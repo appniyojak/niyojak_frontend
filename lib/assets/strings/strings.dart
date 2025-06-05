@@ -670,6 +670,8 @@ Map<String, String> resEnglish = {
 
   'praantStithi': 'Praant Sithi',
   'religion': 'Religion',
+  'mumbaikarGaav': 'Mumbaikar Mandal Asaleli Gaave',
+
   'vasahatSamparkStithi': 'Vasahat Sampark Stithi',
 
   'MandalsurveuAbhiyanStithi': 'Mandal Sarvekshan Abhiyan Stiti',
@@ -2024,6 +2026,7 @@ Map<String, String> resMarathi = {
   'GraamCount': 'गावांची संख्या',
   'praantStithi': 'प्रांत स्थिति',
   'religion': 'रिलीजन',
+  'mumbaikarGaav': 'मुंबईकर मंडल असलेली गावे',
 
   'vasahatSamparkStithi': 'वसाहत संपर्क स्थिती',
 
@@ -3384,6 +3387,7 @@ Map<String, String> resHindi = {
   'SarvekshanSankalan': 'सर्वेक्षण संकलन',
   'praantStithi': 'प्रांत स्थिति',
   'religion': 'रिलीजन',
+  'mumbaikarGaav': 'मुंबईकर मंडल असलेली गावे',
   'MandalCount': 'मंडलांची संख्या',
   'GraamCount': 'गावांची संख्या',
 

@@ -380,7 +380,7 @@ class Vastisarvekshan {
     }
     if (json['ListKaaryakartaaCountByAayaam'] != null) {
       listKaaryakartaaCountByAayaam = <ListKaaryakartaaCountByAayaam>[];
-      json['ListSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation'].forEach((v) {
+      json['ListKaaryakartaaCountByAayaam'].forEach((v) {
         listKaaryakartaaCountByAayaam!
             .add(new ListKaaryakartaaCountByAayaam.fromJson(v));
       });
