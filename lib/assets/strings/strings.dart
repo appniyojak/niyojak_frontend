@@ -671,6 +671,10 @@ Map<String, String> resEnglish = {
   'praantStithi': 'Praant Sithi',
   'religion': 'Religion',
   'mumbaikarGaav': 'Mumbaikar Mandal Asaleli Gaave',
+  'karyamahiti': 'Vividh Kshetra Karya Mahiti',
+  'sewaPrakalpa': 'Sewa Prakalpa Info',
+
+  'satsangKendra': 'Vividh Sampradaay/aadhyatmik satsang kendra',
 
   'vasahatSamparkStithi': 'Vasahat Sampark Stithi',
 
@@ -1440,7 +1444,7 @@ Map<String, String> resMarathi = {
 
   'VastiReport': 'वस्ती अहवाल',
   'SampurnaReport': 'वस्ती सर्वेक्षण अभियान स्तिथी ',
-  'SampurnaReportMandal': 'मंडल सर्वेक्षण अभियान स्तिथी ',
+  'SampurnaReportMandal': 'सर्वेक्षण अभियान स्तिथी ',
 
   'Report': 'सर्वेक्षण अहवाल',
   'mandalSurvey': 'मंडल सर्वेक्षण',
@@ -2027,6 +2031,10 @@ Map<String, String> resMarathi = {
   'praantStithi': 'प्रांत स्थिति',
   'religion': 'रिलीजन',
   'mumbaikarGaav': 'मुंबईकर मंडल असलेली गावे',
+  'karyamahiti': 'विविध क्षेत्र कार्य माहिती',
+  'sewaPrakalpa': 'सेवा प्रकल्प माहिती',
+
+  'satsangKendra': 'विविध संप्रदाय व आध्यात्मिक सत्संग केंद्र',
 
   'vasahatSamparkStithi': 'वसाहत संपर्क स्थिती',
 
@@ -2774,11 +2782,13 @@ Map<String, String> resHindi = {
   'Survey': 'सर्वेक्षण',
   'vastiSurvey': 'वस्ती सर्वेक्षण',
   'vastiSurveyReport': 'वस्ती सर्वेक्षण अहवाल',
+  'mandalSurveyReport': 'मंडल सर्वेक्षण अहवाल',
+
   'mandalReport': 'मंडल अहवाल',
   'VastiReport': 'वस्ती अहवाल',
   'GraamAhaval': 'ग्राम अहवाल',
   'SampurnaReport': 'वस्ती सर्वेक्षण अभियान स्तिथी ',
-  'SampurnaReportMandal': 'मंडल सर्वेक्षण अभियान स्तिथी ',
+  'SampurnaReportMandal': 'सर्वेक्षण अभियान स्तिथी ',
 
   'Report': 'सर्वेक्षण अहवाल',
   'mandalSurvey': 'मंडल सर्वेक्षण',
@@ -3388,6 +3398,10 @@ Map<String, String> resHindi = {
   'praantStithi': 'प्रांत स्थिति',
   'religion': 'रिलीजन',
   'mumbaikarGaav': 'मुंबईकर मंडल असलेली गावे',
+  'karyamahiti': 'विविध क्षेत्र कार्य माहिती',
+  'sewaPrakalpa': 'सेवा प्रकल्प माहिती',
+
+  'satsangKendra': 'विविध संप्रदाय व आध्यात्मिक सत्संग केंद्र',
   'MandalCount': 'मंडलांची संख्या',
   'GraamCount': 'गावांची संख्या',
 
@@ -3403,6 +3417,8 @@ Map<String, String> resHindi = {
   'JagranShreniUpkram': 'जागरण श्रेणी कार्यविभाग उपक्रम स्थिती',
   'BalopasanaKendra': 'वस्तीतील बलोपसाना केंद्र',
   'MotheVyasaayiKendra': 'मोठे व्यवसायिक केंद्र',
+  'MotheRugnalay': 'मोठे रुग्णालय',
+
   'shaikshanikSanstha': 'शैक्षणिक संस्थान',
   'StharInfo': 'स्तराची माहिती',
   'karyakramKarnyacheThikaan': 'कार्यक्रम करण्याचे ठिकाण',

@@ -711,95 +711,115 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                       Divider(),
                     if( isVastiSearch == true)
                       Container(
-                      child:
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: DataTable(
-                          headingRowColor:
-                          MaterialStateProperty.all(Colors.purpleAccent.shade100),
-                          headingTextStyle: TextStyle(
-                              fontSize: 15, color: Colors.black, fontWeight: FontWeight.bold),
-                          columns: const [
-                            DataColumn(label: Text('सर्वेक्षण स्थिती')),
-                            DataColumn(label: Text('नगर')),
-                            DataColumn(label: Text('वस्ती')),
-                            DataColumn(label: Text('')),
-                          ],
-                          rows: [
-                            DataRow(
-                              color: MaterialStateProperty.all(Colors.lightBlue.shade50),
-                              cells: [
-                                DataCell(Text('प्राथमिक सर्वेक्षण\nपूर्ण झाले')),
-                                DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStep1CompleteCount ?? ""}")),
-                                DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStep1CompleteCount ?? ""}")),
-                                DataCell(IconButton(icon: Icon(Icons.remove_red_eye, color: Colors.purpleAccent),onPressed: () => showPopupList(context,data!.nagarVastisarvekshanReportwithselectedlevel!.vastiStep1CompleteNames!.toString()),),),
-
-                              ],
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: DataTable(
+                            headingRowColor:
+                            MaterialStateProperty.all(Colors.teal.shade100),
+                            headingTextStyle: const TextStyle(
+                              fontSize: 15,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
                             ),
-                            DataRow(
-                              color: MaterialStateProperty.all(Colors.lightBlue.shade50),
-                              cells: [
-                                DataCell(Text('अन्य सर्वेक्षण\nपूर्ण झाले')),
-                                DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStep2CompleteCount ?? ""}")),
-                                DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStep2CompleteCount ?? ""}")),
-                                DataCell(IconButton(icon: Icon(Icons.remove_red_eye, color: Colors.purpleAccent),onPressed: () => showPopupList(context,data!.nagarVastisarvekshanReportwithselectedlevel!.vastiStep2CompleteNames!.toString()),),),
-
-                              ],
-                            ),
-                            DataRow(
-                              color: MaterialStateProperty.all(Colors.lightBlue.shade50),
-                              cells: [
-                                DataCell(Text('विस्तृत सर्वेक्षण\nपूर्ण झाले')),
-                                DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStep3CompleteCount ?? ""}")),
-                                DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStep3CompleteCount ?? ""}")),
-                                DataCell(IconButton(icon: Icon(Icons.remove_red_eye, color: Colors.purpleAccent),onPressed: () => showPopupList(context,data!.nagarVastisarvekshanReportwithselectedlevel!.vastiStep3CompleteNames!.toString()),),),
-
-                              ],
-                            ),
-                            DataRow(
-                              color: MaterialStateProperty.all(Colors.red.shade50),
-                              cells: [
-                                DataCell(Text('सर्वेक्षण सुरु झाले')),
-                                DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStepStartedCount ?? ""}")),
-                                DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStepStartedCount ?? ""}")),
-                                DataCell(IconButton(icon: Icon(Icons.remove_red_eye, color: Colors.purpleAccent),onPressed: () => showPopupList(context,data!.nagarVastisarvekshanReportwithselectedlevel!.vastiStepStartedNames!.toString()),),),
-
-                              ],
-                            ),
-                            DataRow(
-                              color: MaterialStateProperty.all(Colors.red.shade50),
-                              cells: [
-                                DataCell(Text('सर्वेक्षण पूर्ण झाले')),
-                                DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarAllStepsCompleteCount ?? ""}")),
-                                DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiAllStepsCompleteCount ?? ""}")),
-                                DataCell(IconButton(icon: Icon(Icons.remove_red_eye, color: Colors.purpleAccent),onPressed: () => showPopupList(context,data!.nagarVastisarvekshanReportwithselectedlevel!.vastiAllStepsCompleteNames!.toString()),),),
-
-
-                              ],
-                            ),
-                            DataRow(
-                              color: MaterialStateProperty.all(Colors.red.shade50),
-                              cells: [
-                                DataCell(Text('सर्वेक्षण सुरु\nझाले नाही')),
-                                DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStepsNotstartedCount ?? ""}")),
-                                DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStepsNotstartedCount ?? ""}")),
-                                DataCell(IconButton(icon: Icon(Icons.remove_red_eye, color: Colors.purpleAccent),onPressed: () => showPopupList(context,data!.nagarVastisarvekshanReportwithselectedlevel!.vastiStepsNotstartedNames!.toString()),),),
-
-                              ],
-                            ),
-                            DataRow(
-                              color: MaterialStateProperty.all(Colors.yellow.shade50),
-                              cells: [
-                                DataCell(Text('एकुण')),
-                                DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarcount ?? ""}")),
-                                DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.vasticount ?? ""}")),
-                                DataCell(Text("-")),
-                              ],
-                            ),
-                          ],
+                            columns: const [
+                              DataColumn(label: Text('सर्वेक्षण स्थिती')),
+                              DataColumn(label: Text('नगर')),
+                              DataColumn(label: Text('वस्ती')),
+                              DataColumn(label: Text('')),
+                            ],
+                            rows: [
+                              DataRow(
+                                color: MaterialStateProperty.all(Colors.green.shade50),
+                                cells: [
+                                  DataCell(Text('प्राथमिक सर्वेक्षण\nपूर्ण झाले')),
+                                  DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStep1CompleteCount ?? ""}")),
+                                  DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStep1CompleteCount ?? ""}")),
+                                  DataCell(IconButton(
+                                    icon: Icon(Icons.remove_red_eye, color: Colors.teal),
+                                    onPressed: () => showPopupList(context,
+                                        data!.nagarVastisarvekshanReportwithselectedlevel!.vastiStep1CompleteNames!.toString()),
+                                  )),
+                                ],
+                              ),
+                              DataRow(
+                                color: MaterialStateProperty.all(Colors.green.shade50),
+                                cells: [
+                                  DataCell(Text('अन्य सर्वेक्षण\nपूर्ण झाले')),
+                                  DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStep2CompleteCount ?? ""}")),
+                                  DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStep2CompleteCount ?? ""}")),
+                                  DataCell(IconButton(
+                                    icon: Icon(Icons.remove_red_eye, color: Colors.teal),
+                                    onPressed: () => showPopupList(context,
+                                        data!.nagarVastisarvekshanReportwithselectedlevel!.vastiStep2CompleteNames!.toString()),
+                                  )),
+                                ],
+                              ),
+                              DataRow(
+                                color: MaterialStateProperty.all(Colors.green.shade50),
+                                cells: [
+                                  DataCell(Text('विस्तृत सर्वेक्षण\nपूर्ण झाले')),
+                                  DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStep3CompleteCount ?? ""}")),
+                                  DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStep3CompleteCount ?? ""}")),
+                                  DataCell(IconButton(
+                                    icon: Icon(Icons.remove_red_eye, color: Colors.teal),
+                                    onPressed: () => showPopupList(context,
+                                        data!.nagarVastisarvekshanReportwithselectedlevel!.vastiStep3CompleteNames!.toString()),
+                                  )),
+                                ],
+                              ),
+                              DataRow(
+                                color: MaterialStateProperty.all(Colors.orange.shade50),
+                                cells: [
+                                  DataCell(Text('सर्वेक्षण सुरु झाले')),
+                                  DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStepStartedCount ?? ""}")),
+                                  DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStepStartedCount ?? ""}")),
+                                  DataCell(IconButton(
+                                    icon: Icon(Icons.remove_red_eye, color: Colors.teal),
+                                    onPressed: () => showPopupList(context,
+                                        data!.nagarVastisarvekshanReportwithselectedlevel!.vastiStepStartedNames!.toString()),
+                                  )),
+                                ],
+                              ),
+                              DataRow(
+                                color: MaterialStateProperty.all(Colors.orange.shade50),
+                                cells: [
+                                  DataCell(Text('सर्वेक्षण पूर्ण झाले')),
+                                  DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarAllStepsCompleteCount ?? ""}")),
+                                  DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiAllStepsCompleteCount ?? ""}")),
+                                  DataCell(IconButton(
+                                    icon: Icon(Icons.remove_red_eye, color: Colors.teal),
+                                    onPressed: () => showPopupList(context,
+                                        data!.nagarVastisarvekshanReportwithselectedlevel!.vastiAllStepsCompleteNames!.toString()),
+                                  )),
+                                ],
+                              ),
+                              DataRow(
+                                color: MaterialStateProperty.all(Colors.orange.shade50),
+                                cells: [
+                                  DataCell(Text('सर्वेक्षण सुरु\nझाले नाही')),
+                                  DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStepsNotstartedCount ?? ""}")),
+                                  DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStepsNotstartedCount ?? ""}")),
+                                  DataCell(IconButton(
+                                    icon: Icon(Icons.remove_red_eye, color: Colors.teal),
+                                    onPressed: () => showPopupList(context,
+                                        data!.nagarVastisarvekshanReportwithselectedlevel!.vastiStepsNotstartedNames!.toString()),
+                                  )),
+                                ],
+                              ),
+                              DataRow(
+                                color: MaterialStateProperty.all(Colors.grey.shade200),
+                                cells: [
+                                  DataCell(Text('एकुण')),
+                                  DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarcount ?? ""}")),
+                                  DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.vasticount ?? ""}")),
+                                  DataCell(Text("-")),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
+
                     SizedBox(height: 10,),
                     commonExpansionTile(
                       title: 'VastisurveuAbhiyanStithi',
@@ -918,100 +938,100 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
 
                         if( data != null && data?.sanghaKaryaStithiData != null )
                           buildTransposedTable(data!.sanghaKaryaStithiData!),
-                        Divider(),
-                        SizedBox(height: 10,),
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Table(
-                            border: TableBorder.all(color: Colors.grey),
-                            columnWidths: const {
-                              0: FlexColumnWidth(2),
-                              1: FlexColumnWidth(1),
-                            },
-                            children: [
-                              TableRow(
-                                decoration: BoxDecoration(color: Colors.purpleAccent.shade100),
-                                children: const [
-                                  Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'शाखेचे प्रकार',
-                                      style: TextStyle(fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'संख्या',
-                                      style: TextStyle(fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              ...purviShakhaHoti.map((item) {
-                                return TableRow(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(item.value ?? ''),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(item.count.toString()),
-                                    ),
-                                  ],
-                                );
-                              }).toList(),
-                            ],
-                          ),
-                        ),
-                        Divider(),
-                        SizedBox(height: 10,),
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Table(
-                            border: TableBorder.all(color: Colors.grey),
-                            columnWidths: const {
-                              0: FlexColumnWidth(2),
-                              1: FlexColumnWidth(1),
-                            },
-                            children: [
-                              TableRow(
-                                decoration: BoxDecoration(color: Colors.purpleAccent.shade100),
-                                children: const [
-                                  Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'साप्ताहिक मिलन प्रकार',
-                                      style: TextStyle(fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'संख्या',
-                                      style: TextStyle(fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              ...purviSptahikMilanHote.map((item) {
-                                return TableRow(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(item.value ?? ''),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(item.count.toString()),
-                                    ),
-                                  ],
-                                );
-                              }).toList(),
-                            ],
-                          ),
-                        ),
+                        // Divider(),
+                        // SizedBox(height: 10,),
+                        // Padding(
+                        //   padding: const EdgeInsets.all(16.0),
+                        //   child: Table(
+                        //     border: TableBorder.all(color: Colors.grey),
+                        //     columnWidths: const {
+                        //       0: FlexColumnWidth(2),
+                        //       1: FlexColumnWidth(1),
+                        //     },
+                        //     children: [
+                        //       TableRow(
+                        //         decoration: BoxDecoration(color: Colors.purpleAccent.shade100),
+                        //         children: const [
+                        //           Padding(
+                        //             padding: EdgeInsets.all(8.0),
+                        //             child: Text(
+                        //               'शाखेचे प्रकार',
+                        //               style: TextStyle(fontWeight: FontWeight.bold),
+                        //             ),
+                        //           ),
+                        //           Padding(
+                        //             padding: EdgeInsets.all(8.0),
+                        //             child: Text(
+                        //               'संख्या',
+                        //               style: TextStyle(fontWeight: FontWeight.bold),
+                        //             ),
+                        //           ),
+                        //         ],
+                        //       ),
+                        //       ...purviShakhaHoti.map((item) {
+                        //         return TableRow(
+                        //           children: [
+                        //             Padding(
+                        //               padding: const EdgeInsets.all(8.0),
+                        //               child: Text(item.value ?? ''),
+                        //             ),
+                        //             Padding(
+                        //               padding: const EdgeInsets.all(8.0),
+                        //               child: Text(item.count.toString()),
+                        //             ),
+                        //           ],
+                        //         );
+                        //       }).toList(),
+                        //     ],
+                        //   ),
+                        // ),
+                        // Divider(),
+                        // SizedBox(height: 10,),
+                        // Padding(
+                        //   padding: const EdgeInsets.all(16.0),
+                        //   child: Table(
+                        //     border: TableBorder.all(color: Colors.grey),
+                        //     columnWidths: const {
+                        //       0: FlexColumnWidth(2),
+                        //       1: FlexColumnWidth(1),
+                        //     },
+                        //     children: [
+                        //       TableRow(
+                        //         decoration: BoxDecoration(color: Colors.purpleAccent.shade100),
+                        //         children: const [
+                        //           Padding(
+                        //             padding: EdgeInsets.all(8.0),
+                        //             child: Text(
+                        //               'साप्ताहिक मिलन प्रकार',
+                        //               style: TextStyle(fontWeight: FontWeight.bold),
+                        //             ),
+                        //           ),
+                        //           Padding(
+                        //             padding: EdgeInsets.all(8.0),
+                        //             child: Text(
+                        //               'संख्या',
+                        //               style: TextStyle(fontWeight: FontWeight.bold),
+                        //             ),
+                        //           ),
+                        //         ],
+                        //       ),
+                        //       ...purviSptahikMilanHote.map((item) {
+                        //         return TableRow(
+                        //           children: [
+                        //             Padding(
+                        //               padding: const EdgeInsets.all(8.0),
+                        //               child: Text(item.value ?? ''),
+                        //             ),
+                        //             Padding(
+                        //               padding: const EdgeInsets.all(8.0),
+                        //               child: Text(item.count.toString()),
+                        //             ),
+                        //           ],
+                        //         );
+                        //       }).toList(),
+                        //     ],
+                        //   ),
+                        // ),
                       ],
                     ),
                     commonExpansionTile(
@@ -1025,7 +1045,7 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                     commonExpansionTile(
                       title: 'SwayamsevakCount',
                       children: [
-                        SingleColumnRow(txtString: Statics.getLabel('TotalKaaryakartaaCount'), value: data?.vastiloksankhya?.totalSwayamsevakCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('TotalKaaryakartaaCount'), value: data?.vastiloksankhya?.totalKaaryakartaaCount.toString(), fontsize: 15),
                         SingleColumnRow(txtString: Statics.getLabel('PratidnyitCount'), value: data?.vastiloksankhya?.pratidnyitCount.toString(), fontsize: 15),
                       ],
                     ),
@@ -1323,7 +1343,7 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                       title: 'VyavasaayeeCategory',
                       children: [
                         Container(
-                          height: 300,
+                          // height: 300,
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey.shade300),
                             borderRadius: BorderRadius.circular(8),
@@ -1544,7 +1564,7 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                       title: 'praantStithi',
                       children: [
                           Container(
-                            height: 500,
+                            // height: 500,
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.shade300),
                               borderRadius: BorderRadius.circular(8),
@@ -2044,7 +2064,7 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                       title: 'BalopasanaKendra',
                       children: [
                           Container(
-                            height: 300,
+                            // height: 300,
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.shade300),
                               borderRadius: BorderRadius.circular(8),

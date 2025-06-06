@@ -257,8 +257,12 @@ class _MandalSurveyReportViewScreen2State extends State<MandalSurveyReportViewSc
   List<TalukamandalSamajikkaryakram>? talukaaSamajikKaryakram;
   List<Talukamandalmahatvacesana>? talukamandalSana;
   List<Talukamandalupaasana>? talukamandalUpasanaSthal;
+  List<TalukamandalvividhSampradhaySatsangKendra>? talukamandalvividhSampradhaySatsangKendra;
   List<TalukamandalReligion>? talukaMandalReligion;
   List<TalukamandalListSwayamsevakCountByVyavasaayeeCategory>? vyavasaayeeCategory;
+  List<Talukamandalsajjanshakkati> sajjanList = [];
+  List<Talukamandaldurjanshakkati> durjanshakati = [];
+  List<TalukamandalSewaPrakalpa> sewaPrakalpa = [];
 
   void getMyDetailsColumnsAndRows() async {
 
@@ -271,12 +275,115 @@ class _MandalSurveyReportViewScreen2State extends State<MandalSurveyReportViewSc
       talukamandalUpasanaSthal = talukaMandalSampurnaModel!.talukamandalupaasana;
       talukaMandalReligion = talukaMandalSampurnaModel!.talukamandalReligion;
       vyavasaayeeCategory = talukaMandalSampurnaModel!.talukamandalListSwayamsevakCountByVyavasaayeeCategory;
+      sajjanList = talukaMandalSampurnaModel!.talukamandalsajjanshakkati!;
+      durjanshakati = talukaMandalSampurnaModel!.talukamandaldurjanshakkati!;
+      sewaPrakalpa = talukaMandalSampurnaModel!.talukamandalSewaPrakalpa!;
+      talukamandalvividhSampradhaySatsangKendra = talukaMandalSampurnaModel!.talukamandalvividhSampradhaySatsangKendra!;
     });
+  }
+
+  Widget buildTalukaMandalTable(List<Talukamandaldurjanshakkati> dataList) {
+      dataList = talukaMandalSampurnaModel!.talukamandaldurjanshakkati ?? [];
+
+    // 1. Get unique subtypes
+    final List<String> uniqueSubtypes = dataList
+        .map((e) => e.subtype ?? '')
+        .toSet()
+        .where((s) => s.isNotEmpty)
+        .toList();
+
+    // 2. Get unique maintypes
+    final List<String> uniqueMaintypes = dataList
+        .map((e) => e.maintype ?? '')
+        .toSet()
+        .where((m) => m.isNotEmpty)
+        .toList();
+
+    // 3. Build rows with sankhya values
+    List<DataRow> rows = uniqueMaintypes.map((maintype) {
+      List<DataCell> cells = [
+        DataCell(Text(maintype)), // First column: maintype
+        ...uniqueSubtypes.map((subtype) {
+          final match = dataList.firstWhere(
+                (e) => e.maintype == maintype && e.subtype == subtype,
+            orElse: () => Talukamandaldurjanshakkati(sankhya: null),
+          );
+          return DataCell(Text(match.sankhya?.toString() ?? '-'));
+        }).toList(),
+      ];
+      return DataRow(cells: cells);
+    }).toList();
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: DataTable(
+        headingRowColor: MaterialStateProperty.all(Colors.purpleAccent),
+        headingTextStyle: TextStyle(color: Colors.white),
+        columns: [
+          const DataColumn(label: Text('प्रमुख प्रकार')), // First column: maintype
+          ...uniqueSubtypes.map((subtype) => DataColumn(label: Text(subtype))),
+        ],
+        rows: rows,
+      ),
+    );
+  }
+
+  Widget buildSewaPrakalpaDataTable(List<TalukamandalSewaPrakalpa> dataList) {
+
+     dataList = talukaMandalSampurnaModel!.talukamandalSewaPrakalpa ?? [];
+
+    // 1. Unique subtypes for header columns
+    final List<String> uniqueSubtypes = dataList
+        .map((e) => e.subtype ?? '')
+        .toSet()
+        .where((s) => s.isNotEmpty)
+        .toList();
+
+    // 2. Unique maintypes for row headers
+    final List<String> uniqueMaintypes = dataList
+        .map((e) => e.maintype ?? '')
+        .toSet()
+        .where((m) => m.isNotEmpty)
+        .toList();
+
+    // 3. Construct DataTable rows
+    List<DataRow> rows = uniqueMaintypes.map((maintype) {
+      List<DataCell> cells = [
+        DataCell(Text(maintype)), // First cell: maintype
+        ...uniqueSubtypes.map((subtype) {
+          final match = dataList.firstWhere(
+                (e) => e.maintype == maintype && e.subtype == subtype,
+            orElse: () => TalukamandalSewaPrakalpa(sankhya: null),
+          );
+          return DataCell(Text(match.sankhya?.toString() ?? '-'));
+        }).toList(),
+      ];
+      return DataRow(cells: cells);
+    }).toList();
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: DataTable(
+        headingRowColor: MaterialStateProperty.all(Colors.purpleAccent.shade200),
+        headingTextStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        columns: [
+          const DataColumn(label: Text('प्रमुख प्रकार')),
+          ...uniqueSubtypes.map((subtype) => DataColumn(label: Text(subtype))),
+        ],
+        rows: rows,
+      ),
+    );
   }
 
 
   @override
   Widget build(BuildContext context) {
+    /// Sajjan Shakti
+    final Map<String, List<Talukamandalsajjanshakkati>> groupedData = {};
+    for (var item in sajjanList) {
+      final key = item.sajjanshakkati;
+      groupedData.putIfAbsent(key!, () => []).add(item);
+    }
     return Scaffold(
       body: Container(
         padding: EdgeInsets
@@ -470,88 +577,112 @@ class _MandalSurveyReportViewScreen2State extends State<MandalSurveyReportViewSc
                       Divider(),
                     if( isVastiSearch == true)
                       Container(
-                        child:
-                        SingleChildScrollView(
+                        child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: DataTable(
                             headingRowColor:
-                            MaterialStateProperty.all(Colors.purpleAccent.shade100),
-                            headingTextStyle: TextStyle(
+                            MaterialStateProperty.all(Colors.teal.shade100),
+                            headingTextStyle: const TextStyle(
                                 fontSize: 15, color: Colors.black, fontWeight: FontWeight.bold),
                             columns: const [
                               DataColumn(label: Text('सर्वेक्षण स्थिती')),
                               DataColumn(label: Text('तालुका')),
                               DataColumn(label: Text('मंडल')),
+                              DataColumn(label: Text('गाव')),
                               DataColumn(label: Text('')),
                             ],
                             rows: [
                               DataRow(
-                                color: MaterialStateProperty.all(Colors.lightBlue.shade50),
+                                color: MaterialStateProperty.all(Colors.green.shade50),
                                 cells: [
                                   DataCell(Text('प्राथमिक सर्वेक्षण\nपूर्ण झाले')),
-                                  DataCell(Text("{data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStep1CompleteCount ?? ""}")),
-                                  DataCell(Text("{data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStep1CompleteCount ?? ""}")),
-                                  DataCell(IconButton(icon: Icon(Icons.remove_red_eye, color: Colors.purpleAccent),onPressed: () => showPopupList(context,"data!.nagarVastisarvekshanReportwithselectedlevel!.vastiStep1CompleteNames!.toString()"),),),
-
+                                  DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.nagarStep1CompleteCount ?? ""}")),
+                                  DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.mandalStep1CompleteCount ?? ""}")),
+                                  DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.vastiStep1CompleteCount ?? ""}")),
+                                  DataCell(IconButton(
+                                    icon: Icon(Icons.remove_red_eye, color: Colors.teal),
+                                    onPressed: () => showPopupList(context,
+                                        talukaMandalSampurnaModel!.talukamandalsarvekshanReportwithselectedlevel!.vastiStep1CompleteNames!.toString()),
+                                  )),
                                 ],
                               ),
+                              // DataRow(
+                              //   color: MaterialStateProperty.all(Colors.green.shade50),
+                              //   cells: [
+                              //     DataCell(Text('अन्य सर्वेक्षण\nपूर्ण झाले')),
+                              //     DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.nagarStep2CompleteCount ?? ""}")),
+                              //     DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.mandalStep1CompleteCount ?? ""}")),
+                              //     DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.vastiStep2CompleteCount ?? ""}")),
+                              //     DataCell(IconButton(
+                              //       icon: Icon(Icons.remove_red_eye, color: Colors.teal),
+                              //       onPressed: () => showPopupList(context,
+                              //           talukaMandalSampurnaModel!.talukamandalsarvekshanReportwithselectedlevel!.vastiStep2CompleteNames!.toString()),
+                              //     )),
+                              //   ],
+                              // ),
                               DataRow(
-                                color: MaterialStateProperty.all(Colors.lightBlue.shade50),
-                                cells: [
-                                  DataCell(Text('अन्य सर्वेक्षण\nपूर्ण झाले')),
-                                  DataCell(Text("{data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStep2CompleteCount ?? ""}")),
-                                  DataCell(Text("{data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStep2CompleteCount ?? ""}")),
-                                  DataCell(IconButton(icon: Icon(Icons.remove_red_eye, color: Colors.purpleAccent),onPressed: () => showPopupList(context,"data!.nagarVastisarvekshanReportwithselectedlevel!.vastiStep2CompleteNames!.toString()"),),),
-
-                                ],
-                              ),
-                              DataRow(
-                                color: MaterialStateProperty.all(Colors.lightBlue.shade50),
+                                color: MaterialStateProperty.all(Colors.green.shade50),
                                 cells: [
                                   DataCell(Text('विस्तृत सर्वेक्षण\nपूर्ण झाले')),
-                                  DataCell(Text("{data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStep3CompleteCount ?? ""}")),
-                                  DataCell(Text("{data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStep3CompleteCount ?? ""}")),
-                                  DataCell(IconButton(icon: Icon(Icons.remove_red_eye, color: Colors.purpleAccent),onPressed: () => showPopupList(context,"data!.nagarVastisarvekshanReportwithselectedlevel!.vastiStep3CompleteNames!.toString()"),),),
-
+                                  DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.nagarStep3CompleteCount ?? ""}")),
+                                  DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.mandalStep3CompleteCount ?? ""}")),
+                                  DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.vastiStep3CompleteCount ?? ""}")),
+                                  DataCell(IconButton(
+                                    icon: Icon(Icons.remove_red_eye, color: Colors.teal),
+                                    onPressed: () => showPopupList(context,
+                                        talukaMandalSampurnaModel!.talukamandalsarvekshanReportwithselectedlevel!.vastiStep3CompleteNames!.toString()),
+                                  )),
                                 ],
                               ),
                               DataRow(
-                                color: MaterialStateProperty.all(Colors.red.shade50),
+                                color: MaterialStateProperty.all(Colors.orange.shade50),
                                 cells: [
                                   DataCell(Text('सर्वेक्षण सुरु झाले')),
-                                  DataCell(Text("{data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStepStartedCount ?? ""}")),
-                                  DataCell(Text("{data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStepStartedCount ?? ""}")),
-                                  DataCell(IconButton(icon: Icon(Icons.remove_red_eye, color: Colors.purpleAccent),onPressed: () => showPopupList(context,"data!.nagarVastisarvekshanReportwithselectedlevel!.vastiStepStartedNames!.toString()"),),),
-
+                                  DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.nagarStepStartedCount ?? ""}")),
+                                  DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.mandalStepStartedCount ?? ""}")),
+                                  DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.vastiStepStartedCount ?? ""}")),
+                                  DataCell(IconButton(
+                                    icon: Icon(Icons.remove_red_eye, color: Colors.teal),
+                                    onPressed: () => showPopupList(context,
+                                        talukaMandalSampurnaModel!.talukamandalsarvekshanReportwithselectedlevel!.vastiStepStartedNames!.toString()),
+                                  )),
                                 ],
                               ),
                               DataRow(
-                                color: MaterialStateProperty.all(Colors.red.shade50),
+                                color: MaterialStateProperty.all(Colors.orange.shade50),
                                 cells: [
                                   DataCell(Text('सर्वेक्षण पूर्ण झाले')),
-                                  DataCell(Text("{data?.nagarVastisarvekshanReportwithselectedlevel?.nagarAllStepsCompleteCount ?? ""}")),
-                                  DataCell(Text("{data?.nagarVastisarvekshanReportwithselectedlevel?.vastiAllStepsCompleteCount ?? ""}")),
-                                  DataCell(IconButton(icon: Icon(Icons.remove_red_eye, color: Colors.purpleAccent),onPressed: () => showPopupList(context,"data!.nagarVastisarvekshanReportwithselectedlevel!.vastiAllStepsCompleteNames!.toString()"),),),
-
-
+                                  DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.nagarAllStepsCompleteCount ?? ""}")),
+                                  DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.mandalAllStepsCompleteCount ?? ""}")),
+                                  DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.vastiAllStepsCompleteCount ?? ""}")),
+                                  DataCell(IconButton(
+                                    icon: Icon(Icons.remove_red_eye, color: Colors.teal),
+                                    onPressed: () => showPopupList(context,
+                                        talukaMandalSampurnaModel!.talukamandalsarvekshanReportwithselectedlevel!.vastiAllStepsCompleteNames!.toString()),
+                                  )),
                                 ],
                               ),
                               DataRow(
-                                color: MaterialStateProperty.all(Colors.red.shade50),
+                                color: MaterialStateProperty.all(Colors.orange.shade50),
                                 cells: [
                                   DataCell(Text('सर्वेक्षण सुरु\nझाले नाही')),
-                                  DataCell(Text("{data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStepsNotstartedCount ?? ""}")),
-                                  DataCell(Text("{data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStepsNotstartedCount ?? ""}")),
-                                  DataCell(IconButton(icon: Icon(Icons.remove_red_eye, color: Colors.purpleAccent),onPressed: () => showPopupList(context,"data!.nagarVastisarvekshanReportwithselectedlevel!.vastiStepsNotstartedNames!.toString()"),),),
-
+                                  DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.nagarStepsNotstartedCount ?? ""}")),
+                                  DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.mandalStepsNotstartedCount ?? ""}")),
+                                  DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.vastiStepsNotstartedCount ?? ""}")),
+                                  DataCell(IconButton(
+                                    icon: Icon(Icons.remove_red_eye, color: Colors.teal),
+                                    onPressed: () => showPopupList(context,
+                                        talukaMandalSampurnaModel!.talukamandalsarvekshanReportwithselectedlevel!.vastiStepsNotstartedNames!.toString()),
+                                  )),
                                 ],
                               ),
                               DataRow(
-                                color: MaterialStateProperty.all(Colors.yellow.shade50),
+                                color: MaterialStateProperty.all(Colors.grey.shade200),
                                 cells: [
                                   DataCell(Text('एकुण')),
-                                  DataCell(Text("{data?.nagarVastisarvekshanReportwithselectedlevel?.nagarcount ?? ""}")),
-                                  DataCell(Text("{data?.nagarVastisarvekshanReportwithselectedlevel?.vasticount ?? ""}")),
+                                  DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.nagarcount ?? ""}")),
+                                  DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.mandalcount ?? ""}")),
+                                  DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.vasticount ?? ""}")),
                                   DataCell(Text("-")),
                                 ],
                               ),
@@ -601,7 +732,7 @@ class _MandalSurveyReportViewScreen2State extends State<MandalSurveyReportViewSc
                                           columns: const [
                                             DataColumn(label: Text('सर्वेक्षण स्थिती')),
                                             DataColumn(label: Text('तालुका ')),
-                                            DataColumn(label: Text('मंडल')),
+                                            DataColumn(label: Text('गाव')),
                                           ],
                                           rows: [
                                             DataRow(
@@ -668,37 +799,243 @@ class _MandalSurveyReportViewScreen2State extends State<MandalSurveyReportViewSc
                     commonExpansionTile(
                       title: 'SarvekshanSankalan',
                       children: [
-                        SingleColumnRow(txtString: Statics.getLabel('MandalCount'),value: "data?.vastiloksankhya?.vastiPramukhCount.toString()",fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('GraamCount'),value: "data?.vastiloksankhya?.vastiPramukhCount.toString()",fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('MandalCount'), value: talukaMandalSampurnaModel?.loksankhyaformandal?.mandalCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('GraamCount'), value: talukaMandalSampurnaModel?.loksankhyaformandal?.graamcount.toString(), fontsize: 15),
+                      ],
+                    ),
+                    commonExpansionTile(
+                      title: 'sewaPrakalpa',
+                      children: [
+                        if( talukaMandalSampurnaModel != null && sewaPrakalpa != null)
+                          buildSewaPrakalpaDataTable(sewaPrakalpa),
+                      ],
+                    ),
+                    commonExpansionTile(
+                      title: 'karyamahiti',
+                      children: [
+                        if (talukaMandalSampurnaModel != null && talukaMandalSampurnaModel?.talukamandalvividhKshetaCheKam != null)
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: DataTable(
+                                headingRowColor: MaterialStateProperty.resolveWith(
+                                      (states) => Colors.purpleAccent[200],
+                                ),
+                                headingTextStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                columns: const [
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          'कार्य संख्या',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          'किती मंडलात',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          'किती गावात',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          'चालवणाऱ्या संस्थांची संख्या',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                                rows: [
+                                  DataRow(
+                                    cells: [
+                                      DataCell(Center(child: Text(talukaMandalSampurnaModel!.talukamandalvividhKshetaCheKam!.karyasankhya.toString()))),
+                                      DataCell(Center(child: Text(talukaMandalSampurnaModel!.talukamandalvividhKshetaCheKam!.mandalCount.toString()))),
+                                      DataCell(Center(child: Text(talukaMandalSampurnaModel!.talukamandalvividhKshetaCheKam!.gramCount.toString()))),
+                                      DataCell(Center(child: Text(talukaMandalSampurnaModel!.talukamandalvividhKshetaCheKam!.sankhya.toString()))),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                    commonExpansionTile(
+                      title: 'satsangKendra',
+                      children: [
+                        Container(
+                          // height: 300,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  if (talukaMandalSampurnaModel != null && talukamandalvividhSampradhaySatsangKendra != null)
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey.shade300),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal, // horizontal scroll
+                                        child: DataTable(
+                                          headingRowColor: MaterialStateProperty.resolveWith(
+                                                (states) => Colors.purpleAccent[200],
+                                          ),
+                                          headingTextStyle: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          columns: const [
+                                            DataColumn(label: Expanded( child: Center(child: Text('संप्रदाय',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
+                                            DataColumn(label: Expanded( child: Center(child: Text('ग्राम संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
+                                            DataColumn(label: Expanded( child: Center(child: Text('किती मंडलात',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
+                                          ],
+                                          rows: talukamandalvividhSampradhaySatsangKendra!.map((item) {
+                                            return DataRow(
+                                              cells: [
+                                                DataCell(Center(child: Text(item.value ?? ''))),
+                                                DataCell(Center(child: Text(item.gramCount.toString()))),
+                                                DataCell(Center(child: Text(item.mandalCount.toString()))),
+                                              ],
+                                            );
+                                          }).toList(),
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              )
+                          ),
+                        ),
+                      ],
+                    ),
+                    commonExpansionTile(
+                      title: 'mumbaikarGaav',
+                      children: [
+                        if (talukaMandalSampurnaModel != null && talukaMandalSampurnaModel?.talukamandalMumbaikar != null)
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: DataTable(
+                                headingRowColor: MaterialStateProperty.resolveWith(
+                                      (states) => Colors.purpleAccent[200],
+                                ),
+                                headingTextStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                columns: const [
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          'मुंबईकर मंडल असलेली गावे',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          'गावांची संख्या',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          'किती मंडलात',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                                rows: [
+                                  DataRow(
+                                    cells: [
+                                      DataCell(Center(child: Text(talukaMandalSampurnaModel!.talukamandalHinduvirayadi!.sankhya.toString()))),
+                                      DataCell(Center(child: Text(talukaMandalSampurnaModel!.talukamandalHinduvirayadi!.gramCount.toString()))),
+                                      DataCell(Center(child: Text(talukaMandalSampurnaModel!.talukamandalHinduvirayadi!.mandalCount.toString()))),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                     commonExpansionTile(
                       title: 'SwayamsevakCount',
                       children: [
-                        SingleColumnRow(txtString: Statics.getLabel('TotalKaaryakartaaCount'), value: "data?.vastiloksankhya?.totalSwayamsevakCount.toString()", fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('PratidnyitCount'), value: "data?.vastiloksankhya?.pratidnyitCount.toString()", fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('TotalKaaryakartaaCount'), value: talukaMandalSampurnaModel?.loksankhyaformandal?.totalKaaryakartaaCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('PratidnyitCount'), value: talukaMandalSampurnaModel?.loksankhyaformandal?.pratidnyitCount.toString(), fontsize: 15),
                       ],
                     ),
                     commonExpansionTile(
                       title: 'SwayamsevakCountByAge',
                       children: [
-                        SingleColumnRow(txtString: Statics.getLabel('Shishu'), value: "data?.vastiloksankhya?.shishuCount.toString()", fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('Baal'), value: "data?.vastiloksankhya?.baalCount.toString()", fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('TarunVidyaarthi'), value: "data?.vastiloksankhya?.tarunVidyaarthiCount.toString()", fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('TarunVyavasaayee'), value: "data?.vastiloksankhya?.tarunVyavasaayeeCount.toString()", fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('ProudhVyavasaayee'), value: "data?.vastiloksankhya?.proudhaVyavasaayeeCount.toString()", fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('UnkownAge'), value: "data?.vastiloksankhya?.unknownAgeCount.toString()", fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('Shishu'), value: talukaMandalSampurnaModel?.loksankhyaformandal?.shishuCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('Baal'), value: talukaMandalSampurnaModel?.loksankhyaformandal?.baalCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('TarunVidyaarthi'), value: talukaMandalSampurnaModel?.loksankhyaformandal?.tarunVidyaarthiCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('TarunVyavasaayee'), value: talukaMandalSampurnaModel?.loksankhyaformandal?.tarunVyavasaayeeCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('ProudhVyavasaayee'), value: talukaMandalSampurnaModel?.loksankhyaformandal?.proudhaVyavasaayeeCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('UnkownAge'), value: talukaMandalSampurnaModel?.loksankhyaformandal?.unknownAgeCount.toString(), fontsize: 15),
                       ],
                     ),
                     commonExpansionTile(
                       title: 'ShikshitSwayamsevakCount',
                       children: [
-                        SingleColumnRow(txtString: Statics.getLabel('PrarambhikShikshit'), value:" data?.vastiloksankhya?.prarambhikShikshitCount.toString()", fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('PraathamikShikshit'), value: "data?.vastiloksankhya?.praathamikShikshitCount.toString()", fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('PrathamVarshShikshit'), value: "data?.vastiloksankhya?.prathamVarshaShikshitCount.toString()", fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('DwitiyaVarshShikshit'), value: "data?.vastiloksankhya?.dwitiyaVarshaShikshitCount.toString()", fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('TrutiyaVarshShikshit'), value: "data?.vastiloksankhya?.trutiyaVarshaShikshitCount.toString()", fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('NoShikshan'), value: "data?.vastiloksankhya?.noShikshanCount.toString()", fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('PrarambhikShikshit'), value:talukaMandalSampurnaModel?.loksankhyaformandal?.prarambhikShikshitCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('PraathamikShikshit'), value: talukaMandalSampurnaModel?.loksankhyaformandal?.praathamikShikshitCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('PrathamVarshShikshit'), value: talukaMandalSampurnaModel?.loksankhyaformandal?.prathamVarshaShikshitCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('DwitiyaVarshShikshit'), value: talukaMandalSampurnaModel?.loksankhyaformandal?.dwitiyaVarshaShikshitCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('TrutiyaVarshShikshit'), value: talukaMandalSampurnaModel?.loksankhyaformandal?.trutiyaVarshaShikshitCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('NoShikshan'), value: talukaMandalSampurnaModel?.loksankhyaformandal?.noShikshanCount.toString(), fontsize: 15),
                       ],
                     ),
                     commonExpansionTile(
@@ -706,58 +1043,58 @@ class _MandalSurveyReportViewScreen2State extends State<MandalSurveyReportViewSc
                       children: [
                         TwoColumnRow(
                           txtString: Statics.getLabel('Shaakhaa'),
-                          value: "data?.vastiloksankhya?.dailyShaakhaaKaaryakartaaCount.toString()",
+                          value: talukaMandalSampurnaModel?.loksankhyaformandal?.dailyShaakhaaKaaryakartaaCount.toString(),
                           txtString2: Statics.getLabel('SaaptaahikLabelShort'),
-                          value2: "data?.vastiloksankhya?.saaptaahikMilanKaaryakartaaCount.toString()",
+                          value2: talukaMandalSampurnaModel?.loksankhyaformandal?.saaptaahikMilanKaaryakartaaCount.toString(),
                           fontsize: 15,
                         ),
                         TwoColumnRow(
                           txtString: Statics.getLabel('MilanMandali'),
-                          value: "data?.vastiloksankhya?.maasikMilanKaaryakartaaCount.toString()",
+                          value: talukaMandalSampurnaModel?.loksankhyaformandal?.maasikMilanKaaryakartaaCount.toString(),
                           txtString2: Statics.getLabel('VastiKaaryakartaaCount'),
-                          value2: "data?.vastiloksankhya?.vastiKaaryakartaaCount.toString()",
+                          value2: talukaMandalSampurnaModel?.loksankhyaformandal?.vastiKaaryakartaaCount.toString(),
                           fontsize: 15,
                         ),
                         TwoColumnRow(
                           txtString: Statics.getLabel('GraamKaaryakartaaCount'),
-                          value: "data?.vastiloksankhya?.graamKaaryakartaaCount.toString()",
+                          value: talukaMandalSampurnaModel?.loksankhyaformandal?.graamKaaryakartaaCount.toString(),
                           txtString2: Statics.getLabel('MandalKaaryakartaaCount'),
-                          value2: "data?.vastiloksankhya?.mandalKaaryakartaaCount.toString()",
+                          value2: talukaMandalSampurnaModel?.loksankhyaformandal?.mandalKaaryakartaaCount.toString(),
                           fontsize: 15,
                         ),
                         TwoColumnRow(
                           txtString: Statics.getLabel('NagarKaaryakartaaCount'),
-                          value: "data?.vastiloksankhya?.nagarKaaryakartaaCount.toString()",
+                          value: talukaMandalSampurnaModel?.loksankhyaformandal?.nagarKaaryakartaaCount.toString(),
                           txtString2: Statics.getLabel('ShaharKaaryakartaaCount'),
-                          value2: "data?.vastiloksankhya?.shaharKaaryakartaaCount.toString()",
+                          value2: talukaMandalSampurnaModel?.loksankhyaformandal?.shaharKaaryakartaaCount.toString(),
                           fontsize: 15,
                         ),
                         TwoColumnRow(
                           txtString: Statics.getLabel('BhaagKaaryakartaaCount'),
-                          value: "data?.vastiloksankhya?.bhaagKaaryakartaaCount.toString()",
+                          value: talukaMandalSampurnaModel?.loksankhyaformandal?.bhaagKaaryakartaaCount.toString(),
                           txtString2: Statics.getLabel('VibhaagKaaryakartaaCount'),
-                          value2: "data?.vastiloksankhya?.vibhaagKaaryakartaaCount.toString()",
+                          value2: talukaMandalSampurnaModel?.loksankhyaformandal?.vibhaagKaaryakartaaCount.toString(),
                           fontsize: 15,
                         ),
                         TwoColumnRow(
                           txtString: Statics.getLabel('MahaanagarKaaryakartaaCount'),
-                          value: "data?.vastiloksankhya?.mahaanagarKaaryakartaaCount.toString()",
+                          value: talukaMandalSampurnaModel?.loksankhyaformandal?.mahaanagarKaaryakartaaCount.toString(),
                           txtString2: Statics.getLabel('PraantKaaryakartaaCount'),
-                          value2: "data?.vastiloksankhya?.praantKaaryakartaaCount.toString()",
+                          value2: talukaMandalSampurnaModel?.loksankhyaformandal?.praantKaaryakartaaCount.toString(),
                           fontsize: 15,
                         ),
                         TwoColumnRow(
                           txtString: Statics.getLabel('KshetraKaaryakartaaCount'),
-                          value: "data?.vastiloksankhya?.kshetraKaaryakartaaCount.toString()",
+                          value: talukaMandalSampurnaModel?.loksankhyaformandal?.kshetraKaaryakartaaCount.toString(),
                           txtString2: Statics.getLabel('AkhilBhaaratiyaKaaryakartaaCount'),
-                          value2: "data?.vastiloksankhya?.akhilBhaaratiyaKaaryakartaaCount.toString()",
+                          value2: talukaMandalSampurnaModel?.loksankhyaformandal?.akhilBhaaratiyaKaaryakartaaCount.toString(),
                           fontsize: 15,
                         ),
                         TwoColumnRow(
                           txtString: Statics.getLabel('PravaaseeKaaryakartaaCount'),
-                          value: "data?.vastiloksankhya?.pravaaseeKaaryakartaaCount.toString()",
+                          value: talukaMandalSampurnaModel?.loksankhyaformandal?.pravaaseeKaaryakartaaCount.toString(),
                           txtString2: Statics.getLabel('TotalKaaryakartaaCount'),
-                          value2: "data?.vastiloksankhya?.totalKaaryakartaaCount.toString()",
+                          value2: talukaMandalSampurnaModel?.loksankhyaformandal?.totalKaaryakartaaCount.toString(),
                           fontsize: 15,
                         ),],
                     ),
@@ -767,19 +1104,19 @@ class _MandalSurveyReportViewScreen2State extends State<MandalSurveyReportViewSc
                       children: [
                         SingleColumnRow(
                             txtString: Statics.getLabel('GatividhiKaaryakartaaCount'),
-                            value: "data?.vastiloksankhya?.gatividhiKaaryakartaaCount.toString()",
+                            value: talukaMandalSampurnaModel?.loksankhyaformandal?.gatividhiKaaryakartaaCount.toString(),
                             fontsize: 15),
                         SingleColumnRow(
                             txtString: Statics.getLabel('AayaamKaaryakartaaCount'),
-                            value: "data?.vastiloksankhya?.aayaamKaaryakartaaCount.toString()",
+                            value: talukaMandalSampurnaModel?.loksankhyaformandal?.aayaamKaaryakartaaCount.toString(),
                             fontsize: 15),
                         SingleColumnRow(
                             txtString: Statics.getLabel('SanghaPreritSansthaaKaaryakartaaCount'),
-                            value: "data?.vastiloksankhya?.sanghaPreritSansthaaKaaryakartaaCount.toString()",
+                            value: talukaMandalSampurnaModel?.loksankhyaformandal?.sanghaPreritSansthaaKaaryakartaaCount.toString(),
                             fontsize: 15),
                         SingleColumnRow(
                             txtString: Statics.getLabel('SocialOrganizationKaaryakartaaCount'),
-                            value: "data?.vastiloksankhya?.socialOrganizationKaaryakartaaCount.toString()",
+                            value: talukaMandalSampurnaModel?.loksankhyaformandal?.socialOrganizationKaaryakartaaCount.toString(),
                             fontsize: 15),
                       ],
                     ),
@@ -830,8 +1167,6 @@ class _MandalSurveyReportViewScreen2State extends State<MandalSurveyReportViewSc
                               )
                           ),
                         ),
-
-
                       ],
                     ),
                     commonExpansionTile(
@@ -935,7 +1270,50 @@ class _MandalSurveyReportViewScreen2State extends State<MandalSurveyReportViewSc
                     commonExpansionTile(
                       title: 'OtherSocialOrganization',
                       children: [
-
+                        Container(
+                          // height: 300,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  if (talukaMandalSampurnaModel != null && talukaMandalSampurnaModel?.talukamandalListSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation != null)
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey.shade300),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal, // horizontal scroll
+                                        child: DataTable(
+                                          headingRowColor: MaterialStateProperty.resolveWith(
+                                                (states) => Colors.purpleAccent[200],
+                                          ),
+                                          headingTextStyle: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          columns: const [
+                                            DataColumn(label: Expanded( child: Center(child: Text('अन्य सामाजिक संस्था',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
+                                            DataColumn(label: Expanded( child: Center(child: Text('संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
+                                          ],
+                                          rows: talukaMandalSampurnaModel!.talukamandalListSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation!.map((item) {
+                                            return DataRow(
+                                              cells: [
+                                                DataCell(Center(child: Text(item.areaOfOperation ?? ''))),
+                                                DataCell(Center(child: Text(item.kaaryakartaaCount.toString()))),
+                                              ],
+                                            );
+                                          }).toList(),
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              )
+                          ),
+                        ),
                       ],
                     ),
                     commonExpansionTile(
@@ -1037,74 +1415,10 @@ class _MandalSurveyReportViewScreen2State extends State<MandalSurveyReportViewSc
                       ],
                     ),
 //=====================================================================================================================
-                    commonExpansionTile(
-                      title: 'mumbaikarGaav',
-                      children: [
-                        if (talukaMandalSampurnaModel != null && talukaMandalSampurnaModel?.talukamandalMumbaikar != null)
-                          Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade300),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: DataTable(
-                                headingRowColor: MaterialStateProperty.resolveWith(
-                                      (states) => Colors.purpleAccent[200],
-                                ),
-                                headingTextStyle: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                columns: const [
-                                  DataColumn(
-                                    label: Expanded(
-                                      child: Center(
-                                        child: Text(
-                                          'मुंबईकर मंडल असलेली गावे',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  DataColumn(
-                                    label: Expanded(
-                                      child: Center(
-                                        child: Text(
-                                          'गावांची संख्या',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  DataColumn(
-                                    label: Expanded(
-                                      child: Center(
-                                        child: Text(
-                                          'किती मंडलात',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                                rows: [
-                                  DataRow(
-                                    cells: [
-                                      DataCell(Center(child: Text(talukaMandalSampurnaModel!.talukamandalHinduvirayadi!.sankhya.toString()))),
-                                      DataCell(Center(child: Text(talukaMandalSampurnaModel!.talukamandalHinduvirayadi!.gramCount.toString()))),
-                                      DataCell(Center(child: Text(talukaMandalSampurnaModel!.talukamandalHinduvirayadi!.mandalCount.toString()))),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
+
+
+
+
                     commonExpansionTile(
                       title: 'religion',
                       children: [
@@ -1205,6 +1519,122 @@ class _MandalSurveyReportViewScreen2State extends State<MandalSurveyReportViewSc
                                     ),
                                 ],
                               )
+                          ),
+                        ),
+                      ],
+                    ),
+                    commonExpansionTile(
+                      title: 'SajjanShakti',
+                      children: [
+                        Container(
+                          height: 400,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: ListView(
+                            children: groupedData.entries.map((entry) {
+                              final sajjanType = entry.key;
+                              final data = entry.value;
+
+                              // Unique prabhavishetra & samparkashiti
+                              final prabhavishetraList = {
+                                ...data.map((e) => e.prabhavishetra).toSet()
+                              }.toList();
+                              final samparkList = {
+                                ...data.map((e) => e.samparkashiti).toSet()
+                              }.toList();
+
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(height: 20),
+                                  Center(
+                                    child: Text(
+                                      "सज्जन शक्ती (${sajjanType})",
+                                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  Table(
+                                    border: TableBorder.all(),
+                                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                                    children: [
+                                      // Header Row
+                                      TableRow(
+                                        decoration: BoxDecoration(
+                                          color: Colors.purpleAccent.shade200, // Header background
+                                        ),
+                                        children: [
+                                          const TableCell(
+                                            child: Padding(
+                                              padding: EdgeInsets.all(8),
+                                              child: Text('सज्जन शक्ती संपर्क स्थिती',  style: TextStyle(color: Colors.white), ),
+
+                                            ),
+                                          ),
+                                          ...prabhavishetraList.map((header) => Padding(
+                                            padding: const EdgeInsets.all(8),
+                                            child: Text(header!,  style: TextStyle(color: Colors.white), ),
+                                          )),
+                                        ],
+                                      ),
+                                      // Data Rows
+                                      ...samparkList.map((sampark) {
+                                        return TableRow(
+                                          children: [
+                                            SizedBox(
+                                              width: 140,
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(8),
+                                                child: Text(sampark!),
+                                              ),
+                                            ),
+                                            ...prabhavishetraList.map((prabhav) {
+                                              final match = data.firstWhere(
+                                                    (item) =>
+                                                item.samparkashiti == sampark &&
+                                                    item.prabhavishetra == prabhav,
+                                                orElse: () => Talukamandalsajjanshakkati(),
+                                              );
+                                              return Padding(
+                                                padding: const EdgeInsets.all(8),
+                                                child: Text('${match.vasticnt ?? ''}'),
+                                              );
+                                            }),
+                                          ],
+                                        );
+                                      }).toList(),
+                                      // Total Row
+                                      TableRow(
+                                        decoration: BoxDecoration(color: Colors.grey.shade200),
+                                        children: [
+                                          const Padding(
+                                            padding: EdgeInsets.all(8),
+                                            child: Text(
+                                              'एकूण',
+                                              style: TextStyle(fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          ...prabhavishetraList.map((prabhav) {
+                                            final total = data
+                                                .where((item) => item.prabhavishetra == prabhav)
+                                                .fold<int>(0, (sum, item) => sum + (item.vasticnt ?? 0));
+
+                                            return Padding(
+                                              padding: const EdgeInsets.all(8),
+                                              child: Text(
+                                                '$total',
+                                                style: const TextStyle(fontWeight: FontWeight.bold),
+                                              ),
+                                            );
+                                          }),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              );
+                            }).toList(),
                           ),
                         ),
                       ],
@@ -1316,6 +1746,13 @@ class _MandalSurveyReportViewScreen2State extends State<MandalSurveyReportViewSc
                       ],
                     ),
                     commonExpansionTile(
+                      title: 'DurjanShakti',
+                      children: [
+                        if( talukaMandalSampurnaModel != null && durjanshakati != null)
+                          buildTalukaMandalTable(durjanshakati),
+                      ],
+                    ),
+                    commonExpansionTile(
                       title: 'HinduVeer',
                       children: [
                         SingleChildScrollView(
@@ -1396,7 +1833,6 @@ class _MandalSurveyReportViewScreen2State extends State<MandalSurveyReportViewSc
           ),
         ),
       ),
-
     );
   }
 
@@ -1441,5 +1877,4 @@ class _MandalSurveyReportViewScreen2State extends State<MandalSurveyReportViewSc
       ),
     );
   }
-
 }

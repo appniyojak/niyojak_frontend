@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:niyojak_prod/screens/survey_screen/report_view/mandal_report_tab_3.dart';
 import 'package:niyojak_prod/widgets/app_drawer.dart';
 import 'report_view/mandal_report_tab1.dart';
 import '../../helpers/static_data.dart' as Statics;
@@ -15,7 +16,7 @@ class _MandalSurveyReportScreenState extends State<MandalSurveyReportScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2, // Number of tabs
+      length: 3, // Number of tabs
       child: Scaffold(
         appBar: AppBar(
           title: Text(
@@ -28,6 +29,7 @@ class _MandalSurveyReportScreenState extends State<MandalSurveyReportScreen> {
             tabs: [
               Tab(text:  Statics.getLabel('SampurnaReportMandal'),),
               Tab(text:  Statics.getLabel('GraamAhaval'),),
+              Tab(text:  Statics.getLabel('mandalReport'),),
             ],
           ),
         ),
@@ -36,6 +38,8 @@ class _MandalSurveyReportScreenState extends State<MandalSurveyReportScreen> {
           children: [
             MandalSurveyReportViewScreen2(),
             MandalSurveyReportViewScreen(),
+            MandalSurveyReportViewScreen3(),
+
           ],
         ),
       ),

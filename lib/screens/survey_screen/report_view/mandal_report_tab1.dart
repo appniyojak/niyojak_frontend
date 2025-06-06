@@ -308,7 +308,7 @@ class _MandalSurveyReportViewScreenState extends State<MandalSurveyReportViewScr
                               ),
                             if (_linkedmandal != null && _linkedmandal!.length > 0)
                               DropdownButtonFormField(
-                                decoration: InputDecoration(labelText: "गाव"),
+                                decoration: InputDecoration(labelText: "तालुका"),
                                 isExpanded: true,
                                 value: _linkedmandalValue == "" ? null : _linkedmandalValue,
                                 items: _linkedmandal!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),

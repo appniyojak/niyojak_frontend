@@ -17,11 +17,19 @@ class TalukaMandalSampurnaModel {
   talukamandalListSwayamsevakCountByStudentCategory;
   List<TalukamandalListSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation>?
   talukamandalListSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation;
+  List<TalukamandalListSocialOrganizationKaaryakartaaCountByAreaOfOperation>?
+  talukamandalListSocialOrganizationKaaryakartaaCountByAreaOfOperation;
   List<TalukamandalListKaaryakartaaCountByAayaam>?
   talukamandalListKaaryakartaaCountByAayaam;
   List<TalukamandalListKaaryakartaaCountByGatividhi>?
   talukamandalListKaaryakartaaCountByGatividhi;
   Loksankhyaformandal? loksankhyaformandal;
+  List<Talukamandalsajjanshakkati>? talukamandalsajjanshakkati;
+  List<Talukamandaldurjanshakkati>? talukamandaldurjanshakkati;
+  List<TalukamandalvividhSampradhaySatsangKendra>?
+  talukamandalvividhSampradhaySatsangKendra;
+  TalukamandalvividhKshetaCheKam? talukamandalvividhKshetaCheKam;
+  List<TalukamandalSewaPrakalpa>? talukamandalSewaPrakalpa;
 
   TalukaMandalSampurnaModel(
       {this.message,
@@ -37,9 +45,15 @@ class TalukaMandalSampurnaModel {
         this.talukamandalListSwayamsevakCountByVyavasaayeeCategory,
         this.talukamandalListSwayamsevakCountByStudentCategory,
         this.talukamandalListSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation,
+        this.talukamandalListSocialOrganizationKaaryakartaaCountByAreaOfOperation,
         this.talukamandalListKaaryakartaaCountByAayaam,
         this.talukamandalListKaaryakartaaCountByGatividhi,
-        this.loksankhyaformandal
+        this.loksankhyaformandal,
+        this.talukamandalsajjanshakkati,
+        this.talukamandaldurjanshakkati,
+        this.talukamandalvividhSampradhaySatsangKendra,
+        this.talukamandalvividhKshetaCheKam,
+        this.talukamandalSewaPrakalpa
       });
 
   TalukaMandalSampurnaModel.fromJson(Map<String, dynamic> json) {
@@ -119,6 +133,16 @@ class TalukaMandalSampurnaModel {
                 .fromJson(v));
       });
     }
+    if (json['talukamandalListSocialOrganizationKaaryakartaaCountByAreaOfOperation'] !=null) {
+      talukamandalListSocialOrganizationKaaryakartaaCountByAreaOfOperation = <
+          TalukamandalListSocialOrganizationKaaryakartaaCountByAreaOfOperation>[];
+      json['talukamandalListSocialOrganizationKaaryakartaaCountByAreaOfOperation']
+          .forEach((v) {
+        talukamandalListSocialOrganizationKaaryakartaaCountByAreaOfOperation!.add(
+            new TalukamandalListSocialOrganizationKaaryakartaaCountByAreaOfOperation
+                .fromJson(v));
+      });
+    }
     if (json['talukamandalListKaaryakartaaCountByAayaam'] != null) {
       talukamandalListKaaryakartaaCountByAayaam =
       <TalukamandalListKaaryakartaaCountByAayaam>[];
@@ -138,6 +162,39 @@ class TalukaMandalSampurnaModel {
     loksankhyaformandal = json['loksankhyaformandal'] != null
         ? new Loksankhyaformandal.fromJson(json['loksankhyaformandal'])
         : null;
+    if (json['talukamandalsajjanshakkati'] != null) {
+      talukamandalsajjanshakkati = <Talukamandalsajjanshakkati>[];
+      json['talukamandalsajjanshakkati'].forEach((v) {
+        talukamandalsajjanshakkati!
+            .add(new Talukamandalsajjanshakkati.fromJson(v));
+      });
+    }
+    if (json['talukamandaldurjanshakkati'] != null) {
+      talukamandaldurjanshakkati = <Talukamandaldurjanshakkati>[];
+      json['talukamandaldurjanshakkati'].forEach((v) {
+        talukamandaldurjanshakkati!
+            .add(new Talukamandaldurjanshakkati.fromJson(v));
+      });
+    }
+    if (json['talukamandalvividhSampradhaySatsangKendra'] != null) {
+      talukamandalvividhSampradhaySatsangKendra =
+      <TalukamandalvividhSampradhaySatsangKendra>[];
+      json['talukamandalvividhSampradhaySatsangKendra'].forEach((v) {
+        talukamandalvividhSampradhaySatsangKendra!
+            .add(new TalukamandalvividhSampradhaySatsangKendra.fromJson(v));
+      });
+    }
+    talukamandalvividhKshetaCheKam =
+    json['talukamandalvividhKshetaCheKam'] != null
+        ? new TalukamandalvividhKshetaCheKam.fromJson(
+        json['talukamandalvividhKshetaCheKam'])
+        : null;
+    if (json['talukamandalSewaPrakalpa'] != null) {
+      talukamandalSewaPrakalpa = <TalukamandalSewaPrakalpa>[];
+      json['talukamandalSewaPrakalpa'].forEach((v) {
+        talukamandalSewaPrakalpa!.add(new TalukamandalSewaPrakalpa.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -196,6 +253,13 @@ class TalukaMandalSampurnaModel {
               .map((v) => v.toJson())
               .toList();
     }
+    if (this.talukamandalListSocialOrganizationKaaryakartaaCountByAreaOfOperation !=null) {
+      data['talukamandalListSocialOrganizationKaaryakartaaCountByAreaOfOperation'] =
+          this
+              .talukamandalListSocialOrganizationKaaryakartaaCountByAreaOfOperation!
+              .map((v) => v.toJson())
+              .toList();
+    }
     if (this.talukamandalListKaaryakartaaCountByAayaam != null) {
       data['talukamandalListKaaryakartaaCountByAayaam'] = this
           .talukamandalListKaaryakartaaCountByAayaam!
@@ -211,6 +275,28 @@ class TalukaMandalSampurnaModel {
     if (this.loksankhyaformandal != null) {
       data['loksankhyaformandal'] = this.loksankhyaformandal!.toJson();
     }
+    if (this.talukamandalsajjanshakkati != null) {
+      data['talukamandalsajjanshakkati'] =
+          this.talukamandalsajjanshakkati!.map((v) => v.toJson()).toList();
+    }
+    if (this.talukamandaldurjanshakkati != null) {
+      data['talukamandaldurjanshakkati'] =
+          this.talukamandaldurjanshakkati!.map((v) => v.toJson()).toList();
+    }
+    if (this.talukamandalvividhSampradhaySatsangKendra != null) {
+      data['talukamandalvividhSampradhaySatsangKendra'] = this
+          .talukamandalvividhSampradhaySatsangKendra!
+          .map((v) => v.toJson())
+          .toList();
+    }
+    if (this.talukamandalvividhKshetaCheKam != null) {
+      data['talukamandalvividhKshetaCheKam'] =
+          this.talukamandalvividhKshetaCheKam!.toJson();
+    }
+    if (this.talukamandalSewaPrakalpa != null) {
+      data['talukamandalSewaPrakalpa'] =
+          this.talukamandalSewaPrakalpa!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
@@ -224,7 +310,7 @@ class TalukamandalHinduvirayadi {
       {this.gramCount, this.mandalCount, this.sankhya, this.value});
 
   TalukamandalHinduvirayadi.fromJson(Map<String, dynamic> json) {
-    gramCount = json['GramCount'];
+    gramCount = json['gramCount'];
     mandalCount = json['MandalCount'];
     sankhya = json['sankhya'];
     value = json['value'];
@@ -232,7 +318,7 @@ class TalukamandalHinduvirayadi {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['GramCount'] = this.gramCount;
+    data['gramCount'] = this.gramCount;
     data['MandalCount'] = this.mandalCount;
     data['sankhya'] = this.sankhya;
     data['value'] = this.value;
@@ -390,7 +476,13 @@ class TalukamandalsarvekshanReportwithname {
   }
 }
 class TalukamandalsarvekshanReportwithselectedlevel {
-  Null? geounitid;
+  int? geounitid;
+  int? mandalAllStepsCompleteCount;
+  int? mandalStep1CompleteCount;
+  int? mandalStep3CompleteCount;
+  int? mandalStepStartedCount;
+  int? mandalStepsNotstartedCount;
+  int? mandalcount;
   int? nagarAllStepsCompleteCount;
   int? nagarStep1CompleteCount;
   int? nagarStep2CompleteCount;
@@ -398,7 +490,7 @@ class TalukamandalsarvekshanReportwithselectedlevel {
   int? nagarStepStartedCount;
   int? nagarStepsNotstartedCount;
   int? nagarcount;
-  Null? name;
+  String? name;
   int? vastiAllStepsCompleteCount;
   String? vastiAllStepsCompleteNames;
   int? vastiStep1CompleteCount;
@@ -415,6 +507,12 @@ class TalukamandalsarvekshanReportwithselectedlevel {
 
   TalukamandalsarvekshanReportwithselectedlevel(
       {this.geounitid,
+        this.mandalAllStepsCompleteCount,
+        this.mandalStep1CompleteCount,
+        this.mandalStep3CompleteCount,
+        this.mandalStepStartedCount,
+        this.mandalStepsNotstartedCount,
+        this.mandalcount,
         this.nagarAllStepsCompleteCount,
         this.nagarStep1CompleteCount,
         this.nagarStep2CompleteCount,
@@ -440,6 +538,12 @@ class TalukamandalsarvekshanReportwithselectedlevel {
   TalukamandalsarvekshanReportwithselectedlevel.fromJson(
       Map<String, dynamic> json) {
     geounitid = json['geounitid'];
+    mandalAllStepsCompleteCount = json['mandal_all_steps_complete_count'];
+    mandalStep1CompleteCount = json['mandal_step1_complete_count'];
+    mandalStep3CompleteCount = json['mandal_step3_complete_count'];
+    mandalStepStartedCount = json['mandal_step_started_count'];
+    mandalStepsNotstartedCount = json['mandal_steps_notstarted_count'];
+    mandalcount = json['mandalcount'];
     nagarAllStepsCompleteCount = json['nagar_all_steps_complete_count'];
     nagarStep1CompleteCount = json['nagar_step1_complete_count'];
     nagarStep2CompleteCount = json['nagar_step2_complete_count'];
@@ -466,6 +570,12 @@ class TalukamandalsarvekshanReportwithselectedlevel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['geounitid'] = this.geounitid;
+    data['mandal_all_steps_complete_count'] = this.mandalAllStepsCompleteCount;
+    data['mandal_step1_complete_count'] = this.mandalStep1CompleteCount;
+    data['mandal_step3_complete_count'] = this.mandalStep3CompleteCount;
+    data['mandal_step_started_count'] = this.mandalStepStartedCount;
+    data['mandal_steps_notstarted_count'] = this.mandalStepsNotstartedCount;
+    data['mandalcount'] = this.mandalcount;
     data['nagar_all_steps_complete_count'] = this.nagarAllStepsCompleteCount;
     data['nagar_step1_complete_count'] = this.nagarStep1CompleteCount;
     data['nagar_step2_complete_count'] = this.nagarStep2CompleteCount;
@@ -638,6 +748,29 @@ class TalukamandalListSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation {
     return data;
   }
 }
+class TalukamandalListSocialOrganizationKaaryakartaaCountByAreaOfOperation {
+  String? mainAreaOfOperationID;
+  int? areaOfOperation;
+  int? kaaryakartaaCount;
+
+  TalukamandalListSocialOrganizationKaaryakartaaCountByAreaOfOperation(
+      {this.mainAreaOfOperationID, this.areaOfOperation, this.kaaryakartaaCount});
+
+  TalukamandalListSocialOrganizationKaaryakartaaCountByAreaOfOperation.fromJson(
+      Map<String, dynamic> json) {
+    mainAreaOfOperationID = json['MainAreaOfOperationID'];
+    areaOfOperation = json['AreaOfOperation'];
+    kaaryakartaaCount = json['KaaryakartaaCount'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['MainAreaOfOperationID'] = this.mainAreaOfOperationID;
+    data['AreaOfOperation'] = this.areaOfOperation;
+    data['KaaryakartaaCount'] = this.kaaryakartaaCount;
+    return data;
+  }
+}
 class TalukamandalListKaaryakartaaCountByAayaam {
   int? aayaamID;
   String? aayaamName;
@@ -686,6 +819,8 @@ class TalukamandalListKaaryakartaaCountByGatividhi {
 }
 class Loksankhyaformandal {
   int? aayaamKaaryakartaaCount;
+  int? graamcount;
+  int? mandalCount;
   int? akhilBhaaratiyaKaaryakartaaCount;
   int? baalCount;
   int? bhaagKaaryakartaaCount;
@@ -718,9 +853,12 @@ class Loksankhyaformandal {
   int? unknownAgeCount;
   int? vastiKaaryakartaaCount;
   int? vibhaagKaaryakartaaCount;
+  int? totalSwayamsevakCount;
 
   Loksankhyaformandal(
       {this.aayaamKaaryakartaaCount,
+        this.graamcount,
+        this.mandalCount,
         this.akhilBhaaratiyaKaaryakartaaCount,
         this.baalCount,
         this.bhaagKaaryakartaaCount,
@@ -752,10 +890,13 @@ class Loksankhyaformandal {
         this.trutiyaVarshaShikshitCount,
         this.unknownAgeCount,
         this.vastiKaaryakartaaCount,
+        this.totalSwayamsevakCount,
         this.vibhaagKaaryakartaaCount});
 
   Loksankhyaformandal.fromJson(Map<String, dynamic> json) {
     aayaamKaaryakartaaCount = json['AayaamKaaryakartaaCount'];
+    mandalCount = json['mandalCount'];
+    graamcount = json['graamcount'];
     akhilBhaaratiyaKaaryakartaaCount = json['AkhilBhaaratiyaKaaryakartaaCount'];
     baalCount = json['BaalCount'];
     bhaagKaaryakartaaCount = json['BhaagKaaryakartaaCount'];
@@ -790,11 +931,14 @@ class Loksankhyaformandal {
     unknownAgeCount = json['UnknownAgeCount'];
     vastiKaaryakartaaCount = json['VastiKaaryakartaaCount'];
     vibhaagKaaryakartaaCount = json['VibhaagKaaryakartaaCount'];
+    totalSwayamsevakCount = json['totalSwayamsevakCount'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['AayaamKaaryakartaaCount'] = this.aayaamKaaryakartaaCount;
+    data['graamcount'] = this.graamcount;
+    data['mandalCount'] = this.mandalCount;
     data['AkhilBhaaratiyaKaaryakartaaCount'] =
         this.akhilBhaaratiyaKaaryakartaaCount;
     data['BaalCount'] = this.baalCount;
@@ -832,6 +976,153 @@ class Loksankhyaformandal {
     data['UnknownAgeCount'] = this.unknownAgeCount;
     data['VastiKaaryakartaaCount'] = this.vastiKaaryakartaaCount;
     data['VibhaagKaaryakartaaCount'] = this.vibhaagKaaryakartaaCount;
+    data['totalSwayamsevakCount'] = this.totalSwayamsevakCount;
+    return data;
+  }
+}
+class Talukamandalsajjanshakkati {
+  String? prabhavishetra;
+  String? sajjanshakkati;
+  String? samparkashiti;
+  int? vasticnt;
+
+  Talukamandalsajjanshakkati(
+      {this.prabhavishetra,
+        this.sajjanshakkati,
+        this.samparkashiti,
+        this.vasticnt});
+
+  Talukamandalsajjanshakkati.fromJson(Map<String, dynamic> json) {
+    prabhavishetra = json['prabhavishetra'];
+    sajjanshakkati = json['sajjanshakkati'];
+    samparkashiti = json['samparkashiti'];
+    vasticnt = json['vasticnt'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['prabhavishetra'] = this.prabhavishetra;
+    data['sajjanshakkati'] = this.sajjanshakkati;
+    data['samparkashiti'] = this.samparkashiti;
+    data['vasticnt'] = this.vasticnt;
+    return data;
+  }
+}
+class Talukamandaldurjanshakkati {
+  Null? gramCount;
+  String? maintype;
+  int? sankhya;
+  String? subtype;
+
+  Talukamandaldurjanshakkati(
+      {this.gramCount, this.maintype, this.sankhya, this.subtype});
+
+  Talukamandaldurjanshakkati.fromJson(Map<String, dynamic> json) {
+    gramCount = json['GramCount'];
+    maintype = json['maintype'];
+    sankhya = json['sankhya'];
+    subtype = json['subtype'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['GramCount'] = this.gramCount;
+    data['maintype'] = this.maintype;
+    data['sankhya'] = this.sankhya;
+    data['subtype'] = this.subtype;
+    return data;
+  }
+}
+
+class TalukamandalvividhSampradhaySatsangKendra {
+  int? gramCount;
+  int? mandalCount;
+  Null? karyasankhya;
+  Null? sankhya;
+  String? value;
+
+  TalukamandalvividhSampradhaySatsangKendra(
+      {this.gramCount,
+        this.mandalCount,
+        this.karyasankhya,
+        this.sankhya,
+        this.value});
+
+  TalukamandalvividhSampradhaySatsangKendra.fromJson(
+      Map<String, dynamic> json) {
+    gramCount = json['GramCount'];
+    mandalCount = json['MandalCount'];
+    karyasankhya = json['karyasankhya'];
+    sankhya = json['sankhya'];
+    value = json['value'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['GramCount'] = this.gramCount;
+    data['MandalCount'] = this.mandalCount;
+    data['karyasankhya'] = this.karyasankhya;
+    data['sankhya'] = this.sankhya;
+    data['value'] = this.value;
+    return data;
+  }
+}
+
+class TalukamandalvividhKshetaCheKam {
+  int? gramCount;
+  int? mandalCount;
+  int? karyasankhya;
+  int? sankhya;
+  Null? value;
+
+  TalukamandalvividhKshetaCheKam(
+      {this.gramCount,
+        this.mandalCount,
+        this.karyasankhya,
+        this.sankhya,
+        this.value});
+
+  TalukamandalvividhKshetaCheKam.fromJson(Map<String, dynamic> json) {
+    gramCount = json['GramCount'];
+    mandalCount = json['MandalCount'];
+    karyasankhya = json['karyasankhya'];
+    sankhya = json['sankhya'];
+    value = json['value'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['GramCount'] = this.gramCount;
+    data['MandalCount'] = this.mandalCount;
+    data['karyasankhya'] = this.karyasankhya;
+    data['sankhya'] = this.sankhya;
+    data['value'] = this.value;
+    return data;
+  }
+}
+
+class TalukamandalSewaPrakalpa {
+  int? gramCount;
+  String? maintype;
+  int? sankhya;
+  String? subtype;
+
+  TalukamandalSewaPrakalpa(
+      {this.gramCount, this.maintype, this.sankhya, this.subtype});
+
+  TalukamandalSewaPrakalpa.fromJson(Map<String, dynamic> json) {
+    gramCount = json['GramCount'];
+    maintype = json['maintype'];
+    sankhya = json['sankhya'];
+    subtype = json['subtype'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['GramCount'] = this.gramCount;
+    data['maintype'] = this.maintype;
+    data['sankhya'] = this.sankhya;
+    data['subtype'] = this.subtype;
     return data;
   }
 }

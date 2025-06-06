@@ -36,7 +36,6 @@ class _VastiSurveyReportScreenState extends State<VastiSurveyReportScreen> {
           children: [
             CompleteSurveyReport(),
             VastiSurveyReportViewScreen(),
-
           ],
         ),
       ),
