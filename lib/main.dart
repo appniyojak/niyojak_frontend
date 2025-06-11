@@ -1,20 +1,13 @@
-import 'dart:convert';
 import 'dart:io';
-import 'package:niyojak_prod/screens/create_notification.dart';
-import 'package:niyojak_prod/screens/survey_screen/report_view/vasti_report_tab2.dart';
-import 'package:niyojak_prod/screens/survey_screen/survey_form/mandal_survey_form_view.dart';
-import 'package:niyojak_prod/screens/survey_screen/mandal_reports_tabs.dart';
-import 'package:niyojak_prod/screens/survey_screen/report_view/vasti_report_tab1.dart';
-import 'package:niyojak_prod/screens/sankalit_data_name.dart';
-import 'package:niyojak_prod/screens/survey_screen/vasti_reports_tabs.dart';
-import 'package:niyojak_prod/screens/update_master_data.dart';
-import 'package:niyojak_prod/screens/survey_screen/survey_form/vasti_survey_form_view.dart';
 
-import '../helpers/static_data.dart' as Statics;
 import 'package:background_fetch/background_fetch.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart'
+    show Firebase, FirebaseOptions;
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:niyojak_prod/providers/sankalp_screen_provider.dart';
 import 'package:niyojak_prod/screens/AbhiyaanSwayamsevak.dart';
 import 'package:niyojak_prod/screens/AbhiyanAddSwayamsevak.dart';
@@ -25,71 +18,76 @@ import 'package:niyojak_prod/screens/AddEditVisheshVyaktiScreen.dart';
 import 'package:niyojak_prod/screens/AddGruhaSamparkScreen.dart';
 import 'package:niyojak_prod/screens/ContactUsScreen.dart';
 import 'package:niyojak_prod/screens/VisheshVyaktShodhScreen.dart';
+import 'package:niyojak_prod/screens/create_notification.dart';
 import 'package:niyojak_prod/screens/edit_swayamsevak_daayitva.dart';
 import 'package:niyojak_prod/screens/edit_swayamsevak_other_info.dart';
 import 'package:niyojak_prod/screens/edit_swayamsevak_soochi.dart';
 import 'package:niyojak_prod/screens/edit_vishesh_vyakti_shod.dart';
 import 'package:niyojak_prod/screens/nirikshan_baithak_vrutta.dart';
+import 'package:niyojak_prod/screens/sankalit_data_name.dart';
 import 'package:niyojak_prod/screens/search_sankalp_screen.dart';
+import 'package:niyojak_prod/screens/survey_screen/mandal_reports_tabs.dart';
+import 'package:niyojak_prod/screens/survey_screen/report_view/vasti_report_tab1.dart';
+import 'package:niyojak_prod/screens/survey_screen/report_view/vasti_report_tab2.dart';
+import 'package:niyojak_prod/screens/survey_screen/survey_form/mandal_survey_form_view.dart';
+import 'package:niyojak_prod/screens/survey_screen/survey_form/vasti_survey_form_view.dart';
+import 'package:niyojak_prod/screens/survey_screen/vasti_reports_tabs.dart';
+import 'package:niyojak_prod/screens/update_master_data.dart';
 import 'package:niyojak_prod/screens/view_vishesh_vyakti_shodh.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import './screens/shaakhaa_toli.dart';
-import 'package:firebase_core/firebase_core.dart' show Firebase, FirebaseOptions;
-import './screens/search_rjb_nidhi_sankalan.dart';
+
+import './screens/annual_baithak_ekatrit_vrutta.dart';
+import './screens/change_password.dart';
 import './screens/edit_daayitva.dart';
+import './screens/edit_event.dart';
+import './screens/edit_join_rss.dart';
 import './screens/edit_sewa_vasti.dart';
+import './screens/edit_shaakhaa.dart';
+import './screens/edit_shaakhaa_vrutta.dart';
+import './screens/edit_soochi.dart';
+import './screens/edit_swayamsevak_basic_info.dart';
+import './screens/edit_swayamsevak_screen.dart';
+import './screens/edit_swayamsevak_transfer.dart';
+import './screens/event_calender.dart';
+import './screens/event_members.dart';
+import './screens/event_vrutta.dart';
+import './screens/help_screen.dart';
+import './screens/home_screen.dart';
+import './screens/login_screen.dart';
+import './screens/maps_display.dart';
+import './screens/profile_settings.dart';
+import './screens/search_annual_baithak_vrutta.dart';
+import './screens/search_event.dart';
+import './screens/search_join_rss.dart';
+import './screens/search_rjb_nidhi_sankalan.dart';
+import './screens/search_shaakhaa.dart';
+import './screens/search_soochi_screen.dart';
+import './screens/search_swayamsevak_transfer.dart';
 import './screens/sewa_vasti_list.dart';
 import './screens/shaakhaa_sewa_vasti_link.dart';
-import './screens/swayamsevak_daayitva_edit.dart';
-import './screens/maps_display.dart';
-import './screens/edit_shaakhaa_vrutta.dart';
+import './screens/shaakhaa_toli.dart';
 import './screens/shaakhaa_vrutta.dart';
-import './screens/event_vrutta.dart';
-import './screens/event_members.dart';
-import './screens/edit_event.dart';
-import './screens/event_calender.dart';
-import './screens/search_event.dart';
-import './widgets/shaakhaa_pat.dart';
-import './screens/soochi_sharing.dart';
-import './screens/edit_join_rss.dart';
 import './screens/soochi_members.dart';
-import './screens/search_join_rss.dart';
-import './screens/search_swayamsevak_transfer.dart';
-import './screens/edit_swayamsevak_transfer.dart';
-import './screens/edit_swayamsevak_basic_info.dart';
-import './screens/search_annual_baithak_vrutta.dart';
-import './screens/annual_baithak_ekatrit_vrutta.dart';
-import './screens/home_screen.dart';
-import './screens/help_screen.dart';
-import './screens/search_soochi_screen.dart';
-import './screens/login_screen.dart';
-import './screens/edit_swayamsevak_screen.dart';
-import './screens/edit_shaakhaa.dart';
-import './screens/search_shaakhaa.dart';
-import './screens/edit_soochi.dart';
+import './screens/soochi_sharing.dart';
 import './screens/splash_screen.dart';
-import './screens/change_password.dart';
-import './screens/profile_settings.dart';
+import './screens/swayamsevak_daayitva_edit.dart';
 import './screens/swayamsevak_search.dart';
+import './widgets/shaakhaa_pat.dart';
 import 'firebase_options.dart';
-import 'helpers/static_data.dart';
-import 'models/response_model/baithakvrutta_by_id_model.dart';
 import 'screens/forget_password.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:http/http.dart' as http;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(name: "niyojak-cdd79", options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(
+      name: "niyojak-cdd79", options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(NiyojakApp());
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp(name: "niyojak-cdd79", options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(
+      name: "niyojak-cdd79", options: DefaultFirebaseOptions.currentPlatform);
   print('Handling a background message: ${message.messageId}');
 }
 
@@ -111,7 +109,8 @@ class NiyojakAppState extends State<NiyojakApp> {
   Future<void> initPlatformState() async {
     try {
       WidgetsFlutterBinding.ensureInitialized();
-      await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+      await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform);
       print("Firebase initialized successfully");
     } catch (e) {
       print("Error initializing Firebase: $e");
@@ -171,8 +170,10 @@ class NiyojakAppState extends State<NiyojakApp> {
 
     // Initialize FlutterLocalNotificationsPlugin
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
-    final InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    final InitializationSettings initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid);
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -211,9 +212,14 @@ class NiyojakAppState extends State<NiyojakApp> {
   }
 
   Future<void> _showNotification(RemoteNotification notification) async {
-    const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails('channel_id', 'channel_name',
-        channelDescription: 'channel_description', importance: Importance.high, priority: Priority.high, showWhen: false);
-    const NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
+    const AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails('channel_id', 'channel_name',
+            channelDescription: 'channel_description',
+            importance: Importance.high,
+            priority: Priority.high,
+            showWhen: false);
+    const NotificationDetails notificationDetails =
+        NotificationDetails(android: androidNotificationDetails);
     await flutterLocalNotificationsPlugin.show(
       notification.hashCode,
       notification.title,
@@ -238,7 +244,9 @@ class NiyojakAppState extends State<NiyojakApp> {
           unselectedLabelColor: Colors.white70, // Color for unselected tab text
         ),
         appBarTheme: AppBarTheme(
-            color: Colors.purple, titleTextStyle: TextStyle(color: Colors.white), iconTheme: IconThemeData(color: Colors.white)),
+            color: Colors.purple,
+            titleTextStyle: TextStyle(color: Colors.white),
+            iconTheme: IconThemeData(color: Colors.white)),
         primaryColor: Colors.purple,
         primarySwatch: Colors.purple,
         fontFamily: 'Lato',
@@ -255,12 +263,16 @@ class NiyojakAppState extends State<NiyojakApp> {
         ForgotPassword.routeName: (ctx) => ForgotPassword(),
         AbhiyaanSwayamsevak.routeName: (ctx) => AbhiyaanSwayamsevak(),
         VisheshVyaktiShodhScreen.routeName: (ctx) => VisheshVyaktiShodhScreen(),
-        AddEditVisheshVyaktiScreen.routeName: (ctx) => AddEditVisheshVyaktiScreen(),
+        AddEditVisheshVyaktiScreen.routeName: (ctx) =>
+            AddEditVisheshVyaktiScreen(),
         EditVisheshVyaktiScreen.routeName: (ctx) => EditVisheshVyaktiScreen(),
         ViewVisheshVyaktiScreen.routeName: (ctx) => ViewVisheshVyaktiScreen(),
-        AbhiyanAddSwayamsevakScreen.routeName: (ctx) => AbhiyanAddSwayamsevakScreen(),
-        AbhiyanEditSwayamsevakScreen.routeName: (ctx) => AbhiyanEditSwayamsevakScreen(),
-        AbhiyanViewSwayamsevakScreen.routeName: (ctx) => AbhiyanViewSwayamsevakScreen(),
+        AbhiyanAddSwayamsevakScreen.routeName: (ctx) =>
+            AbhiyanAddSwayamsevakScreen(),
+        AbhiyanEditSwayamsevakScreen.routeName: (ctx) =>
+            AbhiyanEditSwayamsevakScreen(),
+        AbhiyanViewSwayamsevakScreen.routeName: (ctx) =>
+            AbhiyanViewSwayamsevakScreen(),
         AddGruhaSamparkScreen.routeName: (ctx) => AddGruhaSamparkScreen(),
         SankalitDataNamesView.routeName: (ctx) => SankalitDataNamesView(),
         SearchShaakhaaScreen.routeName: (ctx) => SearchShaakhaaScreen(),
@@ -289,29 +301,41 @@ class NiyojakAppState extends State<NiyojakApp> {
         ShaakhaaSevaVastiLink.routeName: (ctx) => ShaakhaaSevaVastiLink(),
         SearchSewaVasti.routeName: (ctx) => SearchSewaVasti(),
         EditSewaVasti.routeName: (ctx) => EditSewaVasti(),
-        SearchSwayamsevakTransfer.routeName: (ctx) => SearchSwayamsevakTransfer(),
-        EditSwayamsevakTransferScreen.routeName: (ctx) => EditSwayamsevakTransferScreen(),
-        SearchRamJanmaBhoomiNidhiSankalan.routeName: (ctx) => SearchRamJanmaBhoomiNidhiSankalan(),
+        SearchSwayamsevakTransfer.routeName: (ctx) =>
+            SearchSwayamsevakTransfer(),
+        EditSwayamsevakTransferScreen.routeName: (ctx) =>
+            EditSwayamsevakTransferScreen(),
+        SearchRamJanmaBhoomiNidhiSankalan.routeName: (ctx) =>
+            SearchRamJanmaBhoomiNidhiSankalan(),
         ShaakhaaToli.routeName: (ctx) => ShaakhaaToli(),
         EditSwayamsevakBasicInfo.routeName: (ctx) => EditSwayamsevakBasicInfo(),
         EditSwayamsevakDaayitva.routeName: (ctx) => EditSwayamsevakDaayitva(),
         EditSwayamsevakOtherInfo.routeName: (ctx) => EditSwayamsevakOtherInfo(),
-        SearchAnnualBaithakVrutta.routeName: (ctx) => SearchAnnualBaithakVrutta(),
-        NirikshanAnnualBaithakVrutta.routeName: (ctx) => NirikshanAnnualBaithakVrutta(),
-        AnnualBaithakEkatritVrutta.routeName: (ctx) => AnnualBaithakEkatritVrutta(),
-        EditSwayamsevakSoochiInfo.routeName: (ctx) => EditSwayamsevakSoochiInfo(),
+        SearchAnnualBaithakVrutta.routeName: (ctx) =>
+            SearchAnnualBaithakVrutta(),
+        NirikshanAnnualBaithakVrutta.routeName: (ctx) =>
+            NirikshanAnnualBaithakVrutta(),
+        AnnualBaithakEkatritVrutta.routeName: (ctx) =>
+            AnnualBaithakEkatritVrutta(),
+        EditSwayamsevakSoochiInfo.routeName: (ctx) =>
+            EditSwayamsevakSoochiInfo(),
         CreateNotificationView.routeName: (ctx) => CreateNotificationView(),
         UpdateMasterDataScreen.routeName: (ctx) => UpdateMasterDataScreen(),
         VastiSurveyFormScreen.routeName: (ctx) => VastiSurveyFormScreen(),
-        VastiSurveyReportViewScreen.routeName: (ctx) => VastiSurveyReportViewScreen(),
+        VastiSurveyReportViewScreen.routeName: (ctx) =>
+            VastiSurveyReportViewScreen(),
         CompleteSurveyReport.routeName: (ctx) => CompleteSurveyReport(),
         MandalSurveyFormScreen.routeName: (ctx) => MandalSurveyFormScreen(),
         MandalSurveyReportScreen.routeName: (ctx) => MandalSurveyReportScreen(),
         VastiSurveyReportScreen.routeName: (ctx) => VastiSurveyReportScreen(),
         SearchSankalpScreen.routeName: (ctx) =>
-            ChangeNotifierProvider<SankalpScreenProvider>(create: (context) => SankalpScreenProvider(), child: SearchSankalpScreen()),
-        SearchSankalpScreen.routeName: (ctx) => ChangeNotifierProvider<SankalpScreenProvider>(
-            create: (context) => SankalpScreenProvider(), child: SearchSankalpScreen()),
+            ChangeNotifierProvider<SankalpScreenProvider>(
+                create: (context) => SankalpScreenProvider(),
+                child: SearchSankalpScreen()),
+        SearchSankalpScreen.routeName: (ctx) =>
+            ChangeNotifierProvider<SankalpScreenProvider>(
+                create: (context) => SankalpScreenProvider(),
+                child: SearchSankalpScreen()),
       },
     );
   }

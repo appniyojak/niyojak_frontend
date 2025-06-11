@@ -148,13 +148,11 @@ class _SplashScreenCheckState extends State<SplashScreenCheck> {
     //PackageInfo info = await PackageInfo.fromPlatform();
     //String version = info.version;
     //String buildNumber = info.buildNumber;
-
     var inputData = json.encode({
       "AppUserID": (Statics.userDetails['userID'] == '' ? null : Statics.userDetails['userID']),
       "ClientAppVersionNumber": Statics.packageInfo['versionNumber'],
       "devicetype": Platform.isAndroid ? 1 :0,
     });
-
     print({
       "AppUserID": (Statics.userDetails['userID'] == '' ? null : Statics.userDetails['userID']),
       "ClientAppVersionNumber": Statics.packageInfo['versionNumber'],
@@ -162,7 +160,6 @@ class _SplashScreenCheckState extends State<SplashScreenCheck> {
     });
     //Statics.userDetails["isUpdatedVersion"] = await Statics.isCompatibleVersion(inputData);
     var resBody = await Statics.isCompatibleVersion(inputData);
-
     print(jsonEncode(resBody));
     Statics.userDetails['isUpdatedVersion'] = resBody['IsVersionCompatible'];
     if (!mounted) return;

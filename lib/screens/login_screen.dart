@@ -1279,6 +1279,7 @@ class _LogInCardState extends State<LogInCard> {
   //     isLoadingNotifier.value = false;
   //   }
   // }
+
   Future<void> _login(BuildContext context) async {
 
     if (!_formKey.currentState!.validate()) {
@@ -1307,34 +1308,26 @@ class _LogInCardState extends State<LogInCard> {
   void switchScreens(ctx) async {
     var landingPage;
     print("switchScreens 1");
-
     SharedPreferences pref = await SharedPreferences.getInstance();
     var data = pref.getString("AbhiyanSwayamsevakData");
     var otpUser =  pref.getString("otpuser") ?? '';
     if (data != null) {
       print("switchScreens 2");
-
       initialData = AbhiyanSwayamsevakdata.fromJson(jsonDecode(data));
     }
-
     if (Statics.userDetails['isUpdatedVersion'] == false) {
       print("switchScreens 3");
-
       landingPage = UpdateVersion();
     } else {
       print("switchScreens 4");
-
       if (Statics.userDetails['isAuthorized']) {
         print("switchScreens 5");
-
         await Statics.populateUserDetailsMap();
         if (Statics.userDetails['isFirstLogin']) {
           print("switchScreens 6");
-
           landingPage = ChangePassword();
         } else if ((Statics.userDetails['userID'].toString().isEmpty || Statics.userDetails['userID'].toString() == "0") && initialData != null) {
           print("switchScreens 7");
-
           print("1234:- ${Statics.userDetails['userID'].toString()}");
           Database db = await DatabaseHelper.database;
           await db.execute('UPDATE UserDataMaster SET PreferredLanguageID=6;');
@@ -1343,24 +1336,18 @@ class _LogInCardState extends State<LogInCard> {
           landingPage = AbhiyanScreen();
         } else {
           print("switchScreens 8");
-
           landingPage = HomeScreen();
         }
         print("switchScreens 9");
-
       } else {
         print("switchScreens 10");
-
         landingPage = LogInScreen();
       }
       print("switchScreens 11");
-
     }
     print("switchScreens 13");
-
     Navigator.of(ctx).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => landingPage));
   }
-
 }
 
 

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
 import '../../../helpers/static_data.dart' as Statics;
 import '../../../models/response_model/nagar_vasti_model.dart';
 import '../../../providers/bals.dart';
 import '../../../widgets/single_column_row.dart';
 import '../../../widgets/two_column_row.dart';
-
 
 class CompleteSurveyReport extends StatefulWidget {
   static const String routeName = '/complete-survey-report';
@@ -17,7 +17,6 @@ class CompleteSurveyReport extends StatefulWidget {
 }
 
 class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
-
   @override
   void initState() {
     super.initState();
@@ -44,61 +43,74 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
   String? selctedDropDownLevelName = 'प्रांत';
   String? selctedLevelId = '0';
 
-
   void populateDropdown() async {
     var data = await Statics.getStaticLDB('AnnualBaithakType');
     populatelinkedMahaanagarDropdown();
     populatelinkedVibhaagDropdown('');
     if (!mounted) return;
     _baithakTypes = data;
-    _baithakTypes = _baithakTypes!.where((element) => element.showAnnualBaithakkey!.contains('1')).toList();
+    _baithakTypes = _baithakTypes!
+        .where((element) => element.showAnnualBaithakkey!.contains('1'))
+        .toList();
     print("_baithakTypes :-- $_baithakTypes");
     setState(() {});
   }
-  Future<List<GeoUnitMasterBAL>>  populatelinkedMahaanagarDropdown() async {
-    var data = await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['MahaanagarLevelID'].toString(), '', '', '');
+
+  Future<List<GeoUnitMasterBAL>> populatelinkedMahaanagarDropdown() async {
+    var data = await Statics.getGeoUnitsByLevelAndParentForVasti(
+        Statics.levels['MahaanagarLevelID'].toString(), '', '', '');
     setState(() {
       _linkedMahaanagar = data;
     });
     return data;
   }
-  Future<List<GeoUnitMasterBAL>>  populatelinkedBhaagDropdown(String vibhaagIDStr) async {
+
+  Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(
+      String vibhaagIDStr) async {
     _linkedNagarValue = null;
-    var data = await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
+    var data = await Statics.getGeoUnitsByLevelAndParentForVasti(
+        Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
     setState(() {
       _linkedBhaag = data;
     });
     return data;
   }
-  Future<List<GeoUnitMasterBAL>>  populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
+
+  Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(
+      String mahaanagarIDStr) async {
     _linkedBhaagValue = null;
     var data = await Statics.getGeoUnitsByLevelAndParentForVasti(
-        Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '');
+        Statics.levels['VibhaagLevelID'].toString(),
+        mahaanagarIDStr,
+        (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'),
+        '');
     setState(() {
       _linkedVibhaag = data;
     });
     return data;
   }
-  Future<List<GeoUnitMasterBAL>>  populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
+
+  Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(
+      String? bhaagIDStr, String? shaharIDStr) async {
     _linkedNagarValue = null;
     _linkedNagar = null;
     if (shaharIDStr != null) {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
+      var ngDD = await Statics.getGeoUnitsByLevelAndParentForVasti(
+          Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
       setState(() {
         _linkedNagar = (ngDD.length > 0 ? ngDD : null);
       });
       return ngDD;
-
     } else {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
+      var ngDD = await Statics.getGeoUnitsByLevelAndParentForVasti(
+          Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
       setState(() {
         _linkedNagar = (ngDD.length > 0 ? ngDD : null);
       });
       return ngDD;
-
     }
-
   }
+
   void resetData() async {
     setState(() {
       _linkedMahaanagarValue = null;
@@ -125,19 +137,21 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
   }
 
   NagarVastiSampurnaModel? data;
-  List<NagarVastisarvekshanReportwithname>? nagarVastisarvekshanReportwithnamedata;
+  List<NagarVastisarvekshanReportwithname>?
+      nagarVastisarvekshanReportwithnamedata;
 
-  late  List<Sajjanshakkati> sajjanList = [];
+  late List<Sajjanshakkati> sajjanList = [];
   late List<Vasahatsamparkashiti> vasahatSamparkStithiData = [];
   late List<Jagran> jagran = [];
   late List<Gatividhi> gatividhi = [];
   late List<PurviShakhaHoti> purviShakhaHoti = [];
   late List<PurviSptahikMilanHote> purviSptahikMilanHote = [];
   void getMyDetailsColumnsAndRows() async {
-    data =
-    await Statics.vastisarvekshanAllReportData(context,Statics.userDetails["userID"], selctedLevelId,selctedLevel);
+    data = await Statics.vastisarvekshanAllReportData(
+        context, Statics.userDetails["userID"], selctedLevelId, selctedLevel);
     setState(() {
-      nagarVastisarvekshanReportwithnamedata = data!.nagarVastisarvekshanReportwithname;
+      nagarVastisarvekshanReportwithnamedata =
+          data!.nagarVastisarvekshanReportwithname;
       sajjanList = data!.sajjanshakkati ?? [];
       vasahatSamparkStithiData = data!.vasahatsamparkashiti ?? [];
       gatividhi = data!.gatividhi ?? [];
@@ -146,7 +160,6 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
       purviSptahikMilanHote = data!.purviSptahikMilanHote ?? [];
     });
   }
-
 
   // void showPopupList(BuildContext context, String vastiStepStartedNames) {
   //   final List<String> namesList =
@@ -250,7 +263,7 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
     }
 
     final List<String> namesList =
-    vastiStepStartedNames.split('::').map((e) => e.trim()).toList();
+        vastiStepStartedNames.split('::').map((e) => e.trim()).toList();
 
     if (namesList.isEmpty || namesList.first.isEmpty) {
       Fluttertoast.showToast(
@@ -349,8 +362,6 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
     );
   }
 
-
-
   Widget buildTransposedTable(List<SanghaKaryaStithiData> dataList) {
     final columns = <DataColumn>[
       const DataColumn(
@@ -360,11 +371,12 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
         ),
       ),
       ...dataList.map((e) => DataColumn(
-        label: Text(
-          e.vayogatCode.toString(),
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-      )),
+            label: Text(
+              e.vayogatCode.toString(),
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+          )),
       const DataColumn(
         label: Text(
           'एकूण',
@@ -380,33 +392,50 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
     final rows = <DataRow>[
       DataRow(cells: [
         const DataCell(Text('शाखायुक्त')),
-        ...dataList.map((e) => DataCell(Text((e.shaakhaaCount ?? 0).toString()))),
-        DataCell(Text(rowSum(dataList.map((e) => e.shaakhaaCount ?? 0).toList()).toString())),
+        ...dataList
+            .map((e) => DataCell(Text((e.shaakhaaCount ?? 0).toString()))),
+        DataCell(Text(rowSum(dataList.map((e) => e.shaakhaaCount ?? 0).toList())
+            .toString())),
       ]),
       DataRow(cells: [
         const DataCell(Text('साप्ताहिक मिलनयुक्त')),
-        ...dataList.map((e) => DataCell(Text((e.saaptaahikCount ?? 0).toString()))),
-        DataCell(Text(rowSum(dataList.map((e) => e.saaptaahikCount ?? 0).toList()).toString())),
+        ...dataList
+            .map((e) => DataCell(Text((e.saaptaahikCount ?? 0).toString()))),
+        DataCell(Text(
+            rowSum(dataList.map((e) => e.saaptaahikCount ?? 0).toList())
+                .toString())),
       ]),
       DataRow(cells: [
         const DataCell(Text('मासिक मिलन युक्त')),
-        ...dataList.map((e) => DataCell(Text((e.maasikMilanCount ?? 0).toString()))),
-        DataCell(Text(rowSum(dataList.map((e) => e.maasikMilanCount ?? 0).toList()).toString())),
+        ...dataList
+            .map((e) => DataCell(Text((e.maasikMilanCount ?? 0).toString()))),
+        DataCell(Text(
+            rowSum(dataList.map((e) => e.maasikMilanCount ?? 0).toList())
+                .toString())),
       ]),
       DataRow(cells: [
         const DataCell(Text('नवीन संकल्पित शाखा आहे')),
-        ...dataList.map((e) => DataCell(Text((e.sankalpitShaakhaaCount ?? 0).toString()))),
-        DataCell(Text(rowSum(dataList.map((e) => e.sankalpitShaakhaaCount ?? 0).toList()).toString())),
+        ...dataList.map(
+            (e) => DataCell(Text((e.sankalpitShaakhaaCount ?? 0).toString()))),
+        DataCell(Text(
+            rowSum(dataList.map((e) => e.sankalpitShaakhaaCount ?? 0).toList())
+                .toString())),
       ]),
       DataRow(cells: [
         const DataCell(Text('नवीन संकल्पित साप्ताहिक आहे')),
-        ...dataList.map((e) => DataCell(Text((e.sankalpitSaaptaahikCount ?? 0).toString()))),
-        DataCell(Text(rowSum(dataList.map((e) => e.sankalpitSaaptaahikCount ?? 0).toList()).toString())),
+        ...dataList.map((e) =>
+            DataCell(Text((e.sankalpitSaaptaahikCount ?? 0).toString()))),
+        DataCell(Text(rowSum(
+                dataList.map((e) => e.sankalpitSaaptaahikCount ?? 0).toList())
+            .toString())),
       ]),
       DataRow(cells: [
         const DataCell(Text('नवीन संकल्पित मासिक आहे')),
-        ...dataList.map((e) => DataCell(Text((e.sankalpitMaasikMilanCount ?? 0).toString()))),
-        DataCell(Text(rowSum(dataList.map((e) => e.sankalpitMaasikMilanCount ?? 0).toList()).toString())),
+        ...dataList.map((e) =>
+            DataCell(Text((e.sankalpitMaasikMilanCount ?? 0).toString()))),
+        DataCell(Text(rowSum(
+                dataList.map((e) => e.sankalpitMaasikMilanCount ?? 0).toList())
+            .toString())),
       ]),
       DataRow(cells: [
         const DataCell(Text('एकूण')),
@@ -427,20 +456,21 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
               (e.sankalpitShaakhaaCount ?? 0) +
               (e.sankalpitSaaptaahikCount ?? 0) +
               (e.sankalpitMaasikMilanCount ?? 0);
-        }).toList()).toString())),
+        }).toList())
+            .toString())),
       ]),
     ];
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: DataTable(
-        headingRowColor: MaterialStateProperty.all(Colors.purpleAccent.shade100),
+        headingRowColor:
+            MaterialStateProperty.all(Colors.purpleAccent.shade100),
         columns: columns,
         rows: rows,
       ),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -452,8 +482,14 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
     }
 
     /// Vasahat Sampark Stithi
-    final maintypes = vasahatSamparkStithiData.map((e) => e.maintype as String).toSet().toList();
-    final subtypes = vasahatSamparkStithiData.map((e) => e.subtype as String).toSet().toList();
+    final maintypes = vasahatSamparkStithiData
+        .map((e) => e.maintype as String)
+        .toSet()
+        .toList();
+    final subtypes = vasahatSamparkStithiData
+        .map((e) => e.subtype as String)
+        .toSet()
+        .toList();
 
     final Map<String, Map<String, int>> vastiMap = {};
     for (var entry in vasahatSamparkStithiData) {
@@ -464,8 +500,10 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
     }
 
     /// Jagran Shreni
-    final maintypesJagran = jagran.map((e) => e.maintype as String).toSet().toList();
-    final subtypesJagran = jagran.map((e) => e.subtype as String).toSet().toList();
+    final maintypesJagran =
+        jagran.map((e) => e.maintype as String).toSet().toList();
+    final subtypesJagran =
+        jagran.map((e) => e.subtype as String).toSet().toList();
 
     final Map<String, Map<String, int>> vastiMapJagran = {};
     for (var entry in jagran) {
@@ -476,8 +514,10 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
     }
 
     /// Gatividhi
-    final maintypesGatividhi = gatividhi.map((e) => e.maintype as String).toSet().toList();
-    final subtypesGatividhi = gatividhi.map((e) => e.subtype as String).toSet().toList();
+    final maintypesGatividhi =
+        gatividhi.map((e) => e.maintype as String).toSet().toList();
+    final subtypesGatividhi =
+        gatividhi.map((e) => e.subtype as String).toSet().toList();
 
     final Map<String, Map<String, int>> vastiMapgatividhi = {};
     for (var entry in gatividhi) {
@@ -489,13 +529,16 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
 
     return Scaffold(
       body: Container(
-        padding: EdgeInsets
-        .all(10),
+        padding: EdgeInsets.all(10),
         child: SingleChildScrollView(
           child: Column(
             children: [
               Container(
-                decoration: BoxDecoration(border: Border.all(color: Colors.grey,),borderRadius: BorderRadius.all(Radius.circular(15))),
+                decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.grey,
+                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(15))),
                 child: ExpansionPanelList(
                   expansionCallback: (int index, bool isExpanded) {
                     setState(() {
@@ -510,28 +553,42 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                       backgroundColor: Colors.transparent,
                       headerBuilder: (BuildContext context, bool isExpanded) {
                         return ListTile(
-                          title: Text("वस्ती निवडा",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold)),
-                          trailing: IconButton(onPressed: (){
-                            resetData();
-                          }, icon: Icon(Icons.refresh,color: Colors.purpleAccent,)),
+                          title: Text("स्तर निवडा",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold)),
+                          trailing: IconButton(
+                              onPressed: () {
+                                resetData();
+                              },
+                              icon: Icon(
+                                Icons.refresh,
+                                color: Colors.purpleAccent,
+                              )),
                         );
                       },
                       body: Container(
                         margin: EdgeInsets.symmetric(horizontal: 20),
                         child: Column(
                           children: [
-                            if(_linkedMahaanagar != null)
+                            if (_linkedMahaanagar != null)
                               DropdownButtonFormField(
-                                decoration: InputDecoration(labelText: "महानगर"),
+                                decoration:
+                                    InputDecoration(labelText: "महानगर"),
                                 isExpanded: true,
-                                value: _linkedMahaanagarValue == "" ? null : _linkedMahaanagarValue,
-                                items: _linkedMahaanagar!.map((bg) => DropdownMenuItem(
-                                  value: bg.geoUnitID.toString(),
-                                  child: Text(bg.name!),
-                                )).toList(),
+                                value: _linkedMahaanagarValue == ""
+                                    ? null
+                                    : _linkedMahaanagarValue,
+                                items: _linkedMahaanagar!
+                                    .map((bg) => DropdownMenuItem(
+                                          value: bg.geoUnitID.toString(),
+                                          child: Text(bg.name!),
+                                        ))
+                                    .toList(),
                                 onChanged: (value) {
-                                  final selectedItem = _linkedMahaanagar!.firstWhere(
-                                          (bg) => bg.geoUnitID.toString() == value);
+                                  final selectedItem = _linkedMahaanagar!
+                                      .firstWhere((bg) =>
+                                          bg.geoUnitID.toString() == value);
                                   setState(() {
                                     _linkedMahaanagarValue = value;
                                     _linkedVibhaagValue = null;
@@ -545,50 +602,66 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                                     selctedDropDownLevelName = 'महानगर';
                                   });
                                   print("Selected Id: $value");
-                                  print("Selected Level Name: ${selectedItem.name}");
+                                  print(
+                                      "Selected Level Name: ${selectedItem.name}");
                                 },
                               ),
                             SizedBox(
                               height: 10,
                             ),
-                            if(_linkedVibhaag != null)
+                            if (_linkedVibhaag != null)
                               DropdownButtonFormField(
                                 decoration: InputDecoration(labelText: "विभाग"),
                                 isExpanded: true,
-                                value: _linkedVibhaagValue == "" ? null : _linkedVibhaagValue,
-                                items: _linkedVibhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                value: _linkedVibhaagValue == ""
+                                    ? null
+                                    : _linkedVibhaagValue,
+                                items: _linkedVibhaag!
+                                    .map((bg) => DropdownMenuItem(
+                                        value: bg.geoUnitID.toString(),
+                                        child: Text(bg.name!)))
+                                    .toList(),
                                 onChanged: (value) {
-                                  final selectedItem = _linkedVibhaag!.firstWhere(
-                                          (bg) => bg.geoUnitID.toString() == value);
+                                  final selectedItem = _linkedVibhaag!
+                                      .firstWhere((bg) =>
+                                          bg.geoUnitID.toString() == value);
                                   print(value);
                                   setState(() {
                                     _linkedVibhaagValue = value;
                                     populatelinkedBhaagDropdown(value!);
                                     vibhagId = value;
-                                    _linkedBhaagValue  = _linkedNagarValue  = null;
-                                    _linkedBhaag  = _linkedNagar = null;
+                                    _linkedBhaagValue =
+                                        _linkedNagarValue = null;
+                                    _linkedBhaag = _linkedNagar = null;
                                     selctedLevelId = value;
                                     selctedLevelName = selectedItem.name ?? "";
                                     selctedLevel = 'vibhag';
                                     selctedDropDownLevelName = 'विभाग';
-
                                   });
                                   print("Selected Id: $value");
-                                  print("Selected Level Name: ${selectedItem.name}");
+                                  print(
+                                      "Selected Level Name: ${selectedItem.name}");
                                 },
                               ),
                             SizedBox(
                               height: 10,
                             ),
-                            if(_linkedBhaag != null)
+                            if (_linkedBhaag != null)
                               DropdownButtonFormField(
-                                decoration: InputDecoration(labelText: "भाग/जिल्हा"),
+                                decoration:
+                                    InputDecoration(labelText: "भाग/जिल्हा"),
                                 isExpanded: true,
-                                value: _linkedBhaagValue == "" ? null : _linkedBhaagValue,
-                                items: _linkedBhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                value: _linkedBhaagValue == ""
+                                    ? null
+                                    : _linkedBhaagValue,
+                                items: _linkedBhaag!
+                                    .map((bg) => DropdownMenuItem(
+                                        value: bg.geoUnitID.toString(),
+                                        child: Text(bg.name!)))
+                                    .toList(),
                                 onChanged: (value) {
                                   final selectedItem = _linkedBhaag!.firstWhere(
-                                          (bg) => bg.geoUnitID.toString() == value);
+                                      (bg) => bg.geoUnitID.toString() == value);
                                   setState(() {
                                     _linkedBhaagValue = value;
                                     populatelinkedNagarDropdown(value, null);
@@ -596,22 +669,31 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                                     selctedLevelName = selectedItem.name ?? "";
                                     selctedLevel = 'bhag';
                                     selctedDropDownLevelName = 'भाग';
-
                                   });
                                   print("Selected Id: $value");
-                                  print("Selected Level Name: ${selectedItem.name}");
+                                  print(
+                                      "Selected Level Name: ${selectedItem.name}");
                                 },
                               ),
-                            SizedBox(height: 10,),
-                            if (_linkedNagar != null && _linkedNagar!.length > 0)
+                            SizedBox(
+                              height: 10,
+                            ),
+                            if (_linkedNagar != null &&
+                                _linkedNagar!.length > 0)
                               DropdownButtonFormField(
                                 decoration: InputDecoration(labelText: "नगर"),
                                 isExpanded: true,
-                                value: _linkedNagarValue == "" ? null : _linkedNagarValue,
-                                items: _linkedNagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                value: _linkedNagarValue == ""
+                                    ? null
+                                    : _linkedNagarValue,
+                                items: _linkedNagar!
+                                    .map((bg) => DropdownMenuItem(
+                                        value: bg.geoUnitID.toString(),
+                                        child: Text(bg.name!)))
+                                    .toList(),
                                 onChanged: (value) {
                                   final selectedItem = _linkedNagar!.firstWhere(
-                                          (bg) => bg.geoUnitID.toString() == value);
+                                      (bg) => bg.geoUnitID.toString() == value);
                                   setState(() {
                                     _linkedNagarValue = value;
                                     // populatelinkedVastiDropdown(value!);
@@ -619,10 +701,10 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                                     selctedLevelName = selectedItem.name ?? "";
                                     selctedLevel = 'nagar';
                                     selctedDropDownLevelName = 'नगर';
-
                                   });
                                   print("Selected Id: $value");
-                                  print("Selected Level Name: ${selectedItem.name}");
+                                  print(
+                                      "Selected Level Name: ${selectedItem.name}");
                                 },
                               ),
                             // if (_linkedNagar != null && _linkedNagar!.length > 0)
@@ -646,30 +728,37 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                             //       print("Selected Level Name: ${selectedItem.name}");
                             //     },
                             //   ),
-                            if (_linkedvasti != null && _linkedvasti!.length > 0)
+                            if (_linkedvasti != null &&
+                                _linkedvasti!.length > 0)
                               SizedBox(
                                 height: 10,
                               ),
                             // if(selctedLevel == "Vasti")
-                              Align(
-                                alignment: Alignment.center,
-                                child: ElevatedButton(
-                                  style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.purpleAccent)),
-                                  onPressed: (){
-                                    // if(selctedLevel == "Vasti" || selctedLevel == "Graam" ){
-                                      setState(() {
-                                        isVastiSearch = true;
-                                        _isExpanded = false;
-                                      });
-                                      print("selctedLevel $selctedLevel -- selctedLevelId $selctedLevelId -- selctedLevelName $selctedLevelName");
-                                      getMyDetailsColumnsAndRows();
-                                    // }else{
-                                    //   Statics.showToast(Statics.getLabel('vastiGramValidation'));
-                                    // }
-                                  },
-                                  child: Text("निवडा", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                                ),
-                              )
+                            Align(
+                              alignment: Alignment.center,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStatePropertyAll(
+                                        Colors.purpleAccent)),
+                                onPressed: () {
+                                  // if(selctedLevel == "Vasti" || selctedLevel == "Graam" ){
+                                  setState(() {
+                                    isVastiSearch = true;
+                                    _isExpanded = false;
+                                  });
+                                  print(
+                                      "selctedLevel $selctedLevel -- selctedLevelId $selctedLevelId -- selctedLevelName $selctedLevelName");
+                                  getMyDetailsColumnsAndRows();
+                                  // }else{
+                                  //   Statics.showToast(Statics.getLabel('vastiGramValidation'));
+                                  // }
+                                },
+                                child: Text("निवडा",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold)),
+                              ),
+                            )
                           ],
                         ),
                       ),
@@ -678,44 +767,64 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                   ],
                 ),
               ),
-              if(isVastiSearch == true)
-                SizedBox(height: 20,),
-              if( isVastiSearch == true)
+              if (isVastiSearch == true)
+                SizedBox(
+                  height: 20,
+                ),
+              if (isVastiSearch == true)
                 Container(
                     height: 40,
                     width: double.infinity,
-                    decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent,width: 1),borderRadius: BorderRadius.all(Radius.circular(15)),),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.purpleAccent, width: 1),
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text("$selctedDropDownLevelName ",style: TextStyle(color: Colors.purpleAccent,fontWeight: FontWeight.bold,fontSize: 16),),
-                       if(selctedLevelName != "") Text("-> $selctedLevelName",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 17),),
+                        Text(
+                          "$selctedDropDownLevelName ",
+                          style: TextStyle(
+                              color: Colors.purpleAccent,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),
+                        ),
+                        if (selctedLevelName != "")
+                          Text(
+                            "-> $selctedLevelName",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17),
+                          ),
                       ],
                     )),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               Container(
                 child: Column(
                   children: [
-                    if( isVastiSearch == true)
+                    if (isVastiSearch == true)
                       Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Center(
-                        child: Text(
-                          'सारांश ($selctedDropDownLevelName)',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Center(
+                          child: Text(
+                            'सारांश ($selctedDropDownLevelName)',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                    ),
-                    if( isVastiSearch == true)
-                      Divider(),
-                    if( isVastiSearch == true)
+                    if (isVastiSearch == true) Divider(),
+                    if (isVastiSearch == true)
                       Container(
                         child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: DataTable(
                             headingRowColor:
-                            MaterialStateProperty.all(Colors.teal.shade100),
+                                MaterialStateProperty.all(Colors.teal.shade100),
                             headingTextStyle: const TextStyle(
                               fontSize: 15,
                               color: Colors.black,
@@ -729,89 +838,142 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                             ],
                             rows: [
                               DataRow(
-                                color: MaterialStateProperty.all(Colors.green.shade50),
+                                color: MaterialStateProperty.all(
+                                    Colors.green.shade50),
                                 cells: [
-                                  DataCell(Text('प्राथमिक सर्वेक्षण\nपूर्ण झाले')),
-                                  DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStep1CompleteCount ?? ""}")),
-                                  DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStep1CompleteCount ?? ""}")),
+                                  DataCell(
+                                      Text('प्राथमिक सर्वेक्षण\nपूर्ण झाले')),
+                                  DataCell(Text(
+                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStep1CompleteCount ?? ""}")),
+                                  DataCell(Text(
+                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStep1CompleteCount ?? ""}")),
                                   DataCell(IconButton(
-                                    icon: Icon(Icons.remove_red_eye, color: Colors.teal),
-                                    onPressed: () => showPopupList(context,
-                                        data!.nagarVastisarvekshanReportwithselectedlevel!.vastiStep1CompleteNames!.toString()),
+                                    icon: Icon(Icons.remove_red_eye,
+                                        color: Colors.teal),
+                                    onPressed: () => showPopupList(
+                                        context,
+                                        data!
+                                            .nagarVastisarvekshanReportwithselectedlevel!
+                                            .vastiStep1CompleteNames!
+                                            .toString()),
                                   )),
                                 ],
                               ),
                               DataRow(
-                                color: MaterialStateProperty.all(Colors.green.shade50),
+                                color: MaterialStateProperty.all(
+                                    Colors.green.shade50),
                                 cells: [
                                   DataCell(Text('अन्य सर्वेक्षण\nपूर्ण झाले')),
-                                  DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStep2CompleteCount ?? ""}")),
-                                  DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStep2CompleteCount ?? ""}")),
+                                  DataCell(Text(
+                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStep2CompleteCount ?? ""}")),
+                                  DataCell(Text(
+                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStep2CompleteCount ?? ""}")),
                                   DataCell(IconButton(
-                                    icon: Icon(Icons.remove_red_eye, color: Colors.teal),
-                                    onPressed: () => showPopupList(context,
-                                        data!.nagarVastisarvekshanReportwithselectedlevel!.vastiStep2CompleteNames!.toString()),
+                                    icon: Icon(Icons.remove_red_eye,
+                                        color: Colors.teal),
+                                    onPressed: () => showPopupList(
+                                        context,
+                                        data!
+                                            .nagarVastisarvekshanReportwithselectedlevel!
+                                            .vastiStep2CompleteNames!
+                                            .toString()),
                                   )),
                                 ],
                               ),
                               DataRow(
-                                color: MaterialStateProperty.all(Colors.green.shade50),
+                                color: MaterialStateProperty.all(
+                                    Colors.green.shade50),
                                 cells: [
-                                  DataCell(Text('विस्तृत सर्वेक्षण\nपूर्ण झाले')),
-                                  DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStep3CompleteCount ?? ""}")),
-                                  DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStep3CompleteCount ?? ""}")),
+                                  DataCell(
+                                      Text('विस्तृत सर्वेक्षण\nपूर्ण झाले')),
+                                  DataCell(Text(
+                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStep3CompleteCount ?? ""}")),
+                                  DataCell(Text(
+                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStep3CompleteCount ?? ""}")),
                                   DataCell(IconButton(
-                                    icon: Icon(Icons.remove_red_eye, color: Colors.teal),
-                                    onPressed: () => showPopupList(context,
-                                        data!.nagarVastisarvekshanReportwithselectedlevel!.vastiStep3CompleteNames!.toString()),
+                                    icon: Icon(Icons.remove_red_eye,
+                                        color: Colors.teal),
+                                    onPressed: () => showPopupList(
+                                        context,
+                                        data!
+                                            .nagarVastisarvekshanReportwithselectedlevel!
+                                            .vastiStep3CompleteNames!
+                                            .toString()),
                                   )),
                                 ],
                               ),
                               DataRow(
-                                color: MaterialStateProperty.all(Colors.orange.shade50),
+                                color: MaterialStateProperty.all(
+                                    Colors.orange.shade50),
                                 cells: [
                                   DataCell(Text('सर्वेक्षण सुरु झाले')),
-                                  DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStepStartedCount ?? ""}")),
-                                  DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStepStartedCount ?? ""}")),
+                                  DataCell(Text(
+                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStepStartedCount ?? ""}")),
+                                  DataCell(Text(
+                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStepStartedCount ?? ""}")),
                                   DataCell(IconButton(
-                                    icon: Icon(Icons.remove_red_eye, color: Colors.teal),
-                                    onPressed: () => showPopupList(context,
-                                        data!.nagarVastisarvekshanReportwithselectedlevel!.vastiStepStartedNames!.toString()),
+                                    icon: Icon(Icons.remove_red_eye,
+                                        color: Colors.teal),
+                                    onPressed: () => showPopupList(
+                                        context,
+                                        data!
+                                            .nagarVastisarvekshanReportwithselectedlevel!
+                                            .vastiStepStartedNames!
+                                            .toString()),
                                   )),
                                 ],
                               ),
                               DataRow(
-                                color: MaterialStateProperty.all(Colors.orange.shade50),
+                                color: MaterialStateProperty.all(
+                                    Colors.orange.shade50),
                                 cells: [
                                   DataCell(Text('सर्वेक्षण पूर्ण झाले')),
-                                  DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarAllStepsCompleteCount ?? ""}")),
-                                  DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiAllStepsCompleteCount ?? ""}")),
+                                  DataCell(Text(
+                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarAllStepsCompleteCount ?? ""}")),
+                                  DataCell(Text(
+                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiAllStepsCompleteCount ?? ""}")),
                                   DataCell(IconButton(
-                                    icon: Icon(Icons.remove_red_eye, color: Colors.teal),
-                                    onPressed: () => showPopupList(context,
-                                        data!.nagarVastisarvekshanReportwithselectedlevel!.vastiAllStepsCompleteNames!.toString()),
+                                    icon: Icon(Icons.remove_red_eye,
+                                        color: Colors.teal),
+                                    onPressed: () => showPopupList(
+                                        context,
+                                        data!
+                                            .nagarVastisarvekshanReportwithselectedlevel!
+                                            .vastiAllStepsCompleteNames!
+                                            .toString()),
                                   )),
                                 ],
                               ),
                               DataRow(
-                                color: MaterialStateProperty.all(Colors.orange.shade50),
+                                color: MaterialStateProperty.all(
+                                    Colors.orange.shade50),
                                 cells: [
                                   DataCell(Text('सर्वेक्षण सुरु\nझाले नाही')),
-                                  DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStepsNotstartedCount ?? ""}")),
-                                  DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStepsNotstartedCount ?? ""}")),
+                                  DataCell(Text(
+                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStepsNotstartedCount ?? ""}")),
+                                  DataCell(Text(
+                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStepsNotstartedCount ?? ""}")),
                                   DataCell(IconButton(
-                                    icon: Icon(Icons.remove_red_eye, color: Colors.teal),
-                                    onPressed: () => showPopupList(context,
-                                        data!.nagarVastisarvekshanReportwithselectedlevel!.vastiStepsNotstartedNames!.toString()),
+                                    icon: Icon(Icons.remove_red_eye,
+                                        color: Colors.teal),
+                                    onPressed: () => showPopupList(
+                                        context,
+                                        data!
+                                            .nagarVastisarvekshanReportwithselectedlevel!
+                                            .vastiStepsNotstartedNames!
+                                            .toString()),
                                   )),
                                 ],
                               ),
                               DataRow(
-                                color: MaterialStateProperty.all(Colors.grey.shade200),
+                                color: MaterialStateProperty.all(
+                                    Colors.grey.shade200),
                                 cells: [
                                   DataCell(Text('एकुण')),
-                                  DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarcount ?? ""}")),
-                                  DataCell(Text("${data?.nagarVastisarvekshanReportwithselectedlevel?.vasticount ?? ""}")),
+                                  DataCell(Text(
+                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarcount ?? ""}")),
+                                  DataCell(Text(
+                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.vasticount ?? ""}")),
                                   DataCell(Text("-")),
                                 ],
                               ),
@@ -820,123 +982,180 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                         ),
                       ),
 
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     commonExpansionTile(
                       title: 'VastisurveuAbhiyanStithi',
                       children: [
-                          Container(
-                            height: 500,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade300),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: SingleChildScrollView(
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount:
-                                data?.nagarVastisarvekshanReportwithname?.length ?? 0,
-                                itemBuilder: (context, index) {
-                                  final data = nagarVastisarvekshanReportwithnamedata![index];
-                                  return Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 8),
-                                        child: Center(
-                                          child: Text(
-                                            data.name ?? 'नगर/वस्ती नाव',
-                                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                          ),
+                        Container(
+                          height: 500,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: SingleChildScrollView(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: data
+                                      ?.nagarVastisarvekshanReportwithname
+                                      ?.length ??
+                                  0,
+                              itemBuilder: (context, index) {
+                                final data =
+                                    nagarVastisarvekshanReportwithnamedata![
+                                        index];
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8),
+                                      child: Center(
+                                        child: Text(
+                                          data.name ?? 'नगर/वस्ती नाव',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold),
                                         ),
                                       ),
-                                      DataTable(
-                                        headingRowColor:
-                                        MaterialStateProperty.all(Colors.purpleAccent.shade100),
-                                        headingTextStyle: TextStyle(
-                                            fontSize: 15, color: Colors.black, fontWeight: FontWeight.bold),
-                                        columns: const [
-                                          DataColumn(label: Text('सर्वेक्षण स्थिती')),
-                                          DataColumn(label: Text('नगर')),
-                                          DataColumn(label: Text('वस्ती')),
-                                        ],
-                                        rows: [
-                                          DataRow(
-                                            color: MaterialStateProperty.all(Colors.lightBlue.shade50),
-                                            cells: [
-                                              DataCell(Text('प्राथमिक सर्वेक्षण\nपूर्ण झाले')),
-                                              DataCell(Text("${data.nagarStep1CompleteCount ?? ""}")),
-                                              DataCell(Text("${data.vastiStep1CompleteCount ?? ""}")),
-                                            ],
-                                          ),
-                                          DataRow(
-                                            color: MaterialStateProperty.all(Colors.lightBlue.shade50),
-                                            cells: [
-                                              DataCell(Text('अन्य सर्वेक्षण\nपूर्ण झाले')),
-                                              DataCell(Text("${data.nagarStep2CompleteCount ?? ""}")),
-                                              DataCell(Text("${data.vastiStep2CompleteCount ?? ""}")),
-                                            ],
-                                          ),
-                                          DataRow(
-                                            color: MaterialStateProperty.all(Colors.lightBlue.shade50),
-                                            cells: [
-                                              DataCell(Text('विस्तृत सर्वेक्षण\nपूर्ण झाले')),
-                                              DataCell(Text("${data.nagarStep3CompleteCount ?? ""}")),
-                                              DataCell(Text("${data.vastiStep3CompleteCount ?? ""}")),
-                                            ],
-                                          ),
-                                          DataRow(
-                                            color: MaterialStateProperty.all(Colors.red.shade50),
-                                            cells: [
-                                              DataCell(Text('सर्वेक्षण सुरु झाले')),
-                                              DataCell(Text("${data.nagarStepStartedCount ?? ""}")),
-                                              DataCell(Text("${data.vastiStepStartedCount ?? ""}")),
-                                            ],
-                                          ),
-                                          DataRow(
-                                            color: MaterialStateProperty.all(Colors.red.shade50),
-                                            cells: [
-                                              DataCell(Text('सर्वेक्षण पूर्ण झाले')),
-                                              DataCell(Text("${data.nagarAllStepsCompleteCount ?? ""}")),
-                                              DataCell(Text("${data.vastiAllStepsCompleteCount ?? ""}")),
-                                            ],
-                                          ),
-                                          DataRow(
-                                            color: MaterialStateProperty.all(Colors.red.shade50),
-                                            cells: [
-                                              DataCell(Text('सर्वेक्षण सुरु\nझाले नाही')),
-                                              DataCell(Text("${data.nagarStepsNotstartedCount ?? ""}")),
-                                              DataCell(Text("${data.vastiStepsNotstartedCount ?? ""}")),
-                                            ],
-                                          ),
-                                          DataRow(
-                                            color: MaterialStateProperty.all(Colors.yellow.shade50),
-                                            cells: [
-                                              DataCell(Text('एकुण')),
-                                              DataCell(Text("${data.nagarcount ?? ""}")),
-                                              DataCell(Text("${data.vasticount ?? ""}")),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      Divider(thickness: 2),
-                                    ],
-                                  );
-                                },
-                              ),
+                                    ),
+                                    DataTable(
+                                      headingRowColor:
+                                          MaterialStateProperty.all(
+                                              Colors.purpleAccent.shade100),
+                                      headingTextStyle: TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold),
+                                      columns: const [
+                                        DataColumn(
+                                            label: Text('सर्वेक्षण स्थिती')),
+                                        DataColumn(label: Text('नगर')),
+                                        DataColumn(label: Text('वस्ती')),
+                                      ],
+                                      rows: [
+                                        DataRow(
+                                          color: MaterialStateProperty.all(
+                                              Colors.lightBlue.shade50),
+                                          cells: [
+                                            DataCell(Text(
+                                                'प्राथमिक सर्वेक्षण\nपूर्ण झाले')),
+                                            DataCell(Text(
+                                                "${data.nagarStep1CompleteCount ?? ""}")),
+                                            DataCell(Text(
+                                                "${data.vastiStep1CompleteCount ?? ""}")),
+                                          ],
+                                        ),
+                                        DataRow(
+                                          color: MaterialStateProperty.all(
+                                              Colors.lightBlue.shade50),
+                                          cells: [
+                                            DataCell(Text(
+                                                'अन्य सर्वेक्षण\nपूर्ण झाले')),
+                                            DataCell(Text(
+                                                "${data.nagarStep2CompleteCount ?? ""}")),
+                                            DataCell(Text(
+                                                "${data.vastiStep2CompleteCount ?? ""}")),
+                                          ],
+                                        ),
+                                        DataRow(
+                                          color: MaterialStateProperty.all(
+                                              Colors.lightBlue.shade50),
+                                          cells: [
+                                            DataCell(Text(
+                                                'विस्तृत सर्वेक्षण\nपूर्ण झाले')),
+                                            DataCell(Text(
+                                                "${data.nagarStep3CompleteCount ?? ""}")),
+                                            DataCell(Text(
+                                                "${data.vastiStep3CompleteCount ?? ""}")),
+                                          ],
+                                        ),
+                                        DataRow(
+                                          color: MaterialStateProperty.all(
+                                              Colors.red.shade50),
+                                          cells: [
+                                            DataCell(
+                                                Text('सर्वेक्षण सुरु झाले')),
+                                            DataCell(Text(
+                                                "${data.nagarStepStartedCount ?? ""}")),
+                                            DataCell(Text(
+                                                "${data.vastiStepStartedCount ?? ""}")),
+                                          ],
+                                        ),
+                                        DataRow(
+                                          color: MaterialStateProperty.all(
+                                              Colors.red.shade50),
+                                          cells: [
+                                            DataCell(
+                                                Text('सर्वेक्षण पूर्ण झाले')),
+                                            DataCell(Text(
+                                                "${data.nagarAllStepsCompleteCount ?? ""}")),
+                                            DataCell(Text(
+                                                "${data.vastiAllStepsCompleteCount ?? ""}")),
+                                          ],
+                                        ),
+                                        DataRow(
+                                          color: MaterialStateProperty.all(
+                                              Colors.red.shade50),
+                                          cells: [
+                                            DataCell(Text(
+                                                'सर्वेक्षण सुरु\nझाले नाही')),
+                                            DataCell(Text(
+                                                "${data.nagarStepsNotstartedCount ?? ""}")),
+                                            DataCell(Text(
+                                                "${data.vastiStepsNotstartedCount ?? ""}")),
+                                          ],
+                                        ),
+                                        DataRow(
+                                          color: MaterialStateProperty.all(
+                                              Colors.yellow.shade50),
+                                          cells: [
+                                            DataCell(Text('एकुण')),
+                                            DataCell(Text(
+                                                "${data.nagarcount ?? ""}")),
+                                            DataCell(Text(
+                                                "${data.vasticount ?? ""}")),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    Divider(thickness: 2),
+                                  ],
+                                );
+                              },
                             ),
                           ),
+                        ),
                       ],
                     ),
                     commonExpansionTile(
                       title: 'vastiSarvekshanSankalan',
                       children: [
-                        SingleColumnRow(txtString: Statics.getLabel('vastiPramukhaAhe'),value: data?.vastiloksankhya?.vastiPramukhCount.toString(),fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('VastiSamitiAhe'),value: data?.vastiloksankhya?.vastiSamitiAheCount.toString(),fontsize: 15),
-                        // SingleColumnRow(txtString: Statics.getLabel('purviShakhaHoti'),value: data?.vastiloksankhya?.purviShakhaHotiCount.toString(),fontsize: 15),
-                        // SingleColumnRow(txtString: Statics.getLabel('purviSaptahikMilan'),value: data?.vastiloksankhya?.purviSptahikMilanHoteCount.toString(),fontsize: 15),
-
-                        if( data != null && data?.sanghaKaryaStithiData != null )
+                        SingleColumnRow(
+                            txtString: Statics.getLabel('vastiPramukhaAhe'),
+                            value: data?.vastiloksankhya?.vastiPramukhCount
+                                .toString(),
+                            fontsize: 15),
+                        SingleColumnRow(
+                            txtString: Statics.getLabel('VastiSamitiAhe'),
+                            value: data?.vastiloksankhya?.vastiSamitiAheCount
+                                .toString(),
+                            fontsize: 15),
+                        SingleColumnRow(
+                            txtString: Statics.getLabel('purviShakhaHoti'),
+                            value: data?.vastiloksankhya?.purviShakhaHotiCount
+                                .toString(),
+                            fontsize: 15),
+                        SingleColumnRow(
+                            txtString: Statics.getLabel('purviSaptahikMilan'),
+                            value: data
+                                ?.vastiloksankhya?.purviSptahikMilanHoteCount
+                                .toString(),
+                            fontsize: 15),
+                        //
+                        if (data != null && data?.sanghaKaryaStithiData != null)
                           buildTransposedTable(data!.sanghaKaryaStithiData!),
                         // Divider(),
                         // SizedBox(height: 10,),
@@ -1037,38 +1256,112 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                     commonExpansionTile(
                       title: 'vastichiLoksankhya',
                       children: [
-                        SingleColumnRow(txtString: Statics.getLabel('lessThan8000'),value: data?.vastiloksankhya?.lessThan8000.toString(),fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('8000to12000'),value: data?.vastiloksankhya?.between8000And12000.toString(),fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('12000more'),value: data?.vastiloksankhya?.moreThan12000.toString(),fontsize: 15),
+                        SingleColumnRow(
+                            txtString: Statics.getLabel('lessThan8000'),
+                            value:
+                                data?.vastiloksankhya?.lessThan8000.toString(),
+                            fontsize: 15),
+                        SingleColumnRow(
+                            txtString: Statics.getLabel('8000to12000'),
+                            value: data?.vastiloksankhya?.between8000And12000
+                                .toString(),
+                            fontsize: 15),
+                        SingleColumnRow(
+                            txtString: Statics.getLabel('12000more'),
+                            value:
+                                data?.vastiloksankhya?.moreThan12000.toString(),
+                            fontsize: 15),
                       ],
                     ),
                     commonExpansionTile(
                       title: 'SwayamsevakCount',
                       children: [
-                        SingleColumnRow(txtString: Statics.getLabel('TotalKaaryakartaaCount'), value: data?.vastiloksankhya?.totalKaaryakartaaCount.toString(), fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('PratidnyitCount'), value: data?.vastiloksankhya?.pratidnyitCount.toString(), fontsize: 15),
+                        SingleColumnRow(
+                            txtString:
+                                Statics.getLabel('TotalKaaryakartaaCount'),
+                            value: data?.vastiloksankhya?.totalKaaryakartaaCount
+                                .toString(),
+                            fontsize: 15),
+                        SingleColumnRow(
+                            txtString: Statics.getLabel('PratidnyitCount'),
+                            value: data?.vastiloksankhya?.pratidnyitCount
+                                .toString(),
+                            fontsize: 15),
                       ],
                     ),
                     commonExpansionTile(
                       title: 'SwayamsevakCountByAge',
                       children: [
-                        SingleColumnRow(txtString: Statics.getLabel('Shishu'), value: data?.vastiloksankhya?.shishuCount.toString(), fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('Baal'), value: data?.vastiloksankhya?.baalCount.toString(), fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('TarunVidyaarthi'), value: data?.vastiloksankhya?.tarunVidyaarthiCount.toString(), fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('TarunVyavasaayee'), value: data?.vastiloksankhya?.tarunVyavasaayeeCount.toString(), fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('ProudhVyavasaayee'), value: data?.vastiloksankhya?.proudhaVyavasaayeeCount.toString(), fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('UnkownAge'), value: data?.vastiloksankhya?.unknownAgeCount.toString(), fontsize: 15),
+                        SingleColumnRow(
+                            txtString: Statics.getLabel('Shishu'),
+                            value:
+                                data?.vastiloksankhya?.shishuCount.toString(),
+                            fontsize: 15),
+                        SingleColumnRow(
+                            txtString: Statics.getLabel('Baal'),
+                            value: data?.vastiloksankhya?.baalCount.toString(),
+                            fontsize: 15),
+                        SingleColumnRow(
+                            txtString: Statics.getLabel('TarunVidyaarthi'),
+                            value: data?.vastiloksankhya?.tarunVidyaarthiCount
+                                .toString(),
+                            fontsize: 15),
+                        SingleColumnRow(
+                            txtString: Statics.getLabel('TarunVyavasaayee'),
+                            value: data?.vastiloksankhya?.tarunVyavasaayeeCount
+                                .toString(),
+                            fontsize: 15),
+                        SingleColumnRow(
+                            txtString: Statics.getLabel('ProudhVyavasaayee'),
+                            value: data
+                                ?.vastiloksankhya?.proudhaVyavasaayeeCount
+                                .toString(),
+                            fontsize: 15),
+                        SingleColumnRow(
+                            txtString: Statics.getLabel('UnkownAge'),
+                            value: data?.vastiloksankhya?.unknownAgeCount
+                                .toString(),
+                            fontsize: 15),
                       ],
                     ),
                     commonExpansionTile(
                       title: 'ShikshitSwayamsevakCount',
                       children: [
-                        SingleColumnRow(txtString: Statics.getLabel('PrarambhikShikshit'), value: data?.vastiloksankhya?.prarambhikShikshitCount.toString(), fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('PraathamikShikshit'), value: data?.vastiloksankhya?.praathamikShikshitCount.toString(), fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('PrathamVarshShikshit'), value: data?.vastiloksankhya?.prathamVarshaShikshitCount.toString(), fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('DwitiyaVarshShikshit'), value: data?.vastiloksankhya?.dwitiyaVarshaShikshitCount.toString(), fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('TrutiyaVarshShikshit'), value: data?.vastiloksankhya?.trutiyaVarshaShikshitCount.toString(), fontsize: 15),
-                        SingleColumnRow(txtString: Statics.getLabel('NoShikshan'), value: data?.vastiloksankhya?.noShikshanCount.toString(), fontsize: 15),
+                        SingleColumnRow(
+                            txtString: Statics.getLabel('PrarambhikShikshit'),
+                            value: data
+                                ?.vastiloksankhya?.prarambhikShikshitCount
+                                .toString(),
+                            fontsize: 15),
+                        SingleColumnRow(
+                            txtString: Statics.getLabel('PraathamikShikshit'),
+                            value: data
+                                ?.vastiloksankhya?.praathamikShikshitCount
+                                .toString(),
+                            fontsize: 15),
+                        SingleColumnRow(
+                            txtString: Statics.getLabel('PrathamVarshShikshit'),
+                            value: data
+                                ?.vastiloksankhya?.prathamVarshaShikshitCount
+                                .toString(),
+                            fontsize: 15),
+                        SingleColumnRow(
+                            txtString: Statics.getLabel('DwitiyaVarshShikshit'),
+                            value: data
+                                ?.vastiloksankhya?.dwitiyaVarshaShikshitCount
+                                .toString(),
+                            fontsize: 15),
+                        SingleColumnRow(
+                            txtString: Statics.getLabel('TrutiyaVarshShikshit'),
+                            value: data
+                                ?.vastiloksankhya?.trutiyaVarshaShikshitCount
+                                .toString(),
+                            fontsize: 15),
+                        SingleColumnRow(
+                            txtString: Statics.getLabel('NoShikshan'),
+                            value: data?.vastiloksankhya?.noShikshanCount
+                                .toString(),
+                            fontsize: 15),
                       ],
                     ),
                     commonExpansionTile(
@@ -1076,87 +1369,134 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                       children: [
                         TwoColumnRow(
                           txtString: Statics.getLabel('Shaakhaa'),
-                          value: data?.vastiloksankhya?.dailyShaakhaaKaaryakartaaCount.toString(),
+                          value: data
+                              ?.vastiloksankhya?.dailyShaakhaaKaaryakartaaCount
+                              .toString(),
                           txtString2: Statics.getLabel('SaaptaahikLabelShort'),
-                          value2: data?.vastiloksankhya?.saaptaahikMilanKaaryakartaaCount.toString(),
+                          value2: data?.vastiloksankhya
+                              ?.saaptaahikMilanKaaryakartaaCount
+                              .toString(),
                           fontsize: 15,
                         ),
                         TwoColumnRow(
                           txtString: Statics.getLabel('MilanMandali'),
-                          value: data?.vastiloksankhya?.maasikMilanKaaryakartaaCount.toString(),
-                          txtString2: Statics.getLabel('VastiKaaryakartaaCount'),
-                          value2: data?.vastiloksankhya?.vastiKaaryakartaaCount.toString(),
+                          value: data
+                              ?.vastiloksankhya?.maasikMilanKaaryakartaaCount
+                              .toString(),
+                          txtString2:
+                              Statics.getLabel('VastiKaaryakartaaCount'),
+                          value2: data?.vastiloksankhya?.vastiKaaryakartaaCount
+                              .toString(),
                           fontsize: 15,
                         ),
                         TwoColumnRow(
                           txtString: Statics.getLabel('GraamKaaryakartaaCount'),
-                          value: data?.vastiloksankhya?.graamKaaryakartaaCount.toString(),
-                          txtString2: Statics.getLabel('MandalKaaryakartaaCount'),
-                          value2: data?.vastiloksankhya?.mandalKaaryakartaaCount.toString(),
+                          value: data?.vastiloksankhya?.graamKaaryakartaaCount
+                              .toString(),
+                          txtString2:
+                              Statics.getLabel('MandalKaaryakartaaCount'),
+                          value2: data?.vastiloksankhya?.mandalKaaryakartaaCount
+                              .toString(),
                           fontsize: 15,
                         ),
                         TwoColumnRow(
                           txtString: Statics.getLabel('NagarKaaryakartaaCount'),
-                          value: data?.vastiloksankhya?.nagarKaaryakartaaCount.toString(),
-                          txtString2: Statics.getLabel('ShaharKaaryakartaaCount'),
-                          value2: data?.vastiloksankhya?.shaharKaaryakartaaCount.toString(),
+                          value: data?.vastiloksankhya?.nagarKaaryakartaaCount
+                              .toString(),
+                          txtString2:
+                              Statics.getLabel('ShaharKaaryakartaaCount'),
+                          value2: data?.vastiloksankhya?.shaharKaaryakartaaCount
+                              .toString(),
                           fontsize: 15,
                         ),
                         TwoColumnRow(
                           txtString: Statics.getLabel('BhaagKaaryakartaaCount'),
-                          value: data?.vastiloksankhya?.bhaagKaaryakartaaCount.toString(),
-                          txtString2: Statics.getLabel('VibhaagKaaryakartaaCount'),
-                          value2: data?.vastiloksankhya?.vibhaagKaaryakartaaCount.toString(),
+                          value: data?.vastiloksankhya?.bhaagKaaryakartaaCount
+                              .toString(),
+                          txtString2:
+                              Statics.getLabel('VibhaagKaaryakartaaCount'),
+                          value2: data
+                              ?.vastiloksankhya?.vibhaagKaaryakartaaCount
+                              .toString(),
                           fontsize: 15,
                         ),
                         TwoColumnRow(
-                          txtString: Statics.getLabel('MahaanagarKaaryakartaaCount'),
-                          value: data?.vastiloksankhya?.mahaanagarKaaryakartaaCount.toString(),
-                          txtString2: Statics.getLabel('PraantKaaryakartaaCount'),
-                          value2: data?.vastiloksankhya?.praantKaaryakartaaCount.toString(),
+                          txtString:
+                              Statics.getLabel('MahaanagarKaaryakartaaCount'),
+                          value: data
+                              ?.vastiloksankhya?.mahaanagarKaaryakartaaCount
+                              .toString(),
+                          txtString2:
+                              Statics.getLabel('PraantKaaryakartaaCount'),
+                          value2: data?.vastiloksankhya?.praantKaaryakartaaCount
+                              .toString(),
                           fontsize: 15,
                         ),
                         TwoColumnRow(
-                          txtString: Statics.getLabel('KshetraKaaryakartaaCount'),
-                          value: data?.vastiloksankhya?.kshetraKaaryakartaaCount.toString(),
-                          txtString2: Statics.getLabel('AkhilBhaaratiyaKaaryakartaaCount'),
-                          value2: data?.vastiloksankhya?.akhilBhaaratiyaKaaryakartaaCount.toString(),
+                          txtString:
+                              Statics.getLabel('KshetraKaaryakartaaCount'),
+                          value: data?.vastiloksankhya?.kshetraKaaryakartaaCount
+                              .toString(),
+                          txtString2: Statics.getLabel(
+                              'AkhilBhaaratiyaKaaryakartaaCount'),
+                          value2: data?.vastiloksankhya
+                              ?.akhilBhaaratiyaKaaryakartaaCount
+                              .toString(),
                           fontsize: 15,
                         ),
                         TwoColumnRow(
-                          txtString: Statics.getLabel('PravaaseeKaaryakartaaCount'),
-                          value: data?.vastiloksankhya?.pravaaseeKaaryakartaaCount.toString(),
-                          txtString2: Statics.getLabel('TotalKaaryakartaaCount'),
-                          value2: data?.vastiloksankhya?.totalKaaryakartaaCount.toString(),
+                          txtString:
+                              Statics.getLabel('PravaaseeKaaryakartaaCount'),
+                          value: data
+                              ?.vastiloksankhya?.pravaaseeKaaryakartaaCount
+                              .toString(),
+                          txtString2:
+                              Statics.getLabel('TotalKaaryakartaaCount'),
+                          value2: data?.vastiloksankhya?.totalKaaryakartaaCount
+                              .toString(),
                           fontsize: 15,
-                        ),],
+                        ),
+                      ],
                     ),
 //--------------------------------------------------------------------------------------------------------------------------
                     commonExpansionTile(
                       title: 'GatividhiAayaamSansthaaKaaryakartaaCount',
                       children: [
                         SingleColumnRow(
-                            txtString: Statics.getLabel('GatividhiKaaryakartaaCount'),
-                            value: data?.vastiloksankhya?.gatividhiKaaryakartaaCount.toString(),
+                            txtString:
+                                Statics.getLabel('GatividhiKaaryakartaaCount'),
+                            value: data
+                                ?.vastiloksankhya?.gatividhiKaaryakartaaCount
+                                .toString(),
                             fontsize: 15),
                         SingleColumnRow(
-                            txtString: Statics.getLabel('AayaamKaaryakartaaCount'),
-                            value: data?.vastiloksankhya?.aayaamKaaryakartaaCount.toString(),
+                            txtString:
+                                Statics.getLabel('AayaamKaaryakartaaCount'),
+                            value: data
+                                ?.vastiloksankhya?.aayaamKaaryakartaaCount
+                                .toString(),
                             fontsize: 15),
                         SingleColumnRow(
-                            txtString: Statics.getLabel('SanghaPreritSansthaaKaaryakartaaCount'),
-                            value: data?.vastiloksankhya?.sanghaPreritSansthaaKaaryakartaaCount.toString(),
+                            txtString: Statics.getLabel(
+                                'SanghaPreritSansthaaKaaryakartaaCount'),
+                            value: data?.vastiloksankhya
+                                ?.sanghaPreritSansthaaKaaryakartaaCount
+                                .toString(),
                             fontsize: 15),
                         SingleColumnRow(
-                            txtString: Statics.getLabel('SocialOrganizationKaaryakartaaCount'),
-                            value: data?.vastiloksankhya?.socialOrganizationKaaryakartaaCount.toString(),
+                            txtString: Statics.getLabel(
+                                'SocialOrganizationKaaryakartaaCount'),
+                            value: data?.vastiloksankhya
+                                ?.socialOrganizationKaaryakartaaCount
+                                .toString(),
                             fontsize: 15),
                       ],
                     ),
                     commonExpansionTile(
                       title: 'Gatividhi',
                       children: [
-                        if (data != null && data!.listKaaryakartaaCountByGatividhi != null)
+                        if (data != null &&
+                            data!.listKaaryakartaaCountByGatividhi != null)
                           Container(
                             // margin: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
@@ -1166,8 +1506,9 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: DataTable(
-                                headingRowColor: MaterialStateProperty.resolveWith(
-                                      (states) => Colors.purpleAccent[200],
+                                headingRowColor:
+                                    MaterialStateProperty.resolveWith(
+                                  (states) => Colors.purpleAccent[200],
                                 ),
                                 headingTextStyle: const TextStyle(
                                   color: Colors.white,
@@ -1177,24 +1518,28 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                                   DataColumn(label: Text('गतिविधी')),
                                   DataColumn(label: Text('कार्यकर्ता संख्या')),
                                 ],
-                                rows: data!.listKaaryakartaaCountByGatividhi!.map((item) {
+                                rows: data!.listKaaryakartaaCountByGatividhi!
+                                    .map((item) {
                                   return DataRow(
                                     cells: [
                                       DataCell(Text(item.gatividhiName ?? '')),
-                                      DataCell(Center( child: Text(item.kaaryakartaaCount.toString() ?? "0"))),
+                                      DataCell(Center(
+                                          child: Text(item.kaaryakartaaCount
+                                                  .toString() ??
+                                              "0"))),
                                     ],
                                   );
                                 }).toList(),
                               ),
                             ),
                           ),
-
                       ],
                     ),
                     commonExpansionTile(
                       title: 'Aayaam',
                       children: [
-                        if (data != null && data!.listKaaryakartaaCountByAayaam != null)
+                        if (data != null &&
+                            data!.listKaaryakartaaCountByAayaam != null)
                           Container(
                             // margin: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
@@ -1204,8 +1549,9 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: DataTable(
-                                headingRowColor: MaterialStateProperty.resolveWith(
-                                      (states) => Colors.purpleAccent[200],
+                                headingRowColor:
+                                    MaterialStateProperty.resolveWith(
+                                  (states) => Colors.purpleAccent[200],
                                 ),
                                 headingTextStyle: const TextStyle(
                                   color: Colors.white,
@@ -1215,11 +1561,15 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                                   DataColumn(label: Text('आयाम')),
                                   DataColumn(label: Text('कार्यकर्ता संख्या')),
                                 ],
-                                rows: data!.listKaaryakartaaCountByAayaam!.map((item) {
+                                rows: data!.listKaaryakartaaCountByAayaam!
+                                    .map((item) {
                                   return DataRow(
                                     cells: [
                                       DataCell(Text(item.aayaamName ?? '')),
-                                      DataCell(Center( child: Text(item.kaaryakartaaCount.toString() ?? "0"))),
+                                      DataCell(Center(
+                                          child: Text(item.kaaryakartaaCount
+                                                  .toString() ??
+                                              "0"))),
                                     ],
                                   );
                                 }).toList(),
@@ -1231,7 +1581,9 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                     commonExpansionTile(
                       title: 'Sangha-PreritSansthaa',
                       children: [
-                        if (data != null && data!.listSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation != null)
+                        if (data != null &&
+                            data!.listSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation !=
+                                null)
                           Container(
                             // margin: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
@@ -1241,22 +1593,30 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: DataTable(
-                                headingRowColor: MaterialStateProperty.resolveWith(
-                                      (states) => Colors.purpleAccent[200],
+                                headingRowColor:
+                                    MaterialStateProperty.resolveWith(
+                                  (states) => Colors.purpleAccent[200],
                                 ),
                                 headingTextStyle: const TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
                                 columns: const [
-                                  DataColumn(label: Text('संघ प्रेरित संघटना/संस्था')),
+                                  DataColumn(
+                                      label: Text('संघ प्रेरित संघटना/संस्था')),
                                   DataColumn(label: Text('कार्यकर्ता संख्या')),
                                 ],
-                                rows: data!.listSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation!.map((item) {
+                                rows: data!
+                                    .listSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation!
+                                    .map((item) {
                                   return DataRow(
                                     cells: [
-                                      DataCell(Text(item.areaOfOperation ?? '')),
-                                      DataCell(Center( child: Text(item.kaaryakartaaCount.toString() ?? "0"))),
+                                      DataCell(
+                                          Text(item.areaOfOperation ?? '')),
+                                      DataCell(Center(
+                                          child: Text(item.kaaryakartaaCount
+                                                  .toString() ??
+                                              "0"))),
                                     ],
                                   );
                                 }).toList(),
@@ -1268,7 +1628,9 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                     commonExpansionTile(
                       title: 'OtherSocialOrganization',
                       children: [
-                        if (data != null && data!.socialOrganizationKaaryakartaaCountByAreaOfOperation != null)
+                        if (data != null &&
+                            data!.socialOrganizationKaaryakartaaCountByAreaOfOperation !=
+                                null)
                           Container(
                             // margin: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
@@ -1278,22 +1640,30 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: DataTable(
-                                headingRowColor: MaterialStateProperty.resolveWith(
-                                      (states) => Colors.purpleAccent[200],
+                                headingRowColor:
+                                    MaterialStateProperty.resolveWith(
+                                  (states) => Colors.purpleAccent[200],
                                 ),
                                 headingTextStyle: const TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
                                 columns: const [
-                                  DataColumn(label: Text('अन्य सामाजिक संस्था')),
+                                  DataColumn(
+                                      label: Text('अन्य सामाजिक संस्था')),
                                   DataColumn(label: Text('संख्या')),
                                 ],
-                                rows: data!.socialOrganizationKaaryakartaaCountByAreaOfOperation!.map((item) {
+                                rows: data!
+                                    .socialOrganizationKaaryakartaaCountByAreaOfOperation!
+                                    .map((item) {
                                   return DataRow(
                                     cells: [
-                                      DataCell(Text(item.areaOfOperation ?? '')),
-                                      DataCell(Center( child: Text(item.kaaryakartaaCount.toString() ?? "0"))),
+                                      DataCell(
+                                          Text(item.areaOfOperation ?? '')),
+                                      DataCell(Center(
+                                          child: Text(item.kaaryakartaaCount
+                                                  .toString() ??
+                                              "0"))),
                                     ],
                                   );
                                 }).toList(),
@@ -1305,7 +1675,8 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                     commonExpansionTile(
                       title: 'StudentCategory',
                       children: [
-                        if (data != null && data!.listSwayamsevakCountByStudentCategory != null)
+                        if (data != null &&
+                            data!.listSwayamsevakCountByStudentCategory != null)
                           Container(
                             // margin: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
@@ -1315,8 +1686,9 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: DataTable(
-                                headingRowColor: MaterialStateProperty.resolveWith(
-                                      (states) => Colors.purpleAccent[200],
+                                headingRowColor:
+                                    MaterialStateProperty.resolveWith(
+                                  (states) => Colors.purpleAccent[200],
                                 ),
                                 headingTextStyle: const TextStyle(
                                   color: Colors.white,
@@ -1326,11 +1698,18 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                                   DataColumn(label: Text('विद्यार्थी श्रेणी')),
                                   DataColumn(label: Text('संख्या')),
                                 ],
-                                rows: data!.listSwayamsevakCountByStudentCategory!.map((item) {
+                                rows: data!
+                                    .listSwayamsevakCountByStudentCategory!
+                                    .map((item) {
                                   return DataRow(
                                     cells: [
-                                      DataCell(Text(item.studentCategoryName ?? '')),
-                                      DataCell(Center( child: Text(item.countByStudentCategory.toString() ?? "0"))),
+                                      DataCell(
+                                          Text(item.studentCategoryName ?? '')),
+                                      DataCell(Center(
+                                          child: Text(item
+                                                  .countByStudentCategory
+                                                  .toString() ??
+                                              "0"))),
                                     ],
                                   );
                                 }).toList(),
@@ -1350,44 +1729,80 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                           ),
                           child: SingleChildScrollView(
                               child: Column(
-                                children: [
-                                  if (data != null && data!.listSwayamsevakCountByVyavasaayeeCategory != null)
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.grey.shade300),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal, // horizontal scroll
-                                        child: SizedBox(
-                                          width: 320,
-                                          child: DataTable(
-                                            headingRowColor: MaterialStateProperty.resolveWith(
-                                                  (states) => Colors.purpleAccent[200],
-                                            ),
-                                            headingTextStyle: const TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                            columns: const [
-                                              DataColumn(label: Expanded( child: Center(child: Text('व्यवसायी श्रेणी',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                              DataColumn(label: Expanded( child: Center(child: Text('संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                            ],
-                                            rows: data!.listSwayamsevakCountByVyavasaayeeCategory!.map((item) {
-                                              return DataRow(
-                                                cells: [
-                                                  DataCell(Center(child: Text(item.vyavasaayeeCategoryName ?? ''))),
-                                                  DataCell(Center(child: Text(item.countByVyavasaayeeCategory.toString()))),
-                                                ],
-                                              );
-                                            }).toList(),
-                                          ),
+                            children: [
+                              if (data != null &&
+                                  data!.listSwayamsevakCountByVyavasaayeeCategory !=
+                                      null)
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(color: Colors.grey.shade300),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: SingleChildScrollView(
+                                    scrollDirection:
+                                        Axis.horizontal, // horizontal scroll
+                                    child: SizedBox(
+                                      width: 320,
+                                      child: DataTable(
+                                        headingRowColor:
+                                            MaterialStateProperty.resolveWith(
+                                          (states) => Colors.purpleAccent[200],
                                         ),
+                                        headingTextStyle: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        columns: const [
+                                          DataColumn(
+                                            label: Expanded(
+                                              child: Center(
+                                                child: Text(
+                                                  'व्यवसायी श्रेणी',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: Expanded(
+                                              child: Center(
+                                                child: Text(
+                                                  'संख्या',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                        rows: data!
+                                            .listSwayamsevakCountByVyavasaayeeCategory!
+                                            .map((item) {
+                                          return DataRow(
+                                            cells: [
+                                              DataCell(Center(
+                                                  child: Text(
+                                                      item.vyavasaayeeCategoryName ??
+                                                          ''))),
+                                              DataCell(Center(
+                                                  child: Text(item
+                                                      .countByVyavasaayeeCategory
+                                                      .toString()))),
+                                            ],
+                                          );
+                                        }).toList(),
                                       ),
                                     ),
-                                ],
-                              )
-                          ),
+                                  ),
+                                ),
+                            ],
+                          )),
                         ),
                       ],
                     ),
@@ -1402,44 +1817,74 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                           ),
                           child: SingleChildScrollView(
                               child: Column(
-                                children: [
-                                  if (data != null && data!.vasahatprakar != null)
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.grey.shade300),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal, // horizontal scroll
-                                        child: SizedBox(
-                                          width: 320,
-                                          child: DataTable(
-                                            headingRowColor: MaterialStateProperty.resolveWith(
-                                                  (states) => Colors.purpleAccent[200],
-                                            ),
-                                            headingTextStyle: const TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                            columns: const [
-                                              DataColumn(label: Expanded( child: Center(child: Text('वसाहत प्रकार',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                              DataColumn(label: Expanded( child: Center(child: Text('संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                            ],
-                                            rows: data!.vasahatprakar!.map((item) {
-                                              return DataRow(
-                                                cells: [
-                                                  DataCell(Center(child: Text(item.value ?? ''))),
-                                                  DataCell(Center(child: Text(item.count.toString()))),
-                                                ],
-                                              );
-                                            }).toList(),
-                                          ),
+                            children: [
+                              if (data != null && data!.vasahatprakar != null)
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(color: Colors.grey.shade300),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: SingleChildScrollView(
+                                    scrollDirection:
+                                        Axis.horizontal, // horizontal scroll
+                                    child: SizedBox(
+                                      width: 320,
+                                      child: DataTable(
+                                        headingRowColor:
+                                            MaterialStateProperty.resolveWith(
+                                          (states) => Colors.purpleAccent[200],
                                         ),
+                                        headingTextStyle: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        columns: const [
+                                          DataColumn(
+                                            label: Expanded(
+                                              child: Center(
+                                                child: Text(
+                                                  'वसाहत प्रकार',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: Expanded(
+                                              child: Center(
+                                                child: Text(
+                                                  'संख्या',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                        rows: data!.vasahatprakar!.map((item) {
+                                          return DataRow(
+                                            cells: [
+                                              DataCell(Center(
+                                                  child:
+                                                      Text(item.value ?? ''))),
+                                              DataCell(Center(
+                                                  child: Text(
+                                                      item.count.toString()))),
+                                            ],
+                                          );
+                                        }).toList(),
                                       ),
                                     ),
-                                ],
-                              )
-                          ),
+                                  ),
+                                ),
+                            ],
+                          )),
                         ),
                       ],
                     ),
@@ -1462,21 +1907,28 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                                   // Header Row
                                   TableRow(
                                     decoration: BoxDecoration(
-                                      color: Colors.purpleAccent.shade200
-                                    ),
+                                        color: Colors.purpleAccent.shade200),
                                     children: [
                                       TableCell(
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
-                                          child: Text('प्रकार / स्थिती', style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white)),
+                                          child: Text('प्रकार / स्थिती',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white)),
                                         ),
                                       ),
                                       ...subtypes.map((subtype) => TableCell(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(subtype, style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white)),
-                                        ),
-                                      )),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Text(subtype,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.white)),
+                                            ),
+                                          )),
                                     ],
                                   ),
                                   // Data Rows
@@ -1493,7 +1945,8 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                                           final value = vastiMap[mt]?[st] ?? 0;
                                           return TableCell(
                                             child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
                                               child: Text(value.toString()),
                                             ),
                                           );
@@ -1511,421 +1964,721 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                     commonExpansionTile(
                       title: 'pramukhaBhashhaStithi',
                       children: [
-                          Container(
-                            height: 500,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade300),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: SingleChildScrollView(
+                        Container(
+                          height: 500,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: SingleChildScrollView(
                               child: Column(
-                                children: [
-                                  if (data != null && data!.bhaasacount != null)
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.grey.shade300),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal, // horizontal scroll
-                                        child: SizedBox(
-                                          width: 300,
-                                          child: DataTable(
-                                            headingRowColor: MaterialStateProperty.resolveWith(
-                                                  (states) => Colors.purpleAccent[200],
-                                            ),
-                                            headingTextStyle: const TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                            columns: const [
-                                              DataColumn(label: Expanded( child: Center(child: Text('भाषा',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                              DataColumn(label: Expanded( child: Center(child: Text('वस्ती संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                            ],
-                                            rows: data!.bhaasacount!.map((item) {
-                                              return DataRow(
-                                                cells: [
-                                                  DataCell(Center(child: Text(item.value ?? ''))),
-                                                  DataCell(Center(child: Text(item.count.toString()))),
-                                                ],
-                                              );
-                                            }).toList(),
-                                          ),
+                            children: [
+                              if (data != null && data!.bhaasacount != null)
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(color: Colors.grey.shade300),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: SingleChildScrollView(
+                                    scrollDirection:
+                                        Axis.horizontal, // horizontal scroll
+                                    child: SizedBox(
+                                      width: 300,
+                                      child: DataTable(
+                                        headingRowColor:
+                                            MaterialStateProperty.resolveWith(
+                                          (states) => Colors.purpleAccent[200],
                                         ),
+                                        headingTextStyle: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        columns: const [
+                                          DataColumn(
+                                            label: Expanded(
+                                              child: Center(
+                                                child: Text(
+                                                  'भाषा',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: Expanded(
+                                              child: Center(
+                                                child: Text(
+                                                  'वस्ती संख्या',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                        rows: data!.bhaasacount!.map((item) {
+                                          return DataRow(
+                                            cells: [
+                                              DataCell(Center(
+                                                  child:
+                                                      Text(item.value ?? ''))),
+                                              DataCell(Center(
+                                                  child: Text(
+                                                      item.count.toString()))),
+                                            ],
+                                          );
+                                        }).toList(),
                                       ),
                                     ),
-                                ],
-                              )
-                            ),
-                          ),
+                                  ),
+                                ),
+                            ],
+                          )),
+                        ),
                       ],
                     ),
                     commonExpansionTile(
                       title: 'praantStithi',
                       children: [
-                          Container(
-                            // height: 500,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade300),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: SingleChildScrollView(
+                        Container(
+                          // height: 500,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: SingleChildScrollView(
                               child: Column(
-                                children: [
-                                  if (data != null && data!.prantshiti != null)
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.grey.shade300),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal, // horizontal scroll
-                                        child: SizedBox(
-                                          width: 300,
-                                          child: DataTable(
-                                            headingRowColor: MaterialStateProperty.resolveWith(
-                                                  (states) => Colors.purpleAccent[200],
-                                            ),
-                                            headingTextStyle: const TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                            columns: const [
-                                              DataColumn(label: Expanded( child: Center(child: Text('प्रांत स्थिति',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                              DataColumn(label: Expanded( child: Center(child: Text('वस्ती संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                            ],
-                                            rows: data!.prantshiti!.map((item) {
-                                              return DataRow(
-                                                cells: [
-                                                  DataCell(Center(child: Text(item.value ?? ''))),
-                                                  DataCell(Center(child: Text(item.count.toString()))),
-                                                ],
-                                              );
-                                            }).toList(),
-                                          ),
+                            children: [
+                              if (data != null && data!.prantshiti != null)
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(color: Colors.grey.shade300),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: SingleChildScrollView(
+                                    scrollDirection:
+                                        Axis.horizontal, // horizontal scroll
+                                    child: SizedBox(
+                                      width: 300,
+                                      child: DataTable(
+                                        headingRowColor:
+                                            MaterialStateProperty.resolveWith(
+                                          (states) => Colors.purpleAccent[200],
                                         ),
+                                        headingTextStyle: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        columns: const [
+                                          DataColumn(
+                                            label: Expanded(
+                                              child: Center(
+                                                child: Text(
+                                                  'प्रांत स्थिति',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: Expanded(
+                                              child: Center(
+                                                child: Text(
+                                                  'वस्ती संख्या',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                        rows: data!.prantshiti!.map((item) {
+                                          return DataRow(
+                                            cells: [
+                                              DataCell(Center(
+                                                  child:
+                                                      Text(item.value ?? ''))),
+                                              DataCell(Center(
+                                                  child: Text(
+                                                      item.count.toString()))),
+                                            ],
+                                          );
+                                        }).toList(),
                                       ),
                                     ),
-                                ],
-                              )
-                            ),
-                          ),
+                                  ),
+                                ),
+                            ],
+                          )),
+                        ),
                       ],
                     ),
                     commonExpansionTile(
                       title: 'religion',
                       children: [
-                          Container(
-                            // height: 500,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade300),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  if (data != null && data!.religion != null)
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.grey.shade300),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal, // horizontal scroll
-                                        child: DataTable(
-                                          headingRowColor: MaterialStateProperty.resolveWith(
-                                                (states) => Colors.purpleAccent[200],
-                                          ),
-                                          headingTextStyle: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          columns: const [
-                                            DataColumn(label: Expanded( child: Center(child: Text('रिलीजन',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                            DataColumn(label: Expanded( child: Center(child: Text('वस्ती संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                          ],
-                                          rows: data!.religion!.map((item) {
-                                            return DataRow(
-                                              cells: [
-                                                DataCell(Center(child: Text(item.value ?? ''))),
-                                                DataCell(Center(child: Text(item.count.toString()))),
-                                              ],
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              )
-                            ),
+                        Container(
+                          // height: 500,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(8),
                           ),
+                          child: SingleChildScrollView(
+                              child: Column(
+                            children: [
+                              if (data != null && data!.religion != null)
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(color: Colors.grey.shade300),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: SingleChildScrollView(
+                                    scrollDirection:
+                                        Axis.horizontal, // horizontal scroll
+                                    child: DataTable(
+                                      headingRowColor:
+                                          MaterialStateProperty.resolveWith(
+                                        (states) => Colors.purpleAccent[200],
+                                      ),
+                                      headingTextStyle: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      columns: const [
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'रिलीजन',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'वस्ती संख्या',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                      rows: data!.religion!.map((item) {
+                                        return DataRow(
+                                          cells: [
+                                            DataCell(Center(
+                                                child: Text(item.value ?? ''))),
+                                            DataCell(Center(
+                                                child: Text(
+                                                    item.count.toString()))),
+                                          ],
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          )),
+                        ),
                       ],
                     ),
                     commonExpansionTile(
                       title: 'UpsanaSthal',
                       children: [
-                          Container(
-                            height: 300,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade300),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  if (data != null && data!.upasanaSthal != null)
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.grey.shade300),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal, // horizontal scroll
-                                        child: DataTable(
-                                          headingRowColor: MaterialStateProperty.resolveWith(
-                                                (states) => Colors.purpleAccent[200],
-                                          ),
-                                          headingTextStyle: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          columns: const [
-                                            DataColumn(label: Expanded( child: Center(child: Text('उपासना स्थळ ',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                            DataColumn(label: Expanded( child: Center(child: Text('प्रकार',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                            DataColumn(label: Expanded( child: Center(child: Text('संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                            DataColumn(label: Expanded( child: Center(child: Text('किती वस्तीत ',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                          ],
-                                          rows: data!.upasanaSthal!.map((item) {
-                                            return DataRow(
-                                              cells: [
-                                                DataCell(Center(child: Text(item.upaasanasthal ?? ''))),
-                                                DataCell(Center(child: Text(item.prakar.toString()))),
-                                                DataCell(Center(child: Text(item.tot.toString()))),
-                                                DataCell(Center(child: Text(item.vasticnt.toString()))),
-                                              ],
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              )
-                            ),
+                        Container(
+                          height: 300,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(8),
                           ),
+                          child: SingleChildScrollView(
+                              child: Column(
+                            children: [
+                              if (data != null && data!.upasanaSthal != null)
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(color: Colors.grey.shade300),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: SingleChildScrollView(
+                                    scrollDirection:
+                                        Axis.horizontal, // horizontal scroll
+                                    child: DataTable(
+                                      headingRowColor:
+                                          MaterialStateProperty.resolveWith(
+                                        (states) => Colors.purpleAccent[200],
+                                      ),
+                                      headingTextStyle: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      columns: const [
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'उपासना स्थळ ',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'प्रकार',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'संख्या',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'किती वस्तीत ',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                      rows: data!.upasanaSthal!.map((item) {
+                                        return DataRow(
+                                          cells: [
+                                            DataCell(Center(
+                                                child: Text(
+                                                    item.upaasanasthal ?? ''))),
+                                            DataCell(Center(
+                                                child: Text(
+                                                    item.prakar.toString()))),
+                                            DataCell(Center(
+                                                child:
+                                                    Text(item.tot.toString()))),
+                                            DataCell(Center(
+                                                child: Text(
+                                                    item.vasticnt.toString()))),
+                                          ],
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          )),
+                        ),
                       ],
                     ),
                     commonExpansionTile(
                       title: 'SajjanShakti',
                       children: [
-                          Container(
-                            height: 400,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade300),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: ListView(
-                              children: groupedData.entries.map((entry) {
-                                final sajjanType = entry.key;
-                                final data = entry.value;
+                        Container(
+                          height: 400,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: ListView(
+                            children: groupedData.entries.map((entry) {
+                              final sajjanType = entry.key;
+                              final data = entry.value;
 
-                                // Unique prabhavishetra & samparkashiti
-                                final prabhavishetraList = {
-                                  ...data.map((e) => e.prabhavishetra).toSet()
-                                }.toList();
-                                final samparkList = {
-                                  ...data.map((e) => e.samparkashiti).toSet()
-                                }.toList();
+                              // Unique prabhavishetra & samparkashiti
+                              final prabhavishetraList = {
+                                ...data.map((e) => e.prabhavishetra).toSet()
+                              }.toList();
+                              final samparkList = {
+                                ...data.map((e) => e.samparkashiti).toSet()
+                              }.toList();
 
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(height: 20),
-                                    Center(
-                                      child: Text(
-                                        "सज्जन शक्ती (${sajjanType})",
-                                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                      ),
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(height: 20),
+                                  Center(
+                                    child: Text(
+                                      "सज्जन शक्ती (${sajjanType})",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                    Table(
-                                      border: TableBorder.all(),
-                                      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                                      children: [
-                                        // Header Row
-                                        TableRow(
-                                          decoration: BoxDecoration(
-                                            color: Colors.purpleAccent.shade200, // Header background
-                                          ),
-                                          children: [
-                                            const TableCell(
-                                              child: Padding(
-                                                padding: EdgeInsets.all(8),
-                                                child: Text('सज्जन शक्ती संपर्क स्थिती',  style: TextStyle(color: Colors.white), ),
-
-                                              ),
-                                            ),
-                                            ...prabhavishetraList.map((header) => Padding(
-                                              padding: const EdgeInsets.all(8),
-                                              child: Text(header!,  style: TextStyle(color: Colors.white), ),
-                                            )),
-                                          ],
+                                  ),
+                                  Table(
+                                    border: TableBorder.all(),
+                                    defaultVerticalAlignment:
+                                        TableCellVerticalAlignment.middle,
+                                    children: [
+                                      // Header Row
+                                      TableRow(
+                                        decoration: BoxDecoration(
+                                          color: Colors.purpleAccent
+                                              .shade200, // Header background
                                         ),
-                                        // Data Rows
-                                        ...samparkList.map((sampark) {
-                                          return TableRow(
-                                            children: [
-                                              SizedBox(
-                                                width: 140,
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(8),
-                                                  child: Text(sampark!),
-                                                ),
-                                              ),
-                                              ...prabhavishetraList.map((prabhav) {
-                                                final match = data.firstWhere(
-                                                      (item) =>
-                                                  item.samparkashiti == sampark &&
-                                                      item.prabhavishetra == prabhav,
-                                                  orElse: () => Sajjanshakkati(),
-                                                );
-                                                return Padding(
-                                                  padding: const EdgeInsets.all(8),
-                                                  child: Text('${match.vasticnt ?? ''}'),
-                                                );
-                                              }),
-                                            ],
-                                          );
-                                        }).toList(),
-                                        // Total Row
-                                        TableRow(
-                                          decoration: BoxDecoration(color: Colors.grey.shade200),
-                                          children: [
-                                            const Padding(
+                                        children: [
+                                          const TableCell(
+                                            child: Padding(
                                               padding: EdgeInsets.all(8),
                                               child: Text(
-                                                'एकूण',
-                                                style: TextStyle(fontWeight: FontWeight.bold),
+                                                'सज्जन शक्ती संपर्क स्थिती',
+                                                style: TextStyle(
+                                                    color: Colors.white),
                                               ),
                                             ),
-                                            ...prabhavishetraList.map((prabhav) {
-                                              final total = data
-                                                  .where((item) => item.prabhavishetra == prabhav)
-                                                  .fold<int>(0, (sum, item) => sum + (item.vasticnt ?? 0));
-
+                                          ),
+                                          ...prabhavishetraList
+                                              .map((header) => Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(8),
+                                                    child: Text(
+                                                      header!,
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                  )),
+                                        ],
+                                      ),
+                                      // Data Rows
+                                      ...samparkList.map((sampark) {
+                                        return TableRow(
+                                          children: [
+                                            SizedBox(
+                                              width: 140,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8),
+                                                child: Text(sampark!),
+                                              ),
+                                            ),
+                                            ...prabhavishetraList
+                                                .map((prabhav) {
+                                              final match = data.firstWhere(
+                                                (item) =>
+                                                    item.samparkashiti ==
+                                                        sampark &&
+                                                    item.prabhavishetra ==
+                                                        prabhav,
+                                                orElse: () => Sajjanshakkati(),
+                                              );
                                               return Padding(
-                                                padding: const EdgeInsets.all(8),
+                                                padding:
+                                                    const EdgeInsets.all(8),
                                                 child: Text(
-                                                  '$total',
-                                                  style: const TextStyle(fontWeight: FontWeight.bold),
-                                                ),
+                                                    '${match.vasticnt ?? ''}'),
                                               );
                                             }),
                                           ],
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                );
-                              }).toList(),
-                            ),
+                                        );
+                                      }).toList(),
+                                      // Total Row
+                                      TableRow(
+                                        decoration: BoxDecoration(
+                                            color: Colors.grey.shade200),
+                                        children: [
+                                          const Padding(
+                                            padding: EdgeInsets.all(8),
+                                            child: Text(
+                                              'एकूण',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          ...prabhavishetraList.map((prabhav) {
+                                            final total = data
+                                                .where((item) =>
+                                                    item.prabhavishetra ==
+                                                    prabhav)
+                                                .fold<int>(
+                                                    0,
+                                                    (sum, item) =>
+                                                        sum +
+                                                        (item.vasticnt ?? 0));
+
+                                            return Padding(
+                                              padding: const EdgeInsets.all(8),
+                                              child: Text(
+                                                '$total',
+                                                style: const TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            );
+                                          }),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              );
+                            }).toList(),
                           ),
+                        ),
                       ],
                     ),
+                    // commonExpansionTile(
+                    //   title: 'anyaPrabhaviLok',
+                    //   children: [
+                    //     if (data != null && data!.vastiAnyaPrabhaviLok != null)
+                    //       Container(
+                    //         // margin: const EdgeInsets.all(16),
+                    //         decoration: BoxDecoration(
+                    //           border: Border.all(color: Colors.grey.shade300),
+                    //           borderRadius: BorderRadius.circular(8),
+                    //         ),
+                    //         child: SingleChildScrollView(
+                    //           scrollDirection:
+                    //               Axis.horizontal, // horizontal scroll
+                    //           child: SizedBox(
+                    //             // width: 300,
+                    //             child: DataTable(
+                    //               headingRowColor:
+                    //                   MaterialStateProperty.resolveWith(
+                    //                 (states) => Colors.purpleAccent[200],
+                    //               ),
+                    //               headingTextStyle: const TextStyle(
+                    //                 color: Colors.white,
+                    //                 fontWeight: FontWeight.bold,
+                    //               ),
+                    //               columns: const [
+                    //                 DataColumn(label: Text('नाव')),
+                    //                 DataColumn(label: Text('पत्ता')),
+                    //                 DataColumn(label: Text('दूरभाष')),
+                    //                 DataColumn(label: Text('श्रेणी')),
+                    //                 DataColumn(label: Text('उपश्रेणी')),
+                    //                 DataColumn(label: Text('उपश्रेणी २')),
+                    //                 DataColumn(label: Text('संपर्क स्थिती')),
+                    //                 DataColumn(label: Text('प्रभाव क्षेत्र')),
+                    //                 DataColumn(label: Text('संपर्क सूत्र नाव')),
+                    //               ],
+                    //               rows: data!.vastiAnyaPrabhaviLok!.map((item) {
+                    //                 return DataRow(
+                    //                   cells: [
+                    //                     DataCell(Text(item.name ?? '')),
+                    //                     DataCell(Text(item.address ?? '')),
+                    //                     DataCell(Text(item.doorabhaash ?? '')),
+                    //                     DataCell(Text(
+                    //                         item.selectedDropdownValueName ??
+                    //                             '')),
+                    //                     DataCell(Text(
+                    //                         "${item.selectedDropdownValueName1} ${item.otherupshrenee != "" ? "- ${item.otherupshrenee}" : ""}")),
+                    //                     DataCell(Text(
+                    //                         "${item.selectedDropdownValueName2} ${item.otherupshrenee2 != "" ? "- ${item.otherupshrenee2}" : ""}")),
+                    //                     DataCell(Text(
+                    //                         item.selectedDropdownValueName3 ??
+                    //                             '')),
+                    //                     DataCell(Text(
+                    //                         item.selectedDropdownValueName4 ??
+                    //                             '')),
+                    //                     DataCell(
+                    //                         Text(item.samparkasutranav ?? '')),
+                    //                   ],
+                    //                 );
+                    //               }).toList(),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       ),
+                    //   ],
+                    // ),
                     commonExpansionTile(
                       title: 'sajareHonareSan',
                       children: [
-                          Container(
-                            // height: 300,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade300),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  if (data != null && data!.mahatvacesana != null)
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.grey.shade300),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal, // horizontal scroll
-                                        child: DataTable(
-                                          headingRowColor: MaterialStateProperty.resolveWith(
-                                                (states) => Colors.purpleAccent[200],
-                                          ),
-                                          headingTextStyle: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          columns: const [
-                                            DataColumn(label: Expanded( child: Center(child: Text('वस्तीत साजर होणारे\nमहत्वाचे सण/ उत्सव',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                            DataColumn(label: Expanded( child: Center(child: Text('वस्ती संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                         ],
-                                          rows: data!.mahatvacesana!.map((item) {
-                                            return DataRow(
-                                              cells: [
-                                                DataCell(Center(child: Text(item.value ?? ''))),
-                                                DataCell(Center(child: Text(item.count.toString()))),
-                                              ],
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              )
-                            ),
+                        Container(
+                          // height: 300,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(8),
                           ),
+                          child: SingleChildScrollView(
+                              child: Column(
+                            children: [
+                              if (data != null && data!.mahatvacesana != null)
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(color: Colors.grey.shade300),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: SingleChildScrollView(
+                                    scrollDirection:
+                                        Axis.horizontal, // horizontal scroll
+                                    child: DataTable(
+                                      headingRowColor:
+                                          MaterialStateProperty.resolveWith(
+                                        (states) => Colors.purpleAccent[200],
+                                      ),
+                                      headingTextStyle: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      columns: const [
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'वस्तीत साजर होणारे\nमहत्वाचे सण/ उत्सव',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'वस्ती संख्या',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                      rows: data!.mahatvacesana!.map((item) {
+                                        return DataRow(
+                                          cells: [
+                                            DataCell(Center(
+                                                child: Text(item.value ?? ''))),
+                                            DataCell(Center(
+                                                child: Text(
+                                                    item.count.toString()))),
+                                          ],
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          )),
+                        ),
                       ],
                     ),
                     commonExpansionTile(
                       title: 'sajareHonareKaryakram',
                       children: [
-                          Container(
-                            // height: 300,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade300),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  if (data != null && data!.samajikkaryakram != null)
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.grey.shade300),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal, // horizontal scroll
-                                        child: DataTable(
-                                          headingRowColor: MaterialStateProperty.resolveWith(
-                                                (states) => Colors.purpleAccent[200],
-                                          ),
-                                          headingTextStyle: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          columns: const [
-                                            DataColumn(label: Expanded( child: Center(child: Text('वस्तीत साजर होणारे\nमहत्वाचे सामाजिक कार्यक्रम',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                            DataColumn(label: Expanded( child: Center(child: Text('वस्ती संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                         ],
-                                          rows: data!.samajikkaryakram!.map((item) {
-                                            return DataRow(
-                                              cells: [
-                                                DataCell(Center(child: Text(item.value ?? ''))),
-                                                DataCell(Center(child: Text(item.count.toString()))),
-                                              ],
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              )
-                            ),
+                        Container(
+                          // height: 300,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(8),
                           ),
+                          child: SingleChildScrollView(
+                              child: Column(
+                            children: [
+                              if (data != null &&
+                                  data!.samajikkaryakram != null)
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(color: Colors.grey.shade300),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: SingleChildScrollView(
+                                    scrollDirection:
+                                        Axis.horizontal, // horizontal scroll
+                                    child: DataTable(
+                                      headingRowColor:
+                                          MaterialStateProperty.resolveWith(
+                                        (states) => Colors.purpleAccent[200],
+                                      ),
+                                      headingTextStyle: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      columns: const [
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'वस्तीत साजर होणारे\nमहत्वाचे सामाजिक कार्यक्रम',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'वस्ती संख्या',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                      rows: data!.samajikkaryakram!.map((item) {
+                                        return DataRow(
+                                          cells: [
+                                            DataCell(Center(
+                                                child: Text(item.value ?? ''))),
+                                            DataCell(Center(
+                                                child: Text(
+                                                    item.count.toString()))),
+                                          ],
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          )),
+                        ),
                       ],
                     ),
                     commonExpansionTile(
@@ -1947,21 +2700,29 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                                   // Header Row
                                   TableRow(
                                     decoration: BoxDecoration(
-                                        color: Colors.purpleAccent.shade200
-                                    ),
+                                        color: Colors.purpleAccent.shade200),
                                     children: [
                                       TableCell(
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
-                                          child: Text('प्रकार / स्थिती', style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white)),
+                                          child: Text('प्रकार / स्थिती',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white)),
                                         ),
                                       ),
-                                      ...subtypesGatividhi.map((subtype) => TableCell(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(subtype, style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white)),
-                                        ),
-                                      )),
+                                      ...subtypesGatividhi
+                                          .map((subtype) => TableCell(
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Text(subtype,
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: Colors.white)),
+                                                ),
+                                              )),
                                     ],
                                   ),
                                   // Data Rows
@@ -1975,10 +2736,12 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                                           ),
                                         ),
                                         ...subtypesGatividhi.map((st) {
-                                          final value = vastiMapgatividhi[mt]?[st] ?? 0;
+                                          final value =
+                                              vastiMapgatividhi[mt]?[st] ?? 0;
                                           return TableCell(
                                             child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
                                               child: Text(value.toString()),
                                             ),
                                           );
@@ -1991,7 +2754,6 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                             ),
                           ),
                         ),
-
                       ],
                     ),
                     commonExpansionTile(
@@ -2013,21 +2775,29 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                                   // Header Row
                                   TableRow(
                                     decoration: BoxDecoration(
-                                        color: Colors.purpleAccent.shade200
-                                    ),
+                                        color: Colors.purpleAccent.shade200),
                                     children: [
                                       TableCell(
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
-                                          child: Text('प्रकार / स्थिती', style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white)),
+                                          child: Text('प्रकार / स्थिती',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white)),
                                         ),
                                       ),
-                                      ...subtypesJagran.map((subtype) => TableCell(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(subtype, style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white)),
-                                        ),
-                                      )),
+                                      ...subtypesJagran
+                                          .map((subtype) => TableCell(
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Text(subtype,
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: Colors.white)),
+                                                ),
+                                              )),
                                     ],
                                   ),
                                   // Data Rows
@@ -2041,10 +2811,12 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                                           ),
                                         ),
                                         ...subtypesJagran.map((st) {
-                                          final value = vastiMapJagran[mt]?[st] ?? 0;
+                                          final value =
+                                              vastiMapJagran[mt]?[st] ?? 0;
                                           return TableCell(
                                             child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
                                               child: Text(value.toString()),
                                             ),
                                           );
@@ -2057,361 +2829,653 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                             ),
                           ),
                         ),
-
                       ],
                     ),
                     commonExpansionTile(
                       title: 'BalopasanaKendra',
                       children: [
-                          Container(
-                            // height: 300,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade300),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  if (data != null && data!.balopasanakendra != null)
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.grey.shade300),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
-                                        child: DataTable(
-                                          headingRowColor: MaterialStateProperty.resolveWith(
-                                                (states) => Colors.purpleAccent[200],
-                                          ),
-                                          headingTextStyle: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          columns: const [
-                                            DataColumn(label: Expanded( child: Center(child: Text('वस्तीतील बलोपसाना केंद्र',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                            DataColumn(label: Expanded( child: Center(child: Text('वस्ती संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                            DataColumn(label: Expanded( child: Center(child: Text('केंद्र संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                           ],
-                                          rows: data!.balopasanakendra!.map((item) {
-                                            return DataRow(
-                                              cells: [
-                                                DataCell(Center(child: Text(item.value ?? ''))),
-                                                DataCell(Center(child: Text(item.count.toString()))),
-                                                DataCell(Center(child: Text(item.sankhya.toString()))),
-                                              ],
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              )
-                            ),
+                        Container(
+                          // height: 300,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(8),
                           ),
+                          child: SingleChildScrollView(
+                              child: Column(
+                            children: [
+                              if (data != null &&
+                                  data!.balopasanakendra != null)
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(color: Colors.grey.shade300),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: DataTable(
+                                      headingRowColor:
+                                          MaterialStateProperty.resolveWith(
+                                        (states) => Colors.purpleAccent[200],
+                                      ),
+                                      headingTextStyle: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      columns: const [
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'वस्तीतील बलोपसाना केंद्र',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'वस्ती संख्या',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'केंद्र संख्या',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                      rows: data!.balopasanakendra!.map((item) {
+                                        return DataRow(
+                                          cells: [
+                                            DataCell(Center(
+                                                child: Text(item.value ?? ''))),
+                                            DataCell(Center(
+                                                child: Text(
+                                                    item.count.toString()))),
+                                            DataCell(Center(
+                                                child: Text(
+                                                    item.sankhya.toString()))),
+                                          ],
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          )),
+                        ),
                       ],
                     ),
                     commonExpansionTile(
                       title: 'MotheVyasaayiKendra',
                       children: [
-                          Container(
-                            // height: 300,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade300),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  if (data != null && data!.mothevyavasayikakendra != null)
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.grey.shade300),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal, // horizontal scroll
-                                        child: DataTable(
-                                          headingRowColor: MaterialStateProperty.resolveWith(
-                                                (states) => Colors.purpleAccent[200],
-                                          ),
-                                          headingTextStyle: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          columns: const [
-                                            DataColumn(label: Expanded( child: Center(child: Text('मोठे व्यवसायिक केंद्र',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                            DataColumn(label: Expanded( child: Center(child: Text('वस्ती संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                            DataColumn(label: Expanded( child: Center(child: Text('केंद्र संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                          ],
-                                          rows: data!.mothevyavasayikakendra!.map((item) {
-                                            return DataRow(
-                                              cells: [
-                                                DataCell(Center(child: Text(item.value ?? ''))),
-                                                DataCell(Center(child: Text(item.count.toString()))),
-                                                DataCell(Center(child: Text(item.sankhya.toString()))),
-                                              ],
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              )
-                            ),
+                        Container(
+                          // height: 300,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(8),
                           ),
+                          child: SingleChildScrollView(
+                              child: Column(
+                            children: [
+                              if (data != null &&
+                                  data!.mothevyavasayikakendra != null)
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(color: Colors.grey.shade300),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: SingleChildScrollView(
+                                    scrollDirection:
+                                        Axis.horizontal, // horizontal scroll
+                                    child: DataTable(
+                                      headingRowColor:
+                                          MaterialStateProperty.resolveWith(
+                                        (states) => Colors.purpleAccent[200],
+                                      ),
+                                      headingTextStyle: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      columns: const [
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'मोठे व्यवसायिक केंद्र',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'वस्ती संख्या',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'केंद्र संख्या',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                      rows: data!.mothevyavasayikakendra!
+                                          .map((item) {
+                                        return DataRow(
+                                          cells: [
+                                            DataCell(Center(
+                                                child: Text(item.value ?? ''))),
+                                            DataCell(Center(
+                                                child: Text(
+                                                    item.count.toString()))),
+                                            DataCell(Center(
+                                                child: Text(
+                                                    item.sankhya.toString()))),
+                                          ],
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          )),
+                        ),
                       ],
                     ),
                     commonExpansionTile(
                       title: 'MotheRugnalay',
                       children: [
-                          Container(
-                            // height: 300,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade300),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  if (data != null && data!.motherugnalaya != null)
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.grey.shade300),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal, // horizontal scroll
-                                        child: DataTable(
-                                          headingRowColor: MaterialStateProperty.resolveWith(
-                                                (states) => Colors.purpleAccent[200],
-                                          ),
-                                          headingTextStyle: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          columns: const [
-                                            DataColumn(label: Expanded( child: Center(child: Text('मोठे रुग्णालय',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                            DataColumn(label: Expanded( child: Center(child: Text('वस्ती संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                            DataColumn(label: Expanded( child: Center(child: Text('रुग्णालय संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                          ],
-                                          rows: data!.motherugnalaya!.map((item) {
-                                            return DataRow(
-                                              cells: [
-                                                DataCell(Center(child: Text(item.value ?? ''))),
-                                                DataCell(Center(child: Text(item.count.toString()))),
-                                                DataCell(Center(child: Text(item.sankhya.toString()))),
-                                              ],
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              )
-                            ),
+                        Container(
+                          // height: 300,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(8),
                           ),
+                          child: SingleChildScrollView(
+                              child: Column(
+                            children: [
+                              if (data != null && data!.motherugnalaya != null)
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(color: Colors.grey.shade300),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: SingleChildScrollView(
+                                    scrollDirection:
+                                        Axis.horizontal, // horizontal scroll
+                                    child: DataTable(
+                                      headingRowColor:
+                                          MaterialStateProperty.resolveWith(
+                                        (states) => Colors.purpleAccent[200],
+                                      ),
+                                      headingTextStyle: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      columns: const [
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'मोठे रुग्णालय',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'वस्ती संख्या',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'रुग्णालय संख्या',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                      rows: data!.motherugnalaya!.map((item) {
+                                        return DataRow(
+                                          cells: [
+                                            DataCell(Center(
+                                                child: Text(item.value ?? ''))),
+                                            DataCell(Center(
+                                                child: Text(
+                                                    item.count.toString()))),
+                                            DataCell(Center(
+                                                child: Text(
+                                                    item.sankhya.toString()))),
+                                          ],
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          )),
+                        ),
                       ],
                     ),
-                    commonExpansionTile(
-                      title: 'StharInfo',
-                      children: [
-                        SingleColumnRow(txtString: "अग्निशमन दल केंद्र संख्या", value: data?.vastiloksankhya?.fireBrigade.toString(), fontsize: 15),
-                        SingleColumnRow(txtString: "पोलीस ठाणे / चौकी संख्या", value: data?.vastiloksankhya?.policeThane.toString(), fontsize: 15),
-                      ],
-                    ),
+
                     commonExpansionTile(
                       title: 'shaikshanikSanstha',
                       children: [
-                          Container(
-                            // height: 300,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade300),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  if (data != null && data!.schooltapasilaforschool != null)
-                                    Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 8),
-                                    child: Center(
-                                      child: Text(
-                                        'शाळा',
-                                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ),
-                                  if (data != null && data!.schooltapasilaforschool != null)
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.grey.shade300),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal, // horizontal scroll
-                                        child: DataTable(
-                                          headingRowColor: MaterialStateProperty.resolveWith(
-                                                (states) => Colors.purpleAccent[200],
-                                          ),
-                                          headingTextStyle: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          columns: const [
-                                            DataColumn(label: Expanded( child: Center(child: Text('शाळा',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                            DataColumn(label: Expanded( child: Center(child: Text('वस्ती संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                            DataColumn(label: Expanded( child: Center(child: Text('शाळा संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                             ],
-                                          rows: data!.schooltapasilaforschool!.map((item) {
-                                            return DataRow(
-                                              cells: [
-                                                DataCell(Center(child: Text(item.value.toString()))),
-                                                DataCell(Center(child: Text(item.count.toString()))),
-                                                DataCell(Center(child: Text(item.sankhya.toString()))),
-                                              ],
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    ),
-                                  if (data != null && data!.schooltapasilaforclg != null)
-                                    Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 8),
-                                    child: Center(
-                                      child: Text(
-                                        'महाविद्यालय',
-                                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ),
-                                  if (data != null && data!.schooltapasilaforclg != null)
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.grey.shade300),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal, // horizontal scroll
-                                        child: DataTable(
-                                          headingRowColor: MaterialStateProperty.resolveWith(
-                                                (states) => Colors.purpleAccent[200],
-                                          ),
-                                          headingTextStyle: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          columns: const [
-                                            DataColumn(label: Expanded( child: Center(child: Text('महाविद्यालय',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                            DataColumn(label: Expanded( child: Center(child: Text('वस्ती संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                            DataColumn(label: Expanded( child: Center(child: Text('महाविद्यालय संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                             ],
-                                          rows: data!.schooltapasilaforclg!.map((item) {
-                                            return DataRow(
-                                              cells: [
-                                                DataCell(Center(child: Text(item.value.toString()))),
-                                                DataCell(Center(child: Text(item.count.toString()))),
-                                                DataCell(Center(child: Text(item.sankhya.toString()))),
-                                              ],
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    ),
-                                  if (data != null && data!.schooltapasilaformedium != null)
-                                    Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 8),
-                                    child: Center(
-                                      child: Text(
-                                        'विशिष्ट संस्थान',
-                                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ),
-                                  if (data != null && data!.schooltapasilaformedium != null)
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.grey.shade300),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal, // horizontal scroll
-                                        child: DataTable(
-                                          headingRowColor: MaterialStateProperty.resolveWith(
-                                                (states) => Colors.purpleAccent[200],
-                                          ),
-                                          headingTextStyle: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          columns: const [
-                                            DataColumn(label: Expanded( child: Center(child: Text('वस्ती संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                            DataColumn(label: Expanded( child: Center(child: Text('संस्थान संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                             ],
-                                          rows: data!.schooltapasilaformedium!.map((item) {
-                                            return DataRow(
-                                              cells: [
-                                                DataCell(Center(child: Text(item.count.toString()))),
-                                                DataCell(Center(child: Text(item.sankhya.toString()))),
-                                              ],
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              )
-                            ),
+                        Container(
+                          // height: 300,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(8),
                           ),
+                          child: SingleChildScrollView(
+                              child: Column(
+                            children: [
+                              if (data != null &&
+                                  data!.schooltapasilaforschool != null)
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8),
+                                  child: Center(
+                                    child: Text(
+                                      'शाळा',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ),
+                              if (data != null &&
+                                  data!.schooltapasilaforschool != null)
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(color: Colors.grey.shade300),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: SingleChildScrollView(
+                                    scrollDirection:
+                                        Axis.horizontal, // horizontal scroll
+                                    child: DataTable(
+                                      headingRowColor:
+                                          MaterialStateProperty.resolveWith(
+                                        (states) => Colors.purpleAccent[200],
+                                      ),
+                                      headingTextStyle: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      columns: const [
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'शाळा',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'वस्ती संख्या',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'शाळा संख्या',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                      rows: data!.schooltapasilaforschool!
+                                          .map((item) {
+                                        return DataRow(
+                                          cells: [
+                                            DataCell(Center(
+                                                child: Text(
+                                                    item.value.toString()))),
+                                            DataCell(Center(
+                                                child: Text(
+                                                    item.count.toString()))),
+                                            DataCell(Center(
+                                                child: Text(
+                                                    item.sankhya.toString()))),
+                                          ],
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ),
+                              if (data != null &&
+                                  data!.schooltapasilaforclg != null)
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8),
+                                  child: Center(
+                                    child: Text(
+                                      'महाविद्यालय',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ),
+                              if (data != null &&
+                                  data!.schooltapasilaforclg != null)
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(color: Colors.grey.shade300),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: SingleChildScrollView(
+                                    scrollDirection:
+                                        Axis.horizontal, // horizontal scroll
+                                    child: DataTable(
+                                      headingRowColor:
+                                          MaterialStateProperty.resolveWith(
+                                        (states) => Colors.purpleAccent[200],
+                                      ),
+                                      headingTextStyle: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      columns: const [
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'महाविद्यालय',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'वस्ती संख्या',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'महाविद्यालय संख्या',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                      rows: data!.schooltapasilaforclg!
+                                          .map((item) {
+                                        return DataRow(
+                                          cells: [
+                                            DataCell(Center(
+                                                child: Text(
+                                                    item.value.toString()))),
+                                            DataCell(Center(
+                                                child: Text(
+                                                    item.count.toString()))),
+                                            DataCell(Center(
+                                                child: Text(
+                                                    item.sankhya.toString()))),
+                                          ],
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ),
+                              if (data != null &&
+                                  data!.schooltapasilaformedium != null)
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8),
+                                  child: Center(
+                                    child: Text(
+                                      'विशिष्ट संस्थान',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ),
+                              if (data != null &&
+                                  data!.schooltapasilaformedium != null)
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(color: Colors.grey.shade300),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: SingleChildScrollView(
+                                    scrollDirection:
+                                        Axis.horizontal, // horizontal scroll
+                                    child: DataTable(
+                                      headingRowColor:
+                                          MaterialStateProperty.resolveWith(
+                                        (states) => Colors.purpleAccent[200],
+                                      ),
+                                      headingTextStyle: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      columns: const [
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'वस्ती संख्या',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'संस्थान संख्या',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                      rows: data!.schooltapasilaformedium!
+                                          .map((item) {
+                                        return DataRow(
+                                          cells: [
+                                            DataCell(Center(
+                                                child: Text(
+                                                    item.count.toString()))),
+                                            DataCell(Center(
+                                                child: Text(
+                                                    item.sankhya.toString()))),
+                                          ],
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          )),
+                        ),
                       ],
                     ),
                     commonExpansionTile(
                       title: 'MaidaanUdyan',
                       children: [
-                          Container(
-                            // height: 300,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade300),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  if (data != null && data!.maidan != null)
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.grey.shade300),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal, // horizontal scroll
-                                        child: DataTable(
-                                          headingRowColor: MaterialStateProperty.resolveWith(
-                                                (states) => Colors.purpleAccent[200],
-                                          ),
-                                          headingTextStyle: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          columns: const [
-                                            DataColumn(label: Expanded( child: Center(child: Text('वस्ती संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                            DataColumn(label: Expanded( child: Center(child: Text('मैदान / उद्यान संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                             ],
-                                          rows: data!.maidan!.map((item) {
-                                            return DataRow(
-                                              cells: [
-                                                DataCell(Center(child: Text(item.count.toString()))),
-                                                DataCell(Center(child: Text(item.sankhya.toString()))),
-                                              ],
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              )
-                            ),
+                        Container(
+                          // height: 300,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(8),
                           ),
+                          child: SingleChildScrollView(
+                              child: Column(
+                            children: [
+                              if (data != null && data!.maidan != null)
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(color: Colors.grey.shade300),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: SingleChildScrollView(
+                                    scrollDirection:
+                                        Axis.horizontal, // horizontal scroll
+                                    child: DataTable(
+                                      headingRowColor:
+                                          MaterialStateProperty.resolveWith(
+                                        (states) => Colors.purpleAccent[200],
+                                      ),
+                                      headingTextStyle: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      columns: const [
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'वस्ती संख्या',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                'मैदान / उद्यान संख्या',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                      rows: data!.maidan!.map((item) {
+                                        return DataRow(
+                                          cells: [
+                                            DataCell(Center(
+                                                child: Text(
+                                                    item.count.toString()))),
+                                            DataCell(Center(
+                                                child: Text(
+                                                    item.sankhya.toString()))),
+                                          ],
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          )),
+                        ),
                       ],
                     ),
                     commonExpansionTile(
@@ -2424,18 +3488,22 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                               if (data != null && data!.dhaarmiknetrtav != null)
                                 Container(
                                   decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey.shade300),
+                                    border:
+                                        Border.all(color: Colors.grey.shade300),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal, // for horizontal scrolling of table
+                                    scrollDirection: Axis
+                                        .horizontal, // for horizontal scrolling of table
                                     child: ConstrainedBox(
                                       constraints: BoxConstraints(
-                                        minWidth: MediaQuery.of(context).size.width,
+                                        minWidth:
+                                            MediaQuery.of(context).size.width,
                                       ),
                                       child: DataTable(
-                                        headingRowColor: MaterialStateProperty.resolveWith(
-                                              (states) => Colors.purpleAccent[200],
+                                        headingRowColor:
+                                            MaterialStateProperty.resolveWith(
+                                          (states) => Colors.purpleAccent[200],
                                         ),
                                         headingTextStyle: const TextStyle(
                                           color: Colors.white,
@@ -2445,18 +3513,22 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                                           DataColumn(
                                             label: Center(
                                               child: Text(
-                                                'वस्ती संख्या',
+                                                'प्रकार',
                                                 textAlign: TextAlign.center,
-                                                style: TextStyle(fontWeight: FontWeight.bold),
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
                                             ),
                                           ),
                                           DataColumn(
                                             label: Center(
                                               child: Text(
-                                                'प्रकार',
+                                                'वस्ती संख्या',
                                                 textAlign: TextAlign.center,
-                                                style: TextStyle(fontWeight: FontWeight.bold),
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
                                             ),
                                           ),
@@ -2465,17 +3537,26 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                                               child: Text(
                                                 'संख्या',
                                                 textAlign: TextAlign.center,
-                                                style: TextStyle(fontWeight: FontWeight.bold),
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
                                             ),
                                           ),
                                         ],
-                                        rows: data!.dhaarmiknetrtav!.map((item) {
+                                        rows:
+                                            data!.dhaarmiknetrtav!.map((item) {
                                           return DataRow(
                                             cells: [
-                                              DataCell(Center(child: Text(item.count.toString()))),
-                                              DataCell(Center(child: Text(item.value.toString()))),
-                                              DataCell(Center(child: Text(item.sankhya.toString()))),
+                                              DataCell(Center(
+                                                  child: Text(
+                                                      item.value.toString()))),
+                                              DataCell(Center(
+                                                  child: Text(
+                                                      item.count.toString()))),
+                                              DataCell(Center(
+                                                  child: Text(item.sankhya
+                                                      .toString()))),
                                             ],
                                           );
                                         }).toList(),
@@ -2495,21 +3576,26 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                           scrollDirection: Axis.vertical,
                           child: Column(
                             children: [
-                              if (data != null && data!.vastitilasamajika != null)
+                              if (data != null &&
+                                  data!.vastitilasamajika != null)
                                 Container(
                                   decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey.shade300),
+                                    border:
+                                        Border.all(color: Colors.grey.shade300),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal, // for horizontal scrolling of table
+                                    scrollDirection: Axis
+                                        .horizontal, // for horizontal scrolling of table
                                     child: ConstrainedBox(
                                       constraints: BoxConstraints(
-                                        minWidth: MediaQuery.of(context).size.width,
+                                        minWidth:
+                                            MediaQuery.of(context).size.width,
                                       ),
                                       child: DataTable(
-                                        headingRowColor: MaterialStateProperty.resolveWith(
-                                              (states) => Colors.purpleAccent[200],
+                                        headingRowColor:
+                                            MaterialStateProperty.resolveWith(
+                                          (states) => Colors.purpleAccent[200],
                                         ),
                                         headingTextStyle: const TextStyle(
                                           color: Colors.white,
@@ -2521,7 +3607,9 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                                               child: Text(
                                                 'वस्तीतील सामाजिक प्रश्न / गरजा ',
                                                 textAlign: TextAlign.center,
-                                                style: TextStyle(fontWeight: FontWeight.bold),
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
                                             ),
                                           ),
@@ -2530,16 +3618,23 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                                               child: Text(
                                                 'वस्ती संख्या',
                                                 textAlign: TextAlign.center,
-                                                style: TextStyle(fontWeight: FontWeight.bold),
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
                                             ),
                                           ),
                                         ],
-                                        rows: data!.vastitilasamajika!.map((item) {
+                                        rows: data!.vastitilasamajika!
+                                            .map((item) {
                                           return DataRow(
                                             cells: [
-                                              DataCell(Center(child: Text(item.value.toString()))),
-                                              DataCell(Center(child: Text(item.count.toString()))),
+                                              DataCell(Center(
+                                                  child: Text(
+                                                      item.value.toString()))),
+                                              DataCell(Center(
+                                                  child: Text(
+                                                      item.count.toString()))),
                                             ],
                                           );
                                         }).toList(),
@@ -2555,137 +3650,277 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
                     commonExpansionTile(
                       title: 'karyakramKarnyacheThikaan',
                       children: [
-                          SingleChildScrollView(
+                        SingleChildScrollView(
                             child: Column(
-                              children: [
-                                if (data != null && data!.jahirakaryakramasambandhi != null)
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey.shade300),
-                                      borderRadius: BorderRadius.circular(8),
+                          children: [
+                            if (data != null &&
+                                data!.jahirakaryakramasambandhi != null)
+                              Container(
+                                decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: Colors.grey.shade300),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: SingleChildScrollView(
+                                  scrollDirection:
+                                      Axis.horizontal, // horizontal scroll
+                                  child: DataTable(
+                                    headingRowColor:
+                                        MaterialStateProperty.resolveWith(
+                                      (states) => Colors.purpleAccent[200],
                                     ),
-                                    child: SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal, // horizontal scroll
-                                      child: DataTable(
-                                        headingRowColor: MaterialStateProperty.resolveWith(
-                                              (states) => Colors.purpleAccent[200],
+                                    headingTextStyle: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    columns: const [
+                                      DataColumn(
+                                        label: Expanded(
+                                          child: Center(
+                                            child: Text(
+                                              'कार्यक्रम करण्याचे ठिकाण',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
                                         ),
-                                        headingTextStyle: const TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        columns: const [
-                                          DataColumn(label: Expanded( child: Center(child: Text('कार्यक्रम करण्याचे ठिकाण',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                          DataColumn(label: Expanded( child: Center(child: Text('वस्ती संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                          DataColumn(label: Expanded( child: Center(child: Text('ठिकाण संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                          DataColumn(label: Expanded( child: Center(child: Text('निवासासाठी उपलब्ध',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                        ],
-                                        rows: data!.jahirakaryakramasambandhi!.map((item) {
-                                          return DataRow(
-                                            cells: [
-                                              DataCell(Center(child: Text(item.value.toString()))),
-                                              DataCell(Center(child: Text(item.count.toString()))),
-                                              DataCell(Center(child: Text(item.sankhya.toString()))),
-                                              DataCell(Center(child: Text(item.nivasasathiupalabdha.toString()))),
-                                            ],
-                                          );
-                                        }).toList(),
                                       ),
-                                    ),
+                                      DataColumn(
+                                        label: Expanded(
+                                          child: Center(
+                                            child: Text(
+                                              'वस्ती संख्या',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: Expanded(
+                                          child: Center(
+                                            child: Text(
+                                              'ठिकाण संख्या',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: Expanded(
+                                          child: Center(
+                                            child: Text(
+                                              'निवासासाठी उपलब्ध',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                    rows: data!.jahirakaryakramasambandhi!
+                                        .map((item) {
+                                      return DataRow(
+                                        cells: [
+                                          DataCell(Center(
+                                              child:
+                                                  Text(item.value.toString()))),
+                                          DataCell(Center(
+                                              child:
+                                                  Text(item.count.toString()))),
+                                          DataCell(Center(
+                                              child: Text(
+                                                  item.sankhya.toString()))),
+                                          DataCell(Center(
+                                              child: Text(item
+                                                  .nivasasathiupalabdha
+                                                  .toString()))),
+                                        ],
+                                      );
+                                    }).toList(),
                                   ),
-                              ],
-                            )
-                          ),
+                                ),
+                              ),
+                          ],
+                        )),
                       ],
                     ),
                     commonExpansionTile(
                       title: 'DurjanShakti',
                       children: [
-                          SingleChildScrollView(
+                        SingleChildScrollView(
                             child: Column(
-                              children: [
-                                if (data != null && data!.durjanshakti != null)
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey.shade300),
-                                      borderRadius: BorderRadius.circular(8),
+                          children: [
+                            if (data != null && data!.durjanshakti != null)
+                              Container(
+                                decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: Colors.grey.shade300),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: SingleChildScrollView(
+                                  scrollDirection:
+                                      Axis.horizontal, // horizontal scroll
+                                  child: DataTable(
+                                    headingRowColor:
+                                        MaterialStateProperty.resolveWith(
+                                      (states) => Colors.purpleAccent[200],
                                     ),
-                                    child: SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal, // horizontal scroll
-                                      child: DataTable(
-                                        headingRowColor: MaterialStateProperty.resolveWith(
-                                              (states) => Colors.purpleAccent[200],
+                                    headingTextStyle: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    columns: const [
+                                      DataColumn(
+                                        label: Expanded(
+                                          child: Center(
+                                            child: Text(
+                                              'दुर्जन शक्ती',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
                                         ),
-                                        headingTextStyle: const TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        columns: const [
-                                          DataColumn(label: Expanded( child: Center(child: Text('दुर्जन शक्ती',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                          DataColumn(label: Expanded( child: Center(child: Text('वस्ती संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                          DataColumn(label: Expanded( child: Center(child: Text('दुर्जन शक्ती संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                        ],
-                                        rows: data!.durjanshakti!.map((item) {
-                                          return DataRow(
-                                            cells: [
-                                              DataCell(Center(child: Text(item.value.toString()))),
-                                              DataCell(Center(child: Text(item.count.toString()))),
-                                              DataCell(Center(child: Text(item.sankhya.toString()))),
-                                            ],
-                                          );
-                                        }).toList(),
                                       ),
-                                    ),
+                                      DataColumn(
+                                        label: Expanded(
+                                          child: Center(
+                                            child: Text(
+                                              'वस्ती संख्या',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: Expanded(
+                                          child: Center(
+                                            child: Text(
+                                              'दुर्जन शक्ती संख्या',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                    rows: data!.durjanshakti!.map((item) {
+                                      return DataRow(
+                                        cells: [
+                                          DataCell(Center(
+                                              child:
+                                                  Text(item.value.toString()))),
+                                          DataCell(Center(
+                                              child:
+                                                  Text(item.count.toString()))),
+                                          DataCell(Center(
+                                              child: Text(
+                                                  item.sankhya.toString()))),
+                                        ],
+                                      );
+                                    }).toList(),
                                   ),
-                              ],
-                            )
-                          ),
+                                ),
+                              ),
+                          ],
+                        )),
                       ],
                     ),
                     commonExpansionTile(
                       title: 'HinduVeer',
                       children: [
-
-
-                          SingleChildScrollView(
+                        SingleChildScrollView(
                             child: Column(
-                              children: [
-                                if (data != null && data!.hinduvirayadi != null)
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey.shade300),
-                                      borderRadius: BorderRadius.circular(8),
+                          children: [
+                            if (data != null && data!.hinduvirayadi != null)
+                              Container(
+                                decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: Colors.grey.shade300),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: SingleChildScrollView(
+                                  scrollDirection:
+                                      Axis.horizontal, // horizontal scroll
+                                  child: DataTable(
+                                    headingRowColor:
+                                        MaterialStateProperty.resolveWith(
+                                      (states) => Colors.purpleAccent[200],
                                     ),
-                                    child: SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal, // horizontal scroll
-                                      child: DataTable(
-                                        headingRowColor: MaterialStateProperty.resolveWith(
-                                              (states) => Colors.purpleAccent[200],
+                                    headingTextStyle: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    columns: const [
+                                      DataColumn(
+                                        label: Expanded(
+                                          child: Center(
+                                            child: Text(
+                                              'हिंदु वीर संख्या',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
                                         ),
-                                        headingTextStyle: const TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        columns: const [
-                                          DataColumn(label: Expanded( child: Center(child: Text('हिंदु वीर संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                          DataColumn(label: Expanded( child: Center(child: Text('वस्ती संख्या',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),),),
-                                        ],
-                                        rows: data!.hinduvirayadi!.map((item) {
-                                          return DataRow(
-                                            cells: [
-                                              DataCell(Center(child: Text(item.sankhya.toString()))),
-                                              DataCell(Center(child: Text(item.count.toString()))),
-                                            ],
-                                          );
-                                        }).toList(),
                                       ),
-                                    ),
+                                      DataColumn(
+                                        label: Expanded(
+                                          child: Center(
+                                            child: Text(
+                                              'वस्ती संख्या',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                    rows: data!.hinduvirayadi!.map((item) {
+                                      return DataRow(
+                                        cells: [
+                                          DataCell(Center(
+                                              child: Text(
+                                                  item.sankhya.toString()))),
+                                          DataCell(Center(
+                                              child:
+                                                  Text(item.count.toString()))),
+                                        ],
+                                      );
+                                    }).toList(),
                                   ),
-                              ],
-                            )
-                          ),
+                                ),
+                              ),
+                          ],
+                        )),
                       ],
                     ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    // commonExpansionTile(
+                    //   title: 'StharInfo',
+                    //   children: [
+                    SingleColumnRow(
+                        txtString: "अग्निशमन दल केंद्र संख्या",
+                        value: data?.vastiloksankhya?.fireBrigade.toString(),
+                        fontsize: 15),
+                    SingleColumnRow(
+                        txtString: "पोलीस ठाणे / चौकी संख्या",
+                        value: data?.vastiloksankhya?.policeThane.toString(),
+                        fontsize: 15),
+                    //   ],
+                    // ),
                   ],
                 ),
               )
@@ -2693,7 +3928,6 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
           ),
         ),
       ),
-
     );
   }
 
@@ -2727,7 +3961,8 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
           collapsedBackgroundColor: Colors.transparent,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: children,
@@ -2738,5 +3973,4 @@ class _CompleteSurveyReportState extends State<CompleteSurveyReport> {
       ),
     );
   }
-
 }

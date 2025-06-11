@@ -44,7 +44,6 @@ class AbhiyanEditSwayamsevakScreenState extends State<AbhiyanEditSwayamsevakScre
   List<String> strEmail = [];
   List<String> strMobile = [];
   bool? _isSearching = false;
-
   List<GeoUnitMasterBAL>? _linkedbhaag;
   List<GeoUnitMasterBAL>? _linkedshahar;
   List<GeoUnitMasterBAL>? _linkednagar;

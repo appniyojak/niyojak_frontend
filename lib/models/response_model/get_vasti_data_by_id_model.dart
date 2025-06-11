@@ -26,6 +26,8 @@ class GetVastiDataByIdModel {
 
 class Vastisarvekshan {
   String? lokasankhya;
+  String? maleSankhya;
+  String? femaleSankhya;
   String? vadicheNave;
   String? andajeGhare;
   int? policethane;
@@ -49,7 +51,7 @@ class Vastisarvekshan {
   List<VastisarVasahatprakara>? vastisarVasahatprakara;
   List<VastisarVastitamahatvacesana>? vastisarVastitamahatvacesana;
   List<VastisarVastitasajaraSamajikkaryakram>?
-  vastisarVastitasajaraSamajikkaryakram;
+      vastisarVastitasajaraSamajikkaryakram;
   List<VastisarVastitilabalopasanakendra>? vastisarVastitilabalopasanakendra;
   List<VastisarVastitilasamajika>? vastisarVastitilasamajika;
   List<VastisarVividhaprakara>? vastisarVividhaprakara;
@@ -80,59 +82,63 @@ class Vastisarvekshan {
   String? sarpanchacheNaav;
   String? sarpanchacheDoorbhash;
 
-  Vastisarvekshan(
-      {this.lokasankhya,
-        this.vadicheNave,
-        this.andajeGhare,
-        this.policethane,
-        this.vasticyacatuSima,
-        this.vastisarAnyaprabhavilokam,
-        this.vastisarGatividhikaryasthiti,
-        this.vastisarHinduvirayadi,
-        this.vastisarJaagaranshreneesthiti,
-        this.vastisarJahirakaryakramasambandhi,
-        this.vastisarKonatyaprantache,
-        this.vastisarKuthalyavarsi,
-        this.vastisarMotherugnalaya,
-        this.vastisarMothevyavasayikakendra,
-        this.vastisarNirmanadhinamothe,
-        this.vastisarReligion,
-        this.vastisarVasahatprakara,
-        this.vastisarVastitamahatvacesana,
-        this.vastisarVastitasajaraSamajikkaryakram,
-        this.vastisarVastitilabalopasanakendra,
-        this.vastisarVastitilasamajika,
-        this.vastisarVividhaprakara,
-        this.vastisardhaarmiknetrtav,
-        this.vastisardurjanshakti,
-        this.vastisarmaidan,
-        this.vastisarsajjanshakti,
-        this.vastisarschooltapasila,
-        this.vastisarupaasana,
-        this.vastitasajaraanyakaryakaram,
-        this.vastitilasamajikaque,
-        this.agnishamandal,
-        this.anyadhaarmik,
-        this.balopaasanakendr,
-        this.beforeShakhaSaptahikIsOnNowOff,
-        this.anyaVividhKshetracheKame,
-        this.isGavatilMumbaikar,
-        this.cuserid,
-        this.googlemap,
-        this.pkid,
-        this.vastiShakhaPramukhName,
-        this.vastiShakhaSamiti,
-        this.vastiShakhaType,
-        this.vastiShakhaTypevalue,
-        this.vastiid,
-        this.stepOneComplete,
-        this.stepTwoComplete,
-        this.sarpanchacheNaav,
-        this.sarpanchacheDoorbhash,
-      });
+  Vastisarvekshan({
+    this.lokasankhya,
+    this.femaleSankhya,
+    this.maleSankhya,
+    this.vadicheNave,
+    this.andajeGhare,
+    this.policethane,
+    this.vasticyacatuSima,
+    this.vastisarAnyaprabhavilokam,
+    this.vastisarGatividhikaryasthiti,
+    this.vastisarHinduvirayadi,
+    this.vastisarJaagaranshreneesthiti,
+    this.vastisarJahirakaryakramasambandhi,
+    this.vastisarKonatyaprantache,
+    this.vastisarKuthalyavarsi,
+    this.vastisarMotherugnalaya,
+    this.vastisarMothevyavasayikakendra,
+    this.vastisarNirmanadhinamothe,
+    this.vastisarReligion,
+    this.vastisarVasahatprakara,
+    this.vastisarVastitamahatvacesana,
+    this.vastisarVastitasajaraSamajikkaryakram,
+    this.vastisarVastitilabalopasanakendra,
+    this.vastisarVastitilasamajika,
+    this.vastisarVividhaprakara,
+    this.vastisardhaarmiknetrtav,
+    this.vastisardurjanshakti,
+    this.vastisarmaidan,
+    this.vastisarsajjanshakti,
+    this.vastisarschooltapasila,
+    this.vastisarupaasana,
+    this.vastitasajaraanyakaryakaram,
+    this.vastitilasamajikaque,
+    this.agnishamandal,
+    this.anyadhaarmik,
+    this.balopaasanakendr,
+    this.beforeShakhaSaptahikIsOnNowOff,
+    this.anyaVividhKshetracheKame,
+    this.isGavatilMumbaikar,
+    this.cuserid,
+    this.googlemap,
+    this.pkid,
+    this.vastiShakhaPramukhName,
+    this.vastiShakhaSamiti,
+    this.vastiShakhaType,
+    this.vastiShakhaTypevalue,
+    this.vastiid,
+    this.stepOneComplete,
+    this.stepTwoComplete,
+    this.sarpanchacheNaav,
+    this.sarpanchacheDoorbhash,
+  });
 
   Vastisarvekshan.fromJson(Map<String, dynamic> json) {
     lokasankhya = json['Lokasankhya'];
+    femaleSankhya = json['femaleSankhya'];
+    maleSankhya = json['maleSankhya'];
     vadicheNave = json['vadicheNave'];
     andajeGhare = json['andajeGhare'];
     policethane = json['Policethane'];
@@ -167,8 +173,7 @@ class Vastisarvekshan {
     if (json['VastisarSewaPrakalpa'] != null) {
       vastisarSewaPrakalpa = <VastisarSewaPrakalpa>[];
       json['VastisarSewaPrakalpa'].forEach((v) {
-        vastisarSewaPrakalpa!
-            .add(new VastisarSewaPrakalpa.fromJson(v));
+        vastisarSewaPrakalpa!.add(new VastisarSewaPrakalpa.fromJson(v));
       });
     }
     if (json['VastisarvividhKshetaCheKam'] != null) {
@@ -181,8 +186,7 @@ class Vastisarvekshan {
     if (json['VastisargavatilMumbaikar'] != null) {
       vastisarGavatilMumbaikar = <VastisarGavatilMumbaikar>[];
       json['VastisargavatilMumbaikar'].forEach((v) {
-        vastisarGavatilMumbaikar!
-            .add(new VastisarGavatilMumbaikar.fromJson(v));
+        vastisarGavatilMumbaikar!.add(new VastisarGavatilMumbaikar.fromJson(v));
       });
     }
 
@@ -260,7 +264,7 @@ class Vastisarvekshan {
     }
     if (json['VastisarVastitasajaraSamajikkaryakram'] != null) {
       vastisarVastitasajaraSamajikkaryakram =
-      <VastisarVastitasajaraSamajikkaryakram>[];
+          <VastisarVastitasajaraSamajikkaryakram>[];
       json['VastisarVastitasajaraSamajikkaryakram'].forEach((v) {
         vastisarVastitasajaraSamajikkaryakram!
             .add(new VastisarVastitasajaraSamajikkaryakram.fromJson(v));
@@ -347,6 +351,8 @@ class Vastisarvekshan {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['Lokasankhya'] = this.lokasankhya;
+    data['maleSankhya'] = this.maleSankhya;
+    data['femaleSankhya'] = this.femaleSankhya;
     data['vadicheNave'] = this.vadicheNave;
     data['andajeGharev'] = this.andajeGhare;
     data['Policethane'] = this.policethane;
@@ -476,10 +482,8 @@ class Vastisarvekshan {
     data['balopaasanakendr'] = this.balopaasanakendr;
     data['beforeShakhaSaptahikIsOnNowOff'] =
         this.beforeShakhaSaptahikIsOnNowOff;
-    data['anyaVividhKshetracheKame'] =
-        this.anyaVividhKshetracheKame;
-    data['isGavatilMumbaikar'] =
-        this.isGavatilMumbaikar;
+    data['anyaVividhKshetracheKame'] = this.anyaVividhKshetracheKame;
+    data['isGavatilMumbaikar'] = this.isGavatilMumbaikar;
     data['cuserid'] = this.cuserid;
     data['googlemap'] = this.googlemap;
     data['pkid'] = this.pkid;
@@ -522,33 +526,32 @@ class VastisarAnyaprabhavilokam {
   String? selectedDropdownValueName4;
   String? selectedDropdownValueName5;
 
-  VastisarAnyaprabhavilokam(
-      {
-        this.address,
-        this.doorabhaash,
-        this.isactive,
-        this.name,
-        this.pkid,
-        this.prabhaavkshetrid,
-        this.samparksthitiid,
-        this.shreneeid,
-        this.upshreneeid,
-        this.upshreneeid2,
-        this.vastiid,
-        this.visheshid,
-        this.anyavisesamahiti,
-        this.samparkasutranav,
-        this.samparkaSutraDoorbhash,
-        this.otherupshrenee,
-        this.otherupshrenee2,
-        this.othervishesh,
-        this.selectedDropdownValueName,
-        this.selectedDropdownValueName1,
-        this.selectedDropdownValueName2,
-        this.selectedDropdownValueName3,
-        this.selectedDropdownValueName4,
-        this.selectedDropdownValueName5,
-      });
+  VastisarAnyaprabhavilokam({
+    this.address,
+    this.doorabhaash,
+    this.isactive,
+    this.name,
+    this.pkid,
+    this.prabhaavkshetrid,
+    this.samparksthitiid,
+    this.shreneeid,
+    this.upshreneeid,
+    this.upshreneeid2,
+    this.vastiid,
+    this.visheshid,
+    this.anyavisesamahiti,
+    this.samparkasutranav,
+    this.samparkaSutraDoorbhash,
+    this.otherupshrenee,
+    this.otherupshrenee2,
+    this.othervishesh,
+    this.selectedDropdownValueName,
+    this.selectedDropdownValueName1,
+    this.selectedDropdownValueName2,
+    this.selectedDropdownValueName3,
+    this.selectedDropdownValueName4,
+    this.selectedDropdownValueName5,
+  });
 
   VastisarAnyaprabhavilokam.fromJson(Map<String, dynamic> json) {
     anyavisesamahiti = json['Anyavisesamahiti'];
@@ -704,14 +707,14 @@ class VastisarJaagaranshreneesthiti {
 
   VastisarJaagaranshreneesthiti(
       {this.varanvaritaid,
-        this.isactive,
-        this.niyamitacalanareupakrama,
-        this.selectedDropdownValueName,
-        this.selectedDropdownValueName1,
-        this.otherVaranvarita,
-        this.pkid,
-        this.shreneeid,
-        this.vastiid});
+      this.isactive,
+      this.niyamitacalanareupakrama,
+      this.selectedDropdownValueName,
+      this.selectedDropdownValueName1,
+      this.otherVaranvarita,
+      this.pkid,
+      this.shreneeid,
+      this.vastiid});
 
   VastisarJaagaranshreneesthiti.fromJson(Map<String, dynamic> json) {
     varanvaritaid = json['Varanvaritaid'];
@@ -751,18 +754,17 @@ class VastisarSewaPrakalpa {
   int? isactive;
   int? vastiid;
 
-  VastisarSewaPrakalpa(
-      {
-        this.sewaPrakalpaPrakaarId,
-        this.sewaprakalpaChalvanariSansthaId,
-        this.selectedDropdownValueName,
-        this.selectedDropdownValueName1,
-        this.otherSewaPrakalpaPrakaar,
-        this.otherSewaPrakalpaChalavinareShanstha,
-        this.pkid,
-        this.isactive,
-        this.vastiid,
-      });
+  VastisarSewaPrakalpa({
+    this.sewaPrakalpaPrakaarId,
+    this.sewaprakalpaChalvanariSansthaId,
+    this.selectedDropdownValueName,
+    this.selectedDropdownValueName1,
+    this.otherSewaPrakalpaPrakaar,
+    this.otherSewaPrakalpaChalavinareShanstha,
+    this.pkid,
+    this.isactive,
+    this.vastiid,
+  });
 
   VastisarSewaPrakalpa.fromJson(Map<String, dynamic> json) {
     sewaPrakalpaPrakaarId = json['sewaPrakalpaPrakaarId'];
@@ -770,7 +772,8 @@ class VastisarSewaPrakalpa {
     selectedDropdownValueName = json['selectedDropdownValueName'];
     selectedDropdownValueName1 = json['selectedDropdownValueName1'];
     otherSewaPrakalpaPrakaar = json['otherSewaPrakalpaPrakaar'];
-    otherSewaPrakalpaChalavinareShanstha = json['otherSewaPrakalpaChalavinareShanstha'];
+    otherSewaPrakalpaChalavinareShanstha =
+        json['otherSewaPrakalpaChalavinareShanstha'];
     pkid = json['pkid'];
     isactive = json['isactive'];
     vastiid = json['vastiid'];
@@ -779,11 +782,13 @@ class VastisarSewaPrakalpa {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['sewaPrakalpaPrakaarId'] = this.sewaPrakalpaPrakaarId;
-    data['sewaprakalpaChalvanariSansthaId'] = this.sewaprakalpaChalvanariSansthaId;
+    data['sewaprakalpaChalvanariSansthaId'] =
+        this.sewaprakalpaChalvanariSansthaId;
     data['selectedDropdownValueName'] = this.selectedDropdownValueName;
     data['selectedDropdownValueName1'] = this.selectedDropdownValueName1;
     data['otherSewaPrakalpaPrakaar'] = this.otherSewaPrakalpaPrakaar;
-    data['otherSewaPrakalpaChalavinareShanstha'] = this.otherSewaPrakalpaChalavinareShanstha;
+    data['otherSewaPrakalpaChalavinareShanstha'] =
+        this.otherSewaPrakalpaChalavinareShanstha;
     data['pkid'] = this.pkid;
     data['isactive'] = this.isactive;
     data['vastiid'] = this.vastiid;
@@ -798,14 +803,13 @@ class VastisarVividhKshetracheKam {
   int? isactive;
   int? vastiid;
 
-  VastisarVividhKshetracheKam(
-      {
-        this.kaam,
-        this.chalavnariSansthaSanghatamn,
-        this.pkid,
-        this.isactive,
-        this.vastiid,
-      });
+  VastisarVividhKshetracheKam({
+    this.kaam,
+    this.chalavnariSansthaSanghatamn,
+    this.pkid,
+    this.isactive,
+    this.vastiid,
+  });
 
   VastisarVividhKshetracheKam.fromJson(Map<String, dynamic> json) {
     kaam = json['kaam'];
@@ -834,15 +838,14 @@ class VastisarGavatilMumbaikar {
   int? isactive;
   int? vastiid;
 
-  VastisarGavatilMumbaikar(
-      {
-        this.sthaan,
-        this.pramukhachrNaav,
-        this.doorbhash,
-        this.pkid,
-        this.isactive,
-        this.vastiid,
-      });
+  VastisarGavatilMumbaikar({
+    this.sthaan,
+    this.pramukhachrNaav,
+    this.doorbhash,
+    this.pkid,
+    this.isactive,
+    this.vastiid,
+  });
 
   VastisarGavatilMumbaikar.fromJson(Map<String, dynamic> json) {
     sthaan = json['sthaan'];
@@ -873,15 +876,14 @@ class VastisarVadiGharLoksankhya {
   int? isactive;
   int? vastiid;
 
-  VastisarVadiGharLoksankhya(
-      {
-        this.vadiCheNav,
-        this.andajeGhar,
-        this.andajeLoksankhya,
-        this.pkid,
-        this.isactive,
-        this.vastiid,
-      });
+  VastisarVadiGharLoksankhya({
+    this.vadiCheNav,
+    this.andajeGhar,
+    this.andajeLoksankhya,
+    this.pkid,
+    this.isactive,
+    this.vastiid,
+  });
 
   VastisarVadiGharLoksankhya.fromJson(Map<String, dynamic> json) {
     vadiCheNav = json['vadiCheNav'];
@@ -916,19 +918,18 @@ class VastisarVividhAdhyatmikKendra {
   String? selectedGaavId;
   String? selectedDropdownValueName1;
 
-  VastisarVividhAdhyatmikKendra(
-      {
-        this.pkid,
-        this.isactive,
-        this.vastiid,
-        this.aadhyatmikKendraId,
-        this.selectedDropdownValueName,
-        this.isOtherAdhyatmitKendra,
-        this.gaavPramukhName,
-        this.samparkSootra,
-        this.selectedGaavId,
-        this.selectedDropdownValueName1,
-      });
+  VastisarVividhAdhyatmikKendra({
+    this.pkid,
+    this.isactive,
+    this.vastiid,
+    this.aadhyatmikKendraId,
+    this.selectedDropdownValueName,
+    this.isOtherAdhyatmitKendra,
+    this.gaavPramukhName,
+    this.samparkSootra,
+    this.selectedGaavId,
+    this.selectedDropdownValueName1,
+  });
 
   VastisarVividhAdhyatmikKendra.fromJson(Map<String, dynamic> json) {
     pkid = json['pkid'];
@@ -971,17 +972,17 @@ class VastisarJahirakaryakramasambandhi {
   int? vastiid;
   String? selectedDropdownValueName;
 
-  VastisarJahirakaryakramasambandhi(
-      {this.isactive,
-        this.name,
-        this.nivaaskshamata,
-        this.nivasasathiupalabdha,
-        this.pkid,
-        this.prakaarid,
-        this.shamta,
-        this.vastiid,
-        this.selectedDropdownValueName,
-      });
+  VastisarJahirakaryakramasambandhi({
+    this.isactive,
+    this.name,
+    this.nivaaskshamata,
+    this.nivasasathiupalabdha,
+    this.pkid,
+    this.prakaarid,
+    this.shamta,
+    this.vastiid,
+    this.selectedDropdownValueName,
+  });
 
   VastisarJahirakaryakramasambandhi.fromJson(Map<String, dynamic> json) {
     isactive = json['isactive'];
@@ -1020,7 +1021,13 @@ class VastisarKonatyaprantache {
   int? vastiid;
 
   VastisarKonatyaprantache(
-      {this.andaje, this.isactive, this.pkid, this.praantid, this.selectedDropdownValueName, this.vastiid,this.anyaPraantName});
+      {this.andaje,
+      this.isactive,
+      this.pkid,
+      this.praantid,
+      this.selectedDropdownValueName,
+      this.vastiid,
+      this.anyaPraantName});
 
   VastisarKonatyaprantache.fromJson(Map<String, dynamic> json) {
     andaje = json['Andaje'];
@@ -1058,14 +1065,14 @@ class VastisarKuthalyavarsi {
 
   VastisarKuthalyavarsi(
       {this.saptahik,
-        this.shaakhaa,
-        this.selectedDropdownValueName,
-        this.prakarName,
-        this.isShaakhaa,
-        this.id,
-        this.isactive,
-        this.pkid,
-        this.vastiid});
+      this.shaakhaa,
+      this.selectedDropdownValueName,
+      this.prakarName,
+      this.isShaakhaa,
+      this.id,
+      this.isactive,
+      this.pkid,
+      this.vastiid});
 
   VastisarKuthalyavarsi.fromJson(Map<String, dynamic> json) {
     saptahik = json['Saptahik'];
@@ -1104,11 +1111,11 @@ class VastisarReligion {
 
   VastisarReligion(
       {this.andaje,
-        this.konatyarilijanaceid,
-        this.isactive,
-        this.pkid,
-        this.selectedDropdownValueName,
-        this.vastiid});
+      this.konatyarilijanaceid,
+      this.isactive,
+      this.pkid,
+      this.selectedDropdownValueName,
+      this.vastiid});
 
   VastisarReligion.fromJson(Map<String, dynamic> json) {
     andaje = json['Andaje'];
@@ -1145,15 +1152,15 @@ class VastisarVasahatprakara {
 
   VastisarVasahatprakara(
       {this.bhavanachenav,
-        this.doorabhaash,
-        this.selectedDropdownValueName,
-        this.selectedDropdownValueName1,
-        this.isactive,
-        this.pkid,
-        this.prakarid,
-        this.samparksootr,
-        this.samparksthitiid,
-        this.vastiid});
+      this.doorabhaash,
+      this.selectedDropdownValueName,
+      this.selectedDropdownValueName1,
+      this.isactive,
+      this.pkid,
+      this.prakarid,
+      this.samparksootr,
+      this.samparksthitiid,
+      this.vastiid});
 
   VastisarVasahatprakara.fromJson(Map<String, dynamic> json) {
     bhavanachenav = json['bhavanachenav'];
@@ -1197,14 +1204,14 @@ class VastisarVastitamahatvacesana {
 
   VastisarVastitamahatvacesana(
       {this.aayojaksamparksootr,
-        this.ayojakancinave,
-        this.ayojakasansthacinave,
-        this.selectedDropdownValueName,
-        this.otherSajareSan,
-        this.id,
-        this.isactive,
-        this.pkid,
-        this.vastiid});
+      this.ayojakancinave,
+      this.ayojakasansthacinave,
+      this.selectedDropdownValueName,
+      this.otherSajareSan,
+      this.id,
+      this.isactive,
+      this.pkid,
+      this.vastiid});
 
   VastisarVastitamahatvacesana.fromJson(Map<String, dynamic> json) {
     aayojaksamparksootr = json['aayojaksamparksootr'];
@@ -1245,13 +1252,13 @@ class VastisarVastitilabalopasanakendra {
 
   VastisarVastitilabalopasanakendra(
       {this.isactive,
-        this.konasathi,
-        this.name,
-        this.selectedDropdownValueName,
-        this.otherBalopasanaShreniName,
-        this.pkid,
-        this.shreneeid,
-        this.vastiid});
+      this.konasathi,
+      this.name,
+      this.selectedDropdownValueName,
+      this.otherBalopasanaShreniName,
+      this.pkid,
+      this.shreneeid,
+      this.vastiid});
 
   VastisarVastitilabalopasanakendra.fromJson(Map<String, dynamic> json) {
     isactive = json['isactive'];
@@ -1288,7 +1295,13 @@ class VastisarVividhaprakara {
   int? vastiid;
 
   VastisarVividhaprakara(
-      {this.andaje, this.bhaashaid, this.otherbhaasha, this.selectedDropdownValueName, this.isactive, this.pkid, this.vastiid});
+      {this.andaje,
+      this.bhaashaid,
+      this.otherbhaasha,
+      this.selectedDropdownValueName,
+      this.isactive,
+      this.pkid,
+      this.vastiid});
 
   VastisarVividhaprakara.fromJson(Map<String, dynamic> json) {
     andaje = json['Andaje'];
@@ -1328,16 +1341,16 @@ class Vastisardurjanshakti {
 
   Vastisardurjanshakti(
       {this.gunha,
-        this.isactive,
-        this.name,
-        this.selectedDropdownValueName,
-        this.selectedDropdownValueName1,
-        this.selectedDropdownValueName2,
-        this.otherPrakar,
-        this.pkid,
-        this.prakar,
-        this.shiksha,
-        this.vastiid});
+      this.isactive,
+      this.name,
+      this.selectedDropdownValueName,
+      this.selectedDropdownValueName1,
+      this.selectedDropdownValueName2,
+      this.otherPrakar,
+      this.pkid,
+      this.prakar,
+      this.shiksha,
+      this.vastiid});
 
   Vastisardurjanshakti.fromJson(Map<String, dynamic> json) {
     gunha = json['Gunha'];
@@ -1392,29 +1405,28 @@ class Vastisarsajjanshakti {
   String? sansthechaKuthalaPadavar;
   int? visheshId;
 
-  Vastisarsajjanshakti(
-      {
-        this.address,
-        this.doorabhaash,
-        this.isactive,
-        this.name,
-        this.selectedDropdownValueName,
-        this.selectedDropdownValueName1,
-        this.selectedDropdownValueName2,
-        this.selectedDropdownValueName3,
-        this.pkid,
-        this.prabhaavkshetrid,
-        this.samparksthitiid,
-        this.shreneeid,
-        this.vastiid,
-        this.samparkasutranava,
-        this.sanstheCheNaav,
-        this.samparkasutraMobileNumber,
-        this.sansthechaKuthalaPadavar,
-        this.visheshId,
-        this.otherShreniName,
-        this.otherVisheshName,
-      });
+  Vastisarsajjanshakti({
+    this.address,
+    this.doorabhaash,
+    this.isactive,
+    this.name,
+    this.selectedDropdownValueName,
+    this.selectedDropdownValueName1,
+    this.selectedDropdownValueName2,
+    this.selectedDropdownValueName3,
+    this.pkid,
+    this.prabhaavkshetrid,
+    this.samparksthitiid,
+    this.shreneeid,
+    this.vastiid,
+    this.samparkasutranava,
+    this.sanstheCheNaav,
+    this.samparkasutraMobileNumber,
+    this.sansthechaKuthalaPadavar,
+    this.visheshId,
+    this.otherShreniName,
+    this.otherVisheshName,
+  });
 
   Vastisarsajjanshakti.fromJson(Map<String, dynamic> json) {
     samparkasutranava = json['Samparkasutranava'];
@@ -1483,22 +1495,22 @@ class Vastisarschooltapasila {
   String? selectedDropdownValueName3;
   String? selectedDropdownValueName4;
 
-  Vastisarschooltapasila(
-      {this.chaalakprakaar,
-        this.isactive,
-        this.maadhyam,
-        this.milkat,
-        this.name,
-        this.pkid,
-        this.prakaarid,
-        this.shaikshaniksansthaan,
-        this.vastiid,
-        this.selectedDropdownValueName,
-        this.selectedDropdownValueName1,
-        this.selectedDropdownValueName2,
-        this.selectedDropdownValueName3,
-        this.selectedDropdownValueName4,
-      });
+  Vastisarschooltapasila({
+    this.chaalakprakaar,
+    this.isactive,
+    this.maadhyam,
+    this.milkat,
+    this.name,
+    this.pkid,
+    this.prakaarid,
+    this.shaikshaniksansthaan,
+    this.vastiid,
+    this.selectedDropdownValueName,
+    this.selectedDropdownValueName1,
+    this.selectedDropdownValueName2,
+    this.selectedDropdownValueName3,
+    this.selectedDropdownValueName4,
+  });
 
   Vastisarschooltapasila.fromJson(Map<String, dynamic> json) {
     chaalakprakaar = json['chaalakprakaar'];
@@ -1550,14 +1562,14 @@ class Vastisarupaasana {
 
   Vastisarupaasana(
       {this.isactive,
-        this.pkid,
-        this.prakarid,
-        this.sankhya,
-        this.selectedDropdownValueName,
-        this.selectedDropdownValueName1,
-        this.otherupaasanasthala,
-        this.upaasanasthalaid,
-        this.vastiid});
+      this.pkid,
+      this.prakarid,
+      this.sankhya,
+      this.selectedDropdownValueName,
+      this.selectedDropdownValueName1,
+      this.otherupaasanasthala,
+      this.upaasanasthalaid,
+      this.vastiid});
 
   Vastisarupaasana.fromJson(Map<String, dynamic> json) {
     isactive = json['isactive'];
@@ -1595,7 +1607,12 @@ class VastisarMotherugnalaya {
   int? vastiid;
 
   VastisarMotherugnalaya(
-      {this.id, this.isactive, this.name, this.selectedDropdownValueName, this.pkid, this.vastiid});
+      {this.id,
+      this.isactive,
+      this.name,
+      this.selectedDropdownValueName,
+      this.pkid,
+      this.vastiid});
 
   VastisarMotherugnalaya.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -1631,14 +1648,14 @@ class VastisarVastitasajaraSamajikkaryakram {
 
   VastisarVastitasajaraSamajikkaryakram(
       {this.aayojaksamparksootr,
-        this.selectedDropdownValueName,
-        this.ayojakancinave,
-        this.otherKaryakram,
-        this.ayojakasansthacinave,
-        this.id,
-        this.isactive,
-        this.pkid,
-        this.vastiid});
+      this.selectedDropdownValueName,
+      this.ayojakancinave,
+      this.otherKaryakram,
+      this.ayojakasansthacinave,
+      this.id,
+      this.isactive,
+      this.pkid,
+      this.vastiid});
 
   VastisarVastitasajaraSamajikkaryakram.fromJson(Map<String, dynamic> json) {
     selectedDropdownValueName = json['selectedDropdownValueName'];
@@ -1676,7 +1693,12 @@ class VastisarMothevyavasayikakendra {
   int? vastiid;
 
   VastisarMothevyavasayikakendra(
-      {this.id, this.isactive, this.name, this.selectedDropdownValueName, this.pkid, this.vastiid});
+      {this.id,
+      this.isactive,
+      this.name,
+      this.selectedDropdownValueName,
+      this.pkid,
+      this.vastiid});
 
   VastisarMothevyavasayikakendra.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -1708,7 +1730,12 @@ class VastisarNirmanadhinamothe {
   int? vastiid;
 
   VastisarNirmanadhinamothe(
-      {this.id, this.isactive, this.selectedDropdownValueName,  this.name, this.pkid, this.vastiid});
+      {this.id,
+      this.isactive,
+      this.selectedDropdownValueName,
+      this.name,
+      this.pkid,
+      this.vastiid});
 
   VastisarNirmanadhinamothe.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -1740,7 +1767,12 @@ class VastisarVastitilasamajika {
   int? vastiid;
 
   VastisarVastitilasamajika(
-      {this.id, this.isactive, this.selectedDropdownValueName, this.name, this.pkid, this.vastiid});
+      {this.id,
+      this.isactive,
+      this.selectedDropdownValueName,
+      this.name,
+      this.pkid,
+      this.vastiid});
 
   VastisarVastitilasamajika.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -1773,7 +1805,13 @@ class Vastisardhaarmiknetrtav {
   int? vastiid;
 
   Vastisardhaarmiknetrtav(
-      {this.id, this.isactive, this.name, this.selectedDropdownValueName,this.pkid, this.otherNetrutwa, this.vastiid});
+      {this.id,
+      this.isactive,
+      this.name,
+      this.selectedDropdownValueName,
+      this.pkid,
+      this.otherNetrutwa,
+      this.vastiid});
 
   Vastisardhaarmiknetrtav.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -1805,8 +1843,7 @@ class Vastisarmaidan {
   int? pkid;
   int? vastiid;
 
-  Vastisarmaidan(
-      {this.id, this.isactive, this.name, this.pkid, this.vastiid});
+  Vastisarmaidan({this.id, this.isactive, this.name, this.pkid, this.vastiid});
 
   Vastisarmaidan.fromJson(Map<String, dynamic> json) {
     id = json['id'];
