@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:niyojak_prod/screens/survey_screen/report_view/mandal_report_tab_3.dart';
+import 'package:niyojak_prod/screens/survey_screen/report_view/mandal_report_tab1.dart';
+import 'package:niyojak_prod/screens/survey_screen/report_view/mandal_report_tab2.dart';
+import 'package:niyojak_prod/screens/survey_screen/report_view/mandal_report_tab3.dart';
 import 'package:niyojak_prod/widgets/app_drawer.dart';
-import 'report_view/mandal_report_tab1.dart';
+
 import '../../helpers/static_data.dart' as Statics;
-import 'report_view/mandal_report_tab2.dart';
 
 class MandalSurveyReportScreen extends StatefulWidget {
   static const String routeName = '/mandal-survey-report';
 
   @override
-  _MandalSurveyReportScreenState createState() => _MandalSurveyReportScreenState();
+  _MandalSurveyReportScreenState createState() =>
+      _MandalSurveyReportScreenState();
 }
 
 class _MandalSurveyReportScreenState extends State<MandalSurveyReportScreen> {
@@ -27,19 +29,24 @@ class _MandalSurveyReportScreenState extends State<MandalSurveyReportScreen> {
             indicatorColor: Colors.white,
             indicatorSize: TabBarIndicatorSize.label,
             tabs: [
-              Tab(text:  Statics.getLabel('SampurnaReportMandal'),),
-              Tab(text:  Statics.getLabel('GraamAhaval'),),
-              Tab(text:  Statics.getLabel('mandalReport'),),
+              Tab(
+                text: Statics.getLabel('SampurnaReportMandal'),
+              ),
+              Tab(
+                text: Statics.getLabel('mandalReport'),
+              ),
+              Tab(
+                text: Statics.getLabel('GraamAhaval'),
+              ),
             ],
           ),
         ),
         drawer: AppDrawer(),
         body: TabBarView(
           children: [
+            MandalSurveyReportViewScreen1(),
             MandalSurveyReportViewScreen2(),
-            MandalSurveyReportViewScreen(),
             MandalSurveyReportViewScreen3(),
-
           ],
         ),
       ),
