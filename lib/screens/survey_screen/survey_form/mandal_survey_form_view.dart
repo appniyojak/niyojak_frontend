@@ -5248,6 +5248,34 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                   onTap: () {
                     if (isVastiSearch) {
                       if (gaavSamitiYesNo == 0 || gaavSamitiYesNo == 1) {
+                        String sarpanchName =
+                            sarpanchNameController.text.trim();
+
+                        if (sarpanchName.isEmpty) {
+                          Statics.showToast("कृपया सरपंचाचे नाव भरा.");
+                          return;
+                        }
+
+                        if (beforsanghaonnowisoff != 0 &&
+                            beforsanghaonnowisoff != 1) {
+                          Statics.showToast(
+                              "कृपया 'पूर्वी कधीतरी संघाची शाखा/साप्ताहिक चालत होती' साठी 'होय' किंवा 'नाही' निवडा.");
+                          return;
+                        }
+
+                        if (anyaVividhKshetracheKame != 0 &&
+                            anyaVividhKshetracheKame != 1) {
+                          Statics.showToast(
+                              "कृपया 'अन्य विविध क्षेत्राचे काम चालतात' साठी 'होय' किंवा 'नाही' निवडा.");
+                          return;
+                        }
+
+                        if (gavatilMumbaikar != 0 && gavatilMumbaikar != 1) {
+                          Statics.showToast(
+                              "कृपया 'गावातील मुंबईकर मंडळ आहे' साठी 'होय' किंवा 'नाही' निवडा.");
+                          return;
+                        }
+
                         submitStep1Form();
                       } else {
                         showDialog(
@@ -5381,7 +5409,45 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
         context, jsonEncode(formData));
     setState(() {
       _isStep1Completed = response == "success";
+      sarpanchDoorbhasController.clear();
+      sarpanchNameController.clear();
+      femaleController.clear();
+      maleController.clear();
+      sanghaKaryaVastiStithiController.clear();
+      sanghaKaryaVastiPramukhNameController.clear();
+      loksankhyaController.clear();
+      vadicheNaavController.clear();
+      andajeGhareController.clear();
+      gaavSamitiYesNo = 2;
+      beforsanghaonnowisoff = 2;
+      kuthalaVarshiDataList = [];
+      vividhadhyatmitStsangKendraEnteredDataList = [];
+      sewaPrakalpaEnteredDataList = [];
+      vadiGharLoksankhyaEnteredDataList = [];
+      vastiChatahuSimaController.clear();
+      jagranShreniEnteredDataList = [];
+      vividhKshetaCHeKamEnteredDataList = [];
+      anyaVividhKshetracheKame = 2;
+      enteredDataListGatividhi = [];
+      enteredVasahatPrakarDataList = [];
+      enteredVividhBhashaBolnareDataList = [];
+      enteredKontyaPraantacheDataList = [];
+      enteredreligionDataList = [];
+      upasnaSthalDataList = [];
+      sajjanShaktiDataList = [];
+      anyaPrabhaviLokDataList = [];
+      vastitSajarHonareSanDataList = [];
+      vastitSajarHonareSamajikKaryakramDataList = [];
+
+      /// STEP 2 FORM DATA
+
+      /// STEP 3 FORM DATA
+      vastiPrashnaGarjaDataList = [];
+      dharmikNetrutvaDataList = [];
+      durjanShaktiDataList = [];
+      hinduVeerYadiDataList = [];
     });
+    searchVastiData(selctedLevelId);
   }
 
 //=================================================== ANYA PRABHAVI Prabhav Kshetra FORM ====================================================================================
@@ -9151,5 +9217,45 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
     String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
     log("Step 3 Form Data (JSON):\n$formattedJson");
     Statics.vastiSarvekshanStep3FormSubmit(context, jsonEncode(formData));
+    setState(() {
+      sarpanchDoorbhasController.clear();
+      sarpanchNameController.clear();
+      femaleController.clear();
+      maleController.clear();
+      sanghaKaryaVastiStithiController.clear();
+      sanghaKaryaVastiPramukhNameController.clear();
+      loksankhyaController.clear();
+      vadicheNaavController.clear();
+      andajeGhareController.clear();
+      gaavSamitiYesNo = 2;
+      beforsanghaonnowisoff = 2;
+      kuthalaVarshiDataList = [];
+      vividhadhyatmitStsangKendraEnteredDataList = [];
+      sewaPrakalpaEnteredDataList = [];
+      vadiGharLoksankhyaEnteredDataList = [];
+      vastiChatahuSimaController.clear();
+      jagranShreniEnteredDataList = [];
+      vividhKshetaCHeKamEnteredDataList = [];
+      anyaVividhKshetracheKame = 2;
+      enteredDataListGatividhi = [];
+      enteredVasahatPrakarDataList = [];
+      enteredVividhBhashaBolnareDataList = [];
+      enteredKontyaPraantacheDataList = [];
+      enteredreligionDataList = [];
+      upasnaSthalDataList = [];
+      sajjanShaktiDataList = [];
+      anyaPrabhaviLokDataList = [];
+      vastitSajarHonareSanDataList = [];
+      vastitSajarHonareSamajikKaryakramDataList = [];
+
+      /// STEP 2 FORM DATA
+
+      /// STEP 3 FORM DATA
+      vastiPrashnaGarjaDataList = [];
+      dharmikNetrutvaDataList = [];
+      durjanShaktiDataList = [];
+      hinduVeerYadiDataList = [];
+    });
+    searchVastiData(selctedLevelId);
   }
 }

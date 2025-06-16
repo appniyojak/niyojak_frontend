@@ -1488,8 +1488,8 @@ Map<String, String> resMarathi = {
   'GraamAhaval': 'ग्राम अहवाल',
 
   'VastiReport': 'वस्ती अहवाल',
-  'SampurnaReport': 'वस्ती सर्वेक्षण अभियान स्तिथी ',
-  'SampurnaReportMandal': 'सर्वेक्षण अभियान स्तिथी ',
+  'SampurnaReport': 'वस्ती सर्वेक्षण अभियान स्तिती',
+  'SampurnaReportMandal': 'सर्वेक्षण अभियान स्तिती',
 
   'Report': 'सर्वेक्षण अहवाल',
   'mandalSurvey': 'मंडल सर्वेक्षण',
@@ -2874,8 +2874,8 @@ Map<String, String> resHindi = {
   'mandalReport': 'मंडल अहवाल',
   'VastiReport': 'वस्ती अहवाल',
   'GraamAhaval': 'ग्राम अहवाल',
-  'SampurnaReport': 'वस्ती सर्वेक्षण अभियान स्तिथी ',
-  'SampurnaReportMandal': 'सर्वेक्षण अभियान स्तिथी ',
+  'SampurnaReport': 'वस्ती सर्वेक्षण अभियान स्तिती',
+  'SampurnaReportMandal': 'सर्वेक्षण अभियान स्तिती',
 
   'Report': 'सर्वेक्षण अहवाल',
   'mandalSurvey': 'मंडल सर्वेक्षण',

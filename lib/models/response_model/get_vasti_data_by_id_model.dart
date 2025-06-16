@@ -74,9 +74,13 @@ class Vastisarvekshan {
   int? pkid;
   String? vastiShakhaPramukhName;
   String? vastiShakhaSamiti;
+  int? durjanShaktiYesNo;
   String? vastiShakhaType;
   String? vastiShakhaTypevalue;
   int? vastiid;
+  int? step1completepercentage;
+  int? step2completepercentage;
+  int? step3completepercentage;
   bool? stepOneComplete;
   bool? stepTwoComplete;
   String? sarpanchacheNaav;
@@ -126,9 +130,13 @@ class Vastisarvekshan {
     this.pkid,
     this.vastiShakhaPramukhName,
     this.vastiShakhaSamiti,
+    this.durjanShaktiYesNo,
     this.vastiShakhaType,
     this.vastiShakhaTypevalue,
     this.vastiid,
+    this.step1completepercentage,
+    this.step2completepercentage,
+    this.step3completepercentage,
     this.stepOneComplete,
     this.stepTwoComplete,
     this.sarpanchacheNaav,
@@ -339,9 +347,13 @@ class Vastisarvekshan {
     pkid = json['pkid'];
     vastiShakhaPramukhName = json['vastiShakhaPramukhName'];
     vastiShakhaSamiti = json['vastiShakhaSamiti'];
+    durjanShaktiYesNo = json['isdurjanskhatti'];
     vastiShakhaType = json['vastiShakhaType'];
     vastiShakhaTypevalue = json['vastiShakhaTypevalue'];
     vastiid = json['vastiid'];
+    step1completepercentage = json['step1completepercentage'];
+    step2completepercentage = json['step2completepercentage'];
+    step3completepercentage = json['step3completepercentage'];
     stepOneComplete = json['stepOneComplete'];
     stepTwoComplete = json['stepTwoComplete'];
     sarpanchacheNaav = json['sarpanchaName'];
@@ -489,9 +501,13 @@ class Vastisarvekshan {
     data['pkid'] = this.pkid;
     data['vastiShakhaPramukhName'] = this.vastiShakhaPramukhName;
     data['vastiShakhaSamiti'] = this.vastiShakhaSamiti;
+    data['isdurjanskhatti'] = this.durjanShaktiYesNo;
     data['vastiShakhaType'] = this.vastiShakhaType;
     data['vastiShakhaTypevalue'] = this.vastiShakhaTypevalue;
     data['vastiid'] = this.vastiid;
+    data['step1completepercentage'] = this.step1completepercentage;
+    data['step2completepercentage'] = this.step2completepercentage;
+    data['step3completepercentage'] = this.step3completepercentage;
     data['stepOneComplete'] = this.stepOneComplete;
     data['stepTwoComplete'] = this.stepTwoComplete;
     data['sarpanchaName'] = this.sarpanchacheNaav;

@@ -94,6 +94,8 @@ class Vastisarvekshan {
   List<ListKaaryakartaaCountByGatividhi>? listKaaryakartaaCountByGatividhi;
   List<ListSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation>?
       listSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation;
+  List<SocialOrganizationKaaryakartaaCountByAreaOfOperation>?
+      socialOrganizationKaaryakartaaCountByAreaOfOperation;
   List<ListKaaryakartaaCountByAayaam>? listKaaryakartaaCountByAayaam;
   List<ListSwayamsevakCountByStudentCategory>?
       listSwayamsevakCountByStudentCategory;
@@ -106,7 +108,6 @@ class Vastisarvekshan {
       vastisarvividhSampradhaySatsangKendra;
   List<VastisargavatilMumbaikar>? vastisargavatilMumbaikar;
   List<Religion>? religion;
-
   Vastisarvekshan({
     this.gatividhiKaaryakartaaCount,
     this.aayaamKaaryakartaaCount,
@@ -185,6 +186,7 @@ class Vastisarvekshan {
     this.vastisarvividhSampradhaySatsangKendra,
     this.vastisargavatilMumbaikar,
     this.religion,
+    this.socialOrganizationKaaryakartaaCountByAreaOfOperation,
   });
 
   Vastisarvekshan.fromJson(Map<String, dynamic> json) {
@@ -446,6 +448,17 @@ class Vastisarvekshan {
         vastisargavatilMumbaikar!.add(new VastisargavatilMumbaikar.fromJson(v));
       });
     }
+    if (json['ListSocialOrganizationKaaryakartaaCountByAreaOfOperation'] !=
+        null) {
+      socialOrganizationKaaryakartaaCountByAreaOfOperation =
+          <SocialOrganizationKaaryakartaaCountByAreaOfOperation>[];
+      json['ListSocialOrganizationKaaryakartaaCountByAreaOfOperation']
+          .forEach((v) {
+        socialOrganizationKaaryakartaaCountByAreaOfOperation!.add(
+            new SocialOrganizationKaaryakartaaCountByAreaOfOperation.fromJson(
+                v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -639,6 +652,38 @@ class Vastisarvekshan {
       data['VastisargavatilMumbaikar'] =
           this.vastisargavatilMumbaikar!.map((v) => v.toJson()).toList();
     }
+    if (this.socialOrganizationKaaryakartaaCountByAreaOfOperation != null) {
+      data['ListSocialOrganizationKaaryakartaaCountByAreaOfOperation'] = this
+          .socialOrganizationKaaryakartaaCountByAreaOfOperation!
+          .map((v) => v.toJson())
+          .toList();
+    }
+    return data;
+  }
+}
+
+class SocialOrganizationKaaryakartaaCountByAreaOfOperation {
+  int? mainAreaOfOperationID;
+  int? kaaryakartaaCount;
+  String? areaOfOperation;
+
+  SocialOrganizationKaaryakartaaCountByAreaOfOperation(
+      {this.mainAreaOfOperationID,
+      this.kaaryakartaaCount,
+      this.areaOfOperation});
+
+  SocialOrganizationKaaryakartaaCountByAreaOfOperation.fromJson(
+      Map<String, dynamic> json) {
+    mainAreaOfOperationID = json['MainAreaOfOperationID'];
+    kaaryakartaaCount = json['KaaryakartaaCount'];
+    areaOfOperation = json['AreaOfOperation'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['MainAreaOfOperationID'] = this.mainAreaOfOperationID;
+    data['KaaryakartaaCount'] = this.kaaryakartaaCount;
+    data['AreaOfOperation'] = this.areaOfOperation;
     return data;
   }
 }

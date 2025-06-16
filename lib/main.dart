@@ -322,9 +322,8 @@ class NiyojakAppState extends State<NiyojakApp> {
         CreateNotificationView.routeName: (ctx) => CreateNotificationView(),
         UpdateMasterDataScreen.routeName: (ctx) => UpdateMasterDataScreen(),
         VastiSurveyFormScreen.routeName: (ctx) => VastiSurveyFormScreen(),
-        VastiSurveyReportViewScreen.routeName: (ctx) =>
-            VastiSurveyReportViewScreen(),
-        CompleteSurveyReport.routeName: (ctx) => CompleteSurveyReport(),
+        VastiSurveyReportTab1.routeName: (ctx) =>VastiSurveyReportTab1(),
+        VastiSurveyReportTab2.routeName: (ctx) => VastiSurveyReportTab2(),
         MandalSurveyFormScreen.routeName: (ctx) => MandalSurveyFormScreen(),
         MandalSurveyReportScreen.routeName: (ctx) => MandalSurveyReportScreen(),
         VastiSurveyReportScreen.routeName: (ctx) => VastiSurveyReportScreen(),

@@ -11,6 +11,7 @@ class NagarVastiSampurnaModel {
   List<Balopasanakendra>? balopasanakendra;
   List<Mahatvacesana>? mahatvacesana;
   List<Sajjanshakkati>? sajjanshakkati;
+  List<VastiAnyaPrabhaviLokam>? anyaPrabhaviLok;
   List<Samajikkaryakram>? samajikkaryakram;
   List<Schooltapasilaforclg>? schooltapasilaforclg;
   List<Schooltapasilaformedium>? schooltapasilaformedium;
@@ -25,68 +26,68 @@ class NagarVastiSampurnaModel {
   List<ListKaaryakartaaCountByGatividhi>? listKaaryakartaaCountByGatividhi;
   List<ListKaaryakartaaCountByAayaam>? listKaaryakartaaCountByAayaam;
   List<ListSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation>?
-  listSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation;
+      listSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation;
   List<ListSwayamsevakCountByStudentCategory>?
-  listSwayamsevakCountByStudentCategory;
+      listSwayamsevakCountByStudentCategory;
   List<ListSwayamsevakCountByVyavasaayeeCategory>?
-  listSwayamsevakCountByVyavasaayeeCategory;
+      listSwayamsevakCountByVyavasaayeeCategory;
   List<SanghaKaryaStithiData>? sanghaKaryaStithiData;
   NagarVastisarvekshanReportwithselectedlevel?
-  nagarVastisarvekshanReportwithselectedlevel;
+      nagarVastisarvekshanReportwithselectedlevel;
   List<Jagran>? jagran;
   List<Gatividhi>? gatividhi;
   List<Religion>? religion;
   List<Vasahatsamparkashiti>? vasahatsamparkashiti;
-  List<SocialOrganizationKaaryakartaaCountByAreaOfOperation>? socialOrganizationKaaryakartaaCountByAreaOfOperation;
+  List<SocialOrganizationKaaryakartaaCountByAreaOfOperation>?
+      socialOrganizationKaaryakartaaCountByAreaOfOperation;
   List<PurviShakhaHoti>? purviShakhaHoti;
   List<PurviSptahikMilanHote>? purviSptahikMilanHote;
 
   NagarVastiSampurnaModel(
       {this.message,
-        this.nagarVastisarvekshanReportwithname,
-        this.status,
-        this.bhaasacount,
-        this.prantshiti,
-        this.vasahatprakar,
-        this.vastiloksankhya,
-        this.mothevyavasayikakendra,
-        this.motherugnalaya,
-        this.balopasanakendra,
-        this.mahatvacesana,
-        this.sajjanshakkati,
-        this.samajikkaryakram,
-        this.schooltapasilaforclg,
-        this.schooltapasilaformedium,
-        this.schooltapasilaforschool,
-        this.upasanaSthal,
-        this.hinduvirayadi,
-        this.durjanshakti,
-        this.vastitilasamajika,
-        this.dhaarmiknetrtav,
-        this.jahirakaryakramasambandhi,
-        this.maidan,
-        this.listKaaryakartaaCountByGatividhi,
-        this.listKaaryakartaaCountByAayaam,
-        this.listSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation,
-        this.listSwayamsevakCountByStudentCategory,
-        this.listSwayamsevakCountByVyavasaayeeCategory,
-        this.sanghaKaryaStithiData,
-        this.nagarVastisarvekshanReportwithselectedlevel,
-        this.jagran,
-        this.gatividhi,
-        this.religion,
-        this.vasahatsamparkashiti,
-        this.socialOrganizationKaaryakartaaCountByAreaOfOperation,
-        this.purviShakhaHoti,
-        this.purviSptahikMilanHote
-      });
+      this.nagarVastisarvekshanReportwithname,
+      this.status,
+      this.bhaasacount,
+      this.prantshiti,
+      this.vasahatprakar,
+      this.vastiloksankhya,
+      this.mothevyavasayikakendra,
+      this.motherugnalaya,
+      this.balopasanakendra,
+      this.mahatvacesana,
+      this.sajjanshakkati,
+      this.anyaPrabhaviLok,
+      this.samajikkaryakram,
+      this.schooltapasilaforclg,
+      this.schooltapasilaformedium,
+      this.schooltapasilaforschool,
+      this.upasanaSthal,
+      this.hinduvirayadi,
+      this.durjanshakti,
+      this.vastitilasamajika,
+      this.dhaarmiknetrtav,
+      this.jahirakaryakramasambandhi,
+      this.maidan,
+      this.listKaaryakartaaCountByGatividhi,
+      this.listKaaryakartaaCountByAayaam,
+      this.listSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation,
+      this.listSwayamsevakCountByStudentCategory,
+      this.listSwayamsevakCountByVyavasaayeeCategory,
+      this.sanghaKaryaStithiData,
+      this.nagarVastisarvekshanReportwithselectedlevel,
+      this.jagran,
+      this.gatividhi,
+      this.religion,
+      this.vasahatsamparkashiti,
+      this.socialOrganizationKaaryakartaaCountByAreaOfOperation,
+      this.purviShakhaHoti,
+      this.purviSptahikMilanHote});
 
   NagarVastiSampurnaModel.fromJson(Map<String, dynamic> json) {
-
     message = json['Message'];
     if (json['NagarVastisarvekshanReportwithname'] != null) {
       nagarVastisarvekshanReportwithname =
-      <NagarVastisarvekshanReportwithname>[];
+          <NagarVastisarvekshanReportwithname>[];
       json['NagarVastisarvekshanReportwithname'].forEach((v) {
         nagarVastisarvekshanReportwithname!
             .add(new NagarVastisarvekshanReportwithname.fromJson(v));
@@ -142,6 +143,12 @@ class NagarVastiSampurnaModel {
       sajjanshakkati = <Sajjanshakkati>[];
       json['sajjanshakkati'].forEach((v) {
         sajjanshakkati!.add(new Sajjanshakkati.fromJson(v));
+      });
+    }
+    if (json['anyaprabhavilok'] != null) {
+      anyaPrabhaviLok = <VastiAnyaPrabhaviLokam>[];
+      json['anyaprabhavilok'].forEach((v) {
+        anyaPrabhaviLok!.add(new VastiAnyaPrabhaviLokam.fromJson(v));
       });
     }
     if (json['samajikkaryakram'] != null) {
@@ -228,7 +235,7 @@ class NagarVastiSampurnaModel {
     if (json['ListSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation'] !=
         null) {
       listSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation =
-      <ListSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation>[];
+          <ListSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation>[];
       json['ListSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation']
           .forEach((v) {
         listSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation!.add(
@@ -238,7 +245,7 @@ class NagarVastiSampurnaModel {
     }
     if (json['ListSwayamsevakCountByStudentCategory'] != null) {
       listSwayamsevakCountByStudentCategory =
-      <ListSwayamsevakCountByStudentCategory>[];
+          <ListSwayamsevakCountByStudentCategory>[];
       json['ListSwayamsevakCountByStudentCategory'].forEach((v) {
         listSwayamsevakCountByStudentCategory!
             .add(new ListSwayamsevakCountByStudentCategory.fromJson(v));
@@ -246,7 +253,7 @@ class NagarVastiSampurnaModel {
     }
     if (json['ListSwayamsevakCountByVyavasaayeeCategory'] != null) {
       listSwayamsevakCountByVyavasaayeeCategory =
-      <ListSwayamsevakCountByVyavasaayeeCategory>[];
+          <ListSwayamsevakCountByVyavasaayeeCategory>[];
       json['ListSwayamsevakCountByVyavasaayeeCategory'].forEach((v) {
         listSwayamsevakCountByVyavasaayeeCategory!
             .add(new ListSwayamsevakCountByVyavasaayeeCategory.fromJson(v));
@@ -259,10 +266,10 @@ class NagarVastiSampurnaModel {
       });
     }
     nagarVastisarvekshanReportwithselectedlevel =
-    json['NagarVastisarvekshanReportwithselectedlevel'] != null
-        ? new NagarVastisarvekshanReportwithselectedlevel.fromJson(
-        json['NagarVastisarvekshanReportwithselectedlevel'])
-        : null;
+        json['NagarVastisarvekshanReportwithselectedlevel'] != null
+            ? new NagarVastisarvekshanReportwithselectedlevel.fromJson(
+                json['NagarVastisarvekshanReportwithselectedlevel'])
+            : null;
     if (json['jagran'] != null) {
       jagran = <Jagran>[];
       json['jagran'].forEach((v) {
@@ -287,10 +294,15 @@ class NagarVastiSampurnaModel {
         vasahatsamparkashiti!.add(new Vasahatsamparkashiti.fromJson(v));
       });
     }
-    if (json['ListSocialOrganizationKaaryakartaaCountByAreaOfOperation'] != null) {
-      socialOrganizationKaaryakartaaCountByAreaOfOperation = <SocialOrganizationKaaryakartaaCountByAreaOfOperation>[];
-      json['ListSocialOrganizationKaaryakartaaCountByAreaOfOperation'].forEach((v) {
-        socialOrganizationKaaryakartaaCountByAreaOfOperation!.add(new SocialOrganizationKaaryakartaaCountByAreaOfOperation.fromJson(v));
+    if (json['ListSocialOrganizationKaaryakartaaCountByAreaOfOperation'] !=
+        null) {
+      socialOrganizationKaaryakartaaCountByAreaOfOperation =
+          <SocialOrganizationKaaryakartaaCountByAreaOfOperation>[];
+      json['ListSocialOrganizationKaaryakartaaCountByAreaOfOperation']
+          .forEach((v) {
+        socialOrganizationKaaryakartaaCountByAreaOfOperation!.add(
+            new SocialOrganizationKaaryakartaaCountByAreaOfOperation.fromJson(
+                v));
       });
     }
     if (json['purviShakhaHoti'] != null) {
@@ -349,6 +361,10 @@ class NagarVastiSampurnaModel {
     if (this.sajjanshakkati != null) {
       data['sajjanshakkati'] =
           this.sajjanshakkati!.map((v) => v.toJson()).toList();
+    }
+    if (this.anyaPrabhaviLok != null) {
+      data['anyaprabhavilok'] =
+          this.anyaPrabhaviLok!.map((v) => v.toJson()).toList();
     }
     if (this.samajikkaryakram != null) {
       data['samajikkaryakram'] =
@@ -439,8 +455,10 @@ class NagarVastiSampurnaModel {
           this.vasahatsamparkashiti!.map((v) => v.toJson()).toList();
     }
     if (this.socialOrganizationKaaryakartaaCountByAreaOfOperation != null) {
-      data['ListSocialOrganizationKaaryakartaaCountByAreaOfOperation'] =
-          this.socialOrganizationKaaryakartaaCountByAreaOfOperation!.map((v) => v.toJson()).toList();
+      data['ListSocialOrganizationKaaryakartaaCountByAreaOfOperation'] = this
+          .socialOrganizationKaaryakartaaCountByAreaOfOperation!
+          .map((v) => v.toJson())
+          .toList();
     }
     if (this.purviShakhaHoti != null) {
       data['purviShakhaHoti'] =
@@ -474,21 +492,21 @@ class NagarVastisarvekshanReportwithname {
 
   NagarVastisarvekshanReportwithname(
       {this.geounitid,
-        this.nagarAllStepsCompleteCount,
-        this.nagarStep1CompleteCount,
-        this.nagarStep2CompleteCount,
-        this.nagarStep3CompleteCount,
-        this.nagarStepStartedCount,
-        this.nagarStepsNotstartedCount,
-        this.nagarcount,
-        this.name,
-        this.vastiAllStepsCompleteCount,
-        this.vastiStep1CompleteCount,
-        this.vastiStep2CompleteCount,
-        this.vastiStep3CompleteCount,
-        this.vastiStepStartedCount,
-        this.vastiStepsNotstartedCount,
-        this.vasticount});
+      this.nagarAllStepsCompleteCount,
+      this.nagarStep1CompleteCount,
+      this.nagarStep2CompleteCount,
+      this.nagarStep3CompleteCount,
+      this.nagarStepStartedCount,
+      this.nagarStepsNotstartedCount,
+      this.nagarcount,
+      this.name,
+      this.vastiAllStepsCompleteCount,
+      this.vastiStep1CompleteCount,
+      this.vastiStep2CompleteCount,
+      this.vastiStep3CompleteCount,
+      this.vastiStepStartedCount,
+      this.vastiStepsNotstartedCount,
+      this.vasticount});
 
   NagarVastisarvekshanReportwithname.fromJson(Map<String, dynamic> json) {
     geounitid = json['geounitid'];
@@ -633,47 +651,51 @@ class Vastiloksankhya {
   int? purviShakhaHotiCount;
   int? purviSptahikMilanHoteCount;
 
-  Vastiloksankhya(
-      {this.between8000And12000, this.lessThan8000, this.moreThan12000,this.fireBrigade,this.policeThane,
-        this.gatividhiKaaryakartaaCount,
-        this.aayaamKaaryakartaaCount,
-        this.socialOrganizationKaaryakartaaCount,
-        this.sanghaPreritSansthaaKaaryakartaaCount,
-        this.akhilBhaaratiyaKaaryakartaaCount,
-        this.baalCount,
-        this.bhaagKaaryakartaaCount,
-        this.dailyShaakhaaKaaryakartaaCount,
-        this.dwitiyaVarshaShikshitCount,
-        this.graamKaaryakartaaCount,
-        this.kshetraKaaryakartaaCount,
-        this.maasikMilanKaaryakartaaCount,
-        this.mahaanagarKaaryakartaaCount,
-        this.mandalKaaryakartaaCount,
-        this.nagarKaaryakartaaCount,
-        this.noShikshanCount,
-        this.praantKaaryakartaaCount,
-        this.praathamikShikshitCount,
-        this.prarambhikShikshitCount,
-        this.prathamVarshaShikshitCount,
-        this.pratidnyitCount,
-        this.pravaaseeKaaryakartaaCount,
-        this.proudhaVyavasaayeeCount,
-        this.saaptaahikMilanKaaryakartaaCount,
-        this.shaharKaaryakartaaCount,
-        this.shishuCount,
-        this.tarunVidyaarthiCount,
-        this.tarunVyavasaayeeCount,
-        this.totalKaaryakartaaCount,
-        this.totalSwayamsevakCount,
-        this.trutiyaVarshaShikshitCount,
-        this.unknownAgeCount,
-        this.vastiKaaryakartaaCount,
-        this.vibhaagKaaryakartaaCount,
-        this.purviShakhaHotiCount,
-        this.purviSptahikMilanHoteCount,
-        this.vastiPramukhCount,
-        this.vastiSamitiAheCount,
-      });
+  Vastiloksankhya({
+    this.between8000And12000,
+    this.lessThan8000,
+    this.moreThan12000,
+    this.fireBrigade,
+    this.policeThane,
+    this.gatividhiKaaryakartaaCount,
+    this.aayaamKaaryakartaaCount,
+    this.socialOrganizationKaaryakartaaCount,
+    this.sanghaPreritSansthaaKaaryakartaaCount,
+    this.akhilBhaaratiyaKaaryakartaaCount,
+    this.baalCount,
+    this.bhaagKaaryakartaaCount,
+    this.dailyShaakhaaKaaryakartaaCount,
+    this.dwitiyaVarshaShikshitCount,
+    this.graamKaaryakartaaCount,
+    this.kshetraKaaryakartaaCount,
+    this.maasikMilanKaaryakartaaCount,
+    this.mahaanagarKaaryakartaaCount,
+    this.mandalKaaryakartaaCount,
+    this.nagarKaaryakartaaCount,
+    this.noShikshanCount,
+    this.praantKaaryakartaaCount,
+    this.praathamikShikshitCount,
+    this.prarambhikShikshitCount,
+    this.prathamVarshaShikshitCount,
+    this.pratidnyitCount,
+    this.pravaaseeKaaryakartaaCount,
+    this.proudhaVyavasaayeeCount,
+    this.saaptaahikMilanKaaryakartaaCount,
+    this.shaharKaaryakartaaCount,
+    this.shishuCount,
+    this.tarunVidyaarthiCount,
+    this.tarunVyavasaayeeCount,
+    this.totalKaaryakartaaCount,
+    this.totalSwayamsevakCount,
+    this.trutiyaVarshaShikshitCount,
+    this.unknownAgeCount,
+    this.vastiKaaryakartaaCount,
+    this.vibhaagKaaryakartaaCount,
+    this.purviShakhaHotiCount,
+    this.purviSptahikMilanHoteCount,
+    this.vastiPramukhCount,
+    this.vastiSamitiAheCount,
+  });
 
   Vastiloksankhya.fromJson(Map<String, dynamic> json) {
     between8000And12000 = json['Between8000And12000'];
@@ -684,8 +706,10 @@ class Vastiloksankhya {
     gatividhiKaaryakartaaCount = json['GatividhiKaaryakartaaCount'];
     akhilBhaaratiyaKaaryakartaaCount = json['AkhilBhaaratiyaKaaryakartaaCount'];
     aayaamKaaryakartaaCount = json['AayaamKaaryakartaaCount'];
-    socialOrganizationKaaryakartaaCount = json['SocialOrganizationKaaryakartaaCount'];
-    sanghaPreritSansthaaKaaryakartaaCount = json['SanghaPreritSansthaaKaaryakartaaCount'];
+    socialOrganizationKaaryakartaaCount =
+        json['SocialOrganizationKaaryakartaaCount'];
+    sanghaPreritSansthaaKaaryakartaaCount =
+        json['SanghaPreritSansthaaKaaryakartaaCount'];
     baalCount = json['BaalCount'];
     bhaagKaaryakartaaCount = json['BhaagKaaryakartaaCount'];
     dailyShaakhaaKaaryakartaaCount = json['DailyShaakhaaKaaryakartaaCount'];
@@ -729,10 +753,11 @@ class Vastiloksankhya {
     data['Policethane'] = this.policeThane;
     data['agnishamandal'] = this.fireBrigade;
     data['AayaamKaaryakartaaCount'] = this.aayaamKaaryakartaaCount;
-    data['SocialOrganizationKaaryakartaaCount'] = this.socialOrganizationKaaryakartaaCount;
-    data['SanghaPreritSansthaaKaaryakartaaCount'] = this.sanghaPreritSansthaaKaaryakartaaCount;
-    data['GatividhiKaaryakartaaCount'] =
-        this.gatividhiKaaryakartaaCount;
+    data['SocialOrganizationKaaryakartaaCount'] =
+        this.socialOrganizationKaaryakartaaCount;
+    data['SanghaPreritSansthaaKaaryakartaaCount'] =
+        this.sanghaPreritSansthaaKaaryakartaaCount;
+    data['GatividhiKaaryakartaaCount'] = this.gatividhiKaaryakartaaCount;
     data['AkhilBhaaratiyaKaaryakartaaCount'] =
         this.akhilBhaaratiyaKaaryakartaaCount;
     data['BaalCount'] = this.baalCount;
@@ -870,11 +895,40 @@ class Sajjanshakkati {
 
   Sajjanshakkati(
       {this.prabhavishetra,
-        this.sajjanshakkati,
-        this.samparkashiti,
-        this.vasticnt});
+      this.sajjanshakkati,
+      this.samparkashiti,
+      this.vasticnt});
 
   Sajjanshakkati.fromJson(Map<String, dynamic> json) {
+    prabhavishetra = json['prabhavishetra'];
+    sajjanshakkati = json['sajjanshakkati'];
+    samparkashiti = json['samparkashiti'];
+    vasticnt = json['vasticnt'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['prabhavishetra'] = this.prabhavishetra;
+    data['sajjanshakkati'] = this.sajjanshakkati;
+    data['samparkashiti'] = this.samparkashiti;
+    data['vasticnt'] = this.vasticnt;
+    return data;
+  }
+}
+
+class VastiAnyaPrabhaviLokam {
+  String? prabhavishetra;
+  String? sajjanshakkati;
+  String? samparkashiti;
+  int? vasticnt;
+
+  VastiAnyaPrabhaviLokam(
+      {this.prabhavishetra,
+      this.sajjanshakkati,
+      this.samparkashiti,
+      this.vasticnt});
+
+  VastiAnyaPrabhaviLokam.fromJson(Map<String, dynamic> json) {
     prabhavishetra = json['prabhavishetra'];
     sajjanshakkati = json['sajjanshakkati'];
     samparkashiti = json['samparkashiti'];
@@ -1236,8 +1290,8 @@ class ListSwayamsevakCountByStudentCategory {
 
   ListSwayamsevakCountByStudentCategory(
       {this.countByStudentCategory,
-        this.studentCategoryID,
-        this.studentCategoryName});
+      this.studentCategoryID,
+      this.studentCategoryName});
 
   ListSwayamsevakCountByStudentCategory.fromJson(Map<String, dynamic> json) {
     countByStudentCategory = json['CountByStudentCategory'];
@@ -1261,8 +1315,8 @@ class ListSwayamsevakCountByVyavasaayeeCategory {
 
   ListSwayamsevakCountByVyavasaayeeCategory(
       {this.countByVyavasaayeeCategory,
-        this.vyavasaayeeCategoryID,
-        this.vyavasaayeeCategoryName});
+      this.vyavasaayeeCategoryID,
+      this.vyavasaayeeCategoryName});
 
   ListSwayamsevakCountByVyavasaayeeCategory.fromJson(
       Map<String, dynamic> json) {
@@ -1294,15 +1348,15 @@ class SanghaKaryaStithiData {
 
   SanghaKaryaStithiData(
       {this.maasikMilanCount,
-        this.purviSaptahik,
-        this.purviShaakhaa,
-        this.saaptaahikCount,
-        this.sankalpitMaasikMilanCount,
-        this.sankalpitSaaptaahikCount,
-        this.sankalpitShaakhaaCount,
-        this.shaakhaaCount,
-        this.vayogatCode,
-        this.vayogatID});
+      this.purviSaptahik,
+      this.purviShaakhaa,
+      this.saaptaahikCount,
+      this.sankalpitMaasikMilanCount,
+      this.sankalpitSaaptaahikCount,
+      this.sankalpitShaakhaaCount,
+      this.shaakhaaCount,
+      this.vayogatCode,
+      this.vayogatID});
 
   SanghaKaryaStithiData.fromJson(Map<String, dynamic> json) {
     maasikMilanCount = json['MaasikMilanCount'];
@@ -1359,27 +1413,27 @@ class NagarVastisarvekshanReportwithselectedlevel {
 
   NagarVastisarvekshanReportwithselectedlevel(
       {this.geounitid,
-        this.nagarAllStepsCompleteCount,
-        this.nagarStep1CompleteCount,
-        this.nagarStep2CompleteCount,
-        this.nagarStep3CompleteCount,
-        this.nagarStepStartedCount,
-        this.nagarStepsNotstartedCount,
-        this.nagarcount,
-        this.name,
-        this.vastiAllStepsCompleteCount,
-        this.vastiAllStepsCompleteNames,
-        this.vastiStep1CompleteCount,
-        this.vastiStep1CompleteNames,
-        this.vastiStep2CompleteCount,
-        this.vastiStep2CompleteNames,
-        this.vastiStep3CompleteCount,
-        this.vastiStep3CompleteNames,
-        this.vastiStepStartedCount,
-        this.vastiStepStartedNames,
-        this.vastiStepsNotstartedCount,
-        this.vastiStepsNotstartedNames,
-        this.vasticount});
+      this.nagarAllStepsCompleteCount,
+      this.nagarStep1CompleteCount,
+      this.nagarStep2CompleteCount,
+      this.nagarStep3CompleteCount,
+      this.nagarStepStartedCount,
+      this.nagarStepsNotstartedCount,
+      this.nagarcount,
+      this.name,
+      this.vastiAllStepsCompleteCount,
+      this.vastiAllStepsCompleteNames,
+      this.vastiStep1CompleteCount,
+      this.vastiStep1CompleteNames,
+      this.vastiStep2CompleteCount,
+      this.vastiStep2CompleteNames,
+      this.vastiStep3CompleteCount,
+      this.vastiStep3CompleteNames,
+      this.vastiStepStartedCount,
+      this.vastiStepStartedNames,
+      this.vastiStepsNotstartedCount,
+      this.vastiStepsNotstartedNames,
+      this.vasticount});
 
   NagarVastisarvekshanReportwithselectedlevel.fromJson(
       Map<String, dynamic> json) {
@@ -1527,13 +1581,17 @@ class Religion {
 }
 
 class SocialOrganizationKaaryakartaaCountByAreaOfOperation {
-  int? mainAreaOfOperationID ;
+  int? mainAreaOfOperationID;
   int? kaaryakartaaCount;
-  String? areaOfOperation ;
+  String? areaOfOperation;
 
-  SocialOrganizationKaaryakartaaCountByAreaOfOperation({this.mainAreaOfOperationID, this.kaaryakartaaCount, this.areaOfOperation });
+  SocialOrganizationKaaryakartaaCountByAreaOfOperation(
+      {this.mainAreaOfOperationID,
+      this.kaaryakartaaCount,
+      this.areaOfOperation});
 
-  SocialOrganizationKaaryakartaaCountByAreaOfOperation.fromJson(Map<String, dynamic> json) {
+  SocialOrganizationKaaryakartaaCountByAreaOfOperation.fromJson(
+      Map<String, dynamic> json) {
     mainAreaOfOperationID = json['MainAreaOfOperationID'];
     kaaryakartaaCount = json['KaaryakartaaCount'];
     areaOfOperation = json['AreaOfOperation'];
