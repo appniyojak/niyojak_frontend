@@ -1277,7 +1277,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                         SingleColumnRow(
                             txtString:
                                 Statics.getLabel('TotalKaaryakartaaCount'),
-                            value: data?.vastiloksankhya?.totalKaaryakartaaCount
+                            value: data?.vastiloksankhya?.totalSwayamsevakCount
                                 .toString(),
                             fontsize: 15),
                         SingleColumnRow(
@@ -2204,110 +2204,19 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                       title: 'UpsanaSthal',
                       children: [
                         Container(
-                          height: 300,
+                          height: 500,
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey.shade300),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: SingleChildScrollView(
-                              child: Column(
-                            children: [
-                              if (data != null && data!.upasanaSthal != null)
-                                Container(
-                                  decoration: BoxDecoration(
-                                    border:
-                                        Border.all(color: Colors.grey.shade300),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: SingleChildScrollView(
-                                    scrollDirection:
-                                        Axis.horizontal, // horizontal scroll
-                                    child: DataTable(
-                                      headingRowColor:
-                                          MaterialStateProperty.resolveWith(
-                                        (states) => Colors.purpleAccent[200],
-                                      ),
-                                      headingTextStyle: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      columns: const [
-                                        DataColumn(
-                                          label: Expanded(
-                                            child: Center(
-                                              child: Text(
-                                                'उपासना स्थळ ',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        DataColumn(
-                                          label: Expanded(
-                                            child: Center(
-                                              child: Text(
-                                                'प्रकार',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        DataColumn(
-                                          label: Expanded(
-                                            child: Center(
-                                              child: Text(
-                                                'संख्या',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        DataColumn(
-                                          label: Expanded(
-                                            child: Center(
-                                              child: Text(
-                                                'किती वस्तीत ',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                      rows: data!.upasanaSthal!.map((item) {
-                                        return DataRow(
-                                          cells: [
-                                            DataCell(Center(
-                                                child: Text(
-                                                    item.upaasanasthal ?? ''))),
-                                            DataCell(Center(
-                                                child: Text(
-                                                    item.prakar.toString()))),
-                                            DataCell(Center(
-                                                child:
-                                                    Text(item.tot.toString()))),
-                                            DataCell(Center(
-                                                child: Text(
-                                                    item.vasticnt.toString()))),
-                                          ],
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          )),
+                            child: Column(
+                              children: [
+                                if (data != null && data!.upasanaSthal != null)
+                                  ..._buildGroupedTables(data!.upasanaSthal!)
+                              ],
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -2321,137 +2230,276 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: ListView(
-                            children: groupedData.entries.map((entry) {
-                              final sajjanType = entry.key;
-                              final data = entry.value;
+                            children: [
+                              ...groupedData.entries.map((entry) {
+                                final sajjanType = entry.key;
+                                final data = entry.value;
 
-                              // Unique prabhavishetra & samparkashiti
-                              final prabhavishetraList = {
-                                ...data.map((e) => e.prabhavishetra).toSet()
-                              }.toList();
-                              final samparkList = {
-                                ...data.map((e) => e.samparkashiti).toSet()
-                              }.toList();
+                                final prabhavishetraList = {
+                                  ...data.map((e) => e.prabhavishetra).toSet()
+                                }.toList();
+                                final samparkList = {
+                                  ...data.map((e) => e.samparkashiti).toSet()
+                                }.toList();
 
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(height: 20),
-                                  Center(
-                                    child: Text(
-                                      "सज्जन शक्ती (${sajjanType})",
-                                      style: TextStyle(
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(height: 20),
+                                    Center(
+                                      child: Text(
+                                        "सज्जन शक्ती (${sajjanType})",
+                                        style: const TextStyle(
                                           fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  Table(
-                                    border: TableBorder.all(),
-                                    defaultVerticalAlignment:
-                                        TableCellVerticalAlignment.middle,
-                                    children: [
-                                      // Header Row
-                                      TableRow(
-                                        decoration: BoxDecoration(
-                                          color: Colors.purpleAccent
-                                              .shade200, // Header background
+                                          fontWeight: FontWeight.bold,
                                         ),
-                                        children: [
-                                          const TableCell(
-                                            child: Padding(
-                                              padding: EdgeInsets.all(8),
-                                              child: Text(
-                                                'सज्जन शक्ती संपर्क स्थिती',
-                                                style: TextStyle(
-                                                    color: Colors.white),
+                                      ),
+                                    ),
+                                    Table(
+                                      border: TableBorder.all(),
+                                      defaultVerticalAlignment:
+                                          TableCellVerticalAlignment.middle,
+                                      children: [
+                                        TableRow(
+                                          decoration: BoxDecoration(
+                                            color: Colors.purpleAccent.shade200,
+                                          ),
+                                          children: [
+                                            const TableCell(
+                                              child: Padding(
+                                                padding: EdgeInsets.all(8),
+                                                child: Text(
+                                                  'सज्जन शक्ती संपर्क स्थिती',
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          ...prabhavishetraList
-                                              .map((header) => Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(8),
-                                                    child: Text(
-                                                      header!,
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    ),
-                                                  )),
-                                        ],
-                                      ),
-                                      // Data Rows
-                                      ...samparkList.map((sampark) {
-                                        return TableRow(
+                                            ...prabhavishetraList
+                                                .map((header) => Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8),
+                                                      child: Text(
+                                                        header ?? '',
+                                                        style: const TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                    )),
+                                          ],
+                                        ),
+                                        ...samparkList.map((sampark) {
+                                          return TableRow(
+                                            children: [
+                                              SizedBox(
+                                                width: 140,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8),
+                                                  child: Text(sampark ?? ''),
+                                                ),
+                                              ),
+                                              ...prabhavishetraList
+                                                  .map((prabhav) {
+                                                final match = data.firstWhere(
+                                                  (item) =>
+                                                      item.samparkashiti ==
+                                                          sampark &&
+                                                      item.prabhavishetra ==
+                                                          prabhav,
+                                                  orElse: () =>
+                                                      Sajjanshakkati(),
+                                                );
+                                                return Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8),
+                                                  child: Text(
+                                                      '${match.vasticnt ?? ''}'),
+                                                );
+                                              }),
+                                            ],
+                                          );
+                                        }).toList(),
+                                        TableRow(
+                                          decoration: BoxDecoration(
+                                              color: Colors.grey.shade200),
                                           children: [
-                                            SizedBox(
-                                              width: 140,
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8),
-                                                child: Text(sampark!),
+                                            const Padding(
+                                              padding: EdgeInsets.all(8),
+                                              child: Text(
+                                                'एकूण',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
                                             ),
                                             ...prabhavishetraList
                                                 .map((prabhav) {
-                                              final match = data.firstWhere(
-                                                (item) =>
-                                                    item.samparkashiti ==
-                                                        sampark &&
-                                                    item.prabhavishetra ==
-                                                        prabhav,
-                                                orElse: () => Sajjanshakkati(),
-                                              );
+                                              final total = data
+                                                  .where((item) =>
+                                                      item.prabhavishetra ==
+                                                      prabhav)
+                                                  .fold<int>(
+                                                      0,
+                                                      (sum, item) =>
+                                                          sum +
+                                                          (item.vasticnt ?? 0));
                                               return Padding(
                                                 padding:
                                                     const EdgeInsets.all(8),
                                                 child: Text(
-                                                    '${match.vasticnt ?? ''}'),
+                                                  '$total',
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
                                               );
                                             }),
                                           ],
-                                        );
-                                      }).toList(),
-                                      // Total Row
-                                      TableRow(
-                                        decoration: BoxDecoration(
-                                            color: Colors.grey.shade200),
-                                        children: [
-                                          const Padding(
-                                            padding: EdgeInsets.all(8),
-                                            child: Text(
-                                              'एकूण',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                          ...prabhavishetraList.map((prabhav) {
-                                            final total = data
-                                                .where((item) =>
-                                                    item.prabhavishetra ==
-                                                    prabhav)
-                                                .fold<int>(
-                                                    0,
-                                                    (sum, item) =>
-                                                        sum +
-                                                        (item.vasticnt ?? 0));
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                );
+                              }).toList(),
 
-                                            return Padding(
-                                              padding: const EdgeInsets.all(8),
-                                              child: Text(
-                                                '$total',
-                                                style: const TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                              // 👇 Grand Total Table Added Below
+                              Builder(
+                                builder: (context) {
+                                  final allData = groupedData.values
+                                      .expand((list) => list)
+                                      .toList();
+                                  final allPrabhavishetra = allData
+                                      .map((e) => e.prabhavishetra)
+                                      .toSet()
+                                      .toList();
+                                  final allSampark = allData
+                                      .map((e) => e.samparkashiti)
+                                      .toSet()
+                                      .toList();
+
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(height: 30),
+                                      const Center(
+                                        child: Text(
+                                          "सज्जन शक्ती (संपूर्ण एकूण)",
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      Table(
+                                        border: TableBorder.all(),
+                                        defaultVerticalAlignment:
+                                            TableCellVerticalAlignment.middle,
+                                        children: [
+                                          TableRow(
+                                            decoration: BoxDecoration(
+                                              color: Colors.deepPurple.shade200,
+                                            ),
+                                            children: [
+                                              const TableCell(
+                                                child: Padding(
+                                                  padding: EdgeInsets.all(8),
+                                                  child: Text(
+                                                    'संपर्क स्थिती',
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                ),
                                               ),
+                                              ...allPrabhavishetra.map(
+                                                (header) => Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8),
+                                                  child: Text(
+                                                    header ?? '',
+                                                    style: const TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          ...allSampark.map((sampark) {
+                                            return TableRow(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8),
+                                                  child: Text(sampark ?? ''),
+                                                ),
+                                                ...allPrabhavishetra
+                                                    .map((prabhav) {
+                                                  final total = allData
+                                                      .where((e) =>
+                                                          e.samparkashiti ==
+                                                              sampark &&
+                                                          e.prabhavishetra ==
+                                                              prabhav)
+                                                      .fold<int>(
+                                                          0,
+                                                          (sum, e) =>
+                                                              sum +
+                                                              (e.vasticnt ??
+                                                                  0));
+                                                  return Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(8),
+                                                    child: Text('$total'),
+                                                  );
+                                                }),
+                                              ],
                                             );
-                                          }),
+                                          }).toList(),
+                                          TableRow(
+                                            decoration: BoxDecoration(
+                                                color: Colors.grey.shade300),
+                                            children: [
+                                              const Padding(
+                                                padding: EdgeInsets.all(8),
+                                                child: Text(
+                                                  'एकूण',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                              ...allPrabhavishetra
+                                                  .map((prabhav) {
+                                                final total = allData
+                                                    .where((e) =>
+                                                        e.prabhavishetra ==
+                                                        prabhav)
+                                                    .fold<int>(
+                                                        0,
+                                                        (sum, e) =>
+                                                            sum +
+                                                            (e.vasticnt ?? 0));
+                                                return Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8),
+                                                  child: Text(
+                                                    '$total',
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                );
+                                              }),
+                                            ],
+                                          ),
                                         ],
                                       ),
                                     ],
-                                  ),
-                                ],
-                              );
-                            }).toList(),
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -2466,138 +2514,281 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: ListView(
-                            children:
-                                groupedAnyaPrabhaviData.entries.map((entry) {
-                              final anyaPrabhaviType = entry.key;
-                              final data = entry.value;
+                            children: [
+                              ...groupedAnyaPrabhaviData.entries.map((entry) {
+                                final anyaPrabhaviType = entry.key;
+                                final data = entry.value;
 
-                              final prabhavishetraList = {
-                                ...data.map((e) => e.prabhavishetra).toSet()
-                              }.toList();
-                              final samparkList = {
-                                ...data.map((e) => e.samparkashiti).toSet()
-                              }.toList();
+                                final prabhavishetraList = {
+                                  ...data.map((e) => e.prabhavishetra).toSet()
+                                }.toList();
+                                final samparkList = {
+                                  ...data.map((e) => e.samparkashiti).toSet()
+                                }.toList();
 
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(height: 20),
-                                  Center(
-                                    child: Text(
-                                      "अन्य प्रभावी लोकं (${anyaPrabhaviType})",
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(height: 20),
+                                    Center(
+                                      child: Text(
+                                        "अन्य प्रभावी लोकं (${anyaPrabhaviType})",
+                                        style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                     ),
-                                  ),
-                                  Table(
-                                    border: TableBorder.all(),
-                                    defaultVerticalAlignment:
-                                        TableCellVerticalAlignment.middle,
-                                    children: [
-                                      // Header Row
-                                      TableRow(
-                                        decoration: BoxDecoration(
-                                          color: Colors.purpleAccent
-                                              .shade200, // Header background
-                                        ),
-                                        children: [
-                                          const TableCell(
-                                            child: Padding(
-                                              padding: EdgeInsets.all(8),
-                                              child: Text(
-                                                'अन्य प्रभावी लोकं संपर्क स्थिती',
-                                                style: TextStyle(
-                                                    color: Colors.white),
+                                    Table(
+                                      border: TableBorder.all(),
+                                      defaultVerticalAlignment:
+                                          TableCellVerticalAlignment.middle,
+                                      children: [
+                                        // Header Row
+                                        TableRow(
+                                          decoration: BoxDecoration(
+                                            color: Colors.purpleAccent.shade200,
+                                          ),
+                                          children: [
+                                            const TableCell(
+                                              child: Padding(
+                                                padding: EdgeInsets.all(8),
+                                                child: Text(
+                                                  'अन्य प्रभावी लोकं संपर्क स्थिती',
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          ...prabhavishetraList
-                                              .map((header) => Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(8),
-                                                    child: Text(
-                                                      header!,
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    ),
-                                                  )),
-                                        ],
-                                      ),
-                                      // Data Rows
-                                      ...samparkList.map((sampark) {
-                                        return TableRow(
-                                          children: [
-                                            SizedBox(
-                                              width: 140,
-                                              child: Padding(
+                                            ...prabhavishetraList
+                                                .map((header) => Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8),
+                                                      child: Text(
+                                                        header ?? '',
+                                                        style: const TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                    )),
+                                          ],
+                                        ),
+                                        // Data Rows
+                                        ...samparkList.map((sampark) {
+                                          return TableRow(
+                                            children: [
+                                              Padding(
                                                 padding:
                                                     const EdgeInsets.all(8),
-                                                child: Text(sampark!),
+                                                child: Text(sampark ?? ''),
+                                              ),
+                                              ...prabhavishetraList
+                                                  .map((prabhav) {
+                                                final match = data.firstWhere(
+                                                  (item) =>
+                                                      item.samparkashiti ==
+                                                          sampark &&
+                                                      item.prabhavishetra ==
+                                                          prabhav,
+                                                  orElse: () =>
+                                                      VastiAnyaPrabhaviLokam(),
+                                                );
+                                                return Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8),
+                                                  child: Text(
+                                                      '${match.vasticnt ?? ''}'),
+                                                );
+                                              }),
+                                            ],
+                                          );
+                                        }).toList(),
+                                        // Total Row
+                                        TableRow(
+                                          decoration: BoxDecoration(
+                                              color: Colors.grey.shade200),
+                                          children: [
+                                            const Padding(
+                                              padding: EdgeInsets.all(8),
+                                              child: Text(
+                                                'एकूण',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
                                             ),
                                             ...prabhavishetraList
                                                 .map((prabhav) {
-                                              final match = data.firstWhere(
-                                                (item) =>
-                                                    item.samparkashiti ==
-                                                        sampark &&
-                                                    item.prabhavishetra ==
-                                                        prabhav,
-                                                orElse: () =>
-                                                    VastiAnyaPrabhaviLokam(),
-                                              );
+                                              final total = data
+                                                  .where((item) =>
+                                                      item.prabhavishetra ==
+                                                      prabhav)
+                                                  .fold<int>(
+                                                      0,
+                                                      (sum, item) =>
+                                                          sum +
+                                                          (item.vasticnt ?? 0));
+
                                               return Padding(
                                                 padding:
                                                     const EdgeInsets.all(8),
                                                 child: Text(
-                                                    '${match.vasticnt ?? ''}'),
+                                                  '$total',
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
                                               );
                                             }),
                                           ],
-                                        );
-                                      }).toList(),
-                                      // Total Row
-                                      TableRow(
-                                        decoration: BoxDecoration(
-                                            color: Colors.grey.shade200),
-                                        children: [
-                                          const Padding(
-                                            padding: EdgeInsets.all(8),
-                                            child: Text(
-                                              'एकूण',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                          ...prabhavishetraList.map((prabhav) {
-                                            final total = data
-                                                .where((item) =>
-                                                    item.prabhavishetra ==
-                                                    prabhav)
-                                                .fold<int>(
-                                                    0,
-                                                    (sum, item) =>
-                                                        sum +
-                                                        (item.vasticnt ?? 0));
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                );
+                              }).toList(),
 
-                                            return Padding(
-                                              padding: const EdgeInsets.all(8),
-                                              child: Text(
-                                                '$total',
-                                                style: const TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                              // ✅ Grand Total Table
+                              Builder(
+                                builder: (context) {
+                                  final allData = groupedAnyaPrabhaviData.values
+                                      .expand((list) => list)
+                                      .toList();
+                                  final allPrabhavishetra = allData
+                                      .map((e) => e.prabhavishetra)
+                                      .toSet()
+                                      .toList();
+                                  final allSampark = allData
+                                      .map((e) => e.samparkashiti)
+                                      .toSet()
+                                      .toList();
+
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(height: 30),
+                                      const Center(
+                                        child: Text(
+                                          "सज्जन शक्ती (संपूर्ण एकूण)",
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      Table(
+                                        border: TableBorder.all(),
+                                        defaultVerticalAlignment:
+                                            TableCellVerticalAlignment.middle,
+                                        children: [
+                                          // Header Row
+                                          TableRow(
+                                            decoration: BoxDecoration(
+                                              color: Colors.deepPurple.shade200,
+                                            ),
+                                            children: [
+                                              const TableCell(
+                                                child: Padding(
+                                                  padding: EdgeInsets.all(8),
+                                                  child: Text(
+                                                    'संपर्क स्थिती',
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                ),
                                               ),
+                                              ...allPrabhavishetra
+                                                  .map((header) => Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8),
+                                                        child: Text(
+                                                          header ?? '',
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: Colors
+                                                                      .white),
+                                                        ),
+                                                      )),
+                                            ],
+                                          ),
+                                          // Data Rows
+                                          ...allSampark.map((sampark) {
+                                            return TableRow(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8),
+                                                  child: Text(sampark ?? ''),
+                                                ),
+                                                ...allPrabhavishetra
+                                                    .map((prabhav) {
+                                                  final total = allData
+                                                      .where((e) =>
+                                                          e.samparkashiti ==
+                                                              sampark &&
+                                                          e.prabhavishetra ==
+                                                              prabhav)
+                                                      .fold<int>(
+                                                          0,
+                                                          (sum, e) =>
+                                                              sum +
+                                                              (e.vasticnt ??
+                                                                  0));
+                                                  return Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(8),
+                                                    child: Text('$total'),
+                                                  );
+                                                }),
+                                              ],
                                             );
-                                          }),
+                                          }).toList(),
+                                          // Final Row - Total of all columns
+                                          TableRow(
+                                            decoration: BoxDecoration(
+                                                color: Colors.grey.shade300),
+                                            children: [
+                                              const Padding(
+                                                padding: EdgeInsets.all(8),
+                                                child: Text(
+                                                  'एकूण',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                              ...allPrabhavishetra
+                                                  .map((prabhav) {
+                                                final total = allData
+                                                    .where((e) =>
+                                                        e.prabhavishetra ==
+                                                        prabhav)
+                                                    .fold<int>(
+                                                        0,
+                                                        (sum, e) =>
+                                                            sum +
+                                                            (e.vasticnt ?? 0));
+                                                return Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8),
+                                                  child: Text(
+                                                    '$total',
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                );
+                                              }),
+                                            ],
+                                          ),
                                         ],
                                       ),
                                     ],
-                                  ),
-                                ],
-                              );
-                            }).toList(),
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -4066,5 +4257,85 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
         ),
       ),
     );
+  }
+
+  List<Widget> _buildGroupedTables(List<UpasanaSthal> list) {
+    // Group by 'prakar'
+    Map<String, List<UpasanaSthal>> grouped = {};
+
+    for (var item in list) {
+      String key = item.prakar.toString();
+      if (!grouped.containsKey(key)) {
+        grouped[key] = [];
+      }
+      grouped[key]!.add(item);
+    }
+
+    // Return a list of DataTables
+    return grouped.entries.map((entry) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'प्रकार: ${entry.key}',
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 8),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey.shade300),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: SizedBox(
+                height: 300,
+                child: DataTable(
+                  headingRowColor: MaterialStateProperty.resolveWith(
+                    (states) => Colors.purpleAccent[200],
+                  ),
+                  headingTextStyle: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  columns: const [
+                    DataColumn(
+                      label: Center(child: Text('उपासना स्थळ')),
+                    ),
+                    DataColumn(
+                      label: Center(child: Text('प्रकार')),
+                    ),
+                    DataColumn(
+                      label: Center(child: Text('संख्या')),
+                    ),
+                    DataColumn(
+                      label: Center(child: Text('किती वस्तीत')),
+                    ),
+                  ],
+                  rows: entry.value.map((item) {
+                    return DataRow(
+                      cells: [
+                        DataCell(Center(child: Text(item.upaasanasthal ?? ''))),
+                        DataCell(Center(child: Text(item.prakar.toString()))),
+                        DataCell(Center(child: Text(item.tot.toString()))),
+                        DataCell(Center(child: Text(item.vasticnt.toString()))),
+                      ],
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+    }).toList();
   }
 }

@@ -49,7 +49,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
         "AppUserID": Statics.userDetails['userID'],
       });
       print("searchVastiData req param :-  $strInput");
-      vastiDataByIdModel = await Statics.getVastidataByIDForApp(strInput);
+      vastiDataByIdModel =
+          await Statics.getVastidataByIDForApp(context, strInput);
       setDataAfterSearch();
     } else {
       Statics.showMessageDialog(
@@ -146,6 +147,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
       vastitSajarHonareSamajikKaryakramDataList = vastiDataByIdModel!
               .vastisarvekshan!.vastisarVastitasajaraSamajikkaryakram ??
           [];
+      step1completepercentage =
+          vastiDataByIdModel!.vastisarvekshan!.step1completepercentage;
 
       /// STEP 3 FORM DATA =====================================================================================================
       vastiPrashnaGarjaDataList =
@@ -156,6 +159,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
           vastiDataByIdModel!.vastisarvekshan!.vastisardurjanshakti ?? [];
       hinduVeerYadiDataList =
           vastiDataByIdModel!.vastisarvekshan!.vastisarHinduvirayadi ?? [];
+      step3completepercentage =
+          vastiDataByIdModel!.vastisarvekshan!.step3completepercentage;
       // ============================================================================================================================================================================
       _isStep1Completed =
           vastiDataByIdModel!.vastisarvekshan!.stepOneComplete ?? true;
@@ -354,6 +359,9 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   int? male;
   int? female;
 
+  int? step1completepercentage;
+  int? step3completepercentage;
+
   void updateCounts() {
     setState(() {
       male = int.tryParse(maleController.text);
@@ -480,6 +488,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   }
 
   void _handleTabSelection() {
+    print(
+        "_tabController.index ${_tabController.index}----- _isStep1Completed ${_isStep1Completed}");
     if (_tabController.index == 1 && !_isStep1Completed!) {
       showPopupForNaviagtetoOtherPage(
           context, "प्राथमिक माहिती", "अन्य माहिती");
@@ -1245,9 +1255,17 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     ),
                   ],
                 )),
+
+          if (isVastiSearch == true)
+            if (step3completepercentage != null)
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: dynamicProgressBar(
+                    double.parse(step3completepercentage.toString())),
+              ),
           if (isVastiSearch == true)
             SizedBox(
-              height: 20,
+              height: 10,
             ),
           if (isVastiSearch == true)
             Column(
@@ -5409,6 +5427,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
         context, jsonEncode(formData));
     setState(() {
       _isStep1Completed = response == "success";
+      _isStep2Completed = response == "success";
       sarpanchDoorbhasController.clear();
       sarpanchNameController.clear();
       femaleController.clear();
@@ -5439,14 +5458,13 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
       vastitSajarHonareSanDataList = [];
       vastitSajarHonareSamajikKaryakramDataList = [];
 
-      /// STEP 2 FORM DATA
-
       /// STEP 3 FORM DATA
       vastiPrashnaGarjaDataList = [];
       dharmikNetrutvaDataList = [];
       durjanShaktiDataList = [];
       hinduVeerYadiDataList = [];
     });
+    await Future.delayed(Duration.zero);
     searchVastiData(selctedLevelId);
   }
 
@@ -5913,45 +5931,73 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                   int? shaakhaYear = int.tryParse(
                       kuthalaVarshiVayogatShaakhaYearController.text);
 
+                  // ✅ Step 1: Check if years are in valid range
                   if ((saptahikYear != null &&
                           saptahikYear >= 1925 &&
                           saptahikYear <= 2025) ||
                       (shaakhaYear != null &&
                           shaakhaYear >= 1925 &&
                           shaakhaYear <= 2025)) {
+                    // ✅ Step 2: Validation - Already exists check
+                    int currentType = selectedYearType == "shaakha"
+                        ? 1
+                        : selectedYearType == "saptahikMilan"
+                            ? 0
+                            : 2;
+
+                    // Get all entries with same ID
+                    var matchedEntries = kuthalaVarshiDataList!
+                        .where((e) => e.id == selectedKuthalaVarshiId)
+                        .toList();
+
+                    bool hasShaakha =
+                        matchedEntries.any((e) => e.isShaakhaa == 1);
+                    bool hasSaptahik =
+                        matchedEntries.any((e) => e.isShaakhaa == 0);
+
+                    if (editIndex == null && matchedEntries.isNotEmpty) {
+                      if (currentType == 1 && hasShaakha) {
+                        Statics.showToast("शाखा आधी निवडले आहे.");
+                        return;
+                      } else if (currentType == 0 && hasSaptahik) {
+                        Statics.showToast("साप्ताहिक मिलन आधी निवडले आहे.");
+                        return;
+                      } else if (hasShaakha && hasSaptahik) {
+                        Statics.showToast("वयोगट आधी निवडले आहे.");
+                        return;
+                      }
+                    }
+
+                    // ✅ Step 3: Save data if valid
                     final data = VastisarKuthalyavarsi(
                       id: selectedKuthalaVarshiId,
-                      prakarName: selectedYearType == "shaakha"
+                      prakarName: currentType == 1
                           ? "शाखा"
-                          : selectedYearType == "saptahikMilan"
+                          : currentType == 0
                               ? "साप्ताहिक मिलन"
                               : "-",
-                      isShaakhaa: selectedYearType == "shaakha"
-                          ? 1
-                          : selectedYearType == "saptahikMilan"
-                              ? 0
-                              : 2,
+                      isShaakhaa: currentType,
                       pkid: selectedPkId,
                       vastiid: int.parse(selctedLevelId!),
-                      shaakhaa: selectedYearType == "shaakha"
+                      shaakhaa: currentType == 1
                           ? kuthalaVarshiVayogatShaakhaYearController.text
                               .trim()
                           : "",
-                      saptahik: selectedYearType == "saptahikMilan"
+                      saptahik: currentType == 0
                           ? kuthalaVarshiVayogatSaptahikYearController.text
                               .trim()
                           : "",
                       isactive: selectedisActive,
                       selectedDropdownValueName: selectedKuthalaVarshiName,
                     );
+
                     if (editIndex != null) {
                       kuthalaVarshiDataList![editIndex] = data;
                     } else {
                       kuthalaVarshiDataList!.add(data);
                     }
-                    if (onDataChanged != null) {
-                      onDataChanged();
-                    }
+
+                    if (onDataChanged != null) onDataChanged();
                     Navigator.of(ctx).pop();
                     clearKuthalaVarshi();
                     print("Year is valid.");
@@ -6725,7 +6771,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         child: Text("कोणत्या रिलीजनचे",
                             style: TextStyle(fontSize: 15)),
                       ),
-                      vastisarvekshanDropdown2(
+                      vastisarvekshanDropdown4(
                         dataModel: vastisarvekshanDropDownDataModel!,
                         filterTypeName: "रिलीजन",
                         hintText: "रिलीजन निवडा",
@@ -6741,6 +6787,9 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           });
                         },
                         editId: selectedreligionEditId,
+                        excludedItemIds: enteredreligionDataList
+                            .map((e) => e.konatyarilijanaceid!)
+                            .toList(),
                       ),
                       SizedBox(height: 10),
                       textControllerField2(
@@ -6779,20 +6828,17 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           //   if (onDataChanged != null) onDataChanged();
                           // },
                           onPressed: () {
-                            // Parse percentage safely
-                            double? percent = double.tryParse(
+                            // Convert text to double for comparison
+                            double? average = double.tryParse(
                                 religionAveragePersentCount.text.trim());
 
-                            if (percent == null) {
+                            // Check if the value is null or not in range
+                            if (average == null ||
+                                average < 0 ||
+                                average > 100) {
                               Statics.showToast(
-                                  "कृपया वैध टक्केवारी एंटर करा.");
-                              return;
-                            }
-
-                            if (percent > 100) {
-                              Statics.showToast(
-                                  "टक्केवारी १०० पेक्षा जास्त असू शकत नाही.");
-
+                                "कृपया ० आणि १०० मधील टक्केवारी मूल्य प्रविष्ट करा.",
+                              );
                               return;
                             }
 
@@ -6814,7 +6860,6 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             clearFields6();
                             setState(() {});
                             Navigator.of(ctx).pop();
-
                             if (onDataChanged != null) onDataChanged();
                           },
 
@@ -8541,6 +8586,13 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
     return SingleChildScrollView(
       child: Column(
         children: [
+          if (isVastiSearch == true)
+            if (step3completepercentage != null)
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: dynamicProgressBar(
+                    double.parse(step3completepercentage.toString())),
+              ),
           //=====================  DHARMIK NETRUTVA  ================================================================
           mainContainer(
               "दुर्जन शक्ति",
@@ -9257,5 +9309,147 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
       hinduVeerYadiDataList = [];
     });
     searchVastiData(selctedLevelId);
+  }
+
+  Widget dynamicProgressBar(double value) {
+    final progress = (value / 100).clamp(0.0, 1.0);
+    return TweenAnimationBuilder<double>(
+      tween: Tween<double>(begin: 0, end: progress),
+      duration: const Duration(milliseconds: 800),
+      builder: (context, animatedProgress, _) {
+        return Stack(
+          children: [
+            Container(
+              width: 300,
+              height: 24,
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 4,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Container(
+                width: 300 * animatedProgress,
+                height: 24,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.purpleAccent, Colors.deepPurple],
+                  ),
+                ),
+              ),
+            ),
+            Positioned.fill(
+              child: Center(
+                child: Text(
+                  "${value.toInt()}% सर्वेक्षण झाले.",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 13,
+                    color: Colors.white,
+                    shadows: [
+                      Shadow(
+                        offset: Offset(0.5, 0.5),
+                        blurRadius: 2.0,
+                        color: Colors.black45,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  //====================================================================================================================================================================================================================
+  Widget vastisarvekshanDropdown4({
+    required VastisarvekshanDropDownDataModel dataModel,
+    required String filterTypeName,
+    required String hintText,
+    required Function(int?, String?, int?) onItemSelected,
+    required List<int> excludedItemIds, // 🔹 Add list of excluded item IDs
+    String? question,
+    double? width,
+    int? questionNumber,
+    int? editId,
+    Masterdata? selectedValue,
+    Function(Masterdata?)? onSelectionChanged,
+  }) {
+    // 🔹 Filter items based on type and exclude already selected/submitted items
+    List<Masterdata> filteredList = dataModel.masterdata!
+        .where((item) =>
+            item.typename == filterTypeName &&
+            !excludedItemIds.contains(item.id))
+        .toList();
+
+    Masterdata? selectedItem = selectedValue;
+
+    if (selectedItem == null && editId != null) {
+      try {
+        selectedItem = dataModel.masterdata!.firstWhere(
+            (item) => item.id == editId && item.typename == filterTypeName);
+        onItemSelected(
+            selectedItem.id, selectedItem.value, selectedItem.isOther);
+        if (onSelectionChanged != null) {
+          onSelectionChanged(selectedItem);
+        }
+      } catch (e) {
+        selectedItem = null;
+      }
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (question != null)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text(
+              "${questionNumber != null ? "$questionNumber. " : ""}$question",
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+          ),
+        Container(
+          height: 50,
+          width: width ?? double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: Colors.black54),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<Masterdata>(
+              hint: Text(hintText, style: TextStyle(color: Colors.black54)),
+              value: filteredList.contains(selectedItem) ? selectedItem : null,
+              isExpanded: true,
+              items: filteredList.map((Masterdata item) {
+                return DropdownMenuItem<Masterdata>(
+                  value: item,
+                  child: Text(item.value ?? "",
+                      style: TextStyle(color: Colors.black)),
+                );
+              }).toList(),
+              onChanged: (Masterdata? newValue) {
+                if (newValue != null) {
+                  onItemSelected(newValue.id, newValue.value, newValue.isOther);
+                  onSelectionChanged?.call(newValue);
+                }
+              },
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

@@ -54,7 +54,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
         "AppUserID": Statics.userDetails['userID'],
       });
       print("searchVastiData req param :-  $strInput");
-      vastiDataByIdModel = await Statics.getVastidataByIDForApp(strInput);
+      vastiDataByIdModel =
+          await Statics.getVastidataByIDForApp(context, strInput);
       setDataAfterSearch();
     } else {
       Statics.showMessageDialog(
@@ -497,6 +498,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
     _tabController.dispose();
     super.dispose();
   }
+
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -1470,12 +1473,92 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   }
 
 //====================================================================================================================================================================================================================
+//   Widget vastisarvekshanDropdown4({
+//     required VastisarvekshanDropDownDataModel dataModel,
+//     required String filterTypeName,
+//     required String hintText,
+//     required Function(int?, String?, int?) onItemSelected,
+//     required List<int> excludedItemIds, // 🔹 Add list of excluded item IDs
+//     String? question,
+//     double? width,
+//     int? questionNumber,
+//     int? editId,
+//     Masterdata? selectedValue,
+//     Function(Masterdata?)? onSelectionChanged,
+//   }) {
+//     // 🔹 Filter items based on type and exclude already selected/submitted items
+//     List<Masterdata> filteredList = dataModel.masterdata!
+//         .where((item) =>
+//             item.typename == filterTypeName &&
+//             !excludedItemIds.contains(item.id))
+//         .toList();
+//
+//     Masterdata? selectedItem = selectedValue;
+//
+//     if (selectedItem == null && editId != null) {
+//       try {
+//         selectedItem = dataModel.masterdata!.firstWhere(
+//             (item) => item.id == editId && item.typename == filterTypeName);
+//         onItemSelected(
+//             selectedItem.id, selectedItem.value, selectedItem.isOther);
+//         if (onSelectionChanged != null) {
+//           onSelectionChanged(selectedItem);
+//         }
+//       } catch (e) {
+//         selectedItem = null;
+//       }
+//     }
+//
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         if (question != null)
+//           Padding(
+//             padding: const EdgeInsets.only(bottom: 5),
+//             child: Text(
+//               "${questionNumber != null ? "$questionNumber. " : ""}$question",
+//               style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+//             ),
+//           ),
+//         Container(
+//           height: 50,
+//           width: width ?? double.infinity,
+//           padding: const EdgeInsets.symmetric(horizontal: 12),
+//           decoration: BoxDecoration(
+//             color: Colors.white,
+//             border: Border.all(color: Colors.black54),
+//             borderRadius: BorderRadius.circular(8),
+//           ),
+//           child: DropdownButtonHideUnderline(
+//             child: DropdownButton<Masterdata>(
+//               hint: Text(hintText, style: TextStyle(color: Colors.black54)),
+//               value: filteredList.contains(selectedItem) ? selectedItem : null,
+//               isExpanded: true,
+//               items: filteredList.map((Masterdata item) {
+//                 return DropdownMenuItem<Masterdata>(
+//                   value: item,
+//                   child: Text(item.value ?? "",
+//                       style: TextStyle(color: Colors.black)),
+//                 );
+//               }).toList(),
+//               onChanged: (Masterdata? newValue) {
+//                 if (newValue != null) {
+//                   onItemSelected(newValue.id, newValue.value, newValue.isOther);
+//                   onSelectionChanged?.call(newValue);
+//                 }
+//               },
+//             ),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
   Widget vastisarvekshanDropdown4({
     required VastisarvekshanDropDownDataModel dataModel,
     required String filterTypeName,
     required String hintText,
     required Function(int?, String?, int?) onItemSelected,
-    required List<int> excludedItemIds, // 🔹 Add list of excluded item IDs
+    required List<int> excludedItemIds,
     String? question,
     double? width,
     int? questionNumber,
@@ -1483,7 +1566,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
     Masterdata? selectedValue,
     Function(Masterdata?)? onSelectionChanged,
   }) {
-    // 🔹 Filter items based on type and exclude already selected/submitted items
+    // 🔹 Start with filtered list
     List<Masterdata> filteredList = dataModel.masterdata!
         .where((item) =>
             item.typename == filterTypeName &&
@@ -1492,6 +1575,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
 
     Masterdata? selectedItem = selectedValue;
 
+    // 🔹 If selectedItem is not already set and editId is provided, get it
     if (selectedItem == null && editId != null) {
       try {
         selectedItem = dataModel.masterdata!.firstWhere(
@@ -1504,6 +1588,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       } catch (e) {
         selectedItem = null;
       }
+    }
+
+    // 🔹 Ensure selectedItem is in the dropdown list
+    if (selectedItem != null &&
+        !filteredList.any((item) => item.id == selectedItem!.id)) {
+      filteredList.add(selectedItem!);
     }
 
     return Column(
@@ -1529,7 +1619,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
           child: DropdownButtonHideUnderline(
             child: DropdownButton<Masterdata>(
               hint: Text(hintText, style: TextStyle(color: Colors.black54)),
-              value: filteredList.contains(selectedItem) ? selectedItem : null,
+              value: selectedItem,
               isExpanded: true,
               items: filteredList.map((Masterdata item) {
                 return DropdownMenuItem<Masterdata>(
@@ -1556,6 +1646,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
     // print("Statics.userDetails['DaayitvaId'] -=-=-> ${Statics.userDetails['DaayitvaId']}");
     Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(
+      controller: _scrollController,
       child: Column(
         children: [
           if ((int.parse(Statics.userDetails['LevelID']) > 5))
@@ -6054,7 +6145,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
     );
   }
 
-  void submitStep1Form() {
+  Future<void> submitStep1Form() async {
     setState(() {
       _isStep1Completed = true;
     });
@@ -6099,47 +6190,60 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
     String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
     log("Step 1 Form Data (JSON):\n$formattedJson");
 
-    Statics.vastiSarvekshanStep1FormSubmit(context, jsonEncode(formData));
+    String result = await Statics.vastiSarvekshanStep1FormSubmit(
+        context, jsonEncode(formData));
+    if (result == "success") {
+      setState(() {
+        sanghaKaryaVastiStithiController.clear();
+        sanghaKaryaVastiPramukhNameController.clear();
+        loksankhyaController.clear();
+        vastiSamitiYesNo = 2;
+        beforsanghaonnowisoff = 2;
+        kuthalaVarshiDataList = [];
+        vastiChatahuSimaController.clear();
+        jagranShreniEnteredDataList = [];
+        enteredDataListGatividhi = [];
+        enteredVasahatPrakarDataList = [];
+        enteredVividhBhashaBolnareDataList = [];
+        enteredKontyaPraantacheDataList = [];
+        enteredreligionDataList = [];
+        upasnaSthalDataList = [];
+        sajjanShaktiDataList = [];
+        anyaPrabhaviLokDataList = [];
+        vastitSajarHonareSanDataList = [];
+        vastitSajarHonareSamajikKaryakramDataList = [];
+        imageAdd = 0;
 
-    setState(() {
-      sanghaKaryaVastiStithiController.clear();
-      sanghaKaryaVastiPramukhNameController.clear();
-      loksankhyaController.clear();
-      vastiSamitiYesNo = 2;
-      beforsanghaonnowisoff = 2;
-      kuthalaVarshiDataList = [];
-      vastiChatahuSimaController.clear();
-      jagranShreniEnteredDataList = [];
-      enteredDataListGatividhi = [];
-      enteredVasahatPrakarDataList = [];
-      enteredVividhBhashaBolnareDataList = [];
-      enteredKontyaPraantacheDataList = [];
-      enteredreligionDataList = [];
-      upasnaSthalDataList = [];
-      sajjanShaktiDataList = [];
-      anyaPrabhaviLokDataList = [];
-      vastitSajarHonareSanDataList = [];
-      vastitSajarHonareSamajikKaryakramDataList = [];
-      imageAdd = 0;
+        /// STEP 2 FORM DATA
+        vastitBalopasanaKendraDataList = [];
+        motheVyasayikKendraDataList = [];
+        nirmandhinMothePrakalpaDataList = [];
+        motheRugnalayDataList = [];
+        agniShamanDalKendraAhe = 2;
+        polichChoukiAhe = 2;
+        allShaikshanikPrakarDataList = [];
+        maidanUddyanDataList = [];
+        jahirKaryakramDataList = [];
 
-      /// STEP 2 FORM DATA
-      vastitBalopasanaKendraDataList = [];
-      motheVyasayikKendraDataList = [];
-      nirmandhinMothePrakalpaDataList = [];
-      motheRugnalayDataList = [];
-      agniShamanDalKendraAhe = 2;
-      polichChoukiAhe = 2;
-      allShaikshanikPrakarDataList = [];
-      maidanUddyanDataList = [];
-      jahirKaryakramDataList = [];
-
-      /// STEP 3 FORM DATA
-      vastiPrashnaGarjaDataList = [];
-      dharmikNetrutvaDataList = [];
-      durjanShaktiDataList = [];
-      hinduVeerYadiDataList = [];
-    });
-    searchVastiData(selctedLevelId);
+        /// STEP 3 FORM DATA
+        vastiPrashnaGarjaDataList = [];
+        dharmikNetrutvaDataList = [];
+        durjanShaktiDataList = [];
+        hinduVeerYadiDataList = [];
+      });
+      await Future.delayed(Duration(seconds: 2));
+      searchVastiData(selctedLevelId);
+      _scrollController.animateTo(
+        0.0,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    } else if (result == "failed") {
+      print("failllleeeeddddddddddddd");
+    } else {
+      // for unexpected error
+      print("unexpected error");
+    }
   }
 
 //=================================================== ANYA PRABHAVI Prabhav Kshetra FORM ====================================================================================
@@ -6162,15 +6266,104 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
     });
   }
 
+  // Widget vastisarvekshanDropdown3(
+  //     {
+  //   required String filterTypeName,
+  //   required String hintText,
+  //   required Function(int, String, Masterdata) onValueSelected,
+  //   Function(int, String, Masterdata)? onDependentValueSelected,
+  //   Function(int, String, Masterdata)? onThirdLevelValueSelected,
+  //   Masterdata? selectedValue,
+  //   Masterdata? selectedDependentValue,
+  //   Masterdata? selectedThirdLevelValue,
+  //   BoxDecoration? decoration,
+  //   Color? textColor,
+  //   Color? borderColor,
+  //   Color? iconColor,
+  //   bool? viewName,
+  // })
+  // {
+  //   List<Masterdata> masterDataList =
+  //       vastisarvekshanDropDownDataModel!.masterdata!;
+  //   List<Masterdata> filteredItems =
+  //       masterDataList.where((e) => e.typename == filterTypeName).toList();
+  //   List<Masterdata> dependentItems = selectedValue != null
+  //       ? masterDataList.where((e) => e.parentid == selectedValue.id).toList()
+  //       : [];
+  //   List<Masterdata> thirdLevelItems = selectedDependentValue != null
+  //       ? masterDataList
+  //           .where((e) => e.parentid == selectedDependentValue.id)
+  //           .toList()
+  //       : [];
+  //
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.center,
+  //     children: [
+  //       if (filteredItems.isNotEmpty)
+  //         _buildDropdown2(
+  //           hintText: hintText,
+  //           value: selectedValue,
+  //           items: filteredItems,
+  //           onChanged: (newValue) {
+  //             if (newValue != null) {
+  //               onValueSelected(newValue.id!, newValue.value!, newValue);
+  //             }
+  //           },
+  //           decoration: decoration,
+  //           borderColor: borderColor,
+  //           iconColor: iconColor,
+  //           textColor: textColor,
+  //           viewName: viewName,
+  //         ),
+  //       if (dependentItems.isNotEmpty) SizedBox(height: 10),
+  //       if (dependentItems.isNotEmpty)
+  //         _buildDropdown2(
+  //           hintText: "उपश्रेणी निवडा",
+  //           value: selectedDependentValue,
+  //           items: dependentItems,
+  //           onChanged: (newValue) {
+  //             if (newValue != null && onDependentValueSelected != null) {
+  //               onDependentValueSelected(
+  //                   newValue.id!, newValue.value!, newValue);
+  //             }
+  //           },
+  //           decoration: decoration,
+  //           borderColor: borderColor,
+  //           iconColor: iconColor,
+  //           textColor: textColor,
+  //           viewName: viewName,
+  //         ),
+  //       if (thirdLevelItems.isNotEmpty) SizedBox(height: 10),
+  //       if (thirdLevelItems.isNotEmpty)
+  //         _buildDropdown2(
+  //           hintText: "उपश्रेणी 2 निवडा",
+  //           value: selectedThirdLevelValue,
+  //           items: thirdLevelItems,
+  //           onChanged: (newValue) {
+  //             if (newValue != null && onThirdLevelValueSelected != null) {
+  //               onThirdLevelValueSelected(
+  //                   newValue.id!, newValue.value!, newValue);
+  //             }
+  //           },
+  //           decoration: decoration,
+  //           borderColor: borderColor,
+  //           iconColor: iconColor,
+  //           textColor: textColor,
+  //           viewName: viewName,
+  //         ),
+  //     ],
+  //   );
+  // }
+
   Widget vastisarvekshanDropdown3({
     required String filterTypeName,
     required String hintText,
     required Function(int, String, Masterdata) onValueSelected,
     Function(int, String, Masterdata)? onDependentValueSelected,
     Function(int, String, Masterdata)? onThirdLevelValueSelected,
-    Masterdata? selectedValue,
-    Masterdata? selectedDependentValue,
-    Masterdata? selectedThirdLevelValue,
+    int? anyaPrabhaviLokShreniId,
+    int? anyaPrabhaviLokUpShreniId,
+    int? anyaPrabhaviLokUpShreni1Id,
     BoxDecoration? decoration,
     Color? textColor,
     Color? borderColor,
@@ -6181,14 +6374,33 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
         vastisarvekshanDropDownDataModel!.masterdata!;
     List<Masterdata> filteredItems =
         masterDataList.where((e) => e.typename == filterTypeName).toList();
-    List<Masterdata> dependentItems = selectedValue != null
+
+    Masterdata? selectedValue = anyaPrabhaviLokShreniId != null
+        ? filteredItems.firstWhere((e) => e.id == anyaPrabhaviLokShreniId,
+            orElse: () => Masterdata())
+        : null;
+
+    List<Masterdata> dependentItems = selectedValue != null &&
+            selectedValue.id != null
         ? masterDataList.where((e) => e.parentid == selectedValue.id).toList()
         : [];
-    List<Masterdata> thirdLevelItems = selectedDependentValue != null
-        ? masterDataList
-            .where((e) => e.parentid == selectedDependentValue.id)
-            .toList()
-        : [];
+
+    Masterdata? selectedDependentValue = anyaPrabhaviLokUpShreniId != null
+        ? dependentItems.firstWhere((e) => e.id == anyaPrabhaviLokUpShreniId,
+            orElse: () => Masterdata())
+        : null;
+
+    List<Masterdata> thirdLevelItems =
+        selectedDependentValue != null && selectedDependentValue.id != null
+            ? masterDataList
+                .where((e) => e.parentid == selectedDependentValue.id)
+                .toList()
+            : [];
+
+    Masterdata? selectedThirdLevelValue = anyaPrabhaviLokUpShreni1Id != null
+        ? thirdLevelItems.firstWhere((e) => e.id == anyaPrabhaviLokUpShreni1Id,
+            orElse: () => Masterdata())
+        : null;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -6196,7 +6408,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
         if (filteredItems.isNotEmpty)
           _buildDropdown2(
             hintText: hintText,
-            value: selectedValue,
+            value: selectedValue?.id != null ? selectedValue : null,
             items: filteredItems,
             onChanged: (newValue) {
               if (newValue != null) {
@@ -6213,7 +6425,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
         if (dependentItems.isNotEmpty)
           _buildDropdown2(
             hintText: "उपश्रेणी निवडा",
-            value: selectedDependentValue,
+            value: selectedDependentValue?.id != null
+                ? selectedDependentValue
+                : null,
             items: dependentItems,
             onChanged: (newValue) {
               if (newValue != null && onDependentValueSelected != null) {
@@ -6231,7 +6445,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
         if (thirdLevelItems.isNotEmpty)
           _buildDropdown2(
             hintText: "उपश्रेणी 2 निवडा",
-            value: selectedThirdLevelValue,
+            value: selectedThirdLevelValue?.id != null
+                ? selectedThirdLevelValue
+                : null,
             items: thirdLevelItems,
             onChanged: (newValue) {
               if (newValue != null && onThirdLevelValueSelected != null) {
@@ -6344,11 +6560,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       selectedKuthalaVarshiIdEdit = data.id;
       selectedPkId = data.pkid;
       selectedKuthalaVarshiName = data.selectedDropdownValueName;
-      selectedYearType = data.isactive == 1
-          ? "shaakha"
-          : data.isactive == 1
-              ? "saptahikMilan"
-              : "";
+      selectedYearType =
+          data.isShaakhaa == 1 ? "shaakha" : "saptahikMilan" ?? "";
       selectedisActive = data.isactive;
       selectedMasterKuthalaVarshiName = vastisarvekshanDropDownDataModel!
           .masterdata!
@@ -6358,6 +6571,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       } else if (selectedYearType == 'saptahikMilan') {
         kuthalaVarshiVayogatSaptahikYearController.text = data.saptahik ?? '';
       }
+      print("selectedYearType $selectedYearType");
+      print("data.isactive ${data.isactive}");
     }
 
     showDialog(
@@ -8333,10 +8548,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   int? isActiveAnyaPrabhavilok = 1;
   int? pkidAnyaPrabhaviLok = 0;
   int? anyaPrabhaviLokShreniId;
+  int? anyaPrabhaviLokShreniIdEdit;
   String? anyaPrabhaviLokShreniName;
   int? anyaPrabhaviLokUpShreniId;
+  int? anyaPrabhaviLokUpShreniIdEdit;
   String? anyaPrabhaviLokUpShreniName;
   int? anyaPrabhaviLokUpShreni1Id;
+  int? anyaPrabhaviLokUpShreni1IdEdit;
   String? anyaPrabhaviLokUpShreni1Name;
   Masterdata? selectedShreni;
   Masterdata? selectedUpShreni;
@@ -8365,19 +8583,25 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       anyaPrabhaviLokAddressController.text = data.address ?? "";
       anyaPrabhaviLokMobileNoController.text = data.doorabhaash ?? "";
       anyaPrabhaviLokShreniId = data.shreneeid;
+      anyaPrabhaviLokShreniIdEdit = data.shreneeid;
       anyaPrabhaviLokShreniName = data.selectedDropdownValueName;
       anyaPrabhaviLokUpShreniId = data.upshreneeid;
+      anyaPrabhaviLokUpShreniIdEdit = data.upshreneeid;
       anyaPrabhaviLokUpShreniName = data.selectedDropdownValueName1;
       anyaPrabhaviLokAnyaUppshreniController.text = data.otherupshrenee ?? "";
       anyaPrabhaviLokUpShreni1Id = data.upshreneeid2;
+      anyaPrabhaviLokUpShreni1IdEdit = data.upshreneeid2;
       anyaPrabhaviLokUpShreni1Name = data.selectedDropdownValueName2;
       anyaPrabhaviLokAnyaUppshreni1Controller.text = data.otherupshrenee2 ?? "";
       anyaPrabhaviLokVisheshId = data.visheshid;
+      selectedAnyaPrabhaviLokVisheshIDEdit = data.visheshid;
       anyaPrabhaviLokVisheshName = data.selectedDropdownValueName3;
       anyaPrabhaviLokPrabhavKshetraId = data.prabhaavkshetrid;
+      selectedAnyaPrabhaviLokPrabhavKshetraIDEdit = data.prabhaavkshetrid;
       anyaPrabhaviLokPrabhavKshetraName = data.selectedDropdownValueName4;
       anyaPrabhaviLokAnyaVisheshMahitiController.text = data.othervishesh ?? "";
       anyaPrabhaviLokSamparkStithiId = data.samparksthitiid;
+      selectedAnyaPrabhaviLokSamparkStithiIDEdit = data.samparksthitiid;
       anyaPrabhaviLokSamparkStithiName = data.selectedDropdownValueName5;
       anyaPrabhaviLokSamparkSutraNaavController.text =
           data.samparkasutranav ?? "";
@@ -8441,9 +8665,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         ? vastisarvekshanDropdown3(
                             filterTypeName: "श्रेणी",
                             hintText: "श्रेणी निवडा",
-                            selectedValue: selectedShreni,
-                            selectedDependentValue: selectedUpShreni,
-                            selectedThirdLevelValue: selectedUpShreni2,
+                            anyaPrabhaviLokShreniId:
+                                anyaPrabhaviLokShreniIdEdit,
+                            anyaPrabhaviLokUpShreniId:
+                                anyaPrabhaviLokUpShreniIdEdit,
+                            anyaPrabhaviLokUpShreni1Id:
+                                anyaPrabhaviLokUpShreni1IdEdit,
                             onValueSelected: (id, name, value) {
                               anyaPrabhaviLokShreniId = id;
                               anyaPrabhaviLokShreniName = name;
@@ -8542,6 +8769,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         name: "अन्य विशेष माहिती",
                         controller: anyaPrabhaviLokAnyaVisheshMahitiController,
                         height: 50),
+                    SizedBox(
+                      height: 10,
+                    ),
                     vastisarvekshanDropDownDataModel != null
                         ? vastisarvekshanDropdown2(
                             hintText: "संपर्क स्थिति निवडा",
@@ -8562,6 +8792,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             },
                           )
                         : Container(),
+                    SizedBox(
+                      height: 10,
+                    ),
                     // textControllerField("अन्य विशेष माहिती", anyaPrabhaviLokAnyaVisheshMahitiController, context, height: 80),
                     textControllerField2(
                         name: "संपर्क सूत्र नाव",
@@ -8709,6 +8942,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
     if (editIndex != null) {
       var data = vastitSajarHonareSanDataList[editIndex];
       selectedSanId = data.id;
+      selectedSanIdEdit = data.id;
       selectedSanName = data.selectedDropdownValueName;
       vastitSajarHonareSanAyojakSansthaNameController.text =
           data.ayojakasansthacinave ?? "";
@@ -9038,6 +9272,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
 
   Widget _buildStep2() {
     return SingleChildScrollView(
+      controller: _scrollController,
       child: Column(
         children: [
           if (isVastiSearch == true)
@@ -11279,7 +11514,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
     );
   }
 
-  void submitStep2Form() {
+  Future<void> submitStep2Form() async {
     setState(() {
       _isStep2Completed = true;
     });
@@ -11300,6 +11535,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
     String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
     log("Step 2 Form Data (JSON):\n$formattedJson");
     Statics.vastiSarvekshanStep2FormSubmit(context, jsonEncode(formData));
+    await Future.delayed(Duration(seconds: 2));
+    searchVastiData(selctedLevelId);
+    _scrollController.animateTo(
+      0.0,
+      duration: Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
   }
 
   //=================================================== 11. VASTIT BALOPASANA KENDRA FORM ====================================================================================
@@ -13242,6 +13484,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
 
   Widget _buildStep3() {
     return SingleChildScrollView(
+      controller: _scrollController,
       child: Column(
         children: [
           if (isVastiSearch == true)
@@ -14549,7 +14792,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
     );
   }
 
-  void submitStep3Form() {
+  Future<void> submitStep3Form() async {
     Map<String, dynamic> formData = {
       "vastiid": int.parse(selctedLevelId!),
       "cuserid": int.parse(Statics.userDetails['userID']),
@@ -14563,6 +14806,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
     String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
     log("Step 3 Form Data (JSON):\n$formattedJson");
     Statics.vastiSarvekshanStep3FormSubmit(context, jsonEncode(formData));
+    await Future.delayed(Duration(seconds: 2));
+    searchVastiData(selctedLevelId);
+    _scrollController.animateTo(
+      0.0,
+      duration: Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
   }
 
   Widget dynamicProgressBar(double value) {
