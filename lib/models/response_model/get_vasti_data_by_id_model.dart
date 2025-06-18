@@ -26,8 +26,8 @@ class GetVastiDataByIdModel {
 
 class Vastisarvekshan {
   String? lokasankhya;
-  String? maleSankhya;
-  String? femaleSankhya;
+  int? maleSankhya;
+  int? femaleSankhya;
   String? vadicheNave;
   String? andajeGhare;
   int? policethane;
@@ -145,8 +145,8 @@ class Vastisarvekshan {
 
   Vastisarvekshan.fromJson(Map<String, dynamic> json) {
     lokasankhya = json['Lokasankhya'];
-    femaleSankhya = json['femaleSankhya'];
-    maleSankhya = json['maleSankhya'];
+    femaleSankhya = json['femaleCount'];
+    maleSankhya = json['maleCount'];
     vadicheNave = json['vadicheNave'];
     andajeGhare = json['andajeGhare'];
     policethane = json['Policethane'];
@@ -586,7 +586,7 @@ class VastisarAnyaprabhavilokam {
     vastiid = json['vastiid'];
     visheshid = json['visheshid'];
     anyavisesamahiti = json['anyavisesamahiti'];
-    samparkasutranav = json['samparkasutranav'];
+    samparkasutranav = json['Samparkasutranav'];
     otherupshrenee = json['otherupshrenee'];
     otherupshrenee2 = json['otherupshrenee2'];
     othervishesh = json['othervishesh'];

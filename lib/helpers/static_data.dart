@@ -242,7 +242,6 @@ const String getnirikshanbhaithakvruttaforapp =
 const String tulnatmakEkatritVruttaForApp =
     baseUrlAPI + '/tulnatmakEkatritVruttaForApp';
 const String getvastiSarvekshan = baseUrlAPI + '/getvastiSarvekshan';
-const String getmandalSarvekshan = baseUrlAPI + '/getmandalSarvekshan';
 const String getOtpForForgetPassWord = baseUrlAPI + '/sendotpforforgetpass';
 const String forgotPasswordApi = baseUrlAPI + '/saveSwayamsevakpassword';
 const String getofflinenotificationlist =

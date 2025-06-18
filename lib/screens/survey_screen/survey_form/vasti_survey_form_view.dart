@@ -4758,8 +4758,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             if (shouldDelete == true &&
                                 selectedUpasnaSthalRowIndex != null) {
                               setState(() {
-                                upasnaSthalDataList
-                                    .removeAt(selectedUpasnaSthalRowIndex!);
+                                upasnaSthalDataList[
+                                        selectedUpasnaSthalRowIndex!]
+                                    .isactive = 0;
                                 selectedUpasnaSthalRowIndex = null;
                               });
                             }
@@ -5093,8 +5094,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           if (shouldDelete == true &&
                               selectedsajjanShaktiRowIndex != null) {
                             setState(() {
-                              sajjanShaktiDataList
-                                  .removeAt(selectedsajjanShaktiRowIndex!);
+                              sajjanShaktiDataList[
+                                      selectedsajjanShaktiRowIndex!]
+                                  .isactive = 0;
                               selectedsajjanShaktiRowIndex = null;
                             });
                           }
@@ -6866,22 +6868,209 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   Masterdata? selectedVaramvarita;
   int? isActiveJagranShreniStithi = 1;
   int? jagranShreniPkId;
-
   TextEditingController isOtherJaganVaramvaritaConroller =
       TextEditingController();
+  // void showJagranShreniPopup(BuildContext context,
+  //     {int? editIndex, VoidCallback? onDataChanged}) {
+  //   if (editIndex != null) {
+  //     var data = jagranShreniEnteredDataList![editIndex];
+  //     selectedShreniID = data.shreneeid;
+  //     selectedShreniIDEdit = data.shreneeid;
+  //     selectedShreniName = data.selectedDropdownValueName;
+  //     niyamitChalnareUpkramController.text = data.niyamitacalanareupakrama!;
+  //     selectedVaramvaritaIDEdit = data.varanvaritaid;
+  //     selectedVaramvaritaName = data.selectedDropdownValueName1;
+  //     isActiveJagranShreniStithi = data.isactive;
+  //     jagranShreniPkId = data.pkid;
+  //     isOtherJaganVaramvaritaConroller.text = data.otherVaranvarita!;
+  //   }
+  //   showDialog(
+  //     context: context,
+  //     builder: (ctx) {
+  //       return Dialog(
+  //         shape:
+  //             RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+  //         child: StatefulBuilder(
+  //           builder: (context, setState) {
+  //             return Container(
+  //               padding: EdgeInsets.all(16),
+  //               width: 350,
+  //               child: SingleChildScrollView(
+  //                 child: Column(
+  //                   mainAxisSize: MainAxisSize.min,
+  //                   children: [
+  //                     Row(
+  //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                       children: [
+  //                         Text(
+  //                           "जागरण श्रेणी तपशील",
+  //                           style: TextStyle(
+  //                             color: Colors.purpleAccent,
+  //                             fontWeight: FontWeight.bold,
+  //                             fontSize: 20,
+  //                           ),
+  //                         ),
+  //                         IconButton(
+  //                           icon: Icon(Icons.close, color: Colors.grey[700]),
+  //                           onPressed: () {
+  //                             clearFields2();
+  //                             Navigator.of(ctx).pop();
+  //                           },
+  //                         )
+  //                       ],
+  //                     ),
+  //                     const SizedBox(height: 10),
+  //                     SingleChildScrollView(
+  //                       child: Column(
+  //                         children: [
+  //                           vastisarvekshanDropDownDataModel != null
+  //                               ? vastisarvekshanDropdown2(
+  //                                   dataModel:
+  //                                       vastisarvekshanDropDownDataModel!,
+  //                                   filterTypeName: "जागरण श्रेणी",
+  //                                   onItemSelected: (id, value, isOther) {
+  //                                     selectedShreniID = id;
+  //                                     selectedShreniName = value;
+  //                                   },
+  //                                   hintText: "श्रेणी निवडा",
+  //                                   question: "श्रेणी निवडा",
+  //                                   editId: selectedShreniIDEdit,
+  //                                   selectedValue: selectedJagranShreni,
+  //                                   onSelectionChanged: (newValue) {
+  //                                     setState(() {
+  //                                       selectedJagranShreni = newValue;
+  //                                     });
+  //                                   },
+  //                                 )
+  //                               : Container(),
+  //                           const SizedBox(height: 10),
+  //                           textControllerField(
+  //                             'नियमित चालणारे उपक्रम',
+  //                             niyamitChalnareUpkramController,
+  //                             context,
+  //                             height: 100,
+  //                           ),
+  //                           const SizedBox(height: 10),
+  //                           vastisarvekshanDropDownDataModel != null
+  //                               ? vastisarvekshanDropdown2(
+  //                                   dataModel:
+  //                                       vastisarvekshanDropDownDataModel!,
+  //                                   filterTypeName: "जागरण वारंवारिता",
+  //                                   onItemSelected: (id, value, isOther) {
+  //                                     selectedVaramvaritaID = id;
+  //                                     selectedVaramvaritaName = value;
+  //                                     print(
+  //                                         "selectedVaramvaritaID $selectedVaramvaritaID |||| selectedVaramvaritaName $selectedVaramvaritaName");
+  //                                     isOtherJaganVaramvaritaConroller.clear();
+  //                                   },
+  //                                   hintText: "वारंवारिता",
+  //                                   question: "वारंवारिता निवडा",
+  //                                   editId: selectedVaramvaritaIDEdit,
+  //                                   selectedValue: selectedVaramvarita,
+  //                                   onSelectionChanged: (newValue) {
+  //                                     setState(() {
+  //                                       selectedVaramvarita = newValue;
+  //                                     });
+  //                                   },
+  //                                 )
+  //                               : Container(),
+  //                           const SizedBox(height: 10),
+  //                           if (selectedVaramvarita?.isOther == 1)
+  //                             textControllerField2(
+  //                                 name: "अन्य",
+  //                                 controller: isOtherJaganVaramvaritaConroller),
+  //                           const SizedBox(height: 20),
+  //                           Align(
+  //                             alignment: Alignment.center,
+  //                             child: ElevatedButton(
+  //                               style: ElevatedButton.styleFrom(
+  //                                 backgroundColor: Colors.purple,
+  //                                 shape: RoundedRectangleBorder(
+  //                                     borderRadius: BorderRadius.circular(8)),
+  //                               ),
+  //                               onPressed: () {
+  //                                 if (selectedVaramvarita?.isOther == 1 &&
+  //                                     isOtherJaganVaramvaritaConroller.text ==
+  //                                         "") {
+  //                                   Statics.showToast("'अन्य' माहिती आवश्यक.");
+  //                                 } else {
+  //                                   final data = VastisarJaagaranshreneesthiti(
+  //                                     pkid: jagranShreniPkId,
+  //                                     vastiid: int.parse(selctedLevelId!),
+  //                                     shreneeid: selectedShreniID,
+  //                                     niyamitacalanareupakrama:
+  //                                         niyamitChalnareUpkramController.text
+  //                                             .trim(),
+  //                                     varanvaritaid: selectedVaramvaritaID,
+  //                                     isactive: isActiveJagranShreniStithi,
+  //                                     otherVaranvarita:
+  //                                         isOtherJaganVaramvaritaConroller.text,
+  //                                     selectedDropdownValueName:
+  //                                         selectedShreniName,
+  //                                     selectedDropdownValueName1:
+  //                                         selectedVaramvaritaName,
+  //                                   );
+  //                                   if (editIndex != null) {
+  //                                     jagranShreniEnteredDataList![editIndex] =
+  //                                         data;
+  //                                   } else {
+  //                                     jagranShreniEnteredDataList!.add(data);
+  //                                   }
+  //                                   Navigator.of(ctx).pop();
+  //                                   clearFields2();
+  //                                   if (onDataChanged != null) {
+  //                                     onDataChanged();
+  //                                   }
+  //                                 }
+  //                               },
+  //                               child: const Text(
+  //                                 "संग्रह",
+  //                                 style: TextStyle(color: Colors.white),
+  //                               ),
+  //                             ),
+  //                           )
+  //                         ],
+  //                       ),
+  //                     )
+  //                   ],
+  //                 ),
+  //               ),
+  //             );
+  //           },
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
   void showJagranShreniPopup(BuildContext context,
       {int? editIndex, VoidCallback? onDataChanged}) {
     if (editIndex != null) {
       var data = jagranShreniEnteredDataList![editIndex];
+      selectedShreniID = data.shreneeid;
       selectedShreniIDEdit = data.shreneeid;
       selectedShreniName = data.selectedDropdownValueName;
-      niyamitChalnareUpkramController.text = data.niyamitacalanareupakrama!;
+      niyamitChalnareUpkramController.text =
+          data.niyamitacalanareupakrama ?? '';
       selectedVaramvaritaIDEdit = data.varanvaritaid;
       selectedVaramvaritaName = data.selectedDropdownValueName1;
       isActiveJagranShreniStithi = data.isactive;
       jagranShreniPkId = data.pkid;
-      isOtherJaganVaramvaritaConroller.text = data.otherVaranvarita!;
+      isOtherJaganVaramvaritaConroller.text = data.otherVaranvarita ?? '';
+
+      // ✅ Get selected Masterdata objects for editing dropdowns
+      selectedJagranShreni = vastisarvekshanDropDownDataModel?.masterdata
+          ?.firstWhere(
+              (e) => e.id == selectedShreniID && e.typename == "जागरण श्रेणी",
+              orElse: () => Masterdata());
+
+      selectedVaramvarita = vastisarvekshanDropDownDataModel?.masterdata
+          ?.firstWhere(
+              (e) =>
+                  e.id == selectedVaramvaritaIDEdit &&
+                  e.typename == "जागरण वारंवारिता",
+              orElse: () => Masterdata());
     }
+
     showDialog(
       context: context,
       builder: (ctx) {
@@ -6897,6 +7086,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      // 🔹 Title Row
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -6918,116 +7108,113 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         ],
                       ),
                       const SizedBox(height: 10),
-                      SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            vastisarvekshanDropDownDataModel != null
-                                ? vastisarvekshanDropdown2(
-                                    dataModel:
-                                        vastisarvekshanDropDownDataModel!,
-                                    filterTypeName: "जागरण श्रेणी",
-                                    onItemSelected: (id, value, isOther) {
-                                      selectedShreniID = id;
-                                      selectedShreniName = value;
-                                    },
-                                    hintText: "श्रेणी निवडा",
-                                    question: "श्रेणी निवडा",
-                                    editId: selectedShreniIDEdit,
-                                    selectedValue: selectedJagranShreni,
-                                    onSelectionChanged: (newValue) {
-                                      setState(() {
-                                        selectedJagranShreni = newValue;
-                                      });
-                                    },
-                                  )
-                                : Container(),
-                            const SizedBox(height: 10),
-                            textControllerField(
-                              'नियमित चालणारे उपक्रम',
-                              niyamitChalnareUpkramController,
-                              context,
-                              height: 100,
-                            ),
-                            const SizedBox(height: 10),
-                            vastisarvekshanDropDownDataModel != null
-                                ? vastisarvekshanDropdown2(
-                                    dataModel:
-                                        vastisarvekshanDropDownDataModel!,
-                                    filterTypeName: "जागरण वारंवारिता",
-                                    onItemSelected: (id, value, isOther) {
-                                      selectedVaramvaritaID = id;
-                                      selectedVaramvaritaName = value;
-                                      print(
-                                          "selectedVaramvaritaID $selectedVaramvaritaID |||| selectedVaramvaritaName $selectedVaramvaritaName");
-                                      isOtherJaganVaramvaritaConroller.clear();
-                                    },
-                                    hintText: "वारंवारिता",
-                                    question: "वारंवारिता निवडा",
-                                    editId: selectedVaramvaritaIDEdit,
-                                    selectedValue: selectedVaramvarita,
-                                    onSelectionChanged: (newValue) {
-                                      setState(() {
-                                        selectedVaramvarita = newValue;
-                                      });
-                                    },
-                                  )
-                                : Container(),
-                            const SizedBox(height: 10),
-                            if (selectedVaramvarita?.isOther == 1)
-                              textControllerField2(
-                                  name: "अन्य",
-                                  controller: isOtherJaganVaramvaritaConroller),
-                            const SizedBox(height: 20),
-                            Align(
-                              alignment: Alignment.center,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.purple,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8)),
-                                ),
-                                onPressed: () {
-                                  if (selectedVaramvarita?.isOther == 1 &&
-                                      isOtherJaganVaramvaritaConroller.text ==
-                                          "") {
-                                    Statics.showToast("'अन्य' माहिती आवश्यक.");
-                                  } else {
-                                    final data = VastisarJaagaranshreneesthiti(
-                                      pkid: jagranShreniPkId,
-                                      vastiid: int.parse(selctedLevelId!),
-                                      shreneeid: selectedShreniID,
-                                      niyamitacalanareupakrama:
-                                          niyamitChalnareUpkramController.text
-                                              .trim(),
-                                      varanvaritaid: selectedVaramvaritaID,
-                                      isactive: isActiveJagranShreniStithi,
-                                      otherVaranvarita:
-                                          isOtherJaganVaramvaritaConroller.text,
-                                      selectedDropdownValueName:
-                                          selectedShreniName,
-                                      selectedDropdownValueName1:
-                                          selectedVaramvaritaName,
-                                    );
-                                    if (editIndex != null) {
-                                      jagranShreniEnteredDataList![editIndex] =
-                                          data;
-                                    } else {
-                                      jagranShreniEnteredDataList!.add(data);
-                                    }
-                                    Navigator.of(ctx).pop();
-                                    clearFields2();
-                                    if (onDataChanged != null) {
-                                      onDataChanged();
-                                    }
-                                  }
-                                },
-                                child: const Text(
-                                  "संग्रह",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
+
+                      // 🔹 Dropdowns and fields
+                      vastisarvekshanDropDownDataModel != null
+                          ? vastisarvekshanDropdown2(
+                              dataModel: vastisarvekshanDropDownDataModel!,
+                              filterTypeName: "जागरण श्रेणी",
+                              onItemSelected: (id, value, isOther) {
+                                selectedShreniID = id;
+                                selectedShreniName = value;
+                              },
+                              hintText: "श्रेणी निवडा",
+                              question: "श्रेणी निवडा",
+                              editId: selectedShreniIDEdit,
+                              selectedValue: selectedJagranShreni,
+                              onSelectionChanged: (newValue) {
+                                setState(() {
+                                  selectedJagranShreni = newValue;
+                                });
+                              },
                             )
-                          ],
+                          : Container(),
+
+                      const SizedBox(height: 10),
+
+                      textControllerField(
+                        'नियमित चालणारे उपक्रम',
+                        niyamitChalnareUpkramController,
+                        context,
+                        height: 100,
+                      ),
+
+                      const SizedBox(height: 10),
+
+                      vastisarvekshanDropDownDataModel != null
+                          ? vastisarvekshanDropdown2(
+                              dataModel: vastisarvekshanDropDownDataModel!,
+                              filterTypeName: "जागरण वारंवारिता",
+                              onItemSelected: (id, value, isOther) {
+                                selectedVaramvaritaID = id;
+                                selectedVaramvaritaName = value;
+                                isOtherJaganVaramvaritaConroller.clear();
+                              },
+                              hintText: "वारंवारिता",
+                              question: "वारंवारिता निवडा",
+                              editId: selectedVaramvaritaIDEdit,
+                              selectedValue: selectedVaramvarita,
+                              onSelectionChanged: (newValue) {
+                                setState(() {
+                                  selectedVaramvarita = newValue;
+                                });
+                              },
+                            )
+                          : Container(),
+
+                      const SizedBox(height: 10),
+
+                      if (selectedVaramvarita?.isOther == 1)
+                        textControllerField2(
+                          name: "अन्य",
+                          controller: isOtherJaganVaramvaritaConroller,
+                        ),
+
+                      const SizedBox(height: 20),
+
+                      Align(
+                        alignment: Alignment.center,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.purple,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8)),
+                          ),
+                          onPressed: () {
+                            if (selectedVaramvarita?.isOther == 1 &&
+                                isOtherJaganVaramvaritaConroller.text == "") {
+                              Statics.showToast("'अन्य' माहिती आवश्यक.");
+                            } else {
+                              final data = VastisarJaagaranshreneesthiti(
+                                pkid: jagranShreniPkId,
+                                vastiid: int.parse(selctedLevelId!),
+                                shreneeid: selectedShreniID,
+                                niyamitacalanareupakrama:
+                                    niyamitChalnareUpkramController.text.trim(),
+                                varanvaritaid: selectedVaramvaritaID,
+                                isactive: isActiveJagranShreniStithi,
+                                otherVaranvarita:
+                                    isOtherJaganVaramvaritaConroller.text,
+                                selectedDropdownValueName: selectedShreniName,
+                                selectedDropdownValueName1:
+                                    selectedVaramvaritaName,
+                              );
+
+                              if (editIndex != null) {
+                                jagranShreniEnteredDataList![editIndex] = data;
+                              } else {
+                                jagranShreniEnteredDataList!.add(data);
+                              }
+
+                              Navigator.of(ctx).pop();
+                              clearFields2();
+                              onDataChanged?.call();
+                            }
+                          },
+                          child: const Text(
+                            "संग्रह",
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       )
                     ],
@@ -7042,17 +7229,20 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   }
 
   void clearFields2() {
-    selectedShreniID = null;
-    selectedShreniName = null;
-    selectedShreniIDEdit = null;
-    selectedShreni = null;
-    selectedVaramvaritaID = null;
-    selectedVaramvaritaName = null;
-    selectedVaramvaritaIDEdit = null;
-    selectedVaramvarita = null;
-    niyamitChalnareUpkramController.clear();
-    isOtherJaganVaramvaritaConroller.clear();
-    isActiveJagranShreniStithi = 1;
+    setState(() {
+      jagranShreniPkId = null;
+      selectedShreniID = null;
+      selectedShreniName = null;
+      selectedShreniIDEdit = null;
+      selectedShreni = null;
+      selectedVaramvaritaID = null;
+      selectedVaramvaritaName = null;
+      selectedVaramvaritaIDEdit = null;
+      selectedVaramvarita = null;
+      niyamitChalnareUpkramController.clear();
+      isOtherJaganVaramvaritaConroller.clear();
+      isActiveJagranShreniStithi = 1;
+    });
   }
 
 //========================  3. GATIVIDHI FORM ===========================================
@@ -11568,6 +11758,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       selectedVastitBalopasanaKendraId = data.shreneeid;
       selectedVastitBalopasanaKendraIdEdit = data.shreneeid;
       selectedVastitBalopasanaKendraName = data.selectedDropdownValueName;
+      selectedMasterVastitBalopasanaKendraName =
+          vastisarvekshanDropDownDataModel!.masterdata!.firstWhere(
+              (e) => e.id == data.shreneeid,
+              orElse: () => Masterdata());
       vastitBalopasanaKendraAnyaNameController.text =
           data.otherBalopasanaShreniName ?? "";
       vastitBalopasanaKendraNaavController.text = data.name ?? "";
@@ -11575,6 +11769,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       isActiveBalopasanakendra = data.isactive;
       pkidBalopasanakendra = data.pkid;
     }
+
     showDialog(
       context: context,
       builder: (ctx) {
@@ -11593,7 +11788,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
               ),
               IconButton(
                 icon: Icon(Icons.close, color: Colors.grey),
-                onPressed: () => Navigator.of(context).pop(),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  clearvastitBalopasanaKendraFields();
+                },
               ),
             ],
           ),
@@ -11898,7 +12096,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       nirmandhinMothePrakalpaNaavController.text = data.name ?? "";
       nirmandhinMothePrakalpaPkid = data.pkid;
       nirmandhinMothePrakalpaIsActive = data.isactive;
+
+      selectedMasternirmandhinMothePrakalpaName =
+          vastisarvekshanDropDownDataModel!.masterdata!
+              .firstWhere((e) => e.id == data.id, orElse: () => Masterdata());
     }
+
     showDialog(
       context: context,
       builder: (ctx) {
@@ -12025,6 +12228,118 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
 
   final TextEditingController motheRugnalayNaavController =
       TextEditingController();
+  // void showMotheRugnalayPopup(BuildContext context,
+  //     {int? editIndex, VoidCallback? onDataChanged}) {
+  //   if (editIndex != null) {
+  //     var data = motheRugnalayDataList[editIndex];
+  //     selectedmotheRugnalayId = data.id;
+  //     selectedmotheRugnalayIdEdit = data.id;
+  //     selectedmotheRugnalayName = data.selectedDropdownValueName;
+  //     motheRugnalayNaavController.text = data.name ?? "";
+  //     selectedmotheRugnalayPkId = data.pkid;
+  //     selectedmotheRugnalayIsActive = data.isactive;
+  //   }
+  //   showDialog(
+  //     context: context,
+  //     builder: (ctx) {
+  //       return AlertDialog(
+  //         title: Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+  //             Text(
+  //               "मोठे रुग्णालय",
+  //               style: TextStyle(
+  //                 fontWeight: FontWeight.bold,
+  //                 fontSize: 20,
+  //                 color: Colors.purpleAccent,
+  //               ),
+  //             ),
+  //             IconButton(
+  //               icon: Icon(Icons.close, color: Colors.grey),
+  //               onPressed: () => Navigator.of(context).pop(),
+  //             ),
+  //           ],
+  //         ),
+  //         content: StatefulBuilder(
+  //           builder: (context, setState) {
+  //             return SingleChildScrollView(
+  //               child: Column(
+  //                 mainAxisSize: MainAxisSize.min,
+  //                 children: [
+  //                   vastisarvekshanDropdown2(
+  //                     dataModel: vastisarvekshanDropDownDataModel!,
+  //                     filterTypeName: "मोठेरुग्णालयद्र",
+  //                     hintText: "प्रकल्प निवडा",
+  //                     onItemSelected: (id, value, isOther) {
+  //                       selectedmotheRugnalayId = id;
+  //                       selectedmotheRugnalayName = value;
+  //                       print(
+  //                           "id = $selectedmotheRugnalayId //////  name = $selectedmotheRugnalayName");
+  //                     },
+  //                     width: 250,
+  //                     selectedValue: selectedMastermotheRugnalayName,
+  //                     onSelectionChanged: (newValue) {
+  //                       setState(() {
+  //                         selectedMastermotheRugnalayName = newValue;
+  //                       });
+  //                     },
+  //                     editId: selectedmotheRugnalayIdEdit,
+  //                   ),
+  //                   const SizedBox(height: 10),
+  //                   textControllerField(
+  //                       "नाव", motheRugnalayNaavController, context,
+  //                       height: 50),
+  //                   const SizedBox(height: 5),
+  //                 ],
+  //               ),
+  //             );
+  //           },
+  //         ),
+  //         actions: [
+  //           SizedBox(height: 10),
+  //           Align(
+  //             alignment: Alignment.center,
+  //             child: ElevatedButton(
+  //               style: ElevatedButton.styleFrom(
+  //                 backgroundColor: Colors.purple,
+  //                 shape: RoundedRectangleBorder(
+  //                     borderRadius: BorderRadius.circular(8)),
+  //               ),
+  //               onPressed: () {
+  //                 // Map<String, dynamic> data = {
+  //                 //   "motheRugnalayID": selectedmotheRugnalayId,
+  //                 //   "motheRugnalay": selectedmotheRugnalayName,
+  //                 //   "motheRugnalayNaav": motheRugnalayNaavController.text,
+  //                 //   "motheVyasayikObj": selectedMastermotheRugnalayName,
+  //                 // };
+  //
+  //                 VastisarMotherugnalaya data = VastisarMotherugnalaya(
+  //                   vastiid: int.parse(selctedLevelId!),
+  //                   isactive: selectedmotheRugnalayIsActive,
+  //                   pkid: selectedmotheRugnalayPkId,
+  //                   selectedDropdownValueName: selectedmotheRugnalayName,
+  //                   name: motheRugnalayNaavController.text,
+  //                   id: selectedmotheRugnalayId,
+  //                 );
+  //                 if (editIndex != null) {
+  //                   motheRugnalayDataList[editIndex] = data;
+  //                 } else {
+  //                   motheRugnalayDataList.add(data);
+  //                 }
+  //                 if (onDataChanged != null) {
+  //                   onDataChanged();
+  //                 }
+  //                 Navigator.of(ctx).pop();
+  //                 clearMotheRugnalayFields();
+  //               },
+  //               child: Text("संग्रह", style: TextStyle(color: Colors.white)),
+  //             ),
+  //           )
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
   void showMotheRugnalayPopup(BuildContext context,
       {int? editIndex, VoidCallback? onDataChanged}) {
     if (editIndex != null) {
@@ -12035,7 +12350,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       motheRugnalayNaavController.text = data.name ?? "";
       selectedmotheRugnalayPkId = data.pkid;
       selectedmotheRugnalayIsActive = data.isactive;
+
+      /// ✅ Set selected dropdown item for edit
+      selectedMastermotheRugnalayName = vastisarvekshanDropDownDataModel!
+          .masterdata!
+          .firstWhere((e) => e.id == data.id, orElse: () => Masterdata());
     }
+
     showDialog(
       context: context,
       builder: (ctx) {
@@ -12053,7 +12374,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
               ),
               IconButton(
                 icon: Icon(Icons.close, color: Colors.grey),
-                onPressed: () => Navigator.of(context).pop(),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  clearMotheRugnalayFields();
+                },
               ),
             ],
           ),
@@ -12103,13 +12427,6 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       borderRadius: BorderRadius.circular(8)),
                 ),
                 onPressed: () {
-                  // Map<String, dynamic> data = {
-                  //   "motheRugnalayID": selectedmotheRugnalayId,
-                  //   "motheRugnalay": selectedmotheRugnalayName,
-                  //   "motheRugnalayNaav": motheRugnalayNaavController.text,
-                  //   "motheVyasayikObj": selectedMastermotheRugnalayName,
-                  // };
-
                   VastisarMotherugnalaya data = VastisarMotherugnalaya(
                     vastiid: int.parse(selctedLevelId!),
                     isactive: selectedmotheRugnalayIsActive,
@@ -12196,36 +12513,30 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       selectedShalaPrakarId = data.prakaarid;
       selectedShalaPrakarIdEdit = data.prakaarid;
       selectedShalaPrakarName = data.selectedDropdownValueName;
-      // selectedMasterShalaPrakarName = data['shalaPrakarObj'];
-
       selectedShikshanacheMadhyamId = data.maadhyam;
       selectedShikshanacheMadhyamIdEdit = data.maadhyam;
       selectedShikshanacheMadhyamName = data.selectedDropdownValueName1;
-      // selectedMasterShikshanacheMadhyamName = data['shikshanacheMadhyamObj'];
 
       selectedSansthaChalakPrakarId = data.chaalakprakaar;
       selectedSansthaChalakPrakarIdEdit = data.chaalakprakaar;
       selectedSansthaChalakPrakarName = data.selectedDropdownValueName2;
-      // selectedMasterSansthaChalakPrakarName = data['sansthaChalakPrakarObj'];
 
       selectedMahavidyalayinPrakarId = data.prakaarid;
       selectedMahavidyalayinPrakarIdEdit = data.prakaarid;
       selectedMahavidyalayinPrakarName = data.selectedDropdownValueName3;
-      // selectedMasterMahavidyalayinPrakarName = data['mahavidyalayinPrakarObj'];
 
       selectedShaikshanikSansthaId = data.shaikshaniksansthaan;
       selectedShaikshanikSansthaIdEdit = data.shaikshaniksansthaan;
       selectedShaikshanikSansthaName = data.selectedDropdownValueName;
-
       selectedAllShaikshanikPrakarTapshilMilkatId = data.milkat;
       selectedAllShaikshanikPrakarTapshilMilkatIdEdit = data.milkat;
       selectedAllShaikshanikPrakarTapshilMilkatName =
           data.selectedDropdownValueName4;
-      // selectedMasterAllShaikshanikPrakarTapshilMilkatName = data['allShaikshanikPrakarTapshilMilkatObj'];
 
       allShaikshanikPrakarNaavController.text = data.name ?? "";
       pkidSchool = data.pkid;
       isActiveSchool = data.isactive;
+      print("selectedShaikshanikSansthaName $selectedShaikshanikSansthaName");
     }
     showDialog(
       context: context,
@@ -12264,7 +12575,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     selectedShaikshanikSansthaId = id;
                                     selectedShaikshanikSansthaName = value;
                                     print(
-                                        "id = $selectedShaikshanikSansthaId //////  name = $selectedShaikshanikSansthaName");
+                                        "id = $selectedShaikshanikSansthaId //////  name = $selectedShaikshanikSansthaName//////  iD Edit = $selectedShaikshanikSansthaIdEdit");
                                   },
                                   width: 250,
                                   selectedValue:
@@ -12375,7 +12686,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         selectedShaikshanikSansthaId = id;
                                         selectedShaikshanikSansthaName = value;
                                         print(
-                                            "id = $selectedShaikshanikSansthaId //////  name = $selectedShaikshanikSansthaName");
+                                            "id = $selectedShaikshanikSansthaId //////  name = $selectedShaikshanikSansthaName//////  iD Edit = $selectedShaikshanikSansthaIdEdit");
                                       },
                                       width: 250,
                                       selectedValue:
@@ -12456,7 +12767,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                             selectedShaikshanikSansthaName =
                                                 value;
                                             print(
-                                                "id = $selectedShaikshanikSansthaId //////  name = $selectedShaikshanikSansthaName");
+                                                "id = $selectedShaikshanikSansthaId //////  name = $selectedShaikshanikSansthaName//////  iD Edit = $selectedShaikshanikSansthaIdEdit");
                                           },
                                           width: 250,
                                           selectedValue:
@@ -13552,61 +13863,59 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         ),
                         child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              child: DataTable(
-                                columnSpacing: 20,
-                                showCheckboxColumn: false,
-                                headingRowColor: MaterialStatePropertyAll(
-                                    Colors.purple.shade50),
-                                headingTextStyle: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87),
-                                columns: const [
-                                  DataColumn(
-                                      label: Text(
-                                    "वस्तीतील सामाजिक\nप्रश्न/गरजा",
-                                  )),
-                                  DataColumn(
-                                      label: Text(
+                            child: DataTable(
+                              showCheckboxColumn: false,
+                              headingRowColor: MaterialStatePropertyAll(
+                                  Colors.purple.shade50),
+                              headingTextStyle: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87),
+                              columns: const [
+                                DataColumn(
+                                    label: Text(
+                                  "वस्तीतील सामाजिक\nप्रश्न/गरजा",
+                                )),
+                                DataColumn(
+                                    label: Center(
+                                  child: Text(
                                     "तपशील",
-                                  )),
-                                ],
-                                rows: vastiPrashnaGarjaDataList
-                                    .asMap()
-                                    .entries
-                                    .where((entry) => entry.value.isactive == 1)
-                                    .map((entry) {
-                                  int index = entry.key;
-                                  var data = entry.value;
-                                  bool isSelected =
-                                      selectedVastiPrashnaGarjaIdIndex == index;
-                                  return DataRow(
-                                      selected: isSelected,
-                                      color: MaterialStateProperty.resolveWith<
-                                          Color?>(
-                                        (Set<MaterialState> states) {
-                                          if (isSelected)
-                                            return Colors.yellow.shade100;
-                                          return null;
-                                        },
-                                      ),
-                                      onSelectChanged: (bool? selected) {
-                                        if (selected != null && selected) {
-                                          setState(() {
-                                            selectedVastiPrashnaGarjaIdIndex =
-                                                index;
-                                          });
-                                        }
+                                  ),
+                                )),
+                              ],
+                              rows: vastiPrashnaGarjaDataList
+                                  .asMap()
+                                  .entries
+                                  .where((entry) => entry.value.isactive == 1)
+                                  .map((entry) {
+                                int index = entry.key;
+                                var data = entry.value;
+                                bool isSelected =
+                                    selectedVastiPrashnaGarjaIdIndex == index;
+                                return DataRow(
+                                    selected: isSelected,
+                                    color: MaterialStateProperty.resolveWith<
+                                        Color?>(
+                                      (Set<MaterialState> states) {
+                                        if (isSelected)
+                                          return Colors.yellow.shade100;
+                                        return null;
                                       },
-                                      cells: [
-                                        DataCell(Text(
-                                            data.selectedDropdownValueName ??
-                                                '')),
-                                        DataCell(Text(data.name ?? '')),
-                                      ]);
-                                }).toList(),
-                              ),
+                                    ),
+                                    onSelectChanged: (bool? selected) {
+                                      if (selected != null && selected) {
+                                        setState(() {
+                                          selectedVastiPrashnaGarjaIdIndex =
+                                              index;
+                                        });
+                                      }
+                                    },
+                                    cells: [
+                                      DataCell(Text(
+                                          data.selectedDropdownValueName ??
+                                              '')),
+                                      DataCell(Text(data.name ?? '')),
+                                    ]);
+                              }).toList(),
                             )),
                       ),
                       SizedBox(height: 10),
@@ -14800,6 +15109,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       "Vastisardhaarmiknetrtav": dharmikNetrutvaDataList,
       "Vastisardurjanshakti": durjanShaktiDataList,
       "VastisarHinduvirayadi": hinduVeerYadiDataList,
+      "isdurjanskhatti": durjanShaktiYesNo,
       "Vastitilasamajikaque": "",
       "anyadhaarmik": "",
     };
@@ -14807,12 +15117,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
     log("Step 3 Form Data (JSON):\n$formattedJson");
     Statics.vastiSarvekshanStep3FormSubmit(context, jsonEncode(formData));
     await Future.delayed(Duration(seconds: 2));
-    searchVastiData(selctedLevelId);
     _scrollController.animateTo(
       0.0,
       duration: Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
+    searchVastiData(selctedLevelId);
   }
 
   Widget dynamicProgressBar(double value) {

@@ -40,7 +40,6 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   GetVastiDataByIdModel? vastiDataByIdModel;
 
   Future<dynamic> searchVastiData(String? vastiId) async {
-    // resetData();
     bool isConnected = await Statics.isInternetConnected();
     if (isConnected) {
       String strInput = json.encode({
@@ -84,11 +83,11 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
       maleController.text =
           vastiDataByIdModel!.vastisarvekshan!.maleSankhya == null
               ? ""
-              : vastiDataByIdModel!.vastisarvekshan!.maleSankhya!;
+              : vastiDataByIdModel!.vastisarvekshan!.maleSankhya.toString();
       femaleController.text =
           vastiDataByIdModel!.vastisarvekshan!.femaleSankhya == null
               ? ""
-              : vastiDataByIdModel!.vastisarvekshan!.femaleSankhya!;
+              : vastiDataByIdModel!.vastisarvekshan!.femaleSankhya.toString();
       sarpanchDoorbhasController.text =
           vastiDataByIdModel!.vastisarvekshan!.sarpanchacheDoorbhash == null
               ? ""
@@ -161,6 +160,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
           vastiDataByIdModel!.vastisarvekshan!.vastisarHinduvirayadi ?? [];
       step3completepercentage =
           vastiDataByIdModel!.vastisarvekshan!.step3completepercentage;
+      durjanShaktiYesNo =
+          vastiDataByIdModel!.vastisarvekshan!.durjanShaktiYesNo!;
       // ============================================================================================================================================================================
       _isStep1Completed =
           vastiDataByIdModel!.vastisarvekshan!.stepOneComplete ?? true;
@@ -173,6 +174,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
 
   void resetData() async {
     setState(() {
+      durjanShaktiYesNo = 2;
       sarpanchDoorbhasController.clear();
       sarpanchNameController.clear();
       femaleController.clear();
@@ -353,6 +355,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   int? agniShamanDalKendraAhe = 2;
   int? polichChoukiAhe = 2;
   int? gaavSamitiYesNo = 2;
+  int? durjanShaktiYesNo = 2;
   final TextEditingController maleController = TextEditingController();
   final TextEditingController femaleController = TextEditingController();
 
@@ -368,16 +371,6 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
       female = int.tryParse(femaleController.text);
     });
   }
-
-  // String? _getValidDropdownValue() {
-  //   if (_linkedgraamValue != "" && _linkedgraam!.any((bg) => bg.geoUnitID.toString() == _linkedgraamValue)) {
-  //     return _linkedgraamValue;
-  //   } else if (selectedVividhAAdhyatmikKendraGaavIDEdit != "" &&
-  //       _linkedgraam!.any((bg) => bg.geoUnitID.toString() == selectedVividhAAdhyatmikKendraGaavIDEdit)) {
-  //     return selectedVividhAAdhyatmikKendraGaavIDEdit;
-  //   }
-  //   return null;
-  // }
 
   void populateDropdown() async {
     var data = await Statics.getStaticLDB('AnnualBaithakType');
@@ -538,7 +531,6 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
           tabs: [
             Tab(text: Statics.getLabel('basicInfo')),
             Tab(text: Statics.getLabel('detailedInfo')),
-            // Tab(text: Statics.getLabel('detailedInfo')),
           ],
         ),
       ),
@@ -556,54 +548,6 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
     );
   }
 
-  //=======================================================================================================================================================================================================
-  // Widget textControllerField2({
-  //   required String name,
-  //   required TextEditingController controller,
-  //   double height = 50.0,
-  //   TextInputType keyboardType = TextInputType.text,
-  //   bool isEdit = false,
-  //   String? hintTextString,
-  //   int? maxInput
-  // }) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Text(
-  //         name,
-  //         style: TextStyle(
-  //           fontSize: 15,
-  //           fontWeight: FontWeight.bold
-  //         ),
-  //       ),
-  //       SizedBox(height: 5),
-  //       Container(
-  //         height: height,
-  //         child: TextFormField(
-  //           controller: controller,
-  //           keyboardType: keyboardType,
-  //           decoration: InputDecoration(
-  //               border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-  //               contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-  //               filled: true,
-  //               fillColor: Colors.white, // Background color
-  //               hintText: hintTextString
-  //           ),
-  //           readOnly:isVastiSearch == false? true: isEdit,
-  //           onTap: (){
-  //             if (isVastiSearch) {
-  //               print("Nothing");
-  //             } else {
-  //               showPopupForVastiValidation(context);
-  //             }
-  //           },
-  //           maxLength: maxInput,
-  //         ),
-  //       ),
-  //       SizedBox(height: 10),
-  //     ],
-  //   );
-  // }
   Widget textControllerField2(
       {required String name,
       required TextEditingController controller,
@@ -1257,11 +1201,11 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                 )),
 
           if (isVastiSearch == true)
-            if (step3completepercentage != null)
+            if (step1completepercentage != null)
               Container(
                 padding: EdgeInsets.symmetric(vertical: 10),
                 child: dynamicProgressBar(
-                    double.parse(step3completepercentage.toString())),
+                    double.parse(step1completepercentage.toString())),
               ),
           if (isVastiSearch == true)
             SizedBox(
@@ -3330,7 +3274,6 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
               "रिलीजन",
               Column(
                 children: [
-                  SizedBox(height: 10),
                   Container(
                     padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
                     child: Column(
@@ -3339,8 +3282,15 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
+                                Text(
+                                  "रिलीजन",
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.purpleAccent),
+                                ),
                                 InkWell(
                                   onTap: () {
                                     if (isVastiSearch) {
@@ -3657,6 +3607,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       ],
                     ),
                   ),
+
                   //======================================  UPASNA Sthal =====================================================
                   SizedBox(height: 10),
                   Row(
@@ -3963,9 +3914,13 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
 
                             if (shouldDelete == true &&
                                 selectedUpasnaSthalRowIndex != null) {
+                              // upasnaSthalDataList
+                              //     .removeAt(selectedUpasnaSthalRowIndex!);
+                              // selectedUpasnaSthalRowIndex = null;
                               setState(() {
-                                upasnaSthalDataList
-                                    .removeAt(selectedUpasnaSthalRowIndex!);
+                                upasnaSthalDataList[
+                                        selectedUpasnaSthalRowIndex!]
+                                    .isactive = 0;
                                 selectedUpasnaSthalRowIndex = null;
                               });
                             }
@@ -4299,8 +4254,9 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           if (shouldDelete == true &&
                               selectedsajjanShaktiRowIndex != null) {
                             setState(() {
-                              sajjanShaktiDataList
-                                  .removeAt(selectedsajjanShaktiRowIndex!);
+                              sajjanShaktiDataList[
+                                      selectedsajjanShaktiRowIndex!]
+                                  .isactive = 0;
                               selectedsajjanShaktiRowIndex = null;
                             });
                           }
@@ -5009,70 +4965,62 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                   ),
                   child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width * 1.5,
-                        child: DataTable(
-                          showCheckboxColumn: false,
-                          headingRowColor:
-                              MaterialStatePropertyAll(Colors.purple.shade50),
-                          headingTextStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87),
-                          columns: const [
-                            DataColumn(
-                                label: Text(
-                              "सामाजिक कार्यक्रम",
-                            )),
-                            DataColumn(
-                                label: Text(
-                              "आयोजक संस्था",
-                            )),
-                            DataColumn(
-                                label: Text(
-                              "आयोजक",
-                            )),
-                            DataColumn(
-                                label: Text(
-                              "संपर्क",
-                            )),
-                          ],
-                          rows: vastitSajarHonareSamajikKaryakramDataList
-                              .asMap()
-                              .entries
-                              .where((entry) => entry.value.isactive == 1)
-                              .map((entry) {
-                            int index = entry.key;
-                            var data = entry.value;
-                            bool isSelected =
-                                selectedSamajikKaryakramIdIndex == index;
-                            return DataRow(
-                                selected: isSelected,
-                                color:
-                                    MaterialStateProperty.resolveWith<Color?>(
-                                  (Set<MaterialState> states) {
-                                    if (isSelected)
-                                      return Colors.yellow.shade100;
-                                    return null;
-                                  },
-                                ),
-                                onSelectChanged: (bool? selected) {
-                                  if (selected != null && selected) {
-                                    setState(() {
-                                      selectedSamajikKaryakramIdIndex = index;
-                                    });
-                                  }
+                      child: DataTable(
+                        showCheckboxColumn: false,
+                        headingRowColor:
+                            MaterialStatePropertyAll(Colors.purple.shade50),
+                        headingTextStyle: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.black87),
+                        columns: const [
+                          DataColumn(
+                              label: Text(
+                            "सामाजिक कार्यक्रम",
+                          )),
+                          DataColumn(
+                              label: Text(
+                            "आयोजक संस्था",
+                          )),
+                          DataColumn(
+                              label: Text(
+                            "आयोजक",
+                          )),
+                          DataColumn(
+                              label: Text(
+                            "संपर्क",
+                          )),
+                        ],
+                        rows: vastitSajarHonareSamajikKaryakramDataList
+                            .asMap()
+                            .entries
+                            .where((entry) => entry.value.isactive == 1)
+                            .map((entry) {
+                          int index = entry.key;
+                          var data = entry.value;
+                          bool isSelected =
+                              selectedSamajikKaryakramIdIndex == index;
+                          return DataRow(
+                              selected: isSelected,
+                              color: MaterialStateProperty.resolveWith<Color?>(
+                                (Set<MaterialState> states) {
+                                  if (isSelected) return Colors.yellow.shade100;
+                                  return null;
                                 },
-                                cells: [
-                                  DataCell(Text(
-                                      data.selectedDropdownValueName ?? '')),
-                                  DataCell(
-                                      Text(data.ayojakasansthacinave ?? '')),
-                                  DataCell(Text(data.ayojakancinave ?? '')),
-                                  DataCell(
-                                      Text(data.aayojaksamparksootr ?? '')),
-                                ]);
-                          }).toList(),
-                        ),
+                              ),
+                              onSelectChanged: (bool? selected) {
+                                if (selected != null && selected) {
+                                  setState(() {
+                                    selectedSamajikKaryakramIdIndex = index;
+                                  });
+                                }
+                              },
+                              cells: [
+                                DataCell(
+                                    Text(data.selectedDropdownValueName ?? '')),
+                                DataCell(Text(data.ayojakasansthacinave ?? '')),
+                                DataCell(Text(data.ayojakancinave ?? '')),
+                                DataCell(Text(data.aayojaksamparksootr ?? '')),
+                              ]);
+                        }).toList(),
                       )),
                 ),
                 SizedBox(height: 10),
@@ -5378,6 +5326,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   }
 
   Future<void> submitStep1Form() async {
+    setState(() {
+      _isStep1Completed = true;
+    });
+
     Map<String, dynamic> formData = {
       "cuserid": int.parse(Statics.userDetails['userID']),
       "vastiid": int.parse(selctedLevelId!),
@@ -5493,9 +5445,9 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
     required Function(int, String, Masterdata) onValueSelected,
     Function(int, String, Masterdata)? onDependentValueSelected,
     Function(int, String, Masterdata)? onThirdLevelValueSelected,
-    Masterdata? selectedValue,
-    Masterdata? selectedDependentValue,
-    Masterdata? selectedThirdLevelValue,
+    int? anyaPrabhaviLokShreniId,
+    int? anyaPrabhaviLokUpShreniId,
+    int? anyaPrabhaviLokUpShreni1Id,
     BoxDecoration? decoration,
     Color? textColor,
     Color? borderColor,
@@ -5506,14 +5458,33 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
         vastisarvekshanDropDownDataModel!.masterdata!;
     List<Masterdata> filteredItems =
         masterDataList.where((e) => e.typename == filterTypeName).toList();
-    List<Masterdata> dependentItems = selectedValue != null
+
+    Masterdata? selectedValue = anyaPrabhaviLokShreniId != null
+        ? filteredItems.firstWhere((e) => e.id == anyaPrabhaviLokShreniId,
+            orElse: () => Masterdata())
+        : null;
+
+    List<Masterdata> dependentItems = selectedValue != null &&
+            selectedValue.id != null
         ? masterDataList.where((e) => e.parentid == selectedValue.id).toList()
         : [];
-    List<Masterdata> thirdLevelItems = selectedDependentValue != null
-        ? masterDataList
-            .where((e) => e.parentid == selectedDependentValue.id)
-            .toList()
-        : [];
+
+    Masterdata? selectedDependentValue = anyaPrabhaviLokUpShreniId != null
+        ? dependentItems.firstWhere((e) => e.id == anyaPrabhaviLokUpShreniId,
+            orElse: () => Masterdata())
+        : null;
+
+    List<Masterdata> thirdLevelItems =
+        selectedDependentValue != null && selectedDependentValue.id != null
+            ? masterDataList
+                .where((e) => e.parentid == selectedDependentValue.id)
+                .toList()
+            : [];
+
+    Masterdata? selectedThirdLevelValue = anyaPrabhaviLokUpShreni1Id != null
+        ? thirdLevelItems.firstWhere((e) => e.id == anyaPrabhaviLokUpShreni1Id,
+            orElse: () => Masterdata())
+        : null;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -5521,7 +5492,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
         if (filteredItems.isNotEmpty)
           _buildDropdown2(
             hintText: hintText,
-            value: selectedValue,
+            value: selectedValue?.id != null ? selectedValue : null,
             items: filteredItems,
             onChanged: (newValue) {
               if (newValue != null) {
@@ -5538,7 +5509,9 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
         if (dependentItems.isNotEmpty)
           _buildDropdown2(
             hintText: "उपश्रेणी निवडा",
-            value: selectedDependentValue,
+            value: selectedDependentValue?.id != null
+                ? selectedDependentValue
+                : null,
             items: dependentItems,
             onChanged: (newValue) {
               if (newValue != null && onDependentValueSelected != null) {
@@ -5556,7 +5529,9 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
         if (thirdLevelItems.isNotEmpty)
           _buildDropdown2(
             hintText: "उपश्रेणी 2 निवडा",
-            value: selectedThirdLevelValue,
+            value: selectedThirdLevelValue?.id != null
+                ? selectedThirdLevelValue
+                : null,
             items: thirdLevelItems,
             onChanged: (newValue) {
               if (newValue != null && onThirdLevelValueSelected != null) {
@@ -6730,6 +6705,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
       selectedreligionEditId = data.konatyarilijanaceid;
       pkIdReligion = data.pkid;
       religionAveragePersentCount.text = data.andaje ?? "";
+      selectedreligion = Masterdata(
+        id: religionId,
+        value: religionName ?? "",
+      );
     }
     showDialog(
       context: context,
@@ -7438,10 +7417,13 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   int? isActiveAnyaPrabhavilok = 1;
   int? pkidAnyaPrabhaviLok = 0;
   int? anyaPrabhaviLokShreniId;
+  int? anyaPrabhaviLokShreniIdEdit;
   String? anyaPrabhaviLokShreniName;
   int? anyaPrabhaviLokUpShreniId;
+  int? anyaPrabhaviLokUpShreniIdEdit;
   String? anyaPrabhaviLokUpShreniName;
   int? anyaPrabhaviLokUpShreni1Id;
+  int? anyaPrabhaviLokUpShreni1IdEdit;
   String? anyaPrabhaviLokUpShreni1Name;
   Masterdata? selectedShreni;
   Masterdata? selectedUpShreni;
@@ -7462,6 +7444,335 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
       TextEditingController();
   final TextEditingController anyaPrabhaviLokAnyaUppshreni1Controller =
       TextEditingController();
+
+  // void showAnyaPrabhaviPopup(BuildContext context,
+  //     {int? editIndex, VoidCallback? onDataChanged}) {
+  //   if (editIndex != null) {
+  //     var data = anyaPrabhaviLokDataList[editIndex];
+  //     anyaPrabhaviLokNaavController.text = data.name ?? "";
+  //     anyaPrabhaviLokAddressController.text = data.address ?? "";
+  //     anyaPrabhaviLokMobileNoController.text = data.doorabhaash ?? "";
+  //     anyaPrabhaviLokShreniId = data.shreneeid;
+  //     anyaPrabhaviLokShreniName = data.selectedDropdownValueName;
+  //     anyaPrabhaviLokUpShreniId = data.upshreneeid;
+  //     anyaPrabhaviLokUpShreniName = data.selectedDropdownValueName1;
+  //     anyaPrabhaviLokAnyaUppshreniController.text = data.otherupshrenee ?? "";
+  //     anyaPrabhaviLokUpShreni1Id = data.upshreneeid2;
+  //     anyaPrabhaviLokUpShreni1Name = data.selectedDropdownValueName2;
+  //     anyaPrabhaviLokAnyaUppshreni1Controller.text = data.otherupshrenee2 ?? "";
+  //     anyaPrabhaviLokVisheshId = data.visheshid;
+  //     anyaPrabhaviLokVisheshName = data.selectedDropdownValueName3;
+  //     anyaPrabhaviLokPrabhavKshetraId = data.prabhaavkshetrid;
+  //     anyaPrabhaviLokPrabhavKshetraName = data.selectedDropdownValueName4;
+  //     anyaPrabhaviLokAnyaVisheshMahitiController.text = data.othervishesh ?? "";
+  //     anyaPrabhaviLokSamparkStithiId = data.samparksthitiid;
+  //     anyaPrabhaviLokSamparkStithiName = data.selectedDropdownValueName5;
+  //     anyaPrabhaviLokSamparkSutraNaavController.text =
+  //         data.samparkasutranav ?? "";
+  //     anyaPrabhaviLokSamparkSutraDoorbhashController.text =
+  //         data.samparkaSutraDoorbhash ?? "";
+  //     pkidAnyaPrabhaviLok = data.pkid;
+  //   }
+  //   showDialog(
+  //     context: context,
+  //     builder: (ctx) {
+  //       return AlertDialog(
+  //         title: Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+  //             Text(
+  //               "अन्य प्रभावी लोकं",
+  //               style: TextStyle(
+  //                 fontWeight: FontWeight.bold,
+  //                 fontSize: 20,
+  //                 color: Colors.purpleAccent,
+  //               ),
+  //             ),
+  //             IconButton(
+  //               icon: Icon(Icons.close, color: Colors.grey),
+  //               onPressed: () => Navigator.of(context).pop(),
+  //             ),
+  //           ],
+  //         ),
+  //         content: StatefulBuilder(
+  //           builder: (context, setState) {
+  //             return SingleChildScrollView(
+  //               child: Column(
+  //                 mainAxisSize: MainAxisSize.min,
+  //                 children: [
+  //                   textControllerField2(
+  //                       name: "नाव",
+  //                       controller: anyaPrabhaviLokNaavController,
+  //                       height: 50),
+  //                   textControllerField2(
+  //                       name: "पत्ता",
+  //                       controller: anyaPrabhaviLokAddressController,
+  //                       height: 80),
+  //                   textControllerField2(
+  //                     name: "दूरभाष",
+  //                     controller: anyaPrabhaviLokMobileNoController,
+  //                     height: 50,
+  //                     keyboardType: TextInputType.number,
+  //                     maxInput: 10,
+  //                   ),
+  //                   SizedBox(height: 10),
+  //                   Align(
+  //                     alignment: Alignment.centerLeft,
+  //                     child: Text(
+  //                       "श्रेणी/उपश्रेणी",
+  //                       style: TextStyle(
+  //                           fontSize: 15, fontWeight: FontWeight.w500),
+  //                     ),
+  //                   ),
+  //                   SizedBox(height: 5),
+  //                   vastisarvekshanDropDownDataModel != null
+  //                       ? vastisarvekshanDropdown3(
+  //                           filterTypeName: "श्रेणी",
+  //                           hintText: "श्रेणी निवडा",
+  //                           selectedValue: selectedShreni,
+  //                           selectedDependentValue: selectedUpShreni,
+  //                           selectedThirdLevelValue: selectedUpShreni2,
+  //                           onValueSelected: (id, name, value) {
+  //                             anyaPrabhaviLokShreniId = id;
+  //                             anyaPrabhaviLokShreniName = name;
+  //                             setState(() {
+  //                               selectedShreni = value;
+  //                               selectedUpShreni = null;
+  //                               selectedUpShreni2 = null;
+  //                             });
+  //                           },
+  //                           onDependentValueSelected: (id, name, value) {
+  //                             anyaPrabhaviLokUpShreniId = id;
+  //                             anyaPrabhaviLokUpShreniName = name;
+  //                             setState(() {
+  //                               selectedUpShreni = value;
+  //                               selectedUpShreni2 = null;
+  //                             });
+  //                           },
+  //                           onThirdLevelValueSelected: (id, name, value) {
+  //                             anyaPrabhaviLokUpShreni1Id = id;
+  //                             anyaPrabhaviLokUpShreni1Name = name;
+  //                             setState(() {
+  //                               selectedUpShreni2 = value;
+  //                             });
+  //                           },
+  //                           viewName: true,
+  //                         )
+  //                       : Container(),
+  //                   SizedBox(
+  //                     height: 10,
+  //                   ),
+  //                   if (selectedUpShreni?.isOther == 1)
+  //                     textControllerField2(
+  //                         name: "अन्य उपश्रेणी",
+  //                         controller: anyaPrabhaviLokAnyaUppshreniController),
+  //                   SizedBox(
+  //                     height: 10,
+  //                   ),
+  //                   if (selectedUpShreni2?.isOther == 1)
+  //                     textControllerField2(
+  //                         name: "अन्य उपश्रेणी 2",
+  //                         controller: anyaPrabhaviLokAnyaUppshreni1Controller),
+  //                   SizedBox(
+  //                     height: 10,
+  //                   ),
+  //                   vastisarvekshanDropDownDataModel != null
+  //                       ? vastisarvekshanDropdown2(
+  //                           hintText: "विशेष निवडा",
+  //                           filterTypeName: "अन्यप्रभावीलोकंविशेष",
+  //                           onItemSelected: (valueId, valueName, isOther) {
+  //                             anyaPrabhaviLokVisheshId = valueId;
+  //                             anyaPrabhaviLokVisheshName = valueName;
+  //                             print("id = $valueId --- Name = $valueName");
+  //                           },
+  //                           dataModel: vastisarvekshanDropDownDataModel!,
+  //                           question: "विशेष",
+  //                           editId: selectedAnyaPrabhaviLokVisheshIDEdit,
+  //                           selectedValue: selectedAnyaPrabhaviLokVishesh,
+  //                           onSelectionChanged: (newValue) {
+  //                             setState(() {
+  //                               selectedAnyaPrabhaviLokVishesh = newValue;
+  //                             });
+  //                           },
+  //                         )
+  //                       : Container(),
+  //                   SizedBox(
+  //                     height: 10,
+  //                   ),
+  //                   vastisarvekshanDropDownDataModel != null
+  //                       ? vastisarvekshanDropdown2(
+  //                           hintText: "प्रभाव क्षेत्र निवडा",
+  //                           filterTypeName: "अन्यप्रभावीलोकंप्रभावक्षेत्र",
+  //                           onItemSelected: (valueId, valueName, isOther) {
+  //                             anyaPrabhaviLokPrabhavKshetraId = valueId;
+  //                             anyaPrabhaviLokPrabhavKshetraName = valueName;
+  //                             print("id = $valueId --- Name = $valueName");
+  //                           },
+  //                           dataModel: vastisarvekshanDropDownDataModel!,
+  //                           question: "प्रभाव क्षेत्र",
+  //                           editId: selectedAnyaPrabhaviLokPrabhavKshetraIDEdit,
+  //                           selectedValue:
+  //                               selectedAnyaPrabhaviLokPrabhavKshetra,
+  //                           onSelectionChanged: (newValue) {
+  //                             setState(() {
+  //                               selectedAnyaPrabhaviLokPrabhavKshetra =
+  //                                   newValue;
+  //                             });
+  //                           },
+  //                         )
+  //                       : Container(),
+  //                   textControllerField2(
+  //                       name: "अन्य विशेष माहिती",
+  //                       controller: anyaPrabhaviLokAnyaVisheshMahitiController,
+  //                       height: 80),
+  //                   // SizedBox(height: 10,),
+  //                   vastisarvekshanDropDownDataModel != null
+  //                       ? vastisarvekshanDropdown2(
+  //                           hintText: "संपर्क स्थिति निवडा",
+  //                           filterTypeName: "अन्यप्रभावीलोकंसंपर्कस्थिति",
+  //                           onItemSelected: (valueId, valueName, isOther) {
+  //                             anyaPrabhaviLokSamparkStithiId = valueId;
+  //                             anyaPrabhaviLokSamparkStithiName = valueName;
+  //                             print("id = $valueId --- Name = $valueName");
+  //                           },
+  //                           dataModel: vastisarvekshanDropDownDataModel!,
+  //                           question: "संपर्क स्थिति",
+  //                           editId: selectedAnyaPrabhaviLokSamparkStithiIDEdit,
+  //                           selectedValue: selectedAnyaPrabhaviLokSamparkStithi,
+  //                           onSelectionChanged: (newValue) {
+  //                             setState(() {
+  //                               selectedAnyaPrabhaviLokSamparkStithi = newValue;
+  //                             });
+  //                           },
+  //                         )
+  //                       : Container(),
+  //                   // textControllerField("अन्य विशेष माहिती", anyaPrabhaviLokAnyaVisheshMahitiController, context, height: 80),
+  //                   textControllerField2(
+  //                       name: "संपर्क सूत्र नाव",
+  //                       controller: anyaPrabhaviLokSamparkSutraNaavController,
+  //                       height: 50),
+  //                   textControllerField2(
+  //                     name: "संपर्क सूत्रांचे दूरभाष",
+  //                     controller:
+  //                         anyaPrabhaviLokSamparkSutraDoorbhashController,
+  //                     height: 50,
+  //                     keyboardType: TextInputType.number,
+  //                     maxInput: 10,
+  //                   ),
+  //                 ],
+  //               ),
+  //             );
+  //           },
+  //         ),
+  //         actions: [
+  //           Align(
+  //             alignment: Alignment.center,
+  //             child: ElevatedButton(
+  //               style: ElevatedButton.styleFrom(
+  //                 backgroundColor: Colors.purple,
+  //                 shape: RoundedRectangleBorder(
+  //                     borderRadius: BorderRadius.circular(8)),
+  //               ),
+  //               // onPressed: () {
+  //               //   VastisarAnyaprabhavilokam data = VastisarAnyaprabhavilokam(
+  //               //     name: anyaPrabhaviLokNaavController.text,
+  //               //     address: anyaPrabhaviLokAddressController.text,
+  //               //     doorabhaash: anyaPrabhaviLokMobileNoController.text,
+  //               //     shreneeid: anyaPrabhaviLokShreniId,
+  //               //     selectedDropdownValueName : anyaPrabhaviLokShreniName,
+  //               //     upshreneeid : anyaPrabhaviLokUpShreniId,
+  //               //     selectedDropdownValueName1 : anyaPrabhaviLokUpShreniName,
+  //               //     upshreneeid2: anyaPrabhaviLokUpShreni1Id,
+  //               //     selectedDropdownValueName2: anyaPrabhaviLokUpShreni1Name,
+  //               //     visheshid : anyaPrabhaviLokVisheshId,
+  //               //     selectedDropdownValueName3: anyaPrabhaviLokVisheshName,
+  //               //     prabhaavkshetrid: anyaPrabhaviLokPrabhavKshetraId,
+  //               //     selectedDropdownValueName4: anyaPrabhaviLokPrabhavKshetraName,
+  //               //     othervishesh: anyaPrabhaviLokAnyaVisheshMahitiController.text,
+  //               //     samparksthitiid : anyaPrabhaviLokSamparkStithiId,
+  //               //     selectedDropdownValueName5: anyaPrabhaviLokSamparkStithiName,
+  //               //     samparkasutranav: anyaPrabhaviLokSamparkSutraNaavController.text,
+  //               //     samparkaSutraDoorbhash: anyaPrabhaviLokSamparkSutraDoorbhashController.text,
+  //               //     pkid: pkidAnyaPrabhaviLok,
+  //               //     anyavisesamahiti:anyaPrabhaviLokAnyaVisheshMahitiController.text,
+  //               //     otherupshrenee: anyaPrabhaviLokAnyaUppshreniController.text,
+  //               //     otherupshrenee2:  anyaPrabhaviLokAnyaUppshreni1Controller.text,
+  //               //     isactive:  isActiveAnyaPrabhavilok,
+  //               //     vastiid: int.parse(selctedLevelId!),
+  //               //   );
+  //               //   if (editIndex != null) {
+  //               //     anyaPrabhaviLokDataList[editIndex] = data;
+  //               //   } else {
+  //               //     anyaPrabhaviLokDataList.add(data);
+  //               //   }
+  //               //   clearAnyaPrabhaviLokFields();
+  //               //   if (onDataChanged != null) {
+  //               //     onDataChanged();
+  //               //   }
+  //               //   Navigator.of(ctx).pop();
+  //               // },
+  //               onPressed: () {
+  //                 if ((selectedUpShreni?.isOther == 1 &&
+  //                         anyaPrabhaviLokAnyaUppshreniController.text == "") ||
+  //                     (selectedUpShreni2?.isOther == 1 &&
+  //                         anyaPrabhaviLokAnyaUppshreni1Controller.text == "")) {
+  //                   Statics.showToast("'अन्य' माहिती आवश्यक.");
+  //                 } else {
+  //                   VastisarAnyaprabhavilokam data = VastisarAnyaprabhavilokam(
+  //                     name: anyaPrabhaviLokNaavController.text,
+  //                     address: anyaPrabhaviLokAddressController.text,
+  //                     doorabhaash: anyaPrabhaviLokMobileNoController.text,
+  //                     shreneeid: anyaPrabhaviLokShreniId,
+  //                     selectedDropdownValueName: anyaPrabhaviLokShreniName,
+  //                     upshreneeid: anyaPrabhaviLokUpShreniId,
+  //                     selectedDropdownValueName1: anyaPrabhaviLokUpShreniName,
+  //                     upshreneeid2: anyaPrabhaviLokUpShreni1Id,
+  //                     selectedDropdownValueName2: anyaPrabhaviLokUpShreni1Name,
+  //                     visheshid: anyaPrabhaviLokVisheshId,
+  //                     selectedDropdownValueName3: anyaPrabhaviLokVisheshName,
+  //                     prabhaavkshetrid: anyaPrabhaviLokPrabhavKshetraId,
+  //                     selectedDropdownValueName4:
+  //                         anyaPrabhaviLokPrabhavKshetraName,
+  //                     othervishesh:
+  //                         anyaPrabhaviLokAnyaVisheshMahitiController.text,
+  //                     samparksthitiid: anyaPrabhaviLokSamparkStithiId,
+  //                     selectedDropdownValueName5:
+  //                         anyaPrabhaviLokSamparkStithiName,
+  //                     samparkasutranav:
+  //                         anyaPrabhaviLokSamparkSutraNaavController.text,
+  //                     samparkaSutraDoorbhash:
+  //                         anyaPrabhaviLokSamparkSutraDoorbhashController.text,
+  //                     pkid: pkidAnyaPrabhaviLok,
+  //                     anyavisesamahiti:
+  //                         anyaPrabhaviLokAnyaVisheshMahitiController.text,
+  //                     otherupshrenee:
+  //                         anyaPrabhaviLokAnyaUppshreniController.text,
+  //                     otherupshrenee2:
+  //                         anyaPrabhaviLokAnyaUppshreni1Controller.text,
+  //                     isactive: isActiveAnyaPrabhavilok,
+  //                     vastiid: int.parse(selctedLevelId!),
+  //                   );
+  //                   if (editIndex != null) {
+  //                     anyaPrabhaviLokDataList[editIndex] = data;
+  //                   } else {
+  //                     anyaPrabhaviLokDataList.add(data);
+  //                   }
+  //                   clearAnyaPrabhaviLokFields();
+  //                   if (onDataChanged != null) {
+  //                     onDataChanged();
+  //                   }
+  //                   Navigator.of(ctx).pop();
+  //                 }
+  //               },
+  //
+  //               child: Text("संग्रह", style: TextStyle(color: Colors.white)),
+  //             ),
+  //           )
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
   void showAnyaPrabhaviPopup(BuildContext context,
       {int? editIndex, VoidCallback? onDataChanged}) {
     if (editIndex != null) {
@@ -7470,19 +7781,25 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
       anyaPrabhaviLokAddressController.text = data.address ?? "";
       anyaPrabhaviLokMobileNoController.text = data.doorabhaash ?? "";
       anyaPrabhaviLokShreniId = data.shreneeid;
+      anyaPrabhaviLokShreniIdEdit = data.shreneeid;
       anyaPrabhaviLokShreniName = data.selectedDropdownValueName;
       anyaPrabhaviLokUpShreniId = data.upshreneeid;
+      anyaPrabhaviLokUpShreniIdEdit = data.upshreneeid;
       anyaPrabhaviLokUpShreniName = data.selectedDropdownValueName1;
       anyaPrabhaviLokAnyaUppshreniController.text = data.otherupshrenee ?? "";
       anyaPrabhaviLokUpShreni1Id = data.upshreneeid2;
+      anyaPrabhaviLokUpShreni1IdEdit = data.upshreneeid2;
       anyaPrabhaviLokUpShreni1Name = data.selectedDropdownValueName2;
       anyaPrabhaviLokAnyaUppshreni1Controller.text = data.otherupshrenee2 ?? "";
       anyaPrabhaviLokVisheshId = data.visheshid;
+      selectedAnyaPrabhaviLokVisheshIDEdit = data.visheshid;
       anyaPrabhaviLokVisheshName = data.selectedDropdownValueName3;
       anyaPrabhaviLokPrabhavKshetraId = data.prabhaavkshetrid;
+      selectedAnyaPrabhaviLokPrabhavKshetraIDEdit = data.prabhaavkshetrid;
       anyaPrabhaviLokPrabhavKshetraName = data.selectedDropdownValueName4;
       anyaPrabhaviLokAnyaVisheshMahitiController.text = data.othervishesh ?? "";
       anyaPrabhaviLokSamparkStithiId = data.samparksthitiid;
+      selectedAnyaPrabhaviLokSamparkStithiIDEdit = data.samparksthitiid;
       anyaPrabhaviLokSamparkStithiName = data.selectedDropdownValueName5;
       anyaPrabhaviLokSamparkSutraNaavController.text =
           data.samparkasutranav ?? "";
@@ -7524,7 +7841,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     textControllerField2(
                         name: "पत्ता",
                         controller: anyaPrabhaviLokAddressController,
-                        height: 80),
+                        height: 50),
                     textControllerField2(
                       name: "दूरभाष",
                       controller: anyaPrabhaviLokMobileNoController,
@@ -7532,7 +7849,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       keyboardType: TextInputType.number,
                       maxInput: 10,
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 5),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -7546,9 +7863,12 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         ? vastisarvekshanDropdown3(
                             filterTypeName: "श्रेणी",
                             hintText: "श्रेणी निवडा",
-                            selectedValue: selectedShreni,
-                            selectedDependentValue: selectedUpShreni,
-                            selectedThirdLevelValue: selectedUpShreni2,
+                            anyaPrabhaviLokShreniId:
+                                anyaPrabhaviLokShreniIdEdit,
+                            anyaPrabhaviLokUpShreniId:
+                                anyaPrabhaviLokUpShreniIdEdit,
+                            anyaPrabhaviLokUpShreni1Id:
+                                anyaPrabhaviLokUpShreni1IdEdit,
                             onValueSelected: (id, name, value) {
                               anyaPrabhaviLokShreniId = id;
                               anyaPrabhaviLokShreniName = name;
@@ -7576,16 +7896,18 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             viewName: true,
                           )
                         : Container(),
-                    SizedBox(
-                      height: 10,
-                    ),
+                    if (selectedUpShreni?.isOther == 1)
+                      SizedBox(
+                        height: 10,
+                      ),
                     if (selectedUpShreni?.isOther == 1)
                       textControllerField2(
                           name: "अन्य उपश्रेणी",
                           controller: anyaPrabhaviLokAnyaUppshreniController),
-                    SizedBox(
-                      height: 10,
-                    ),
+                    if (selectedUpShreni2?.isOther == 1)
+                      SizedBox(
+                        height: 10,
+                      ),
                     if (selectedUpShreni2?.isOther == 1)
                       textControllerField2(
                           name: "अन्य उपश्रेणी 2",
@@ -7638,11 +7960,16 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             },
                           )
                         : Container(),
+                    SizedBox(
+                      height: 10,
+                    ),
                     textControllerField2(
                         name: "अन्य विशेष माहिती",
                         controller: anyaPrabhaviLokAnyaVisheshMahitiController,
-                        height: 80),
-                    // SizedBox(height: 10,),
+                        height: 50),
+                    SizedBox(
+                      height: 10,
+                    ),
                     vastisarvekshanDropDownDataModel != null
                         ? vastisarvekshanDropdown2(
                             hintText: "संपर्क स्थिति निवडा",
@@ -7663,6 +7990,9 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             },
                           )
                         : Container(),
+                    SizedBox(
+                      height: 10,
+                    ),
                     // textControllerField("अन्य विशेष माहिती", anyaPrabhaviLokAnyaVisheshMahitiController, context, height: 80),
                     textControllerField2(
                         name: "संपर्क सूत्र नाव",
@@ -7672,7 +8002,6 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       name: "संपर्क सूत्रांचे दूरभाष",
                       controller:
                           anyaPrabhaviLokSamparkSutraDoorbhashController,
-                      height: 50,
                       keyboardType: TextInputType.number,
                       maxInput: 10,
                     ),
@@ -7690,44 +8019,6 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8)),
                 ),
-                // onPressed: () {
-                //   VastisarAnyaprabhavilokam data = VastisarAnyaprabhavilokam(
-                //     name: anyaPrabhaviLokNaavController.text,
-                //     address: anyaPrabhaviLokAddressController.text,
-                //     doorabhaash: anyaPrabhaviLokMobileNoController.text,
-                //     shreneeid: anyaPrabhaviLokShreniId,
-                //     selectedDropdownValueName : anyaPrabhaviLokShreniName,
-                //     upshreneeid : anyaPrabhaviLokUpShreniId,
-                //     selectedDropdownValueName1 : anyaPrabhaviLokUpShreniName,
-                //     upshreneeid2: anyaPrabhaviLokUpShreni1Id,
-                //     selectedDropdownValueName2: anyaPrabhaviLokUpShreni1Name,
-                //     visheshid : anyaPrabhaviLokVisheshId,
-                //     selectedDropdownValueName3: anyaPrabhaviLokVisheshName,
-                //     prabhaavkshetrid: anyaPrabhaviLokPrabhavKshetraId,
-                //     selectedDropdownValueName4: anyaPrabhaviLokPrabhavKshetraName,
-                //     othervishesh: anyaPrabhaviLokAnyaVisheshMahitiController.text,
-                //     samparksthitiid : anyaPrabhaviLokSamparkStithiId,
-                //     selectedDropdownValueName5: anyaPrabhaviLokSamparkStithiName,
-                //     samparkasutranav: anyaPrabhaviLokSamparkSutraNaavController.text,
-                //     samparkaSutraDoorbhash: anyaPrabhaviLokSamparkSutraDoorbhashController.text,
-                //     pkid: pkidAnyaPrabhaviLok,
-                //     anyavisesamahiti:anyaPrabhaviLokAnyaVisheshMahitiController.text,
-                //     otherupshrenee: anyaPrabhaviLokAnyaUppshreniController.text,
-                //     otherupshrenee2:  anyaPrabhaviLokAnyaUppshreni1Controller.text,
-                //     isactive:  isActiveAnyaPrabhavilok,
-                //     vastiid: int.parse(selctedLevelId!),
-                //   );
-                //   if (editIndex != null) {
-                //     anyaPrabhaviLokDataList[editIndex] = data;
-                //   } else {
-                //     anyaPrabhaviLokDataList.add(data);
-                //   }
-                //   clearAnyaPrabhaviLokFields();
-                //   if (onDataChanged != null) {
-                //     onDataChanged();
-                //   }
-                //   Navigator.of(ctx).pop();
-                // },
                 onPressed: () {
                   if ((selectedUpShreni?.isOther == 1 &&
                           anyaPrabhaviLokAnyaUppshreniController.text == "") ||
@@ -7781,7 +8072,6 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     Navigator.of(ctx).pop();
                   }
                 },
-
                 child: Text("संग्रह", style: TextStyle(color: Colors.white)),
               ),
             )
@@ -7857,9 +8147,13 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
       vastitSajarHonareSanAyojakNameController.text = data.ayojakancinave ?? "";
       vastitSajarHonareSanAyojakSamparkController.text =
           data.aayojaksamparksootr ?? "";
-      // selectedMasterSanName = data['sanObj'];
       vastitSajarHonareAnyaSanController.text = data.otherSajareSan ?? "";
       pkidSajareHonareSan = data.pkid;
+
+      selectedMasterSanName = Masterdata(
+        id: selectedSanId,
+        value: selectedSanName ?? "",
+      );
     }
 
     showDialog(
@@ -7879,7 +8173,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
               ),
               IconButton(
                 icon: Icon(Icons.close, color: Colors.grey),
-                onPressed: () => Navigator.of(context).pop(),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  clearvastitSajarHonareSanFields();
+                },
               ),
             ],
           ),
@@ -7944,30 +8241,6 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8)),
                 ),
-                // onPressed: () {
-                //   VastisarVastitamahatvacesana data =VastisarVastitamahatvacesana(
-                //     id : selectedSanId ,
-                //     selectedDropdownValueName: selectedSanName,
-                //     ayojakasansthacinave: vastitSajarHonareSanAyojakSansthaNameController.text,
-                //     ayojakancinave: vastitSajarHonareSanAyojakNameController.text,
-                //     aayojaksamparksootr: vastitSajarHonareSanAyojakSamparkController.text,
-                //     // selectedMasterSanName = data['sanObj'];
-                //     otherSajareSan : vastitSajarHonareAnyaSanController.text,
-                //     isactive: isActiveSajareHonareSan,
-                //     pkid: pkidSajareHonareSan ?? 0,
-                //     vastiid: int.parse(selctedLevelId!),
-                //   );
-                //   if (editIndex != null) {
-                //     vastitSajarHonareSanDataList[editIndex] = data;
-                //   } else {
-                //     vastitSajarHonareSanDataList.add(data);
-                //   }
-                //   clearvastitSajarHonareSanFields();
-                //   if (onDataChanged != null) {
-                //     onDataChanged();
-                //   }
-                //   Navigator.of(ctx).pop();
-                // },
                 onPressed: () {
                   if ((selectedMasterSanName?.isOther == 1 &&
                       vastitSajarHonareAnyaSanController.text == "")) {
@@ -8001,7 +8274,6 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     Navigator.of(ctx).pop();
                   }
                 },
-
                 child: Text("संग्रह", style: TextStyle(color: Colors.white)),
               ),
             )
@@ -8598,326 +8870,349 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
               "दुर्जन शक्ति",
               Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          if (isVastiSearch) {
-                            showDurjanShaktiPopup(context, onDataChanged: () {
-                              setState(() {});
-                            });
-                          } else {
-                            showPopupForVastiValidation(context);
-                          }
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 5),
-                          width: 100,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.purpleAccent.shade100),
-                              color: Colors.purpleAccent.withOpacity(0.7),
-                              borderRadius: BorderRadius.circular(15)),
-                          child: const Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.add, color: Colors.white, size: 15),
-                                SizedBox(width: 5),
-                                Text(
-                                  "नवीन",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
+                  yesNoRadioButton(
+                      question: "दुर्जन शक्ति आहे का?",
+                      selectedOption: durjanShaktiYesNo ?? 2,
+                      onChanged: (value) {
+                        if (isVastiSearch) {
+                          setState(() {
+                            durjanShaktiYesNo = value;
+                          });
+                        } else {
+                          showPopupForVastiValidation(
+                            context,
+                          );
+                        }
+                      }),
+                  if (durjanShaktiYesNo == 1)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            if (isVastiSearch) {
+                              showDurjanShaktiPopup(context, onDataChanged: () {
+                                setState(() {});
+                              });
+                            } else {
+                              showPopupForVastiValidation(context);
+                            }
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            width: 100,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Colors.purpleAccent.shade100),
+                                color: Colors.purpleAccent.withOpacity(0.7),
+                                borderRadius: BorderRadius.circular(15)),
+                            child: const Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.add,
+                                      color: Colors.white, size: 15),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    "नवीन",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  Column(
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.symmetric(vertical: 10),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black54),
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                        ),
-                        child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              child: DataTable(
-                                columnSpacing: 20,
-                                showCheckboxColumn: false,
-                                headingRowColor: MaterialStatePropertyAll(
-                                    Colors.purple.shade50),
-                                headingTextStyle: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87),
-                                columns: const [
-                                  DataColumn(
-                                      label: Text(
-                                    "नाव",
-                                  )),
-                                  DataColumn(
-                                      label: Text(
-                                    "प्रकार",
-                                  )),
-                                  DataColumn(
-                                      label: Text(
-                                    "शिक्षा",
-                                  )),
-                                  DataColumn(
-                                      label: Text(
-                                    "गुन्हा",
-                                  )),
-                                ],
-                                rows: durjanShaktiDataList
-                                    .asMap()
-                                    .entries
-                                    .where((entry) => entry.value.isactive == 1)
-                                    .map((entry) {
-                                  int index = entry.key;
-                                  var data = entry.value;
-                                  bool isSelected =
-                                      selectedDurjanShaktiIdIndex == index;
-                                  return DataRow(
-                                      selected: isSelected,
-                                      color: MaterialStateProperty.resolveWith<
-                                          Color?>(
-                                        (Set<MaterialState> states) {
-                                          if (isSelected)
-                                            return Colors.yellow.shade100;
-                                          return null;
+                      ],
+                    ),
+                  if (durjanShaktiYesNo == 1) SizedBox(height: 20),
+                  if (durjanShaktiYesNo == 1)
+                    Column(
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black54),
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                          ),
+                          child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                child: DataTable(
+                                  columnSpacing: 20,
+                                  showCheckboxColumn: false,
+                                  headingRowColor: MaterialStatePropertyAll(
+                                      Colors.purple.shade50),
+                                  headingTextStyle: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black87),
+                                  columns: const [
+                                    DataColumn(
+                                        label: Text(
+                                      "नाव",
+                                    )),
+                                    DataColumn(
+                                        label: Text(
+                                      "प्रकार",
+                                    )),
+                                    DataColumn(
+                                        label: Text(
+                                      "शिक्षा",
+                                    )),
+                                    DataColumn(
+                                        label: Text(
+                                      "गुन्हा",
+                                    )),
+                                  ],
+                                  rows: durjanShaktiDataList
+                                      .asMap()
+                                      .entries
+                                      .where(
+                                          (entry) => entry.value.isactive == 1)
+                                      .map((entry) {
+                                    int index = entry.key;
+                                    var data = entry.value;
+                                    bool isSelected =
+                                        selectedDurjanShaktiIdIndex == index;
+                                    return DataRow(
+                                        selected: isSelected,
+                                        color: MaterialStateProperty
+                                            .resolveWith<Color?>(
+                                          (Set<MaterialState> states) {
+                                            if (isSelected)
+                                              return Colors.yellow.shade100;
+                                            return null;
+                                          },
+                                        ),
+                                        onSelectChanged: (bool? selected) {
+                                          if (selected != null && selected) {
+                                            setState(() {
+                                              selectedDurjanShaktiIdIndex =
+                                                  index;
+                                            });
+                                          }
                                         },
-                                      ),
-                                      onSelectChanged: (bool? selected) {
-                                        if (selected != null && selected) {
-                                          setState(() {
-                                            selectedDurjanShaktiIdIndex = index;
-                                          });
-                                        }
-                                      },
-                                      cells: [
-                                        DataCell(Text(data.name ?? '')),
-                                        DataCell(Text(
-                                            data.selectedDropdownValueName ??
-                                                '')),
-                                        DataCell(Text(
-                                            data.selectedDropdownValueName1 ??
-                                                '')),
-                                        DataCell(Text(
-                                            data.selectedDropdownValueName2 ??
-                                                '')),
-                                      ]);
-                                }).toList(),
-                              ),
-                            )),
-                      ),
-                      SizedBox(height: 10),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 6,
+                                        cells: [
+                                          DataCell(Text(data.name ?? '')),
+                                          DataCell(Text(
+                                              data.selectedDropdownValueName ??
+                                                  '')),
+                                          DataCell(Text(
+                                              data.selectedDropdownValueName1 ??
+                                                  '')),
+                                          DataCell(Text(
+                                              data.selectedDropdownValueName2 ??
+                                                  '')),
+                                        ]);
+                                  }).toList(),
+                                ),
+                              )),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                if (selectedDurjanShaktiIdIndex != null) {
-                                  var selectedData = durjanShaktiDataList[
-                                      selectedDurjanShaktiIdIndex!];
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        backgroundColor: Colors.white,
-                                        title: Center(
-                                          child: Text(
-                                            "दुर्जन शक्ति",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                              color: Colors.purpleAccent,
-                                            ),
+                        SizedBox(height: 10),
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 6,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  if (selectedDurjanShaktiIdIndex != null) {
+                                    var selectedData = durjanShaktiDataList[
+                                        selectedDurjanShaktiIdIndex!];
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
                                           ),
-                                        ),
-                                        content: SingleChildScrollView(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Divider(
-                                                  thickness: 1,
-                                                  color: Colors
-                                                      .deepPurple.shade100),
-                                              SizedBox(height: 12),
-                                              _buildInfoRow(
-                                                  "नाव", selectedData.name),
-                                              _buildInfoRow(
-                                                  "प्रकार",
-                                                  selectedData
-                                                      .selectedDropdownValueName),
-                                              _buildInfoRow("अन्य प्रकार",
-                                                  selectedData.otherPrakar),
-                                              _buildInfoRow(
-                                                  "शिक्षा",
-                                                  selectedData
-                                                      .selectedDropdownValueName1),
-                                              _buildInfoRow(
-                                                  "गुन्हा",
-                                                  selectedData
-                                                      .selectedDropdownValueName2),
-                                            ],
-                                          ),
-                                        ),
-                                        actionsAlignment:
-                                            MainAxisAlignment.center,
-                                        actions: [
-                                          ElevatedButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                            child: Text("बंद करा",
-                                                style: TextStyle(
-                                                    color: Colors.white)),
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  Colors.purpleAccent,
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 24, vertical: 12),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
+                                          backgroundColor: Colors.white,
+                                          title: Center(
+                                            child: Text(
+                                              "दुर्जन शक्ति",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20,
+                                                color: Colors.purpleAccent,
                                               ),
                                             ),
                                           ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                }
-                              },
-                              child: Icon(Icons.remove_red_eye,
-                                  color: Colors.green, size: 20),
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                showDurjanShaktiPopup(context,
-                                    editIndex: selectedDurjanShaktiIdIndex,
-                                    onDataChanged: () {
-                                  setState(() {});
-                                });
-                              },
-                              child: Icon(Icons.edit,
-                                  color: Colors.blue, size: 20),
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            InkWell(
-                              onTap: () async {
-                                final shouldDelete = await showDialog<bool>(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    backgroundColor: Colors.white,
-                                    title: Center(
-                                      child: Text(
-                                        "पुष्टीकरण",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                          color: Colors.redAccent,
-                                        ),
-                                      ),
-                                    ),
-                                    content: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10.0),
-                                      child: Text(
-                                        "तुम्हाला हि माहिती नक्की काढून टाकायची आहे का ?",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.black87,
-                                        ),
-                                      ),
-                                    ),
-                                    actionsAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    actions: [
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.grey.shade300,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                          content: SingleChildScrollView(
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Divider(
+                                                    thickness: 1,
+                                                    color: Colors
+                                                        .deepPurple.shade100),
+                                                SizedBox(height: 12),
+                                                _buildInfoRow(
+                                                    "नाव", selectedData.name),
+                                                _buildInfoRow(
+                                                    "प्रकार",
+                                                    selectedData
+                                                        .selectedDropdownValueName),
+                                                _buildInfoRow("अन्य प्रकार",
+                                                    selectedData.otherPrakar),
+                                                _buildInfoRow(
+                                                    "शिक्षा",
+                                                    selectedData
+                                                        .selectedDropdownValueName1),
+                                                _buildInfoRow(
+                                                    "गुन्हा",
+                                                    selectedData
+                                                        .selectedDropdownValueName2),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        onPressed: () =>
-                                            Navigator.pop(context, false),
-                                        child: const Text(
-                                          "नाही",
-                                          style: TextStyle(color: Colors.black),
-                                        ),
-                                      ),
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.redAccent,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                          ),
-                                        ),
-                                        onPressed: () =>
-                                            Navigator.pop(context, true),
-                                        child: const Text(
-                                          "होय",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                                if (shouldDelete == true &&
-                                    selectedDurjanShaktiIdIndex != null) {
-                                  // setState(() {
-                                  //   durjanShaktiDataList
-                                  //       .removeAt(selectedDurjanShaktiIdIndex!);
-                                  //   selectedDurjanShaktiIdIndex = null;
-                                  // });
-                                  setState(() {
-                                    durjanShaktiDataList[
-                                            selectedDurjanShaktiIdIndex!]
-                                        .isactive = 0;
-                                    selectedDurjanShaktiIdIndex = null;
+                                          actionsAlignment:
+                                              MainAxisAlignment.center,
+                                          actions: [
+                                            ElevatedButton(
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                              child: Text("बंद करा",
+                                                  style: TextStyle(
+                                                      color: Colors.white)),
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    Colors.purpleAccent,
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 24,
+                                                    vertical: 12),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  }
+                                },
+                                child: Icon(Icons.remove_red_eye,
+                                    color: Colors.green, size: 20),
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  showDurjanShaktiPopup(context,
+                                      editIndex: selectedDurjanShaktiIdIndex,
+                                      onDataChanged: () {
+                                    setState(() {});
                                   });
-                                }
-                              },
-                              child: Icon(Icons.delete,
-                                  color: Colors.red, size: 20),
-                            ),
-                          ],
+                                },
+                                child: Icon(Icons.edit,
+                                    color: Colors.blue, size: 20),
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              InkWell(
+                                onTap: () async {
+                                  final shouldDelete = await showDialog<bool>(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      backgroundColor: Colors.white,
+                                      title: Center(
+                                        child: Text(
+                                          "पुष्टीकरण",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                            color: Colors.redAccent,
+                                          ),
+                                        ),
+                                      ),
+                                      content: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 10.0),
+                                        child: Text(
+                                          "तुम्हाला हि माहिती नक्की काढून टाकायची आहे का ?",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                      ),
+                                      actionsAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      actions: [
+                                        ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                Colors.grey.shade300,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                          ),
+                                          onPressed: () =>
+                                              Navigator.pop(context, false),
+                                          child: const Text(
+                                            "नाही",
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                          ),
+                                        ),
+                                        ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.redAccent,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                          ),
+                                          onPressed: () =>
+                                              Navigator.pop(context, true),
+                                          child: const Text(
+                                            "होय",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                  if (shouldDelete == true &&
+                                      selectedDurjanShaktiIdIndex != null) {
+                                    // setState(() {
+                                    //   durjanShaktiDataList
+                                    //       .removeAt(selectedDurjanShaktiIdIndex!);
+                                    //   selectedDurjanShaktiIdIndex = null;
+                                    // });
+                                    setState(() {
+                                      durjanShaktiDataList[
+                                              selectedDurjanShaktiIdIndex!]
+                                          .isactive = 0;
+                                      selectedDurjanShaktiIdIndex = null;
+                                    });
+                                  }
+                                },
+                                child: Icon(Icons.delete,
+                                    color: Colors.red, size: 20),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
                 ],
               )),
 //================================== HINDU VEER YAADI FORM =================================================================================================================================================
@@ -9263,6 +9558,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
       "Vastisardhaarmiknetrtav": dharmikNetrutvaDataList,
       "Vastisardurjanshakti": durjanShaktiDataList,
       "VastisarHinduvirayadi": hinduVeerYadiDataList,
+      "isdurjanskhatti": durjanShaktiYesNo,
       "Vastitilasamajikaque": "",
       "anyadhaarmik": "",
     };
@@ -9377,7 +9673,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
     required String filterTypeName,
     required String hintText,
     required Function(int?, String?, int?) onItemSelected,
-    required List<int> excludedItemIds, // 🔹 Add list of excluded item IDs
+    required List<int> excludedItemIds,
     String? question,
     double? width,
     int? questionNumber,
@@ -9385,7 +9681,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
     Masterdata? selectedValue,
     Function(Masterdata?)? onSelectionChanged,
   }) {
-    // 🔹 Filter items based on type and exclude already selected/submitted items
+    // 🔹 Start with filtered list
     List<Masterdata> filteredList = dataModel.masterdata!
         .where((item) =>
             item.typename == filterTypeName &&
@@ -9394,6 +9690,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
 
     Masterdata? selectedItem = selectedValue;
 
+    // 🔹 If selectedItem is not already set and editId is provided, get it
     if (selectedItem == null && editId != null) {
       try {
         selectedItem = dataModel.masterdata!.firstWhere(
@@ -9406,6 +9703,12 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
       } catch (e) {
         selectedItem = null;
       }
+    }
+
+    // 🔹 Ensure selectedItem is in the dropdown list
+    if (selectedItem != null &&
+        !filteredList.any((item) => item.id == selectedItem!.id)) {
+      filteredList.add(selectedItem!);
     }
 
     return Column(
@@ -9431,7 +9734,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
           child: DropdownButtonHideUnderline(
             child: DropdownButton<Masterdata>(
               hint: Text(hintText, style: TextStyle(color: Colors.black54)),
-              value: filteredList.contains(selectedItem) ? selectedItem : null,
+              value: selectedItem,
               isExpanded: true,
               items: filteredList.map((Masterdata item) {
                 return DropdownMenuItem<Masterdata>(
