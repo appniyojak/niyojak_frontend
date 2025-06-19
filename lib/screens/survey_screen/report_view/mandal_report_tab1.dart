@@ -683,8 +683,10 @@ class _MandalSurveyReportViewScreen1State
                                 fontSize: 15,
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold),
-                            columns: const [
-                              DataColumn(label: Text('सर्वेक्षण स्थिती')),
+                            columns: [
+                              DataColumn(
+                                  label: Text(
+                                      "${Statics.getLabel('sarvekshanSthiti')}")),
                               DataColumn(label: Text('तालुका')),
                               DataColumn(label: Text('मंडल')),
                               DataColumn(label: Text('गाव')),
@@ -695,8 +697,8 @@ class _MandalSurveyReportViewScreen1State
                                 color: MaterialStateProperty.all(
                                     Colors.green.shade50),
                                 cells: [
-                                  DataCell(
-                                      Text('प्राथमिक सर्वेक्षण\nपूर्ण झाले')),
+                                  DataCell(Text(
+                                      "${Statics.getLabel('prathamikSurveyComplete')}")),
                                   DataCell(Text(
                                       "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.nagarStep1CompleteCount ?? ""}")),
                                   DataCell(Text(
@@ -718,7 +720,7 @@ class _MandalSurveyReportViewScreen1State
                               // DataRow(
                               //   color: MaterialStateProperty.all(Colors.green.shade50),
                               //   cells: [
-                              //     DataCell(Text('अन्य सर्वेक्षण\nपूर्ण झाले')),
+                              //     DataCell(Text("${Statics.getLabel('otherSuerveyComplete')}")),
                               //     DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.nagarStep2CompleteCount ?? ""}")),
                               //     DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.mandalStep1CompleteCount ?? ""}")),
                               //     DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.vastiStep2CompleteCount ?? ""}")),
@@ -733,8 +735,8 @@ class _MandalSurveyReportViewScreen1State
                                 color: MaterialStateProperty.all(
                                     Colors.green.shade50),
                                 cells: [
-                                  DataCell(
-                                      Text('विस्तृत सर्वेक्षण\nपूर्ण झाले')),
+                                  DataCell(Text(
+                                      "${Statics.getLabel('vistrutSurveyComplete')}")),
                                   DataCell(Text(
                                       "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.nagarStep3CompleteCount ?? ""}")),
                                   DataCell(Text(
@@ -757,7 +759,8 @@ class _MandalSurveyReportViewScreen1State
                                 color: MaterialStateProperty.all(
                                     Colors.orange.shade50),
                                 cells: [
-                                  DataCell(Text('सर्वेक्षण सुरु झाले')),
+                                  DataCell(Text(
+                                      "${Statics.getLabel('surveyStart')}")),
                                   DataCell(Text(
                                       "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.nagarStepStartedCount ?? ""}")),
                                   DataCell(Text(
@@ -780,7 +783,8 @@ class _MandalSurveyReportViewScreen1State
                                 color: MaterialStateProperty.all(
                                     Colors.orange.shade50),
                                 cells: [
-                                  DataCell(Text('सर्वेक्षण पूर्ण झाले')),
+                                  DataCell(Text(
+                                      "${Statics.getLabel('surveyComplete')}")),
                                   DataCell(Text(
                                       "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.nagarAllStepsCompleteCount ?? ""}")),
                                   DataCell(Text(
@@ -803,7 +807,8 @@ class _MandalSurveyReportViewScreen1State
                                 color: MaterialStateProperty.all(
                                     Colors.orange.shade50),
                                 cells: [
-                                  DataCell(Text('सर्वेक्षण सुरु\nझाले नाही')),
+                                  DataCell(Text(
+                                      "${Statics.getLabel('surveyNotStarted')}")),
                                   DataCell(Text(
                                       "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.nagarStepsNotstartedCount ?? ""}")),
                                   DataCell(Text(
@@ -826,7 +831,8 @@ class _MandalSurveyReportViewScreen1State
                                 color: MaterialStateProperty.all(
                                     Colors.grey.shade200),
                                 cells: [
-                                  DataCell(Text('एकुण')),
+                                  DataCell(
+                                      Text("${Statics.getLabel('Total')}")),
                                   DataCell(Text(
                                       "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.nagarcount ?? ""}")),
                                   DataCell(Text(
@@ -896,10 +902,10 @@ class _MandalSurveyReportViewScreen1State
                                                 fontSize: 15,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.bold),
-                                            columns: const [
+                                            columns: [
                                               DataColumn(
-                                                  label:
-                                                      Text('सर्वेक्षण स्थिती')),
+                                                  label: Text(
+                                                      "${Statics.getLabel('sarvekshanSthiti')}")),
                                               DataColumn(label: Text('तालुका')),
                                               DataColumn(label: Text('मंडल')),
                                               DataColumn(label: Text('गाव')),
@@ -912,7 +918,7 @@ class _MandalSurveyReportViewScreen1State
                                                             .lightBlue.shade50),
                                                 cells: [
                                                   DataCell(Text(
-                                                      'प्राथमिक सर्वेक्षण\nपूर्ण झाले')),
+                                                      "${Statics.getLabel('prathamikSurveyComplete')}")),
                                                   DataCell(Text(
                                                       "${data.nagarStep1CompleteCount ?? ""}")),
                                                   DataCell(Text(
@@ -928,7 +934,7 @@ class _MandalSurveyReportViewScreen1State
                                                             .lightBlue.shade50),
                                                 cells: [
                                                   DataCell(Text(
-                                                      'विस्तृत सर्वेक्षण\nपूर्ण झाले')),
+                                                      "${Statics.getLabel('vistrutSurveyComplete')}")),
                                                   DataCell(Text(
                                                       "${data.nagarStep3CompleteCount ?? ""}")),
                                                   DataCell(Text(
@@ -943,7 +949,7 @@ class _MandalSurveyReportViewScreen1State
                                                         Colors.red.shade50),
                                                 cells: [
                                                   DataCell(Text(
-                                                      'सर्वेक्षण सुरु झाले')),
+                                                      "${Statics.getLabel('surveyStart')}")),
                                                   DataCell(Text(
                                                       "${data.nagarStepStartedCount ?? ""}")),
                                                   DataCell(Text(
@@ -958,7 +964,7 @@ class _MandalSurveyReportViewScreen1State
                                                         Colors.red.shade50),
                                                 cells: [
                                                   DataCell(Text(
-                                                      'सर्वेक्षण पूर्ण झाले')),
+                                                      "${Statics.getLabel('surveyComplete')}")),
                                                   DataCell(Text(
                                                       "${data.nagarAllStepsCompleteCount ?? ""}")),
                                                   DataCell(Text(
@@ -973,7 +979,7 @@ class _MandalSurveyReportViewScreen1State
                                                         Colors.red.shade50),
                                                 cells: [
                                                   DataCell(Text(
-                                                      'सर्वेक्षण सुरु\nझाले नाही')),
+                                                      "${Statics.getLabel('surveyNotStarted')}")),
                                                   DataCell(Text(
                                                       "${data.nagarStepsNotstartedCount ?? ""}")),
                                                   DataCell(Text(
@@ -987,7 +993,8 @@ class _MandalSurveyReportViewScreen1State
                                                     MaterialStateProperty.all(
                                                         Colors.yellow.shade50),
                                                 cells: [
-                                                  DataCell(Text('एकुण')),
+                                                  DataCell(Text(
+                                                      "${Statics.getLabel('Total')}")),
                                                   DataCell(Text(
                                                       "${data.nagarcount ?? ""}")),
                                                   DataCell(Text(
@@ -1057,7 +1064,7 @@ class _MandalSurveyReportViewScreen1State
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                columns: const [
+                                columns: [
                                   DataColumn(
                                     label: Expanded(
                                       child: Center(
@@ -1171,7 +1178,7 @@ class _MandalSurveyReportViewScreen1State
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                      columns: const [
+                                      columns: [
                                         DataColumn(
                                           label: Expanded(
                                             child: Center(
@@ -1258,7 +1265,7 @@ class _MandalSurveyReportViewScreen1State
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                columns: const [
+                                columns: [
                                   DataColumn(
                                     label: Expanded(
                                       child: Center(
@@ -1599,7 +1606,7 @@ class _MandalSurveyReportViewScreen1State
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                      columns: const [
+                                      columns: [
                                         DataColumn(
                                           label: Expanded(
                                             child: Center(
@@ -1617,7 +1624,7 @@ class _MandalSurveyReportViewScreen1State
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'संख्या',
+                                                "${Statics.getLabel('count')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -1684,7 +1691,7 @@ class _MandalSurveyReportViewScreen1State
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                      columns: const [
+                                      columns: [
                                         DataColumn(
                                           label: Expanded(
                                             child: Center(
@@ -1702,7 +1709,7 @@ class _MandalSurveyReportViewScreen1State
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'संख्या',
+                                                "${Statics.getLabel('count')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -1769,7 +1776,7 @@ class _MandalSurveyReportViewScreen1State
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                      columns: const [
+                                      columns: [
                                         DataColumn(
                                           label: Expanded(
                                             child: Center(
@@ -1787,7 +1794,7 @@ class _MandalSurveyReportViewScreen1State
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'संख्या',
+                                                "${Statics.getLabel('count')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -1855,7 +1862,7 @@ class _MandalSurveyReportViewScreen1State
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                      columns: const [
+                                      columns: [
                                         DataColumn(
                                           label: Expanded(
                                             child: Center(
@@ -1873,7 +1880,7 @@ class _MandalSurveyReportViewScreen1State
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'संख्या',
+                                                "${Statics.getLabel('count')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -1941,12 +1948,12 @@ class _MandalSurveyReportViewScreen1State
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                      columns: const [
+                                      columns: [
                                         DataColumn(
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'विद्यार्थी श्रेणी',
+                                                "${Statics.getLabel('StudentCategory')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -1959,7 +1966,7 @@ class _MandalSurveyReportViewScreen1State
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'संख्या',
+                                                "${Statics.getLabel('count')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -2027,12 +2034,12 @@ class _MandalSurveyReportViewScreen1State
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                      columns: const [
+                                      columns: [
                                         DataColumn(
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'व्यवसायी श्रेणी',
+                                                "${Statics.getLabel('VyavasaayeeCategory')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -2045,7 +2052,7 @@ class _MandalSurveyReportViewScreen1State
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'संख्या',
+                                                "${Statics.getLabel('count')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -2113,12 +2120,12 @@ class _MandalSurveyReportViewScreen1State
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                      columns: const [
+                                      columns: [
                                         DataColumn(
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'रिलीजन',
+                                                "${Statics.getLabel('religion')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -2208,12 +2215,12 @@ class _MandalSurveyReportViewScreen1State
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                      columns: const [
+                                      columns: [
                                         DataColumn(
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'उपासना स्थळ',
+                                                "${Statics.getLabel('UpasanaSthal')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -2226,7 +2233,7 @@ class _MandalSurveyReportViewScreen1State
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'संख्या',
+                                                "${Statics.getLabel('count')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -2316,7 +2323,7 @@ class _MandalSurveyReportViewScreen1State
                                   SizedBox(height: 20),
                                   Center(
                                     child: Text(
-                                      "सज्जन शक्ती (${sajjanType})",
+                                      "${Statics.getLabel('SajjanShakti')} (${sajjanType})",
                                       style: TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold),
@@ -2334,11 +2341,11 @@ class _MandalSurveyReportViewScreen1State
                                               .shade200, // Header background
                                         ),
                                         children: [
-                                          const TableCell(
+                                          TableCell(
                                             child: Padding(
                                               padding: EdgeInsets.all(8),
                                               child: Text(
-                                                'सज्जन शक्ती संपर्क स्थिती',
+                                                '${Statics.getLabel('SajjanShakti')} ${Statics.getLabel('samparkSthiti')}',
                                                 style: TextStyle(
                                                     color: Colors.white),
                                               ),
@@ -2394,10 +2401,10 @@ class _MandalSurveyReportViewScreen1State
                                         decoration: BoxDecoration(
                                             color: Colors.grey.shade200),
                                         children: [
-                                          const Padding(
+                                          Padding(
                                             padding: EdgeInsets.all(8),
                                             child: Text(
-                                              'एकूण',
+                                              "${Statics.getLabel('Total')}",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             ),
@@ -2466,12 +2473,12 @@ class _MandalSurveyReportViewScreen1State
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                      columns: const [
+                                      columns: [
                                         DataColumn(
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'प्रकार',
+                                                "${Statics.getLabel('SelectFrequency')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -2484,7 +2491,7 @@ class _MandalSurveyReportViewScreen1State
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'संख्या',
+                                                "${Statics.getLabel('count')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -2577,12 +2584,12 @@ class _MandalSurveyReportViewScreen1State
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                      columns: const [
+                                      columns: [
                                         DataColumn(
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'प्रकार',
+                                                "${Statics.getLabel('SelectFrequency')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -2595,7 +2602,7 @@ class _MandalSurveyReportViewScreen1State
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'संख्या',
+                                                "${Statics.getLabel('count')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -2692,12 +2699,12 @@ class _MandalSurveyReportViewScreen1State
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
-                                    columns: const [
+                                    columns: [
                                       DataColumn(
                                         label: Expanded(
                                           child: Center(
                                             child: Text(
-                                              'हिंदु वीर संख्या',
+                                              "${Statics.getLabel('hinduVeerCount')}",
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),

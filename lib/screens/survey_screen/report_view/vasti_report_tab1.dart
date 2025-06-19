@@ -163,99 +163,10 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
     });
   }
 
-  // void showPopupList(BuildContext context, String vastiStepStartedNames) {
-  //   final List<String> namesList =
-  //   vastiStepStartedNames.split('::').map((e) => e.trim()).toList();
-  //   showDialog(
-  //     context: context,
-  //     builder: (_) => Dialog(
-  //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-  //       child: Container(
-  //         width: double.maxFinite,
-  //         height: 500,
-  //         padding: const EdgeInsets.all(20),
-  //         decoration: BoxDecoration(
-  //           borderRadius: BorderRadius.circular(20),
-  //           color: Colors.white,
-  //         ),
-  //         child: Column(
-  //           children: [
-  //             Row(
-  //               children: const [
-  //                 Icon(Icons.list_alt, color: Colors.purpleAccent),
-  //                 SizedBox(width: 10),
-  //                 Text(
-  //                   'वस्ती यादी',
-  //                   style: TextStyle(
-  //                     fontSize: 20,
-  //                     fontWeight: FontWeight.bold,
-  //                     color: Colors.purpleAccent,
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //             const Divider(thickness: 1, height: 20),
-  //             Expanded(
-  //               child: Scrollbar(
-  //                 thumbVisibility: true,
-  //                 thickness: 6,
-  //                 radius: Radius.circular(10),
-  //                 child: ListView.builder(
-  //                   itemCount: namesList.length,
-  //                   itemBuilder: (_, index) => Padding(
-  //                     padding: const EdgeInsets.symmetric(vertical: 4.0),
-  //                     child: Row(
-  //                       crossAxisAlignment: CrossAxisAlignment.start,
-  //                       children: [
-  //                         Text(
-  //                           '${index + 1}) ',
-  //                           style: TextStyle(
-  //                             fontWeight: FontWeight.w600,
-  //                             color: Colors.black87,
-  //                           ),
-  //                         ),
-  //                         Expanded(
-  //                           child: Text(
-  //                             namesList[index],
-  //                             style: const TextStyle(
-  //                               fontSize: 16,
-  //                               color: Colors.black87,
-  //                             ),
-  //                           ),
-  //                         ),
-  //                       ],
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ),
-  //             ),
-  //             const SizedBox(height: 20),
-  //             Align(
-  //               alignment: Alignment.center,
-  //               child: ElevatedButton.icon(
-  //                 onPressed: () => Navigator.pop(context),
-  //                 icon: const Icon(Icons.close),
-  //                 label: const Text('बंद करा'),
-  //                 style: ElevatedButton.styleFrom(
-  //                   backgroundColor: Colors.purpleAccent,
-  //                   foregroundColor: Colors.white,
-  //                   shape: RoundedRectangleBorder(
-  //                     borderRadius: BorderRadius.circular(12),
-  //                   ),
-  //                 ),
-  //               ),
-  //             )
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
   void showPopupList(BuildContext context, String vastiStepStartedNames) {
     if (vastiStepStartedNames.trim().isEmpty) {
       Fluttertoast.showToast(
-        msg: "वस्ती उपलब्ध नाहीयेत",
+        msg: "${Statics.getLabel('vastiNotAvailable')}",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: Colors.black87,
@@ -269,7 +180,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
 
     if (namesList.isEmpty || namesList.first.isEmpty) {
       Fluttertoast.showToast(
-        msg: "वस्ती उपलब्ध नाहीयेत",
+        msg: "${Statics.getLabel('vastiNotAvailable')}",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: Colors.black87,
@@ -285,7 +196,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
         child: Container(
           width: double.maxFinite,
           height: 500,
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(20),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             color: Colors.white,
@@ -293,11 +204,11 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
           child: Column(
             children: [
               Row(
-                children: const [
+                children: [
                   Icon(Icons.list_alt, color: Colors.purpleAccent),
                   SizedBox(width: 10),
                   Text(
-                    'वस्ती यादी',
+                    Statics.getLabel('vastiYaadi'),
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -306,7 +217,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                   ),
                 ],
               ),
-              const Divider(thickness: 1, height: 20),
+              Divider(thickness: 1, height: 20),
               Expanded(
                 child: Scrollbar(
                   thumbVisibility: true,
@@ -315,7 +226,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                   child: ListView.builder(
                     itemCount: namesList.length,
                     itemBuilder: (_, index) => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      padding: EdgeInsets.symmetric(vertical: 4.0),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -329,7 +240,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                           Expanded(
                             child: Text(
                               namesList[index],
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.black87,
                               ),
@@ -341,13 +252,13 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               Align(
                 alignment: Alignment.center,
                 child: ElevatedButton.icon(
                   onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close),
-                  label: const Text('बंद करा'),
+                  icon: Icon(Icons.close),
+                  label: Text('बंद करा'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purpleAccent,
                     foregroundColor: Colors.white,
@@ -409,7 +320,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.symmetric(horizontal: 8),
               child: Text(
-                'संघ कार्य स्थिती',
+                "${Statics.getLabel('sanghaKaryaStithi')}",
                 style:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
@@ -460,7 +371,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                       alignment: Alignment.center,
                       color: Colors.purpleAccent.shade100,
                       child: Text(
-                        'एकूण',
+                        "${Statics.getLabel('Total')}",
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold),
                       ),
@@ -647,7 +558,8 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                       backgroundColor: Colors.transparent,
                       headerBuilder: (BuildContext context, bool isExpanded) {
                         return ListTile(
-                          title: Text("स्तर निवडा",
+                          title: Text(
+                              "${Statics.getLabel('selectedBhougolikkaryastithi')}",
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold)),
@@ -667,8 +579,9 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                           children: [
                             if (_linkedMahaanagar != null)
                               DropdownButtonFormField(
-                                decoration:
-                                    InputDecoration(labelText: "महानगर"),
+                                decoration: InputDecoration(
+                                    labelText:
+                                        "${Statics.getLabel('mahaanagar')}"),
                                 isExpanded: true,
                                 value: _linkedMahaanagarValue == ""
                                     ? null
@@ -705,7 +618,9 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                             ),
                             if (_linkedVibhaag != null)
                               DropdownButtonFormField(
-                                decoration: InputDecoration(labelText: "विभाग"),
+                                decoration: InputDecoration(
+                                    labelText:
+                                        "${Statics.getLabel('vibhaag')}"),
                                 isExpanded: true,
                                 value: _linkedVibhaagValue == ""
                                     ? null
@@ -742,8 +657,9 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                             ),
                             if (_linkedBhaag != null)
                               DropdownButtonFormField(
-                                decoration:
-                                    InputDecoration(labelText: "भाग/जिल्हा"),
+                                decoration: InputDecoration(
+                                    labelText:
+                                        "${Statics.getLabel('BhaagKaaryakartaaCount')}"),
                                 isExpanded: true,
                                 value: _linkedBhaagValue == ""
                                     ? null
@@ -847,7 +763,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                   //   Statics.showToast(Statics.getLabel('vastiGramValidation'));
                                   // }
                                 },
-                                child: Text("निवडा",
+                                child: Text("${Statics.getLabel('Search')}",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold)),
@@ -902,10 +818,10 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                   children: [
                     if (isVastiSearch == true)
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        padding: EdgeInsets.symmetric(vertical: 8),
                         child: Center(
                           child: Text(
-                            'सारांश ($selctedDropDownLevelName)',
+                            '${Statics.getLabel('sharaansh')} ($selctedDropDownLevelName)',
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
@@ -919,15 +835,20 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                           child: DataTable(
                             headingRowColor:
                                 MaterialStateProperty.all(Colors.teal.shade100),
-                            headingTextStyle: const TextStyle(
+                            headingTextStyle: TextStyle(
                               fontSize: 15,
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
                             ),
-                            columns: const [
-                              DataColumn(label: Text('सर्वेक्षण स्थिती')),
-                              DataColumn(label: Text('नगर')),
-                              DataColumn(label: Text('वस्ती')),
+                            columns: [
+                              DataColumn(
+                                  label: Text(
+                                      "${Statics.getLabel('sarvekshanSthiti')}")),
+                              DataColumn(
+                                  label:
+                                      Text(Statics.getLabel('NagarShahari'))),
+                              DataColumn(
+                                  label: Text("${Statics.getLabel('Vasti')}")),
                               DataColumn(label: Text('')),
                             ],
                             rows: [
@@ -935,8 +856,8 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                 color: MaterialStateProperty.all(
                                     Colors.green.shade50),
                                 cells: [
-                                  DataCell(
-                                      Text('प्राथमिक सर्वेक्षण\nपूर्ण झाले')),
+                                  DataCell(Text(
+                                      "${Statics.getLabel('prathamikSurveyComplete')}")),
                                   DataCell(Text(
                                       "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStep1CompleteCount ?? ""}")),
                                   DataCell(Text(
@@ -957,7 +878,8 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                 color: MaterialStateProperty.all(
                                     Colors.green.shade50),
                                 cells: [
-                                  DataCell(Text('अन्य सर्वेक्षण\nपूर्ण झाले')),
+                                  DataCell(Text(
+                                      "${Statics.getLabel('otherSuerveyComplete')}")),
                                   DataCell(Text(
                                       "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStep2CompleteCount ?? ""}")),
                                   DataCell(Text(
@@ -978,8 +900,8 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                 color: MaterialStateProperty.all(
                                     Colors.green.shade50),
                                 cells: [
-                                  DataCell(
-                                      Text('विस्तृत सर्वेक्षण\nपूर्ण झाले')),
+                                  DataCell(Text(
+                                      "${Statics.getLabel('vistrutSurveyComplete')}")),
                                   DataCell(Text(
                                       "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStep3CompleteCount ?? ""}")),
                                   DataCell(Text(
@@ -1000,7 +922,8 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                 color: MaterialStateProperty.all(
                                     Colors.orange.shade50),
                                 cells: [
-                                  DataCell(Text('सर्वेक्षण सुरु झाले')),
+                                  DataCell(Text(
+                                      "${Statics.getLabel('surveyStart')}")),
                                   DataCell(Text(
                                       "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStepStartedCount ?? ""}")),
                                   DataCell(Text(
@@ -1021,7 +944,8 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                 color: MaterialStateProperty.all(
                                     Colors.orange.shade50),
                                 cells: [
-                                  DataCell(Text('सर्वेक्षण पूर्ण झाले')),
+                                  DataCell(Text(
+                                      "${Statics.getLabel('surveyComplete')}")),
                                   DataCell(Text(
                                       "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarAllStepsCompleteCount ?? ""}")),
                                   DataCell(Text(
@@ -1042,7 +966,8 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                 color: MaterialStateProperty.all(
                                     Colors.orange.shade50),
                                 cells: [
-                                  DataCell(Text('सर्वेक्षण सुरु\nझाले नाही')),
+                                  DataCell(Text(
+                                      "${Statics.getLabel('surveyNotStarted')}")),
                                   DataCell(Text(
                                       "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStepsNotstartedCount ?? ""}")),
                                   DataCell(Text(
@@ -1063,7 +988,8 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                 color: MaterialStateProperty.all(
                                     Colors.grey.shade200),
                                 cells: [
-                                  DataCell(Text('एकुण')),
+                                  DataCell(
+                                      Text("${Statics.getLabel('Total')}")),
                                   DataCell(Text(
                                       "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarcount ?? ""}")),
                                   DataCell(Text(
@@ -1103,11 +1029,12 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8),
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 8),
                                       child: Center(
                                         child: Text(
-                                          data.name ?? 'नगर/वस्ती नाव',
+                                          data.name ??
+                                              "${Statics.getLabel('nagarVastiName')}",
                                           style: TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold),
@@ -1122,11 +1049,17 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           fontSize: 15,
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold),
-                                      columns: const [
+                                      columns: [
                                         DataColumn(
-                                            label: Text('सर्वेक्षण स्थिती')),
-                                        DataColumn(label: Text('नगर')),
-                                        DataColumn(label: Text('वस्ती')),
+                                            label: Text(
+                                                "${Statics.getLabel('sarvekshanSthiti')}")),
+                                        DataColumn(
+                                            label: Text(Statics.getLabel(
+                                                'NagarShahari'))),
+                                        DataColumn(
+                                            label: Text(
+                                                "${Statics.getLabel('Vasti')}")),
+                                        DataColumn(label: Text('')),
                                       ],
                                       rows: [
                                         DataRow(
@@ -1134,7 +1067,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                               Colors.lightBlue.shade50),
                                           cells: [
                                             DataCell(Text(
-                                                'प्राथमिक सर्वेक्षण\nपूर्ण झाले')),
+                                                "${Statics.getLabel('prathamikSurveyComplete')}")),
                                             DataCell(Text(
                                                 "${data.nagarStep1CompleteCount ?? ""}")),
                                             DataCell(Text(
@@ -1146,7 +1079,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                               Colors.lightBlue.shade50),
                                           cells: [
                                             DataCell(Text(
-                                                'अन्य सर्वेक्षण\nपूर्ण झाले')),
+                                                "${Statics.getLabel('otherSuerveyComplete')}")),
                                             DataCell(Text(
                                                 "${data.nagarStep2CompleteCount ?? ""}")),
                                             DataCell(Text(
@@ -1158,7 +1091,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                               Colors.lightBlue.shade50),
                                           cells: [
                                             DataCell(Text(
-                                                'विस्तृत सर्वेक्षण\nपूर्ण झाले')),
+                                                "${Statics.getLabel('vistrutSurveyComplete')}")),
                                             DataCell(Text(
                                                 "${data.nagarStep3CompleteCount ?? ""}")),
                                             DataCell(Text(
@@ -1169,8 +1102,8 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           color: MaterialStateProperty.all(
                                               Colors.red.shade50),
                                           cells: [
-                                            DataCell(
-                                                Text('सर्वेक्षण सुरु झाले')),
+                                            DataCell(Text(
+                                                "${Statics.getLabel('surveyStart')}")),
                                             DataCell(Text(
                                                 "${data.nagarStepStartedCount ?? ""}")),
                                             DataCell(Text(
@@ -1181,8 +1114,8 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           color: MaterialStateProperty.all(
                                               Colors.red.shade50),
                                           cells: [
-                                            DataCell(
-                                                Text('सर्वेक्षण पूर्ण झाले')),
+                                            DataCell(Text(
+                                                "${Statics.getLabel('surveyComplete')}")),
                                             DataCell(Text(
                                                 "${data.nagarAllStepsCompleteCount ?? ""}")),
                                             DataCell(Text(
@@ -1194,7 +1127,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                               Colors.red.shade50),
                                           cells: [
                                             DataCell(Text(
-                                                'सर्वेक्षण सुरु\nझाले नाही')),
+                                                "${Statics.getLabel('surveyNotStarted')}")),
                                             DataCell(Text(
                                                 "${data.nagarStepsNotstartedCount ?? ""}")),
                                             DataCell(Text(
@@ -1205,7 +1138,8 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           color: MaterialStateProperty.all(
                                               Colors.yellow.shade50),
                                           cells: [
-                                            DataCell(Text('एकुण')),
+                                            DataCell(Text(
+                                                "${Statics.getLabel('Total')}")),
                                             DataCell(Text(
                                                 "${data.nagarcount ?? ""}")),
                                             DataCell(Text(
@@ -1495,7 +1429,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                         if (data != null &&
                             data!.listKaaryakartaaCountByGatividhi != null)
                           Container(
-                            // margin: const EdgeInsets.all(16),
+                            // margin:EdgeInsets.all(16),
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.shade300),
                               borderRadius: BorderRadius.circular(8),
@@ -1507,13 +1441,17 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                     MaterialStateProperty.resolveWith(
                                   (states) => Colors.purpleAccent[200],
                                 ),
-                                headingTextStyle: const TextStyle(
+                                headingTextStyle: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                columns: const [
-                                  DataColumn(label: Text('गतिविधी')),
-                                  DataColumn(label: Text('कार्यकर्ता संख्या')),
+                                columns: [
+                                  DataColumn(
+                                      label: Text(
+                                          "${Statics.getLabel('Gatividhi')}")),
+                                  DataColumn(
+                                      label: Text(
+                                          "${Statics.getLabel('KaaryakartaaCountByLevel')}")),
                                 ],
                                 rows: data!.listKaaryakartaaCountByGatividhi!
                                     .map((item) {
@@ -1522,8 +1460,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                       DataCell(Text(item.gatividhiName ?? '')),
                                       DataCell(Center(
                                           child: Text(item.kaaryakartaaCount
-                                                  .toString() ??
-                                              "0"))),
+                                              .toString()))),
                                     ],
                                   );
                                 }).toList(),
@@ -1538,7 +1475,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                         if (data != null &&
                             data!.listKaaryakartaaCountByAayaam != null)
                           Container(
-                            // margin: const EdgeInsets.all(16),
+                            // margin:EdgeInsets.all(16),
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.shade300),
                               borderRadius: BorderRadius.circular(8),
@@ -1550,13 +1487,17 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                     MaterialStateProperty.resolveWith(
                                   (states) => Colors.purpleAccent[200],
                                 ),
-                                headingTextStyle: const TextStyle(
+                                headingTextStyle: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                columns: const [
-                                  DataColumn(label: Text('आयाम')),
-                                  DataColumn(label: Text('कार्यकर्ता संख्या')),
+                                columns: [
+                                  DataColumn(
+                                      label: Text(
+                                          "${Statics.getLabel('Aayaam')}")),
+                                  DataColumn(
+                                      label: Text(
+                                          "${Statics.getLabel('KaaryakartaaCountByLevel')}")),
                                 ],
                                 rows: data!.listKaaryakartaaCountByAayaam!
                                     .map((item) {
@@ -1582,7 +1523,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                             data!.listSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation !=
                                 null)
                           Container(
-                            // margin: const EdgeInsets.all(16),
+                            // margin:EdgeInsets.all(16),
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.shade300),
                               borderRadius: BorderRadius.circular(8),
@@ -1594,14 +1535,17 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                     MaterialStateProperty.resolveWith(
                                   (states) => Colors.purpleAccent[200],
                                 ),
-                                headingTextStyle: const TextStyle(
+                                headingTextStyle: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                columns: const [
+                                columns: [
                                   DataColumn(
-                                      label: Text('संघ प्रेरित संघटना/संस्था')),
-                                  DataColumn(label: Text('कार्यकर्ता संख्या')),
+                                      label: Text(
+                                          "${Statics.getLabel('sanghaPreritSanghatana')}")),
+                                  DataColumn(
+                                      label: Text(
+                                          "${Statics.getLabel('KaaryakartaaCountByLevel')}")),
                                 ],
                                 rows: data!
                                     .listSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation!
@@ -1629,7 +1573,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                             data!.socialOrganizationKaaryakartaaCountByAreaOfOperation !=
                                 null)
                           Container(
-                            // margin: const EdgeInsets.all(16),
+                            // margin:EdgeInsets.all(16),
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.shade300),
                               borderRadius: BorderRadius.circular(8),
@@ -1641,14 +1585,17 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                     MaterialStateProperty.resolveWith(
                                   (states) => Colors.purpleAccent[200],
                                 ),
-                                headingTextStyle: const TextStyle(
+                                headingTextStyle: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                columns: const [
+                                columns: [
                                   DataColumn(
-                                      label: Text('अन्य सामाजिक संस्था')),
-                                  DataColumn(label: Text('संख्या')),
+                                      label: Text(
+                                          "${Statics.getLabel('OtherSocialOrganization')}")),
+                                  DataColumn(
+                                      label:
+                                          Text("${Statics.getLabel('count')}")),
                                 ],
                                 rows: data!
                                     .socialOrganizationKaaryakartaaCountByAreaOfOperation!
@@ -1675,7 +1622,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                         if (data != null &&
                             data!.listSwayamsevakCountByStudentCategory != null)
                           Container(
-                            // margin: const EdgeInsets.all(16),
+                            // margin:EdgeInsets.all(16),
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.shade300),
                               borderRadius: BorderRadius.circular(8),
@@ -1687,13 +1634,17 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                     MaterialStateProperty.resolveWith(
                                   (states) => Colors.purpleAccent[200],
                                 ),
-                                headingTextStyle: const TextStyle(
+                                headingTextStyle: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                columns: const [
-                                  DataColumn(label: Text('विद्यार्थी श्रेणी')),
-                                  DataColumn(label: Text('संख्या')),
+                                columns: [
+                                  DataColumn(
+                                      label: Text(
+                                          "${Statics.getLabel('StudentCategory')}")),
+                                  DataColumn(
+                                      label:
+                                          Text("${Statics.getLabel('count')}")),
                                 ],
                                 rows: data!
                                     .listSwayamsevakCountByStudentCategory!
@@ -1746,16 +1697,16 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                             MaterialStateProperty.resolveWith(
                                           (states) => Colors.purpleAccent[200],
                                         ),
-                                        headingTextStyle: const TextStyle(
+                                        headingTextStyle: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
                                         ),
-                                        columns: const [
+                                        columns: [
                                           DataColumn(
                                             label: Expanded(
                                               child: Center(
                                                 child: Text(
-                                                  'व्यवसायी श्रेणी',
+                                                  "${Statics.getLabel('VyavasaayeeCategory')}",
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       fontWeight:
@@ -1768,7 +1719,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                             label: Expanded(
                                               child: Center(
                                                 child: Text(
-                                                  'संख्या',
+                                                  "${Statics.getLabel('count')}",
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       fontWeight:
@@ -1832,16 +1783,16 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                             MaterialStateProperty.resolveWith(
                                           (states) => Colors.purpleAccent[200],
                                         ),
-                                        headingTextStyle: const TextStyle(
+                                        headingTextStyle: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
                                         ),
-                                        columns: const [
+                                        columns: [
                                           DataColumn(
                                             label: Expanded(
                                               child: Center(
                                                 child: Text(
-                                                  'वसाहत प्रकार',
+                                                  "${Statics.getLabel('vasahatPrakar')}",
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       fontWeight:
@@ -1854,7 +1805,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                             label: Expanded(
                                               child: Center(
                                                 child: Text(
-                                                  'संख्या',
+                                                  "${Statics.getLabel('count')}",
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       fontWeight:
@@ -1908,8 +1859,9 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                     children: [
                                       TableCell(
                                         child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text('प्रकार / स्थिती',
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text(
+                                              "${Statics.getLabel('prakaarSthiti')}",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.white)),
@@ -1917,8 +1869,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                       ),
                                       ...subtypes.map((subtype) => TableCell(
                                             child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
+                                              padding: EdgeInsets.all(8.0),
                                               child: Text(subtype,
                                                   style: TextStyle(
                                                       fontWeight:
@@ -1934,7 +1885,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                       children: [
                                         TableCell(
                                           child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                            padding: EdgeInsets.all(8.0),
                                             child: Text(mt),
                                           ),
                                         ),
@@ -1942,8 +1893,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           final value = vastiMap[mt]?[st] ?? 0;
                                           return TableCell(
                                             child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
+                                              padding: EdgeInsets.all(8.0),
                                               child: Text(value.toString()),
                                             ),
                                           );
@@ -1987,16 +1937,16 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                             MaterialStateProperty.resolveWith(
                                           (states) => Colors.purpleAccent[200],
                                         ),
-                                        headingTextStyle: const TextStyle(
+                                        headingTextStyle: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
                                         ),
-                                        columns: const [
+                                        columns: [
                                           DataColumn(
                                             label: Expanded(
                                               child: Center(
                                                 child: Text(
-                                                  'भाषा',
+                                                  "${Statics.getLabel('onlyBhasha')}",
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       fontWeight:
@@ -2009,7 +1959,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                             label: Expanded(
                                               child: Center(
                                                 child: Text(
-                                                  'वस्ती संख्या',
+                                                  "${Statics.getLabel('vastiCount')}",
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       fontWeight:
@@ -2069,16 +2019,16 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                             MaterialStateProperty.resolveWith(
                                           (states) => Colors.purpleAccent[200],
                                         ),
-                                        headingTextStyle: const TextStyle(
+                                        headingTextStyle: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
                                         ),
-                                        columns: const [
+                                        columns: [
                                           DataColumn(
                                             label: Expanded(
                                               child: Center(
                                                 child: Text(
-                                                  'प्रांत स्थिति',
+                                                  "${Statics.getLabel('praantStithi')}",
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       fontWeight:
@@ -2091,7 +2041,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                             label: Expanded(
                                               child: Center(
                                                 child: Text(
-                                                  'वस्ती संख्या',
+                                                  "${Statics.getLabel('vastiCount')}",
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       fontWeight:
@@ -2149,16 +2099,16 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           MaterialStateProperty.resolveWith(
                                         (states) => Colors.purpleAccent[200],
                                       ),
-                                      headingTextStyle: const TextStyle(
+                                      headingTextStyle: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                      columns: const [
+                                      columns: [
                                         DataColumn(
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'रिलीजन',
+                                                "${Statics.getLabel('religion')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -2171,7 +2121,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'वस्ती संख्या',
+                                                "${Statics.getLabel('vastiCount')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -2213,7 +2163,8 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                             child: Column(
                               children: [
                                 if (data != null && data!.upasanaSthal != null)
-                                  ..._buildGroupedTables(data!.upasanaSthal!)
+                                  ..._buildGroupedTables(
+                                      data!.upasanaSthal!, context)
                               ],
                             ),
                           ),
@@ -2245,11 +2196,11 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const SizedBox(height: 20),
+                                    SizedBox(height: 20),
                                     Center(
                                       child: Text(
-                                        "सज्जन शक्ती (${sajjanType})",
-                                        style: const TextStyle(
+                                        "${Statics.getLabel('SajjanShakti')} (${sajjanType})",
+                                        style: TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -2265,11 +2216,11 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                             color: Colors.purpleAccent.shade200,
                                           ),
                                           children: [
-                                            const TableCell(
+                                            TableCell(
                                               child: Padding(
                                                 padding: EdgeInsets.all(8),
                                                 child: Text(
-                                                  'सज्जन शक्ती संपर्क स्थिती',
+                                                  '${Statics.getLabel('SajjanShakti')} ${Statics.getLabel('samparkSthiti')}',
                                                   style: TextStyle(
                                                       color: Colors.white),
                                                 ),
@@ -2278,11 +2229,10 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                             ...prabhavishetraList
                                                 .map((header) => Padding(
                                                       padding:
-                                                          const EdgeInsets.all(
-                                                              8),
+                                                          EdgeInsets.all(8),
                                                       child: Text(
                                                         header ?? '',
-                                                        style: const TextStyle(
+                                                        style: TextStyle(
                                                             color:
                                                                 Colors.white),
                                                       ),
@@ -2295,8 +2245,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                               SizedBox(
                                                 width: 140,
                                                 child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8),
+                                                  padding: EdgeInsets.all(8),
                                                   child: Text(sampark ?? ''),
                                                 ),
                                               ),
@@ -2312,8 +2261,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                                       Sajjanshakkati(),
                                                 );
                                                 return Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8),
+                                                  padding: EdgeInsets.all(8),
                                                   child: Text(
                                                       '${match.vasticnt ?? ''}'),
                                                 );
@@ -2325,10 +2273,10 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           decoration: BoxDecoration(
                                               color: Colors.grey.shade200),
                                           children: [
-                                            const Padding(
+                                            Padding(
                                               padding: EdgeInsets.all(8),
                                               child: Text(
-                                                'एकूण',
+                                                "${Statics.getLabel('Total')}",
                                                 style: TextStyle(
                                                     fontWeight:
                                                         FontWeight.bold),
@@ -2346,11 +2294,10 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                                           sum +
                                                           (item.vasticnt ?? 0));
                                               return Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8),
+                                                padding: EdgeInsets.all(8),
                                                 child: Text(
                                                   '$total',
-                                                  style: const TextStyle(
+                                                  style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold),
                                                 ),
@@ -2383,10 +2330,10 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      const SizedBox(height: 30),
-                                      const Center(
+                                      SizedBox(height: 30),
+                                      Center(
                                         child: Text(
-                                          "सज्जन शक्ती (संपूर्ण एकूण)",
+                                          "${Statics.getLabel('SajjanShakti')} ${Statics.getLabel('completeAll')}",
                                           style: TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold),
@@ -2402,11 +2349,11 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                               color: Colors.deepPurple.shade200,
                                             ),
                                             children: [
-                                              const TableCell(
+                                              TableCell(
                                                 child: Padding(
                                                   padding: EdgeInsets.all(8),
                                                   child: Text(
-                                                    'संपर्क स्थिती',
+                                                    "${Statics.getLabel('samparkSthiti')}",
                                                     style: TextStyle(
                                                         color: Colors.white),
                                                   ),
@@ -2414,11 +2361,10 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                               ),
                                               ...allPrabhavishetra.map(
                                                 (header) => Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8),
+                                                  padding: EdgeInsets.all(8),
                                                   child: Text(
                                                     header ?? '',
-                                                    style: const TextStyle(
+                                                    style: TextStyle(
                                                         color: Colors.white),
                                                   ),
                                                 ),
@@ -2429,8 +2375,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                             return TableRow(
                                               children: [
                                                 Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8),
+                                                  padding: EdgeInsets.all(8),
                                                   child: Text(sampark ?? ''),
                                                 ),
                                                 ...allPrabhavishetra
@@ -2448,8 +2393,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                                               (e.vasticnt ??
                                                                   0));
                                                   return Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(8),
+                                                    padding: EdgeInsets.all(8),
                                                     child: Text('$total'),
                                                   );
                                                 }),
@@ -2460,10 +2404,10 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                             decoration: BoxDecoration(
                                                 color: Colors.grey.shade300),
                                             children: [
-                                              const Padding(
+                                              Padding(
                                                 padding: EdgeInsets.all(8),
                                                 child: Text(
-                                                  'एकूण',
+                                                  "${Statics.getLabel('Total')}",
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold),
@@ -2481,11 +2425,10 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                                             sum +
                                                             (e.vasticnt ?? 0));
                                                 return Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8),
+                                                  padding: EdgeInsets.all(8),
                                                   child: Text(
                                                     '$total',
-                                                    style: const TextStyle(
+                                                    style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold),
                                                   ),
@@ -2515,10 +2458,11 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                           ),
                           child: ListView(
                             children: [
-                              ...groupedAnyaPrabhaviData.entries.map((entry) {
+                              ...groupedAnyaPrabhaviData.entries
+                                  .where((entry) => entry.key.trim().isNotEmpty)
+                                  .map((entry) {
                                 final anyaPrabhaviType = entry.key;
                                 final data = entry.value;
-
                                 final prabhavishetraList = {
                                   ...data.map((e) => e.prabhavishetra).toSet()
                                 }.toList();
@@ -2529,11 +2473,11 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const SizedBox(height: 20),
+                                    SizedBox(height: 20),
                                     Center(
                                       child: Text(
-                                        "अन्य प्रभावी लोकं (${anyaPrabhaviType})",
-                                        style: const TextStyle(
+                                        "${Statics.getLabel('anyaPrabhaviLok')} (${anyaPrabhaviType})",
+                                        style: TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold),
                                       ),
@@ -2549,11 +2493,11 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                             color: Colors.purpleAccent.shade200,
                                           ),
                                           children: [
-                                            const TableCell(
+                                            TableCell(
                                               child: Padding(
                                                 padding: EdgeInsets.all(8),
                                                 child: Text(
-                                                  'अन्य प्रभावी लोकं संपर्क स्थिती',
+                                                  '${Statics.getLabel('anyaPrabhaviLok')} "${Statics.getLabel('samparkSthiti')}"',
                                                   style: TextStyle(
                                                       color: Colors.white),
                                                 ),
@@ -2562,11 +2506,10 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                             ...prabhavishetraList
                                                 .map((header) => Padding(
                                                       padding:
-                                                          const EdgeInsets.all(
-                                                              8),
+                                                          EdgeInsets.all(8),
                                                       child: Text(
                                                         header ?? '',
-                                                        style: const TextStyle(
+                                                        style: TextStyle(
                                                             color:
                                                                 Colors.white),
                                                       ),
@@ -2578,8 +2521,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           return TableRow(
                                             children: [
                                               Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8),
+                                                padding: EdgeInsets.all(8),
                                                 child: Text(sampark ?? ''),
                                               ),
                                               ...prabhavishetraList
@@ -2594,8 +2536,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                                       VastiAnyaPrabhaviLokam(),
                                                 );
                                                 return Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8),
+                                                  padding: EdgeInsets.all(8),
                                                   child: Text(
                                                       '${match.vasticnt ?? ''}'),
                                                 );
@@ -2608,10 +2549,10 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           decoration: BoxDecoration(
                                               color: Colors.grey.shade200),
                                           children: [
-                                            const Padding(
+                                            Padding(
                                               padding: EdgeInsets.all(8),
                                               child: Text(
-                                                'एकूण',
+                                                "${Statics.getLabel('Total')}",
                                                 style: TextStyle(
                                                     fontWeight:
                                                         FontWeight.bold),
@@ -2630,11 +2571,10 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                                           (item.vasticnt ?? 0));
 
                                               return Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8),
+                                                padding: EdgeInsets.all(8),
                                                 child: Text(
                                                   '$total',
-                                                  style: const TextStyle(
+                                                  style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold),
                                                 ),
@@ -2667,10 +2607,10 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      const SizedBox(height: 30),
-                                      const Center(
+                                      SizedBox(height: 30),
+                                      Center(
                                         child: Text(
-                                          "सज्जन शक्ती (संपूर्ण एकूण)",
+                                          "${Statics.getLabel('anyaPrabhaviLok')} ${Statics.getLabel('completeAll')}",
                                           style: TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold),
@@ -2687,11 +2627,11 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                               color: Colors.deepPurple.shade200,
                                             ),
                                             children: [
-                                              const TableCell(
+                                              TableCell(
                                                 child: Padding(
                                                   padding: EdgeInsets.all(8),
                                                   child: Text(
-                                                    'संपर्क स्थिती',
+                                                    "${Statics.getLabel('samparkSthiti')}",
                                                     style: TextStyle(
                                                         color: Colors.white),
                                                   ),
@@ -2700,14 +2640,12 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                               ...allPrabhavishetra
                                                   .map((header) => Padding(
                                                         padding:
-                                                            const EdgeInsets
-                                                                .all(8),
+                                                            EdgeInsets.all(8),
                                                         child: Text(
                                                           header ?? '',
-                                                          style:
-                                                              const TextStyle(
-                                                                  color: Colors
-                                                                      .white),
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white),
                                                         ),
                                                       )),
                                             ],
@@ -2717,8 +2655,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                             return TableRow(
                                               children: [
                                                 Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8),
+                                                  padding: EdgeInsets.all(8),
                                                   child: Text(sampark ?? ''),
                                                 ),
                                                 ...allPrabhavishetra
@@ -2736,8 +2673,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                                               (e.vasticnt ??
                                                                   0));
                                                   return Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(8),
+                                                    padding: EdgeInsets.all(8),
                                                     child: Text('$total'),
                                                   );
                                                 }),
@@ -2749,10 +2685,10 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                             decoration: BoxDecoration(
                                                 color: Colors.grey.shade300),
                                             children: [
-                                              const Padding(
+                                              Padding(
                                                 padding: EdgeInsets.all(8),
                                                 child: Text(
-                                                  'एकूण',
+                                                  "${Statics.getLabel('Total')}",
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold),
@@ -2770,11 +2706,10 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                                             sum +
                                                             (e.vasticnt ?? 0));
                                                 return Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8),
+                                                  padding: EdgeInsets.all(8),
                                                   child: Text(
                                                     '$total',
-                                                    style: const TextStyle(
+                                                    style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold),
                                                   ),
@@ -2820,16 +2755,16 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           MaterialStateProperty.resolveWith(
                                         (states) => Colors.purpleAccent[200],
                                       ),
-                                      headingTextStyle: const TextStyle(
+                                      headingTextStyle: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                      columns: const [
+                                      columns: [
                                         DataColumn(
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'वस्तीत साजर होणारे\nमहत्वाचे सण/ उत्सव',
+                                                "${Statics.getLabel('vastitiHonareSanUtsav')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -2842,7 +2777,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'वस्ती संख्या',
+                                                "${Statics.getLabel('vastiCount')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -2899,16 +2834,16 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           MaterialStateProperty.resolveWith(
                                         (states) => Colors.purpleAccent[200],
                                       ),
-                                      headingTextStyle: const TextStyle(
+                                      headingTextStyle: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                      columns: const [
+                                      columns: [
                                         DataColumn(
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'वस्तीत साजर होणारे\nमहत्वाचे सामाजिक कार्यक्रम',
+                                                "${Statics.getLabel('vastitiHonareSamajikKaryaKram')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -2921,7 +2856,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'वस्ती संख्या',
+                                                "${Statics.getLabel('vastiCount')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -2973,8 +2908,9 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                     children: [
                                       TableCell(
                                         child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text('प्रकार / स्थिती',
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text(
+                                              "${Statics.getLabel('prakaarSthiti')}",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.white)),
@@ -2983,8 +2919,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                       ...subtypesGatividhi
                                           .map((subtype) => TableCell(
                                                 child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
+                                                  padding: EdgeInsets.all(8.0),
                                                   child: Text(subtype,
                                                       style: TextStyle(
                                                           fontWeight:
@@ -3000,7 +2935,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                       children: [
                                         TableCell(
                                           child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                            padding: EdgeInsets.all(8.0),
                                             child: Text(mt),
                                           ),
                                         ),
@@ -3009,8 +2944,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                               vastiMapgatividhi[mt]?[st] ?? 0;
                                           return TableCell(
                                             child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
+                                              padding: EdgeInsets.all(8.0),
                                               child: Text(value.toString()),
                                             ),
                                           );
@@ -3048,8 +2982,9 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                     children: [
                                       TableCell(
                                         child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text('प्रकार / स्थिती',
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text(
+                                              "${Statics.getLabel('prakaarSthiti')}",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.white)),
@@ -3058,8 +2993,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                       ...subtypesJagran
                                           .map((subtype) => TableCell(
                                                 child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
+                                                  padding: EdgeInsets.all(8.0),
                                                   child: Text(subtype,
                                                       style: TextStyle(
                                                           fontWeight:
@@ -3075,7 +3009,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                       children: [
                                         TableCell(
                                           child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                            padding: EdgeInsets.all(8.0),
                                             child: Text(mt),
                                           ),
                                         ),
@@ -3084,8 +3018,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                               vastiMapJagran[mt]?[st] ?? 0;
                                           return TableCell(
                                             child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
+                                              padding: EdgeInsets.all(8.0),
                                               child: Text(value.toString()),
                                             ),
                                           );
@@ -3127,16 +3060,16 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           MaterialStateProperty.resolveWith(
                                         (states) => Colors.purpleAccent[200],
                                       ),
-                                      headingTextStyle: const TextStyle(
+                                      headingTextStyle: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                      columns: const [
+                                      columns: [
                                         DataColumn(
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'वस्तीतील बलोपसाना केंद्र',
+                                                "${Statics.getLabel('BalopasanaKendra')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -3149,7 +3082,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'वस्ती संख्या',
+                                                "${Statics.getLabel('vastiCount')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -3162,7 +3095,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'केंद्र संख्या',
+                                                "${Statics.getLabel('kendrsSankhya')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -3222,16 +3155,16 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           MaterialStateProperty.resolveWith(
                                         (states) => Colors.purpleAccent[200],
                                       ),
-                                      headingTextStyle: const TextStyle(
+                                      headingTextStyle: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                      columns: const [
+                                      columns: [
                                         DataColumn(
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'मोठे व्यवसायिक केंद्र',
+                                                "${Statics.getLabel('MotheVyasaayiKendra')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -3244,7 +3177,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'वस्ती संख्या',
+                                                "${Statics.getLabel('vastiCount')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -3257,7 +3190,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'केंद्र संख्या',
+                                                "${Statics.getLabel('kendrsSankhya')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -3317,16 +3250,16 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           MaterialStateProperty.resolveWith(
                                         (states) => Colors.purpleAccent[200],
                                       ),
-                                      headingTextStyle: const TextStyle(
+                                      headingTextStyle: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                      columns: const [
+                                      columns: [
                                         DataColumn(
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'मोठे रुग्णालय',
+                                                "${Statics.getLabel('MotheRugnalay')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -3339,7 +3272,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'वस्ती संख्या',
+                                                "${Statics.getLabel('vastiCount')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -3352,7 +3285,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'रुग्णालय संख्या',
+                                                "${Statics.getLabel('hospitalCount')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -3400,11 +3333,10 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                               if (data != null &&
                                   data!.schooltapasilaforschool != null)
                                 Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8),
+                                  padding: EdgeInsets.symmetric(vertical: 8),
                                   child: Center(
                                     child: Text(
-                                      'शाळा',
+                                      "${Statics.getLabel('school')}",
                                       style: TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold),
@@ -3427,16 +3359,16 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           MaterialStateProperty.resolveWith(
                                         (states) => Colors.purpleAccent[200],
                                       ),
-                                      headingTextStyle: const TextStyle(
+                                      headingTextStyle: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                      columns: const [
+                                      columns: [
                                         DataColumn(
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'शाळा',
+                                                "${Statics.getLabel('school')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -3449,7 +3381,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'वस्ती संख्या',
+                                                "${Statics.getLabel('vastiCount')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -3462,7 +3394,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'शाळा संख्या',
+                                                "${Statics.getLabel('schoolCount')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -3494,11 +3426,10 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                               if (data != null &&
                                   data!.schooltapasilaforclg != null)
                                 Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8),
+                                  padding: EdgeInsets.symmetric(vertical: 8),
                                   child: Center(
                                     child: Text(
-                                      'महाविद्यालय',
+                                      "${Statics.getLabel('College')}",
                                       style: TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold),
@@ -3521,16 +3452,16 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           MaterialStateProperty.resolveWith(
                                         (states) => Colors.purpleAccent[200],
                                       ),
-                                      headingTextStyle: const TextStyle(
+                                      headingTextStyle: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                      columns: const [
+                                      columns: [
                                         DataColumn(
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'महाविद्यालय',
+                                                "${Statics.getLabel('College')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -3543,7 +3474,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'वस्ती संख्या',
+                                                "${Statics.getLabel('vastiCount')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -3556,7 +3487,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'महाविद्यालय संख्या',
+                                                "${Statics.getLabel('CollegeCount')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -3588,11 +3519,10 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                               if (data != null &&
                                   data!.schooltapasilaformedium != null)
                                 Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8),
+                                  padding: EdgeInsets.symmetric(vertical: 8),
                                   child: Center(
                                     child: Text(
-                                      'विशिष्ट संस्थान',
+                                      "${Statics.getLabel('vishisthaSansthan')}",
                                       style: TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold),
@@ -3615,16 +3545,16 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           MaterialStateProperty.resolveWith(
                                         (states) => Colors.purpleAccent[200],
                                       ),
-                                      headingTextStyle: const TextStyle(
+                                      headingTextStyle: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                      columns: const [
+                                      columns: [
                                         DataColumn(
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'वस्ती संख्या',
+                                                "${Statics.getLabel('vastiCount')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -3695,16 +3625,16 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           MaterialStateProperty.resolveWith(
                                         (states) => Colors.purpleAccent[200],
                                       ),
-                                      headingTextStyle: const TextStyle(
+                                      headingTextStyle: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                      columns: const [
+                                      columns: [
                                         DataColumn(
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'वस्ती संख्या',
+                                                "${Statics.getLabel('vastiCount')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -3717,7 +3647,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'मैदान / उद्यान संख्या',
+                                                "${Statics.getLabel('maidanUdyanCount')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -3774,15 +3704,15 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                             MaterialStateProperty.resolveWith(
                                           (states) => Colors.purpleAccent[200],
                                         ),
-                                        headingTextStyle: const TextStyle(
+                                        headingTextStyle: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
                                         ),
-                                        columns: const [
+                                        columns: [
                                           DataColumn(
                                             label: Center(
                                               child: Text(
-                                                'प्रकार',
+                                                "${Statics.getLabel('SelectFrequency')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -3793,7 +3723,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           DataColumn(
                                             label: Center(
                                               child: Text(
-                                                'वस्ती संख्या',
+                                                "${Statics.getLabel('vastiCount')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -3804,7 +3734,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           DataColumn(
                                             label: Center(
                                               child: Text(
-                                                'संख्या',
+                                                "${Statics.getLabel('count')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -3866,15 +3796,15 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                             MaterialStateProperty.resolveWith(
                                           (states) => Colors.purpleAccent[200],
                                         ),
-                                        headingTextStyle: const TextStyle(
+                                        headingTextStyle: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
                                         ),
-                                        columns: const [
+                                        columns: [
                                           DataColumn(
                                             label: Center(
                                               child: Text(
-                                                'वस्तीतील सामाजिक प्रश्न / गरजा ',
+                                                "${Statics.getLabel('vastitilSamajikQueGaraja')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -3885,7 +3815,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           DataColumn(
                                             label: Center(
                                               child: Text(
-                                                'वस्ती संख्या',
+                                                "${Statics.getLabel('vastiCount')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -3938,16 +3868,16 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                         MaterialStateProperty.resolveWith(
                                       (states) => Colors.purpleAccent[200],
                                     ),
-                                    headingTextStyle: const TextStyle(
+                                    headingTextStyle: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
-                                    columns: const [
+                                    columns: [
                                       DataColumn(
                                         label: Expanded(
                                           child: Center(
                                             child: Text(
-                                              'कार्यक्रम करण्याचे ठिकाण',
+                                              "${Statics.getLabel('karyakramKarnyacheThikaan')}",
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
@@ -3959,7 +3889,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                         label: Expanded(
                                           child: Center(
                                             child: Text(
-                                              'वस्ती संख्या',
+                                              "${Statics.getLabel('vastiCount')}",
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
@@ -3971,7 +3901,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                         label: Expanded(
                                           child: Center(
                                             child: Text(
-                                              'ठिकाण संख्या',
+                                              "${Statics.getLabel('thikaanCount')}",
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
@@ -3983,7 +3913,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                         label: Expanded(
                                           child: Center(
                                             child: Text(
-                                              'निवासासाठी उपलब्ध',
+                                              "${Statics.getLabel('nivaasAvailable')}",
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
@@ -4040,16 +3970,16 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                         MaterialStateProperty.resolveWith(
                                       (states) => Colors.purpleAccent[200],
                                     ),
-                                    headingTextStyle: const TextStyle(
+                                    headingTextStyle: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
-                                    columns: const [
+                                    columns: [
                                       DataColumn(
                                         label: Expanded(
                                           child: Center(
                                             child: Text(
-                                              'दुर्जन शक्ती',
+                                              "${Statics.getLabel('DurjanShakti')}",
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
@@ -4061,7 +3991,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                         label: Expanded(
                                           child: Center(
                                             child: Text(
-                                              'वस्ती संख्या',
+                                              "${Statics.getLabel('vastiCount')}",
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
@@ -4073,7 +4003,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                         label: Expanded(
                                           child: Center(
                                             child: Text(
-                                              'दुर्जन शक्ती संख्या',
+                                              "${Statics.getLabel('durjanShakatiCount')}",
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
@@ -4125,16 +4055,16 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                         MaterialStateProperty.resolveWith(
                                       (states) => Colors.purpleAccent[200],
                                     ),
-                                    headingTextStyle: const TextStyle(
+                                    headingTextStyle: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
-                                    columns: const [
+                                    columns: [
                                       DataColumn(
                                         label: Expanded(
                                           child: Center(
                                             child: Text(
-                                              'हिंदु वीर संख्या',
+                                              "${Statics.getLabel('hinduVeerCount')}",
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
@@ -4146,7 +4076,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                         label: Expanded(
                                           child: Center(
                                             child: Text(
-                                              'वस्ती संख्या',
+                                              "${Statics.getLabel('vastiCount')}",
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
@@ -4182,7 +4112,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                     //   children: [
                     Card(
                         elevation: 1,
-                        margin: const EdgeInsets.symmetric(vertical: 6),
+                        margin: EdgeInsets.symmetric(vertical: 6),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -4191,12 +4121,14 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                           child: Column(
                             children: [
                               SingleColumnRow(
-                                  txtString: "अग्निशमन दल केंद्र संख्या",
+                                  txtString:
+                                      "${Statics.getLabel('fireBrigateCenterCount')}",
                                   value: data?.vastiloksankhya?.fireBrigade
                                       .toString(),
                                   fontsize: 15),
                               SingleColumnRow(
-                                  txtString: "पोलीस ठाणे / चौकी संख्या",
+                                  txtString:
+                                      "${Statics.getLabel('policeStationCount')}",
                                   value: data?.vastiloksankhya?.policeThane
                                       .toString(),
                                   fontsize: 15),
@@ -4223,7 +4155,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
   }) {
     return Card(
       elevation: 1,
-      margin: const EdgeInsets.symmetric(vertical: 6),
+      margin: EdgeInsets.symmetric(vertical: 6),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
@@ -4232,10 +4164,10 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
           dividerColor: Colors.transparent, // removes the expansion line
         ),
         child: ExpansionTile(
-          tilePadding: const EdgeInsets.symmetric(horizontal: 16.0),
+          tilePadding: EdgeInsets.symmetric(horizontal: 16.0),
           title: Text(
             Statics.getLabel(title),
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
               color: Colors.purple,
@@ -4246,8 +4178,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
           collapsedBackgroundColor: Colors.transparent,
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: children,
@@ -4259,37 +4190,41 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
     );
   }
 
-  List<Widget> _buildGroupedTables(List<UpasanaSthal> list) {
+  List<Widget> _buildGroupedTables(
+      List<UpasanaSthal> list, BuildContext context) {
     // Group by 'prakar'
     Map<String, List<UpasanaSthal>> grouped = {};
-
     for (var item in list) {
       String key = item.prakar.toString();
-      if (!grouped.containsKey(key)) {
-        grouped[key] = [];
-      }
-      grouped[key]!.add(item);
+      grouped.putIfAbsent(key, () => []).add(item);
     }
 
-    // Return a list of DataTables
+    double screenWidth = MediaQuery.of(context).size.width;
+    bool isTablet = screenWidth > 600;
+    double tableHeight = isTablet ? 400 : 300;
+    double fontSize = isTablet ? 18 : 14;
+    double headingFontSize = isTablet ? 20 : 16;
+    EdgeInsets containerPadding =
+        EdgeInsets.symmetric(horizontal: isTablet ? 16 : 8);
+
     return grouped.entries.map((entry) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: containerPadding,
             child: Text(
               'प्रकार: ${entry.key}',
-              style: const TextStyle(
-                fontSize: 16,
+              style: TextStyle(
+                fontSize: headingFontSize,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
             ),
           ),
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 8),
+            margin: containerPadding,
             decoration: BoxDecoration(
               border: Border.all(color: Colors.grey.shade300),
               borderRadius: BorderRadius.circular(8),
@@ -4297,28 +4232,32 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: SizedBox(
-                height: 300,
+                height: tableHeight,
                 child: DataTable(
                   headingRowColor: MaterialStateProperty.resolveWith(
                     (states) => Colors.purpleAccent[200],
                   ),
-                  headingTextStyle: const TextStyle(
+                  headingTextStyle: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
+                    fontSize: fontSize,
                   ),
-                  columns: const [
+                  dataTextStyle: TextStyle(
+                    fontSize: fontSize,
+                  ),
+                  columns: [
                     DataColumn(
-                      label: Center(child: Text('उपासना स्थळ')),
-                    ),
+                        label: Center(
+                            child:
+                                Text("${Statics.getLabel('UpasanaSthal')}"))),
                     DataColumn(
-                      label: Center(child: Text('प्रकार')),
-                    ),
+                        label: Center(
+                            child: Text(
+                                "${Statics.getLabel('SelectFrequency')}"))),
                     DataColumn(
-                      label: Center(child: Text('संख्या')),
-                    ),
-                    DataColumn(
-                      label: Center(child: Text('किती वस्तीत')),
-                    ),
+                        label: Center(
+                            child: Text("${Statics.getLabel('count')}"))),
+                    DataColumn(label: Center(child: Text('किती वस्तीत'))),
                   ],
                   rows: entry.value.map((item) {
                     return DataRow(

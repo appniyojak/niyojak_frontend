@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:niyojak_prod/models/response_model/VisheshVyaktiListResponse.dart';
+
 import '../helpers/static_data.dart' as Statics;
 import '../providers/bals.dart';
 import '../providers/swayamsevak_provider.dart';
@@ -12,7 +13,8 @@ class EditVisheshVyaktiScreen extends StatefulWidget {
   static const routeName = '/edit-vishesh-vyakti';
 
   @override
-  State<EditVisheshVyaktiScreen> createState() => _EditVisheshVyaktiScreenState();
+  State<EditVisheshVyaktiScreen> createState() =>
+      _EditVisheshVyaktiScreenState();
 }
 
 class _EditVisheshVyaktiScreenState extends State<EditVisheshVyaktiScreen> {
@@ -32,7 +34,8 @@ class _EditVisheshVyaktiScreenState extends State<EditVisheshVyaktiScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final args = ModalRoute.of(context)!.settings.arguments as GruhasamparkVisheshVyaktiData;
+      final args = ModalRoute.of(context)!.settings.arguments
+          as GruhasamparkVisheshVyaktiData;
       if (args != null) {
         setState(() {
           argsData = args;
@@ -96,21 +99,30 @@ class _EditVisheshVyaktiScreenState extends State<EditVisheshVyaktiScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SizedBox(height: 20),
-                  buildTextField("पूर्ण नाव", nameController, TextInputType.text),
+                  buildTextField(
+                      "पूर्ण नाव", nameController, TextInputType.text),
                   SizedBox(height: 20),
-                  buildTextField(Statics.getLabel('Address'), addressController, TextInputType.text),
+                  buildTextField(Statics.getLabel('Address'), addressController,
+                      TextInputType.text),
                   SizedBox(height: 20),
-                  buildTextField("दूरभाष", mobileController, TextInputType.number, inputFormatters: [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.digitsOnly]),
+                  buildTextField("${Statics.getLabel('doorBhash')}",
+                      mobileController, TextInputType.number, inputFormatters: [
+                    LengthLimitingTextInputFormatter(10),
+                    FilteringTextInputFormatter.digitsOnly
+                  ]),
                   SizedBox(height: 20),
                   buildDropdownSection(),
                   SizedBox(height: 20),
-                  buildTextField("संस्थेचे नाव", sansthaNameController, TextInputType.text),
+                  buildTextField("संस्थेचे नाव", sansthaNameController,
+                      TextInputType.text),
                   SizedBox(height: 20),
-                  buildTextField("संस्थेत कुठल्या पदावर", sansthaPadhController, TextInputType.text),
+                  buildTextField("संस्थेत कुठल्या पदावर", sansthaPadhController,
+                      TextInputType.text),
                   SizedBox(height: 20),
                   buildSpecialDropdownSection(),
                   SizedBox(height: 20),
-                  buildMultiLineTextField("अन्य विशेष माहिती", anyaMahitiController),
+                  buildMultiLineTextField(
+                      "अन्य विशेष माहिती", anyaMahitiController),
                   SizedBox(height: 30),
                   buildSubmitButton(),
                 ],
@@ -122,7 +134,9 @@ class _EditVisheshVyaktiScreenState extends State<EditVisheshVyaktiScreen> {
     );
   }
 
-  Widget buildTextField(String label, TextEditingController controller, TextInputType inputType, {List<TextInputFormatter>? inputFormatters}) {
+  Widget buildTextField(
+      String label, TextEditingController controller, TextInputType inputType,
+      {List<TextInputFormatter>? inputFormatters}) {
     return TextField(
       controller: controller,
       style: TextStyle(fontSize: 16),
@@ -133,7 +147,8 @@ class _EditVisheshVyaktiScreenState extends State<EditVisheshVyaktiScreen> {
       decoration: InputDecoration(
         isDense: true,
         labelText: label,
-        contentPadding: EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 12),
+        contentPadding:
+            EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 12),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
       ),
     );
@@ -163,17 +178,28 @@ class _EditVisheshVyaktiScreenState extends State<EditVisheshVyaktiScreen> {
                   isDense: true,
                   iconSize: 30,
                   underline: SizedBox(),
-                  value: selectedSansthaValue.isEmpty ? null : selectedSansthaValue,
+                  value: selectedSansthaValue.isEmpty
+                      ? null
+                      : selectedSansthaValue,
                   onChanged: (String? newValue) {
                     setState(() {
                       selectedSansthaValue = newValue!;
                       print("  ========================   $newValue");
                     });
                   },
-                  items: ["धार्मिक", "सामाजिक", "शैक्षणिक", "सेवा", "सांस्कृतिक", "अन्य"].map<DropdownMenuItem<String>>((String value) {
+                  items: [
+                    "धार्मिक",
+                    "सामाजिक",
+                    "शैक्षणिक",
+                    "सेवा",
+                    "सांस्कृतिक",
+                    "अन्य"
+                  ].map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
-                      child: Padding(padding: const EdgeInsets.only(top: 3.0), child: Text(value)),
+                      child: Padding(
+                          padding: const EdgeInsets.only(top: 3.0),
+                          child: Text(value)),
                     );
                   }).toList(),
                 ),
@@ -185,7 +211,8 @@ class _EditVisheshVyaktiScreenState extends State<EditVisheshVyaktiScreen> {
                     autofocus: true,
                     textInputAction: TextInputAction.done,
                     controller: anyaSansthaController,
-                    decoration: InputDecoration(hintText: "संस्था कुठल्या विषयात काम करते"),
+                    decoration: InputDecoration(
+                        hintText: "संस्था कुठल्या विषयात काम करते"),
                     keyboardType: TextInputType.text,
                   ),
                 ),
@@ -225,10 +252,19 @@ class _EditVisheshVyaktiScreenState extends State<EditVisheshVyaktiScreen> {
                   selectedVisheshValue = newValue!;
                 });
               },
-              items: ["अनुकूल", "प्रतिकूल", "तटस्थ", "संघाशी जुडू इच्छितात", "जुने स्वयंसेवक","अन्य"].map<DropdownMenuItem<String>>((String value) {
+              items: [
+                "अनुकूल",
+                "प्रतिकूल",
+                "तटस्थ",
+                "संघाशी जुडू इच्छितात",
+                "जुने स्वयंसेवक",
+                "अन्य"
+              ].map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
-                  child: Padding(padding: const EdgeInsets.only(top: 3.0), child: Text(value)),
+                  child: Padding(
+                      padding: const EdgeInsets.only(top: 3.0),
+                      child: Text(value)),
                 );
               }).toList(),
             ),
@@ -238,17 +274,19 @@ class _EditVisheshVyaktiScreenState extends State<EditVisheshVyaktiScreen> {
     );
   }
 
-  Widget buildMultiLineTextField(String hint, TextEditingController controller) {
+  Widget buildMultiLineTextField(
+      String hint, TextEditingController controller) {
     return TextField(
-        controller: controller,
-        style: TextStyle(fontSize: 16),
-    autofocus: false,
-    maxLines: 4,
+      controller: controller,
+      style: TextStyle(fontSize: 16),
+      autofocus: false,
+      maxLines: 4,
       textInputAction: TextInputAction.done,
       decoration: InputDecoration(
         hintText: hint,
         isDense: true,
-        contentPadding: EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 12),
+        contentPadding:
+            EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 12),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
       ),
     );
@@ -269,7 +307,8 @@ class _EditVisheshVyaktiScreenState extends State<EditVisheshVyaktiScreen> {
           showSnackbar("कृपया १० अंकी मोबाईल नंबर लिहा");
         } else if (selectedSansthaValue.isEmpty) {
           showSnackbar("कृपया संस्थेचा प्रकार निवडा");
-        } else if (selectedSansthaValue == "अन्य" && anyaSansthaController.text.isEmpty) {
+        } else if (selectedSansthaValue == "अन्य" &&
+            anyaSansthaController.text.isEmpty) {
           showSnackbar("कृपया संस्थेचा प्रकार लिहा");
         } else if (sansthaNameController.text.isEmpty) {
           showSnackbar("कृपया संस्थेचे नाव लिहा");
@@ -278,10 +317,9 @@ class _EditVisheshVyaktiScreenState extends State<EditVisheshVyaktiScreen> {
         } else if (selectedVisheshValue.isEmpty) {
           showSnackbar("कृपया विशेष माहिती निवडा");
         } else {
-            editVisheshVyakti();
+          editVisheshVyakti();
           // Navigator.of(context).pop(true);
-            Navigator.of(context).pop();
-
+          Navigator.of(context).pop();
         }
       },
       child: Text("जतन करा"),
@@ -295,43 +333,43 @@ class _EditVisheshVyaktiScreenState extends State<EditVisheshVyaktiScreen> {
     ));
   }
 
-
-
   Future<void> editVisheshVyakti() async {
-      // try {
-        List<UserDataBAL> user = await Statics.getUserDataLDB();
-        bool isConnected = await Statics.isInternetConnected();
-        if (isConnected) {
-          var data = {
-            "AnyaVishesh": anyaMahitiController.text,
-            "Email": addressController.text,
-            "GruhasamparkID": argsData!.gruhasamparkID,
-            "GruhasamparkVisheshID": argsData!.gruhasamparkVisheshID,
-            "MobileNumber": mobileController.text,
-            "SansthaName": sansthaNameController.text,
-            "SansthaPadh": sansthaPadhController.text,
-            "SansthaType": selectedSansthaValue == "अन्य" ?anyaSansthaController.text :selectedSansthaValue,
-            "VisheshNote": selectedVisheshValue,
-            "VisheshVyaktiName": nameController.text
-          };
-          print(jsonEncode(data));
-          var result = await SwayamsevakProvider().updateAbhiyanGruhaSampark(jsonEncode(data));
-          Statics.showToast(result['Message']);
-          if (result['Status'] == "200") {
-            print("succeed");
-            Statics.showToast(result['Message']);
-            setState(() {});
-            Navigator.of(context).pop();
-            Navigator.of(context).pushReplacementNamed(VisheshVyaktiShodhScreen.routeName);
-
-          } else {
-            Statics.showToast(result['Message']);
-          }
-        }
-      // } catch (e) {
-      //   print(e);
-      //   Statics.showToast(Statics.getLabel('unableToSaveData'));
-      // }
+    // try {
+    List<UserDataBAL> user = await Statics.getUserDataLDB();
+    bool isConnected = await Statics.isInternetConnected();
+    if (isConnected) {
+      var data = {
+        "AnyaVishesh": anyaMahitiController.text,
+        "Email": addressController.text,
+        "GruhasamparkID": argsData!.gruhasamparkID,
+        "GruhasamparkVisheshID": argsData!.gruhasamparkVisheshID,
+        "MobileNumber": mobileController.text,
+        "SansthaName": sansthaNameController.text,
+        "SansthaPadh": sansthaPadhController.text,
+        "SansthaType": selectedSansthaValue == "अन्य"
+            ? anyaSansthaController.text
+            : selectedSansthaValue,
+        "VisheshNote": selectedVisheshValue,
+        "VisheshVyaktiName": nameController.text
+      };
+      print(jsonEncode(data));
+      var result = await SwayamsevakProvider()
+          .updateAbhiyanGruhaSampark(jsonEncode(data));
+      Statics.showToast(result['Message']);
+      if (result['Status'] == "200") {
+        print("succeed");
+        Statics.showToast(result['Message']);
+        setState(() {});
+        Navigator.of(context).pop();
+        Navigator.of(context)
+            .pushReplacementNamed(VisheshVyaktiShodhScreen.routeName);
+      } else {
+        Statics.showToast(result['Message']);
+      }
     }
-
+    // } catch (e) {
+    //   print(e);
+    //   Statics.showToast(Statics.getLabel('unableToSaveData'));
+    // }
+  }
 }

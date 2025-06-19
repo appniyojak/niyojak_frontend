@@ -152,14 +152,14 @@ class _TulnatmakBaithakEkatritVruttaState
   //   DropdownMenuItem(value: 'prodhvaysai', child: Text('प्रौढ व्यवसायी')),
   //   DropdownMenuItem(value: 'vidyarthi', child: Text( 'विद्यार्थी')),
   //   DropdownMenuItem(value: 'vyavsayi', child: Text('व्यवसायी')),
-  //   DropdownMenuItem(value: 'ekun', child: Text('एकुण')),
+  //   DropdownMenuItem(value: 'ekun', child: Text("${Statics.getLabel('Total')}")),
   // ];
   //
   //  String? _vayogatSanghamandaliSaptahikMilan ='';
   // final List<DropdownMenuItem<String>> _vayogatSanghamandaliSaptahikMilanItems = [
   //   DropdownMenuItem(value: 'vidyarthi', child: Text( 'विद्यार्थी')),
   //   DropdownMenuItem(value: 'vyavsayi', child: Text('व्यवसायी')),
-  //   DropdownMenuItem(value: 'ekun', child: Text('एकुण')),
+  //   DropdownMenuItem(value: 'ekun', child: Text("${Statics.getLabel('Total')}")),
   // ];
   String? _selectvayogatsubpoint = '';
   List<DropdownMenuItem<String>> _selectvayogatsubpointItems = [];
@@ -167,7 +167,8 @@ class _TulnatmakBaithakEkatritVruttaState
   final List<DropdownMenuItem<String>> _vayogatItems1 = [
     DropdownMenuItem(value: 'vidyarthi', child: Text('विद्यार्थी')),
     DropdownMenuItem(value: 'vaysai', child: Text('व्यवसायी')),
-    DropdownMenuItem(value: 'ekun', child: Text('एकुण')),
+    DropdownMenuItem(
+        value: 'ekun', child: Text("${Statics.getLabel('Total')}")),
   ];
 
   final List<DropdownMenuItem<String>> _vayogatItems2 = [
@@ -176,7 +177,8 @@ class _TulnatmakBaithakEkatritVruttaState
         value: 'mahavidyalain', child: Text('महाविद्यालयीन (केवळ तरुण)')),
     DropdownMenuItem(value: 'tarunvaysai', child: Text('तरुण व्यवसायी')),
     DropdownMenuItem(value: 'prodhvaysai', child: Text('प्रौढ व्यवसायी')),
-    DropdownMenuItem(value: 'ekun', child: Text('एकुण')),
+    DropdownMenuItem(
+        value: 'ekun', child: Text("${Statics.getLabel('Total')}")),
   ];
 
   String? _saptahikmilansubpoint = '';
@@ -187,11 +189,13 @@ class _TulnatmakBaithakEkatritVruttaState
       _saptahikmilansubpointItems = [
         DropdownMenuItem(value: 'nagriya', child: Text('नगरीय')),
         DropdownMenuItem(value: 'gramin', child: Text('ग्रामीण')),
-        DropdownMenuItem(value: 'ekun', child: Text('एकुण')),
+        DropdownMenuItem(
+            value: 'ekun', child: Text("${Statics.getLabel('Total')}")),
       ];
     } else if (_toliyuktasubpoint == "saptahikmilan") {
       _saptahikmilansubpointItems = [
-        DropdownMenuItem(value: 'ekun', child: Text('एकुण')),
+        DropdownMenuItem(
+            value: 'ekun', child: Text("${Statics.getLabel('Total')}")),
       ];
     }
   }

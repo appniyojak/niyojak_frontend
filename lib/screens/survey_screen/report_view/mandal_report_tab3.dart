@@ -228,9 +228,9 @@ class _MandalSurveyReportViewScreen3State
                   TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           )),
-      const DataColumn(
+      DataColumn(
         label: Text(
-          'एकूण',
+          "${Statics.getLabel('Total')}",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
@@ -289,7 +289,7 @@ class _MandalSurveyReportViewScreen3State
             .toString())),
       ]),
       DataRow(cells: [
-        const DataCell(Text('एकूण')),
+        DataCell(Text("${Statics.getLabel('Total')}")),
         ...dataList.map((e) {
           final total = (e.shaakhaaCount ?? 0) +
               (e.saaptaahikCount ?? 0) +
@@ -568,7 +568,7 @@ class _MandalSurveyReportViewScreen3State
                                           Statics.getLabel('mandalValidation'));
                                     }
                                   },
-                                  child: Text("निवडा",
+                                  child: Text("${Statics.getLabel('Filters')}",
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold)),
@@ -658,8 +658,10 @@ class _MandalSurveyReportViewScreen3State
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                columns: const [
-                                  DataColumn(label: Text('प्रकार')),
+                                columns: [
+                                  DataColumn(
+                                      label: Text(
+                                          "${Statics.getLabel('SelectFrequency')}")),
                                   DataColumn(label: Text('चालवणारी संस्था')),
                                 ],
                                 rows: data!.vastisarSewaPrakalpa!.map((item) {
@@ -717,7 +719,7 @@ class _MandalSurveyReportViewScreen3State
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                columns: const [
+                                columns: [
                                   DataColumn(label: Text('कार्य ')),
                                   DataColumn(
                                       label: Text('चालवणारी संस्था/संघटन')),
@@ -761,10 +763,12 @@ class _MandalSurveyReportViewScreen3State
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                columns: const [
+                                columns: [
                                   DataColumn(label: Text('संस्था')),
                                   DataColumn(label: Text('गाव प्रमुख')),
-                                  DataColumn(label: Text('दूरभाष')),
+                                  DataColumn(
+                                      label: Text(
+                                          "${Statics.getLabel('doorBhash')}")),
                                 ],
                                 rows: data!
                                     .vastisarvividhSampradhaySatsangKendra!
@@ -808,7 +812,7 @@ class _MandalSurveyReportViewScreen3State
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                columns: const [
+                                columns: [
                                   DataColumn(label: Text('स्थान')),
                                   DataColumn(label: Text('प्रमुखाचे नाव')),
                                 ],
@@ -1040,9 +1044,13 @@ class _MandalSurveyReportViewScreen3State
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                columns: const [
-                                  DataColumn(label: Text('गतिविधी')),
-                                  DataColumn(label: Text('कार्यकर्ता संख्या')),
+                                columns: [
+                                  DataColumn(
+                                      label: Text(
+                                          "${Statics.getLabel('Gatividhi')}")),
+                                  DataColumn(
+                                      label: Text(
+                                          "${Statics.getLabel('KaaryakartaaCount')}")),
                                 ],
                                 rows: data!.listKaaryakartaaCountByGatividhi!
                                     .map((item) {
@@ -1083,9 +1091,13 @@ class _MandalSurveyReportViewScreen3State
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                columns: const [
-                                  DataColumn(label: Text('आयाम')),
-                                  DataColumn(label: Text('कार्यकर्ता संख्या')),
+                                columns: [
+                                  DataColumn(
+                                      label: Text(
+                                          "${Statics.getLabel('Aayaam')}")),
+                                  DataColumn(
+                                      label: Text(
+                                          "${Statics.getLabel('KaaryakartaaCount')}")),
                                 ],
                                 rows: data!.listKaaryakartaaCountByAayaam!
                                     .map((item) {
@@ -1127,10 +1139,13 @@ class _MandalSurveyReportViewScreen3State
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                columns: const [
+                                columns: [
                                   DataColumn(
-                                      label: Text('संघ प्रेरित संघटना/संस्था')),
-                                  DataColumn(label: Text('कार्यकर्ता संख्या')),
+                                      label: Text(
+                                          "${Statics.getLabel('sanghaPreritSanghatana')}")),
+                                  DataColumn(
+                                      label: Text(
+                                          "${Statics.getLabel('KaaryakartaaCount')}")),
                                 ],
                                 rows: data!
                                     .listSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation!
@@ -1177,9 +1192,13 @@ class _MandalSurveyReportViewScreen3State
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                columns: const [
-                                  DataColumn(label: Text('विद्यार्थी श्रेणी')),
-                                  DataColumn(label: Text('संख्या')),
+                                columns: [
+                                  DataColumn(
+                                      label: Text(
+                                          "${Statics.getLabel('StudentCategory')}")),
+                                  DataColumn(
+                                      label:
+                                          Text("${Statics.getLabel('count')}")),
                                 ],
                                 rows: data!
                                     .listSwayamsevakCountByStudentCategory!
@@ -1236,12 +1255,12 @@ class _MandalSurveyReportViewScreen3State
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                      columns: const [
+                                      columns: [
                                         DataColumn(
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'रिलीजन',
+                                                "${Statics.getLabel('religion')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -1254,7 +1273,7 @@ class _MandalSurveyReportViewScreen3State
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'वस्ती संख्या',
+                                                "${Statics.getLabel('vastiCount')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -1297,7 +1316,7 @@ class _MandalSurveyReportViewScreen3State
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15),
-                                columns: const [
+                                columns: [
                                   DataColumn(label: Text('संघ कार्य स्थिती')),
                                 ],
                                 rows: List<DataRow>.generate(
@@ -1360,8 +1379,8 @@ class _MandalSurveyReportViewScreen3State
                     //                 color: Colors.white,
                     //                 fontWeight: FontWeight.bold,
                     //               ),
-                    //               columns: const [
-                    //                 DataColumn(label: Text('प्रकार')),
+                    //               columns:[
+                    //                 DataColumn(label: Text("${Statics.getLabel('SelectFrequency')}")),
                     //                 DataColumn(label: Text('भवनाचे नाव')),
                     //               ],
                     //               rows: data!.vastisarvividhKshetaCheKam!.map((item) {
@@ -1402,12 +1421,20 @@ class _MandalSurveyReportViewScreen3State
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                  columns: const [
-                                    DataColumn(label: Text('प्रकार')),
+                                  columns: [
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('SelectFrequency')}")),
                                     DataColumn(label: Text('भवनाचे नाव')),
-                                    DataColumn(label: Text('संपर्क स्थिती')),
-                                    DataColumn(label: Text('संपर्क सूत्र नाव')),
-                                    DataColumn(label: Text('दूरभाष')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('samparkSthiti')}")),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('samparkSootraNaav')}")),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('doorBhash')}")),
                                   ],
                                   rows: data!.vastiVasahatPrakar!.map((item) {
                                     return DataRow(
@@ -1455,10 +1482,16 @@ class _MandalSurveyReportViewScreen3State
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                  columns: const [
-                                    DataColumn(label: Text('उपासना स्थळ ')),
-                                    DataColumn(label: Text('प्रकार')),
-                                    DataColumn(label: Text('संख्या')),
+                                  columns: [
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('UpasanaSthal')}")),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('SelectFrequency')}")),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('count')}")),
                                   ],
                                   rows:
                                       data!.vastiUpasanaSthalInfo!.map((item) {
@@ -1504,15 +1537,21 @@ class _MandalSurveyReportViewScreen3State
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                  columns: const [
+                                  columns: [
                                     DataColumn(label: Text('नाव')),
                                     DataColumn(label: Text('पत्ता')),
-                                    DataColumn(label: Text('दूरभाष')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('doorBhash')}")),
                                     DataColumn(label: Text('श्रेणी')),
                                     DataColumn(label: Text('संस्था')),
-                                    DataColumn(label: Text('संपर्क स्थिती')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('samparkSthiti')}")),
                                     DataColumn(label: Text('प्रभाव क्षेत्र')),
-                                    DataColumn(label: Text('संपर्क सूत्र नाव')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('samparkSootraNaav')}")),
                                   ],
                                   rows:
                                       data!.vastiSajjanShaktiData!.map((item) {
@@ -1567,16 +1606,22 @@ class _MandalSurveyReportViewScreen3State
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                  columns: const [
+                                  columns: [
                                     DataColumn(label: Text('नाव')),
                                     DataColumn(label: Text('पत्ता')),
-                                    DataColumn(label: Text('दूरभाष')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('doorBhash')}")),
                                     DataColumn(label: Text('श्रेणी')),
                                     DataColumn(label: Text('उपश्रेणी')),
                                     DataColumn(label: Text('उपश्रेणी २')),
-                                    DataColumn(label: Text('संपर्क स्थिती')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('samparkSthiti')}")),
                                     DataColumn(label: Text('प्रभाव क्षेत्र')),
-                                    DataColumn(label: Text('संपर्क सूत्र नाव')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('samparkSootraNaav')}")),
                                   ],
                                   rows: data!.vastiAnyaPrabhaviLok!.map((item) {
                                     return DataRow(
@@ -1632,11 +1677,16 @@ class _MandalSurveyReportViewScreen3State
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                  columns: const [
-                                    DataColumn(label: Text('प्रकार')),
+                                  columns: [
                                     DataColumn(
-                                        label: Text('आयोजक संस्थांची नावे')),
-                                    DataColumn(label: Text('आयोजकांची नावे')),
+                                        label: Text(
+                                            "${Statics.getLabel('SelectFrequency')}")),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('aayojakSansthachiNave')}")),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('aayojakNaav')}")),
                                   ],
                                   rows:
                                       data!.vastitSajareHonareSan!.map((item) {
@@ -1681,11 +1731,16 @@ class _MandalSurveyReportViewScreen3State
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                  columns: const [
-                                    DataColumn(label: Text('प्रकार')),
+                                  columns: [
                                     DataColumn(
-                                        label: Text('आयोजक संस्थांची नावे')),
-                                    DataColumn(label: Text('आयोजकांची नावे')),
+                                        label: Text(
+                                            "${Statics.getLabel('SelectFrequency')}")),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('aayojakSansthachiNave')}")),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('aayojakNaav')}")),
                                   ],
                                   rows:
                                       data!.vastiSamajikKaryakram!.map((item) {
@@ -1729,9 +1784,11 @@ class _MandalSurveyReportViewScreen3State
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                  columns: const [
+                                  columns: [
                                     DataColumn(label: Text('नाव')),
-                                    DataColumn(label: Text('प्रकार')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('SelectFrequency')}")),
                                     DataColumn(label: Text('शिक्षा')),
                                     DataColumn(label: Text('गुन्हा')),
                                   ],
@@ -1783,7 +1840,7 @@ class _MandalSurveyReportViewScreen3State
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                  columns: const [
+                                  columns: [
                                     DataColumn(
                                       label: Expanded(
                                         // ensures center works properly

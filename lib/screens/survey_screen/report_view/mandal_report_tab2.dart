@@ -479,7 +479,8 @@ class _MandalSurveyReportViewScreen2State
                                         const EdgeInsets.symmetric(vertical: 8),
                                     child: Center(
                                       child: Text(
-                                        data.name ?? 'नगर/वस्ती नाव',
+                                        data.name ??
+                                            "${Statics.getLabel('nagarVastiName')}",
                                         style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold),
@@ -493,9 +494,10 @@ class _MandalSurveyReportViewScreen2State
                                         fontSize: 15,
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold),
-                                    columns: const [
+                                    columns: [
                                       DataColumn(
-                                          label: Text('सर्वेक्षण स्थिती')),
+                                          label: Text(
+                                              "${Statics.getLabel('sarvekshanSthiti')}")),
                                       DataColumn(label: Text('नगर')),
                                       DataColumn(label: Text('वस्ती')),
                                     ],
@@ -505,7 +507,7 @@ class _MandalSurveyReportViewScreen2State
                                             Colors.lightBlue.shade50),
                                         cells: [
                                           DataCell(Text(
-                                              'प्राथमिक सर्वेक्षण\nपूर्ण झाले')),
+                                              "${Statics.getLabel('prathamikSurveyComplete')}")),
                                           DataCell(Text(
                                               "${data.nagarStep1CompleteCount ?? ""}")),
                                           DataCell(Text(
@@ -517,7 +519,7 @@ class _MandalSurveyReportViewScreen2State
                                             Colors.lightBlue.shade50),
                                         cells: [
                                           DataCell(Text(
-                                              'अन्य सर्वेक्षण\nपूर्ण झाले')),
+                                              "${Statics.getLabel('otherSuerveyComplete')}")),
                                           DataCell(Text(
                                               "${data.nagarStep2CompleteCount ?? ""}")),
                                           DataCell(Text(
@@ -529,7 +531,7 @@ class _MandalSurveyReportViewScreen2State
                                             Colors.lightBlue.shade50),
                                         cells: [
                                           DataCell(Text(
-                                              'विस्तृत सर्वेक्षण\nपूर्ण झाले')),
+                                              "${Statics.getLabel('vistrutSurveyComplete')}")),
                                           DataCell(Text(
                                               "${data.nagarStep3CompleteCount ?? ""}")),
                                           DataCell(Text(
@@ -540,7 +542,8 @@ class _MandalSurveyReportViewScreen2State
                                         color: MaterialStateProperty.all(
                                             Colors.red.shade50),
                                         cells: [
-                                          DataCell(Text('सर्वेक्षण सुरु झाले')),
+                                          DataCell(Text(
+                                              "${Statics.getLabel('surveyStart')}")),
                                           DataCell(Text(
                                               "${data.nagarStepStartedCount ?? ""}")),
                                           DataCell(Text(
@@ -551,8 +554,8 @@ class _MandalSurveyReportViewScreen2State
                                         color: MaterialStateProperty.all(
                                             Colors.red.shade50),
                                         cells: [
-                                          DataCell(
-                                              Text('सर्वेक्षण पूर्ण झाले')),
+                                          DataCell(Text(
+                                              "${Statics.getLabel('surveyComplete')}")),
                                           DataCell(Text(
                                               "${data.nagarAllStepsCompleteCount ?? ""}")),
                                           DataCell(Text(
@@ -564,7 +567,7 @@ class _MandalSurveyReportViewScreen2State
                                             Colors.red.shade50),
                                         cells: [
                                           DataCell(Text(
-                                              'सर्वेक्षण सुरु\nझाले नाही')),
+                                              "${Statics.getLabel('surveyNotStarted')}")),
                                           DataCell(Text(
                                               "${data.nagarStepsNotstartedCount ?? ""}")),
                                           DataCell(Text(
@@ -575,7 +578,8 @@ class _MandalSurveyReportViewScreen2State
                                         color: MaterialStateProperty.all(
                                             Colors.yellow.shade50),
                                         cells: [
-                                          DataCell(Text('एकुण')),
+                                          DataCell(Text(
+                                              "${Statics.getLabel('Total')}")),
                                           DataCell(
                                               Text("${data.nagarcount ?? ""}")),
                                           DataCell(

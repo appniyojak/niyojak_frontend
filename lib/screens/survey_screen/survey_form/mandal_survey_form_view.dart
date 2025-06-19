@@ -1126,7 +1126,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                       Statics.getLabel('mandalValidation'));
                                 }
                               },
-                              child: Text("निवडा",
+                              child: Text("${Statics.getLabel('Filters')}",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold)),
@@ -1353,7 +1353,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 headingTextStyle: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black87),
-                                columns: const [
+                                columns: [
                                   DataColumn(
                                       label: Text(
                                     "वाडी/पाड्याचे नाव",
@@ -1552,8 +1552,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                         ),
                                         onPressed: () =>
                                             Navigator.pop(context, false),
-                                        child: const Text(
-                                          "नाही",
+                                        child: Text(
+                                          "${Statics.getLabel('ConfirmationNo')}",
                                           style: TextStyle(color: Colors.black),
                                         ),
                                       ),
@@ -1567,8 +1567,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                         ),
                                         onPressed: () =>
                                             Navigator.pop(context, true),
-                                        child: const Text(
-                                          "होय",
+                                        child: Text(
+                                          "${Statics.getLabel('ConfirmationYes')}",
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
@@ -1597,7 +1597,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           controller: sarpanchNameController),
                       SizedBox(height: 10),
                       textControllerField2(
-                        name: "दूरभाष",
+                        name: "${Statics.getLabel('doorBhash')}",
                         controller: sarpanchDoorbhasController,
                         keyboardType: TextInputType.number,
                         maxInput: 10,
@@ -1756,7 +1756,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 headingTextStyle: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black87),
-                                columns: const [
+                                columns: [
                                   DataColumn(
                                       label: Center(
                                           child: Text(
@@ -1980,8 +1980,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                           ),
                                           onPressed: () =>
                                               Navigator.pop(context, false),
-                                          child: const Text(
-                                            "नाही",
+                                          child: Text(
+                                            "${Statics.getLabel('ConfirmationNo')}",
                                             style:
                                                 TextStyle(color: Colors.black),
                                           ),
@@ -1996,8 +1996,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                           ),
                                           onPressed: () =>
                                               Navigator.pop(context, true),
-                                          child: const Text(
-                                            "होय",
+                                          child: Text(
+                                            "${Statics.getLabel('ConfirmationYes')}",
                                             style:
                                                 TextStyle(color: Colors.white),
                                           ),
@@ -2100,7 +2100,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         horizontalMargin: 16,
                         headingTextStyle: TextStyle(
                             fontWeight: FontWeight.bold, color: Colors.black87),
-                        columns: const [
+                        columns: [
                           DataColumn(
                               label: Text(
                             "प्रकार",
@@ -2292,8 +2292,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   ),
                                   onPressed: () =>
                                       Navigator.pop(context, false),
-                                  child: const Text(
-                                    "नाही",
+                                  child: Text(
+                                    "${Statics.getLabel('ConfirmationNo')}",
                                     style: TextStyle(color: Colors.black),
                                   ),
                                 ),
@@ -2305,8 +2305,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     ),
                                   ),
                                   onPressed: () => Navigator.pop(context, true),
-                                  child: const Text(
-                                    "होय",
+                                  child: Text(
+                                    "${Statics.getLabel('ConfirmationYes')}",
                                     style: TextStyle(color: Colors.white),
                                   ),
                                 ),
@@ -2421,7 +2421,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           headingTextStyle: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.black87),
-                          columns: const [
+                          columns: [
                             DataColumn(
                                 label: Text(
                               "काम",
@@ -2607,8 +2607,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     ),
                                     onPressed: () =>
                                         Navigator.pop(context, false),
-                                    child: const Text(
-                                      "नाही",
+                                    child: Text(
+                                      "${Statics.getLabel('ConfirmationNo')}",
                                       style: TextStyle(color: Colors.black),
                                     ),
                                   ),
@@ -2621,8 +2621,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     ),
                                     onPressed: () =>
                                         Navigator.pop(context, true),
-                                    child: const Text(
-                                      "होय",
+                                    child: Text(
+                                      "${Statics.getLabel('ConfirmationYes')}",
                                       style: TextStyle(color: Colors.white),
                                     ),
                                   ),
@@ -2721,7 +2721,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         horizontalMargin: 16,
                         headingTextStyle: TextStyle(
                             fontWeight: FontWeight.bold, color: Colors.black87),
-                        columns: const [
+                        columns: [
                           DataColumn(
                               label: Text(
                             "संस्था",
@@ -2921,8 +2921,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   ),
                                   onPressed: () =>
                                       Navigator.pop(context, false),
-                                  child: const Text(
-                                    "नाही",
+                                  child: Text(
+                                    "${Statics.getLabel('ConfirmationNo')}",
                                     style: TextStyle(color: Colors.black),
                                   ),
                                 ),
@@ -2934,8 +2934,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     ),
                                   ),
                                   onPressed: () => Navigator.pop(context, true),
-                                  child: const Text(
-                                    "होय",
+                                  child: Text(
+                                    "${Statics.getLabel('ConfirmationYes')}",
                                     style: TextStyle(color: Colors.white),
                                   ),
                                 ),
@@ -3047,7 +3047,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           headingTextStyle: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.black87),
-                          columns: const [
+                          columns: [
                             DataColumn(
                                 label: Text(
                               "स्थान",
@@ -3228,8 +3228,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     ),
                                     onPressed: () =>
                                         Navigator.pop(context, false),
-                                    child: const Text(
-                                      "नाही",
+                                    child: Text(
+                                      "${Statics.getLabel('ConfirmationNo')}",
                                       style: TextStyle(color: Colors.black),
                                     ),
                                   ),
@@ -3242,8 +3242,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     ),
                                     onPressed: () =>
                                         Navigator.pop(context, true),
-                                    child: const Text(
-                                      "होय",
+                                    child: Text(
+                                      "${Statics.getLabel('ConfirmationYes')}",
                                       style: TextStyle(color: Colors.white),
                                     ),
                                   ),
@@ -3271,7 +3271,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
           ),
           // ===================================== रिलीजन ==================================================================================
           mainContainer(
-              "रिलीजन",
+              "${Statics.getLabel('religion')}",
               Column(
                 children: [
                   Container(
@@ -3285,7 +3285,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "रिलीजन",
+                                  "${Statics.getLabel('religion')}",
                                   style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
@@ -3356,7 +3356,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     headingTextStyle: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black87),
-                                    columns: const [
+                                    columns: [
                                       DataColumn(
                                           label: Text(
                                         'कोणत्या रिलीजन चे',
@@ -3430,7 +3430,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                               backgroundColor: Colors.white,
                                               title: Center(
                                                 child: Text(
-                                                  "रिलीजन",
+                                                  "${Statics.getLabel('religion')}",
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 20,
@@ -3555,8 +3555,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                               ),
                                               onPressed: () =>
                                                   Navigator.pop(context, false),
-                                              child: const Text(
-                                                "नाही",
+                                              child: Text(
+                                                "${Statics.getLabel('ConfirmationNo')}",
                                                 style: TextStyle(
                                                     color: Colors.black),
                                               ),
@@ -3572,8 +3572,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                               ),
                                               onPressed: () =>
                                                   Navigator.pop(context, true),
-                                              child: const Text(
-                                                "होय",
+                                              child: Text(
+                                                "${Statics.getLabel('ConfirmationYes')}",
                                                 style: TextStyle(
                                                     color: Colors.white),
                                               ),
@@ -3614,7 +3614,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "उपासना स्थळ",
+                        "${Statics.getLabel('UpasanaSthal')}",
                         style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -3680,10 +3680,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             headingTextStyle: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black87),
-                            columns: const [
+                            columns: [
                               DataColumn(
                                   label: Text(
-                                "उपासना स्थळ",
+                                "${Statics.getLabel('UpasanaSthal')}",
                               )),
                               DataColumn(
                                   label: Text(
@@ -3770,7 +3770,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     backgroundColor: Colors.white,
                                     title: Center(
                                       child: Text(
-                                        "उपासना स्थळ",
+                                        "${Statics.getLabel('UpasanaSthal')}",
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 20,
@@ -3789,7 +3789,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                                 Colors.purpleAccent.shade100),
                                         SizedBox(height: 12),
                                         _buildInfoRow(
-                                            "उपासना स्थळ",
+                                            "${Statics.getLabel('UpasanaSthal')}",
                                             selectedData
                                                 .selectedDropdownValueName),
                                         SizedBox(height: 12),
@@ -3889,8 +3889,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     ),
                                     onPressed: () =>
                                         Navigator.pop(context, false),
-                                    child: const Text(
-                                      "नाही",
+                                    child: Text(
+                                      "${Statics.getLabel('ConfirmationNo')}",
                                       style: TextStyle(color: Colors.black),
                                     ),
                                   ),
@@ -3903,8 +3903,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     ),
                                     onPressed: () =>
                                         Navigator.pop(context, true),
-                                    child: const Text(
-                                      "होय",
+                                    child: Text(
+                                      "${Statics.getLabel('ConfirmationYes')}",
                                       style: TextStyle(color: Colors.white),
                                     ),
                                   ),
@@ -4001,7 +4001,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         columnSpacing: 40,
                         headingTextStyle: TextStyle(
                             fontWeight: FontWeight.bold, color: Colors.black87),
-                        columns: const [
+                        columns: [
                           DataColumn(
                               label: Text(
                             "नाव",
@@ -4099,7 +4099,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                             "पत्ता", selectedData.address),
                                         SizedBox(height: 12),
                                         _buildInfoRow(
-                                            "दूरभाष", selectedData.doorabhaash),
+                                            "${Statics.getLabel('doorBhash')}",
+                                            selectedData.doorabhaash),
                                         SizedBox(height: 12),
                                         _buildInfoRow(
                                             "श्रेणी",
@@ -4229,8 +4230,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   ),
                                   onPressed: () =>
                                       Navigator.pop(context, false),
-                                  child: const Text(
-                                    "नाही",
+                                  child: Text(
+                                    "${Statics.getLabel('ConfirmationNo')}",
                                     style: TextStyle(color: Colors.black),
                                   ),
                                 ),
@@ -4242,8 +4243,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     ),
                                   ),
                                   onPressed: () => Navigator.pop(context, true),
-                                  child: const Text(
-                                    "होय",
+                                  child: Text(
+                                    "${Statics.getLabel('ConfirmationYes')}",
                                     style: TextStyle(color: Colors.white),
                                   ),
                                 ),
@@ -4272,7 +4273,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
             height: 20,
           ),
           mainContainer(
-            "अन्य प्रभावी लोकं (संपर्क विभागाची यादी )",
+            "${Statics.getLabel('anyaPrabhaviLok')} (संपर्क विभागाची यादी )",
             Column(
               children: [
                 Row(
@@ -4333,7 +4334,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         columnSpacing: 1,
                         headingTextStyle: TextStyle(
                             fontWeight: FontWeight.bold, color: Colors.black87),
-                        columns: const [
+                        columns: [
                           // DataColumn(label: Text("क्रिया", style: TextStyle(color: Colors.black54))),
                           DataColumn(
                               label: Text(
@@ -4407,7 +4408,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   backgroundColor: Colors.white,
                                   title: Center(
                                     child: Text(
-                                      "अन्य प्रभावी लोकं",
+                                      "${Statics.getLabel('anyaPrabhaviLok')}",
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20,
@@ -4429,7 +4430,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                         _buildInfoRow(
                                             "पत्ता", selectedData.address),
                                         _buildInfoRow(
-                                            "दूरभाष", selectedData.doorabhaash),
+                                            "${Statics.getLabel('doorBhash')}",
+                                            selectedData.doorabhaash),
                                         _buildInfoRow(
                                             "श्रेणी",
                                             selectedData
@@ -4458,7 +4460,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                             "संपर्क स्थिति",
                                             selectedData
                                                 .selectedDropdownValueName5),
-                                        _buildInfoRow("संपर्क सूत्र नाव",
+                                        _buildInfoRow(
+                                            "${Statics.getLabel('samparkSootraNaav')}",
                                             selectedData.samparkasutranav),
                                         _buildInfoRow(
                                             "संपर्क सूत्रांचे दूरभाष",
@@ -4549,7 +4552,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   ),
                                   onPressed: () =>
                                       Navigator.pop(context, false),
-                                  child: const Text(
+                                  child: Text(
                                     "नाही",
                                     style: TextStyle(color: Colors.black),
                                   ),
@@ -4562,8 +4565,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     ),
                                   ),
                                   onPressed: () => Navigator.pop(context, true),
-                                  child: const Text(
-                                    "होय",
+                                  child: Text(
+                                    "${Statics.getLabel('ConfirmationYes')}",
                                     style: TextStyle(color: Colors.white),
                                   ),
                                 ),
@@ -4660,7 +4663,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           headingTextStyle: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.black87),
-                          columns: const [
+                          columns: [
                             DataColumn(
                                 label: Text(
                               "सण",
@@ -4857,7 +4860,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   ),
                                   onPressed: () =>
                                       Navigator.pop(context, false),
-                                  child: const Text(
+                                  child: Text(
                                     "नाही",
                                     style: TextStyle(color: Colors.black),
                                   ),
@@ -4870,8 +4873,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     ),
                                   ),
                                   onPressed: () => Navigator.pop(context, true),
-                                  child: const Text(
-                                    "होय",
+                                  child: Text(
+                                    "${Statics.getLabel('ConfirmationYes')}",
                                     style: TextStyle(color: Colors.white),
                                   ),
                                 ),
@@ -4936,7 +4939,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 Border.all(color: Colors.purpleAccent.shade100),
                             color: Colors.purpleAccent.shade100,
                             borderRadius: BorderRadius.circular(15)),
-                        child: const Center(
+                        child: Center(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -4971,7 +4974,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             MaterialStatePropertyAll(Colors.purple.shade50),
                         headingTextStyle: TextStyle(
                             fontWeight: FontWeight.bold, color: Colors.black87),
-                        columns: const [
+                        columns: [
                           DataColumn(
                               label: Text(
                             "सामाजिक कार्यक्रम",
@@ -5164,7 +5167,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   ),
                                   onPressed: () =>
                                       Navigator.pop(context, false),
-                                  child: const Text(
+                                  child: Text(
                                     "नाही",
                                     style: TextStyle(color: Colors.black),
                                   ),
@@ -5177,8 +5180,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     ),
                                   ),
                                   onPressed: () => Navigator.pop(context, true),
-                                  child: const Text(
-                                    "होय",
+                                  child: Text(
+                                    "${Statics.getLabel('ConfirmationYes')}",
                                     style: TextStyle(color: Colors.white),
                                   ),
                                 ),
@@ -5698,7 +5701,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     onDataChanged();
                                   }
                                 },
-                                child: const Text(
+                                child: Text(
                                   "संग्रह",
                                   style: TextStyle(color: Colors.white),
                                 ),
@@ -6192,7 +6195,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     onDataChanged();
                                   }
                                 },
-                                child: const Text(
+                                child: Text(
                                   "संग्रह",
                                   style: TextStyle(color: Colors.white),
                                 ),
@@ -6328,7 +6331,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     onDataChanged();
                                   }
                                 },
-                                child: const Text(
+                                child: Text(
                                   "संग्रह",
                                   style: TextStyle(color: Colors.white),
                                 ),
@@ -6461,7 +6464,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           name: "गाव प्रमुखाचे नाव",
                           controller: gavPramukhAdhyatmikKendraController),
                       textControllerField2(
-                          name: "दूरभाष",
+                          name: "${Statics.getLabel('doorBhash')}",
                           controller: samparkSootraAdhyatmikKendraController,
                           keyboardType: TextInputType.number,
                           maxInput: 10,
@@ -6508,7 +6511,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               onDataChanged();
                             }
                           },
-                          child: const Text("संग्रह",
+                          child: Text("संग्रह",
                               style: TextStyle(color: Colors.white)),
                         ),
                       ),
@@ -6610,7 +6613,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     gavatilMumbaikarPramukhNameConroller),
                             const SizedBox(height: 20),
                             textControllerField2(
-                                name: "दूरभाष",
+                                name: "${Statics.getLabel('doorBhash')}",
                                 controller: gavatilMumbaikarDoorbhashConroller,
                                 keyboardType: TextInputType.number,
                                 maxInput: 10,
@@ -6650,7 +6653,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     onDataChanged();
                                   }
                                 },
-                                child: const Text(
+                                child: Text(
                                   "संग्रह",
                                   style: TextStyle(color: Colors.white),
                                 ),
@@ -6728,8 +6731,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            "रिलीजन",
+                          Text(
+                            "${Statics.getLabel('religion')}",
                             style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -7157,7 +7160,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         name: "पत्ता",
                         controller: sajjanShaktiAddressController),
                     textControllerField2(
-                      name: "दूरभाष",
+                      name: "${Statics.getLabel('doorBhash')}",
                       controller: sajjanShaktiPhoneController,
                       keyboardType: TextInputType.number,
                       maxInput: 10,
@@ -7260,7 +7263,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     ),
                     const SizedBox(height: 5),
                     textControllerField2(
-                        name: "संपर्क सूत्र नाव",
+                        name: "${Statics.getLabel('samparkSootraNaav')}",
                         controller: sajjanShaktiContactPersonNameController),
                     const SizedBox(height: 5),
                     textControllerField2(
@@ -7481,7 +7484,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
   //           children: [
   //             Text(
-  //               "अन्य प्रभावी लोकं",
+  //               "${Statics.getLabel('anyaPrabhaviLok')}",
   //               style: TextStyle(
   //                 fontWeight: FontWeight.bold,
   //                 fontSize: 20,
@@ -7509,7 +7512,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   //                       controller: anyaPrabhaviLokAddressController,
   //                       height: 80),
   //                   textControllerField2(
-  //                     name: "दूरभाष",
+  //                     name: "${Statics.getLabel('doorBhash')}",
   //                     controller: anyaPrabhaviLokMobileNoController,
   //                     height: 50,
   //                     keyboardType: TextInputType.number,
@@ -7648,7 +7651,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   //                       : Container(),
   //                   // textControllerField("अन्य विशेष माहिती", anyaPrabhaviLokAnyaVisheshMahitiController, context, height: 80),
   //                   textControllerField2(
-  //                       name: "संपर्क सूत्र नाव",
+  //                       name: ""${Statics.getLabel('samparkSootraNaav')}"",
   //                       controller: anyaPrabhaviLokSamparkSutraNaavController,
   //                       height: 50),
   //                   textControllerField2(
@@ -7815,7 +7818,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "अन्य प्रभावी लोकं",
+                "${Statics.getLabel('anyaPrabhaviLok')}",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
@@ -7843,7 +7846,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         controller: anyaPrabhaviLokAddressController,
                         height: 50),
                     textControllerField2(
-                      name: "दूरभाष",
+                      name: "${Statics.getLabel('doorBhash')}",
                       controller: anyaPrabhaviLokMobileNoController,
                       height: 50,
                       keyboardType: TextInputType.number,
@@ -7995,7 +7998,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     ),
                     // textControllerField("अन्य विशेष माहिती", anyaPrabhaviLokAnyaVisheshMahitiController, context, height: 80),
                     textControllerField2(
-                        name: "संपर्क सूत्र नाव",
+                        name: "${Statics.getLabel('samparkSootraNaav')}",
                         controller: anyaPrabhaviLokSamparkSutraNaavController,
                         height: 50),
                     textControllerField2(
@@ -8906,7 +8909,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     color: Colors.purpleAccent.shade100),
                                 color: Colors.purpleAccent.withOpacity(0.7),
                                 borderRadius: BorderRadius.circular(15)),
-                            child: const Center(
+                            child: Center(
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -8949,7 +8952,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   headingTextStyle: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black87),
-                                  columns: const [
+                                  columns: [
                                     DataColumn(
                                         label: Text(
                                       "नाव",
@@ -9165,7 +9168,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                           ),
                                           onPressed: () =>
                                               Navigator.pop(context, false),
-                                          child: const Text(
+                                          child: Text(
                                             "नाही",
                                             style:
                                                 TextStyle(color: Colors.black),
@@ -9181,8 +9184,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                           ),
                                           onPressed: () =>
                                               Navigator.pop(context, true),
-                                          child: const Text(
-                                            "होय",
+                                          child: Text(
+                                            "${Statics.getLabel('ConfirmationYes')}",
                                             style:
                                                 TextStyle(color: Colors.white),
                                           ),
@@ -9241,7 +9244,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   color: Colors.purpleAccent.shade100),
                               color: Colors.purpleAccent.withOpacity(0.7),
                               borderRadius: BorderRadius.circular(15)),
-                          child: const Center(
+                          child: Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -9282,7 +9285,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 headingTextStyle: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black87),
-                                columns: const [
+                                columns: [
                                   DataColumn(label: Text("क्र.")),
                                   DataColumn(
                                       label: Text(
@@ -9462,7 +9465,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                         ),
                                         onPressed: () =>
                                             Navigator.pop(context, false),
-                                        child: const Text(
+                                        child: Text(
                                           "नाही",
                                           style: TextStyle(color: Colors.black),
                                         ),
@@ -9477,8 +9480,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                         ),
                                         onPressed: () =>
                                             Navigator.pop(context, true),
-                                        child: const Text(
-                                          "होय",
+                                        child: Text(
+                                          "${Statics.getLabel('ConfirmationYes')}",
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
