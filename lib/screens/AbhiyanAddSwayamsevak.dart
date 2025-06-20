@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -7,6 +8,7 @@ import 'package:niyojak_prod/models/response_model/AbhiyaanListResponse.dart';
 import 'package:niyojak_prod/providers/bals.dart';
 import 'package:niyojak_prod/providers/swayamsevak_provider.dart';
 import 'package:niyojak_prod/widgets/swayamsevak_card.dart';
+
 import '../helpers/static_data.dart' as Statics;
 
 class AbhiyanAddSwayamsevakScreen extends StatefulWidget {
@@ -16,7 +18,8 @@ class AbhiyanAddSwayamsevakScreen extends StatefulWidget {
   }
 }
 
-class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen> {
+class AbhiyanAddSwayamsevakScreenState
+    extends State<AbhiyanAddSwayamsevakScreen> {
   Statics.ScreenArguments? args;
 
   String selectedAbhiyanValue = "";
@@ -231,8 +234,10 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
 
   void populatelinkedBhaagDropdown() async {
     print("bhaag called");
-    _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), "", "", "");
+    _linkedshaharValue = _linkednagarValue =
+        _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    var data = await Statics.getGeoUnitsByLevelAndParent(
+        Statics.levels['BhaagLevelID'].toString(), "", "", "");
     setState(() {
       _linkedbhaag = data;
     });
@@ -240,23 +245,29 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
   }
 
   void populatelinkedShaharDropdown(String bhaagIDStr) async {
-    _linkedshaharValue = _linkedvastiValue = _linkedshahar = _linkedvasti = null;
-    var shDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', '');
+    _linkedshaharValue =
+        _linkedvastiValue = _linkedshahar = _linkedvasti = null;
+    var shDD = await Statics.getGeoUnitsByLevelAndParent(
+        Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', '');
     setState(() {
       _linkedshahar = (shDD.length > 0 ? shDD : null);
     });
   }
 
-  void populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
-    _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+  void populatelinkedNagarDropdown(
+      String? bhaagIDStr, String? shaharIDStr) async {
+    _linkednagarValue =
+        _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
     if (shaharIDStr != null) {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
+      var ngDD = await Statics.getGeoUnitsByLevelAndParent(
+          Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
       setState(() {
         _linkednagar = (ngDD.length > 0 ? ngDD : null);
       });
     } else {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
+      var ngDD = await Statics.getGeoUnitsByLevelAndParent(
+          Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
       setState(() {
         _linkednagar = (ngDD.length > 0 ? ngDD : null);
       });
@@ -266,7 +277,8 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
   void populatelinkedMandalDropdown(String? nagarIDStr) async {
     _linkedmandalValue = _linkedgraamValue = null;
     _linkedmandal = _linkedgraam = null;
-    var mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, 'Nagar', '');
+    var mnDD = await Statics.getGeoUnitsByLevelAndParent(
+        Statics.levels['MandalLevelID'].toString(), nagarIDStr!, 'Nagar', '');
     setState(() {
       _linkedmandal = (mnDD.length > 0 ? mnDD : null);
     });
@@ -274,7 +286,8 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
 
   void populatelinkedGraamDropdown(String? mandalIDStr) async {
     _linkedgraamValue = null;
-    var gmDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['GraamLevelID'].toString(), mandalIDStr!, 'Mandal', '');
+    var gmDD = await Statics.getGeoUnitsByLevelAndParent(
+        Statics.levels['GraamLevelID'].toString(), mandalIDStr!, 'Mandal', '');
     setState(() {
       _linkedgraam = (gmDD.length > 0 ? gmDD : null);
     });
@@ -282,7 +295,8 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
 
   void populatelinkedVastiDropdown(String? nagarIDStr) async {
     _linkedvastiValue = null;
-    var vsDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, 'Nagar', '');
+    var vsDD = await Statics.getGeoUnitsByLevelAndParent(
+        Statics.levels['VastiLevelID'].toString(), nagarIDStr!, 'Nagar', '');
     setState(() {
       _linkedvasti = (vsDD.length > 0 ? vsDD : null);
     });
@@ -292,12 +306,24 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
     print("calling");
     bool isConnected = await Statics.isInternetConnected();
     if (isConnected) {
-      int? bhaagVal = _linkedbhaagValue == null || _linkedbhaagValue == "" ? null : int.parse(_linkedbhaagValue!);
-      int? shaharVal = _linkedshaharValue == null || _linkedshaharValue == "" ? null : int.parse(_linkedshaharValue!);
-      int? nagarVal = _linkednagarValue == null || _linkednagarValue == "" ? null : int.parse(_linkednagarValue!);
-      int? mandalVal = _linkedmandalValue == null || _linkedmandalValue == "" ? null : int.parse(_linkedmandalValue!);
-      int? graamVal = _linkedgraamValue == null || _linkedgraamValue == "" ? null : int.parse(_linkedgraamValue!);
-      int? vastiVal = _linkedvastiValue == null || _linkedvastiValue == "" ? null : int.parse(_linkedvastiValue!);
+      int? bhaagVal = _linkedbhaagValue == null || _linkedbhaagValue == ""
+          ? null
+          : int.parse(_linkedbhaagValue!);
+      int? shaharVal = _linkedshaharValue == null || _linkedshaharValue == ""
+          ? null
+          : int.parse(_linkedshaharValue!);
+      int? nagarVal = _linkednagarValue == null || _linkednagarValue == ""
+          ? null
+          : int.parse(_linkednagarValue!);
+      int? mandalVal = _linkedmandalValue == null || _linkedmandalValue == ""
+          ? null
+          : int.parse(_linkedmandalValue!);
+      int? graamVal = _linkedgraamValue == null || _linkedgraamValue == ""
+          ? null
+          : int.parse(_linkedgraamValue!);
+      int? vastiVal = _linkedvastiValue == null || _linkedvastiValue == ""
+          ? null
+          : int.parse(_linkedvastiValue!);
 
       int? geoUnitID;
       geoUnitID = vastiVal != null
@@ -324,7 +350,9 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
       if (_isTrainedInMukhyaYogaasan == true) mukhyaVishay += "Yogaasan,";
       if (_isTrainedInMukhyaYogachaap == true) mukhyaVishay += "YogaChaap,";
 
-      mukhyaVishay = mukhyaVishay == "" ? null : mukhyaVishay.substring(0, mukhyaVishay.length - 1);
+      mukhyaVishay = mukhyaVishay == ""
+          ? null
+          : mukhyaVishay.substring(0, mukhyaVishay.length - 1);
 
       if (_isTrainedInAnyaDanda == true) anyaVishay += "Danda,";
       if (_isTrainedInAnyaDandaYuddha == true) anyaVishay += "DandaYuddha,";
@@ -333,7 +361,9 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
       if (_isTrainedInAnyaYogaasan == true) anyaVishay += "Yogaasan,";
       if (_isTrainedInAnyaYogachaap == true) anyaVishay += "YogaChaap,";
 
-      anyaVishay = anyaVishay == "" ? null : anyaVishay.substring(0, anyaVishay.length - 1);
+      anyaVishay = anyaVishay == ""
+          ? null
+          : anyaVishay.substring(0, anyaVishay.length - 1);
 
       String? prathamVaadya = "";
       if (_isTrainedInPrathamAanak == true) prathamVaadya += "Aanak,";
@@ -345,7 +375,9 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
       if (_isTrainedInPrathamVanshi == true) prathamVaadya += "Vanshi,";
       if (_isTrainedInPrathamVenu == true) prathamVaadya += "Venu,";
 
-      prathamVaadya = prathamVaadya == "" ? null : prathamVaadya.substring(0, prathamVaadya.length - 1);
+      prathamVaadya = prathamVaadya == ""
+          ? null
+          : prathamVaadya.substring(0, prathamVaadya.length - 1);
 
       String? dwitiyaVaadya = "";
       if (_isTrainedInDwitiyaAanak == true) dwitiyaVaadya += "Aanak,";
@@ -357,7 +389,9 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
       if (_isTrainedInDwitiyaVanshi == true) dwitiyaVaadya += "Vanshi,";
       if (_isTrainedInDwitiyaVenu == true) dwitiyaVaadya += "Venu,";
 
-      dwitiyaVaadya = dwitiyaVaadya == "" ? null : dwitiyaVaadya.substring(0, dwitiyaVaadya.length - 1);
+      dwitiyaVaadya = dwitiyaVaadya == ""
+          ? null
+          : dwitiyaVaadya.substring(0, dwitiyaVaadya.length - 1);
 
       String? trutiyaVaadya = "";
       if (_isTrainedInTrutiyaAanak == true) trutiyaVaadya += "Aanak,";
@@ -369,7 +403,9 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
       if (_isTrainedInTrutiyaVanshi == true) trutiyaVaadya += "Vanshi,";
       if (_isTrainedInTrutiyaVenu == true) trutiyaVaadya += "Venu,";
 
-      trutiyaVaadya = trutiyaVaadya == "" ? null : trutiyaVaadya.substring(0, trutiyaVaadya.length - 1);
+      trutiyaVaadya = trutiyaVaadya == ""
+          ? null
+          : trutiyaVaadya.substring(0, trutiyaVaadya.length - 1);
 
       String? anyaVaadya = "";
       if (_isTrainedInAnyaAanak == true) anyaVaadya += "Aanak,";
@@ -381,16 +417,21 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
       if (_isTrainedInAnyaVanshi == true) anyaVaadya += "Vanshi,";
       if (_isTrainedInAnyaVenu == true) anyaVaadya += "Venu,";
 
-      anyaVaadya = anyaVaadya == "" ? null : anyaVaadya.substring(0, anyaVaadya.length - 1);
+      anyaVaadya = anyaVaadya == ""
+          ? null
+          : anyaVaadya.substring(0, anyaVaadya.length - 1);
       String? educationOrgName = "";
 
       if (_categoryValue != null) {
         if (_categoryValue!.code == "School Student") {
-          educationOrgName = _schoolNameCntrl.text.isEmpty ? null : _schoolNameCntrl.text;
+          educationOrgName =
+              _schoolNameCntrl.text.isEmpty ? null : _schoolNameCntrl.text;
           _collegeID == null;
         } else if (_categoryValue!.code == 'Jr College') {
           _collegeID == null;
-          educationOrgName = _collegeOthrNameCntrl.text.isEmpty ? null : _collegeOthrNameCntrl.text;
+          educationOrgName = _collegeOthrNameCntrl.text.isEmpty
+              ? null
+              : _collegeOthrNameCntrl.text;
         } else if (_categoryValue!.code == 'Senior College' ||
             _categoryValue!.code == 'Post Graduate' ||
             _categoryValue!.code == 'Professional Studies' ||
@@ -408,7 +449,9 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
       if (_isFri == true) _weeklyOffDay = _weeklyOffDay + "5,";
       if (_isSat == true) _weeklyOffDay = _weeklyOffDay + "6,";
 
-      _weeklyOffDay = _weeklyOffDay == "" ? null : _weeklyOffDay.substring(0, _weeklyOffDay.length - 1);
+      _weeklyOffDay = _weeklyOffDay == ""
+          ? null
+          : _weeklyOffDay.substring(0, _weeklyOffDay.length - 1);
 
       var inputData = json.encode({
         "AppUserID": Statics.userDetails["userID"],
@@ -416,10 +459,12 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
         "SearchCriteria": _searchController.text,
         "BloodGroupID": _bldGrpvalue == "" ? null : _bldGrpvalue,
         "MotherTongueID": _mthrTngvalue == "" ? null : _mthrTngvalue,
-        "ShaakhaaExperienceYearID": _shaakhaSanchalanvalue == "" ? null : _shaakhaSanchalanvalue,
+        "ShaakhaaExperienceYearID":
+            _shaakhaSanchalanvalue == "" ? null : _shaakhaSanchalanvalue,
         "GeoUnitID": geoUnitID,
         "IsPratidnyit": _isPratidnyit,
-        "PratidnyaYear": _pratidnyaYearCtrl.text.isEmpty ? null : _pratidnyaYearCtrl.text,
+        "PratidnyaYear":
+            _pratidnyaYearCtrl.text.isEmpty ? null : _pratidnyaYearCtrl.text,
         "IsGanaveshComplete": _isGanveshComplete,
         "NoCap": _noCap,
         "NoShirt": _noShirt,
@@ -430,9 +475,13 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
         "NoDanda": _noDanda,
         "VehicleType": _vehicleValue == "" ? null : _vehicleValue,
         "HasDriver": _hasVehicleDriver,
-        "SanghaShikshanCode": _sanghaShikshaVarsha == "" ? null : _sanghaShikshaVarsha,
-        "SanghaShikshanYearFrom": _shikshaFromYearCntrl.text.isEmpty ? null : _shikshaFromYearCntrl.text,
-        "SanghaShikshanYearTo": _shikshaToYearCntrl.text.isEmpty ? null : _shikshaToYearCntrl.text,
+        "SanghaShikshanCode":
+            _sanghaShikshaVarsha == "" ? null : _sanghaShikshaVarsha,
+        "SanghaShikshanYearFrom": _shikshaFromYearCntrl.text.isEmpty
+            ? null
+            : _shikshaFromYearCntrl.text,
+        "SanghaShikshanYearTo":
+            _shikshaToYearCntrl.text.isEmpty ? null : _shikshaToYearCntrl.text,
         "HasBeenOTCShikshak": _hasBeenShikshak,
         "MukhyaShaaririkVishayCodes": mukhyaVishay == "" ? null : mukhyaVishay,
         "AnyaShaaririkVishayCodes": anyaVishay == "" ? null : anyaVishay,
@@ -444,19 +493,30 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
         "IsUnderstandLipiDwitiyaVaadya": _isDwitiyaLipi,
         "IsUnderstandLipiTrutiyaVaadya": _isTrutiyaLipi,
         "IsUnderstandLipiAnyaVaadya": _isAnyaLipi,
-        "RachanaaCountPrathamVaadya": _rachanaaCountPrathamCntrl.text.isEmpty ? null : _rachanaaCountPrathamCntrl.text,
-        "RachanaaCountDwitiyaVaadya": _rachanaaCountDwitiyaCntrl.text.isEmpty ? null : _rachanaaCountDwitiyaCntrl.text,
-        "RachanaaCountTrutiyaVaadya": _rachanaaCountTrutiyaCntrl.text.isEmpty ? null : _rachanaaCountTrutiyaCntrl.text,
-        "RachanaaCountAnyaVaadya": _rachanaaCountAnyaCntrl.text.isEmpty ? null : _rachanaaCountAnyaCntrl.text,
-        "OccupationCategoryID": _categoryValue == null ? null : _categoryValue!.staticID,
-        "EducationUniversityID": _educationUniversityID,
-        "EducationUniversityName": _educationUniversityNameCntrl.text.trim() != "Other"
+        "RachanaaCountPrathamVaadya": _rachanaaCountPrathamCntrl.text.isEmpty
             ? null
-            : _educationOthrUniversityNameCntrl.text.trim() == ""
+            : _rachanaaCountPrathamCntrl.text,
+        "RachanaaCountDwitiyaVaadya": _rachanaaCountDwitiyaCntrl.text.isEmpty
+            ? null
+            : _rachanaaCountDwitiyaCntrl.text,
+        "RachanaaCountTrutiyaVaadya": _rachanaaCountTrutiyaCntrl.text.isEmpty
+            ? null
+            : _rachanaaCountTrutiyaCntrl.text,
+        "RachanaaCountAnyaVaadya": _rachanaaCountAnyaCntrl.text.isEmpty
+            ? null
+            : _rachanaaCountAnyaCntrl.text,
+        "OccupationCategoryID":
+            _categoryValue == null ? null : _categoryValue!.staticID,
+        "EducationUniversityID": _educationUniversityID,
+        "EducationUniversityName":
+            _educationUniversityNameCntrl.text.trim() != "Other"
                 ? null
-                : _educationOthrUniversityNameCntrl.text,
+                : _educationOthrUniversityNameCntrl.text.trim() == ""
+                    ? null
+                    : _educationOthrUniversityNameCntrl.text,
         "EducationInstitutionID": _collegeID,
-        "EducationInstitutionName": educationOrgName == "" ? null : educationOrgName,
+        "EducationInstitutionName":
+            educationOrgName == "" ? null : educationOrgName,
         "EducationProgramID": _educationProgramID,
         "EducationProgramName": _educationProgramName.text.trim() != "Other"
             ? null
@@ -469,29 +529,46 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
             : _educationOthrCourseName.text.trim() == ""
                 ? null
                 : _educationOthrCourseName.text,
-        "EducationStandardID": _standardValue == null ? null : _standardValue!.staticID,
-        "EducationStandardName": _standardValue != null && _standardValue!.code == "Other"
-            ? _educationOthrStandardNameCntrl.text.trim() == ""
-                ? null
-                : _educationStandardNameCntrl.text
-            : null,
-        "GovernmentDepartment": _govtDeptCtrl.text.isEmpty ? null : _govtDeptCtrl.text,
+        "EducationStandardID":
+            _standardValue == null ? null : _standardValue!.staticID,
+        "EducationStandardName":
+            _standardValue != null && _standardValue!.code == "Other"
+                ? _educationOthrStandardNameCntrl.text.trim() == ""
+                    ? null
+                    : _educationStandardNameCntrl.text
+                : null,
+        "GovernmentDepartment":
+            _govtDeptCtrl.text.isEmpty ? null : _govtDeptCtrl.text,
         "Designation": null,
-        "OfficeLocation": _officeLocationCtrl.text.isEmpty ? null : _officeLocationCtrl.text,
+        "OfficeLocation":
+            _officeLocationCtrl.text.isEmpty ? null : _officeLocationCtrl.text,
         "WeeklyOffDayIDs": _weeklyOffDay,
-        "OrganizationName": _organizationNameCtrl.text.isEmpty ? null : _organizationNameCtrl.text,
-        "IndustryVertical": _industrialVerticalCtrl.text.isEmpty ? null : _industrialVerticalCtrl.text,
-        "OrganizationAtRetirement": _organizationAtRetirementCtrl.text.isEmpty ? null : _organizationAtRetirementCtrl.text,
-        "DesignationAtRetirement": _desgAtRetirementCtrl.text.isEmpty ? null : _desgAtRetirementCtrl.text,
-        "DepartmentAtRetirement": _deptAtRetirementCtrl.text.isEmpty ? null : _deptAtRetirementCtrl.text,
-        "DaayitvaForID": _daayitvaForValue == null ? null : _daayitvaForValue!.staticID,
+        "OrganizationName": _organizationNameCtrl.text.isEmpty
+            ? null
+            : _organizationNameCtrl.text,
+        "IndustryVertical": _industrialVerticalCtrl.text.isEmpty
+            ? null
+            : _industrialVerticalCtrl.text,
+        "OrganizationAtRetirement": _organizationAtRetirementCtrl.text.isEmpty
+            ? null
+            : _organizationAtRetirementCtrl.text,
+        "DesignationAtRetirement": _desgAtRetirementCtrl.text.isEmpty
+            ? null
+            : _desgAtRetirementCtrl.text,
+        "DepartmentAtRetirement": _deptAtRetirementCtrl.text.isEmpty
+            ? null
+            : _deptAtRetirementCtrl.text,
+        "DaayitvaForID":
+            _daayitvaForValue == null ? null : _daayitvaForValue!.staticID,
         "DaayitvaID": _daayitvaValue == "" ? null : _daayitvaValue,
         "DaayitvaLevelID": _levelValue == "" ? null : _levelValue,
         "DaayitvaGeoUnitID": _geoUnitsValue == "" ? null : _geoUnitsValue,
         "IsNoDaayitva": _noDaayitva,
         "IsPravaasi": _pravaasi,
-        "SanghaPreritSansthaaID": _preritSansthaValue == "" ? null : _preritSansthaValue,
-        "SocialOrganizationName": _othOrgNameCtrl.text.isEmpty ? null : _othOrgNameCtrl.text,
+        "SanghaPreritSansthaaID":
+            _preritSansthaValue == "" ? null : _preritSansthaValue,
+        "SocialOrganizationName":
+            _othOrgNameCtrl.text.isEmpty ? null : _othOrgNameCtrl.text,
         "SortOrder": _sortingOnValue == "Name" ? "FullName" : "SwayamsevakID",
       });
       print(jsonEncode(inputData));
@@ -507,7 +584,8 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
         SwayamsevakProvider().getSwayamsevaksForExport(inputData);
         return null;
       } else {
-        Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
+        Statics.showMessageDialog(
+            context, Statics.getLabel('internetNotConnected'));
         return null;
       }
     }
@@ -550,14 +628,16 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
           setState(() {
             _isSearching = false;
           });
-          Statics.showToast(Statics.getLabel('noDataFoundTryAnotherSearch').split(",").first);
+          Statics.showToast(
+              Statics.getLabel('noDataFoundTryAnotherSearch').split(",").first);
         }
       }
     } catch (e) {
       setState(() {
         _isSearching = false;
       });
-      Statics.showToast(Statics.getLabel('noDataFoundTryAnotherSearch').split(",").first);
+      Statics.showToast(
+          Statics.getLabel('noDataFoundTryAnotherSearch').split(",").first);
     }
   }
 
@@ -570,7 +650,8 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
         var data = {
           "AbhiyanSwayamsevakID": 0,
           "AbhiyaanID": selectedAbhiyanValue,
-          "SwayamsevakID": newData.isNotEmpty ? newData.first['SwayamsevakID'] : "",
+          "SwayamsevakID":
+              newData.isNotEmpty ? newData.first['SwayamsevakID'] : "",
           "MobileNo": _mobileCntrl.text.isEmpty
               ? newData.isNotEmpty
                   ? newData.first['MobileNumber']
@@ -594,7 +675,8 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
           "Vibhagid": 0,
         };
 
-        var result = await SwayamsevakProvider().saveAbhiyanSwayamsevak(jsonEncode(data));
+        var result = await SwayamsevakProvider()
+            .saveAbhiyanSwayamsevak(jsonEncode(data));
         if (result.status == "200") {
           print("succeed");
           showDialog(
@@ -615,7 +697,8 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
                   child: Text(getLabel('ConfirmationYes')),
                   onPressed: () {
                     Navigator.of(ctx).pop();
-                    Navigator.pushReplacementNamed(context, AbhiyanAddSwayamsevakScreen.routeName);
+                    Navigator.pushReplacementNamed(
+                        context, AbhiyanAddSwayamsevakScreen.routeName);
                   },
                 ),
               ],
@@ -633,7 +716,8 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
   void populateGeoUnits(String? levelID) async {
     var data4;
     if (levelID == "") {
-      data4 = await Statics.getGeoUnitsByLevel(Statics.levels['MahaanagarLevelID']);
+      data4 =
+          await Statics.getGeoUnitsByLevel(Statics.levels['MahaanagarLevelID']);
     } else
       data4 = await Statics.getGeoUnitsByLevel(levelID!);
     if (!mounted) return;
@@ -652,10 +736,7 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:
-        Text(
-            "${Statics.getLabel('addSahabhagiKaryakarta')}"
-        ),
+        title: Text("${Statics.getLabel('addSahabhagiKaryakarta')}"),
       ),
       body: ModalProgressHUD(
         inAsyncCall: _isSearching,
@@ -674,7 +755,8 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
                   children: [
                     Text(
                       "${Statics.getLabel('Abhiyaan')}",
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -684,14 +766,19 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
                     Container(
                       width: MediaQuery.of(context).size.width * 0.88,
                       alignment: Alignment.center,
-                      padding: EdgeInsets.only(left: 10, right: 0, top: 5, bottom: 5),
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.black38)),
+                      padding: EdgeInsets.only(
+                          left: 10, right: 0, top: 5, bottom: 5),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.black38)),
                       child: DropdownButton(
                         isExpanded: true,
                         isDense: true,
                         iconSize: 30,
                         underline: SizedBox(),
-                        value: selectedAbhiyanValue == "" ? null : selectedAbhiyanValue,
+                        value: selectedAbhiyanValue == ""
+                            ? null
+                            : selectedAbhiyanValue,
                         onChanged: (newValue) {
                           print(newValue);
                           setState(() {
@@ -716,7 +803,8 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
                   children: [
                     Text(
                       "${Statics.getLabel('Search')}              :",
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.6,
@@ -732,7 +820,10 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
                           }
                           setState(() {});
                         },
-                        inputFormatters: [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.digitsOnly],
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(10),
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
                         keyboardType: TextInputType.phone,
                         decoration: InputDecoration(
                           isDense: true,
@@ -741,7 +832,8 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
                             onTap: () async {
                               FocusScope.of(context).unfocus();
                               if (_searchController.text.length < 10) {
-                                Statics.showToast(Statics.getLabel('MobileValidationMessage'));
+                                Statics.showToast(Statics.getLabel(
+                                    'MobileValidationMessage'));
                                 return null;
                               }
                               await _search("Search");
@@ -754,15 +846,20 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
                             ),
                           ),
                           border: OutlineInputBorder(
-                              borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                              borderSide: BorderSide(
+                                  width: 0.7, color: Colors.grey.shade700),
+                              borderRadius: BorderRadius.circular(5)),
                           enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                              borderSide: BorderSide(
+                                  width: 0.7, color: Colors.grey.shade700),
+                              borderRadius: BorderRadius.circular(5)),
                           focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                              borderSide: BorderSide(
+                                  width: 0.7, color: Colors.grey.shade700),
+                              borderRadius: BorderRadius.circular(5)),
                         ),
                       ),
                     ),
-
                   ],
                 ),
                 SizedBox(
@@ -803,15 +900,23 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
                           labelText: Statics.getLabel('FullName'),
                           isDense: true,
                           border: OutlineInputBorder(
-                              borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                              borderSide: BorderSide(
+                                  width: 0.7, color: Colors.grey.shade700),
+                              borderRadius: BorderRadius.circular(5)),
                           enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                              borderSide: BorderSide(
+                                  width: 0.7, color: Colors.grey.shade700),
+                              borderRadius: BorderRadius.circular(5)),
                           focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                              borderSide: BorderSide(
+                                  width: 0.7, color: Colors.grey.shade700),
+                              borderRadius: BorderRadius.circular(5)),
                         ),
                         keyboardType: TextInputType.text,
                         validator: (value) {
-                          if (value!.isEmpty) return (Statics.getLabel('FullNameValidationMessage'));
+                          if (value!.isEmpty)
+                            return (Statics.getLabel(
+                                'FullNameValidationMessage'));
                           return null;
                         },
                         onSaved: (value) {
@@ -828,16 +933,27 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
                           labelText: Statics.getLabel('Mobile'),
                           isDense: true,
                           border: OutlineInputBorder(
-                              borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                              borderSide: BorderSide(
+                                  width: 0.7, color: Colors.grey.shade700),
+                              borderRadius: BorderRadius.circular(5)),
                           enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                              borderSide: BorderSide(
+                                  width: 0.7, color: Colors.grey.shade700),
+                              borderRadius: BorderRadius.circular(5)),
                           focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                              borderSide: BorderSide(
+                                  width: 0.7, color: Colors.grey.shade700),
+                              borderRadius: BorderRadius.circular(5)),
                         ),
                         keyboardType: TextInputType.phone,
-                        inputFormatters: [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.digitsOnly],
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(10),
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
                         validator: (value) {
-                          if (value!.isEmpty || value!.trim().length < 10) return (Statics.getLabel('MobileValidationMessage'));
+                          if (value!.isEmpty || value!.trim().length < 10)
+                            return (Statics.getLabel(
+                                'MobileValidationMessage'));
                           return null;
                         },
                         onSaved: (value) {
@@ -854,15 +970,23 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
                           labelText: Statics.getLabel('Email'),
                           isDense: true,
                           border: OutlineInputBorder(
-                              borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                              borderSide: BorderSide(
+                                  width: 0.7, color: Colors.grey.shade700),
+                              borderRadius: BorderRadius.circular(5)),
                           enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                              borderSide: BorderSide(
+                                  width: 0.7, color: Colors.grey.shade700),
+                              borderRadius: BorderRadius.circular(5)),
                           focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                              borderSide: BorderSide(
+                                  width: 0.7, color: Colors.grey.shade700),
+                              borderRadius: BorderRadius.circular(5)),
                         ),
                         keyboardType: TextInputType.text,
                         validator: (value) {
-                          if (value!.isEmpty) return (Statics.getLabel('ValidEmailBodyValidationMessage'));
+                          if (value!.isEmpty)
+                            return (Statics.getLabel(
+                                'ValidEmailBodyValidationMessage'));
                           return null;
                         },
                         onSaved: (value) {
@@ -873,8 +997,10 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
                         height: 15,
                       ),
                       Container(
-                        decoration:
-                            BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(width: 0.7, color: Colors.grey.shade700)),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                                width: 0.7, color: Colors.grey.shade700)),
                         child: ExpansionPanelList(
                           elevation: 0,
                           expandedHeaderPadding: EdgeInsets.zero,
@@ -889,59 +1015,86 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
                           children: [
                             ExpansionPanel(
                               backgroundColor: Colors.transparent,
-                              headerBuilder: (BuildContext context, bool isExpanded) {
+                              headerBuilder:
+                                  (BuildContext context, bool isExpanded) {
                                 return ListTile(
-                                  title: Text(Statics.getLabel('SelectGeoUnit')),
+                                  title:
+                                      Text(Statics.getLabel('SelectGeoUnit')),
                                 );
                               },
                               body: Container(
                                 margin: EdgeInsets.all(10),
                                 child: Column(
                                   children: [
-                                    if(_linkedbhaag != null)
-                                    DropdownButtonFormField(
-                                      decoration: InputDecoration(labelText: Statics.getLabel('Bhaag')),
-                                      isExpanded: true,
-                                      value: _linkedbhaagValue == "" ? null : _linkedbhaagValue,
-                                      items:
-                                          _linkedbhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _linkedbhaagValue = value;
-                                          populatelinkedShaharDropdown(value!);
-                                          populatelinkedNagarDropdown(value, null);
-                                        });
-                                      },
-                                    ),
+                                    if (_linkedbhaag != null)
+                                      DropdownButtonFormField(
+                                        decoration: InputDecoration(
+                                            labelText:
+                                                Statics.getLabel('Bhaag')),
+                                        isExpanded: true,
+                                        value: _linkedbhaagValue == ""
+                                            ? null
+                                            : _linkedbhaagValue,
+                                        items: _linkedbhaag!
+                                            .map((bg) => DropdownMenuItem(
+                                                value: bg.geoUnitID.toString(),
+                                                child: Text(bg.name!)))
+                                            .toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _linkedbhaagValue = value;
+                                            populatelinkedShaharDropdown(
+                                                value!);
+                                            populatelinkedNagarDropdown(
+                                                value, null);
+                                          });
+                                        },
+                                      ),
                                     SizedBox(
                                       height: 10,
                                     ),
-                                    if (_linkedshahar != null && _linkedshahar!.length > 0)
+                                    if (_linkedshahar != null &&
+                                        _linkedshahar!.length > 0)
                                       DropdownButtonFormField(
-                                        decoration: InputDecoration(labelText: Statics.getLabel('Shahar')),
+                                        decoration: InputDecoration(
+                                            labelText:
+                                                Statics.getLabel('Shahar')),
                                         isExpanded: true,
-                                        value: _linkedshaharValue == "" ? null : _linkedshaharValue,
+                                        value: _linkedshaharValue == ""
+                                            ? null
+                                            : _linkedshaharValue,
                                         items: _linkedshahar!
-                                            .map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!)))
+                                            .map((bg) => DropdownMenuItem(
+                                                value: bg.geoUnitID.toString(),
+                                                child: Text(bg.name!)))
                                             .toList(),
                                         onChanged: (value) {
                                           setState(() {
                                             _linkedshaharValue = value;
-                                            populatelinkedNagarDropdown(null, value);
+                                            populatelinkedNagarDropdown(
+                                                null, value);
                                           });
                                         },
                                       ),
-                                    if (_linkedshahar != null && _linkedshahar!.length > 0)
+                                    if (_linkedshahar != null &&
+                                        _linkedshahar!.length > 0)
                                       SizedBox(
                                         height: 10,
                                       ),
-                                    if (_linkednagar != null && _linkednagar!.length > 0)
+                                    if (_linkednagar != null &&
+                                        _linkednagar!.length > 0)
                                       DropdownButtonFormField(
-                                        decoration: InputDecoration(labelText: Statics.getLabel('Nagar')),
+                                        decoration: InputDecoration(
+                                            labelText:
+                                                Statics.getLabel('Nagar')),
                                         isExpanded: true,
-                                        value: _linkednagarValue == "" ? null : _linkednagarValue,
+                                        value: _linkednagarValue == ""
+                                            ? null
+                                            : _linkednagarValue,
                                         items: _linkednagar!
-                                            .map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!)))
+                                            .map((bg) => DropdownMenuItem(
+                                                value: bg.geoUnitID.toString(),
+                                                child: Text(bg.name!)))
                                             .toList(),
                                         onChanged: (value) {
                                           setState(() {
@@ -951,17 +1104,25 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
                                           });
                                         },
                                       ),
-                                    if (_linkednagar != null && _linkednagar!.length > 0)
+                                    if (_linkednagar != null &&
+                                        _linkednagar!.length > 0)
                                       SizedBox(
                                         height: 10,
                                       ),
-                                    if (_linkedmandal != null && _linkedmandal!.length > 0)
+                                    if (_linkedmandal != null &&
+                                        _linkedmandal!.length > 0)
                                       DropdownButtonFormField(
-                                        decoration: InputDecoration(labelText: Statics.getLabel('Mandal')),
+                                        decoration: InputDecoration(
+                                            labelText:
+                                                Statics.getLabel('Mandal')),
                                         isExpanded: true,
-                                        value: _linkedmandalValue == "" ? null : _linkedmandalValue,
+                                        value: _linkedmandalValue == ""
+                                            ? null
+                                            : _linkedmandalValue,
                                         items: _linkedmandal!
-                                            .map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!)))
+                                            .map((bg) => DropdownMenuItem(
+                                                value: bg.geoUnitID.toString(),
+                                                child: Text(bg.name!)))
                                             .toList(),
                                         onChanged: (value) {
                                           setState(() {
@@ -970,17 +1131,25 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
                                           });
                                         },
                                       ),
-                                    if (_linkedmandal != null && _linkedmandal!.length > 0)
+                                    if (_linkedmandal != null &&
+                                        _linkedmandal!.length > 0)
                                       SizedBox(
                                         height: 10,
                                       ),
-                                    if (_linkedgraam != null && _linkedgraam!.length > 0)
+                                    if (_linkedgraam != null &&
+                                        _linkedgraam!.length > 0)
                                       DropdownButtonFormField(
-                                        decoration: InputDecoration(labelText: Statics.getLabel('Graam')),
+                                        decoration: InputDecoration(
+                                            labelText:
+                                                Statics.getLabel('Graam')),
                                         isExpanded: true,
-                                        value: _linkedgraamValue == "" ? null : _linkedgraamValue,
+                                        value: _linkedgraamValue == ""
+                                            ? null
+                                            : _linkedgraamValue,
                                         items: _linkedgraam!
-                                            .map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!)))
+                                            .map((bg) => DropdownMenuItem(
+                                                value: bg.geoUnitID.toString(),
+                                                child: Text(bg.name!)))
                                             .toList(),
                                         onChanged: (value) {
                                           setState(() {
@@ -988,13 +1157,20 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
                                           });
                                         },
                                       ),
-                                    if (_linkedvasti != null && _linkedvasti!.length > 0)
+                                    if (_linkedvasti != null &&
+                                        _linkedvasti!.length > 0)
                                       DropdownButtonFormField(
-                                        decoration: InputDecoration(labelText: Statics.getLabel('Vasti')),
+                                        decoration: InputDecoration(
+                                            labelText:
+                                                Statics.getLabel('Vasti')),
                                         isExpanded: true,
-                                        value: _linkedvastiValue == "" ? null : _linkedvastiValue,
+                                        value: _linkedvastiValue == ""
+                                            ? null
+                                            : _linkedvastiValue,
                                         items: _linkedvasti!
-                                            .map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!)))
+                                            .map((bg) => DropdownMenuItem(
+                                                value: bg.geoUnitID.toString(),
+                                                child: Text(bg.name!)))
                                             .toList(),
                                         onChanged: (value) {
                                           setState(() {
@@ -1020,37 +1196,51 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
                           Padding(
                             padding: const EdgeInsets.only(top: 9.0),
                             child: Text(
-                              "${ Statics.getLabel('Vasti')} :",
-                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                              "${Statics.getLabel('Vasti')} :",
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
                             ),
                           ),
                           Container(
                             width: MediaQuery.of(context).size.width * 0.58,
                             // margin: EdgeInsets.only(right: 5),
                             alignment: Alignment.center,
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.black38)),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(color: Colors.black38)),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Padding(
-                                  padding: EdgeInsets.only(left: 10, right: 0, top: 5, bottom: 5),
+                                  padding: EdgeInsets.only(
+                                      left: 10, right: 0, top: 5, bottom: 5),
                                   child: DropdownButton<String>(
                                     isExpanded: true,
                                     isDense: true,
                                     iconSize: 30,
                                     underline: SizedBox(),
-                                    value: selectedSansthaValue == "" ? null : selectedSansthaValue,
+                                    value: selectedSansthaValue == ""
+                                        ? null
+                                        : selectedSansthaValue,
                                     onChanged: (String? newValue) {
                                       setState(() {
                                         selectedSansthaValue = newValue!;
                                       });
                                     },
-                                    items: <String>["धार्मिक", "सामाजिक", "शैक्षणिक", "सेवा", "सांस्कृतिक", "अन्य"]
-                                        .map<DropdownMenuItem<String>>((String value) {
+                                    items: <String>[
+                                      "धार्मिक",
+                                      "सामाजिक",
+                                      "शैक्षणिक",
+                                      "सेवा",
+                                      "सांस्कृतिक",
+                                      "अन्य"
+                                    ].map<DropdownMenuItem<String>>(
+                                        (String value) {
                                       return DropdownMenuItem<String>(
                                         value: value,
                                         child: Padding(
-                                          padding: const EdgeInsets.only(top: 3.0),
+                                          padding:
+                                              const EdgeInsets.only(top: 3.0),
                                           child: Text(value),
                                         ),
                                       );
@@ -1065,7 +1255,8 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
                                       textInputAction: TextInputAction.done,
                                       controller: _anyaSansthaCntrl,
                                       decoration: InputDecoration(
-                                        hintText: "संस्था कुठल्या विषयात काम करते",
+                                        hintText:
+                                            "संस्था कुठल्या विषयात काम करते",
                                       ),
                                       keyboardType: TextInputType.text,
                                       onSaved: (value) {
@@ -1088,11 +1279,17 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
                           labelText: "संस्थेचे नाव",
                           isDense: true,
                           border: OutlineInputBorder(
-                              borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                              borderSide: BorderSide(
+                                  width: 0.7, color: Colors.grey.shade700),
+                              borderRadius: BorderRadius.circular(5)),
                           enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                              borderSide: BorderSide(
+                                  width: 0.7, color: Colors.grey.shade700),
+                              borderRadius: BorderRadius.circular(5)),
                           focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                              borderSide: BorderSide(
+                                  width: 0.7, color: Colors.grey.shade700),
+                              borderRadius: BorderRadius.circular(5)),
                         ),
                         keyboardType: TextInputType.text,
                         onSaved: (value) {
@@ -1109,11 +1306,17 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
                           labelText: "संस्थेत कुठल्या पदावर",
                           isDense: true,
                           border: OutlineInputBorder(
-                              borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                              borderSide: BorderSide(
+                                  width: 0.7, color: Colors.grey.shade700),
+                              borderRadius: BorderRadius.circular(5)),
                           enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                              borderSide: BorderSide(
+                                  width: 0.7, color: Colors.grey.shade700),
+                              borderRadius: BorderRadius.circular(5)),
                           focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                              borderSide: BorderSide(
+                                  width: 0.7, color: Colors.grey.shade700),
+                              borderRadius: BorderRadius.circular(5)),
                         ),
                         keyboardType: TextInputType.text,
                         onSaved: (value) {
@@ -1130,40 +1333,44 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
                   children: [
                     Text(
                       "${Statics.getLabel('SelectLevel')}    :",
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     ),
-                    if(_level != null)
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.6,
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.only(left: 10, right: 0, top: 5, bottom: 5),
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.black38)),
-                      child: DropdownButton<String>(
-                        isExpanded: true,
-                        isDense: true,
-                        iconSize: 30,
-                        underline: SizedBox(),
-                        value: _levelValue == "" ? null : _levelValue,
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedDayitvValue = "";
-                            _levelValue = newValue!;
-                            _geoUnitsValue = "";
-                            print(newValue);
-                          });
-                          populateGeoUnits(newValue);
-                        },
-                        items: _level!
-                            .map((bg) => DropdownMenuItem(
-                                value: bg.levelID.toString(),
-                                child: Text(bg.levelName == "Bhaag"
-                                    ? "Bhaag / Jilha"
-                                    : bg.levelName == "Nagar"
-                                        ? "Nagar / Taluka"
-                                        : bg.levelName!)))
-                            .toList(),
+                    if (_level != null)
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.only(
+                            left: 10, right: 0, top: 5, bottom: 5),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(color: Colors.black38)),
+                        child: DropdownButton<String>(
+                          isExpanded: true,
+                          isDense: true,
+                          iconSize: 30,
+                          underline: SizedBox(),
+                          value: _levelValue == "" ? null : _levelValue,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedDayitvValue = "";
+                              _levelValue = newValue!;
+                              _geoUnitsValue = "";
+                              print(newValue);
+                            });
+                            populateGeoUnits(newValue);
+                          },
+                          items: _level!
+                              .map((bg) => DropdownMenuItem(
+                                  value: bg.levelID.toString(),
+                                  child: Text(bg.levelName == "Bhaag"
+                                      ? "Bhaag / Jilha"
+                                      : bg.levelName == "Nagar"
+                                          ? "Nagar / Taluka"
+                                          : bg.levelName!)))
+                              .toList(),
+                        ),
                       ),
-                    ),
                   ],
                 ),
                 if (_levelValue != "")
@@ -1176,29 +1383,37 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
                     children: [
                       Text(
                         "${Statics.getLabel('SelectLevelName')}     :",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
                       ),
-                      if(_geoUnits != null)
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.only(left: 10, right: 0, top: 5, bottom: 5),
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.black38)),
-                        child: DropdownButton<String>(
-                          isExpanded: true,
-                          isDense: true,
-                          iconSize: 30,
-                          underline: SizedBox(),
-                          value: _geoUnitsValue == "" ? null : _geoUnitsValue,
-                          onChanged: (String? newValue) {
-                            selectedDayitvValue = "";
-                            _geoUnitsValue = newValue!;
-                            print(newValue);
-                            setState(() {});
-                          },
-                          items: _geoUnits!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                      if (_geoUnits != null)
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.only(
+                              left: 10, right: 0, top: 5, bottom: 5),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(color: Colors.black38)),
+                          child: DropdownButton<String>(
+                            isExpanded: true,
+                            isDense: true,
+                            iconSize: 30,
+                            underline: SizedBox(),
+                            value: _geoUnitsValue == "" ? null : _geoUnitsValue,
+                            onChanged: (String? newValue) {
+                              selectedDayitvValue = "";
+                              _geoUnitsValue = newValue!;
+                              print(newValue);
+                              setState(() {});
+                            },
+                            items: _geoUnits!
+                                .map((bg) => DropdownMenuItem(
+                                    value: bg.geoUnitID.toString(),
+                                    child: Text(bg.name!)))
+                                .toList(),
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 SizedBox(
@@ -1207,82 +1422,92 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
                 if (_levelValue != "" && _geoUnitsValue != "")
                   // _levelValue == "2" || _levelValue == "3" ?
                   Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "दायित्व             :",
-                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.6,
-                              alignment: Alignment.center,
-                              padding: EdgeInsets.only(left: 10, right: 0, top: 5, bottom: 5),
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.black38)),
-                              child: DropdownButton<String>(
-                                isExpanded: true,
-                                isDense: true,
-                                iconSize: 30,
-                                underline: SizedBox(),
-                                value: selectedDayitvValue == "" ? null : selectedDayitvValue,
-                                onChanged: (String? newValue) {
-                                  setState(() {
-                                    selectedDayitvValue = newValue!;
-                                  });
-                                },
-                                items:
-                                    <String>["अभियान प्रमुख", "अभियान सह प्रमुख", "अभियान टोळी सदस्य"].map<DropdownMenuItem<String>>((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(top: 3.0),
-                                      child: Text(value),
-                                    ),
-                                  );
-                                }).toList(),
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "दायित्व             :",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.only(
+                            left: 10, right: 0, top: 5, bottom: 5),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(color: Colors.black38)),
+                        child: DropdownButton<String>(
+                          isExpanded: true,
+                          isDense: true,
+                          iconSize: 30,
+                          underline: SizedBox(),
+                          value: selectedDayitvValue == ""
+                              ? null
+                              : selectedDayitvValue,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedDayitvValue = newValue!;
+                            });
+                          },
+                          items: <String>[
+                            "अभियान प्रमुख",
+                            "अभियान सह प्रमुख",
+                            "अभियान टोळी सदस्य"
+                          ].map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 3.0),
+                                child: Text(value),
                               ),
-                            ),
-                          ],
+                            );
+                          }).toList(),
                         ),
-                      // : Row(
-                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //     children: [
-                      //       Text(
-                      //         "दायित्व             :",
-                      //         style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                      //       ),
-                      //       Container(
-                      //         width: MediaQuery.of(context).size.width * 0.6,
-                      //         alignment: Alignment.center,
-                      //         padding: EdgeInsets.only(left: 10, right: 0, top: 5, bottom: 5),
-                      //         decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.black38)),
-                      //         child: DropdownButton<String>(
-                      //           isExpanded: true,
-                      //           isDense: true,
-                      //           iconSize: 30,
-                      //           underline: SizedBox(),
-                      //           value: selectedDayitvValue == "" ? null : selectedDayitvValue,
-                      //           onChanged: (String? newValue) {
-                      //             setState(() {
-                      //               selectedDayitvValue = newValue!;
-                      //             });
-                      //           },
-                      //           items: <String>["अभियान प्रमुख", "अभियान सह प्रमुख"].map<DropdownMenuItem<String>>((String value) {
-                      //             return DropdownMenuItem<String>(
-                      //               value: value,
-                      //               child: Padding(
-                      //                 padding: const EdgeInsets.only(top: 3.0),
-                      //                 child: Text(value),
-                      //               ),
-                      //             );
-                      //           }).toList(),
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
+                      ),
+                    ],
+                  ),
+                // : Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       Text(
+                //         "दायित्व             :",
+                //         style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                //       ),
+                //       Container(
+                //         width: MediaQuery.of(context).size.width * 0.6,
+                //         alignment: Alignment.center,
+                //         padding: EdgeInsets.only(left: 10, right: 0, top: 5, bottom: 5),
+                //         decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.black38)),
+                //         child: DropdownButton<String>(
+                //           isExpanded: true,
+                //           isDense: true,
+                //           iconSize: 30,
+                //           underline: SizedBox(),
+                //           value: selectedDayitvValue == "" ? null : selectedDayitvValue,
+                //           onChanged: (String? newValue) {
+                //             setState(() {
+                //               selectedDayitvValue = newValue!;
+                //             });
+                //           },
+                //           items: <String>["अभियान प्रमुख", "अभियान सह प्रमुख"].map<DropdownMenuItem<String>>((String value) {
+                //             return DropdownMenuItem<String>(
+                //               value: value,
+                //               child: Padding(
+                //                 padding: const EdgeInsets.only(top: 3.0),
+                //                 child: Text(value),
+                //               ),
+                //             );
+                //           }).toList(),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.03),
                 // if (selectedDayitvValue.isNotEmpty)
                 MaterialButton(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
                   padding: EdgeInsets.symmetric(
                     horizontal: 15,
                     vertical: 8,
@@ -1302,25 +1527,33 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
                       print("मोबाइल क्रमांक प्रविष्ट करा");
                       Statics.showToast("मोबाइल क्रमांक प्रविष्ट करा");
                       return null;
-                    } else if (showFields && _linkedvastiValue == null && _linkedgraamValue == null) {
+                    } else if (showFields &&
+                        _linkedvastiValue == null &&
+                        _linkedgraamValue == null) {
                       print("निवास स्थान निवडा");
                       Statics.showToast("निवास स्थान निवडा");
                       return null;
-                    } else if (showFields && selectedSansthaValue == "अन्य" && _anyaSansthaCntrl.text.isEmpty) {
+                    } else if (showFields &&
+                        selectedSansthaValue == "अन्य" &&
+                        _anyaSansthaCntrl.text.isEmpty) {
                       print("अन्य संस्था प्रविष्ट करा");
                       Statics.showToast("अन्य संस्था प्रविष्ट करा");
                       return null;
-                    } else if (showFields && selectedSansthaValue != "" && _sansthaNameCntrl.text.isEmpty) {
+                    } else if (showFields &&
+                        selectedSansthaValue != "" &&
+                        _sansthaNameCntrl.text.isEmpty) {
                       print("संस्थेचे नाव प्रविष्ट करा");
                       Statics.showToast("संस्थेचे नाव प्रविष्ट करा");
                       return null;
-                    } else if (showFields && selectedSansthaValue != "" && _sansthaPadhCntrl.text.isEmpty) {
+                    } else if (showFields &&
+                        selectedSansthaValue != "" &&
+                        _sansthaPadhCntrl.text.isEmpty) {
                       print("संस्थेमध्ये पद प्रविष्ट करा");
                       Statics.showToast("संस्थेमध्ये पद प्रविष्ट करा");
                       return null;
                     } else if (_levelValue.isEmpty) {
-                      print("स्तर निवडा");
-                      Statics.showToast("स्तर निवडा");
+                      print("${Statics.getLabel('selectStar')}");
+                      Statics.showToast("${Statics.getLabel('selectStar')}");
                       return null;
                     } else if (_geoUnitsValue.isEmpty) {
                       print("स्तराचे नाव निवडा");

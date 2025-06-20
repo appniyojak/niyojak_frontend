@@ -154,7 +154,7 @@ class _MandalSurveyReportViewScreen1State
   void showPopupList(BuildContext context, String vastiStepStartedNames) {
     if (vastiStepStartedNames.trim().isEmpty) {
       Fluttertoast.showToast(
-        msg: "वस्ती उपलब्ध नाहीयेत",
+        msg: "${Statics.getLabel('vastiNotAvailable')}",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: Colors.black87,
@@ -168,7 +168,7 @@ class _MandalSurveyReportViewScreen1State
 
     if (namesList.isEmpty || namesList.first.isEmpty) {
       Fluttertoast.showToast(
-        msg: "वस्ती उपलब्ध नाहीयेत",
+        msg: "${Statics.getLabel('vastiNotAvailable')}",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: Colors.black87,
@@ -192,11 +192,11 @@ class _MandalSurveyReportViewScreen1State
           child: Column(
             children: [
               Row(
-                children: const [
+                children: [
                   Icon(Icons.list_alt, color: Colors.purpleAccent),
                   SizedBox(width: 10),
                   Text(
-                    'वस्ती यादी',
+                    "${Statics.getLabel('vastiYaadi')}",
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -246,7 +246,7 @@ class _MandalSurveyReportViewScreen1State
                 child: ElevatedButton.icon(
                   onPressed: () => Navigator.pop(context),
                   icon: const Icon(Icons.close),
-                  label: const Text('बंद करा'),
+                  label: Text("${Statics.getLabel('bandKara')}"),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purpleAccent,
                     foregroundColor: Colors.white,
@@ -337,8 +337,9 @@ class _MandalSurveyReportViewScreen1State
         headingRowColor: MaterialStateProperty.all(Colors.purpleAccent),
         headingTextStyle: TextStyle(color: Colors.white),
         columns: [
-          const DataColumn(
-              label: Text('प्रमुख प्रकार')), // First column: maintype
+          DataColumn(
+              label: Text(
+                  "${Statics.getLabel('mukhyaPrakar')}")), // First column: maintype
           ...uniqueSubtypes.map((subtype) => DataColumn(label: Text(subtype))),
         ],
         rows: rows,
@@ -386,7 +387,7 @@ class _MandalSurveyReportViewScreen1State
         headingTextStyle:
             const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         columns: [
-          const DataColumn(label: Text('प्रमुख प्रकार')),
+          DataColumn(label: Text("${Statics.getLabel('mukhyaPrakar')}")),
           ...uniqueSubtypes.map((subtype) => DataColumn(label: Text(subtype))),
         ],
         rows: rows,
@@ -428,7 +429,7 @@ class _MandalSurveyReportViewScreen1State
                       backgroundColor: Colors.transparent,
                       headerBuilder: (BuildContext context, bool isExpanded) {
                         return ListTile(
-                          title: Text("स्तर निवडा",
+                          title: Text("${Statics.getLabel('selectStar')}",
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold)),
@@ -448,7 +449,8 @@ class _MandalSurveyReportViewScreen1State
                           children: [
                             if (_linkedVibhaag != null)
                               DropdownButtonFormField(
-                                decoration: InputDecoration(labelText: "विभाग"),
+                                decoration: InputDecoration(
+                                    labelText: Statics.getLabel('vibhaag')),
                                 isExpanded: true,
                                 value: _linkedVibhaagValue == ""
                                     ? null
@@ -487,8 +489,8 @@ class _MandalSurveyReportViewScreen1State
                             ),
                             if (_linkedBhaag != null)
                               DropdownButtonFormField(
-                                decoration:
-                                    InputDecoration(labelText: "भाग/जिल्हा"),
+                                decoration: InputDecoration(
+                                    labelText: "${Statics.getLabel('Bhaag')}"),
                                 isExpanded: true,
                                 value: _linkedBhaagValue == ""
                                     ? null
@@ -521,8 +523,9 @@ class _MandalSurveyReportViewScreen1State
                             if (_linkedNagar != null &&
                                 _linkedNagar!.length > 0)
                               DropdownButtonFormField(
-                                decoration:
-                                    InputDecoration(labelText: "तालुका "),
+                                decoration: InputDecoration(
+                                    labelText:
+                                        "${Statics.getLabel('taalukaa')}"),
                                 isExpanded: true,
                                 value: _linkedNagarValue == ""
                                     ? null
@@ -557,7 +560,8 @@ class _MandalSurveyReportViewScreen1State
                             if (_linkedmandal != null &&
                                 _linkedmandal!.length > 0)
                               DropdownButtonFormField(
-                                decoration: InputDecoration(labelText: "मंडल"),
+                                decoration: InputDecoration(
+                                    labelText: "${Statics.getLabel('Mandal')}"),
                                 isExpanded: true,
                                 value: _linkedmandalValue == ""
                                     ? null
@@ -607,7 +611,7 @@ class _MandalSurveyReportViewScreen1State
                                   //   Statics.showToast(Statics.getLabel('vastiGramValidation'));
                                   // }
                                 },
-                                child: Text("निवडा",
+                                child: Text("${Statics.getLabel('Filters')}",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold)),
@@ -665,7 +669,7 @@ class _MandalSurveyReportViewScreen1State
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         child: Center(
                           child: Text(
-                            'सारांश ($selctedDropDownLevelName)',
+                            '${Statics.getLabel('sharaansh')} ($selctedDropDownLevelName)',
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
@@ -687,9 +691,13 @@ class _MandalSurveyReportViewScreen1State
                               DataColumn(
                                   label: Text(
                                       "${Statics.getLabel('sarvekshanSthiti')}")),
-                              DataColumn(label: Text('तालुका')),
-                              DataColumn(label: Text('मंडल')),
-                              DataColumn(label: Text('गाव')),
+                              DataColumn(
+                                  label:
+                                      Text("${Statics.getLabel('taalukaa')}")),
+                              DataColumn(
+                                  label: Text("${Statics.getLabel('Mandal')}")),
+                              DataColumn(
+                                  label: Text("${Statics.getLabel('gaav')}")),
                               DataColumn(label: Text('')),
                             ],
                             rows: [
@@ -880,7 +888,8 @@ class _MandalSurveyReportViewScreen1State
                                             vertical: 8),
                                         child: Center(
                                           child: Text(
-                                            data.name ?? 'तालुका /मंडल नाव',
+                                            data.name ??
+                                                "${Statics.getLabel('talukaMandalNaav')}",
                                             style: TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold),
@@ -906,9 +915,15 @@ class _MandalSurveyReportViewScreen1State
                                               DataColumn(
                                                   label: Text(
                                                       "${Statics.getLabel('sarvekshanSthiti')}")),
-                                              DataColumn(label: Text('तालुका')),
-                                              DataColumn(label: Text('मंडल')),
-                                              DataColumn(label: Text('गाव')),
+                                              DataColumn(
+                                                  label: Text(
+                                                      "${Statics.getLabel('taalukaa')}")),
+                                              DataColumn(
+                                                  label: Text(
+                                                      "${Statics.getLabel('Mandal')}")),
+                                              DataColumn(
+                                                  label: Text(
+                                                      "${Statics.getLabel('gaav')}")),
                                             ],
                                             rows: [
                                               DataRow(
@@ -1069,7 +1084,7 @@ class _MandalSurveyReportViewScreen1State
                                     label: Expanded(
                                       child: Center(
                                         child: Text(
-                                          'कार्य संख्या',
+                                          "${Statics.getLabel('karyaSankhya')}",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
@@ -1081,7 +1096,7 @@ class _MandalSurveyReportViewScreen1State
                                     label: Expanded(
                                       child: Center(
                                         child: Text(
-                                          'किती मंडलात',
+                                          "${Statics.getLabel('kitiMandalat')}",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
@@ -1093,7 +1108,7 @@ class _MandalSurveyReportViewScreen1State
                                     label: Expanded(
                                       child: Center(
                                         child: Text(
-                                          'किती गावात',
+                                          "${Statics.getLabel('kitiGaavat')}",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
@@ -1105,7 +1120,7 @@ class _MandalSurveyReportViewScreen1State
                                     label: Expanded(
                                       child: Center(
                                         child: Text(
-                                          'चालवणाऱ्या संस्थांची संख्या',
+                                          "${Statics.getLabel('chalavnareCount')}",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
@@ -1183,7 +1198,7 @@ class _MandalSurveyReportViewScreen1State
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'संप्रदाय',
+                                                "${Statics.getLabel('saampradaay')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -1196,7 +1211,7 @@ class _MandalSurveyReportViewScreen1State
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'ग्राम संख्या',
+                                                "${Statics.getLabel('TotalGraamCount')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -1209,7 +1224,7 @@ class _MandalSurveyReportViewScreen1State
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'किती मंडलात',
+                                                "${Statics.getLabel('kitiMandalat')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -1270,7 +1285,7 @@ class _MandalSurveyReportViewScreen1State
                                     label: Expanded(
                                       child: Center(
                                         child: Text(
-                                          'मुंबईकर मंडल असलेली गावे',
+                                          "${Statics.getLabel('mumbaikarGaav')}",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
@@ -1282,7 +1297,7 @@ class _MandalSurveyReportViewScreen1State
                                     label: Expanded(
                                       child: Center(
                                         child: Text(
-                                          'गावांची संख्या',
+                                          "${Statics.getLabel('GraamCount')}",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
@@ -1294,7 +1309,7 @@ class _MandalSurveyReportViewScreen1State
                                     label: Expanded(
                                       child: Center(
                                         child: Text(
-                                          'किती मंडलात',
+                                          "${Statics.getLabel('kitiMandalat')}",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
@@ -1696,7 +1711,7 @@ class _MandalSurveyReportViewScreen1State
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'आयाम',
+                                                "${Statics.getLabel('Aayaam')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -1781,7 +1796,7 @@ class _MandalSurveyReportViewScreen1State
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'संघ प्रेरित संघटना / संस्था',
+                                                "${Statics.getLabel('sanghaPreritSanghatana')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -1867,7 +1882,7 @@ class _MandalSurveyReportViewScreen1State
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'अन्य सामाजिक संस्था',
+                                                "${Statics.getLabel('OtherSocialOrganization')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -2138,7 +2153,7 @@ class _MandalSurveyReportViewScreen1State
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'गावांची संख्या',
+                                                "${Statics.getLabel('GraamCount')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -2151,7 +2166,7 @@ class _MandalSurveyReportViewScreen1State
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'किती मंडलात',
+                                                "${Statics.getLabel('kitiMandalat')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -2246,7 +2261,7 @@ class _MandalSurveyReportViewScreen1State
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'गावांची संख्या',
+                                                "${Statics.getLabel('GraamCount')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -2259,7 +2274,7 @@ class _MandalSurveyReportViewScreen1State
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'किती मंडलात',
+                                                "${Statics.getLabel('kitiMandalat')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -2504,7 +2519,7 @@ class _MandalSurveyReportViewScreen1State
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'गावांची संख्या',
+                                                "${Statics.getLabel('GraamCount')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -2517,7 +2532,7 @@ class _MandalSurveyReportViewScreen1State
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'किती मंडलात',
+                                                "${Statics.getLabel('kitiMandalat')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -2615,7 +2630,7 @@ class _MandalSurveyReportViewScreen1State
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'गावांची संख्या',
+                                                "${Statics.getLabel('GraamCount')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -2628,7 +2643,7 @@ class _MandalSurveyReportViewScreen1State
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'किती मंडलात',
+                                                "${Statics.getLabel('kitiMandalat')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -2716,7 +2731,7 @@ class _MandalSurveyReportViewScreen1State
                                         label: Expanded(
                                           child: Center(
                                             child: Text(
-                                              'गावांची संख्या',
+                                              "${Statics.getLabel('GraamCount')}",
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
@@ -2728,7 +2743,7 @@ class _MandalSurveyReportViewScreen1State
                                         label: Expanded(
                                           child: Center(
                                             child: Text(
-                                              'किती मंडलात',
+                                              "${Statics.getLabel('kitiMandalat')}",
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),

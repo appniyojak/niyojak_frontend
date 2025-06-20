@@ -258,7 +258,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                 child: ElevatedButton.icon(
                   onPressed: () => Navigator.pop(context),
                   icon: Icon(Icons.close),
-                  label: Text('बंद करा'),
+                  label: Text("${Statics.getLabel('bandKara')}"),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purpleAccent,
                     foregroundColor: Colors.white,
@@ -281,12 +281,12 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
 
     // Row titles
     final rowTitles = [
-      'शाखायुक्त',
-      'साप्ताहिक मिलनयुक्त',
-      'मासिक मिलन युक्त',
-      'नवीन संकल्पित शाखा आहे',
-      'नवीन संकल्पित साप्ताहिक आहे',
-      'नवीन संकल्पित मासिक आहे',
+      "${Statics.getLabel('shaakhaaYukta')}",
+      "${Statics.getLabel('saaptahikMilanyukta')}",
+      "${Statics.getLabel('MaasikYuktaLabel')}",
+      "${Statics.getLabel('isNewSankalpitShakha')}",
+      "${Statics.getLabel('isNewSankalpitSaptahikMilan')}",
+      "${Statics.getLabel('isNewSankalpitMaasikMilan')}",
       'एकूण',
     ];
 
@@ -721,7 +721,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                             //   SizedBox(height: 10,),
                             // if (_linkedvasti != null && _linkedvasti!.length > 0)
                             //   DropdownButtonFormField(
-                            //     decoration: InputDecoration(labelText: "वस्ती"),
+                            //     decoration: InputDecoration(labelText: "${Statics.getLabel('Vasti')}"),
                             //     isExpanded: true,
                             //     value: _linkedvastiValue == "" ? null : _linkedvastiValue,
                             //     items: _linkedvasti!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),

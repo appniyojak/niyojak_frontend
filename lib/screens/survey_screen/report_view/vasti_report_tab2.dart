@@ -47,14 +47,14 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
   String? selctedLevelIdNew = '';
   //=====================================  NEW  ADD ========================================================================================
   final rowTitles = [
-    'शाखा',
-    'साप्ताहिक मिलन',
-    'मासिक मिलन',
-    'नवीन संकल्पित\nशाखा आहे',
-    'नवीन संकल्पित\n साप्ताहिक मिलन आहे',
-    'नवीन संकल्पित\nमासिक मिलन आहे',
-    'पूर्वी शाखा होती',
-    'पूर्वी साप्ताहिक\nमिलन होते',
+    "${Statics.getLabel('Shaakhaa')}",
+    "${Statics.getLabel('SaaptaahikMilan')}",
+    "${Statics.getLabel('MaasikMilan')}",
+    "${Statics.getLabel('isNewSankalpitShakha')}",
+    "${Statics.getLabel('isNewSankalpitSaptahikMilan')}",
+    "${Statics.getLabel('isNewSankalpitMaasikMilan')}",
+    "${Statics.getLabel('purviShakhaHoti')}",
+    "${Statics.getLabel('isBeforeSaaptahikMilan')}",
   ];
   String getCellValueByRowIndex(SanghaKaryaStithiData e, int index) {
     switch (index) {
@@ -1694,7 +1694,9 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(label: Text('कार्यविभाग')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('KaryaVibhaag')}")),
                                     DataColumn(
                                         label: Text(
                                             "${Statics.getLabel('upkram')}")),
@@ -1748,9 +1750,15 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(label: Text('नाव')),
-                                    DataColumn(label: Text('कोणासाठी')),
-                                    DataColumn(label: Text('श्रेणी')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('Name')}")),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('Konasathi')}")),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('shreni')}")),
                                   ],
                                   rows: data!.vastiBalopasanaCenterInfo!
                                       .map((item) {
@@ -1796,17 +1804,27 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(label: Text('नाव')),
-                                    DataColumn(label: Text('पत्ता')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('Name')}")),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('Address')}")),
                                     DataColumn(
                                         label: Text(
                                             "${Statics.getLabel('doorBhash')}")),
-                                    DataColumn(label: Text('श्रेणी')),
-                                    DataColumn(label: Text('संस्था')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('shreni')}")),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('sanstha')}")),
                                     DataColumn(
                                         label: Text(
                                             "${Statics.getLabel('samparkSthiti')}")),
-                                    DataColumn(label: Text('प्रभाव क्षेत्र')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('prbhaavkshetra')}")),
                                     DataColumn(
                                         label: Text(
                                             "${Statics.getLabel('samparkSootraNaav')}")),
@@ -1865,18 +1883,30 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(label: Text('नाव')),
-                                    DataColumn(label: Text('पत्ता')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('Name')}")),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('Address')}")),
                                     DataColumn(
                                         label: Text(
                                             "${Statics.getLabel('doorBhash')}")),
-                                    DataColumn(label: Text('श्रेणी')),
-                                    DataColumn(label: Text('उपश्रेणी')),
-                                    DataColumn(label: Text('उपश्रेणी २')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('shreni')}")),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('upshreni')}")),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('upshreni2')}")),
                                     DataColumn(
                                         label: Text(
                                             "${Statics.getLabel('samparkSthiti')}")),
-                                    DataColumn(label: Text('प्रभाव क्षेत्र')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('prbhaavkshetra')}")),
                                     DataColumn(
                                         label: Text(
                                             "${Statics.getLabel('samparkSootraNaav')}")),
@@ -1937,7 +1967,9 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(label: Text('नाव')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('Name')}")),
                                     DataColumn(
                                         label: Text(
                                             "${Statics.getLabel('SelectFrequency')}")),
@@ -1984,7 +2016,9 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(label: Text('नाव')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('Name')}")),
                                     DataColumn(
                                         label: Text(
                                             "${Statics.getLabel('SelectFrequency')}")),
@@ -2040,15 +2074,22 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(label: Text('नाव')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('Name')}")),
                                     DataColumn(
                                         label: Text(
                                             "${Statics.getLabel('school')}")),
                                     // DataColumn(label: Text('शाळा प्रकार')),
-                                    DataColumn(label: Text('शिक्षणाचे माध्यम')),
                                     DataColumn(
-                                        label: Text('संस्था चालक प्रकार')),
-                                    DataColumn(label: Text('मिळकत')),
+                                        label: Text(
+                                            "${Statics.getLabel('shikshanacheMadhyam')}")),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('sansthaCHalakPrakar')}")),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('milkat')}")),
                                   ],
                                   rows: data!.vastiShaikshanikSansthaData!
                                       .asMap()
@@ -2085,7 +2126,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                           height: 10,
                         ),
                         Text(
-                          "महाविद्यालय",
+                          "${Statics.getLabel('College')}",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
@@ -2115,12 +2156,16 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(label: Text('नाव')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('Name')}")),
                                     // DataColumn(label: Text("${Statics.getLabel('College')}")),
                                     DataColumn(
                                         label: Text(
                                             "${Statics.getLabel('College')}")),
-                                    DataColumn(label: Text('मिळकत')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('milkat')}")),
                                   ],
                                   rows: data!.vastiShaikshanikSansthaData!
                                       .asMap()
@@ -2181,8 +2226,12 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(label: Text('नाव')),
-                                    DataColumn(label: Text('मिळकत')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('Name')}")),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('milkat')}")),
                                   ],
                                   rows: data!.vastiShaikshanikSansthaData!
                                       .asMap()
@@ -2244,7 +2293,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                'मैदान / उद्यान नाव',
+                                                "${Statics.getLabel('maiddanUdyyanNaav')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight:
@@ -2297,15 +2346,21 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(label: Text('नाव')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('Name')}")),
                                     DataColumn(
                                         label: Text(
                                             "${Statics.getLabel('SelectFrequency')}")),
-                                    DataColumn(label: Text('क्षमता')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('shamta')}")),
                                     DataColumn(
                                         label: Text(
                                             "${Statics.getLabel('nivaasAvailable')}")),
-                                    DataColumn(label: Text('निवास क्षमता')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('nivaasShamta')}")),
                                   ],
                                   rows: data!.vastiKaryakramcheThikanData!
                                       .map((item) {
@@ -2361,8 +2416,10 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                   columns: [
                                     DataColumn(
                                         label: Text(
-                                            'वस्तीतील सामाजिक\nप्रश्न/गरजा')),
-                                    DataColumn(label: Text('तपशील')),
+                                            "${Statics.getLabel('VastiSamajikGarja')}")),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('tapshil')}")),
                                   ],
                                   rows:
                                       data!.vastiSamajikGarajaData!.map((item) {
@@ -2406,7 +2463,9 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(label: Text('नाव')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('Name')}")),
                                     DataColumn(
                                         label: Text(
                                             "${Statics.getLabel('religion')}")),
@@ -2452,12 +2511,18 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(label: Text('नाव')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('Name')}")),
                                     DataColumn(
                                         label: Text(
                                             "${Statics.getLabel('SelectFrequency')}")),
-                                    DataColumn(label: Text('शिक्षा')),
-                                    DataColumn(label: Text('गुन्हा')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('shiksha')}")),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('crime')}")),
                                   ],
                                   rows:
                                       data!.vastiDurjanShaktiData!.map((item) {
@@ -2513,7 +2578,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                         // ensures center works properly
                                         child: Center(
                                           child: Text(
-                                            'नाव',
+                                            "${Statics.getLabel('Name')}",
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold),

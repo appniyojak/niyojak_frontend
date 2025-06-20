@@ -950,7 +950,9 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         // ),
                         if (_linkedVibhaag != null)
                           DropdownButtonFormField(
-                            decoration: InputDecoration(labelText: "विभाग"),
+                            decoration: InputDecoration(
+                                labelText:
+                                    "${Statics.getLabel('OtherSocialOrganization')}"),
                             isExpanded: true,
                             value: _linkedVibhaagValue == ""
                                 ? null
@@ -984,8 +986,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         ),
                         if (_linkedBhaag != null)
                           DropdownButtonFormField(
-                            decoration:
-                                InputDecoration(labelText: "भाग/जिल्हा"),
+                            decoration: InputDecoration(
+                                labelText: "${Statics.getLabel('Bhaag')}"),
                             isExpanded: true,
                             value: _linkedBhaagValue == ""
                                 ? null
@@ -1015,7 +1017,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         ),
                         if (_linkedNagar != null && _linkedNagar!.length > 0)
                           DropdownButtonFormField(
-                            decoration: InputDecoration(labelText: "तालुका"),
+                            decoration: InputDecoration(
+                                labelText: "${Statics.getLabel('taalukaa')}"),
                             isExpanded: true,
                             value: _linkedNagarValue == ""
                                 ? null
@@ -1046,7 +1049,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           ),
                         if (_linkedmandal != null && _linkedmandal!.length > 0)
                           DropdownButtonFormField(
-                            decoration: InputDecoration(labelText: "मंडल"),
+                            decoration: InputDecoration(
+                                labelText: "${Statics.getLabel('Mandal')}"),
                             isExpanded: true,
                             value: _linkedmandalValue == ""
                                 ? null
@@ -1077,7 +1081,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           ),
                         if (_linkedgraam != null && _linkedgraam!.length > 0)
                           DropdownButtonFormField(
-                            decoration: InputDecoration(labelText: "गाव"),
+                            decoration: InputDecoration(
+                                labelText: "${Statics.getLabel('gaav')}"),
                             isExpanded: true,
                             value: _linkedgraamValue == ""
                                 ? null
@@ -1184,7 +1189,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      "गाव ->  ",
+                      "${Statics.getLabel('gaav')} ->  ",
                       style: TextStyle(
                           color: Colors.purpleAccent,
                           fontWeight: FontWeight.bold,
@@ -1467,7 +1472,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                           ElevatedButton(
                                             onPressed: () =>
                                                 Navigator.pop(context),
-                                            child: Text("बंद करा",
+                                            child: Text(
+                                                "${Statics.getLabel('bandKara')}",
                                                 style: TextStyle(
                                                     color: Colors.white)),
                                             style: ElevatedButton.styleFrom(
@@ -1593,7 +1599,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       ),
                       SizedBox(height: 10),
                       textControllerField2(
-                          name: "सरपंचाचे नाव",
+                          name: "${Statics.getLabel('SarpanchacheNaav')}",
                           controller: sarpanchNameController),
                       SizedBox(height: 10),
                       textControllerField2(
@@ -1896,7 +1902,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                             ElevatedButton(
                                               onPressed: () =>
                                                   Navigator.pop(context),
-                                              child: Text("बंद करा",
+                                              child: Text(
+                                                  "${Statics.getLabel('bandKara')}",
                                                   style: TextStyle(
                                                       color: Colors.white)),
                                               style: ElevatedButton.styleFrom(
@@ -2212,7 +2219,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text("बंद करा",
+                                      child: Text(
+                                          "${Statics.getLabel('bandKara')}",
                                           style:
                                               TextStyle(color: Colors.white)),
                                       style: ElevatedButton.styleFrom(
@@ -2524,7 +2532,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     actions: [
                                       ElevatedButton(
                                         onPressed: () => Navigator.pop(context),
-                                        child: Text("बंद करा",
+                                        child: Text(
+                                            "${Statics.getLabel('bandKara')}",
                                             style:
                                                 TextStyle(color: Colors.white)),
                                         style: ElevatedButton.styleFrom(
@@ -2810,7 +2819,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                           thickness: 1,
                                           color: Colors.purpleAccent.shade100),
                                       SizedBox(height: 12),
-                                      // _buildInfoRow("गाव", selectedData.selectedDropdownValueName1.toString()),
+                                      // _buildInfoRow("${Statics.getLabel('gaav')}", selectedData.selectedDropdownValueName1.toString()),
                                       // SizedBox(height: 12),
                                       _buildInfoRow(
                                           "संस्था",
@@ -2838,7 +2847,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text("बंद करा",
+                                      child: Text(
+                                          "${Statics.getLabel('bandKara')}",
                                           style:
                                               TextStyle(color: Colors.white)),
                                       style: ElevatedButton.styleFrom(
@@ -3054,7 +3064,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             )),
                             DataColumn(
                                 label: Text(
-                              "प्रमुखाचे नाव",
+                              "${Statics.getLabel('pramukhaacheNaav')}",
                             )),
                           ],
                           rows: gavatilMumbaikarEnteredDataList!
@@ -3147,7 +3157,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     actions: [
                                       ElevatedButton(
                                         onPressed: () => Navigator.pop(context),
-                                        child: Text("बंद करा",
+                                        child: Text(
+                                            "${Statics.getLabel('bandKara')}",
                                             style:
                                                 TextStyle(color: Colors.white)),
                                         style: ElevatedButton.styleFrom(
@@ -3463,7 +3474,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                                 ElevatedButton(
                                                   onPressed: () =>
                                                       Navigator.pop(context),
-                                                  child: Text("बंद करा",
+                                                  child: Text(
+                                                      "${Statics.getLabel('bandKara')}",
                                                       style: TextStyle(
                                                           color: Colors.white)),
                                                   style:
@@ -3809,7 +3821,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     actions: [
                                       ElevatedButton(
                                         onPressed: () => Navigator.pop(context),
-                                        child: Text("बंद करा",
+                                        child: Text(
+                                            "${Statics.getLabel('bandKara')}",
                                             style:
                                                 TextStyle(color: Colors.white)),
                                         style: ElevatedButton.styleFrom(
@@ -4150,7 +4163,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text("बंद करा",
+                                      child: Text(
+                                          "${Statics.getLabel('bandKara')}",
                                           style:
                                               TextStyle(color: Colors.white)),
                                       style: ElevatedButton.styleFrom(
@@ -4474,7 +4488,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text("बंद करा",
+                                      child: Text(
+                                          "${Statics.getLabel('bandKara')}",
                                           style:
                                               TextStyle(color: Colors.white)),
                                       style: ElevatedButton.styleFrom(
@@ -4781,7 +4796,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text("बंद करा",
+                                      child: Text(
+                                          "${Statics.getLabel('bandKara')}",
                                           style:
                                               TextStyle(color: Colors.white)),
                                       style: ElevatedButton.styleFrom(
@@ -5087,7 +5103,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text("बंद करा",
+                                      child: Text(
+                                          "${Statics.getLabel('bandKara')}",
                                           style:
                                               TextStyle(color: Colors.white)),
                                       style: ElevatedButton.styleFrom(
@@ -5858,7 +5875,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             });
                           },
                         ),
-                        Text('शाखा'),
+                        Text("${Statics.getLabel('Shaakhaa')}"),
                         SizedBox(width: 20),
                         Radio<String>(
                           value: 'saptahikMilan',
@@ -6603,12 +6620,12 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         child: Column(
                           children: [
                             textControllerField2(
-                              name: 'स्थान',
+                              name: "${Statics.getLabel('sthaan')}",
                               controller: gavatilMumbaikarSthanNameConroller,
                             ),
                             const SizedBox(height: 10),
                             textControllerField2(
-                                name: "प्रमुखाचे नाव",
+                                name: "${Statics.getLabel('pramukhaacheNaav')}",
                                 controller:
                                     gavatilMumbaikarPramukhNameConroller),
                             const SizedBox(height: 20),
@@ -8622,7 +8639,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     vastisarvekshanDropdown2(
                       dataModel: vastisarvekshanDropDownDataModel!,
                       filterTypeName: "दुर्जनशक्तिशिक्षा",
-                      hintText: "शिक्षा",
+                      hintText: "${Statics.getLabel('shiksha')}",
                       onItemSelected: (id, value, isOther) {
                         selectedDurjanShaktiShikshaId = id;
                         selectedDurjanShaktiShikashaName = value;
@@ -8640,7 +8657,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     vastisarvekshanDropdown2(
                       dataModel: vastisarvekshanDropDownDataModel!,
                       filterTypeName: "दुर्जनशक्तिगुन्हा",
-                      hintText: "गुन्हा",
+                      hintText: "${Statics.getLabel('crime')}",
                       onItemSelected: (id, value, isOther) {
                         selectedDurjanShaktiGunhaId = id;
                         selectedDurjanShaktiGunhaName = value;
@@ -8963,11 +8980,11 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     )),
                                     DataColumn(
                                         label: Text(
-                                      "शिक्षा",
+                                      "${Statics.getLabel('shiksha')}",
                                     )),
                                     DataColumn(
                                         label: Text(
-                                      "गुन्हा",
+                                      "${Statics.getLabel('crime')}",
                                     )),
                                   ],
                                   rows: durjanShaktiDataList
@@ -9066,11 +9083,11 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                                 _buildInfoRow("अन्य प्रकार",
                                                     selectedData.otherPrakar),
                                                 _buildInfoRow(
-                                                    "शिक्षा",
+                                                    "${Statics.getLabel('shiksha')}",
                                                     selectedData
                                                         .selectedDropdownValueName1),
                                                 _buildInfoRow(
-                                                    "गुन्हा",
+                                                    "${Statics.getLabel('crime')}",
                                                     selectedData
                                                         .selectedDropdownValueName2),
                                               ],
@@ -9082,7 +9099,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                             ElevatedButton(
                                               onPressed: () =>
                                                   Navigator.pop(context),
-                                              child: Text("बंद करा",
+                                              child: Text(
+                                                  "${Statics.getLabel('bandKara')}",
                                                   style: TextStyle(
                                                       color: Colors.white)),
                                               style: ElevatedButton.styleFrom(
@@ -9381,7 +9399,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                           ElevatedButton(
                                             onPressed: () =>
                                                 Navigator.pop(context),
-                                            child: Text("बंद करा",
+                                            child: Text(
+                                                "${Statics.getLabel('bandKara')}",
                                                 style: TextStyle(
                                                     color: Colors.white)),
                                             style: ElevatedButton.styleFrom(

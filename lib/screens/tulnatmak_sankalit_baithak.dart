@@ -80,15 +80,19 @@ class _TulnatmakBaithakEkatritVruttaState
     DropdownMenuItem(value: 'mahanagar', child: Text('महानगरीय नगर')),
     DropdownMenuItem(value: 'anyanagar', child: Text('अन्य नगर')),
     DropdownMenuItem(value: 'ekunnagar', child: Text('एकुण नगर')),
-    DropdownMenuItem(value: 'taluka', child: Text('तालुका')),
+    DropdownMenuItem(
+        value: 'taluka', child: Text("${Statics.getLabel('taalukaa')}")),
     DropdownMenuItem(value: 'madal', child: Text('मंडल')),
     DropdownMenuItem(value: 'graam', child: Text('ग्राम')),
     DropdownMenuItem(value: 'basti', child: Text('बस्ती')),
-    DropdownMenuItem(value: 'sthan', child: Text('स्थान')),
+    DropdownMenuItem(
+        value: 'sthan', child: Text("${Statics.getLabel('sthaan')}")),
   ];
   String? _mahAnyEkunManBasGram = '';
   final List<DropdownMenuItem<String>> _mahAnyEkunManBasGramItems = [
-    DropdownMenuItem(value: 'sakhayukta', child: Text('शाखायुक्त')),
+    DropdownMenuItem(
+        value: 'sakhayukta',
+        child: Text("${Statics.getLabel('shaakhaaYukta')}")),
     DropdownMenuItem(
         value: 'saptahikmilanyukt', child: Text('साप्ताहिक मिलन युक्त')),
     DropdownMenuItem(value: 'kimandosakha', child: Text('किमान दो शाखा')),
@@ -97,7 +101,9 @@ class _TulnatmakBaithakEkatritVruttaState
 
   String? _talukasubpoint = '';
   final List<DropdownMenuItem<String>> _talukasubpointItems = [
-    DropdownMenuItem(value: 'sakhayukta', child: Text('शाखायुक्त')),
+    DropdownMenuItem(
+        value: 'sakhayukta',
+        child: Text("${Statics.getLabel('shaakhaaYukta')}")),
     DropdownMenuItem(
         value: 'sakhayuktatalukakendra',
         child: Text('शाखायुक्त तालुका केंद्र')),
@@ -138,10 +144,14 @@ class _TulnatmakBaithakEkatritVruttaState
   ];
   String? _karyastithisubpoint = '';
   final List<DropdownMenuItem<String>> _karyastithisubpointItems = [
-    DropdownMenuItem(value: 'shakha', child: Text('शाखा')),
-    DropdownMenuItem(value: 'saptahikmilan', child: Text('साप्ताहिक मिलन')),
+    DropdownMenuItem(
+        value: 'shakha', child: Text("${Statics.getLabel('Shaakhaa')}")),
+    DropdownMenuItem(
+        value: 'saptahikmilan',
+        child: Text("${Statics.getLabel('SaaptaahikMilan')}")),
     DropdownMenuItem(value: 'sanghmandali', child: Text('संघ मंडली')),
-    DropdownMenuItem(value: 'masikmilan', child: Text('मासिक मिलन')),
+    DropdownMenuItem(
+        value: 'masikmilan', child: Text("${Statics.getLabel('MaasikMilan')}")),
   ];
 
   //  String? _selectvayogatsubpoint='';
@@ -202,26 +212,38 @@ class _TulnatmakBaithakEkatritVruttaState
 
   String? _toliyuktasubpoint = '';
   final List<DropdownMenuItem<String>> _toliyuktasubpointItems = [
-    DropdownMenuItem(value: 'shakha', child: Text('शाखा')),
-    DropdownMenuItem(value: 'saptahikmilan', child: Text('साप्ताहिक मिलन')),
+    DropdownMenuItem(
+        value: 'shakha', child: Text("${Statics.getLabel('Shaakhaa')}")),
+    DropdownMenuItem(
+        value: 'saptahikmilan',
+        child: Text("${Statics.getLabel('SaaptaahikMilan')}")),
   ];
 
   String? _baithakkarnaryasubpoint = '';
   final List<DropdownMenuItem<String>> _baithakkarnaryasubpointItems = [
-    DropdownMenuItem(value: 'shakha', child: Text('शाखा')),
-    DropdownMenuItem(value: 'saptahikmilan', child: Text('साप्ताहिक मिलन')),
+    DropdownMenuItem(
+        value: 'shakha', child: Text("${Statics.getLabel('Shaakhaa')}")),
+    DropdownMenuItem(
+        value: 'saptahikmilan',
+        child: Text("${Statics.getLabel('SaaptaahikMilan')}")),
   ];
 
   String? _palakyuktasubpoint = '';
   final List<DropdownMenuItem<String>> _palakyuktasubpointItems = [
-    DropdownMenuItem(value: 'shakha', child: Text('शाखा')),
-    DropdownMenuItem(value: 'saptahikmilan', child: Text('साप्ताहिक मिलन')),
+    DropdownMenuItem(
+        value: 'shakha', child: Text("${Statics.getLabel('Shaakhaa')}")),
+    DropdownMenuItem(
+        value: 'saptahikmilan',
+        child: Text("${Statics.getLabel('SaaptaahikMilan')}")),
   ];
 
   String? _varshikotsavkarnaryasubpoint = '';
   final List<DropdownMenuItem<String>> _varshikotsavkarnaryasubpointItems = [
-    DropdownMenuItem(value: 'shakha', child: Text('शाखा')),
-    DropdownMenuItem(value: 'saptahikmilan', child: Text('साप्ताहिक मिलन')),
+    DropdownMenuItem(
+        value: 'shakha', child: Text("${Statics.getLabel('Shaakhaa')}")),
+    DropdownMenuItem(
+        value: 'saptahikmilan',
+        child: Text("${Statics.getLabel('SaaptaahikMilan')}")),
   ];
 
   dynamic _ekatritVrutta;
@@ -1207,7 +1229,8 @@ class _TulnatmakBaithakEkatritVruttaState
                                       _mahAnyEkunManBasGramItems.addAll([
                                         DropdownMenuItem(
                                             value: 'sakhayukta',
-                                            child: Text('शाखायुक्त')),
+                                            child: Text(
+                                                "${Statics.getLabel('shaakhaaYukta')}")),
                                         DropdownMenuItem(
                                             value: 'saptahikmilanyukt',
                                             child:

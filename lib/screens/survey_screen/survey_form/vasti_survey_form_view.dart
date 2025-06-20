@@ -1670,7 +1670,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     backgroundColor: Colors.transparent,
                     headerBuilder: (BuildContext context, bool isExpanded) {
                       return ListTile(
-                        title: Text("स्तर निवडा",
+                        title: Text("${Statics.getLabel('selectStar')}",
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold)),
@@ -1726,7 +1726,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           ),
                           if (_linkedVibhaag != null)
                             DropdownButtonFormField(
-                              decoration: InputDecoration(labelText: "विभाग"),
+                              decoration: InputDecoration(
+                                  labelText:
+                                      "${Statics.getLabel('OtherSocialOrganization')}"),
                               isExpanded: true,
                               value: _linkedVibhaagValue == ""
                                   ? null
@@ -1760,8 +1762,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           ),
                           if (_linkedBhaag != null)
                             DropdownButtonFormField(
-                              decoration:
-                                  InputDecoration(labelText: "भाग/जिल्हा"),
+                              decoration: InputDecoration(
+                                  labelText: "${Statics.getLabel('Bhaag')}"),
                               isExpanded: true,
                               value: _linkedBhaagValue == ""
                                   ? null
@@ -1822,7 +1824,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             ),
                           if (_linkedvasti != null && _linkedvasti!.length > 0)
                             DropdownButtonFormField(
-                              decoration: InputDecoration(labelText: "वस्ती"),
+                              decoration: InputDecoration(
+                                  labelText: "${Statics.getLabel('Vasti')}"),
                               isExpanded: true,
                               value: _linkedvastiValue == ""
                                   ? null
@@ -2303,7 +2306,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                             ElevatedButton(
                                               onPressed: () =>
                                                   Navigator.pop(context),
-                                              child: Text("बंद करा",
+                                              child: Text(
+                                                  "${Statics.getLabel('bandKara')}",
                                                   style: TextStyle(
                                                       color: Colors.white)),
                                               style: ElevatedButton.styleFrom(
@@ -2658,7 +2662,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text("बंद करा",
+                                      child: Text(
+                                          "${Statics.getLabel('bandKara')}",
                                           style:
                                               TextStyle(color: Colors.white)),
                                       style: ElevatedButton.styleFrom(
@@ -2991,7 +2996,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text("बंद करा",
+                                      child: Text(
+                                          "${Statics.getLabel('bandKara')}",
                                           style:
                                               TextStyle(color: Colors.white)),
                                       style: ElevatedButton.styleFrom(
@@ -3297,7 +3303,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     actions: [
                                       ElevatedButton(
                                         onPressed: () => Navigator.pop(context),
-                                        child: Text("बंद करा",
+                                        child: Text(
+                                            "${Statics.getLabel('bandKara')}",
                                             style:
                                                 TextStyle(color: Colors.white)),
                                         style: ElevatedButton.styleFrom(
@@ -3621,7 +3628,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                                 ElevatedButton(
                                                   onPressed: () =>
                                                       Navigator.pop(context),
-                                                  child: Text("बंद करा",
+                                                  child: Text(
+                                                      "${Statics.getLabel('bandKara')}",
                                                       style: TextStyle(
                                                           color: Colors.white)),
                                                   style:
@@ -3968,7 +3976,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                                 ElevatedButton(
                                                   onPressed: () =>
                                                       Navigator.pop(context),
-                                                  child: Text("बंद करा",
+                                                  child: Text(
+                                                      "${Statics.getLabel('bandKara')}",
                                                       style: TextStyle(
                                                           color: Colors.white)),
                                                   style:
@@ -4307,7 +4316,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                                 ElevatedButton(
                                                   onPressed: () =>
                                                       Navigator.pop(context),
-                                                  child: Text("बंद करा",
+                                                  child: Text(
+                                                      "${Statics.getLabel('bandKara')}",
                                                       style: TextStyle(
                                                           color: Colors.white)),
                                                   style:
@@ -4636,7 +4646,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     actions: [
                                       ElevatedButton(
                                         onPressed: () => Navigator.pop(context),
-                                        child: Text("बंद करा",
+                                        child: Text(
+                                            "${Statics.getLabel('bandKara')}",
                                             style:
                                                 TextStyle(color: Colors.white)),
                                         style: ElevatedButton.styleFrom(
@@ -4973,7 +4984,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text("बंद करा",
+                                      child: Text(
+                                          "${Statics.getLabel('bandKara')}",
                                           style:
                                               TextStyle(color: Colors.white)),
                                       style: ElevatedButton.styleFrom(
@@ -5295,7 +5307,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text("बंद करा",
+                                      child: Text(
+                                          "${Statics.getLabel('bandKara')}",
                                           style:
                                               TextStyle(color: Colors.white)),
                                       style: ElevatedButton.styleFrom(
@@ -5602,7 +5615,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text("बंद करा",
+                                      child: Text(
+                                          "${Statics.getLabel('bandKara')}",
                                           style:
                                               TextStyle(color: Colors.white)),
                                       style: ElevatedButton.styleFrom(
@@ -5916,7 +5930,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text("बंद करा",
+                                      child: Text(
+                                          "${Statics.getLabel('bandKara')}",
                                           style:
                                               TextStyle(color: Colors.white)),
                                       style: ElevatedButton.styleFrom(
@@ -6632,7 +6647,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             });
                           },
                         ),
-                        Text('शाखा'),
+                        Text("${Statics.getLabel('Shaakhaa')}"),
                         SizedBox(width: 20),
                         Radio<String>(
                           value: 'saptahikMilan',
@@ -9653,7 +9668,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     actions: [
                                       ElevatedButton(
                                         onPressed: () => Navigator.pop(context),
-                                        child: Text("बंद करा",
+                                        child: Text(
+                                            "${Statics.getLabel('bandKara')}",
                                             style:
                                                 TextStyle(color: Colors.white)),
                                         style: ElevatedButton.styleFrom(
@@ -9945,7 +9961,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     actions: [
                                       ElevatedButton(
                                         onPressed: () => Navigator.pop(context),
-                                        child: Text("बंद करा",
+                                        child: Text(
+                                            "${Statics.getLabel('bandKara')}",
                                             style:
                                                 TextStyle(color: Colors.white)),
                                         style: ElevatedButton.styleFrom(
@@ -10236,7 +10253,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     actions: [
                                       ElevatedButton(
                                         onPressed: () => Navigator.pop(context),
-                                        child: Text("बंद करा",
+                                        child: Text(
+                                            "${Statics.getLabel('bandKara')}",
                                             style:
                                                 TextStyle(color: Colors.white)),
                                         style: ElevatedButton.styleFrom(
@@ -10525,7 +10543,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     actions: [
                                       ElevatedButton(
                                         onPressed: () => Navigator.pop(context),
-                                        child: Text("बंद करा",
+                                        child: Text(
+                                            "${Statics.getLabel('bandKara')}",
                                             style:
                                                 TextStyle(color: Colors.white)),
                                         style: ElevatedButton.styleFrom(
@@ -10898,7 +10917,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                           ElevatedButton(
                                             onPressed: () =>
                                                 Navigator.pop(context),
-                                            child: Text("बंद करा",
+                                            child: Text(
+                                                "${Statics.getLabel('bandKara')}",
                                                 style: TextStyle(
                                                     color: Colors.white)),
                                             style: ElevatedButton.styleFrom(
@@ -11197,7 +11217,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                           ElevatedButton(
                                             onPressed: () =>
                                                 Navigator.pop(context),
-                                            child: Text("बंद करा",
+                                            child: Text(
+                                                "${Statics.getLabel('bandKara')}",
                                                 style: TextStyle(
                                                     color: Colors.white)),
                                             style: ElevatedButton.styleFrom(
@@ -11537,7 +11558,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                           ElevatedButton(
                                             onPressed: () =>
                                                 Navigator.pop(context),
-                                            child: Text("बंद करा",
+                                            child: Text(
+                                                "${Statics.getLabel('bandKara')}",
                                                 style: TextStyle(
                                                     color: Colors.white)),
                                             style: ElevatedButton.styleFrom(
@@ -13238,7 +13260,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("वस्तीतील सामाजिक\nप्रश्न/गरजा",
+              Text("${Statics.getLabel('VastiSamajikGarja')}",
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -13588,7 +13610,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     vastisarvekshanDropdown2(
                       dataModel: vastisarvekshanDropDownDataModel!,
                       filterTypeName: "दुर्जनशक्तिशिक्षा",
-                      hintText: "शिक्षा",
+                      hintText: "${Statics.getLabel('shiksha')}",
                       onItemSelected: (id, value, isOther) {
                         selectedDurjanShaktiShikshaId = id;
                         selectedDurjanShaktiShikashaName = value;
@@ -13606,7 +13628,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     vastisarvekshanDropdown2(
                       dataModel: vastisarvekshanDropDownDataModel!,
                       filterTypeName: "दुर्जनशक्तिगुन्हा",
-                      hintText: "गुन्हा",
+                      hintText: "${Statics.getLabel('crime')}",
                       onItemSelected: (id, value, isOther) {
                         selectedDurjanShaktiGunhaId = id;
                         selectedDurjanShaktiGunhaName = value;
@@ -13877,7 +13899,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               columns: [
                                 DataColumn(
                                     label: Text(
-                                  "वस्तीतील सामाजिक\nप्रश्न/गरजा",
+                                  "${Statics.getLabel('VastiSamajikGarja')}",
                                 )),
                                 DataColumn(
                                     label: Center(
@@ -13966,7 +13988,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                                       .deepPurple.shade100),
                                               SizedBox(height: 12),
                                               _buildInfoRow(
-                                                  "वस्तीतील सामाजिक\nप्रश्न/गरजा",
+                                                  "${Statics.getLabel('VastiSamajikGarja')}",
                                                   selectedData
                                                       .selectedDropdownValueName),
                                               _buildInfoRow(
@@ -13980,7 +14002,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                           ElevatedButton(
                                             onPressed: () =>
                                                 Navigator.pop(context),
-                                            child: Text("बंद करा",
+                                            child: Text(
+                                                "${Statics.getLabel('bandKara')}",
                                                 style: TextStyle(
                                                     color: Colors.white)),
                                             style: ElevatedButton.styleFrom(
@@ -14289,7 +14312,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                           ElevatedButton(
                                             onPressed: () =>
                                                 Navigator.pop(context),
-                                            child: Text("बंद करा",
+                                            child: Text(
+                                                "${Statics.getLabel('bandKara')}",
                                                 style: TextStyle(
                                                     color: Colors.white)),
                                             style: ElevatedButton.styleFrom(
@@ -14517,11 +14541,11 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     )),
                                     DataColumn(
                                         label: Text(
-                                      "शिक्षा",
+                                      "${Statics.getLabel('shiksha')}",
                                     )),
                                     DataColumn(
                                         label: Text(
-                                      "गुन्हा",
+                                      "${Statics.getLabel('crime')}",
                                     )),
                                   ],
                                   rows: durjanShaktiDataList
@@ -14620,11 +14644,11 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                                 _buildInfoRow("अन्य प्रकार",
                                                     selectedData.otherPrakar),
                                                 _buildInfoRow(
-                                                    "शिक्षा",
+                                                    "${Statics.getLabel('shiksha')}",
                                                     selectedData
                                                         .selectedDropdownValueName1),
                                                 _buildInfoRow(
-                                                    "गुन्हा",
+                                                    "${Statics.getLabel('crime')}",
                                                     selectedData
                                                         .selectedDropdownValueName2),
                                               ],
@@ -14636,7 +14660,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                             ElevatedButton(
                                               onPressed: () =>
                                                   Navigator.pop(context),
-                                              child: Text("बंद करा",
+                                              child: Text(
+                                                  "${Statics.getLabel('bandKara')}",
                                                   style: TextStyle(
                                                       color: Colors.white)),
                                               style: ElevatedButton.styleFrom(
@@ -14938,7 +14963,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                           ElevatedButton(
                                             onPressed: () =>
                                                 Navigator.pop(context),
-                                            child: Text("बंद करा",
+                                            child: Text(
+                                                "${Statics.getLabel('bandKara')}",
                                                 style: TextStyle(
                                                     color: Colors.white)),
                                             style: ElevatedButton.styleFrom(

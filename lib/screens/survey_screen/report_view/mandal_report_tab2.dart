@@ -215,7 +215,7 @@ class _MandalSurveyReportViewScreen2State
                     backgroundColor: Colors.transparent,
                     headerBuilder: (BuildContext context, bool isExpanded) {
                       return ListTile(
-                        title: Text("स्तर निवडा",
+                        title: Text("${Statics.getLabel('selectStar')}",
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold)),
@@ -235,7 +235,9 @@ class _MandalSurveyReportViewScreen2State
                         children: [
                           if (_linkedVibhaag != null)
                             DropdownButtonFormField(
-                              decoration: InputDecoration(labelText: "विभाग"),
+                              decoration: InputDecoration(
+                                  labelText:
+                                      "${Statics.getLabel('OtherSocialOrganization')}"),
                               isExpanded: true,
                               value: _linkedVibhaagValue == ""
                                   ? null
@@ -269,8 +271,8 @@ class _MandalSurveyReportViewScreen2State
                           ),
                           if (_linkedBhaag != null)
                             DropdownButtonFormField(
-                              decoration:
-                                  InputDecoration(labelText: "भाग/जिल्हा"),
+                              decoration: InputDecoration(
+                                  labelText: "${Statics.getLabel('Bhaag')}"),
                               isExpanded: true,
                               value: _linkedBhaagValue == ""
                                   ? null
@@ -300,7 +302,8 @@ class _MandalSurveyReportViewScreen2State
                           ),
                           if (_linkedNagar != null && _linkedNagar!.length > 0)
                             DropdownButtonFormField(
-                              decoration: InputDecoration(labelText: "तालुका"),
+                              decoration: InputDecoration(
+                                  labelText: "${Statics.getLabel('taalukaa')}"),
                               isExpanded: true,
                               value: _linkedNagarValue == ""
                                   ? null
@@ -332,7 +335,8 @@ class _MandalSurveyReportViewScreen2State
                           if (_linkedmandal != null &&
                               _linkedmandal!.length > 0)
                             DropdownButtonFormField(
-                              decoration: InputDecoration(labelText: "मंडल"),
+                              decoration: InputDecoration(
+                                  labelText: "${Statics.getLabel('Mandal')}"),
                               isExpanded: true,
                               value: _linkedmandalValue == ""
                                   ? null
@@ -383,7 +387,7 @@ class _MandalSurveyReportViewScreen2State
                                         Statics.getLabel('mandalValidation'));
                                   }
                                 },
-                                child: Text("निवडा",
+                                child: Text("${Statics.getLabel('Filters')}",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold)),
@@ -498,8 +502,12 @@ class _MandalSurveyReportViewScreen2State
                                       DataColumn(
                                           label: Text(
                                               "${Statics.getLabel('sarvekshanSthiti')}")),
-                                      DataColumn(label: Text('नगर')),
-                                      DataColumn(label: Text('वस्ती')),
+                                      DataColumn(
+                                          label: Text(
+                                              "${Statics.getLabel('NagarShahari')}")),
+                                      DataColumn(
+                                          label: Text(
+                                              "${Statics.getLabel('Vasti')}")),
                                     ],
                                     rows: [
                                       DataRow(

@@ -1,10 +1,11 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
+
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:flutter/widgets.dart';
+
 import './static_data.dart' as Statics;
 
 class DatabaseHelper {
@@ -14,7 +15,6 @@ class DatabaseHelper {
   static Database? _database;
 
   static Future<Database> get database async {
-
     if (_database == null) {
       print("database null");
       _database = await initDatabase();
@@ -27,19 +27,21 @@ class DatabaseHelper {
   static Future<Database> initDatabase() async {
     WidgetsFlutterBinding.ensureInitialized();
     var dataDir = "";
-    if(Platform.isIOS){
+    if (Platform.isIOS) {
       var p = await getLibraryDirectory();
       dataDir = p.path;
     } else {
       dataDir = await getDatabasesPath();
     }
-print(dataDir);
+    print(dataDir);
     var dbPath = dataDir + '/' + _dbName;
     var database = await openDatabase(dbPath,
         version: _dbVersion,
-        singleInstance: false,
-        onUpgrade: (db, oldVersion, newVersion) {
-      print('initDatabase - database upgraded, oldVersion:' + oldVersion.toString() + '; newVersion:' + newVersion.toString());
+        singleInstance: false, onUpgrade: (db, oldVersion, newVersion) {
+      print('initDatabase - database upgraded, oldVersion:' +
+          oldVersion.toString() +
+          '; newVersion:' +
+          newVersion.toString());
       // db.execute('DROP TABLE UserDataMaster');
       db.execute('DROP TABLE IF EXISTS AbhiyaanVrutta');
       db.execute('DROP TABLE IF EXISTS AbhiyaanParticipant');
@@ -67,27 +69,34 @@ print(dataDir);
           ' DaayitvaID INT,DaayitvaGeoUnitName VARCHAR(100),DaayitvaGeoUnitID INT,BirthDate VARCHAR(20), ' +
           ' LinkedGeoUnitHierarchy VARCHAR(100), IsFirstLogin BOOL, LastLoginTimeStamp VARCHAR(30), ' +
           ' IsLoggedIn VARCHAR(10), IsPravaasiKaaryakartaa BOOL)');
-    },
-        onCreate: (db, version) {
+    }, onCreate: (db, version) {
       print('initDatabase - database created; version:' + version.toString());
 
-      db.execute(' CREATE TABLE LevelMaster(LevelID INT, PraantID INT, LevelName VARCHAR(50), ' + ' Hierarchy INT)');
+      db.execute(
+          ' CREATE TABLE LevelMaster(LevelID INT, PraantID INT, LevelName VARCHAR(50), ' +
+              ' Hierarchy INT)');
 
-      db.execute(' CREATE TABLE StaticMaster(StaticID INT, PraantID INT, EntityType VARCHAR(100), Code VARCHAR(100), ' +
-          '   CodeForDisplay VARCHAR(100), DisplaySequence INT, ViewOnly INT, showAnnualBaithak VARCHAR(5), myear VARCHAR(10))');
+      db.execute(
+          ' CREATE TABLE StaticMaster(StaticID INT, PraantID INT, EntityType VARCHAR(100), Code VARCHAR(100), ' +
+              '   CodeForDisplay VARCHAR(100), DisplaySequence INT, ViewOnly INT, showAnnualBaithak VARCHAR(5), myear VARCHAR(10))');
 
       db.execute(' CREATE TABLE GeoUnitMaster(GeoUnitID INT, PraantID INT, GeoUnitName VARCHAR(200),NameForDisplay VARCHAR(200),' +
           ' LevelID INT, DisplaySequence INT, ' +
           '   HasGraaminKshetra BOOL, ParentKshetraID INT, ParentPraantID INT, ParentMahaanagarID INT, ' +
           '   ParentVibhaagID INT, ParentBhaagID INT, ParentNagarID INT, ParentShaharID INT, ' +
           '   ParentMandalID INT, ParentVastiID INT, ParentGraamID INT)');
-      db.execute(' CREATE TABLE SwayamsevakMaster(SwayamsevakID INT, FullName VARCHAR(50), ' +
-          '   MobileNumber VARCHAR(10), LinkedGeoUnitID INT, AppPassword VARCHAR(20), PreferredLanguageID INT)');
       db.execute(
-          ' CREATE TABLE DaayitvaMaster(DaayitvaID INT, PraantID INT, DaayitvaName VARCHAR(50), DaayitvaForID INT, ' + '   IsPravaasiDaayitva BIT)');
-      db.execute(' CREATE TABLE StateMaster(StateID INT, GSTStateCode VARCHAR(5), Code VARCHAR(10), StateName VARCHAR(50))');
-      db.execute(' CREATE TABLE GatividhiMaster(GatividhiID INT, PraantID INT, GatividhiName VARCHAR(200))');
-      db.execute(' CREATE TABLE AayaamMaster(AayaamID INT, PraantID INT, AayaamName VARCHAR(200))');
+          ' CREATE TABLE SwayamsevakMaster(SwayamsevakID INT, FullName VARCHAR(50), ' +
+              '   MobileNumber VARCHAR(10), LinkedGeoUnitID INT, AppPassword VARCHAR(20), PreferredLanguageID INT)');
+      db.execute(
+          ' CREATE TABLE DaayitvaMaster(DaayitvaID INT, PraantID INT, DaayitvaName VARCHAR(50), DaayitvaForID INT, ' +
+              '   IsPravaasiDaayitva BIT)');
+      db.execute(
+          ' CREATE TABLE StateMaster(StateID INT, GSTStateCode VARCHAR(5), Code VARCHAR(10), StateName VARCHAR(50))');
+      db.execute(
+          ' CREATE TABLE GatividhiMaster(GatividhiID INT, PraantID INT, GatividhiName VARCHAR(200))');
+      db.execute(
+          ' CREATE TABLE AayaamMaster(AayaamID INT, PraantID INT, AayaamName VARCHAR(200))');
 
       db.execute(' CREATE TABLE UserDataMaster(SwayamsevakID INT, SwayamsevakDaayitvaID INT,PreferredLanguageID INT,' +
           ' PreferredLanguageCode VARCHAR(100),PraantID INT,MobileNumber VARCHAR(15),LinkedVastiName VARCHAR(100),' +
@@ -137,21 +146,19 @@ print(dataDir);
       String sqlStr = 'UPDATE UserDataMaster SET IsLoggedIn=\'false\';';
       String sqlStr2 = 'UPDATE UserDataMaster SET SwayamsevakID=0;';
 
-
       await db.execute(sqlStr);
       await db.execute(sqlStr2);
-     await db.rawDelete('DELETE FROM AayaamMaster');
-      await  db.rawDelete('DELETE FROM DaayitvaMaster');
+      await db.rawDelete('DELETE FROM AayaamMaster');
+      await db.rawDelete('DELETE FROM DaayitvaMaster');
       await db.rawDelete('DELETE FROM GatividhiMaster');
       await db.rawDelete('DELETE FROM GeoUnitMaster');
       await db.rawDelete('DELETE FROM HomeScreenData');
       await db.rawDelete('DELETE FROM LevelMaster');
-      await  db.rawDelete('DELETE FROM StateMaster');
+      await db.rawDelete('DELETE FROM StateMaster');
       await db.rawDelete('DELETE FROM StaticMaster');
       await db.rawDelete('DELETE FROM SwayamsevakMaster');
       await db.rawDelete('DELETE FROM UserDataMaster');
       print("DatabaseHelper logoutUser executed");
-
 
       // await db.execute('DROP TABLE IF EXISTS AayaamMaster');
       // await db.execute('DROP TABLE IF EXISTS DaayitvaMaster');
@@ -164,16 +171,15 @@ print(dataDir);
       // await db.execute('DROP TABLE IF EXISTS SwayamsevakMaster');
       // await  db.execute('DROP TABLE IF EXISTS UserDataMaster');
       _database = null;
-
     } catch (e) {
       print("Error in DatabaseHelper logoutUser: $e");
     }
   }
 
-
   static Future<void> reCreate(String tableName, dynamic dataList) async {
     Database db = await database;
-    if (await Statics.checkForTableExists(tableName)) await db.execute('DELETE FROM ' + tableName);
+    if (await Statics.checkForTableExists(tableName))
+      await db.execute('DELETE FROM ' + tableName);
     int cnt = 0;
     String sqlStr = '';
     try {
@@ -181,7 +187,9 @@ print(dataDir);
         for (var data in dataList) {
           cnt = cnt + 1;
           sqlStr = sqlStr +
-              (cnt == 1 ? 'INSERT INTO LevelMaster (LevelID, PraantID, LevelName, Hierarchy) VALUES ' : ',') +
+              (cnt == 1
+                  ? 'INSERT INTO LevelMaster (LevelID, PraantID, LevelName, Hierarchy) VALUES '
+                  : ',') +
               '(' +
               data['LevelID'].toString() +
               ',' +
@@ -198,7 +206,9 @@ print(dataDir);
           // print("StaticMaster =-=-> " +data['myear'].toString() );
           cnt = cnt + 1;
           sqlStr = sqlStr +
-              (cnt == 1 ? 'INSERT INTO StaticMaster(StaticID, PraantID, EntityType, Code, CodeForDisplay, DisplaySequence, ViewOnly, showAnnualBaithak, myear) VALUES ' : ',') +
+              (cnt == 1
+                  ? 'INSERT INTO StaticMaster(StaticID, PraantID, EntityType, Code, CodeForDisplay, DisplaySequence, ViewOnly, showAnnualBaithak, myear) VALUES '
+                  : ',') +
               '(' +
               data['StaticID'].toString() +
               ',' +
@@ -227,7 +237,9 @@ print(dataDir);
         for (var data in dataList) {
           cnt = cnt + 1;
           sqlStr = sqlStr +
-              (cnt == 1 ? 'INSERT INTO StateMaster(StateID, Code , GSTStateCode , StateName) VALUES ' : ',') +
+              (cnt == 1
+                  ? 'INSERT INTO StateMaster(StateID, Code , GSTStateCode , StateName) VALUES '
+                  : ',') +
               '(' +
               data['StateID'].toString() +
               ',\'' +
@@ -242,7 +254,9 @@ print(dataDir);
         for (var data in dataList) {
           cnt = cnt + 1;
           sqlStr = sqlStr +
-              (cnt == 1 ? 'INSERT INTO DaayitvaMaster(DaayitvaID, PraantID , DaayitvaName , DaayitvaForID, IsPravaasiDaayitva) VALUES ' : ',') +
+              (cnt == 1
+                  ? 'INSERT INTO DaayitvaMaster(DaayitvaID, PraantID , DaayitvaName , DaayitvaForID, IsPravaasiDaayitva) VALUES '
+                  : ',') +
               '(' +
               data['DaayitvaID'].toString() +
               ',' +
@@ -259,7 +273,9 @@ print(dataDir);
         for (var data in dataList) {
           cnt = cnt + 1;
           sqlStr = sqlStr +
-              (cnt == 1 ? 'INSERT INTO AayaamMaster(AayaamID,PraantID,AayaamName) VALUES ' : ',') +
+              (cnt == 1
+                  ? 'INSERT INTO AayaamMaster(AayaamID,PraantID,AayaamName) VALUES '
+                  : ',') +
               '(' +
               data['AayaamID'].toString() +
               ',' +
@@ -272,7 +288,9 @@ print(dataDir);
         for (var data in dataList) {
           cnt = cnt + 1;
           sqlStr = sqlStr +
-              (cnt == 1 ? 'INSERT INTO GatividhiMaster(GatividhiID,PraantID,GatividhiName) VALUES ' : ',') +
+              (cnt == 1
+                  ? 'INSERT INTO GatividhiMaster(GatividhiID,PraantID,GatividhiName) VALUES '
+                  : ',') +
               '(' +
               data['GatividhiID'].toString() +
               ',' +
@@ -287,15 +305,15 @@ print(dataDir);
           sqlStr = sqlStr +
               (cnt == 1
                   ? 'INSERT INTO GeoUnitMaster(GeoUnitID, PraantID, GeoUnitName, LevelID, DisplaySequence, ' +
-                  ' ParentKshetraID, ParentPraantID, ParentMahaanagarID, ParentVibhaagID, ParentBhaagID, ParentNagarID, ' +
-                  ' ParentShaharID, ParentMandalID, ParentGraamID, ParentVastiID, HasGraaminKshetra) VALUES '
+                      ' ParentKshetraID, ParentPraantID, ParentMahaanagarID, ParentVibhaagID, ParentBhaagID, ParentNagarID, ' +
+                      ' ParentShaharID, ParentMandalID, ParentGraamID, ParentVastiID, HasGraaminKshetra) VALUES '
                   : ',') +
               '(' +
               data['GeoUnitID'].toString() +
               ',' +
               data['PraantID'].toString() +
               ',\'' +
-              data['GeoUnitName'].toString() +
+              data['GeoUnitName'].toString().replaceAll("'", "''") +
               '\',' +
               data['LevelID'].toString() +
               ',' +
@@ -332,10 +350,10 @@ print(dataDir);
           sqlStr = sqlStr +
               (cnt == 1
                   ? 'INSERT INTO UserDataMaster(SwayamsevakID, SwayamsevakDaayitvaID, PreferredLanguageID, ' +
-                  ' PreferredLanguageCode, PraantID, MobileNumber,LinkedVastiName,LinkedVastiID, LinkedShaakhaaName,' +
-                  ' LinkedShaakhaaID, LinkedGraamName, LinkedGraamID, LevelName, LevelID, FullName, ' +
-                  ' Email, DaayitvaStartYear, DaayitvaName, DaayitvaID, DaayitvaGeoUnitName, DaayitvaGeoUnitID, ' +
-                  ' BirthDate, LinkedGeoUnitHierarchy, IsFirstLogin, LastLoginTimeStamp, IsLoggedIn, IsPravaasiKaaryakartaa) VALUES '
+                      ' PreferredLanguageCode, PraantID, MobileNumber,LinkedVastiName,LinkedVastiID, LinkedShaakhaaName,' +
+                      ' LinkedShaakhaaID, LinkedGraamName, LinkedGraamID, LevelName, LevelID, FullName, ' +
+                      ' Email, DaayitvaStartYear, DaayitvaName, DaayitvaID, DaayitvaGeoUnitName, DaayitvaGeoUnitID, ' +
+                      ' BirthDate, LinkedGeoUnitHierarchy, IsFirstLogin, LastLoginTimeStamp, IsLoggedIn, IsPravaasiKaaryakartaa) VALUES '
                   : ',') +
               '(' +
               dataList['SwayamsevakID'].toString() +
@@ -388,13 +406,22 @@ print(dataDir);
               dataList['LinkedGeoUnitHierarchy'] +
               '\'' +
               ',' +
-              ((dataList['IsFirstLogin'] == null || dataList['IsFirstLogin'] == false) ? '0' : '1') +
+              ((dataList['IsFirstLogin'] == null ||
+                      dataList['IsFirstLogin'] == false)
+                  ? '0'
+                  : '1') +
               ',\'' +
               //DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()) +
               dataList['LastLoginTimeStampStr'] +
               '\',\'true\', ' +
-              ((dataList[' IsLoggedIn'] == null || dataList[' IsLoggedIn'] == false) ? '0' : '1') +
-              ((dataList['IsPravaasiKaaryakartaa'] == null || dataList['IsPravaasiKaaryakartaa'] == false) ? '0' : '1') +
+              ((dataList[' IsLoggedIn'] == null ||
+                      dataList[' IsLoggedIn'] == false)
+                  ? '0'
+                  : '1') +
+              ((dataList['IsPravaasiKaaryakartaa'] == null ||
+                      dataList['IsPravaasiKaaryakartaa'] == false)
+                  ? '0'
+                  : '1') +
               ')';
         } catch (e) {
           print(" -- DB Exception -- ${e.toString()}");
@@ -405,13 +432,13 @@ print(dataDir);
         sqlStr = sqlStr +
             (cnt == 1
                 ? 'INSERT INTO HomeScreenData( ShishuCount, BaalCount,	TarunVidyaarthiCount,	TarunVyavasayeeCount,	' +
-                '	ProudhaVyavasayeeCount,	 UnknownAgeCount,	TrutiyaVarshaShikshitCount,	DwitiyaVarshaShikshitCount,	' +
-                '	PrathamVarshaShikshitCount,	PraathamikShikshitCount, NoShikshanCount,	ShaakhaaKaaryakartaaCount,	' +
-                ' VastiKaaryakartaaCount, GraamKaaryakartaaCount,	MandalKaaryakartaaCount, NagarKaaryakartaaCount, ' +
-                ' ShaharKaaryakartaaCount, BhaagKaaryakartaaCount, VibhaagKaaryakartaaCount, MahaanagarKaaryakartaaCount,	' +
-                ' PraantKaaryakartaaCount,	KshetraKaaryakartaaCount,	PravaseeKaaryakartaaCount,	' +
-                ' GatividhiKaaryakartaaCount, AayaamKaaryakartaaCount,  SanghaPreritSansthaaKaaryakartaaCount,' +
-                ' TotalKaaryakartaaCount , SocialOrganizationKaaryakartaaCount , PratidnyitCount, Notificationcount ) VALUES '
+                    '	ProudhaVyavasayeeCount,	 UnknownAgeCount,	TrutiyaVarshaShikshitCount,	DwitiyaVarshaShikshitCount,	' +
+                    '	PrathamVarshaShikshitCount,	PraathamikShikshitCount, NoShikshanCount,	ShaakhaaKaaryakartaaCount,	' +
+                    ' VastiKaaryakartaaCount, GraamKaaryakartaaCount,	MandalKaaryakartaaCount, NagarKaaryakartaaCount, ' +
+                    ' ShaharKaaryakartaaCount, BhaagKaaryakartaaCount, VibhaagKaaryakartaaCount, MahaanagarKaaryakartaaCount,	' +
+                    ' PraantKaaryakartaaCount,	KshetraKaaryakartaaCount,	PravaseeKaaryakartaaCount,	' +
+                    ' GatividhiKaaryakartaaCount, AayaamKaaryakartaaCount,  SanghaPreritSansthaaKaaryakartaaCount,' +
+                    ' TotalKaaryakartaaCount , SocialOrganizationKaaryakartaaCount , PratidnyitCount, Notificationcount ) VALUES '
                 : ',') +
             '(' +
             dataList['ShishuCount'].toString() +
@@ -484,11 +511,14 @@ print(dataDir);
     }
   }
 
-  static Future<void> insertOrUpdateRecord(String tableName, dynamic data) async {
+  static Future<void> insertOrUpdateRecord(
+      String tableName, dynamic data) async {
     Database db = await database;
     String sqlStr = '';
     if (tableName == 'LevelMaster') {
-      sqlStr = 'SELECT 1 FROM LevelMaster WHERE LevelID=' + data['LevelID'].toString() + ';';
+      sqlStr = 'SELECT 1 FROM LevelMaster WHERE LevelID=' +
+          data['LevelID'].toString() +
+          ';';
       var result = await db.rawQuery(sqlStr);
       if (result.length > 0) {
         // Record found, then update it
@@ -503,18 +533,21 @@ print(dataDir);
       } else {
         // Record not found, then insert
 
-        sqlStr = 'INSERT INTO LevelMaster (LevelID, PraantID, LevelName, Hierarchy) VALUES (' +
-            data['LevelID'].toString() +
-            ',' +
-            data['PraantID'].toString() +
-            ',\'' +
-            data['LevelName'].toString() +
-            '\',' +
-            data['Hierarchy'].toString() +
-            ');';
+        sqlStr =
+            'INSERT INTO LevelMaster (LevelID, PraantID, LevelName, Hierarchy) VALUES (' +
+                data['LevelID'].toString() +
+                ',' +
+                data['PraantID'].toString() +
+                ',\'' +
+                data['LevelName'].toString() +
+                '\',' +
+                data['Hierarchy'].toString() +
+                ');';
       }
     } else if (tableName == 'StaticMaster') {
-      sqlStr = 'SELECT 1 FROM StaticMaster WHERE StaticID=' + data['StaticID'].toString() + ';';
+      sqlStr = 'SELECT 1 FROM StaticMaster WHERE StaticID=' +
+          data['StaticID'].toString() +
+          ';';
       var result = await db.rawQuery(sqlStr);
       if (result.length > 0) {
         sqlStr = 'UPDATE StaticMaster SET ' +
@@ -533,36 +566,41 @@ print(dataDir);
             '\', myear=' +
             (data['myear'] == null || data['myear'].toString().isEmpty
                 ? '-\''
-                :  data['myear'].toString() + '\'') +
+                : data['myear'].toString() + '\'') +
             ' WHERE StaticID=' +
             data['StaticID'].toString() +
             ';';
       } else {
-        print("StaticMaster22 =-=-> " +data['showAnnualBaithak'].toString() );
-        print("StaticMaster22 =-=-> " +data['myear'].toString() );
-        sqlStr = 'INSERT INTO StaticMaster(StaticID, PraantID, EntityType, Code, CodeForDisplay, DisplaySequence, ViewOnly, showAnnualBaithak, myear) VALUES (' +
-            data['StaticID'].toString() +
-            ',' +
-            data['PraantID'].toString() +
-            ',\'' +
-            data['EntityType'].toString() +
-            '\',\'' +
-            data['Code'].toString() +
-            '\',\'' + data['CodeForDisplay'].toString() + '\',' +
-            data['DisplaySequence'].toString() +
-            ',' +
-            data['ViewOnly'].toString() +
-            ',' +
-            data['showAnnualBaithak'].toString() +
-            ',' +
-            (data['myear'] == null || data['myear'].toString().isEmpty
-                ? '\'-\''
-                : '\'' + data['myear'].toString() + '\'') +
-            ');';
+        print("StaticMaster22 =-=-> " + data['showAnnualBaithak'].toString());
+        print("StaticMaster22 =-=-> " + data['myear'].toString());
+        sqlStr =
+            'INSERT INTO StaticMaster(StaticID, PraantID, EntityType, Code, CodeForDisplay, DisplaySequence, ViewOnly, showAnnualBaithak, myear) VALUES (' +
+                data['StaticID'].toString() +
+                ',' +
+                data['PraantID'].toString() +
+                ',\'' +
+                data['EntityType'].toString() +
+                '\',\'' +
+                data['Code'].toString() +
+                '\',\'' +
+                data['CodeForDisplay'].toString() +
+                '\',' +
+                data['DisplaySequence'].toString() +
+                ',' +
+                data['ViewOnly'].toString() +
+                ',' +
+                data['showAnnualBaithak'].toString() +
+                ',' +
+                (data['myear'] == null || data['myear'].toString().isEmpty
+                    ? '\'-\''
+                    : '\'' + data['myear'].toString() + '\'') +
+                ');';
         // log(sqlStr + "sqlStrsqlStr 2222");
       }
     } else if (tableName == 'StateMaster') {
-      sqlStr = 'SELECT 1 FROM StateMaster WHERE StateID=' + data['StateID'].toString() + ';';
+      sqlStr = 'SELECT 1 FROM StateMaster WHERE StateID=' +
+          data['StateID'].toString() +
+          ';';
       var result = await db.rawQuery(sqlStr);
       if (result.length > 0) {
         // Record found, then update it
@@ -578,18 +616,21 @@ print(dataDir);
             ';';
       } else {
         // Record not found, then insert
-        sqlStr = 'INSERT INTO StateMaster(StateID, Code , GSTStateCode , StateName) VALUES (' +
-            data['StateID'].toString() +
-            ',\'' +
-            data['Code'].toString() +
-            '\',\'' +
-            data['GSTStateCode'].toString() +
-            '\',\'' +
-            data['StateName'].toString() +
-            '\' );';
+        sqlStr =
+            'INSERT INTO StateMaster(StateID, Code , GSTStateCode , StateName) VALUES (' +
+                data['StateID'].toString() +
+                ',\'' +
+                data['Code'].toString() +
+                '\',\'' +
+                data['GSTStateCode'].toString() +
+                '\',\'' +
+                data['StateName'].toString() +
+                '\' );';
       }
     } else if (tableName == 'DaayitvaMaster') {
-      sqlStr = 'SELECT 1 FROM DaayitvaMaster WHERE DaayitvaID=' + data['DaayitvaID'].toString() + ';';
+      sqlStr = 'SELECT 1 FROM DaayitvaMaster WHERE DaayitvaID=' +
+          data['DaayitvaID'].toString() +
+          ';';
       var result = await db.rawQuery(sqlStr);
       if (result.length > 0) {
         // Record found, then update it
@@ -605,37 +646,47 @@ print(dataDir);
             ';';
       } else {
         // Record not found, then insert
-        sqlStr = 'INSERT INTO DaayitvaMaster(DaayitvaID, PraantID , DaayitvaName , DaayitvaForID, IsPravaasiDaayitva) VALUES (' +
-            data['DaayitvaID'].toString() +
-            ',' +
-            data['PraantID'].toString() +
-            ',\'' +
-            data['DaayitvaName'].toString() +
-            '\',' +
-            data['DaayitvaForID'].toString() +
-            ',' +
-            (data['IsPravaasiDaayitva'].toString() == 'true' ? '1' : '0') +
-            ');';
+        sqlStr =
+            'INSERT INTO DaayitvaMaster(DaayitvaID, PraantID , DaayitvaName , DaayitvaForID, IsPravaasiDaayitva) VALUES (' +
+                data['DaayitvaID'].toString() +
+                ',' +
+                data['PraantID'].toString() +
+                ',\'' +
+                data['DaayitvaName'].toString() +
+                '\',' +
+                data['DaayitvaForID'].toString() +
+                ',' +
+                (data['IsPravaasiDaayitva'].toString() == 'true' ? '1' : '0') +
+                ');';
       }
     } else if (tableName == 'AayaamMaster') {
-      sqlStr = 'SELECT 1 FROM AayaamMaster WHERE AayaamID=' + data['AayaamID'].toString() + ';';
+      sqlStr = 'SELECT 1 FROM AayaamMaster WHERE AayaamID=' +
+          data['AayaamID'].toString() +
+          ';';
       var result = await db.rawQuery(sqlStr);
       if (result.length > 0) {
         // Record found, then update it
-        sqlStr =
-            'UPDATE AayaamMaster SET ' + ' AayaamName=\'' + data['AayaamName'].toString() + '\' WHERE AayaamID=' + data['AayaamID'].toString() + ';';
+        sqlStr = 'UPDATE AayaamMaster SET ' +
+            ' AayaamName=\'' +
+            data['AayaamName'].toString() +
+            '\' WHERE AayaamID=' +
+            data['AayaamID'].toString() +
+            ';';
       } else {
         // Record not found, then insert
-        sqlStr = 'INSERT INTO AayaamMaster(AayaamID,PraantID,AayaamName) VALUES (' +
-            data['AayaamID'].toString() +
-            ',' +
-            data['PraantID'].toString() +
-            ',\'' +
-            data['AayaamName'].toString() +
-            '\' );';
+        sqlStr =
+            'INSERT INTO AayaamMaster(AayaamID,PraantID,AayaamName) VALUES (' +
+                data['AayaamID'].toString() +
+                ',' +
+                data['PraantID'].toString() +
+                ',\'' +
+                data['AayaamName'].toString() +
+                '\' );';
       }
     } else if (tableName == 'GatividhiMaster') {
-      sqlStr = 'SELECT 1 FROM GatividhiMaster WHERE GatividhiID=' + data['GatividhiID'].toString() + ';';
+      sqlStr = 'SELECT 1 FROM GatividhiMaster WHERE GatividhiID=' +
+          data['GatividhiID'].toString() +
+          ';';
       var result = await db.rawQuery(sqlStr);
       if (result.length > 0) {
         // Record found, then update it
@@ -647,16 +698,19 @@ print(dataDir);
             ';';
       } else {
         // Record not found, then insert
-        sqlStr = 'INSERT INTO GatividhiMaster(GatividhiID,PraantID,GatividhiName) VALUES (' +
-            data['GatividhiID'].toString() +
-            ',' +
-            data['PraantID'].toString() +
-            ',\'' +
-            data['GatividhiName'].toString() +
-            '\' );';
+        sqlStr =
+            'INSERT INTO GatividhiMaster(GatividhiID,PraantID,GatividhiName) VALUES (' +
+                data['GatividhiID'].toString() +
+                ',' +
+                data['PraantID'].toString() +
+                ',\'' +
+                data['GatividhiName'].toString() +
+                '\' );';
       }
     } else if (tableName == 'GeoUnitMaster') {
-      sqlStr = 'SELECT 1 FROM GeoUnitMaster WHERE GeoUnitID=' + data['GeoUnitID'].toString() + ';';
+      sqlStr = 'SELECT 1 FROM GeoUnitMaster WHERE GeoUnitID=' +
+          data['GeoUnitID'].toString() +
+          ';';
       var result = await db.rawQuery(sqlStr);
       if (result.length > 0) {
         // Record found, then update it
@@ -702,7 +756,7 @@ print(dataDir);
             ',' +
             data['PraantID'].toString() +
             ',\'' +
-            data['GeoUnitName'].toString() +
+            data['GeoUnitName'].toString().replaceAll("'", "''") +
             '\',' +
             data['LevelID'].toString() +
             ',' +
@@ -732,7 +786,9 @@ print(dataDir);
             ');';
       }
     } else if (tableName == 'UserDataMaster') {
-      sqlStr = 'SELECT 1 FROM UserDataMaster WHERE SwayamsevakID=' + data['SwayamsevakID'].toString() + ';';
+      sqlStr = 'SELECT 1 FROM UserDataMaster WHERE SwayamsevakID=' +
+          data['SwayamsevakID'].toString() +
+          ';';
       var result = await db.rawQuery(sqlStr);
       if (result.length > 0) {
         // Record found, then update it
@@ -792,13 +848,18 @@ print(dataDir);
             data['LinkedGeoUnitHierarchy'].toString() +
             '\'' +
             ', IsFirstLogin=' +
-            (data["IsFirstLogin"] == null || data["IsFirstLogin"] == false ? '0' : '1') +
+            (data["IsFirstLogin"] == null || data["IsFirstLogin"] == false
+                ? '0'
+                : '1') +
             ', LastLoginTimeStamp=\'' +
             DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()) +
             '\'' +
             ', IsLoggedIn=\'true\' ' +
             ', IsPravaasiKaaryakartaa=' +
-            (data["IsPravaasiKaaryakartaa"] == null || data["IsPravaasiKaaryakartaa"] == false ? '0' : '1') +
+            (data["IsPravaasiKaaryakartaa"] == null ||
+                    data["IsPravaasiKaaryakartaa"] == false
+                ? '0'
+                : '1') +
             ' WHERE SwayamsevakID=' +
             data['SwayamsevakID'].toString() +
             ';';
@@ -859,13 +920,20 @@ print(dataDir);
             data['LinkedGeoUnitHierarchy'] +
             '\'' +
             ',' +
-            ((data['IsFirstLogin'] == null || data['IsFirstLogin'] == false) ? '0' : '1') +
+            ((data['IsFirstLogin'] == null || data['IsFirstLogin'] == false)
+                ? '0'
+                : '1') +
             ',\'' +
             DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()) +
             '\',\'true\' ' +
             ',' +
-            ((data[' IsLoggedIn'] == null || data[' IsLoggedIn'] == false) ? '0' : '1') +
-            ((data['IsPravaasiKaaryakartaa'] == null || data['IsPravaasiKaaryakartaa'] == false) ? '0' : '1') +
+            ((data[' IsLoggedIn'] == null || data[' IsLoggedIn'] == false)
+                ? '0'
+                : '1') +
+            ((data['IsPravaasiKaaryakartaa'] == null ||
+                    data['IsPravaasiKaaryakartaa'] == false)
+                ? '0'
+                : '1') +
             ' );';
       }
     } else if (tableName == 'HomeScreenData') {
