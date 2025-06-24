@@ -2377,7 +2377,7 @@ class _AnnualBaithakEkatritVruttaState
                                 Container(
                                     height: 40,
                                     child: Text(
-                                      'वयोगट',
+                                      "${Statics.getLabel('Vayogat')}",
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16),
@@ -2602,7 +2602,7 @@ class _AnnualBaithakEkatritVruttaState
                                 Container(
                                     height: 40,
                                     child: Text(
-                                      'वयोगट',
+                                      "${Statics.getLabel('Vayogat')}",
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16),
@@ -2762,7 +2762,7 @@ class _AnnualBaithakEkatritVruttaState
                                     Container(
                                         height: 40,
                                         child: Text(
-                                          'वयोगट',
+                                          "${Statics.getLabel('Vayogat')}",
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 16),
@@ -2908,7 +2908,7 @@ class _AnnualBaithakEkatritVruttaState
                                   Container(
                                       height: 40,
                                       child: Text(
-                                        'वयोगट',
+                                        "${Statics.getLabel('Vayogat')}",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16),
@@ -3205,7 +3205,7 @@ class _AnnualBaithakEkatritVruttaState
                                 Container(
                                     height: 40,
                                     child: Text(
-                                      'वयोगट',
+                                      "${Statics.getLabel('Vayogat')}",
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16),
@@ -3327,7 +3327,7 @@ class _AnnualBaithakEkatritVruttaState
                                 Container(
                                     height: 40,
                                     child: Text(
-                                      'वयोगट',
+                                      "${Statics.getLabel('Vayogat')}",
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16),
@@ -3424,7 +3424,7 @@ class _AnnualBaithakEkatritVruttaState
                                 Container(
                                     height: 40,
                                     child: Text(
-                                      'वयोगट',
+                                      "${Statics.getLabel('Vayogat')}",
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16),

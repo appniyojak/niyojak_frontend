@@ -245,7 +245,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       builder: (context) => AlertDialog(
         backgroundColor: Colors.white,
         title: Text(
-          "सूचना",
+          "${Statics.getLabel('suchana')}",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.red.shade700,
@@ -271,7 +271,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
             ),
             onPressed: () => Navigator.pop(context),
             child: Text(
-              "ठीक",
+              "${Statics.getLabel('okay')}",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
@@ -290,7 +290,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       builder: (context) => AlertDialog(
         backgroundColor: Colors.white,
         title: Text(
-          "सूचना",
+          "${Statics.getLabel('suchana')}",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.red.shade700,
@@ -300,7 +300,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
         content: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
           child: Text(
-            "$pageName2 भरण्यापूर्वी $pageName1 भरणे अनिवार्य आहे.\n $pageName1 संग्रह केल्यानंतर $pageName2 भरता येईल.",
+            "$pageName2 ${Statics.getLabel('bharnyaPurvi')} $pageName1 ${Statics.getLabel('bharneImportant')}\n $pageName1 ${Statics.getLabel('sangrahKelyaNantr')} $pageName2 ${Statics.getLabel('bhartaYeil')}",
             style: TextStyle(
               fontSize: 16,
               color: Colors.red.shade800,
@@ -316,7 +316,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
             ),
             onPressed: () => Navigator.pop(context),
             child: Text(
-              "ठीक",
+              "${Statics.getLabel('okay')}",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
@@ -465,17 +465,17 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
 
   void _handleTabSelection() {
     if (_tabController.index == 1 && !_isStep1Completed!) {
-      showPopupForNaviagtetoOtherPage(
-          context, "प्राथमिक माहिती", "अन्य माहिती");
+      showPopupForNaviagtetoOtherPage(context, Statics.getLabel('basicInfo'),
+          Statics.getLabel('OtherInfo'));
       _tabController.index = 0;
     } else if (_tabController.index == 2) {
       if (!_isStep1Completed!) {
         showPopupForNaviagtetoOtherPage(
-            context, "प्राथमिक माहिती", "विस्तृत माहिती");
+            context, Statics.getLabel('basicInfo'), "विस्तृत माहिती");
         _tabController.index = 0;
       } else if (!_isStep2Completed!) {
         showPopupForNaviagtetoOtherPage(
-            context, "अन्य माहिती", "विस्तृत माहिती");
+            context, Statics.getLabel('OtherInfo'), "विस्तृत माहिती");
         _tabController.index = 1;
       }
     }
@@ -2103,7 +2103,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "तपशील",
+                              "${Statics.getLabel('tapshil')}",
                               style: TextStyle(
                                   fontSize: 15, fontWeight: FontWeight.w500),
                             ),
@@ -2133,7 +2133,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                       Icon(Icons.add,
                                           color: Colors.white, size: 15),
                                       Text(
-                                        "नवीन",
+                                        "${Statics.getLabel('AddButton')}",
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold),
@@ -2170,17 +2170,17 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   DataColumn(
                                       label: Center(
                                           child: Text(
-                                    "वयोगट",
+                                    "${Statics.getLabel('Vayogat')}",
                                   ))),
                                   DataColumn(
                                       label: Center(
                                           child: Text(
-                                    "प्रकार",
+                                    "${Statics.getLabel('SelectFrequency')}",
                                   ))),
                                   DataColumn(
                                       label: Center(
                                           child: Text(
-                                    "वर्ष",
+                                    "${Statics.getLabel('SankalpCompletionYear')}",
                                   ))),
                                 ],
                                 rows: (kuthalaVarshiDataList != null &&
@@ -2262,7 +2262,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                           backgroundColor: Colors.white,
                                           title: Center(
                                             child: Text(
-                                              "तपशील माहिती",
+                                              "${Statics.getLabel('tapshilInfo')}",
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 20,
@@ -2281,15 +2281,16 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                                       .purpleAccent.shade100),
                                               SizedBox(height: 12),
                                               _buildInfoRow(
-                                                  "वयोगट",
+                                                  "${Statics.getLabel('Vayogat')}",
                                                   selectedData
                                                       .selectedDropdownValueName),
                                               SizedBox(height: 12),
-                                              _buildInfoRow("शाखा प्रकार",
+                                              _buildInfoRow(
+                                                  "${Statics.getLabel('shaakhaPrakar')}",
                                                   selectedData.prakarName),
                                               SizedBox(height: 12),
                                               _buildInfoRow(
-                                                  "वर्ष",
+                                                  "${Statics.getLabel('SankalpCompletionYear')}",
                                                   selectedData.isShaakhaa == 1
                                                       ? selectedData.shaakhaa
                                                       : selectedData
@@ -2357,7 +2358,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                       backgroundColor: Colors.white,
                                       title: Center(
                                         child: Text(
-                                          "पुष्टीकरण",
+                                          "${Statics.getLabel('pusthikarn')}",
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 18,
@@ -2369,7 +2370,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 10.0),
                                         child: Text(
-                                          "तुम्हाला हि माहिती नक्की काढून टाकायची आहे का ?",
+                                          "${Statics.getLabel('deleteconfirmText')}",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontSize: 16,
@@ -2472,7 +2473,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
           ),
           // ===================================== JAGRAN SHRENI STITHI ==================================================================================
           mainContainer(
-            "जागरण श्रेणी स्थिति",
+            "${Statics.getLabel('jagranShreniSthiti')}",
             Column(
               children: [
                 Row(
@@ -2504,7 +2505,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             children: [
                               Icon(Icons.add, color: Colors.white, size: 15),
                               Text(
-                                "नवीन",
+                                "${Statics.getLabel('AddButton')}",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold),
@@ -2539,7 +2540,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         columns: [
                           DataColumn(
                               label: Text(
-                            "श्रेणी",
+                            "${Statics.getLabel('Category')}",
                           )),
                           DataColumn(
                               label: Text(
@@ -2622,7 +2623,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   backgroundColor: Colors.white,
                                   title: Center(
                                     child: Text(
-                                      "जागरण श्रेणी स्थिति",
+                                      "${Statics.getLabel('jagranShreniSthiti')}",
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20,
@@ -2640,7 +2641,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                           color: Colors.purpleAccent.shade100),
                                       SizedBox(height: 12),
                                       _buildInfoRow(
-                                          "श्रेणी",
+                                          "${Statics.getLabel('Category')}",
                                           selectedData
                                               .selectedDropdownValueName),
                                       SizedBox(height: 12),
@@ -2712,7 +2713,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               backgroundColor: Colors.white,
                               title: Center(
                                 child: Text(
-                                  "पुष्टीकरण",
+                                  "${Statics.getLabel('pusthikarn')}",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18,
@@ -2724,7 +2725,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 10.0),
                                 child: Text(
-                                  "तुम्हाला हि माहिती नक्की काढून टाकायची आहे का ?",
+                                  "${Statics.getLabel('deleteconfirmText')}",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 16,
@@ -2822,7 +2823,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             children: [
                               Icon(Icons.add, color: Colors.white, size: 15),
                               Text(
-                                "नवीन",
+                                "${Statics.getLabel('AddButton')}",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold),
@@ -3044,7 +3045,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               backgroundColor: Colors.white,
                               title: Center(
                                 child: Text(
-                                  "पुष्टीकरण",
+                                  "${Statics.getLabel('pusthikarn')}",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18,
@@ -3056,7 +3057,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 10.0),
                                 child: Text(
-                                  "तुम्हाला हि माहिती नक्की काढून टाकायची आहे का ?",
+                                  "${Statics.getLabel('deleteconfirmText')}",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 16,
@@ -3154,7 +3155,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               children: [
                                 Icon(Icons.add, color: Colors.white, size: 15),
                                 Text(
-                                  "नवीन",
+                                  "${Statics.getLabel('AddButton')}",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold),
@@ -3189,15 +3190,15 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           columns: [
                             DataColumn(
                                 label: Text(
-                              "प्रकार",
+                              "${Statics.getLabel('SelectFrequency')}",
                             )),
                             DataColumn(
                                 label: Text(
-                              "भवनाचे नाव",
+                              "${Statics.getLabel('bhavnacheNaav')}",
                             )),
                             DataColumn(
                                 label: Text(
-                              "संपर्क स्थिति",
+                              "${Statics.getLabel('samparkStithi')}",
                             )),
                           ],
                           rows: enteredVasahatPrakarDataList
@@ -3280,22 +3281,25 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                                 Colors.purpleAccent.shade100),
                                         SizedBox(height: 12),
                                         _buildInfoRow(
-                                            "प्रकार",
+                                            "${Statics.getLabel('SelectFrequency')}",
                                             selectedData
                                                 .selectedDropdownValueName),
                                         SizedBox(height: 12),
-                                        _buildInfoRow("भवनाचे नाव",
+                                        _buildInfoRow(
+                                            "${Statics.getLabel('bhavnacheNaav')}",
                                             selectedData.bhavanachenav),
                                         SizedBox(height: 12),
                                         _buildInfoRow(
-                                            "संपर्क स्थिति",
+                                            "${Statics.getLabel('samparkStithi')}",
                                             selectedData
                                                 .selectedDropdownValueName1),
                                         SizedBox(height: 12),
-                                        _buildInfoRow("संपर्क सूत्र",
+                                        _buildInfoRow(
+                                            "${Statics.getLabel('samparkSootraNaav')}",
                                             selectedData.samparksootr),
                                         SizedBox(height: 12),
-                                        _buildInfoRow("संपर्क सूत्रांचे दूरभाष",
+                                        _buildInfoRow(
+                                            "${Statics.getLabel('samparakSootraDoorbhash')}",
                                             selectedData.doorabhaash),
                                       ],
                                     ),
@@ -3351,7 +3355,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 backgroundColor: Colors.white,
                                 title: Center(
                                   child: Text(
-                                    "पुष्टीकरण",
+                                    "${Statics.getLabel('pusthikarn')}",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18,
@@ -3363,7 +3367,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 10.0),
                                   child: Text(
-                                    "तुम्हाला हि माहिती नक्की काढून टाकायची आहे का ?",
+                                    "${Statics.getLabel('deleteconfirmText')}",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 16,
@@ -3479,7 +3483,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                           Icon(Icons.add,
                                               color: Colors.white, size: 16),
                                           Text(
-                                            "नवीन",
+                                            "${Statics.getLabel('AddButton')}",
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold),
@@ -3519,7 +3523,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                       )),
                                       DataColumn(
                                           label: Text(
-                                        "अंदाजे (%)",
+                                        "${Statics.getLabel('avgPersent')}",
                                       )),
                                     ],
                                     rows: enteredVividhBhashaBolnareDataList
@@ -3618,7 +3622,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                                       selectedData
                                                           .otherbhaasha),
                                                   SizedBox(height: 12),
-                                                  _buildInfoRow("अंदाजे (%)",
+                                                  _buildInfoRow(
+                                                      "${Statics.getLabel('avgPersent')}",
                                                       selectedData.andaje),
                                                 ],
                                               ),
@@ -3688,7 +3693,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                           backgroundColor: Colors.white,
                                           title: Center(
                                             child: Text(
-                                              "पुष्टीकरण",
+                                              "${Statics.getLabel('pusthikarn')}",
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 18,
@@ -3700,7 +3705,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                             padding: const EdgeInsets.symmetric(
                                                 vertical: 10.0),
                                             child: Text(
-                                              "तुम्हाला हि माहिती नक्की काढून टाकायची आहे का ?",
+                                              "${Statics.getLabel('deleteconfirmText')}",
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                 fontSize: 16,
@@ -3828,7 +3833,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                           Icon(Icons.add,
                                               color: Colors.white, size: 15),
                                           Text(
-                                            "नवीन",
+                                            "${Statics.getLabel('AddButton')}",
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold),
@@ -3966,7 +3971,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                                           .anyaPraantName),
                                                   SizedBox(height: 12),
                                                   _buildInfoRow(
-                                                      "अंदाजे लोकसंख्या",
+                                                      "${Statics.getLabel('andajeLoksankhya')}",
                                                       selectedData.andaje),
                                                 ],
                                               ),
@@ -4036,7 +4041,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                           backgroundColor: Colors.white,
                                           title: Center(
                                             child: Text(
-                                              "पुष्टीकरण",
+                                              "${Statics.getLabel('pusthikarn')}",
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 18,
@@ -4048,7 +4053,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                             padding: const EdgeInsets.symmetric(
                                                 vertical: 10.0),
                                             child: Text(
-                                              "तुम्हाला हि माहिती नक्की काढून टाकायची आहे का ?",
+                                              "${Statics.getLabel('deleteconfirmText')}",
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                 fontSize: 16,
@@ -4176,7 +4181,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                           Icon(Icons.add,
                                               color: Colors.white, size: 15),
                                           Text(
-                                            "नवीन",
+                                            "${Statics.getLabel('AddButton')}",
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold),
@@ -4212,11 +4217,11 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     columns: [
                                       DataColumn(
                                           label: Text(
-                                        'कोणत्या रिलीजन चे',
+                                        '${Statics.getLabel('konteReligion')}',
                                       )),
                                       DataColumn(
                                           label: Text(
-                                        'अंदाजे (%)',
+                                        '${Statics.getLabel('avgPersent')}',
                                       )),
                                     ],
                                     rows: enteredreligionDataList
@@ -4302,11 +4307,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                                           .shade100),
                                                   SizedBox(height: 12),
                                                   _buildInfoRow(
-                                                      "कोणत्या रिलीजन चे",
+                                                      "${Statics.getLabel('konteReligion')}",
                                                       selectedData
                                                           .selectedDropdownValueName),
                                                   SizedBox(height: 12),
-                                                  _buildInfoRow("अंदाजे (%)",
+                                                  _buildInfoRow(
+                                                      "${Statics.getLabel('avgPersent')}",
                                                       selectedData.andaje),
                                                 ],
                                               ),
@@ -4375,7 +4381,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                           backgroundColor: Colors.white,
                                           title: Center(
                                             child: Text(
-                                              "पुष्टीकरण",
+                                              "${Statics.getLabel('pusthikarn')}",
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 18,
@@ -4387,7 +4393,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                             padding: const EdgeInsets.symmetric(
                                                 vertical: 10.0),
                                             child: Text(
-                                              "तुम्हाला हि माहिती नक्की काढून टाकायची आहे का ?",
+                                              "${Statics.getLabel('deleteconfirmText')}",
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                 fontSize: 16,
@@ -4467,7 +4473,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "उपासना स्थळ",
+                        "${Statics.getLabel('UpasanaSthal')}",
                         style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -4500,7 +4506,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               children: [
                                 Icon(Icons.add, color: Colors.white, size: 15),
                                 Text(
-                                  "नवीन",
+                                  "${Statics.getLabel('AddButton')}",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold),
@@ -4536,15 +4542,15 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             columns: [
                               DataColumn(
                                   label: Text(
-                                "उपासना स्थळ",
+                                "${Statics.getLabel('UpasanaSthal')}",
                               )),
                               DataColumn(
                                   label: Text(
-                                "प्रकार",
+                                "${Statics.getLabel('SelectFrequency')}",
                               )),
                               DataColumn(
                                   label: Text(
-                                "संख्या",
+                                "${Statics.getLabel('count')}",
                               )),
                             ],
                             rows: upasnaSthalDataList
@@ -4607,7 +4613,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     backgroundColor: Colors.white,
                                     title: Center(
                                       child: Text(
-                                        "उपासना स्थळ",
+                                        "${Statics.getLabel('UpasanaSthal')}",
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 20,
@@ -4626,20 +4632,22 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                                 Colors.purpleAccent.shade100),
                                         SizedBox(height: 12),
                                         _buildInfoRow(
-                                            "उपासना स्थळ",
+                                            "${Statics.getLabel('UpasanaSthal')}",
                                             selectedData
                                                 .selectedDropdownValueName),
                                         SizedBox(height: 12),
-                                        _buildInfoRow("अन्य उपासना स्थळ",
+                                        _buildInfoRow(
+                                            "${Statics.getLabel('otherUpasanaSthal')}",
                                             selectedData.otherupaasanasthala),
                                         SizedBox(height: 12),
                                         _buildInfoRow(
-                                            "प्रकार",
+                                            "${Statics.getLabel('SelectFrequency')}",
                                             selectedData
                                                 .selectedDropdownValueName1),
                                         SizedBox(height: 12),
                                         _buildInfoRow(
-                                            "संख्या", selectedData.sankhya),
+                                            "${Statics.getLabel('count')}",
+                                            selectedData.sankhya),
                                       ],
                                     ),
                                     actionsAlignment: MainAxisAlignment.center,
@@ -4696,7 +4704,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 backgroundColor: Colors.white,
                                 title: Center(
                                   child: Text(
-                                    "पुष्टीकरण",
+                                    "${Statics.getLabel('pusthikarn')}",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18,
@@ -4708,7 +4716,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 10.0),
                                   child: Text(
-                                    "तुम्हाला हि माहिती नक्की काढून टाकायची आहे का ?",
+                                    "${Statics.getLabel('deleteconfirmText')}",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 16,
@@ -4773,7 +4781,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
             height: 20,
           ),
           mainContainer(
-              "सज्जन शक्ति",
+              "${Statics.getLabel('SajjanShakti')}",
               Column(children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -4805,7 +4813,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             children: [
                               Icon(Icons.add, color: Colors.white, size: 15),
                               Text(
-                                "नवीन",
+                                "${Statics.getLabel('AddButton')}",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold),
@@ -4839,15 +4847,15 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         columns: [
                           DataColumn(
                               label: Text(
-                            "नाव",
+                            "${Statics.getLabel('Name')}",
                           )),
                           DataColumn(
                               label: Text(
-                            "श्रेणी",
+                            "${Statics.getLabel('Category')}",
                           )),
                           DataColumn(
                               label: Text(
-                            "संपर्क स्थिति",
+                            "${Statics.getLabel('samparkStithi')}",
                           )),
                         ],
                         rows: sajjanShaktiDataList
@@ -4909,7 +4917,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   backgroundColor: Colors.white,
                                   title: Center(
                                     child: Text(
-                                      "उपासना स्थळ",
+                                      "${Statics.getLabel('UpasanaSthal')}",
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20,
@@ -4928,53 +4936,60 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                             color:
                                                 Colors.purpleAccent.shade100),
                                         SizedBox(height: 12),
-                                        _buildInfoRow("नाव", selectedData.name),
+                                        _buildInfoRow(
+                                            "${Statics.getLabel('Name')}",
+                                            selectedData.name),
                                         SizedBox(height: 12),
                                         _buildInfoRow(
-                                            "पत्ता", selectedData.address),
+                                            "${Statics.getLabel('Address')}",
+                                            selectedData.address),
                                         SizedBox(height: 12),
                                         _buildInfoRow(
                                             "दूरभाष", selectedData.doorabhaash),
                                         SizedBox(height: 12),
                                         _buildInfoRow(
-                                            "श्रेणी",
+                                            "${Statics.getLabel('Category')}",
                                             selectedData
                                                 .selectedDropdownValueName),
                                         SizedBox(height: 12),
-                                        _buildInfoRow("अन्य श्रेणी",
+                                        _buildInfoRow(
+                                            "${Statics.getLabel('OtherCategory')}",
                                             selectedData.otherShreniName),
                                         SizedBox(height: 12),
-                                        _buildInfoRow("संस्थेचे नाव",
+                                        _buildInfoRow(
+                                            "${Statics.getLabel('OrganizationName')}",
                                             selectedData.sanstheCheNaav),
                                         SizedBox(height: 12),
                                         _buildInfoRow(
-                                            "संस्थेचा कुठल्या\nपदावर",
+                                            "${Statics.getLabel('kontyaPadavar')}",
                                             selectedData
                                                 .sansthechaKuthalaPadavar),
                                         SizedBox(height: 12),
                                         _buildInfoRow(
-                                            "संपर्क स्थिति",
+                                            "${Statics.getLabel('samparkStithi')}",
                                             selectedData
                                                 .selectedDropdownValueName1),
                                         SizedBox(height: 12),
                                         _buildInfoRow(
-                                            "विशेष",
+                                            "${Statics.getLabel('special')}",
                                             selectedData
                                                 .selectedDropdownValueName2),
                                         SizedBox(height: 12),
-                                        _buildInfoRow("अन्य विशेष",
+                                        _buildInfoRow(
+                                            "${Statics.getLabel('otherSpecial')}",
                                             selectedData.otherVisheshName),
                                         SizedBox(height: 12),
                                         _buildInfoRow(
-                                            "प्रभाव क्षेत्र",
+                                            "${Statics.getLabel('prabhavKshetra')}",
                                             selectedData
                                                 .selectedDropdownValueName3),
                                         SizedBox(height: 12),
-                                        _buildInfoRow("संपर्क सूत्र\nनाव",
+                                        _buildInfoRow(
+                                            "${Statics.getLabel('samparkSootraNaav')}",
                                             selectedData.samparkasutranava),
                                         SizedBox(height: 12),
                                         _buildInfoRow(
-                                            "संपर्क सूत्रांचे\nदूरभाष ",
+                                            "${Statics.getLabel('samparakSootraDoorbhash')}",
                                             selectedData
                                                 .samparkasutraMobileNumber),
                                       ],
@@ -5034,7 +5049,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               backgroundColor: Colors.white,
                               title: Center(
                                 child: Text(
-                                  "पुष्टीकरण",
+                                  "${Statics.getLabel('pusthikarn')}",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18,
@@ -5046,7 +5061,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 10.0),
                                 child: Text(
-                                  "तुम्हाला हि माहिती नक्की काढून टाकायची आहे का ?",
+                                  "${Statics.getLabel('deleteconfirmText')}",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 16,
@@ -5108,7 +5123,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
             height: 20,
           ),
           mainContainer(
-            "${Statics.getLabel('anyaPrabhaviLok')} (संपर्क विभागाची यादी)",
+            "${Statics.getLabel('anyaPrabhaviLok')} (${Statics.getLabel('samparkVibhaagYaadi')})",
             Column(
               children: [
                 Row(
@@ -5138,7 +5153,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             children: [
                               Icon(Icons.add, color: Colors.white, size: 15),
                               Text(
-                                "नवीन",
+                                "${Statics.getLabel('AddButton')}",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold),
@@ -5172,15 +5187,15 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         columns: [
                           DataColumn(
                               label: Text(
-                            "नाव",
+                            "${Statics.getLabel('Name')}",
                           )),
                           DataColumn(
                               label: Text(
-                            "विशेष",
+                            "${Statics.getLabel('special')}",
                           )),
                           DataColumn(
                               label: Text(
-                            "प्रभाव क्षेत्र",
+                            "${Statics.getLabel('prabhavKshetra')}",
                           )),
                         ],
                         rows: anyaPrabhaviLokDataList
@@ -5260,44 +5275,49 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                             thickness: 1,
                                             color: Colors.deepPurple.shade100),
                                         SizedBox(height: 12),
-                                        _buildInfoRow("नाव", selectedData.name),
                                         _buildInfoRow(
-                                            "पत्ता", selectedData.address),
+                                            "${Statics.getLabel('Name')}",
+                                            selectedData.name),
+                                        _buildInfoRow(
+                                            "${Statics.getLabel('Address')}",
+                                            selectedData.address),
                                         _buildInfoRow(
                                             "दूरभाष", selectedData.doorabhaash),
                                         _buildInfoRow(
-                                            "श्रेणी",
+                                            "${Statics.getLabel('Category')}",
                                             selectedData
                                                 .selectedDropdownValueName),
                                         _buildInfoRow(
-                                            "उपश्रेणी",
+                                            "${Statics.getLabel('upshreni')}",
                                             selectedData
                                                 .selectedDropdownValueName1),
-                                        _buildInfoRow("अन्य उपश्रेणी",
+                                        _buildInfoRow(
+                                            "${Statics.getLabel('otherUpshreni')}",
                                             selectedData.otherupshrenee),
                                         _buildInfoRow(
-                                            "उपश्रेणी 1",
+                                            "${Statics.getLabel('upshreni')} 1",
                                             selectedData
                                                 .selectedDropdownValueName2),
                                         _buildInfoRow(
-                                            "विशेष",
+                                            "${Statics.getLabel('special')}",
                                             selectedData
                                                 .selectedDropdownValueName3),
                                         _buildInfoRow(
-                                            "प्रभाव क्षेत्र",
+                                            "${Statics.getLabel('prabhavKshetra')}",
                                             selectedData
                                                 .selectedDropdownValueName4),
-                                        _buildInfoRow("अन्य विशेष माहिती",
+                                        _buildInfoRow(
+                                            "${Statics.getLabel('anyaVisheshMahiti')}",
                                             selectedData.othervishesh),
                                         _buildInfoRow(
-                                            "संपर्क स्थिति",
+                                            "${Statics.getLabel('samparkStithi')}",
                                             selectedData
                                                 .selectedDropdownValueName5),
                                         _buildInfoRow(
                                             "${Statics.getLabel('samparkSootraNaav')}",
                                             selectedData.samparkasutranav),
                                         _buildInfoRow(
-                                            "संपर्क सूत्रांचे दूरभाष",
+                                            "${Statics.getLabel('samparakSootraDoorbhash')}",
                                             selectedData
                                                 .samparkaSutraDoorbhash),
                                       ],
@@ -5355,7 +5375,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               backgroundColor: Colors.white,
                               title: Center(
                                 child: Text(
-                                  "पुष्टीकरण",
+                                  "${Statics.getLabel('pusthikarn')}",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18,
@@ -5367,7 +5387,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 10.0),
                                 child: Text(
-                                  "तुम्हाला हि माहिती नक्की काढून टाकायची आहे का ?",
+                                  "${Statics.getLabel('deleteconfirmText')}",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 16,
@@ -5466,7 +5486,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             children: [
                               Icon(Icons.add, color: Colors.white, size: 15),
                               Text(
-                                "नवीन",
+                                "${Statics.getLabel('AddButton')}",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold),
@@ -5500,19 +5520,19 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           columns: [
                             DataColumn(
                                 label: Text(
-                              "सण",
+                              "${Statics.getLabel('festivals')}",
                             )),
                             DataColumn(
                                 label: Text(
-                              "आयोजक संस्था",
+                              "${Statics.getLabel('aayojakSansthachiNave')}",
                             )),
                             DataColumn(
                                 label: Text(
-                              "आयोजक",
+                              "${Statics.getLabel('aayojakNaav')}",
                             )),
                             DataColumn(
                                 label: Text(
-                              "संपर्क",
+                              "${Statics.getLabel('Sampark')}",
                             )),
                           ],
                           rows: vastitSajarHonareSanDataList
@@ -5597,16 +5617,20 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                             color: Colors.deepPurple.shade100),
                                         SizedBox(height: 12),
                                         _buildInfoRow(
-                                            "सण",
+                                            "${Statics.getLabel('festivals')}",
                                             selectedData
                                                 .selectedDropdownValueName),
-                                        _buildInfoRow("अन्य सण",
+                                        _buildInfoRow(
+                                            "${Statics.getLabel('otherFestivals')}",
                                             selectedData.otherSajareSan),
-                                        _buildInfoRow("आयोजक संस्था",
+                                        _buildInfoRow(
+                                            "${Statics.getLabel('aayojakSansthachiNave')}",
                                             selectedData.ayojakasansthacinave),
-                                        _buildInfoRow("आयोजक",
+                                        _buildInfoRow(
+                                            "${Statics.getLabel('aayojakNaav')}",
                                             selectedData.ayojakancinave),
-                                        _buildInfoRow("संपर्क सूत्र",
+                                        _buildInfoRow(
+                                            "${Statics.getLabel('samparkSootraNaav')}",
                                             selectedData.aayojaksamparksootr),
                                       ],
                                     ),
@@ -5664,7 +5688,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               backgroundColor: Colors.white,
                               title: Center(
                                 child: Text(
-                                  "पुष्टीकरण",
+                                  "${Statics.getLabel('pusthikarn')}",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18,
@@ -5676,7 +5700,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 10.0),
                                 child: Text(
-                                  "तुम्हाला हि माहिती नक्की काढून टाकायची आहे का ?",
+                                  "${Statics.getLabel('deleteconfirmText')}",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 16,
@@ -5781,7 +5805,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               Icon(Icons.add, color: Colors.white, size: 15),
                               SizedBox(width: 5),
                               Text(
-                                "नवीन",
+                                "${Statics.getLabel('AddButton')}",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold),
@@ -5815,15 +5839,15 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           columns: [
                             DataColumn(
                                 label: Text(
-                              "सामाजिक कार्यक्रम",
+                              "${Statics.getLabel('samajikKaryakram')}",
                             )),
                             DataColumn(
                                 label: Text(
-                              "आयोजक संस्था",
+                              "${Statics.getLabel('aayojakSansthachiNave')}",
                             )),
                             DataColumn(
                                 label: Text(
-                              "आयोजक",
+                              "${Statics.getLabel('aayojakNaav')}",
                             )),
                             DataColumn(
                                 label: Text(
@@ -5912,16 +5936,19 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                             color: Colors.deepPurple.shade100),
                                         SizedBox(height: 12),
                                         _buildInfoRow(
-                                            "सामाजिक कार्यक्रम",
+                                            "${Statics.getLabel('samajikKaryakram')}",
                                             selectedData
                                                 .selectedDropdownValueName),
                                         _buildInfoRow("अन्य",
                                             selectedData.otherKaryakram),
-                                        _buildInfoRow("आयोजक संस्था",
+                                        _buildInfoRow(
+                                            "${Statics.getLabel('aayojakSansthachiNave')}",
                                             selectedData.ayojakasansthacinave),
-                                        _buildInfoRow("आयोजक",
+                                        _buildInfoRow(
+                                            "${Statics.getLabel('aayojakNaav')}",
                                             selectedData.ayojakancinave),
-                                        _buildInfoRow("संपर्क",
+                                        _buildInfoRow(
+                                            "${Statics.getLabel('Sampark')}",
                                             selectedData.aayojaksamparksootr),
                                       ],
                                     ),
@@ -5980,7 +6007,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               backgroundColor: Colors.white,
                               title: Center(
                                 child: Text(
-                                  "पुष्टीकरण",
+                                  "${Statics.getLabel('pusthikarn')}",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18,
@@ -5992,7 +6019,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 10.0),
                                 child: Text(
-                                  "तुम्हाला हि माहिती नक्की काढून टाकायची आहे का ?",
+                                  "${Statics.getLabel('deleteconfirmText')}",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 16,
@@ -6071,7 +6098,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           builder: (context) => AlertDialog(
                             backgroundColor: Colors.white,
                             title: Text(
-                              "सूचना",
+                              "${Statics.getLabel('suchana')}",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.red.shade700,
@@ -6098,7 +6125,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 ),
                                 onPressed: () => Navigator.pop(context),
                                 child: Text(
-                                  "ठीक",
+                                  "${Statics.getLabel('okay')}",
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ),
@@ -6322,7 +6349,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   //       if (dependentItems.isNotEmpty) SizedBox(height: 10),
   //       if (dependentItems.isNotEmpty)
   //         _buildDropdown2(
-  //           hintText: "उपश्रेणी निवडा",
+  //           hintText: "${Statics.getLabel('selectUpshreni')}",
   //           value: selectedDependentValue,
   //           items: dependentItems,
   //           onChanged: (newValue) {
@@ -6340,7 +6367,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   //       if (thirdLevelItems.isNotEmpty) SizedBox(height: 10),
   //       if (thirdLevelItems.isNotEmpty)
   //         _buildDropdown2(
-  //           hintText: "उपश्रेणी 2 निवडा",
+  //           hintText: "${Statics.getLabel('selectUpshreni2')}",
   //           value: selectedThirdLevelValue,
   //           items: thirdLevelItems,
   //           onChanged: (newValue) {
@@ -6428,7 +6455,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
         if (dependentItems.isNotEmpty) SizedBox(height: 10),
         if (dependentItems.isNotEmpty)
           _buildDropdown2(
-            hintText: "उपश्रेणी निवडा",
+            hintText: "${Statics.getLabel('upshreni')} निवडा",
             value: selectedDependentValue?.id != null
                 ? selectedDependentValue
                 : null,
@@ -6448,7 +6475,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
         if (thirdLevelItems.isNotEmpty) SizedBox(height: 10),
         if (thirdLevelItems.isNotEmpty)
           _buildDropdown2(
-            hintText: "उपश्रेणी 2 निवडा",
+            hintText: "${Statics.getLabel('upshreni')} 2 निवडा",
             value: selectedThirdLevelValue?.id != null
                 ? selectedThirdLevelValue
                 : null,
@@ -6587,7 +6614,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "तपशील",
+                "${Statics.getLabel('tapshil')}",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
@@ -6613,7 +6640,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         ? vastisarvekshanDropdown2(
                             dataModel: vastisarvekshanDropDownDataModel!,
                             filterTypeName: "कुठल्या वर्षी",
-                            hintText: "वयोगट निवडा",
+                            hintText: "${Statics.getLabel('selectVayogat')}",
                             onItemSelected: (id, value, isOther) {
                               selectedKuthalaVarshiId = id;
                               selectedKuthalaVarshiName = value;
@@ -6659,19 +6686,19 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             });
                           },
                         ),
-                        Text('सा. मिलन'),
+                        Text("${Statics.getLabel('SaaptaahikMilan')}"),
                       ],
                     ),
                     if (selectedYearType == 'shaakha')
                       textControllerField2(
-                          name: 'कुठल्या वर्षी ?',
+                          name: "${Statics.getLabel('kuthalaVarshi')}",
                           controller: kuthalaVarshiVayogatShaakhaYearController,
                           keyboardType: TextInputType.number,
                           hintTextString: "e.g. 2025",
                           maxInput: 4),
                     if (selectedYearType == 'saptahikMilan')
                       textControllerField2(
-                          name: 'कुठल्या वर्षी ?',
+                          name: "${Statics.getLabel('kuthalaVarshi')}",
                           controller:
                               kuthalaVarshiVayogatSaptahikYearController,
                           keyboardType: TextInputType.number,
@@ -6744,7 +6771,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                 //     ScaffoldMessenger.of(context).showSnackBar(
                 //       SnackBar(
                 //         content: Text(
-                //             "वर्ष १९२५ आणि २०२५ च्या दरम्यान असले पाहिजे."),
+                //             "${Statics.getLabel('yearValidation')}"),
                 //         duration: Duration(seconds: 2),
                 //       ),
                 //     );
@@ -6782,13 +6809,16 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
 
                     if (editIndex == null && matchedEntries.isNotEmpty) {
                       if (currentType == 1 && hasShaakha) {
-                        Statics.showToast("शाखा आधी निवडले आहे.");
+                        Statics.showToast(
+                            "${Statics.getLabel('alreadyShakhaSelected')}");
                         return;
                       } else if (currentType == 0 && hasSaptahik) {
-                        Statics.showToast("साप्ताहिक मिलन आधी निवडले आहे.");
+                        Statics.showToast(
+                            "${Statics.getLabel('alreadySaptahikSelected')}");
                         return;
                       } else if (hasShaakha && hasSaptahik) {
-                        Statics.showToast("वयोगट आधी निवडले आहे.");
+                        Statics.showToast(
+                            "${Statics.getLabel('alreadyVayogatSelected')}");
                         return;
                       }
                     }
@@ -6829,14 +6859,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text(
-                            "वर्ष १९२५ आणि २०२५ च्या दरम्यान असले पाहिजे."),
+                        content: Text("${Statics.getLabel('yearValidation')}"),
                         duration: Duration(seconds: 2),
                       ),
                     );
                   }
                 },
-                child: Text("संग्रह", style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}",
+                    style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -6994,7 +7024,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   //                                 if (selectedVaramvarita?.isOther == 1 &&
   //                                     isOtherJaganVaramvaritaConroller.text ==
   //                                         "") {
-  //                                   Statics.showToast("'अन्य' माहिती आवश्यक.");
+  //                                   Statics.showToast("${Statics.getLabel('otherInfoValidation')}");
   //                                 } else {
   //                                   final data = VastisarJaagaranshreneesthiti(
   //                                     pkid: jagranShreniPkId,
@@ -7026,7 +7056,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   //                                 }
   //                               },
   //                               child: Text(
-  //                                 "संग्रह",
+  //                                 "${Statics.getLabel('Submit')}",
   //                                 style: TextStyle(color: Colors.white),
   //                               ),
   //                             ),
@@ -7168,7 +7198,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
 
                       if (selectedVaramvarita?.isOther == 1)
                         textControllerField2(
-                          name: "अन्य",
+                          name: "${Statics.getLabel('other')}",
                           controller: isOtherJaganVaramvaritaConroller,
                         ),
 
@@ -7185,7 +7215,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           onPressed: () {
                             if (selectedVaramvarita?.isOther == 1 &&
                                 isOtherJaganVaramvaritaConroller.text == "") {
-                              Statics.showToast("'अन्य' माहिती आवश्यक.");
+                              Statics.showToast(
+                                  "${Statics.getLabel('otherInfoValidation')}");
                             } else {
                               final data = VastisarJaagaranshreneesthiti(
                                 pkid: jagranShreniPkId,
@@ -7214,7 +7245,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             }
                           },
                           child: Text(
-                            "संग्रह",
+                            "${Statics.getLabel('Submit')}",
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
@@ -7364,7 +7395,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       SizedBox(height: 10),
                       if (selectedVaramvaritaGatividhi?.isOther == 1)
                         textControllerField2(
-                            name: "अन्य",
+                            name: "${Statics.getLabel('other')}",
                             controller: anyaGatividhiVaramvaritaController,
                             hintTextString: "अन्य वारंवारिता"),
                       SizedBox(height: 20),
@@ -7379,7 +7410,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           onPressed: () {
                             if (selectedVaramvaritaGatividhi?.isOther == 1 &&
                                 anyaGatividhiVaramvaritaController.text == "") {
-                              Statics.showToast("'अन्य' माहिती आवश्यक.");
+                              Statics.showToast(
+                                  "${Statics.getLabel('otherInfoValidation')}");
                             } else {
                               if (selectedShreniIDGatividhi == null ||
                                   selectedVaramvaritaIDGatividhi == null) {
@@ -7417,7 +7449,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               if (onDataChanged != null) onDataChanged();
                             }
                           },
-                          child: Text("संग्रह",
+                          child: Text("${Statics.getLabel('Submit')}",
                               style: TextStyle(color: Colors.white)),
                         ),
                       )
@@ -7513,7 +7545,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       const SizedBox(height: 10),
                       textControllerField2(
                           controller: vsahatPrakarBhavnacheNavController,
-                          name: "भवनाचे नाव",
+                          name: "${Statics.getLabel('bhavnacheNaav')}",
                           keyboardType: TextInputType.text,
                           height: 50),
                       const SizedBox(height: 10),
@@ -7521,7 +7553,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          "प्रकार निवडा",
+                          "${Statics.getLabel('SelectPrakar')}",
                           style: TextStyle(
                             fontSize: 15,
                           ),
@@ -7530,7 +7562,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       vastisarvekshanDropdown2(
                         dataModel: vastisarvekshanDropDownDataModel!,
                         filterTypeName: "वसाहत प्रकार",
-                        hintText: "प्रकार",
+                        hintText: "${Statics.getLabel('SelectFrequency')}",
                         onItemSelected: (id, value, isOther) {
                           vsahatPrakarName = value;
                           vsahatPrakarId = id;
@@ -7577,13 +7609,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       const SizedBox(height: 10),
                       textControllerField2(
                           controller: vsahatPrakarSamparkKshetraController,
-                          name: "संपर्क सूत्र",
+                          name: "${Statics.getLabel('samparkSootraNaav')}",
                           keyboardType: TextInputType.text,
                           height: 50),
                       const SizedBox(height: 10),
                       textControllerField2(
                         controller: vsahatPrakarDurbhashController,
-                        name: "संपर्क सूत्रांचे दूरभाष",
+                        name: "${Statics.getLabel('samparakSootraDoorbhash')}",
                         keyboardType: TextInputType.number,
                         maxInput: 10,
                       ),
@@ -7645,7 +7677,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             Navigator.of(ctx).pop();
                             if (onDataChanged != null) onDataChanged();
                           },
-                          child: Text("संग्रह",
+                          child: Text("${Statics.getLabel('Submit')}",
                               style: TextStyle(color: Colors.white)),
                         ),
                       )
@@ -7773,7 +7805,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       SizedBox(height: 10),
                       textControllerField2(
                         controller: bhashaPersentCount,
-                        name: "अंदाजे (%)",
+                        name: "${Statics.getLabel('avgPersent')}",
                         keyboardType: TextInputType.number,
                         height: 50,
                         hintTextString: "उदा. ० ते १०० ",
@@ -7794,7 +7826,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             // Validation: 'अन्य' भाषा का नाम अनिवार्य है
                             if (selectedbhasha?.isOther == 1 &&
                                 anyaBhashaNameController.text == "") {
-                              Statics.showToast("'अन्य' माहिती आवश्यक.");
+                              Statics.showToast(
+                                  "${Statics.getLabel('otherInfoValidation')}");
                               return;
                             }
 
@@ -7865,7 +7898,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             Navigator.of(ctx).pop();
                             if (onDataChanged != null) onDataChanged();
                           },
-                          child: Text("संग्रह",
+                          child: Text("${Statics.getLabel('Submit')}",
                               style: TextStyle(color: Colors.white)),
                         ),
                       )
@@ -7986,7 +8019,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         ),
                       textControllerField2(
                         controller: loksankhyaAveragePersentCount,
-                        name: "अंदाजे लोकसंख्या",
+                        name: "${Statics.getLabel('andajeLoksankhya')}",
                         keyboardType: TextInputType.number,
                         height: 50,
                       ),
@@ -8002,7 +8035,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           onPressed: () {
                             if (selectedKontyaPraantache?.isOther == 1 &&
                                 anyaKontyaPrantacheNameController.text == "") {
-                              Statics.showToast("'अन्य' माहिती आवश्यक.");
+                              Statics.showToast(
+                                  "${Statics.getLabel('otherInfoValidation')}");
                             } else {
                               final item = VastisarKonatyaprantache(
                                 pkid: pkIdKontyaPrantache ?? 0,
@@ -8028,7 +8062,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               if (onDataChanged != null) onDataChanged();
                             }
                           },
-                          child: Text("संग्रह",
+                          child: Text("${Statics.getLabel('Submit')}",
                               style: TextStyle(color: Colors.white)),
                         ),
                       ),
@@ -8109,13 +8143,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       const SizedBox(height: 10),
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: Text("कोणत्या रिलीजनचे",
+                        child: Text("${Statics.getLabel('wichRiligion')}",
                             style: TextStyle(fontSize: 15)),
                       ),
                       vastisarvekshanDropdown4(
                         dataModel: vastisarvekshanDropDownDataModel!,
                         filterTypeName: "रिलीजन",
-                        hintText: "रिलीजन निवडा",
+                        hintText: "${Statics.getLabel('selectRelegion')}",
                         onItemSelected: (id, value, isOther) {
                           religionName = value;
                           religionId = id;
@@ -8135,7 +8169,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       SizedBox(height: 10),
                       textControllerField2(
                         controller: religionAveragePersentCount,
-                        name: "अंदाजे (%)",
+                        name: "${Statics.getLabel('avgPersent')}",
                         keyboardType: TextInputType.number,
                         height: 50,
                         hintTextString: "उदा. ० ते १०० ",
@@ -8178,7 +8212,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 average < 0 ||
                                 average > 100) {
                               Statics.showToast(
-                                "कृपया ० आणि १०० मधील टक्केवारी मूल्य प्रविष्ट करा.",
+                                "${Statics.getLabel('persentValidation')}",
                               );
                               return;
                             }
@@ -8203,7 +8237,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             Navigator.of(ctx).pop();
                             if (onDataChanged != null) onDataChanged();
                           },
-                          child: Text("संग्रह",
+                          child: Text("${Statics.getLabel('Submit')}",
                               style: TextStyle(color: Colors.white)),
                         ),
                       ),
@@ -8265,7 +8299,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "उपासना स्थळ माहिती",
+                "${Statics.getLabel('UpsanaSthal')}",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
@@ -8290,7 +8324,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     vastisarvekshanDropdown2(
                       dataModel: vastisarvekshanDropDownDataModel!,
                       filterTypeName: "उपासना स्थळ",
-                      hintText: "उपासना स्थळ निवडा",
+                      hintText: "${Statics.getLabel('selectUpasanaSthal')}",
                       onItemSelected: (id, value, isOther) {
                         selectedUpasnaSthalName = value;
                         selectedUpasnaSthalId = id;
@@ -8308,14 +8342,15 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     if (selectedUpasnaSthal?.isOther == 1)
                       textControllerField2(
                           controller: anyaUpasnaSthalNameController,
-                          name: "अन्य उपासना स्थळ",
+                          name: "${Statics.getLabel('otherUpasanaSthal')}",
                           height: 50,
-                          hintTextString: "अन्य उपासना स्थळ"),
+                          hintTextString:
+                              "${Statics.getLabel('otherUpasanaSthal')}"),
                     const SizedBox(height: 10),
                     vastisarvekshanDropdown2(
                       dataModel: vastisarvekshanDropDownDataModel!,
                       filterTypeName: "प्रकार",
-                      hintText: "प्रकार निवडा",
+                      hintText: "${Statics.getLabel('SelectPrakar')}",
                       onItemSelected: (id, value, isOther) {
                         selectedUpasnaSthalTypeName = value;
                         selectedUpasnaSthalTypeId = id;
@@ -8332,10 +8367,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: upasnaSthalCountController,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         border: OutlineInputBorder(),
-                        hintText: "संख्या",
-                        labelText: "संख्या",
+                        hintText: "${Statics.getLabel('count')}",
+                        labelText: "${Statics.getLabel('count')}",
                         fillColor: Colors.white,
                         filled: true,
                         isDense: true,
@@ -8400,7 +8435,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     Navigator.of(ctx).pop();
                   }
                 },
-                child: Text("संग्रह", style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}",
+                    style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -8503,7 +8539,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "सज्जन शक्ति माहिती",
+                "${Statics.getLabel('sajjanShaktiInfo')}",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
@@ -8526,11 +8562,11 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     textControllerField2(
-                      name: "नाव",
+                      name: "${Statics.getLabel('Name')}",
                       controller: sajjanShaktiNameController,
                     ),
                     textControllerField2(
-                        name: "पत्ता",
+                        name: "${Statics.getLabel('Address')}",
                         controller: sajjanShaktiAddressController),
                     textControllerField2(
                       name: "दूरभाष",
@@ -8539,10 +8575,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       maxInput: 10,
                     ),
                     vastisarvekshanDropdown2(
-                      question: "श्रेणी",
+                      question: "${Statics.getLabel('Category')}",
                       dataModel: vastisarvekshanDropDownDataModel!,
                       filterTypeName: "सज्जन शक्ति श्रेणी",
-                      hintText: "श्रेणी",
+                      hintText: "${Statics.getLabel('Category')}",
                       onItemSelected: (id, value, isOther) {
                         sajjanShaktiShreniName = value;
                         sajjanShaktiShreniId = id;
@@ -8560,23 +8596,23 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       const SizedBox(height: 5),
                     if (sajjanShaktiShreniEditDataId?.isOther == 1)
                       textControllerField2(
-                          name: "अन्य श्रेणी",
+                          name: "${Statics.getLabel('OtherCategory')}",
                           controller: sajjanShaktiAnyaShreniNameController),
                     const SizedBox(height: 5),
                     textControllerField2(
-                        name: "संस्थेचे नाव",
+                        name: "${Statics.getLabel('OrganizationName')}",
                         controller: sajjanShaktiSansthecheNaavController),
                     const SizedBox(height: 5),
                     textControllerField2(
-                        name: "संस्थेत कुठल्या पदावर",
+                        name: "${Statics.getLabel('sansthetKuthalaPadavar')}",
                         controller:
                             sajjanShaktiSansthKuthalyaPadavarController),
                     const SizedBox(height: 5),
                     vastisarvekshanDropdown2(
-                      question: "संपर्क स्थिति",
+                      question: "${Statics.getLabel('samparkStithi')}",
                       dataModel: vastisarvekshanDropDownDataModel!,
                       filterTypeName: "सज्जन शक्ति संपर्क स्थिति",
-                      hintText: "संपर्क स्थिति",
+                      hintText: "${Statics.getLabel('samparkStithi')}",
                       onItemSelected: (id, value, isOther) {
                         sajjanShaktiSamparkStithiName = value;
                         sajjanShaktiSamparkStithiId = id;
@@ -8594,8 +8630,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     vastisarvekshanDropdown2(
                       dataModel: vastisarvekshanDropDownDataModel!,
                       filterTypeName: "सज्जन शक्ति विशेष",
-                      hintText: "विशेष",
-                      question: "विशेष",
+                      hintText: "${Statics.getLabel('special')}",
+                      question: "${Statics.getLabel('special')}",
                       onItemSelected: (id, value, isOther) {
                         sajjanShaktiVisheshName = value;
                         sajjanShaktiVisheshId = id;
@@ -8613,14 +8649,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       const SizedBox(height: 5),
                     if (sajjanShaktiVisheshEditDataId?.isOther == 1)
                       textControllerField2(
-                          name: "अन्य विशेष",
+                          name: "${Statics.getLabel('otherSpecial')}",
                           controller: sajjanShaktiAnyaVisheshNameController),
                     const SizedBox(height: 5),
                     vastisarvekshanDropdown2(
                       dataModel: vastisarvekshanDropDownDataModel!,
                       filterTypeName: "सज्जन शक्ति प्रभाव क्षेत्र",
-                      hintText: "प्रभाव क्षेत्र",
-                      question: "प्रभाव क्षेत्र",
+                      hintText: "${Statics.getLabel('prabhavKshetra')}",
+                      question: "${Statics.getLabel('prabhavKshetra')}",
                       onItemSelected: (id, value, isOther) {
                         sajjanShaktiPrabhavKeshtraName = value;
                         sajjanShaktiPrabhavKeshtraId = id;
@@ -8640,7 +8676,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         controller: sajjanShaktiContactPersonNameController),
                     const SizedBox(height: 5),
                     textControllerField2(
-                      name: "संपर्क सूत्रांचे दूरभाष",
+                      name: "${Statics.getLabel('samparakSootraDoorbhash')}",
                       controller: sajjanShaktiContactPersonDoorbhashController,
                       keyboardType: TextInputType.number,
                       maxInput: 10,
@@ -8664,7 +8700,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           sajjanShaktiAnyaShreniNameController.text == "") ||
                       (sajjanShaktiVisheshEditDataId?.isOther == 1 &&
                           sajjanShaktiAnyaVisheshNameController.text == "")) {
-                    Statics.showToast("'अन्य' माहिती आवश्यक.");
+                    Statics.showToast(
+                        "${Statics.getLabel('otherInfoValidation')}");
                   } else {
                     Vastisarsajjanshakti newData = Vastisarsajjanshakti(
                         name: sajjanShaktiNameController.text.trim(),
@@ -8709,7 +8746,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     Navigator.of(ctx).pop();
                   }
                 },
-                child: Text("संग्रह", style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}",
+                    style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -8845,11 +8883,11 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     textControllerField2(
-                        name: "नाव",
+                        name: "${Statics.getLabel('Name')}",
                         controller: anyaPrabhaviLokNaavController,
                         height: 50),
                     textControllerField2(
-                        name: "पत्ता",
+                        name: "${Statics.getLabel('Address')}",
                         controller: anyaPrabhaviLokAddressController,
                         height: 50),
                     textControllerField2(
@@ -8863,7 +8901,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        "श्रेणी/उपश्रेणी",
+                        "${Statics.getLabel('Category')}/${Statics.getLabel('upshreni')}",
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w500),
                       ),
@@ -8912,7 +8950,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       ),
                     if (selectedUpShreni?.isOther == 1)
                       textControllerField2(
-                          name: "अन्य उपश्रेणी",
+                          name: "${Statics.getLabel('otherUpshreni')}",
                           controller: anyaPrabhaviLokAnyaUppshreniController),
                     if (selectedUpShreni2?.isOther == 1)
                       SizedBox(
@@ -8935,7 +8973,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               print("id = $valueId --- Name = $valueName");
                             },
                             dataModel: vastisarvekshanDropDownDataModel!,
-                            question: "विशेष",
+                            question: "${Statics.getLabel('special')}",
                             editId: selectedAnyaPrabhaviLokVisheshIDEdit,
                             selectedValue: selectedAnyaPrabhaviLokVishesh,
                             onSelectionChanged: (newValue) {
@@ -8958,7 +8996,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               print("id = $valueId --- Name = $valueName");
                             },
                             dataModel: vastisarvekshanDropDownDataModel!,
-                            question: "प्रभाव क्षेत्र",
+                            question: "${Statics.getLabel('prabhavKshetra')}",
                             editId: selectedAnyaPrabhaviLokPrabhavKshetraIDEdit,
                             selectedValue:
                                 selectedAnyaPrabhaviLokPrabhavKshetra,
@@ -8974,7 +9012,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       height: 10,
                     ),
                     textControllerField2(
-                        name: "अन्य विशेष माहिती",
+                        name: "${Statics.getLabel('anyaVisheshMahiti')}",
                         controller: anyaPrabhaviLokAnyaVisheshMahitiController,
                         height: 50),
                     SizedBox(
@@ -8990,7 +9028,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               print("id = $valueId --- Name = $valueName");
                             },
                             dataModel: vastisarvekshanDropDownDataModel!,
-                            question: "संपर्क स्थिति",
+                            question: "${Statics.getLabel('samparkStithi')}",
                             editId: selectedAnyaPrabhaviLokSamparkStithiIDEdit,
                             selectedValue: selectedAnyaPrabhaviLokSamparkStithi,
                             onSelectionChanged: (newValue) {
@@ -9003,13 +9041,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     SizedBox(
                       height: 10,
                     ),
-                    // textControllerField("अन्य विशेष माहिती", anyaPrabhaviLokAnyaVisheshMahitiController, context, height: 80),
+                    // textControllerField(${Statics.getLabel('anyaVisheshMahiti')}, anyaPrabhaviLokAnyaVisheshMahitiController, context, height: 80),
                     textControllerField2(
                         name: "${Statics.getLabel('samparkSootraNaav')}",
                         controller: anyaPrabhaviLokSamparkSutraNaavController,
                         height: 50),
                     textControllerField2(
-                      name: "संपर्क सूत्रांचे दूरभाष",
+                      name: "${Statics.getLabel('samparakSootraDoorbhash')}",
                       controller:
                           anyaPrabhaviLokSamparkSutraDoorbhashController,
                       keyboardType: TextInputType.number,
@@ -9034,7 +9072,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           anyaPrabhaviLokAnyaUppshreniController.text == "") ||
                       (selectedUpShreni2?.isOther == 1 &&
                           anyaPrabhaviLokAnyaUppshreni1Controller.text == "")) {
-                    Statics.showToast("'अन्य' माहिती आवश्यक.");
+                    Statics.showToast(
+                        "${Statics.getLabel('otherInfoValidation')}");
                   } else {
                     VastisarAnyaprabhavilokam data = VastisarAnyaprabhavilokam(
                       name: anyaPrabhaviLokNaavController.text,
@@ -9082,7 +9121,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     Navigator.of(ctx).pop();
                   }
                 },
-                child: Text("संग्रह", style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}",
+                    style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -9211,15 +9251,17 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     ),
                     const SizedBox(height: 10),
                     if (selectedMasterSanName?.isOther == 1)
-                      textControllerField("अन्य सण",
-                          vastitSajarHonareAnyaSanController, context,
+                      textControllerField(
+                          "${Statics.getLabel('otherFestivals')}",
+                          vastitSajarHonareAnyaSanController,
+                          context,
                           height: 50),
                     textControllerField(
-                        "आयोजक संस्थाची नावे",
+                        "${Statics.getLabel('aayojakSansthachiNave')}",
                         vastitSajarHonareSanAyojakSansthaNameController,
                         context,
                         height: 50),
-                    textControllerField("आयोजकांची नावे",
+                    textControllerField("${Statics.getLabel('aayojakNaav')}",
                         vastitSajarHonareSanAyojakNameController, context,
                         height: 80),
                     textControllerField("आयोजक संपर्क सूत्र",
@@ -9244,7 +9286,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                 onPressed: () {
                   if ((selectedMasterSanName?.isOther == 1 &&
                       vastitSajarHonareAnyaSanController.text == "")) {
-                    Statics.showToast("'अन्य' माहिती आवश्यक.");
+                    Statics.showToast(
+                        "${Statics.getLabel('otherInfoValidation')}");
                   } else {
                     VastisarVastitamahatvacesana data =
                         VastisarVastitamahatvacesana(
@@ -9274,7 +9317,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     Navigator.of(ctx).pop();
                   }
                 },
-                child: Text("संग्रह", style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}",
+                    style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -9379,17 +9423,17 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     const SizedBox(height: 10),
                     if (selectedMasterSamajikKaryakramName?.isOther == 1)
                       textControllerField(
-                          "अन्य",
+                          "${Statics.getLabel('other')}",
                           vastitSajarHonareSamajikKaryakramAnya1Controller,
                           context,
                           height: 50),
                     textControllerField(
-                        "आयोजक संस्थाची नावे",
+                        "${Statics.getLabel('aayojakSansthachiNave')}",
                         vastitSajarHonareSamajikKaryakramAyojakSansthaNameController,
                         context,
                         height: 50),
                     textControllerField(
-                        "आयोजकांची नावे",
+                        "${Statics.getLabel('aayojakNaav')}",
                         vastitSajarHonareSamajikKaryakramAyojakNameController,
                         context,
                         height: 80),
@@ -9418,7 +9462,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   if ((selectedMasterSamajikKaryakramName?.isOther == 1 &&
                       vastitSajarHonareSamajikKaryakramAnya1Controller.text ==
                           "")) {
-                    Statics.showToast("'अन्य' माहिती आवश्यक.");
+                    Statics.showToast(
+                        "${Statics.getLabel('otherInfoValidation')}");
                   } else {
                     VastisarVastitasajaraSamajikkaryakram data =
                         VastisarVastitasajaraSamajikkaryakram(
@@ -9453,7 +9498,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     Navigator.of(ctx).pop();
                   }
                 },
-                child: Text("संग्रह", style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}",
+                    style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -9525,7 +9571,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               Icon(Icons.add, color: Colors.white, size: 15),
                               SizedBox(width: 5),
                               Text(
-                                "नवीन",
+                                "${Statics.getLabel('AddButton')}",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold),
@@ -9562,7 +9608,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               )),
                               DataColumn(
                                   label: Text(
-                                "नाव",
+                                "${Statics.getLabel('Name')}",
                               )),
                               DataColumn(
                                   label: Text(
@@ -9658,7 +9704,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                               selectedData
                                                   .otherBalopasanaShreniName),
                                           _buildInfoRow(
-                                              "नाव", selectedData.name),
+                                              "${Statics.getLabel('Name')}",
+                                              selectedData.name),
                                           _buildInfoRow("कोणासाठी",
                                               selectedData.konasathi),
                                         ],
@@ -9719,7 +9766,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 backgroundColor: Colors.white,
                                 title: Center(
                                   child: Text(
-                                    "पुष्टीकरण",
+                                    "${Statics.getLabel('pusthikarn')}",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18,
@@ -9731,7 +9778,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 10.0),
                                   child: Text(
-                                    "तुम्हाला हि माहिती नक्की काढून टाकायची आहे का ?",
+                                    "${Statics.getLabel('deleteconfirmText')}",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 16,
@@ -9830,7 +9877,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               Icon(Icons.add, color: Colors.white, size: 15),
                               SizedBox(width: 5),
                               Text(
-                                "नवीन",
+                                "${Statics.getLabel('AddButton')}",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold),
@@ -9867,7 +9914,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               )),
                               DataColumn(
                                   label: Text(
-                                "नाव",
+                                "${Statics.getLabel('Name')}",
                               )),
                             ],
                             rows: motheVyasayikKendraDataList
@@ -9953,7 +10000,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                               selectedData
                                                   .selectedDropdownValueName),
                                           _buildInfoRow(
-                                              "नाव", selectedData.name),
+                                              "${Statics.getLabel('Name')}",
+                                              selectedData.name),
                                         ],
                                       ),
                                     ),
@@ -10011,7 +10059,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 backgroundColor: Colors.white,
                                 title: Center(
                                   child: Text(
-                                    "पुष्टीकरण",
+                                    "${Statics.getLabel('pusthikarn')}",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18,
@@ -10023,7 +10071,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 10.0),
                                   child: Text(
-                                    "तुम्हाला हि माहिती नक्की काढून टाकायची आहे का ?",
+                                    "${Statics.getLabel('deleteconfirmText')}",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 16,
@@ -10119,7 +10167,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               Icon(Icons.add, color: Colors.white, size: 15),
                               SizedBox(width: 5),
                               Text(
-                                "नवीन",
+                                "${Statics.getLabel('AddButton')}",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold),
@@ -10152,7 +10200,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             columns: [
                               DataColumn(
                                   label: Text(
-                                "नाव",
+                                "${Statics.getLabel('Name')}",
                               )),
                               DataColumn(
                                   label: Text(
@@ -10241,7 +10289,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                                   Colors.deepPurple.shade100),
                                           SizedBox(height: 12),
                                           _buildInfoRow(
-                                              "नाव", selectedData.name),
+                                              "${Statics.getLabel('Name')}",
+                                              selectedData.name),
                                           _buildInfoRow(
                                               "प्रकल्प",
                                               selectedData
@@ -10304,7 +10353,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 backgroundColor: Colors.white,
                                 title: Center(
                                   child: Text(
-                                    "पुष्टीकरण",
+                                    "${Statics.getLabel('pusthikarn')}",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18,
@@ -10316,7 +10365,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 10.0),
                                   child: Text(
-                                    "तुम्हाला हि माहिती नक्की काढून टाकायची आहे का ?",
+                                    "${Statics.getLabel('deleteconfirmText')}",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 16,
@@ -10413,7 +10462,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               Icon(Icons.add, color: Colors.white, size: 15),
                               SizedBox(width: 5),
                               Text(
-                                "नवीन",
+                                "${Statics.getLabel('AddButton')}",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold),
@@ -10450,7 +10499,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               )),
                               DataColumn(
                                   label: Text(
-                                "नाव",
+                                "${Statics.getLabel('Name')}",
                               )),
                             ],
                             rows: motheRugnalayDataList
@@ -10535,7 +10584,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                               selectedData
                                                   .selectedDropdownValueName),
                                           _buildInfoRow(
-                                              "नाव", selectedData.name),
+                                              "${Statics.getLabel('Name')}",
+                                              selectedData.name),
                                         ],
                                       ),
                                     ),
@@ -10593,7 +10643,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 backgroundColor: Colors.white,
                                 title: Center(
                                   child: Text(
-                                    "पुष्टीकरण",
+                                    "${Statics.getLabel('pusthikarn')}",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18,
@@ -10605,7 +10655,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 10.0),
                                   child: Text(
-                                    "तुम्हाला हि माहिती नक्की काढून टाकायची आहे का ?",
+                                    "${Statics.getLabel('deleteconfirmText')}",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 16,
@@ -10747,7 +10797,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 Icon(Icons.add, color: Colors.white, size: 15),
                                 SizedBox(width: 5),
                                 Text(
-                                  "नवीन",
+                                  "${Statics.getLabel('AddButton')}",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold),
@@ -10903,7 +10953,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                                     selectedData
                                                         .selectedDropdownValueName),
                                               _buildInfoRow(
-                                                  "नाव", selectedData.name),
+                                                  "${Statics.getLabel('Name')}",
+                                                  selectedData.name),
                                               _buildInfoRow(
                                                   "मिळकत",
                                                   selectedData
@@ -10971,7 +11022,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     backgroundColor: Colors.white,
                                     title: Center(
                                       child: Text(
-                                        "पुष्टीकरण",
+                                        "${Statics.getLabel('pusthikarn')}",
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18,
@@ -10983,7 +11034,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 10.0),
                                       child: Text(
-                                        "तुम्हाला हि माहिती नक्की काढून टाकायची आहे का ?",
+                                        "${Statics.getLabel('deleteconfirmText')}",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontSize: 16,
@@ -11085,7 +11136,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 Icon(Icons.add, color: Colors.white, size: 15),
                                 SizedBox(width: 5),
                                 Text(
-                                  "नवीन",
+                                  "${Statics.getLabel('AddButton')}",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold),
@@ -11126,7 +11177,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   )),
                                   DataColumn(
                                       label: Text(
-                                    "नाव",
+                                    "${Statics.getLabel('Name')}",
                                   )),
                                 ],
                                 rows: maidanUddyanDataList
@@ -11207,7 +11258,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                                       .deepPurple.shade100),
                                               SizedBox(height: 12),
                                               _buildInfoRow(
-                                                  "नाव", selectedData.name),
+                                                  "${Statics.getLabel('Name')}",
+                                                  selectedData.name),
                                             ],
                                           ),
                                         ),
@@ -11269,7 +11321,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     backgroundColor: Colors.white,
                                     title: Center(
                                       child: Text(
-                                        "पुष्टीकरण",
+                                        "${Statics.getLabel('pusthikarn')}",
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18,
@@ -11281,7 +11333,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 10.0),
                                       child: Text(
-                                        "तुम्हाला हि माहिती नक्की काढून टाकायची आहे का ?",
+                                        "${Statics.getLabel('deleteconfirmText')}",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontSize: 16,
@@ -11383,7 +11435,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 Icon(Icons.add, color: Colors.white, size: 15),
                                 SizedBox(width: 5),
                                 Text(
-                                  "नवीन",
+                                  "${Statics.getLabel('AddButton')}",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold),
@@ -11420,11 +11472,11 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 columns: [
                                   DataColumn(
                                       label: Text(
-                                    "प्रकार",
+                                    "${Statics.getLabel('SelectFrequency')}",
                                   )),
                                   DataColumn(
                                       label: Text(
-                                    "नाव",
+                                    "${Statics.getLabel('Name')}",
                                   )),
                                   DataColumn(
                                       label: Text(
@@ -11530,11 +11582,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                                       .deepPurple.shade100),
                                               SizedBox(height: 12),
                                               _buildInfoRow(
-                                                  "प्रकार",
+                                                  "${Statics.getLabel('SelectFrequency')}",
                                                   selectedData
                                                       .selectedDropdownValueName),
                                               _buildInfoRow(
-                                                  "नाव", selectedData.name),
+                                                  "${Statics.getLabel('Name')}",
+                                                  selectedData.name),
                                               _buildInfoRow("क्षमता",
                                                   selectedData.shamta),
                                               _buildInfoRow(
@@ -11610,7 +11663,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     backgroundColor: Colors.white,
                                     title: Center(
                                       child: Text(
-                                        "पुष्टीकरण",
+                                        "${Statics.getLabel('pusthikarn')}",
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18,
@@ -11622,7 +11675,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 10.0),
                                       child: Text(
-                                        "तुम्हाला हि माहिती नक्की काढून टाकायची आहे का ?",
+                                        "${Statics.getLabel('deleteconfirmText')}",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontSize: 16,
@@ -11644,7 +11697,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         onPressed: () =>
                                             Navigator.pop(context, false),
                                         child: Text(
-                                          "नाही",
+                                          "${Statics.getLabel('ConfirmationNo')}",
                                           style: TextStyle(color: Colors.black),
                                         ),
                                       ),
@@ -11865,8 +11918,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       textControllerField("अन्य केंद्र",
                           vastitBalopasanaKendraAnyaNameController, context,
                           height: 50),
-                    textControllerField(
-                        "नाव", vastitBalopasanaKendraNaavController, context,
+                    textControllerField("${Statics.getLabel('Name')}",
+                        vastitBalopasanaKendraNaavController, context,
                         height: 50),
                     const SizedBox(height: 10),
                     Column(
@@ -11914,7 +11967,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                 onPressed: () {
                   if ((selectedMasterVastitBalopasanaKendraName?.isOther == 1 &&
                       vastitBalopasanaKendraAnyaNameController.text == "")) {
-                    Statics.showToast("'अन्य' माहिती आवश्यक.");
+                    Statics.showToast(
+                        "${Statics.getLabel('otherInfoValidation')}");
                   } else {
                     VastisarVastitilabalopasanakendra data =
                         VastisarVastitilabalopasanakendra(
@@ -11940,7 +11994,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     clearvastitBalopasanaKendraFields();
                   }
                 },
-                child: Text("संग्रह", style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}",
+                    style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -12035,8 +12090,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       editId: selectedMotheVyasayikKendraIdEdit,
                     ),
                     const SizedBox(height: 10),
-                    textControllerField(
-                        "नाव", motheVyasayikKendraNaavController, context,
+                    textControllerField("${Statics.getLabel('Name')}",
+                        motheVyasayikKendraNaavController, context,
                         height: 50),
                     const SizedBox(height: 5),
                   ],
@@ -12081,7 +12136,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   Navigator.of(ctx).pop();
                   clearMotheVyasayikFields();
                 },
-                child: Text("संग्रह", style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}",
+                    style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -12155,8 +12211,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    textControllerField(
-                        "नाव", nirmandhinMothePrakalpaNaavController, context,
+                    textControllerField("${Statics.getLabel('Name')}",
+                        nirmandhinMothePrakalpaNaavController, context,
                         height: 50),
                     const SizedBox(height: 5),
                     vastisarvekshanDropdown2(
@@ -12222,7 +12278,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   Navigator.of(ctx).pop();
                   clearNirmandhinMothePrakalpaFields();
                 },
-                child: Text("संग्रह", style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}",
+                    style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -12313,7 +12370,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   //                   ),
   //                   const SizedBox(height: 10),
   //                   textControllerField(
-  //                       "नाव", motheRugnalayNaavController, context,
+  //                       "${Statics.getLabel('Name')}", motheRugnalayNaavController, context,
   //                       height: 50),
   //                   const SizedBox(height: 5),
   //                 ],
@@ -12358,7 +12415,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   //                 Navigator.of(ctx).pop();
   //                 clearMotheRugnalayFields();
   //               },
-  //               child: Text("संग्रह", style: TextStyle(color: Colors.white)),
+  //               child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
   //             ),
   //           )
   //         ],
@@ -12433,8 +12490,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       editId: selectedmotheRugnalayIdEdit,
                     ),
                     const SizedBox(height: 10),
-                    textControllerField(
-                        "नाव", motheRugnalayNaavController, context,
+                    textControllerField("${Statics.getLabel('Name')}",
+                        motheRugnalayNaavController, context,
                         height: 50),
                     const SizedBox(height: 5),
                   ],
@@ -12472,7 +12529,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   Navigator.of(ctx).pop();
                   clearMotheRugnalayFields();
                 },
-                child: Text("संग्रह", style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}",
+                    style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -12674,7 +12732,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             editId: selectedSansthaChalakPrakarIdEdit,
                           ),
                           const SizedBox(height: 5),
-                          textControllerField("नाव",
+                          textControllerField("${Statics.getLabel('Name')}",
                               allShaikshanikPrakarNaavController, context,
                               height: 50),
                           vastisarvekshanDropdown2(
@@ -12753,7 +12811,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                           selectedMahavidyalayinPrakarIdEdit,
                                     )
                                   : Container(),
-                              textControllerField("नाव",
+                              textControllerField("${Statics.getLabel('Name')}",
                                   allShaikshanikPrakarNaavController, context,
                                   height: 50),
                               vastisarvekshanDropdown2(
@@ -12809,7 +12867,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         )
                                       : Container(),
                                   textControllerField(
-                                      "नाव",
+                                      "${Statics.getLabel('Name')}",
                                       allShaikshanikPrakarNaavController,
                                       context,
                                       height: 50),
@@ -12913,7 +12971,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   Navigator.of(ctx).pop();
                   clearShalaPrakarDataListFields();
                 },
-                child: Text("संग्रह", style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}",
+                    style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -13001,7 +13060,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     textControllerField(
-                      "नाव",
+                      "${Statics.getLabel('Name')}",
                       maidanUdyanNameControler,
                       context,
                       height: 50,
@@ -13040,7 +13099,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   Navigator.of(ctx).pop();
                   maidanUdyanNameControler.clear();
                 },
-                child: Text("संग्रह", style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}",
+                    style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -13112,7 +13172,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     vastisarvekshanDropdown2(
                       dataModel: vastisarvekshanDropDownDataModel!,
                       filterTypeName: "जाहीरकार्यक्रमसंबंधीप्रकार1",
-                      hintText: "प्रकार",
+                      hintText: "${Statics.getLabel('SelectFrequency')}",
                       onItemSelected: (id, value, isOther) {
                         selectedJahirKaryakramId = id;
                         selectedJahirKaryakramName = value;
@@ -13125,10 +13185,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         });
                       },
                       editId: selectedJahirKaryakramIdEdit,
-                      question: "प्रकार",
+                      question: "${Statics.getLabel('SelectFrequency')}",
                     ),
-                    textControllerField(
-                        "नाव", jahirKaryakramNaavControler, context,
+                    textControllerField("${Statics.getLabel('Name')}",
+                        jahirKaryakramNaavControler, context,
                         height: 50),
                     textControllerField(
                         "क्षमता", jahirKaryakramShamtaControler, context,
@@ -13201,7 +13261,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   Navigator.of(ctx).pop();
                   clearjahirKaryakram(); // ✅ Clear fields after saving
                 },
-                child: Text("संग्रह", style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}",
+                    style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -13298,8 +13359,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       editId: selectedVastiPrashnaGarjaIdEdit,
                     ),
                     const SizedBox(height: 5),
-                    textControllerField(
-                        "तपशील", vastiPrashnaGarjaTapshilController, context,
+                    textControllerField("${Statics.getLabel('tapshil')}",
+                        vastiPrashnaGarjaTapshilController, context,
                         height: 50),
                   ],
                 ),
@@ -13341,7 +13402,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   Navigator.of(ctx).pop();
                   clearVastiPrashnaGarja();
                 },
-                child: Text("संग्रह", style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}",
+                    style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -13439,8 +13501,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           dharmikNetrutvaAnyaNameController, context,
                           height: 50),
                     const SizedBox(height: 5),
-                    textControllerField(
-                        "नाव", dharmikNetrutvaController, context,
+                    textControllerField("${Statics.getLabel('Name')}",
+                        dharmikNetrutvaController, context,
                         height: 50),
                   ],
                 ),
@@ -13459,7 +13521,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                 onPressed: () {
                   if ((selectedMasterDharmikNetrutvaName?.isOther == 1 &&
                       dharmikNetrutvaAnyaNameController.text == "")) {
-                    Statics.showToast("'अन्य' माहिती आवश्यक.");
+                    Statics.showToast(
+                        "${Statics.getLabel('otherInfoValidation')}");
                   } else {
                     Vastisardhaarmiknetrtav data = Vastisardhaarmiknetrtav(
                       id: selectedDharmikNetrutvaId,
@@ -13483,7 +13546,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     clearDharmikNetrutva();
                   }
                 },
-                child: Text("संग्रह", style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}",
+                    style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -13581,13 +13645,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    textControllerField(
-                        "नाव", durjanShaktiNaavController, context,
+                    textControllerField("${Statics.getLabel('Name')}",
+                        durjanShaktiNaavController, context,
                         height: 50),
                     vastisarvekshanDropdown2(
                       dataModel: vastisarvekshanDropDownDataModel!,
                       filterTypeName: "दुर्जनशक्तिप्रकार",
-                      hintText: "प्रकार",
+                      hintText: "${Statics.getLabel('SelectFrequency')}",
                       onItemSelected: (id, value, isOther) {
                         selectedDurjanShaktiPrakarId = id;
                         selectedDurjanShaktiPrakarName = value;
@@ -13603,7 +13667,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     ),
                     const SizedBox(height: 5),
                     if (selectedMasterDurjanShaktiPrakarName?.isOther == 1)
-                      textControllerField("अन्य प्रकार",
+                      textControllerField("${Statics.getLabel('otherType')}",
                           durjanShaktiAnyaPrkarController, context,
                           height: 50),
                     const SizedBox(height: 5),
@@ -13659,7 +13723,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                 onPressed: () {
                   if ((selectedMasterDurjanShaktiPrakarName?.isOther == 1 &&
                       durjanShaktiAnyaPrkarController.text == "")) {
-                    Statics.showToast("'अन्य' माहिती आवश्यक.");
+                    Statics.showToast(
+                        "${Statics.getLabel('otherInfoValidation')}");
                   } else {
                     Vastisardurjanshakti data = Vastisardurjanshakti(
                         name: durjanShaktiNaavController.text,
@@ -13688,7 +13753,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     clearDurjanShakti();
                   }
                 },
-                child: Text("संग्रह", style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}",
+                    style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -13810,7 +13876,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   Navigator.of(ctx).pop();
                   hinduVeerYadiNameControler.clear();
                 },
-                child: Text("संग्रह", style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}",
+                    style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -13865,7 +13932,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 Icon(Icons.add, color: Colors.white, size: 15),
                                 SizedBox(width: 5),
                                 Text(
-                                  "नवीन",
+                                  "${Statics.getLabel('AddButton')}",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold),
@@ -13904,7 +13971,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 DataColumn(
                                     label: Center(
                                   child: Text(
-                                    "तपशील",
+                                    "${Statics.getLabel('tapshil')}",
                                   ),
                                 )),
                               ],
@@ -13992,7 +14059,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                                   selectedData
                                                       .selectedDropdownValueName),
                                               _buildInfoRow(
-                                                  "तपशील", selectedData.name),
+                                                  "${Statics.getLabel('tapshil')}",
+                                                  selectedData.name),
                                             ],
                                           ),
                                         ),
@@ -14054,7 +14122,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     backgroundColor: Colors.white,
                                     title: Center(
                                       child: Text(
-                                        "पुष्टीकरण",
+                                        "${Statics.getLabel('pusthikarn')}",
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18,
@@ -14066,7 +14134,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 10.0),
                                       child: Text(
-                                        "तुम्हाला हि माहिती नक्की काढून टाकायची आहे का ?",
+                                        "${Statics.getLabel('deleteconfirmText')}",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontSize: 16,
@@ -14088,7 +14156,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         onPressed: () =>
                                             Navigator.pop(context, false),
                                         child: Text(
-                                          "नाही",
+                                          "${Statics.getLabel('ConfirmationNo')}",
                                           style: TextStyle(color: Colors.black),
                                         ),
                                       ),
@@ -14170,7 +14238,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 Icon(Icons.add, color: Colors.white, size: 15),
                                 SizedBox(width: 5),
                                 Text(
-                                  "नवीन",
+                                  "${Statics.getLabel('AddButton')}",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold),
@@ -14364,7 +14432,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     backgroundColor: Colors.white,
                                     title: Center(
                                       child: Text(
-                                        "पुष्टीकरण",
+                                        "${Statics.getLabel('pusthikarn')}",
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18,
@@ -14376,7 +14444,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 10.0),
                                       child: Text(
-                                        "तुम्हाला हि माहिती नक्की काढून टाकायची आहे का ?",
+                                        "${Statics.getLabel('deleteconfirmText')}",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontSize: 16,
@@ -14398,7 +14466,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         onPressed: () =>
                                             Navigator.pop(context, false),
                                         child: Text(
-                                          "नाही",
+                                          "${Statics.getLabel('ConfirmationNo')}",
                                           style: TextStyle(color: Colors.black),
                                         ),
                                       ),
@@ -14495,7 +14563,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                       color: Colors.white, size: 15),
                                   SizedBox(width: 5),
                                   Text(
-                                    "नवीन",
+                                    "${Statics.getLabel('AddButton')}",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold),
@@ -14537,7 +14605,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     )),
                                     DataColumn(
                                         label: Text(
-                                      "प्रकार",
+                                      "${Statics.getLabel('SelectFrequency')}",
                                     )),
                                     DataColumn(
                                         label: Text(
@@ -14638,10 +14706,11 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                                 _buildInfoRow(
                                                     "नाव", selectedData.name),
                                                 _buildInfoRow(
-                                                    "प्रकार",
+                                                    "${Statics.getLabel('SelectFrequency')}",
                                                     selectedData
                                                         .selectedDropdownValueName),
-                                                _buildInfoRow("अन्य प्रकार",
+                                                _buildInfoRow(
+                                                    "${Statics.getLabel('otherType')}",
                                                     selectedData.otherPrakar),
                                                 _buildInfoRow(
                                                     "${Statics.getLabel('shiksha')}",
@@ -14713,7 +14782,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                       backgroundColor: Colors.white,
                                       title: Center(
                                         child: Text(
-                                          "पुष्टीकरण",
+                                          "${Statics.getLabel('pusthikarn')}",
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 18,
@@ -14725,7 +14794,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 10.0),
                                         child: Text(
-                                          "तुम्हाला हि माहिती नक्की काढून टाकायची आहे का ?",
+                                          "${Statics.getLabel('deleteconfirmText')}",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontSize: 16,
@@ -14748,7 +14817,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                           onPressed: () =>
                                               Navigator.pop(context, false),
                                           child: Text(
-                                            "नाही",
+                                            "${Statics.getLabel('ConfirmationNo')}",
                                             style:
                                                 TextStyle(color: Colors.black),
                                           ),
@@ -14830,7 +14899,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 Icon(Icons.add, color: Colors.white, size: 15),
                                 SizedBox(width: 5),
                                 Text(
-                                  "नवीन",
+                                  "${Statics.getLabel('AddButton')}",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold),
@@ -15015,7 +15084,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     backgroundColor: Colors.white,
                                     title: Center(
                                       child: Text(
-                                        "पुष्टीकरण",
+                                        "${Statics.getLabel('pusthikarn')}",
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18,
@@ -15027,7 +15096,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 10.0),
                                       child: Text(
-                                        "तुम्हाला हि माहिती नक्की काढून टाकायची आहे का ?",
+                                        "${Statics.getLabel('deleteconfirmText')}",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontSize: 16,
@@ -15049,7 +15118,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         onPressed: () =>
                                             Navigator.pop(context, false),
                                         child: Text(
-                                          "नाही",
+                                          "${Statics.getLabel('ConfirmationNo')}",
                                           style: TextStyle(color: Colors.black),
                                         ),
                                       ),

@@ -294,7 +294,8 @@ class _AddEditVisheshVyaktiScreenState
                         textInputAction: TextInputAction.done,
                         decoration: InputDecoration(
                             isDense: true,
-                            labelText: "संस्थेचे नाव",
+                            labelText:
+                                "${Statics.getLabel('OrganizationName')}",
                             contentPadding: EdgeInsets.only(
                                 left: 12, right: 12, top: 14, bottom: 12),
                             border: OutlineInputBorder(
@@ -315,7 +316,8 @@ class _AddEditVisheshVyaktiScreenState
                       textInputAction: TextInputAction.next,
                       controller: sansthaPadhController,
                       decoration: InputDecoration(
-                        labelText: "संस्थेत कुठल्या पदावर",
+                        labelText:
+                            "${Statics.getLabel('sansthetKuthalaPadavar')}",
                         isDense: true,
                         border: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -415,7 +417,8 @@ class _AddEditVisheshVyaktiScreenState
                         textInputAction: TextInputAction.newline,
                         decoration: InputDecoration(
                             isDense: true,
-                            hintText: "अन्य विशेष माहिती",
+                            hintText:
+                                "${Statics.getLabel('anyaVisheshMahiti')}",
                             contentPadding: EdgeInsets.only(
                                 left: 12, right: 12, top: 14, bottom: 12),
                             border: OutlineInputBorder(

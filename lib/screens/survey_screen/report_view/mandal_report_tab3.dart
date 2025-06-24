@@ -858,12 +858,14 @@ class _MandalSurveyReportViewScreen3State
                             value: data?.vastiPramukhName,
                             fontsize: 15),
                         SingleColumnRow(
-                            txtString: "${Statics.getLabel('gavSadyasyaSamitiCount')}",
+                            txtString:
+                                "${Statics.getLabel('gavSadyasyaSamitiCount')}",
                             value: data?.vastiSamitiSadhyasyaCount.toString(),
                             fontsize: 15),
                         // SingleColumnRow(txtString: "गावातील सेवा वस्त्यां (किती ?)", value: data?.vastiSewaVastiCount.toString(), fontsize: 15),
                         SingleColumnRow(
-                            txtString: "गावाची लोकसंख्या",
+                            txtString:
+                                "${Statics.getLabel('gaavachiLoksankhya')}",
                             value: data?.vastichiLoksankhyaCount,
                             fontsize: 15),
                       ],
@@ -1378,46 +1380,6 @@ class _MandalSurveyReportViewScreen3State
                           )
                       ],
                     ),
-                    // commonExpansionTile(
-                    //   title: 'vividhKshetraKarya',
-                    //   children: [
-                    //     if (data != null && data!.vastisarvividhKshetaCheKam != null)
-                    //       Container(
-                    //         decoration: BoxDecoration(
-                    //           border: Border.all(color: Colors.grey.shade300),
-                    //           borderRadius: BorderRadius.circular(8),
-                    //         ),
-                    //         child: SingleChildScrollView(
-                    //           scrollDirection: Axis.horizontal, // horizontal scroll
-                    //           child: SizedBox(
-                    //             width: 900, // total width of all columns
-                    //             child: DataTable(
-                    //               headingRowColor: MaterialStateProperty.resolveWith(
-                    //                     (states) => Colors.purpleAccent[200],
-                    //               ),
-                    //               columnSpacing: 20,
-                    //               headingTextStyle: const TextStyle(
-                    //                 color: Colors.white,
-                    //                 fontWeight: FontWeight.bold,
-                    //               ),
-                    //               columns:[
-                    //                 DataColumn(label: Text("${Statics.getLabel('SelectFrequency')}")),
-                    //                 DataColumn(label: Text('भवनाचे नाव')),
-                    //               ],
-                    //               rows: data!.vastisarvividhKshetaCheKam!.map((item) {
-                    //                 return DataRow(
-                    //                   cells: [
-                    //                     DataCell(Text(item.kaam ?? '')),
-                    //                     DataCell(Text(item.chalavnariSansthaSanghatamn ?? '')),
-                    //                   ],
-                    //                 );
-                    //               }).toList(),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //       ),
-                    //   ],
-                    // ),
                     commonExpansionTile(
                       title: 'vasahatPrakar',
                       children: [
@@ -1446,7 +1408,9 @@ class _MandalSurveyReportViewScreen3State
                                     DataColumn(
                                         label: Text(
                                             "${Statics.getLabel('SelectFrequency')}")),
-                                    DataColumn(label: Text('भवनाचे नाव')),
+                                    DataColumn(
+                                        label: Text(
+                                            "${Statics.getLabel('bhavnacheNaav')}")),
                                     DataColumn(
                                         label: Text(
                                             "${Statics.getLabel('samparkSthiti')}")),

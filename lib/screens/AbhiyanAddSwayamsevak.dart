@@ -1276,7 +1276,7 @@ class AbhiyanAddSwayamsevakScreenState
                         textInputAction: TextInputAction.next,
                         controller: _sansthaNameCntrl,
                         decoration: InputDecoration(
-                          labelText: "संस्थेचे नाव",
+                          labelText: "${Statics.getLabel('OrganizationName')}",
                           isDense: true,
                           border: OutlineInputBorder(
                               borderSide: BorderSide(
@@ -1303,7 +1303,8 @@ class AbhiyanAddSwayamsevakScreenState
                         textInputAction: TextInputAction.next,
                         controller: _sansthaPadhCntrl,
                         decoration: InputDecoration(
-                          labelText: "संस्थेत कुठल्या पदावर",
+                          labelText:
+                              "${Statics.getLabel('sansthetKuthalaPadavar')}",
                           isDense: true,
                           border: OutlineInputBorder(
                               borderSide: BorderSide(
