@@ -691,7 +691,8 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                             if (_linkedNagar != null &&
                                 _linkedNagar!.length > 0)
                               DropdownButtonFormField(
-                                decoration: InputDecoration(labelText: "नगर"),
+                                decoration: InputDecoration(
+                                    labelText: "${Statics.getLabel('Nagar')}"),
                                 isExpanded: true,
                                 value: _linkedNagarValue == ""
                                     ? null
@@ -916,6 +917,28 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                             .vastiStep3CompleteNames!
                                             .toString()),
                                   )),
+                                ],
+                              ),
+                              DataRow(
+                                color: MaterialStateProperty.all(
+                                    Colors.red.shade50),
+                                cells: [
+                                  DataCell(Text(
+                                      "${Statics.getLabel('totalVasti')}")),
+                                  DataCell(Text(
+                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagar_step_total ?? ""}")),
+                                  DataCell(Text(
+                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.vasti_step_total ?? ""}")),
+                                  DataCell(Text("-")),
+                                ],
+                              ),
+                              DataRow(
+                                color: MaterialStateProperty.all(Colors.white),
+                                cells: [
+                                  DataCell(Text("")),
+                                  DataCell(Text("")),
+                                  DataCell(Text("")),
+                                  DataCell(Text("")),
                                 ],
                               ),
                               DataRow(

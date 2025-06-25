@@ -79,6 +79,9 @@ class Vastisarvekshan {
   String? vastiShakhaTypevalue;
   int? vastiid;
   int? step1completepercentage;
+  String? step1pendingpoints;
+  String? step2pendingpoints;
+  String? step3pendingpoints;
   int? step2completepercentage;
   int? step3completepercentage;
   bool? stepOneComplete;
@@ -135,6 +138,9 @@ class Vastisarvekshan {
     this.vastiShakhaTypevalue,
     this.vastiid,
     this.step1completepercentage,
+    this.step1pendingpoints,
+    this.step2pendingpoints,
+    this.step3pendingpoints,
     this.step2completepercentage,
     this.step3completepercentage,
     this.stepOneComplete,
@@ -352,6 +358,9 @@ class Vastisarvekshan {
     vastiShakhaTypevalue = json['vastiShakhaTypevalue'];
     vastiid = json['vastiid'];
     step1completepercentage = json['step1completepercentage'];
+    step1pendingpoints = json['step1pendingpoints'];
+    step2pendingpoints = json['step2pendingpoints'];
+    step3pendingpoints = json['step3pendingpoints'];
     step2completepercentage = json['step2completepercentage'];
     step3completepercentage = json['step3completepercentage'];
     stepOneComplete = json['stepOneComplete'];
@@ -506,6 +515,9 @@ class Vastisarvekshan {
     data['vastiShakhaTypevalue'] = this.vastiShakhaTypevalue;
     data['vastiid'] = this.vastiid;
     data['step1completepercentage'] = this.step1completepercentage;
+    data['step1pendingpoints'] = this.step1pendingpoints;
+    data['step2pendingpoints'] = this.step2pendingpoints;
+    data['step3pendingpoints'] = this.step3pendingpoints;
     data['step2completepercentage'] = this.step2completepercentage;
     data['step3completepercentage'] = this.step3completepercentage;
     data['stepOneComplete'] = this.stepOneComplete;

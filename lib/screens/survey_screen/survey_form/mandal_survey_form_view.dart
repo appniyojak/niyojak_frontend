@@ -365,6 +365,21 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   int? step1completepercentage;
   int? step3completepercentage;
 
+  String? selectedValueAll;
+  String? selectedValueMale;
+  String? selectedValueFemale;
+  String? ekunLoksankhya;
+
+  final Map<String, String> options = {
+    '${Statics.getLabel('moreThan40000')}': '44444',
+    '${Statics.getLabel('20000to40000')}': '22222',
+    '${Statics.getLabel('10000to20000')}': '11111',
+    '${Statics.getLabel('5000to10000')}': '5555',
+    '${Statics.getLabel('3000to5000')}': '3333',
+    '${Statics.getLabel('1000to3000')}': '1111',
+    '${Statics.getLabel('lessThan1000')}': '999',
+  };
+
   void updateCounts() {
     setState(() {
       male = int.tryParse(maleController.text);
@@ -921,8 +936,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         if (_linkedVibhaag != null)
                           DropdownButtonFormField(
                             decoration: InputDecoration(
-                                labelText:
-                                    "${Statics.getLabel('OtherSocialOrganization')}"),
+                                labelText: "${Statics.getLabel('Vibhaag')}"),
                             isExpanded: true,
                             value: _linkedVibhaagValue == ""
                                 ? null
@@ -1052,7 +1066,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         if (_linkedgraam != null && _linkedgraam!.length > 0)
                           DropdownButtonFormField(
                             decoration: InputDecoration(
-                                labelText: "${Statics.getLabel('gaav')}"),
+                                labelText: "${Statics.getLabel('Graam')}"),
                             isExpanded: true,
                             value: _linkedgraamValue == ""
                                 ? null
@@ -1600,45 +1614,201 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       SizedBox(
                         height: 10,
                       ),
-                      Row(
+                      Column(
                         children: [
-                          Flexible(
-                            child: textControllerField2(
-                              name: "${Statics.getLabel('prushaanchiSankhya')}",
-                              controller: maleController,
-                              keyboardType: TextInputType.number,
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text:
+                                        "${Statics.getLabel('prushaanchiSankhya')}",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: "*",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                          SizedBox(width: 10),
-                          Flexible(
-                            child: textControllerField2(
-                              name: "${Statics.getLabel('mahilanchiSankhya')}",
-                              controller: femaleController,
-                              keyboardType: TextInputType.number,
+                          SizedBox(height: 5),
+                          Container(
+                            height: 50,
+                            width: double.infinity,
+                            padding: EdgeInsets.symmetric(horizontal: 12),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(color: Colors.black54),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                isExpanded: true,
+                                value: selectedValueMale == ""
+                                    ? null
+                                    : selectedValueMale,
+                                items: options.keys.map((String key) {
+                                  return DropdownMenuItem<String>(
+                                    value: options[key],
+                                    child: Text(key),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedValueMale = value;
+                                    maleController.text = value.toString();
+                                  });
+                                },
+                                hint: Text(
+                                    Statics.getLabel('prushaanchiSankhya')),
+                              ),
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(height: 10),
-                      if (male != null && female == null)
-                        Text(
-                          '${Statics.getLabel('prushaanchiSankhya')}: $male',
-                          style: TextStyle(fontSize: 16, color: Colors.blue),
-                        ),
-                      if (female != null && male == null)
-                        Text(
-                          '${Statics.getLabel('mahilanchiSankhya')}: $female',
-                          style: TextStyle(fontSize: 16, color: Colors.pink),
-                        ),
-                      if (male != null && female != null)
-                        Text(
-                          '${Statics.getLabel('ekunLoksankhya')}: $total',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.teal,
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text:
+                                        "${Statics.getLabel('mahilanchiSankhya')}",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: "*",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
+                          SizedBox(height: 5),
+                          Container(
+                            height: 50,
+                            width: double.infinity,
+                            padding: EdgeInsets.symmetric(horizontal: 12),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(color: Colors.black54),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                isExpanded: true,
+                                value: selectedValueFemale == ""
+                                    ? null
+                                    : selectedValueFemale,
+                                items: options.keys.map((String key) {
+                                  return DropdownMenuItem<String>(
+                                    value: options[key],
+                                    child: Text(key),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedValueFemale = value;
+                                    femaleController.text = value.toString();
+                                  });
+                                },
+                                hint:
+                                    Text(Statics.getLabel('mahilanchiSankhya')),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text:
+                                        "${Statics.getLabel('gaavachiLoksankhya')}",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: "*",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Container(
+                            height: 50,
+                            width: double.infinity,
+                            padding: EdgeInsets.symmetric(horizontal: 12),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(color: Colors.black54),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                isExpanded: true,
+                                value: selectedValueAll == ""
+                                    ? null
+                                    : selectedValueAll,
+                                items: options.keys.map((String key) {
+                                  return DropdownMenuItem<String>(
+                                    value: options[key],
+                                    child: Text(key),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedValueAll = value;
+                                    ekunLoksankhya = value;
+                                  });
+                                },
+                                hint: Text(
+                                    Statics.getLabel('gaavachiLoksankhya')),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -1989,11 +2159,6 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
 
                                   if (shouldDelete == true &&
                                       selectedKuthalaVarshiIdIndex != null) {
-                                    // setState(() {
-                                    //   kuthalaVarshiDataList
-                                    //       .removeAt(selectedKuthalaVarshiIdIndex!);
-                                    //   selectedKuthalaVarshiIdIndex = null;
-                                    // });
                                     setState(() {
                                       kuthalaVarshiDataList![
                                               selectedKuthalaVarshiIdIndex!]
@@ -5375,7 +5540,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
 //====================================================================================================
       "VastisarKonatyaprantache": enteredKontyaPraantacheDataList,
       "vastiShakhaPramukhName": sanghaKaryaVastiPramukhNameController.text,
-      "Lokasankhya": loksankhyaController.text,
+      "Lokasankhya": ekunLoksankhya,
       "beforeShakhaSaptahikIsOnNowOff": beforsanghaonnowisoff,
       "VasticyacatuSima": vastiChatahuSimaController.text,
       "googlemap": selectedFilePath,
@@ -7561,7 +7726,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   //                   vastisarvekshanDropDownDataModel != null
   //                       ? vastisarvekshanDropdown3(
   //                           filterTypeName: "श्रेणी",
-  //                           hintText: "श्रेणी निवडा",
+  //                           hintText: "${Statics.getLabel('otherUpshreni')}",
   //                           selectedValue: selectedShreni,
   //                           selectedDependentValue: selectedUpShreni,
   //                           selectedThirdLevelValue: selectedUpShreni2,
@@ -7604,14 +7769,14 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   //                   ),
   //                   if (selectedUpShreni2?.isOther == 1)
   //                     textControllerField2(
-  //                         name: "अन्य उपश्रेणी 2",
+  //                         name: "${Statics.getLabel('otherUpshreni2')}",
   //                         controller: anyaPrabhaviLokAnyaUppshreni1Controller),
   //                   SizedBox(
   //                     height: 10,
   //                   ),
   //                   vastisarvekshanDropDownDataModel != null
   //                       ? vastisarvekshanDropdown2(
-  //                           hintText: "विशेष निवडा",
+  //                           hintText: "${Statics.getLabel('selectVishesh')}",
   //                           filterTypeName: "अन्यप्रभावीलोकंविशेष",
   //                           onItemSelected: (valueId, valueName, isOther) {
   //                             anyaPrabhaviLokVisheshId = valueId;
@@ -7634,7 +7799,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   //                   ),
   //                   vastisarvekshanDropDownDataModel != null
   //                       ? vastisarvekshanDropdown2(
-  //                           hintText: "प्रभाव क्षेत्र निवडा",
+  //                           hintText: "${Statics.getLabel('prabhavKshetraSelect')}",
   //                           filterTypeName: "अन्यप्रभावीलोकंप्रभावक्षेत्र",
   //                           onItemSelected: (valueId, valueName, isOther) {
   //                             anyaPrabhaviLokPrabhavKshetraId = valueId;
@@ -7661,7 +7826,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   //                   // SizedBox(height: 10,),
   //                   vastisarvekshanDropDownDataModel != null
   //                       ? vastisarvekshanDropdown2(
-  //                           hintText: "संपर्क स्थिति निवडा",
+  //                           hintText: "${Statics.getLabel('samparkSthitiSelect')}",
   //                           filterTypeName: "अन्यप्रभावीलोकंसंपर्कस्थिति",
   //                           onItemSelected: (valueId, valueName, isOther) {
   //                             anyaPrabhaviLokSamparkStithiId = valueId;
@@ -7895,7 +8060,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     vastisarvekshanDropDownDataModel != null
                         ? vastisarvekshanDropdown3(
                             filterTypeName: "श्रेणी",
-                            hintText: "श्रेणी निवडा",
+                            hintText: "${Statics.getLabel('otherUpshreni')}",
                             anyaPrabhaviLokShreniId:
                                 anyaPrabhaviLokShreniIdEdit,
                             anyaPrabhaviLokUpShreniId:
@@ -7943,14 +8108,14 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       ),
                     if (selectedUpShreni2?.isOther == 1)
                       textControllerField2(
-                          name: "अन्य उपश्रेणी 2",
+                          name: "${Statics.getLabel('otherUpshreni2')}",
                           controller: anyaPrabhaviLokAnyaUppshreni1Controller),
                     SizedBox(
                       height: 10,
                     ),
                     vastisarvekshanDropDownDataModel != null
                         ? vastisarvekshanDropdown2(
-                            hintText: "विशेष निवडा",
+                            hintText: "${Statics.getLabel('selectVishesh')}",
                             filterTypeName: "अन्यप्रभावीलोकंविशेष",
                             onItemSelected: (valueId, valueName, isOther) {
                               anyaPrabhaviLokVisheshId = valueId;
@@ -7973,7 +8138,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     ),
                     vastisarvekshanDropDownDataModel != null
                         ? vastisarvekshanDropdown2(
-                            hintText: "प्रभाव क्षेत्र निवडा",
+                            hintText:
+                                "${Statics.getLabel('prabhavKshetraSelect')}",
                             filterTypeName: "अन्यप्रभावीलोकंप्रभावक्षेत्र",
                             onItemSelected: (valueId, valueName, isOther) {
                               anyaPrabhaviLokPrabhavKshetraId = valueId;
@@ -8005,7 +8171,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     ),
                     vastisarvekshanDropDownDataModel != null
                         ? vastisarvekshanDropdown2(
-                            hintText: "संपर्क स्थिति निवडा",
+                            hintText:
+                                "${Statics.getLabel('samparkSthitiSelect')}",
                             filterTypeName: "अन्यप्रभावीलोकंसंपर्कस्थिति",
                             onItemSelected: (valueId, valueName, isOther) {
                               anyaPrabhaviLokSamparkStithiId = valueId;
@@ -8199,7 +8366,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "गावात होणारे सण",
+                "${Statics.getLabel('GavatsajareHonareSan')}",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
@@ -8224,7 +8391,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     vastisarvekshanDropdown2(
                       dataModel: vastisarvekshanDropDownDataModel!,
                       filterTypeName: "वस्तीतसाजरहोणारेमहत्वाचेसण",
-                      hintText: "सण निवडा",
+                      hintText: "${Statics.getLabel('selectFestival')}",
                       onItemSelected: (id, value, isOther) {
                         selectedSanId = id;
                         selectedSanName = value;
@@ -8257,7 +8424,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         controller: vastitSajarHonareSanAyojakNameController,
                         height: 50),
                     textControllerField2(
-                        name: "आयोजक संपर्क सूत्र",
+                        name: "${Statics.getLabel('aayojakSamparkSootra')}",
                         controller: vastitSajarHonareSanAyojakSamparkController,
                         height: 50),
                     const SizedBox(height: 10),
@@ -8377,7 +8544,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "गावातील महत्वाचे\nसामाजिक कार्यक्रम",
+                "${Statics.getLabel('GavatHonareKaryakram')}",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
@@ -8400,7 +8567,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       dataModel: vastisarvekshanDropDownDataModel!,
                       filterTypeName:
                           "वस्तीतसाजरहोणारेमहत्वाचेसामाजिककार्यक्रम",
-                      hintText: "कार्यक्रम निवडा",
+                      hintText: "${Statics.getLabel('SelectKaryakram')}",
                       onItemSelected: (id, value, isOther) {
                         selectedSamajikKaryakramId = id;
                         selectedSamajikKaryakramName = value;
@@ -8417,7 +8584,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     const SizedBox(height: 10),
                     if (selectedSamajikKaryakramName == "अन्य")
                       textControllerField(
-                          "अन्य",
+                          "${Statics.getLabel('otherEnter')}",
                           vastitSajarHonareSamajikKaryakramAnya1Controller,
                           context,
                           height: 50),
@@ -8432,7 +8599,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         context,
                         height: 80),
                     textControllerField(
-                        "आयोजक संपर्क सूत्र",
+                        "${Statics.getLabel('aayojakSamparkSootra')}",
                         vastitSajarHonareSamajikKaryakramAyojakSamparkController,
                         context,
                         height: 50),
@@ -8609,7 +8776,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("दुर्जन शक्ति",
+              Text("${Statics.getLabel('DurjanShakti')}",
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -8704,31 +8871,6 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8)),
                 ),
-                // onPressed: () {
-                //   Vastisardurjanshakti data = Vastisardurjanshakti (
-                //       name: durjanShaktiNaavController.text,
-                //       pkid: pkidDurjanShaktiGunha,
-                //       isactive: isActivedDurjanShaktiGunha,
-                //       vastiid:  int.parse(selctedLevelId!),
-                //       selectedDropdownValueName: selectedDurjanShaktiPrakarName,
-                //       selectedDropdownValueName1: selectedDurjanShaktiShikashaName,
-                //       selectedDropdownValueName2: selectedDurjanShaktiGunhaName,
-                //       gunha: selectedDurjanShaktiGunhaId,
-                //       prakar: selectedDurjanShaktiPrakarId,
-                //       shiksha: selectedDurjanShaktiShikshaId,
-                //       otherPrakar: durjanShaktiAnyaPrkarController.text
-                //   );
-                //   if (editIndex != null) {
-                //     durjanShaktiDataList[editIndex] = data;
-                //   } else {
-                //     durjanShaktiDataList.add(data);
-                //   }
-                //   if (onDataChanged != null) {
-                //     onDataChanged();
-                //   }
-                //   Navigator.of(ctx).pop();
-                //   clearDurjanShakti();
-                // },
                 onPressed: () {
                   if ((selectedMasterDurjanShaktiPrakarName?.isOther == 1 &&
                       durjanShaktiAnyaPrkarController.text == "")) {
@@ -8762,7 +8904,6 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     clearDurjanShakti();
                   }
                 },
-
                 child: Text("${Statics.getLabel('Submit')}",
                     style: TextStyle(color: Colors.white)),
               ),
@@ -8818,7 +8959,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "हिंदू वीर यादी",
+                "${Statics.getLabel('HinduVeer')}",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
@@ -8841,7 +8982,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     textControllerField(
-                      "नाव",
+                      "${Statics.getLabel('Name')}",
                       hinduVeerYadiNameControler,
                       context,
                       height: 50,
@@ -8862,9 +9003,6 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                   ),
                 ),
                 onPressed: () {
-                  // Map<String, dynamic> data = {
-                  //   'hinduVeerYadiName': hinduVeerYadiNameControler.text.trim(), // ✅ fixed this line
-                  // };
                   VastisarHinduvirayadi data = VastisarHinduvirayadi(
                     vastiid: int.parse(selctedLevelId!),
                     isactive: isActiveHinduVeerYadi,
@@ -8909,11 +9047,11 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
               ),
           //=====================  DHARMIK NETRUTVA  ================================================================
           mainContainer(
-              "दुर्जन शक्ति",
+              "${Statics.getLabel('DurjanShakti')}",
               Column(
                 children: [
                   yesNoRadioButton(
-                      question: "दुर्जन शक्ति आहे का?",
+                      question: "${Statics.getLabel('isDurjanShakti')}",
                       selectedOption: durjanShaktiYesNo ?? 2,
                       onChanged: (value) {
                         if (isVastiSearch) {
@@ -8994,7 +9132,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   columns: [
                                     DataColumn(
                                         label: Text(
-                                      "नाव",
+                                      "${Statics.getLabel('Name')}",
                                     )),
                                     DataColumn(
                                         label: Text(
@@ -9077,7 +9215,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                           backgroundColor: Colors.white,
                                           title: Center(
                                             child: Text(
-                                              "दुर्जन शक्ति",
+                                              "${Statics.getLabel('DurjanShakti')}",
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 20,
@@ -9097,7 +9235,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                                         .deepPurple.shade100),
                                                 SizedBox(height: 12),
                                                 _buildInfoRow(
-                                                    "नाव", selectedData.name),
+                                                    "${Statics.getLabel('Name')}",
+                                                    selectedData.name),
                                                 _buildInfoRow(
                                                     "${Statics.getLabel('SelectFrequency')}",
                                                     selectedData
@@ -9236,11 +9375,6 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   );
                                   if (shouldDelete == true &&
                                       selectedDurjanShaktiIdIndex != null) {
-                                    // setState(() {
-                                    //   durjanShaktiDataList
-                                    //       .removeAt(selectedDurjanShaktiIdIndex!);
-                                    //   selectedDurjanShaktiIdIndex = null;
-                                    // });
                                     setState(() {
                                       durjanShaktiDataList[
                                               selectedDurjanShaktiIdIndex!]
@@ -9261,7 +9395,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
               )),
 //================================== HINDU VEER YAADI FORM =================================================================================================================================================
           mainContainer(
-              "हिंदू वीर यादी",
+              "${Statics.getLabel('HinduVeer')}",
               Column(
                 children: [
                   Row(
@@ -9327,10 +9461,12 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black87),
                                 columns: [
-                                  DataColumn(label: Text("क्र.")),
                                   DataColumn(
                                       label: Text(
-                                    "नाव",
+                                          "${Statics.getLabel('serialNo')}")),
+                                  DataColumn(
+                                      label: Text(
+                                    "${Statics.getLabel('Name')}",
                                   )),
                                 ],
                                 rows: hinduVeerYadiDataList
@@ -9392,7 +9528,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                         backgroundColor: Colors.white,
                                         title: Center(
                                           child: Text(
-                                            "हिंदू वीर यादी",
+                                            "${Statics.getLabel('HinduVeer')}",
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 20,
@@ -9412,7 +9548,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                                       .deepPurple.shade100),
                                               SizedBox(height: 12),
                                               _buildInfoRow(
-                                                  "नाव", selectedData.name),
+                                                  "${Statics.getLabel('Name')}",
+                                                  selectedData.name),
                                             ],
                                           ),
                                         ),
@@ -9532,11 +9669,6 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 );
                                 if (shouldDelete == true &&
                                     selectedHinduVeerYadiIdIndex != null) {
-                                  // setState(() {
-                                  //   hinduVeerYadiDataList
-                                  //       .removeAt(selectedHinduVeerYadiIdIndex!);
-                                  //   selectedHinduVeerYadiIdIndex = null;
-                                  // });
                                   setState(() {
                                     hinduVeerYadiDataList[
                                             selectedHinduVeerYadiIdIndex!]
@@ -9576,7 +9708,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           ),
                           child: Center(
                             child: Text(
-                              "विस्तृत माहिती संग्रह",
+                              "${Statics.getLabel('visrutMahitiSubmit')}",
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -9690,7 +9822,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
             Positioned.fill(
               child: Center(
                 child: Text(
-                  "${value.toInt()}% सर्वेक्षण झाले.",
+                  "${value.toInt()}% ${Statics.getLabel('surveyCompleted')}",
                   style: const TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 13,

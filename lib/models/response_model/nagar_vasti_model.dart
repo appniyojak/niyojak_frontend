@@ -1405,6 +1405,8 @@ class NagarVastisarvekshanReportwithselectedlevel {
   String? vastiStep2CompleteNames;
   int? vastiStep3CompleteCount;
   String? vastiStep3CompleteNames;
+  int? vasti_step_total;
+  int? nagar_step_total;
   int? vastiStepStartedCount;
   String? vastiStepStartedNames;
   int? vastiStepsNotstartedCount;
@@ -1429,6 +1431,8 @@ class NagarVastisarvekshanReportwithselectedlevel {
       this.vastiStep2CompleteNames,
       this.vastiStep3CompleteCount,
       this.vastiStep3CompleteNames,
+      this.nagar_step_total,
+      this.vasti_step_total,
       this.vastiStepStartedCount,
       this.vastiStepStartedNames,
       this.vastiStepsNotstartedCount,
@@ -1454,6 +1458,8 @@ class NagarVastisarvekshanReportwithselectedlevel {
     vastiStep2CompleteNames = json['vasti_step2_complete_names'];
     vastiStep3CompleteCount = json['vasti_step3_complete_count'];
     vastiStep3CompleteNames = json['vasti_step3_complete_names'];
+    nagar_step_total = json['nagar_step_total'];
+    vasti_step_total = json['vasti_step_total'];
     vastiStepStartedCount = json['vasti_step_started_count'];
     vastiStepStartedNames = json['vasti_step_started_names'];
     vastiStepsNotstartedCount = json['vasti_steps_notstarted_count'];
