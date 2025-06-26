@@ -1315,6 +1315,7 @@ class VastisarVastitilabalopasanakendra {
 
 class VastisarVividhaprakara {
   String? andaje;
+  String? andajeForShow;
   String? otherbhaasha;
   String? selectedDropdownValueName;
   int? bhaashaid;
@@ -1324,6 +1325,7 @@ class VastisarVividhaprakara {
 
   VastisarVividhaprakara(
       {this.andaje,
+      this.andajeForShow,
       this.bhaashaid,
       this.otherbhaasha,
       this.selectedDropdownValueName,
@@ -1333,6 +1335,7 @@ class VastisarVividhaprakara {
 
   VastisarVividhaprakara.fromJson(Map<String, dynamic> json) {
     andaje = json['Andaje'];
+    andajeForShow = json['andajeForShow'];
     bhaashaid = json['bhaashaid'];
     otherbhaasha = json['otherbhaasha'];
     selectedDropdownValueName = json['selectedDropdownValueName'];
@@ -1344,6 +1347,7 @@ class VastisarVividhaprakara {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['Andaje'] = this.andaje;
+    data['andajeForShow'] = this.andajeForShow;
     data['otherbhaasha'] = this.otherbhaasha;
     data['selectedDropdownValueName'] = this.selectedDropdownValueName;
     data['bhaashaid'] = this.bhaashaid;

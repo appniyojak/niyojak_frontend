@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../helpers/static_data.dart' as Statics;
 import '../../../models/response_model/nagar_vasti_model.dart';
 import '../../../providers/bals.dart';
+import '../../../widgets/single_column_row.dart';
 
 class MandalSurveyReportViewScreen2 extends StatefulWidget {
   static const String routeName = '/mandal-survey-report-tab2';
@@ -39,6 +40,7 @@ class _MandalSurveyReportViewScreen2State
   String? mahanagarId = '';
   String? vibhagId = '';
   String? selctedLevel = 'praant';
+  String? selctedDropDownLevelName = 'प्रांत';
   String? selctedLevelName = '';
   String? selctedLevelId = '';
   String? selctedLevelNameNew = '';
@@ -150,6 +152,7 @@ class _MandalSurveyReportViewScreen2State
       mahanagarId = '';
       selctedLevelName = "";
       selctedLevel = 'praant';
+      selctedDropDownLevelName = 'प्रांत';
       _linkedvastiValue = '';
       selctedLevelId = '';
       selctedLevelName = "";
@@ -236,8 +239,7 @@ class _MandalSurveyReportViewScreen2State
                           if (_linkedVibhaag != null)
                             DropdownButtonFormField(
                               decoration: InputDecoration(
-                                  labelText:
-                                      "${Statics.getLabel('OtherSocialOrganization')}"),
+                                  labelText: "${Statics.getLabel('Vibhaag')}"),
                               isExpanded: true,
                               value: _linkedVibhaagValue == ""
                                   ? null
@@ -260,6 +262,7 @@ class _MandalSurveyReportViewScreen2State
                                   selctedLevelId = value;
                                   selctedLevelName = selectedItem.name ?? "";
                                   selctedLevel = 'Vibhaag';
+                                  selctedDropDownLevelName = 'विभाग';
                                 });
                                 print("Selected Id: $value");
                                 print(
@@ -291,6 +294,7 @@ class _MandalSurveyReportViewScreen2State
                                   selctedLevelId = value;
                                   selctedLevelName = selectedItem.name ?? "";
                                   selctedLevel = 'Bhaag';
+                                  selctedDropDownLevelName = 'भाग';
                                 });
                                 print("Selected Id: $value");
                                 print(
@@ -321,7 +325,8 @@ class _MandalSurveyReportViewScreen2State
                                   populatelinkedMandalDropdown(value!);
                                   selctedLevelId = value;
                                   selctedLevelName = selectedItem.name ?? "";
-                                  selctedLevel = 'Nagar';
+                                  selctedLevel = 'Taluka';
+                                  selctedDropDownLevelName = 'तालुका';
                                 });
                                 print("Selected Id: $value");
                                 print(
@@ -354,6 +359,8 @@ class _MandalSurveyReportViewScreen2State
                                   selctedLevelId = value;
                                   selctedLevelName = selectedItem.name ?? "";
                                   selctedLevel = 'Mandal';
+                                  selctedDropDownLevelName = 'मंडल ';
+
                                   populatelinkedGraamDropdown(value!);
                                 });
                                 print("Selected Id: $value");
@@ -448,6 +455,145 @@ class _MandalSurveyReportViewScreen2State
               SizedBox(
                 height: 20,
               ),
+//===================================================================================================================================================
+            if (isVastiSearch == true)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Center(
+                  child: Text(
+                    '${Statics.getLabel('sharaansh')} ($selctedDropDownLevelName)',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            if (isVastiSearch == true) Divider(),
+            if (isVastiSearch == true)
+              Container(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: DataTable(
+                    headingRowColor:
+                        MaterialStateProperty.all(Colors.teal.shade100),
+                    headingTextStyle: const TextStyle(
+                        fontSize: 15,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
+                    columns: [
+                      DataColumn(
+                          label:
+                              Text("${Statics.getLabel('sarvekshanSthiti')}")),
+                      DataColumn(
+                          label: Text("${Statics.getLabel('taalukaa')}")),
+                      DataColumn(label: Text("${Statics.getLabel('Mandal')}")),
+                      DataColumn(label: Text('')),
+                    ],
+                    rows: [
+                      DataRow(
+                        color: MaterialStateProperty.all(Colors.green.shade50),
+                        cells: [
+                          DataCell(Text(
+                              "${Statics.getLabel('prathamikSurveyComplete')}")),
+                          DataCell(Text("")),
+                          DataCell(Text("")),
+                          DataCell(IconButton(
+                            icon:
+                                Icon(Icons.remove_red_eye, color: Colors.teal),
+                            onPressed: () {
+                              // showPopupList(
+                              //     context,
+                              //     talukaMandalSampurnaModel!
+                              //         .talukamandalsarvekshanReportwithselectedlevel!
+                              //         .vastiStep1CompleteNames!
+                              //         .toString());
+                            },
+                          )),
+                        ],
+                      ),
+                      // DataRow(
+                      //   color: MaterialStateProperty.all(Colors.green.shade50),
+                      //   cells: [
+                      //     DataCell(Text("${Statics.getLabel('otherSuerveyComplete')}")),
+                      //     DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.nagarStep2CompleteCount ?? ""}")),
+                      //     DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.mandalStep1CompleteCount ?? ""}")),
+                      //     DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.vastiStep2CompleteCount ?? ""}")),
+                      //     DataCell(IconButton(
+                      //       icon: Icon(Icons.remove_red_eye, color: Colors.teal),
+                      //       onPressed: () => showPopupList(context,
+                      //           talukaMandalSampurnaModel!.talukamandalsarvekshanReportwithselectedlevel!.vastiStep2CompleteNames!.toString()),
+                      //     )),
+                      //   ],
+                      // ),
+                      DataRow(
+                        color: MaterialStateProperty.all(Colors.green.shade50),
+                        cells: [
+                          DataCell(Text(
+                              "${Statics.getLabel('vistrutSurveyComplete')}")),
+                          DataCell(Text("")),
+                          DataCell(Text("")),
+                          DataCell(IconButton(
+                            icon:
+                                Icon(Icons.remove_red_eye, color: Colors.teal),
+                            onPressed: () {},
+                          )),
+                        ],
+                      ),
+                      DataRow(
+                        color: MaterialStateProperty.all(Colors.orange.shade50),
+                        cells: [
+                          DataCell(Text("${Statics.getLabel('surveyStart')}")),
+                          DataCell(Text("")),
+                          DataCell(Text("")),
+                          DataCell(IconButton(
+                            icon:
+                                Icon(Icons.remove_red_eye, color: Colors.teal),
+                            onPressed: () {},
+                          )),
+                        ],
+                      ),
+                      DataRow(
+                        color: MaterialStateProperty.all(Colors.orange.shade50),
+                        cells: [
+                          DataCell(
+                              Text("${Statics.getLabel('surveyComplete')}")),
+                          DataCell(Text("")),
+                          DataCell(Text("")),
+                          DataCell(IconButton(
+                            icon:
+                                Icon(Icons.remove_red_eye, color: Colors.teal),
+                            onPressed: () {},
+                          )),
+                        ],
+                      ),
+                      DataRow(
+                        color: MaterialStateProperty.all(Colors.orange.shade50),
+                        cells: [
+                          DataCell(
+                              Text("${Statics.getLabel('surveyNotStarted')}")),
+                          DataCell(Text("")),
+                          DataCell(Text("")),
+                          DataCell(IconButton(
+                            icon:
+                                Icon(Icons.remove_red_eye, color: Colors.teal),
+                            onPressed: () {},
+                          )),
+                        ],
+                      ),
+                      DataRow(
+                        color: MaterialStateProperty.all(Colors.grey.shade200),
+                        cells: [
+                          DataCell(Text("${Statics.getLabel('Total')}")),
+                          DataCell(Text("")),
+                          DataCell(Text("")),
+                          DataCell(Text("-")),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            SizedBox(
+              height: 10,
+            ),
 //===================================================================================================================================================
             Container(
               margin: EdgeInsets.symmetric(
@@ -607,7 +753,35 @@ class _MandalSurveyReportViewScreen2State
                   ),
                 ],
               ),
+            ),
+//===================================================================================================================================================
+            Container(
+              margin: EdgeInsets.symmetric(
+                horizontal: 10,
+              ),
+              child: Column(
+                children: [
+                  commonExpansionTile(
+                    title: 'mandalSurveySankalan',
+                    children: [
+                      Container(
+                          height: 500,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Column(
+                            children: [
+                              SingleColumnRow(
+                                  txtString: "", value: "", fontsize: 15),
+                            ],
+                          )),
+                    ],
+                  ),
+                ],
+              ),
             )
+//===================================================================================================================================================
           ]),
         ),
       ),
@@ -627,7 +801,7 @@ class _MandalSurveyReportViewScreen2State
       ),
       child: Theme(
         data: ThemeData().copyWith(
-          dividerColor: Colors.transparent, // removes the expansion line
+          dividerColor: Colors.transparent,
         ),
         child: ExpansionTile(
           tilePadding: const EdgeInsets.symmetric(horizontal: 16.0),

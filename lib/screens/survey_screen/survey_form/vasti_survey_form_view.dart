@@ -27,6 +27,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   final TextEditingController sanghaKaryaVastiStithiController =
       TextEditingController();
   final TextEditingController loksankhyaController = TextEditingController();
+  final TextEditingController femaleController = TextEditingController();
+  final TextEditingController maleController = TextEditingController();
   final TextEditingController vastiChatahuSimaController =
       TextEditingController();
   final TextEditingController niyamitChalnareUpkramController =
@@ -368,6 +370,22 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   int? agniShamanDalKendraAhe = 2;
   int? polichChoukiAhe = 2;
   int? gaavSamitiYesNo = 2;
+
+  String? selectedValueAll;
+  String? selectedValueMale;
+  String? selectedValueFemale;
+  String? ekunLoksankhya;
+
+  final Map<String, String> options = {
+    '{Statics.getLabel(moreThan40000)}': '44444',
+    '{Statics.getLabel(20000to40000)}': '22222',
+    '{Statics.getLabel(10000to20000)}': '11111',
+    '{Statics.getLabel(5000to10000)}': '5555',
+    '{Statics.getLabel(3000to5000)}': '3333',
+    '{Statics.getLabel(1000to3000)}': '1111',
+    '{Statics.getLabel(lessThan1000)}': '999',
+  };
+
   void populateDropdown() async {
     var data = await Statics.getStaticLDB('AnnualBaithakType');
     populatelinkedMahaanagarDropdown();
@@ -1677,23 +1695,220 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   color: Colors.black,
                                   fontSize: 15))),
                       Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                              "- ${sanghaKaryaVastiPramukhNameController.text}",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: sanghaKaryaVastiPramukhNameController
-                                              .text ==
-                                          "नियुक्त नाही"
-                                      ? Colors.red
-                                      : Colors.purple))),
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "- ${sanghaKaryaVastiPramukhNameController.text}",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: sanghaKaryaVastiPramukhNameController.text ==
+                                    "नियुक्त नाही"
+                                ? Colors.red
+                                : Colors.purple,
+                          ),
+                        ),
+                      ),
                       SizedBox(height: 10),
-                      textControllerField2(
-                          name: "${Statics.getLabel('Population')}",
-                          controller: loksankhyaController,
-                          height: 50,
-                          keyboardType: TextInputType.number,
-                          imp: "*"),
+                      // textControllerField2(
+                      //     name: "${Statics.getLabel('Population')}",
+                      //     controller: loksankhyaController,
+                      //     height: 50,
+                      //     keyboardType: TextInputType.number,
+                      //     imp: "*"),
+                      Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text:
+                                        "${Statics.getLabel('prushaanchiSankhya')}",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: "*",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Container(
+                            height: 50,
+                            width: double.infinity,
+                            padding: EdgeInsets.symmetric(horizontal: 12),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(color: Colors.black54),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                isExpanded: true,
+                                value: selectedValueMale == ""
+                                    ? null
+                                    : selectedValueMale,
+                                items: options.keys.map((String key) {
+                                  return DropdownMenuItem<String>(
+                                    value: options[key],
+                                    child: Text(key),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedValueMale = value;
+                                    maleController.text = value.toString();
+                                  });
+                                },
+                                hint: Text(
+                                    Statics.getLabel('prushaanchiSankhya')),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text:
+                                        "${Statics.getLabel('mahilanchiSankhya')}",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: "*",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Container(
+                            height: 50,
+                            width: double.infinity,
+                            padding: EdgeInsets.symmetric(horizontal: 12),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(color: Colors.black54),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                isExpanded: true,
+                                value: selectedValueFemale == ""
+                                    ? null
+                                    : selectedValueFemale,
+                                items: options.keys.map((String key) {
+                                  return DropdownMenuItem<String>(
+                                    value: options[key],
+                                    child: Text(key),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedValueFemale = value;
+                                    femaleController.text = value.toString();
+                                  });
+                                },
+                                hint:
+                                    Text(Statics.getLabel('mahilanchiSankhya')),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text:
+                                        "${Statics.getLabel('gaavachiLoksankhya')}",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: "*",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Container(
+                            height: 50,
+                            width: double.infinity,
+                            padding: EdgeInsets.symmetric(horizontal: 12),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(color: Colors.black54),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                isExpanded: true,
+                                value: selectedValueAll == ""
+                                    ? null
+                                    : selectedValueAll,
+                                items: options.keys.map((String key) {
+                                  return DropdownMenuItem<String>(
+                                    value: options[key],
+                                    child: Text(key),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedValueAll = value;
+                                    ekunLoksankhya = value;
+                                  });
+                                },
+                                hint: Text(
+                                    Statics.getLabel('gaavachiLoksankhya')),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                       SizedBox(height: 10),
                       yesNoRadioButton(
                           question: "${Statics.getLabel('isVastiSamiti')}",
@@ -3190,7 +3405,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                                 ? "${data.selectedDropdownValueName} - ${data.otherbhaasha}"
                                                 : data.selectedDropdownValueName ??
                                                     "")),
-                                            DataCell(Text(data.andaje ?? "")),
+                                            DataCell(
+                                                Text(data.andajeForShow ?? "")),
                                           ]);
                                     }).toList(),
                                   ),
@@ -5780,16 +5996,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
     setState(() {
       _isStep1Completed = true;
     });
-
     log("Selected File Path (Base64): $selectedFilePath");
     log("Selected File Name: $selectedFileName");
-
     Map<String, dynamic> formData = {
       "cuserid": int.parse(Statics.userDetails['userID']),
       "vastiid": int.parse(selctedLevelId!),
       "vastiShakhaPramukhName": sanghaKaryaVastiPramukhNameController.text,
       "vastiShakhaSamiti": vastiSamitiYesNo,
-      "Lokasankhya": loksankhyaController.text,
+      "Lokasankhya": ekunLoksankhya,
       "beforeShakhaSaptahikIsOnNowOff": beforsanghaonnowisoff,
       "VasticyacatuSima": vastiChatahuSimaController.text,
       "googlemap": imageAdd == 1 ? selectedFilePath : selectedFileName,
@@ -5816,8 +6030,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       "VastisarvividhKshetaCheKam": [],
       "VastisarvividhSampradhaySatsangKendra": [],
       "VastisargavatilMumbaikar": [],
-      "maleCount": "",
-      "femaleCount": "",
+      "maleCount": maleController.text,
+      "femaleCount": femaleController.text,
     };
 
     String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
@@ -6980,18 +7194,351 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   int? pkIdVividhBhasha = 0;
   TextEditingController bhashaPersentCount = TextEditingController();
   TextEditingController anyaBhashaNameController = TextEditingController();
+  String? bhashaCount;
+  final Map<String, String> bhashaOptions = {
+    '{Statics.getLabel(moreThan50)}': '55',
+    '{Statics.getLabel(20to49)}': '30',
+    '{Statics.getLabel(0to19)}': '19',
+  };
+  // void showVividhBhashaBolnarePopup(BuildContext context,
+  //     {int? editIndex, VoidCallback? onDataChanged}) {
+  //   if (editIndex != null) {
+  //     var data = enteredVividhBhashaBolnareDataList[editIndex];
+  //     bhashaId = data.bhaashaid;
+  //     bhashaName = data.selectedDropdownValueName;
+  //     // selectedbhasha = data.bhaashaid;
+  //     selectedbhashaEditId = data.bhaashaid;
+  //     pkIdVividhBhasha = data.pkid;
+  //     bhashaPersentCount.text = data.andaje ?? "";
+  //     anyaBhashaNameController.text = data.otherbhaasha!;
+  //     bhashaCount = data.andajeForShow;
+  //   }
+  //   showDialog(
+  //     context: context,
+  //     builder: (ctx) {
+  //       return Dialog(
+  //         shape:
+  //             RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+  //         child: StatefulBuilder(
+  //           builder: (context, setState) {
+  //             return Container(
+  //               padding: EdgeInsets.all(16),
+  //               width: 350,
+  //               child: SingleChildScrollView(
+  //                 child: Column(
+  //                   mainAxisSize: MainAxisSize.min,
+  //                   children: [
+  //                     Row(
+  //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                       children: [
+  //                         Text(
+  //                           "${Statics.getLabel('vividhBhashaBolnare')}",
+  //                           style: TextStyle(
+  //                               fontSize: 20,
+  //                               fontWeight: FontWeight.bold,
+  //                               color: Colors.purpleAccent),
+  //                         ),
+  //                         IconButton(
+  //                           icon: const Icon(Icons.close),
+  //                           onPressed: () {
+  //                             clearFields4();
+  //                             Navigator.of(ctx).pop();
+  //                           },
+  //                         ),
+  //                       ],
+  //                     ),
+  //                     const SizedBox(height: 10),
+  //                     // Dropdown 1
+  //                     Align(
+  //                       alignment: Alignment.centerLeft,
+  //                       child: Text(
+  //                         "${Statics.getLabel('selectLanguage')}",
+  //                         style: TextStyle(
+  //                           fontSize: 15,
+  //                         ),
+  //                       ),
+  //                     ),
+  //                     vastisarvekshanDropdown2(
+  //                       dataModel: vastisarvekshanDropDownDataModel!,
+  //                       filterTypeName: "विविध भाषा",
+  //                       hintText: "${Statics.getLabel('selectLanguage')}",
+  //                       onItemSelected: (id, value, isOther) {
+  //                         bhashaName = value;
+  //                         bhashaId = id;
+  //                         anyaBhashaNameController.clear();
+  //                       },
+  //                       width: double.infinity,
+  //                       questionNumber: 12,
+  //                       selectedValue: selectedbhasha,
+  //                       onSelectionChanged: (newValue) {
+  //                         setState(() {
+  //                           selectedbhasha = newValue;
+  //                         });
+  //                       },
+  //                       editId: selectedbhashaEditId,
+  //                     ),
+  //                     SizedBox(height: 10),
+  //                     if (selectedbhasha?.isOther == 1)
+  //                       textControllerField2(
+  //                           controller: anyaBhashaNameController,
+  //                           name: "${Statics.getLabel('OtherLanguage')}",
+  //                           height: 50,
+  //                           hintTextString:
+  //                               "${Statics.getLabel('onlyBhasha')}"),
+  //                     SizedBox(height: 10),
+  //                     // textControllerField2(
+  //                     //   controller: bhashaPersentCount,
+  //                     //   name: "${Statics.getLabel('avgPersent')}",
+  //                     //   keyboardType: TextInputType.number,
+  //                     //   height: 50,
+  //                     //   hintTextString: "${Statics.getLabel('example0to100')}",
+  //                     // ),
+  //                     Column(
+  //                       children: [
+  //                         Align(
+  //                           alignment: Alignment.centerLeft,
+  //                           child: RichText(
+  //                             text: TextSpan(
+  //                               children: [
+  //                                 TextSpan(
+  //                                   text:
+  //                                       "${Statics.getLabel('prushaanchiSankhya')}",
+  //                                   style: TextStyle(
+  //                                     fontSize: 15,
+  //                                     fontWeight: FontWeight.bold,
+  //                                     color: Colors.black,
+  //                                   ),
+  //                                 ),
+  //                                 TextSpan(
+  //                                   text: "*",
+  //                                   style: TextStyle(
+  //                                     fontSize: 15,
+  //                                     fontWeight: FontWeight.bold,
+  //                                     color: Colors.red,
+  //                                   ),
+  //                                 ),
+  //                               ],
+  //                             ),
+  //                           ),
+  //                         ),
+  //                         SizedBox(height: 5),
+  //                         Container(
+  //                           height: 50,
+  //                           width: double.infinity,
+  //                           padding: EdgeInsets.symmetric(horizontal: 12),
+  //                           decoration: BoxDecoration(
+  //                             color: Colors.white,
+  //                             border: Border.all(color: Colors.black54),
+  //                             borderRadius: BorderRadius.circular(8),
+  //                           ),
+  //                           child: DropdownButtonHideUnderline(
+  //                             child: DropdownButton<String>(
+  //                               isExpanded: true,
+  //                               value: bhashaCount == "" ? null : bhashaCount,
+  //                               items: bhashaOptions.keys.map((String key) {
+  //                                 return DropdownMenuItem<String>(
+  //                                   value: bhashaOptions[key],
+  //                                   child: Text(key),
+  //                                 );
+  //                               }).toList(),
+  //                               onChanged: (value) {
+  //                                 setState(() {
+  //                                   bhashaPersentCount.text = value!;
+  //                                 });
+  //                               },
+  //                               hint: Text(
+  //                                   Statics.getLabel('prushaanchiSankhya')),
+  //                             ),
+  //                           ),
+  //                         ),
+  //                       ],
+  //                     ),
+  //                     SizedBox(height: 10),
+  //                     Align(
+  //                       alignment: Alignment.center,
+  //                       child: ElevatedButton(
+  //                         style: ElevatedButton.styleFrom(
+  //                           backgroundColor: Colors.purple,
+  //                           shape: RoundedRectangleBorder(
+  //                               borderRadius: BorderRadius.circular(8)),
+  //                         ),
+  //                         // onPressed: () {
+  //                         //   double? average =
+  //                         //       double.tryParse(bhashaPersentCount.text.trim());
+  //                         //   if (selectedbhasha?.isOther == 1 &&
+  //                         //       anyaBhashaNameController.text == "") {
+  //                         //     Statics.showToast(
+  //                         //         "${Statics.getLabel('otherInfoValidation')}");
+  //                         //     return;
+  //                         //   }
+  //                         //   if (average == null ||
+  //                         //       average < 0 ||
+  //                         //       average > 100) {
+  //                         //     Statics.showToast(
+  //                         //         "${Statics.getLabel('persentValidation')}");
+  //                         //     return;
+  //                         //   }
+  //                         //
+  //                         //   bool isDuplicate =
+  //                         //       enteredVividhBhashaBolnareDataList.any((item) =>
+  //                         //           item.bhaashaid == bhashaId &&
+  //                         //           (editIndex == null ||
+  //                         //               enteredVividhBhashaBolnareDataList
+  //                         //                       .indexOf(item) !=
+  //                         //                   editIndex));
+  //                         //
+  //                         //   if (isDuplicate) {
+  //                         //     Statics.showToast(
+  //                         //         "${Statics.getLabel('bhashaValidation')}");
+  //                         //     return;
+  //                         //   }
+  //                         //   double totalPercent = 0;
+  //                         //   for (int i = 0;
+  //                         //       i < enteredVividhBhashaBolnareDataList.length;
+  //                         //       i++) {
+  //                         //     if (editIndex != null && i == editIndex) continue;
+  //                         //     totalPercent += double.tryParse(
+  //                         //             enteredVividhBhashaBolnareDataList[i]
+  //                         //                 .andaje!) ??
+  //                         //         0;
+  //                         //   }
+  //                         //   totalPercent += average;
+  //                         //
+  //                         //   if (totalPercent > 100) {
+  //                         //     Statics.showToast(
+  //                         //         "${Statics.getLabel('notMoreThan100')}");
+  //                         //     return;
+  //                         //   }
+  //                         //
+  //                         //   final newData = VastisarVividhaprakara(
+  //                         //     pkid: pkIdVividhBhasha,
+  //                         //     vastiid: int.parse(selctedLevelId!),
+  //                         //     bhaashaid: bhashaId,
+  //                         //     selectedDropdownValueName: bhashaName,
+  //                         //     andaje: bhashaPersentCount.text.trim(),
+  //                         //     otherbhaasha: anyaBhashaNameController.text,
+  //                         //     isactive: isActiveBhasha,
+  //                         //   );
+  //                         //   print("newData ${json.encode(newData)}");
+  //                         //   if (editIndex != null) {
+  //                         //     enteredVividhBhashaBolnareDataList[editIndex] =
+  //                         //         newData;
+  //                         //   } else {
+  //                         //     enteredVividhBhashaBolnareDataList.add(newData);
+  //                         //   }
+  //                         //   clearFields4();
+  //                         //   setState(() {});
+  //                         //   Navigator.of(ctx).pop();
+  //                         //   if (onDataChanged != null) onDataChanged();
+  //                         // },
+  //                         onPressed: () {
+  //                           double? average =
+  //                               double.tryParse(bhashaPersentCount.text.trim());
+  //
+  //                           // Validate 'other' language name if selected language is 'other'
+  //                           if (selectedbhasha?.isOther == 1 &&
+  //                               anyaBhashaNameController.text == "") {
+  //                             Statics.showToast(
+  //                                 "${Statics.getLabel('otherInfoValidation')}");
+  //                             return;
+  //                           }
+  //                           // Validate percentage input
+  //                           if (average == null ||
+  //                               average < 0 ||
+  //                               average > 100) {
+  //                             Statics.showToast(
+  //                                 "${Statics.getLabel('persentValidation')}");
+  //                             return;
+  //                           }
+  //                           // Check for duplicate entries (excluding current edit item)
+  //                           bool isDuplicate =
+  //                               enteredVividhBhashaBolnareDataList.any((item) =>
+  //                                   item.bhaashaid == bhashaId &&
+  //                                   (editIndex == null ||
+  //                                       enteredVividhBhashaBolnareDataList
+  //                                               .indexOf(item) !=
+  //                                           editIndex));
+  //                           if (isDuplicate) {
+  //                             Statics.showToast(
+  //                                 "${Statics.getLabel('bhashaValidation')}");
+  //                             return;
+  //                           }
+  //                           // Calculate total percent of active entries (isactive == 1)
+  //                           double totalPercent = 0;
+  //                           for (int i = 0;
+  //                               i < enteredVividhBhashaBolnareDataList.length;
+  //                               i++) {
+  //                             if (editIndex != null && i == editIndex) continue;
+  //                             var item = enteredVividhBhashaBolnareDataList[i];
+  //                             if (item.isactive == 1) {
+  //                               totalPercent +=
+  //                                   double.tryParse(item.andaje!) ?? 0;
+  //                             }
+  //                           }
+  //                           // Only add current average if it is active
+  //                           if (isActiveBhasha == 1) {
+  //                             totalPercent += average;
+  //                           }
+  //                           if (totalPercent > 100) {
+  //                             Statics.showToast(
+  //                                 "${Statics.getLabel('notMoreThan100')}");
+  //                             return;
+  //                           }
+  //                           // Create new data object
+  //                           final newData = VastisarVividhaprakara(
+  //                             pkid: pkIdVividhBhasha,
+  //                             vastiid: int.parse(selctedLevelId!),
+  //                             bhaashaid: bhashaId,
+  //                             selectedDropdownValueName: bhashaName,
+  //                             andaje: bhashaPersentCount.text.trim(),
+  //                             otherbhaasha: anyaBhashaNameController.text,
+  //                             isactive: isActiveBhasha,
+  //                             andajeForShow: bhashaCount,
+  //                           );
+  //                           print("newData ${json.encode(newData)}");
+  //                           // Add or update entry in the list
+  //                           if (editIndex != null) {
+  //                             enteredVividhBhashaBolnareDataList[editIndex] =
+  //                                 newData;
+  //                           } else {
+  //                             enteredVividhBhashaBolnareDataList.add(newData);
+  //                           }
+  //                           clearFields4();
+  //                           setState(() {});
+  //                           Navigator.of(ctx).pop();
+  //                           if (onDataChanged != null) onDataChanged();
+  //                         },
+  //                         child: Text("${Statics.getLabel('Submit')}",
+  //                             style: TextStyle(color: Colors.white)),
+  //                       ),
+  //                     )
+  //                   ],
+  //                 ),
+  //               ),
+  //             );
+  //           },
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
   void showVividhBhashaBolnarePopup(BuildContext context,
       {int? editIndex, VoidCallback? onDataChanged}) {
     if (editIndex != null) {
       var data = enteredVividhBhashaBolnareDataList[editIndex];
       bhashaId = data.bhaashaid;
       bhashaName = data.selectedDropdownValueName;
-      // selectedbhasha = data.bhaashaid;
       selectedbhashaEditId = data.bhaashaid;
       pkIdVividhBhasha = data.pkid;
       bhashaPersentCount.text = data.andaje ?? "";
-      anyaBhashaNameController.text = data.otherbhaasha!;
+      anyaBhashaNameController.text = data.otherbhaasha ?? "";
+      bhashaCount = data.andajeForShow;
+      isActiveBhasha = data.isactive;
+    } else {
+      isActiveBhasha = 1;
     }
+
     showDialog(
       context: context,
       builder: (ctx) {
@@ -7027,14 +7574,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         ],
                       ),
                       const SizedBox(height: 10),
-                      // Dropdown 1
+
+                      // Language Dropdown
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           "${Statics.getLabel('selectLanguage')}",
-                          style: TextStyle(
-                            fontSize: 15,
-                          ),
+                          style: TextStyle(fontSize: 15),
                         ),
                       ),
                       vastisarvekshanDropdown2(
@@ -7057,22 +7603,91 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         editId: selectedbhashaEditId,
                       ),
                       SizedBox(height: 10),
+
+                      // Other Language Field
                       if (selectedbhasha?.isOther == 1)
                         textControllerField2(
-                            controller: anyaBhashaNameController,
-                            name: "${Statics.getLabel('OtherLanguage')}",
+                          controller: anyaBhashaNameController,
+                          name: "${Statics.getLabel('OtherLanguage')}",
+                          height: 50,
+                          hintTextString: "${Statics.getLabel('onlyBhasha')}",
+                        ),
+
+                      SizedBox(height: 10),
+
+                      // Percentage Dropdown
+                      Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text:
+                                        "${Statics.getLabel('prushaanchiSankhya')}",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: "*",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Container(
                             height: 50,
-                            hintTextString:
-                                "${Statics.getLabel('onlyBhasha')}"),
-                      SizedBox(height: 10),
-                      textControllerField2(
-                        controller: bhashaPersentCount,
-                        name: "${Statics.getLabel('avgPersent')}",
-                        keyboardType: TextInputType.number,
-                        height: 50,
-                        hintTextString: "${Statics.getLabel('example0to100')}",
+                            width: double.infinity,
+                            padding: EdgeInsets.symmetric(horizontal: 12),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(color: Colors.black54),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                isExpanded: true,
+                                value: bhashaCount != null
+                                    ? bhashaOptions[bhashaCount!]
+                                    : null,
+                                items: bhashaOptions.entries.map((entry) {
+                                  return DropdownMenuItem<String>(
+                                    value: entry.value, // 55 / 30 / 19
+                                    child: Text(entry.key), // "अधिक ५०%" etc.
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    bhashaPersentCount.text = value!;
+
+                                    // Store label in bhashaCount for andajeForShow
+                                    bhashaCount = bhashaOptions.entries
+                                        .firstWhere(
+                                            (entry) => entry.value == value)
+                                        .key;
+                                  });
+                                },
+                                hint: Text(
+                                    Statics.getLabel('prushaanchiSankhya')),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
+
                       SizedBox(height: 10),
+
+                      // Submit Button
                       Align(
                         alignment: Alignment.center,
                         child: ElevatedButton(
@@ -7085,7 +7700,6 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             double? average =
                                 double.tryParse(bhashaPersentCount.text.trim());
 
-                            // Validation: 'अन्य' भाषा का नाम अनिवार्य है
                             if (selectedbhasha?.isOther == 1 &&
                                 anyaBhashaNameController.text == "") {
                               Statics.showToast(
@@ -7093,7 +7707,6 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               return;
                             }
 
-                            // Validation: प्रतिशत मान 0–100 के बीच हो
                             if (average == null ||
                                 average < 0 ||
                                 average > 100) {
@@ -7116,18 +7729,22 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               return;
                             }
 
-                            // Validation 2: Total percentage should not exceed 100
                             double totalPercent = 0;
                             for (int i = 0;
                                 i < enteredVividhBhashaBolnareDataList.length;
                                 i++) {
                               if (editIndex != null && i == editIndex) continue;
-                              totalPercent += double.tryParse(
-                                      enteredVividhBhashaBolnareDataList[i]
-                                          .andaje!) ??
-                                  0;
+
+                              var item = enteredVividhBhashaBolnareDataList[i];
+                              if (item.isactive == 1) {
+                                totalPercent +=
+                                    double.tryParse(item.andaje ?? "") ?? 0;
+                              }
                             }
-                            totalPercent += average;
+
+                            if (isActiveBhasha == 1) {
+                              totalPercent += average;
+                            }
 
                             if (totalPercent > 100) {
                               Statics.showToast(
@@ -7140,20 +7757,20 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               vastiid: int.parse(selctedLevelId!),
                               bhaashaid: bhashaId,
                               selectedDropdownValueName: bhashaName,
-                              andaje: bhashaPersentCount.text.trim(),
+                              andaje:
+                                  bhashaPersentCount.text.trim(), // e.g., "55"
                               otherbhaasha: anyaBhashaNameController.text,
                               isactive: isActiveBhasha,
+                              andajeForShow: bhashaCount, // e.g., "अधिक ५०%"
                             );
 
                             print("newData ${json.encode(newData)}");
-
                             if (editIndex != null) {
                               enteredVividhBhashaBolnareDataList[editIndex] =
                                   newData;
                             } else {
                               enteredVividhBhashaBolnareDataList.add(newData);
                             }
-
                             clearFields4();
                             setState(() {});
                             Navigator.of(ctx).pop();
@@ -14365,42 +14982,100 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
     final progress = (value / 100).clamp(0.0, 1.0);
 
     return GestureDetector(
+      // onTap: () {
+      //   print("detailListItems#$detailListItems");
+      //   // Filter out empty or whitespace-only strings
+      //   final filteredDetails =
+      //       detailListItems.where((item) => item.trim().isNotEmpty).toList();
+      //
+      //   print("Filtered detailListItems: $filteredDetails");
+      //
+      //   if (filteredDetails.isEmpty) {
+      //     Statics.showToast("सारी जानकारी भर दी गई है");
+      //     return;
+      //   }
+      //
+      //   showDialog(
+      //     context: context,
+      //     builder: (ctx) {
+      //       return AlertDialog(
+      //         title: Text("${Statics.getLabel('remainingQuestion')}"),
+      //         content: SizedBox(
+      //           width: double.maxFinite,
+      //           child: ListView.builder(
+      //             shrinkWrap: true,
+      //             itemCount: detailListItems.length,
+      //             itemBuilder: (context, index) {
+      //               return Padding(
+      //                 padding: const EdgeInsets.symmetric(vertical: 4),
+      //                 child: Text(
+      //                   "${index + 1}. ${detailListItems[index]}",
+      //                   style: const TextStyle(
+      //                     color: Colors.red,
+      //                     fontWeight: FontWeight.bold,
+      //                   ),
+      //                 ),
+      //               );
+      //             },
+      //           ),
+      //         ),
+      //         actions: [
+      //           TextButton(
+      //             onPressed: () => Navigator.of(context).pop(),
+      //             child: Text("${Statics.getLabel('bandKara')}"),
+      //           ),
+      //         ],
+      //       );
+      //     },
+      //   );
+      // },
       onTap: () {
-        if (detailListItems != [])
-          showDialog(
-            context: context,
-            builder: (ctx) {
-              return AlertDialog(
-                title: Text("${Statics.getLabel('remainingQuestion')}"),
-                content: SizedBox(
-                  width: double.maxFinite,
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: detailListItems.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: Text(
-                          "${index + 1}. ${detailListItems[index]}",
-                          style: const TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                          ),
+        // Filter out empty or whitespace-only strings
+        final filteredDetails =
+            detailListItems.where((item) => item.trim().isNotEmpty).toList();
+
+        print("Filtered detailListItems: $filteredDetails");
+
+        if (filteredDetails.isEmpty) {
+          Statics.showToast("सारी जानकारी भर दी गई है");
+          return;
+        }
+
+        showDialog(
+          context: context,
+          builder: (ctx) {
+            return AlertDialog(
+              title: Text("${Statics.getLabel('remainingQuestion')}"),
+              content: SizedBox(
+                width: double.maxFinite,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: filteredDetails.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Text(
+                        "${index + 1}. ${filteredDetails[index]}",
+                        style: const TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text("${Statics.getLabel('bandKara')}"),
-                  ),
-                ],
-              );
-            },
-          );
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text("${Statics.getLabel('bandKara')}"),
+                ),
+              ],
+            );
+          },
+        );
       },
+
       child: TweenAnimationBuilder<double>(
         tween: Tween<double>(begin: 0, end: progress),
         duration: const Duration(milliseconds: 800),
