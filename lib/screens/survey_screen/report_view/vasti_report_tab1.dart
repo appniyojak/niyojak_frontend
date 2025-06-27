@@ -1082,7 +1082,6 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                         DataColumn(
                                             label: Text(
                                                 "${Statics.getLabel('Vasti')}")),
-                                        DataColumn(label: Text('')),
                                       ],
                                       rows: [
                                         DataRow(

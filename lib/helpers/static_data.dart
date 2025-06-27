@@ -19,6 +19,7 @@ import '../helpers/static_data.dart' as Statics;
 import '../models/response_model/TulnatmakResponseModel.dart';
 import '../models/response_model/geounit_name_model.dart';
 import '../models/response_model/get_vasti_data_by_id_model.dart';
+import '../models/response_model/mandalVastisarvekshanReportModel.dart';
 import '../models/response_model/nagar_vasti_model.dart';
 import '../models/response_model/nirikshan_baithak_vrutta.dart';
 import '../models/response_model/notification_list_model.dart';
@@ -166,6 +167,8 @@ const String urlRefreshHomeScreenForApp =
 const String urlVastisarvekshanReport = baseUrlAPI + '/VastisarvekshanReport';
 const String urlNagarVastisarvekshanReport =
     baseUrlAPI + '/NagarVastisarvekshanReport';
+const String mandalVastisarvekshanReport =
+    baseUrlAPI + '/mandalVastisarvekshanReport';
 const String urlNagarVastisarvekshanReportForMandal =
     baseUrlAPI + '/NagarVastisarvekshanReportformandal';
 const String urlGetShaakhaaPatForApp = baseUrlAPI + '/GetShaakhaaPatForApp';
@@ -2323,6 +2326,49 @@ Future<NagarVastiSampurnaModel?> vastisarvekshanAllReportData(
     Navigator.of(context, rootNavigator: true).pop();
 
     return NagarVastiSampurnaModel.fromJson(responseBody);
+  } else {
+    log("Error: ${response.statusCode}");
+    Navigator.of(context, rootNavigator: true).pop();
+
+    return null;
+  }
+}
+
+Future<MandalVastisarvekshanReportModel?> vastisarvekshanOnlyMandalReportData(
+    context, String? userID, String? targetGeoUnitID, String? levelType) async {
+  showLoaderDialog(context);
+
+  print("${userID}  --- $targetGeoUnitID  ");
+  Map<String, String> jHeaders = {
+    'Content-Type': 'application/json',
+    'Accept': '*/*'
+  };
+
+  var response = await http.post(Uri.parse(mandalVastisarvekshanReport),
+      headers: jHeaders,
+      body: json.encode({
+        "AppUserID": userID,
+        "GeoUnitID": int.parse(targetGeoUnitID!),
+        "type": levelType
+      }));
+
+  print(json.encode({
+    "AppUserID": userID,
+    "GeoUnitID": int.parse(targetGeoUnitID),
+    "type": levelType
+  }));
+  log("response ==>  $response");
+
+  if (response.statusCode == 200) {
+    var responseBody = json.decode(response.body);
+    Fluttertoast.showToast(
+      msg: "माहिती प्राप्त झाली.",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+    );
+    Navigator.of(context, rootNavigator: true).pop();
+
+    return MandalVastisarvekshanReportModel.fromJson(responseBody);
   } else {
     log("Error: ${response.statusCode}");
     Navigator.of(context, rootNavigator: true).pop();
