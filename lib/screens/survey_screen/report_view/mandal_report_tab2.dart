@@ -317,6 +317,13 @@ class _MandalSurveyReportViewScreen2State
       }
     }
 
+    // Get unique subvalue list
+    final subvalues =
+        data?.durjanshakti!.map((e) => e.subvalue).toSet().toList();
+
+    // Get unique value list
+    final values = data?.durjanshakti!.map((e) => e.value).toSet().toList();
+
     return Scaffold(
       body: Container(
         padding: EdgeInsets.all(10),
@@ -1359,489 +1366,490 @@ class _MandalSurveyReportViewScreen2State
               commonExpansionTile(
                 title: 'Gatividhi',
                 children: [
-                  // Container(
-                  //   // height: 300,
-                  //   decoration: BoxDecoration(
-                  //     border: Border.all(color: Colors.grey.shade300),
-                  //     borderRadius: BorderRadius.circular(8),
-                  //   ),
-                  //   child: SingleChildScrollView(
-                  //       child: Column(
-                  //     children: [
-                  //       if (data != null &&
-                  //           data?.talukamandalListKaaryakartaaCountByGatividhi !=
-                  //               null)
-                  //         Container(
-                  //           decoration: BoxDecoration(
-                  //             border: Border.all(color: Colors.grey.shade300),
-                  //             borderRadius: BorderRadius.circular(8),
-                  //           ),
-                  //           child: SingleChildScrollView(
-                  //             scrollDirection:
-                  //                 Axis.horizontal, // horizontal scroll
-                  //             child: DataTable(
-                  //               headingRowColor:
-                  //                   MaterialStateProperty.resolveWith(
-                  //                 (states) => Colors.purpleAccent[200],
-                  //               ),
-                  //               headingTextStyle: const TextStyle(
-                  //                 color: Colors.white,
-                  //                 fontWeight: FontWeight.bold,
-                  //               ),
-                  //               columns: [
-                  //                 DataColumn(
-                  //                   label: Expanded(
-                  //                     child: Center(
-                  //                       child: Text(
-                  //                         'गतिविधी',
-                  //                         textAlign: TextAlign.center,
-                  //                         style: TextStyle(
-                  //                             fontWeight: FontWeight.bold),
-                  //                       ),
-                  //                     ),
-                  //                   ),
-                  //                 ),
-                  //                 DataColumn(
-                  //                   label: Expanded(
-                  //                     child: Center(
-                  //                       child: Text(
-                  //                         "${Statics.getLabel('count')}",
-                  //                         textAlign: TextAlign.center,
-                  //                         style: TextStyle(
-                  //                             fontWeight: FontWeight.bold),
-                  //                       ),
-                  //                     ),
-                  //                   ),
-                  //                 ),
-                  //               ],
-                  //               rows: data!
-                  //                   .talukamandalListKaaryakartaaCountByGatividhi!
-                  //                   .map((item) {
-                  //                 return DataRow(
-                  //                   cells: [
-                  //                     DataCell(Center(
-                  //                         child:
-                  //                             Text(item.gatividhiName ?? ''))),
-                  //                     DataCell(Center(
-                  //                         child: Text(item.kaaryakartaaCount
-                  //                             .toString()))),
-                  //                   ],
-                  //                 );
-                  //               }).toList(),
-                  //             ),
-                  //           ),
-                  //         ),
-                  //     ],
-                  //   )),
-                  // ),
+                  Container(
+                    // height: 300,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade300),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: SingleChildScrollView(
+                        child: Column(
+                      children: [
+                        if (data != null &&
+                            data?.kaaryakartaaCountByGatividhi != null)
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: SingleChildScrollView(
+                              scrollDirection:
+                                  Axis.horizontal, // horizontal scroll
+                              child: DataTable(
+                                headingRowColor:
+                                    MaterialStateProperty.resolveWith(
+                                  (states) => Colors.purpleAccent[200],
+                                ),
+                                headingTextStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                columns: [
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          'गतिविधी',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          "${Statics.getLabel('count')}",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                                rows: data!.kaaryakartaaCountByGatividhi!
+                                    .map((item) {
+                                  return DataRow(
+                                    cells: [
+                                      DataCell(Center(
+                                          child:
+                                              Text(item.gatividhiName ?? ''))),
+                                      DataCell(Center(
+                                          child: Text(item.kaaryakartaaCount
+                                              .toString()))),
+                                    ],
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ),
+                      ],
+                    )),
+                  ),
                 ],
               ),
               commonExpansionTile(
                 title: 'Aayaam',
                 children: [
-                  // Container(
-                  //   // height: 300,
-                  //   decoration: BoxDecoration(
-                  //     border: Border.all(color: Colors.grey.shade300),
-                  //     borderRadius: BorderRadius.circular(8),
-                  //   ),
-                  //   child: SingleChildScrollView(
-                  //       child: Column(
-                  //     children: [
-                  //       if (data != null &&
-                  //           data?. !=
-                  //               null)
-                  //         Container(
-                  //           decoration: BoxDecoration(
-                  //             border: Border.all(color: Colors.grey.shade300),
-                  //             borderRadius: BorderRadius.circular(8),
-                  //           ),
-                  //           child: SingleChildScrollView(
-                  //             scrollDirection:
-                  //                 Axis.horizontal, // horizontal scroll
-                  //             child: DataTable(
-                  //               headingRowColor:
-                  //                   MaterialStateProperty.resolveWith(
-                  //                 (states) => Colors.purpleAccent[200],
-                  //               ),
-                  //               headingTextStyle: const TextStyle(
-                  //                 color: Colors.white,
-                  //                 fontWeight: FontWeight.bold,
-                  //               ),
-                  //               columns: [
-                  //                 DataColumn(
-                  //                   label: Expanded(
-                  //                     child: Center(
-                  //                       child: Text(
-                  //                         "${Statics.getLabel('Aayaam')}",
-                  //                         textAlign: TextAlign.center,
-                  //                         style: TextStyle(
-                  //                             fontWeight: FontWeight.bold),
-                  //                       ),
-                  //                     ),
-                  //                   ),
-                  //                 ),
-                  //                 DataColumn(
-                  //                   label: Expanded(
-                  //                     child: Center(
-                  //                       child: Text(
-                  //                         "${Statics.getLabel('count')}",
-                  //                         textAlign: TextAlign.center,
-                  //                         style: TextStyle(
-                  //                             fontWeight: FontWeight.bold),
-                  //                       ),
-                  //                     ),
-                  //                   ),
-                  //                 ),
-                  //               ],
-                  //               rows: data!
-                  //                   .talukamandalListKaaryakartaaCountByAayaam!
-                  //                   .map((item) {
-                  //                 return DataRow(
-                  //                   cells: [
-                  //                     DataCell(Center(
-                  //                         child: Text(item.aayaamName ?? ''))),
-                  //                     DataCell(Center(
-                  //                         child: Text(item.kaaryakartaaCount
-                  //                             .toString()))),
-                  //                   ],
-                  //                 );
-                  //               }).toList(),
-                  //             ),
-                  //           ),
-                  //         ),
-                  //     ],
-                  //   )),
-                  // ),
+                  Container(
+                    // height: 300,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade300),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: SingleChildScrollView(
+                        child: Column(
+                      children: [
+                        if (data != null &&
+                            data?.kaaryakartaaCountByAayaam != null)
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: SingleChildScrollView(
+                              scrollDirection:
+                                  Axis.horizontal, // horizontal scroll
+                              child: DataTable(
+                                headingRowColor:
+                                    MaterialStateProperty.resolveWith(
+                                  (states) => Colors.purpleAccent[200],
+                                ),
+                                headingTextStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                columns: [
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          "${Statics.getLabel('Aayaam')}",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          "${Statics.getLabel('count')}",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                                rows: data!.kaaryakartaaCountByAayaam!
+                                    .map((item) {
+                                  return DataRow(
+                                    cells: [
+                                      DataCell(Center(
+                                          child: Text(item.aayaamName ?? ''))),
+                                      DataCell(Center(
+                                          child: Text(item.kaaryakartaaCount
+                                              .toString()))),
+                                    ],
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ),
+                      ],
+                    )),
+                  ),
                 ],
               ),
               commonExpansionTile(
                 title: 'Sangha-PreritSansthaa',
                 children: [
-                  // Container(
-                  //   // height: 300,
-                  //   decoration: BoxDecoration(
-                  //     border: Border.all(color: Colors.grey.shade300),
-                  //     borderRadius: BorderRadius.circular(8),
-                  //   ),
-                  //   child: SingleChildScrollView(
-                  //       child: Column(
-                  //     children: [
-                  //       if (data != null &&
-                  //           data?. !=
-                  //               null)
-                  //         Container(
-                  //           decoration: BoxDecoration(
-                  //             border: Border.all(color: Colors.grey.shade300),
-                  //             borderRadius: BorderRadius.circular(8),
-                  //           ),
-                  //           child: SingleChildScrollView(
-                  //             scrollDirection:
-                  //                 Axis.horizontal, // horizontal scroll
-                  //             child: DataTable(
-                  //               headingRowColor:
-                  //                   MaterialStateProperty.resolveWith(
-                  //                 (states) => Colors.purpleAccent[200],
-                  //               ),
-                  //               headingTextStyle: const TextStyle(
-                  //                 color: Colors.white,
-                  //                 fontWeight: FontWeight.bold,
-                  //               ),
-                  //               columns: [
-                  //                 DataColumn(
-                  //                   label: Expanded(
-                  //                     child: Center(
-                  //                       child: Text(
-                  //                         "${Statics.getLabel('sanghaPreritSanghatana')}",
-                  //                         textAlign: TextAlign.center,
-                  //                         style: TextStyle(
-                  //                             fontWeight: FontWeight.bold),
-                  //                       ),
-                  //                     ),
-                  //                   ),
-                  //                 ),
-                  //                 DataColumn(
-                  //                   label: Expanded(
-                  //                     child: Center(
-                  //                       child: Text(
-                  //                         "${Statics.getLabel('count')}",
-                  //                         textAlign: TextAlign.center,
-                  //                         style: TextStyle(
-                  //                             fontWeight: FontWeight.bold),
-                  //                       ),
-                  //                     ),
-                  //                   ),
-                  //                 ),
-                  //               ],
-                  //               rows: data!
-                  //                   .talukamandalListSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation!
-                  //                   .map((item) {
-                  //                 return DataRow(
-                  //                   cells: [
-                  //                     DataCell(Center(
-                  //                         child: Text(
-                  //                             item.areaOfOperation ?? ''))),
-                  //                     DataCell(Center(
-                  //                         child: Text(item.kaaryakartaaCount
-                  //                             .toString()))),
-                  //                   ],
-                  //                 );
-                  //               }).toList(),
-                  //             ),
-                  //           ),
-                  //         ),
-                  //     ],
-                  //   )),
-                  // ),
+                  Container(
+                    // height: 300,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade300),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: SingleChildScrollView(
+                        child: Column(
+                      children: [
+                        if (data != null &&
+                            data?.sanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation !=
+                                null)
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: SingleChildScrollView(
+                              scrollDirection:
+                                  Axis.horizontal, // horizontal scroll
+                              child: DataTable(
+                                headingRowColor:
+                                    MaterialStateProperty.resolveWith(
+                                  (states) => Colors.purpleAccent[200],
+                                ),
+                                headingTextStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                columns: [
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          "${Statics.getLabel('sanghaPreritSanghatana')}",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          "${Statics.getLabel('count')}",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                                rows: data!
+                                    .sanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation!
+                                    .map((item) {
+                                  return DataRow(
+                                    cells: [
+                                      DataCell(Center(
+                                          child: Text(
+                                              item.areaOfOperation ?? ''))),
+                                      DataCell(Center(
+                                          child: Text(item.kaaryakartaaCount
+                                              .toString()))),
+                                    ],
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ),
+                      ],
+                    )),
+                  ),
                 ],
               ),
               commonExpansionTile(
                 title: 'OtherSocialOrganization',
                 children: [
-                  // Container(
-                  //   // height: 300,
-                  //   decoration: BoxDecoration(
-                  //     border: Border.all(color: Colors.grey.shade300),
-                  //     borderRadius: BorderRadius.circular(8),
-                  //   ),
-                  //   child: SingleChildScrollView(
-                  //       child: Column(
-                  //     children: [
-                  //       if (data != null &&
-                  //           data?.talukamandalListSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation !=
-                  //               null)
-                  //         Container(
-                  //           decoration: BoxDecoration(
-                  //             border: Border.all(color: Colors.grey.shade300),
-                  //             borderRadius: BorderRadius.circular(8),
-                  //           ),
-                  //           child: SingleChildScrollView(
-                  //             scrollDirection:
-                  //                 Axis.horizontal, // horizontal scroll
-                  //             child: DataTable(
-                  //               headingRowColor:
-                  //                   MaterialStateProperty.resolveWith(
-                  //                 (states) => Colors.purpleAccent[200],
-                  //               ),
-                  //               headingTextStyle: const TextStyle(
-                  //                 color: Colors.white,
-                  //                 fontWeight: FontWeight.bold,
-                  //               ),
-                  //               columns: [
-                  //                 DataColumn(
-                  //                   label: Expanded(
-                  //                     child: Center(
-                  //                       child: Text(
-                  //                         "${Statics.getLabel('OtherSocialOrganization')}",
-                  //                         textAlign: TextAlign.center,
-                  //                         style: TextStyle(
-                  //                             fontWeight: FontWeight.bold),
-                  //                       ),
-                  //                     ),
-                  //                   ),
-                  //                 ),
-                  //                 DataColumn(
-                  //                   label: Expanded(
-                  //                     child: Center(
-                  //                       child: Text(
-                  //                         "${Statics.getLabel('count')}",
-                  //                         textAlign: TextAlign.center,
-                  //                         style: TextStyle(
-                  //                             fontWeight: FontWeight.bold),
-                  //                       ),
-                  //                     ),
-                  //                   ),
-                  //                 ),
-                  //               ],
-                  //               rows: data!
-                  //                   .talukamandalListSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation!
-                  //                   .map((item) {
-                  //                 return DataRow(
-                  //                   cells: [
-                  //                     DataCell(Center(
-                  //                         child: Text(
-                  //                             item.areaOfOperation ?? ''))),
-                  //                     DataCell(Center(
-                  //                         child: Text(item.kaaryakartaaCount
-                  //                             .toString()))),
-                  //                   ],
-                  //                 );
-                  //               }).toList(),
-                  //             ),
-                  //           ),
-                  //         ),
-                  //     ],
-                  //   )),
-                  // ),
+                  Container(
+                    // height: 300,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade300),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: SingleChildScrollView(
+                        child: Column(
+                      children: [
+                        if (data != null &&
+                            data?.socialOrganizationKaaryakartaaCountByAreaOfOperation !=
+                                null)
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: SingleChildScrollView(
+                              scrollDirection:
+                                  Axis.horizontal, // horizontal scroll
+                              child: DataTable(
+                                headingRowColor:
+                                    MaterialStateProperty.resolveWith(
+                                  (states) => Colors.purpleAccent[200],
+                                ),
+                                headingTextStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                columns: [
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          "${Statics.getLabel('OtherSocialOrganization')}",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          "${Statics.getLabel('count')}",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                                rows: data!
+                                    .socialOrganizationKaaryakartaaCountByAreaOfOperation!
+                                    .map((item) {
+                                  return DataRow(
+                                    cells: [
+                                      DataCell(Center(
+                                          child: Text(
+                                              item.studentCategoryName ?? ''))),
+                                      DataCell(Center(
+                                          child: Text(item
+                                              .countByStudentCategory
+                                              .toString()))),
+                                    ],
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ),
+                      ],
+                    )),
+                  ),
                 ],
               ),
               commonExpansionTile(
                 title: 'StudentCategory',
                 children: [
-                  // Container(
-                  //   // height: 300,
-                  //   decoration: BoxDecoration(
-                  //     border: Border.all(color: Colors.grey.shade300),
-                  //     borderRadius: BorderRadius.circular(8),
-                  //   ),
-                  //   child: SingleChildScrollView(
-                  //       child: Column(
-                  //     children: [
-                  //       if (data != null &&
-                  //           data?.talukamandalListSwayamsevakCountByStudentCategory !=
-                  //               null)
-                  //         Container(
-                  //           decoration: BoxDecoration(
-                  //             border: Border.all(color: Colors.grey.shade300),
-                  //             borderRadius: BorderRadius.circular(8),
-                  //           ),
-                  //           child: SingleChildScrollView(
-                  //             scrollDirection:
-                  //                 Axis.horizontal, // horizontal scroll
-                  //             child: DataTable(
-                  //               headingRowColor:
-                  //                   MaterialStateProperty.resolveWith(
-                  //                 (states) => Colors.purpleAccent[200],
-                  //               ),
-                  //               headingTextStyle: const TextStyle(
-                  //                 color: Colors.white,
-                  //                 fontWeight: FontWeight.bold,
-                  //               ),
-                  //               columns: [
-                  //                 DataColumn(
-                  //                   label: Expanded(
-                  //                     child: Center(
-                  //                       child: Text(
-                  //                         "${Statics.getLabel('StudentCategory')}",
-                  //                         textAlign: TextAlign.center,
-                  //                         style: TextStyle(
-                  //                             fontWeight: FontWeight.bold),
-                  //                       ),
-                  //                     ),
-                  //                   ),
-                  //                 ),
-                  //                 DataColumn(
-                  //                   label: Expanded(
-                  //                     child: Center(
-                  //                       child: Text(
-                  //                         "${Statics.getLabel('count')}",
-                  //                         textAlign: TextAlign.center,
-                  //                         style: TextStyle(
-                  //                             fontWeight: FontWeight.bold),
-                  //                       ),
-                  //                     ),
-                  //                   ),
-                  //                 ),
-                  //               ],
-                  //               rows: data!
-                  //                   .talukamandalListSwayamsevakCountByStudentCategory!
-                  //                   .map((item) {
-                  //                 return DataRow(
-                  //                   cells: [
-                  //                     DataCell(Center(
-                  //                         child: Text(
-                  //                             item.studentCategoryName ?? ''))),
-                  //                     DataCell(Center(
-                  //                         child: Text(item
-                  //                             .countByStudentCategory
-                  //                             .toString()))),
-                  //                   ],
-                  //                 );
-                  //               }).toList(),
-                  //             ),
-                  //           ),
-                  //         ),
-                  //     ],
-                  //   )),
-                  // ),
+                  Container(
+                    // height: 300,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade300),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: SingleChildScrollView(
+                        child: Column(
+                      children: [
+                        if (data != null &&
+                            data?.swayamsevakCountByStudentCategory != null)
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: SingleChildScrollView(
+                              scrollDirection:
+                                  Axis.horizontal, // horizontal scroll
+                              child: DataTable(
+                                headingRowColor:
+                                    MaterialStateProperty.resolveWith(
+                                  (states) => Colors.purpleAccent[200],
+                                ),
+                                headingTextStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                columns: [
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          "${Statics.getLabel('StudentCategory')}",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          "${Statics.getLabel('count')}",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                                rows: data!.swayamsevakCountByStudentCategory!
+                                    .map((item) {
+                                  return DataRow(
+                                    cells: [
+                                      DataCell(Center(
+                                          child: Text(
+                                              item.studentCategoryName ?? ''))),
+                                      DataCell(Center(
+                                          child: Text(item
+                                              .countByStudentCategory
+                                              .toString()))),
+                                    ],
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ),
+                      ],
+                    )),
+                  ),
                 ],
               ),
               commonExpansionTile(
                 title: 'VyavasaayeeCategory',
                 children: [
-                  // Container(
-                  //   // height: 300,
-                  //   decoration: BoxDecoration(
-                  //     border: Border.all(color: Colors.grey.shade300),
-                  //     borderRadius: BorderRadius.circular(8),
-                  //   ),
-                  //   child: SingleChildScrollView(
-                  //       child: Column(
-                  //     children: [
-                  //       if (data != null &&
-                  //           data?.talukamandalListSwayamsevakCountByVyavasaayeeCategory !=
-                  //               null)
-                  //         Container(
-                  //           decoration: BoxDecoration(
-                  //             border: Border.all(color: Colors.grey.shade300),
-                  //             borderRadius: BorderRadius.circular(8),
-                  //           ),
-                  //           child: SingleChildScrollView(
-                  //             scrollDirection:
-                  //                 Axis.horizontal, // horizontal scroll
-                  //             child: DataTable(
-                  //               headingRowColor:
-                  //                   MaterialStateProperty.resolveWith(
-                  //                 (states) => Colors.purpleAccent[200],
-                  //               ),
-                  //               headingTextStyle: const TextStyle(
-                  //                 color: Colors.white,
-                  //                 fontWeight: FontWeight.bold,
-                  //               ),
-                  //               columns: [
-                  //                 DataColumn(
-                  //                   label: Expanded(
-                  //                     child: Center(
-                  //                       child: Text(
-                  //                         "${Statics.getLabel('VyavasaayeeCategory')}",
-                  //                         textAlign: TextAlign.center,
-                  //                         style: TextStyle(
-                  //                             fontWeight: FontWeight.bold),
-                  //                       ),
-                  //                     ),
-                  //                   ),
-                  //                 ),
-                  //                 DataColumn(
-                  //                   label: Expanded(
-                  //                     child: Center(
-                  //                       child: Text(
-                  //                         "${Statics.getLabel('count')}",
-                  //                         textAlign: TextAlign.center,
-                  //                         style: TextStyle(
-                  //                             fontWeight: FontWeight.bold),
-                  //                       ),
-                  //                     ),
-                  //                   ),
-                  //                 ),
-                  //               ],
-                  //               rows: data!
-                  //                   .talukamandalListSwayamsevakCountByVyavasaayeeCategory!
-                  //                   .map((item) {
-                  //                 return DataRow(
-                  //                   cells: [
-                  //                     DataCell(Center(
-                  //                         child: Text(
-                  //                             item.vyavasaayeeCategoryName ??
-                  //                                 ''))),
-                  //                     DataCell(Center(
-                  //                         child: Text(item
-                  //                             .countByVyavasaayeeCategory
-                  //                             .toString()))),
-                  //                   ],
-                  //                 );
-                  //               }).toList(),
-                  //             ),
-                  //           ),
-                  //         ),
-                  //     ],
-                  //   )),
-                  // ),
+                  Container(
+                    // height: 300,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade300),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: SingleChildScrollView(
+                        child: Column(
+                      children: [
+                        if (data != null &&
+                            data?.listSwayamsevakCountByVyavasaayeeCategory !=
+                                null)
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: SingleChildScrollView(
+                              scrollDirection:
+                                  Axis.horizontal, // horizontal scroll
+                              child: DataTable(
+                                headingRowColor:
+                                    MaterialStateProperty.resolveWith(
+                                  (states) => Colors.purpleAccent[200],
+                                ),
+                                headingTextStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                columns: [
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          "${Statics.getLabel('VyavasaayeeCategory')}",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          "${Statics.getLabel('count')}",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                                rows: data!
+                                    .listSwayamsevakCountByVyavasaayeeCategory!
+                                    .map((item) {
+                                  return DataRow(
+                                    cells: [
+                                      DataCell(Center(
+                                          child: Text(
+                                              item.vyavasaayeeCategoryName ??
+                                                  ''))),
+                                      DataCell(Center(
+                                          child: Text(item
+                                              .countByVyavasaayeeCategory
+                                              .toString()))),
+                                    ],
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ),
+                      ],
+                    )),
+                  ),
                 ],
               ),
 //===================================================================================================================================================
               commonExpansionTile(
-                title: 'gaavachiLoksankhya',
+                title: 'Population',
                 children: [
+                  Text(Statics.getLabel("gaavachiLoksankhya"),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.purpleAccent,
+                          fontSize: 20)),
+                  Divider(),
                   SingleColumnRow(
                       txtString: Statics.getLabel('moreThan40000'),
                       value: data?.mandaldata?.greaterthen4000.toString(),
@@ -1870,12 +1878,12 @@ class _MandalSurveyReportViewScreen2State
                       txtString: Statics.getLabel('1000to3000'),
                       value: data?.mandaldata?.lessThan1000.toString(),
                       fontsize: 15),
-                ],
-              ),
-//===================================================================================================================================================
-              commonExpansionTile(
-                title: 'purushLoksankhya',
-                children: [
+                  Text(Statics.getLabel("purushLoksankhya"),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.purpleAccent,
+                          fontSize: 20)),
+                  Divider(),
                   SingleColumnRow(
                       txtString: Statics.getLabel('moreThan40000'),
                       value:
@@ -1916,102 +1924,6 @@ class _MandalSurveyReportViewScreen2State
               commonExpansionTile(
                 title: 'religion',
                 children: [
-                  // Container(
-                  //   // height: 300,
-                  //   decoration: BoxDecoration(
-                  //     border: Border.all(color: Colors.grey.shade300),
-                  //     borderRadius: BorderRadius.circular(8),
-                  //   ),
-                  //   child: SingleChildScrollView(
-                  //       child: Column(
-                  //         children: [
-                  //           if (data != null &&
-                  //               data. != null)
-                  //             Container(
-                  //               decoration: BoxDecoration(
-                  //                 border:
-                  //                 Border.all(color: Colors.grey.shade300),
-                  //                 borderRadius: BorderRadius.circular(8),
-                  //               ),
-                  //               child: SingleChildScrollView(
-                  //                 scrollDirection:
-                  //                 Axis.horizontal, // horizontal scroll
-                  //                 child: DataTable(
-                  //                   headingRowColor:
-                  //                   MaterialStateProperty.resolveWith(
-                  //                         (states) => Colors.purpleAccent[200],
-                  //                   ),
-                  //                   headingTextStyle: const TextStyle(
-                  //                     color: Colors.white,
-                  //                     fontWeight: FontWeight.bold,
-                  //                   ),
-                  //                   columns: [
-                  //                     DataColumn(
-                  //                       label: Expanded(
-                  //                         child: Center(
-                  //                           child: Text(
-                  //                             "${Statics.getLabel('religion')}",
-                  //                             textAlign: TextAlign.center,
-                  //                             style: TextStyle(
-                  //                                 fontWeight:
-                  //                                 FontWeight.bold),
-                  //                           ),
-                  //                         ),
-                  //                       ),
-                  //                     ),
-                  //                     DataColumn(
-                  //                       label: Expanded(
-                  //                         child: Center(
-                  //                           child: Text(
-                  //                             "${Statics.getLabel('GraamCount')}",
-                  //                             textAlign: TextAlign.center,
-                  //                             style: TextStyle(
-                  //                                 fontWeight:
-                  //                                 FontWeight.bold),
-                  //                           ),
-                  //                         ),
-                  //                       ),
-                  //                     ),
-                  //                     DataColumn(
-                  //                       label: Expanded(
-                  //                         child: Center(
-                  //                           child: Text(
-                  //                             "${Statics.getLabel('kitiMandalat')}",
-                  //                             textAlign: TextAlign.center,
-                  //                             style: TextStyle(
-                  //                                 fontWeight:
-                  //                                 FontWeight.bold),
-                  //                           ),
-                  //                         ),
-                  //                       ),
-                  //                     ),
-                  //                   ],
-                  //                   rows: talukaMandalReligion!.map((item) {
-                  //                     return DataRow(
-                  //                       cells: [
-                  //                         DataCell(Center(
-                  //                             child: Text(item.value ?? ''))),
-                  //                         DataCell(Center(
-                  //                             child: Text(item.gramCount
-                  //                                 .toString()))),
-                  //                         DataCell(Center(
-                  //                             child: Text(item.mandalCount
-                  //                                 .toString()))),
-                  //                       ],
-                  //                     );
-                  //                   }).toList(),
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //         ],
-                  //       )),
-                  // ),
-                ],
-              ),
-//===================================================================================================================================================
-              commonExpansionTile(
-                title: 'UpsanaSthal',
-                children: [
                   Container(
                     // height: 300,
                     decoration: BoxDecoration(
@@ -2021,7 +1933,7 @@ class _MandalSurveyReportViewScreen2State
                     child: SingleChildScrollView(
                         child: Column(
                       children: [
-                        if (data != null && data?.upaasana != null)
+                        if (data != null && data?.religion != null)
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.shade300),
@@ -2044,19 +1956,7 @@ class _MandalSurveyReportViewScreen2State
                                     label: Expanded(
                                       child: Center(
                                         child: Text(
-                                          "${Statics.getLabel('UpasanaSthal')}",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  DataColumn(
-                                    label: Expanded(
-                                      child: Center(
-                                        child: Text(
-                                          "${Statics.getLabel('count')}",
+                                          "${Statics.getLabel('religion')}",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
@@ -2077,14 +1977,11 @@ class _MandalSurveyReportViewScreen2State
                                     ),
                                   ),
                                 ],
-                                rows: data!.upaasana!.map((item) {
+                                rows: data!.religion!.map((item) {
                                   return DataRow(
                                     cells: [
                                       DataCell(Center(
                                           child: Text(item.value ?? ''))),
-                                      DataCell(Center(
-                                          child:
-                                              Text(item.sankhya.toString()))),
                                       DataCell(Center(
                                           child:
                                               Text(item.gramCount.toString()))),
@@ -2099,6 +1996,7 @@ class _MandalSurveyReportViewScreen2State
                   ),
                 ],
               ),
+
 //===================================================================================================================================================
               commonExpansionTile(
                 title: 'SajjanShakti',
@@ -2263,7 +2161,7 @@ class _MandalSurveyReportViewScreen2State
                             SizedBox(height: 20),
                             Center(
                               child: Text(
-                                "${Statics.getLabel('AnyaPrabhaviLok')} (${sajjanType})",
+                                "${Statics.getLabel('anyaPrabhaviLok')} (${sajjanType})",
                                 style: TextStyle(
                                     fontSize: 20, fontWeight: FontWeight.bold),
                               ),
@@ -2367,6 +2265,381 @@ class _MandalSurveyReportViewScreen2State
                       }).toList(),
                     ),
                   ),
+                ],
+              ),
+// ===================================================================================================================================================
+              commonExpansionTile(
+                title: 'UpsanaSthal',
+                children: [
+                  Container(
+                    // height: 300,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade300),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: SingleChildScrollView(
+                        child: Column(
+                      children: [
+                        if (data != null && data?.upaasana != null)
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: SingleChildScrollView(
+                              scrollDirection:
+                                  Axis.horizontal, // horizontal scroll
+                              child: DataTable(
+                                headingRowColor:
+                                    MaterialStateProperty.resolveWith(
+                                  (states) => Colors.purpleAccent[200],
+                                ),
+                                headingTextStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                columns: [
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          "${Statics.getLabel('UpsanaSthal')}",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          "${Statics.getLabel('count')}",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          "${Statics.getLabel('GraamCount')}",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                                rows: data!.upaasana!.map((item) {
+                                  return DataRow(
+                                    cells: [
+                                      DataCell(Center(
+                                          child: Text(item.value ?? ''))),
+                                      DataCell(Center(
+                                          child:
+                                              Text(item.sankhya.toString()))),
+                                      DataCell(Center(
+                                          child:
+                                              Text(item.gramCount.toString()))),
+                                    ],
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ),
+                      ],
+                    )),
+                  ),
+                ],
+              ),
+// ===================================================================================================================================================
+              commonExpansionTile(
+                title: 'GavatsajareHonareSan',
+                children: [
+                  Container(
+                    // height: 300,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade300),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: SingleChildScrollView(
+                        child: Column(
+                      children: [
+                        if (data != null && data?.mahatvacesana != null)
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: SingleChildScrollView(
+                              scrollDirection:
+                                  Axis.horizontal, // horizontal scroll
+                              child: DataTable(
+                                headingRowColor:
+                                    MaterialStateProperty.resolveWith(
+                                  (states) => Colors.purpleAccent[200],
+                                ),
+                                headingTextStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                columns: [
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          "${Statics.getLabel('SelectFrequency')}",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          "${Statics.getLabel('count')}",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          "${Statics.getLabel('GraamCount')}",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                                rows: data!.mahatvacesana!.map((item) {
+                                  return DataRow(
+                                    cells: [
+                                      DataCell(Center(
+                                          child: Text(item.value ?? ''))),
+                                      DataCell(Center(
+                                          child:
+                                              Text(item.sankhya.toString()))),
+                                      DataCell(Center(
+                                          child:
+                                              Text(item.gramCount.toString()))),
+                                    ],
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ),
+                      ],
+                    )),
+                  ),
+                ],
+              ),
+// ===================================================================================================================================================
+              commonExpansionTile(
+                title: 'GavatHonareKaryakram',
+                children: [
+                  Container(
+                    // height: 300,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade300),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: SingleChildScrollView(
+                        child: Column(
+                      children: [
+                        if (data != null && data?.samajikkaryakram != null)
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: SingleChildScrollView(
+                              scrollDirection:
+                                  Axis.horizontal, // horizontal scroll
+                              child: DataTable(
+                                headingRowColor:
+                                    MaterialStateProperty.resolveWith(
+                                  (states) => Colors.purpleAccent[200],
+                                ),
+                                headingTextStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                columns: [
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          "${Statics.getLabel('SelectFrequency')}",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          "${Statics.getLabel('count')}",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          "${Statics.getLabel('GraamCount')}",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                                rows: data!.samajikkaryakram!.map((item) {
+                                  return DataRow(
+                                    cells: [
+                                      DataCell(Center(
+                                          child: Text(item.value ?? ''))),
+                                      DataCell(Center(
+                                          child:
+                                              Text(item.sankhya.toString()))),
+                                      DataCell(Center(
+                                          child:
+                                              Text(item.gramCount.toString()))),
+                                    ],
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ),
+                      ],
+                    )),
+                  ),
+                ],
+              ),
+// ===================================================================================================================================================
+              commonExpansionTile(
+                title: 'DurjanShakti',
+                children: [
+                  if (data != null && data?.durjanshakti != null)
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: DataTable(
+                        headingRowColor: MaterialStateProperty.all(
+                            Colors.purpleAccent.shade100),
+                        columns: [
+                          DataColumn(
+                              label: Text(Statics.getLabel("DurjanShakti"))),
+                          ...subvalues!
+                              .map((sub) => DataColumn(label: Text(sub!))),
+                        ],
+                        rows: values!.map((val) {
+                          return DataRow(cells: [
+                            DataCell(Text(val!)),
+                            ...subvalues.map((sub) {
+                              final match = data?.durjanshakti!.firstWhere(
+                                (e) => e.value == val && e.subvalue == sub,
+                                // orElse: () => {"gramCount": 0},
+                              );
+                              return DataCell(
+                                  Text(match!.gramCount.toString()));
+                            })
+                          ]);
+                        }).toList(),
+                      ),
+                    ),
+                ],
+              ),
+// ===================================================================================================================================================
+              commonExpansionTile(
+                title: 'HinduVeer',
+                children: [
+                  SingleChildScrollView(
+                      child: Column(
+                    children: [
+                      if (data != null && data!.hinduvirayadi != null)
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: SingleChildScrollView(
+                            scrollDirection:
+                                Axis.horizontal, // horizontal scroll
+                            child: DataTable(
+                              headingRowColor:
+                                  MaterialStateProperty.resolveWith(
+                                (states) => Colors.purpleAccent[200],
+                              ),
+                              headingTextStyle: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              columns: [
+                                DataColumn(
+                                  label: Expanded(
+                                    child: Center(
+                                      child: Text(
+                                        "${Statics.getLabel('hinduVeerCount')}",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Expanded(
+                                    child: Center(
+                                      child: Text(
+                                        "${Statics.getLabel('GraamCount')}",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                              rows: data!.hinduvirayadi!.map((item) {
+                                return DataRow(
+                                  cells: [
+                                    DataCell(Center(
+                                        child: Text(item.sankhya.toString()))),
+                                    DataCell(Center(
+                                        child:
+                                            Text(item.gramCount.toString()))),
+                                  ],
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ),
+                    ],
+                  )),
                 ],
               ),
 // ===================================================================================================================================================

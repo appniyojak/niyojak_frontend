@@ -12,27 +12,45 @@ class MandalVastisarvekshanReportModel {
   Mandaldata? mandaldata;
   List<Sajjanshakkati>? sajjanshakkati;
   List<Durjanshakti>? samajikkaryakram;
+  List<Durjanshakti>? religion;
   List<SewaPrakalpa>? sewaPrakalpa;
   List<Upaasana>? upaasana;
   List<Durjanshakti>? vividhKshetaCheKam;
   List<VividhSampradhaySatsang>? vividhSampradhaySatsang;
+  List<ListSwayamsevakCountByVyavasaayeeCategory>?
+      listSwayamsevakCountByVyavasaayeeCategory;
+  List<KaaryakartaaCountByAayaam>? kaaryakartaaCountByAayaam;
+  List<SwayamsevakCountByStudentCategory>? swayamsevakCountByStudentCategory;
+  List<SocialOrganizationKaaryakartaaCountByAreaOfOperation>?
+      socialOrganizationKaaryakartaaCountByAreaOfOperation;
+  List<SanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation>?
+      sanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation;
+  List<KaaryakartaaCountByGatividhi>? kaaryakartaaCountByGatividhi;
 
-  MandalVastisarvekshanReportModel(
-      {this.hinduvirayadi,
-      this.message,
-      this.status,
-      this.anyaprabhavilok,
-      this.durjanshakti,
-      this.loksankhyaformandal,
-      this.mahatvacesana,
-      this.mandalVastisarvekshanReportwithname,
-      this.mandaldata,
-      this.sajjanshakkati,
-      this.samajikkaryakram,
-      this.sewaPrakalpa,
-      this.upaasana,
-      this.vividhKshetaCheKam,
-      this.vividhSampradhaySatsang});
+  MandalVastisarvekshanReportModel({
+    this.hinduvirayadi,
+    this.message,
+    this.status,
+    this.anyaprabhavilok,
+    this.durjanshakti,
+    this.loksankhyaformandal,
+    this.mahatvacesana,
+    this.mandalVastisarvekshanReportwithname,
+    this.mandaldata,
+    this.sajjanshakkati,
+    this.samajikkaryakram,
+    this.religion,
+    this.sewaPrakalpa,
+    this.upaasana,
+    this.vividhKshetaCheKam,
+    this.vividhSampradhaySatsang,
+    this.listSwayamsevakCountByVyavasaayeeCategory,
+    this.kaaryakartaaCountByAayaam,
+    this.swayamsevakCountByStudentCategory,
+    this.socialOrganizationKaaryakartaaCountByAreaOfOperation,
+    this.sanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation,
+    this.kaaryakartaaCountByGatividhi,
+  });
 
   MandalVastisarvekshanReportModel.fromJson(Map<String, dynamic> json) {
     if (json['Hinduvirayadi'] != null) {
@@ -84,6 +102,12 @@ class MandalVastisarvekshanReportModel {
         samajikkaryakram!.add(new Durjanshakti.fromJson(v));
       });
     }
+    if (json['Religion'] != null) {
+      religion = <Durjanshakti>[];
+      json['Religion'].forEach((v) {
+        religion!.add(new Durjanshakti.fromJson(v));
+      });
+    }
     if (json['sewaPrakalpa'] != null) {
       sewaPrakalpa = <SewaPrakalpa>[];
       json['sewaPrakalpa'].forEach((v) {
@@ -106,6 +130,55 @@ class MandalVastisarvekshanReportModel {
       vividhSampradhaySatsang = <VividhSampradhaySatsang>[];
       json['vividhSampradhaySatsang'].forEach((v) {
         vividhSampradhaySatsang!.add(new VividhSampradhaySatsang.fromJson(v));
+      });
+    }
+    if (json['SwayamsevakCountByVyavasaayeeCategory'] != null) {
+      listSwayamsevakCountByVyavasaayeeCategory =
+          <ListSwayamsevakCountByVyavasaayeeCategory>[];
+      json['SwayamsevakCountByVyavasaayeeCategory'].forEach((v) {
+        listSwayamsevakCountByVyavasaayeeCategory!
+            .add(new ListSwayamsevakCountByVyavasaayeeCategory.fromJson(v));
+      });
+    }
+    if (json['KaaryakartaaCountByAayaam'] != null) {
+      kaaryakartaaCountByAayaam = <KaaryakartaaCountByAayaam>[];
+      json['KaaryakartaaCountByAayaam'].forEach((v) {
+        kaaryakartaaCountByAayaam!
+            .add(new KaaryakartaaCountByAayaam.fromJson(v));
+      });
+    }
+    if (json['SwayamsevakCountByStudentCategory'] != null) {
+      swayamsevakCountByStudentCategory = <SwayamsevakCountByStudentCategory>[];
+      json['SwayamsevakCountByStudentCategory'].forEach((v) {
+        swayamsevakCountByStudentCategory!
+            .add(new SwayamsevakCountByStudentCategory.fromJson(v));
+      });
+    }
+    if (json['SocialOrganizationKaaryakartaaCountByAreaOfOperation'] != null) {
+      socialOrganizationKaaryakartaaCountByAreaOfOperation =
+          <SocialOrganizationKaaryakartaaCountByAreaOfOperation>[];
+      json['SocialOrganizationKaaryakartaaCountByAreaOfOperation'].forEach((v) {
+        socialOrganizationKaaryakartaaCountByAreaOfOperation!.add(
+            new SocialOrganizationKaaryakartaaCountByAreaOfOperation.fromJson(
+                v));
+      });
+    }
+    if (json['SanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation'] !=
+        null) {
+      sanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation =
+          <SanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation>[];
+      json['SanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation']
+          .forEach((v) {
+        sanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation!.add(
+            new SanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation.fromJson(
+                v));
+      });
+    }
+    if (json['KaaryakartaaCountByGatividhi'] != null) {
+      kaaryakartaaCountByGatividhi = <KaaryakartaaCountByGatividhi>[];
+      json['KaaryakartaaCountByGatividhi'].forEach((v) {
+        kaaryakartaaCountByGatividhi!
+            .add(new KaaryakartaaCountByGatividhi.fromJson(v));
       });
     }
   }
@@ -147,6 +220,9 @@ class MandalVastisarvekshanReportModel {
       data['samajikkaryakram'] =
           this.samajikkaryakram!.map((v) => v.toJson()).toList();
     }
+    if (this.religion != null) {
+      data['Religion'] = this.religion!.map((v) => v.toJson()).toList();
+    }
     if (this.sewaPrakalpa != null) {
       data['sewaPrakalpa'] = this.sewaPrakalpa!.map((v) => v.toJson()).toList();
     }
@@ -160,6 +236,38 @@ class MandalVastisarvekshanReportModel {
     if (this.vividhSampradhaySatsang != null) {
       data['vividhSampradhaySatsang'] =
           this.vividhSampradhaySatsang!.map((v) => v.toJson()).toList();
+    }
+    if (this.listSwayamsevakCountByVyavasaayeeCategory != null) {
+      data['SwayamsevakCountByVyavasaayeeCategory'] = this
+          .listSwayamsevakCountByVyavasaayeeCategory!
+          .map((v) => v.toJson())
+          .toList();
+    }
+    if (this.kaaryakartaaCountByAayaam != null) {
+      data['KaaryakartaaCountByAayaam'] =
+          this.kaaryakartaaCountByAayaam!.map((v) => v.toJson()).toList();
+    }
+    if (this.swayamsevakCountByStudentCategory != null) {
+      data['SwayamsevakCountByStudentCategory'] = this
+          .swayamsevakCountByStudentCategory!
+          .map((v) => v.toJson())
+          .toList();
+    }
+    if (this.socialOrganizationKaaryakartaaCountByAreaOfOperation != null) {
+      data['SocialOrganizationKaaryakartaaCountByAreaOfOperation'] = this
+          .socialOrganizationKaaryakartaaCountByAreaOfOperation!
+          .map((v) => v.toJson())
+          .toList();
+    }
+    if (this.sanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation != null) {
+      data['SanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation'] = this
+          .sanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation!
+          .map((v) => v.toJson())
+          .toList();
+    }
+    if (this.kaaryakartaaCountByGatividhi != null) {
+      data['KaaryakartaaCountByGatividhi'] =
+          this.kaaryakartaaCountByGatividhi!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -687,6 +795,153 @@ class VividhSampradhaySatsang {
     data['sankhya'] = this.sankhya;
     data['subvalue'] = this.subvalue;
     data['value'] = this.value;
+    return data;
+  }
+}
+
+class ListSwayamsevakCountByVyavasaayeeCategory {
+  int? countByVyavasaayeeCategory;
+  int? vyavasaayeeCategoryID;
+  String? vyavasaayeeCategoryName;
+
+  ListSwayamsevakCountByVyavasaayeeCategory(
+      {this.countByVyavasaayeeCategory,
+      this.vyavasaayeeCategoryID,
+      this.vyavasaayeeCategoryName});
+
+  ListSwayamsevakCountByVyavasaayeeCategory.fromJson(
+      Map<String, dynamic> json) {
+    countByVyavasaayeeCategory = json['CountByVyavasaayeeCategory'];
+    vyavasaayeeCategoryID = json['VyavasaayeeCategoryID'];
+    vyavasaayeeCategoryName = json['VyavasaayeeCategoryName'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['CountByVyavasaayeeCategory'] = this.countByVyavasaayeeCategory;
+    data['VyavasaayeeCategoryID'] = this.vyavasaayeeCategoryID;
+    data['VyavasaayeeCategoryName'] = this.vyavasaayeeCategoryName;
+    return data;
+  }
+}
+
+class KaaryakartaaCountByAayaam {
+  int? aayaamID;
+  String? aayaamName;
+  int? kaaryakartaaCount;
+
+  KaaryakartaaCountByAayaam(
+      {this.aayaamID, this.aayaamName, this.kaaryakartaaCount});
+
+  KaaryakartaaCountByAayaam.fromJson(Map<String, dynamic> json) {
+    aayaamID = json['AayaamID'];
+    aayaamName = json['AayaamName'];
+    kaaryakartaaCount = json['KaaryakartaaCount'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['AayaamID'] = this.aayaamID;
+    data['AayaamName'] = this.aayaamName;
+    data['KaaryakartaaCount'] = this.kaaryakartaaCount;
+    return data;
+  }
+}
+
+class SwayamsevakCountByStudentCategory {
+  int? studentCategoryID;
+  String? studentCategoryName;
+  int? countByStudentCategory;
+
+  SwayamsevakCountByStudentCategory(
+      {this.studentCategoryID,
+      this.studentCategoryName,
+      this.countByStudentCategory});
+
+  SwayamsevakCountByStudentCategory.fromJson(Map<String, dynamic> json) {
+    studentCategoryID = json['StudentCategoryID'];
+    studentCategoryName = json['StudentCategoryName'];
+    studentCategoryID = json['CountByStudentCategory'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['StudentCategoryID'] = this.studentCategoryID;
+    data['StudentCategoryName'] = this.studentCategoryName;
+    data['CountByStudentCategory'] = this.countByStudentCategory;
+    return data;
+  }
+}
+
+class SocialOrganizationKaaryakartaaCountByAreaOfOperation {
+  int? studentCategoryID;
+  String? studentCategoryName;
+  int? countByStudentCategory;
+
+  SocialOrganizationKaaryakartaaCountByAreaOfOperation(
+      {this.studentCategoryID,
+      this.studentCategoryName,
+      this.countByStudentCategory});
+
+  SocialOrganizationKaaryakartaaCountByAreaOfOperation.fromJson(
+      Map<String, dynamic> json) {
+    studentCategoryID = json['MainAreaOfOperationID'];
+    studentCategoryName = json['AreaOfOperation'];
+    studentCategoryID = json['KaaryakartaaCount'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['MainAreaOfOperationID'] = this.studentCategoryID;
+    data['AreaOfOperation'] = this.studentCategoryName;
+    data['KaaryakartaaCount'] = this.countByStudentCategory;
+    return data;
+  }
+}
+
+class SanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation {
+  int? areaOfOperationID;
+  String? areaOfOperation;
+  int? kaaryakartaaCount;
+
+  SanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation(
+      {this.areaOfOperationID, this.areaOfOperation, this.kaaryakartaaCount});
+
+  SanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation.fromJson(
+      Map<String, dynamic> json) {
+    areaOfOperationID = json['AreaOfOperationID'];
+    areaOfOperation = json['AreaOfOperation'];
+    kaaryakartaaCount = json['KaaryakartaaCount'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['AreaOfOperationID'] = this.areaOfOperationID;
+    data['AreaOfOperation'] = this.areaOfOperation;
+    data['KaaryakartaaCount'] = this.kaaryakartaaCount;
+    return data;
+  }
+}
+
+class KaaryakartaaCountByGatividhi {
+  int? gatividhiID;
+  String? gatividhiName;
+  int? kaaryakartaaCount;
+
+  KaaryakartaaCountByGatividhi(
+      {this.gatividhiID, this.gatividhiName, this.kaaryakartaaCount});
+
+  KaaryakartaaCountByGatividhi.fromJson(Map<String, dynamic> json) {
+    gatividhiID = json['GatividhiID'];
+    gatividhiName = json['GatividhiName'];
+    kaaryakartaaCount = json['KaaryakartaaCount'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['GatividhiID'] = this.gatividhiID;
+    data['GatividhiName'] = this.gatividhiName;
+    data['KaaryakartaaCount'] = this.kaaryakartaaCount;
     return data;
   }
 }

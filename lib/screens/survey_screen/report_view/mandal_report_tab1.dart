@@ -1323,17 +1323,15 @@ class _MandalSurveyReportViewScreen1State
                                     cells: [
                                       DataCell(Center(
                                           child: Text(talukaMandalSampurnaModel!
-                                              .talukamandalHinduvirayadi!
-                                              .sankhya
+                                              .talukamandalMumbaikar!.sankhya
                                               .toString()))),
                                       DataCell(Center(
                                           child: Text(talukaMandalSampurnaModel!
-                                              .talukamandalHinduvirayadi!
-                                              .gramCount
+                                              .talukamandalMumbaikar!.gramCount
                                               .toString()))),
                                       DataCell(Center(
                                           child: Text(talukaMandalSampurnaModel!
-                                              .talukamandalHinduvirayadi!
+                                              .talukamandalMumbaikar!
                                               .mandalCount
                                               .toString()))),
                                     ],
