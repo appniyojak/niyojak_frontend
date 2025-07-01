@@ -855,102 +855,20 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                             rows: [
                               DataRow(
                                 color: MaterialStateProperty.all(
-                                    Colors.green.shade50),
-                                cells: [
-                                  DataCell(Text(
-                                      "${Statics.getLabel('prathamikSurveyComplete')}")),
-                                  DataCell(Text(
-                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStep1CompleteCount ?? ""}")),
-                                  DataCell(Text(
-                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStep1CompleteCount ?? ""}")),
-                                  DataCell(IconButton(
-                                    icon: Icon(Icons.remove_red_eye,
-                                        color: Colors.teal),
-                                    onPressed: () => showPopupList(
-                                        context,
-                                        data!
-                                            .nagarVastisarvekshanReportwithselectedlevel!
-                                            .vastiStep1CompleteNames!
-                                            .toString()),
-                                  )),
-                                ],
-                              ),
-                              DataRow(
-                                color: MaterialStateProperty.all(
-                                    Colors.green.shade50),
-                                cells: [
-                                  DataCell(Text(
-                                      "${Statics.getLabel('otherSuerveyComplete')}")),
-                                  DataCell(Text(
-                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStep2CompleteCount ?? ""}")),
-                                  DataCell(Text(
-                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStep2CompleteCount ?? ""}")),
-                                  DataCell(IconButton(
-                                    icon: Icon(Icons.remove_red_eye,
-                                        color: Colors.teal),
-                                    onPressed: () => showPopupList(
-                                        context,
-                                        data!
-                                            .nagarVastisarvekshanReportwithselectedlevel!
-                                            .vastiStep2CompleteNames!
-                                            .toString()),
-                                  )),
-                                ],
-                              ),
-                              DataRow(
-                                color: MaterialStateProperty.all(
-                                    Colors.green.shade50),
-                                cells: [
-                                  DataCell(Text(
-                                      "${Statics.getLabel('vistrutSurveyComplete')}")),
-                                  DataCell(Text(
-                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStep3CompleteCount ?? ""}")),
-                                  DataCell(Text(
-                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStep3CompleteCount ?? ""}")),
-                                  DataCell(IconButton(
-                                    icon: Icon(Icons.remove_red_eye,
-                                        color: Colors.teal),
-                                    onPressed: () => showPopupList(
-                                        context,
-                                        data!
-                                            .nagarVastisarvekshanReportwithselectedlevel!
-                                            .vastiStep3CompleteNames!
-                                            .toString()),
-                                  )),
-                                ],
-                              ),
-                              DataRow(
-                                color: MaterialStateProperty.all(
-                                    Colors.red.shade50),
-                                cells: [
-                                  DataCell(Text(
-                                      "${Statics.getLabel('totalVasti')}")),
-                                  DataCell(Text(
-                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagar_step_total ?? ""}")),
-                                  DataCell(Text(
-                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.vasti_step_total ?? ""}")),
-                                  DataCell(Text("-")),
-                                ],
-                              ),
-                              DataRow(
-                                color: MaterialStateProperty.all(Colors.white),
-                                cells: [
-                                  DataCell(Text("")),
-                                  DataCell(Text("")),
-                                  DataCell(Text("")),
-                                  DataCell(Text("")),
-                                ],
-                              ),
-                              DataRow(
-                                color: MaterialStateProperty.all(
                                     Colors.orange.shade50),
                                 cells: [
                                   DataCell(Text(
                                       "${Statics.getLabel('surveyStart')}")),
-                                  DataCell(Text(
-                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStepStartedCount ?? ""}")),
-                                  DataCell(Text(
-                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStepStartedCount ?? ""}")),
+                                  DataCell(Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                        "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStepStartedCount ?? ""}"),
+                                  )),
+                                  DataCell(Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                        "${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStepStartedCount ?? ""}"),
+                                  )),
                                   DataCell(IconButton(
                                     icon: Icon(Icons.remove_red_eye,
                                         color: Colors.teal),
@@ -969,10 +887,16 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                 cells: [
                                   DataCell(Text(
                                       "${Statics.getLabel('surveyComplete')}")),
-                                  DataCell(Text(
-                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarAllStepsCompleteCount ?? ""}")),
-                                  DataCell(Text(
-                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiAllStepsCompleteCount ?? ""}")),
+                                  DataCell(Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                        "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarAllStepsCompleteCount ?? ""}"),
+                                  )),
+                                  DataCell(Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                        "${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiAllStepsCompleteCount ?? ""}"),
+                                  )),
                                   DataCell(IconButton(
                                     icon: Icon(Icons.remove_red_eye,
                                         color: Colors.teal),
@@ -991,10 +915,16 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                 cells: [
                                   DataCell(Text(
                                       "${Statics.getLabel('surveyNotStarted')}")),
-                                  DataCell(Text(
-                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStepsNotstartedCount ?? ""}")),
-                                  DataCell(Text(
-                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStepsNotstartedCount ?? ""}")),
+                                  DataCell(Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                        "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStepsNotstartedCount ?? ""}"),
+                                  )),
+                                  DataCell(Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                        "${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStepsNotstartedCount ?? ""}"),
+                                  )),
                                   DataCell(IconButton(
                                     icon: Icon(Icons.remove_red_eye,
                                         color: Colors.teal),
@@ -1013,11 +943,155 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                 cells: [
                                   DataCell(
                                       Text("${Statics.getLabel('Total')}")),
-                                  DataCell(Text(
-                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarcount ?? ""}")),
-                                  DataCell(Text(
-                                      "${data?.nagarVastisarvekshanReportwithselectedlevel?.vasticount ?? ""}")),
+                                  DataCell(Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                        "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarcount ?? ""}"),
+                                  )),
+                                  DataCell(Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                        "${data?.nagarVastisarvekshanReportwithselectedlevel?.vasticount ?? ""}"),
+                                  )),
                                   DataCell(Text("-")),
+                                ],
+                              ),
+                              DataRow(
+                                color: MaterialStateProperty.all(Colors.white),
+                                cells: [
+                                  DataCell(Text("")),
+                                  DataCell(Text("")),
+                                  DataCell(Text("")),
+                                  DataCell(Text("")),
+                                ],
+                              ),
+                              DataRow(
+                                color: MaterialStateProperty.all(
+                                    Colors.green.shade50),
+                                cells: [
+                                  DataCell(Text(
+                                      "${Statics.getLabel('prathamikSurveyComplete')}")),
+                                  DataCell(Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                        "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStep1CompleteCount ?? ""}"),
+                                  )),
+                                  DataCell(Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                        "${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStep1CompleteCount ?? ""}"),
+                                  )),
+                                  DataCell(IconButton(
+                                    icon: Icon(Icons.remove_red_eye,
+                                        color: Colors.teal),
+                                    onPressed: () => showPopupList(
+                                        context,
+                                        data!
+                                            .nagarVastisarvekshanReportwithselectedlevel!
+                                            .vastiStep1CompleteNames!
+                                            .toString()),
+                                  )),
+                                ],
+                              ),
+                              DataRow(
+                                color: MaterialStateProperty.all(
+                                    Colors.green.shade50),
+                                cells: [
+                                  DataCell(
+                                    Text(
+                                        "${Statics.getLabel('otherSuerveyComplete')}"),
+                                  ),
+                                  DataCell(
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                          "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStep2CompleteCount ?? ""}"),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                          "${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStep2CompleteCount ?? ""}"),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    IconButton(
+                                      icon: Icon(Icons.remove_red_eye,
+                                          color: Colors.teal),
+                                      onPressed: () => showPopupList(
+                                          context,
+                                          data!
+                                              .nagarVastisarvekshanReportwithselectedlevel!
+                                              .vastiStep2CompleteNames!
+                                              .toString()),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              DataRow(
+                                color: MaterialStateProperty.all(
+                                    Colors.green.shade50),
+                                cells: [
+                                  DataCell(
+                                    Text(
+                                        "${Statics.getLabel('vistrutSurveyComplete')}"),
+                                  ),
+                                  DataCell(
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                          "${data?.nagarVastisarvekshanReportwithselectedlevel?.nagarStep3CompleteCount ?? ""}"),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                          "${data?.nagarVastisarvekshanReportwithselectedlevel?.vastiStep3CompleteCount ?? ""}"),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    IconButton(
+                                      icon: Icon(Icons.remove_red_eye,
+                                          color: Colors.teal),
+                                      onPressed: () => showPopupList(
+                                          context,
+                                          data!
+                                              .nagarVastisarvekshanReportwithselectedlevel!
+                                              .vastiStep3CompleteNames!
+                                              .toString()),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              DataRow(
+                                color: MaterialStateProperty.all(
+                                    Colors.red.shade50),
+                                cells: [
+                                  DataCell(
+                                    Text(
+                                        "${Statics.getLabel('remainingVasti')}"),
+                                  ),
+                                  DataCell(
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        "${(data?.nagarVastisarvekshanReportwithselectedlevel?.nagarcount ?? 0) - (data?.nagarVastisarvekshanReportwithselectedlevel?.nagar_step_total ?? 0)}",
+                                      ),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        "${(data?.nagarVastisarvekshanReportwithselectedlevel?.vasticount ?? 0) - (data?.nagarVastisarvekshanReportwithselectedlevel?.vasti_step_total ?? 0)}",
+                                      ),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    Text("-"),
+                                  ),
                                 ],
                               ),
                             ],
@@ -1086,42 +1160,6 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                       rows: [
                                         DataRow(
                                           color: MaterialStateProperty.all(
-                                              Colors.lightBlue.shade50),
-                                          cells: [
-                                            DataCell(Text(
-                                                "${Statics.getLabel('prathamikSurveyComplete')}")),
-                                            DataCell(Text(
-                                                "${data.nagarStep1CompleteCount ?? ""}")),
-                                            DataCell(Text(
-                                                "${data.vastiStep1CompleteCount ?? ""}")),
-                                          ],
-                                        ),
-                                        DataRow(
-                                          color: MaterialStateProperty.all(
-                                              Colors.lightBlue.shade50),
-                                          cells: [
-                                            DataCell(Text(
-                                                "${Statics.getLabel('otherSuerveyComplete')}")),
-                                            DataCell(Text(
-                                                "${data.nagarStep2CompleteCount ?? ""}")),
-                                            DataCell(Text(
-                                                "${data.vastiStep2CompleteCount ?? ""}")),
-                                          ],
-                                        ),
-                                        DataRow(
-                                          color: MaterialStateProperty.all(
-                                              Colors.lightBlue.shade50),
-                                          cells: [
-                                            DataCell(Text(
-                                                "${Statics.getLabel('vistrutSurveyComplete')}")),
-                                            DataCell(Text(
-                                                "${data.nagarStep3CompleteCount ?? ""}")),
-                                            DataCell(Text(
-                                                "${data.vastiStep3CompleteCount ?? ""}")),
-                                          ],
-                                        ),
-                                        DataRow(
-                                          color: MaterialStateProperty.all(
                                               Colors.red.shade50),
                                           cells: [
                                             DataCell(Text(
@@ -1166,6 +1204,51 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                                 "${data.nagarcount ?? ""}")),
                                             DataCell(Text(
                                                 "${data.vasticount ?? ""}")),
+                                          ],
+                                        ),
+                                        DataRow(
+                                          color: MaterialStateProperty.all(
+                                              Colors.white),
+                                          cells: [
+                                            DataCell(Text("")),
+                                            DataCell(Text("")),
+                                            DataCell(Text("")),
+                                          ],
+                                        ),
+                                        DataRow(
+                                          color: MaterialStateProperty.all(
+                                              Colors.lightBlue.shade50),
+                                          cells: [
+                                            DataCell(Text(
+                                                "${Statics.getLabel('prathamikSurveyComplete')}")),
+                                            DataCell(Text(
+                                                "${data.nagarStep1CompleteCount ?? ""}")),
+                                            DataCell(Text(
+                                                "${data.vastiStep1CompleteCount ?? ""}")),
+                                          ],
+                                        ),
+                                        DataRow(
+                                          color: MaterialStateProperty.all(
+                                              Colors.lightBlue.shade50),
+                                          cells: [
+                                            DataCell(Text(
+                                                "${Statics.getLabel('otherSuerveyComplete')}")),
+                                            DataCell(Text(
+                                                "${data.nagarStep2CompleteCount ?? ""}")),
+                                            DataCell(Text(
+                                                "${data.vastiStep2CompleteCount ?? ""}")),
+                                          ],
+                                        ),
+                                        DataRow(
+                                          color: MaterialStateProperty.all(
+                                              Colors.lightBlue.shade50),
+                                          cells: [
+                                            DataCell(Text(
+                                                "${Statics.getLabel('vistrutSurveyComplete')}")),
+                                            DataCell(Text(
+                                                "${data.nagarStep3CompleteCount ?? ""}")),
+                                            DataCell(Text(
+                                                "${data.vastiStep3CompleteCount ?? ""}")),
                                           ],
                                         ),
                                       ],

@@ -183,7 +183,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
     return vsDD;
   }
 
-  Future<void> getData() async {
+  Future<void> getData(context) async {
     print("GeoUnitID  :- $selctedLevelId");
     print("selctedLevel  :- $selctedLevel");
     print("selctedLevelName  :- $selctedLevelName");
@@ -247,7 +247,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
       "GeoUnitName": englishNameController.text,
     });
     print("_submitForm" + inputData);
-    Statics.savelevelUpdatedata(inputData);
+    Statics.savelevelUpdatedata(context, inputData);
   }
 
   @override
@@ -538,7 +538,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
                         textColor:
                             Theme.of(context).primaryTextTheme.button!.color,
                         onPressed: () {
-                          getData();
+                          getData(context);
                         },
                         child: Text(
                           Statics.getLabel('ViewMenu'),

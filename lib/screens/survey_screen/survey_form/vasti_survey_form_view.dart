@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 import 'package:niyojak_prod/widgets/app_drawer.dart';
 
@@ -526,6 +527,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   @override
   void dispose() {
     _tabController.dispose();
+    // maleController.dispose();
+    // femaleController.dispose();
+    loksankhyaController.dispose();
     super.dispose();
   }
 
@@ -775,6 +779,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
             buildCounter: (context,
                     {int? currentLength, int? maxLength, bool? isFocused}) =>
                 null,
+            inputFormatters: keyboardType == TextInputType.number
+                ? [FilteringTextInputFormatter.digitsOnly]
+                : null,
           ),
         ),
         SizedBox(height: 10),
@@ -1611,10 +1618,130 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
             if (step1completepercentage != null)
               Container(
                 padding: EdgeInsets.symmetric(vertical: 10),
-                child: dynamicProgressBar(
-                    context: context,
-                    value: double.parse(step1completepercentage.toString()),
-                    detailListItems: step1pendingpoints!.split(',')),
+                child: Column(
+                  children: [
+                    dynamicProgressBar(
+                        context: context,
+                        value: double.parse(step1completepercentage.toString()),
+                        detailListItems: step1pendingpoints!.split(',')),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        // Filter out empty or whitespace-only strings
+                        final filteredDetails = step1pendingpoints!
+                            .split(',')
+                            .where((item) => item.trim().isNotEmpty)
+                            .toList();
+
+                        print(
+                            "Filtered step1pendingpoints!.split(','): $filteredDetails");
+
+                        if (filteredDetails.isEmpty) {
+                          Statics.showToast(Statics.getLabel('allInfoSubmit'));
+                          return;
+                        }
+
+                        showDialog(
+                          context: context,
+                          builder: (ctx) {
+                            return Dialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              backgroundColor: Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    // Icon and Title
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.warning_amber_rounded,
+                                            color: Colors.red, size: 30),
+                                        SizedBox(width: 8),
+                                        Text(
+                                          Statics.getLabel('remainingQuestion'),
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 20),
+                                    SizedBox(
+                                      height: 300,
+                                      child: ListView.builder(
+                                        itemCount: filteredDetails.length,
+                                        itemBuilder: (context, index) {
+                                          return ListTile(
+                                            dense: true,
+                                            contentPadding: EdgeInsets.zero,
+                                            title: Text(
+                                              "${index + 1}. ${filteredDetails[index]}",
+                                              style: TextStyle(
+                                                color: Colors.black87,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.red,
+                                          foregroundColor: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 12),
+                                        ),
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
+                                        child:
+                                            Text(Statics.getLabel('bandKara')),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.info_outline,
+                            size: 18,
+                            color: Colors.red.shade300,
+                          ),
+                          SizedBox(width: 6),
+                          Text(
+                            "${Statics.getLabel('remainingQuestion')}",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.red.shade300,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
           if (isVastiSearch == true)
             SizedBox(
@@ -1708,208 +1835,43 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         ),
                       ),
                       SizedBox(height: 10),
-                      // textControllerField2(
-                      //     name: "${Statics.getLabel('Population')}",
-                      //     controller: loksankhyaController,
-                      //     height: 50,
-                      //     keyboardType: TextInputType.number,
-                      //     imp: "*"),
-                      Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text:
-                                        "${Statics.getLabel('prushaanchiSankhya')}",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: "*",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          Container(
-                            height: 50,
-                            width: double.infinity,
-                            padding: EdgeInsets.symmetric(horizontal: 12),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: Colors.black54),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                isExpanded: true,
-                                value: selectedValueMale == ""
-                                    ? null
-                                    : selectedValueMale,
-                                items: options.keys.map((String key) {
-                                  return DropdownMenuItem<String>(
-                                    value: options[key],
-                                    child: Text(key),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedValueMale = value;
-                                    maleController.text = value.toString();
-                                  });
-                                },
-                                hint: Text(
-                                    Statics.getLabel('prushaanchiSankhya')),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text:
-                                        "${Statics.getLabel('mahilanchiSankhya')}",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: "*",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          Container(
-                            height: 50,
-                            width: double.infinity,
-                            padding: EdgeInsets.symmetric(horizontal: 12),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: Colors.black54),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                isExpanded: true,
-                                value: selectedValueFemale == ""
-                                    ? null
-                                    : selectedValueFemale,
-                                items: options.keys.map((String key) {
-                                  return DropdownMenuItem<String>(
-                                    value: options[key],
-                                    child: Text(key),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedValueFemale = value;
-                                    femaleController.text = value.toString();
-                                  });
-                                },
-                                hint:
-                                    Text(Statics.getLabel('mahilanchiSankhya')),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text:
-                                        "${Statics.getLabel('gaavachiLoksankhya')}",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: "*",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          Container(
-                            height: 50,
-                            width: double.infinity,
-                            padding: EdgeInsets.symmetric(horizontal: 12),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: Colors.black54),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                isExpanded: true,
-                                value: selectedValueAll == ""
-                                    ? null
-                                    : selectedValueAll,
-                                items: options.keys.map((String key) {
-                                  return DropdownMenuItem<String>(
-                                    value: options[key],
-                                    child: Text(key),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedValueAll = value;
-                                    ekunLoksankhya = value;
-                                  });
-                                },
-                                hint: Text(
-                                    Statics.getLabel('gaavachiLoksankhya')),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 10),
+                      textControllerField2(
+                          name: "${Statics.getLabel('Population')}",
+                          controller: loksankhyaController,
+                          keyboardType: TextInputType.number,
+                          imp: "*"),
+                      // Column(
+                      //   children: [
+                      //     Row(
+                      //       children: [
+                      //         Expanded(
+                      //           child: textControllerField2(
+                      //               name:
+                      //                   "${Statics.getLabel('prushaanchiSankhya')}",
+                      //               controller: maleController,
+                      //               keyboardType: TextInputType.number,
+                      //               imp: "*"),
+                      //         ),
+                      //         SizedBox(width: 16),
+                      //         Expanded(
+                      //           child: textControllerField2(
+                      //               name:
+                      //                   "${Statics.getLabel('mahilanchiSankhya')}",
+                      //               controller: femaleController,
+                      //               keyboardType: TextInputType.number,
+                      //               imp: "*"),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //     // SizedBox(height: 10),
+                      //     Text(
+                      //       '${Statics.getLabel('Population')}: $total',
+                      //       style: TextStyle(
+                      //           fontSize: 15, fontWeight: FontWeight.bold),
+                      //     )
+                      //   ],
+                      // ),
+                      // SizedBox(height: 10),
                       yesNoRadioButton(
                           question: "${Statics.getLabel('isVastiSamiti')}",
                           selectedOption: vastiSamitiYesNo ?? 2,
@@ -3348,10 +3310,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(15)),
                               ),
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: SizedBox(
-                                  width: MediaQuery.of(context).size.width * 1,
+                              child: Center(
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
                                   child: DataTable(
                                     showCheckboxColumn: false,
                                     headingRowColor: MaterialStatePropertyAll(
@@ -3366,8 +3327,11 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         "${Statics.getLabel('onlyBhasha')}",
                                       )),
                                       DataColumn(
-                                          label: Text(
-                                        "${Statics.getLabel('avgPersent')}",
+                                          label: Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Text(
+                                          "${Statics.getLabel('avgPersent')}",
+                                        ),
                                       )),
                                     ],
                                     rows: enteredVividhBhashaBolnareDataList
@@ -3405,8 +3369,11 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                                 ? "${data.selectedDropdownValueName} - ${data.otherbhaasha}"
                                                 : data.selectedDropdownValueName ??
                                                     "")),
-                                            DataCell(
-                                                Text(data.andajeForShow ?? "")),
+                                            DataCell(Align(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child:
+                                                    Text(data.andaje ?? ""))),
                                           ]);
                                     }).toList(),
                                   ),
@@ -3694,64 +3661,72 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(15)),
                               ),
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: SizedBox(
-                                  width: MediaQuery.of(context).size.width * 1,
-                                  child: DataTable(
-                                    showCheckboxColumn: false,
-                                    headingRowColor: MaterialStatePropertyAll(
-                                        Colors.purple.shade50),
-                                    columnSpacing: 1,
-                                    headingTextStyle: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black87),
-                                    columns: [
-                                      DataColumn(
-                                          label: Text(
-                                        "${Statics.getLabel('Praant')}",
-                                      )),
-                                      DataColumn(
-                                          label: Text(
-                                        "${Statics.getLabel('andajeLoksankhya')}",
-                                      )),
-                                    ],
-                                    rows: enteredKontyaPraantacheDataList
-                                        .asMap()
-                                        .entries
-                                        .where((entry) =>
-                                            entry.value.isactive == 1)
-                                        .map((entry) {
-                                      int index = entry.key;
-                                      var data = entry.value;
-                                      bool isSelected =
-                                          selectedKontyaPraantacheIdRowIndex ==
-                                              index;
-                                      return DataRow(
-                                          selected: isSelected,
-                                          color: MaterialStateProperty
-                                              .resolveWith<Color?>(
-                                            (Set<MaterialState> states) {
-                                              if (isSelected)
-                                                return Colors.yellow.shade100;
-                                              return null;
+                              child: Center(
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.6,
+                                    child: DataTable(
+                                      showCheckboxColumn: false,
+                                      headingRowColor: MaterialStatePropertyAll(
+                                          Colors.purple.shade50),
+                                      columnSpacing: 1,
+                                      headingTextStyle: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black87),
+                                      columns: [
+                                        DataColumn(
+                                            label: Text(
+                                          "${Statics.getLabel('Praant')}",
+                                        )),
+                                        DataColumn(
+                                            label: Text(
+                                          "${Statics.getLabel('andajeLoksankhya')}",
+                                        )),
+                                      ],
+                                      rows: enteredKontyaPraantacheDataList
+                                          .asMap()
+                                          .entries
+                                          .where((entry) =>
+                                              entry.value.isactive == 1)
+                                          .map((entry) {
+                                        int index = entry.key;
+                                        var data = entry.value;
+                                        bool isSelected =
+                                            selectedKontyaPraantacheIdRowIndex ==
+                                                index;
+                                        return DataRow(
+                                            selected: isSelected,
+                                            color: MaterialStateProperty
+                                                .resolveWith<Color?>(
+                                              (Set<MaterialState> states) {
+                                                if (isSelected)
+                                                  return Colors.yellow.shade100;
+                                                return null;
+                                              },
+                                            ),
+                                            onSelectChanged: (bool? selected) {
+                                              if (selected != null &&
+                                                  selected) {
+                                                setState(() {
+                                                  selectedKontyaPraantacheIdRowIndex =
+                                                      index;
+                                                });
+                                              }
                                             },
-                                          ),
-                                          onSelectChanged: (bool? selected) {
-                                            if (selected != null && selected) {
-                                              setState(() {
-                                                selectedKontyaPraantacheIdRowIndex =
-                                                    index;
-                                              });
-                                            }
-                                          },
-                                          cells: [
-                                            DataCell(Text(
-                                                data.selectedDropdownValueName ??
-                                                    "")),
-                                            DataCell(Text(data.andaje ?? "")),
-                                          ]);
-                                    }).toList(),
+                                            cells: [
+                                              DataCell(Text(
+                                                  data.selectedDropdownValueName ??
+                                                      "")),
+                                              DataCell(Align(
+                                                  alignment:
+                                                      Alignment.centerRight,
+                                                  child:
+                                                      Text(data.andaje ?? ""))),
+                                            ]);
+                                      }).toList(),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -4037,63 +4012,71 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(15)),
                               ),
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: SizedBox(
-                                  width: MediaQuery.of(context).size.width * 1,
-                                  child: DataTable(
-                                    showCheckboxColumn: false,
-                                    headingRowColor: MaterialStatePropertyAll(
-                                        Colors.purple.shade50),
-                                    columnSpacing: 1,
-                                    headingTextStyle: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black87),
-                                    columns: [
-                                      DataColumn(
-                                          label: Text(
-                                        '${Statics.getLabel('konteReligion')}',
-                                      )),
-                                      DataColumn(
-                                          label: Text(
-                                        '${Statics.getLabel('avgPersent')}',
-                                      )),
-                                    ],
-                                    rows: enteredreligionDataList
-                                        .asMap()
-                                        .entries
-                                        .where((entry) =>
-                                            entry.value.isactive == 1)
-                                        .map((entry) {
-                                      int index = entry.key;
-                                      var data = entry.value;
-                                      bool isSelected =
-                                          selectedReligionIdRowIndex == index;
-                                      return DataRow(
-                                          selected: isSelected,
-                                          color: MaterialStateProperty
-                                              .resolveWith<Color?>(
-                                            (Set<MaterialState> states) {
-                                              if (isSelected)
-                                                return Colors.yellow.shade100;
-                                              return null;
+                              child: Center(
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.8,
+                                    child: DataTable(
+                                      showCheckboxColumn: false,
+                                      headingRowColor: MaterialStatePropertyAll(
+                                          Colors.purple.shade50),
+                                      columnSpacing: 1,
+                                      headingTextStyle: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black87),
+                                      columns: [
+                                        DataColumn(
+                                            label: Text(
+                                          '${Statics.getLabel('konteReligion')}',
+                                        )),
+                                        DataColumn(
+                                            label: Text(
+                                          '${Statics.getLabel('avgPersent')}',
+                                        )),
+                                      ],
+                                      rows: enteredreligionDataList
+                                          .asMap()
+                                          .entries
+                                          .where((entry) =>
+                                              entry.value.isactive == 1)
+                                          .map((entry) {
+                                        int index = entry.key;
+                                        var data = entry.value;
+                                        bool isSelected =
+                                            selectedReligionIdRowIndex == index;
+                                        return DataRow(
+                                            selected: isSelected,
+                                            color: MaterialStateProperty
+                                                .resolveWith<Color?>(
+                                              (Set<MaterialState> states) {
+                                                if (isSelected)
+                                                  return Colors.yellow.shade100;
+                                                return null;
+                                              },
+                                            ),
+                                            onSelectChanged: (bool? selected) {
+                                              if (selected != null &&
+                                                  selected) {
+                                                setState(() {
+                                                  selectedReligionIdRowIndex =
+                                                      index;
+                                                });
+                                              }
                                             },
-                                          ),
-                                          onSelectChanged: (bool? selected) {
-                                            if (selected != null && selected) {
-                                              setState(() {
-                                                selectedReligionIdRowIndex =
-                                                    index;
-                                              });
-                                            }
-                                          },
-                                          cells: [
-                                            DataCell(Text(
-                                                data.selectedDropdownValueName ??
-                                                    "")),
-                                            DataCell(Text(data.andaje ?? "")),
-                                          ]);
-                                    }).toList(),
+                                            cells: [
+                                              DataCell(Text(
+                                                  data.selectedDropdownValueName ??
+                                                      "")),
+                                              DataCell(Align(
+                                                  alignment:
+                                                      Alignment.centerRight,
+                                                  child:
+                                                      Text(data.andaje ?? ""))),
+                                            ]);
+                                      }).toList(),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -6003,7 +5986,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       "vastiid": int.parse(selctedLevelId!),
       "vastiShakhaPramukhName": sanghaKaryaVastiPramukhNameController.text,
       "vastiShakhaSamiti": vastiSamitiYesNo,
-      "Lokasankhya": ekunLoksankhya,
+      "Lokasankhya": loksankhyaController.text,
       "beforeShakhaSaptahikIsOnNowOff": beforsanghaonnowisoff,
       "VasticyacatuSima": vastiChatahuSimaController.text,
       "googlemap": imageAdd == 1 ? selectedFilePath : selectedFileName,
@@ -6030,8 +6013,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       "VastisarvividhKshetaCheKam": [],
       "VastisarvividhSampradhaySatsangKendra": [],
       "VastisargavatilMumbaikar": [],
-      "maleCount": maleController.text,
-      "femaleCount": femaleController.text,
+      "maleCount": "",
+      "femaleCount": "",
     };
 
     String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
@@ -7195,24 +7178,208 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   TextEditingController bhashaPersentCount = TextEditingController();
   TextEditingController anyaBhashaNameController = TextEditingController();
   String? bhashaCount;
-  final Map<String, String> bhashaOptions = {
-    '{Statics.getLabel(moreThan50)}': '55',
-    '{Statics.getLabel(20to49)}': '30',
-    '{Statics.getLabel(0to19)}': '19',
-  };
+  void showVividhBhashaBolnarePopup(BuildContext context,
+      {int? editIndex, VoidCallback? onDataChanged}) {
+    if (editIndex != null) {
+      var data = enteredVividhBhashaBolnareDataList[editIndex];
+      bhashaId = data.bhaashaid;
+      bhashaName = data.selectedDropdownValueName;
+      // selectedbhasha = data.bhaashaid;
+      selectedbhashaEditId = data.bhaashaid;
+      pkIdVividhBhasha = data.pkid;
+      bhashaPersentCount.text = data.andaje ?? "";
+      anyaBhashaNameController.text = data.otherbhaasha!;
+      bhashaCount = data.andajeForShow;
+    }
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return Dialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return Container(
+                padding: EdgeInsets.all(16),
+                width: 350,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "${Statics.getLabel('vividhBhashaBolnare')}",
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.purpleAccent),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.close),
+                            onPressed: () {
+                              clearFields4();
+                              Navigator.of(ctx).pop();
+                            },
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      // Dropdown 1
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "${Statics.getLabel('selectLanguage')}",
+                          style: TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                      vastisarvekshanDropdown2(
+                        dataModel: vastisarvekshanDropDownDataModel!,
+                        filterTypeName: "विविध भाषा",
+                        hintText: "${Statics.getLabel('selectLanguage')}",
+                        onItemSelected: (id, value, isOther) {
+                          bhashaName = value;
+                          bhashaId = id;
+                          anyaBhashaNameController.clear();
+                        },
+                        width: double.infinity,
+                        questionNumber: 12,
+                        selectedValue: selectedbhasha,
+                        onSelectionChanged: (newValue) {
+                          setState(() {
+                            selectedbhasha = newValue;
+                          });
+                        },
+                        editId: selectedbhashaEditId,
+                      ),
+                      SizedBox(height: 10),
+                      if (selectedbhasha?.isOther == 1)
+                        textControllerField2(
+                            controller: anyaBhashaNameController,
+                            name: "${Statics.getLabel('OtherLanguage')}",
+                            height: 50,
+                            hintTextString:
+                                "${Statics.getLabel('onlyBhasha')}"),
+                      SizedBox(height: 10),
+                      textControllerField2(
+                        controller: bhashaPersentCount,
+                        name: "${Statics.getLabel('avgPersent')}",
+                        keyboardType: TextInputType.number,
+                        height: 50,
+                        hintTextString: "${Statics.getLabel('example0to100')}",
+                      ),
+                      SizedBox(height: 10),
+                      Align(
+                        alignment: Alignment.center,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.purple,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8)),
+                          ),
+                          onPressed: () {
+                            double? average =
+                                double.tryParse(bhashaPersentCount.text.trim());
+                            if (selectedbhasha?.isOther == 1 &&
+                                anyaBhashaNameController.text == "") {
+                              Statics.showToast(
+                                  "${Statics.getLabel('otherInfoValidation')}");
+                              return;
+                            }
+                            if (average == null ||
+                                average < 0 ||
+                                average > 100) {
+                              Statics.showToast(
+                                  "${Statics.getLabel('persentValidation')}");
+                              return;
+                            }
+
+                            bool isDuplicate =
+                                enteredVividhBhashaBolnareDataList.any((item) =>
+                                    item.bhaashaid == bhashaId &&
+                                    (editIndex == null ||
+                                        enteredVividhBhashaBolnareDataList
+                                                .indexOf(item) !=
+                                            editIndex));
+
+                            if (isDuplicate) {
+                              Statics.showToast(
+                                  "${Statics.getLabel('bhashaValidation')}");
+                              return;
+                            }
+                            double totalPercent = 0;
+                            for (int i = 0;
+                                i < enteredVividhBhashaBolnareDataList.length;
+                                i++) {
+                              if (editIndex != null && i == editIndex) continue;
+                              totalPercent += double.tryParse(
+                                      enteredVividhBhashaBolnareDataList[i]
+                                          .andaje!) ??
+                                  0;
+                            }
+                            totalPercent += average;
+
+                            if (totalPercent > 100) {
+                              Statics.showToast(
+                                  "${Statics.getLabel('notMoreThan100')}");
+                              return;
+                            }
+
+                            final newData = VastisarVividhaprakara(
+                              pkid: pkIdVividhBhasha,
+                              vastiid: int.parse(selctedLevelId!),
+                              bhaashaid: bhashaId,
+                              selectedDropdownValueName: bhashaName,
+                              andaje: bhashaPersentCount.text.trim(),
+                              otherbhaasha: anyaBhashaNameController.text,
+                              isactive: isActiveBhasha,
+                            );
+                            print("newData ${json.encode(newData)}");
+                            if (editIndex != null) {
+                              enteredVividhBhashaBolnareDataList[editIndex] =
+                                  newData;
+                            } else {
+                              enteredVividhBhashaBolnareDataList.add(newData);
+                            }
+                            clearFields4();
+                            setState(() {});
+                            Navigator.of(ctx).pop();
+                            if (onDataChanged != null) onDataChanged();
+                          },
+                          child: Text("${Statics.getLabel('Submit')}",
+                              style: TextStyle(color: Colors.white)),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
   // void showVividhBhashaBolnarePopup(BuildContext context,
   //     {int? editIndex, VoidCallback? onDataChanged}) {
   //   if (editIndex != null) {
   //     var data = enteredVividhBhashaBolnareDataList[editIndex];
   //     bhashaId = data.bhaashaid;
   //     bhashaName = data.selectedDropdownValueName;
-  //     // selectedbhasha = data.bhaashaid;
   //     selectedbhashaEditId = data.bhaashaid;
   //     pkIdVividhBhasha = data.pkid;
   //     bhashaPersentCount.text = data.andaje ?? "";
-  //     anyaBhashaNameController.text = data.otherbhaasha!;
+  //     anyaBhashaNameController.text = data.otherbhaasha ?? "";
   //     bhashaCount = data.andajeForShow;
+  //     isActiveBhasha = data.isactive;
+  //   } else {
+  //     isActiveBhasha = 1;
   //   }
+  //
   //   showDialog(
   //     context: context,
   //     builder: (ctx) {
@@ -7248,14 +7415,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   //                       ],
   //                     ),
   //                     const SizedBox(height: 10),
-  //                     // Dropdown 1
+  //
+  //                     // Language Dropdown
   //                     Align(
   //                       alignment: Alignment.centerLeft,
   //                       child: Text(
   //                         "${Statics.getLabel('selectLanguage')}",
-  //                         style: TextStyle(
-  //                           fontSize: 15,
-  //                         ),
+  //                         style: TextStyle(fontSize: 15),
   //                       ),
   //                     ),
   //                     vastisarvekshanDropdown2(
@@ -7278,21 +7444,19 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   //                       editId: selectedbhashaEditId,
   //                     ),
   //                     SizedBox(height: 10),
+  //
+  //                     // Other Language Field
   //                     if (selectedbhasha?.isOther == 1)
   //                       textControllerField2(
-  //                           controller: anyaBhashaNameController,
-  //                           name: "${Statics.getLabel('OtherLanguage')}",
-  //                           height: 50,
-  //                           hintTextString:
-  //                               "${Statics.getLabel('onlyBhasha')}"),
+  //                         controller: anyaBhashaNameController,
+  //                         name: "${Statics.getLabel('OtherLanguage')}",
+  //                         height: 50,
+  //                         hintTextString: "${Statics.getLabel('onlyBhasha')}",
+  //                       ),
+  //
   //                     SizedBox(height: 10),
-  //                     // textControllerField2(
-  //                     //   controller: bhashaPersentCount,
-  //                     //   name: "${Statics.getLabel('avgPersent')}",
-  //                     //   keyboardType: TextInputType.number,
-  //                     //   height: 50,
-  //                     //   hintTextString: "${Statics.getLabel('example0to100')}",
-  //                     // ),
+  //
+  //                     // Percentage Dropdown
   //                     Column(
   //                       children: [
   //                         Align(
@@ -7334,16 +7498,24 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   //                           child: DropdownButtonHideUnderline(
   //                             child: DropdownButton<String>(
   //                               isExpanded: true,
-  //                               value: bhashaCount == "" ? null : bhashaCount,
-  //                               items: bhashaOptions.keys.map((String key) {
+  //                               value: bhashaCount != null
+  //                                   ? bhashaOptions[bhashaCount!]
+  //                                   : null,
+  //                               items: bhashaOptions.entries.map((entry) {
   //                                 return DropdownMenuItem<String>(
-  //                                   value: bhashaOptions[key],
-  //                                   child: Text(key),
+  //                                   value: entry.value, // 55 / 30 / 19
+  //                                   child: Text(entry.key), // "अधिक ५०%" etc.
   //                                 );
   //                               }).toList(),
   //                               onChanged: (value) {
   //                                 setState(() {
   //                                   bhashaPersentCount.text = value!;
+  //
+  //                                   // Store label in bhashaCount for andajeForShow
+  //                                   bhashaCount = bhashaOptions.entries
+  //                                       .firstWhere(
+  //                                           (entry) => entry.value == value)
+  //                                       .key;
   //                                 });
   //                               },
   //                               hint: Text(
@@ -7353,7 +7525,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   //                         ),
   //                       ],
   //                     ),
+  //
   //                     SizedBox(height: 10),
+  //
+  //                     // Submit Button
   //                     Align(
   //                       alignment: Alignment.center,
   //                       child: ElevatedButton(
@@ -7362,87 +7537,17 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   //                           shape: RoundedRectangleBorder(
   //                               borderRadius: BorderRadius.circular(8)),
   //                         ),
-  //                         // onPressed: () {
-  //                         //   double? average =
-  //                         //       double.tryParse(bhashaPersentCount.text.trim());
-  //                         //   if (selectedbhasha?.isOther == 1 &&
-  //                         //       anyaBhashaNameController.text == "") {
-  //                         //     Statics.showToast(
-  //                         //         "${Statics.getLabel('otherInfoValidation')}");
-  //                         //     return;
-  //                         //   }
-  //                         //   if (average == null ||
-  //                         //       average < 0 ||
-  //                         //       average > 100) {
-  //                         //     Statics.showToast(
-  //                         //         "${Statics.getLabel('persentValidation')}");
-  //                         //     return;
-  //                         //   }
-  //                         //
-  //                         //   bool isDuplicate =
-  //                         //       enteredVividhBhashaBolnareDataList.any((item) =>
-  //                         //           item.bhaashaid == bhashaId &&
-  //                         //           (editIndex == null ||
-  //                         //               enteredVividhBhashaBolnareDataList
-  //                         //                       .indexOf(item) !=
-  //                         //                   editIndex));
-  //                         //
-  //                         //   if (isDuplicate) {
-  //                         //     Statics.showToast(
-  //                         //         "${Statics.getLabel('bhashaValidation')}");
-  //                         //     return;
-  //                         //   }
-  //                         //   double totalPercent = 0;
-  //                         //   for (int i = 0;
-  //                         //       i < enteredVividhBhashaBolnareDataList.length;
-  //                         //       i++) {
-  //                         //     if (editIndex != null && i == editIndex) continue;
-  //                         //     totalPercent += double.tryParse(
-  //                         //             enteredVividhBhashaBolnareDataList[i]
-  //                         //                 .andaje!) ??
-  //                         //         0;
-  //                         //   }
-  //                         //   totalPercent += average;
-  //                         //
-  //                         //   if (totalPercent > 100) {
-  //                         //     Statics.showToast(
-  //                         //         "${Statics.getLabel('notMoreThan100')}");
-  //                         //     return;
-  //                         //   }
-  //                         //
-  //                         //   final newData = VastisarVividhaprakara(
-  //                         //     pkid: pkIdVividhBhasha,
-  //                         //     vastiid: int.parse(selctedLevelId!),
-  //                         //     bhaashaid: bhashaId,
-  //                         //     selectedDropdownValueName: bhashaName,
-  //                         //     andaje: bhashaPersentCount.text.trim(),
-  //                         //     otherbhaasha: anyaBhashaNameController.text,
-  //                         //     isactive: isActiveBhasha,
-  //                         //   );
-  //                         //   print("newData ${json.encode(newData)}");
-  //                         //   if (editIndex != null) {
-  //                         //     enteredVividhBhashaBolnareDataList[editIndex] =
-  //                         //         newData;
-  //                         //   } else {
-  //                         //     enteredVividhBhashaBolnareDataList.add(newData);
-  //                         //   }
-  //                         //   clearFields4();
-  //                         //   setState(() {});
-  //                         //   Navigator.of(ctx).pop();
-  //                         //   if (onDataChanged != null) onDataChanged();
-  //                         // },
   //                         onPressed: () {
   //                           double? average =
   //                               double.tryParse(bhashaPersentCount.text.trim());
   //
-  //                           // Validate 'other' language name if selected language is 'other'
   //                           if (selectedbhasha?.isOther == 1 &&
   //                               anyaBhashaNameController.text == "") {
   //                             Statics.showToast(
   //                                 "${Statics.getLabel('otherInfoValidation')}");
   //                             return;
   //                           }
-  //                           // Validate percentage input
+  //
   //                           if (average == null ||
   //                               average < 0 ||
   //                               average > 100) {
@@ -7450,7 +7555,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   //                                 "${Statics.getLabel('persentValidation')}");
   //                             return;
   //                           }
-  //                           // Check for duplicate entries (excluding current edit item)
+  //
   //                           bool isDuplicate =
   //                               enteredVividhBhashaBolnareDataList.any((item) =>
   //                                   item.bhaashaid == bhashaId &&
@@ -7458,45 +7563,49 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   //                                       enteredVividhBhashaBolnareDataList
   //                                               .indexOf(item) !=
   //                                           editIndex));
+  //
   //                           if (isDuplicate) {
   //                             Statics.showToast(
   //                                 "${Statics.getLabel('bhashaValidation')}");
   //                             return;
   //                           }
-  //                           // Calculate total percent of active entries (isactive == 1)
+  //
   //                           double totalPercent = 0;
   //                           for (int i = 0;
   //                               i < enteredVividhBhashaBolnareDataList.length;
   //                               i++) {
   //                             if (editIndex != null && i == editIndex) continue;
+  //
   //                             var item = enteredVividhBhashaBolnareDataList[i];
   //                             if (item.isactive == 1) {
   //                               totalPercent +=
-  //                                   double.tryParse(item.andaje!) ?? 0;
+  //                                   double.tryParse(item.andaje ?? "") ?? 0;
   //                             }
   //                           }
-  //                           // Only add current average if it is active
+  //
   //                           if (isActiveBhasha == 1) {
   //                             totalPercent += average;
   //                           }
+  //
   //                           if (totalPercent > 100) {
   //                             Statics.showToast(
   //                                 "${Statics.getLabel('notMoreThan100')}");
   //                             return;
   //                           }
-  //                           // Create new data object
+  //
   //                           final newData = VastisarVividhaprakara(
   //                             pkid: pkIdVividhBhasha,
   //                             vastiid: int.parse(selctedLevelId!),
   //                             bhaashaid: bhashaId,
   //                             selectedDropdownValueName: bhashaName,
-  //                             andaje: bhashaPersentCount.text.trim(),
+  //                             andaje:
+  //                                 bhashaPersentCount.text.trim(), // e.g., "55"
   //                             otherbhaasha: anyaBhashaNameController.text,
   //                             isactive: isActiveBhasha,
-  //                             andajeForShow: bhashaCount,
+  //                             andajeForShow: bhashaCount, // e.g., "अधिक ५०%"
   //                           );
+  //
   //                           print("newData ${json.encode(newData)}");
-  //                           // Add or update entry in the list
   //                           if (editIndex != null) {
   //                             enteredVividhBhashaBolnareDataList[editIndex] =
   //                                 newData;
@@ -7522,274 +7631,6 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   //     },
   //   );
   // }
-
-  void showVividhBhashaBolnarePopup(BuildContext context,
-      {int? editIndex, VoidCallback? onDataChanged}) {
-    if (editIndex != null) {
-      var data = enteredVividhBhashaBolnareDataList[editIndex];
-      bhashaId = data.bhaashaid;
-      bhashaName = data.selectedDropdownValueName;
-      selectedbhashaEditId = data.bhaashaid;
-      pkIdVividhBhasha = data.pkid;
-      bhashaPersentCount.text = data.andaje ?? "";
-      anyaBhashaNameController.text = data.otherbhaasha ?? "";
-      bhashaCount = data.andajeForShow;
-      isActiveBhasha = data.isactive;
-    } else {
-      isActiveBhasha = 1;
-    }
-
-    showDialog(
-      context: context,
-      builder: (ctx) {
-        return Dialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          child: StatefulBuilder(
-            builder: (context, setState) {
-              return Container(
-                padding: EdgeInsets.all(16),
-                width: 350,
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "${Statics.getLabel('vividhBhashaBolnare')}",
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.purpleAccent),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.close),
-                            onPressed: () {
-                              clearFields4();
-                              Navigator.of(ctx).pop();
-                            },
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-
-                      // Language Dropdown
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "${Statics.getLabel('selectLanguage')}",
-                          style: TextStyle(fontSize: 15),
-                        ),
-                      ),
-                      vastisarvekshanDropdown2(
-                        dataModel: vastisarvekshanDropDownDataModel!,
-                        filterTypeName: "विविध भाषा",
-                        hintText: "${Statics.getLabel('selectLanguage')}",
-                        onItemSelected: (id, value, isOther) {
-                          bhashaName = value;
-                          bhashaId = id;
-                          anyaBhashaNameController.clear();
-                        },
-                        width: double.infinity,
-                        questionNumber: 12,
-                        selectedValue: selectedbhasha,
-                        onSelectionChanged: (newValue) {
-                          setState(() {
-                            selectedbhasha = newValue;
-                          });
-                        },
-                        editId: selectedbhashaEditId,
-                      ),
-                      SizedBox(height: 10),
-
-                      // Other Language Field
-                      if (selectedbhasha?.isOther == 1)
-                        textControllerField2(
-                          controller: anyaBhashaNameController,
-                          name: "${Statics.getLabel('OtherLanguage')}",
-                          height: 50,
-                          hintTextString: "${Statics.getLabel('onlyBhasha')}",
-                        ),
-
-                      SizedBox(height: 10),
-
-                      // Percentage Dropdown
-                      Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text:
-                                        "${Statics.getLabel('prushaanchiSankhya')}",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: "*",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          Container(
-                            height: 50,
-                            width: double.infinity,
-                            padding: EdgeInsets.symmetric(horizontal: 12),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: Colors.black54),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                isExpanded: true,
-                                value: bhashaCount != null
-                                    ? bhashaOptions[bhashaCount!]
-                                    : null,
-                                items: bhashaOptions.entries.map((entry) {
-                                  return DropdownMenuItem<String>(
-                                    value: entry.value, // 55 / 30 / 19
-                                    child: Text(entry.key), // "अधिक ५०%" etc.
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    bhashaPersentCount.text = value!;
-
-                                    // Store label in bhashaCount for andajeForShow
-                                    bhashaCount = bhashaOptions.entries
-                                        .firstWhere(
-                                            (entry) => entry.value == value)
-                                        .key;
-                                  });
-                                },
-                                hint: Text(
-                                    Statics.getLabel('prushaanchiSankhya')),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      SizedBox(height: 10),
-
-                      // Submit Button
-                      Align(
-                        alignment: Alignment.center,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.purple,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                          ),
-                          onPressed: () {
-                            double? average =
-                                double.tryParse(bhashaPersentCount.text.trim());
-
-                            if (selectedbhasha?.isOther == 1 &&
-                                anyaBhashaNameController.text == "") {
-                              Statics.showToast(
-                                  "${Statics.getLabel('otherInfoValidation')}");
-                              return;
-                            }
-
-                            if (average == null ||
-                                average < 0 ||
-                                average > 100) {
-                              Statics.showToast(
-                                  "${Statics.getLabel('persentValidation')}");
-                              return;
-                            }
-
-                            bool isDuplicate =
-                                enteredVividhBhashaBolnareDataList.any((item) =>
-                                    item.bhaashaid == bhashaId &&
-                                    (editIndex == null ||
-                                        enteredVividhBhashaBolnareDataList
-                                                .indexOf(item) !=
-                                            editIndex));
-
-                            if (isDuplicate) {
-                              Statics.showToast(
-                                  "${Statics.getLabel('bhashaValidation')}");
-                              return;
-                            }
-
-                            double totalPercent = 0;
-                            for (int i = 0;
-                                i < enteredVividhBhashaBolnareDataList.length;
-                                i++) {
-                              if (editIndex != null && i == editIndex) continue;
-
-                              var item = enteredVividhBhashaBolnareDataList[i];
-                              if (item.isactive == 1) {
-                                totalPercent +=
-                                    double.tryParse(item.andaje ?? "") ?? 0;
-                              }
-                            }
-
-                            if (isActiveBhasha == 1) {
-                              totalPercent += average;
-                            }
-
-                            if (totalPercent > 100) {
-                              Statics.showToast(
-                                  "${Statics.getLabel('notMoreThan100')}");
-                              return;
-                            }
-
-                            final newData = VastisarVividhaprakara(
-                              pkid: pkIdVividhBhasha,
-                              vastiid: int.parse(selctedLevelId!),
-                              bhaashaid: bhashaId,
-                              selectedDropdownValueName: bhashaName,
-                              andaje:
-                                  bhashaPersentCount.text.trim(), // e.g., "55"
-                              otherbhaasha: anyaBhashaNameController.text,
-                              isactive: isActiveBhasha,
-                              andajeForShow: bhashaCount, // e.g., "अधिक ५०%"
-                            );
-
-                            print("newData ${json.encode(newData)}");
-                            if (editIndex != null) {
-                              enteredVividhBhashaBolnareDataList[editIndex] =
-                                  newData;
-                            } else {
-                              enteredVividhBhashaBolnareDataList.add(newData);
-                            }
-                            clearFields4();
-                            setState(() {});
-                            Navigator.of(ctx).pop();
-                            if (onDataChanged != null) onDataChanged();
-                          },
-                          child: Text("${Statics.getLabel('Submit')}",
-                              style: TextStyle(color: Colors.white)),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        );
-      },
-    );
-  }
 
   void clearFields4() {
     bhashaId = null;
@@ -9394,316 +9235,432 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       child: Column(
         children: [
           if (isVastiSearch == true)
-            if (step1completepercentage != null)
+            if (step2completepercentage != null)
               Container(
                 padding: EdgeInsets.symmetric(vertical: 10),
-                child: dynamicProgressBar(
-                    context: context,
-                    value: double.parse(step2completepercentage.toString()),
-                    detailListItems: step2pendingpoints!.split(',')),
-              ),
-//======================== VASTITIL BALOSAPANA KENDRA  =======================================================
-          mainContainer(
-              "${Statics.getLabel('BalopasanaKendra')}",
-              Column(
-                children: [
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: InkWell(
+                child: Column(
+                  children: [
+                    dynamicProgressBar(
+                        context: context,
+                        value: double.parse(step2completepercentage.toString()),
+                        detailListItems: step2pendingpoints!.split(',')),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    InkWell(
                       onTap: () {
-                        if (isVastiSearch) {
-                          showVastitBalopasanaKendraPopup(
-                            context,
-                            onDataChanged: () {
-                              setState(() {});
-                            },
-                          );
-                        } else {
-                          showPopupForVastiValidation(context);
+                        // Filter out empty or whitespace-only strings
+                        final filteredDetails = step2pendingpoints!
+                            .split(',')
+                            .where((item) => item.trim().isNotEmpty)
+                            .toList();
+
+                        print(
+                            "Filtered step1pendingpoints!.split(','): $filteredDetails");
+
+                        if (filteredDetails.isEmpty) {
+                          Statics.showToast(Statics.getLabel('allInfoSubmit'));
+                          return;
                         }
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        width: 100,
-                        decoration: BoxDecoration(
-                            border:
-                                Border.all(color: Colors.purpleAccent.shade100),
-                            color: Colors.purpleAccent.withOpacity(0.7),
-                            borderRadius: BorderRadius.circular(15)),
-                        child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.add, color: Colors.white, size: 15),
-                              SizedBox(width: 5),
-                              Text(
-                                "${Statics.getLabel('AddButton')}",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black54),
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                    ),
-                    child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 1.2,
-                          child: DataTable(
-                            showCheckboxColumn: false,
-                            headingRowColor:
-                                MaterialStatePropertyAll(Colors.purple.shade50),
-                            headingTextStyle: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87),
-                            columns: [
-                              DataColumn(
-                                  label: Text(
-                                "${Statics.getLabel('balopasanaOnly')}",
-                              )),
-                              DataColumn(
-                                  label: Text(
-                                "${Statics.getLabel('Name')}",
-                              )),
-                              DataColumn(
-                                  label: Text(
-                                "${Statics.getLabel('konasathi')}",
-                              )),
-                            ],
-                            rows: vastitBalopasanaKendraDataList
-                                .asMap()
-                                .entries
-                                .where((entry) => entry.value.isactive == 1)
-                                .map((entry) {
-                              int index = entry.key;
-                              var data = entry.value;
-                              bool isSelected =
-                                  selectedVastitBalopasanaKendraIdIndex ==
-                                      index;
-                              return DataRow(
-                                  selected: isSelected,
-                                  color:
-                                      MaterialStateProperty.resolveWith<Color?>(
-                                    (Set<MaterialState> states) {
-                                      if (isSelected)
-                                        return Colors.yellow.shade100;
-                                      return null;
-                                    },
-                                  ),
-                                  onSelectChanged: (bool? selected) {
-                                    if (selected != null && selected) {
-                                      setState(() {
-                                        selectedVastitBalopasanaKendraIdIndex =
-                                            index;
-                                      });
-                                    }
-                                  },
-                                  cells: [
-                                    DataCell(Text(
-                                        data.selectedDropdownValueName ?? '')),
-                                    DataCell(Text(data.name ?? '')),
-                                    DataCell(Text(data.konasathi ?? '')),
-                                  ]);
-                            }).toList(),
-                          ),
-                        )),
-                  ),
-                  SizedBox(height: 10),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 6,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            if (selectedVastitBalopasanaKendraIdIndex != null) {
-                              var selectedData = vastitBalopasanaKendraDataList[
-                                  selectedVastitBalopasanaKendraIdIndex!];
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    backgroundColor: Colors.white,
-                                    title: Center(
-                                      child: Text(
-                                        "${Statics.getLabel('BalopasanaKendra')}",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                          color: Colors.purpleAccent,
+
+                        showDialog(
+                          context: context,
+                          builder: (ctx) {
+                            return Dialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              backgroundColor: Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    // Icon and Title
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.warning_amber_rounded,
+                                            color: Colors.red, size: 30),
+                                        SizedBox(width: 8),
+                                        Text(
+                                          Statics.getLabel('remainingQuestion'),
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.black87,
+                                          ),
                                         ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 20),
+                                    SizedBox(
+                                      height: 300,
+                                      child: ListView.builder(
+                                        itemCount: filteredDetails.length,
+                                        itemBuilder: (context, index) {
+                                          return ListTile(
+                                            dense: true,
+                                            contentPadding: EdgeInsets.zero,
+                                            title: Text(
+                                              "${index + 1}. ${filteredDetails[index]}",
+                                              style: TextStyle(
+                                                color: Colors.black87,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          );
+                                        },
                                       ),
                                     ),
-                                    content: SingleChildScrollView(
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Divider(
-                                              thickness: 1,
-                                              color:
-                                                  Colors.deepPurple.shade100),
-                                          SizedBox(height: 12),
-                                          _buildInfoRow(
-                                              "${Statics.getLabel('balopasanaOnly')}",
-                                              selectedData
-                                                  .selectedDropdownValueName),
-                                          _buildInfoRow(
-                                              "${Statics.getLabel('otherBalopasanaKendra')}",
-                                              selectedData
-                                                  .otherBalopasanaShreniName),
-                                          _buildInfoRow(
-                                              "${Statics.getLabel('Name')}",
-                                              selectedData.name),
-                                          _buildInfoRow(
-                                              "${Statics.getLabel('konasathi')}",
-                                              selectedData.konasathi),
-                                        ],
-                                      ),
-                                    ),
-                                    actionsAlignment: MainAxisAlignment.center,
-                                    actions: [
-                                      ElevatedButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: Text(
-                                            "${Statics.getLabel('bandKara')}",
-                                            style:
-                                                TextStyle(color: Colors.white)),
+                                    const SizedBox(height: 20),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.purpleAccent,
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 24, vertical: 12),
+                                          backgroundColor: Colors.red,
+                                          foregroundColor: Colors.white,
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(12),
                                           ),
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 12),
                                         ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            }
-                          },
-                          child: Icon(Icons.remove_red_eye,
-                              color: Colors.green, size: 20),
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            showVastitBalopasanaKendraPopup(context,
-                                editIndex:
-                                    selectedVastitBalopasanaKendraIdIndex,
-                                onDataChanged: () {
-                              setState(() {});
-                            });
-                          },
-                          child: Icon(Icons.edit, color: Colors.blue, size: 20),
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        InkWell(
-                          onTap: () async {
-                            final shouldDelete = await showDialog<bool>(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                backgroundColor: Colors.white,
-                                title: Center(
-                                  child: Text(
-                                    "${Statics.getLabel('pusthikarn')}",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                      color: Colors.redAccent,
-                                    ),
-                                  ),
-                                ),
-                                content: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10.0),
-                                  child: Text(
-                                    "${Statics.getLabel('deleteconfirmText')}",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                ),
-                                actionsAlignment: MainAxisAlignment.spaceEvenly,
-                                actions: [
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.grey.shade300,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
+                                        child:
+                                            Text(Statics.getLabel('bandKara')),
                                       ),
                                     ),
-                                    onPressed: () =>
-                                        Navigator.pop(context, false),
-                                    child: Text(
-                                      "${Statics.getLabel('ConfirmationNo')}",
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                  ),
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.redAccent,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
-                                    onPressed: () =>
-                                        Navigator.pop(context, true),
-                                    child: Text(
-                                      "${Statics.getLabel('ConfirmationYes')}",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             );
-                            if (shouldDelete == true &&
-                                selectedVastitBalopasanaKendraIdIndex != null) {
-                              setState(() {
-                                vastitBalopasanaKendraDataList[
-                                        selectedVastitBalopasanaKendraIdIndex!]
-                                    .isactive = 0;
-                                selectedVastitBalopasanaKendraIdIndex = null;
-                              });
-                            }
                           },
-                          child:
-                              Icon(Icons.delete, color: Colors.red, size: 20),
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.info_outline,
+                            size: 18,
+                            color: Colors.red.shade300,
+                          ),
+                          SizedBox(width: 6),
+                          Text(
+                            "${Statics.getLabel('remainingQuestion')}",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.red.shade300,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+//======================== VASTITIL BALOSAPANA KENDRA  =======================================================
+          mainContainer(
+            "${Statics.getLabel('BalopasanaKendra')}",
+            Column(
+              children: [
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: InkWell(
+                    onTap: () {
+                      if (isVastiSearch) {
+                        showVastitBalopasanaKendraPopup(
+                          context,
+                          onDataChanged: () {
+                            setState(() {});
+                          },
+                        );
+                      } else {
+                        showPopupForVastiValidation(context);
+                      }
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      width: 100,
+                      decoration: BoxDecoration(
+                          border:
+                              Border.all(color: Colors.purpleAccent.shade100),
+                          color: Colors.purpleAccent.withOpacity(0.7),
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.add, color: Colors.white, size: 15),
+                            SizedBox(width: 5),
+                            Text(
+                              "${Statics.getLabel('AddButton')}",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                ],
-              )),
+                ),
+                SizedBox(height: 10),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black54),
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                  ),
+                  child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 1.2,
+                        child: DataTable(
+                          showCheckboxColumn: false,
+                          headingRowColor:
+                              MaterialStatePropertyAll(Colors.purple.shade50),
+                          headingTextStyle: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87),
+                          columns: [
+                            DataColumn(
+                                label: Text(
+                              "${Statics.getLabel('balopasanaOnly')}",
+                            )),
+                            DataColumn(
+                                label: Text(
+                              "${Statics.getLabel('Name')}",
+                            )),
+                            DataColumn(
+                                label: Text(
+                              "${Statics.getLabel('konasathi')}",
+                            )),
+                          ],
+                          rows: vastitBalopasanaKendraDataList
+                              .asMap()
+                              .entries
+                              .where((entry) => entry.value.isactive == 1)
+                              .map((entry) {
+                            int index = entry.key;
+                            var data = entry.value;
+                            bool isSelected =
+                                selectedVastitBalopasanaKendraIdIndex == index;
+                            return DataRow(
+                                selected: isSelected,
+                                color:
+                                    MaterialStateProperty.resolveWith<Color?>(
+                                  (Set<MaterialState> states) {
+                                    if (isSelected)
+                                      return Colors.yellow.shade100;
+                                    return null;
+                                  },
+                                ),
+                                onSelectChanged: (bool? selected) {
+                                  if (selected != null && selected) {
+                                    setState(() {
+                                      selectedVastitBalopasanaKendraIdIndex =
+                                          index;
+                                    });
+                                  }
+                                },
+                                cells: [
+                                  DataCell(Text(
+                                      data.selectedDropdownValueName ?? '')),
+                                  DataCell(Text(data.name ?? '')),
+                                  DataCell(Text(data.konasathi ?? '')),
+                                ]);
+                          }).toList(),
+                        ),
+                      )),
+                ),
+                SizedBox(height: 10),
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 6,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          if (selectedVastitBalopasanaKendraIdIndex != null) {
+                            var selectedData = vastitBalopasanaKendraDataList[
+                                selectedVastitBalopasanaKendraIdIndex!];
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  backgroundColor: Colors.white,
+                                  title: Center(
+                                    child: Text(
+                                      "${Statics.getLabel('BalopasanaKendra')}",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Colors.purpleAccent,
+                                      ),
+                                    ),
+                                  ),
+                                  content: SingleChildScrollView(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Divider(
+                                            thickness: 1,
+                                            color: Colors.deepPurple.shade100),
+                                        SizedBox(height: 12),
+                                        _buildInfoRow(
+                                            "${Statics.getLabel('balopasanaOnly')}",
+                                            selectedData
+                                                .selectedDropdownValueName),
+                                        _buildInfoRow(
+                                            "${Statics.getLabel('otherBalopasanaKendra')}",
+                                            selectedData
+                                                .otherBalopasanaShreniName),
+                                        _buildInfoRow(
+                                            "${Statics.getLabel('Name')}",
+                                            selectedData.name),
+                                        _buildInfoRow(
+                                            "${Statics.getLabel('konasathi')}",
+                                            selectedData.konasathi),
+                                      ],
+                                    ),
+                                  ),
+                                  actionsAlignment: MainAxisAlignment.center,
+                                  actions: [
+                                    ElevatedButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: Text(
+                                          "${Statics.getLabel('bandKara')}",
+                                          style:
+                                              TextStyle(color: Colors.white)),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.purpleAccent,
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 24, vertical: 12),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }
+                        },
+                        child: Icon(Icons.remove_red_eye,
+                            color: Colors.green, size: 20),
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          showVastitBalopasanaKendraPopup(context,
+                              editIndex: selectedVastitBalopasanaKendraIdIndex,
+                              onDataChanged: () {
+                            setState(() {});
+                          });
+                        },
+                        child: Icon(Icons.edit, color: Colors.blue, size: 20),
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      InkWell(
+                        onTap: () async {
+                          final shouldDelete = await showDialog<bool>(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              backgroundColor: Colors.white,
+                              title: Center(
+                                child: Text(
+                                  "${Statics.getLabel('pusthikarn')}",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    color: Colors.redAccent,
+                                  ),
+                                ),
+                              ),
+                              content: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10.0),
+                                child: Text(
+                                  "${Statics.getLabel('deleteconfirmText')}",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                              ),
+                              actionsAlignment: MainAxisAlignment.spaceEvenly,
+                              actions: [
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.grey.shade300,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                  onPressed: () =>
+                                      Navigator.pop(context, false),
+                                  child: Text(
+                                    "${Statics.getLabel('ConfirmationNo')}",
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.redAccent,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                  onPressed: () => Navigator.pop(context, true),
+                                  child: Text(
+                                    "${Statics.getLabel('ConfirmationYes')}",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                          if (shouldDelete == true &&
+                              selectedVastitBalopasanaKendraIdIndex != null) {
+                            setState(() {
+                              vastitBalopasanaKendraDataList[
+                                      selectedVastitBalopasanaKendraIdIndex!]
+                                  .isactive = 0;
+                              selectedVastitBalopasanaKendraIdIndex = null;
+                            });
+                          }
+                        },
+                        child: Icon(Icons.delete, color: Colors.red, size: 20),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
 //======================== VASTITIL BALOSAPANA KENDRA  =======================================================
           mainContainer(
               "${Statics.getLabel('MotheVyasaayiKendra')}",
@@ -13595,13 +13552,133 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       child: Column(
         children: [
           if (isVastiSearch == true)
-            if (step1completepercentage != null)
+            if (step3completepercentage != null)
               Container(
                 padding: EdgeInsets.symmetric(vertical: 10),
-                child: dynamicProgressBar(
-                    context: context,
-                    value: double.parse(step3completepercentage.toString()),
-                    detailListItems: step3pendingpoints!.split(',')),
+                child: Column(
+                  children: [
+                    dynamicProgressBar(
+                        context: context,
+                        value: double.parse(step3completepercentage.toString()),
+                        detailListItems: step3pendingpoints!.split(',')),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        // Filter out empty or whitespace-only strings
+                        final filteredDetails = step3pendingpoints!
+                            .split(',')
+                            .where((item) => item.trim().isNotEmpty)
+                            .toList();
+
+                        print(
+                            "Filtered step3pendingpoints!.split(','): $filteredDetails");
+
+                        if (filteredDetails.isEmpty) {
+                          Statics.showToast(Statics.getLabel('allInfoSubmit'));
+                          return;
+                        }
+
+                        showDialog(
+                          context: context,
+                          builder: (ctx) {
+                            return Dialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              backgroundColor: Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    // Icon and Title
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.warning_amber_rounded,
+                                            color: Colors.red, size: 30),
+                                        SizedBox(width: 8),
+                                        Text(
+                                          Statics.getLabel('remainingQuestion'),
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 20),
+                                    SizedBox(
+                                      height: 300,
+                                      child: ListView.builder(
+                                        itemCount: filteredDetails.length,
+                                        itemBuilder: (context, index) {
+                                          return ListTile(
+                                            dense: true,
+                                            contentPadding: EdgeInsets.zero,
+                                            title: Text(
+                                              "${index + 1}. ${filteredDetails[index]}",
+                                              style: TextStyle(
+                                                color: Colors.black87,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.red,
+                                          foregroundColor: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 12),
+                                        ),
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
+                                        child:
+                                            Text(Statics.getLabel('bandKara')),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.info_outline,
+                            size: 18,
+                            color: Colors.red.shade300,
+                          ),
+                          SizedBox(width: 6),
+                          Text(
+                            "${Statics.getLabel('remainingQuestion')}",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.red.shade300,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
           //=====================  SAMAJIK PRASHANA AND GARJA ================================================================
           mainContainer(
@@ -14981,165 +15058,52 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   }) {
     final progress = (value / 100).clamp(0.0, 1.0);
 
-    return GestureDetector(
-      // onTap: () {
-      //   print("detailListItems#$detailListItems");
-      //   // Filter out empty or whitespace-only strings
-      //   final filteredDetails =
-      //       detailListItems.where((item) => item.trim().isNotEmpty).toList();
-      //
-      //   print("Filtered detailListItems: $filteredDetails");
-      //
-      //   if (filteredDetails.isEmpty) {
-      //     Statics.showToast("सारी जानकारी भर दी गई है");
-      //     return;
-      //   }
-      //
-      //   showDialog(
-      //     context: context,
-      //     builder: (ctx) {
-      //       return AlertDialog(
-      //         title: Text("${Statics.getLabel('remainingQuestion')}"),
-      //         content: SizedBox(
-      //           width: double.maxFinite,
-      //           child: ListView.builder(
-      //             shrinkWrap: true,
-      //             itemCount: detailListItems.length,
-      //             itemBuilder: (context, index) {
-      //               return Padding(
-      //                 padding: const EdgeInsets.symmetric(vertical: 4),
-      //                 child: Text(
-      //                   "${index + 1}. ${detailListItems[index]}",
-      //                   style: const TextStyle(
-      //                     color: Colors.red,
-      //                     fontWeight: FontWeight.bold,
-      //                   ),
-      //                 ),
-      //               );
-      //             },
-      //           ),
-      //         ),
-      //         actions: [
-      //           TextButton(
-      //             onPressed: () => Navigator.of(context).pop(),
-      //             child: Text("${Statics.getLabel('bandKara')}"),
-      //           ),
-      //         ],
-      //       );
-      //     },
-      //   );
-      // },
-      onTap: () {
-        // Filter out empty or whitespace-only strings
-        final filteredDetails =
-            detailListItems.where((item) => item.trim().isNotEmpty).toList();
-
-        print("Filtered detailListItems: $filteredDetails");
-
-        if (filteredDetails.isEmpty) {
-          Statics.showToast("सारी जानकारी भर दी गई है");
-          return;
-        }
-
-        showDialog(
-          context: context,
-          builder: (ctx) {
-            return AlertDialog(
-              title: Text("${Statics.getLabel('remainingQuestion')}"),
-              content: SizedBox(
-                width: double.maxFinite,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: filteredDetails.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4),
-                      child: Text(
-                        "${index + 1}. ${filteredDetails[index]}",
-                        style: const TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    );
-                  },
+    return TweenAnimationBuilder<double>(
+      tween: Tween<double>(begin: 0, end: progress),
+      duration: const Duration(milliseconds: 800),
+      builder: (context, animatedProgress, _) {
+        return Stack(
+          children: [
+            Container(
+              width: 300,
+              height: 24,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [
+                    Color(0xFFcfd8dc),
+                    Color(0xFF90a4ae)
+                  ], // Blue-grey background
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text("${Statics.getLabel('bandKara')}"),
-                ),
-              ],
-            );
-          },
-        );
-      },
-
-      child: TweenAnimationBuilder<double>(
-        tween: Tween<double>(begin: 0, end: progress),
-        duration: const Duration(milliseconds: 800),
-        builder: (context, animatedProgress, _) {
-          return Stack(
-            children: [
-              Container(
-                width: 300,
-                height: 24,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color(0xFFcfd8dc),
-                      Color(0xFF90a4ae)
-                    ], // Blue-grey background
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: Container(
-                  width: 300 * animatedProgress,
-                  height: 24,
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0xFF43a047),
-                        Color(0xFF66bb6a)
-                      ], // Green gradient
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
+              ),
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Container(
+                width: 300 * animatedProgress,
+                height: 24,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Color(0xFFEA80FC),
+                      Colors.purpleAccent,
+                    ],
                   ),
                 ),
               ),
-              Positioned.fill(
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "${value.toInt()}% ${Statics.getLabel('surveyCompleted')}",
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 13,
-                          color: Colors.white,
-                          shadows: [
-                            Shadow(
-                              offset: Offset(1, 1),
-                              blurRadius: 2.5,
-                              color: Colors.black45,
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Icon(
-                        Icons.info_outline,
-                        size: 15, // similar to text size
+            ),
+            Positioned.fill(
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "${value.toInt()}% ${Statics.getLabel('surveyCompleted')}",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13,
                         color: Colors.white,
                         shadows: [
                           Shadow(
@@ -15149,14 +15113,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          );
-        },
-      ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

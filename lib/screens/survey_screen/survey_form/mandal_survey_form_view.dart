@@ -98,8 +98,13 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
               : vastiDataByIdModel!.vastisarvekshan!.vastiShakhaType!;
       sanghaKaryaVastiPramukhNameController.text =
           vastiDataByIdModel!.vastisarvekshan!.vastiShakhaPramukhName ?? "";
-      loksankhyaController.text =
-          vastiDataByIdModel!.vastisarvekshan!.lokasankhya ?? "";
+      total = int.parse(vastiDataByIdModel!.vastisarvekshan!.maleSankhya == null
+              ? ""
+              : vastiDataByIdModel!.vastisarvekshan!.maleSankhya.toString()) +
+          int.parse(vastiDataByIdModel!.vastisarvekshan!.femaleSankhya == null
+              ? ""
+              : vastiDataByIdModel!.vastisarvekshan!.femaleSankhya.toString());
+      //     int.parse(vastiDataByIdModel!.vastisarvekshan!.lokasankhya ?? "0");
       vadicheNaavController.text =
           vastiDataByIdModel!.vastisarvekshan!.vadicheNave ?? "";
       andajeGhareController.text =
@@ -148,6 +153,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
           [];
       step1completepercentage =
           vastiDataByIdModel!.vastisarvekshan!.step1completepercentage;
+      step1pendingpoints =
+          vastiDataByIdModel!.vastisarvekshan!.step1pendingpoints;
 
       /// STEP 3 FORM DATA =====================================================================================================
       vastiPrashnaGarjaDataList =
@@ -162,6 +169,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
           vastiDataByIdModel!.vastisarvekshan!.step3completepercentage;
       durjanShaktiYesNo =
           vastiDataByIdModel!.vastisarvekshan!.durjanShaktiYesNo!;
+      step3pendingpoints =
+          vastiDataByIdModel!.vastisarvekshan!.step3pendingpoints;
       // ============================================================================================================================================================================
       _isStep1Completed =
           vastiDataByIdModel!.vastisarvekshan!.stepOneComplete ?? true;
@@ -365,27 +374,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   int? step1completepercentage;
   int? step3completepercentage;
 
-  String? selectedValueAll;
-  String? selectedValueMale;
-  String? selectedValueFemale;
-  String? ekunLoksankhya;
-
-  final Map<String, String> options = {
-    '${Statics.getLabel('moreThan40000')}': '44444',
-    '${Statics.getLabel('20000to40000')}': '22222',
-    '${Statics.getLabel('10000to20000')}': '11111',
-    '${Statics.getLabel('5000to10000')}': '5555',
-    '${Statics.getLabel('3000to5000')}': '3333',
-    '${Statics.getLabel('1000to3000')}': '1111',
-    '${Statics.getLabel('lessThan1000')}': '999',
-  };
-
-  void updateCounts() {
-    setState(() {
-      male = int.tryParse(maleController.text);
-      female = int.tryParse(femaleController.text);
-    });
-  }
+  String? step1pendingpoints;
+  String? step3pendingpoints;
 
   void populateDropdown() async {
     var data = await Statics.getStaticLDB('AnnualBaithakType');
@@ -491,8 +481,17 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
     populateDropdown();
     fetchVastiSurveyDropdownData();
     _tabController.addListener(_handleTabSelection);
-    maleController.addListener(updateCounts);
-    femaleController.addListener(updateCounts);
+    maleController.addListener(_updateTotal);
+    femaleController.addListener(_updateTotal);
+  }
+
+  int total = 0;
+  void _updateTotal() {
+    final int male = int.tryParse(maleController.text) ?? 0;
+    final int female = int.tryParse(femaleController.text) ?? 0;
+    setState(() {
+      total = male + female;
+    });
   }
 
   void _handleTabSelection() {
@@ -1193,8 +1192,130 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
             if (step1completepercentage != null)
               Container(
                 padding: EdgeInsets.symmetric(vertical: 10),
-                child: dynamicProgressBar(
-                    double.parse(step1completepercentage.toString())),
+                child: Column(
+                  children: [
+                    dynamicProgressBar(
+                        context: context,
+                        value: double.parse(step1completepercentage.toString()),
+                        detailListItems: step1pendingpoints!.split(',')),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        // Filter out empty or whitespace-only strings
+                        final filteredDetails = step1pendingpoints!
+                            .split(',')
+                            .where((item) => item.trim().isNotEmpty)
+                            .toList();
+
+                        print(
+                            "Filtered step1pendingpoints!.split(','): $filteredDetails");
+
+                        if (filteredDetails.isEmpty) {
+                          Statics.showToast(Statics.getLabel('allInfoSubmit'));
+                          return;
+                        }
+
+                        showDialog(
+                          context: context,
+                          builder: (ctx) {
+                            return Dialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              backgroundColor: Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    // Icon and Title
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.warning_amber_rounded,
+                                            color: Colors.red, size: 30),
+                                        SizedBox(width: 8),
+                                        Text(
+                                          Statics.getLabel('remainingQuestion'),
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 20),
+                                    SizedBox(
+                                      height: 300,
+                                      child: ListView.builder(
+                                        itemCount: filteredDetails.length,
+                                        itemBuilder: (context, index) {
+                                          return ListTile(
+                                            dense: true,
+                                            contentPadding: EdgeInsets.zero,
+                                            title: Text(
+                                              "${index + 1}. ${filteredDetails[index]}",
+                                              style: TextStyle(
+                                                color: Colors.black87,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.red,
+                                          foregroundColor: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 12),
+                                        ),
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
+                                        child:
+                                            Text(Statics.getLabel('bandKara')),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.info_outline,
+                            size: 18,
+                            color: Colors.red.shade300,
+                          ),
+                          SizedBox(width: 6),
+                          Text(
+                            "${Statics.getLabel('remainingQuestion')}",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.red.shade300,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
           if (isVastiSearch == true)
             SizedBox(
@@ -1616,197 +1737,37 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       ),
                       Column(
                         children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text:
-                                        "${Statics.getLabel('prushaanchiSankhya')}",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  controller: maleController,
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                    labelText: 'पुरुष',
+                                    border: OutlineInputBorder(),
                                   ),
-                                  TextSpan(
-                                    text: "*",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.red,
-                                    ),
+                                ),
+                              ),
+                              SizedBox(width: 16),
+                              Expanded(
+                                child: TextField(
+                                  controller: femaleController,
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                    labelText: 'महिला',
+                                    border: OutlineInputBorder(),
                                   ),
-                                ],
+                                ),
                               ),
-                            ),
+                            ],
                           ),
-                          SizedBox(height: 5),
-                          Container(
-                            height: 50,
-                            width: double.infinity,
-                            padding: EdgeInsets.symmetric(horizontal: 12),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: Colors.black54),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                isExpanded: true,
-                                value: selectedValueMale == ""
-                                    ? null
-                                    : selectedValueMale,
-                                items: options.keys.map((String key) {
-                                  return DropdownMenuItem<String>(
-                                    value: options[key],
-                                    child: Text(key),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedValueMale = value;
-                                    maleController.text = value.toString();
-                                  });
-                                },
-                                hint: Text(
-                                    Statics.getLabel('prushaanchiSankhya')),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text:
-                                        "${Statics.getLabel('mahilanchiSankhya')}",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: "*",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          Container(
-                            height: 50,
-                            width: double.infinity,
-                            padding: EdgeInsets.symmetric(horizontal: 12),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: Colors.black54),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                isExpanded: true,
-                                value: selectedValueFemale == ""
-                                    ? null
-                                    : selectedValueFemale,
-                                items: options.keys.map((String key) {
-                                  return DropdownMenuItem<String>(
-                                    value: options[key],
-                                    child: Text(key),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedValueFemale = value;
-                                    femaleController.text = value.toString();
-                                  });
-                                },
-                                hint:
-                                    Text(Statics.getLabel('mahilanchiSankhya')),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text:
-                                        "${Statics.getLabel('gaavachiLoksankhya')}",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: "*",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          Container(
-                            height: 50,
-                            width: double.infinity,
-                            padding: EdgeInsets.symmetric(horizontal: 12),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: Colors.black54),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                isExpanded: true,
-                                value: selectedValueAll == ""
-                                    ? null
-                                    : selectedValueAll,
-                                items: options.keys.map((String key) {
-                                  return DropdownMenuItem<String>(
-                                    value: options[key],
-                                    child: Text(key),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedValueAll = value;
-                                    ekunLoksankhya = value;
-                                  });
-                                },
-                                hint: Text(
-                                    Statics.getLabel('gaavachiLoksankhya')),
-                              ),
-                            ),
-                          ),
+                          SizedBox(height: 20),
+                          Text(
+                            'कुल लोकसंख्या: $total',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          )
                         ],
                       ),
                     ],
@@ -5540,7 +5501,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
 //====================================================================================================
       "VastisarKonatyaprantache": enteredKontyaPraantacheDataList,
       "vastiShakhaPramukhName": sanghaKaryaVastiPramukhNameController.text,
-      "Lokasankhya": ekunLoksankhya,
+      "Lokasankhya": total,
       "beforeShakhaSaptahikIsOnNowOff": beforsanghaonnowisoff,
       "VasticyacatuSima": vastiChatahuSimaController.text,
       "googlemap": selectedFilePath,
@@ -9042,8 +9003,130 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
             if (step3completepercentage != null)
               Container(
                 padding: EdgeInsets.symmetric(vertical: 10),
-                child: dynamicProgressBar(
-                    double.parse(step3completepercentage.toString())),
+                child: Column(
+                  children: [
+                    dynamicProgressBar(
+                        context: context,
+                        value: double.parse(step1completepercentage.toString()),
+                        detailListItems: step3pendingpoints!.split(',')),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        // Filter out empty or whitespace-only strings
+                        final filteredDetails = step3pendingpoints!
+                            .split(',')
+                            .where((item) => item.trim().isNotEmpty)
+                            .toList();
+
+                        print(
+                            "Filtered step3pendingpoints!.split(','): $filteredDetails");
+
+                        if (filteredDetails.isEmpty) {
+                          Statics.showToast(Statics.getLabel('allInfoSubmit'));
+                          return;
+                        }
+
+                        showDialog(
+                          context: context,
+                          builder: (ctx) {
+                            return Dialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              backgroundColor: Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    // Icon and Title
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.warning_amber_rounded,
+                                            color: Colors.red, size: 30),
+                                        SizedBox(width: 8),
+                                        Text(
+                                          Statics.getLabel('remainingQuestion'),
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 20),
+                                    SizedBox(
+                                      height: 300,
+                                      child: ListView.builder(
+                                        itemCount: filteredDetails.length,
+                                        itemBuilder: (context, index) {
+                                          return ListTile(
+                                            dense: true,
+                                            contentPadding: EdgeInsets.zero,
+                                            title: Text(
+                                              "${index + 1}. ${filteredDetails[index]}",
+                                              style: TextStyle(
+                                                color: Colors.black87,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.red,
+                                          foregroundColor: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 12),
+                                        ),
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
+                                        child:
+                                            Text(Statics.getLabel('bandKara')),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.info_outline,
+                            size: 18,
+                            color: Colors.red.shade300,
+                          ),
+                          SizedBox(width: 6),
+                          Text(
+                            "${Statics.getLabel('remainingQuestion')}",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.red.shade300,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
           //=====================  DHARMIK NETRUTVA  ================================================================
           mainContainer(
@@ -9784,66 +9867,6 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
     searchVastiData(selctedLevelId);
   }
 
-  Widget dynamicProgressBar(double value) {
-    final progress = (value / 100).clamp(0.0, 1.0);
-    return TweenAnimationBuilder<double>(
-      tween: Tween<double>(begin: 0, end: progress),
-      duration: const Duration(milliseconds: 800),
-      builder: (context, animatedProgress, _) {
-        return Stack(
-          children: [
-            Container(
-              width: 300,
-              height: 24,
-              decoration: BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 4,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-            ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Container(
-                width: 300 * animatedProgress,
-                height: 24,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.purpleAccent, Colors.deepPurple],
-                  ),
-                ),
-              ),
-            ),
-            Positioned.fill(
-              child: Center(
-                child: Text(
-                  "${value.toInt()}% ${Statics.getLabel('surveyCompleted')}",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 13,
-                    color: Colors.white,
-                    shadows: [
-                      Shadow(
-                        offset: Offset(0.5, 0.5),
-                        blurRadius: 2.0,
-                        color: Colors.black45,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   //====================================================================================================================================================================================================================
   Widget vastisarvekshanDropdown4({
     required VastisarvekshanDropDownDataModel dataModel,
@@ -9930,6 +9953,79 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
           ),
         ),
       ],
+    );
+  }
+
+  Widget dynamicProgressBar({
+    required BuildContext context,
+    required double value,
+    required List<String> detailListItems,
+  }) {
+    final progress = (value / 100).clamp(0.0, 1.0);
+
+    return TweenAnimationBuilder<double>(
+      tween: Tween<double>(begin: 0, end: progress),
+      duration: const Duration(milliseconds: 800),
+      builder: (context, animatedProgress, _) {
+        return Stack(
+          children: [
+            Container(
+              width: 300,
+              height: 24,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [
+                    Color(0xFFcfd8dc),
+                    Color(0xFF90a4ae)
+                  ], // Blue-grey background
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Container(
+                width: 300 * animatedProgress,
+                height: 24,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Color(0xFFEA80FC),
+                      Colors.purpleAccent,
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Positioned.fill(
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "${value.toInt()}% ${Statics.getLabel('surveyCompleted')}",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13,
+                        color: Colors.white,
+                        shadows: [
+                          Shadow(
+                            offset: Offset(1, 1),
+                            blurRadius: 2.5,
+                            color: Colors.black45,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

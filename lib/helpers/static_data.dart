@@ -3748,7 +3748,9 @@ Future<GetgeounitNameModel?> getlevelUpdatedata(String inputJson) async {
   }
 }
 
-Future<void> savelevelUpdatedata(String inputJson) async {
+Future<void> savelevelUpdatedata(context, String inputJson) async {
+  showLoaderDialog(context);
+
   Map<String, String> jHeaders = {
     'Content-Type': 'application/json',
     'Accept': '*/*'
@@ -3765,8 +3767,10 @@ Future<void> savelevelUpdatedata(String inputJson) async {
 
   if (response.statusCode == 200) {
     Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+    Navigator.of(context, rootNavigator: true).pop();
   } else {
     print("Error: ${response.statusCode} - ${response.body}");
+    Navigator.of(context, rootNavigator: true).pop();
   }
 }
 
@@ -3927,7 +3931,6 @@ Future<List<dynamic>> getGetEducationProgramsForApp(
     'Content-Type': 'application/json',
     'Accept': '*/*'
   };
-
   var response = await http.post(Uri.parse(urlGetEducationProgramsForApp),
       headers: jHeaders,
       body: json.encode({
@@ -3936,9 +3939,7 @@ Future<List<dynamic>> getGetEducationProgramsForApp(
         "EducationProgramID": educationProgramID,
         "ProgramName": strInput
       }));
-
   var responseBody = json.decode(response.body);
-
   return responseBody['EducationProgramList'];
 }
 
@@ -3959,7 +3960,6 @@ Future<List<dynamic>> getEducationCoursesForApp(
       }));
 
   var responseBody = json.decode(response.body);
-
   return responseBody['EducationCourseList'];
 }
 
@@ -3981,10 +3981,8 @@ Future<List<dynamic>> getDistrictForApp(
     print(request);
     var response = await http.post(Uri.parse(urlGetDistrictsForApp),
         headers: jHeaders, body: request);
-
     log(response.body);
     var responseBody = json.decode(response.body);
-
     return responseBody['DistrictList'];
   } catch (e) {
     print(">>>> " + e.toString());
@@ -4299,46 +4297,6 @@ Future<String> mandalSarvekshanStep1FormSubmit(String inputJson) async {
   try {
     var response = await http.post(
       Uri.parse(mandalSarvekshanstep1Submit),
-      headers: jHeaders,
-      body: inputJson,
-    );
-
-    var responseBody = json.decode(response.body);
-
-    if (response.statusCode == 200) {
-      Fluttertoast.showToast(
-        msg: "Form submitted successfully",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-      );
-      return "success";
-    } else {
-      Fluttertoast.showToast(
-        msg: responseBody['msg'] ?? "Submission failed",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-      );
-      return "failed";
-    }
-  } catch (e) {
-    Fluttertoast.showToast(
-      msg: "Error: ${e.toString()}",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-    );
-    return "error";
-  }
-}
-
-Future<String> mandalSarvekshanStep2FormSubmit(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
-
-  try {
-    var response = await http.post(
-      Uri.parse(mandalSarvekshanstep2Submit),
       headers: jHeaders,
       body: inputJson,
     );
