@@ -766,163 +766,163 @@ class _MandalSurveyReportViewScreen2State
                 height: 10,
               ),
 //===================================================================================================================================================
-              Container(
-                margin: EdgeInsets.symmetric(
-                  horizontal: 10,
-                ),
-                child: Column(
-                  children: [
-                    commonExpansionTile(
-                      title: 'VastisurveuAbhiyanStithi',
-                      children: [
-                        // Container(
-                        //   height: 500,
-                        //   decoration: BoxDecoration(
-                        //     border: Border.all(color: Colors.grey.shade300),
-                        //     borderRadius: BorderRadius.circular(8),
-                        //   ),
-                        //   child: SingleChildScrollView(
-                        //     child: ListView.builder(
-                        //       shrinkWrap: true,
-                        //       physics: NeverScrollableScrollPhysics(),
-                        //       itemCount: data?.mandaldata?.length ?? 0,
-                        //       itemBuilder: (context, index) {
-                        //         final data =
-                        //             nagarVastisarvekshanReportwithnamedata?[
-                        //                 index];
-                        //         return Column(
-                        //           crossAxisAlignment: CrossAxisAlignment.start,
-                        //           children: [
-                        //             Padding(
-                        //               padding:
-                        //                   const EdgeInsets.symmetric(vertical: 8),
-                        //               child: Center(
-                        //                 child: Text(
-                        //                   data.name ??
-                        //                       "${Statics.getLabel('nagarVastiName')}",
-                        //                   style: TextStyle(
-                        //                       fontSize: 18,
-                        //                       fontWeight: FontWeight.bold),
-                        //                 ),
-                        //               ),
-                        //             ),
-                        //             DataTable(
-                        //               headingRowColor: MaterialStateProperty.all(
-                        //                   Colors.purpleAccent.shade100),
-                        //               headingTextStyle: TextStyle(
-                        //                   fontSize: 15,
-                        //                   color: Colors.black,
-                        //                   fontWeight: FontWeight.bold),
-                        //               columns: [
-                        //                 DataColumn(
-                        //                     label: Text(
-                        //                         "${Statics.getLabel('sarvekshanSthiti')}")),
-                        //                 DataColumn(
-                        //                     label: Text(
-                        //                         "${Statics.getLabel('NagarShahari')}")),
-                        //                 DataColumn(
-                        //                     label: Text(
-                        //                         "${Statics.getLabel('Vasti')}")),
-                        //               ],
-                        //               rows: [
-                        //                 DataRow(
-                        //                   color: MaterialStateProperty.all(
-                        //                       Colors.lightBlue.shade50),
-                        //                   cells: [
-                        //                     DataCell(Text(
-                        //                         "${Statics.getLabel('prathamikSurveyComplete')}")),
-                        //                     DataCell(Text(
-                        //                         "${data.nagarStep1CompleteCount ?? ""}")),
-                        //                     DataCell(Text(
-                        //                         "${data.vastiStep1CompleteCount ?? ""}")),
-                        //                   ],
-                        //                 ),
-                        //                 DataRow(
-                        //                   color: MaterialStateProperty.all(
-                        //                       Colors.lightBlue.shade50),
-                        //                   cells: [
-                        //                     DataCell(Text(
-                        //                         "${Statics.getLabel('otherSuerveyComplete')}")),
-                        //                     DataCell(Text(
-                        //                         "${data.nagarStep2CompleteCount ?? ""}")),
-                        //                     DataCell(Text(
-                        //                         "${data.vastiStep2CompleteCount ?? ""}")),
-                        //                   ],
-                        //                 ),
-                        //                 DataRow(
-                        //                   color: MaterialStateProperty.all(
-                        //                       Colors.lightBlue.shade50),
-                        //                   cells: [
-                        //                     DataCell(Text(
-                        //                         "${Statics.getLabel('vistrutSurveyComplete')}")),
-                        //                     DataCell(Text(
-                        //                         "${data.nagarStep3CompleteCount ?? ""}")),
-                        //                     DataCell(Text(
-                        //                         "${data.vastiStep3CompleteCount ?? ""}")),
-                        //                   ],
-                        //                 ),
-                        //                 DataRow(
-                        //                   color: MaterialStateProperty.all(
-                        //                       Colors.red.shade50),
-                        //                   cells: [
-                        //                     DataCell(Text(
-                        //                         "${Statics.getLabel('surveyStart')}")),
-                        //                     DataCell(Text(
-                        //                         "${data.nagarStepStartedCount ?? ""}")),
-                        //                     DataCell(Text(
-                        //                         "${data.vastiStepStartedCount ?? ""}")),
-                        //                   ],
-                        //                 ),
-                        //                 DataRow(
-                        //                   color: MaterialStateProperty.all(
-                        //                       Colors.red.shade50),
-                        //                   cells: [
-                        //                     DataCell(Text(
-                        //                         "${Statics.getLabel('surveyComplete')}")),
-                        //                     DataCell(Text(
-                        //                         "${data.nagarAllStepsCompleteCount ?? ""}")),
-                        //                     DataCell(Text(
-                        //                         "${data.vastiAllStepsCompleteCount ?? ""}")),
-                        //                   ],
-                        //                 ),
-                        //                 DataRow(
-                        //                   color: MaterialStateProperty.all(
-                        //                       Colors.red.shade50),
-                        //                   cells: [
-                        //                     DataCell(Text(
-                        //                         "${Statics.getLabel('surveyNotStarted')}")),
-                        //                     DataCell(Text(
-                        //                         "${data.nagarStepsNotstartedCount ?? ""}")),
-                        //                     DataCell(Text(
-                        //                         "${data.vastiStepsNotstartedCount ?? ""}")),
-                        //                   ],
-                        //                 ),
-                        //                 DataRow(
-                        //                   color: MaterialStateProperty.all(
-                        //                       Colors.yellow.shade50),
-                        //                   cells: [
-                        //                     DataCell(Text(
-                        //                         "${Statics.getLabel('Total')}")),
-                        //                     DataCell(
-                        //                         Text("${data.nagarcount ?? ""}")),
-                        //                     DataCell(
-                        //                         Text("${data.vasticount ?? ""}")),
-                        //                   ],
-                        //                 ),
-                        //               ],
-                        //             ),
-                        //             Divider(thickness: 2),
-                        //           ],
-                        //         );
-                        //       },
-                        //     ),
-                        //   ),
-                        // ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+//               Container(
+//                 margin: EdgeInsets.symmetric(
+//                   horizontal: 10,
+//                 ),
+//                 child: Column(
+//                   children: [
+//                     commonExpansionTile(
+//                       title: 'VastisurveuAbhiyanStithi',
+//                       children: [
+//                         // Container(
+//                         //   height: 500,
+//                         //   decoration: BoxDecoration(
+//                         //     border: Border.all(color: Colors.grey.shade300),
+//                         //     borderRadius: BorderRadius.circular(8),
+//                         //   ),
+//                         //   child: SingleChildScrollView(
+//                         //     child: ListView.builder(
+//                         //       shrinkWrap: true,
+//                         //       physics: NeverScrollableScrollPhysics(),
+//                         //       itemCount: data?.mandaldata?.length ?? 0,
+//                         //       itemBuilder: (context, index) {
+//                         //         final data =
+//                         //             nagarVastisarvekshanReportwithnamedata?[
+//                         //                 index];
+//                         //         return Column(
+//                         //           crossAxisAlignment: CrossAxisAlignment.start,
+//                         //           children: [
+//                         //             Padding(
+//                         //               padding:
+//                         //                   const EdgeInsets.symmetric(vertical: 8),
+//                         //               child: Center(
+//                         //                 child: Text(
+//                         //                   data.name ??
+//                         //                       "${Statics.getLabel('nagarVastiName')}",
+//                         //                   style: TextStyle(
+//                         //                       fontSize: 18,
+//                         //                       fontWeight: FontWeight.bold),
+//                         //                 ),
+//                         //               ),
+//                         //             ),
+//                         //             DataTable(
+//                         //               headingRowColor: MaterialStateProperty.all(
+//                         //                   Colors.purpleAccent.shade100),
+//                         //               headingTextStyle: TextStyle(
+//                         //                   fontSize: 15,
+//                         //                   color: Colors.black,
+//                         //                   fontWeight: FontWeight.bold),
+//                         //               columns: [
+//                         //                 DataColumn(
+//                         //                     label: Text(
+//                         //                         "${Statics.getLabel('sarvekshanSthiti')}")),
+//                         //                 DataColumn(
+//                         //                     label: Text(
+//                         //                         "${Statics.getLabel('NagarShahari')}")),
+//                         //                 DataColumn(
+//                         //                     label: Text(
+//                         //                         "${Statics.getLabel('Vasti')}")),
+//                         //               ],
+//                         //               rows: [
+//                         //                 DataRow(
+//                         //                   color: MaterialStateProperty.all(
+//                         //                       Colors.lightBlue.shade50),
+//                         //                   cells: [
+//                         //                     DataCell(Text(
+//                         //                         "${Statics.getLabel('prathamikSurveyComplete')}")),
+//                         //                     DataCell(Text(
+//                         //                         "${data.nagarStep1CompleteCount ?? ""}")),
+//                         //                     DataCell(Text(
+//                         //                         "${data.vastiStep1CompleteCount ?? ""}")),
+//                         //                   ],
+//                         //                 ),
+//                         //                 DataRow(
+//                         //                   color: MaterialStateProperty.all(
+//                         //                       Colors.lightBlue.shade50),
+//                         //                   cells: [
+//                         //                     DataCell(Text(
+//                         //                         "${Statics.getLabel('otherSuerveyComplete')}")),
+//                         //                     DataCell(Text(
+//                         //                         "${data.nagarStep2CompleteCount ?? ""}")),
+//                         //                     DataCell(Text(
+//                         //                         "${data.vastiStep2CompleteCount ?? ""}")),
+//                         //                   ],
+//                         //                 ),
+//                         //                 DataRow(
+//                         //                   color: MaterialStateProperty.all(
+//                         //                       Colors.lightBlue.shade50),
+//                         //                   cells: [
+//                         //                     DataCell(Text(
+//                         //                         "${Statics.getLabel('vistrutSurveyComplete')}")),
+//                         //                     DataCell(Text(
+//                         //                         "${data.nagarStep3CompleteCount ?? ""}")),
+//                         //                     DataCell(Text(
+//                         //                         "${data.vastiStep3CompleteCount ?? ""}")),
+//                         //                   ],
+//                         //                 ),
+//                         //                 DataRow(
+//                         //                   color: MaterialStateProperty.all(
+//                         //                       Colors.red.shade50),
+//                         //                   cells: [
+//                         //                     DataCell(Text(
+//                         //                         "${Statics.getLabel('surveyStart')}")),
+//                         //                     DataCell(Text(
+//                         //                         "${data.nagarStepStartedCount ?? ""}")),
+//                         //                     DataCell(Text(
+//                         //                         "${data.vastiStepStartedCount ?? ""}")),
+//                         //                   ],
+//                         //                 ),
+//                         //                 DataRow(
+//                         //                   color: MaterialStateProperty.all(
+//                         //                       Colors.red.shade50),
+//                         //                   cells: [
+//                         //                     DataCell(Text(
+//                         //                         "${Statics.getLabel('surveyComplete')}")),
+//                         //                     DataCell(Text(
+//                         //                         "${data.nagarAllStepsCompleteCount ?? ""}")),
+//                         //                     DataCell(Text(
+//                         //                         "${data.vastiAllStepsCompleteCount ?? ""}")),
+//                         //                   ],
+//                         //                 ),
+//                         //                 DataRow(
+//                         //                   color: MaterialStateProperty.all(
+//                         //                       Colors.red.shade50),
+//                         //                   cells: [
+//                         //                     DataCell(Text(
+//                         //                         "${Statics.getLabel('surveyNotStarted')}")),
+//                         //                     DataCell(Text(
+//                         //                         "${data.nagarStepsNotstartedCount ?? ""}")),
+//                         //                     DataCell(Text(
+//                         //                         "${data.vastiStepsNotstartedCount ?? ""}")),
+//                         //                   ],
+//                         //                 ),
+//                         //                 DataRow(
+//                         //                   color: MaterialStateProperty.all(
+//                         //                       Colors.yellow.shade50),
+//                         //                   cells: [
+//                         //                     DataCell(Text(
+//                         //                         "${Statics.getLabel('Total')}")),
+//                         //                     DataCell(
+//                         //                         Text("${data.nagarcount ?? ""}")),
+//                         //                     DataCell(
+//                         //                         Text("${data.vasticount ?? ""}")),
+//                         //                   ],
+//                         //                 ),
+//                         //               ],
+//                         //             ),
+//                         //             Divider(thickness: 2),
+//                         //           ],
+//                         //         );
+//                         //       },
+//                         //     ),
+//                         //   ),
+//                         // ),
+//                       ],
+//                     ),
+//                   ],
+//                 ),
+//               ),
 //===================================================================================================================================================
               Container(
                 margin: EdgeInsets.symmetric(
