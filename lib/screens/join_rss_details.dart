@@ -5,18 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import '../dialogs/levelwise_dropdown.dart';
-import '../widgets/legend.dart';
-import '../providers/bals.dart';
 
 import '../helpers/static_data.dart' as Statics;
-import 'edit_join_rss.dart';
+import '../providers/bals.dart';
+import '../widgets/legend.dart';
 
 class JoinRSSDetails extends StatefulWidget {
   var joinRSSID;
   var onSaveDetails;
   var viewType;
-  JoinRSSDetails({Key? key, this.joinRSSID, this.onSaveDetails, this.viewType}) : super(key: key);
+  JoinRSSDetails({Key? key, this.joinRSSID, this.onSaveDetails, this.viewType})
+      : super(key: key);
   @override
   _JoinRSSDetailsState createState() => _JoinRSSDetailsState();
 }
@@ -96,15 +95,18 @@ class _JoinRSSDetailsState extends State<JoinRSSDetails> {
       if (!mounted) return;
       setState(() {
         _joiningDate = DateTime.now();
-        _joiningDateCntrl.text = DateFormat('dd-MMM-yyyy').format(DateTime.now());
+        _joiningDateCntrl.text =
+            DateFormat('dd-MMM-yyyy').format(DateTime.now());
 
-        sDetails = new JoinRSSBAL(joinRSSID, 1, null, null, null, null, "", "", "", "", null, "", "", "", "", "", "", "", "", "", "", "", "");
+        sDetails = new JoinRSSBAL(joinRSSID, 1, null, null, null, null, "", "",
+            "", "", null, "", "", "", "", "", "", "", "", "", "", "", "");
       });
     }
   }
 
   void populateBhaagDropdown() async {
-    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), "", "", "");
+    var data = await Statics.getGeoUnitsByLevelAndParent(
+        Statics.levels['BhaagLevelID'].toString(), "", "", "");
 
     setState(() {
       _bhaag = data;
@@ -114,7 +116,8 @@ class _JoinRSSDetailsState extends State<JoinRSSDetails> {
   void populateShaharDropdown(String bhaagIDStr) async {
     _shaharValue = null;
     _shahar = null;
-    var shDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', '');
+    var shDD = await Statics.getGeoUnitsByLevelAndParent(
+        Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', '');
     setState(() {
       _shahar = (shDD.length > 0 ? shDD : null);
     });
@@ -124,12 +127,14 @@ class _JoinRSSDetailsState extends State<JoinRSSDetails> {
     _nagarValue = null;
     _nagar = null;
     if (shaharIDStr != null) {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
+      var ngDD = await Statics.getGeoUnitsByLevelAndParent(
+          Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
       setState(() {
         _nagar = (ngDD.length > 0 ? ngDD : null);
       });
     } else {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
+      var ngDD = await Statics.getGeoUnitsByLevelAndParent(
+          Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
       setState(() {
         _nagar = (ngDD.length > 0 ? ngDD : null);
       });
@@ -141,15 +146,20 @@ class _JoinRSSDetailsState extends State<JoinRSSDetails> {
 
     cols.add(new DataColumn(label: Text(Statics.getLabel('StatusDate'))));
     cols.add(new DataColumn(label: Text(Statics.getLabel('Status'))));
-    cols.add(new DataColumn(label: Text(Statics.getLabel('Status') + " " + Statics.getLabel('Remark'))));
+    cols.add(new DataColumn(
+        label: Text(
+            Statics.getLabel('Status') + " " + Statics.getLabel('Remark'))));
 
     List<DataRow> row = [];
     for (var data in dataList) {
       List<DataCell> cells = [];
 
-      cells.add(new DataCell(Container(width: 100, child: Text(data["StatusDateStr"].toString()))));
-      cells.add(new DataCell(Container(width: 100, child: Text(data["StatusCode"].toString()))));
-      cells.add(new DataCell(Container(width: 100, child: Text(data["StatusRemark"].toString()))));
+      cells.add(new DataCell(Container(
+          width: 100, child: Text(data["StatusDateStr"].toString()))));
+      cells.add(new DataCell(
+          Container(width: 100, child: Text(data["StatusCode"].toString()))));
+      cells.add(new DataCell(
+          Container(width: 100, child: Text(data["StatusRemark"].toString()))));
 
       row.add(new DataRow(cells: cells));
     }
@@ -166,9 +176,9 @@ class _JoinRSSDetailsState extends State<JoinRSSDetails> {
     });
     bool isConnected = await Statics.isInternetConnected();
     if (!isConnected) {
-      Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
+      Statics.showMessageDialog(
+          context, Statics.getLabel('internetNotConnected'));
     } else {
-
       var data = await Statics.getJoinRSSDataByID(theId.toString(), "Data");
       JoinRSSBAL? _joinRSSBAL;
 
@@ -196,43 +206,64 @@ class _JoinRSSDetailsState extends State<JoinRSSDetails> {
           _mobileCntrl.text = sDetails!.mobileNumber.toString();
           _emailCntrl.text = sDetails!.email.toString();
           _addressCntrl.text = sDetails!.address.toString();
-          _genderValue = sDetails!.genderID == null ? null : sDetails!.genderID.toString();
+          _genderValue =
+              sDetails!.genderID == null ? null : sDetails!.genderID.toString();
 
-          _districtCntrl.text = sDetails!.districtName == null ? "" : sDetails!.districtName.toString();
+          _districtCntrl.text = sDetails!.districtName == null
+              ? ""
+              : sDetails!.districtName.toString();
 
-          _cityCntrl.text = sDetails!.cityName == null ? "" : sDetails!.cityName.toString();
+          _cityCntrl.text =
+              sDetails!.cityName == null ? "" : sDetails!.cityName.toString();
 
-          _stateCntrl.text = sDetails!.stateName == null ? "" : sDetails!.stateName.toString();
+          _stateCntrl.text =
+              sDetails!.stateName == null ? "" : sDetails!.stateName.toString();
 
-          _countryCntrl.text = sDetails!.country == null ? "" : sDetails!.country.toString();
+          _countryCntrl.text =
+              sDetails!.country == null ? "" : sDetails!.country.toString();
 
-          _ageCntrl.text = sDetails!.age == null ? "" : sDetails!.age.toString();
+          _ageCntrl.text =
+              sDetails!.age == null ? "" : sDetails!.age.toString();
 
-          _occupationCntrl.text = sDetails!.occupation == null ? "" : sDetails!.occupation.toString();
+          _occupationCntrl.text = sDetails!.occupation == null
+              ? ""
+              : sDetails!.occupation.toString();
 
-          _remarkCntrl.text = sDetails!.remark == null ? "" : sDetails!.remark.toString();
+          _remarkCntrl.text =
+              sDetails!.remark == null ? "" : sDetails!.remark.toString();
 
-          _joiningDate = (sDetails!.joiningDate != null ? DateTime.parse(sDetails!.joiningDate!) : null);
-          _joiningDateCntrl.text = (sDetails!.joiningDate != null ? DateFormat('dd-MMM-yyyy').format(_joiningDate!) : '');
+          _joiningDate = (sDetails!.joiningDate != null
+              ? DateTime.parse(sDetails!.joiningDate!)
+              : null);
+          _joiningDateCntrl.text = (sDetails!.joiningDate != null
+              ? DateFormat('dd-MMM-yyyy').format(_joiningDate!)
+              : '');
 
-          _statusremarkCntrl.text = sDetails!.statusRemark == null ? "" : sDetails!.statusRemark.toString();
+          _statusremarkCntrl.text = sDetails!.statusRemark == null
+              ? ""
+              : sDetails!.statusRemark.toString();
 
-          _jrsremarkCntrl.text = sDetails!.jRSRemark == null ? "" : sDetails!.jRSRemark.toString();
+          _jrsremarkCntrl.text =
+              sDetails!.jRSRemark == null ? "" : sDetails!.jRSRemark.toString();
 
-          _statusValue = sDetails!.statusID == null ? null : sDetails!.statusID.toString();
+          _statusValue =
+              sDetails!.statusID == null ? null : sDetails!.statusID.toString();
 
-          _bhaagValue = sDetails!.bhaagID == null ? null : sDetails!.bhaagID.toString();
+          _bhaagValue =
+              sDetails!.bhaagID == null ? null : sDetails!.bhaagID.toString();
           if (_bhaagValue != null) {
             populateShaharDropdown(_bhaagValue!);
             populateNagarDropdown(_bhaagValue, null);
           }
-          _shaharValue = sDetails!.shaharID == null ? null : sDetails!.shaharID.toString();
+          _shaharValue =
+              sDetails!.shaharID == null ? null : sDetails!.shaharID.toString();
 
           if (_shaharValue != null) {
             populateNagarDropdown(null, _shaharValue);
           }
 
-          _nagarValue = sDetails!.nagarID == null ? null : sDetails!.nagarID.toString();
+          _nagarValue =
+              sDetails!.nagarID == null ? null : sDetails!.nagarID.toString();
         }
       });
     }
@@ -245,8 +276,12 @@ class _JoinRSSDetailsState extends State<JoinRSSDetails> {
     DateTime? date = await showDatePicker(
         context: context,
         initialDate: _joiningDate == null ? DateTime.now() : _joiningDate!,
-        firstDate: DateTime((_joiningDate == null ? DateTime.now().year : _joiningDate!.year) - 80),
-        lastDate: DateTime((_joiningDate == null ? DateTime.now().year : _joiningDate!.year) + 80));
+        firstDate: DateTime(
+            (_joiningDate == null ? DateTime.now().year : _joiningDate!.year) -
+                80),
+        lastDate: DateTime(
+            (_joiningDate == null ? DateTime.now().year : _joiningDate!.year) +
+                80));
 
     if (date != null) {
       setState(() {
@@ -308,25 +343,26 @@ class _JoinRSSDetailsState extends State<JoinRSSDetails> {
       if (!isConnected) {
         print("sub5");
 
-        Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
+        Statics.showMessageDialog(
+            context, Statics.getLabel('internetNotConnected'));
       } else {
         print("sub 6");
 
         await saveSwDetails();
       }
       print("sub 7");
-
     } on Exception catch (error) {
       print("sub 8");
 
-      Statics.showErrorDialog(context, Statics.getLabel('unableToCompleteProcess'));
+      Statics.showErrorDialog(
+          context, Statics.getLabel('unableToCompleteProcess'));
     } catch (error) {
       print("sub 9");
 
-      Statics.showErrorDialog(context, Statics.getLabel('unableToCompleteProcess'));
+      Statics.showErrorDialog(
+          context, Statics.getLabel('unableToCompleteProcess'));
     }
     print("sub 10");
-
 
     setState(() {
       print("sub 11");
@@ -337,7 +373,8 @@ class _JoinRSSDetailsState extends State<JoinRSSDetails> {
 
   void _populateFields() {
     if (_emailBodyCntrl.text.trim() == "") {
-      Statics.showErrorDialog(context, Statics.getLabel('EmailBodyValidationMessage'));
+      Statics.showErrorDialog(
+          context, Statics.getLabel('EmailBodyValidationMessage'));
       return;
     } else {
       var txt = _emailBodyCntrl.text;
@@ -369,31 +406,70 @@ class _JoinRSSDetailsState extends State<JoinRSSDetails> {
         int remarkIdx = txt.indexOf("Remark:");
 
         String firstName =
-            txt.substring(firstNameidx, lastNameidx).split(":").length == 2 ? txt.substring(firstNameidx, lastNameidx).split(":")[1].trim() : "";
+            txt.substring(firstNameidx, lastNameidx).split(":").length == 2
+                ? txt.substring(firstNameidx, lastNameidx).split(":")[1].trim()
+                : "";
         String lastName =
-            txt.substring(lastNameidx, genderIdx).split(":").length == 2 ? txt.substring(lastNameidx, genderIdx).split(":")[1].trim() : "";
-        String gender = txt.substring(genderIdx, addressIdx).split(":").length == 2 ? txt.substring(genderIdx, addressIdx).split(":")[1].trim() : "";
-        String address = txt.substring(addressIdx, cityIdx).split(":").length == 2 ? txt.substring(addressIdx, cityIdx).split(":")[1].trim() : "";
-        String city = txt.substring(cityIdx, districtIdx).split(":").length == 2 ? txt.substring(cityIdx, districtIdx).split(":")[1].trim() : "";
+            txt.substring(lastNameidx, genderIdx).split(":").length == 2
+                ? txt.substring(lastNameidx, genderIdx).split(":")[1].trim()
+                : "";
+        String gender =
+            txt.substring(genderIdx, addressIdx).split(":").length == 2
+                ? txt.substring(genderIdx, addressIdx).split(":")[1].trim()
+                : "";
+        String address =
+            txt.substring(addressIdx, cityIdx).split(":").length == 2
+                ? txt.substring(addressIdx, cityIdx).split(":")[1].trim()
+                : "";
+        String city = txt.substring(cityIdx, districtIdx).split(":").length == 2
+            ? txt.substring(cityIdx, districtIdx).split(":")[1].trim()
+            : "";
         String district =
-            txt.substring(districtIdx, stateIdx).split(":").length == 2 ? txt.substring(districtIdx, stateIdx).split(":")[1].trim() : "";
-        String state = txt.substring(stateIdx, countryIdx).split(":").length == 2 ? txt.substring(stateIdx, countryIdx).split(":")[1].trim() : "";
-        String country = txt.substring(countryIdx, emailIdx).split(":").length == 2 ? txt.substring(countryIdx, emailIdx).split(":")[1].trim() : "";
-        String email = txt.substring(emailIdx, phoneIdx).split(":").length == 2 ? txt.substring(emailIdx, phoneIdx).split(":")[1].trim() : "";
-        String phone = txt.substring(phoneIdx, ageIdx).split(":").length == 2 ? txt.substring(phoneIdx, ageIdx).split(":")[1].trim() : "";
-        String age = txt.substring(ageIdx, occupationIdx).split(":").length == 2 ? txt.substring(ageIdx, occupationIdx).split(":")[1].trim() : "";
+            txt.substring(districtIdx, stateIdx).split(":").length == 2
+                ? txt.substring(districtIdx, stateIdx).split(":")[1].trim()
+                : "";
+        String state =
+            txt.substring(stateIdx, countryIdx).split(":").length == 2
+                ? txt.substring(stateIdx, countryIdx).split(":")[1].trim()
+                : "";
+        String country =
+            txt.substring(countryIdx, emailIdx).split(":").length == 2
+                ? txt.substring(countryIdx, emailIdx).split(":")[1].trim()
+                : "";
+        String email = txt.substring(emailIdx, phoneIdx).split(":").length == 2
+            ? txt.substring(emailIdx, phoneIdx).split(":")[1].trim()
+            : "";
+        String phone = txt.substring(phoneIdx, ageIdx).split(":").length == 2
+            ? txt.substring(phoneIdx, ageIdx).split(":")[1].trim()
+            : "";
+        String age = txt.substring(ageIdx, occupationIdx).split(":").length == 2
+            ? txt.substring(ageIdx, occupationIdx).split(":")[1].trim()
+            : "";
         String occupation =
-            txt.substring(occupationIdx, remarkIdx).split(":").length == 2 ? txt.substring(occupationIdx, remarkIdx).split(":")[1].trim() : "";
-        String remark = txt.substring(remarkIdx).split(":").length == 2 ? txt.substring(remarkIdx).split(":")[1].trim() : "";
-        var statusValue = _status!.indexWhere((p) => p.code == "RecordCreated") > -1
-            ? _status![_status!.indexWhere((p) => p.code == "RecordCreated")].staticID.toString()
+            txt.substring(occupationIdx, remarkIdx).split(":").length == 2
+                ? txt.substring(occupationIdx, remarkIdx).split(":")[1].trim()
+                : "";
+        String remark = txt.substring(remarkIdx).split(":").length == 2
+            ? txt.substring(remarkIdx).split(":")[1].trim()
+            : "";
+        var statusValue = _status!
+                    .indexWhere((p) => p.code == "RecordCreated") >
+                -1
+            ? _status![_status!.indexWhere((p) => p.code == "RecordCreated")]
+                .staticID
+                .toString()
             : null;
         setState(() {
           _fullNameCntrl.text = firstName + " " + lastName;
           _genderValue = gender.toLowerCase() == "male"
-              ? _genderList![_genderList!.indexWhere((p) => p.code == "Male")].staticID.toString()
+              ? _genderList![_genderList!.indexWhere((p) => p.code == "Male")]
+                  .staticID
+                  .toString()
               : gender.toLowerCase() == "female"
-                  ? _genderList![_genderList!.indexWhere((p) => p.code == "Female")].staticID.toString()
+                  ? _genderList![
+                          _genderList!.indexWhere((p) => p.code == "Female")]
+                      .staticID
+                      .toString()
                   : null;
           _addressCntrl.text = address;
           _cityCntrl.text = city;
@@ -409,11 +485,14 @@ class _JoinRSSDetailsState extends State<JoinRSSDetails> {
         });
         Statics.showToast("Data fetched successfully");
       } else {
-        Statics.showErrorDialog(context, Statics.getLabel('ValidEmailBodyValidationMessage'));
+        Statics.showErrorDialog(
+            context, Statics.getLabel('ValidEmailBodyValidationMessage'));
 
         _genderValue = null;
-        _fullNameCntrl.text = _addressCntrl.text = _cityCntrl.text = _districtCntrl.text = _stateCntrl.text =
-            _countryCntrl.text = _emailCntrl.text = _mobileCntrl.text = _ageCntrl.text = _occupationCntrl.text = _remarkCntrl.text = "";
+        _fullNameCntrl.text = _addressCntrl.text = _cityCntrl.text =
+            _districtCntrl.text = _stateCntrl.text = _countryCntrl.text =
+                _emailCntrl.text = _mobileCntrl.text = _ageCntrl.text =
+                    _occupationCntrl.text = _remarkCntrl.text = "";
       }
     }
   }
@@ -435,7 +514,9 @@ class _JoinRSSDetailsState extends State<JoinRSSDetails> {
         "Age": sDetails!.age,
         "Occupation": sDetails!.occupation,
         "Remark": sDetails!.remark,
-        "JoiningDateStr": (_joiningDate != null ? DateFormat('yyyy-MM-dd').format(_joiningDate!) : null),
+        "JoiningDateStr": (_joiningDate != null
+            ? DateFormat('yyyy-MM-dd').format(_joiningDate!)
+            : null),
         "BhaagID": sDetails!.bhaagID,
         "ShaharID": sDetails!.shaharID,
         "NagarID": sDetails!.nagarID,
@@ -446,9 +527,9 @@ class _JoinRSSDetailsState extends State<JoinRSSDetails> {
       },
       "ModifiedBy": Statics.userDetails["userID"].toString()
     });
-print("inputData  ----->>>>$inputData");
+    print("inputData  ----->>>>$inputData");
     var data = await Statics.saveJoinRSSForApp(inputData);
-print("data ---->>>$data");
+    print("data ---->>>$data");
     setState(() {
       widget.joinRSSID = data;
       widget.onSaveDetails(widget.joinRSSID);
@@ -470,12 +551,22 @@ print("data ---->>>$data");
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
-                    Legend(legendString: "searchJoinRSSScreenLabel", fontsize: 18),
+                    Legend(
+                        legendString: "searchJoinRSSScreenLabel", fontsize: 18),
                     AbsorbPointer(
-                      absorbing:
-                          (Statics.userDetails["LevelName"] == "Praant" ||Statics.userDetails["LevelName"] == "प्रांत"
-                              && Statics.userDetails["DaayitvaName"] == "Join RSS Sanyojak" || Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. संयोजक" ||
-                              Statics.userDetails["DaayitvaName"] == "Join RSS Pramukh" || Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. प्रमुख") ? false : true,
+                      absorbing: (Statics.userDetails["LevelName"] ==
+                                  "Praant" ||
+                              Statics.userDetails["LevelName"] == "प्रांत" &&
+                                  Statics.userDetails["DaayitvaName"] ==
+                                      "Join RSS Sanyojak" ||
+                              Statics.userDetails["DaayitvaName"] ==
+                                  "जॉयन आर.एस.एस. संयोजक" ||
+                              Statics.userDetails["DaayitvaName"] ==
+                                  "Join RSS Pramukh" ||
+                              Statics.userDetails["DaayitvaName"] ==
+                                  "जॉयन आर.एस.एस. प्रमुख")
+                          ? false
+                          : true,
                       child: Column(
                         children: <Widget>[
                           ExpansionPanelList(
@@ -486,9 +577,11 @@ print("data ---->>>$data");
                             },
                             children: [
                               ExpansionPanel(
-                                headerBuilder: (BuildContext context, bool isExpanded) {
+                                headerBuilder:
+                                    (BuildContext context, bool isExpanded) {
                                   return ListTile(
-                                    title: Text(Statics.getLabel('CopyFromEmail')),
+                                    title:
+                                        Text(Statics.getLabel('CopyFromEmail')),
                                   );
                                 },
                                 body: Container(
@@ -496,9 +589,12 @@ print("data ---->>>$data");
                                   child: Column(
                                     children: [
                                       TextFormField(
-                                        textInputAction: TextInputAction.newline,
+                                        textInputAction:
+                                            TextInputAction.newline,
                                         controller: _emailBodyCntrl,
-                                        decoration: InputDecoration(labelText: Statics.getLabel('EmailBody')),
+                                        decoration: InputDecoration(
+                                            labelText:
+                                                Statics.getLabel('EmailBody')),
                                         keyboardType: TextInputType.multiline,
                                         maxLines: 4,
                                       ),
@@ -506,13 +602,18 @@ print("data ---->>>$data");
                                         height: 10,
                                       ),
                                       MaterialButton(
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(30)),
                                         padding: EdgeInsets.symmetric(
                                           horizontal: 15,
                                           vertical: 8,
                                         ),
                                         color: Theme.of(context).primaryColor,
-                                        textColor: Theme.of(context).primaryTextTheme.button!.color,
+                                        textColor: Theme.of(context)
+                                            .primaryTextTheme
+                                            .button!
+                                            .color,
                                         onPressed: _populateFields,
                                         child: Text(
                                           Statics.getLabel('PopulateFields'),
@@ -530,10 +631,13 @@ print("data ---->>>$data");
                           TextFormField(
                             textInputAction: TextInputAction.next,
                             controller: _fullNameCntrl,
-                            decoration: InputDecoration(labelText: Statics.getLabel('FullName')),
+                            decoration: InputDecoration(
+                                labelText: Statics.getLabel('FullName')),
                             keyboardType: TextInputType.text,
                             validator: (value) {
-                              if (value == null || value.isEmpty) return (Statics.getLabel('FullNameValidationMessage'));
+                              if (value == null || value.isEmpty)
+                                return (Statics.getLabel(
+                                    'FullNameValidationMessage'));
                               return null;
                             },
                             onSaved: (value) {
@@ -546,11 +650,16 @@ print("data ---->>>$data");
                           TextFormField(
                             textInputAction: TextInputAction.next,
                             controller: _mobileCntrl,
-                            decoration: InputDecoration(labelText: Statics.getLabel('Mobile')),
+                            decoration: InputDecoration(
+                                labelText: Statics.getLabel('Mobile')),
                             keyboardType: TextInputType.phone,
                             maxLength: 30,
                             validator: (value) {
-                              if (value == null || value.isEmpty || value.trim().length < 10) return (Statics.getLabel('MobileValidationMessage'));
+                              if (value == null ||
+                                  value.isEmpty ||
+                                  value.trim().length < 10)
+                                return (Statics.getLabel(
+                                    'MobileValidationMessage'));
                               return null;
                             },
                             onSaved: (value) {
@@ -563,12 +672,15 @@ print("data ---->>>$data");
                           TextFormField(
                             textInputAction: TextInputAction.next,
                             controller: _emailCntrl,
-                            decoration: InputDecoration(labelText: Statics.getLabel('Email')),
+                            decoration: InputDecoration(
+                                labelText: Statics.getLabel('Email')),
                             keyboardType: TextInputType.emailAddress,
                             maxLength: 100,
                             validator: (value) {
                               if (value != null && value.isNotEmpty) {
-                                if (!value.contains('@')) return (Statics.getLabel('EmailValidationMessage'));
+                                if (!value.contains('@'))
+                                  return (Statics.getLabel(
+                                      'EmailValidationMessage'));
                               }
                               return null;
                             },
@@ -582,44 +694,51 @@ print("data ---->>>$data");
                           SizedBox(
                             height: 10,
                           ),
-                          if(_genderList != null)
-                          DropdownButtonFormField(
-                            decoration: InputDecoration(labelText: Statics.getLabel('Gender')),
-                            isExpanded: true,
-                            value: _genderValue == null ? null : _genderValue,
-                            items:
-                                _genderList!.map((bg) => DropdownMenuItem(value: bg.staticID.toString(), child: Text(bg.codeForDisplay!))).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                _genderValue = value;
-                              });
-                            },
-                            validator: (value) {
-                              if (value == null) {
-                                return (Statics.getLabel('GenderValidationMessage'));
-                              }
-                              return null;
-                            },
-                            onSaved: (value) {
-                              if (value != null && value.isNotEmpty)
-                                sDetails!.genderID = int.parse(value);
-                              else
-                                sDetails!.genderID = null;
-                            },
-                          ),
+                          if (_genderList != null)
+                            DropdownButtonFormField(
+                              decoration: InputDecoration(
+                                  labelText: Statics.getLabel('Gender')),
+                              isExpanded: true,
+                              value: _genderValue == null ? null : _genderValue,
+                              items: _genderList!
+                                  .map((bg) => DropdownMenuItem(
+                                      value: bg.staticID.toString(),
+                                      child: Text(bg.codeForDisplay!)))
+                                  .toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  _genderValue = value;
+                                });
+                              },
+                              validator: (value) {
+                                if (value == null) {
+                                  return (Statics.getLabel(
+                                      'GenderValidationMessage'));
+                                }
+                                return null;
+                              },
+                              onSaved: (value) {
+                                if (value != null && value.isNotEmpty)
+                                  sDetails!.genderID = int.parse(value);
+                                else
+                                  sDetails!.genderID = null;
+                              },
+                            ),
                           SizedBox(
                             height: 10,
                           ),
                           TextFormField(
                             textInputAction: TextInputAction.newline,
                             controller: _addressCntrl,
-                            decoration: InputDecoration(labelText: Statics.getLabel('Address')),
+                            decoration: InputDecoration(
+                                labelText: Statics.getLabel('Address')),
                             keyboardType: TextInputType.multiline,
                             maxLines: 4,
                             maxLength: 200,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return (Statics.getLabel('AddressValidationMessage'));
+                                return (Statics.getLabel(
+                                    'AddressValidationMessage'));
                               }
                               return null;
                             },
@@ -636,7 +755,8 @@ print("data ---->>>$data");
                           TextFormField(
                             textInputAction: TextInputAction.next,
                             controller: _cityCntrl,
-                            decoration: InputDecoration(labelText: Statics.getLabel('City')),
+                            decoration: InputDecoration(
+                                labelText: Statics.getLabel('City')),
                             keyboardType: TextInputType.text,
                             maxLength: 100,
                             onSaved: (value) {
@@ -652,7 +772,8 @@ print("data ---->>>$data");
                           TextFormField(
                             textInputAction: TextInputAction.next,
                             controller: _districtCntrl,
-                            decoration: InputDecoration(labelText: Statics.getLabel('District')),
+                            decoration: InputDecoration(
+                                labelText: Statics.getLabel('District')),
                             keyboardType: TextInputType.emailAddress,
                             maxLength: 100,
                             onSaved: (value) {
@@ -668,7 +789,8 @@ print("data ---->>>$data");
                           TextFormField(
                             textInputAction: TextInputAction.next,
                             controller: _stateCntrl,
-                            decoration: InputDecoration(labelText: Statics.getLabel('State')),
+                            decoration: InputDecoration(
+                                labelText: Statics.getLabel('State')),
                             keyboardType: TextInputType.emailAddress,
                             maxLength: 100,
                             onSaved: (value) {
@@ -684,7 +806,8 @@ print("data ---->>>$data");
                           TextFormField(
                             textInputAction: TextInputAction.next,
                             controller: _countryCntrl,
-                            decoration: InputDecoration(labelText: Statics.getLabel('Country')),
+                            decoration: InputDecoration(
+                                labelText: Statics.getLabel('Country')),
                             keyboardType: TextInputType.emailAddress,
                             maxLength: 100,
                             onSaved: (value) {
@@ -700,7 +823,8 @@ print("data ---->>>$data");
                           TextFormField(
                             textInputAction: TextInputAction.next,
                             controller: _ageCntrl,
-                            decoration: InputDecoration(labelText: Statics.getLabel('Age')),
+                            decoration: InputDecoration(
+                                labelText: Statics.getLabel('Age')),
                             keyboardType: TextInputType.text,
                             maxLength: 100,
                             onSaved: (value) {
@@ -716,7 +840,8 @@ print("data ---->>>$data");
                           TextFormField(
                             textInputAction: TextInputAction.next,
                             controller: _occupationCntrl,
-                            decoration: InputDecoration(labelText: Statics.getLabel('Occupation')),
+                            decoration: InputDecoration(
+                                labelText: Statics.getLabel('Occupation')),
                             keyboardType: TextInputType.emailAddress,
                             maxLength: 100,
                             onSaved: (value) {
@@ -732,7 +857,8 @@ print("data ---->>>$data");
                           TextFormField(
                             textInputAction: TextInputAction.newline,
                             controller: _remarkCntrl,
-                            decoration: InputDecoration(labelText: Statics.getLabel('Remark')),
+                            decoration: InputDecoration(
+                                labelText: Statics.getLabel('Remark')),
                             keyboardType: TextInputType.multiline,
                             maxLines: 4,
                             maxLength: 200,
@@ -749,11 +875,14 @@ print("data ---->>>$data");
                           Row(
                             children: [
                               SizedBox(
-                                width: Statics.getDeviceSize(context).width * 0.7,
+                                width:
+                                    Statics.getDeviceSize(context).width * 0.7,
                                 child: TextField(
                                   enabled: false,
                                   controller: _joiningDateCntrl,
-                                  decoration: InputDecoration(labelText: Statics.getLabel('JoiningDate')),
+                                  decoration: InputDecoration(
+                                      labelText:
+                                          Statics.getLabel('JoiningDate')),
                                   textInputAction: TextInputAction.done,
                                 ),
                               ),
@@ -770,7 +899,8 @@ print("data ---->>>$data");
                           TextFormField(
                             textInputAction: TextInputAction.next,
                             controller: _jrsremarkCntrl,
-                            decoration: InputDecoration(labelText: Statics.getLabel('JRSRemark')),
+                            decoration: InputDecoration(
+                                labelText: Statics.getLabel('JRSRemark')),
                             keyboardType: TextInputType.text,
                             maxLength: 200,
                             onSaved: (value) {
@@ -797,12 +927,18 @@ print("data ---->>>$data");
                                 height: 20,
                                 width: 80,
                                 child: MaterialButton(
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(30)),
                                     color: Theme.of(context).primaryColor,
-                                    textColor: Theme.of(context).primaryTextTheme.button!.color,
+                                    textColor: Theme.of(context)
+                                        .primaryTextTheme
+                                        .button!
+                                        .color,
                                     onPressed: () {
                                       setState(() {
-                                        _bhaagValue = _shaharValue = _nagarValue = null;
+                                        _bhaagValue =
+                                            _shaharValue = _nagarValue = null;
                                         _bhaag = _shahar = _nagar = null;
                                       });
                                       populateBhaagDropdown();
@@ -819,39 +955,51 @@ print("data ---->>>$data");
                           // setState(() {
                           //   geoUnitIDnew = geoUnitID;
                           // });},),
-                          if(_bhaag != null)
-                          DropdownButtonFormField(
-                            decoration: InputDecoration(labelText: Statics.getLabel('Bhaag')),
-                            isExpanded: true,
-                            value: _bhaagValue == "" ? null : _bhaagValue,
-                            items: _bhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) return (Statics.getLabel('SelectBhaagValidationMessage'));
-                              return null;
-                            },
-                            onChanged: (value) {
-                              setState(() {
-                                _bhaagValue = value;
-                                populateShaharDropdown(value!);
-                                populateNagarDropdown(value, null);
-                              });
-                            },
-                            onSaved: (value) {
-                              if (value != null && value.isNotEmpty)
-                                sDetails!.bhaagID = int.parse(value);
-                              else
-                                sDetails!.bhaagID = null;
-                            },
-                          ),
+                          if (_bhaag != null)
+                            DropdownButtonFormField(
+                              decoration: InputDecoration(
+                                  labelText: Statics.getLabel('Bhaag')),
+                              isExpanded: true,
+                              value: _bhaagValue == "" ? null : _bhaagValue,
+                              items: _bhaag!
+                                  .map((bg) => DropdownMenuItem(
+                                      value: bg.geoUnitID.toString(),
+                                      child: Text(bg.name!)))
+                                  .toList(),
+                              validator: (value) {
+                                if (value == null || value.isEmpty)
+                                  return (Statics.getLabel(
+                                      'SelectBhaagValidationMessage'));
+                                return null;
+                              },
+                              onChanged: (value) {
+                                setState(() {
+                                  _bhaagValue = value;
+                                  populateShaharDropdown(value!);
+                                  populateNagarDropdown(value, null);
+                                });
+                              },
+                              onSaved: (value) {
+                                if (value != null && value.isNotEmpty)
+                                  sDetails!.bhaagID = int.parse(value);
+                                else
+                                  sDetails!.bhaagID = null;
+                              },
+                            ),
                           SizedBox(
                             height: 10,
                           ),
                           if (_shahar != null && _shahar!.length > 0)
                             DropdownButtonFormField(
-                              decoration: InputDecoration(labelText: Statics.getLabel('Shahar')),
+                              decoration: InputDecoration(
+                                  labelText: Statics.getLabel('Shahar')),
                               isExpanded: true,
                               value: _shaharValue == "" ? null : _shaharValue,
-                              items: _shahar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                              items: _shahar!
+                                  .map((bg) => DropdownMenuItem(
+                                      value: bg.geoUnitID.toString(),
+                                      child: Text(bg.name!)))
+                                  .toList(),
                               onChanged: (value) {
                                 setState(() {
                                   _shaharValue = value;
@@ -871,10 +1019,15 @@ print("data ---->>>$data");
                             ),
                           if (_nagar != null && _nagar!.length > 0)
                             DropdownButtonFormField(
-                              decoration: InputDecoration(labelText: Statics.getLabel('Nagar')),
+                              decoration: InputDecoration(
+                                  labelText: Statics.getLabel('Nagar')),
                               isExpanded: true,
                               value: _nagarValue == "" ? null : _nagarValue,
-                              items: _nagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                              items: _nagar!
+                                  .map((bg) => DropdownMenuItem(
+                                      value: bg.geoUnitID.toString(),
+                                      child: Text(bg.name!)))
+                                  .toList(),
                               onChanged: (value) {
                                 setState(() {
                                   _nagarValue = value;
@@ -897,37 +1050,46 @@ print("data ---->>>$data");
                     SizedBox(
                       height: 10,
                     ),
-                    if(_status != null)
-                    DropdownButtonFormField(
-                      decoration: InputDecoration(labelText: Statics.getLabel('Status')),
-                      isExpanded: true,
-                      value: _statusValue == "" ? null : _statusValue,
-                      items: _status!.map((bg) => DropdownMenuItem(value: bg.staticID.toString(), child: Text(bg.codeForDisplay!))).toList(),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return (Statics.getLabel('StatusValidationMessage'));
-                        }
-                        return null;
-                      },
-                      onChanged: (value) {
-                        setState(() {
-                          _statusValue = value;
-                        });
-                      },
-                      onSaved: (value) {
-                        if (value != null && value.isNotEmpty)
-                          sDetails!.statusID = int.parse(value);
-                        else
-                          sDetails!.statusID = null;
-                      },
-                    ),
+                    if (_status != null)
+                      DropdownButtonFormField(
+                        decoration: InputDecoration(
+                            labelText: Statics.getLabel('Status')),
+                        isExpanded: true,
+                        value: _statusValue == "" ? null : _statusValue,
+                        items: _status!
+                            .map((bg) => DropdownMenuItem(
+                                value: bg.staticID.toString(),
+                                child: Text(bg.codeForDisplay!)))
+                            .toList(),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return (Statics.getLabel(
+                                'StatusValidationMessage'));
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            _statusValue = value;
+                          });
+                        },
+                        onSaved: (value) {
+                          if (value != null && value.isNotEmpty)
+                            sDetails!.statusID = int.parse(value);
+                          else
+                            sDetails!.statusID = null;
+                        },
+                      ),
                     SizedBox(
                       height: 10,
                     ),
                     TextFormField(
                       textInputAction: TextInputAction.next,
                       controller: _statusremarkCntrl,
-                      decoration: InputDecoration(labelText: Statics.getLabel('Status') + " " + Statics.getLabel('Remark')),
+                      decoration: InputDecoration(
+                          labelText: Statics.getLabel('Status') +
+                              " " +
+                              Statics.getLabel('Remark')),
                       keyboardType: TextInputType.text,
                       maxLength: 200,
                       onSaved: (value) {
@@ -946,16 +1108,18 @@ print("data ---->>>$data");
                       Text(Statics.getLabel('canNotMakeChanges'))
                     else
                       MaterialButton(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30)),
                         padding: EdgeInsets.symmetric(
                           horizontal: 15,
                           vertical: 8,
                         ),
                         color: Theme.of(context).primaryColor,
-                        textColor: Theme.of(context).primaryTextTheme.button!.color,
-                        onPressed: () async{
+                        textColor:
+                            Theme.of(context).primaryTextTheme.button!.color,
+                        onPressed: () async {
                           print("JKdfhskff");
-                         await _submit().then((value) {
+                          await _submit().then((value) {
                             Navigator.of(context).pop();
                           });
                         },
@@ -967,7 +1131,8 @@ print("data ---->>>$data");
                     SizedBox(
                       height: 10,
                     ),
-                    if (_detailscolumns != null) Legend(legendString: "StatusHistory", fontsize: 18),
+                    if (_detailscolumns != null)
+                      Legend(legendString: "StatusHistory", fontsize: 18),
                     if (_detailscolumns != null)
                       Container(
                         height: Statics.getDeviceSize(context).height * 0.3,
@@ -979,7 +1144,10 @@ print("data ---->>>$data");
                               children: [
                                 DataTable(
                                   columnSpacing: 20,
-                                  headingTextStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black),
+                                  headingTextStyle: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                      color: Colors.black),
                                   columns: _detailscolumns!,
                                   rows: _detailsrows!,
                                 ),

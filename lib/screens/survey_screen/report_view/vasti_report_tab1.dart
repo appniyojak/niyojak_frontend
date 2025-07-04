@@ -275,6 +275,200 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
     );
   }
 
+  // Widget buildTransposedTable(List<SanghaKaryaStithiData> dataList) {
+  //   final verticalScrollController = ScrollController();
+  //   final horizontalScrollController = ScrollController();
+  //
+  //   // Row titles
+  //   final rowTitles = [
+  //     "${Statics.getLabel('shaakhaaYukta')}",
+  //     "${Statics.getLabel('saaptahikMilanyukta')}",
+  //     "${Statics.getLabel('MaasikYuktaLabel')}",
+  //     "${Statics.getLabel('isNewSankalpitShakha')}",
+  //     "${Statics.getLabel('isNewSankalpitSaptahikMilan')}",
+  //     "${Statics.getLabel('isNewSankalpitMaasikMilan')}",
+  //     'एकूण',
+  //   ];
+  //
+  //   // Helper to get totals
+  //   int rowSum(List<int> list) => list.fold(0, (a, b) => a + b);
+  //
+  //   // Precalculate total per column (for last row)
+  //   List<int> columnTotals = List.generate(dataList.length, (i) {
+  //     final e = dataList[i];
+  //     return (e.shaakhaaCount ?? 0) +
+  //         (e.saaptaahikCount ?? 0) +
+  //         (e.maasikMilanCount ?? 0) +
+  //         (e.sankalpitShaakhaaCount ?? 0) +
+  //         (e.sankalpitSaaptaahikCount ?? 0) +
+  //         (e.sankalpitMaasikMilanCount ?? 0);
+  //   });
+  //
+  //   final totalOfTotals = rowSum(columnTotals);
+  //
+  //   return Row(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       // Fixed first column
+  //       Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           Container(
+  //             height: 48,
+  //             width: 160,
+  //             color: Colors.purpleAccent.shade100,
+  //             alignment: Alignment.centerLeft,
+  //             padding: EdgeInsets.symmetric(horizontal: 8),
+  //             child: Text(
+  //               "${Statics.getLabel('sanghaKaryaStithi')}",
+  //               style:
+  //                   TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+  //             ),
+  //           ),
+  //           ...rowTitles.map((title) {
+  //             return Container(
+  //               width: 160,
+  //               height: 48,
+  //               alignment: Alignment.centerLeft,
+  //               padding: EdgeInsets.symmetric(horizontal: 8),
+  //               decoration: BoxDecoration(
+  //                   border: Border(
+  //                       bottom:
+  //                           BorderSide(color: Colors.grey.shade300, width: 1))),
+  //               child: Text(title),
+  //             );
+  //           }).toList(),
+  //         ],
+  //       ),
+  //
+  //       // Scrollable data columns
+  //       Expanded(
+  //         child: SingleChildScrollView(
+  //           scrollDirection: Axis.horizontal,
+  //           controller: horizontalScrollController,
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               // Header row
+  //               Row(
+  //                 children: [
+  //                   ...dataList.map((e) {
+  //                     return Container(
+  //                       width: 100,
+  //                       height: 48,
+  //                       alignment: Alignment.center,
+  //                       color: Colors.purpleAccent.shade100,
+  //                       child: Text(
+  //                         e.vayogatCode.toString(),
+  //                         style: TextStyle(
+  //                             color: Colors.white, fontWeight: FontWeight.bold),
+  //                       ),
+  //                     );
+  //                   }).toList(),
+  //                   Container(
+  //                     width: 100,
+  //                     height: 48,
+  //                     alignment: Alignment.center,
+  //                     color: Colors.purpleAccent.shade100,
+  //                     child: Text(
+  //                       "${Statics.getLabel('Total')}",
+  //                       style: TextStyle(
+  //                           color: Colors.white, fontWeight: FontWeight.bold),
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //
+  //               // Data rows
+  //               ...List.generate(rowTitles.length, (rowIndex) {
+  //                 return Row(
+  //                   children: [
+  //                     ...dataList.map((e) {
+  //                       int value = 0;
+  //                       switch (rowIndex) {
+  //                         case 0:
+  //                           value = e.shaakhaaCount ?? 0;
+  //                           break;
+  //                         case 1:
+  //                           value = e.saaptaahikCount ?? 0;
+  //                           break;
+  //                         case 2:
+  //                           value = e.maasikMilanCount ?? 0;
+  //                           break;
+  //                         case 3:
+  //                           value = e.sankalpitShaakhaaCount ?? 0;
+  //                           break;
+  //                         case 4:
+  //                           value = e.sankalpitSaaptaahikCount ?? 0;
+  //                           break;
+  //                         case 5:
+  //                           value = e.sankalpitMaasikMilanCount ?? 0;
+  //                           break;
+  //                         case 6:
+  //                           value = (e.shaakhaaCount ?? 0) +
+  //                               (e.saaptaahikCount ?? 0) +
+  //                               (e.maasikMilanCount ?? 0) +
+  //                               (e.sankalpitShaakhaaCount ?? 0) +
+  //                               (e.sankalpitSaaptaahikCount ?? 0) +
+  //                               (e.sankalpitMaasikMilanCount ?? 0);
+  //                           break;
+  //                       }
+  //                       return Container(
+  //                         width: 100,
+  //                         height: 48,
+  //                         alignment: Alignment.center,
+  //                         decoration: BoxDecoration(
+  //                           border: Border(
+  //                               bottom: BorderSide(
+  //                                   color: Colors.grey.shade300, width: 1)),
+  //                         ),
+  //                         child: Text(value.toString()),
+  //                       );
+  //                     }).toList(),
+  //
+  //                     // Total column per row
+  //                     Container(
+  //                       width: 100,
+  //                       height: 48,
+  //                       alignment: Alignment.center,
+  //                       decoration: BoxDecoration(
+  //                         border: Border(
+  //                             bottom: BorderSide(
+  //                                 color: Colors.grey.shade300, width: 1)),
+  //                       ),
+  //                       child: Text(() {
+  //                         if (rowIndex == 6) return totalOfTotals.toString();
+  //                         final values = dataList.map((e) {
+  //                           switch (rowIndex) {
+  //                             case 0:
+  //                               return e.shaakhaaCount ?? 0;
+  //                             case 1:
+  //                               return e.saaptaahikCount ?? 0;
+  //                             case 2:
+  //                               return e.maasikMilanCount ?? 0;
+  //                             case 3:
+  //                               return e.sankalpitShaakhaaCount ?? 0;
+  //                             case 4:
+  //                               return e.sankalpitSaaptaahikCount ?? 0;
+  //                             case 5:
+  //                               return e.sankalpitMaasikMilanCount ?? 0;
+  //                           }
+  //                           return 0;
+  //                         }).toList();
+  //                         return rowSum(values).toString();
+  //                       }()),
+  //                     ),
+  //                   ],
+  //                 );
+  //               }),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
+
   Widget buildTransposedTable(List<SanghaKaryaStithiData> dataList) {
     final verticalScrollController = ScrollController();
     final horizontalScrollController = ScrollController();
@@ -287,7 +481,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
       "${Statics.getLabel('isNewSankalpitShakha')}",
       "${Statics.getLabel('isNewSankalpitSaptahikMilan')}",
       "${Statics.getLabel('isNewSankalpitMaasikMilan')}",
-      'एकूण',
+      "${Statics.getLabel('Total')}",
     ];
 
     // Helper to get totals
@@ -325,7 +519,21 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                     TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
-            ...rowTitles.map((title) {
+            // Total row first
+            Container(
+              width: 160,
+              height: 48,
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: Colors.grey.shade300, width: 1)),
+              ),
+              child: Text(
+                "${Statics.getLabel('Total')}",
+              ),
+            ),
+            ...rowTitles.sublist(0, 6).map((title) {
               return Container(
                 width: 160,
                 height: 48,
@@ -357,7 +565,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                         width: 100,
                         height: 48,
                         alignment: Alignment.center,
-                        color: Colors.purpleAccent.shade100,
+                        color: Colors.blueAccent, // Changed header color
                         child: Text(
                           e.vayogatCode.toString(),
                           style: TextStyle(
@@ -369,7 +577,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                       width: 100,
                       height: 48,
                       alignment: Alignment.center,
-                      color: Colors.purpleAccent.shade100,
+                      color: Colors.blueAccent, // Changed header color
                       child: Text(
                         "${Statics.getLabel('Total')}",
                         style: TextStyle(
@@ -379,8 +587,9 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                   ],
                 ),
 
-                // Data rows
-                ...List.generate(rowTitles.length, (rowIndex) {
+                // Data rows (Total row first)
+                ...List.generate(rowTitles.length, (i) {
+                  final rowIndex = i == 0 ? 6 : i - 1; // Swap total row to top
                   return Row(
                     children: [
                       ...dataList.map((e) {
@@ -967,6 +1176,28 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                               ),
                               DataRow(
                                 color: MaterialStateProperty.all(
+                                    Colors.blueAccent.shade100),
+                                cells: [
+                                  DataCell(
+                                    Container(
+                                      alignment: Alignment.center,
+                                      width: double
+                                          .infinity, // makes it span available width
+                                      child: Text(
+                                          "${Statics.getLabel('surveyStart')}",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                              fontSize: 16)),
+                                    ),
+                                  ),
+                                  DataCell.empty, // Leave other cells empty
+                                  DataCell.empty,
+                                  DataCell.empty,
+                                ],
+                              ),
+                              DataRow(
+                                color: MaterialStateProperty.all(
                                     Colors.green.shade50),
                                 cells: [
                                   DataCell(Text(
@@ -1065,35 +1296,35 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                   ),
                                 ],
                               ),
-                              DataRow(
-                                color: MaterialStateProperty.all(
-                                    Colors.red.shade50),
-                                cells: [
-                                  DataCell(
-                                    Text(
-                                        "${Statics.getLabel('remainingVasti')}"),
-                                  ),
-                                  DataCell(
-                                    Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Text(
-                                        "${(data?.nagarVastisarvekshanReportwithselectedlevel?.nagarcount ?? 0) - (data?.nagarVastisarvekshanReportwithselectedlevel?.nagar_step_total ?? 0)}",
-                                      ),
-                                    ),
-                                  ),
-                                  DataCell(
-                                    Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Text(
-                                        "${(data?.nagarVastisarvekshanReportwithselectedlevel?.vasticount ?? 0) - (data?.nagarVastisarvekshanReportwithselectedlevel?.vasti_step_total ?? 0)}",
-                                      ),
-                                    ),
-                                  ),
-                                  DataCell(
-                                    Text("-"),
-                                  ),
-                                ],
-                              ),
+                              // DataRow(
+                              //   color: MaterialStateProperty.all(
+                              //       Colors.red.shade50),
+                              //   cells: [
+                              //     DataCell(
+                              //       Text(
+                              //           "${Statics.getLabel('remainingVasti')}"),
+                              //     ),
+                              //     DataCell(
+                              //       Align(
+                              //         alignment: Alignment.centerRight,
+                              //         child: Text(
+                              //           "${(data?.nagarVastisarvekshanReportwithselectedlevel?.nagarcount ?? 0) - (data?.nagarVastisarvekshanReportwithselectedlevel?.nagar_step_total ?? 0)}",
+                              //         ),
+                              //       ),
+                              //     ),
+                              //     DataCell(
+                              //       Align(
+                              //         alignment: Alignment.centerRight,
+                              //         child: Text(
+                              //           "${(data?.nagarVastisarvekshanReportwithselectedlevel?.vasticount ?? 0) - (data?.nagarVastisarvekshanReportwithselectedlevel?.vasti_step_total ?? 0)}",
+                              //         ),
+                              //       ),
+                              //     ),
+                              //     DataCell(
+                              //       Text("-"),
+                              //     ),
+                              //   ],
+                              // ),
                             ],
                           ),
                         ),
