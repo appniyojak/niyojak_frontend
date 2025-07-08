@@ -36,7 +36,7 @@ class LevelWiseDropdownState extends State<LevelWiseDropdown> {
   String? _linkedGraamValue;
   String? _linkedVastiValue;
 
-  bool _showMandalGraam = false; // 🌿 Decides Mandal → Graam or Vasti path
+  bool _showMandalGraam = false;
 
   @override
   void initState() {
@@ -95,7 +95,6 @@ class LevelWiseDropdownState extends State<LevelWiseDropdown> {
     setState(() {
       selectedValues[level] = value;
 
-      // Clear child levels
       bool reset = false;
       dropdownData.forEach((key, _) {
         if (reset) dropdownData[key] = null;
@@ -111,10 +110,8 @@ class LevelWiseDropdownState extends State<LevelWiseDropdown> {
         _populateDropdown(nextLevel, value);
       }
 
-      // ✅ Notify parent of current selection
       widget.onFinalSelection(level, value);
 
-      // After Nagar selection, decide path
       if (level == 'Nagar' && value != null) {
         _checkIfMandalGraamOrVasti(value);
       }
@@ -127,7 +124,6 @@ class LevelWiseDropdownState extends State<LevelWiseDropdown> {
     setState(() {
       _showMandalGraam = hasMandal;
 
-      // Clear existing selections
       _linkedMandal = _linkedGraam = _linkedVasti = null;
       _linkedMandalValue = _linkedGraamValue = _linkedVastiValue = null;
 
@@ -195,7 +191,6 @@ class LevelWiseDropdownState extends State<LevelWiseDropdown> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // 🌿 Level-wise Dropdowns
         ...dropdownData.keys.map((level) {
           var data = dropdownData[level];
           return data != null
@@ -218,8 +213,6 @@ class LevelWiseDropdownState extends State<LevelWiseDropdown> {
                 )
               : SizedBox.shrink();
         }).toList(),
-
-        // 🌿 Mandal → Graam Path
         if (_showMandalGraam && _linkedMandal != null)
           DropdownButtonFormField<String>(
             decoration: InputDecoration(labelText: Statics.getLabel('Mandal')),
@@ -232,7 +225,7 @@ class LevelWiseDropdownState extends State<LevelWiseDropdown> {
             onChanged: (value) {
               setState(() {
                 _linkedMandalValue = value;
-                widget.onFinalSelection('Mandal', value); // ✅ Notify parent
+                widget.onFinalSelection('Mandal', value);
                 _populateGraamDropdown(value!);
               });
             },
@@ -249,12 +242,10 @@ class LevelWiseDropdownState extends State<LevelWiseDropdown> {
             onChanged: (value) {
               setState(() {
                 _linkedGraamValue = value;
-                widget.onFinalSelection('Graam', value); // ✅ Notify parent
+                widget.onFinalSelection('Graam', value);
               });
             },
           ),
-
-        // 🌿 Nagar → Vasti Path
         if (!_showMandalGraam && _linkedVasti != null)
           DropdownButtonFormField<String>(
             decoration: InputDecoration(labelText: Statics.getLabel('Vasti')),
@@ -267,7 +258,7 @@ class LevelWiseDropdownState extends State<LevelWiseDropdown> {
             onChanged: (value) {
               setState(() {
                 _linkedVastiValue = value;
-                widget.onFinalSelection('Vasti', value); // ✅ Notify parent
+                widget.onFinalSelection('Vasti', value);
               });
             },
           ),
