@@ -2093,83 +2093,117 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                     commonExpansionTile(
                       title: 'vasahatPrakar',
                       children: [
-                        Container(
-                          height: 300,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey.shade300),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: SingleChildScrollView(
-                              child: Column(
-                            children: [
-                              if (data != null && data!.vasahatprakar != null)
-                                Container(
-                                  decoration: BoxDecoration(
-                                    border:
-                                        Border.all(color: Colors.grey.shade300),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: SingleChildScrollView(
-                                    scrollDirection:
-                                        Axis.horizontal, // horizontal scroll
-                                    child: SizedBox(
-                                      width: 320,
-                                      child: DataTable(
-                                        headingRowColor:
-                                            MaterialStateProperty.resolveWith(
-                                          (states) => Colors.purpleAccent[200],
-                                        ),
-                                        headingTextStyle: TextStyle(
-                                          color: Colors.white,
+                        if (data != null && data!.vasahatprakar != null)
+                          Container(
+                            width: double.infinity,
+                            margin: EdgeInsets.symmetric(
+                              horizontal:
+                                  MediaQuery.of(context).size.width * 0.05,
+                              vertical: 8,
+                            ),
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: DataTable(
+                                columnSpacing: 24, // add space between columns
+                                headingRowColor:
+                                    MaterialStateProperty.resolveWith(
+                                  (states) => Colors.purpleAccent[200],
+                                ),
+                                headingTextStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize:
+                                      MediaQuery.of(context).size.width < 400
+                                          ? 12
+                                          : 14,
+                                ),
+                                columns: [
+                                  DataColumn(
+                                    label: Center(
+                                      child: Text(
+                                        "${Statics.getLabel('vasahatPrakar')}",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
                                           fontWeight: FontWeight.bold,
+                                          fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .width <
+                                                  400
+                                              ? 12
+                                              : 14,
                                         ),
-                                        columns: [
-                                          DataColumn(
-                                            label: Expanded(
-                                              child: Center(
-                                                child: Text(
-                                                  "${Statics.getLabel('vasahatPrakar')}",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          DataColumn(
-                                            label: Expanded(
-                                              child: Center(
-                                                child: Text(
-                                                  "${Statics.getLabel('count')}",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                        rows: data!.vasahatprakar!.map((item) {
-                                          return DataRow(
-                                            cells: [
-                                              DataCell(Center(
-                                                  child:
-                                                      Text(item.value ?? ''))),
-                                              DataCell(Center(
-                                                  child: Text(
-                                                      item.count.toString()))),
-                                            ],
-                                          );
-                                        }).toList(),
                                       ),
                                     ),
                                   ),
-                                ),
-                            ],
-                          )),
-                        ),
+                                  DataColumn(
+                                    label: Center(
+                                      child: Text(
+                                        "${Statics.getLabel('count')}",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .width <
+                                                  400
+                                              ? 12
+                                              : 14,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                                rows: data!.vasahatprakar!.map((item) {
+                                  return DataRow(
+                                    cells: [
+                                      DataCell(
+                                        Container(
+                                          width:
+                                              150, // fixed width to prevent overlap
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            item.value ?? '',
+                                            overflow: TextOverflow
+                                                .ellipsis, // truncate if too long
+                                            style: TextStyle(
+                                              fontSize: MediaQuery.of(context)
+                                                          .size
+                                                          .width <
+                                                      400
+                                                  ? 12
+                                                  : 14,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Container(
+                                          width: 100, // fixed width
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            item.count.toString(),
+                                            style: TextStyle(
+                                              fontSize: MediaQuery.of(context)
+                                                          .size
+                                                          .width <
+                                                      400
+                                                  ? 12
+                                                  : 14,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          )
                       ],
                     ),
                     commonExpansionTile(
@@ -4249,7 +4283,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                         label: Expanded(
                                           child: Center(
                                             child: Text(
-                                              "${Statics.getLabel('nivaasAvailable')}",
+                                              "${Statics.getLabel('NnivaasAvailable')}",
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
@@ -4544,72 +4578,78 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
         EdgeInsets.symmetric(horizontal: isTablet ? 16 : 8);
 
     return grouped.entries.map((entry) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 10),
-          Padding(
-            padding: containerPadding,
-            child: Text(
-              'प्रकार: ${entry.key}',
-              style: TextStyle(
-                fontSize: headingFontSize,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-          ),
-          Container(
-            margin: containerPadding,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey.shade300),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: SizedBox(
-                height: tableHeight,
-                child: DataTable(
-                  headingRowColor: MaterialStateProperty.resolveWith(
-                    (states) => Colors.purpleAccent[200],
-                  ),
-                  headingTextStyle: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: fontSize,
-                  ),
-                  dataTextStyle: TextStyle(
-                    fontSize: fontSize,
-                  ),
-                  columns: [
-                    DataColumn(
-                        label: Center(
-                            child:
-                                Text("${Statics.getLabel('UpasanaSthal')}"))),
-                    DataColumn(
-                        label: Center(
-                            child: Text(
-                                "${Statics.getLabel('SelectFrequency')}"))),
-                    DataColumn(
-                        label: Center(
-                            child: Text("${Statics.getLabel('count')}"))),
-                    DataColumn(label: Center(child: Text('किती वस्तीत'))),
-                  ],
-                  rows: entry.value.map((item) {
-                    return DataRow(
-                      cells: [
-                        DataCell(Center(child: Text(item.upaasanasthal ?? ''))),
-                        DataCell(Center(child: Text(item.prakar.toString()))),
-                        DataCell(Center(child: Text(item.tot.toString()))),
-                        DataCell(Center(child: Text(item.vasticnt.toString()))),
-                      ],
-                    );
-                  }).toList(),
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 10),
+            Padding(
+              padding: containerPadding,
+              child: Text(
+                '${Statics.getLabel('SelectFrequency')}: ${entry.key}',
+                style: TextStyle(
+                  fontSize: headingFontSize,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
                 ),
               ),
             ),
-          ),
-        ],
+            SizedBox(height: 10),
+            Container(
+              margin: containerPadding,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey.shade300),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: SizedBox(
+                  height: tableHeight,
+                  child: DataTable(
+                    headingRowColor: MaterialStateProperty.resolveWith(
+                      (states) => Colors.purpleAccent[200],
+                    ),
+                    headingTextStyle: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: fontSize,
+                    ),
+                    dataTextStyle: TextStyle(
+                      fontSize: fontSize,
+                    ),
+                    columns: [
+                      DataColumn(
+                          label: Center(
+                              child:
+                                  Text("${Statics.getLabel('UpasanaSthal')}"))),
+                      DataColumn(
+                          label: Center(
+                              child: Text(
+                                  "${Statics.getLabel('TotalKaaryakartaaCount')}"))),
+                      DataColumn(
+                          label: Center(
+                              child:
+                                  Text("${Statics.getLabel('howManyVasti')}"))),
+                    ],
+                    rows: entry.value.map((item) {
+                      return DataRow(
+                        cells: [
+                          DataCell(
+                              Center(child: Text(item.upaasanasthal ?? ''))),
+                          DataCell(Center(child: Text(item.tot.toString()))),
+                          DataCell(
+                              Center(child: Text(item.vasticnt.toString()))),
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            ),
+            // SizedBox(height: 20),
+          ],
+        ),
       );
     }).toList();
   }

@@ -2981,36 +2981,68 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   SizedBox(height: 10),
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.black54),
                       borderRadius: const BorderRadius.all(Radius.circular(15)),
                     ),
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width * 1.2,
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minWidth: MediaQuery.of(context).size.width *
+                              1.1, // Ensure min width
+                        ),
                         child: DataTable(
                           showCheckboxColumn: false,
                           headingRowColor:
                               MaterialStatePropertyAll(Colors.purple.shade50),
                           headingTextStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87),
-                          columnSpacing: 10,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                            fontSize: MediaQuery.of(context).size.width < 400
+                                ? 12
+                                : 14,
+                          ),
+                          dataRowHeight: MediaQuery.of(context).size.width < 400
+                              ? 40
+                              : 48, // smaller rows on mobile
+                          columnSpacing: 16, // spacing between columns
                           columns: [
                             DataColumn(
-                                label: Text(
-                              "${Statics.getLabel('SelectFrequency')}",
-                            )),
+                              label: SizedBox(
+                                width: MediaQuery.of(context).size.width < 400
+                                    ? 120
+                                    : 160,
+                                child: Text(
+                                  "${Statics.getLabel('SelectFrequency')}",
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
                             DataColumn(
-                                label: Text(
-                              "${Statics.getLabel('bhavnacheNaav')}",
-                            )),
+                              label: SizedBox(
+                                width: MediaQuery.of(context).size.width < 400
+                                    ? 100
+                                    : 140,
+                                child: Text(
+                                  "${Statics.getLabel('bhavnacheNaav')}",
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
                             DataColumn(
-                                label: Text(
-                              "${Statics.getLabel('samparkStithi')}",
-                            )),
+                              label: SizedBox(
+                                width: MediaQuery.of(context).size.width < 400
+                                    ? 120
+                                    : 160,
+                                child: Text(
+                                  "${Statics.getLabel('samparkStithi')}",
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
                           ],
                           rows: enteredVasahatPrakarDataList
                               .asMap()
@@ -3039,10 +3071,41 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               },
                               cells: [
                                 DataCell(
-                                    Text(data.selectedDropdownValueName ?? "")),
-                                DataCell(Text(data.bhavanachenav ?? "")),
-                                DataCell(Text(
-                                    data.selectedDropdownValueName1 ?? "")),
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width < 400
+                                            ? 120
+                                            : 160,
+                                    child: Text(
+                                      data.selectedDropdownValueName ?? "",
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width < 400
+                                            ? 100
+                                            : 140,
+                                    child: Text(
+                                      data.bhavanachenav ?? "",
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width < 400
+                                            ? 120
+                                            : 160,
+                                    child: Text(
+                                      data.selectedDropdownValueName1 ?? "",
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ),
                               ],
                             );
                           }).toList(),
@@ -6093,6 +6156,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       selectedShreni = null;
       selectedUpShreni = null;
       selectedUpShreni2 = null;
+      anyaPrabhaviLokShreniId = null;
+      anyaPrabhaviLokUpShreniId = null;
+      anyaPrabhaviLokUpShreni1Id = null;
     });
   }
 
@@ -6111,37 +6177,45 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
     Color? iconColor,
     bool? viewName,
   }) {
+    Masterdata? selectedValue = selectedShreni;
+    Masterdata? selectedDependentValue = selectedUpShreni;
+    Masterdata? selectedThirdLevelValue = selectedUpShreni2;
+
     List<Masterdata> masterDataList =
-        vastisarvekshanDropDownDataModel!.masterdata!;
+        vastisarvekshanDropDownDataModel?.masterdata ?? [];
     List<Masterdata> filteredItems =
         masterDataList.where((e) => e.typename == filterTypeName).toList();
 
-    Masterdata? selectedValue = anyaPrabhaviLokShreniId != null
-        ? filteredItems.firstWhere((e) => e.id == anyaPrabhaviLokShreniId,
-            orElse: () => Masterdata())
-        : null;
+    if (anyaPrabhaviLokShreniId != null && selectedValue == null) {
+      selectedValue = filteredItems.firstWhere(
+        (e) => e.id == anyaPrabhaviLokShreniId,
+      );
+      selectedShreni = selectedValue;
+    }
 
-    List<Masterdata> dependentItems = selectedValue != null &&
-            selectedValue.id != null
-        ? masterDataList.where((e) => e.parentid == selectedValue.id).toList()
+    List<Masterdata> dependentItems = selectedValue != null
+        ? masterDataList.where((e) => e.parentid == selectedValue!.id).toList()
         : [];
 
-    Masterdata? selectedDependentValue = anyaPrabhaviLokUpShreniId != null
-        ? dependentItems.firstWhere((e) => e.id == anyaPrabhaviLokUpShreniId,
-            orElse: () => Masterdata())
-        : null;
+    if (anyaPrabhaviLokUpShreniId != null && selectedDependentValue == null) {
+      selectedDependentValue = dependentItems.firstWhere(
+        (e) => e.id == anyaPrabhaviLokUpShreniId,
+      );
+      selectedUpShreni = selectedDependentValue;
+    }
 
-    List<Masterdata> thirdLevelItems =
-        selectedDependentValue != null && selectedDependentValue.id != null
-            ? masterDataList
-                .where((e) => e.parentid == selectedDependentValue.id)
-                .toList()
-            : [];
+    List<Masterdata> thirdLevelItems = selectedDependentValue != null
+        ? masterDataList
+            .where((e) => e.parentid == selectedDependentValue!.id)
+            .toList()
+        : [];
 
-    Masterdata? selectedThirdLevelValue = anyaPrabhaviLokUpShreni1Id != null
-        ? thirdLevelItems.firstWhere((e) => e.id == anyaPrabhaviLokUpShreni1Id,
-            orElse: () => Masterdata())
-        : null;
+    if (anyaPrabhaviLokUpShreni1Id != null && selectedThirdLevelValue == null) {
+      selectedThirdLevelValue = thirdLevelItems.firstWhere(
+        (e) => e.id == anyaPrabhaviLokUpShreni1Id,
+      );
+      selectedUpShreni2 = selectedThirdLevelValue;
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -6149,10 +6223,19 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
         if (filteredItems.isNotEmpty)
           _buildDropdown2(
             hintText: hintText,
-            value: selectedValue?.id != null ? selectedValue : null,
+            value: selectedValue,
             items: filteredItems,
             onChanged: (newValue) {
               if (newValue != null) {
+                anyaPrabhaviLokShreniId = newValue.id;
+                anyaPrabhaviLokShreniName = newValue.value;
+
+                setState(() {
+                  selectedShreni = newValue;
+                  selectedUpShreni = null;
+                  selectedUpShreni2 = null;
+                });
+
                 onValueSelected(newValue.id!, newValue.value!, newValue);
               }
             },
@@ -6166,14 +6249,22 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
         if (dependentItems.isNotEmpty)
           _buildDropdown2(
             hintText: "${Statics.getLabel('selectUpshreni')}",
-            value: selectedDependentValue?.id != null
-                ? selectedDependentValue
-                : null,
+            value: selectedDependentValue,
             items: dependentItems,
             onChanged: (newValue) {
-              if (newValue != null && onDependentValueSelected != null) {
-                onDependentValueSelected(
-                    newValue.id!, newValue.value!, newValue);
+              if (newValue != null) {
+                anyaPrabhaviLokUpShreniId = newValue.id;
+                anyaPrabhaviLokUpShreniName = newValue.value;
+
+                setState(() {
+                  selectedUpShreni = newValue;
+                  selectedUpShreni2 = null;
+                });
+
+                if (onDependentValueSelected != null) {
+                  onDependentValueSelected(
+                      newValue.id!, newValue.value!, newValue);
+                }
               }
             },
             decoration: decoration,
@@ -6186,14 +6277,21 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
         if (thirdLevelItems.isNotEmpty)
           _buildDropdown2(
             hintText: "${Statics.getLabel('selectUpshreni2')}",
-            value: selectedThirdLevelValue?.id != null
-                ? selectedThirdLevelValue
-                : null,
+            value: selectedThirdLevelValue,
             items: thirdLevelItems,
             onChanged: (newValue) {
-              if (newValue != null && onThirdLevelValueSelected != null) {
-                onThirdLevelValueSelected(
-                    newValue.id!, newValue.value!, newValue);
+              if (newValue != null) {
+                anyaPrabhaviLokUpShreni1Id = newValue.id;
+                anyaPrabhaviLokUpShreni1Name = newValue.value;
+
+                setState(() {
+                  selectedUpShreni2 = newValue;
+                });
+
+                if (onThirdLevelValueSelected != null) {
+                  onThirdLevelValueSelected(
+                      newValue.id!, newValue.value!, newValue);
+                }
               }
             },
             decoration: decoration,
@@ -6206,41 +6304,41 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
     );
   }
 
-  Widget _buildDropdown2<T extends Masterdata>(
-      {required String hintText,
-      required T? value,
-      required List<T> items,
-      required Function(T?) onChanged,
-      BoxDecoration? decoration,
-      Color? textColor,
-      Color? borderColor,
-      Color? iconColor,
-      bool? viewName}) {
+  Widget _buildDropdown2<T extends Masterdata>({
+    required String hintText,
+    required T? value,
+    required List<T> items,
+    required Function(T?) onChanged,
+    BoxDecoration? decoration,
+    Color? textColor,
+    Color? borderColor,
+    Color? iconColor,
+    bool? viewName,
+  }) {
     return Container(
       height: 50,
       width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.black54),
-        borderRadius: BorderRadius.circular(8),
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: decoration ??
+          BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: borderColor ?? Colors.black54),
+            borderRadius: BorderRadius.circular(8),
+          ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<T>(
           iconEnabledColor: iconColor ?? Colors.black,
           hint: Text(
-            value != null && viewName == true
-                ? value.value ?? "No Value"
-                : hintText,
+            value != null && viewName == true ? value.value ?? "" : hintText,
             style: TextStyle(color: textColor ?? Colors.black),
           ),
-          value: value,
+          value: items.any((e) => e.id == value?.id) ? value : null,
           isExpanded: true,
           items: items
               .map((item) => DropdownMenuItem<T>(
                     value: item,
                     child: Text(
-                      item.value ?? "No Value",
+                      item.value ?? "",
                       style: TextStyle(color: textColor ?? Colors.black),
                     ),
                   ))
@@ -6250,6 +6348,96 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       ),
     );
   }
+
+  // Widget _buildDropdown2<T extends Masterdata>({
+  //   required String hintText,
+  //   required T? value,
+  //   required List<T> items,
+  //   required Function(T?) onChanged,
+  //   BoxDecoration? decoration,
+  //   Color? textColor,
+  //   Color? borderColor,
+  //   Color? iconColor,
+  //   bool? viewName,
+  // }) {
+  //   return Container(
+  //     height: 50,
+  //     width: double.infinity,
+  //     padding: const EdgeInsets.symmetric(horizontal: 12),
+  //     decoration: decoration ??
+  //         BoxDecoration(
+  //           color: Colors.white,
+  //           border: Border.all(color: borderColor ?? Colors.black54),
+  //           borderRadius: BorderRadius.circular(8),
+  //         ),
+  //     child: DropdownButtonHideUnderline(
+  //       child: DropdownButton<T>(
+  //         iconEnabledColor: iconColor ?? Colors.black,
+  //         hint: Text(
+  //           value != null && viewName == true ? value.value ?? "" : hintText,
+  //           style: TextStyle(color: textColor ?? Colors.black),
+  //         ),
+  //         value: items.any((e) => e.id == value?.id) ? value : null,
+  //         isExpanded: true,
+  //         items: items
+  //             .map((item) => DropdownMenuItem<T>(
+  //                   value: item,
+  //                   child: Text(
+  //                     item.value ?? "",
+  //                     style: TextStyle(color: textColor ?? Colors.black),
+  //                   ),
+  //                 ))
+  //             .toList(),
+  //         onChanged: onChanged,
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  // Widget _buildDropdown2<T extends Masterdata>(
+  //     {required String hintText,
+  //     required T? value,
+  //     required List<T> items,
+  //     required Function(T?) onChanged,
+  //     BoxDecoration? decoration,
+  //     Color? textColor,
+  //     Color? borderColor,
+  //     Color? iconColor,
+  //     bool? viewName}) {
+  //   return Container(
+  //     height: 50,
+  //     width: double.infinity,
+  //     padding: EdgeInsets.symmetric(horizontal: 12),
+  //     decoration: BoxDecoration(
+  //       color: Colors.white,
+  //       border: Border.all(color: Colors.black54),
+  //       borderRadius: BorderRadius.circular(8),
+  //     ),
+  //     child: DropdownButtonHideUnderline(
+  //       child: DropdownButton<T>(
+  //         iconEnabledColor: iconColor ?? Colors.black,
+  //         hint: Text(
+  //           value != null && viewName == true
+  //               ? value.value ?? "No Value"
+  //               : hintText,
+  //           style: TextStyle(color: textColor ?? Colors.black),
+  //         ),
+  //         value: value,
+  //         isExpanded: true,
+  //         items: items
+  //             .map((item) => DropdownMenuItem<T>(
+  //                   value: item,
+  //                   child: Text(
+  //                     item.value ?? "No Value",
+  //                     style: TextStyle(color: textColor ?? Colors.black),
+  //                   ),
+  //                 ))
+  //             .toList(),
+  //         onChanged: onChanged,
+  //       ),
+  //     ),
+  //   );
+  // }
 
 //=============================================================================================================
   Widget _buildInfoRow(String title, String? value) {
@@ -11277,7 +11465,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   )),
                                   DataColumn(
                                       label: Text(
-                                    "${Statics.getLabel('nivaasAvailable')}",
+                                    "${Statics.getLabel('NnivaasAvailable')}",
                                   )),
                                   DataColumn(
                                       label: Text(
@@ -11385,7 +11573,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                                   "${Statics.getLabel('shamta')}",
                                                   selectedData.shamta),
                                               _buildInfoRow(
-                                                  "${Statics.getLabel('nivaasAvailable')}",
+                                                  "${Statics.getLabel('NnivaasAvailable')}",
                                                   selectedData.nivasasathiupalabdha ==
                                                           1
                                                       ? "${Statics.getLabel('ConfirmationYes')}"
@@ -12865,7 +13053,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         jahirKaryakramShamtaControler, context,
                         height: 50),
                     yesNoRadioButton(
-                      question: "${Statics.getLabel('nivaasAvailable')}",
+                      question: "${Statics.getLabel('NnivaasAvailable')}",
                       onChanged: (value) {
                         if (isVastiSearch) {
                           setState(() {
