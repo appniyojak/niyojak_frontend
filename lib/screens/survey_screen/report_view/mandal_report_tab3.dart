@@ -384,7 +384,7 @@ class _MandalSurveyReportViewScreen3State
                               DropdownButtonFormField(
                                 decoration: InputDecoration(
                                     labelText:
-                                        "${Statics.getLabel('OtherSocialOrganization')}"),
+                                        "${Statics.getLabel('Vibhaag')}"),
                                 isExpanded: true,
                                 value: _linkedVibhaagValue == ""
                                     ? null
@@ -1257,7 +1257,8 @@ class _MandalSurveyReportViewScreen3State
                           child: SingleChildScrollView(
                               child: Column(
                             children: [
-                              if (data != null && data!.religion != null)
+                              if (data != null &&
+                                  data!.vastiKontyaReligion != null)
                                 Container(
                                   decoration: BoxDecoration(
                                     border:
@@ -1304,14 +1305,17 @@ class _MandalSurveyReportViewScreen3State
                                           ),
                                         ),
                                       ],
-                                      rows: data!.religion!.map((item) {
+                                      rows: data!.vastiKontyaReligion!
+                                          .map((item) {
                                         return DataRow(
                                           cells: [
                                             DataCell(Center(
-                                                child: Text(item.value ?? ''))),
+                                                child: Text(
+                                                    item.selectedDropdownValueName ??
+                                                        ''))),
                                             DataCell(Center(
                                                 child: Text(
-                                                    item.count.toString()))),
+                                                    item.andaje.toString()))),
                                           ],
                                         );
                                       }).toList(),
@@ -1323,126 +1327,63 @@ class _MandalSurveyReportViewScreen3State
                         ),
                       ],
                     ),
-                    commonExpansionTile(
-                      title: 'sanghaKaryaStithi',
-                      children: [
-                        if (data != null && data!.sanghaKaryaStithiData != null)
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              DataTable(
-                                headingRowColor: MaterialStateProperty.all(
-                                    Colors.purpleAccent[200]),
-                                headingTextStyle: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15),
-                                columns: [
-                                  DataColumn(
-                                      label: Text(
-                                          "${Statics.getLabel('sanghaKaryaStithi')}")),
-                                ],
-                                rows: List<DataRow>.generate(
-                                  rowTitles.length,
-                                  (index) => DataRow(
-                                    cells: [DataCell(Text(rowTitles[index]))],
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: DataTable(
-                                    headingRowColor: MaterialStateProperty.all(
-                                        Colors.purpleAccent[200]),
-                                    headingTextStyle: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15),
-                                    columns: sanghaData
-                                        .map((e) => DataColumn(
-                                            label: Text(e.vayogatCode ?? '')))
-                                        .toList(),
-                                    rows: List<DataRow>.generate(
-                                      rowTitles.length,
-                                      (index) => DataRow(
-                                        cells: sanghaData.map((e) {
-                                          final value =
-                                              getCellValueByRowIndex(e, index);
-                                          return DataCell(Text(value));
-                                        }).toList(),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )
-                      ],
-                    ),
-                    commonExpansionTile(
-                      title: 'vasahatPrakar',
-                      children: [
-                        if (data != null && data!.vastiVasahatPrakar != null)
-                          Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade300),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
-                              child: SizedBox(
-                                width: 900, // total width of all columns
-                                child: DataTable(
-                                  headingRowColor:
-                                      MaterialStateProperty.resolveWith(
-                                    (states) => Colors.purpleAccent[200],
-                                  ),
-                                  columnSpacing: 20,
-                                  headingTextStyle: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  columns: [
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('SelectFrequency')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('bhavnacheNaav')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('samparkSthiti')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('samparkSootraNaav')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('doorBhash')}")),
-                                  ],
-                                  rows: data!.vastiVasahatPrakar!.map((item) {
-                                    return DataRow(
-                                      cells: [
-                                        DataCell(Text(
-                                            item.selectedDropdownValueName ??
-                                                '')),
-                                        DataCell(
-                                            Text(item.bhavanachenav ?? '')),
-                                        DataCell(Text(
-                                            item.selectedDropdownValueName1 ??
-                                                '')),
-                                        DataCell(Text(item.samparksootr ?? '')),
-                                        DataCell(Text(item.doorabhaash ?? '')),
-                                      ],
-                                    );
-                                  }).toList(),
-                                ),
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
+                    // commonExpansionTile(
+                    //   title: 'sanghaKaryaStithi',
+                    //   children: [
+                    //     if (data != null && data!.sanghaKaryaStithiData != null)
+                    //       Row(
+                    //         crossAxisAlignment: CrossAxisAlignment.start,
+                    //         children: [
+                    //           DataTable(
+                    //             headingRowColor: MaterialStateProperty.all(
+                    //                 Colors.purpleAccent[200]),
+                    //             headingTextStyle: TextStyle(
+                    //                 color: Colors.white,
+                    //                 fontWeight: FontWeight.bold,
+                    //                 fontSize: 15),
+                    //             columns: [
+                    //               DataColumn(
+                    //                   label: Text(
+                    //                       "${Statics.getLabel('sanghaKaryaStithi')}")),
+                    //             ],
+                    //             rows: List<DataRow>.generate(
+                    //               rowTitles.length,
+                    //               (index) => DataRow(
+                    //                 cells: [DataCell(Text(rowTitles[index]))],
+                    //               ),
+                    //             ),
+                    //           ),
+                    //           Expanded(
+                    //             child: SingleChildScrollView(
+                    //               scrollDirection: Axis.horizontal,
+                    //               child: DataTable(
+                    //                 headingRowColor: MaterialStateProperty.all(
+                    //                     Colors.purpleAccent[200]),
+                    //                 headingTextStyle: TextStyle(
+                    //                     color: Colors.white,
+                    //                     fontWeight: FontWeight.bold,
+                    //                     fontSize: 15),
+                    //                 columns: sanghaData
+                    //                     .map((e) => DataColumn(
+                    //                         label: Text(e.vayogatCode ?? '')))
+                    //                     .toList(),
+                    //                 rows: List<DataRow>.generate(
+                    //                   rowTitles.length,
+                    //                   (index) => DataRow(
+                    //                     cells: sanghaData.map((e) {
+                    //                       final value =
+                    //                           getCellValueByRowIndex(e, index);
+                    //                       return DataCell(Text(value));
+                    //                     }).toList(),
+                    //                   ),
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //           ),
+                    //         ],
+                    //       )
+                    //   ],
+                    // ),
                     commonExpansionTile(
                       title: 'UpsanaSthal',
                       children: [

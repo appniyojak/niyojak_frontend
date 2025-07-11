@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -277,49 +280,91 @@ class _MandalSurveyReportViewScreen1State
   List<Talukamandaldurjanshakkati> durjanshakati = [];
   List<TalukamandalSewaPrakalpa> sewaPrakalpa = [];
 
+  // void getMyDetailsColumnsAndRows() async {
+  //   talukaMandalSampurnaModel =
+  //       await Statics.vastisarvekshanAllReportDataForMandal(context,
+  //           Statics.userDetails["userID"], selctedLevelId, selctedLevel);
+  //   log("talukaMandalSampurnaModel ${jsonEncode(talukaMandalSampurnaModel)}");
+  //   setState(() {
+  //     data =
+  //         talukaMandalSampurnaModel!.talukamandalsarvekshanReportwithname ?? [];
+  //     talukaaSamajikKaryakram =
+  //         talukaMandalSampurnaModel!.talukamandalSamajikkaryakram ?? [];
+  //     talukamandalSana =
+  //         talukaMandalSampurnaModel!.talukamandalmahatvacesana ?? [];
+  //     talukamandalUpasanaSthal =
+  //         talukaMandalSampurnaModel!.talukamandalupaasana ?? [];
+  //     talukaMandalReligion =
+  //         talukaMandalSampurnaModel!.talukamandalReligion ?? [];
+  //     vyavasaayeeCategory = talukaMandalSampurnaModel!
+  //             .talukamandalListSwayamsevakCountByVyavasaayeeCategory ??
+  //         [];
+  //     sajjanList = talukaMandalSampurnaModel!.talukamandalsajjanshakkati ?? [];
+  //     durjanshakati = talukaMandalSampurnaModel!.talukamandaldurjanshakkati!;
+  //     sewaPrakalpa = talukaMandalSampurnaModel!.talukamandalSewaPrakalpa ?? [];
+  //     talukamandalvividhSampradhaySatsangKendra = talukaMandalSampurnaModel!
+  //             .talukamandalvividhSampradhaySatsangKendra ??
+  //         [];
+  //   });
+  // }
+
   void getMyDetailsColumnsAndRows() async {
     talukaMandalSampurnaModel =
         await Statics.vastisarvekshanAllReportDataForMandal(context,
             Statics.userDetails["userID"], selctedLevelId, selctedLevel);
+    log("talukaMandalSampurnaModel ${jsonEncode(talukaMandalSampurnaModel)}");
+
+    if (talukaMandalSampurnaModel == null ||
+        (talukaMandalSampurnaModel!.talukamandalsarvekshanReportwithname ==
+                null ||
+            talukaMandalSampurnaModel!
+                .talukamandalsarvekshanReportwithname!.isEmpty)) {
+      Statics.showToast("${Statics.getLabel('NoDataFound')}");
+      return;
+    }
+
     setState(() {
-      data = talukaMandalSampurnaModel!.talukamandalsarvekshanReportwithname;
+      data =
+          talukaMandalSampurnaModel!.talukamandalsarvekshanReportwithname ?? [];
       talukaaSamajikKaryakram =
-          talukaMandalSampurnaModel!.talukamandalSamajikkaryakram;
-      talukamandalSana = talukaMandalSampurnaModel!.talukamandalmahatvacesana;
+          talukaMandalSampurnaModel!.talukamandalSamajikkaryakram ?? [];
+      talukamandalSana =
+          talukaMandalSampurnaModel!.talukamandalmahatvacesana ?? [];
       talukamandalUpasanaSthal =
-          talukaMandalSampurnaModel!.talukamandalupaasana;
-      talukaMandalReligion = talukaMandalSampurnaModel!.talukamandalReligion;
+          talukaMandalSampurnaModel!.talukamandalupaasana ?? [];
+      talukaMandalReligion =
+          talukaMandalSampurnaModel!.talukamandalReligion ?? [];
       vyavasaayeeCategory = talukaMandalSampurnaModel!
-          .talukamandalListSwayamsevakCountByVyavasaayeeCategory;
-      sajjanList = talukaMandalSampurnaModel!.talukamandalsajjanshakkati!;
-      durjanshakati = talukaMandalSampurnaModel!.talukamandaldurjanshakkati!;
-      sewaPrakalpa = talukaMandalSampurnaModel!.talukamandalSewaPrakalpa!;
-      talukamandalvividhSampradhaySatsangKendra =
-          talukaMandalSampurnaModel!.talukamandalvividhSampradhaySatsangKendra!;
+              .talukamandalListSwayamsevakCountByVyavasaayeeCategory ??
+          [];
+      sajjanList = talukaMandalSampurnaModel!.talukamandalsajjanshakkati ?? [];
+      durjanshakati =
+          talukaMandalSampurnaModel!.talukamandaldurjanshakkati ?? [];
+      sewaPrakalpa = talukaMandalSampurnaModel!.talukamandalSewaPrakalpa ?? [];
+      talukamandalvividhSampradhaySatsangKendra = talukaMandalSampurnaModel!
+              .talukamandalvividhSampradhaySatsangKendra ??
+          [];
     });
   }
 
   Widget buildTalukaMandalTable(List<Talukamandaldurjanshakkati> dataList) {
     dataList = talukaMandalSampurnaModel!.talukamandaldurjanshakkati ?? [];
 
-    // 1. Get unique subtypes
     final List<String> uniqueSubtypes = dataList
         .map((e) => e.subtype ?? '')
         .toSet()
         .where((s) => s.isNotEmpty)
         .toList();
 
-    // 2. Get unique maintypes
     final List<String> uniqueMaintypes = dataList
         .map((e) => e.maintype ?? '')
         .toSet()
         .where((m) => m.isNotEmpty)
         .toList();
 
-    // 3. Build rows with sankhya values
     List<DataRow> rows = uniqueMaintypes.map((maintype) {
       List<DataCell> cells = [
-        DataCell(Text(maintype)), // First column: maintype
+        DataCell(Text(maintype)),
         ...uniqueSubtypes.map((subtype) {
           final match = dataList.firstWhere(
             (e) => e.maintype == maintype && e.subtype == subtype,
@@ -337,9 +382,7 @@ class _MandalSurveyReportViewScreen1State
         headingRowColor: MaterialStateProperty.all(Colors.purpleAccent),
         headingTextStyle: TextStyle(color: Colors.white),
         columns: [
-          DataColumn(
-              label: Text(
-                  "${Statics.getLabel('mukhyaPrakar')}")), // First column: maintype
+          DataColumn(label: Text("${Statics.getLabel('mukhyaPrakar')}")),
           ...uniqueSubtypes.map((subtype) => DataColumn(label: Text(subtype))),
         ],
         rows: rows,

@@ -1044,10 +1044,10 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                           scrollDirection: Axis.horizontal,
                           child: DataTable(
                             headingRowColor:
-                                MaterialStateProperty.all(Colors.teal.shade100),
+                                MaterialStateProperty.all(Colors.blueAccent),
                             headingTextStyle: TextStyle(
                               fontSize: 15,
-                              color: Colors.black,
+                              color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
                             columns: [
@@ -1176,7 +1176,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                               ),
                               DataRow(
                                 color: MaterialStateProperty.all(
-                                    Colors.blueAccent.shade100),
+                                    Colors.teal.shade100),
                                 cells: [
                                   DataCell(
                                     Container(
@@ -1184,15 +1184,39 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                       width: double
                                           .infinity, // makes it span available width
                                       child: Text(
-                                          "${Statics.getLabel('surveyStart')}",
+                                          "${Statics.getLabel('surveyStart')} ${Statics.getLabel('Status')}",
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              color: Colors.white,
+                                              color: Colors.black,
                                               fontSize: 16)),
                                     ),
                                   ),
-                                  DataCell.empty, // Leave other cells empty
-                                  DataCell.empty,
+                                  DataCell(
+                                    Container(
+                                      alignment: Alignment.center,
+                                      width: double
+                                          .infinity, // makes it span available width
+                                      child: Text(
+                                          "${Statics.getLabel('NagarShahari')}",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                              fontSize: 16)),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    Container(
+                                      alignment: Alignment.center,
+                                      width: double
+                                          .infinity, // makes it span available width
+                                      child: Text(
+                                          "${Statics.getLabel('Vasti')}",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                              fontSize: 16)),
+                                    ),
+                                  ),
                                   DataCell.empty,
                                 ],
                               ),

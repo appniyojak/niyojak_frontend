@@ -971,7 +971,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                       title: 'OtherSocialOrganization',
                       children: [
                         if (data != null &&
-                            data!.socialOrganizationKaaryakartaaCountByAreaOfOperation !=
+                            data!.listSocialOrganizationKaaryakartaaCountByAreaOfOperation !=
                                 null)
                           Container(
                             // margin: const EdgeInsets.all(16),
@@ -999,7 +999,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                           Text("${Statics.getLabel('count')}")),
                                 ],
                                 rows: data!
-                                    .socialOrganizationKaaryakartaaCountByAreaOfOperation!
+                                    .listSocialOrganizationKaaryakartaaCountByAreaOfOperation!
                                     .map((item) {
                                   return DataRow(
                                     cells: [
