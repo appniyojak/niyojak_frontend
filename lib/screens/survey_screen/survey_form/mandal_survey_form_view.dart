@@ -368,9 +368,6 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   final TextEditingController maleController = TextEditingController();
   final TextEditingController femaleController = TextEditingController();
 
-  int? male;
-  int? female;
-
   int? step1completepercentage;
   int? step3completepercentage;
 
@@ -889,7 +886,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
 
 // ================================================   BASIC INFO FORM =================================================================================================================================
   Widget _buildStep1() {
-    int total = (male ?? 0) + (female ?? 0);
+    int total = (int.tryParse(maleController.text) ?? 0) +
+        (int.tryParse(femaleController.text) ?? 0);
     Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: Column(
@@ -1378,19 +1376,42 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
           ),
 // =====================================  SANGHA KARYA  STITHI ==================================================================================
           mainContainer(
-            "${Statics.getLabel('sanghakarya')}",
+            "${Statics.getLabel('GraamInfo')}",
             Column(
               children: [
                 Container(
                   padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(15)),
+                  // decoration: BoxDecoration(
+                  //     border: Border.all(color: Colors.grey),
+                  //     borderRadius: BorderRadius.circular(15)),
                   child: Column(
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text:
+                                      "${Statics.getLabel('vadipadyacheInfo')}",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: "*",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                           InkWell(
                             onTap: () {
                               if (isVastiSearch) {
@@ -1708,7 +1729,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       SizedBox(height: 10),
                       textControllerField2(
                           name: "${Statics.getLabel('SarpanchacheNaav')}",
-                          controller: sarpanchNameController),
+                          controller: sarpanchNameController,
+                          imp: "*"),
                       SizedBox(height: 10),
                       textControllerField2(
                         name: "${Statics.getLabel('doorBhash')}",
@@ -1737,6 +1759,32 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       ),
                       Column(
                         children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: "${Statics.getLabel('Population')}",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: "*",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 10),
                           Row(
                             children: [
                               Expanded(
@@ -1744,7 +1792,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   controller: maleController,
                                   keyboardType: TextInputType.number,
                                   decoration: InputDecoration(
-                                    labelText: 'पुरुष',
+                                    labelText: '${Statics.getLabel('Men')}',
                                     border: OutlineInputBorder(),
                                   ),
                                 ),
@@ -1755,32 +1803,35 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   controller: femaleController,
                                   keyboardType: TextInputType.number,
                                   decoration: InputDecoration(
-                                    labelText: 'महिला',
+                                    labelText: '${Statics.getLabel('Women')}',
                                     border: OutlineInputBorder(),
                                   ),
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(height: 20),
+                          SizedBox(height: 10),
                           Text(
-                            'कुल लोकसंख्या: $total',
+                            '${Statics.getLabel('ekunLoksankhya')}: $total',
                             style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          )
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.purple),
+                          ),
                         ],
                       ),
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
+              ],
+            ),
+          ), // =====================================  SANGHA KARYA  STITHI ==================================================================================
+          mainContainer(
+            "${Statics.getLabel('sanghakarya')}",
+            Column(
+              children: [
                 Container(
                   padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(15)),
                   child: Column(
                     children: [
                       yesNoRadioButton(
@@ -1797,7 +1848,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 context,
                               );
                             }
-                          }),
+                          },
+                          imp: "*"),
                       if (beforsanghaonnowisoff == 1)
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1805,7 +1857,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             Text(
                               "${Statics.getLabel('tapshil')}",
                               style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.w500),
+                                  fontSize: 15, fontWeight: FontWeight.bold),
                             ),
                             InkWell(
                               onTap: () {
@@ -2463,7 +2515,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           context,
                         );
                       }
-                    }),
+                    },
+                    imp: "*"),
                 if (anyaVividhKshetracheKame == 1)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -3094,7 +3147,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           context,
                         );
                       }
-                    }),
+                    },
+                    imp: "*"),
                 if (gavatilMumbaikar == 1)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -5385,6 +5439,17 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               "${Statics.getLabel('mumbaikarValidation')}");
                           return;
                         }
+                        if (vadiGharLoksankhyaEnteredDataList!.isEmpty) {
+                          Statics.showToast(
+                              "${Statics.getLabel('vadipadyachiInfoValidation')}");
+                          return;
+                        }
+                        if (maleController.text != 0 &&
+                            femaleController.text != 0) {
+                          Statics.showToast(
+                              "${Statics.getLabel('maleFemaleCountValidation')}");
+                          return;
+                        }
 
                         submitStep1Form();
                       } else {
@@ -5818,7 +5883,45 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(8)),
                                 ),
+                                // onPressed: () {
+                                //   VastisarVadiGharLoksankhya data =
+                                //       VastisarVadiGharLoksankhya(
+                                //     pkid: VastisarVividhKshetracheKamPkId,
+                                //     isactive:
+                                //         isActiveVastisarVividhKshetracheKam,
+                                //     vastiid: int.parse(selctedLevelId!),
+                                //     vadiCheNav: vadicheNaavController.text,
+                                //     andajeGhar: andajeGhareController.text,
+                                //     andajeLoksankhya: loksankhyaController.text,
+                                //   );
+                                //   if (editIndex != null) {
+                                //     vadiGharLoksankhyaEnteredDataList![
+                                //         editIndex] = data;
+                                //   } else {
+                                //     vadiGharLoksankhyaEnteredDataList!
+                                //         .add(data);
+                                //   }
+                                //   Navigator.of(ctx).pop();
+                                //   clearFieldsVadiGharLoksankhya();
+                                //   if (onDataChanged != null) {
+                                //     onDataChanged();
+                                //   }
+                                // },
                                 onPressed: () {
+                                  String andajeGharInput =
+                                      loksankhyaController.text.trim();
+
+                                  // Check if input is a valid number between 0 and 100
+                                  if (!RegExp(r'^\d+$').hasMatch(
+                                          andajeGharInput) || // only digits
+                                      int.tryParse(andajeGharInput) ==
+                                          null || // not a number
+                                      int.parse(andajeGharInput) < 0 ||
+                                      int.parse(andajeGharInput) > 100) {
+                                    Statics.showToast(
+                                        "${Statics.getLabel('persentValidation')}");
+                                    return;
+                                  }
                                   VastisarVadiGharLoksankhya data =
                                       VastisarVadiGharLoksankhya(
                                     pkid: VastisarVividhKshetracheKamPkId,
@@ -5829,6 +5932,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     andajeGhar: andajeGhareController.text,
                                     andajeLoksankhya: loksankhyaController.text,
                                   );
+
                                   if (editIndex != null) {
                                     vadiGharLoksankhyaEnteredDataList![
                                         editIndex] = data;
@@ -5836,12 +5940,14 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     vadiGharLoksankhyaEnteredDataList!
                                         .add(data);
                                   }
+
                                   Navigator.of(ctx).pop();
                                   clearFieldsVadiGharLoksankhya();
                                   if (onDataChanged != null) {
                                     onDataChanged();
                                   }
                                 },
+
                                 child: Text(
                                   "${Statics.getLabel('Submit')}",
                                   style: TextStyle(color: Colors.white),

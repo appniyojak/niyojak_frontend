@@ -719,17 +719,196 @@ class _MandalSurveyReportViewScreen1State
                         ),
                       ),
                     if (isVastiSearch == true) Divider(),
+                    // if (isVastiSearch == true)
+                    //   Container(
+                    //     child: SingleChildScrollView(
+                    //       scrollDirection: Axis.horizontal,
+                    //       child: DataTable(
+                    //         headingRowColor:
+                    //             MaterialStateProperty.all(Colors.teal.shade100),
+                    //         headingTextStyle: const TextStyle(
+                    //             fontSize: 15,
+                    //             color: Colors.black,
+                    //             fontWeight: FontWeight.bold),
+                    //         columns: [
+                    //           DataColumn(
+                    //               label: Text(
+                    //                   "${Statics.getLabel('sarvekshanSthiti')}")),
+                    //           DataColumn(
+                    //               label:
+                    //                   Text("${Statics.getLabel('taalukaa')}")),
+                    //           DataColumn(
+                    //               label: Text("${Statics.getLabel('Mandal')}")),
+                    //           DataColumn(
+                    //               label: Text("${Statics.getLabel('gaav')}")),
+                    //           DataColumn(label: Text('')),
+                    //         ],
+                    //         rows: [
+                    //           DataRow(
+                    //             color: MaterialStateProperty.all(
+                    //                 Colors.green.shade50),
+                    //             cells: [
+                    //               DataCell(Text(
+                    //                   "${Statics.getLabel('prathamikSurveyComplete')}")),
+                    //               DataCell(Text(
+                    //                   "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.nagarStep1CompleteCount ?? ""}")),
+                    //               DataCell(Text(
+                    //                   "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.mandalStep1CompleteCount ?? ""}")),
+                    //               DataCell(Text(
+                    //                   "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.vastiStep1CompleteCount ?? ""}")),
+                    //               DataCell(IconButton(
+                    //                 icon: Icon(Icons.remove_red_eye,
+                    //                     color: Colors.teal),
+                    //                 onPressed: () => showPopupList(
+                    //                     context,
+                    //                     talukaMandalSampurnaModel!
+                    //                         .talukamandalsarvekshanReportwithselectedlevel!
+                    //                         .vastiStep1CompleteNames!
+                    //                         .toString()),
+                    //               )),
+                    //             ],
+                    //           ),
+                    //           // DataRow(
+                    //           //   color: MaterialStateProperty.all(Colors.green.shade50),
+                    //           //   cells: [
+                    //           //     DataCell(Text("${Statics.getLabel('otherSuerveyComplete')}")),
+                    //           //     DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.nagarStep2CompleteCount ?? ""}")),
+                    //           //     DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.mandalStep1CompleteCount ?? ""}")),
+                    //           //     DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.vastiStep2CompleteCount ?? ""}")),
+                    //           //     DataCell(IconButton(
+                    //           //       icon: Icon(Icons.remove_red_eye, color: Colors.teal),
+                    //           //       onPressed: () => showPopupList(context,
+                    //           //           talukaMandalSampurnaModel!.talukamandalsarvekshanReportwithselectedlevel!.vastiStep2CompleteNames!.toString()),
+                    //           //     )),
+                    //           //   ],
+                    //           // ),
+                    //           DataRow(
+                    //             color: MaterialStateProperty.all(
+                    //                 Colors.green.shade50),
+                    //             cells: [
+                    //               DataCell(Text(
+                    //                   "${Statics.getLabel('vistrutSurveyComplete')}")),
+                    //               DataCell(Text(
+                    //                   "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.nagarStep3CompleteCount ?? ""}")),
+                    //               DataCell(Text(
+                    //                   "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.mandalStep3CompleteCount ?? ""}")),
+                    //               DataCell(Text(
+                    //                   "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.vastiStep3CompleteCount ?? ""}")),
+                    //               DataCell(IconButton(
+                    //                 icon: Icon(Icons.remove_red_eye,
+                    //                     color: Colors.teal),
+                    //                 onPressed: () => showPopupList(
+                    //                     context,
+                    //                     talukaMandalSampurnaModel!
+                    //                         .talukamandalsarvekshanReportwithselectedlevel!
+                    //                         .vastiStep3CompleteNames!
+                    //                         .toString()),
+                    //               )),
+                    //             ],
+                    //           ),
+                    //           DataRow(
+                    //             color: MaterialStateProperty.all(
+                    //                 Colors.orange.shade50),
+                    //             cells: [
+                    //               DataCell(Text(
+                    //                   "${Statics.getLabel('surveyStart')}")),
+                    //               DataCell(Text(
+                    //                   "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.nagarStepStartedCount ?? ""}")),
+                    //               DataCell(Text(
+                    //                   "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.mandalStepStartedCount ?? ""}")),
+                    //               DataCell(Text(
+                    //                   "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.vastiStepStartedCount ?? ""}")),
+                    //               DataCell(IconButton(
+                    //                 icon: Icon(Icons.remove_red_eye,
+                    //                     color: Colors.teal),
+                    //                 onPressed: () => showPopupList(
+                    //                     context,
+                    //                     talukaMandalSampurnaModel!
+                    //                         .talukamandalsarvekshanReportwithselectedlevel!
+                    //                         .vastiStepStartedNames!
+                    //                         .toString()),
+                    //               )),
+                    //             ],
+                    //           ),
+                    //           DataRow(
+                    //             color: MaterialStateProperty.all(
+                    //                 Colors.orange.shade50),
+                    //             cells: [
+                    //               DataCell(Text(
+                    //                   "${Statics.getLabel('surveyComplete')}")),
+                    //               DataCell(Text(
+                    //                   "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.nagarAllStepsCompleteCount ?? ""}")),
+                    //               DataCell(Text(
+                    //                   "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.mandalAllStepsCompleteCount ?? ""}")),
+                    //               DataCell(Text(
+                    //                   "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.vastiAllStepsCompleteCount ?? ""}")),
+                    //               DataCell(IconButton(
+                    //                 icon: Icon(Icons.remove_red_eye,
+                    //                     color: Colors.teal),
+                    //                 onPressed: () => showPopupList(
+                    //                     context,
+                    //                     talukaMandalSampurnaModel!
+                    //                         .talukamandalsarvekshanReportwithselectedlevel!
+                    //                         .vastiAllStepsCompleteNames!
+                    //                         .toString()),
+                    //               )),
+                    //             ],
+                    //           ),
+                    //           DataRow(
+                    //             color: MaterialStateProperty.all(
+                    //                 Colors.orange.shade50),
+                    //             cells: [
+                    //               DataCell(Text(
+                    //                   "${Statics.getLabel('surveyNotStarted')}")),
+                    //               DataCell(Text(
+                    //                   "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.nagarStepsNotstartedCount ?? ""}")),
+                    //               DataCell(Text(
+                    //                   "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.mandalStepsNotstartedCount ?? ""}")),
+                    //               DataCell(Text(
+                    //                   "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.vastiStepsNotstartedCount ?? ""}")),
+                    //               DataCell(IconButton(
+                    //                 icon: Icon(Icons.remove_red_eye,
+                    //                     color: Colors.teal),
+                    //                 onPressed: () => showPopupList(
+                    //                     context,
+                    //                     talukaMandalSampurnaModel!
+                    //                         .talukamandalsarvekshanReportwithselectedlevel!
+                    //                         .vastiStepsNotstartedNames!
+                    //                         .toString()),
+                    //               )),
+                    //             ],
+                    //           ),
+                    //           DataRow(
+                    //             color: MaterialStateProperty.all(
+                    //                 Colors.grey.shade200),
+                    //             cells: [
+                    //               DataCell(
+                    //                   Text("${Statics.getLabel('Total')}")),
+                    //               DataCell(Text(
+                    //                   "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.nagarcount ?? ""}")),
+                    //               DataCell(Text(
+                    //                   "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.mandalcount ?? ""}")),
+                    //               DataCell(Text(
+                    //                   "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.vasticount ?? ""}")),
+                    //               DataCell(Text("-")),
+                    //             ],
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ),
                     if (isVastiSearch == true)
                       Container(
                         child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: DataTable(
                             headingRowColor:
-                                MaterialStateProperty.all(Colors.teal.shade100),
-                            headingTextStyle: const TextStyle(
-                                fontSize: 15,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
+                                MaterialStateProperty.all(Colors.blueAccent),
+                            headingTextStyle: TextStyle(
+                              fontSize: 15,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                             columns: [
                               DataColumn(
                                   label: Text(
@@ -744,68 +923,6 @@ class _MandalSurveyReportViewScreen1State
                               DataColumn(label: Text('')),
                             ],
                             rows: [
-                              DataRow(
-                                color: MaterialStateProperty.all(
-                                    Colors.green.shade50),
-                                cells: [
-                                  DataCell(Text(
-                                      "${Statics.getLabel('prathamikSurveyComplete')}")),
-                                  DataCell(Text(
-                                      "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.nagarStep1CompleteCount ?? ""}")),
-                                  DataCell(Text(
-                                      "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.mandalStep1CompleteCount ?? ""}")),
-                                  DataCell(Text(
-                                      "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.vastiStep1CompleteCount ?? ""}")),
-                                  DataCell(IconButton(
-                                    icon: Icon(Icons.remove_red_eye,
-                                        color: Colors.teal),
-                                    onPressed: () => showPopupList(
-                                        context,
-                                        talukaMandalSampurnaModel!
-                                            .talukamandalsarvekshanReportwithselectedlevel!
-                                            .vastiStep1CompleteNames!
-                                            .toString()),
-                                  )),
-                                ],
-                              ),
-                              // DataRow(
-                              //   color: MaterialStateProperty.all(Colors.green.shade50),
-                              //   cells: [
-                              //     DataCell(Text("${Statics.getLabel('otherSuerveyComplete')}")),
-                              //     DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.nagarStep2CompleteCount ?? ""}")),
-                              //     DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.mandalStep1CompleteCount ?? ""}")),
-                              //     DataCell(Text("${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.vastiStep2CompleteCount ?? ""}")),
-                              //     DataCell(IconButton(
-                              //       icon: Icon(Icons.remove_red_eye, color: Colors.teal),
-                              //       onPressed: () => showPopupList(context,
-                              //           talukaMandalSampurnaModel!.talukamandalsarvekshanReportwithselectedlevel!.vastiStep2CompleteNames!.toString()),
-                              //     )),
-                              //   ],
-                              // ),
-                              DataRow(
-                                color: MaterialStateProperty.all(
-                                    Colors.green.shade50),
-                                cells: [
-                                  DataCell(Text(
-                                      "${Statics.getLabel('vistrutSurveyComplete')}")),
-                                  DataCell(Text(
-                                      "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.nagarStep3CompleteCount ?? ""}")),
-                                  DataCell(Text(
-                                      "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.mandalStep3CompleteCount ?? ""}")),
-                                  DataCell(Text(
-                                      "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.vastiStep3CompleteCount ?? ""}")),
-                                  DataCell(IconButton(
-                                    icon: Icon(Icons.remove_red_eye,
-                                        color: Colors.teal),
-                                    onPressed: () => showPopupList(
-                                        context,
-                                        talukaMandalSampurnaModel!
-                                            .talukamandalsarvekshanReportwithselectedlevel!
-                                            .vastiStep3CompleteNames!
-                                            .toString()),
-                                  )),
-                                ],
-                              ),
                               DataRow(
                                 color: MaterialStateProperty.all(
                                     Colors.orange.shade50),
@@ -893,6 +1010,122 @@ class _MandalSurveyReportViewScreen1State
                                   DataCell(Text("-")),
                                 ],
                               ),
+                              DataRow(
+                                color: MaterialStateProperty.all(Colors.white),
+                                cells: [
+                                  DataCell(Text("")),
+                                  DataCell(Text("")),
+                                  DataCell(Text("")),
+                                  DataCell(Text("")),
+                                  DataCell(Text("")),
+                                ],
+                              ),
+                              DataRow(
+                                color: MaterialStateProperty.all(
+                                    Colors.teal.shade100),
+                                cells: [
+                                  DataCell(
+                                    Container(
+                                      alignment: Alignment.center,
+                                      width: double
+                                          .infinity, // makes it span available width
+                                      child: Text(
+                                          "${Statics.getLabel('surveyStart')} ${Statics.getLabel('Status')}",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                              fontSize: 16)),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    Container(
+                                      alignment: Alignment.center,
+                                      width: double
+                                          .infinity, // makes it span available width
+                                      child: Text(
+                                          "${Statics.getLabel('taalukaa')}",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                              fontSize: 16)),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    Container(
+                                      alignment: Alignment.center,
+                                      width: double
+                                          .infinity, // makes it span available width
+                                      child: Text(
+                                          "${Statics.getLabel('Mandal')}",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                              fontSize: 16)),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    Container(
+                                      alignment: Alignment.center,
+                                      width: double
+                                          .infinity, // makes it span available width
+                                      child: Text("${Statics.getLabel('gaav')}",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                              fontSize: 16)),
+                                    ),
+                                  ),
+                                  DataCell.empty,
+                                ],
+                              ),
+                              DataRow(
+                                color: MaterialStateProperty.all(
+                                    Colors.green.shade50),
+                                cells: [
+                                  DataCell(Text(
+                                      "${Statics.getLabel('prathamikSurveyComplete')}")),
+                                  DataCell(Text(
+                                      "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.nagarStep1CompleteCount ?? ""}")),
+                                  DataCell(Text(
+                                      "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.mandalStep1CompleteCount ?? ""}")),
+                                  DataCell(Text(
+                                      "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.vastiStep1CompleteCount ?? ""}")),
+                                  DataCell(IconButton(
+                                    icon: Icon(Icons.remove_red_eye,
+                                        color: Colors.teal),
+                                    onPressed: () => showPopupList(
+                                        context,
+                                        talukaMandalSampurnaModel!
+                                            .talukamandalsarvekshanReportwithselectedlevel!
+                                            .vastiStep1CompleteNames!
+                                            .toString()),
+                                  )),
+                                ],
+                              ),
+                              DataRow(
+                                color: MaterialStateProperty.all(
+                                    Colors.green.shade50),
+                                cells: [
+                                  DataCell(Text(
+                                      "${Statics.getLabel('vistrutSurveyComplete')}")),
+                                  DataCell(Text(
+                                      "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.nagarStep3CompleteCount ?? ""}")),
+                                  DataCell(Text(
+                                      "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.mandalStep3CompleteCount ?? ""}")),
+                                  DataCell(Text(
+                                      "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.vastiStep3CompleteCount ?? ""}")),
+                                  DataCell(IconButton(
+                                    icon: Icon(Icons.remove_red_eye,
+                                        color: Colors.teal),
+                                    onPressed: () => showPopupList(
+                                        context,
+                                        talukaMandalSampurnaModel!
+                                            .talukamandalsarvekshanReportwithselectedlevel!
+                                            .vastiStep3CompleteNames!
+                                            .toString()),
+                                  )),
+                                ],
+                              ),
                             ],
                           ),
                         ),
@@ -903,7 +1136,10 @@ class _MandalSurveyReportViewScreen1State
                     commonExpansionTile(
                       title: 'MandalsurveuAbhiyanStithi',
                       children: [
-                        if (talukaMandalSampurnaModel != null)
+                        if (talukaMandalSampurnaModel != null &&
+                            talukaMandalSampurnaModel!
+                                    .talukamandalsarvekshanReportwithname !=
+                                null)
                           Container(
                             height: 500,
                             decoration: BoxDecoration(

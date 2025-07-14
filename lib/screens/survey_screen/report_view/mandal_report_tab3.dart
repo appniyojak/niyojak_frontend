@@ -187,6 +187,8 @@ class _MandalSurveyReportViewScreen3State
       _linkedVibhaagValue = null;
       _linkedBhaagValue = null;
       _linkedNagarValue = null;
+      _linkedmandalValue = null;
+      _linkedgraamValue = null;
       mahanagarId = '';
       selctedLevelName = "";
       selctedLevel = 'praant';
@@ -196,6 +198,8 @@ class _MandalSurveyReportViewScreen3State
       _linkedBhaag = null;
       _linkedNagar = null;
       _linkedvasti = null;
+      _linkedmandal = null;
+      _linkedgraam = null;
       isVastiSearch = false;
       selctedLevelName = '';
       _isExpanded = false;
@@ -689,7 +693,7 @@ class _MandalSurveyReportViewScreen3State
                       ],
                     ),
                     commonExpansionTile(
-                      title: 'mandalSarvekshanSankalan',
+                      title: 'graamSarvekshanSankalan',
                       children: [
                         SingleColumnRow(
                             txtString: Statics.getLabel('purviShakhaHoti'),

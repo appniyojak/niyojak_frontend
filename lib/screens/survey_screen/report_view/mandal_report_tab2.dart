@@ -610,21 +610,176 @@ class _MandalSurveyReportViewScreen2State
                   ),
                 ),
               if (isVastiSearch == true) Divider(),
+              // if (isVastiSearch == true)
+              //   Container(
+              //     child: SingleChildScrollView(
+              //       scrollDirection: Axis.horizontal,
+              //       child: DataTable(
+              //         headingRowColor:
+              //             MaterialStateProperty.all(Colors.teal.shade100),
+              //         headingTextStyle: const TextStyle(
+              //             fontSize: 15,
+              //             color: Colors.black,
+              //             fontWeight: FontWeight.bold),
+              //         columns: [
+              //           DataColumn(
+              //               label: Text(
+              //                   "${Statics.getLabel('sarvekshanSthiti')}")),
+              //           DataColumn(
+              //               label: Text("${Statics.getLabel('Mandal')}")),
+              //           DataColumn(label: Text("${Statics.getLabel('gaav')}")),
+              //           DataColumn(label: Text('')),
+              //         ],
+              //         rows: [
+              //           DataRow(
+              //             color:
+              //                 MaterialStateProperty.all(Colors.green.shade50),
+              //             cells: [
+              //               DataCell(Text(
+              //                   "${Statics.getLabel('prathamikSurveyComplete')}")),
+              //               DataCell(Text(
+              //                   "${data?.mandalVastisarvekshanReportwithname?.mandalStep1CompleteCount ?? ""}")),
+              //               DataCell(Text(
+              //                   "${data?.mandalVastisarvekshanReportwithname?.gramStep1CompleteCount ?? ""}")),
+              //               DataCell(IconButton(
+              //                 icon: Icon(Icons.remove_red_eye,
+              //                     color: Colors.teal),
+              //                 onPressed: () {
+              //                   showPopupList(
+              //                       context,
+              //                       data!.mandalVastisarvekshanReportwithname!
+              //                           .gramStep1CompleteNames!
+              //                           .toString());
+              //                 },
+              //               )),
+              //             ],
+              //           ),
+              //           DataRow(
+              //             color:
+              //                 MaterialStateProperty.all(Colors.green.shade50),
+              //             cells: [
+              //               DataCell(Text(
+              //                   "${Statics.getLabel('vistrutSurveyComplete')}")),
+              //               DataCell(Text(
+              //                   "${data?.mandalVastisarvekshanReportwithname?.mandalStep3CompleteCount ?? ""}")),
+              //               DataCell(Text(
+              //                   "${data?.mandalVastisarvekshanReportwithname?.gramStep3CompleteCount ?? ""}")),
+              //               DataCell(IconButton(
+              //                 icon: Icon(Icons.remove_red_eye,
+              //                     color: Colors.teal),
+              //                 onPressed: () {
+              //                   showPopupList(
+              //                       context,
+              //                       data!.mandalVastisarvekshanReportwithname!
+              //                           .gramStep3CompleteNames!
+              //                           .toString());
+              //                 },
+              //               )),
+              //             ],
+              //           ),
+              //           DataRow(
+              //             color:
+              //                 MaterialStateProperty.all(Colors.orange.shade50),
+              //             cells: [
+              //               DataCell(
+              //                   Text("${Statics.getLabel('surveyStart')}")),
+              //               DataCell(Text(
+              //                   "${data?.mandalVastisarvekshanReportwithname?.mandalStepStartedCount ?? ""}")),
+              //               DataCell(Text(
+              //                   "${data?.mandalVastisarvekshanReportwithname?.gramStepStartedCount ?? ""}")),
+              //               DataCell(IconButton(
+              //                 icon: Icon(Icons.remove_red_eye,
+              //                     color: Colors.teal),
+              //                 onPressed: () {
+              //                   showPopupList(
+              //                       context,
+              //                       data!.mandalVastisarvekshanReportwithname!
+              //                           .gramStepStartedNames!
+              //                           .toString());
+              //                 },
+              //               )),
+              //             ],
+              //           ),
+              //           DataRow(
+              //             color:
+              //                 MaterialStateProperty.all(Colors.orange.shade50),
+              //             cells: [
+              //               DataCell(
+              //                   Text("${Statics.getLabel('surveyComplete')}")),
+              //               DataCell(Text(
+              //                   "${data?.mandalVastisarvekshanReportwithname?.mandalAllStepsCompleteCount ?? ""}")),
+              //               DataCell(Text(
+              //                   "${data?.mandalVastisarvekshanReportwithname?.gramAllStepsCompleteCount ?? ""}")),
+              //               DataCell(IconButton(
+              //                 icon: Icon(Icons.remove_red_eye,
+              //                     color: Colors.teal),
+              //                 onPressed: () {
+              //                   showPopupList(
+              //                       context,
+              //                       data!.mandalVastisarvekshanReportwithname!
+              //                           .gramAllStepsCompleteNames!
+              //                           .toString());
+              //                 },
+              //               )),
+              //             ],
+              //           ),
+              //           DataRow(
+              //             color:
+              //                 MaterialStateProperty.all(Colors.orange.shade50),
+              //             cells: [
+              //               DataCell(Text(
+              //                   "${Statics.getLabel('surveyNotStarted')}")),
+              //               DataCell(Text(
+              //                   "${data?.mandalVastisarvekshanReportwithname?.mandalStepsNotstartedCount ?? ""}")),
+              //               DataCell(Text(
+              //                   "${data?.mandalVastisarvekshanReportwithname?.gramStepsNotstartedCount ?? ""}")),
+              //               DataCell(IconButton(
+              //                 icon: Icon(Icons.remove_red_eye,
+              //                     color: Colors.teal),
+              //                 onPressed: () {
+              //                   showPopupList(
+              //                       context,
+              //                       data!.mandalVastisarvekshanReportwithname!
+              //                           .gramStepsNotstartedNames!
+              //                           .toString());
+              //                 },
+              //               )),
+              //             ],
+              //           ),
+              //           DataRow(
+              //             color:
+              //                 MaterialStateProperty.all(Colors.grey.shade200),
+              //             cells: [
+              //               DataCell(Text("${Statics.getLabel('Total')}")),
+              //               DataCell(Text(
+              //                   "${data?.mandalVastisarvekshanReportwithname?.mandalcount ?? ""}")),
+              //               DataCell(Text(
+              //                   "${data?.mandalVastisarvekshanReportwithname?.gramcount ?? ""}")),
+              //               DataCell(Text("-")),
+              //             ],
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
               if (isVastiSearch == true)
                 Container(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: DataTable(
                       headingRowColor:
-                          MaterialStateProperty.all(Colors.teal.shade100),
-                      headingTextStyle: const TextStyle(
-                          fontSize: 15,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
+                          MaterialStateProperty.all(Colors.blueAccent),
+                      headingTextStyle: TextStyle(
+                        fontSize: 15,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                       columns: [
                         DataColumn(
                             label: Text(
                                 "${Statics.getLabel('sarvekshanSthiti')}")),
+                        DataColumn(
+                            label: Text("${Statics.getLabel('taalukaa')}")),
                         DataColumn(
                             label: Text("${Statics.getLabel('Mandal')}")),
                         DataColumn(label: Text("${Statics.getLabel('gaav')}")),
@@ -633,70 +788,24 @@ class _MandalSurveyReportViewScreen2State
                       rows: [
                         DataRow(
                           color:
-                              MaterialStateProperty.all(Colors.green.shade50),
-                          cells: [
-                            DataCell(Text(
-                                "${Statics.getLabel('prathamikSurveyComplete')}")),
-                            DataCell(Text(
-                                "${data?.mandalVastisarvekshanReportwithname?.mandalStep1CompleteCount ?? ""}")),
-                            DataCell(Text(
-                                "${data?.mandalVastisarvekshanReportwithname?.gramStep1CompleteCount ?? ""}")),
-                            DataCell(IconButton(
-                              icon: Icon(Icons.remove_red_eye,
-                                  color: Colors.teal),
-                              onPressed: () {
-                                showPopupList(
-                                    context,
-                                    data!.mandalVastisarvekshanReportwithname!
-                                        .gramStep1CompleteNames!
-                                        .toString());
-                              },
-                            )),
-                          ],
-                        ),
-                        DataRow(
-                          color:
-                              MaterialStateProperty.all(Colors.green.shade50),
-                          cells: [
-                            DataCell(Text(
-                                "${Statics.getLabel('vistrutSurveyComplete')}")),
-                            DataCell(Text(
-                                "${data?.mandalVastisarvekshanReportwithname?.mandalStep3CompleteCount ?? ""}")),
-                            DataCell(Text(
-                                "${data?.mandalVastisarvekshanReportwithname?.gramStep3CompleteCount ?? ""}")),
-                            DataCell(IconButton(
-                              icon: Icon(Icons.remove_red_eye,
-                                  color: Colors.teal),
-                              onPressed: () {
-                                showPopupList(
-                                    context,
-                                    data!.mandalVastisarvekshanReportwithname!
-                                        .gramStep3CompleteNames!
-                                        .toString());
-                              },
-                            )),
-                          ],
-                        ),
-                        DataRow(
-                          color:
                               MaterialStateProperty.all(Colors.orange.shade50),
                           cells: [
                             DataCell(
                                 Text("${Statics.getLabel('surveyStart')}")),
                             DataCell(Text(
-                                "${data?.mandalVastisarvekshanReportwithname?.mandalStepStartedCount ?? ""}")),
+                                "${data?.mandalVastisarvekshanReportwithname?.gramStepStartedCount ?? ""}")),
+                            DataCell(Text(
+                                "${data?.mandalVastisarvekshanReportwithname?.gramStepStartedCount ?? ""}")),
                             DataCell(Text(
                                 "${data?.mandalVastisarvekshanReportwithname?.gramStepStartedCount ?? ""}")),
                             DataCell(IconButton(
                               icon: Icon(Icons.remove_red_eye,
                                   color: Colors.teal),
-                              onPressed: () {
-                                showPopupList(
-                                    context,
-                                    data!.mandalVastisarvekshanReportwithname!
-                                        .gramStepStartedNames!
-                                        .toString());
-                              },
+                              onPressed: () => showPopupList(
+                                  context,
+                                  data!.mandalVastisarvekshanReportwithname!
+                                      .gramStepStartedNames!
+                                      .toString()),
                             )),
                           ],
                         ),
@@ -707,19 +816,19 @@ class _MandalSurveyReportViewScreen2State
                             DataCell(
                                 Text("${Statics.getLabel('surveyComplete')}")),
                             DataCell(Text(
-                                "${data?.mandalVastisarvekshanReportwithname?.mandalAllStepsCompleteCount ?? ""}")),
+                                "${data?.mandalVastisarvekshanReportwithname?.gramAllStepsCompleteCount ?? ""}")),
+                            DataCell(Text(
+                                "${data?.mandalVastisarvekshanReportwithname?.gramAllStepsCompleteCount ?? ""}")),
                             DataCell(Text(
                                 "${data?.mandalVastisarvekshanReportwithname?.gramAllStepsCompleteCount ?? ""}")),
                             DataCell(IconButton(
                               icon: Icon(Icons.remove_red_eye,
                                   color: Colors.teal),
-                              onPressed: () {
-                                showPopupList(
-                                    context,
-                                    data!.mandalVastisarvekshanReportwithname!
-                                        .gramAllStepsCompleteNames!
-                                        .toString());
-                              },
+                              onPressed: () => showPopupList(
+                                  context,
+                                  data!.mandalVastisarvekshanReportwithname!
+                                      .gramAllStepsCompleteNames!
+                                      .toString()),
                             )),
                           ],
                         ),
@@ -730,19 +839,19 @@ class _MandalSurveyReportViewScreen2State
                             DataCell(Text(
                                 "${Statics.getLabel('surveyNotStarted')}")),
                             DataCell(Text(
-                                "${data?.mandalVastisarvekshanReportwithname?.mandalStepsNotstartedCount ?? ""}")),
+                                "${data?.mandalVastisarvekshanReportwithname?.gramStepsNotstartedCount ?? ""}")),
+                            DataCell(Text(
+                                "${data?.mandalVastisarvekshanReportwithname?.gramStepsNotstartedCount ?? ""}")),
                             DataCell(Text(
                                 "${data?.mandalVastisarvekshanReportwithname?.gramStepsNotstartedCount ?? ""}")),
                             DataCell(IconButton(
                               icon: Icon(Icons.remove_red_eye,
                                   color: Colors.teal),
-                              onPressed: () {
-                                showPopupList(
-                                    context,
-                                    data!.mandalVastisarvekshanReportwithname!
-                                        .gramStepsNotstartedNames!
-                                        .toString());
-                              },
+                              onPressed: () => showPopupList(
+                                  context,
+                                  data!.mandalVastisarvekshanReportwithname!
+                                      .gramStepsNotstartedNames!
+                                      .toString()),
                             )),
                           ],
                         ),
@@ -752,10 +861,124 @@ class _MandalSurveyReportViewScreen2State
                           cells: [
                             DataCell(Text("${Statics.getLabel('Total')}")),
                             DataCell(Text(
-                                "${data?.mandalVastisarvekshanReportwithname?.mandalcount ?? ""}")),
+                                "${data?.mandalVastisarvekshanReportwithname?.gramcount ?? ""}")),
+                            DataCell(Text(
+                                "${data?.mandalVastisarvekshanReportwithname?.gramcount ?? ""}")),
                             DataCell(Text(
                                 "${data?.mandalVastisarvekshanReportwithname?.gramcount ?? ""}")),
                             DataCell(Text("-")),
+                          ],
+                        ),
+                        DataRow(
+                          color: MaterialStateProperty.all(Colors.white),
+                          cells: [
+                            DataCell(Text("")),
+                            DataCell(Text("")),
+                            DataCell(Text("")),
+                            DataCell(Text("")),
+                            DataCell(Text("")),
+                          ],
+                        ),
+                        DataRow(
+                          color:
+                              MaterialStateProperty.all(Colors.teal.shade100),
+                          cells: [
+                            DataCell(
+                              Container(
+                                alignment: Alignment.center,
+                                width: double
+                                    .infinity, // makes it span available width
+                                child: Text(
+                                    "${Statics.getLabel('surveyStart')} ${Statics.getLabel('Status')}",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                        fontSize: 16)),
+                              ),
+                            ),
+                            DataCell(
+                              Container(
+                                alignment: Alignment.center,
+                                width: double
+                                    .infinity, // makes it span available width
+                                child: Text("${Statics.getLabel('taalukaa')}",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                        fontSize: 16)),
+                              ),
+                            ),
+                            DataCell(
+                              Container(
+                                alignment: Alignment.center,
+                                width: double
+                                    .infinity, // makes it span available width
+                                child: Text("${Statics.getLabel('Mandal')}",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                        fontSize: 16)),
+                              ),
+                            ),
+                            DataCell(
+                              Container(
+                                alignment: Alignment.center,
+                                width: double
+                                    .infinity, // makes it span available width
+                                child: Text("${Statics.getLabel('gaav')}",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                        fontSize: 16)),
+                              ),
+                            ),
+                            DataCell.empty,
+                          ],
+                        ),
+                        DataRow(
+                          color:
+                              MaterialStateProperty.all(Colors.green.shade50),
+                          cells: [
+                            DataCell(Text(
+                                "${Statics.getLabel('prathamikSurveyComplete')}")),
+                            DataCell(Text(
+                                "${data?.mandalVastisarvekshanReportwithname?.gramStep1CompleteCount ?? ""}")),
+                            DataCell(Text(
+                                "${data?.mandalVastisarvekshanReportwithname?.gramStep1CompleteCount ?? ""}")),
+                            DataCell(Text(
+                                "${data?.mandalVastisarvekshanReportwithname?.gramStep1CompleteCount ?? ""}")),
+                            DataCell(IconButton(
+                              icon: Icon(Icons.remove_red_eye,
+                                  color: Colors.teal),
+                              onPressed: () => showPopupList(
+                                  context,
+                                  data!.mandalVastisarvekshanReportwithname!
+                                      .gramStep1CompleteNames!
+                                      .toString()),
+                            )),
+                          ],
+                        ),
+                        DataRow(
+                          color:
+                              MaterialStateProperty.all(Colors.green.shade50),
+                          cells: [
+                            DataCell(Text(
+                                "${Statics.getLabel('vistrutSurveyComplete')}")),
+                            DataCell(Text(
+                                "${data?.mandalVastisarvekshanReportwithname?.gramStep3CompleteCount ?? ""}")),
+                            DataCell(Text(
+                                "${data?.mandalVastisarvekshanReportwithname?.gramStep3CompleteCount ?? ""}")),
+                            DataCell(Text(
+                                "${data?.mandalVastisarvekshanReportwithname?.gramStep3CompleteCount ?? ""}")),
+                            DataCell(IconButton(
+                              icon: Icon(Icons.remove_red_eye,
+                                  color: Colors.teal),
+                              onPressed: () => showPopupList(
+                                  context,
+                                  data!.mandalVastisarvekshanReportwithname!
+                                      .gramStep3CompleteNames!
+                                      .toString()),
+                            )),
                           ],
                         ),
                       ],

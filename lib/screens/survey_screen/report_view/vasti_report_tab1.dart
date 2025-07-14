@@ -2547,20 +2547,13 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                     commonExpansionTile(
                       title: 'UpsanaSthal',
                       children: [
-                        Container(
-                          height: 500,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey.shade300),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                if (data != null && data!.upasanaSthal != null)
-                                  ..._buildGroupedTables(
-                                      data!.upasanaSthal!, context)
-                              ],
-                            ),
+                        SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              if (data != null && data!.upasanaSthal != null)
+                                ..._buildGroupedTables(
+                                    data!.upasanaSthal!, context)
+                            ],
                           ),
                         ),
                       ],
@@ -4611,7 +4604,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
             Padding(
               padding: containerPadding,
               child: Text(
-                '${Statics.getLabel('SelectFrequency')}: ${entry.key}',
+                '${Statics.getLabel('SelectFrequency')} : ${entry.key == "" ? Statics.getLabel('NotSelected') : entry.key}',
                 style: TextStyle(
                   fontSize: headingFontSize,
                   fontWeight: FontWeight.bold,

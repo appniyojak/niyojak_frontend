@@ -3376,69 +3376,72 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               child: Center(
                                 child: SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
-                                  child: DataTable(
-                                    showCheckboxColumn: false,
-                                    headingRowColor: MaterialStatePropertyAll(
-                                        Colors.purple.shade50),
-                                    columnSpacing: 1,
-                                    headingTextStyle: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black87),
-                                    columns: [
-                                      DataColumn(
-                                          label: Text(
-                                        "${Statics.getLabel('onlyBhasha')}",
-                                      )),
-                                      DataColumn(
-                                          label: Align(
-                                        alignment: Alignment.centerRight,
-                                        child: Text(
-                                          "${Statics.getLabel('avgPersent')}",
-                                        ),
-                                      )),
-                                    ],
-                                    rows: enteredVividhBhashaBolnareDataList
-                                        .asMap()
-                                        .entries
-                                        .where((entry) =>
-                                            entry.value.isactive == 1)
-                                        .map((entry) {
-                                      int index = entry.key;
-                                      var data = entry.value;
-                                      bool isSelected =
-                                          selectedVividhBhashaBolnarerIdRowIndex ==
-                                              index;
-                                      return DataRow(
-                                          selected: isSelected,
-                                          color: MaterialStateProperty
-                                              .resolveWith<Color?>(
-                                            (Set<MaterialState> states) {
-                                              if (isSelected)
-                                                return Colors.yellow.shade100;
-                                              return null;
-                                            },
+                                  child: SizedBox(
+                                    width: 220,
+                                    child: DataTable(
+                                      showCheckboxColumn: false,
+                                      headingRowColor: MaterialStatePropertyAll(
+                                          Colors.purple.shade50),
+                                      columnSpacing: 1,
+                                      headingTextStyle: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black87),
+                                      columns: [
+                                        DataColumn(
+                                            label: Text(
+                                          "${Statics.getLabel('onlyBhasha')}",
+                                        )),
+                                        DataColumn(
+                                            label: Center(
+                                          child: Text(
+                                            "${Statics.getLabel('avgPersent')}",
                                           ),
-                                          onSelectChanged: (bool? selected) {
-                                            if (selected != null && selected) {
-                                              setState(() {
-                                                selectedVividhBhashaBolnarerIdRowIndex =
-                                                    index;
-                                              });
-                                            }
-                                          },
-                                          cells: [
-                                            DataCell(Text(data.otherbhaasha !=
-                                                    ""
-                                                ? "${data.selectedDropdownValueName} - ${data.otherbhaasha}"
-                                                : data.selectedDropdownValueName ??
-                                                    "")),
-                                            DataCell(Align(
-                                                alignment:
-                                                    Alignment.centerRight,
-                                                child:
-                                                    Text(data.andaje ?? ""))),
-                                          ]);
-                                    }).toList(),
+                                        )),
+                                      ],
+                                      rows: enteredVividhBhashaBolnareDataList
+                                          .asMap()
+                                          .entries
+                                          .where((entry) =>
+                                              entry.value.isactive == 1)
+                                          .map((entry) {
+                                        int index = entry.key;
+                                        var data = entry.value;
+                                        bool isSelected =
+                                            selectedVividhBhashaBolnarerIdRowIndex ==
+                                                index;
+                                        return DataRow(
+                                            selected: isSelected,
+                                            color: MaterialStateProperty
+                                                .resolveWith<Color?>(
+                                              (Set<MaterialState> states) {
+                                                if (isSelected)
+                                                  return Colors.yellow.shade100;
+                                                return null;
+                                              },
+                                            ),
+                                            onSelectChanged: (bool? selected) {
+                                              if (selected != null &&
+                                                  selected) {
+                                                setState(() {
+                                                  selectedVividhBhashaBolnarerIdRowIndex =
+                                                      index;
+                                                });
+                                              }
+                                            },
+                                            cells: [
+                                              DataCell(Text(data.otherbhaasha !=
+                                                      ""
+                                                  ? "${data.selectedDropdownValueName} - ${data.otherbhaasha}"
+                                                  : data.selectedDropdownValueName ??
+                                                      "")),
+                                              DataCell(Align(
+                                                  alignment:
+                                                      Alignment.centerRight,
+                                                  child:
+                                                      Text(data.andaje ?? ""))),
+                                            ]);
+                                      }).toList(),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -7978,7 +7981,130 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8)),
                           ),
+                          // onPressed: () {
+                          //   if (selectedKontyaPraantache?.isOther == 1 &&
+                          //       anyaKontyaPrantacheNameController.text == "") {
+                          //     Statics.showToast(
+                          //         "${Statics.getLabel('otherInfoValidation')}");
+                          //   } else {
+                          //     final item = VastisarKonatyaprantache(
+                          //       pkid: pkIdKontyaPrantache ?? 0,
+                          //       vastiid: int.parse(selctedLevelId!),
+                          //       praantid: KontyaPraantacheId,
+                          //       andaje:
+                          //           loksankhyaAveragePersentCount.text.trim(),
+                          //       anyaPraantName:
+                          //           anyaKontyaPrantacheNameController.text
+                          //               .trim(),
+                          //       isactive: isActiveKontyaPraantache,
+                          //       selectedDropdownValueName: KontyaPraantacheName,
+                          //     );
+                          //     if (editIndex != null) {
+                          //       enteredKontyaPraantacheDataList[editIndex] =
+                          //           item;
+                          //     } else {
+                          //       enteredKontyaPraantacheDataList.add(item);
+                          //     }
+                          //     clearFields5();
+                          //     setState(() {});
+                          //     Navigator.of(ctx).pop();
+                          //     if (onDataChanged != null) onDataChanged();
+                          //   }
+                          // },
+                          // onPressed: () {
+                          //   String input =
+                          //       loksankhyaAveragePersentCount.text.trim();
+                          //
+                          //   // Check if input is a valid number between 0-100
+                          //   if (!RegExp(r'^\d+$')
+                          //           .hasMatch(input) || // only digits
+                          //       int.tryParse(input) == null || // valid integer
+                          //       int.parse(input) < 0 ||
+                          //       int.parse(input) > 100) {
+                          //     Statics.showToast(
+                          //         "${Statics.getLabel('persentValidation')}"); // Your localized label
+                          //     return;
+                          //   }
+                          //
+                          //   if (selectedKontyaPraantache?.isOther == 1 &&
+                          //       anyaKontyaPrantacheNameController.text == "") {
+                          //     Statics.showToast(
+                          //         "${Statics.getLabel('otherInfoValidation')}");
+                          //   } else {
+                          //     final item = VastisarKonatyaprantache(
+                          //       pkid: pkIdKontyaPrantache ?? 0,
+                          //       vastiid: int.parse(selctedLevelId!),
+                          //       praantid: KontyaPraantacheId,
+                          //       andaje: input,
+                          //       anyaPraantName:
+                          //           anyaKontyaPrantacheNameController.text
+                          //               .trim(),
+                          //       isactive: isActiveKontyaPraantache,
+                          //       selectedDropdownValueName: KontyaPraantacheName,
+                          //     );
+                          //     if (editIndex != null) {
+                          //       enteredKontyaPraantacheDataList[editIndex] =
+                          //           item;
+                          //     } else {
+                          //       enteredKontyaPraantacheDataList.add(item);
+                          //     }
+                          //     clearFields5();
+                          //     setState(() {});
+                          //     Navigator.of(ctx).pop();
+                          //     if (onDataChanged != null) onDataChanged();
+                          //   }
+                          // },
                           onPressed: () {
+                            String input =
+                                loksankhyaAveragePersentCount.text.trim();
+
+                            // Check if input is a valid number between 0-100
+                            if (!RegExp(r'^\d+$')
+                                    .hasMatch(input) || // only digits
+                                int.tryParse(input) == null || // valid integer
+                                int.parse(input) < 0 ||
+                                int.parse(input) > 100) {
+                              Statics.showToast(
+                                  "${Statics.getLabel('persentValidation')}");
+                              return;
+                            }
+
+                            int newValue = int.parse(input);
+
+                            // Calculate total of andaje where isactive == 1
+                            int total = 0;
+                            for (int i = 0;
+                                i < enteredKontyaPraantacheDataList.length;
+                                i++) {
+                              if (enteredKontyaPraantacheDataList[i].isactive ==
+                                  1) {
+                                total += int.tryParse(
+                                        enteredKontyaPraantacheDataList[i]
+                                            .andaje!) ??
+                                    0;
+                              }
+                            }
+
+                            // If editing, subtract old value before adding new one
+                            if (editIndex != null &&
+                                enteredKontyaPraantacheDataList[editIndex]
+                                        .isactive ==
+                                    1) {
+                              total -= int.tryParse(
+                                      enteredKontyaPraantacheDataList[editIndex]
+                                          .andaje!) ??
+                                  0;
+                            }
+
+                            total += newValue;
+
+                            // Check if total exceeds 100
+                            if (total > 100) {
+                              Statics.showToast(
+                                  "${Statics.getLabel('notMoreThan100')}");
+                              return;
+                            }
+
                             if (selectedKontyaPraantache?.isOther == 1 &&
                                 anyaKontyaPrantacheNameController.text == "") {
                               Statics.showToast(
@@ -7988,8 +8114,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 pkid: pkIdKontyaPrantache ?? 0,
                                 vastiid: int.parse(selctedLevelId!),
                                 praantid: KontyaPraantacheId,
-                                andaje:
-                                    loksankhyaAveragePersentCount.text.trim(),
+                                andaje: input,
                                 anyaPraantName:
                                     anyaKontyaPrantacheNameController.text
                                         .trim(),
@@ -8008,6 +8133,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               if (onDataChanged != null) onDataChanged();
                             }
                           },
+
                           child: Text("${Statics.getLabel('Submit')}",
                               style: TextStyle(color: Colors.white)),
                         ),
