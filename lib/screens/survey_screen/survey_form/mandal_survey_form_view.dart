@@ -1393,8 +1393,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text:
-                                      "${Statics.getLabel('vadipadyacheInfo')}",
+                                  text: '${Statics.getLabel('vadipadyacheInfo')}',
+
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
@@ -1402,7 +1402,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   ),
                                 ),
                                 TextSpan(
-                                  text: "*",
+                                  text: " *",
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,

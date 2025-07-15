@@ -1515,6 +1515,8 @@ Map<String, String> resEnglish = {
   'anyaVividhKshetra': 'Anya Vividh Kshetra Karya Mahiti',
   'mumbaikarMandal': 'Gavatil Mumbaikar Mandal',
   'NotSelected': "Not Selected",
+  'vadipadyacheInfo': 'Vadi/Padya Info',
+  'vastiLabel': "Vasti",
 };
 
 Map<String, String> resMarathi = {
@@ -2137,8 +2139,8 @@ Map<String, String> resMarathi = {
   'satsangKendra': 'विविध संप्रदाय व आध्यात्मिक सत्संग केंद्र',
   'vasahatSamparkStithi': 'वसाहत संपर्क स्थिती',
   'MandalsurveuAbhiyanStithi': 'मंडल सर्वेक्षण अभियान स्थिती',
-  'sajareHonareSan': 'वस्तीत साजरे होणारे महत्वाचे सण/ उत्सव',
-  'GavatsajareHonareSan': 'गावात साजरे होणारे महत्वाचे सण/ उत्सव',
+  'sajareHonareSan': 'वस्तीत साजरे होणारे महत्वाचे\nसण/ उत्सव',
+  'GavatsajareHonareSan': 'गावात साजरे होणारे महत्वाचे\nसण/ उत्सव',
   'sajareHonareKaryakram': 'वस्तीत साजरे होणारे महत्वाचे सामाजिक कार्यक्रम',
   'GavatHonareKaryakram': 'गावात साजरे होणारे महत्वाचे सामाजिक कार्यक्रम',
   'gatividhiUpakraam': 'गतिविधी उपक्रम स्थिती',
@@ -2795,9 +2797,9 @@ Map<String, String> resMarathi = {
   'onlyBhasha': 'भाषा',
   'samparkSthiti': 'संपर्क स्थिती',
   'completeAll': '(संपूर्ण एकूण)',
-  'vastitiHonareSanUtsav': 'वस्तीत साजर होणारे\nमहत्वाचे सण/ उत्सव',
+  'vastitiHonareSanUtsav': 'वस्तीत साजर होणारे महत्वाचे\nसण/ उत्सव',
   'vastitiHonareSamajikKaryaKram':
-      'वस्तीत साजर होणारे\nमहत्वाचे सामाजिक कार्यक्रम',
+      'वस्तीत साजर होणारे महत्वाचे \nसामाजिक कार्यक्रम',
   'kendrsSankhya': 'केंद्र संख्या',
   'hospitalCount': 'रुग्णालय संख्या',
   'school': 'शाळा',
@@ -3039,6 +3041,8 @@ Map<String, String> resMarathi = {
   'anyaVividhKshetra': 'अन्य विविध क्षेत्र कार्य माहिती',
   'mumbaikarMandal': 'गावातील मुंबईकर मंडळ',
   'NotSelected': "निवडले नाही",
+  'vadipadyacheInfo': 'वाडी/पाड्याचे माहिती',
+  'vastiLabel': "वस्ती",
 };
 
 Map<String, String> resHindi = {
@@ -3666,8 +3670,8 @@ Map<String, String> resHindi = {
   'satsangKendra': 'विविध संप्रदाय व आध्यात्मिक सत्संग केंद्र',
   'vasahatSamparkStithi': 'वसाहत संपर्क स्थिती',
   'MandalsurveuAbhiyanStithi': 'मंडल सर्वेक्षण अभियान स्थिती',
-  'sajareHonareSan': 'वस्तीत साजरे होणारे महत्वाचे सण/ उत्सव',
-  'GavatsajareHonareSan': 'गावात साजरे होणारे महत्वाचे सण/ उत्सव',
+  'sajareHonareSan': 'वस्तीत साजरे होणारे महत्वाचे\nसण/ उत्सव',
+  'GavatsajareHonareSan': 'गावात साजरे होणारे महत्वाचे\n सण/ उत्सव',
   'sajareHonareKaryakram': 'वस्तीत साजरे होणारे महत्वाचे सामाजिक कार्यक्रम',
   'GavatHonareKaryakram': 'गावात साजरे होणारे महत्वाचे सामाजिक कार्यक्रम',
   'gatividhiUpakraam': 'गतिविधी उपक्रम स्थिती',
@@ -4566,4 +4570,6 @@ Map<String, String> resHindi = {
   'anyaVividhKshetra': 'अन्य विविध क्षेत्र कार्य माहिती',
   'mumbaikarMandal': 'गावातील मुंबईकर मंडळ',
   'NotSelected': "चयनित नहीं",
+  'vadipadyacheInfo': 'वाडी/पाड्याचे जानकारी',
+  'vastiLabel': "बस्ती",
 };

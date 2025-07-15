@@ -31,14 +31,14 @@ import '../providers/bals.dart';
 import './database_helper.dart';
 
 ///Production
-// const String baseUrl = 'http://114.79.135.131:8014';
-// const String baseUrlAPI =
-//     'http://114.79.135.131:8014/WCFServices/NiyojakProdMobileApp.svc';
+const String baseUrl = 'http://114.79.135.131:8014';
+const String baseUrlAPI =
+    'http://114.79.135.131:8014/WCFServices/NiyojakProdMobileApp.svc';
 
 // Development
-const String baseUrl = 'http://108.181.165.29:8027';
-const String baseUrlAPI =
-    'http://108.181.165.29:8027/WCFServices/NiyojakProdMobileApp.svc';
+// const String baseUrl = 'http://108.181.165.29:8027';
+// const String baseUrlAPI =
+//     'http://108.181.165.29:8027/WCFServices/NiyojakProdMobileApp.svc';
 // ============//============================================================================
 
 const String urlCheckLoginDate = baseUrlAPI + '/checklogoutdate';
@@ -429,15 +429,33 @@ List<SankalpByAadhaarBAL> tgLstSankalpByAadhaarData = [];
 List<BhaugolikVistaarBAL> tgLstBhaugolikVistaar = [];
 // List<BhaugolikVistaarBAL> tgLstLastMonthBhaugolikVistaar = [];
 
+// String getLabel(String key) {
+//   if (userDetails['languagePreference'] == 'English')
+//     return resEnglish[key].toString();
+//   if (userDetails['languagePreference'] == 'Marathi')
+//     return resMarathi[key].toString();
+//   if (userDetails['languagePreference'] == 'Hindi')
+//     return resHindi[key].toString();
+//   return resMarathi[key].toString();
+// }
+
 String getLabel(String key) {
-  if (userDetails['languagePreference'] == 'English')
-    return resEnglish[key].toString();
-  if (userDetails['languagePreference'] == 'Marathi')
-    return resMarathi[key].toString();
-  if (userDetails['languagePreference'] == 'Hindi')
-    return resHindi[key].toString();
-  return resMarathi[key].toString();
+  String language = userDetails['languagePreference'];
+
+  if (language == 'English') {
+    return resEnglish[key]?.toString() ?? '';
+  }
+  if (language == 'Marathi') {
+    return resMarathi[key]?.toString() ?? '';
+  }
+  if (language == 'Hindi') {
+    return resHindi[key]?.toString() ?? '';
+  }
+
+  // Default to Marathi if language not matched
+  return resMarathi[key]?.toString() ?? '';
 }
+
 
 Size getDeviceSize(BuildContext context) {
   return MediaQuery.of(
