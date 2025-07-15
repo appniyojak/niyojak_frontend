@@ -1514,6 +1514,7 @@ Map<String, String> resEnglish = {
   'graamSarvekshanSankalan': 'Graam Survekshan Sankalan',
   'anyaVividhKshetra': 'Anya Vividh Kshetra Karya Mahiti',
   'mumbaikarMandal': 'Gavatil Mumbaikar Mandal',
+  'NotSelected': "Not Selected",
 };
 
 Map<String, String> resMarathi = {
@@ -3037,6 +3038,7 @@ Map<String, String> resMarathi = {
   'graamSarvekshanSankalan': 'ग्राम  सर्वेक्षण संकलन',
   'anyaVividhKshetra': 'अन्य विविध क्षेत्र कार्य माहिती',
   'mumbaikarMandal': 'गावातील मुंबईकर मंडळ',
+  'NotSelected': "निवडले नाही",
 };
 
 Map<String, String> resHindi = {
@@ -4563,4 +4565,5 @@ Map<String, String> resHindi = {
   'graamSarvekshanSankalan': 'ग्राम सर्वेक्षण संकलन',
   'anyaVividhKshetra': 'अन्य विविध क्षेत्र कार्य माहिती',
   'mumbaikarMandal': 'गावातील मुंबईकर मंडळ',
+  'NotSelected': "चयनित नहीं",
 };
