@@ -2031,23 +2031,27 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                     width:
                                         MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
-                                        child: Text(
-                                      "${Statics.getLabel('shreni')}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 17),
-                                    )),
+                                      child: Text(
+                                        "${Statics.getLabel('shreni')}",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 17,
+                                            color: Colors.purpleAccent),
+                                      ),
+                                    ),
                                   ),
                                   Container(
                                     width:
                                         MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
-                                        child: Text(
-                                      "${Statics.getLabel('count')}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 17),
-                                    )),
+                                      child: Text(
+                                        "${Statics.getLabel('count')}",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 17,
+                                            color: Colors.purpleAccent),
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),

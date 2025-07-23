@@ -959,16 +959,18 @@ class _MandalSurveyReportViewScreen1State
                                       "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.mandalAllStepsCompleteCount ?? ""}")),
                                   DataCell(Text(
                                       "${talukaMandalSampurnaModel?.talukamandalsarvekshanReportwithselectedlevel?.vastiAllStepsCompleteCount ?? ""}")),
-                                  DataCell(IconButton(
-                                    icon: Icon(Icons.remove_red_eye,
-                                        color: Colors.teal),
-                                    onPressed: () => showPopupList(
-                                        context,
-                                        talukaMandalSampurnaModel!
-                                            .talukamandalsarvekshanReportwithselectedlevel!
-                                            .vastiAllStepsCompleteNames!
-                                            .toString()),
-                                  )),
+                                  DataCell(
+                                    IconButton(
+                                      icon: Icon(Icons.remove_red_eye,
+                                          color: Colors.teal),
+                                      onPressed: () => showPopupList(
+                                          context,
+                                          talukaMandalSampurnaModel!
+                                              .talukamandalsarvekshanReportwithselectedlevel!
+                                              .vastiAllStepsCompleteNames!
+                                              .toString()),
+                                    ),
+                                  ),
                                 ],
                               ),
                               DataRow(
