@@ -1180,10 +1180,10 @@ class _MandalSurveyReportViewScreen1State
                                       SingleChildScrollView(
                                         scrollDirection: Axis.horizontal,
                                         child: Container(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.9,
+                                          // width: MediaQuery.of(context)
+                                          //         .size
+                                          //         .width *
+                                          //     0.9,
                                           child: DataTable(
                                             headingRowColor:
                                                 MaterialStateProperty.all(Colors
