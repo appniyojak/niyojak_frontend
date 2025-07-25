@@ -1517,6 +1517,7 @@ Map<String, String> resEnglish = {
   'NotSelected': "Not Selected",
   'vadipadyacheInfo': 'Vadi/Padya Info',
   'vastiLabel': "Vasti",
+  'utsavLable': "उत्सव",
 };
 
 Map<String, String> resMarathi = {
@@ -3043,6 +3044,7 @@ Map<String, String> resMarathi = {
   'NotSelected': "निवडले नाही",
   'vadipadyacheInfo': 'वाडी/पाड्याचे माहिती',
   'vastiLabel': "वस्ती",
+  'utsavLable': "उत्सव",
 };
 
 Map<String, String> resHindi = {
@@ -4572,4 +4574,5 @@ Map<String, String> resHindi = {
   'NotSelected': "चयनित नहीं",
   'vadipadyacheInfo': 'वाडी/पाड्याचे जानकारी',
   'vastiLabel': "बस्ती",
+  'utsavLable': "उत्सव",
 };

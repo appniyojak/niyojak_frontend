@@ -76,6 +76,7 @@ import './screens/swayamsevak_search.dart';
 import './widgets/shaakhaa_pat.dart';
 import 'firebase_options.dart';
 import 'screens/forget_password.dart';
+import 'screens/shatabdi_vrutta_sankalan/vijayadashami/vijayadashami_form_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -322,11 +323,12 @@ class NiyojakAppState extends State<NiyojakApp> {
         CreateNotificationView.routeName: (ctx) => CreateNotificationView(),
         UpdateMasterDataScreen.routeName: (ctx) => UpdateMasterDataScreen(),
         VastiSurveyFormScreen.routeName: (ctx) => VastiSurveyFormScreen(),
-        VastiSurveyReportTab1.routeName: (ctx) =>VastiSurveyReportTab1(),
+        VastiSurveyReportTab1.routeName: (ctx) => VastiSurveyReportTab1(),
         VastiSurveyReportTab2.routeName: (ctx) => VastiSurveyReportTab2(),
         MandalSurveyFormScreen.routeName: (ctx) => MandalSurveyFormScreen(),
         MandalSurveyReportScreen.routeName: (ctx) => MandalSurveyReportScreen(),
         VastiSurveyReportScreen.routeName: (ctx) => VastiSurveyReportScreen(),
+        VijayadashamiFormView.routeName: (ctx) => VijayadashamiFormView(),
         SearchSankalpScreen.routeName: (ctx) =>
             ChangeNotifierProvider<SankalpScreenProvider>(
                 create: (context) => SankalpScreenProvider(),

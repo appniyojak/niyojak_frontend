@@ -20,6 +20,7 @@ import '../screens/search_shaakhaa.dart';
 import '../screens/search_soochi_screen.dart';
 import '../screens/search_swayamsevak_transfer.dart';
 import '../screens/sewa_vasti_list.dart';
+import '../screens/shatabdi_vrutta_sankalan/vijayadashami/vijayadashami_form_view.dart';
 import '../screens/survey_screen/mandal_reports_tabs.dart';
 import '../screens/survey_screen/survey_form/mandal_survey_form_view.dart';
 import '../screens/survey_screen/survey_form/vasti_survey_form_view.dart';
@@ -232,6 +233,19 @@ class _AppDrawerState extends State<AppDrawer> {
                 ),
                 onTap: () {
                   Navigator.of(context).pushReplacementNamed(AbhiyanScreen.routeName);
+                },
+              ),
+            Divider(),
+            if (initialData != null)
+              ListTile(
+                dense: true,
+                leading: Icon(Icons.app_registration),
+                title: Text(
+                  "${Statics.getLabel('utsavLable')}",
+                  style: TextStyle(fontSize: 18),
+                ),
+                onTap: () {
+                  Navigator.of(context).pushReplacementNamed(VijayadashamiFormView.routeName);
                 },
               ),
             Divider(),
