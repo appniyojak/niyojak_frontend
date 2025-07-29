@@ -1529,8 +1529,10 @@ Map<String, String> resEnglish = {
   'sanchalan': "संचलन",
   'sanchalanSadandaZalKa': "संचलन सदण्ड झालं का ?",
   'sanchalanGhoshVadanZalKa': "संचलानत घोष वादन झालं का ?",
-  'ganveshatPresentCount': "गणवेषात उपस्थित एकूण ( संचलनात उपस्थित धरून)",
+  'ganveshatPresentCount': "गणवेषात उपस्थित एकूण",
   'otherSwayamsewakPresentCount': "अन्य उपस्थित स्वयंसेवक",
+  'shatabdiVarshaVruttaSankalan': "शताब्दी वर्ष वृत्त संकलन",
+  'gruhSamparkAbhiyaan': "गृह संपर्क अभियान",
 };
 
 Map<String, String> resMarathi = {
@@ -3069,8 +3071,10 @@ Map<String, String> resMarathi = {
   'sanchalan': "संचलन",
   'sanchalanSadandaZalKa': "संचलन सदण्ड झालं का ?",
   'sanchalanGhoshVadanZalKa': "संचलानत घोष वादन झालं का ?",
-  'ganveshatPresentCount': "गणवेषात उपस्थित एकूण ( संचलनात उपस्थित धरून)",
+  'ganveshatPresentCount': "गणवेषात उपस्थित एकूण",
   'otherSwayamsewakPresentCount': "अन्य उपस्थित स्वयंसेवक",
+  'shatabdiVarshaVruttaSankalan': "शताब्दी वर्ष वृत्त संकलन",
+  'gruhSamparkAbhiyaan': "गृह संपर्क अभियान",
 };
 
 Map<String, String> resHindi = {
@@ -4612,6 +4616,8 @@ Map<String, String> resHindi = {
   'sanchalan': "संचलन",
   'sanchalanSadandaZalKa': "संचलन सदण्ड झालं का ?",
   'sanchalanGhoshVadanZalKa': "संचलानत घोष वादन झालं का ?",
-  'ganveshatPresentCount': "गणवेषात उपस्थित एकूण ( संचलनात उपस्थित धरून)",
+  'ganveshatPresentCount': "गणवेषात उपस्थित एकूण",
   'otherSwayamsewakPresentCount': "अन्य उपस्थित स्वयंसेवक",
+  'shatabdiVarshaVruttaSankalan': "शताब्दी वर्ष वृत्त संकलन",
+  'gruhSamparkAbhiyaan': "गृह संपर्क अभियान",
 };

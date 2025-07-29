@@ -26,6 +26,7 @@ import 'package:niyojak_prod/screens/edit_vishesh_vyakti_shod.dart';
 import 'package:niyojak_prod/screens/nirikshan_baithak_vrutta.dart';
 import 'package:niyojak_prod/screens/sankalit_data_name.dart';
 import 'package:niyojak_prod/screens/search_sankalp_screen.dart';
+import 'package:niyojak_prod/screens/shatabdi_vrutta_sankalan/gruh_Sampark_abhiyan/gruh_sampark_abhiyan_view.dart';
 import 'package:niyojak_prod/screens/survey_screen/mandal_reports_tabs.dart';
 import 'package:niyojak_prod/screens/survey_screen/report_view/vasti_report_tab1.dart';
 import 'package:niyojak_prod/screens/survey_screen/report_view/vasti_report_tab2.dart';
@@ -329,6 +330,7 @@ class NiyojakAppState extends State<NiyojakApp> {
         MandalSurveyReportScreen.routeName: (ctx) => MandalSurveyReportScreen(),
         VastiSurveyReportScreen.routeName: (ctx) => VastiSurveyReportScreen(),
         VijayadashamiFormView.routeName: (ctx) => VijayadashamiFormView(),
+        GruhSamparkAbhiyanView.routeName: (ctx) => GruhSamparkAbhiyanView(),
         SearchSankalpScreen.routeName: (ctx) =>
             ChangeNotifierProvider<SankalpScreenProvider>(
                 create: (context) => SankalpScreenProvider(),
