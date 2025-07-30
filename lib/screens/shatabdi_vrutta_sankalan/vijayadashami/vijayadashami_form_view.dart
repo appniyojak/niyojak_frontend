@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:niyojak_prod/screens/shatabdi_vrutta_sankalan/vijayadashami/vijaya_dashami_report.dart';
 import 'package:niyojak_prod/widgets/app_drawer.dart';
 
 import '../../../helpers/static_data.dart' as Statics;
 import '../../../models/request_model/pat_gan_anya_vijaya_dashami_model.dart';
-import '../../../models/response_model/get_vasti_data_by_id_model.dart';
+import '../../../models/request_model/sanchalan_list_model.dart';
 import '../../../providers/bals.dart';
 
 class VijayadashamiFormView extends StatefulWidget {
@@ -23,9 +24,6 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
   String? programOnTime;
   String? personalSong;
   String? ghoshVadan;
-
-  List<String> levelOptions = ['नगर', 'तालुका', 'उपनगर', 'उपखंड', 'मंडल'];
-  List<String> yesNoOptions = ['होय', 'नाही'];
 
   bool _isSearching = false;
   bool _isExpanded = false;
@@ -200,6 +198,9 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
 
   final TextEditingController maleController = TextEditingController();
   final TextEditingController femaleController = TextEditingController();
+  final TextEditingController presentMaleController = TextEditingController();
+  final TextEditingController presentMatrushaktiController =
+      TextEditingController();
 
   @override
   void dispose() {
@@ -219,6 +220,14 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
           "${Statics.getLabel('vijayaDashamiUtsav')}",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .pushNamed(VijayadashamiFormReport.routeName);
+              },
+              icon: Icon(Icons.document_scanner_outlined))
+        ],
       ),
       drawer: AppDrawer(),
       body: Form(
@@ -653,10 +662,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                       children: [
                         InkWell(
                           onTap: () {
-                            showsanchalanZaleKaPopup(context,
-                                onDataChanged: () {
-                              setState(() {});
-                            });
+                            showsanchalanZaleKaPopup(context);
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 5),
@@ -686,264 +692,51 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                         ),
                       ],
                     ),
-                  if (sanchalanZaleKa == 1) SizedBox(height: 20),
                   if (sanchalanZaleKa == 1)
-                    Column(
-                      children: [
-                        Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.symmetric(vertical: 10),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black54),
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                          ),
-                          child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                child: DataTable(
-                                  columnSpacing: 20,
-                                  showCheckboxColumn: false,
-                                  headingRowColor: MaterialStatePropertyAll(
-                                      Colors.purple.shade50),
-                                  headingTextStyle: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black87),
-                                  columns: [
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('serialNo')}")),
-                                    DataColumn(
-                                        label: Text(
-                                      "${Statics.getLabel('Name')}",
-                                    )),
-                                  ],
-                                  rows: sanchalanZaleKaDataList
-                                      .asMap()
-                                      .entries
-                                      .where(
-                                          (entry) => entry.value.isactive == 1)
-                                      .map((entry) {
-                                    int index = entry.key;
-                                    var data = entry.value;
-                                    bool isSelected =
-                                        selectedsanchalanZaleKaIdIndex == index;
-                                    return DataRow(
-                                        selected: isSelected,
-                                        color: MaterialStateProperty
-                                            .resolveWith<Color?>(
-                                          (Set<MaterialState> states) {
-                                            if (isSelected)
-                                              return Colors.yellow.shade100;
-                                            return null;
-                                          },
-                                        ),
-                                        onSelectChanged: (bool? selected) {
-                                          if (selected != null && selected) {
-                                            setState(() {
-                                              selectedsanchalanZaleKaIdIndex =
-                                                  index;
-                                            });
-                                          }
-                                        },
-                                        cells: [
-                                          DataCell(Text("${index + 1}")),
-                                          DataCell(Text(data.name ?? '')),
-                                        ]);
-                                  }).toList(),
-                                ),
-                              )),
-                        ),
-                        SizedBox(height: 10),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 6,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  if (selectedsanchalanZaleKaIdIndex != null) {
-                                    var selectedData = sanchalanZaleKaDataList[
-                                        selectedsanchalanZaleKaIdIndex!];
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                          ),
-                                          backgroundColor: Colors.white,
-                                          title: Center(
-                                            child: Text(
-                                              "${Statics.getLabel('HinduVeer')}",
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 20,
-                                                color: Colors.purpleAccent,
-                                              ),
-                                            ),
-                                          ),
-                                          content: SingleChildScrollView(
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Divider(
-                                                    thickness: 1,
-                                                    color: Colors
-                                                        .deepPurple.shade100),
-                                                SizedBox(height: 12),
-                                                _buildInfoRow(
-                                                    "${Statics.getLabel('Name')}",
-                                                    selectedData.name),
-                                              ],
-                                            ),
-                                          ),
-                                          actionsAlignment:
-                                              MainAxisAlignment.center,
-                                          actions: [
-                                            ElevatedButton(
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                              child: Text(
-                                                  "${Statics.getLabel('bandKara')}",
-                                                  style: TextStyle(
-                                                      color: Colors.white)),
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    Colors.purpleAccent,
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 24,
-                                                    vertical: 12),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  }
-                                },
-                                child: Icon(Icons.remove_red_eye,
-                                    color: Colors.green, size: 20),
-                              ),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  showsanchalanZaleKaPopup(context,
-                                      editIndex: selectedsanchalanZaleKaIdIndex,
-                                      onDataChanged: () {
-                                    setState(() {});
-                                  });
-                                },
-                                child: Icon(Icons.edit,
-                                    color: Colors.blue, size: 20),
-                              ),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              InkWell(
-                                onTap: () async {
-                                  final shouldDelete = await showDialog<bool>(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      backgroundColor: Colors.white,
-                                      title: Center(
-                                        child: Text(
-                                          "${Statics.getLabel('pusthikarn')}",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
-                                            color: Colors.redAccent,
-                                          ),
-                                        ),
-                                      ),
-                                      content: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10.0),
-                                        child: Text(
-                                          "${Statics.getLabel('deleteconfirmText')}",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.black87,
-                                          ),
-                                        ),
-                                      ),
-                                      actionsAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      actions: [
-                                        ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                Colors.grey.shade300,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                            ),
-                                          ),
-                                          onPressed: () =>
-                                              Navigator.pop(context, false),
-                                          child: Text(
-                                            "${Statics.getLabel('ConfirmationNo')}",
-                                            style:
-                                                TextStyle(color: Colors.black),
-                                          ),
-                                        ),
-                                        ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.redAccent,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                            ),
-                                          ),
-                                          onPressed: () =>
-                                              Navigator.pop(context, true),
-                                          child: Text(
-                                            "${Statics.getLabel('ConfirmationYes')}",
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                  if (shouldDelete == true &&
-                                      selectedsanchalanZaleKaIdIndex != null) {
-                                    setState(() {
-                                      sanchalanZaleKaDataList[
-                                              selectedsanchalanZaleKaIdIndex!]
-                                          .isactive = 0;
-                                      selectedsanchalanZaleKaIdIndex = null;
-                                    });
-                                  }
-                                },
-                                child: Icon(Icons.delete,
-                                    color: Colors.red, size: 20),
-                              ),
-                            ],
-                          ),
-                        ),
-//============================================================================================================================================================
-                      ],
+                    SizedBox(
+                      height: 20,
+                    ),
+                  if (sanchalanZaleKa == 1)
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: DataTable(
+                        headingRowColor: MaterialStateProperty.all(
+                            Colors.purpleAccent.shade100),
+                        headingTextStyle: const TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                        columns: [
+                          DataColumn(label: Text(Statics.getLabel('Vasti'))),
+                          DataColumn(
+                              label:
+                                  Text(Statics.getLabel('sanchalanSadanda'))),
+                          DataColumn(
+                              label: Text(
+                                  Statics.getLabel('sanchalanGhoshVadan'))),
+                        ],
+                        rows: savedsanchalanZaleKaEntries
+                            .map(
+                              (entry) => DataRow(cells: [
+                                DataCell(Text(
+                                    entry.selectedSanchalanVastiName ?? "-")),
+                                DataCell(Text(
+                                  entry.sanchalanSadandaYesNo == 1
+                                      ? Statics.getLabel('ConfirmationYes')
+                                      : Statics.getLabel('ConfirmationNo'),
+                                )),
+                                DataCell(Text(
+                                  entry.sanchalanGhoshVadanYesNo == 1
+                                      ? Statics.getLabel('ConfirmationYes')
+                                      : Statics.getLabel('ConfirmationNo'),
+                                )),
+                              ]),
+                            )
+                            .toList(),
+                      ),
                     ),
                 ],
               ),
             ),
-// ================================== 5 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
+// ================================== 6 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
             mainContainer(
               "${Statics.getLabel('searchSwayamsevakScreenLabel')}",
               Column(
@@ -953,9 +746,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                     children: [
                       InkWell(
                         onTap: () {
-                          showswayamsewakPopup(context, onDataChanged: () {
-                            setState(() {});
-                          });
+                          showSwayamsewakPopupDialog(context);
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 5),
@@ -985,274 +776,23 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                     ],
                   ),
                   SizedBox(height: 20),
-                  Column(
-                    children: [
-                      /// 🧾 Display Data List as Table
-                      if (swayamsewakDataList.isNotEmpty)
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Table(
-                            border: TableBorder.all(color: Colors.grey),
-                            defaultColumnWidth: const IntrinsicColumnWidth(),
-                            children: [
-                              // Header Row
-                              TableRow(
-                                decoration: const BoxDecoration(
-                                    color: Color(0xFFE0E0E0)),
-                                children: [
-                                  const Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text('Level Name',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                  ),
-                                  for (int j = 0;
-                                      j <
-                                          swayamsewakDataList[0]["data"][0]
-                                              .length;
-                                      j++)
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text('Col ${j + 1}',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold)),
-                                    ),
-                                  const Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text('Total',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                  ),
-                                ],
-                              ),
-
-                              // Data Rows
-                              for (var rowEntry in swayamsewakDataList)
-                                for (int i = 0;
-                                    i < rowEntry["data"].length;
-                                    i++)
-                                  TableRow(
-                                    children: [
-                                      // Level Name (Only on first column of first row)
-                                      if (i == 0)
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            rowEntry[
-                                                    "selctedDropDownLevelName"] ??
-                                                "",
-                                            style:
-                                                const TextStyle(fontSize: 14),
-                                          ),
-                                        )
-                                      else
-                                        const SizedBox.shrink(),
-
-                                      // Data Columns
-                                      for (var val in rowEntry["data"][i])
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(val),
-                                        ),
-
-                                      // Total Column
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          rowEntry["data"][i]
-                                              .map((e) => int.tryParse(e) ?? 0)
-                                              .reduce((a, b) => a + b)
-                                              .toString(),
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                            ],
-                          ),
-                        ),
-                      SizedBox(height: 10),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 6,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                if (selectedsanchalanZaleKaIdIndex != null) {
-                                  var selectedData = sanchalanZaleKaDataList[
-                                      selectedsanchalanZaleKaIdIndex!];
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        backgroundColor: Colors.white,
-                                        title: Center(
-                                          child: Text(
-                                            "${Statics.getLabel('HinduVeer')}",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                              color: Colors.purpleAccent,
-                                            ),
-                                          ),
-                                        ),
-                                        content: SingleChildScrollView(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Divider(
-                                                  thickness: 1,
-                                                  color: Colors
-                                                      .deepPurple.shade100),
-                                              SizedBox(height: 12),
-                                              _buildInfoRow(
-                                                  "${Statics.getLabel('Name')}",
-                                                  selectedData.name),
-                                            ],
-                                          ),
-                                        ),
-                                        actionsAlignment:
-                                            MainAxisAlignment.center,
-                                        actions: [
-                                          ElevatedButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                            child: Text(
-                                                "${Statics.getLabel('bandKara')}",
-                                                style: TextStyle(
-                                                    color: Colors.white)),
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  Colors.purpleAccent,
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 24, vertical: 12),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                }
-                              },
-                              child: Icon(Icons.remove_red_eye,
-                                  color: Colors.green, size: 20),
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                showswayamsewakPopup(context,
-                                    onDataChanged: () {
-                                  setState(() {});
-                                });
-                              },
-                              child: Icon(Icons.edit,
-                                  color: Colors.blue, size: 20),
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            InkWell(
-                              onTap: () async {
-                                final shouldDelete = await showDialog<bool>(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    backgroundColor: Colors.white,
-                                    title: Center(
-                                      child: Text(
-                                        "${Statics.getLabel('pusthikarn')}",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                          color: Colors.redAccent,
-                                        ),
-                                      ),
-                                    ),
-                                    content: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10.0),
-                                      child: Text(
-                                        "${Statics.getLabel('deleteconfirmText')}",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.black87,
-                                        ),
-                                      ),
-                                    ),
-                                    actionsAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    actions: [
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.grey.shade300,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                          ),
-                                        ),
-                                        onPressed: () =>
-                                            Navigator.pop(context, false),
-                                        child: Text(
-                                          "${Statics.getLabel('ConfirmationNo')}",
-                                          style: TextStyle(color: Colors.black),
-                                        ),
-                                      ),
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.redAccent,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                          ),
-                                        ),
-                                        onPressed: () =>
-                                            Navigator.pop(context, true),
-                                        child: Text(
-                                          "${Statics.getLabel('ConfirmationYes')}",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                                if (shouldDelete == true &&
-                                    selectedsanchalanZaleKaIdIndex != null) {
-                                  setState(() {
-                                    sanchalanZaleKaDataList[
-                                            selectedsanchalanZaleKaIdIndex!]
-                                        .isactive = 0;
-                                    selectedsanchalanZaleKaIdIndex = null;
-                                  });
-                                }
-                              },
-                              child: Icon(Icons.delete,
-                                  color: Colors.red, size: 20),
-                            ),
-                          ],
-                        ),
-                      ),
-//============================================================================================================================================================
-                    ],
-                  ),
+                  buildSavedPatGanAnyaTable(savedPatGanAnyaEntries),
+                ],
+              ),
+            ),
+// ================================== 7 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
+            mainContainer(
+              "${Statics.getLabel('otherInfo')}",
+              Column(
+                children: [
+                  textControllerField2(
+                      name: Statics.getLabel("presentMatrushakti"),
+                      controller: presentMatrushaktiController,
+                      keyboardType: TextInputType.number),
+                  textControllerField2(
+                      name: Statics.getLabel("presentMale"),
+                      controller: presentMaleController,
+                      keyboardType: TextInputType.number),
                 ],
               ),
             ),
@@ -1263,223 +803,237 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
   }
 
 // ================================  SANCHALAN POPUP ==================================================================
-  List<VastisarHinduvirayadi> sanchalanZaleKaDataList = [];
-  int? selectedsanchalanZaleKaIdIndex;
-  void showsanchalanZaleKaPopup(
-    BuildContext context, {
-    int? editIndex,
-    VoidCallback? onDataChanged,
-  }) {
-    if (editIndex != null) {
-      var data = sanchalanZaleKaDataList[editIndex];
-      selectedsanchalanZaleKaIdIndex = data.id;
-    }
-    showDialog(
+  List<SanchalanDataList> savedsanchalanZaleKaEntries = [];
+  String? selctedsanchalanZaleKaLevelName;
+  String? selctedsanchalanZaleKaLevelId;
+  Future<void> showsanchalanZaleKaPopup(BuildContext context) async {
+    String? localSelectedLevelName = selctedsanchalanZaleKaLevelName;
+    String? localSelectedLevelId = selctedsanchalanZaleKaLevelId;
+    int? localSanchalanSadandaZalKa = sanchalanSadandaZalKa;
+    int? localSanchalanGhoshVadanZalKa = sanchalanGhoshVadanZalKa;
+
+    await showDialog(
       context: context,
-      builder: (ctx) {
-        return AlertDialog(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "${Statics.getLabel('sanchalan')}",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: Colors.purpleAccent,
-                ),
-              ),
-              IconButton(
-                icon: Icon(Icons.close, color: Colors.grey),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              )
-            ],
-          ),
-          content: StatefulBuilder(
-            builder: (context, setState) {
-              return SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    yesNoRadioButton(
-                      question: "${Statics.getLabel('sanchalanSadandaZalKa')}",
-                      selectedOption: sanchalanSadandaZalKa ?? 2,
-                      onChanged: (value) {
-                        setState(() {
-                          sanchalanSadandaZalKa = value;
-                        });
-                      },
-                    ),
-                    yesNoRadioButton(
-                      question:
-                          "${Statics.getLabel('sanchalanGhoshVadanZalKa')}",
-                      selectedOption: sanchalanGhoshVadanZalKa ?? 2,
-                      onChanged: (value) {
-                        setState(() {
-                          sanchalanGhoshVadanZalKa = value;
-                        });
-                      },
-                    ),
-                    if (_linkedgraam != null && _linkedgraam!.length > 0)
-                      DropdownButtonFormField(
-                        decoration: InputDecoration(
-                            labelText: Statics.getLabel('Graam')),
-                        isExpanded: true,
-                        value:
-                            _linkedgraamValue == "" ? null : _linkedgraamValue,
-                        items: _linkedgraam!
-                            .map((bg) => DropdownMenuItem(
-                                value: bg.geoUnitID.toString(),
-                                child: Text(bg.name!)))
-                            .toList(),
-                        onChanged: (value) {
-                          final selectedItem = _linkedVibhaag!.firstWhere(
-                              (bg) => bg.geoUnitID.toString() == value);
-                          setState(() {
-                            selctedSanchalanLevelName = selectedItem.name ?? "";
-                            selctedSanchalanLevelId = value ?? "";
-                          });
-                        },
-                      ),
-                    if (_linkedvasti != null && _linkedvasti!.length > 0)
-                      DropdownButtonFormField(
-                        decoration: InputDecoration(
-                            labelText: Statics.getLabel('Vasti')),
-                        isExpanded: true,
-                        value:
-                            _linkedvastiValue == "" ? null : _linkedvastiValue,
-                        items: _linkedvasti!
-                            .map((bg) => DropdownMenuItem(
-                                value: bg.geoUnitID.toString(),
-                                child: Text(bg.name!)))
-                            .toList(),
-                        onChanged: (value) {
-                          final selectedItem = _linkedVibhaag!.firstWhere(
-                              (bg) => bg.geoUnitID.toString() == value);
-                          setState(() {
-                            selctedSanchalanLevelName = selectedItem.name ?? "";
-                            selctedSanchalanLevelId = value ?? "";
-                          });
-                        },
-                      ),
-                  ],
-                ),
-              );
-            },
-          ),
-          actions: [
-            Align(
-              alignment: Alignment.center,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, updateState) {
+            return AlertDialog(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    Statics.getLabel('sanchalan'),
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                ),
-                onPressed: () {
-                  VastisarHinduvirayadi data = VastisarHinduvirayadi(
-                    vastiid: int.parse(selctedLevelId!),
-                    id: selectedsanchalanZaleKaIdIndex,
-                  );
-
-                  if (editIndex != null) {
-                    sanchalanZaleKaDataList[editIndex] = data;
-                  } else {
-                    sanchalanZaleKaDataList.add(data);
-                  }
-
-                  if (onDataChanged != null) {
-                    onDataChanged();
-                  }
-
-                  Navigator.of(ctx).pop();
-                },
-                child: Text("${Statics.getLabel('Submit')}",
-                    style: TextStyle(color: Colors.white)),
+                  IconButton(
+                    icon: Icon(Icons.close, color: Colors.grey[700]),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  )
+                ],
               ),
-            )
-          ],
-        );
-      },
-    );
-  }
-
-// ================================  Swayamsewak POPUP ==================================================================
-
-  List swayamsewakDataList = [];
-  int? selectedswayamsewakIdIndex;
-  dynamic selctedDropDownLevelId;
-  String selctedDropDownLevelName = "";
-
-  List<List<TextEditingController>> swayamsewakControllers = List.generate(
-    3, // number of rows
-    (_) =>
-        List.generate(5, (_) => TextEditingController()), // number of columns
-  );
-
-  List<TextEditingController> swayamsewakTotalControllers = List.generate(
-    3,
-    (_) => TextEditingController(),
-  );
-  SwayamSewakPatGanAnyaModel swayamSewakPatGanAnyaModel =
-      SwayamSewakPatGanAnyaModel();
-  void showswayamsewakPopup(
-    BuildContext context, {
-    VoidCallback? onDataChanged,
-  }) {
-    // Clear all controllers before showing
-    for (var row in swayamsewakControllers) {
-      for (var ctrl in row) {
-        ctrl.clear();
-      }
-    }
-    showDialog(
-      context: context,
-      builder: (ctx) {
-        return AlertDialog(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "${Statics.getLabel('searchSwayamsevakScreenLabel')}",
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: Colors.purpleAccent,
-                ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.close, color: Colors.grey),
-                onPressed: () => Navigator.of(context).pop(),
-              )
-            ],
-          ),
-          content: StatefulBuilder(
-            builder: (context, setState) {
-              List<String> rowLabels = [
-                Statics.getLabel('patSankhyaa'),
-                Statics.getLabel('ganveshatPresentCount'),
-                Statics.getLabel('otherSwayamsewakPresentCount'),
-              ];
-              List<String> columnHeaders = [
-                Statics.getLabel('Shishu'),
-                Statics.getLabel('Baal'),
-                Statics.getLabel('MahaavidyaalayeenTarunLabel'),
-                Statics.getLabel('TarunVyavasaayee'),
-                Statics.getLabel('ProudhVyavasaayee'),
-              ];
-
-              return SingleChildScrollView(
-                scrollDirection: Axis.vertical,
+              content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     DropdownButtonFormField(
                       decoration: InputDecoration(
                         labelText: Statics.getLabel('Vasti'),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade400,
+                            width: 1.5,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                          borderSide: BorderSide(
+                            color: Colors.purpleAccent,
+                            width: 2,
+                          ),
+                        ),
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                      ),
+                      isExpanded: true,
+                      value: localSelectedLevelId,
+                      items: _linkedvasti!
+                          .map((bg) => DropdownMenuItem(
+                                value: bg.geoUnitID.toString(),
+                                child: Text(bg.name!),
+                              ))
+                          .toList(),
+                      onChanged: (value) {
+                        final selectedItem = _linkedvasti!.firstWhere(
+                            (bg) => bg.geoUnitID.toString() == value);
+                        updateState(() {
+                          localSelectedLevelName = selectedItem.name ?? "";
+                          localSelectedLevelId = value.toString();
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 15),
+                    yesNoRadioButton(
+                      question: Statics.getLabel('sanchalanSadandaZalKa'),
+                      selectedOption: localSanchalanSadandaZalKa ?? 2,
+                      onChanged: (value) {
+                        updateState(() {
+                          localSanchalanSadandaZalKa = value;
+                        });
+                      },
+                    ),
+                    yesNoRadioButton(
+                      question: Statics.getLabel('sanchalanGhoshVadanZalKa'),
+                      selectedOption: localSanchalanGhoshVadanZalKa ?? 2,
+                      onChanged: (value) {
+                        updateState(() {
+                          localSanchalanGhoshVadanZalKa = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                Center(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.purpleAccent,
+                      foregroundColor: Colors.white,
+                    ),
+                    onPressed: () {
+                      try {
+                        final entry = SanchalanDataList(
+                          selectedSanchalanVastiId:
+                              int.tryParse(localSelectedLevelId ?? "0"),
+                          selectedSanchalanVastiName: localSelectedLevelName,
+                          sanchalanGhoshVadanYesNo:
+                              localSanchalanGhoshVadanZalKa,
+                          sanchalanSadandaYesNo: localSanchalanSadandaZalKa,
+                        );
+
+                        Navigator.pop(context, entry);
+                      } catch (e) {
+                        print("Error while saving: $e");
+                      }
+                    },
+                    child: Text(Statics.getLabel('Submit')),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    ).then((result) {
+      if (result != null && result is SanchalanDataList) {
+        setState(() {
+          // ✅ Add to table list
+          savedsanchalanZaleKaEntries.add(result);
+
+          // ✅ Clear form variables after submission
+          selctedsanchalanZaleKaLevelName = null;
+          selctedsanchalanZaleKaLevelId = null;
+          sanchalanSadandaZalKa = null;
+          sanchalanGhoshVadanZalKa = null;
+        });
+      }
+    });
+  }
+
+  List<PatGanAnyaDataList> savedPatGanAnyaEntries = [];
+  String? selctedPatGanAnyaLevelName;
+  String? selctedPatGanAnyaLevelId;
+  Future<void> showSwayamsewakPopupDialog(BuildContext context) async {
+    List<List<TextEditingController>> matrixControllers = List.generate(
+      3,
+      (_) => List.generate(5, (_) => TextEditingController()),
+    );
+
+    final List<PatGanAnyaDataList> tempEntries = [];
+
+    final List<String> columnHeaders = [
+      Statics.getLabel('Shishu'),
+      Statics.getLabel('Baal'),
+      Statics.getLabel('MahaavidyaalayeenTarunLabel'),
+      Statics.getLabel('TarunVyavasaayee'),
+      Statics.getLabel('ProudhVyavasaayee'),
+    ];
+
+    final List<String> rowHeaders = [
+      Statics.getLabel('patSankhyaa'),
+      Statics.getLabel('ganveshatPresentCount'),
+      Statics.getLabel('otherSwayamsewakPresentCount'),
+    ];
+
+    int getRowTotal(int rowIndex) {
+      int sum = 0;
+      for (var ctrl in matrixControllers[rowIndex]) {
+        sum += int.tryParse(ctrl.text) ?? 0;
+      }
+      return sum;
+    }
+
+    void clearInputs() {
+      for (var row in matrixControllers) {
+        for (var ctrl in row) {
+          ctrl.clear();
+        }
+      }
+    }
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, updateState) {
+            return AlertDialog(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    Statics.getLabel('searchSwayamsevakScreenLabel'),
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.close, color: Colors.grey[700]),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
+              ),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    DropdownButtonFormField(
+                      decoration: InputDecoration(
+                        labelText: Statics.getLabel('Vasti'),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade400,
+                            width: 1.5,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                          borderSide: BorderSide(
+                            color: Colors.purpleAccent,
+                            width: 2,
+                          ),
+                        ),
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 14),
                       ),
                       isExpanded: true,
                       value: _linkedvastiValue == "" ? null : _linkedvastiValue,
@@ -1493,151 +1047,291 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                         final selectedItem = _linkedvasti!.firstWhere(
                             (bg) => bg.geoUnitID.toString() == value);
                         setState(() {
-                          selctedDropDownLevelName = selectedItem.name ?? "";
-                          selctedDropDownLevelId = value;
-                          _linkedvastiValue = value;
+                          selctedPatGanAnyaLevelName = selectedItem.name ?? "";
+                          selctedPatGanAnyaLevelId = value;
                         });
                       },
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 12),
+                    // SingleChildScrollView(
+                    //   scrollDirection: Axis.horizontal,
+                    //   child: Column(
+                    //     children: [
+                    //       // Column Headers
+                    //       Row(
+                    //         children: [
+                    //           SizedBox(width: 100),
+                    //           ...columnHeaders.map(
+                    //             (col) => Container(
+                    //               width: 120,
+                    //               alignment: Alignment.center,
+                    //               child: Text(col, textAlign: TextAlign.center),
+                    //             ),
+                    //           ),
+                    //         ],
+                    //       ),
+                    //       const SizedBox(height: 15),
+                    //
+                    //       // Input Grid
+                    //       Column(
+                    //         children: List.generate(3, (row) {
+                    //           return Row(
+                    //             children: [
+                    //               SizedBox(
+                    //                 width: 100,
+                    //                 child: Text(rowHeaders[row]),
+                    //               ),
+                    //               ...List.generate(5, (col) {
+                    //                 return Container(
+                    //                   width: 120,
+                    //                   padding: const EdgeInsets.all(4),
+                    //                   child: TextField(
+                    //                     controller: matrixControllers[row][col],
+                    //                     keyboardType: TextInputType.number,
+                    //                     decoration: InputDecoration(
+                    //                       hintText: '0',
+                    //                       border: OutlineInputBorder(),
+                    //                       contentPadding:
+                    //                           const EdgeInsets.symmetric(
+                    //                         horizontal: 8,
+                    //                         vertical: 4,
+                    //                       ),
+                    //                     ),
+                    //                   ),
+                    //                 );
+                    //               }),
+                    //             ],
+                    //           );
+                    //         }),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      child: Table(
-                        border: TableBorder.all(color: Colors.grey),
-                        defaultColumnWidth: const IntrinsicColumnWidth(),
+                      child: Column(
                         children: [
-                          TableRow(
+                          // Header Row
+                          Row(
                             children: [
-                              const SizedBox(width: 180),
-                              for (var header in columnHeaders)
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(header,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold)),
-                                ),
+                              buildCell('', isHeader: true),
+                              ...columnHeaders
+                                  .map((col) => buildCell(col, isHeader: true))
+                                  .toList(),
                             ],
                           ),
-                          for (int i = 0; i < 3; i++)
-                            TableRow(
+
+                          // Table Rows
+                          ...List.generate(rowHeaders.length, (row) {
+                            return Row(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    rowLabels[i],
-                                    style: const TextStyle(fontSize: 14),
-                                  ),
-                                ),
-                                for (int j = 0; j < 5; j++)
-                                  Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: SizedBox(
-                                      width: 90,
+                                buildCell(rowHeaders[row], isHeader: true),
+                                ...List.generate(columnHeaders.length, (col) {
+                                  return Container(
+                                    width: 100,
+                                    height: 60,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.grey.shade400),
+                                    ),
+                                    padding: EdgeInsets.all(8),
+                                    child: Center(
                                       child: TextField(
-                                        controller: swayamsewakControllers[i]
-                                            [j],
+                                        controller: matrixControllers[row][col],
+                                        textAlign: TextAlign.center,
                                         keyboardType: TextInputType.number,
-                                        decoration: const InputDecoration(
-                                          isDense: true,
-                                          border: OutlineInputBorder(),
+                                        decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: '0',
                                         ),
                                       ),
                                     ),
-                                  ),
-                                Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: SizedBox(
-                                    width: 90,
-                                    child: TextField(
-                                      controller:
-                                          swayamsewakTotalControllers[i],
-                                      keyboardType: TextInputType.number,
-                                      decoration: const InputDecoration(
-                                        isDense: true,
-                                        border: OutlineInputBorder(),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                  );
+                                }),
                               ],
-                            ),
+                            );
+                          }),
                         ],
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.purple,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      onPressed: () {
-                        List<List<String>> matrixData = swayamsewakControllers
-                            .map((row) =>
-                                row.map((ctrl) => ctrl.text.trim()).toList())
-                            .toList();
-                        final newEntry = PatGanAnyaDataList(
-                          selectedLevelId:
-                              int.tryParse(selctedDropDownLevelId ?? ""),
-                          selectedLevelName: selctedDropDownLevelName,
-                          shishupatSankhya:
-                              int.tryParse(matrixData[0][0] ?? '0'),
-                          baalpatSankhya: int.tryParse(matrixData[0][1] ?? '0'),
-                          mahaidyalayinpatSankhya:
-                              int.tryParse(matrixData[0][2] ?? '0'),
-                          tarunpatSankhya:
-                              int.tryParse(matrixData[0][3] ?? '0'),
-                          proudhpatSankhya:
-                              int.tryParse(matrixData[0][4] ?? '0'),
-                          shishuGanvesh: int.tryParse(matrixData[1][0] ?? '0'),
-                          baalGanvesh: int.tryParse(matrixData[1][1] ?? '0'),
-                          mahaidyalayinGanvesh:
-                              int.tryParse(matrixData[1][2] ?? '0'),
-                          tarunGanvesh: int.tryParse(matrixData[1][3] ?? '0'),
-                          proudhGanvesh: int.tryParse(matrixData[1][4] ?? '0'),
-                          totalGanvesh: int.tryParse(matrixData[1][5] ?? '0'),
-                          shishuAnyaUpastith:
-                              int.tryParse(matrixData[2][0] ?? '0'),
-                          baalAnyaUpastith:
-                              int.tryParse(matrixData[2][1] ?? '0'),
-                          mahaidyalayinAnyaUpastith:
-                              int.tryParse(matrixData[2][2] ?? '0'),
-                          tarunAnyaUpastith:
-                              int.tryParse(matrixData[2][3] ?? '0'),
-                          proudhAnyaUpastith:
-                              int.tryParse(matrixData[2][4] ?? '0'),
-                          totalAnyaUpastith:
-                              int.tryParse(matrixData[2][5] ?? '0'),
-                        );
-                        swayamSewakPatGanAnyaModel.patGanAnyaDataList ??= [];
-                        swayamSewakPatGanAnyaModel.patGanAnyaDataList!
-                            .add(newEntry);
-                        if (onDataChanged != null) {
-                          onDataChanged();
-                        }
-                        Navigator.of(context).pop();
-                        Future.delayed(const Duration(milliseconds: 300), () {
-                          showswayamsewakPopup(
-                            context,
-                            onDataChanged: onDataChanged,
-                          );
-                        });
-                      },
-                      child: Text(
-                        "${Statics.getLabel('Submit')}",
-                        style: const TextStyle(color: Colors.white),
                       ),
                     ),
                   ],
                 ),
-              );
-            },
-          ),
+              ),
+              actions: [
+                Center(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          Colors.purpleAccent, // Button background color
+                      foregroundColor: Colors.white, // Text color
+                    ),
+                    onPressed: () {
+                      try {
+                        final entry = PatGanAnyaDataList(
+                          shishupatSankhya:
+                              int.tryParse(matrixControllers[0][0].text),
+                          baalpatSankhya:
+                              int.tryParse(matrixControllers[0][1].text),
+                          mahaidyalayinpatSankhya:
+                              int.tryParse(matrixControllers[0][2].text),
+                          tarunpatSankhya:
+                              int.tryParse(matrixControllers[0][3].text),
+                          proudhpatSankhya:
+                              int.tryParse(matrixControllers[0][4].text),
+                          totalpatSankhya: getRowTotal(0),
+                          shishuGanvesh:
+                              int.tryParse(matrixControllers[1][0].text),
+                          baalGanvesh:
+                              int.tryParse(matrixControllers[1][1].text),
+                          mahaidyalayinGanvesh:
+                              int.tryParse(matrixControllers[1][2].text),
+                          tarunGanvesh:
+                              int.tryParse(matrixControllers[1][3].text),
+                          proudhGanvesh:
+                              int.tryParse(matrixControllers[1][4].text),
+                          totalGanvesh: getRowTotal(1),
+                          shishuAnyaUpastith:
+                              int.tryParse(matrixControllers[2][0].text),
+                          baalAnyaUpastith:
+                              int.tryParse(matrixControllers[2][1].text),
+                          mahaidyalayinAnyaUpastith:
+                              int.tryParse(matrixControllers[2][2].text),
+                          tarunAnyaUpastith:
+                              int.tryParse(matrixControllers[2][3].text),
+                          proudhAnyaUpastith:
+                              int.tryParse(matrixControllers[2][4].text),
+                          totalAnyaUpastith: getRowTotal(2),
+                          selectedLevelId:
+                              int.tryParse(selctedPatGanAnyaLevelId ?? "0"),
+                          selectedLevelName: selctedPatGanAnyaLevelName,
+                        );
+
+                        Navigator.pop(context, entry);
+                      } catch (e) {
+                        print("Error while saving: $e");
+                      }
+                    },
+                    child: Text(
+                      Statics.getLabel('Submit'),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
         );
       },
+    ).then((result) {
+      if (result != null && result is PatGanAnyaDataList) {
+        setState(() {
+          savedPatGanAnyaEntries.add(result);
+        });
+      }
+    });
+  }
+
+  Widget buildCell(String text, {bool isHeader = false}) {
+    return Container(
+      width: 100,
+      height: 60,
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey),
+        color: Colors.transparent,
+      ),
+      alignment: Alignment.center,
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontWeight: FontWeight.normal,
+          fontSize: 14,
+        ),
+      ),
     );
   }
+
+  Widget buildSavedPatGanAnyaTable(List<PatGanAnyaDataList> dataList) {
+    if (dataList.isEmpty) {
+      return Text(Statics.getLabel('NoDataFound'));
+    }
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: DataTable(
+        headingRowColor:
+            MaterialStateProperty.all(Colors.purpleAccent.shade100),
+        headingTextStyle:
+            const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        columns: [
+          DataColumn(label: Text(Statics.getLabel('Vasti'))),
+          DataColumn(label: Text(Statics.getLabel('Type'))),
+          DataColumn(label: Text(Statics.getLabel('Shishu'))),
+          DataColumn(label: Text(Statics.getLabel('Baal'))),
+          DataColumn(
+              label: Text(Statics.getLabel('MahaavidyaalayeenTarunLabel'))),
+          DataColumn(label: Text(Statics.getLabel('TarunVyavasaayee'))),
+          DataColumn(label: Text(Statics.getLabel('ProudhVyavasaayee'))),
+          DataColumn(label: Text(Statics.getLabel('Total'))),
+        ],
+        rows: [
+          for (int i = 0; i < dataList.length; i++) ...[
+            // Use alternating colors for each 3-row group
+            DataRow(
+              color: MaterialStateProperty.all(
+                  i.isEven ? Colors.grey.shade100 : Colors.grey.shade300),
+              cells: [
+                DataCell(Text(dataList[i].selectedLevelName ?? '')),
+                DataCell(Text(Statics.getLabel('patSankhyaa'))),
+                DataCell(Text('${dataList[i].shishupatSankhya ?? 0}')),
+                DataCell(Text('${dataList[i].baalpatSankhya ?? 0}')),
+                DataCell(Text('${dataList[i].mahaidyalayinpatSankhya ?? 0}')),
+                DataCell(Text('${dataList[i].tarunpatSankhya ?? 0}')),
+                DataCell(Text('${dataList[i].proudhpatSankhya ?? 0}')),
+                DataCell(Text(
+                  '${(dataList[i].shishupatSankhya ?? 0) + (dataList[i].baalpatSankhya ?? 0) + (dataList[i].mahaidyalayinpatSankhya ?? 0) + (dataList[i].tarunpatSankhya ?? 0) + (dataList[i].proudhpatSankhya ?? 0)}',
+                )),
+              ],
+            ),
+            DataRow(
+              color: MaterialStateProperty.all(
+                  i.isEven ? Colors.grey.shade100 : Colors.grey.shade300),
+              cells: [
+                const DataCell(Text('')),
+                DataCell(Text(Statics.getLabel('ganveshatPresentCount'))),
+                DataCell(Text('${dataList[i].shishuGanvesh ?? 0}')),
+                DataCell(Text('${dataList[i].baalGanvesh ?? 0}')),
+                DataCell(Text('${dataList[i].mahaidyalayinGanvesh ?? 0}')),
+                DataCell(Text('${dataList[i].tarunGanvesh ?? 0}')),
+                DataCell(Text('${dataList[i].proudhGanvesh ?? 0}')),
+                DataCell(Text(
+                  '${(dataList[i].shishuGanvesh ?? 0) + (dataList[i].baalGanvesh ?? 0) + (dataList[i].mahaidyalayinGanvesh ?? 0) + (dataList[i].tarunGanvesh ?? 0) + (dataList[i].proudhGanvesh ?? 0)}',
+                )),
+              ],
+            ),
+            DataRow(
+              color: MaterialStateProperty.all(
+                  i.isEven ? Colors.grey.shade100 : Colors.grey.shade300),
+              cells: [
+                const DataCell(Text('')),
+                DataCell(
+                    Text(Statics.getLabel('otherSwayamsewakPresentCount'))),
+                DataCell(Text('${dataList[i].shishuAnyaUpastith ?? 0}')),
+                DataCell(Text('${dataList[i].baalAnyaUpastith ?? 0}')),
+                DataCell(Text('${dataList[i].mahaidyalayinAnyaUpastith ?? 0}')),
+                DataCell(Text('${dataList[i].tarunAnyaUpastith ?? 0}')),
+                DataCell(Text('${dataList[i].proudhAnyaUpastith ?? 0}')),
+                DataCell(Text(
+                  '${(dataList[i].shishuAnyaUpastith ?? 0) + (dataList[i].baalAnyaUpastith ?? 0) + (dataList[i].mahaidyalayinAnyaUpastith ?? 0) + (dataList[i].tarunAnyaUpastith ?? 0) + (dataList[i].proudhAnyaUpastith ?? 0)}',
+                )),
+              ],
+            ),
+          ]
+        ],
+      ),
+    );
+  }
+
+// ================================ END  Swayamsewak POPUP ==================================================================
 
   Widget textControllerField2(
       {required String name,
@@ -1830,3 +1524,5 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     );
   }
 }
+
+//====================================================================================================================================

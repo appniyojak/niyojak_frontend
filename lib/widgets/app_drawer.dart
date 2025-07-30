@@ -20,7 +20,7 @@ import '../screens/search_shaakhaa.dart';
 import '../screens/search_soochi_screen.dart';
 import '../screens/search_swayamsevak_transfer.dart';
 import '../screens/sewa_vasti_list.dart';
-import '../screens/shatabdi_vrutta_sankalan/gruh_Sampark_abhiyan/gruh_sampark_abhiyan_view.dart';
+// import '../screens/shatabdi_vrutta_sankalan/gruh_Sampark_abhiyan/gruh_sampark_abhiyan_view.dart';
 import '../screens/shatabdi_vrutta_sankalan/vijayadashami/vijayadashami_form_view.dart';
 import '../screens/survey_screen/mandal_reports_tabs.dart';
 import '../screens/survey_screen/survey_form/mandal_survey_form_view.dart';
@@ -261,17 +261,17 @@ class _AppDrawerState extends State<AppDrawer> {
                     Navigator.of(context).pushReplacementNamed(VijayadashamiFormView.routeName);
                   },
                 ),
-                ListTile(
-                  dense: true,
-                  leading: Icon(Icons.add_home_work_outlined),
-                  title: Text(
-                    "${Statics.getLabel('gruhSamparkAbhiyaan')}",
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  onTap: () {
-                    Navigator.of(context).pushReplacementNamed(GruhSamparkAbhiyanView.routeName);
-                  },
-                ),
+                // ListTile(
+                //   dense: true,
+                //   leading: Icon(Icons.add_home_work_outlined),
+                //   title: Text(
+                //     "${Statics.getLabel('gruhSamparkAbhiyaan')}",
+                //     style: TextStyle(fontSize: 18),
+                //   ),
+                //   onTap: () {
+                //     Navigator.of(context).pushReplacementNamed(GruhSamparkAbhiyanView.routeName);
+                //   },
+                // ),
               ],
             ),
             Divider(),
