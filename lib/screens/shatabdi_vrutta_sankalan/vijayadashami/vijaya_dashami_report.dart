@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:niyojak_prod/widgets/single_column_row.dart';
 
@@ -426,6 +428,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
               SizedBox(
                 height: 10,
               ),
+              buildMarathiDataTable(),
               SingleChildScrollView(
                 child: ExpansionPanelList(
                   expansionCallback: (index, isExpanded) {
@@ -482,6 +485,58 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                         ],
                       ),
                     ),
+                    _buildPanel(
+                      "समाज",
+                      1,
+                      Column(
+                        children: [
+                          SingleColumnRow(
+                            txtString: "मुख्य अतिथी",
+                            value: "",
+                            fontsize: 16,
+                          ),
+                          SingleColumnRow(
+                            txtString: "पुरुष",
+                            value: "22",
+                          ),
+                          SingleColumnRow(
+                            txtString: "महिला",
+                            value: "11",
+                          ),
+                          SingleColumnRow(
+                            txtString: "एकूण",
+                            value: "33",
+                          ),
+                          SingleColumnRow(
+                            txtString: "सद्भाव कार्य",
+                            value: "",
+                            fontsize: 16,
+                          ),
+                          SingleColumnRow(
+                            txtString: "यादी",
+                            value: "dbsjhs kdjskdg",
+                            fontsize: 16,
+                          ),
+                          SingleColumnRow(
+                            txtString: "उपस्थित",
+                            value: "",
+                            fontsize: 16,
+                          ),
+                          SingleColumnRow(
+                            txtString: "पुरुष",
+                            value: "22",
+                          ),
+                          SingleColumnRow(
+                            txtString: "महिला",
+                            value: "11",
+                          ),
+                          SingleColumnRow(
+                            txtString: "एकूण",
+                            value: "33",
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -522,6 +577,50 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
       ),
       isExpanded: _expanded[index],
       canTapOnHeader: true,
+    );
+  }
+
+  Widget buildMarathiDataTable() {
+    final List<String> levels = ['नगर', 'तालुका', 'उपनगर', 'उपखंड', 'मंडल'];
+    final List<String> headers = [
+      'कार्यक्रम स्तर',
+      'किती कार्यक्रम झाले',
+      'किती संचालन झाले ?',
+      'किती कार्यक्रम ठरलेल्या बैठक सुरु झाले ?',
+      'किती कार्यक्रमात वैदिक गीत पाठ स्तुती गेले ?',
+      'किती कार्यक्रमात घोष वादन झाले ?',
+      'किती कार्यक्रमांचे हिसाब २४ तासात पूर्ण झाले ?',
+    ];
+
+    final Random random = Random();
+
+    String getRandomValue() {
+      return random.nextBool() ? random.nextInt(10).toString() : '•';
+    }
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: DataTable(
+        headingRowColor:
+            MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
+        columns: headers
+            .map((header) => DataColumn(
+                  label: Container(
+                    width: 180,
+                    child: Text(header,
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                  ),
+                ))
+            .toList(),
+        rows: levels.map((level) {
+          return DataRow(cells: [
+            DataCell(Text(level)),
+            ...List.generate(headers.length - 1, (_) {
+              return DataCell(Center(child: Text(getRandomValue())));
+            }),
+          ]);
+        }).toList(),
+      ),
     );
   }
 }
