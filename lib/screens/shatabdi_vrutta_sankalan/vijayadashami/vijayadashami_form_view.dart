@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:niyojak_prod/screens/shatabdi_vrutta_sankalan/vijayadashami/vijaya_dashami_report.dart';
@@ -67,6 +70,46 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     final int female = int.tryParse(femaleController.text) ?? 0;
     setState(() {
       total = male + female;
+    });
+  }
+
+  void clearForm() async {
+    setState(() {
+      programNirdharitVed = 2;
+      vaiyaktikGitKantashtha = 2;
+      programHishobh24Hour = 2;
+      maleController.clear();
+      femaleController.clear();
+      sanchalanZaleKa = 2;
+      savedsanchalanZaleKaEntries = [];
+      savedPatGanAnyaEntries = [];
+      presentMatrushaktiController.clear();
+      presentMaleController.clear();
+      _isExpanded = false;
+      // Reset selected values
+      _linkedMahaanagarValue = null;
+      _linkedVibhaagValue = null;
+      _linkedBhaagValue = null;
+      _linkedShaharValue = null;
+      _linkedNagarValue = null;
+      _linkedmandalValue = null;
+      _linkedgraamValue = null;
+      _linkedvastiValue = null;
+
+      // Clear data lists
+      // _linkedVibhaag = null;
+      _linkedBhaag = null;
+      _linkedShahar = null;
+      _linkedNagar = null;
+      _linkedmandal = null;
+      _linkedgraam = null;
+      _linkedvasti = null;
+
+      // Reset level tracking variables
+      selctedLevel = '';
+      selctedLevelName = '';
+      selctedLevelId = null;
+      populatelinkedVibhaagDropdown('');
     });
   }
 
@@ -252,6 +295,13 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                             color: Colors.purpleAccent,
                             fontWeight: FontWeight.bold),
                       ),
+                      trailing: IconButton(
+                          onPressed: () {
+                            clearForm();
+                          },
+                          icon: Icon(Icons.refresh),
+                          color: Colors.purpleAccent),
+                      iconColor: Colors.purpleAccent,
                     );
                   },
                   body: Container(
@@ -464,24 +514,25 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                         SizedBox(
                           height: 15,
                         ),
-                        Align(
-                          alignment: Alignment.center,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStatePropertyAll(
-                                    Colors.purpleAccent)),
-                            onPressed: () {
-                              setState(() {
-                                _isExpanded = false;
-                                isVastiSearch = true;
-                              });
-                            },
-                            child: Text("${Statics.getLabel('Filters')}",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold)),
-                          ),
-                        )
+                        if (selctedLevel == 'Nagar')
+                          Align(
+                            alignment: Alignment.center,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStatePropertyAll(
+                                      Colors.purpleAccent)),
+                              onPressed: () {
+                                setState(() {
+                                  _isExpanded = false;
+                                  isVastiSearch = true;
+                                });
+                              },
+                              child: Text("${Statics.getLabel('Filters')}",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                          )
                       ],
                     ),
                   ),
@@ -493,6 +544,27 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
             SizedBox(
               height: 20,
             ),
+            if (isVastiSearch == false)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    // ""
+                    // "${Statics.getLabel('Note')} :- "
+                    "${Statics.getLabel('NagarSelectionImportant')}",
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 2),
+                  Container(
+                    height: 2,
+                    width: double.infinity,
+                    color: Colors.red,
+                  ),
+                ],
+              ),
             if (selctedLevel != "" &&
                 selctedLevelName != "" &&
                 isVastiSearch == true)
@@ -796,6 +868,25 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                 ],
               ),
             ),
+//==============================  SUBMIT BUTTON =======================================================================
+            Container(
+              child: MaterialButton(
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                color: Theme.of(context).primaryColor,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50)),
+                onPressed: () {
+                  submitForm();
+                },
+                child: Text(
+                  Statics.getLabel('Submit'),
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ),
+            )
           ],
         ),
       ),
@@ -1012,46 +1103,75 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    DropdownButtonFormField(
-                      decoration: InputDecoration(
-                        labelText: Statics.getLabel('Vasti'),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                          borderSide: BorderSide(
-                            color: Colors.grey.shade400,
-                            width: 1.5,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                          borderSide: BorderSide(
-                            color: Colors.purpleAccent,
-                            width: 2,
-                          ),
-                        ),
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-                      ),
-                      isExpanded: true,
-                      value: _linkedvastiValue == "" ? null : _linkedvastiValue,
-                      items: _linkedvasti!
-                          .map((bg) => DropdownMenuItem(
+                    if (_linkedmandal != null && _linkedmandal!.length > 0)
+                      DropdownButtonFormField(
+                        decoration: InputDecoration(
+                            labelText: Statics.getLabel('Mandal')),
+                        isExpanded: true,
+                        value: _linkedmandalValue == ""
+                            ? null
+                            : _linkedmandalValue,
+                        items: _linkedmandal!
+                            .map((bg) => DropdownMenuItem(
                                 value: bg.geoUnitID.toString(),
-                                child: Text(bg.name!),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        final selectedItem = _linkedvasti!.firstWhere(
-                            (bg) => bg.geoUnitID.toString() == value);
-                        setState(() {
-                          selctedPatGanAnyaLevelName = selectedItem.name ?? "";
-                          selctedPatGanAnyaLevelId = value;
-                        });
-                      },
-                    ),
+                                child: Text(bg.name!)))
+                            .toList(),
+                        onChanged: (value) {
+                          final selectedItem = _linkedmandal!.firstWhere(
+                              (bg) => bg.geoUnitID.toString() == value);
+                          setState(() {
+                            selctedLevelName = selectedItem.name ?? "";
+                            selctedLevel = 'Mandal';
+                            selctedLevelId = value;
+
+                            _linkedmandalValue = value;
+                            populatelinkedGraamDropdown(value!);
+                          });
+                        },
+                      ),
+                    if (_linkedvasti != null && _linkedvasti!.length > 0)
+                      DropdownButtonFormField(
+                        decoration: InputDecoration(
+                          labelText: Statics.getLabel('Vasti'),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: BorderSide(
+                              color: Colors.grey.shade400,
+                              width: 1.5,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: BorderSide(
+                              color: Colors.purpleAccent,
+                              width: 2,
+                            ),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 14),
+                        ),
+                        isExpanded: true,
+                        value:
+                            _linkedvastiValue == "" ? null : _linkedvastiValue,
+                        items: _linkedvasti!
+                            .map((bg) => DropdownMenuItem(
+                                  value: bg.geoUnitID.toString(),
+                                  child: Text(bg.name!),
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          final selectedItem = _linkedvasti!.firstWhere(
+                              (bg) => bg.geoUnitID.toString() == value);
+                          setState(() {
+                            selctedPatGanAnyaLevelName =
+                                selectedItem.name ?? "";
+                            selctedPatGanAnyaLevelId = value;
+                          });
+                        },
+                      ),
                     const SizedBox(height: 12),
                     // SingleChildScrollView(
                     //   scrollDirection: Axis.horizontal,
@@ -1499,29 +1619,23 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     );
   }
 
-  Widget _buildInfoRow(String title, String? value) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Text(
-          "$title : ",
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 16,
-            color: Colors.purpleAccent,
-          ),
-        ),
-        Expanded(
-          child: Text(
-            value ?? "—",
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.black87,
-            ),
-          ),
-        ),
-      ],
-    );
+  Future<void> submitForm() async {
+    Map<String, dynamic> formData = {
+      "vastiid": int.parse(selctedLevelId!),
+      "cuserid": int.parse(Statics.userDetails['userID']),
+      "programNirdharitVed": programNirdharitVed,
+      "vaiyaktikGitKantashtha": vaiyaktikGitKantashtha,
+      "programHishobh24Hour": programHishobh24Hour,
+      "maleCount": maleController.text,
+      "femaleCount": femaleController.text,
+      "sanchalanZaleKa": sanchalanZaleKa,
+      "sanchalanZaleKaEntries": savedsanchalanZaleKaEntries,
+      "patGanAnyaEntries": savedPatGanAnyaEntries,
+      "presentMatrushakti": presentMatrushaktiController.text,
+      "presentMale": presentMaleController.text,
+    };
+    String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
+    log("Form Data (JSON):\n$formattedJson");
   }
 }
 

@@ -1537,6 +1537,8 @@ Map<String, String> resEnglish = {
   'sanchalanGhoshVadan': "संचलानत घोष वादन ?",
   'presentMatrushakti': "उपस्थित अन्य मातृशक्ति",
   'presentMale': "उपस्थित अन्य पुरुष",
+  'NagarSelectionImportant':
+      'माहिती भरण्यापूर्वी नगर/तालुका  निवडणे अनिवार्य आहे',
 };
 
 Map<String, String> resMarathi = {
@@ -3083,6 +3085,8 @@ Map<String, String> resMarathi = {
   'sanchalanGhoshVadan': "संचलानत घोष वादन ?",
   'presentMatrushakti': "उपस्थित अन्य मातृशक्ति",
   'presentMale': "उपस्थित अन्य पुरुष",
+  'NagarSelectionImportant':
+      'माहिती भरण्यापूर्वी नगर/तालुका  निवडणे अनिवार्य आहे',
 };
 
 Map<String, String> resHindi = {
@@ -4632,4 +4636,6 @@ Map<String, String> resHindi = {
   'sanchalanGhoshVadan': "संचलानत घोष वादन ?",
   'presentMatrushakti': "उपस्थित अन्य मातृशक्ति",
   'presentMale': "उपस्थित अन्य पुरुष",
+  'NagarSelectionImportant':
+      'माहिती भरण्यापूर्वी नगर/तालुका  निवडणे अनिवार्य आहे',
 };
