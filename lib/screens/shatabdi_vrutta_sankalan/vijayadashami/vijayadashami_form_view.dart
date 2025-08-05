@@ -1024,10 +1024,8 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     ).then((result) {
       if (result != null && result is SanchalanDataList) {
         setState(() {
-          // ✅ Add to table list
           savedsanchalanZaleKaEntries.add(result);
 
-          // ✅ Clear form variables after submission
           selctedsanchalanZaleKaLevelName = null;
           selctedsanchalanZaleKaLevelId = null;
           sanchalanSadandaZalKa = null;
@@ -1045,8 +1043,6 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       3,
       (_) => List.generate(5, (_) => TextEditingController()),
     );
-
-    final List<PatGanAnyaDataList> tempEntries = [];
 
     final List<String> columnHeaders = [
       Statics.getLabel('Shishu'),
@@ -1068,14 +1064,6 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
         sum += int.tryParse(ctrl.text) ?? 0;
       }
       return sum;
-    }
-
-    void clearInputs() {
-      for (var row in matrixControllers) {
-        for (var ctrl in row) {
-          ctrl.clear();
-        }
-      }
     }
 
     await showDialog(

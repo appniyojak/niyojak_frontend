@@ -3748,7 +3748,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         )),
                                         DataColumn(
                                             label: Text(
-                                          "${Statics.getLabel('andajeLoksankhya')}",
+                                          "${Statics.getLabel('avgPersent')}",
                                         )),
                                       ],
                                       rows: enteredKontyaPraantacheDataList
@@ -3852,7 +3852,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                                           .anyaPraantName),
                                                   SizedBox(height: 12),
                                                   _buildInfoRow(
-                                                      "${Statics.getLabel('andajeLoksankhya')}",
+                                                      "${Statics.getLabel('avgPersent')}",
                                                       selectedData.andaje),
                                                 ],
                                               ),
@@ -6192,6 +6192,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
     if (anyaPrabhaviLokShreniId != null && selectedValue == null) {
       selectedValue = filteredItems.firstWhere(
         (e) => e.id == anyaPrabhaviLokShreniId,
+        orElse: () =>
+            filteredItems.isNotEmpty ? filteredItems.first : Masterdata(),
       );
       selectedShreni = selectedValue;
     }
@@ -6203,7 +6205,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
     if (anyaPrabhaviLokUpShreniId != null && selectedDependentValue == null) {
       selectedDependentValue = dependentItems.firstWhere(
         (e) => e.id == anyaPrabhaviLokUpShreniId,
+        orElse: () =>
+            dependentItems.isNotEmpty ? dependentItems.first : Masterdata(),
       );
+
       selectedUpShreni = selectedDependentValue;
     }
 
@@ -6216,7 +6221,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
     if (anyaPrabhaviLokUpShreni1Id != null && selectedThirdLevelValue == null) {
       selectedThirdLevelValue = thirdLevelItems.firstWhere(
         (e) => e.id == anyaPrabhaviLokUpShreni1Id,
+        orElse: () =>
+            thirdLevelItems.isNotEmpty ? thirdLevelItems.first : Masterdata(),
       );
+
       selectedUpShreni2 = selectedThirdLevelValue;
     }
 
@@ -7968,7 +7976,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         ),
                       textControllerField2(
                         controller: loksankhyaAveragePersentCount,
-                        name: "${Statics.getLabel('andajeLoksankhya')}",
+                        name: "${Statics.getLabel('avgPersent')}",
                         keyboardType: TextInputType.number,
                         height: 50,
                       ),
@@ -9178,60 +9186,6 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8)),
                 ),
-                // onPressed: () {
-                //   if ((selectedUpShreni?.isOther == 1 &&
-                //           anyaPrabhaviLokAnyaUppshreniController.text == "") ||
-                //       (selectedUpShreni2?.isOther == 1 &&
-                //           anyaPrabhaviLokAnyaUppshreni1Controller.text == "")) {
-                //     Statics.showToast(
-                //         "${Statics.getLabel('otherInfoValidation')}");
-                //   } else {
-                //     VastisarAnyaprabhavilokam data = VastisarAnyaprabhavilokam(
-                //       name: anyaPrabhaviLokNaavController.text,
-                //       address: anyaPrabhaviLokAddressController.text,
-                //       doorabhaash: anyaPrabhaviLokMobileNoController.text,
-                //       shreneeid: anyaPrabhaviLokShreniId,
-                //       selectedDropdownValueName: anyaPrabhaviLokShreniName,
-                //       upshreneeid: anyaPrabhaviLokUpShreniId,
-                //       selectedDropdownValueName1: anyaPrabhaviLokUpShreniName,
-                //       upshreneeid2: anyaPrabhaviLokUpShreni1Id,
-                //       selectedDropdownValueName2: anyaPrabhaviLokUpShreni1Name,
-                //       visheshid: anyaPrabhaviLokVisheshId,
-                //       selectedDropdownValueName3: anyaPrabhaviLokVisheshName,
-                //       prabhaavkshetrid: anyaPrabhaviLokPrabhavKshetraId,
-                //       selectedDropdownValueName4:
-                //           anyaPrabhaviLokPrabhavKshetraName,
-                //       othervishesh:
-                //           anyaPrabhaviLokAnyaVisheshMahitiController.text,
-                //       samparksthitiid: anyaPrabhaviLokSamparkStithiId,
-                //       selectedDropdownValueName5:
-                //           anyaPrabhaviLokSamparkStithiName,
-                //       samparkasutranav:
-                //           anyaPrabhaviLokSamparkSutraNaavController.text,
-                //       samparkaSutraDoorbhash:
-                //           anyaPrabhaviLokSamparkSutraDoorbhashController.text,
-                //       pkid: pkidAnyaPrabhaviLok,
-                //       anyavisesamahiti:
-                //           anyaPrabhaviLokAnyaVisheshMahitiController.text,
-                //       otherupshrenee:
-                //           anyaPrabhaviLokAnyaUppshreniController.text,
-                //       otherupshrenee2:
-                //           anyaPrabhaviLokAnyaUppshreni1Controller.text,
-                //       isactive: isActiveAnyaPrabhavilok,
-                //       vastiid: int.parse(selctedLevelId!),
-                //     );
-                //     if (editIndex != null) {
-                //       anyaPrabhaviLokDataList[editIndex] = data;
-                //     } else {
-                //       anyaPrabhaviLokDataList.add(data);
-                //     }
-                //     clearAnyaPrabhaviLokFields();
-                //     if (onDataChanged != null) {
-                //       onDataChanged();
-                //     }
-                //     Navigator.of(ctx).pop();
-                //   }
-                // },
                 onPressed: () {
                   if ((selectedUpShreni?.isOther == 1 &&
                           anyaPrabhaviLokAnyaUppshreniController.text == "") ||
@@ -9241,6 +9195,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         "${Statics.getLabel('otherInfoValidation')}");
                   } else if (anyaPrabhaviLokMobileNoController.text.length !=
                       10) {
+                    log("anyaPrabhaviLokMobileNoController.text.length  -->> ${anyaPrabhaviLokMobileNoController.text.length}");
                     Statics.showToast(
                         "${Statics.getLabel('mobileNumberLimit')}");
                   } else {
@@ -9290,7 +9245,6 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     Navigator.of(ctx).pop();
                   }
                 },
-
                 child: Text("${Statics.getLabel('Submit')}",
                     style: TextStyle(color: Colors.white)),
               ),
@@ -9434,10 +9388,11 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     textControllerField("${Statics.getLabel('aayojakNaav')}",
                         vastitSajarHonareSanAyojakNameController, context,
                         height: 80),
-                    textControllerField(
-                        "${Statics.getLabel('aayojakSamparkSootra')}",
-                        vastitSajarHonareSanAyojakSamparkController,
-                        context,
+                    textControllerField2(
+                        name: "${Statics.getLabel('aayojakSamparkSootra')}",
+                        controller: vastitSajarHonareSanAyojakSamparkController,
+                        keyboardType: TextInputType.number,
+                        maxInput: 10,
                         height: 50),
                     const SizedBox(height: 10),
                   ],

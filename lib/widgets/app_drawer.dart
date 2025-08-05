@@ -223,8 +223,9 @@ class _AppDrawerState extends State<AppDrawer> {
             //     Navigator.of(context).pushReplacementNamed(MandalSurveyFormScreen.routeName);
             //   },
             // ),
-            if (initialData != null) Divider(),
-            if (initialData != null)
+            // if (initialData != null)
+              Divider(),
+            // if (initialData != null)
               ListTile(
                 dense: true,
                 leading: Icon(Icons.api),

@@ -1517,6 +1517,7 @@ Map<String, String> resEnglish = {
   'NotSelected': "Not Selected",
   'vadipadyacheInfo': 'Vadi/Padya Info',
   'vastiLabel': "Vasti",
+  'mobileNumberLimit': 'Mobile number must be 10 digits long.',
   'utsavLable': "उत्सव",
   'vijayaDashamiUtsav': "विजयादशमी उत्सव ",
   'ProgramNirdharitTime': "कार्यक्रम निर्धारित वेळेवर झालं का ?",
@@ -3087,6 +3088,7 @@ Map<String, String> resMarathi = {
   'presentMale': "उपस्थित अन्य पुरुष",
   'NagarSelectionImportant':
       'माहिती भरण्यापूर्वी नगर/तालुका  निवडणे अनिवार्य आहे',
+  'mobileNumberLimit': 'मोबाईल नंबर १० अंकी असावा.',
 };
 
 Map<String, String> resHindi = {
@@ -4638,4 +4640,5 @@ Map<String, String> resHindi = {
   'presentMale': "उपस्थित अन्य पुरुष",
   'NagarSelectionImportant':
       'माहिती भरण्यापूर्वी नगर/तालुका  निवडणे अनिवार्य आहे',
+  'mobileNumberLimit': 'मोबाइल नंबर 10 अंकों का होना चाहिए',
 };
