@@ -9198,6 +9198,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     log("anyaPrabhaviLokMobileNoController.text.length  -->> ${anyaPrabhaviLokMobileNoController.text.length}");
                     Statics.showToast(
                         "${Statics.getLabel('mobileNumberLimit')}");
+                  } else if (anyaPrabhaviLokSamparkSutraDoorbhashController
+                          .text.length !=
+                      10) {
+                    log("anyaPrabhaviLokSamparkSutraDoorbhashController.text.length  -->> ${anyaPrabhaviLokSamparkSutraDoorbhashController.text.length}");
+                    Statics.showToast(
+                        "${Statics.getLabel('mobileNumberLimit')}");
                   } else {
                     VastisarAnyaprabhavilokam data = VastisarAnyaprabhavilokam(
                       name: anyaPrabhaviLokNaavController.text,
@@ -9603,11 +9609,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         vastitSajarHonareSamajikKaryakramAyojakNameController,
                         context,
                         height: 80),
-                    textControllerField(
-                        "${Statics.getLabel('aayojakSamparkSootra')}",
-                        vastitSajarHonareSamajikKaryakramAyojakSamparkController,
-                        context,
-                        height: 50),
+                    textControllerField2(
+                        name: "${Statics.getLabel('aayojakSamparkSootra')}",
+                        controller:
+                            vastitSajarHonareSamajikKaryakramAyojakSamparkController,
+                        height: 50,
+                        keyboardType: TextInputType.number,
+                        maxInput: 10),
                     const SizedBox(height: 10),
                   ],
                 ),

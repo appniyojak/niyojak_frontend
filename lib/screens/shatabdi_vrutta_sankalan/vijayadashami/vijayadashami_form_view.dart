@@ -8,7 +8,6 @@ import 'package:niyojak_prod/widgets/app_drawer.dart';
 
 import '../../../helpers/static_data.dart' as Statics;
 import '../../../models/request_model/pat_gan_anya_vijaya_dashami_model.dart';
-import '../../../models/request_model/sanchalan_list_model.dart';
 import '../../../providers/bals.dart';
 
 class VijayadashamiFormView extends StatefulWidget {
@@ -62,6 +61,11 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     populateDropdown();
     maleController.addListener(_updateTotal);
     femaleController.addListener(_updateTotal);
+    shishuCountController.addListener(updateTotal);
+    baalCountController.addListener(updateTotal);
+    tarunVidyaarthiCountController.addListener(updateTotal);
+    tarunVyavasaayeeCountController.addListener(updateTotal);
+    proudhVyavasaayeeCountController.addListener(updateTotal);
   }
 
   int total = 0;
@@ -73,6 +77,20 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     });
   }
 
+  void updateTotal() {
+    int getValue(TextEditingController controller) {
+      return int.tryParse(controller.text.trim()) ?? 0;
+    }
+
+    final total = getValue(shishuCountController) +
+        getValue(baalCountController) +
+        getValue(tarunVidyaarthiCountController) +
+        getValue(tarunVyavasaayeeCountController) +
+        getValue(proudhVyavasaayeeCountController);
+
+    totalCountController.text = total.toString();
+  }
+
   void clearForm() async {
     setState(() {
       programNirdharitVed = 2;
@@ -81,11 +99,13 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       maleController.clear();
       femaleController.clear();
       sanchalanZaleKa = 2;
-      savedsanchalanZaleKaEntries = [];
+      sanchalanSadandaZalKa = 2;
+      sanchalanGhoshVadanZalKa = 2;
       savedPatGanAnyaEntries = [];
       presentMatrushaktiController.clear();
       presentMaleController.clear();
       _isExpanded = false;
+
       // Reset selected values
       _linkedMahaanagarValue = null;
       _linkedVibhaagValue = null;
@@ -244,11 +264,32 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
   final TextEditingController presentMaleController = TextEditingController();
   final TextEditingController presentMatrushaktiController =
       TextEditingController();
+  final TextEditingController shishuCountController = TextEditingController();
+  final TextEditingController baalCountController = TextEditingController();
+  final TextEditingController tarunVidyaarthiCountController =
+      TextEditingController();
+  final TextEditingController tarunVyavasaayeeCountController =
+      TextEditingController();
+  final TextEditingController proudhVyavasaayeeCountController =
+      TextEditingController();
+  final TextEditingController totalCountController = TextEditingController();
+  final TextEditingController totalCountVastController =
+      TextEditingController();
+  final TextEditingController pratinidhitwaController = TextEditingController();
+
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void dispose() {
     femaleController.clear();
     maleController.clear();
+    shishuCountController.dispose();
+    baalCountController.dispose();
+    tarunVidyaarthiCountController.dispose();
+    tarunVyavasaayeeCountController.dispose();
+    proudhVyavasaayeeCountController.dispose();
+    totalCountController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -718,6 +759,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
             mainContainer(
               "${Statics.getLabel('sanchalan')}",
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   yesNoRadioButton(
                     question: "${Statics.getLabel('sanchalanZaleKa')}",
@@ -728,33 +770,149 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                       });
                     },
                   ),
-                  if (sanchalanZaleKa == 1)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                  yesNoRadioButton(
+                    question: Statics.getLabel('sanchalanSadandaZalKa'),
+                    selectedOption: sanchalanSadandaZalKa ?? 2,
+                    onChanged: (value) {
+                      setState(() {
+                        sanchalanSadandaZalKa = value;
+                      });
+                    },
+                  ),
+                  yesNoRadioButton(
+                    question: Statics.getLabel('sanchalanGhoshVadanZalKa'),
+                    selectedOption: sanchalanGhoshVadanZalKa ?? 2,
+                    onChanged: (value) {
+                      setState(() {
+                        sanchalanGhoshVadanZalKa = value;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text(
+                      "${Statics.getLabel('upastithi')}",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                          fontSize: 15),
+                    ),
+                  ),
+                  SizedBox(height: 6),
+                  Scrollbar(
+                    controller:
+                        _scrollController, // Create this ScrollController
+                    thumbVisibility: true, // Always show scrollbar
+                    child: SingleChildScrollView(
+                      controller:
+                          _scrollController, // Attach same controller here
+                      scrollDirection: Axis.horizontal,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 100,
+                              child: textControllerField2(
+                                name: Statics.getLabel('Shishu'),
+                                controller: shishuCountController,
+                                keyboardType: TextInputType.number,
+                                isTextBold: false,
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            SizedBox(
+                              width: 100,
+                              child: textControllerField2(
+                                name: Statics.getLabel('Baal'),
+                                controller: baalCountController,
+                                keyboardType: TextInputType.number,
+                                isTextBold: false,
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            SizedBox(
+                              width: 100,
+                              child: textControllerField2(
+                                name: Statics.getLabel('TarunVidyaarthi'),
+                                controller: tarunVidyaarthiCountController,
+                                keyboardType: TextInputType.number,
+                                isTextBold: false,
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            SizedBox(
+                              width: 100,
+                              child: textControllerField2(
+                                name: Statics.getLabel('TarunVyavasaayee'),
+                                controller: tarunVyavasaayeeCountController,
+                                keyboardType: TextInputType.number,
+                                isTextBold: false,
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            SizedBox(
+                              width: 100,
+                              child: textControllerField2(
+                                name: Statics.getLabel('ProudhVyavasaayee'),
+                                controller: proudhVyavasaayeeCountController,
+                                keyboardType: TextInputType.number,
+                                isTextBold: false,
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            SizedBox(
+                              width: 100,
+                              child: textControllerField2(
+                                name: Statics.getLabel('Total'),
+                                controller: totalCountController,
+                                isEdit: true,
+                                isTextBold: false,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        Text(
+                          "${Statics.getLabel('bhougolikPratinidhitwa')} :",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontSize: 15),
+                        ),
                         InkWell(
                           onTap: () {
-                            showsanchalanZaleKaPopup(context);
+                            selectVastiPopUp(context);
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 5),
                             width: 100,
+                            height: 30,
                             decoration: BoxDecoration(
                                 border: Border.all(
                                     color: Colors.purpleAccent.shade100),
-                                color: Colors.purpleAccent.withOpacity(0.7),
+                                // color: Colors.purpleAccent.withOpacity(0.7),
                                 borderRadius: BorderRadius.circular(15)),
                             child: Center(
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(Icons.add,
-                                      color: Colors.white, size: 15),
                                   SizedBox(width: 5),
                                   Text(
-                                    "${Statics.getLabel('AddButton')}",
+                                    "${Statics.getLabel('addVasti')}",
                                     style: TextStyle(
-                                        color: Colors.white,
+                                        color: Colors.purpleAccent.shade100,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ],
@@ -764,47 +922,68 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                         ),
                       ],
                     ),
-                  if (sanchalanZaleKa == 1)
-                    SizedBox(
-                      height: 20,
-                    ),
-                  if (sanchalanZaleKa == 1)
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: DataTable(
-                        headingRowColor: MaterialStateProperty.all(
-                            Colors.purpleAccent.shade100),
-                        headingTextStyle: const TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                        columns: [
-                          DataColumn(label: Text(Statics.getLabel('Vasti'))),
-                          DataColumn(
-                              label:
-                                  Text(Statics.getLabel('sanchalanSadanda'))),
-                          DataColumn(
-                              label: Text(
-                                  Statics.getLabel('sanchalanGhoshVadan'))),
-                        ],
-                        rows: savedsanchalanZaleKaEntries
-                            .map(
-                              (entry) => DataRow(cells: [
-                                DataCell(Text(
-                                    entry.selectedSanchalanVastiName ?? "-")),
-                                DataCell(Text(
-                                  entry.sanchalanSadandaYesNo == 1
-                                      ? Statics.getLabel('ConfirmationYes')
-                                      : Statics.getLabel('ConfirmationNo'),
-                                )),
-                                DataCell(Text(
-                                  entry.sanchalanGhoshVadanYesNo == 1
-                                      ? Statics.getLabel('ConfirmationYes')
-                                      : Statics.getLabel('ConfirmationNo'),
-                                )),
-                              ]),
-                            )
-                            .toList(),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  // Selected Vasti List
+                  if (selectedVastiList.isNotEmpty)
+                    Container(
+                      height: 150,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0, vertical: 4),
+                      child: SingleChildScrollView(
+                        controller: _scrollController,
+                        scrollDirection: Axis.vertical,
+                        child: Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: selectedVastiList.map((vasti) {
+                            return Chip(
+                              label: Text(vasti.name),
+                              deleteIcon: Icon(Icons.close),
+                              onDeleted: () {
+                                setState(() {
+                                  selectedVastiList
+                                      .removeWhere((v) => v.id == vasti.id);
+                                });
+                              },
+                            );
+                          }).toList(),
+                        ),
                       ),
                     ),
+
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: textControllerField2(
+                          name:
+                              "${Statics.getLabel('Total')} ${Statics.getLabel('Vasti')}",
+                          controller: totalCountVastController,
+                          keyboardType: TextInputType.number,
+                          isTextBold: false,
+                        ),
+                      ),
+                      SizedBox(width: 8), // optional spacing between fields
+                      Expanded(
+                        child: textControllerField2(
+                          name: "${Statics.getLabel('pratinidhitva')}",
+                          controller: pratinidhitwaController,
+                          keyboardType: TextInputType.number,
+                          isTextBold: false,
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -894,146 +1073,129 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
   }
 
 // ================================  SANCHALAN POPUP ==================================================================
-  List<SanchalanDataList> savedsanchalanZaleKaEntries = [];
-  String? selctedsanchalanZaleKaLevelName;
-  String? selctedsanchalanZaleKaLevelId;
-  Future<void> showsanchalanZaleKaPopup(BuildContext context) async {
-    String? localSelectedLevelName = selctedsanchalanZaleKaLevelName;
-    String? localSelectedLevelId = selctedsanchalanZaleKaLevelId;
-    int? localSanchalanSadandaZalKa = sanchalanSadandaZalKa;
-    int? localSanchalanGhoshVadanZalKa = sanchalanGhoshVadanZalKa;
-
-    await showDialog(
-      context: context,
-      builder: (context) {
-        return StatefulBuilder(
-          builder: (context, updateState) {
-            return AlertDialog(
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    Statics.getLabel('sanchalan'),
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.close, color: Colors.grey[700]),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  )
-                ],
-              ),
-              content: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    DropdownButtonFormField(
-                      decoration: InputDecoration(
-                        labelText: Statics.getLabel('Vasti'),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                          borderSide: BorderSide(
-                            color: Colors.grey.shade400,
-                            width: 1.5,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                          borderSide: BorderSide(
-                            color: Colors.purpleAccent,
-                            width: 2,
-                          ),
-                        ),
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-                      ),
-                      isExpanded: true,
-                      value: localSelectedLevelId,
-                      items: _linkedvasti!
-                          .map((bg) => DropdownMenuItem(
-                                value: bg.geoUnitID.toString(),
-                                child: Text(bg.name!),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        final selectedItem = _linkedvasti!.firstWhere(
-                            (bg) => bg.geoUnitID.toString() == value);
-                        updateState(() {
-                          localSelectedLevelName = selectedItem.name ?? "";
-                          localSelectedLevelId = value.toString();
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 15),
-                    yesNoRadioButton(
-                      question: Statics.getLabel('sanchalanSadandaZalKa'),
-                      selectedOption: localSanchalanSadandaZalKa ?? 2,
-                      onChanged: (value) {
-                        updateState(() {
-                          localSanchalanSadandaZalKa = value;
-                        });
-                      },
-                    ),
-                    yesNoRadioButton(
-                      question: Statics.getLabel('sanchalanGhoshVadanZalKa'),
-                      selectedOption: localSanchalanGhoshVadanZalKa ?? 2,
-                      onChanged: (value) {
-                        updateState(() {
-                          localSanchalanGhoshVadanZalKa = value;
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              actions: [
-                Center(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.purpleAccent,
-                      foregroundColor: Colors.white,
-                    ),
-                    onPressed: () {
-                      try {
-                        final entry = SanchalanDataList(
-                          selectedSanchalanVastiId:
-                              int.tryParse(localSelectedLevelId ?? "0"),
-                          selectedSanchalanVastiName: localSelectedLevelName,
-                          sanchalanGhoshVadanYesNo:
-                              localSanchalanGhoshVadanZalKa,
-                          sanchalanSadandaYesNo: localSanchalanSadandaZalKa,
-                        );
-
-                        Navigator.pop(context, entry);
-                      } catch (e) {
-                        print("Error while saving: $e");
-                      }
-                    },
-                    child: Text(Statics.getLabel('Submit')),
-                  ),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    ).then((result) {
-      if (result != null && result is SanchalanDataList) {
-        setState(() {
-          savedsanchalanZaleKaEntries.add(result);
-
-          selctedsanchalanZaleKaLevelName = null;
-          selctedsanchalanZaleKaLevelId = null;
-          sanchalanSadandaZalKa = null;
-          sanchalanGhoshVadanZalKa = null;
-        });
-      }
-    });
-  }
+//   List<SanchalanDataList> savedsanchalanZaleKaEntries = [];
+//   String? selctedsanchalanZaleKaLevelName;
+//   String? selctedsanchalanZaleKaLevelId;
+//   Future<void> showsanchalanZaleKaPopup(BuildContext context) async {
+//     String? localSelectedLevelName = selctedsanchalanZaleKaLevelName;
+//     String? localSelectedLevelId = selctedsanchalanZaleKaLevelId;
+//     int? localSanchalanSadandaZalKa = sanchalanSadandaZalKa;
+//     int? localSanchalanGhoshVadanZalKa = sanchalanGhoshVadanZalKa;
+//
+//     await showDialog(
+//       context: context,
+//       builder: (context) {
+//         return StatefulBuilder(
+//           builder: (context, updateState) {
+//             return AlertDialog(
+//               title: Row(
+//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                 children: [
+//                   Text(
+//                     Statics.getLabel('sanchalan'),
+//                     style: TextStyle(fontWeight: FontWeight.bold),
+//                   ),
+//                   IconButton(
+//                     icon: Icon(Icons.close, color: Colors.grey[700]),
+//                     onPressed: () {
+//                       Navigator.pop(context);
+//                     },
+//                   )
+//                 ],
+//               ),
+//               content: SingleChildScrollView(
+//                 child: Column(
+//                   mainAxisSize: MainAxisSize.min,
+//                   children: [
+//                     DropdownButtonFormField(
+//                       decoration: InputDecoration(
+//                         labelText: Statics.getLabel('Vasti'),
+//                         border: OutlineInputBorder(
+//                           borderRadius: BorderRadius.circular(8.0),
+//                         ),
+//                         enabledBorder: OutlineInputBorder(
+//                           borderRadius: BorderRadius.circular(8.0),
+//                           borderSide: BorderSide(
+//                             color: Colors.grey.shade400,
+//                             width: 1.5,
+//                           ),
+//                         ),
+//                         focusedBorder: OutlineInputBorder(
+//                           borderRadius: BorderRadius.circular(8.0),
+//                           borderSide: BorderSide(
+//                             color: Colors.purpleAccent,
+//                             width: 2,
+//                           ),
+//                         ),
+//                         contentPadding:
+//                             EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+//                       ),
+//                       isExpanded: true,
+//                       value: localSelectedLevelId,
+//                       items: _linkedvasti!
+//                           .map((bg) => DropdownMenuItem(
+//                                 value: bg.geoUnitID.toString(),
+//                                 child: Text(bg.name!),
+//                               ))
+//                           .toList(),
+//                       onChanged: (value) {
+//                         final selectedItem = _linkedvasti!.firstWhere(
+//                             (bg) => bg.geoUnitID.toString() == value);
+//                         updateState(() {
+//                           localSelectedLevelName = selectedItem.name ?? "";
+//                           localSelectedLevelId = value.toString();
+//                         });
+//                       },
+//                     ),
+//                     const SizedBox(height: 15),
+//
+//                   ],
+//                 ),
+//               ),
+//               actions: [
+//                 Center(
+//                   child: ElevatedButton(
+//                     style: ElevatedButton.styleFrom(
+//                       backgroundColor: Colors.purpleAccent,
+//                       foregroundColor: Colors.white,
+//                     ),
+//                     onPressed: () {
+//                       try {
+//                         final entry = SanchalanDataList(
+//                           selectedSanchalanVastiId:
+//                               int.tryParse(localSelectedLevelId ?? "0"),
+//                           selectedSanchalanVastiName: localSelectedLevelName,
+//                           sanchalanGhoshVadanYesNo:
+//                               localSanchalanGhoshVadanZalKa,
+//                           sanchalanSadandaYesNo: localSanchalanSadandaZalKa,
+//                         );
+//
+//                         Navigator.pop(context, entry);
+//                       } catch (e) {
+//                         print("Error while saving: $e");
+//                       }
+//                     },
+//                     child: Text(Statics.getLabel('Submit')),
+//                   ),
+//                 ),
+//               ],
+//             );
+//           },
+//         );
+//       },
+//     ).then((result) {
+//       if (result != null && result is SanchalanDataList) {
+//         setState(() {
+//           savedsanchalanZaleKaEntries.add(result);
+//
+//           selctedsanchalanZaleKaLevelName = null;
+//           selctedsanchalanZaleKaLevelId = null;
+//           sanchalanSadandaZalKa = null;
+//           sanchalanGhoshVadanZalKa = null;
+//         });
+//       }
+//     });
+//   }
 
   List<PatGanAnyaDataList> savedPatGanAnyaEntries = [];
   String? selctedPatGanAnyaLevelName;
@@ -1441,15 +1603,106 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
 
 // ================================ END  Swayamsewak POPUP ==================================================================
 
-  Widget textControllerField2(
-      {required String name,
-      required TextEditingController controller,
-      double height = 50.0,
-      TextInputType keyboardType = TextInputType.text,
-      bool isEdit = false,
-      String? hintTextString,
-      String? imp,
-      int? maxInput}) {
+// ================================ Select Vasti POPUP ==================================================================
+  List<VastiModel> selectedVastiList = [];
+
+  Future<void> selectVastiPopUp(BuildContext context) async {
+    List<int> selectedVastiIds = selectedVastiList.map((e) => e.id).toList();
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, updateState) {
+            return AlertDialog(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    Statics.getLabel('addVasti'),
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.close, color: Colors.grey[700]),
+                    onPressed: () => Navigator.of(context).pop(),
+                  )
+                ],
+              ),
+              content: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.5,
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: _linkedvasti!.map((vastiItem) {
+                      return CheckboxListTile(
+                        value: selectedVastiIds.contains(vastiItem.geoUnitID),
+                        title: Text(vastiItem.name ?? ''),
+                        onChanged: (bool? isChecked) {
+                          updateState(() {
+                            if (isChecked ?? false) {
+                              selectedVastiIds.add(vastiItem.geoUnitID!);
+                            } else {
+                              selectedVastiIds.remove(vastiItem.geoUnitID);
+                            }
+                          });
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+              actions: [
+                Center(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.purpleAccent,
+                      foregroundColor: Colors.white,
+                    ),
+                    onPressed: () {
+                      try {
+                        selectedVastiList = _linkedvasti!
+                            .where((vasti) =>
+                                selectedVastiIds.contains(vasti.geoUnitID))
+                            .map((vasti) => VastiModel(
+                                  id: vasti.geoUnitID ?? 0,
+                                  name: vasti.name ?? '',
+                                ))
+                            .toList();
+
+                        print(
+                            "Selected Vasti List: ${selectedVastiList.map((e) => e.toJson())}");
+                        Navigator.of(context).pop();
+                        setState(() {});
+                      } catch (e) {
+                        print("Error while saving: $e");
+                      }
+                    },
+                    child: Text(Statics.getLabel('Submit')),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+// ================================ Select Vasti POPUP ==================================================================
+
+  Widget textControllerField2({
+    required String name,
+    required TextEditingController controller,
+    double height = 50.0,
+    TextInputType keyboardType = TextInputType.text,
+    bool isEdit = false,
+    String? hintTextString,
+    String? imp,
+    int? maxInput,
+    bool isTextBold = true, // <-- NEW argument
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1460,7 +1713,9 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                 text: name,
                 style: TextStyle(
                   fontSize: 15,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: isTextBold
+                      ? FontWeight.bold
+                      : FontWeight.normal, // <-- toggle bold
                   color: Colors.black,
                 ),
               ),
@@ -1492,14 +1747,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
               fillColor: Colors.white,
               hintText: hintTextString,
             ),
-            // readOnly: isVastiSearch == false ? true : isEdit,
-            onTap: () {
-              // if (isVastiSearch) {
-              // print("Nothing");
-              // } else {
-              //   showPopupForVastiValidation(context);
-              // }
-            },
+            readOnly: isEdit,
             maxLength: maxInput,
             buildCounter: (context,
                     {int? currentLength, int? maxLength, bool? isFocused}) =>
@@ -1617,7 +1865,8 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       "maleCount": maleController.text,
       "femaleCount": femaleController.text,
       "sanchalanZaleKa": sanchalanZaleKa,
-      "sanchalanZaleKaEntries": savedsanchalanZaleKaEntries,
+      "sanchalanSadandaZalKa": sanchalanSadandaZalKa,
+      "sanchalanGhoshVadanZalKa": sanchalanGhoshVadanZalKa,
       "patGanAnyaEntries": savedPatGanAnyaEntries,
       "presentMatrushakti": presentMatrushaktiController.text,
       "presentMale": presentMaleController.text,
@@ -1628,3 +1877,28 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
 }
 
 //====================================================================================================================================
+class VastiModel {
+  final int id;
+  final String name;
+
+  VastiModel({
+    required this.id,
+    required this.name,
+  });
+
+  // Factory constructor for creating a new object from a JSON map
+  factory VastiModel.fromJson(Map<String, dynamic> json) {
+    return VastiModel(
+      id: json['id'] ?? 0,
+      name: json['name'] ?? '',
+    );
+  }
+
+  // Method to convert this object to a JSON map
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+    };
+  }
+}

@@ -619,7 +619,7 @@ Map<String, String> resEnglish = {
   'MandalsurveuAbhiyanStithi': 'Mandal Sarvekshan Abhiyan Stiti',
   'sajareHonareSan': 'Vastit Sajare Honare San/Utsav',
   'GavatsajareHonareSan': 'Gaavat Sajare Honare San/Utsav',
-  'sajareHonareKaryakram': 'Vastit Sajare Honare San/Utsav',
+  'sajareHonareKaryakram': 'Vastit Sajare\n Honare San/Utsav',
   'GavatHonareKaryakram': 'Gavat Sajare Honare Samajik Karyakram',
   'gatividhiUpakraam': 'Gatividhi Upkram Stithi',
   'JagranShreniUpkram': 'Jagaran Shreni Karyavibhag Upkram Stithi',
@@ -1540,6 +1540,9 @@ Map<String, String> resEnglish = {
   'presentMale': "उपस्थित अन्य पुरुष",
   'NagarSelectionImportant':
       'माहिती भरण्यापूर्वी नगर/तालुका  निवडणे अनिवार्य आहे',
+  'upastithi': 'उपस्थिति',
+  'bhougolikPratinidhitwa': 'भौगोलिक प्रतिनिधित्व',
+  'addVasti': 'वस्ती जोडा',
 };
 
 Map<String, String> resMarathi = {
@@ -2164,7 +2167,7 @@ Map<String, String> resMarathi = {
   'MandalsurveuAbhiyanStithi': 'मंडल सर्वेक्षण अभियान स्थिती',
   'sajareHonareSan': 'वस्तीत साजरे होणारे महत्वाचे\nसण/ उत्सव',
   'GavatsajareHonareSan': 'गावात साजरे होणारे महत्वाचे\nसण/ उत्सव',
-  'sajareHonareKaryakram': 'वस्तीत साजरे होणारे महत्वाचे सामाजिक कार्यक्रम',
+  'sajareHonareKaryakram': 'वस्तीत साजरे होणारे\n महत्वाचे सामाजिक कार्यक्रम',
   'GavatHonareKaryakram': 'गावात साजरे होणारे महत्वाचे सामाजिक कार्यक्रम',
   'gatividhiUpakraam': 'गतिविधी उपक्रम स्थिती',
   'JagranShreniUpkram': 'जागरण श्रेणी कार्यविभाग उपक्रम स्थिती',
@@ -3089,6 +3092,9 @@ Map<String, String> resMarathi = {
   'NagarSelectionImportant':
       'माहिती भरण्यापूर्वी नगर/तालुका  निवडणे अनिवार्य आहे',
   'mobileNumberLimit': 'मोबाईल नंबर १० अंकी असावा.',
+  'upastithi': 'उपस्थिति',
+  'bhougolikPratinidhitwa': 'भौगोलिक प्रतिनिधित्व',
+  'addVasti': 'वस्ती जोडा',
 };
 
 Map<String, String> resHindi = {
@@ -3718,7 +3724,7 @@ Map<String, String> resHindi = {
   'MandalsurveuAbhiyanStithi': 'मंडल सर्वेक्षण अभियान स्थिती',
   'sajareHonareSan': 'वस्तीत साजरे होणारे महत्वाचे\nसण/ उत्सव',
   'GavatsajareHonareSan': 'गावात साजरे होणारे महत्वाचे\n सण/ उत्सव',
-  'sajareHonareKaryakram': 'वस्तीत साजरे होणारे महत्वाचे सामाजिक कार्यक्रम',
+  'sajareHonareKaryakram': 'वस्तीत साजरे होणारे \nमहत्वाचे सामाजिक कार्यक्रम',
   'GavatHonareKaryakram': 'गावात साजरे होणारे महत्वाचे सामाजिक कार्यक्रम',
   'gatividhiUpakraam': 'गतिविधी उपक्रम स्थिती',
   'JagranShreniUpkram': 'जागरण श्रेणी कार्यविभाग उपक्रम स्थिती',
@@ -4641,4 +4647,7 @@ Map<String, String> resHindi = {
   'NagarSelectionImportant':
       'माहिती भरण्यापूर्वी नगर/तालुका  निवडणे अनिवार्य आहे',
   'mobileNumberLimit': 'मोबाइल नंबर 10 अंकों का होना चाहिए',
+  'upastithi': 'उपस्थिति',
+  'bhougolikPratinidhitwa': 'भौगोलिक प्रतिनिधित्व',
+  'addVasti': 'वस्ती जोडा',
 };
