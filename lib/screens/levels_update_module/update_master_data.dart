@@ -2,10 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import '../helpers/static_data.dart' as Statics;
-import '../models/response_model/geounit_name_model.dart';
-import '../providers/bals.dart';
-import '../widgets/app_drawer.dart';
+import '../../helpers/static_data.dart' as Statics;
+import '../../models/response_model/geounit_name_model.dart';
+import '../../providers/bals.dart';
 
 class UpdateMasterDataScreen extends StatefulWidget {
   static const routeName = '/master-data-update';
@@ -253,13 +252,6 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          Statics.getLabel('masterdataupdate'),
-          style: TextStyle(fontSize: 24),
-        ),
-      ),
-      drawer: AppDrawer(),
       body: Container(
         padding: EdgeInsets.all(20.0),
         child: SingleChildScrollView(

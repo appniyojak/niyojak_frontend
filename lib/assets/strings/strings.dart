@@ -1543,6 +1543,9 @@ Map<String, String> resEnglish = {
   'upastithi': 'उपस्थिति',
   'bhougolikPratinidhitwa': 'भौगोलिक प्रतिनिधित्व',
   'addVasti': 'वस्ती जोडा',
+  'upnagarUpkhanda': 'उपनगर/उपखंड',
+  'upnagarUpkhandaNewAdd': 'नवीन उपनगर/उपखंड जोडा',
+  'upnagarUpkhandaLinked': 'उपनगर/उपखंडला नगर/वस्ती जोडा',
 };
 
 Map<String, String> resMarathi = {
@@ -3095,6 +3098,9 @@ Map<String, String> resMarathi = {
   'upastithi': 'उपस्थिति',
   'bhougolikPratinidhitwa': 'भौगोलिक प्रतिनिधित्व',
   'addVasti': 'वस्ती जोडा',
+  'upnagarUpkhanda': 'उपनगर/उपखंड',
+  'upnagarUpkhandaNewAdd': 'नवीन उपनगर/उपखंड जोडा',
+  'upnagarUpkhandaLinked': 'उपनगर/उपखंडला नगर/वस्ती जोडा',
 };
 
 Map<String, String> resHindi = {
@@ -4650,4 +4656,7 @@ Map<String, String> resHindi = {
   'upastithi': 'उपस्थिति',
   'bhougolikPratinidhitwa': 'भौगोलिक प्रतिनिधित्व',
   'addVasti': 'वस्ती जोडा',
+  'upnagarUpkhanda': 'उपनगर/उपखंड',
+  'upnagarUpkhandaNewAdd': 'नवीन उपनगर/उपखंड जोडा',
+  'upnagarUpkhandaLinked': 'उपनगर/उपखंडला नगर/वस्ती जोडा',
 };

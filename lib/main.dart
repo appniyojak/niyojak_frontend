@@ -23,6 +23,8 @@ import 'package:niyojak_prod/screens/edit_swayamsevak_daayitva.dart';
 import 'package:niyojak_prod/screens/edit_swayamsevak_other_info.dart';
 import 'package:niyojak_prod/screens/edit_swayamsevak_soochi.dart';
 import 'package:niyojak_prod/screens/edit_vishesh_vyakti_shod.dart';
+import 'package:niyojak_prod/screens/levels_update_module/levels_manage_tabs.dart';
+import 'package:niyojak_prod/screens/levels_update_module/update_master_data.dart';
 import 'package:niyojak_prod/screens/nirikshan_baithak_vrutta.dart';
 import 'package:niyojak_prod/screens/sankalit_data_name.dart';
 import 'package:niyojak_prod/screens/search_sankalp_screen.dart';
@@ -34,7 +36,6 @@ import 'package:niyojak_prod/screens/survey_screen/report_view/vasti_report_tab2
 import 'package:niyojak_prod/screens/survey_screen/survey_form/mandal_survey_form_view.dart';
 import 'package:niyojak_prod/screens/survey_screen/survey_form/vasti_survey_form_view.dart';
 import 'package:niyojak_prod/screens/survey_screen/vasti_reports_tabs.dart';
-import 'package:niyojak_prod/screens/update_master_data.dart';
 import 'package:niyojak_prod/screens/view_vishesh_vyakti_shodh.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -324,6 +325,7 @@ class NiyojakAppState extends State<NiyojakApp> {
             EditSwayamsevakSoochiInfo(),
         CreateNotificationView.routeName: (ctx) => CreateNotificationView(),
         UpdateMasterDataScreen.routeName: (ctx) => UpdateMasterDataScreen(),
+        TabScreen.routeName: (ctx) => TabScreen(),
         VastiSurveyFormScreen.routeName: (ctx) => VastiSurveyFormScreen(),
         VastiSurveyReportTab1.routeName: (ctx) => VastiSurveyReportTab1(),
         VastiSurveyReportTab2.routeName: (ctx) => VastiSurveyReportTab2(),

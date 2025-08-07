@@ -12,6 +12,7 @@ import '../helpers/static_data.dart' as Statics;
 import '../screens/annual_baithak_ekatrit_vrutta.dart';
 import '../screens/help_screen.dart';
 import '../screens/home_screen.dart';
+import '../screens/levels_update_module/levels_manage_tabs.dart';
 import '../screens/search_annual_baithak_vrutta.dart';
 import '../screens/search_event.dart';
 import '../screens/search_join_rss.dart';
@@ -27,7 +28,6 @@ import '../screens/survey_screen/survey_form/mandal_survey_form_view.dart';
 import '../screens/survey_screen/survey_form/vasti_survey_form_view.dart';
 import '../screens/survey_screen/vasti_reports_tabs.dart';
 import '../screens/swayamsevak_search.dart';
-import '../screens/update_master_data.dart';
 
 class AppDrawer extends StatefulWidget {
   const AppDrawer({Key? key}) : super(key: key);
@@ -530,7 +530,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   style: TextStyle(fontSize: 18),
                 ),
                 onTap: () {
-                  Navigator.of(context).pushReplacementNamed(UpdateMasterDataScreen.routeName);
+                  Navigator.of(context).pushReplacementNamed(TabScreen.routeName);
                 },
               ),
             if (shouldShowListTileforGeounitCHange(Statics.userDetails['LevelName'], Statics.userDetails["DaayitvaName"]) == true)

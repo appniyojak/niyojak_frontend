@@ -27,6 +27,7 @@ import '../models/response_model/sankalit_data_names_model.dart';
 import '../models/response_model/taluka_mandal_model.dart';
 import '../models/response_model/vasti_sarvekshan_dropdown_model.dart';
 import '../models/response_model/vasti_survey_report_model.dart';
+import '../models/response_model/vasti_up_data_model.dart';
 import '../providers/bals.dart';
 import './database_helper.dart';
 
@@ -195,6 +196,8 @@ const String urlGetShaakhaaVruttaListForApp =
 const String urlSaveShaakhaaVruttaForApp =
     baseUrlAPI + '/SaveShaakhaaVruttaForApp';
 const String urlGetgeounitNamebyid = baseUrlAPI + '/GetgeounitNamebyid';
+const String getupnagarmandaldataagainstnagar =
+    baseUrlAPI + '/getupnagarmandaldataagainstnagar';
 const String urlDeleteShaakhaaVruttaForApp =
     baseUrlAPI + '/DeleteShaakhaaVruttaForApp';
 const String urlGetSwayamsevakSoochisForApp =
@@ -3755,6 +3758,31 @@ Future<GetgeounitNameModel?> getlevelUpdatedata(String inputJson) async {
     print("getlevelUpdatedata inputJson -> $inputJson");
     print("getlevelUpdatedata responseBody -> $responseBody");
     return geounitNameModel;
+  } else {
+    print("Error: ${response.statusCode} - ${response.body}");
+    return null;
+  }
+}
+
+Future<VastiUpDataListModel?> getVastiUpdata(String inputJson) async {
+  Map<String, String> jHeaders = {
+    'Content-Type': 'application/json',
+    'Accept': '*/*'
+  };
+
+  var response = await http.post(
+    Uri.parse(getupnagarmandaldataagainstnagar),
+    headers: jHeaders,
+    body: inputJson,
+  );
+
+  if (response.statusCode == 200) {
+    var responseBody = json.decode(response.body);
+    VastiUpDataListModel vastiUpDataListModel =
+        VastiUpDataListModel.fromJson(responseBody); // Store response in model
+    print("vastiUpDataListModel inputJson -> $inputJson");
+    print("vastiUpDataListModel responseBody -> $responseBody");
+    return vastiUpDataListModel;
   } else {
     print("Error: ${response.statusCode} - ${response.body}");
     return null;
