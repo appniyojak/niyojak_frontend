@@ -31,6 +31,7 @@ class _UpNagarkhandaAddUpdateViewState
   bool _isExpanded = true;
   bool showupnagarUpkhandaNewAdd = false;
   bool showupnagarUpkhandaLinked = false;
+  bool showTextFieldEnterUpData = false;
 
   List<GeoUnitMasterBAL>? _linkedMahaanagar;
   List<GeoUnitMasterBAL>? _linkedVibhaag;
@@ -55,7 +56,7 @@ class _UpNagarkhandaAddUpdateViewState
   String? selctedLevelName = '';
   String? selctedLevelId = '';
   String? selctedLevelNameNew = '';
-  String? selctedLevelIdNew = '';
+  String? upnagarLinkedValue = '';
 
   void populateDropdown() async {
     var data = await Statics.getStaticLDB('AnnualBaithakType');
@@ -185,22 +186,59 @@ class _UpNagarkhandaAddUpdateViewState
 
     if (vastiUpDataListModel != null) {
       print("Data fetched successfully");
+      setState(() {
+        hideSelectedIds = vastiUpDataListModel!.vastimandallist!
+            .where((item) =>
+                item.linkedUpaNagarID.toString() == upnagarLinkedValue ||
+                item.linkedUpaNagarID == 0)
+            .map((item) => item.geoUnitID.toString())
+            .join(',');
+
+        print("selectedIdString getVastiUpDataList  --->>>   $hideSelectedIds");
+      });
     } else {
       print("Failed to fetch data");
     }
   }
 
-  void submitUpkhandaForm() {
+  int? selectedUpVastiNagarId;
+  Future<void> submitUpkhandaForm() async {
     var inputData = json.encode({
       "AppUserID": Statics.userDetails['userID'],
       "GeoUnitID": selctedLevelId,
+      "Upnagarid": upnagarLinkedValue ?? 0,
       "vastiids": selectedIdString,
       "GeoUnitName": englishNameController.text,
       "GeoUnitNameMarathi": marathiNameController.text,
       "GeoUnitNameHindi": hindiNameController.text,
     });
     print("_submitForm" + inputData);
-    Statics.savelevelUpdatedata(context, inputData);
+    await Statics.saveUpNagarUpkhandadata(context, inputData);
+    resetAll();
+  }
+
+  Future<void> resetAll() async {
+    setState(() {
+      upnagarLinkedValue = null;
+      marathiNameController.clear();
+      hindiNameController.clear();
+      englishNameController.clear();
+      showTextFieldEnterUpData = false;
+      selectedIdString = '';
+      // _linkedMahaanagarValue = _linkedVibhaagValue = _linkedBhaagValue =
+      //     _linkedNagarValue = _linkedvastiValue = _linkedMandalValue = null;
+      // _linkedMahaanagar =
+      //     _linkedVibhaag = _linkedBhaag = _linkedNagar = _linkedvasti = null;
+      viewcontainer = false;
+      _isExpanded = true;
+      showupnagarUpkhandaNewAdd = false;
+      showupnagarUpkhandaLinked = false;
+      showTextFieldEnterUpData = false;
+    });
+
+    // ✅ These must also return Future<void>
+    await populatelinkedMahaanagarDropdown();
+    await populatelinkedVibhaagDropdown('');
   }
 
   @override
@@ -483,7 +521,9 @@ class _UpNagarkhandaAddUpdateViewState
                                         .primaryTextTheme
                                         .button!
                                         .color,
-                                    onPressed: () {
+                                    onPressed: () async {
+                                      await resetAll();
+
                                       setState(() {
                                         showupnagarUpkhandaNewAdd = true;
                                         _isExpanded = false;
@@ -610,70 +650,360 @@ class _UpNagarkhandaAddUpdateViewState
                               ],
                             )),
                         SizedBox(height: 20),
-                        TextFormField(
-                          controller: marathiNameController,
-                          keyboardType: TextInputType.text,
-                          textDirection: TextDirection.ltr,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: "मराठीत नाव",
-                            labelText: "मराठीत नाव",
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "कृपया मराठी नाव प्रविष्ट करा";
-                            }
-                            return null;
-                          },
+                        // Row(
+                        //   children: [
+                        //     if (vastiUpDataListModel!.upnagarmandallist != null)
+                        //       Expanded(
+                        //         child: DropdownButtonFormField<String>(
+                        //           focusColor: Colors.purpleAccent,
+                        //           decoration: InputDecoration(
+                        //             labelText:
+                        //                 Statics.getLabel('upnagarUpkhanda'),
+                        //             isDense: true,
+                        //             contentPadding: EdgeInsets.symmetric(
+                        //                 horizontal: 12, vertical: 10),
+                        //             enabledBorder: OutlineInputBorder(
+                        //               borderRadius:
+                        //                   BorderRadius.all(Radius.circular(10)),
+                        //               borderSide: BorderSide(
+                        //                   color: Colors.purpleAccent),
+                        //             ),
+                        //             focusedBorder: OutlineInputBorder(
+                        //               borderRadius:
+                        //                   BorderRadius.all(Radius.circular(10)),
+                        //               borderSide: BorderSide(
+                        //                   color: Colors.purpleAccent, width: 2),
+                        //             ),
+                        //             border: OutlineInputBorder(
+                        //               borderRadius:
+                        //                   BorderRadius.all(Radius.circular(10)),
+                        //             ),
+                        //           ),
+                        //           dropdownColor: Colors
+                        //               .white, // Optional: set dropdown background color
+                        //           isExpanded: true,
+                        //           value: upnagarLinkedValue!.isEmpty
+                        //               ? null
+                        //               : upnagarLinkedValue,
+                        //           items: vastiUpDataListModel!
+                        //               .upnagarmandallist!
+                        //               .map((bg) => DropdownMenuItem(
+                        //                     value: bg.geoUnitID.toString(),
+                        //                     child: Text(bg.geoUnitName ?? ""),
+                        //                   ))
+                        //               .toList(),
+                        //           onChanged: (value) {
+                        //             setState(() {
+                        //               upnagarLinkedValue = value ?? "";
+                        //             });
+                        //           },
+                        //         ),
+                        //       ),
+                        //     SizedBox(width: 10),
+                        //     InkWell(
+                        //       onTap: () {
+                        //         showTextFieldEnterUpData = true;
+                        //       },
+                        //       child: Container(
+                        //         width: 40,
+                        //         height: 40,
+                        //         decoration: BoxDecoration(
+                        //           border: Border.all(
+                        //             color: Colors.purpleAccent,
+                        //             width: 2,
+                        //           ),
+                        //           borderRadius: BorderRadius.all(
+                        //             Radius.circular(10),
+                        //           ),
+                        //         ),
+                        //         child: Center(
+                        //           child: Icon(
+                        //             Icons.add,
+                        //             color: Colors.purpleAccent,
+                        //             size: 25,
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
+                        // if (vastiUpDataListModel!.upnagarmandallist != [] ||
+                        //     showTextFieldEnterUpData == true)
+                        //   Column(
+                        //     children: [
+                        //       SizedBox(height: 20),
+                        //       TextFormField(
+                        //         controller: marathiNameController,
+                        //         keyboardType: TextInputType.text,
+                        //         textDirection: TextDirection.ltr,
+                        //         decoration: InputDecoration(
+                        //           border: OutlineInputBorder(),
+                        //           hintText: "मराठीत नाव",
+                        //           labelText: "मराठीत नाव",
+                        //           contentPadding: EdgeInsets.symmetric(
+                        //               vertical: 10, horizontal: 12),
+                        //         ),
+                        //         validator: (value) {
+                        //           if (value == null || value.isEmpty) {
+                        //             return "कृपया मराठी नाव प्रविष्ट करा";
+                        //           }
+                        //           return null;
+                        //         },
+                        //       ),
+                        //       SizedBox(height: 20),
+                        //       TextFormField(
+                        //         controller: hindiNameController,
+                        //         keyboardType: TextInputType.text,
+                        //         textDirection: TextDirection.ltr,
+                        //         decoration: InputDecoration(
+                        //           border: OutlineInputBorder(),
+                        //           hintText: "हिंदी में नाम",
+                        //           labelText: "हिंदी में नाम",
+                        //           contentPadding: EdgeInsets.symmetric(
+                        //               vertical: 10, horizontal: 12),
+                        //         ),
+                        //         validator: (value) {
+                        //           if (value == null || value.isEmpty) {
+                        //             return "कृपया हिंदी नाम दर्ज करें";
+                        //           }
+                        //           return null;
+                        //         },
+                        //       ),
+                        //       SizedBox(height: 20),
+                        //       TextFormField(
+                        //         controller: englishNameController,
+                        //         keyboardType: TextInputType.text,
+                        //         textDirection: TextDirection.ltr,
+                        //         decoration: InputDecoration(
+                        //           border: OutlineInputBorder(),
+                        //           hintText: "Name in English",
+                        //           labelText: "Name in English",
+                        //           contentPadding: EdgeInsets.symmetric(
+                        //               vertical: 10, horizontal: 12),
+                        //         ),
+                        //         validator: (value) {
+                        //           if (value == null || value.isEmpty) {
+                        //             return "Please enter the name in English";
+                        //           }
+                        //           return null;
+                        //         },
+                        //       ),
+                        //       SizedBox(height: 20),
+                        //     ],
+                        //   ),
+
+                        Row(
+                          children: [
+                            if (vastiUpDataListModel?.upnagarmandallist !=
+                                    null &&
+                                vastiUpDataListModel!
+                                    .upnagarmandallist!.isNotEmpty) ...[
+                              Expanded(
+                                child: DropdownButtonFormField<String>(
+                                  focusColor: Colors.purpleAccent,
+                                  decoration: InputDecoration(
+                                    labelText:
+                                        Statics.getLabel('upnagarUpkhanda'),
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 10),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                      borderSide: BorderSide(
+                                          color: Colors.purpleAccent),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                      borderSide: BorderSide(
+                                          color: Colors.purpleAccent, width: 2),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                    ),
+                                  ),
+                                  dropdownColor: Colors.white,
+                                  isExpanded: true,
+                                  value: upnagarLinkedValue == null ||
+                                          upnagarLinkedValue == ""
+                                      ? null
+                                      : upnagarLinkedValue,
+                                  items: vastiUpDataListModel!
+                                      .upnagarmandallist!
+                                      .map((bg) => DropdownMenuItem(
+                                            value: bg.geoUnitID.toString(),
+                                            child: Text(bg.geoUnitName ?? ""),
+                                          ))
+                                      .toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      upnagarLinkedValue = value ?? "";
+
+                                      // Find selected item and populate controllers
+                                      var selected = vastiUpDataListModel!
+                                          .upnagarmandallist!
+                                          .firstWhere((e) =>
+                                              e.geoUnitID.toString() == value);
+
+                                      marathiNameController.text =
+                                          selected.geoUnitNameMarathi ?? "";
+                                      hindiNameController.text =
+                                          selected.geoUnitNameHindi ?? "";
+                                      englishNameController.text =
+                                          selected.geoUnitName ?? "";
+
+                                      showTextFieldEnterUpData = true;
+
+                                      // selectedIdString = vastiUpDataListModel!
+                                      //     .upnagarmandallist!
+                                      //     .where((item) =>
+                                      //         item.linkedUpaNagarID == value ||
+                                      //         item.linkedUpaNagarID == 0)
+                                      //     .map((item) =>
+                                      //         item.geoUnitID.toString())
+                                      //     .join(',');
+                                      // hideSelectedIds =
+                                    });
+                                    print(
+                                        "selectedIdString in dropdown ---> $selectedIdString");
+                                  },
+                                ),
+                              )
+                            ] else ...[
+                              Expanded(
+                                child: Container(
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                      border: Border.all(
+                                        color: Colors.purpleAccent,
+                                      )),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Text(Statics.getLabel(
+                                          'upnagarUpkhandaNewAdd')),
+                                      Icon(Icons.arrow_right_alt)
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                            SizedBox(width: 10),
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  upnagarLinkedValue = null;
+                                  marathiNameController.clear();
+                                  hindiNameController.clear();
+                                  englishNameController.clear();
+                                  showTextFieldEnterUpData = true;
+                                  selectedIdString = '';
+                                });
+                              },
+                              child: Container(
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.purpleAccent,
+                                  ),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
+                                ),
+                                child: Center(
+                                  child: Icon(Icons.add,
+                                      color: Colors.purpleAccent, size: 25),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(height: 20),
-                        TextFormField(
-                          controller: hindiNameController,
-                          keyboardType: TextInputType.text,
-                          textDirection: TextDirection.ltr,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: "हिंदी में नाम",
-                            labelText: "हिंदी में नाम",
+                        if (showTextFieldEnterUpData)
+                          Column(
+                            children: [
+                              SizedBox(height: 20),
+                              TextFormField(
+                                controller: marathiNameController,
+                                keyboardType: TextInputType.text,
+                                textDirection: TextDirection.ltr,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  hintText: "मराठीत नाव",
+                                  labelText: "मराठीत नाव",
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 12),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "कृपया मराठी नाव प्रविष्ट करा";
+                                  }
+                                  return null;
+                                },
+                              ),
+                              SizedBox(height: 20),
+                              TextFormField(
+                                controller: hindiNameController,
+                                keyboardType: TextInputType.text,
+                                textDirection: TextDirection.ltr,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  hintText: "हिंदी में नाम",
+                                  labelText: "हिंदी में नाम",
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 12),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "कृपया हिंदी नाम दर्ज करें";
+                                  }
+                                  return null;
+                                },
+                              ),
+                              SizedBox(height: 20),
+                              TextFormField(
+                                controller: englishNameController,
+                                keyboardType: TextInputType.text,
+                                textDirection: TextDirection.ltr,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  hintText: "Name in English",
+                                  labelText: "Name in English",
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 12),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "Please enter the name in English";
+                                  }
+                                  return null;
+                                },
+                              ),
+                              SizedBox(height: 20),
+                            ],
                           ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "कृपया हिंदी नाम दर्ज करें";
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(height: 20),
-                        TextFormField(
-                          controller: englishNameController,
-                          keyboardType: TextInputType.text,
-                          textDirection: TextDirection.ltr,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: "Name in English",
-                            labelText: "Name in English",
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "Please enter the name in English";
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 10),
                         InkWell(
                           onTap: () {
                             showGeoUnitMultiSelectPopup(
-                                context, _linkedmandal ?? _linkedvasti!);
+                              context,
+                              initiallySelectedIds: selectedIdString,
+                              hideSelectedIds: hideSelectedIds,
+                            );
+                            setState(() {});
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 5),
-                            width: 100,
+                            width: 200,
                             height: 30,
                             decoration: BoxDecoration(
                                 border: Border.all(
                                     color: Colors.purpleAccent.shade100),
-                                // color: Colors.purpleAccent.withOpacity(0.7),
+                                color: Colors.purpleAccent.withOpacity(0.7),
                                 borderRadius: BorderRadius.circular(15)),
                             child: Center(
                               child: Row(
@@ -683,7 +1013,7 @@ class _UpNagarkhandaAddUpdateViewState
                                   Text(
                                     "${Statics.getLabel('addVasti')}",
                                     style: TextStyle(
-                                        color: Colors.purpleAccent.shade100,
+                                        color: Colors.white,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ],
@@ -713,12 +1043,37 @@ class _UpNagarkhandaAddUpdateViewState
   }
 
   String? selectedIdString;
+  String? hideSelectedIds;
+
   Future<void> showGeoUnitMultiSelectPopup(
-    BuildContext context,
-    List<GeoUnitMasterBAL> geoUnitList,
-  ) async {
+    BuildContext context, {
+    String? initiallySelectedIds,
+    String? hideSelectedIds,
+  }) async {
+    print("selectedIdString ====?> $selectedIdString");
+
+    final List<Upnagarmandallist> fullList =
+        vastiUpDataListModel!.vastimandallist ?? [];
+
+    final Set<String> allowedIds = (hideSelectedIds ?? "")
+        .split(",")
+        .where((id) => id.trim().isNotEmpty)
+        .toSet();
+
+    // ✅ Show only items whose IDs are in `allowedIds`
+    final List<Upnagarmandallist> geoUnitList = fullList
+        .where((item) => allowedIds.contains(item.geoUnitID.toString()))
+        .toList();
+
+    final Set<String> preSelected = (initiallySelectedIds ?? "")
+        .split(",")
+        .where((id) => id.trim().isNotEmpty)
+        .toSet();
+
     Map<String, bool> selectedMap = {
-      for (var item in geoUnitList) item.geoUnitID.toString(): false,
+      for (var item in geoUnitList)
+        item.geoUnitID.toString():
+            preSelected.contains(item.geoUnitID.toString())
     };
 
     await showDialog(
@@ -734,7 +1089,7 @@ class _UpNagarkhandaAddUpdateViewState
                   shrinkWrap: true,
                   children: geoUnitList.map<Widget>((item) {
                     String id = item.geoUnitID.toString();
-                    String name = item.name ?? "";
+                    String name = item.preferedname ?? "";
                     return CheckboxListTile(
                       value: selectedMap[id],
                       title: Text(name),

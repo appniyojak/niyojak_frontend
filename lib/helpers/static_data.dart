@@ -227,6 +227,8 @@ const String urlGetShaakhaaSewaVastiLinksForApp =
 const String urlSaveShaakhaaSewaVastiLinkForApp =
     baseUrlAPI + '/SaveShaakhaaSewaVastiLinkForApp';
 const String urlUpdategeounitNamebyid = baseUrlAPI + '/UpdategeounitNamebyid';
+const String updatevastimasndalparent =
+    baseUrlAPI + '/updatevastimasndalparent';
 const String urlGetJoinRSSGridByStatus = baseUrlAPI + '/GetJoinRSSGridByStatus';
 const String urlGetSewaVastiForApp = baseUrlAPI + '/GetSewaVastiForApp';
 const String urlSaveSewaVastiForApp = baseUrlAPI + '/SaveSewaVastiForApp';
@@ -3808,6 +3810,33 @@ Future<void> savelevelUpdatedata(context, String inputJson) async {
 
   if (response.statusCode == 200) {
     Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+    Navigator.of(context, rootNavigator: true).pop();
+  } else {
+    print("Error: ${response.statusCode} - ${response.body}");
+    Navigator.of(context, rootNavigator: true).pop();
+  }
+}
+
+Future<void> saveUpNagarUpkhandadata(context, String inputJson) async {
+  showLoaderDialog(context);
+
+  Map<String, String> jHeaders = {
+    'Content-Type': 'application/json',
+    'Accept': '*/*'
+  };
+
+  var response = await http.post(
+    Uri.parse(updatevastimasndalparent),
+    headers: jHeaders,
+    body: inputJson,
+  );
+
+  print("Response: ${response.body}");
+  print("response.statusCode: ${response.statusCode}");
+
+  if (response.statusCode == 200) {
+    Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+    getVastiUpdata(inputJson);
     Navigator.of(context, rootNavigator: true).pop();
   } else {
     print("Error: ${response.statusCode} - ${response.body}");
