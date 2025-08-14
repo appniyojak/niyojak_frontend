@@ -28,6 +28,7 @@ import '../models/response_model/taluka_mandal_model.dart';
 import '../models/response_model/vasti_sarvekshan_dropdown_model.dart';
 import '../models/response_model/vasti_survey_report_model.dart';
 import '../models/response_model/vasti_up_data_model.dart';
+import '../models/response_model/vijayaDashamiInitModel.dart';
 import '../providers/bals.dart';
 import './database_helper.dart';
 
@@ -168,6 +169,8 @@ const String urlRefreshHomeScreenForApp =
 const String urlVastisarvekshanReport = baseUrlAPI + '/VastisarvekshanReport';
 const String urlNagarVastisarvekshanReport =
     baseUrlAPI + '/NagarVastisarvekshanReport';
+const String getDataWhileAddUpdateUPLevel =
+    baseUrlAPI + '/GetDataWhileAddUpdateUPLevel';
 const String mandalVastisarvekshanReport =
     baseUrlAPI + '/mandalVastisarvekshanReport';
 const String urlNagarVastisarvekshanReportForMandal =
@@ -2344,6 +2347,47 @@ Future<NagarVastiSampurnaModel?> vastisarvekshanAllReportData(
     Navigator.of(context, rootNavigator: true).pop();
 
     return NagarVastiSampurnaModel.fromJson(responseBody);
+  } else {
+    log("Error: ${response.statusCode}");
+    Navigator.of(context, rootNavigator: true).pop();
+
+    return null;
+  }
+}
+
+Future<GetVijayadashamiInitModel?> getVijayadashamiInitData(
+    context, String? userID, String? targetGeoUnitID) async {
+  showLoaderDialog(context);
+
+  print("${userID}  --- $targetGeoUnitID  ");
+  Map<String, String> jHeaders = {
+    'Content-Type': 'application/json',
+    'Accept': '*/*'
+  };
+
+  var response = await http.post(Uri.parse(getDataWhileAddUpdateUPLevel),
+      headers: jHeaders,
+      body: json.encode({
+        "AppUserID": userID,
+        "GeoUnitID": int.parse(targetGeoUnitID!),
+      }));
+
+  print(json.encode({
+    "AppUserID": userID,
+    "GeoUnitID": int.parse(targetGeoUnitID),
+  }));
+  log("response ==>  $response");
+
+  if (response.statusCode == 200) {
+    var responseBody = json.decode(response.body);
+    Fluttertoast.showToast(
+      msg: "माहिती प्राप्त झाली.",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+    );
+    Navigator.of(context, rootNavigator: true).pop();
+
+    return GetVijayadashamiInitModel.fromJson(responseBody);
   } else {
     log("Error: ${response.statusCode}");
     Navigator.of(context, rootNavigator: true).pop();

@@ -1210,38 +1210,6 @@ class _MandalSurveyReportViewScreen1State
                                               DataRow(
                                                 color:
                                                     MaterialStateProperty.all(
-                                                        Colors
-                                                            .lightBlue.shade50),
-                                                cells: [
-                                                  DataCell(Text(
-                                                      "${Statics.getLabel('prathamikSurveyComplete')}")),
-                                                  DataCell(Text(
-                                                      "${data.nagarStep1CompleteCount ?? ""}")),
-                                                  DataCell(Text(
-                                                      "${data.mandalStep1CompleteCount ?? ""}")),
-                                                  DataCell(Text(
-                                                      "${data.vastiStep1CompleteCount ?? ""}")),
-                                                ],
-                                              ),
-                                              DataRow(
-                                                color:
-                                                    MaterialStateProperty.all(
-                                                        Colors
-                                                            .lightBlue.shade50),
-                                                cells: [
-                                                  DataCell(Text(
-                                                      "${Statics.getLabel('vistrutSurveyComplete')}")),
-                                                  DataCell(Text(
-                                                      "${data.nagarStep3CompleteCount ?? ""}")),
-                                                  DataCell(Text(
-                                                      "${data.mandalStep3CompleteCount ?? ""}")),
-                                                  DataCell(Text(
-                                                      "${data.vastiStep3CompleteCount ?? ""}")),
-                                                ],
-                                              ),
-                                              DataRow(
-                                                color:
-                                                    MaterialStateProperty.all(
                                                         Colors.red.shade50),
                                                 cells: [
                                                   DataCell(Text(
@@ -1297,6 +1265,48 @@ class _MandalSurveyReportViewScreen1State
                                                       "${data.mandalcount ?? ""}")),
                                                   DataCell(Text(
                                                       "${data.vasticount ?? ""}")),
+                                                ],
+                                              ),
+                                              DataRow(
+                                                  color:
+                                                      MaterialStateProperty.all(
+                                                          Colors.white),
+                                                  cells: [
+                                                    DataCell.empty,
+                                                    DataCell.empty,
+                                                    DataCell.empty,
+                                                    DataCell.empty,
+                                                  ]),
+                                              DataRow(
+                                                color:
+                                                    MaterialStateProperty.all(
+                                                        Colors
+                                                            .lightBlue.shade50),
+                                                cells: [
+                                                  DataCell(Text(
+                                                      "${Statics.getLabel('prathamikSurveyComplete')}")),
+                                                  DataCell(Text(
+                                                      "${data.nagarStep1CompleteCount ?? ""}")),
+                                                  DataCell(Text(
+                                                      "${data.mandalStep1CompleteCount ?? ""}")),
+                                                  DataCell(Text(
+                                                      "${data.vastiStep1CompleteCount ?? ""}")),
+                                                ],
+                                              ),
+                                              DataRow(
+                                                color:
+                                                    MaterialStateProperty.all(
+                                                        Colors
+                                                            .lightBlue.shade50),
+                                                cells: [
+                                                  DataCell(Text(
+                                                      "${Statics.getLabel('vistrutSurveyComplete')}")),
+                                                  DataCell(Text(
+                                                      "${data.nagarStep3CompleteCount ?? ""}")),
+                                                  DataCell(Text(
+                                                      "${data.mandalStep3CompleteCount ?? ""}")),
+                                                  DataCell(Text(
+                                                      "${data.vastiStep3CompleteCount ?? ""}")),
                                                 ],
                                               ),
                                             ],

@@ -189,8 +189,8 @@ class _UpNagarkhandaAddUpdateViewState
       setState(() {
         hideSelectedIds = vastiUpDataListModel!.vastimandallist!
             .where((item) =>
-                item.linkedUpaNagarID.toString() == upnagarLinkedValue ||
-                item.linkedUpaNagarID == 0)
+                item.linkedUpaNagarID.toString() != upnagarLinkedValue &&
+                item.linkedUpaNagarID != 0)
             .map((item) => item.geoUnitID.toString())
             .join(',');
 
@@ -201,7 +201,6 @@ class _UpNagarkhandaAddUpdateViewState
     }
   }
 
-  int? selectedUpVastiNagarId;
   Future<void> submitUpkhandaForm() async {
     var inputData = json.encode({
       "AppUserID": Statics.userDetails['userID'],
@@ -225,10 +224,18 @@ class _UpNagarkhandaAddUpdateViewState
       englishNameController.clear();
       showTextFieldEnterUpData = false;
       selectedIdString = '';
-      // _linkedMahaanagarValue = _linkedVibhaagValue = _linkedBhaagValue =
-      //     _linkedNagarValue = _linkedvastiValue = _linkedMandalValue = null;
-      // _linkedMahaanagar =
-      //     _linkedVibhaag = _linkedBhaag = _linkedNagar = _linkedvasti = null;
+      _linkedMahaanagarValue = _linkedVibhaagValue = _linkedBhaagValue =
+          _linkedNagarValue = _linkedvastiValue = _linkedMandalValue = null;
+      _linkedMahaanagar =
+          _linkedVibhaag = _linkedBhaag = _linkedNagar = _linkedvasti = null;
+      selectedIdString = "";
+      hideSelectedIds = "";
+      viewcontainer = false;
+      _isExpanded = true;
+      showupnagarUpkhandaNewAdd = false;
+      showupnagarUpkhandaLinked = false;
+      showTextFieldEnterUpData = false;
+      vastiUpDataListModel = null;
       viewcontainer = false;
       _isExpanded = true;
       showupnagarUpkhandaNewAdd = false;
@@ -236,7 +243,6 @@ class _UpNagarkhandaAddUpdateViewState
       showTextFieldEnterUpData = false;
     });
 
-    // ✅ These must also return Future<void>
     await populatelinkedMahaanagarDropdown();
     await populatelinkedVibhaagDropdown('');
   }
@@ -522,8 +528,6 @@ class _UpNagarkhandaAddUpdateViewState
                                         .button!
                                         .color,
                                     onPressed: () async {
-                                      await resetAll();
-
                                       setState(() {
                                         showupnagarUpkhandaNewAdd = true;
                                         _isExpanded = false;
@@ -800,76 +804,133 @@ class _UpNagarkhandaAddUpdateViewState
                                     .upnagarmandallist!.isNotEmpty) ...[
                               Expanded(
                                 child: DropdownButtonFormField<String>(
-                                  focusColor: Colors.purpleAccent,
-                                  decoration: InputDecoration(
-                                    labelText:
-                                        Statics.getLabel('upnagarUpkhanda'),
-                                    isDense: true,
-                                    contentPadding: EdgeInsets.symmetric(
-                                        horizontal: 12, vertical: 10),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(10)),
-                                      borderSide: BorderSide(
-                                          color: Colors.purpleAccent),
+                                    focusColor: Colors.purpleAccent,
+                                    decoration: InputDecoration(
+                                      labelText:
+                                          Statics.getLabel('upnagarUpkhanda'),
+                                      isDense: true,
+                                      contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 12, vertical: 10),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10)),
+                                        borderSide: BorderSide(
+                                            color: Colors.purpleAccent),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10)),
+                                        borderSide: BorderSide(
+                                            color: Colors.purpleAccent,
+                                            width: 2),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10)),
+                                      ),
                                     ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(10)),
-                                      borderSide: BorderSide(
-                                          color: Colors.purpleAccent, width: 2),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(10)),
-                                    ),
-                                  ),
-                                  dropdownColor: Colors.white,
-                                  isExpanded: true,
-                                  value: upnagarLinkedValue == null ||
-                                          upnagarLinkedValue == ""
-                                      ? null
-                                      : upnagarLinkedValue,
-                                  items: vastiUpDataListModel!
-                                      .upnagarmandallist!
-                                      .map((bg) => DropdownMenuItem(
-                                            value: bg.geoUnitID.toString(),
-                                            child: Text(bg.geoUnitName ?? ""),
-                                          ))
-                                      .toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      upnagarLinkedValue = value ?? "";
+                                    dropdownColor: Colors.white,
+                                    isExpanded: true,
+                                    value: upnagarLinkedValue == null ||
+                                            upnagarLinkedValue == ""
+                                        ? null
+                                        : upnagarLinkedValue,
+                                    items: vastiUpDataListModel!
+                                        .upnagarmandallist!
+                                        .map((bg) => DropdownMenuItem(
+                                              value: bg.geoUnitID.toString(),
+                                              child: Text(bg.geoUnitName ?? ""),
+                                            ))
+                                        .toList(),
+                                    // onChanged: (value) {
+                                    //   setState(() {
+                                    //     upnagarLinkedValue = value ?? "";
+                                    //
+                                    //     // Find selected item and populate controllers
+                                    //     var selected = vastiUpDataListModel!
+                                    //         .upnagarmandallist!
+                                    //         .firstWhere((e) =>
+                                    //             e.geoUnitID.toString() == value);
+                                    //
+                                    //     marathiNameController.text =
+                                    //         selected.geoUnitNameMarathi ?? "";
+                                    //     hindiNameController.text =
+                                    //         selected.geoUnitNameHindi ?? "";
+                                    //     englishNameController.text =
+                                    //         selected.geoUnitName ?? "";
+                                    //
+                                    //     showTextFieldEnterUpData = true;
+                                    //
+                                    //     selectedIdString = vastiUpDataListModel!
+                                    //         .upnagarmandallist!
+                                    //         .where((item) =>
+                                    //             item.linkedUpaNagarID == value ||
+                                    //             item.linkedUpaNagarID == 0)
+                                    //         .map((item) =>
+                                    //             item.geoUnitID.toString())
+                                    //         .join(',');
+                                    //     hideSelectedIds = vastiUpDataListModel!
+                                    //         .upnagarmandallist!
+                                    //         .where((item) =>
+                                    //             item.linkedUpaNagarID == value ||
+                                    //             item.linkedUpaNagarID == 0)
+                                    //         .map((item) =>
+                                    //             item.geoUnitID.toString())
+                                    //         .join(',');
+                                    //   });
+                                    //   print(
+                                    //       "selectedIdString in dropdown ---> $selectedIdString");
+                                    // },
+                                    onChanged: (value) {
+                                      setState(() {
+                                        upnagarLinkedValue = value ?? "";
 
-                                      // Find selected item and populate controllers
-                                      var selected = vastiUpDataListModel!
-                                          .upnagarmandallist!
-                                          .firstWhere((e) =>
-                                              e.geoUnitID.toString() == value);
+                                        // Find selected item and populate controllers
+                                        var selected = vastiUpDataListModel!
+                                            .upnagarmandallist!
+                                            .firstWhere((e) =>
+                                                e.geoUnitID.toString() ==
+                                                value);
 
-                                      marathiNameController.text =
-                                          selected.geoUnitNameMarathi ?? "";
-                                      hindiNameController.text =
-                                          selected.geoUnitNameHindi ?? "";
-                                      englishNameController.text =
-                                          selected.geoUnitName ?? "";
+                                        marathiNameController.text =
+                                            selected.geoUnitNameMarathi ?? "";
+                                        hindiNameController.text =
+                                            selected.geoUnitNameHindi ?? "";
+                                        englishNameController.text =
+                                            selected.geoUnitName ?? "";
 
-                                      showTextFieldEnterUpData = true;
+                                        showTextFieldEnterUpData = true;
 
-                                      // selectedIdString = vastiUpDataListModel!
-                                      //     .upnagarmandallist!
-                                      //     .where((item) =>
-                                      //         item.linkedUpaNagarID == value ||
-                                      //         item.linkedUpaNagarID == 0)
-                                      //     .map((item) =>
-                                      //         item.geoUnitID.toString())
-                                      //     .join(',');
-                                      // hideSelectedIds =
-                                    });
-                                    print(
-                                        "selectedIdString in dropdown ---> $selectedIdString");
-                                  },
-                                ),
+                                        // 1. hideSelectedIds → jinke linkedUpaNagarID != value aur != 0
+                                        hideSelectedIds = vastiUpDataListModel!
+                                            .vastimandallist!
+                                            .where((item) =>
+                                                item.linkedUpaNagarID
+                                                        .toString() !=
+                                                    value &&
+                                                item.linkedUpaNagarID != 0)
+                                            .map((item) =>
+                                                item.geoUnitID.toString())
+                                            .join(',');
+
+                                        // 2. selectedIdString → jinke linkedUpaNagarID == value (checked in popup)
+                                        selectedIdString = vastiUpDataListModel!
+                                            .vastimandallist!
+                                            .where((item) =>
+                                                item.linkedUpaNagarID
+                                                    .toString() ==
+                                                value)
+                                            .map((item) =>
+                                                item.geoUnitID.toString())
+                                            .join(',');
+
+                                        // Debug print
+                                        print(
+                                            "selectedIdString (checked) ---> $selectedIdString");
+                                        print(
+                                            "hideSelectedIds (hidden) ---> $hideSelectedIds");
+                                      });
+                                    }),
                               )
                             ] else ...[
                               Expanded(
@@ -902,11 +963,18 @@ class _UpNagarkhandaAddUpdateViewState
                                   hindiNameController.clear();
                                   englishNameController.clear();
                                   showTextFieldEnterUpData = true;
-                                  selectedIdString = '';
+                                  hideSelectedIds = vastiUpDataListModel!
+                                      .vastimandallist!
+                                      .where((item) =>
+                                          item.linkedUpaNagarID.toString() !=
+                                              upnagarLinkedValue &&
+                                          item.linkedUpaNagarID != 0)
+                                      .map((item) => item.geoUnitID.toString())
+                                      .join(',');
                                 });
                               },
                               child: Container(
-                                width: 40,
+                                width: 80,
                                 height: 40,
                                 decoration: BoxDecoration(
                                   border: Border.all(
@@ -987,19 +1055,73 @@ class _UpNagarkhandaAddUpdateViewState
                             ],
                           ),
                         SizedBox(height: 10),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: Text(
+                              "${Statics.getLabel('upnagarUpkhandaLinked')}",
+                              style: TextStyle(color: Colors.red),
+                            )),
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  showGeoUnitMultiSelectPopup(
+                                    context,
+                                    initiallySelectedIds: selectedIdString,
+                                    hideSelectedIds: hideSelectedIds,
+                                  );
+                                  setState(() {});
+                                },
+                                child: Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 5),
+                                  width: 60,
+                                  height: 35,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.purpleAccent.shade100),
+                                      // color:
+                                      //     Colors.purpleAccent.withOpacity(0.7),
+                                      borderRadius: BorderRadius.circular(15)),
+                                  child: Center(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        SizedBox(width: 5),
+                                        Text(
+                                          "${Statics.getLabel('addVasti')}",
+                                          style: TextStyle(
+                                              color: Colors.purpleAccent,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Divider(
+                          color: Colors.grey,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
                         InkWell(
                           onTap: () {
-                            showGeoUnitMultiSelectPopup(
-                              context,
-                              initiallySelectedIds: selectedIdString,
-                              hideSelectedIds: hideSelectedIds,
-                            );
-                            setState(() {});
+                            if (_formKey.currentState!.validate()) {
+                              submitUpkhandaForm();
+                            }
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 5),
-                            width: 200,
-                            height: 30,
+                            width: 80,
+                            height: 35,
                             decoration: BoxDecoration(
                                 border: Border.all(
                                     color: Colors.purpleAccent.shade100),
@@ -1011,7 +1133,7 @@ class _UpNagarkhandaAddUpdateViewState
                                 children: [
                                   SizedBox(width: 5),
                                   Text(
-                                    "${Statics.getLabel('addVasti')}",
+                                    "${Statics.getLabel('Submit')}",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold),
@@ -1020,17 +1142,7 @@ class _UpNagarkhandaAddUpdateViewState
                               ),
                             ),
                           ),
-                        ),
-
-                        ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              submitUpkhandaForm();
-                            }
-                          },
-                          child: Text(Statics.getLabel('Submit'),
-                              style: TextStyle(fontSize: 18)),
-                        ),
+                        )
                       ],
                     ),
                   ),
@@ -1060,9 +1172,8 @@ class _UpNagarkhandaAddUpdateViewState
         .where((id) => id.trim().isNotEmpty)
         .toSet();
 
-    // ✅ Show only items whose IDs are in `allowedIds`
     final List<Upnagarmandallist> geoUnitList = fullList
-        .where((item) => allowedIds.contains(item.geoUnitID.toString()))
+        .where((item) => !allowedIds.contains(item.geoUnitID.toString()))
         .toList();
 
     final Set<String> preSelected = (initiallySelectedIds ?? "")
