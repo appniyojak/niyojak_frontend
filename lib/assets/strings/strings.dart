@@ -1538,11 +1538,10 @@ Map<String, String> resEnglish = {
   'sanchalanGhoshVadan': "संचलानत घोष वादन ?",
   'presentMatrushakti': "उपस्थित अन्य मातृशक्ति",
   'presentMale': "उपस्थित अन्य पुरुष",
-  'NagarSelectionImportant':
-      'माहिती भरण्यापूर्वी नगर/तालुका  निवडणे अनिवार्य आहे',
+  'NagarSelectionImportant': 'माहिती भरण्यापूर्वी स्तर निवडणे अनिवार्य आहे',
   'upastithi': 'उपस्थिति',
   'bhougolikPratinidhitwa': 'भौगोलिक प्रतिनिधित्व',
-  'addVasti': 'वस्ती जोडा',
+  'addVasti': 'ग्राम /वस्ती जोडा',
   'upnagarUpkhanda': 'उपनगर/उपखंड',
   'upnagarUpkhandaNewAdd': 'नवीन उपनगर/उपखंड जोडा',
   'upnagarUpkhandaLinked': 'वरील उपनगर/उपखंडाशी वस्ती जोडा.',
@@ -1550,7 +1549,12 @@ Map<String, String> resEnglish = {
   'average': 'सरासरी',
   'addMukhyaAtithi': 'मुख्य अतिथी जोडा',
   'selectMukhyaAtithi': 'मुख्य अतिथी निवाडा',
+  'addVIshishthaAtithi': 'विशिष्ठ अतिथी जोडा',
   'selectVIshishthaAtithi': 'विशिष्ठ अतिथी निवाडा',
+  'shakhaMilanPratinidhitwa': 'शाखा/मिलन प्रतिनिधित्व ',
+  'addshakhaa': 'शाखा जोडा',
+  'selectshakhaa': 'शाखा निवाडा',
+  'selectedTotal': 'एकूण निवडलेले',
 };
 
 Map<String, String> resMarathi = {
@@ -3097,12 +3101,11 @@ Map<String, String> resMarathi = {
   'sanchalanGhoshVadan': "संचलानत घोष वादन ?",
   'presentMatrushakti': "उपस्थित अन्य मातृशक्ति",
   'presentMale': "उपस्थित अन्य पुरुष",
-  'NagarSelectionImportant':
-      'माहिती भरण्यापूर्वी नगर/तालुका  निवडणे अनिवार्य आहे',
+  'NagarSelectionImportant': 'माहिती भरण्यापूर्वी स्तर निवडणे अनिवार्य आहे',
   'mobileNumberLimit': 'मोबाईल नंबर १० अंकी असावा.',
   'upastithi': 'उपस्थिति',
   'bhougolikPratinidhitwa': 'भौगोलिक प्रतिनिधित्व',
-  'addVasti': 'वस्ती जोडा',
+  'addVasti': 'ग्राम /वस्ती जोडा',
   'upnagarUpkhanda': 'उपनगर/उपखंड',
   'upnagarUpkhandaNewAdd': 'नवीन उपनगर/उपखंड जोडा',
   'upnagarUpkhandaLinked': 'वरील उपनगर/उपखंडाशी वस्ती जोडा.',
@@ -3110,7 +3113,12 @@ Map<String, String> resMarathi = {
   'average': 'सरासरी',
   'addMukhyaAtithi': 'मुख्य अतिथी जोडा',
   'selectMukhyaAtithi': 'मुख्य अतिथी निवाडा',
+  'addVIshishthaAtithi': 'विशिष्ठ अतिथी जोडा',
   'selectVIshishthaAtithi': 'विशिष्ठ अतिथी निवाडा',
+  'shakhaMilanPratinidhitwa': 'शाखा/मिलन प्रतिनिधित्व ',
+  'addshakhaa': 'शाखा जोडा',
+  'selectshakhaa': 'शाखा निवाडा',
+  'selectedTotal': 'एकूण निवडलेले',
 };
 
 Map<String, String> resHindi = {
@@ -4660,12 +4668,11 @@ Map<String, String> resHindi = {
   'sanchalanGhoshVadan': "संचलानत घोष वादन ?",
   'presentMatrushakti': "उपस्थित अन्य मातृशक्ति",
   'presentMale': "उपस्थित अन्य पुरुष",
-  'NagarSelectionImportant':
-      'माहिती भरण्यापूर्वी नगर/तालुका  निवडणे अनिवार्य आहे',
+  'NagarSelectionImportant': 'माहिती भरण्यापूर्वी स्तर निवडणे अनिवार्य आहे',
   'mobileNumberLimit': 'मोबाइल नंबर 10 अंकों का होना चाहिए',
   'upastithi': 'उपस्थिति',
   'bhougolikPratinidhitwa': 'भौगोलिक प्रतिनिधित्व',
-  'addVasti': 'वस्ती जोडा',
+  'addVasti': 'ग्राम /वस्ती जोडा',
   'upnagarUpkhanda': 'उपनगर/उपखंड',
   'upnagarUpkhandaNewAdd': 'नवीन उपनगर/उपखंड जोडा',
   'upnagarUpkhandaLinked': 'वरील उपनगर/उपखंडाशी वस्ती जोडा.',
@@ -4673,5 +4680,10 @@ Map<String, String> resHindi = {
   'average': 'सरासरी',
   'addMukhyaAtithi': 'मुख्य अतिथी जोडा',
   'selectMukhyaAtithi': 'मुख्य अतिथी निवाडा',
+  'addVIshishthaAtithi': 'विशिष्ठ अतिथी जोडा',
   'selectVIshishthaAtithi': 'विशिष्ठ अतिथी निवाडा',
+  'shakhaMilanPratinidhitwa': 'शाखा/मिलन प्रतिनिधित्व ',
+  'addshakhaa': 'शाखा जोडा',
+  'selectshakhaa': 'शाखा निवाडा',
+  'selectedTotal': 'एकूण निवडलेले',
 };

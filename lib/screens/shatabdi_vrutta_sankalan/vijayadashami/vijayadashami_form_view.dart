@@ -253,14 +253,33 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     );
   }
 
-  Widget _numberField(TextEditingController controller) {
+  Widget _numberField(TextEditingController controller,
+      {TextEditingController? limitController,
+      TextEditingController? otherController}) {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: TextField(
         controller: controller,
         keyboardType: TextInputType.number,
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        onChanged: (_) => setState(() {}),
+        onChanged: (_) {
+          // Validate when value changes
+          if (limitController != null && otherController != null) {
+            final int limit = int.tryParse(limitController.text) ?? 0;
+            final int current = int.tryParse(controller.text) ?? 0;
+            final int other = int.tryParse(otherController.text) ?? 0;
+
+            // Agar current + other > limit hua to current ko adjust karo
+            if (current + other > limit) {
+              final int allowed = limit - other;
+              controller.text = allowed < 0 ? "0" : allowed.toString();
+              controller.selection = TextSelection.fromPosition(
+                TextPosition(offset: controller.text.length),
+              );
+            }
+          }
+          setState(() {});
+        },
         decoration: const InputDecoration(border: InputBorder.none),
       ),
     );
@@ -310,7 +329,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: const Text("Select One Name"),
+              title: Text("${Statics.getLabel('selectMukhyaAtithi')}"),
               content: SizedBox(
                 width: double.maxFinite,
                 child: ListView.builder(
@@ -319,7 +338,8 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                   itemBuilder: (context, index) {
                     final item = vastiList[index];
                     return RadioListTile<dynamic>(
-                      title: Text(item.name ?? ""),
+                      title: Text(
+                          "${item.name} (${item.samparkasutranava == "" ? "-" : item.samparkasutranava})"),
                       value: item,
                       groupValue: selectedItem,
                       onChanged: (value) {
@@ -339,7 +359,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                     }
                     Navigator.pop(context);
                   },
-                  child: const Text("Submit"),
+                  child: Center(child: Text("${Statics.getLabel('Submit')}")),
                 ),
               ],
             );
@@ -370,7 +390,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: const Text("Select Multiple Names"),
+              title: Text("${Statics.getLabel('selectVIshishthaAtithi')}"),
               content: SizedBox(
                 width: double.maxFinite,
                 child: ListView.builder(
@@ -380,7 +400,8 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                     final item = filteredList[index];
                     final isSelected = selectedItems.contains(item);
                     return CheckboxListTile(
-                      title: Text(item.name ?? ""),
+                      title: Text(
+                          "${item.name} (${item.samparkasutranava == "" ? "-" : item.samparkasutranava})"),
                       value: isSelected,
                       onChanged: (bool? checked) {
                         setState(() {
@@ -401,7 +422,257 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                     onSubmit(selectedItems);
                     Navigator.pop(context);
                   },
-                  child: const Text("Submit"),
+                  child: Center(child: Text("${Statics.getLabel('Submit')}")),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  List<Upnagarmandallist> checkboxGraamVastiSelectedItems = [];
+  int? selectedVastiCount = 0;
+  int? totalVastiCount = 0;
+  Future<void> showGraamVastiMandalUpnagarPopup(
+    BuildContext context, {
+    required List<Upnagarmandallist> vastiList,
+    List<Upnagarmandallist>? preselectedItems,
+    required void Function(List<Upnagarmandallist> selectedItems,
+            int selectedCount, int totalCount)
+        onSubmit,
+  }) async {
+    List<Upnagarmandallist> selectedItems = List.from(preselectedItems ?? []);
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Vasti Joda", // heading
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    "Total Vasti: ${vastiList.length}", // total count
+                    style: const TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
+                  Text(
+                    "Selected: ${selectedItems.length}", // selected count
+                    style: const TextStyle(fontSize: 14, color: Colors.blue),
+                  ),
+                ],
+              ),
+              content: SizedBox(
+                width: double.maxFinite,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: vastiList.length,
+                  itemBuilder: (context, index) {
+                    final item = vastiList[index];
+                    final isSelected = selectedItems.contains(item);
+
+                    return CheckboxListTile(
+                      title: Text(item.preferedname ?? ""),
+                      value: isSelected,
+                      onChanged: (bool? checked) {
+                        setState(() {
+                          if (checked == true) {
+                            selectedItems.add(item);
+                          } else {
+                            selectedItems.remove(item);
+                          }
+                        });
+                      },
+                    );
+                  },
+                ),
+              ),
+              actions: [
+                ElevatedButton(
+                  onPressed: () {
+                    onSubmit(
+                      selectedItems,
+                      selectedItems.length,
+                      vastiList.length,
+                    );
+                    Navigator.pop(context);
+                  },
+                  child: Center(child: Text("${Statics.getLabel('Submit')}")),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  VastiCounts? countsShakhaa;
+  List<Shakhaalist> checkboxShakhaSelectedItems = [];
+
+  Future<void> showShakhaalistPopup(
+    BuildContext context, {
+    required List<Shakhaalist> shakhaalist,
+    List<Shakhaalist>? preselectedItems,
+    required void Function(
+      List<Shakhaalist> selectedItems,
+      VastiCounts counts,
+    ) onSubmit,
+  }) async {
+    List<Shakhaalist> selectedItems = List.from(preselectedItems ?? []);
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "${Statics.getLabel('selectshakhaa')}",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    "${Statics.getLabel('Total')} ${Statics.getLabel('Shaakhaa')} : ${shakhaalist.length}",
+                    style: const TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
+                  Text(
+                    "${Statics.getLabel('selectedTotal')} : ${selectedItems.length}",
+                    style: const TextStyle(fontSize: 14, color: Colors.blue),
+                  ),
+                ],
+              ),
+              content: SizedBox(
+                width: double.maxFinite,
+                height: MediaQuery.of(context).size.height * 0.6,
+                child: SingleChildScrollView(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Table(
+                      border: TableBorder.all(color: Colors.black26),
+                      defaultColumnWidth: const IntrinsicColumnWidth(),
+                      columnWidths: const {
+                        0: FixedColumnWidth(50),
+                      },
+                      children: [
+                        // Header Row
+                        TableRow(
+                          decoration:
+                              const BoxDecoration(color: Color(0xFFE0E0E0)),
+                          children: const [
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Text("✔",
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Text("Vayogat",
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Text("Prakar",
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Text("Naam",
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                            ),
+                          ],
+                        ),
+
+                        // Data Rows
+                        ...shakhaalist.map((item) {
+                          final isSelected = selectedItems.contains(item);
+
+                          return TableRow(
+                            children: [
+                              Center(
+                                child: Checkbox(
+                                  value: isSelected,
+                                  onChanged: (checked) {
+                                    setState(() {
+                                      if (checked == true) {
+                                        selectedItems.add(item);
+                                      } else {
+                                        selectedItems.remove(item);
+                                      }
+                                    });
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Text(item.vayogatname ?? ""),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Text(item.frequencyName ?? ""),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Text(item.preferedname ?? ""),
+                              ),
+                            ],
+                          );
+                        }),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              actions: [
+                ElevatedButton(
+                  onPressed: () {
+                    // ✅ Store selected items in global list
+                    checkboxShakhaSelectedItems = List.from(selectedItems);
+
+                    // ✅ Agar aapko counts bhi chahiye (group by prakar & vayogat)
+                    final Map<String, int> prakarCounts = {};
+                    for (var item in selectedItems) {
+                      final key = item.frequencyName ?? "Unknown";
+                      prakarCounts[key] = (prakarCounts[key] ?? 0) + 1;
+                    }
+
+                    final Map<String, int> vayogatCounts = {};
+                    for (var item in selectedItems) {
+                      final key = item.vayogatname ?? "Unknown";
+                      vayogatCounts[key] = (vayogatCounts[key] ?? 0) + 1;
+                    }
+
+                    final counts = VastiCounts(
+                      prakarCounts: prakarCounts,
+                      vayogatCounts: vayogatCounts,
+                    );
+
+                    // ✅ Callback fire karna (parent ko data dena)
+                    onSubmit(selectedItems, counts);
+
+                    Navigator.pop(context);
+                  },
+                  child: Center(child: Text("${Statics.getLabel('Submit')}")),
                 ),
               ],
             );
@@ -842,11 +1113,11 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                           showVastiSelectionPopup(
                             context,
                             vastiList: data?.vastisarsajjanshakti ?? [],
-                            preselectedItem:
-                                selectedPerson, // <-- Pass previous selection
+                            preselectedItem: selectedPerson,
                             onSubmit: (selectedItem) {
                               setState(() {
                                 selectedPerson = selectedItem;
+                                checkboxSelectedItems.remove(selectedPerson);
                               });
                             },
                           );
@@ -882,8 +1153,6 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                   SizedBox(
                     height: 10,
                   ),
-                  const Text("Radio Selection",
-                      style: TextStyle(fontWeight: FontWeight.bold)),
                   Table(
                     border: TableBorder.all(),
                     columnWidths: const {
@@ -892,16 +1161,23 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                       2: FlexColumnWidth(),
                     },
                     children: [
-                      const TableRow(
+                      TableRow(
                         decoration: BoxDecoration(color: Color(0xFFE0E0E0)),
                         children: [
                           Padding(
-                              padding: EdgeInsets.all(4), child: Text("Sr No")),
-                          Padding(
-                              padding: EdgeInsets.all(4), child: Text("Name")),
+                              padding: EdgeInsets.all(4),
+                              child: Text(
+                                "${Statics.getLabel('serialNo')}",
+                              )),
                           Padding(
                               padding: EdgeInsets.all(4),
-                              child: Text("Samparkasutra")),
+                              child: Text(
+                                "${Statics.getLabel('Name')}",
+                              )),
+                          Padding(
+                              padding: EdgeInsets.all(4),
+                              child: Text(
+                                  "${Statics.getLabel('samparkSootraNaav')}")),
                         ],
                       ),
                       TableRow(
@@ -948,7 +1224,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 5),
-                          width: 130,
+                          width: 150,
                           height: 35,
                           decoration: BoxDecoration(
                               border: Border.all(
@@ -962,7 +1238,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                               children: [
                                 SizedBox(width: 5),
                                 Text(
-                                  "${Statics.getLabel('selectVIshishthaAtithi')}",
+                                  "${Statics.getLabel('addVIshishthaAtithi')}",
                                   style: TextStyle(
                                       color: Colors.purpleAccent,
                                       fontWeight: FontWeight.bold),
@@ -977,8 +1253,6 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                   SizedBox(
                     height: 10,
                   ),
-                  Text("Checkbox Selections",
-                      style: TextStyle(fontWeight: FontWeight.bold)),
                   Table(
                     border: TableBorder.all(),
                     columnWidths: const {
@@ -987,32 +1261,49 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                       2: FlexColumnWidth(),
                     },
                     children: [
-                      const TableRow(
+                      TableRow(
                         decoration: BoxDecoration(color: Color(0xFFE0E0E0)),
                         children: [
                           Padding(
-                              padding: EdgeInsets.all(4), child: Text("Sr No")),
-                          Padding(
-                              padding: EdgeInsets.all(4), child: Text("Name")),
+                              padding: EdgeInsets.all(4),
+                              child: Text(
+                                "${Statics.getLabel('serialNo')}",
+                              )),
                           Padding(
                               padding: EdgeInsets.all(4),
-                              child: Text("Samparkasutra")),
+                              child: Text(
+                                "${Statics.getLabel('Name')}",
+                              )),
+                          Padding(
+                              padding: EdgeInsets.all(4),
+                              child: Text(
+                                  "${Statics.getLabel('samparkSootraNaav')}")),
                         ],
                       ),
-                      ...checkboxSelectedItems.asMap().entries.map((entry) {
+                      ...checkboxSelectedItems
+                          .asMap()
+                          .entries
+                          .where((entry) =>
+                              checkboxSelectedItems.indexWhere(
+                                  (e) => e.pkid == entry.value.pkid) ==
+                              entry.key)
+                          .map((entry) {
                         int srNo = entry.key + 1;
                         final item = entry.value;
                         return TableRow(
                           children: [
                             Padding(
-                                padding: const EdgeInsets.all(4),
-                                child: Text(srNo.toString())),
+                              padding: const EdgeInsets.all(4),
+                              child: Text(srNo.toString()),
+                            ),
                             Padding(
-                                padding: const EdgeInsets.all(4),
-                                child: Text(item.name ?? "")),
+                              padding: const EdgeInsets.all(4),
+                              child: Text(item.name ?? ""),
+                            ),
                             Padding(
-                                padding: const EdgeInsets.all(4),
-                                child: Text(item.samparkasutranava ?? "")),
+                              padding: const EdgeInsets.all(4),
+                              child: Text(item.samparkasutranava ?? ""),
+                            ),
                           ],
                         );
                       }).toList(),
@@ -1098,8 +1389,12 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                                       "${Statics.getLabel('Shishu')}/${Statics.getLabel('Baal')}"),
                                 ),
                                 _numberField(patShishuBaalCtrl),
-                                _numberField(ganShishuBaalCtrl),
-                                _numberField(anyaShishuBaalCtrl),
+                                _numberField(ganShishuBaalCtrl,
+                                    limitController: patShishuBaalCtrl,
+                                    otherController: anyaShishuBaalCtrl),
+                                _numberField(anyaShishuBaalCtrl,
+                                    limitController: patShishuBaalCtrl,
+                                    otherController: ganShishuBaalCtrl),
                               ],
                             ),
                             TableRow(
@@ -1110,8 +1405,12 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                                       "${Statics.getLabel('MahaavidyaalayeenTarunLabel')}"),
                                 ),
                                 _numberField(patMahavidyaCtrl),
-                                _numberField(ganMahavidyaCtrl),
-                                _numberField(anyaMahavidyaCtrl),
+                                _numberField(ganMahavidyaCtrl,
+                                    limitController: patMahavidyaCtrl,
+                                    otherController: anyaMahavidyaCtrl),
+                                _numberField(anyaMahavidyaCtrl,
+                                    limitController: patMahavidyaCtrl,
+                                    otherController: ganMahavidyaCtrl),
                               ],
                             ),
                             TableRow(
@@ -1122,8 +1421,12 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                                       "${Statics.getLabel('TarunVyavasaayee')}"),
                                 ),
                                 _numberField(patTarunVyavCtrl),
-                                _numberField(ganTarunVyavCtrl),
-                                _numberField(anyaTarunVyavCtrl),
+                                _numberField(ganTarunVyavCtrl,
+                                    limitController: patTarunVyavCtrl,
+                                    otherController: anyaTarunVyavCtrl),
+                                _numberField(anyaTarunVyavCtrl,
+                                    limitController: patTarunVyavCtrl,
+                                    otherController: ganTarunVyavCtrl),
                               ],
                             ),
                             TableRow(
@@ -1134,8 +1437,12 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                                       "${Statics.getLabel('ProudhaVyavasaayeeLabel')}"),
                                 ),
                                 _numberField(patProudhVyavCtrl),
-                                _numberField(ganProudhVyavCtrl),
-                                _numberField(anyaProudhVyavCtrl),
+                                _numberField(ganProudhVyavCtrl,
+                                    limitController: patProudhVyavCtrl,
+                                    otherController: anyaProudhVyavCtrl),
+                                _numberField(anyaProudhVyavCtrl,
+                                    limitController: patProudhVyavCtrl,
+                                    otherController: ganProudhVyavCtrl),
                               ],
                             ),
 
@@ -1197,16 +1504,30 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          showGraamVastiMandalUpnagarPopup(
+                            context,
+                            vastiList: data?.vastimandallist ?? [],
+                            preselectedItems: checkboxGraamVastiSelectedItems,
+                            onSubmit:
+                                (selectedItems, selectedCount, totalCount) {
+                              print("Selected: $selectedCount / $totalCount");
+                              setState(() {
+                                totalVastiCount = totalCount;
+                                selectedVastiCount = selectedCount;
+                              });
+                              print(
+                                  "Selected Items: ${selectedItems.map((e) => e.geoUnitName)}");
+                            },
+                          );
+                        },
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 5),
-                          width: 80,
+                          width: 120,
                           height: 35,
                           decoration: BoxDecoration(
                               border: Border.all(
                                   color: Colors.purpleAccent.shade100),
-                              // color:
-                              //     Colors.purpleAccent.withOpacity(0.7),
                               borderRadius: BorderRadius.circular(15)),
                           child: Center(
                             child: Row(
@@ -1232,14 +1553,93 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                   SingleColumnRow(
                     txtString:
                         "${Statics.getLabel('Total')} ${Statics.getLabel('Vasti')} ",
+                    value: totalVastiCount.toString(),
                   ),
                   SingleColumnRow(
                     txtString:
                         "${Statics.getLabel('pratinidhitva')} ${Statics.getLabel('Vasti')} ",
+                    value: selectedVastiCount.toString(),
                   ),
                   SingleColumnRow(
                     txtString:
                         "${Statics.getLabel('average')} ${Statics.getLabel('upastithi')} ",
+                    value:
+                        "${((selectedVastiCount! / totalVastiCount!) * 100).toStringAsFixed(2)} %",
+                  )
+                ],
+              ),
+            ),
+// ================================== 7 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
+            mainContainer(
+              "${Statics.getLabel('shakhaMilanPratinidhitwa')}",
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          showShakhaalistPopup(
+                            context,
+                            shakhaalist: data?.shakhaalist ?? [],
+                            preselectedItems: checkboxShakhaSelectedItems,
+                            onSubmit: (selectedItems, counts) {
+                              setState(() {
+                                checkboxShakhaSelectedItems = selectedItems;
+                                countsShakhaa = counts; // model me store
+                              });
+
+                              print(
+                                  "Selected Items: ${selectedItems.map((e) => e.geoUnitName)}");
+                              print("Prakar Counts: ${counts.prakarCounts}");
+                              print("Vayogat Counts: ${counts.vayogatCounts}");
+                            },
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          width: 120,
+                          height: 35,
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: Colors.purpleAccent.shade100),
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(width: 5),
+                                Text(
+                                  "${Statics.getLabel('addshakhaa')}",
+                                  style: TextStyle(
+                                      color: Colors.purpleAccent,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  SingleColumnRow(
+                    txtString:
+                        "${Statics.getLabel('Total')} ${Statics.getLabel('Vasti')} ",
+                    value: totalVastiCount.toString(),
+                  ),
+                  SingleColumnRow(
+                    txtString:
+                        "${Statics.getLabel('pratinidhitva')} ${Statics.getLabel('Vasti')} ",
+                    value: selectedVastiCount.toString(),
+                  ),
+                  SingleColumnRow(
+                    txtString:
+                        "${Statics.getLabel('average')} ${Statics.getLabel('upastithi')} ",
+                    value:
+                        "${((selectedVastiCount! / totalVastiCount!) * 100).toStringAsFixed(2)} %",
                   )
                 ],
               ),
@@ -1532,4 +1932,30 @@ class VastiPerson {
     this.visheshId,
     this.visheshname,
   });
+}
+
+class VastiCounts {
+  final Map<String, int> prakarCounts;
+  final Map<String, int> vayogatCounts;
+
+  VastiCounts({
+    required this.prakarCounts,
+    required this.vayogatCounts,
+  });
+
+  // Factory for JSON parsing
+  factory VastiCounts.fromJson(Map<String, dynamic> json) {
+    return VastiCounts(
+      prakarCounts: Map<String, int>.from(json['prakarCounts'] ?? {}),
+      vayogatCounts: Map<String, int>.from(json['vayogatCounts'] ?? {}),
+    );
+  }
+
+  // To JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'prakarCounts': prakarCounts,
+      'vayogatCounts': vayogatCounts,
+    };
+  }
 }

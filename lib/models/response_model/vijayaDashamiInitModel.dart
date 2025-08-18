@@ -176,16 +176,19 @@ class Shakhaalist {
   String? preferedname;
   String? vayogatname;
   int? linkedUpaNagarID;
+  int? isSankalpit;
 
-  Shakhaalist(
-      {this.frequencyName,
-      this.geoUnitID,
-      this.geoUnitName,
-      this.geoUnitNameHindi,
-      this.geoUnitNameMarathi,
-      this.preferedname,
-      this.vayogatname,
-      this.linkedUpaNagarID});
+  Shakhaalist({
+    this.frequencyName,
+    this.geoUnitID,
+    this.geoUnitName,
+    this.geoUnitNameHindi,
+    this.geoUnitNameMarathi,
+    this.preferedname,
+    this.vayogatname,
+    this.isSankalpit,
+    this.linkedUpaNagarID,
+  });
 
   Shakhaalist.fromJson(Map<String, dynamic> json) {
     frequencyName = json['FrequencyName'];
@@ -196,6 +199,7 @@ class Shakhaalist {
     preferedname = json['Preferedname'];
     vayogatname = json['Vayogatname'];
     linkedUpaNagarID = json['linkedUpaNagarID'];
+    isSankalpit = json['IsSankalpit'];
   }
 
   Map<String, dynamic> toJson() {
@@ -208,6 +212,7 @@ class Shakhaalist {
     data['Preferedname'] = this.preferedname;
     data['Vayogatname'] = this.vayogatname;
     data['linkedUpaNagarID'] = this.linkedUpaNagarID;
+    data['IsSankalpit'] = this.isSankalpit;
     return data;
   }
 }

@@ -243,6 +243,7 @@ class NiyojakAppState extends State<NiyojakApp> {
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           foregroundColor: Colors.white,
         ),
+        scaffoldBackgroundColor: Colors.white,
         tabBarTheme: TabBarTheme(
           labelColor: Colors.white, // Color for selected tab text
           unselectedLabelColor: Colors.white70, // Color for unselected tab text

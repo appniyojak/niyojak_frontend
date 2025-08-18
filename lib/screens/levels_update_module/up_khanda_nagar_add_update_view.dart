@@ -1075,7 +1075,7 @@ class _UpNagarkhandaAddUpdateViewState
                                 child: Container(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 5),
-                                  width: 60,
+                                  width: 120,
                                   height: 35,
                                   decoration: BoxDecoration(
                                       border: Border.all(
