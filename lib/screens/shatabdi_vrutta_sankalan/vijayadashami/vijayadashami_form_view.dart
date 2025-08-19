@@ -8,8 +8,10 @@ import 'package:niyojak_prod/widgets/app_drawer.dart';
 import 'package:niyojak_prod/widgets/single_column_row.dart';
 
 import '../../../helpers/static_data.dart' as Statics;
+import '../../../models/response_model/vasti_up_data_model.dart';
 import '../../../models/response_model/vijayaDashamiInitModel.dart';
 import '../../../providers/bals.dart';
+import 'add_sajjanshakti_anyaprabhai_form.dart';
 
 class VijayadashamiFormView extends StatefulWidget {
   static const String routeName = '/vijayadashami-form-view';
@@ -311,6 +313,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     data = await Statics.getVijayadashamiInitData(
         context, Statics.userDetails["userID"], selctedLevelId);
     print("searchVijayaDashami data ${data?.vastisarsajjanshakti}");
+    getVastiUpDataList();
     setState(() {});
   }
 
@@ -318,50 +321,139 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
   Future<void> showVastiSelectionPopup(
     BuildContext context, {
     required List<Vastisarsajjanshakti> vastiList,
-    Vastisarsajjanshakti? preselectedItem, // <-- pass selected item here
+    Vastisarsajjanshakti? preselectedItem,
     required void Function(Vastisarsajjanshakti selectedItem) onSubmit,
   }) async {
-    dynamic selectedItem = preselectedItem; // <-- start with preselected
+    dynamic selectedItem = preselectedItem;
 
     await showDialog(
       context: context,
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setState) {
-            return AlertDialog(
-              title: Text("${Statics.getLabel('selectMukhyaAtithi')}"),
-              content: SizedBox(
-                width: double.maxFinite,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: vastiList.length,
-                  itemBuilder: (context, index) {
-                    final item = vastiList[index];
-                    return RadioListTile<dynamic>(
-                      title: Text(
-                          "${item.name} (${item.samparkasutranava == "" ? "-" : item.samparkasutranava})"),
-                      value: item,
-                      groupValue: selectedItem,
-                      onChanged: (value) {
-                        setState(() {
-                          selectedItem = value;
-                        });
-                      },
-                    );
-                  },
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                constraints: const BoxConstraints(maxHeight: 450),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // 🔹 Title + Close Button
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          Statics.getLabel('selectMukhyaAtithi'),
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.purpleAccent,
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.close, color: Colors.grey),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ],
+                    ),
+                    const Divider(),
+                    const SizedBox(height: 8),
+
+                    // 🔹 Radio List
+                    Expanded(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: vastiList.length,
+                        itemBuilder: (context, index) {
+                          final item = vastiList[index];
+                          return Card(
+                            margin: const EdgeInsets.symmetric(vertical: 4),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: RadioListTile<dynamic>(
+                              contentPadding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
+                              title: Text(
+                                "${item.name} "
+                                "(${item.samparkasutranava == "" ? "-" : item.samparkasutranava})",
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                              value: item,
+                              groupValue: selectedItem,
+                              activeColor: Colors.purpleAccent,
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedItem = value;
+                                });
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    // 🔹 Buttons
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.purpleAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                            ),
+                            onPressed: () {
+                              if (selectedItem != null) {
+                                onSubmit(selectedItem);
+                              }
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              Statics.getLabel('Submit'),
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              side:
+                                  const BorderSide(color: Colors.purpleAccent),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pushNamed(
+                                  SajjanShaktiFormPage.routeName,
+                                  arguments: data!.vastimandallist);
+                            },
+                            child: Text(
+                              Statics.getLabel('addMukhyaAtithi'),
+                              style: const TextStyle(
+                                color: Colors.purpleAccent,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-              actions: [
-                ElevatedButton(
-                  onPressed: () {
-                    if (selectedItem != null) {
-                      onSubmit(selectedItem);
-                    }
-                    Navigator.pop(context);
-                  },
-                  child: Center(child: Text("${Statics.getLabel('Submit')}")),
-                ),
-              ],
             );
           },
         );
@@ -389,42 +481,95 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setState) {
-            return AlertDialog(
-              title: Text("${Statics.getLabel('selectVIshishthaAtithi')}"),
-              content: SizedBox(
-                width: double.maxFinite,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: filteredList.length,
-                  itemBuilder: (context, index) {
-                    final item = filteredList[index];
-                    final isSelected = selectedItems.contains(item);
-                    return CheckboxListTile(
-                      title: Text(
-                          "${item.name} (${item.samparkasutranava == "" ? "-" : item.samparkasutranava})"),
-                      value: isSelected,
-                      onChanged: (bool? checked) {
-                        setState(() {
-                          if (checked == true) {
-                            selectedItems.add(item);
-                          } else {
-                            selectedItems.remove(item);
-                          }
-                        });
-                      },
-                    );
-                  },
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                constraints: const BoxConstraints(maxHeight: 450),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // 🔹 Title + Close Button
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          Statics.getLabel('selectVIshishthaAtithi'),
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.purpleAccent,
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.close, color: Colors.grey),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ],
+                    ),
+                    const Divider(),
+                    const SizedBox(height: 8),
+
+                    // 🔹 Checkbox List
+                    Expanded(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: filteredList.length,
+                        itemBuilder: (context, index) {
+                          final item = filteredList[index];
+                          final isSelected = selectedItems.contains(item);
+                          return CheckboxListTile(
+                            title: Text(
+                              "${item.name} "
+                              "(${item.samparkasutranava == "" ? "-" : item.samparkasutranava})",
+                            ),
+                            value: isSelected,
+                            activeColor: Colors.purpleAccent,
+                            onChanged: (bool? checked) {
+                              setState(() {
+                                if (checked == true) {
+                                  selectedItems.add(item);
+                                } else {
+                                  selectedItems.remove(item);
+                                }
+                              });
+                            },
+                          );
+                        },
+                      ),
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    // 🔹 Submit Button
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.purpleAccent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                        ),
+                        onPressed: () {
+                          onSubmit(selectedItems);
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          Statics.getLabel('Submit'),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              actions: [
-                ElevatedButton(
-                  onPressed: () {
-                    onSubmit(selectedItems);
-                    Navigator.pop(context);
-                  },
-                  child: Center(child: Text("${Statics.getLabel('Submit')}")),
-                ),
-              ],
             );
           },
         );
@@ -432,18 +577,19 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     );
   }
 
-  List<Upnagarmandallist> checkboxGraamVastiSelectedItems = [];
+  List<UpnagarmandallistVijayaDashami> checkboxGraamVastiSelectedItems = [];
   int? selectedVastiCount = 0;
   int? totalVastiCount = 0;
   Future<void> showGraamVastiMandalUpnagarPopup(
     BuildContext context, {
-    required List<Upnagarmandallist> vastiList,
-    List<Upnagarmandallist>? preselectedItems,
-    required void Function(List<Upnagarmandallist> selectedItems,
+    required List<UpnagarmandallistVijayaDashami> vastiList,
+    List<UpnagarmandallistVijayaDashami>? preselectedItems,
+    required void Function(List<UpnagarmandallistVijayaDashami> selectedItems,
             int selectedCount, int totalCount)
         onSubmit,
   }) async {
-    List<Upnagarmandallist> selectedItems = List.from(preselectedItems ?? []);
+    List<UpnagarmandallistVijayaDashami> selectedItems =
+        List.from(preselectedItems ?? []);
 
     await showDialog(
       context: context,
@@ -682,6 +828,31 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     );
   }
 
+  String? selectedValue;
+
+  VastiUpDataListModel? vastiUpDataListModel;
+
+  Future<void> getVastiUpDataList() async {
+    var inputData = json.encode({
+      "AppUserID": Statics.userDetails['userID'],
+      "GeoUnitID": selctedLevelId,
+    });
+
+    print("_submitForm $inputData");
+
+    vastiUpDataListModel = await Statics.getVastiUpdata(inputData);
+
+    if (vastiUpDataListModel != null) {
+      print("Data fetched successfully");
+      setState(() {
+        print(
+            "selectedIdString getVastiUpDataList  --->>>   $vastiUpDataListModel");
+      });
+    } else {
+      print("Failed to fetch data");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -706,268 +877,339 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-//=======================================   SEARCH FILTERS ==========================================================================================
-            ExpansionPanelList(
-              expansionCallback: (int index, bool isExpanded) {
-                setState(() {
-                  _isExpanded = isExpanded;
-                });
-              },
-              children: [
-                ExpansionPanel(
-                  headerBuilder: (BuildContext context, bool isExpanded) {
-                    return ListTile(
-                      title: Text(
-                        Statics.getLabel('selectStar'),
-                        style: TextStyle(
-                            color: Colors.purpleAccent,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      trailing: IconButton(
-                          onPressed: () {
-                            clearForm();
-                          },
-                          icon: Icon(Icons.refresh),
-                          color: Colors.purpleAccent),
-                      iconColor: Colors.purpleAccent,
-                    );
-                  },
-                  body: Container(
-                    margin: EdgeInsets.all(20),
-                    child: Column(
-                      children: [
-                        if (_linkedMahaanagar != null)
-                          DropdownButtonFormField(
-                            decoration: InputDecoration(
-                                labelText: Statics.getLabel('Mahaanagar')),
-                            isExpanded: true,
-                            value: _linkedMahaanagarValue == ""
-                                ? null
-                                : _linkedMahaanagarValue,
-                            items: _linkedMahaanagar!
-                                .map((bg) => DropdownMenuItem(
-                                    value: bg.geoUnitID.toString(),
-                                    child: Text(bg.name!)))
-                                .toList(),
-                            onChanged: (value) {
-                              final selectedItem = _linkedMahaanagar!
-                                  .firstWhere(
-                                      (bg) => bg.geoUnitID.toString() == value);
-                              print(value);
-                              setState(() {
-                                _linkedMahaanagarValue = value;
-                                _linkedVibhaagValue = null;
-                                _linkedBhaagValue = null;
-                                _linkedShaharValue = null;
-                                _linkedNagarValue = null;
-                                populatelinkedVibhaagDropdown(value!);
-                                mahanagarId = value;
-                                selctedLevelName = selectedItem.name ?? "";
-                                selctedLevel = 'Mahanagar';
-                                selctedLevelId = value;
-                              });
-                            },
-                          ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        if (_linkedVibhaag != null)
-                          DropdownButtonFormField(
-                            decoration: InputDecoration(
-                                labelText: Statics.getLabel('Vibhaag')),
-                            isExpanded: true,
-                            value: _linkedVibhaagValue == ""
-                                ? null
-                                : _linkedVibhaagValue,
-                            items: _linkedVibhaag!
-                                .map((bg) => DropdownMenuItem(
-                                    value: bg.geoUnitID.toString(),
-                                    child: Text(bg.name!)))
-                                .toList(),
-                            onChanged: (value) {
-                              final selectedItem = _linkedVibhaag!.firstWhere(
-                                  (bg) => bg.geoUnitID.toString() == value);
-                              print(value);
-                              setState(() {
-                                _linkedVibhaagValue = value;
-                                populatelinkedBhaagDropdown(value!);
-                                vibhagId = value;
-                                _linkedBhaagValue = _linkedNagarValue = null;
-                                _linkedBhaag = _linkedNagar = null;
-                                selctedLevelName = selectedItem.name ?? "";
-                                selctedLevel = 'Vibhaag';
-                                selctedLevelId = value;
-                              });
-                            },
-                          ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        if (_linkedBhaag != null)
-                          DropdownButtonFormField(
-                            decoration: InputDecoration(
-                                labelText: Statics.getLabel('Bhaag')),
-                            isExpanded: true,
-                            value: _linkedBhaagValue == ""
-                                ? null
-                                : _linkedBhaagValue,
-                            items: _linkedBhaag!
-                                .map((bg) => DropdownMenuItem(
-                                    value: bg.geoUnitID.toString(),
-                                    child: Text(bg.name!)))
-                                .toList(),
-                            onChanged: (value) {
-                              final selectedItem = _linkedBhaag!.firstWhere(
-                                  (bg) => bg.geoUnitID.toString() == value);
-                              setState(() {
-                                _linkedBhaagValue = value;
-                                // populatelinkedShaharDropdown(value!);
-                                populatelinkedNagarDropdown(value, null);
-                                selctedLevelName = selectedItem.name ?? "";
-                                selctedLevel = 'Bhaag';
-                                selctedLevelId = value;
-                              });
-                            },
-                          ),
-                        if (_linkedNagar != null && _linkedNagar!.length > 0)
-                          DropdownButtonFormField(
-                            decoration: InputDecoration(
-                                labelText: Statics.getLabel('Nagar')),
-                            isExpanded: true,
-                            value: _linkedNagarValue == ""
-                                ? null
-                                : _linkedNagarValue,
-                            items: _linkedNagar!
-                                .map((bg) => DropdownMenuItem(
-                                    value: bg.geoUnitID.toString(),
-                                    child: Text(bg.name!)))
-                                .toList(),
-                            onChanged: (value) {
-                              final selectedItem = _linkedNagar!.firstWhere(
-                                  (bg) => bg.geoUnitID.toString() == value);
-                              populatelinkedMandalDropdown(value!);
-                              populatelinkedVastiDropdown(value);
-                              setState(() {
-                                selctedLevelName = selectedItem.name ?? "";
-                                selctedLevel = 'Nagar';
-                                selctedLevelId = value;
+            // String? selectedValue; // <-- add this in your State
 
-                                _linkedNagarValue = value;
-                              });
-                            },
-                          ),
-                        // if (_linkedNagar != null && _linkedNagar!.length > 0)
-                        //   SizedBox(
-                        //     height: 10,
-                        //   ),
-                        // if (_linkedmandal != null && _linkedmandal!.length > 0)
-                        //   DropdownButtonFormField(
-                        //     decoration: InputDecoration(
-                        //         labelText: Statics.getLabel('Mandal')),
-                        //     isExpanded: true,
-                        //     value: _linkedmandalValue == ""
-                        //         ? null
-                        //         : _linkedmandalValue,
-                        //     items: _linkedmandal!
-                        //         .map((bg) => DropdownMenuItem(
-                        //             value: bg.geoUnitID.toString(),
-                        //             child: Text(bg.name!)))
-                        //         .toList(),
-                        //     onChanged: (value) {
-                        //       final selectedItem = _linkedmandal!.firstWhere(
-                        //           (bg) => bg.geoUnitID.toString() == value);
-                        //       setState(() {
-                        //         selctedLevelName = selectedItem.name ?? "";
-                        //         selctedLevel = 'Mandal';
-                        //         selctedLevelId = value;
-                        //
-                        //         _linkedmandalValue = value;
-                        //         populatelinkedGraamDropdown(value!);
-                        //       });
-                        //     },
-                        //   ),
-                        // if (_linkedmandal != null && _linkedmandal!.length > 0)
-                        //   SizedBox(
-                        //     height: 10,
-                        //   ),
-                        // if (_linkedgraam != null && _linkedgraam!.length > 0)
-                        //   DropdownButtonFormField(
-                        //     decoration: InputDecoration(
-                        //         labelText: Statics.getLabel('Graam')),
-                        //     isExpanded: true,
-                        //     value: _linkedgraamValue == ""
-                        //         ? null
-                        //         : _linkedgraamValue,
-                        //     items: _linkedgraam!
-                        //         .map((bg) => DropdownMenuItem(
-                        //             value: bg.geoUnitID.toString(),
-                        //             child: Text(bg.name!)))
-                        //         .toList(),
-                        //     onChanged: (value) {
-                        //       final selectedItem = _linkedgraam!.firstWhere(
-                        //           (bg) => bg.geoUnitID.toString() == value);
-                        //       setState(() {
-                        //         _linkedgraamValue = value;
-                        //         selctedLevelName = selectedItem.name ?? "";
-                        //         selctedLevel = 'Graam';
-                        //         selctedLevelId = value;
-                        //       });
-                        //     },
-                        //   ),
-                        // if (_linkedvasti != null && _linkedvasti!.length > 0)
-
-                        // DropdownButtonFormField(
-                        //   decoration: InputDecoration(
-                        //       labelText: Statics.getLabel('Vasti')),
-                        //   isExpanded: true,
-                        //   value: _linkedvastiValue == ""
-                        //       ? null
-                        //       : _linkedvastiValue,
-                        //   items: _linkedvasti!
-                        //       .map((bg) => DropdownMenuItem(
-                        //           value: bg.geoUnitID.toString(),
-                        //           child: Text(bg.name!)))
-                        //       .toList(),
-                        //   onChanged: (value) {
-                        //     final selectedItem = _linkedvasti!.firstWhere(
-                        //         (bg) => bg.geoUnitID.toString() == value);
-                        //     setState(() {
-                        //       _linkedvastiValue = value;
-                        //       selctedLevelName = selectedItem.name ?? "";
-                        //       selctedLevel = 'Vasti';
-                        //       selctedLevelId = value;
-                        //     });
-                        //   },
-                        // ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        if (selctedLevel == 'Nagar')
-                          Align(
-                            alignment: Alignment.center,
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStatePropertyAll(
-                                      Colors.purpleAccent)),
-                              onPressed: () {
-                                searchVijayaDashami();
-                                setState(() {
-                                  _isExpanded = false;
-                                  isVastiSearch = true;
-                                });
-                              },
-                              child: Text("${Statics.getLabel('Filters')}",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold)),
-                            ),
-                          )
-                      ],
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.purpleAccent),
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+              ),
+              padding: EdgeInsets.symmetric(
+                vertical: size.height * 0.01,
+                horizontal: size.width * 0.03,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "${Statics.getLabel('vijaaydashamiStarQuestion')}",
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                  isExpanded: _isExpanded,
-                ),
-              ],
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: RadioListTile<String>(
+                          contentPadding: EdgeInsets.zero,
+                          title: Text(
+                              "${Statics.getLabel('NagarKaaryakartaaCount')}"),
+                          value: "option1", // ✅ fixed (actual value)
+                          groupValue: selectedValue,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedValue = value;
+                            });
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        child: RadioListTile<String>(
+                          contentPadding: EdgeInsets.zero,
+                          title: Text("${Statics.getLabel('upnagarUpkhanda')}"),
+                          value: "option2", // ✅ fixed (actual value)
+                          groupValue: selectedValue,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedValue = value;
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+//=======================================   SEARCH FILTERS ==========================================================================================
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.purpleAccent),
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+              ),
+              padding: EdgeInsets.symmetric(
+                // vertical: size.height * 0.01,
+                horizontal: size.width * 0.02,
+              ),
+              child: ExpansionPanelList(
+                elevation: 0,
+                dividerColor: Colors.transparent,
+                expansionCallback: (int index, bool isExpanded) {
+                  setState(() {
+                    _isExpanded = isExpanded;
+                  });
+                },
+                children: [
+                  ExpansionPanel(
+                    headerBuilder: (BuildContext context, bool isExpanded) {
+                      return ListTile(
+                        title: Text(
+                          Statics.getLabel('selectStar'),
+                          style: TextStyle(
+                              color: Colors.purpleAccent,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        trailing: IconButton(
+                            onPressed: () {
+                              clearForm();
+                            },
+                            icon: Icon(Icons.refresh),
+                            color: Colors.purpleAccent),
+                        iconColor: Colors.purpleAccent,
+                      );
+                    },
+                    body: Container(
+                      margin: EdgeInsets.all(20),
+                      child: Column(
+                        children: [
+                          if (_linkedMahaanagar != null)
+                            DropdownButtonFormField(
+                              decoration: InputDecoration(
+                                  labelText: Statics.getLabel('Mahaanagar')),
+                              isExpanded: true,
+                              value: _linkedMahaanagarValue == ""
+                                  ? null
+                                  : _linkedMahaanagarValue,
+                              items: _linkedMahaanagar!
+                                  .map((bg) => DropdownMenuItem(
+                                      value: bg.geoUnitID.toString(),
+                                      child: Text(bg.name!)))
+                                  .toList(),
+                              onChanged: (value) {
+                                final selectedItem = _linkedMahaanagar!
+                                    .firstWhere((bg) =>
+                                        bg.geoUnitID.toString() == value);
+                                print(value);
+                                setState(() {
+                                  _linkedMahaanagarValue = value;
+                                  _linkedVibhaagValue = null;
+                                  _linkedBhaagValue = null;
+                                  _linkedShaharValue = null;
+                                  _linkedNagarValue = null;
+                                  populatelinkedVibhaagDropdown(value!);
+                                  mahanagarId = value;
+                                  selctedLevelName = selectedItem.name ?? "";
+                                  selctedLevel = 'Mahanagar';
+                                  selctedLevelId = value;
+                                });
+                              },
+                            ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          if (_linkedVibhaag != null)
+                            DropdownButtonFormField(
+                              decoration: InputDecoration(
+                                  labelText: Statics.getLabel('Vibhaag')),
+                              isExpanded: true,
+                              value: _linkedVibhaagValue == ""
+                                  ? null
+                                  : _linkedVibhaagValue,
+                              items: _linkedVibhaag!
+                                  .map((bg) => DropdownMenuItem(
+                                      value: bg.geoUnitID.toString(),
+                                      child: Text(bg.name!)))
+                                  .toList(),
+                              onChanged: (value) {
+                                final selectedItem = _linkedVibhaag!.firstWhere(
+                                    (bg) => bg.geoUnitID.toString() == value);
+                                print(value);
+                                setState(() {
+                                  _linkedVibhaagValue = value;
+                                  populatelinkedBhaagDropdown(value!);
+                                  vibhagId = value;
+                                  _linkedBhaagValue = _linkedNagarValue = null;
+                                  _linkedBhaag = _linkedNagar = null;
+                                  selctedLevelName = selectedItem.name ?? "";
+                                  selctedLevel = 'Vibhaag';
+                                  selctedLevelId = value;
+                                });
+                              },
+                            ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          if (_linkedBhaag != null)
+                            DropdownButtonFormField(
+                              decoration: InputDecoration(
+                                  labelText: Statics.getLabel('Bhaag')),
+                              isExpanded: true,
+                              value: _linkedBhaagValue == ""
+                                  ? null
+                                  : _linkedBhaagValue,
+                              items: _linkedBhaag!
+                                  .map((bg) => DropdownMenuItem(
+                                      value: bg.geoUnitID.toString(),
+                                      child: Text(bg.name!)))
+                                  .toList(),
+                              onChanged: (value) {
+                                final selectedItem = _linkedBhaag!.firstWhere(
+                                    (bg) => bg.geoUnitID.toString() == value);
+                                setState(() {
+                                  _linkedBhaagValue = value;
+                                  // populatelinkedShaharDropdown(value!);
+                                  populatelinkedNagarDropdown(value, null);
+                                  selctedLevelName = selectedItem.name ?? "";
+                                  selctedLevel = 'Bhaag';
+                                  selctedLevelId = value;
+                                });
+                              },
+                            ),
+                          if (_linkedNagar != null && _linkedNagar!.length > 0)
+                            DropdownButtonFormField(
+                              decoration: InputDecoration(
+                                  labelText: Statics.getLabel('Nagar')),
+                              isExpanded: true,
+                              value: _linkedNagarValue == ""
+                                  ? null
+                                  : _linkedNagarValue,
+                              items: _linkedNagar!
+                                  .map((bg) => DropdownMenuItem(
+                                      value: bg.geoUnitID.toString(),
+                                      child: Text(bg.name!)))
+                                  .toList(),
+                              onChanged: (value) {
+                                final selectedItem = _linkedNagar!.firstWhere(
+                                    (bg) => bg.geoUnitID.toString() == value);
+                                populatelinkedMandalDropdown(value!);
+                                populatelinkedVastiDropdown(value);
+                                setState(() {
+                                  selctedLevelName = selectedItem.name ?? "";
+                                  selctedLevel = 'Nagar';
+                                  selctedLevelId = value;
+
+                                  _linkedNagarValue = value;
+                                });
+                              },
+                            ),
+                          // if (_linkedNagar != null && _linkedNagar!.length > 0)
+                          //   SizedBox(
+                          //     height: 10,
+                          //   ),
+                          // if (_linkedmandal != null && _linkedmandal!.length > 0)
+                          //   DropdownButtonFormField(
+                          //     decoration: InputDecoration(
+                          //         labelText: Statics.getLabel('Mandal')),
+                          //     isExpanded: true,
+                          //     value: _linkedmandalValue == ""
+                          //         ? null
+                          //         : _linkedmandalValue,
+                          //     items: _linkedmandal!
+                          //         .map((bg) => DropdownMenuItem(
+                          //             value: bg.geoUnitID.toString(),
+                          //             child: Text(bg.name!)))
+                          //         .toList(),
+                          //     onChanged: (value) {
+                          //       final selectedItem = _linkedmandal!.firstWhere(
+                          //           (bg) => bg.geoUnitID.toString() == value);
+                          //       setState(() {
+                          //         selctedLevelName = selectedItem.name ?? "";
+                          //         selctedLevel = 'Mandal';
+                          //         selctedLevelId = value;
+                          //
+                          //         _linkedmandalValue = value;
+                          //         populatelinkedGraamDropdown(value!);
+                          //       });
+                          //     },
+                          //   ),
+                          // if (_linkedmandal != null && _linkedmandal!.length > 0)
+                          //   SizedBox(
+                          //     height: 10,
+                          //   ),
+                          // if (_linkedgraam != null && _linkedgraam!.length > 0)
+                          //   DropdownButtonFormField(
+                          //     decoration: InputDecoration(
+                          //         labelText: Statics.getLabel('Graam')),
+                          //     isExpanded: true,
+                          //     value: _linkedgraamValue == ""
+                          //         ? null
+                          //         : _linkedgraamValue,
+                          //     items: _linkedgraam!
+                          //         .map((bg) => DropdownMenuItem(
+                          //             value: bg.geoUnitID.toString(),
+                          //             child: Text(bg.name!)))
+                          //         .toList(),
+                          //     onChanged: (value) {
+                          //       final selectedItem = _linkedgraam!.firstWhere(
+                          //           (bg) => bg.geoUnitID.toString() == value);
+                          //       setState(() {
+                          //         _linkedgraamValue = value;
+                          //         selctedLevelName = selectedItem.name ?? "";
+                          //         selctedLevel = 'Graam';
+                          //         selctedLevelId = value;
+                          //       });
+                          //     },
+                          //   ),
+                          // if (_linkedvasti != null && _linkedvasti!.length > 0)
+
+                          // DropdownButtonFormField(
+                          //   decoration: InputDecoration(
+                          //       labelText: Statics.getLabel('Vasti')),
+                          //   isExpanded: true,
+                          //   value: _linkedvastiValue == ""
+                          //       ? null
+                          //       : _linkedvastiValue,
+                          //   items: _linkedvasti!
+                          //       .map((bg) => DropdownMenuItem(
+                          //           value: bg.geoUnitID.toString(),
+                          //           child: Text(bg.name!)))
+                          //       .toList(),
+                          //   onChanged: (value) {
+                          //     final selectedItem = _linkedvasti!.firstWhere(
+                          //         (bg) => bg.geoUnitID.toString() == value);
+                          //     setState(() {
+                          //       _linkedvastiValue = value;
+                          //       selctedLevelName = selectedItem.name ?? "";
+                          //       selctedLevel = 'Vasti';
+                          //       selctedLevelId = value;
+                          //     });
+                          //   },
+                          // ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          if (selctedLevel == 'Nagar')
+                            Align(
+                              alignment: Alignment.center,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStatePropertyAll(
+                                        Colors.purpleAccent)),
+                                onPressed: () {
+                                  searchVijayaDashami();
+                                  setState(() {
+                                    _isExpanded = false;
+                                    isVastiSearch = true;
+                                  });
+                                },
+                                child: Text("${Statics.getLabel('Filters')}",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold)),
+                              ),
+                            )
+                        ],
+                      ),
+                    ),
+                    isExpanded: _isExpanded,
+                  ),
+                ],
+              ),
             ),
 
             SizedBox(

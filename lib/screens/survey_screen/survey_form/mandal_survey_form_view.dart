@@ -1393,8 +1393,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: '${Statics.getLabel('vadipadyacheInfo')}',
-
+                                  text:
+                                      '${Statics.getLabel('vadipadyacheInfo')}',
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
@@ -5411,45 +5411,58 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                   onTap: () {
                     if (isVastiSearch) {
                       if (gaavSamitiYesNo == 0 || gaavSamitiYesNo == 1) {
+                        print("1");
+
                         String sarpanchName =
                             sarpanchNameController.text.trim();
-
                         if (sarpanchName.isEmpty) {
+                          print("2");
+
                           Statics.showToast(
                               "${Statics.getLabel('sarpanchNavValidation')}");
                           return;
                         }
-
                         if (beforsanghaonnowisoff != 0 &&
                             beforsanghaonnowisoff != 1) {
+                          print("3");
+
                           Statics.showToast(
                               "${Statics.getLabel('purviShakhaValidation')}");
                           return;
                         }
-
                         if (anyaVividhKshetracheKame != 0 &&
                             anyaVividhKshetracheKame != 1) {
+                          print("4");
+
                           Statics.showToast(
                               "${Statics.getLabel('anyaVividhValidation')}");
                           return;
                         }
-
                         if (gavatilMumbaikar != 0 && gavatilMumbaikar != 1) {
+                          print("5");
+
                           Statics.showToast(
                               "${Statics.getLabel('mumbaikarValidation')}");
                           return;
                         }
                         if (vadiGharLoksankhyaEnteredDataList!.isEmpty) {
+                          print("6");
+
                           Statics.showToast(
                               "${Statics.getLabel('vadipadyachiInfoValidation')}");
                           return;
                         }
-                        if (maleController.text != 0 &&
-                            femaleController.text != 0) {
+                        if (maleController.text == "" &&
+                            femaleController.text == "") {
+                          print(maleController.text);
+                          print(femaleController.text);
+                          print("7");
+
                           Statics.showToast(
                               "${Statics.getLabel('maleFemaleCountValidation')}");
                           return;
                         }
+                        print("8");
 
                         submitStep1Form();
                       } else {
@@ -6735,6 +6748,13 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 borderRadius: BorderRadius.circular(8)),
                           ),
                           onPressed: () {
+                            if (samparkSootraAdhyatmikKendraController
+                                    .text.length !=
+                                10) {
+                              Statics.showToast(
+                                  "${Statics.getLabel('mobileNumberLimit')}");
+                              return;
+                            }
                             VastisarVividhAdhyatmikKendra data =
                                 VastisarVividhAdhyatmikKendra(
                               pkid: pkIdVividhAAdhyatmikKendra,
@@ -6884,6 +6904,13 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                       borderRadius: BorderRadius.circular(8)),
                                 ),
                                 onPressed: () {
+                                  if (gavatilMumbaikarDoorbhashConroller
+                                          .text.length !=
+                                      10) {
+                                    Statics.showToast(
+                                        "${Statics.getLabel('mobileNumberLimit')}");
+                                    return;
+                                  }
                                   VastisarGavatilMumbaikar data =
                                       VastisarGavatilMumbaikar(
                                     pkid: VastisarVividhKshetracheKamPkId,
@@ -7265,6 +7292,11 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     Statics.showToast(
                         "${Statics.getLabel('otherInfoValidation')}");
                   } else {
+                    if (gavatilMumbaikarDoorbhashConroller.text.length != 10) {
+                      Statics.showToast(
+                          "${Statics.getLabel('mobileNumberLimit')}");
+                      return;
+                    }
                     Vastisarupaasana newData = Vastisarupaasana(
                       upaasanasthalaid: selectedUpasnaSthalId,
                       selectedDropdownValueName: selectedUpasnaSthalName,
@@ -7584,6 +7616,18 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                 //   Navigator.of(ctx).pop();
                 // },
                 onPressed: () {
+                  if (sajjanShaktiPhoneController.text.length != 10) {
+                    Statics.showToast(
+                        "${Statics.getLabel('mobileNumberLimit')}");
+                    return;
+                  }
+                  if (sajjanShaktiContactPersonDoorbhashController
+                          .text.length !=
+                      10) {
+                    Statics.showToast(
+                        "${Statics.getLabel('mobileNumberLimit')}");
+                    return;
+                  }
                   if ((sajjanShaktiShreniEditDataId?.isOther == 1 &&
                           sajjanShaktiAnyaShreniNameController.text == "") ||
                       (sajjanShaktiVisheshEditDataId?.isOther == 1 &&
@@ -8287,6 +8331,18 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       borderRadius: BorderRadius.circular(8)),
                 ),
                 onPressed: () {
+                  if (anyaPrabhaviLokMobileNoController.text.length != 10) {
+                    Statics.showToast(
+                        "${Statics.getLabel('mobileNumberLimit')}");
+                    return;
+                  }
+                  if (anyaPrabhaviLokSamparkSutraDoorbhashController
+                          .text.length !=
+                      10) {
+                    Statics.showToast(
+                        "${Statics.getLabel('mobileNumberLimit')}");
+                    return;
+                  }
                   if ((selectedUpShreni?.isOther == 1 &&
                           anyaPrabhaviLokAnyaUppshreniController.text == "") ||
                       (selectedUpShreni2?.isOther == 1 &&
@@ -8511,6 +8567,12 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       borderRadius: BorderRadius.circular(8)),
                 ),
                 onPressed: () {
+                  if (vastitSajarHonareSanAyojakSamparkController.text.length !=
+                      10) {
+                    Statics.showToast(
+                        "${Statics.getLabel('mobileNumberLimit')}");
+                    return;
+                  }
                   if ((selectedMasterSanName?.isOther == 1 &&
                       vastitSajarHonareAnyaSanController.text == "")) {
                     Statics.showToast(
@@ -8710,6 +8772,13 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                 //   Navigator.of(ctx).pop();
                 // },
                 onPressed: () {
+                  if (vastitSajarHonareSamajikKaryakramAyojakSamparkController
+                          .text.length !=
+                      10) {
+                    Statics.showToast(
+                        "${Statics.getLabel('mobileNumberLimit')}");
+                    return;
+                  }
                   if ((selectedMasterSamajikKaryakramName?.isOther == 1 &&
                       vastitSajarHonareSamajikKaryakramAnya1Controller.text ==
                           "")) {

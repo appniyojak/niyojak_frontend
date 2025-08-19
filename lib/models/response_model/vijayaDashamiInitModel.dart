@@ -3,8 +3,8 @@ class GetVijayadashamiInitModel {
   String? status;
   List<Vastisarsajjanshakti>? vastisarsajjanshakti;
   List<Shakhaalist>? shakhaalist;
-  List<Upnagarmandallist>? upnagarmandallist;
-  List<Upnagarmandallist>? vastimandallist;
+  List<UpnagarmandallistVijayaDashami>? upnagarmandallist;
+  List<UpnagarmandallistVijayaDashami>? vastimandallist;
 
   GetVijayadashamiInitModel(
       {this.message,
@@ -30,15 +30,15 @@ class GetVijayadashamiInitModel {
       });
     }
     if (json['upnagarmandallist'] != null) {
-      upnagarmandallist = <Upnagarmandallist>[];
+      upnagarmandallist = <UpnagarmandallistVijayaDashami>[];
       json['upnagarmandallist'].forEach((v) {
-        upnagarmandallist!.add(new Upnagarmandallist.fromJson(v));
+        upnagarmandallist!.add(new UpnagarmandallistVijayaDashami.fromJson(v));
       });
     }
     if (json['vastimandallist'] != null) {
-      vastimandallist = <Upnagarmandallist>[];
+      vastimandallist = <UpnagarmandallistVijayaDashami>[];
       json['vastimandallist'].forEach((v) {
-        vastimandallist!.add(new Upnagarmandallist.fromJson(v));
+        vastimandallist!.add(new UpnagarmandallistVijayaDashami.fromJson(v));
       });
     }
   }
@@ -217,7 +217,7 @@ class Shakhaalist {
   }
 }
 
-class Upnagarmandallist {
+class UpnagarmandallistVijayaDashami {
   String? frequencyName;
   int? geoUnitID;
   String? geoUnitName;
@@ -227,7 +227,7 @@ class Upnagarmandallist {
   String? vayogatname;
   int? linkedUpaNagarID;
 
-  Upnagarmandallist(
+  UpnagarmandallistVijayaDashami(
       {this.frequencyName,
       this.geoUnitID,
       this.geoUnitName,
@@ -237,7 +237,7 @@ class Upnagarmandallist {
       this.vayogatname,
       this.linkedUpaNagarID});
 
-  Upnagarmandallist.fromJson(Map<String, dynamic> json) {
+  UpnagarmandallistVijayaDashami.fromJson(Map<String, dynamic> json) {
     frequencyName = json['FrequencyName'];
     geoUnitID = json['GeoUnitID'];
     geoUnitName = json['GeoUnitName'];

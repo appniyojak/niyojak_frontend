@@ -1555,6 +1555,8 @@ Map<String, String> resEnglish = {
   'addshakhaa': 'शाखा जोडा',
   'selectshakhaa': 'शाखा निवाडा',
   'selectedTotal': 'एकूण निवडलेले',
+  'vijaaydashamiStarQuestion':
+      'विजयादशमी उत्सव कोणत्या स्तरावर साजरा केला जाईल?',
 };
 
 Map<String, String> resMarathi = {
@@ -3119,6 +3121,8 @@ Map<String, String> resMarathi = {
   'addshakhaa': 'शाखा जोडा',
   'selectshakhaa': 'शाखा निवाडा',
   'selectedTotal': 'एकूण निवडलेले',
+  'vijaaydashamiStarQuestion':
+      'विजयादशमी उत्सव कोणत्या स्तरावर साजरा केला जाईल?',
 };
 
 Map<String, String> resHindi = {
@@ -4686,4 +4690,6 @@ Map<String, String> resHindi = {
   'addshakhaa': 'शाखा जोडा',
   'selectshakhaa': 'शाखा निवाडा',
   'selectedTotal': 'एकूण निवडलेले',
+  'vijaaydashamiStarQuestion':
+      'विजयादशमी उत्सव कोणत्या स्तरावर साजरा केला जाईल?',
 };
