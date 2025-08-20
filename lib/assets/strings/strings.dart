@@ -4690,6 +4690,5 @@ Map<String, String> resHindi = {
   'addshakhaa': 'शाखा जोडा',
   'selectshakhaa': 'शाखा निवाडा',
   'selectedTotal': 'एकूण निवडलेले',
-  'vijaaydashamiStarQuestion':
-      'विजयादशमी उत्सव कोणत्या स्तरावर साजरा केला जाईल?',
+  'vijaaydashamiStarQuestion': 'विजयादशमी उत्सव कोणत्या स्तरावर साजरा झालं?',
 };

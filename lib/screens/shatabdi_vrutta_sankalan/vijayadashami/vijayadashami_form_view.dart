@@ -318,142 +318,172 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
   }
 
   Vastisarsajjanshakti? selectedPerson;
-  Future<void> showVastiSelectionPopup(
+  Vastisanyaprabhavi? selectedPrabhavi;
+  String? selectedType;
+  Future<void> showMukhyaAtithiSelectionPopup(
     BuildContext context, {
-    required List<Vastisarsajjanshakti> vastiList,
-    Vastisarsajjanshakti? preselectedItem,
-    required void Function(Vastisarsajjanshakti selectedItem) onSubmit,
+    required List<Vastisarsajjanshakti> vastisarsajjanshaktiList,
+    required List<Vastisanyaprabhavi> vastisanyaprabhaviList,
+    required void Function(String id, String type, dynamic selectedItem)
+        onSubmit,
+    required VoidCallback onAdd, // 👈 Add button ke liye callback
+    dynamic preselectedItem,
+    String? preselectedType,
   }) async {
     dynamic selectedItem = preselectedItem;
+    String? selectedType = preselectedType;
 
     await showDialog(
       context: context,
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setState) {
-            return Dialog(
+            return AlertDialog(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                constraints: const BoxConstraints(maxHeight: 450),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+              titlePadding: const EdgeInsets.fromLTRB(20, 20, 12, 0),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      const SizedBox(width: 8),
+                      Text(
+                        Statics.getLabel('selectMukhyaAtithi'),
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close, color: Colors.redAccent),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
+              content: SizedBox(
+                width: double.maxFinite,
+                height: 400,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        Statics.getLabel('SajjanShakti'),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          color: Colors.blueGrey,
+                        ),
+                      ),
+                      const Divider(),
+                      ...vastisarsajjanshaktiList.map((item) {
+                        return RadioListTile(
+                          title: Text(item.name ?? "Unknown"),
+                          value: item,
+                          groupValue: selectedItem,
+                          activeColor: Colors.purpleAccent,
+                          contentPadding: EdgeInsets.zero,
+                          onChanged: (val) {
+                            setState(() {
+                              selectedItem = val;
+                              selectedType = "sarsajjanshakti";
+                            });
+                          },
+                        );
+                      }),
+                      const SizedBox(height: 16),
+                      Text(
+                        Statics.getLabel('anyaPrabhaviLok'),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          color: Colors.blueGrey,
+                        ),
+                      ),
+                      const Divider(),
+                      ...vastisanyaprabhaviList.map((item) {
+                        return RadioListTile(
+                          title: Text(item.name ?? "Unknown"),
+                          value: item,
+                          groupValue: selectedItem,
+                          activeColor: Colors.blueAccent,
+                          contentPadding: EdgeInsets.zero,
+                          onChanged: (val) {
+                            setState(() {
+                              selectedItem = val;
+                              selectedType = "anyaprabhavi";
+                            });
+                          },
+                        );
+                      }),
+                    ],
+                  ),
+                ),
+              ),
+              actionsPadding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // 🔹 Title + Close Button
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          Statics.getLabel('selectMukhyaAtithi'),
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.purpleAccent,
-                          ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.close, color: Colors.grey),
-                          onPressed: () => Navigator.pop(context),
-                        ),
-                      ],
-                    ),
-                    const Divider(),
-                    const SizedBox(height: 8),
-
-                    // 🔹 Radio List
                     Expanded(
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: vastiList.length,
-                        itemBuilder: (context, index) {
-                          final item = vastiList[index];
-                          return Card(
-                            margin: const EdgeInsets.symmetric(vertical: 4),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: RadioListTile<dynamic>(
-                              contentPadding:
-                                  const EdgeInsets.symmetric(horizontal: 12),
-                              title: Text(
-                                "${item.name} "
-                                "(${item.samparkasutranava == "" ? "-" : item.samparkasutranava})",
-                                style: const TextStyle(fontSize: 14),
-                              ),
-                              value: item,
-                              groupValue: selectedItem,
-                              activeColor: Colors.purpleAccent,
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedItem = value;
-                                });
-                              },
-                            ),
-                          );
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.purpleAccent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 10),
+                        ),
+                        onPressed: () {
+                          if (selectedItem != null && selectedType != null) {
+                            String id = "";
+                            if (selectedType == "sarsajjanshakti") {
+                              id = (selectedItem as Vastisarsajjanshakti)
+                                  .pkid
+                                  .toString();
+                            } else {
+                              id = (selectedItem as Vastisanyaprabhavi)
+                                  .pkId
+                                  .toString();
+                            }
+                            onSubmit(id, selectedType!, selectedItem);
+                            Navigator.pop(context);
+                          }
                         },
+                        child: Text(
+                          Statics.getLabel('Submit'),
+                          style: const TextStyle(color: Colors.white),
+                        ),
                       ),
                     ),
-
-                    const SizedBox(height: 12),
-
-                    // 🔹 Buttons
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.purpleAccent,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                            ),
-                            onPressed: () {
-                              if (selectedItem != null) {
-                                onSubmit(selectedItem);
-                              }
-                              Navigator.pop(context);
-                            },
-                            child: Text(
-                              Statics.getLabel('Submit'),
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(
+                            color: Colors.purpleAccent, width: 1.5),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                              side:
-                                  const BorderSide(color: Colors.purpleAccent),
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).pushNamed(
-                                  SajjanShaktiFormPage.routeName,
-                                  arguments: data!.vastimandallist);
-                            },
-                            child: Text(
-                              Statics.getLabel('addMukhyaAtithi'),
-                              style: const TextStyle(
-                                color: Colors.purpleAccent,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 10),
+                      ),
+                      onPressed: onAdd,
+                      child: Text(
+                        Statics.getLabel('addMukhyaAtithi'),
+                        style: const TextStyle(color: Colors.purpleAccent),
+                      ),
                     ),
                   ],
                 ),
-              ),
+              ],
             );
           },
         );
@@ -461,115 +491,128 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     );
   }
 
-  List<Vastisarsajjanshakti> checkboxSelectedItems = [];
-
-  Future<void> showVastiCheckboxPopup(
+  List<Vastisarsajjanshakti> selectedSajjanshaktiItems = [];
+  List<Vastisanyaprabhavi> selectedAnyaprabhaviItems = [];
+  Future<void> showVisheshAtithiSelectionPopup(
     BuildContext context, {
-    required List<Vastisarsajjanshakti> vastiList,
-    Vastisarsajjanshakti? excludeItem,
-    List<Vastisarsajjanshakti>? preselectedItems, // <-- pass selected list here
-    required void Function(List<Vastisarsajjanshakti> selectedItems) onSubmit,
+    required List<Vastisarsajjanshakti> vastisarsajjanshaktiList,
+    required List<Vastisanyaprabhavi> vastisanyaprabhaviList,
+    required dynamic excludedItem, // jo MukhyaAtithi me select hua tha
+    required List<Vastisarsajjanshakti> preselectedSajjanshakti,
+    required List<Vastisanyaprabhavi> preselectedAnyaprabhavi,
+    required void Function(
+      String sajjanshaktiIds,
+      String anyaprabhaviIds,
+      List<Vastisarsajjanshakti> selectedSajjanshakti,
+      List<Vastisanyaprabhavi> selectedAnyaprabhavi,
+    ) onSubmit,
   }) async {
-    List<Vastisarsajjanshakti> filteredList =
-        vastiList.where((item) => item.pkid != excludeItem?.pkid).toList();
-
-    List<Vastisarsajjanshakti> selectedItems =
-        List.from(preselectedItems ?? []);
+    final filteredSajjanshakti = vastisarsajjanshaktiList.where((e) {
+      if (excludedItem == null) return true;
+      if (excludedItem is Vastisarsajjanshakti) {
+        return e.pkid != excludedItem.pkid;
+      }
+      return true;
+    }).toList();
+    final filteredAnyaprabhavi = vastisanyaprabhaviList.where((e) {
+      if (excludedItem == null) return true;
+      if (excludedItem is Vastisanyaprabhavi) {
+        return e.pkId != excludedItem.pkId;
+      }
+      return true;
+    }).toList();
+    List<Vastisarsajjanshakti> selectedSajjanshakti =
+        List.of(preselectedSajjanshakti);
+    List<Vastisanyaprabhavi> selectedAnyaprabhavi =
+        List.of(preselectedAnyaprabhavi);
+    if (excludedItem != null) {
+      if (excludedItem is Vastisarsajjanshakti) {
+        selectedSajjanshakti.removeWhere((x) => x.pkid == excludedItem.pkid);
+      } else if (excludedItem is Vastisanyaprabhavi) {
+        selectedAnyaprabhavi.removeWhere((x) => x.pkId == excludedItem.pkId);
+      }
+    }
 
     await showDialog(
       context: context,
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setState) {
-            return Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                constraints: const BoxConstraints(maxHeight: 450),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // 🔹 Title + Close Button
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          Statics.getLabel('selectVIshishthaAtithi'),
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.purpleAccent,
-                          ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.close, color: Colors.grey),
-                          onPressed: () => Navigator.pop(context),
-                        ),
-                      ],
-                    ),
-                    const Divider(),
-                    const SizedBox(height: 8),
-
-                    // 🔹 Checkbox List
-                    Expanded(
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: filteredList.length,
-                        itemBuilder: (context, index) {
-                          final item = filteredList[index];
-                          final isSelected = selectedItems.contains(item);
-                          return CheckboxListTile(
-                            title: Text(
-                              "${item.name} "
-                              "(${item.samparkasutranava == "" ? "-" : item.samparkasutranava})",
-                            ),
-                            value: isSelected,
-                            activeColor: Colors.purpleAccent,
-                            onChanged: (bool? checked) {
-                              setState(() {
-                                if (checked == true) {
-                                  selectedItems.add(item);
-                                } else {
-                                  selectedItems.remove(item);
-                                }
-                              });
-                            },
-                          );
-                        },
-                      ),
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    // 🔹 Submit Button
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.purpleAccent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                        ),
-                        onPressed: () {
-                          onSubmit(selectedItems);
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          Statics.getLabel('Submit'),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+            return AlertDialog(
+              title: const Text("Select Vishesh Atithi"),
+              content: SizedBox(
+                width: double.maxFinite,
+                height: 400,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text("Vasti Sarsajjanshakti",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      ...filteredSajjanshakti.map((item) {
+                        return CheckboxListTile(
+                          title: Text(item.name ?? "Unknown"),
+                          value: selectedSajjanshakti
+                              .any((x) => x.pkid == item.pkid),
+                          onChanged: (val) {
+                            setState(() {
+                              if (val == true) {
+                                selectedSajjanshakti.add(item);
+                              } else {
+                                selectedSajjanshakti
+                                    .removeWhere((x) => x.pkid == item.pkid);
+                              }
+                            });
+                          },
+                        );
+                      }),
+                      const SizedBox(height: 12),
+                      const Text("Vasti Sanyaprabhavi",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      ...filteredAnyaprabhavi.map((item) {
+                        return CheckboxListTile(
+                          title: Text(item.name ?? "Unknown"),
+                          value: selectedAnyaprabhavi
+                              .any((x) => x.pkId == item.pkId),
+                          onChanged: (val) {
+                            setState(() {
+                              if (val == true) {
+                                selectedAnyaprabhavi.add(item);
+                              } else {
+                                selectedAnyaprabhavi
+                                    .removeWhere((x) => x.pkId == item.pkId);
+                              }
+                            });
+                          },
+                        );
+                      }),
+                    ],
+                  ),
                 ),
               ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("Cancel"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    // prepare comma-separated id strings
+                    String sajjanshaktiIds = selectedSajjanshakti
+                        .map((e) => e.pkid.toString())
+                        .join(",");
+                    String anyaprabhaviIds = selectedAnyaprabhavi
+                        .map((e) => e.pkId.toString())
+                        .join(",");
+
+                    onSubmit(sajjanshaktiIds, anyaprabhaviIds,
+                        selectedSajjanshakti, selectedAnyaprabhavi);
+
+                    Navigator.pop(context);
+                  },
+                  child: const Text("Submit"),
+                ),
+              ],
             );
           },
         );
@@ -665,7 +708,6 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
 
   VastiCounts? countsShakhaa;
   List<Shakhaalist> checkboxShakhaSelectedItems = [];
-
   Future<void> showShakhaalistPopup(
     BuildContext context, {
     required List<Shakhaalist> shakhaalist,
@@ -1352,17 +1394,38 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                     children: [
                       InkWell(
                         onTap: () {
-                          showVastiSelectionPopup(
-                            context,
-                            vastiList: data?.vastisarsajjanshakti ?? [],
-                            preselectedItem: selectedPerson,
-                            onSubmit: (selectedItem) {
-                              setState(() {
-                                selectedPerson = selectedItem;
-                                checkboxSelectedItems.remove(selectedPerson);
-                              });
-                            },
-                          );
+                          showMukhyaAtithiSelectionPopup(context,
+                              vastisarsajjanshaktiList:
+                                  data?.vastisarsajjanshakti ?? [],
+                              vastisanyaprabhaviList:
+                                  data?.vastisanyaprabhavi ?? [],
+                              preselectedItem:
+                                  selectedPerson ?? selectedPrabhavi,
+                              preselectedType: selectedType,
+                              onSubmit: (id, type, selectedItem) {
+                            setState(() {
+                              selectedType = type;
+                              if (type == "sarsajjanshakti") {
+                                selectedPerson =
+                                    selectedItem as Vastisarsajjanshakti;
+                                selectedSajjanshaktiItems
+                                    .remove(selectedPerson);
+                                selectedPrabhavi = null;
+                              } else {
+                                selectedPrabhavi =
+                                    selectedItem as Vastisanyaprabhavi;
+                                selectedAnyaprabhaviItems
+                                    .remove(selectedPrabhavi);
+
+                                selectedPerson = null;
+                              }
+                            });
+                          }, onAdd: () {
+                            Navigator.of(context).pushReplacementNamed(
+                                SajjanShaktiFormPage.routeName,
+                                arguments:
+                                    vastiUpDataListModel?.vastimandallist);
+                          });
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 5),
@@ -1371,17 +1434,15 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                           decoration: BoxDecoration(
                               border: Border.all(
                                   color: Colors.purpleAccent.shade100),
-                              // color:
-                              //     Colors.purpleAccent.withOpacity(0.7),
                               borderRadius: BorderRadius.circular(15)),
                           child: Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                SizedBox(width: 5),
+                                const SizedBox(width: 5),
                                 Text(
                                   "${Statics.getLabel('addMukhyaAtithi')}",
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Colors.purpleAccent,
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -1404,22 +1465,22 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                     },
                     children: [
                       TableRow(
-                        decoration: BoxDecoration(color: Color(0xFFE0E0E0)),
+                        decoration:
+                            const BoxDecoration(color: Color(0xFFE0E0E0)),
                         children: [
                           Padding(
-                              padding: EdgeInsets.all(4),
-                              child: Text(
-                                "${Statics.getLabel('serialNo')}",
-                              )),
+                            padding: const EdgeInsets.all(4),
+                            child: Text("${Statics.getLabel('serialNo')}"),
+                          ),
                           Padding(
-                              padding: EdgeInsets.all(4),
-                              child: Text(
-                                "${Statics.getLabel('Name')}",
-                              )),
+                            padding: const EdgeInsets.all(4),
+                            child: Text("${Statics.getLabel('Name')}"),
+                          ),
                           Padding(
-                              padding: EdgeInsets.all(4),
-                              child: Text(
-                                  "${Statics.getLabel('samparkSootraNaav')}")),
+                            padding: const EdgeInsets.all(4),
+                            child: Text(
+                                "${Statics.getLabel('samparkSootraNaav')}"),
+                          ),
                         ],
                       ),
                       TableRow(
@@ -1427,12 +1488,17 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                           const Padding(
                               padding: EdgeInsets.all(4), child: Text("1")),
                           Padding(
-                              padding: const EdgeInsets.all(4),
-                              child: Text(selectedPerson?.name ?? "")),
+                            padding: const EdgeInsets.all(4),
+                            child: Text(selectedPerson?.name ??
+                                selectedPrabhavi?.name ??
+                                ""),
+                          ),
                           Padding(
-                              padding: const EdgeInsets.all(4),
-                              child: Text(
-                                  selectedPerson?.samparkasutranava ?? "")),
+                            padding: const EdgeInsets.all(4),
+                            child: Text(selectedPerson?.samparkasutranava ??
+                                selectedPrabhavi?.samparkAsutraNav ??
+                                ""),
+                          ),
                         ],
                       ),
                     ],
@@ -1446,20 +1512,28 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
               "${Statics.getLabel('specialAtithi')}",
               Column(
                 children: [
+                  // Button for popup
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       InkWell(
                         onTap: () async {
-                          await showVastiCheckboxPopup(
+                          await showVisheshAtithiSelectionPopup(
                             context,
-                            vastiList: data?.vastisarsajjanshakti ?? [],
-                            excludeItem: selectedPerson,
-                            preselectedItems:
-                                checkboxSelectedItems, // <-- Pass previous selections
-                            onSubmit: (selectedItems) {
+                            vastisarsajjanshaktiList:
+                                data?.vastisarsajjanshakti ?? [],
+                            vastisanyaprabhaviList:
+                                data?.vastisanyaprabhavi ?? [],
+                            excludedItem: selectedPerson ?? selectedPrabhavi,
+                            preselectedSajjanshakti:
+                                selectedSajjanshaktiItems, // 👈 already selected list bhej do
+                            preselectedAnyaprabhavi:
+                                selectedAnyaprabhaviItems, // 👈 already selected list bhej do
+                            onSubmit: (sajjanshaktiIds, anyaprabhaviIds,
+                                sajjanList, anyaprabhaviList) {
                               setState(() {
-                                checkboxSelectedItems = selectedItems;
+                                selectedSajjanshaktiItems = sajjanList;
+                                selectedAnyaprabhaviItems = anyaprabhaviList;
                               });
                             },
                           );
@@ -1469,88 +1543,129 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                           width: 150,
                           height: 35,
                           decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.purpleAccent.shade100),
-                              // color:
-                              //     Colors.purpleAccent.withOpacity(0.7),
-                              borderRadius: BorderRadius.circular(15)),
+                            border:
+                                Border.all(color: Colors.purpleAccent.shade100),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
                           child: Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(width: 5),
-                                Text(
-                                  "${Statics.getLabel('addVIshishthaAtithi')}",
-                                  style: TextStyle(
-                                      color: Colors.purpleAccent,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
+                            child: Text(
+                              "${Statics.getLabel('addVIshishthaAtithi')}",
+                              style: TextStyle(
+                                color: Colors.purpleAccent,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Table(
-                    border: TableBorder.all(),
-                    columnWidths: const {
-                      0: FixedColumnWidth(40),
-                      1: FlexColumnWidth(),
-                      2: FlexColumnWidth(),
-                    },
-                    children: [
-                      TableRow(
-                        decoration: BoxDecoration(color: Color(0xFFE0E0E0)),
-                        children: [
-                          Padding(
-                              padding: EdgeInsets.all(4),
-                              child: Text(
-                                "${Statics.getLabel('serialNo')}",
-                              )),
-                          Padding(
-                              padding: EdgeInsets.all(4),
-                              child: Text(
-                                "${Statics.getLabel('Name')}",
-                              )),
-                          Padding(
-                              padding: EdgeInsets.all(4),
-                              child: Text(
-                                  "${Statics.getLabel('samparkSootraNaav')}")),
-                        ],
-                      ),
-                      ...checkboxSelectedItems
-                          .asMap()
-                          .entries
-                          .where((entry) =>
-                              checkboxSelectedItems.indexWhere(
-                                  (e) => e.pkid == entry.value.pkid) ==
-                              entry.key)
-                          .map((entry) {
-                        int srNo = entry.key + 1;
-                        final item = entry.value;
-                        return TableRow(
+
+                  const SizedBox(height: 20),
+
+                  // Table for Sajjanshakti
+                  if (selectedSajjanshaktiItems.isNotEmpty) ...[
+                    Text("Vasti Sarsajjanshakti",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Table(
+                      border: TableBorder.all(),
+                      columnWidths: const {
+                        0: FixedColumnWidth(40),
+                        1: FlexColumnWidth(),
+                        2: FlexColumnWidth(),
+                      },
+                      children: [
+                        TableRow(
+                          decoration: BoxDecoration(color: Color(0xFFE0E0E0)),
                           children: [
                             Padding(
-                              padding: const EdgeInsets.all(4),
-                              child: Text(srNo.toString()),
-                            ),
+                                padding: EdgeInsets.all(4),
+                                child: Text("${Statics.getLabel('serialNo')}")),
                             Padding(
-                              padding: const EdgeInsets.all(4),
-                              child: Text(item.name ?? ""),
-                            ),
+                                padding: EdgeInsets.all(4),
+                                child: Text("${Statics.getLabel('Name')}")),
                             Padding(
-                              padding: const EdgeInsets.all(4),
-                              child: Text(item.samparkasutranava ?? ""),
-                            ),
+                                padding: EdgeInsets.all(4),
+                                child: Text(
+                                    "${Statics.getLabel('samparkSootraNaav')}")),
                           ],
-                        );
-                      }).toList(),
-                    ],
-                  ),
+                        ),
+                        ...selectedSajjanshaktiItems
+                            .asMap()
+                            .entries
+                            .map((entry) {
+                          int srNo = entry.key + 1;
+                          final item = entry.value;
+                          return TableRow(
+                            children: [
+                              Padding(
+                                  padding: const EdgeInsets.all(4),
+                                  child: Text(srNo.toString())),
+                              Padding(
+                                  padding: const EdgeInsets.all(4),
+                                  child: Text(item.name ?? "")),
+                              Padding(
+                                  padding: const EdgeInsets.all(4),
+                                  child: Text(item.samparkasutranava ?? "")),
+                            ],
+                          );
+                        }).toList(),
+                      ],
+                    ),
+                  ],
+
+                  const SizedBox(height: 20),
+
+                  // Table for Anyaprabhavi
+                  if (selectedAnyaprabhaviItems.isNotEmpty) ...[
+                    Text("Vasti Anyaprabhavi Lok",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Table(
+                      border: TableBorder.all(),
+                      columnWidths: const {
+                        0: FixedColumnWidth(40),
+                        1: FlexColumnWidth(),
+                        2: FlexColumnWidth(),
+                      },
+                      children: [
+                        TableRow(
+                          decoration: BoxDecoration(color: Color(0xFFE0E0E0)),
+                          children: [
+                            Padding(
+                                padding: EdgeInsets.all(4),
+                                child: Text("${Statics.getLabel('serialNo')}")),
+                            Padding(
+                                padding: EdgeInsets.all(4),
+                                child: Text("${Statics.getLabel('Name')}")),
+                            Padding(
+                                padding: EdgeInsets.all(4),
+                                child: Text(
+                                    "${Statics.getLabel('samparkSootraNaav')}")),
+                          ],
+                        ),
+                        ...selectedAnyaprabhaviItems
+                            .asMap()
+                            .entries
+                            .map((entry) {
+                          int srNo = entry.key + 1;
+                          final item = entry.value;
+                          return TableRow(
+                            children: [
+                              Padding(
+                                  padding: const EdgeInsets.all(4),
+                                  child: Text(srNo.toString())),
+                              Padding(
+                                  padding: const EdgeInsets.all(4),
+                                  child: Text(item.name ?? "")),
+                              Padding(
+                                  padding: const EdgeInsets.all(4),
+                                  child: Text(item.samparkAsutraNav ?? "")),
+                            ],
+                          );
+                        }).toList(),
+                      ],
+                    ),
+                  ],
                 ],
               ),
             ),

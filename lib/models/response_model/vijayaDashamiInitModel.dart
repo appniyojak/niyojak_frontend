@@ -5,14 +5,17 @@ class GetVijayadashamiInitModel {
   List<Shakhaalist>? shakhaalist;
   List<UpnagarmandallistVijayaDashami>? upnagarmandallist;
   List<UpnagarmandallistVijayaDashami>? vastimandallist;
+  List<Vastisanyaprabhavi>? vastisanyaprabhavi;
 
-  GetVijayadashamiInitModel(
-      {this.message,
-      this.status,
-      this.vastisarsajjanshakti,
-      this.shakhaalist,
-      this.upnagarmandallist,
-      this.vastimandallist});
+  GetVijayadashamiInitModel({
+    this.message,
+    this.status,
+    this.vastisarsajjanshakti,
+    this.shakhaalist,
+    this.upnagarmandallist,
+    this.vastimandallist,
+    this.vastisanyaprabhavi,
+  });
 
   GetVijayadashamiInitModel.fromJson(Map<String, dynamic> json) {
     message = json['Message'];
@@ -41,6 +44,12 @@ class GetVijayadashamiInitModel {
         vastimandallist!.add(new UpnagarmandallistVijayaDashami.fromJson(v));
       });
     }
+    if (json['Vastisanyaprabhavi'] != null) {
+      vastisanyaprabhavi = <Vastisanyaprabhavi>[];
+      json['Vastisanyaprabhavi'].forEach((v) {
+        vastisanyaprabhavi!.add(new Vastisanyaprabhavi.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -61,6 +70,10 @@ class GetVijayadashamiInitModel {
     if (this.vastimandallist != null) {
       data['vastimandallist'] =
           this.vastimandallist!.map((v) => v.toJson()).toList();
+    }
+    if (this.vastisanyaprabhavi != null) {
+      data['Vastisanyaprabhavi'] =
+          this.vastisanyaprabhavi!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -258,6 +271,119 @@ class UpnagarmandallistVijayaDashami {
     data['Preferedname'] = this.preferedname;
     data['Vayogatname'] = this.vayogatname;
     data['linkedUpaNagarID'] = this.linkedUpaNagarID;
+    return data;
+  }
+}
+
+class Vastisanyaprabhavi {
+  String? address;
+  String? anyaVishesMahiti;
+  String? doorabhaash;
+  bool? isActive;
+  String? name;
+  String? otherUpshrenee;
+  String? otherUpshrenee2;
+  String? otherVishesh;
+  int? pkId;
+  String? prabhaavKshetreName;
+  int? prabhaavkshetrId;
+  String? samparkAsutraNav;
+  String? samparkSthit;
+  int? samparkSthitiId;
+  String? samparkaSutraDoorbhash;
+  int? shreneeId;
+  String? shreneeName;
+  String? upshrenee2Name;
+  int? upshreneeId;
+  int? upshreneeId2;
+  String? upshreneeName;
+  int? vastiId;
+  String? vastiName;
+  int? visheshId;
+  String? visheshName;
+
+  Vastisanyaprabhavi(
+      {this.address,
+      this.anyaVishesMahiti,
+      this.doorabhaash,
+      this.isActive,
+      this.name,
+      this.otherUpshrenee,
+      this.otherUpshrenee2,
+      this.otherVishesh,
+      this.pkId,
+      this.prabhaavKshetreName,
+      this.prabhaavkshetrId,
+      this.samparkAsutraNav,
+      this.samparkSthit,
+      this.samparkSthitiId,
+      this.samparkaSutraDoorbhash,
+      this.shreneeId,
+      this.shreneeName,
+      this.upshrenee2Name,
+      this.upshreneeId,
+      this.upshreneeId2,
+      this.upshreneeName,
+      this.vastiId,
+      this.vastiName,
+      this.visheshId,
+      this.visheshName});
+
+  Vastisanyaprabhavi.fromJson(Map<String, dynamic> json) {
+    address = json['Address'];
+    anyaVishesMahiti = json['AnyaVishesMahiti'];
+    doorabhaash = json['Doorabhaash'];
+    isActive = json['IsActive'];
+    name = json['Name'];
+    otherUpshrenee = json['OtherUpshrenee'];
+    otherUpshrenee2 = json['OtherUpshrenee2'];
+    otherVishesh = json['OtherVishesh'];
+    pkId = json['PkId'];
+    prabhaavKshetreName = json['PrabhaavKshetreName'];
+    prabhaavkshetrId = json['PrabhaavkshetrId'];
+    samparkAsutraNav = json['SamparkAsutraNav'];
+    samparkSthit = json['SamparkSthit'];
+    samparkSthitiId = json['SamparkSthitiId'];
+    samparkaSutraDoorbhash = json['SamparkaSutraDoorbhash'];
+    shreneeId = json['ShreneeId'];
+    shreneeName = json['ShreneeName'];
+    upshrenee2Name = json['Upshrenee2Name'];
+    upshreneeId = json['UpshreneeId'];
+    upshreneeId2 = json['UpshreneeId2'];
+    upshreneeName = json['UpshreneeName'];
+    vastiId = json['VastiId'];
+    vastiName = json['VastiName'];
+    visheshId = json['VisheshId'];
+    visheshName = json['VisheshName'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['Address'] = this.address;
+    data['AnyaVishesMahiti'] = this.anyaVishesMahiti;
+    data['Doorabhaash'] = this.doorabhaash;
+    data['IsActive'] = this.isActive;
+    data['Name'] = this.name;
+    data['OtherUpshrenee'] = this.otherUpshrenee;
+    data['OtherUpshrenee2'] = this.otherUpshrenee2;
+    data['OtherVishesh'] = this.otherVishesh;
+    data['PkId'] = this.pkId;
+    data['PrabhaavKshetreName'] = this.prabhaavKshetreName;
+    data['PrabhaavkshetrId'] = this.prabhaavkshetrId;
+    data['SamparkAsutraNav'] = this.samparkAsutraNav;
+    data['SamparkSthit'] = this.samparkSthit;
+    data['SamparkSthitiId'] = this.samparkSthitiId;
+    data['SamparkaSutraDoorbhash'] = this.samparkaSutraDoorbhash;
+    data['ShreneeId'] = this.shreneeId;
+    data['ShreneeName'] = this.shreneeName;
+    data['Upshrenee2Name'] = this.upshrenee2Name;
+    data['UpshreneeId'] = this.upshreneeId;
+    data['UpshreneeId2'] = this.upshreneeId2;
+    data['UpshreneeName'] = this.upshreneeName;
+    data['VastiId'] = this.vastiId;
+    data['VastiName'] = this.vastiName;
+    data['VisheshId'] = this.visheshId;
+    data['VisheshName'] = this.visheshName;
     return data;
   }
 }
