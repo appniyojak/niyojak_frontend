@@ -140,9 +140,9 @@ class _SajjanShaktiFormPageState extends State<SajjanShaktiFormPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("सज्जन शक्ति जानकारी",
+        title: Text(Statics.getLabel('addVIshishthaAtithi'),
             style: TextStyle(fontWeight: FontWeight.bold)),
       ),
       body: SingleChildScrollView(

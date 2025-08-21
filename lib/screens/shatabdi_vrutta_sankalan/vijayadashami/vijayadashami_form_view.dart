@@ -11,7 +11,7 @@ import '../../../helpers/static_data.dart' as Statics;
 import '../../../models/response_model/vasti_up_data_model.dart';
 import '../../../models/response_model/vijayaDashamiInitModel.dart';
 import '../../../providers/bals.dart';
-import 'add_sajjanshakti_anyaprabhai_form.dart';
+import 'add_vishishtha_vyakti_form.dart';
 
 class VijayadashamiFormView extends StatefulWidget {
   static const String routeName = '/vijayadashami-form-view';
@@ -255,34 +255,43 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     );
   }
 
-  Widget _numberField(TextEditingController controller,
-      {TextEditingController? limitController,
-      TextEditingController? otherController}) {
+  Widget _numberField(
+    TextEditingController controller, {
+    TextEditingController? limitController,
+    TextEditingController? otherController,
+  }) {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: TextField(
         controller: controller,
         keyboardType: TextInputType.number,
-        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        onChanged: (_) {
-          // Validate when value changes
+        textAlign: TextAlign.center,
+        decoration: const InputDecoration(
+          hintText: "0",
+          border: UnderlineInputBorder(),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.deepPurple, width: 2),
+          ),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey, width: 1),
+          ),
+          isDense: true, // compact look
+          contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+        ),
+        onChanged: (val) {
           if (limitController != null && otherController != null) {
-            final int limit = int.tryParse(limitController.text) ?? 0;
-            final int current = int.tryParse(controller.text) ?? 0;
-            final int other = int.tryParse(otherController.text) ?? 0;
+            final limit = int.tryParse(limitController.text) ?? 0;
+            final self = int.tryParse(val) ?? 0;
+            final other = int.tryParse(otherController.text) ?? 0;
 
-            // Agar current + other > limit hua to current ko adjust karo
-            if (current + other > limit) {
-              final int allowed = limit - other;
-              controller.text = allowed < 0 ? "0" : allowed.toString();
+            if (self + other > limit) {
+              controller.text = (limit - other).toString();
               controller.selection = TextSelection.fromPosition(
                 TextPosition(offset: controller.text.length),
               );
             }
           }
-          setState(() {});
         },
-        decoration: const InputDecoration(border: InputBorder.none),
       ),
     );
   }
@@ -497,7 +506,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     BuildContext context, {
     required List<Vastisarsajjanshakti> vastisarsajjanshaktiList,
     required List<Vastisanyaprabhavi> vastisanyaprabhaviList,
-    required dynamic excludedItem, // jo MukhyaAtithi me select hua tha
+    required dynamic excludedItem,
     required List<Vastisarsajjanshakti> preselectedSajjanshakti,
     required List<Vastisanyaprabhavi> preselectedAnyaprabhavi,
     required void Function(
@@ -514,6 +523,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       }
       return true;
     }).toList();
+
     final filteredAnyaprabhavi = vastisanyaprabhaviList.where((e) {
       if (excludedItem == null) return true;
       if (excludedItem is Vastisanyaprabhavi) {
@@ -521,10 +531,12 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       }
       return true;
     }).toList();
+
     List<Vastisarsajjanshakti> selectedSajjanshakti =
         List.of(preselectedSajjanshakti);
     List<Vastisanyaprabhavi> selectedAnyaprabhavi =
         List.of(preselectedAnyaprabhavi);
+
     if (excludedItem != null) {
       if (excludedItem is Vastisarsajjanshakti) {
         selectedSajjanshakti.removeWhere((x) => x.pkid == excludedItem.pkid);
@@ -535,82 +547,196 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
 
     await showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: const Text("Select Vishesh Atithi"),
-              content: SizedBox(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              insetPadding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+              content: Container(
+                padding: const EdgeInsets.all(16),
                 width: double.maxFinite,
-                height: 400,
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text("Vasti Sarsajjanshakti",
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      ...filteredSajjanshakti.map((item) {
-                        return CheckboxListTile(
-                          title: Text(item.name ?? "Unknown"),
-                          value: selectedSajjanshakti
-                              .any((x) => x.pkid == item.pkid),
-                          onChanged: (val) {
-                            setState(() {
-                              if (val == true) {
-                                selectedSajjanshakti.add(item);
-                              } else {
-                                selectedSajjanshakti
-                                    .removeWhere((x) => x.pkid == item.pkid);
-                              }
-                            });
-                          },
-                        );
-                      }),
-                      const SizedBox(height: 12),
-                      const Text("Vasti Sanyaprabhavi",
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      ...filteredAnyaprabhavi.map((item) {
-                        return CheckboxListTile(
-                          title: Text(item.name ?? "Unknown"),
-                          value: selectedAnyaprabhavi
-                              .any((x) => x.pkId == item.pkId),
-                          onChanged: (val) {
-                            setState(() {
-                              if (val == true) {
-                                selectedAnyaprabhavi.add(item);
-                              } else {
-                                selectedAnyaprabhavi
-                                    .removeWhere((x) => x.pkId == item.pkId);
-                              }
-                            });
-                          },
-                        );
-                      }),
-                    ],
-                  ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    /// Title with Close Button
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          Statics.getLabel('selectVIshishthaAtithi'),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.purpleAccent,
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.close, color: Colors.red),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ],
+                    ),
+
+                    /// Content
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            /// Sajjan Shakti
+                            Text(
+                              Statics.getLabel('SajjanShakti'),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                                color: Colors.blueGrey,
+                              ),
+                            ),
+                            const Divider(),
+
+                            const SizedBox(height: 6),
+                            ...filteredSajjanshakti.map((item) {
+                              return CheckboxListTile(
+                                dense: true,
+                                contentPadding: EdgeInsets.zero,
+                                title: Text(item.name ?? "Unknown"),
+                                value: selectedSajjanshakti
+                                    .any((x) => x.pkid == item.pkid),
+                                onChanged: (val) {
+                                  setState(() {
+                                    if (val == true) {
+                                      selectedSajjanshakti.add(item);
+                                    } else {
+                                      selectedSajjanshakti.removeWhere(
+                                          (x) => x.pkid == item.pkid);
+                                    }
+                                  });
+                                },
+                              );
+                            }),
+
+                            const SizedBox(height: 12),
+
+                            /// Anya Prabhavi Lok
+                            Text(
+                              Statics.getLabel('anyaPrabhaviLok'),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                                color: Colors.blueGrey,
+                              ),
+                            ),
+                            const Divider(),
+
+                            const SizedBox(height: 6),
+                            ...filteredAnyaprabhavi.map((item) {
+                              return CheckboxListTile(
+                                dense: true,
+                                contentPadding: EdgeInsets.zero,
+                                title: Text(item.name ?? "Unknown"),
+                                value: selectedAnyaprabhavi
+                                    .any((x) => x.pkId == item.pkId),
+                                onChanged: (val) {
+                                  setState(() {
+                                    if (val == true) {
+                                      selectedAnyaprabhavi.add(item);
+                                    } else {
+                                      selectedAnyaprabhavi.removeWhere(
+                                          (x) => x.pkId == item.pkId);
+                                    }
+                                  });
+                                },
+                              );
+                            }),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    /// Actions
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     ElevatedButton(
+                    //       style: ElevatedButton.styleFrom(
+                    //         backgroundColor: Colors.purpleAccent,
+                    //         shape: RoundedRectangleBorder(
+                    //           borderRadius: BorderRadius.circular(8),
+                    //         ),
+                    //       ),
+                    //       onPressed: () {
+                    //
+                    //       },
+                    //       child: Text(
+                    //         Statics.getLabel('Submit'),
+                    //         style: TextStyle(color: Colors.white),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                  ],
                 ),
               ),
               actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text("Cancel"),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    // prepare comma-separated id strings
-                    String sajjanshaktiIds = selectedSajjanshakti
-                        .map((e) => e.pkid.toString())
-                        .join(",");
-                    String anyaprabhaviIds = selectedAnyaprabhavi
-                        .map((e) => e.pkId.toString())
-                        .join(",");
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.purpleAccent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 10),
+                        ),
+                        onPressed: () {
+                          String sajjanshaktiIds = selectedSajjanshakti
+                              .map((e) => e.pkid.toString())
+                              .join(",");
+                          String anyaprabhaviIds = selectedAnyaprabhavi
+                              .map((e) => e.pkId.toString())
+                              .join(",");
 
-                    onSubmit(sajjanshaktiIds, anyaprabhaviIds,
-                        selectedSajjanshakti, selectedAnyaprabhavi);
+                          onSubmit(sajjanshaktiIds, anyaprabhaviIds,
+                              selectedSajjanshakti, selectedAnyaprabhavi);
 
-                    Navigator.pop(context);
-                  },
-                  child: const Text("Submit"),
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          Statics.getLabel('Submit'),
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(
+                            color: Colors.purpleAccent, width: 1.5),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 10),
+                      ),
+                      onPressed: () {},
+                      child: Text(
+                        Statics.getLabel('addVIshishthaAtithi'),
+                        style: const TextStyle(color: Colors.purpleAccent),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             );
@@ -622,14 +748,16 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
 
   List<UpnagarmandallistVijayaDashami> checkboxGraamVastiSelectedItems = [];
   int? selectedVastiCount = 0;
-  int? totalVastiCount = 0;
+  int totalVastiCount = 0;
   Future<void> showGraamVastiMandalUpnagarPopup(
     BuildContext context, {
     required List<UpnagarmandallistVijayaDashami> vastiList,
     List<UpnagarmandallistVijayaDashami>? preselectedItems,
-    required void Function(List<UpnagarmandallistVijayaDashami> selectedItems,
-            int selectedCount, int totalCount)
-        onSubmit,
+    required void Function(
+      List<UpnagarmandallistVijayaDashami> selectedItems,
+      int selectedCount,
+      int totalCount,
+    ) onSubmit,
   }) async {
     List<UpnagarmandallistVijayaDashami> selectedItems =
         List.from(preselectedItems ?? []);
@@ -639,66 +767,110 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setState) {
-            return AlertDialog(
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Vasti Joda", // heading
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "Total Vasti: ${vastiList.length}", // total count
-                    style: const TextStyle(fontSize: 14, color: Colors.grey),
-                  ),
-                  Text(
-                    "Selected: ${selectedItems.length}", // selected count
-                    style: const TextStyle(fontSize: 14, color: Colors.blue),
-                  ),
-                ],
+            return Dialog(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
               ),
-              content: SizedBox(
+              insetPadding: const EdgeInsets.all(16),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                height: MediaQuery.of(context).size.height *
+                    0.6, // ✅ Standard height
                 width: double.maxFinite,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: vastiList.length,
-                  itemBuilder: (context, index) {
-                    final item = vastiList[index];
-                    final isSelected = selectedItems.contains(item);
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // ✅ Title & counts
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Vasti Joda",
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
+                        IconButton(
+                          icon:
+                              const Icon(Icons.close, color: Colors.redAccent),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ],
+                    ),
+                    const Divider(),
+                    Text(
+                      "Total Vasti: ${vastiList.length}",
+                      style: const TextStyle(fontSize: 14, color: Colors.grey),
+                    ),
+                    Text(
+                      "Selected: ${selectedItems.length}",
+                      style: const TextStyle(fontSize: 14, color: Colors.blue),
+                    ),
+                    const SizedBox(height: 10),
 
-                    return CheckboxListTile(
-                      title: Text(item.preferedname ?? ""),
-                      value: isSelected,
-                      onChanged: (bool? checked) {
-                        setState(() {
-                          if (checked == true) {
-                            selectedItems.add(item);
-                          } else {
-                            selectedItems.remove(item);
-                          }
-                        });
+                    // ✅ List scrollable
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black12),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: ListView.builder(
+                          itemCount: vastiList.length,
+                          itemBuilder: (context, index) {
+                            final item = vastiList[index];
+                            final isSelected = selectedItems.contains(item);
+
+                            return CheckboxListTile(
+                              title: Text(item.preferedname ?? ""),
+                              value: isSelected,
+                              onChanged: (bool? checked) {
+                                setState(() {
+                                  if (checked == true) {
+                                    selectedItems.add(item);
+                                  } else {
+                                    selectedItems.remove(item);
+                                  }
+                                });
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    // ✅ Footer Button
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.purpleAccent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 12),
+                      ),
+                      onPressed: () {
+                        onSubmit(
+                          selectedItems,
+                          selectedItems.length,
+                          vastiList.length,
+                        );
+                        Navigator.pop(context);
                       },
-                    );
-                  },
+                      child: Center(
+                        child: Text(
+                          Statics.getLabel('Submit'),
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ),
-              actions: [
-                ElevatedButton(
-                  onPressed: () {
-                    onSubmit(
-                      selectedItems,
-                      selectedItems.length,
-                      vastiList.length,
-                    );
-                    Navigator.pop(context);
-                  },
-                  child: Center(child: Text("${Statics.getLabel('Submit')}")),
-                ),
-              ],
             );
           },
         );
@@ -708,6 +880,9 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
 
   VastiCounts? countsShakhaa;
   List<Shakhaalist> checkboxShakhaSelectedItems = [];
+  int totalShakhaCount = 0;
+  int selectedShakhaCount = 0;
+  String averageShakhaCount = "0";
   Future<void> showShakhaalistPopup(
     BuildContext context, {
     required List<Shakhaalist> shakhaalist,
@@ -719,150 +894,679 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
   }) async {
     List<Shakhaalist> selectedItems = List.from(preselectedItems ?? []);
 
+    final List<String> vayogatOptions = shakhaalist
+        .map((e) => e.vayogatname ?? "")
+        .where((e) => e.isNotEmpty)
+        .toSet()
+        .toList();
+
+    String? selectedVayogat;
+
     await showDialog(
       context: context,
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setState) {
-            return AlertDialog(
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "${Statics.getLabel('selectshakhaa')}",
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "${Statics.getLabel('Total')} ${Statics.getLabel('Shaakhaa')} : ${shakhaalist.length}",
-                    style: const TextStyle(fontSize: 14, color: Colors.grey),
-                  ),
-                  Text(
-                    "${Statics.getLabel('selectedTotal')} : ${selectedItems.length}",
-                    style: const TextStyle(fontSize: 14, color: Colors.blue),
-                  ),
-                ],
+            final filteredList = selectedVayogat == null
+                ? shakhaalist
+                : shakhaalist
+                    .where((e) => e.vayogatname == selectedVayogat)
+                    .toList();
+
+            return Dialog(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
               ),
-              content: SizedBox(
+              insetPadding: const EdgeInsets.all(16),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                padding: const EdgeInsets.all(16),
+                // ✅ Standard height for popup (60% of screen)
+                height: MediaQuery.of(context).size.height * 0.75,
                 width: double.maxFinite,
-                height: MediaQuery.of(context).size.height * 0.6,
-                child: SingleChildScrollView(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Table(
-                      border: TableBorder.all(color: Colors.black26),
-                      defaultColumnWidth: const IntrinsicColumnWidth(),
-                      columnWidths: const {
-                        0: FixedColumnWidth(50),
-                      },
+                child: Column(
+                  children: [
+                    // ✅ Title Bar
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // Header Row
-                        TableRow(
-                          decoration:
-                              const BoxDecoration(color: Color(0xFFE0E0E0)),
-                          children: const [
-                            Padding(
-                              padding: EdgeInsets.all(8),
-                              child: Text("✔",
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(8),
-                              child: Text("Vayogat",
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(8),
-                              child: Text("Prakar",
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(8),
-                              child: Text("Naam",
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
-                            ),
-                          ],
+                        Text(
+                          Statics.getLabel('selectshakhaa'),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
                         ),
-
-                        // Data Rows
-                        ...shakhaalist.map((item) {
-                          final isSelected = selectedItems.contains(item);
-
-                          return TableRow(
-                            children: [
-                              Center(
-                                child: Checkbox(
-                                  value: isSelected,
-                                  onChanged: (checked) {
-                                    setState(() {
-                                      if (checked == true) {
-                                        selectedItems.add(item);
-                                      } else {
-                                        selectedItems.remove(item);
-                                      }
-                                    });
-                                  },
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Text(item.vayogatname ?? ""),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Text(item.frequencyName ?? ""),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Text(item.preferedname ?? ""),
-                              ),
-                            ],
-                          );
-                        }),
+                        IconButton(
+                          icon:
+                              const Icon(Icons.close, color: Colors.redAccent),
+                          onPressed: () => Navigator.pop(context),
+                        ),
                       ],
                     ),
-                  ),
+                    const Divider(),
+
+                    // ✅ Dropdown
+                    DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8),
+                        labelText: "Vayogat",
+                      ),
+                      value: selectedVayogat,
+                      items: vayogatOptions.map((v) {
+                        return DropdownMenuItem(
+                          value: v,
+                          child: Text(v),
+                        );
+                      }).toList(),
+                      onChanged: (val) {
+                        setState(() {
+                          selectedVayogat = val;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 10),
+
+                    // ✅ Stats
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "${Statics.getLabel('Total')} : ${filteredList.where((item) => item.frequencyName == "शाखा").length}",
+                          style:
+                              const TextStyle(fontSize: 14, color: Colors.grey),
+                        ),
+                        Text(
+                          "${Statics.getLabel('selectedTotal')} : ${selectedItems.where((item) => item.frequencyName == "शाखा").length}",
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+
+                    // ✅ Table inside scroll
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black12),
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.white,
+                        ),
+                        child: SingleChildScrollView(
+                          child: Table(
+                            border: TableBorder.symmetric(
+                              inside: const BorderSide(color: Colors.black12),
+                            ),
+                            columnWidths: const {
+                              0: FixedColumnWidth(50),
+                            },
+                            children: [
+                              // Header
+                              TableRow(
+                                decoration: BoxDecoration(
+                                  color: Colors.blue.shade50,
+                                ),
+                                children: const [
+                                  Padding(
+                                    padding: EdgeInsets.all(8),
+                                    child: Text("✔",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8),
+                                    child: Text("Naam",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                  ),
+                                ],
+                              ),
+                              ...filteredList
+                                  .where((item) => item.frequencyName == "शाखा")
+                                  .map((item) {
+                                final isSelected = selectedItems.contains(item);
+
+                                return TableRow(
+                                  children: [
+                                    Center(
+                                      child: Checkbox(
+                                        value: isSelected,
+                                        onChanged: (checked) {
+                                          setState(() {
+                                            if (checked == true) {
+                                              selectedItems.add(item);
+                                            } else {
+                                              selectedItems.remove(item);
+                                            }
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Text(item.preferedname ?? ""),
+                                    ),
+                                  ],
+                                );
+                              }),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    // ✅ Footer
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.purpleAccent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 12),
+                      ),
+                      onPressed: () {
+                        final Map<String, int> vayogatCounts = {};
+                        for (var item in selectedItems) {
+                          final key = item.vayogatname ?? "Unknown";
+                          vayogatCounts[key] = (vayogatCounts[key] ?? 0) + 1;
+                        }
+
+                        final counts = VastiCounts(
+                          prakarCounts: {},
+                          vayogatCounts: vayogatCounts,
+                        );
+
+                        onSubmit(selectedItems, counts);
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        Statics.getLabel('Submit'),
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    )
+                  ],
                 ),
               ),
-              actions: [
-                ElevatedButton(
-                  onPressed: () {
-                    // ✅ Store selected items in global list
-                    checkboxShakhaSelectedItems = List.from(selectedItems);
+            );
+          },
+        );
+      },
+    );
+  }
 
-                    // ✅ Agar aapko counts bhi chahiye (group by prakar & vayogat)
-                    final Map<String, int> prakarCounts = {};
-                    for (var item in selectedItems) {
-                      final key = item.frequencyName ?? "Unknown";
-                      prakarCounts[key] = (prakarCounts[key] ?? 0) + 1;
-                    }
+  VastiCounts? countsMilan;
+  List<Shakhaalist> checkboxMilanSelectedItems = [];
+  int totalMilanCount = 0;
+  int selectedMilanCount = 0;
+  String averageMilanCount = "0";
+  Future<void> showMilanalistPopup(
+    BuildContext context, {
+    required List<Shakhaalist> milanalist,
+    List<Shakhaalist>? preselectedItems,
+    required void Function(
+      List<Shakhaalist> selectedItems,
+      VastiCounts counts,
+    ) onSubmit,
+  }) async {
+    List<Shakhaalist> selectedItems = List.from(preselectedItems ?? []);
 
-                    final Map<String, int> vayogatCounts = {};
-                    for (var item in selectedItems) {
-                      final key = item.vayogatname ?? "Unknown";
-                      vayogatCounts[key] = (vayogatCounts[key] ?? 0) + 1;
-                    }
+    final List<String> vayogatOptions = milanalist
+        .map((e) => e.vayogatname ?? "")
+        .where((e) => e.isNotEmpty)
+        .toSet()
+        .toList();
 
-                    final counts = VastiCounts(
-                      prakarCounts: prakarCounts,
-                      vayogatCounts: vayogatCounts,
-                    );
+    String? selectedVayogat;
 
-                    // ✅ Callback fire karna (parent ko data dena)
-                    onSubmit(selectedItems, counts);
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            final filteredList = selectedVayogat == null
+                ? milanalist
+                : milanalist
+                    .where((e) => e.vayogatname == selectedVayogat)
+                    .toList();
 
-                    Navigator.pop(context);
-                  },
-                  child: Center(child: Text("${Statics.getLabel('Submit')}")),
+            return Dialog(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              insetPadding: const EdgeInsets.all(16),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
                 ),
-              ],
+                padding: const EdgeInsets.all(16),
+                // ✅ Standard height for popup (60% of screen)
+                height: MediaQuery.of(context).size.height * 0.75,
+                width: double.maxFinite,
+                child: Column(
+                  children: [
+                    // ✅ Title Bar
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          Statics.getLabel('selectSaptahikMilan'),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
+                        IconButton(
+                          icon:
+                              const Icon(Icons.close, color: Colors.redAccent),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ],
+                    ),
+                    const Divider(),
+
+                    // ✅ Dropdown
+                    DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8),
+                        labelText: "Vayogat",
+                      ),
+                      value: selectedVayogat,
+                      items: vayogatOptions.map((v) {
+                        return DropdownMenuItem(
+                          value: v,
+                          child: Text(v),
+                        );
+                      }).toList(),
+                      onChanged: (val) {
+                        setState(() {
+                          selectedVayogat = val;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 10),
+
+                    // ✅ Stats
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "${Statics.getLabel('Total')} : ${filteredList.where((item) => item.frequencyName == "साप्ताहिक मिलन").length}",
+                          style:
+                              const TextStyle(fontSize: 14, color: Colors.grey),
+                        ),
+                        Text(
+                          "${Statics.getLabel('selectedTotal')} : ${selectedItems.where((item) => item.frequencyName == "साप्ताहिक मिलन").length}",
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+
+                    // ✅ Table inside scroll
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black12),
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.white,
+                        ),
+                        child: SingleChildScrollView(
+                          child: Table(
+                            border: TableBorder.symmetric(
+                              inside: const BorderSide(color: Colors.black12),
+                            ),
+                            columnWidths: const {
+                              0: FixedColumnWidth(50),
+                            },
+                            children: [
+                              // Header
+                              TableRow(
+                                decoration: BoxDecoration(
+                                  color: Colors.blue.shade50,
+                                ),
+                                children: const [
+                                  Padding(
+                                    padding: EdgeInsets.all(8),
+                                    child: Text("✔",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8),
+                                    child: Text("Naam",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                  ),
+                                ],
+                              ),
+                              ...filteredList
+                                  .where((item) =>
+                                      item.frequencyName == "साप्ताहिक मिलन")
+                                  .map((item) {
+                                final isSelected = selectedItems.contains(item);
+
+                                return TableRow(
+                                  children: [
+                                    Center(
+                                      child: Checkbox(
+                                        value: isSelected,
+                                        onChanged: (checked) {
+                                          setState(() {
+                                            if (checked == true) {
+                                              selectedItems.add(item);
+                                            } else {
+                                              selectedItems.remove(item);
+                                            }
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Text(item.preferedname ?? ""),
+                                    ),
+                                  ],
+                                );
+                              }),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    // ✅ Footer
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.purpleAccent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 12),
+                      ),
+                      onPressed: () {
+                        final Map<String, int> vayogatCounts = {};
+                        for (var item in selectedItems) {
+                          final key = item.vayogatname ?? "Unknown";
+                          vayogatCounts[key] = (vayogatCounts[key] ?? 0) + 1;
+                        }
+
+                        final counts = VastiCounts(
+                          prakarCounts: {},
+                          vayogatCounts: vayogatCounts,
+                        );
+
+                        onSubmit(selectedItems, counts);
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        Statics.getLabel('Submit'),
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  VastiCounts? countsSanghaMandali;
+  List<Shakhaalist> checkboxSanghaMandaliSelectedItems = [];
+  int totalSanghaMandaliCount = 0;
+  int selectedSanghaMandaliCount = 0;
+  String averageSanghaMandaliCount = "0";
+  Future<void> showSanghaMandalialistPopup(
+    BuildContext context, {
+    required List<Shakhaalist> sanghaMandalialist,
+    List<Shakhaalist>? preselectedItems,
+    required void Function(
+      List<Shakhaalist> selectedItems,
+      VastiCounts counts,
+    ) onSubmit,
+  }) async {
+    List<Shakhaalist> selectedItems = List.from(preselectedItems ?? []);
+
+    final List<String> vayogatOptions = sanghaMandalialist
+        .map((e) => e.vayogatname ?? "")
+        .where((e) => e.isNotEmpty)
+        .toSet()
+        .toList();
+
+    String? selectedVayogat;
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            final filteredList = selectedVayogat == null
+                ? sanghaMandalialist
+                : sanghaMandalialist
+                    .where((e) => e.vayogatname == selectedVayogat)
+                    .toList();
+
+            return Dialog(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              insetPadding: const EdgeInsets.all(16),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                padding: const EdgeInsets.all(16),
+                // ✅ Standard height for popup (60% of screen)
+                height: MediaQuery.of(context).size.height * 0.75,
+                width: double.maxFinite,
+                child: Column(
+                  children: [
+                    // ✅ Title Bar
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          Statics.getLabel('selectSanghaMandali'),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
+                        IconButton(
+                          icon:
+                              const Icon(Icons.close, color: Colors.redAccent),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ],
+                    ),
+                    const Divider(),
+
+                    // ✅ Dropdown
+                    DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8),
+                        labelText: "Vayogat",
+                      ),
+                      value: selectedVayogat,
+                      items: vayogatOptions.map((v) {
+                        return DropdownMenuItem(
+                          value: v,
+                          child: Text(v),
+                        );
+                      }).toList(),
+                      onChanged: (val) {
+                        setState(() {
+                          selectedVayogat = val;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 10),
+
+                    // ✅ Stats
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "${Statics.getLabel('Total')} : ${filteredList.where((item) => item.frequencyName == "मासिक मिलन/संघ मंडळी").length}",
+                          style:
+                              const TextStyle(fontSize: 14, color: Colors.grey),
+                        ),
+                        Text(
+                          "${Statics.getLabel('selectedTotal')} : ${selectedItems.where((item) => item.frequencyName == "मासिक मिलन/संघ मंडळी").length}",
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+
+                    // ✅ Table inside scroll
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black12),
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.white,
+                        ),
+                        child: SingleChildScrollView(
+                          child: Table(
+                            border: TableBorder.symmetric(
+                              inside: const BorderSide(color: Colors.black12),
+                            ),
+                            columnWidths: const {
+                              0: FixedColumnWidth(50),
+                            },
+                            children: [
+                              // Header
+                              TableRow(
+                                decoration: BoxDecoration(
+                                  color: Colors.blue.shade50,
+                                ),
+                                children: const [
+                                  Padding(
+                                    padding: EdgeInsets.all(8),
+                                    child: Text("✔",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8),
+                                    child: Text("Naam",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                  ),
+                                ],
+                              ),
+                              ...filteredList
+                                  .where((item) =>
+                                      item.frequencyName ==
+                                      "मासिक मिलन/संघ मंडळी")
+                                  .map((item) {
+                                final isSelected = selectedItems.contains(item);
+
+                                return TableRow(
+                                  children: [
+                                    Center(
+                                      child: Checkbox(
+                                        value: isSelected,
+                                        onChanged: (checked) {
+                                          setState(() {
+                                            if (checked == true) {
+                                              selectedItems.add(item);
+                                            } else {
+                                              selectedItems.remove(item);
+                                            }
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Text(item.preferedname ?? ""),
+                                    ),
+                                  ],
+                                );
+                              }),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    // ✅ Footer
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.purpleAccent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 12),
+                      ),
+                      onPressed: () {
+                        final Map<String, int> vayogatCounts = {};
+                        for (var item in selectedItems) {
+                          final key = item.vayogatname ?? "Unknown";
+                          vayogatCounts[key] = (vayogatCounts[key] ?? 0) + 1;
+                        }
+
+                        final counts = VastiCounts(
+                          prakarCounts: {},
+                          vayogatCounts: vayogatCounts,
+                        );
+
+                        onSubmit(selectedItems, counts);
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        Statics.getLabel('Submit'),
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    )
+                  ],
+                ),
+              ),
             );
           },
         );
@@ -1422,9 +2126,9 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                             });
                           }, onAdd: () {
                             Navigator.of(context).pushReplacementNamed(
-                                SajjanShaktiFormPage.routeName,
-                                arguments:
-                                    vastiUpDataListModel?.vastimandallist);
+                              AddVIshishthaAtithiPage.routeName,
+                              arguments: _linkedNagar,
+                            );
                           });
                         },
                         child: Container(
@@ -1675,178 +2379,174 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
               "${Statics.getLabel('swayamsewakUpastithi')}",
               Column(
                 children: [
-                  Column(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        child: Table(
-                          border: TableBorder.all(color: Colors.black),
-                          columnWidths: const {
-                            0: FlexColumnWidth(3),
-                            1: FlexColumnWidth(2),
-                            2: FlexColumnWidth(3),
-                            3: FlexColumnWidth(2),
-                          },
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    child: Table(
+                      border: TableBorder.all(color: Colors.black),
+                      columnWidths: const {
+                        0: FlexColumnWidth(3),
+                        1: FlexColumnWidth(2),
+                        2: FlexColumnWidth(3),
+                        3: FlexColumnWidth(2),
+                      },
+                      children: [
+                        // Header Row
+                        // Header Row
+                        TableRow(
+                          decoration: BoxDecoration(
+                              color: Colors.purpleAccent.shade100),
                           children: [
-                            // Header Row
-                            // Header Row
-                            TableRow(
-                              decoration: BoxDecoration(
-                                  color: Colors.purpleAccent.shade100),
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                    "${Statics.getLabel('Vayogat')}",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white, // Text color white
-                                    ),
-                                  ),
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                "${Statics.getLabel('Vayogat')}",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white, // Text color white
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                    "${Statics.getLabel('patSankhyaa')}",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                    "${Statics.getLabel('ganveshatPresentCount')}",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                    "${Statics.getLabel('otherSwayamsewakPresentCount')}",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
-
-                            // Data Rows
-                            TableRow(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                      "${Statics.getLabel('Shishu')}/${Statics.getLabel('Baal')}"),
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                "${Statics.getLabel('patSankhyaa')}",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
                                 ),
-                                _numberField(patShishuBaalCtrl),
-                                _numberField(ganShishuBaalCtrl,
-                                    limitController: patShishuBaalCtrl,
-                                    otherController: anyaShishuBaalCtrl),
-                                _numberField(anyaShishuBaalCtrl,
-                                    limitController: patShishuBaalCtrl,
-                                    otherController: ganShishuBaalCtrl),
-                              ],
+                              ),
                             ),
-                            TableRow(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                      "${Statics.getLabel('MahaavidyaalayeenTarunLabel')}"),
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                "${Statics.getLabel('ganveshatPresentCount')}",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
                                 ),
-                                _numberField(patMahavidyaCtrl),
-                                _numberField(ganMahavidyaCtrl,
-                                    limitController: patMahavidyaCtrl,
-                                    otherController: anyaMahavidyaCtrl),
-                                _numberField(anyaMahavidyaCtrl,
-                                    limitController: patMahavidyaCtrl,
-                                    otherController: ganMahavidyaCtrl),
-                              ],
+                              ),
                             ),
-                            TableRow(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                      "${Statics.getLabel('TarunVyavasaayee')}"),
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                "${Statics.getLabel('otherSwayamsewakPresentCount')}",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
                                 ),
-                                _numberField(patTarunVyavCtrl),
-                                _numberField(ganTarunVyavCtrl,
-                                    limitController: patTarunVyavCtrl,
-                                    otherController: anyaTarunVyavCtrl),
-                                _numberField(anyaTarunVyavCtrl,
-                                    limitController: patTarunVyavCtrl,
-                                    otherController: ganTarunVyavCtrl),
-                              ],
-                            ),
-                            TableRow(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                      "${Statics.getLabel('ProudhaVyavasaayeeLabel')}"),
-                                ),
-                                _numberField(patProudhVyavCtrl),
-                                _numberField(ganProudhVyavCtrl,
-                                    limitController: patProudhVyavCtrl,
-                                    otherController: anyaProudhVyavCtrl),
-                                _numberField(anyaProudhVyavCtrl,
-                                    limitController: patProudhVyavCtrl,
-                                    otherController: ganProudhVyavCtrl),
-                              ],
-                            ),
-
-                            // Total Row
-                            TableRow(
-                              decoration: const BoxDecoration(
-                                  color: Colors.amberAccent),
-                              children: [
-                                const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("Total",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold)),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(_getColumnTotal([
-                                    patShishuBaalCtrl,
-                                    patMahavidyaCtrl,
-                                    patTarunVyavCtrl,
-                                    patProudhVyavCtrl
-                                  ]).toString()),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(_getColumnTotal([
-                                    ganShishuBaalCtrl,
-                                    ganMahavidyaCtrl,
-                                    ganTarunVyavCtrl,
-                                    ganProudhVyavCtrl
-                                  ]).toString()),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(_getColumnTotal([
-                                    anyaShishuBaalCtrl,
-                                    anyaMahavidyaCtrl,
-                                    anyaTarunVyavCtrl,
-                                    anyaProudhVyavCtrl
-                                  ]).toString()),
-                                ),
-                              ],
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                    ],
+
+                        // Data Rows
+                        TableRow(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                  "${Statics.getLabel('Shishu')}/${Statics.getLabel('Baal')}"),
+                            ),
+                            _numberField(patShishuBaalCtrl),
+                            _numberField(ganShishuBaalCtrl,
+                                limitController: patShishuBaalCtrl,
+                                otherController: anyaShishuBaalCtrl),
+                            _numberField(anyaShishuBaalCtrl,
+                                limitController: patShishuBaalCtrl,
+                                otherController: ganShishuBaalCtrl),
+                          ],
+                        ),
+                        TableRow(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                  "${Statics.getLabel('MahaavidyaalayeenTarunLabel')}"),
+                            ),
+                            _numberField(patMahavidyaCtrl),
+                            _numberField(ganMahavidyaCtrl,
+                                limitController: patMahavidyaCtrl,
+                                otherController: anyaMahavidyaCtrl),
+                            _numberField(anyaMahavidyaCtrl,
+                                limitController: patMahavidyaCtrl,
+                                otherController: ganMahavidyaCtrl),
+                          ],
+                        ),
+                        TableRow(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                  "${Statics.getLabel('TarunVyavasaayee')}"),
+                            ),
+                            _numberField(patTarunVyavCtrl),
+                            _numberField(ganTarunVyavCtrl,
+                                limitController: patTarunVyavCtrl,
+                                otherController: anyaTarunVyavCtrl),
+                            _numberField(anyaTarunVyavCtrl,
+                                limitController: patTarunVyavCtrl,
+                                otherController: ganTarunVyavCtrl),
+                          ],
+                        ),
+                        TableRow(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                  "${Statics.getLabel('ProudhaVyavasaayeeLabel')}"),
+                            ),
+                            _numberField(patProudhVyavCtrl),
+                            _numberField(ganProudhVyavCtrl,
+                                limitController: patProudhVyavCtrl,
+                                otherController: anyaProudhVyavCtrl),
+                            _numberField(anyaProudhVyavCtrl,
+                                limitController: patProudhVyavCtrl,
+                                otherController: ganProudhVyavCtrl),
+                          ],
+                        ),
+
+                        // Total Row
+                        TableRow(
+                          decoration:
+                              const BoxDecoration(color: Colors.amberAccent),
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text("Total",
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(_getColumnTotal([
+                                patShishuBaalCtrl,
+                                patMahavidyaCtrl,
+                                patTarunVyavCtrl,
+                                patProudhVyavCtrl
+                              ]).toString()),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(_getColumnTotal([
+                                ganShishuBaalCtrl,
+                                ganMahavidyaCtrl,
+                                ganTarunVyavCtrl,
+                                ganProudhVyavCtrl
+                              ]).toString()),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(_getColumnTotal([
+                                anyaShishuBaalCtrl,
+                                anyaMahavidyaCtrl,
+                                anyaTarunVyavCtrl,
+                                anyaProudhVyavCtrl
+                              ]).toString()),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -1921,7 +2621,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                     txtString:
                         "${Statics.getLabel('average')} ${Statics.getLabel('upastithi')} ",
                     value:
-                        "${((selectedVastiCount! / totalVastiCount!) * 100).toStringAsFixed(2)} %",
+                        "${totalVastiCount > 0 ? ((selectedVastiCount! / totalVastiCount) * 100).toStringAsFixed(0) : 0} %",
                   )
                 ],
               ),
@@ -1944,12 +2644,30 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                               setState(() {
                                 checkboxShakhaSelectedItems = selectedItems;
                                 countsShakhaa = counts; // model me store
-                              });
 
-                              print(
-                                  "Selected Items: ${selectedItems.map((e) => e.geoUnitName)}");
-                              print("Prakar Counts: ${counts.prakarCounts}");
-                              print("Vayogat Counts: ${counts.vayogatCounts}");
+                                // ✅ Total shakha count
+                                totalShakhaCount = (data?.shakhaalist ?? [])
+                                    .where(
+                                        (item) => item.frequencyName == "शाखा")
+                                    .length;
+
+                                // ✅ Selected shakha count
+                                selectedShakhaCount = selectedItems
+                                    .where(
+                                        (item) => item.frequencyName == "शाखा")
+                                    .length;
+
+                                // ✅ Average shakha count (percentage)
+                                if (totalShakhaCount > 0) {
+                                  averageShakhaCount = ((selectedShakhaCount /
+                                              totalShakhaCount) *
+                                          100)
+                                      .round()
+                                      .toString();
+                                } else {
+                                  averageShakhaCount = "0";
+                                }
+                              });
                             },
                           );
                         },
@@ -1958,19 +2676,21 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                           width: 120,
                           height: 35,
                           decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.purpleAccent.shade100),
-                              borderRadius: BorderRadius.circular(15)),
+                            border:
+                                Border.all(color: Colors.purpleAccent.shade100),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
                           child: Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                SizedBox(width: 5),
+                                const SizedBox(width: 5),
                                 Text(
                                   "${Statics.getLabel('addshakhaa')}",
-                                  style: TextStyle(
-                                      color: Colors.purpleAccent,
-                                      fontWeight: FontWeight.bold),
+                                  style: const TextStyle(
+                                    color: Colors.purpleAccent,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ],
                             ),
@@ -1979,25 +2699,241 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 10,
+                  const SizedBox(height: 10),
+
+                  // ✅ Results after submit
+                  SingleColumnRow(
+                    txtString:
+                        "${Statics.getLabel('Total')} ${Statics.getLabel('Shaakhaa')} ",
+                    value: "$totalShakhaCount",
                   ),
                   SingleColumnRow(
                     txtString:
-                        "${Statics.getLabel('Total')} ${Statics.getLabel('Vasti')} ",
-                    value: totalVastiCount.toString(),
+                        "${Statics.getLabel('pratinidhitva')} ${Statics.getLabel('Shaakhaa')} ",
+                    value: "$selectedShakhaCount",
                   ),
                   SingleColumnRow(
                     txtString:
-                        "${Statics.getLabel('pratinidhitva')} ${Statics.getLabel('Vasti')} ",
-                    value: selectedVastiCount.toString(),
+                        "${Statics.getLabel('average')} ${Statics.getLabel('Shaakhaa')} ${Statics.getLabel('upastithi')} ",
+                    value: "$averageShakhaCount %",
+                  ),
+                ],
+              ),
+            ),
+// ================================== 8 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
+            mainContainer(
+              "${Statics.getLabel('MilanPratinidhitwa')}",
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          showMilanalistPopup(
+                            context,
+                            milanalist: data?.shakhaalist ?? [],
+                            preselectedItems: checkboxMilanSelectedItems,
+                            onSubmit: (selectedItems, counts) {
+                              setState(() {
+                                checkboxMilanSelectedItems = selectedItems;
+                                countsMilan = counts; // model me store
+
+                                // ✅ Total shakha count
+                                totalMilanCount = (data?.shakhaalist ?? [])
+                                    .where((item) =>
+                                        item.frequencyName == "साप्ताहिक मिलन")
+                                    .length;
+
+                                // ✅ Selected shakha count
+                                selectedMilanCount = selectedItems
+                                    .where((item) =>
+                                        item.frequencyName == "साप्ताहिक मिलन")
+                                    .length;
+
+                                // ✅ Average shakha count (percentage)
+                                if (totalMilanCount > 0) {
+                                  averageMilanCount =
+                                      ((selectedMilanCount / totalMilanCount) *
+                                              100)
+                                          .round()
+                                          .toString();
+                                } else {
+                                  averageMilanCount = "0";
+                                }
+                              });
+                            },
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          width: 160,
+                          height: 35,
+                          decoration: BoxDecoration(
+                            border:
+                                Border.all(color: Colors.purpleAccent.shade100),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "${Statics.getLabel('addSaptahikMilan')}",
+                                  style: const TextStyle(
+                                    color: Colors.purpleAccent,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+
+                  // ✅ Results after submit
+                  SingleColumnRow(
+                    txtString:
+                        "${Statics.getLabel('Total')} ${Statics.getLabel('SaaptaahikMilan')} ",
+                    value: "$totalMilanCount",
                   ),
                   SingleColumnRow(
                     txtString:
-                        "${Statics.getLabel('average')} ${Statics.getLabel('upastithi')} ",
+                        "${Statics.getLabel('pratinidhitva')} ${Statics.getLabel('SaaptaahikMilan')} ",
+                    value: "$selectedMilanCount",
+                  ),
+                  SingleColumnRow(
+                    txtString:
+                        "${Statics.getLabel('average')} ${Statics.getLabel('SaaptaahikMilan')} ${Statics.getLabel('upastithi')} ",
+                    value: "$averageMilanCount %",
+                  ),
+                ],
+              ),
+            ),
+// ================================== 9 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
+            mainContainer(
+              "${Statics.getLabel('milanMandali')} ${Statics.getLabel('pratinidhitva')}",
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          showSanghaMandalialistPopup(
+                            context,
+                            sanghaMandalialist: data?.shakhaalist ?? [],
+                            preselectedItems:
+                                checkboxSanghaMandaliSelectedItems,
+                            onSubmit: (selectedItems, counts) {
+                              setState(() {
+                                checkboxSanghaMandaliSelectedItems =
+                                    selectedItems;
+                                countsSanghaMandali = counts; // model me store
+
+                                // ✅ Total shakha count
+                                totalSanghaMandaliCount = (data?.shakhaalist ??
+                                        [])
+                                    .where((item) =>
+                                        item.frequencyName == "साप्ताहिक मिलन")
+                                    .length;
+
+                                // ✅ Selected shakha count
+                                selectedSanghaMandaliCount = selectedItems
+                                    .where((item) =>
+                                        item.frequencyName == "साप्ताहिक मिलन")
+                                    .length;
+
+                                // ✅ Average shakha count (percentage)
+                                if (totalSanghaMandaliCount > 0) {
+                                  averageSanghaMandaliCount =
+                                      ((selectedSanghaMandaliCount /
+                                                  totalSanghaMandaliCount) *
+                                              100)
+                                          .round()
+                                          .toString();
+                                } else {
+                                  averageSanghaMandaliCount = "0";
+                                }
+                              });
+                            },
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          width: 200,
+                          height: 35,
+                          decoration: BoxDecoration(
+                            border:
+                                Border.all(color: Colors.purpleAccent.shade100),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "${Statics.getLabel('addSanghaMandali')}",
+                                  style: const TextStyle(
+                                    color: Colors.purpleAccent,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+
+                  // ✅ Results after submit
+                  SingleColumnRow(
+                    txtString:
+                        "${Statics.getLabel('Total')} ${Statics.getLabel('milanMandali')} ",
+                    value: "$totalSanghaMandaliCount",
+                  ),
+                  SingleColumnRow(
+                    txtString:
+                        "${Statics.getLabel('pratinidhitva')} ${Statics.getLabel('milanMandali')} ",
+                    value: "$selectedSanghaMandaliCount",
+                  ),
+                  SingleColumnRow(
+                    txtString:
+                        "${Statics.getLabel('average')} ${Statics.getLabel('milanMandali')} ${Statics.getLabel('upastithi')} ",
+                    value: "$averageSanghaMandaliCount %",
+                  ),
+                ],
+              ),
+            ),
+// ================================== 10 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
+            mainContainer(
+              "${Statics.getLabel('Total')} ${Statics.getLabel('pratinidhitva')}",
+              Column(
+                children: [
+                  // ✅ Results after submit
+                  SingleColumnRow(
+                    txtString:
+                        "${Statics.getLabel('Total')} ${Statics.getLabel('milanMandali')} ",
                     value:
-                        "${((selectedVastiCount! / totalVastiCount!) * 100).toStringAsFixed(2)} %",
-                  )
+                        "${totalShakhaCount + totalMilanCount + totalSanghaMandaliCount}",
+                  ),
+                  SingleColumnRow(
+                    txtString:
+                        "${Statics.getLabel('pratinidhitva')} ${Statics.getLabel('milanMandali')} ",
+                    value:
+                        "${selectedShakhaCount + selectedMilanCount + selectedSanghaMandaliCount}",
+                  ),
+                  SingleColumnRow(
+                    txtString:
+                        "${Statics.getLabel('average')} ${Statics.getLabel('milanMandali')} ${Statics.getLabel('upastithi')} ",
+                    value:
+                        "${averageShakhaCount + averageMilanCount + averageSanghaMandaliCount} %",
+                  ),
                 ],
               ),
             ),
