@@ -1536,8 +1536,8 @@ Map<String, String> resEnglish = {
   'gruhSamparkAbhiyaan': "गृह संपर्क अभियान",
   'sanchalanSadanda': "संचलनात सदण्ड ?",
   'sanchalanGhoshVadan': "संचलनात घोष वादन ?",
-  'presentMatrushakti': "उपस्थित अन्य मातृशक्ति",
-  'presentMale': "उपस्थित अन्य पुरुष",
+  'presentMatrushakti': "मातृशक्ति",
+  'presentMale': "पुरुष",
   'NagarSelectionImportant': 'माहिती भरण्यापूर्वी स्तर निवडणे अनिवार्य आहे',
   'upastithi': 'उपस्थिति',
   'bhougolikPratinidhitwa': 'भौगोलिक प्रतिनिधित्व',
@@ -1561,6 +1561,7 @@ Map<String, String> resEnglish = {
   'addSaptahikMilan': 'साप्ताहिक मिलन जोडा',
   'selectSanghaMandali': 'मासिक मिलन/संघ मंडळी निवाडा',
   'addSanghaMandali': 'मासिक मिलन/संघ मंडळी जोडा',
+  'anyaUpstithMahiti': 'अन्य उपस्थित माहिती',
 };
 
 Map<String, String> resMarathi = {
@@ -3105,8 +3106,8 @@ Map<String, String> resMarathi = {
   'gruhSamparkAbhiyaan': "गृह संपर्क अभियान",
   'sanchalanSadanda': "संचलनात सदण्ड ?",
   'sanchalanGhoshVadan': "संचलनात घोष वादन ?",
-  'presentMatrushakti': "उपस्थित अन्य मातृशक्ति",
-  'presentMale': "उपस्थित अन्य पुरुष",
+  'presentMatrushakti': "मातृशक्ति",
+  'presentMale': "पुरुष",
   'NagarSelectionImportant': 'माहिती भरण्यापूर्वी स्तर निवडणे अनिवार्य आहे',
   'mobileNumberLimit': 'मोबाईल नंबर १० अंकी असावा.',
   'upastithi': 'उपस्थिति',
@@ -3131,6 +3132,7 @@ Map<String, String> resMarathi = {
   'addSaptahikMilan': 'साप्ताहिक मिलन जोडा',
   'selectSanghaMandali': 'मासिक मिलन/संघ मंडळी निवाडा',
   'addSanghaMandali': 'मासिक मिलन/संघ मंडळी जोडा',
+  'anyaUpstithMahiti': 'अन्य उपस्थित माहिती',
 };
 
 Map<String, String> resHindi = {
@@ -4678,8 +4680,8 @@ Map<String, String> resHindi = {
   'gruhSamparkAbhiyaan': "गृह संपर्क अभियान",
   'sanchalanSadanda': "संचलनात सदण्ड ?",
   'sanchalanGhoshVadan': "संचलनात घोष वादन ?",
-  'presentMatrushakti': "उपस्थित अन्य मातृशक्ति",
-  'presentMale': "उपस्थित अन्य पुरुष",
+  'presentMatrushakti': "मातृशक्ति",
+  'presentMale': "पुरुष",
   'NagarSelectionImportant': 'माहिती भरण्यापूर्वी स्तर निवडणे अनिवार्य आहे',
   'mobileNumberLimit': 'मोबाइल नंबर 10 अंकों का होना चाहिए',
   'upastithi': 'उपस्थिति',
@@ -4704,4 +4706,5 @@ Map<String, String> resHindi = {
   'addSaptahikMilan': 'साप्ताहिक मिलन जोडा',
   'selectSanghaMandali': 'मासिक मिलन/संघ मंडळी निवाडा',
   'addSanghaMandali': 'मासिक मिलन/संघ मंडळी जोडा',
+  'anyaUpstithMahiti': 'अन्य उपस्थित माहिती',
 };

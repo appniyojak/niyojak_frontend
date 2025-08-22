@@ -19,6 +19,7 @@ import '../helpers/static_data.dart' as Statics;
 import '../models/response_model/TulnatmakResponseModel.dart';
 import '../models/response_model/geounit_name_model.dart';
 import '../models/response_model/get_vasti_data_by_id_model.dart';
+import '../models/response_model/get_vijaya_dashami_geounit_data.dart';
 import '../models/response_model/mandalVastisarvekshanReportModel.dart';
 import '../models/response_model/nagar_vasti_model.dart';
 import '../models/response_model/nirikshan_baithak_vrutta.dart';
@@ -162,6 +163,10 @@ const String urlSaveMyProfileAppData = baseUrlAPI + '/SaveMyProfileAppData';
 const String urlResetAppPassword = baseUrlAPI + '/ResetAppPassword';
 const String urlGetJoinRSSGridForApp = baseUrlAPI + '/GetJoinRSSGridForApp';
 const String urlSaveJoinRSSForApp = baseUrlAPI + '/SaveJoinRSSForApp';
+const String saveupdatevijayadashamiutsav =
+    baseUrlAPI + '/saveupdatevijayadashamiutsav';
+const String getvijayadashamiutsavbyid =
+    baseUrlAPI + '/getvijayadashamiutsavbyid';
 const String urlGetJoinRSSDataForApp = baseUrlAPI + '/GetJoinRSSDataForApp';
 const String urlDeleteJoinRSSForApp = baseUrlAPI + '/DeleteJoinRSSForApp';
 const String urlRefreshHomeScreenForApp =
@@ -3134,6 +3139,67 @@ Future<String> saveJoinRSSForApp(String inputJson) async {
   var responseBody = json.decode(response.body);
 
   return responseBody['OutputJoinRSSID'].toString();
+}
+
+Future<void> saveVijayaDashamiUtsavData(
+    BuildContext context, Map<String, dynamic> inputJson) async {
+  showLoaderDialog(context);
+  Map<String, String> jHeaders = {
+    'Content-Type': 'application/json',
+    'Accept': '*/*'
+  };
+
+  var response = await http.post(
+    Uri.parse(saveupdatevijayadashamiutsav),
+    headers: jHeaders,
+    body: jsonEncode(inputJson), // ✅ Encode here
+  );
+
+  print("Response: ${response.body}");
+  print("response.statusCode: ${response.statusCode}");
+
+  Navigator.of(context, rootNavigator: true).pop();
+
+  if (response.statusCode == 200) {
+    Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+  } else {
+    print("Error: ${response.statusCode} - ${response.body}");
+  }
+}
+
+Future<GetVijayadashamiDataByGeoUnitModel?> getVijayaDashamiUtsavDataByGeounit(
+    BuildContext context, Map<String, dynamic> inputJson) async {
+  showLoaderDialog(context);
+  Map<String, String> jHeaders = {
+    'Content-Type': 'application/json',
+    'Accept': '*/*'
+  };
+
+  try {
+    var response = await http.post(
+      Uri.parse(getvijayadashamiutsavbyid),
+      headers: jHeaders,
+      body: jsonEncode(inputJson),
+    );
+
+    Navigator.of(context, rootNavigator: true).pop();
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+
+      GetVijayadashamiDataByGeoUnitModel model =
+          GetVijayadashamiDataByGeoUnitModel.fromJson(data);
+
+      return model; // ✅ return karna zaroori hai
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null; // ✅ error case
+    }
+  } catch (e) {
+    Navigator.of(context, rootNavigator: true).pop();
+    print("Exception: $e");
+    return null;
+  }
 }
 
 Future<dynamic> getJoinRSSDataByID(String joinRSSID, String type) async {
