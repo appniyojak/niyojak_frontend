@@ -1,21 +1,26 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import '../../../../helpers/static_data.dart' as Statics;
 import '../../../models/response_model/get_vasti_data_by_id_model.dart';
 import '../../../models/response_model/vasti_sarvekshan_dropdown_model.dart';
 import '../../../models/response_model/vasti_up_data_model.dart';
+import '../../../providers/bals.dart';
 
-class SajjanShaktiFormPage extends StatefulWidget {
-  static const String routeName = '/sajjan-shakti';
-  const SajjanShaktiFormPage({Key? key}) : super(key: key);
+class AddVishisthaAtithi extends StatefulWidget {
+  static const String routeName = '/add-vishishtha-atithi';
+  const AddVishisthaAtithi({Key? key}) : super(key: key);
 
   @override
-  State<SajjanShaktiFormPage> createState() => _SajjanShaktiFormPageState();
+  State<AddVishisthaAtithi> createState() => _AddVishisthaAtithiState();
 }
 
-class _SajjanShaktiFormPageState extends State<SajjanShaktiFormPage> {
+class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
+  int? isVastiOrGraam;
   List<Vastisarsajjanshakti> sajjanShaktiDataList = [];
-
+  int? selectedsajjanShaktiRowIndex;
   // All your variables here
   int? sajjanShaktiShreniId;
   String? sajjanShaktiShreniName;
@@ -64,17 +69,63 @@ class _SajjanShaktiFormPageState extends State<SajjanShaktiFormPage> {
   List<Upnagarmandallist> vastimandallist = [];
   Upnagarmandallist? vastimandalData;
 
+  String? selctedLevel = 'Nagar';
+  String? selctedLevelName = '';
+  String? selctedLevelId = '';
+  String? _linkedNagarValue = '';
+  String? _linkedgraamValue = "";
+  String? _linkedmandalValue = "";
+  String? _linkedvastiValue = "";
+  List<GeoUnitMasterBAL>? _linkedNagar;
+  List<GeoUnitMasterBAL>? _linkedmandal;
+  List<GeoUnitMasterBAL>? _linkedgraam;
+  List<GeoUnitMasterBAL>? _linkedvasti;
+
+  Future<List<GeoUnitMasterBAL>> populatelinkedMandalDropdown(
+      String nagarIDStr) async {
+    _linkedgraamValue = null;
+    _linkedmandal = _linkedgraam = null;
+    var mnDD = await Statics.getGeoUnitsByLevelAndParent(
+        Statics.levels['MandalLevelID'].toString(), nagarIDStr, 'Nagar', '');
+    setState(() {
+      _linkedmandal = (mnDD.length > 0 ? mnDD : null);
+    });
+    return mnDD;
+  }
+
+  Future<List<GeoUnitMasterBAL>> populatelinkedGraamDropdown(
+      String mandalIDStr) async {
+    _linkedgraamValue = null;
+    var gmDD = await Statics.getGeoUnitsByLevelAndParent(
+        Statics.levels['GraamLevelID'].toString(), mandalIDStr, 'Mandal', '');
+    setState(() {
+      _linkedgraam = (gmDD.length > 0 ? gmDD : null);
+    });
+    return gmDD;
+  }
+
+  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(
+      String nagarIDStr) async {
+    _linkedvastiValue = null;
+    var vsDD = await Statics.getGeoUnitsByLevelAndParent(
+        Statics.levels['VastiLevelID'].toString(), nagarIDStr, 'Nagar', '');
+    setState(() {
+      _linkedvasti = (vsDD.length > 0 ? vsDD : null);
+    });
+    return vsDD;
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    /// 👇 arguments receive karo
+    // 👇 Receive the arguments properly
     final args =
-        ModalRoute.of(context)!.settings.arguments as List<Upnagarmandallist>?;
+        ModalRoute.of(context)!.settings.arguments as List<GeoUnitMasterBAL>?;
 
-    if (args != null && args.isNotEmpty && vastimandallist.isEmpty) {
+    if (args != null && args.isNotEmpty) {
       setState(() {
-        vastimandallist = args;
+        _linkedNagar = args;
       });
     }
   }
@@ -91,7 +142,7 @@ class _SajjanShaktiFormPageState extends State<SajjanShaktiFormPage> {
   }
 
   int? sajjanShaktiType;
-
+  List<int> selectedTypes = [];
   List<VastisarAnyaprabhavilokam> anyaPrabhaviLokDataList = [];
   int? selectedanyaPrabhaviLokRowIndex;
   int? anyaPrabhaviLokSamparkStithiId;
@@ -137,12 +188,119 @@ class _SajjanShaktiFormPageState extends State<SajjanShaktiFormPage> {
   final TextEditingController anyaPrabhaviLokAnyaUppshreni1Controller =
       TextEditingController();
 
+  void resetSajjanShaktiAndAnyaPrabhaviLokData() {
+    // Sajjan Shakti list
+    sajjanShaktiDataList.clear();
+
+    // Sajjan Shakti IDs and names reset
+    sajjanShaktiShreniId = null;
+    sajjanShaktiShreniName = null;
+    sajjanShaktiShreniEditId = null;
+    sajjanShaktiShreniEditDataId = null;
+
+    sajjanShaktiSamparkStithiId = null;
+    sajjanShaktiSamparkStithiName = null;
+    sajjanShaktiSamparkStithiEditId = null;
+    sajjanShaktiSamparkStithiEditDataId = null;
+
+    sajjanShaktiPrabhavKeshtraId = null;
+    sajjanShaktiPrabhavKeshtraName = null;
+    sajjanShaktiPrabhavKeshtraEditId = null;
+    sajjanShaktiPrabhavKeshtraEditDataId = null;
+
+    sajjanShaktiVisheshId = null;
+    sajjanShaktiVisheshName = null;
+    sajjanShaktiVisheshEditId = null;
+    sajjanShaktiVisheshEditDataId = null;
+
+    // Sajjan Shakti controllers reset
+    sajjanShaktiNameController.clear();
+    sajjanShaktiAddressController.clear();
+    sajjanShaktiPhoneController.clear();
+    sajjanShaktiContactPersonNameController.clear();
+    sajjanShaktiContactPersonDoorbhashController.clear();
+    sajjanShaktiSansthecheNaavController.clear();
+    sajjanShaktiSansthKuthalyaPadavarController.clear();
+    sajjanShaktiAnyaShreniNameController.clear();
+    sajjanShaktiAnyaVisheshNameController.clear();
+
+    // Sajjan Shakti type
+    sajjanShaktiType = null;
+
+    // Anya Prabhavi Lok
+    anyaPrabhaviLokDataList.clear();
+    selectedanyaPrabhaviLokRowIndex = null;
+    anyaPrabhaviLokSamparkStithiId = null;
+    anyaPrabhaviLokSamparkStithiName = null;
+    selectedAnyaPrabhaviLokSamparkStithiIDEdit = null;
+    selectedAnyaPrabhaviLokSamparkStithi = null;
+
+    isActiveAnyaPrabhavilok = 1;
+    pkidAnyaPrabhaviLok = 0;
+
+    anyaPrabhaviLokShreniId = null;
+    anyaPrabhaviLokShreniIdEdit = null;
+    anyaPrabhaviLokShreniName = null;
+
+    anyaPrabhaviLokUpShreniId = null;
+    anyaPrabhaviLokUpShreniIdEdit = null;
+    anyaPrabhaviLokUpShreniName = null;
+
+    anyaPrabhaviLokUpShreni1Id = null;
+    anyaPrabhaviLokUpShreni1IdEdit = null;
+    anyaPrabhaviLokUpShreni1Name = null;
+
+    selectedShreni = null;
+    selectedUpShreni = null;
+    selectedUpShreni2 = null;
+
+    anyaPrabhaviLokVisheshId = null;
+    anyaPrabhaviLokVisheshName = null;
+    selectedAnyaPrabhaviLokVisheshIDEdit = null;
+    selectedAnyaPrabhaviLokVishesh = null;
+
+    anyaPrabhaviLokPrabhavKshetraId = null;
+    anyaPrabhaviLokPrabhavKshetraName = null;
+    selectedAnyaPrabhaviLokPrabhavKshetraIDEdit = null;
+    selectedAnyaPrabhaviLokPrabhavKshetra = null;
+
+    // Controllers reset
+    anyaPrabhaviLokNaavController.clear();
+    anyaPrabhaviLokAddressController.clear();
+    anyaPrabhaviLokAnyaVisheshMahitiController.clear();
+    anyaPrabhaviLokSamparkSutraNaavController.clear();
+    anyaPrabhaviLokSamparkSutraDoorbhashController.clear();
+    anyaPrabhaviLokMobileNoController.clear();
+    anyaPrabhaviLokAnyaUppshreniController.clear();
+    anyaPrabhaviLokAnyaUppshreni1Controller.clear();
+
+    // Dropdown data reset
+    vastisarvekshanDropDownDataModel = null;
+    fetchVastiSurveyDropdownData();
+  }
+
+  Future<void> submitForm() async {
+    Map<String, dynamic> formData = {
+      "GeoUnitID": int.parse(selctedLevelId!),
+      "AppUserID": int.parse(Statics.userDetails['userID']),
+      "isnagar": isVastiOrGraam,
+      "Vastisarsajjanshakti": sajjanShaktiDataList,
+      "VastisarAnyaprabhavilokam": anyaPrabhaviLokDataList,
+    };
+
+    String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
+    log("Form Data (JSON):\n$formattedJson");
+    await Statics.saveVishishthaAtithiData(context, formData);
+    resetSajjanShaktiAndAnyaPrabhaviLokData();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(Statics.getLabel('addVIshishthaAtithi'),
+        title: Text(Statics.getLabel('addMukhyaAtithi'),
             style: TextStyle(fontWeight: FontWeight.bold)),
       ),
       body: SingleChildScrollView(
@@ -157,118 +315,197 @@ class _SajjanShaktiFormPageState extends State<SajjanShaktiFormPage> {
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     border: Border.all(color: Colors.purpleAccent)),
                 child: Column(children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      Statics.getLabel('vastiGramNivda'),
-                      style: const TextStyle(
-                        fontSize: 14,
+                  Text(
+                    "${Statics.getLabel('selectedBhougolikkaryastithi')}",
+                    style: TextStyle(
+                        color: Colors.purpleAccent,
                         fontWeight: FontWeight.w600,
-                        color: Colors.black87,
-                      ),
-                    ),
+                        fontSize: 20),
                   ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade50,
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<Upnagarmandallist>(
-                        hint: const Text("Select Vasti"),
-                        value: vastimandalData,
-                        isExpanded: true,
-                        icon: const Icon(Icons.arrow_drop_down),
-                        items: vastimandallist.map((Upnagarmandallist item) {
-                          return DropdownMenuItem<Upnagarmandallist>(
-                            value: item,
-                            child: Text(
-                              item.geoUnitName ?? "",
-                              style: const TextStyle(
-                                  fontSize: 14, color: Colors.black87),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (Upnagarmandallist? newValue) {
-                          setState(() {
-                            vastimandalData = newValue;
-                          });
-                        },
-                      ),
-                    ),
+                  Divider(
+                    color: Colors.grey,
                   ),
                   SizedBox(
                     height: 10,
                   ),
+                  if (_linkedNagar != null && _linkedNagar!.length > 0)
+                    DropdownButtonFormField(
+                      decoration:
+                          InputDecoration(labelText: Statics.getLabel('Nagar')),
+                      isExpanded: true,
+                      value: _linkedNagarValue == "" ? null : _linkedNagarValue,
+                      items: _linkedNagar!
+                          .map((bg) => DropdownMenuItem(
+                              value: bg.geoUnitID.toString(),
+                              child: Text(bg.name!)))
+                          .toList(),
+                      onChanged: (value) {
+                        final selectedItem = _linkedNagar!.firstWhere(
+                            (bg) => bg.geoUnitID.toString() == value);
+                        populatelinkedMandalDropdown(value!);
+                        populatelinkedVastiDropdown(value);
+                        setState(() {
+                          selctedLevelName = selectedItem.name ?? "";
+                          selctedLevel = 'Nagar';
+                          selctedLevelId = value;
+
+                          _linkedNagarValue = value;
+                        });
+                      },
+                    ),
+                  if (_linkedNagar != null && _linkedNagar!.length > 0)
+                    SizedBox(
+                      height: 10,
+                    ),
+                  if (_linkedmandal != null && _linkedmandal!.length > 0)
+                    DropdownButtonFormField(
+                      decoration: InputDecoration(
+                          labelText: Statics.getLabel('Mandal')),
+                      isExpanded: true,
+                      value:
+                          _linkedmandalValue == "" ? null : _linkedmandalValue,
+                      items: _linkedmandal!
+                          .map((bg) => DropdownMenuItem(
+                              value: bg.geoUnitID.toString(),
+                              child: Text(bg.name!)))
+                          .toList(),
+                      onChanged: (value) {
+                        final selectedItem = _linkedmandal!.firstWhere(
+                            (bg) => bg.geoUnitID.toString() == value);
+                        setState(() {
+                          selctedLevelName = selectedItem.name ?? "";
+                          selctedLevel = 'Mandal';
+                          selctedLevelId = value;
+
+                          _linkedmandalValue = value;
+                          populatelinkedGraamDropdown(value!);
+                        });
+                      },
+                    ),
+                  if (_linkedmandal != null && _linkedmandal!.length > 0)
+                    SizedBox(
+                      height: 10,
+                    ),
+                  if (_linkedgraam != null && _linkedgraam!.length > 0)
+                    DropdownButtonFormField(
+                      decoration:
+                          InputDecoration(labelText: Statics.getLabel('Graam')),
+                      isExpanded: true,
+                      value: _linkedgraamValue == "" ? null : _linkedgraamValue,
+                      items: _linkedgraam!
+                          .map((bg) => DropdownMenuItem(
+                              value: bg.geoUnitID.toString(),
+                              child: Text(bg.name!)))
+                          .toList(),
+                      onChanged: (value) {
+                        final selectedItem = _linkedgraam!.firstWhere(
+                            (bg) => bg.geoUnitID.toString() == value);
+                        setState(() {
+                          _linkedgraamValue = value;
+                          selctedLevelName = selectedItem.name ?? "";
+                          selctedLevel = 'Graam';
+                          selctedLevelId = value;
+                          isVastiOrGraam = 0;
+                        });
+                      },
+                    ),
+                  if (_linkedvasti != null && _linkedvasti!.length > 0)
+                    DropdownButtonFormField(
+                      decoration:
+                          InputDecoration(labelText: Statics.getLabel('Vasti')),
+                      isExpanded: true,
+                      value: _linkedvastiValue == "" ? null : _linkedvastiValue,
+                      items: _linkedvasti!
+                          .map((bg) => DropdownMenuItem(
+                              value: bg.geoUnitID.toString(),
+                              child: Text(bg.name!)))
+                          .toList(),
+                      onChanged: (value) {
+                        final selectedItem = _linkedvasti!.firstWhere(
+                            (bg) => bg.geoUnitID.toString() == value);
+                        setState(() {
+                          _linkedvastiValue = value;
+                          selctedLevelName = selectedItem.name ?? "";
+                          selctedLevel = 'Vasti';
+                          selctedLevelId = value;
+                          isVastiOrGraam = 1;
+                        });
+                      },
+                    ),
+                  SizedBox(
+                    height: 15,
+                  ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      // Sajjan Shakti Button
                       Expanded(
                         child: GestureDetector(
                           onTap: () {
                             setState(() {
-                              sajjanShaktiType = 1;
+                              if (selectedTypes.contains(1)) {
+                                selectedTypes.remove(1);
+                              } else {
+                                selectedTypes.add(1);
+                              }
                             });
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 12),
-                            margin: const EdgeInsets.only(right: 8),
                             decoration: BoxDecoration(
-                              color: sajjanShaktiType == 1
+                              color: selectedTypes.contains(1)
                                   ? Colors.purpleAccent
                                   : Colors.transparent,
-                              border: Border.all(
-                                color: Colors.purpleAccent,
-                                width: 1.5,
-                              ),
-                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: Colors.purpleAccent),
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            alignment: Alignment.center,
-                            child: Text(
-                              "${Statics.getLabel('SajjanShakti')}",
-                              style: TextStyle(
-                                color: sajjanShaktiType == 1
-                                    ? Colors.white
-                                    : Colors.purpleAccent,
-                                fontWeight: FontWeight.w600,
+                            child: Center(
+                              child: Text(
+                                "${Statics.getLabel('SajjanShakti')}",
+                                style: TextStyle(
+                                  color: selectedTypes.contains(1)
+                                      ? Colors.white
+                                      : Colors.purpleAccent,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
                         ),
                       ),
+
+                      const SizedBox(width: 10),
+
+                      // Anya Prabhavi Lok Button
                       Expanded(
                         child: GestureDetector(
                           onTap: () {
                             setState(() {
-                              sajjanShaktiType = 0;
+                              if (selectedTypes.contains(0)) {
+                                selectedTypes.remove(0);
+                              } else {
+                                selectedTypes.add(0);
+                              }
                             });
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 12),
-                            margin: const EdgeInsets.only(left: 8),
                             decoration: BoxDecoration(
-                              color: sajjanShaktiType == 0
+                              color: selectedTypes.contains(0)
                                   ? Colors.purpleAccent
                                   : Colors.transparent,
-                              border: Border.all(
-                                color: Colors.purpleAccent,
-                                width: 1.5,
-                              ),
-                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: Colors.purpleAccent),
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            alignment: Alignment.center,
-                            child: Text(
-                              "${Statics.getLabel('anyaPrabhaviLok')}",
-                              style: TextStyle(
-                                color: sajjanShaktiType == 0
-                                    ? Colors.white
-                                    : Colors.purpleAccent,
-                                fontWeight: FontWeight.w600,
+                            child: Center(
+                              child: Text(
+                                "${Statics.getLabel('anyaPrabhaviLok')}",
+                                style: TextStyle(
+                                  color: selectedTypes.contains(0)
+                                      ? Colors.white
+                                      : Colors.purpleAccent,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
@@ -284,7 +521,7 @@ class _SajjanShaktiFormPageState extends State<SajjanShaktiFormPage> {
               SizedBox(
                 height: 15,
               ),
-              if (sajjanShaktiType == 1)
+              if (selectedTypes.contains(1))
                 Container(
                   padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
@@ -302,130 +539,128 @@ class _SajjanShaktiFormPageState extends State<SajjanShaktiFormPage> {
                       Divider(
                         color: Colors.grey,
                       ),
-                      SizedBox(
-                        height: 10,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          InkWell(
+                            onTap: () async {
+                              final newItem = await showSajjanShaktiFormPopup(
+                                context,
+                              );
+                              if (newItem != null) {
+                                setState(() {
+                                  sajjanShaktiDataList.add(newItem);
+                                });
+                              }
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 5),
+                              width: 100,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: Colors.purpleAccent.shade100),
+                                  color: Colors.purpleAccent.withOpacity(0.7),
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Center(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.add,
+                                        color: Colors.white, size: 15),
+                                    Text(
+                                      "${Statics.getLabel('AddButton')}",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
                       ),
-                      textControllerField2(
-                        name: Statics.getLabel('Name'),
-                        controller: sajjanShaktiNameController,
-                        fieldHeight: 45,
-                      ),
-                      textControllerField2(
-                        name: Statics.getLabel('Address'),
-                        controller: sajjanShaktiAddressController,
-                        maxLines: 4,
-                      ),
-                      textControllerField2(
-                        name: Statics.getLabel('doorBhash'),
-                        controller: sajjanShaktiPhoneController,
-                        keyboardType: TextInputType.number,
-                        maxInput: 10,
-                      ),
-                      if (vastisarvekshanDropDownDataModel != null)
-                        vastisarvekshanDropdown2(
-                          question: Statics.getLabel('Category'),
-                          dataModel: vastisarvekshanDropDownDataModel!,
-                          filterTypeName: "सज्जन शक्ति श्रेणी",
-                          hintText: Statics.getLabel('Category'),
-                          onItemSelected: (id, value, isOther) {
-                            sajjanShaktiShreniName = value;
-                            sajjanShaktiShreniId = id;
-                          },
-                          selectedValue: sajjanShaktiShreniEditDataId,
-                          onSelectionChanged: (newValue) {
-                            setState(() {
-                              sajjanShaktiShreniEditDataId = newValue;
-                            });
-                          },
-                          editId: sajjanShaktiShreniEditId,
+                      SizedBox(height: 5),
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black54),
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
                         ),
-                      if (sajjanShaktiShreniEditDataId?.isOther == 1)
-                        textControllerField2(
-                          name: Statics.getLabel('OtherCategory'),
-                          controller: sajjanShaktiAnyaShreniNameController,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width * 1,
+                            child: DataTable(
+                              showCheckboxColumn: false,
+                              headingRowColor: MaterialStatePropertyAll(
+                                  Colors.purple.shade50),
+                              columnSpacing: 40,
+                              headingTextStyle: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87),
+                              columns: [
+                                DataColumn(
+                                    label: Text(
+                                  "${Statics.getLabel('Name')}",
+                                )),
+                                DataColumn(
+                                    label: Text(
+                                  "${Statics.getLabel('Category')}",
+                                )),
+                                DataColumn(
+                                    label: Text(
+                                  "${Statics.getLabel('samparkStithi')}",
+                                )),
+                              ],
+                              rows: sajjanShaktiDataList
+                                  .asMap()
+                                  .entries
+                                  .where((entry) => entry.value.isactive == 1)
+                                  .map((entry) {
+                                int index = entry.key;
+                                var data = entry.value;
+                                bool isSelected =
+                                    selectedsajjanShaktiRowIndex == index;
+                                return DataRow(
+                                    selected: isSelected,
+                                    color: MaterialStateProperty.resolveWith<
+                                        Color?>(
+                                      (Set<MaterialState> states) {
+                                        if (isSelected)
+                                          return Colors.yellow.shade100;
+                                        return null;
+                                      },
+                                    ),
+                                    onSelectChanged: (bool? selected) {
+                                      if (selected != null && selected) {
+                                        setState(() {
+                                          selectedsajjanShaktiRowIndex = index;
+                                        });
+                                      }
+                                    },
+                                    cells: [
+                                      DataCell(Text(data.name ?? "")),
+                                      DataCell(Text(
+                                          data.selectedDropdownValueName ??
+                                              "")),
+                                      DataCell(Text(
+                                          data.selectedDropdownValueName1 ??
+                                              "")),
+                                    ]);
+                              }).toList(),
+                            ),
+                          ),
                         ),
-                      textControllerField2(
-                        name: Statics.getLabel('OrganizationName'),
-                        controller: sajjanShaktiSansthecheNaavController,
-                      ),
-                      textControllerField2(
-                        name: Statics.getLabel('sansthetKuthalaPadavar'),
-                        controller: sajjanShaktiSansthKuthalyaPadavarController,
-                      ),
-                      if (vastisarvekshanDropDownDataModel != null)
-                        vastisarvekshanDropdown2(
-                          question: Statics.getLabel('samparkStithi'),
-                          dataModel: vastisarvekshanDropDownDataModel!,
-                          filterTypeName: "सज्जन शक्ति संपर्क स्थिति",
-                          hintText: Statics.getLabel('samparkStithi'),
-                          onItemSelected: (id, value, isOther) {
-                            sajjanShaktiSamparkStithiName = value;
-                            sajjanShaktiSamparkStithiId = id;
-                          },
-                          selectedValue: sajjanShaktiSamparkStithiEditDataId,
-                          onSelectionChanged: (newValue) {
-                            setState(() {
-                              sajjanShaktiSamparkStithiEditDataId = newValue;
-                            });
-                          },
-                          editId: sajjanShaktiSamparkStithiEditId,
-                        ),
-                      if (vastisarvekshanDropDownDataModel != null)
-                        vastisarvekshanDropdown2(
-                          question: Statics.getLabel('special'),
-                          dataModel: vastisarvekshanDropDownDataModel!,
-                          filterTypeName: "सज्जन शक्ति विशेष",
-                          hintText: Statics.getLabel('special'),
-                          onItemSelected: (id, value, isOther) {
-                            sajjanShaktiVisheshName = value;
-                            sajjanShaktiVisheshId = id;
-                          },
-                          selectedValue: sajjanShaktiVisheshEditDataId,
-                          onSelectionChanged: (newValue) {
-                            setState(() {
-                              sajjanShaktiVisheshEditDataId = newValue;
-                            });
-                          },
-                          editId: sajjanShaktiVisheshEditId,
-                        ),
-                      if (sajjanShaktiVisheshEditDataId?.isOther == 1)
-                        textControllerField2(
-                          name: Statics.getLabel('otherSpecial'),
-                          controller: sajjanShaktiAnyaVisheshNameController,
-                        ),
-                      if (vastisarvekshanDropDownDataModel != null)
-                        vastisarvekshanDropdown2(
-                          question: Statics.getLabel('prabhavKshetra'),
-                          dataModel: vastisarvekshanDropDownDataModel!,
-                          filterTypeName: "सज्जन शक्ति प्रभाव क्षेत्र",
-                          hintText: Statics.getLabel('prabhavKshetra'),
-                          onItemSelected: (id, value, isOther) {
-                            sajjanShaktiPrabhavKeshtraName = value;
-                            sajjanShaktiPrabhavKeshtraId = id;
-                          },
-                          selectedValue: sajjanShaktiPrabhavKeshtraEditDataId,
-                          onSelectionChanged: (newValue) {
-                            setState(() {
-                              sajjanShaktiPrabhavKeshtraEditDataId = newValue;
-                            });
-                          },
-                          editId: sajjanShaktiPrabhavKeshtraEditId,
-                        ),
-                      textControllerField2(
-                        name: Statics.getLabel('samparkSootraNaav'),
-                        controller: sajjanShaktiContactPersonNameController,
-                      ),
-                      textControllerField2(
-                        name: Statics.getLabel('samparakSootraDoorbhash'),
-                        controller:
-                            sajjanShaktiContactPersonDoorbhashController,
-                        keyboardType: TextInputType.number,
-                        maxInput: 10,
                       ),
                     ],
                   ),
                 ),
-              if (sajjanShaktiType == 0)
+              SizedBox(
+                height: 15,
+              ),
+              if (selectedTypes.contains(0))
                 Container(
                   padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
@@ -447,237 +682,792 @@ class _SajjanShaktiFormPageState extends State<SajjanShaktiFormPage> {
                       SizedBox(
                         height: 10,
                       ),
-                      textControllerField2(
-                        name: "${Statics.getLabel('Name')}",
-                        controller: anyaPrabhaviLokNaavController,
-                      ),
-                      textControllerField2(
-                        name: "${Statics.getLabel('Address')}",
-                        controller: anyaPrabhaviLokAddressController,
-                      ),
-                      textControllerField2(
-                        name: "${Statics.getLabel('doorBhash')}",
-                        controller: anyaPrabhaviLokMobileNoController,
-                        keyboardType: TextInputType.number,
-                        maxInput: 10,
-                      ),
-                      SizedBox(height: 5),
                       Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          /// ---- Left side label ----
-                          Expanded(
-                            flex: 3,
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "${Statics.getLabel('Category')}/${Statics.getLabel('upshreni')}",
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500,
+                          InkWell(
+                            onTap: () async {
+                              final result =
+                                  await showAnyaPrabhaviLokFormPopup(context);
+                              if (result != null) {
+                                setState(() {
+                                  anyaPrabhaviLokDataList.add(result);
+                                });
+                              }
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 5),
+                              width: 100,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: Colors.purpleAccent.shade100),
+                                  color: Colors.purpleAccent.withOpacity(0.7),
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Center(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.add,
+                                        color: Colors.white, size: 15),
+                                    Text(
+                                      "${Statics.getLabel('AddButton')}",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
-                          ),
-
-                          /// ---- Separator ----
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Text(
-                              ":",
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black87,
-                              ),
-                            ),
-                          ),
-
-                          /// ---- Right side (Dropdown + conditions) ----
-                          Expanded(
-                            flex: 3,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                /// Dropdown
-                                if (vastisarvekshanDropDownDataModel != null)
-                                  vastisarvekshanDropdown3(
-                                    filterTypeName: "श्रेणी",
-                                    hintText:
-                                        "${Statics.getLabel('otherUpshreni')}",
-                                    anyaPrabhaviLokShreniId:
-                                        anyaPrabhaviLokShreniIdEdit,
-                                    anyaPrabhaviLokUpShreniId:
-                                        anyaPrabhaviLokUpShreniIdEdit,
-                                    anyaPrabhaviLokUpShreni1Id:
-                                        anyaPrabhaviLokUpShreni1IdEdit,
-                                    onValueSelected: (id, name, value) {
-                                      anyaPrabhaviLokShreniId = id;
-                                      anyaPrabhaviLokShreniName = name;
-                                      setState(() {
-                                        selectedShreni = value;
-                                        selectedUpShreni = null;
-                                        selectedUpShreni2 = null;
-                                      });
-                                    },
-                                    onDependentValueSelected:
-                                        (id, name, value) {
-                                      anyaPrabhaviLokUpShreniId = id;
-                                      anyaPrabhaviLokUpShreniName = name;
-                                      setState(() {
-                                        selectedUpShreni = value;
-                                        selectedUpShreni2 = null;
-                                      });
-                                    },
-                                    onThirdLevelValueSelected:
-                                        (id, name, value) {
-                                      anyaPrabhaviLokUpShreni1Id = id;
-                                      anyaPrabhaviLokUpShreni1Name = name;
-                                      setState(() {
-                                        selectedUpShreni2 = value;
-                                      });
-                                    },
-                                    viewName: true,
-                                  ),
-
-                                const SizedBox(height: 10),
-
-                                /// Other Upshreni (1st level)
-                                if (selectedUpShreni?.isOther == 1)
-                                  textControllerField2(
-                                    name:
-                                        "${Statics.getLabel('otherUpshreni')}",
-                                    controller:
-                                        anyaPrabhaviLokAnyaUppshreniController,
-                                  ),
-
-                                if (selectedUpShreni?.isOther == 1)
-                                  const SizedBox(height: 10),
-
-                                /// Other Upshreni (2nd level)
-                                if (selectedUpShreni2?.isOther == 1)
-                                  textControllerField2(
-                                    name:
-                                        "${Statics.getLabel('otherUpshreni2')}",
-                                    controller:
-                                        anyaPrabhaviLokAnyaUppshreni1Controller,
-                                  ),
-
-                                if (selectedUpShreni2?.isOther == 1)
-                                  const SizedBox(height: 10),
-                              ],
-                            ),
-                          ),
+                          )
                         ],
                       ),
-
-                      SizedBox(height: 5),
-
-                      vastisarvekshanDropDownDataModel != null
-                          ? vastisarvekshanDropdown2(
-                              hintText: "${Statics.getLabel('selectVishesh')}",
-                              filterTypeName: "अन्यप्रभावीलोकंविशेष",
-                              onItemSelected: (valueId, valueName, isOther) {
-                                anyaPrabhaviLokVisheshId = valueId;
-                                anyaPrabhaviLokVisheshName = valueName;
-                                print("id = $valueId --- Name = $valueName");
-                              },
-                              dataModel: vastisarvekshanDropDownDataModel!,
-                              question: "${Statics.getLabel('special')}",
-                              editId: selectedAnyaPrabhaviLokVisheshIDEdit,
-                              selectedValue: selectedAnyaPrabhaviLokVishesh,
-                              onSelectionChanged: (newValue) {
-                                setState(() {
-                                  selectedAnyaPrabhaviLokVishesh = newValue;
-                                });
-                              },
-                            )
-                          : Container(),
                       SizedBox(
                         height: 10,
                       ),
-                      vastisarvekshanDropDownDataModel != null
-                          ? vastisarvekshanDropdown2(
-                              hintText:
-                                  "${Statics.getLabel('prabhavKshetraSelect')}",
-                              filterTypeName: "अन्यप्रभावीलोकंप्रभावक्षेत्र",
-                              onItemSelected: (valueId, valueName, isOther) {
-                                anyaPrabhaviLokPrabhavKshetraId = valueId;
-                                anyaPrabhaviLokPrabhavKshetraName = valueName;
-                                print("id = $valueId --- Name = $valueName");
-                              },
-                              dataModel: vastisarvekshanDropDownDataModel!,
-                              question: "${Statics.getLabel('prabhavKshetra')}",
-                              editId:
-                                  selectedAnyaPrabhaviLokPrabhavKshetraIDEdit,
-                              selectedValue:
-                                  selectedAnyaPrabhaviLokPrabhavKshetra,
-                              onSelectionChanged: (newValue) {
-                                setState(() {
-                                  selectedAnyaPrabhaviLokPrabhavKshetra =
-                                      newValue;
-                                });
-                              },
-                            )
-                          : Container(),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      textControllerField2(
-                        name: "${Statics.getLabel('anyaVisheshMahiti')}",
-                        controller: anyaPrabhaviLokAnyaVisheshMahitiController,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      vastisarvekshanDropDownDataModel != null
-                          ? vastisarvekshanDropdown2(
-                              hintText:
-                                  "${Statics.getLabel('samparkSthitiSelect')}",
-                              filterTypeName: "अन्यप्रभावीलोकंसंपर्कस्थिति",
-                              onItemSelected: (valueId, valueName, isOther) {
-                                anyaPrabhaviLokSamparkStithiId = valueId;
-                                anyaPrabhaviLokSamparkStithiName = valueName;
-                                print("id = $valueId --- Name = $valueName");
-                              },
-                              dataModel: vastisarvekshanDropDownDataModel!,
-                              question: "${Statics.getLabel('samparkStithi')}",
-                              editId:
-                                  selectedAnyaPrabhaviLokSamparkStithiIDEdit,
-                              selectedValue:
-                                  selectedAnyaPrabhaviLokSamparkStithi,
-                              onSelectionChanged: (newValue) {
-                                setState(() {
-                                  selectedAnyaPrabhaviLokSamparkStithi =
-                                      newValue;
-                                });
-                              },
-                            )
-                          : Container(),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      // textControllerField(${Statics.getLabel('anyaVisheshMahiti')}, anyaPrabhaviLokAnyaVisheshMahitiController, context, height: 80),
-                      textControllerField2(
-                        name: "${Statics.getLabel('samparkSootraNaav')}",
-                        controller: anyaPrabhaviLokSamparkSutraNaavController,
-                      ),
-                      textControllerField2(
-                        name: "${Statics.getLabel('samparakSootraDoorbhash')}",
-                        controller:
-                            anyaPrabhaviLokSamparkSutraDoorbhashController,
-                        keyboardType: TextInputType.number,
-                        maxInput: 10,
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black54),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(15)),
+                        ),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width * 1,
+                            child: DataTable(
+                              showCheckboxColumn: false,
+                              headingRowColor: MaterialStatePropertyAll(
+                                  Colors.purple.shade50),
+                              columnSpacing: 1,
+                              headingTextStyle: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87),
+                              columns: [
+                                DataColumn(
+                                    label: Text(
+                                  "${Statics.getLabel('Name')}",
+                                )),
+                                DataColumn(
+                                    label: Text(
+                                  "${Statics.getLabel('special')}",
+                                )),
+                                DataColumn(
+                                    label: Text(
+                                  "${Statics.getLabel('prabhavKshetra')}",
+                                )),
+                              ],
+                              rows: anyaPrabhaviLokDataList
+                                  .asMap()
+                                  .entries
+                                  .where((entry) => entry.value.isactive == 1)
+                                  .map((entry) {
+                                int index = entry.key;
+                                var data = entry.value;
+                                bool isSelected =
+                                    selectedanyaPrabhaviLokRowIndex == index;
+                                return DataRow(
+                                    selected: isSelected,
+                                    color: MaterialStateProperty.resolveWith<
+                                        Color?>(
+                                      (Set<MaterialState> states) {
+                                        if (isSelected)
+                                          return Colors.yellow.shade100;
+                                        return null;
+                                      },
+                                    ),
+                                    onSelectChanged: (bool? selected) {
+                                      if (selected != null && selected) {
+                                        setState(() {
+                                          selectedanyaPrabhaviLokRowIndex =
+                                              index;
+                                        });
+                                      }
+                                    },
+                                    cells: [
+                                      DataCell(Text(data.name ?? "")),
+                                      DataCell(Text(
+                                          data.selectedDropdownValueName3 ??
+                                              "")),
+                                      DataCell(Text(
+                                          data.selectedDropdownValueName4 ??
+                                              "")),
+                                    ]);
+                              }).toList(),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 45, // fixed button height
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.purpleAccent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () {
+                      submitForm();
+                    },
+                    child: Text(
+                      Statics.getLabel('Submit'),
+                      style: const TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Future<Vastisarsajjanshakti?> showSajjanShaktiFormPopup(
+      BuildContext context) async {
+    return await showDialog<Vastisarsajjanshakti>(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return Container(
+                padding: const EdgeInsets.all(16),
+                width: MediaQuery.of(context).size.width * 0.9,
+                height: MediaQuery.of(context).size.height * 0.8,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        Statics.getLabel("sajjanShaktiInfo"),
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.purpleAccent,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+
+                      /// 📝 Name
+                      textControllerField2(
+                        name: Statics.getLabel('Name'),
+                        controller: sajjanShaktiNameController,
+                        fieldHeight: 45,
+                      ),
+
+                      textControllerField2(
+                        name: Statics.getLabel('Address'),
+                        controller: sajjanShaktiAddressController,
+                        maxLines: 4,
+                      ),
+
+                      textControllerField2(
+                        name: Statics.getLabel('doorBhash'),
+                        controller: sajjanShaktiPhoneController,
+                        keyboardType: TextInputType.number,
+                        maxInput: 10,
+                      ),
+
+                      if (vastisarvekshanDropDownDataModel != null)
+                        vastisarvekshanDropdown2(
+                          question: Statics.getLabel('Category'),
+                          dataModel: vastisarvekshanDropDownDataModel!,
+                          filterTypeName: "सज्जन शक्ति श्रेणी",
+                          hintText: Statics.getLabel('Category'),
+                          onItemSelected: (id, value, isOther) {
+                            sajjanShaktiShreniName = value;
+                            sajjanShaktiShreniId = id;
+                          },
+                          selectedValue: sajjanShaktiShreniEditDataId,
+                          onSelectionChanged: (newValue) {
+                            setState(() {
+                              sajjanShaktiShreniEditDataId = newValue;
+                            });
+                          },
+                          editId: sajjanShaktiShreniEditId,
+                        ),
+
+                      if (sajjanShaktiShreniEditDataId?.isOther == 1)
+                        textControllerField2(
+                          name: Statics.getLabel('OtherCategory'),
+                          controller: sajjanShaktiAnyaShreniNameController,
+                        ),
+
+                      textControllerField2(
+                        name: Statics.getLabel('OrganizationName'),
+                        controller: sajjanShaktiSansthecheNaavController,
+                      ),
+
+                      textControllerField2(
+                        name: Statics.getLabel('sansthetKuthalaPadavar'),
+                        controller: sajjanShaktiSansthKuthalyaPadavarController,
+                      ),
+
+                      if (vastisarvekshanDropDownDataModel != null)
+                        vastisarvekshanDropdown2(
+                          question: Statics.getLabel('samparkStithi'),
+                          dataModel: vastisarvekshanDropDownDataModel!,
+                          filterTypeName: "सज्जन शक्ति संपर्क स्थिति",
+                          hintText: Statics.getLabel('samparkStithi'),
+                          onItemSelected: (id, value, isOther) {
+                            sajjanShaktiSamparkStithiName = value;
+                            sajjanShaktiSamparkStithiId = id;
+                          },
+                          selectedValue: sajjanShaktiSamparkStithiEditDataId,
+                          onSelectionChanged: (newValue) {
+                            setState(() {
+                              sajjanShaktiSamparkStithiEditDataId = newValue;
+                            });
+                          },
+                          editId: sajjanShaktiSamparkStithiEditId,
+                        ),
+
+                      if (vastisarvekshanDropDownDataModel != null)
+                        vastisarvekshanDropdown2(
+                          question: Statics.getLabel('special'),
+                          dataModel: vastisarvekshanDropDownDataModel!,
+                          filterTypeName: "सज्जन शक्ति विशेष",
+                          hintText: Statics.getLabel('special'),
+                          onItemSelected: (id, value, isOther) {
+                            sajjanShaktiVisheshName = value;
+                            sajjanShaktiVisheshId = id;
+                          },
+                          selectedValue: sajjanShaktiVisheshEditDataId,
+                          onSelectionChanged: (newValue) {
+                            setState(() {
+                              sajjanShaktiVisheshEditDataId = newValue;
+                            });
+                          },
+                          editId: sajjanShaktiVisheshEditId,
+                        ),
+
+                      if (sajjanShaktiVisheshEditDataId?.isOther == 1)
+                        textControllerField2(
+                          name: Statics.getLabel('otherSpecial'),
+                          controller: sajjanShaktiAnyaVisheshNameController,
+                        ),
+
+                      if (vastisarvekshanDropDownDataModel != null)
+                        vastisarvekshanDropdown2(
+                          question: Statics.getLabel('prabhavKshetra'),
+                          dataModel: vastisarvekshanDropDownDataModel!,
+                          filterTypeName: "सज्जन शक्ति प्रभाव क्षेत्र",
+                          hintText: Statics.getLabel('prabhavKshetra'),
+                          onItemSelected: (id, value, isOther) {
+                            sajjanShaktiPrabhavKeshtraName = value;
+                            sajjanShaktiPrabhavKeshtraId = id;
+                          },
+                          selectedValue: sajjanShaktiPrabhavKeshtraEditDataId,
+                          onSelectionChanged: (newValue) {
+                            setState(() {
+                              sajjanShaktiPrabhavKeshtraEditDataId = newValue;
+                            });
+                          },
+                          editId: sajjanShaktiPrabhavKeshtraEditId,
+                        ),
+
+                      textControllerField2(
+                        name: Statics.getLabel('samparkSootraNaav'),
+                        controller: sajjanShaktiContactPersonNameController,
+                      ),
+
+                      textControllerField2(
+                        name: Statics.getLabel('samparakSootraDoorbhash'),
+                        controller:
+                            sajjanShaktiContactPersonDoorbhashController,
+                        keyboardType: TextInputType.number,
+                        maxInput: 10,
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      // Action Buttons
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          OutlinedButton.icon(
+                            style: OutlinedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              side: BorderSide(color: Colors.grey, width: 1.2),
+                            ),
+                            onPressed: () {
+                              clearSajjanShaktiForm();
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.close,
+                                size: 18, color: Colors.grey),
+                            label: Text(
+                              Statics.getLabel('Cancel'),
+                              style: const TextStyle(
+                                  fontSize: 14, color: Colors.grey),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.purpleAccent,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              elevation: 3,
+                              shadowColor: Colors.purpleAccent.withOpacity(0.4),
+                            ),
+                            onPressed: () {
+                              if (sajjanShaktiType == 1) {
+                                if ((sajjanShaktiShreniEditDataId?.isOther ==
+                                            1 &&
+                                        sajjanShaktiAnyaShreniNameController
+                                                .text ==
+                                            "") ||
+                                    (sajjanShaktiVisheshEditDataId?.isOther ==
+                                            1 &&
+                                        sajjanShaktiAnyaVisheshNameController
+                                                .text ==
+                                            "")) {
+                                  Statics.showToast(
+                                      "${Statics.getLabel('otherInfoValidation')}");
+                                  return;
+                                } else if (sajjanShaktiPhoneController
+                                        .text.length !=
+                                    10) {
+                                  Statics.showToast(
+                                      "${Statics.getLabel('mobileNumberLimit')}");
+                                  return;
+                                }
+                              }
+
+                              Vastisarsajjanshakti newData =
+                                  Vastisarsajjanshakti(
+                                name: sajjanShaktiNameController.text.trim(),
+                                address:
+                                    sajjanShaktiAddressController.text.trim(),
+                                doorabhaash:
+                                    sajjanShaktiPhoneController.text.trim(),
+                                shreneeid: sajjanShaktiShreniId,
+                                selectedDropdownValueName:
+                                    sajjanShaktiShreniName,
+                                otherShreniName:
+                                    sajjanShaktiAnyaShreniNameController.text
+                                        .trim(),
+                                sanstheCheNaav:
+                                    sajjanShaktiSansthecheNaavController.text
+                                        .trim(),
+                                sansthechaKuthalaPadavar:
+                                    sajjanShaktiSansthKuthalyaPadavarController
+                                        .text
+                                        .trim(),
+                                samparksthitiid: sajjanShaktiSamparkStithiId,
+                                selectedDropdownValueName1:
+                                    sajjanShaktiSamparkStithiName,
+                                visheshId: sajjanShaktiVisheshId,
+                                selectedDropdownValueName2:
+                                    sajjanShaktiVisheshName,
+                                otherVisheshName:
+                                    sajjanShaktiAnyaVisheshNameController.text
+                                        .trim(),
+                                prabhaavkshetrid: sajjanShaktiPrabhavKeshtraId,
+                                selectedDropdownValueName3:
+                                    sajjanShaktiPrabhavKeshtraName,
+                                samparkasutranava:
+                                    sajjanShaktiContactPersonNameController.text
+                                        .trim(),
+                                samparkasutraMobileNumber:
+                                    sajjanShaktiContactPersonDoorbhashController
+                                        .text
+                                        .trim(),
+                                isactive: 1,
+                                vastiid: int.parse(selctedLevelId!),
+                                pkid: 0,
+                              );
+
+                              clearSajjanShaktiForm(); // 👈 sab reset
+                              Navigator.pop(context, newData);
+                            },
+                            icon: const Icon(Icons.check,
+                                size: 18, color: Colors.white),
+                            label: Text(
+                              Statics.getLabel('Submit'),
+                              style: const TextStyle(
+                                  fontSize: 14, color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  void clearSajjanShaktiForm() {
+    sajjanShaktiNameController.clear();
+    sajjanShaktiAddressController.clear();
+    sajjanShaktiPhoneController.clear();
+    sajjanShaktiAnyaShreniNameController.clear();
+    sajjanShaktiSansthecheNaavController.clear();
+    sajjanShaktiSansthKuthalyaPadavarController.clear();
+    sajjanShaktiAnyaVisheshNameController.clear();
+    sajjanShaktiContactPersonNameController.clear();
+    sajjanShaktiContactPersonDoorbhashController.clear();
+
+    sajjanShaktiShreniId = null;
+    sajjanShaktiShreniName = null;
+    sajjanShaktiShreniEditDataId = null;
+    sajjanShaktiShreniEditId = null;
+
+    sajjanShaktiSamparkStithiId = null;
+    sajjanShaktiSamparkStithiName = null;
+    sajjanShaktiSamparkStithiEditDataId = null;
+    sajjanShaktiSamparkStithiEditId = null;
+
+    sajjanShaktiVisheshId = null;
+    sajjanShaktiVisheshName = null;
+    sajjanShaktiVisheshEditDataId = null;
+    sajjanShaktiVisheshEditId = null;
+
+    sajjanShaktiPrabhavKeshtraId = null;
+    sajjanShaktiPrabhavKeshtraName = null;
+    sajjanShaktiPrabhavKeshtraEditDataId = null;
+    sajjanShaktiPrabhavKeshtraEditId = null;
+  }
+
+  Future<VastisarAnyaprabhavilokam?> showAnyaPrabhaviLokFormPopup(
+      BuildContext context) async {
+    return await showDialog<VastisarAnyaprabhavilokam>(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return Container(
+                padding: const EdgeInsets.all(16),
+                width: MediaQuery.of(context).size.width * 0.9,
+                height: MediaQuery.of(context).size.height * 0.8,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        Statics.getLabel("anyaPrabhaviLokInfo"),
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.purpleAccent,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+
+                      /// ---- Name ----
+                      textControllerField2(
+                        name: Statics.getLabel('Name'),
+                        controller: anyaPrabhaviLokNaavController,
+                      ),
+
+                      textControllerField2(
+                        name: Statics.getLabel('Address'),
+                        controller: anyaPrabhaviLokAddressController,
+                      ),
+
+                      textControllerField2(
+                        name: Statics.getLabel('doorBhash'),
+                        controller: anyaPrabhaviLokMobileNoController,
+                        keyboardType: TextInputType.number,
+                        maxInput: 10,
+                      ),
+
+                      const SizedBox(height: 10),
+
+                      /// Category / UpShreni
+                      vastisarvekshanDropdown3(
+                        filterTypeName: "श्रेणी",
+                        hintText: Statics.getLabel('otherUpshreni'),
+                        anyaPrabhaviLokShreniId: anyaPrabhaviLokShreniIdEdit,
+                        anyaPrabhaviLokUpShreniId:
+                            anyaPrabhaviLokUpShreniIdEdit,
+                        anyaPrabhaviLokUpShreni1Id:
+                            anyaPrabhaviLokUpShreni1IdEdit,
+                        onValueSelected: (id, name, value) {
+                          anyaPrabhaviLokShreniId = id;
+                          anyaPrabhaviLokShreniName = name;
+                          setState(() {
+                            selectedShreni = value;
+                            selectedUpShreni = null;
+                            selectedUpShreni2 = null;
+                          });
+                        },
+                        onDependentValueSelected: (id, name, value) {
+                          anyaPrabhaviLokUpShreniId = id;
+                          anyaPrabhaviLokUpShreniName = name;
+                          setState(() {
+                            selectedUpShreni = value;
+                            selectedUpShreni2 = null;
+                          });
+                        },
+                        onThirdLevelValueSelected: (id, name, value) {
+                          anyaPrabhaviLokUpShreni1Id = id;
+                          anyaPrabhaviLokUpShreni1Name = name;
+                          setState(() {
+                            selectedUpShreni2 = value;
+                          });
+                        },
+                        viewName: true,
+                      ),
+
+                      if (selectedUpShreni?.isOther == 1)
+                        textControllerField2(
+                          name: Statics.getLabel('otherUpshreni'),
+                          controller: anyaPrabhaviLokAnyaUppshreniController,
+                        ),
+                      if (selectedUpShreni2?.isOther == 1)
+                        textControllerField2(
+                          name: Statics.getLabel('otherUpshreni2'),
+                          controller: anyaPrabhaviLokAnyaUppshreni1Controller,
+                        ),
+
+                      const SizedBox(height: 10),
+
+                      /// Vishesh
+                      vastisarvekshanDropdown2(
+                        hintText: Statics.getLabel('selectVishesh'),
+                        filterTypeName: "अन्यप्रभावीलोकंविशेष",
+                        dataModel: vastisarvekshanDropDownDataModel!,
+                        question: Statics.getLabel('special'),
+                        editId: selectedAnyaPrabhaviLokVisheshIDEdit,
+                        selectedValue: selectedAnyaPrabhaviLokVishesh,
+                        onItemSelected: (id, name, isOther) {
+                          anyaPrabhaviLokVisheshId = id;
+                          anyaPrabhaviLokVisheshName = name;
+                        },
+                        onSelectionChanged: (newValue) {
+                          setState(() {
+                            selectedAnyaPrabhaviLokVishesh = newValue;
+                          });
+                        },
+                      ),
+
+                      const SizedBox(height: 10),
+
+                      /// Prabhav Kshetra
+                      vastisarvekshanDropdown2(
+                        hintText: Statics.getLabel('prabhavKshetraSelect'),
+                        filterTypeName: "अन्यप्रभावीलोकंप्रभावक्षेत्र",
+                        dataModel: vastisarvekshanDropDownDataModel!,
+                        question: Statics.getLabel('prabhavKshetra'),
+                        editId: selectedAnyaPrabhaviLokPrabhavKshetraIDEdit,
+                        selectedValue: selectedAnyaPrabhaviLokPrabhavKshetra,
+                        onItemSelected: (id, name, isOther) {
+                          anyaPrabhaviLokPrabhavKshetraId = id;
+                          anyaPrabhaviLokPrabhavKshetraName = name;
+                        },
+                        onSelectionChanged: (newValue) {
+                          setState(() {
+                            selectedAnyaPrabhaviLokPrabhavKshetra = newValue;
+                          });
+                        },
+                      ),
+
+                      textControllerField2(
+                        name: Statics.getLabel('anyaVisheshMahiti'),
+                        controller: anyaPrabhaviLokAnyaVisheshMahitiController,
+                      ),
+
+                      vastisarvekshanDropdown2(
+                        hintText: Statics.getLabel('samparkSthitiSelect'),
+                        filterTypeName: "अन्यप्रभावीलोकंसंपर्कस्थिति",
+                        dataModel: vastisarvekshanDropDownDataModel!,
+                        question: Statics.getLabel('samparkStithi'),
+                        editId: selectedAnyaPrabhaviLokSamparkStithiIDEdit,
+                        selectedValue: selectedAnyaPrabhaviLokSamparkStithi,
+                        onItemSelected: (id, name, isOther) {
+                          anyaPrabhaviLokSamparkStithiId = id;
+                          anyaPrabhaviLokSamparkStithiName = name;
+                        },
+                        onSelectionChanged: (newValue) {
+                          setState(() {
+                            selectedAnyaPrabhaviLokSamparkStithi = newValue;
+                          });
+                        },
+                      ),
+
+                      textControllerField2(
+                        name: Statics.getLabel('samparkSootraNaav'),
+                        controller: anyaPrabhaviLokSamparkSutraNaavController,
+                      ),
+
+                      textControllerField2(
+                        name: Statics.getLabel('samparakSootraDoorbhash'),
+                        controller:
+                            anyaPrabhaviLokSamparkSutraDoorbhashController,
+                        keyboardType: TextInputType.number,
+                        maxInput: 10,
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      /// Action Buttons
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          OutlinedButton.icon(
+                            onPressed: () {
+                              _clearAnyaPrabhaviLokForm();
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.close,
+                                size: 18, color: Colors.grey),
+                            label: Text(
+                              Statics.getLabel('Cancel'),
+                              style: const TextStyle(color: Colors.grey),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.purpleAccent,
+                            ),
+                            onPressed: () {
+                              if ((selectedUpShreni?.isOther == 1 &&
+                                      anyaPrabhaviLokAnyaUppshreniController
+                                              .text ==
+                                          "") ||
+                                  (selectedUpShreni2?.isOther == 1 &&
+                                      anyaPrabhaviLokAnyaUppshreni1Controller
+                                              .text ==
+                                          "")) {
+                                Statics.showToast(
+                                    "${Statics.getLabel('otherInfoValidation')}");
+                              } else if (anyaPrabhaviLokMobileNoController
+                                      .text.length !=
+                                  10) {
+                                log("anyaPrabhaviLokMobileNoController.text.length  -->> ${anyaPrabhaviLokMobileNoController.text.length}");
+                                Statics.showToast(
+                                    "${Statics.getLabel('mobileNumberLimit')}");
+                              } else if (anyaPrabhaviLokSamparkSutraDoorbhashController
+                                      .text.length !=
+                                  10) {
+                                log("anyaPrabhaviLokSamparkSutraDoorbhashController.text.length  -->> ${anyaPrabhaviLokSamparkSutraDoorbhashController.text.length}");
+                                Statics.showToast(
+                                    "${Statics.getLabel('mobileNumberLimit')}");
+                              } else {
+                                VastisarAnyaprabhavilokam newData =
+                                    VastisarAnyaprabhavilokam(
+                                  name: anyaPrabhaviLokNaavController.text,
+                                  address:
+                                      anyaPrabhaviLokAddressController.text,
+                                  doorabhaash:
+                                      anyaPrabhaviLokMobileNoController.text,
+                                  shreneeid: anyaPrabhaviLokShreniId,
+                                  selectedDropdownValueName:
+                                      anyaPrabhaviLokShreniName,
+                                  upshreneeid: anyaPrabhaviLokUpShreniId,
+                                  selectedDropdownValueName1:
+                                      anyaPrabhaviLokUpShreniName,
+                                  upshreneeid2: anyaPrabhaviLokUpShreni1Id,
+                                  selectedDropdownValueName2:
+                                      anyaPrabhaviLokUpShreni1Name,
+                                  visheshid: anyaPrabhaviLokVisheshId,
+                                  selectedDropdownValueName3:
+                                      anyaPrabhaviLokVisheshName,
+                                  prabhaavkshetrid:
+                                      anyaPrabhaviLokPrabhavKshetraId,
+                                  selectedDropdownValueName4:
+                                      anyaPrabhaviLokPrabhavKshetraName,
+                                  othervishesh:
+                                      anyaPrabhaviLokAnyaVisheshMahitiController
+                                          .text,
+                                  samparksthitiid:
+                                      anyaPrabhaviLokSamparkStithiId,
+                                  selectedDropdownValueName5:
+                                      anyaPrabhaviLokSamparkStithiName,
+                                  samparkasutranav:
+                                      anyaPrabhaviLokSamparkSutraNaavController
+                                          .text,
+                                  samparkaSutraDoorbhash:
+                                      anyaPrabhaviLokSamparkSutraDoorbhashController
+                                          .text,
+                                  pkid: 0,
+                                  anyavisesamahiti:
+                                      anyaPrabhaviLokAnyaVisheshMahitiController
+                                          .text,
+                                  otherupshrenee:
+                                      anyaPrabhaviLokAnyaUppshreniController
+                                          .text,
+                                  otherupshrenee2:
+                                      anyaPrabhaviLokAnyaUppshreni1Controller
+                                          .text,
+                                  isactive: 1,
+                                  vastiid: int.parse(selctedLevelId!),
+                                );
+                                _clearAnyaPrabhaviLokForm(); // clear after submit
+                                Navigator.pop(context, newData);
+                              }
+                            },
+                            icon: const Icon(Icons.check, color: Colors.white),
+                            label: Text(Statics.getLabel('Submit'),
+                                style: const TextStyle(color: Colors.white)),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  /// Helper function to clear form
+  void _clearAnyaPrabhaviLokForm() {
+    anyaPrabhaviLokNaavController.clear();
+    anyaPrabhaviLokAddressController.clear();
+    anyaPrabhaviLokMobileNoController.clear();
+    anyaPrabhaviLokAnyaUppshreniController.clear();
+    anyaPrabhaviLokAnyaUppshreni1Controller.clear();
+    anyaPrabhaviLokAnyaVisheshMahitiController.clear();
+    anyaPrabhaviLokSamparkSutraNaavController.clear();
+    anyaPrabhaviLokSamparkSutraDoorbhashController.clear();
+
+    // reset selected values
+    selectedShreni = null;
+    selectedUpShreni = null;
+    selectedUpShreni2 = null;
+    selectedAnyaPrabhaviLokVishesh = null;
+    selectedAnyaPrabhaviLokPrabhavKshetra = null;
+    selectedAnyaPrabhaviLokSamparkStithi = null;
   }
 
   /// ----------- COMMON FIELD WIDGETS ----------------

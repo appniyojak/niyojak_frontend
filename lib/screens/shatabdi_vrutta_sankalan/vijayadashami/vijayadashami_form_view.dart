@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:niyojak_prod/screens/shatabdi_vrutta_sankalan/vijayadashami/vijaya_dashami_report.dart';
 import 'package:niyojak_prod/widgets/app_drawer.dart';
 import 'package:niyojak_prod/widgets/single_column_row.dart';
 
@@ -12,7 +11,8 @@ import '../../../models/response_model/get_vijaya_dashami_geounit_data.dart';
 import '../../../models/response_model/vasti_up_data_model.dart';
 import '../../../models/response_model/vijayaDashamiInitModel.dart';
 import '../../../providers/bals.dart';
-import 'add_vishishtha_vyakti_form.dart';
+import 'add_mukhya_atithi_form.dart';
+import 'add_vishesh_vyakti.dart';
 
 class VijayadashamiFormView extends StatefulWidget {
   static const String routeName = '/vijayadashami-form-view';
@@ -62,7 +62,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     presentMaleController.addListener(_calculateTotal);
   }
 
-  void clearForm() {
+  Future<void> clearForm() async {
     setState(() {
       // Reset int flags (as per your logic: 2 = default)
       programNirdharitVed = 2;
@@ -113,7 +113,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       selctedLevel = '';
       selctedLevelName = '';
       selctedLevelId = null;
-      utsavKontyaStaravar = null;
+      utsavKontyaStaravar = "1";
 
       // Reset selections
       selectedMukhyaAtithi = null;
@@ -152,6 +152,8 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       averageShakhaCount = "0";
       selectedShakhaaPratinidhitwaVastiIds = null;
 
+      selectedPrabhavi = null;
+      selectedPerson = null;
       // Re-populate base dropdowns
       populatelinkedVibhaagDropdown('');
     });
@@ -400,6 +402,8 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     data = await Statics.getVijayadashamiInitData(
         context, Statics.userDetails["userID"], selctedLevelId);
     print("searchVijayaDashami data ${data?.vastisarsajjanshakti}");
+    selectedPrabhavi = null;
+    selectedPerson = null;
     getVastiUpDataList();
     setState(() {});
   }
@@ -414,7 +418,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     required List<Vastisanyaprabhavi> vastisanyaprabhaviList,
     required void Function(String id, String type, dynamic selectedItem)
         onSubmit,
-    required VoidCallback onAdd, // 👈 Add button ke liye callback
+    required VoidCallback onAdd,
     dynamic preselectedItem,
     String? preselectedType,
   }) async {
@@ -581,13 +585,18 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
 
   List<Vastisarsajjanshakti> selectedSajjanshaktiItems = [];
   List<Vastisanyaprabhavi> selectedAnyaprabhaviItems = [];
+  String? selectedSajjanshaktiItemsIds;
+  String? selectedAnyaprabhaviItemsIds;
   Future<void> showVisheshAtithiSelectionPopup(
     BuildContext context, {
     required List<Vastisarsajjanshakti> vastisarsajjanshaktiList,
     required List<Vastisanyaprabhavi> vastisanyaprabhaviList,
     required dynamic excludedItem,
-    required List<Vastisarsajjanshakti> preselectedSajjanshakti,
-    required List<Vastisanyaprabhavi> preselectedAnyaprabhavi,
+    required String? sajjanshaktiIds,
+    required String? anyaprabhaviIds,
+    required String? selectedType, // 👈 नया parameter
+    required int? selectedMukhyaAtithi, // 👈 नया parameter
+    required VoidCallback onAdd,
     required void Function(
       String sajjanshaktiIds,
       String anyaprabhaviIds,
@@ -596,32 +605,46 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     ) onSubmit,
   }) async {
     final filteredSajjanshakti = vastisarsajjanshaktiList.where((e) {
-      if (excludedItem == null) return true;
-      if (excludedItem is Vastisarsajjanshakti) {
-        return e.pkid != excludedItem.pkid;
+      if (excludedItem != null && excludedItem is Vastisarsajjanshakti) {
+        if (e.pkid == excludedItem.pkid) return false;
       }
+
+      // 👇 अगर selectedType = "sarsajjanshakti" है तो selectedMukhyaAtithi को exclude करना
+      if (selectedType == "sarsajjanshakti" && selectedMukhyaAtithi != null) {
+        if (e.pkid == selectedMukhyaAtithi) return false;
+      }
+
       return true;
     }).toList();
 
     final filteredAnyaprabhavi = vastisanyaprabhaviList.where((e) {
-      if (excludedItem == null) return true;
-      if (excludedItem is Vastisanyaprabhavi) {
-        return e.pkId != excludedItem.pkId;
+      if (excludedItem != null && excludedItem is Vastisanyaprabhavi) {
+        if (e.pkId == excludedItem.pkId) return false;
       }
+
+      // 👇 अगर selectedType = "anyaprabhavi" है तो selectedMukhyaAtithi को exclude करना
+      if (selectedType == "anyaprabhavi" && selectedMukhyaAtithi != null) {
+        if (e.pkId == selectedMukhyaAtithi) return false;
+      }
+
       return true;
     }).toList();
 
-    List<Vastisarsajjanshakti> selectedSajjanshakti =
-        List.of(preselectedSajjanshakti);
-    List<Vastisanyaprabhavi> selectedAnyaprabhavi =
-        List.of(preselectedAnyaprabhavi);
+    /// ✅ Preselect items from comma separated IDs
+    List<Vastisarsajjanshakti> selectedSajjanshakti = [];
+    if (sajjanshaktiIds != null && sajjanshaktiIds.isNotEmpty) {
+      final ids = sajjanshaktiIds.split(",").map((e) => e.trim()).toList();
+      selectedSajjanshakti = filteredSajjanshakti
+          .where((e) => ids.contains(e.pkid.toString()))
+          .toList();
+    }
 
-    if (excludedItem != null) {
-      if (excludedItem is Vastisarsajjanshakti) {
-        selectedSajjanshakti.removeWhere((x) => x.pkid == excludedItem.pkid);
-      } else if (excludedItem is Vastisanyaprabhavi) {
-        selectedAnyaprabhavi.removeWhere((x) => x.pkId == excludedItem.pkId);
-      }
+    List<Vastisanyaprabhavi> selectedAnyaprabhavi = [];
+    if (anyaprabhaviIds != null && anyaprabhaviIds.isNotEmpty) {
+      final ids = anyaprabhaviIds.split(",").map((e) => e.trim()).toList();
+      selectedAnyaprabhavi = filteredAnyaprabhavi
+          .where((e) => ids.contains(e.pkId.toString()))
+          .toList();
     }
 
     await showDialog(
@@ -648,7 +671,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                       children: [
                         Text(
                           Statics.getLabel('selectVIshishthaAtithi'),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
                             color: Colors.purpleAccent,
@@ -678,7 +701,6 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                             ),
                             const Divider(),
 
-                            const SizedBox(height: 6),
                             ...filteredSajjanshakti.map((item) {
                               return CheckboxListTile(
                                 dense: true,
@@ -712,7 +734,6 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                             ),
                             const Divider(),
 
-                            const SizedBox(height: 6),
                             ...filteredAnyaprabhavi.map((item) {
                               return CheckboxListTile(
                                 dense: true,
@@ -736,64 +757,59 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                         ),
                       ),
                     ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.purpleAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            onPressed: () {
+                              String sajIds = selectedSajjanshakti
+                                  .map((e) => e.pkid.toString())
+                                  .join(",");
+                              String anyaIds = selectedAnyaprabhavi
+                                  .map((e) => e.pkId.toString())
+                                  .join(",");
+
+                              onSubmit(sajIds, anyaIds, selectedSajjanshakti,
+                                  selectedAnyaprabhavi);
+
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              Statics.getLabel('Submit'),
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            side: const BorderSide(
+                                color: Colors.purpleAccent, width: 1.5),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 10),
+                          ),
+                          onPressed: onAdd,
+                          child: Text(
+                            Statics.getLabel('addVIshishthaAtithi'),
+                            style: const TextStyle(color: Colors.purpleAccent),
+                          ),
+                        ),
+                      ],
+                    )
                   ],
                 ),
               ),
-              actions: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.purpleAccent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 10),
-                        ),
-                        onPressed: () {
-                          String sajjanshaktiIds = selectedSajjanshakti
-                              .map((e) => e.pkid.toString())
-                              .join(",");
-                          String anyaprabhaviIds = selectedAnyaprabhavi
-                              .map((e) => e.pkId.toString())
-                              .join(",");
-
-                          onSubmit(sajjanshaktiIds, anyaprabhaviIds,
-                              selectedSajjanshakti, selectedAnyaprabhavi);
-
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          Statics.getLabel('Submit'),
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        side: const BorderSide(
-                            color: Colors.purpleAccent, width: 1.5),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 10),
-                      ),
-                      onPressed: () {},
-                      child: Text(
-                        Statics.getLabel('addVIshishthaAtithi'),
-                        style: const TextStyle(color: Colors.purpleAccent),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
             );
           },
         );
@@ -1677,14 +1693,14 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
           "${Statics.getLabel('vijayaDashamiUtsav')}",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.of(context)
-                    .pushNamed(VijayadashamiFormReport.routeName);
-              },
-              icon: Icon(Icons.document_scanner_outlined))
-        ],
+        // actions: [
+        //   IconButton(
+        //       onPressed: () {
+        //         Navigator.of(context)
+        //             .pushNamed(VijayadashamiFormReport.routeName);
+        //       },
+        //       icon: Icon(Icons.document_scanner_outlined))
+        // ],
       ),
       drawer: AppDrawer(),
       body: Form(
@@ -1910,36 +1926,37 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                                 });
                               },
                             ),
-                          // if (_linkedNagar != null && _linkedNagar!.length > 0)
-                          //   SizedBox(
-                          //     height: 10,
-                          //   ),
-                          // if (_linkedmandal != null && _linkedmandal!.length > 0)
-                          //   DropdownButtonFormField(
-                          //     decoration: InputDecoration(
-                          //         labelText: Statics.getLabel('Mandal')),
-                          //     isExpanded: true,
-                          //     value: _linkedmandalValue == ""
-                          //         ? null
-                          //         : _linkedmandalValue,
-                          //     items: _linkedmandal!
-                          //         .map((bg) => DropdownMenuItem(
-                          //             value: bg.geoUnitID.toString(),
-                          //             child: Text(bg.name!)))
-                          //         .toList(),
-                          //     onChanged: (value) {
-                          //       final selectedItem = _linkedmandal!.firstWhere(
-                          //           (bg) => bg.geoUnitID.toString() == value);
-                          //       setState(() {
-                          //         selctedLevelName = selectedItem.name ?? "";
-                          //         selctedLevel = 'Mandal';
-                          //         selctedLevelId = value;
-                          //
-                          //         _linkedmandalValue = value;
-                          //         populatelinkedGraamDropdown(value!);
-                          //       });
-                          //     },
-                          //   ),
+                          if (_linkedNagar != null && _linkedNagar!.length > 0)
+                            SizedBox(
+                              height: 10,
+                            ),
+                          if (_linkedmandal != null &&
+                              _linkedmandal!.length > 0)
+                            DropdownButtonFormField(
+                              decoration: InputDecoration(
+                                  labelText: Statics.getLabel('Mandal')),
+                              isExpanded: true,
+                              value: _linkedmandalValue == ""
+                                  ? null
+                                  : _linkedmandalValue,
+                              items: _linkedmandal!
+                                  .map((bg) => DropdownMenuItem(
+                                      value: bg.geoUnitID.toString(),
+                                      child: Text(bg.name!)))
+                                  .toList(),
+                              onChanged: (value) {
+                                final selectedItem = _linkedmandal!.firstWhere(
+                                    (bg) => bg.geoUnitID.toString() == value);
+                                setState(() {
+                                  selctedLevelName = selectedItem.name ?? "";
+                                  selctedLevel = 'Mandal';
+                                  selctedLevelId = value;
+
+                                  _linkedmandalValue = value;
+                                  populatelinkedGraamDropdown(value!);
+                                });
+                              },
+                            ),
                           // if (_linkedmandal != null && _linkedmandal!.length > 0)
                           //   SizedBox(
                           //     height: 10,
@@ -2162,25 +2179,20 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                     children: [
                       InkWell(
                         onTap: () {
+                          final list = data?.vastisarsajjanshakti ?? [];
+                          final preselected =
+                              list.any((e) => e.pkid == selectedMukhyaAtithi)
+                                  ? list.firstWhere(
+                                      (e) => e.pkid == selectedMukhyaAtithi)
+                                  : null;
+
                           showMukhyaAtithiSelectionPopup(
                             context,
                             vastisarsajjanshaktiList:
                                 data?.vastisarsajjanshakti ?? [],
                             vastisanyaprabhaviList:
                                 data?.vastisanyaprabhavi ?? [],
-                            preselectedItem: selectedMukhyaAtithi != null
-                                ? (selectedType == "sarsajjanshakti"
-                                    ? (data?.vastisarsajjanshakti ?? [])
-                                        .firstWhere(
-                                        (e) => e.pkid == selectedMukhyaAtithi,
-                                        // orElse: () => null,
-                                      )
-                                    : (data?.vastisanyaprabhavi ?? [])
-                                        .firstWhere(
-                                        (e) => e.pkId == selectedMukhyaAtithi,
-                                        // orElse: () => null,
-                                      ))
-                                : null,
+                            preselectedItem: preselected,
                             preselectedType: selectedType,
                             onSubmit: (id, type, selectedItem) {
                               setState(() {
@@ -2199,10 +2211,12 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                               });
                             },
                             onAdd: () {
-                              Navigator.of(context).pushReplacementNamed(
-                                AddVIshishthaAtithiPage.routeName,
-                                arguments: _linkedNagar,
-                              );
+                              Navigator.of(context)
+                                  .pushReplacementNamed(
+                                    AddMukhyaAtithi.routeName,
+                                    arguments: _linkedNagar,
+                                  )
+                                  .then((value) => searchVijayaDashami());
                             },
                           );
                         },
@@ -2296,25 +2310,31 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                     children: [
                       InkWell(
                         onTap: () async {
-                          await showVisheshAtithiSelectionPopup(
-                            context,
-                            vastisarsajjanshaktiList:
-                                data?.vastisarsajjanshakti ?? [],
-                            vastisanyaprabhaviList:
-                                data?.vastisanyaprabhavi ?? [],
-                            excludedItem: selectedPerson ?? selectedPrabhavi,
-                            preselectedSajjanshakti:
-                                selectedSajjanshaktiItems, // 👈 already selected list bhej do
-                            preselectedAnyaprabhavi:
-                                selectedAnyaprabhaviItems, // 👈 already selected list bhej do
-                            onSubmit: (sajjanshaktiIds, anyaprabhaviIds,
-                                sajjanList, anyaprabhaviList) {
-                              setState(() {
-                                selectedSajjanshaktiItems = sajjanList;
-                                selectedAnyaprabhaviItems = anyaprabhaviList;
-                              });
-                            },
-                          );
+                          await showVisheshAtithiSelectionPopup(context,
+                              vastisarsajjanshaktiList:
+                                  data?.vastisarsajjanshakti ?? [],
+                              vastisanyaprabhaviList:
+                                  data?.vastisanyaprabhavi ?? [],
+                              excludedItem: null,
+                              sajjanshaktiIds: selectedSajjanshaktiItemsIds,
+                              anyaprabhaviIds: selectedAnyaprabhaviItemsIds,
+                              onSubmit: (sajIds, anyaIds, sajList, anyaList) {
+                            setState(() {
+                              selectedSajjanshaktiItemsIds = sajIds;
+                              selectedAnyaprabhaviItemsIds = anyaIds;
+                              selectedSajjanshaktiItems = sajList;
+                              selectedAnyaprabhaviItems = anyaList;
+                            });
+                          }, onAdd: () {
+                            Navigator.of(context)
+                                .pushReplacementNamed(
+                                  AddVishisthaAtithi.routeName,
+                                  arguments: _linkedNagar,
+                                )
+                                .then((value) => searchVijayaDashami());
+                          },
+                              selectedMukhyaAtithi: selectedMukhyaAtithi,
+                              selectedType: selectedType);
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 5),
@@ -3048,12 +3068,12 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                   ),
                   SingleColumnRow(
                     txtString:
-                        "${Statics.getLabel('pratinidhitva')} ${Statics.getLabel('Shaakhaa')} ",
+                        " ${Statics.getLabel('Shaakhaa')} ${Statics.getLabel('pratinidhitva')}",
                     value: "$selectedShakhaCount",
                   ),
                   SingleColumnRow(
                     txtString:
-                        "${Statics.getLabel('average')} ${Statics.getLabel('Shaakhaa')} ${Statics.getLabel('upastithi')} ",
+                        " ${Statics.getLabel('Shaakhaa')} ${Statics.getLabel('average')} ${Statics.getLabel('upastithi')} ",
                     value: "$averageShakhaCount %",
                   ),
                 ],
@@ -3145,12 +3165,12 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                   ),
                   SingleColumnRow(
                     txtString:
-                        "${Statics.getLabel('pratinidhitva')} ${Statics.getLabel('SaaptaahikMilan')} ",
+                        " ${Statics.getLabel('SaaptaahikMilan')} ${Statics.getLabel('pratinidhitva')} ",
                     value: "$selectedMilanCount",
                   ),
                   SingleColumnRow(
                     txtString:
-                        "${Statics.getLabel('average')} ${Statics.getLabel('SaaptaahikMilan')} ${Statics.getLabel('upastithi')} ",
+                        " ${Statics.getLabel('SaaptaahikMilan')} ${Statics.getLabel('average')} ${Statics.getLabel('upastithi')} ",
                     value: "$averageMilanCount %",
                   ),
                 ],
@@ -3248,12 +3268,12 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                   ),
                   SingleColumnRow(
                     txtString:
-                        "${Statics.getLabel('pratinidhitva')} ${Statics.getLabel('milanMandali')} ",
+                        " ${Statics.getLabel('milanMandali')} ${Statics.getLabel('pratinidhitva')} ",
                     value: "$selectedSanghaMandaliCount",
                   ),
                   SingleColumnRow(
                     txtString:
-                        "${Statics.getLabel('average')} ${Statics.getLabel('milanMandali')} ${Statics.getLabel('upastithi')} ",
+                        "${Statics.getLabel('milanMandali')}  ${Statics.getLabel('average')}  ${Statics.getLabel('upastithi')} ",
                     value: "$averageSanghaMandaliCount %",
                   ),
                 ],
@@ -3266,8 +3286,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                   children: [
                     // ✅ Total
                     SingleColumnRow(
-                      txtString:
-                          "${Statics.getLabel('Total')} ${Statics.getLabel('milanMandali')} ",
+                      txtString: "${Statics.getLabel('Total')} ",
                       value:
                           "${totalShakhaCount + totalMilanCount + totalSanghaMandaliCount}",
                     ),
@@ -3275,7 +3294,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                     // ✅ Selected
                     SingleColumnRow(
                       txtString:
-                          "${Statics.getLabel('pratinidhitva')} ${Statics.getLabel('milanMandali')} ",
+                          "${Statics.getLabel('Total')}  ${Statics.getLabel('pratinidhitva')}",
                       value:
                           "${selectedShakhaCount + selectedMilanCount + selectedSanghaMandaliCount}",
                     ),
@@ -3283,7 +3302,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                     // ✅ Average (calculated from above two)
                     SingleColumnRow(
                       txtString:
-                          "${Statics.getLabel('average')} ${Statics.getLabel('milanMandali')} ${Statics.getLabel('upastithi')} ",
+                          "${Statics.getLabel('Total')}  ${Statics.getLabel('average')} ",
                       value: (() {
                         final total = totalShakhaCount +
                             totalMilanCount +
@@ -3580,7 +3599,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
     log("Form Data (JSON):\n$formattedJson");
     await Statics.saveVijayaDashamiUtsavData(context, formData);
-    clearForm();
+    getFormData();
   }
 
   GetVijayadashamiDataByGeoUnitModel? getVijayaDashamiUtsavDataByGeounitData;
@@ -3635,6 +3654,41 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       //     ? "sarsajjanshakti"
       //     : "anyaprabhavi";
 
+      selectedSajjanshaktiItemsIds = utsav.visititAtithiSajjanShaktiids;
+      // Sajjan Shakti
+      if (selectedSajjanshaktiItemsIds != null &&
+          selectedSajjanshaktiItemsIds!.isNotEmpty &&
+          data?.vastisarsajjanshakti != null) {
+        final idSet = selectedSajjanshaktiItemsIds!
+            .split(",")
+            .map((e) => e.trim())
+            .where((e) => e.isNotEmpty)
+            .toSet(); // remove duplicates
+
+        selectedSajjanshaktiItems = data!.vastisarsajjanshakti!
+            .where((item) => idSet.contains(item.pkid.toString()))
+            .toList();
+      } else {
+        selectedSajjanshaktiItems = [];
+      }
+      selectedAnyaprabhaviItemsIds = utsav.visititAtithiAnyaprabhaViLokamids;
+      // Anya Prabhavi
+      if (selectedAnyaprabhaviItemsIds != null &&
+          selectedAnyaprabhaviItemsIds!.isNotEmpty &&
+          data?.vastisanyaprabhavi != null) {
+        final idSet = selectedAnyaprabhaviItemsIds!
+            .split(",")
+            .map((e) => e.trim())
+            .where((e) => e.isNotEmpty)
+            .toSet();
+
+        selectedAnyaprabhaviItems = data!.vastisanyaprabhavi!
+            .where((item) => idSet.contains(item.pkId.toString()))
+            .toList();
+      } else {
+        selectedAnyaprabhaviItems = [];
+      }
+
       selectedMukhyaAtithi = utsav.mukhyaAtithiId;
       selectedType = utsav.mukhyaAtithiIsSajjanShakti == 1
           ? "sarsajjanshakti"
@@ -3646,26 +3700,106 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
         );
         selectedPrabhavi = null;
       } else {
-        selectedPrabhavi = (data?.vastisanyaprabhavi ?? []).firstWhere(
-          (e) => e.pkId == selectedMukhyaAtithi,
-        );
+        selectedPrabhavi = (data?.vastisanyaprabhavi ?? [])
+                .where((e) => e.pkId == selectedMukhyaAtithi)
+                .toList()
+                .isNotEmpty
+            ? (data?.vastisanyaprabhavi ?? [])
+                .firstWhere((e) => e.pkId == selectedMukhyaAtithi)
+            : null;
+
         selectedPerson = null;
       }
-
+//============================================   bhougolik pratinidhitwa =================================================================
       selectedBhougolikPratinidhitwaVastiIds =
           utsav.bhougolikPratinidhatvaIds ?? '';
+
+      if (selectedBhougolikPratinidhitwaVastiIds != null &&
+          selectedBhougolikPratinidhitwaVastiIds!.isNotEmpty &&
+          data?.vastimandallist != null) {
+        final idSet = selectedBhougolikPratinidhitwaVastiIds!
+            .split(",")
+            .map((e) => e.trim())
+            .where((e) => e.isNotEmpty)
+            .toSet();
+
+        checkboxGraamVastiSelectedItems = data!.vastimandallist!
+            .where((item) => idSet.contains(item.geoUnitID.toString()))
+            .toList();
+      } else {
+        checkboxGraamVastiSelectedItems = [];
+      }
+      selectedVastiCount = utsav.bhougolikPratinidhatvaCount ?? 0;
       selectedVastiCount = utsav.bhougolikPratinidhatvaCount ?? 0;
 
-      selectedShakhaaPratinidhitwaVastiIds = utsav.shakhaPratinidhatvaIds ?? '';
-      selectedShakhaCount = utsav.shakhaPratinidhatvaCount ?? 0;
+//============================================   SHAKHAA pratinidhitwa =================================================================
 
+      selectedShakhaaPratinidhitwaVastiIds = utsav.shakhaPratinidhatvaIds ?? '';
+      if (selectedShakhaaPratinidhitwaVastiIds != null &&
+          selectedShakhaaPratinidhitwaVastiIds!.isNotEmpty &&
+          data?.shakhaalist != null) {
+        final idSet = selectedShakhaaPratinidhitwaVastiIds!
+            .split(",")
+            .map((e) => e.trim())
+            .where((e) => e.isNotEmpty)
+            .toSet();
+
+        checkboxShakhaSelectedItems = data!.shakhaalist!
+            .where((item) => idSet.contains(item.geoUnitID.toString()))
+            .toList();
+      } else {
+        checkboxShakhaSelectedItems = [];
+      }
+      selectedShakhaCount = utsav.shakhaPratinidhatvaCount ?? 0;
+//============================================   MILAN pratinidhitwa =================================================================
       selectedMilanPratinidhitwaVastiIds = utsav.milanPratinidhatvaIds ?? '';
+      if (selectedMilanPratinidhitwaVastiIds != null &&
+          selectedMilanPratinidhitwaVastiIds!.isNotEmpty &&
+          data?.shakhaalist != null) {
+        final idSet = selectedMilanPratinidhitwaVastiIds!
+            .split(",")
+            .map((e) => e.trim())
+            .where((e) => e.isNotEmpty)
+            .toSet();
+
+        checkboxMilanSelectedItems = data!.shakhaalist!
+            .where((item) => idSet.contains(item.geoUnitID.toString()))
+            .toList();
+      } else {
+        checkboxMilanSelectedItems = [];
+      }
+
       selectedMilanCount = utsav.milanPratinidhatvaCount ?? 0;
+//============================================   MASIKMILAN SANGHA MANDALI  pratinidhitwa =================================================================
 
       selectedSanghaMandaliPratinidhitwaVastiIds =
           utsav.manasikSanghMandaliPratinidhatvaIds ?? '';
+      if (selectedSanghaMandaliPratinidhitwaVastiIds != null &&
+          selectedSanghaMandaliPratinidhitwaVastiIds!.isNotEmpty &&
+          data?.shakhaalist != null) {
+        final idSet = selectedSanghaMandaliPratinidhitwaVastiIds!
+            .split(",")
+            .map((e) => e.trim())
+            .where((e) => e.isNotEmpty)
+            .toSet();
+
+        checkboxSanghaMandaliSelectedItems = data!.shakhaalist!
+            .where((item) => idSet.contains(item.geoUnitID.toString()))
+            .toList();
+      } else {
+        checkboxSanghaMandaliSelectedItems = [];
+      }
+
       selectedSanghaMandaliCount =
           utsav.manasikSanghMandaliPratinidhatvaCount ?? 0;
+      totalVastiCount = utsav.bhougolikEkunvasti ?? 0;
+      totalShakhaCount = utsav.shakhaPratinidhatvaEkun ?? 0;
+      totalMilanCount = utsav.milanPratinidhatvaEkun ?? 0;
+      totalSanghaMandaliCount = utsav.manasikSanghMandaliPratinidhatvaEkun ?? 0;
+      averageShakhaCount = utsav.shakhaPratinidhatvaSahasari.toString();
+      averageMilanCount = utsav.milanPratinidhatvaSahasari.toString();
+      averageSanghaMandaliCount =
+          utsav.manasikSanghMandaliPratinidhatvaSahasari.toString();
     });
   }
 }

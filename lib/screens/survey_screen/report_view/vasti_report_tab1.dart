@@ -4577,6 +4577,99 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
     );
   }
 
+  // List<Widget> _buildGroupedTables(
+  //     List<UpasanaSthal> list, BuildContext context) {
+  //   // Group by 'prakar'
+  //   Map<String, List<UpasanaSthal>> grouped = {};
+  //   for (var item in list) {
+  //     String key = item.prakar.toString();
+  //     grouped.putIfAbsent(key, () => []).add(item);
+  //   }
+  //
+  //   double screenWidth = MediaQuery.of(context).size.width;
+  //   bool isTablet = screenWidth > 600;
+  //   double tableHeight = isTablet ? 400 : 300;
+  //   double fontSize = isTablet ? 18 : 14;
+  //   double headingFontSize = isTablet ? 20 : 16;
+  //   EdgeInsets containerPadding =
+  //       EdgeInsets.symmetric(horizontal: isTablet ? 16 : 8);
+  //
+  //   return grouped.entries.map((entry) {
+  //     return Padding(
+  //       padding: const EdgeInsets.symmetric(vertical: 10.0),
+  //       child: Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           SizedBox(height: 10),
+  //           Padding(
+  //             padding: containerPadding,
+  //             child: Text(
+  //               '${Statics.getLabel('SelectFrequency')} : ${entry.key == "" ? Statics.getLabel('NotSelected') : entry.key}',
+  //               style: TextStyle(
+  //                 fontSize: headingFontSize,
+  //                 fontWeight: FontWeight.bold,
+  //                 color: Colors.black,
+  //               ),
+  //             ),
+  //           ),
+  //           SizedBox(height: 10),
+  //           Container(
+  //             margin: containerPadding,
+  //             decoration: BoxDecoration(
+  //               border: Border.all(color: Colors.grey.shade300),
+  //               borderRadius: BorderRadius.circular(8),
+  //             ),
+  //             child: SingleChildScrollView(
+  //               scrollDirection: Axis.horizontal,
+  //               child: SizedBox(
+  //                 height: tableHeight,
+  //                 child: DataTable(
+  //                   headingRowColor: MaterialStateProperty.resolveWith(
+  //                     (states) => Colors.purpleAccent[200],
+  //                   ),
+  //                   headingTextStyle: TextStyle(
+  //                     color: Colors.white,
+  //                     fontWeight: FontWeight.bold,
+  //                     fontSize: fontSize,
+  //                   ),
+  //                   dataTextStyle: TextStyle(
+  //                     fontSize: fontSize,
+  //                   ),
+  //                   columns: [
+  //                     DataColumn(
+  //                         label: Center(
+  //                             child:
+  //                                 Text("${Statics.getLabel('UpasanaSthal')}"))),
+  //                     DataColumn(
+  //                         label: Center(
+  //                             child: Text(
+  //                                 "${Statics.getLabel('TotalKaaryakartaaCount')}"))),
+  //                     DataColumn(
+  //                         label: Center(
+  //                             child:
+  //                                 Text("${Statics.getLabel('howManyVasti')}"))),
+  //                   ],
+  //                   rows: entry.value.map((item) {
+  //                     return DataRow(
+  //                       cells: [
+  //                         DataCell(
+  //                             Center(child: Text(item.upaasanasthal ?? ''))),
+  //                         DataCell(Center(child: Text(item.tot.toString()))),
+  //                         DataCell(
+  //                             Center(child: Text(item.vasticnt.toString()))),
+  //                       ],
+  //                     );
+  //                   }).toList(),
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //           // SizedBox(height: 20),
+  //         ],
+  //       ),
+  //     );
+  //   }).toList();
+  // }
   List<Widget> _buildGroupedTables(
       List<UpasanaSthal> list, BuildContext context) {
     // Group by 'prakar'
@@ -4594,7 +4687,10 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
     EdgeInsets containerPadding =
         EdgeInsets.symmetric(horizontal: isTablet ? 16 : 8);
 
-    return grouped.entries.map((entry) {
+    return grouped.entries
+        // ✅ Only keep "अधिकृत" and "अनधिकृत"
+        .where((entry) => entry.key == "अधिकृत" || entry.key == "अनाधिकृत")
+        .map((entry) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 10.0),
         child: Column(
@@ -4664,7 +4760,6 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                 ),
               ),
             ),
-            // SizedBox(height: 20),
           ],
         ),
       );

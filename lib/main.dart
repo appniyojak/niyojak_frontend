@@ -28,7 +28,8 @@ import 'package:niyojak_prod/screens/levels_update_module/update_master_data.dar
 import 'package:niyojak_prod/screens/nirikshan_baithak_vrutta.dart';
 import 'package:niyojak_prod/screens/sankalit_data_name.dart';
 import 'package:niyojak_prod/screens/search_sankalp_screen.dart';
-import 'package:niyojak_prod/screens/shatabdi_vrutta_sankalan/vijayadashami/add_vishishtha_vyakti_form.dart';
+import 'package:niyojak_prod/screens/shatabdi_vrutta_sankalan/vijayadashami/add_mukhya_atithi_form.dart';
+import 'package:niyojak_prod/screens/shatabdi_vrutta_sankalan/vijayadashami/add_vishesh_vyakti.dart';
 import 'package:niyojak_prod/screens/shatabdi_vrutta_sankalan/vijayadashami/vijaya_dashami_report.dart';
 // import 'package:niyojak_prod/screens/shatabdi_vrutta_sankalan/gruh_Sampark_abhiyan/gruh_sampark_abhiyan_view.dart';
 import 'package:niyojak_prod/screens/survey_screen/mandal_reports_tabs.dart';
@@ -329,7 +330,8 @@ class NiyojakAppState extends State<NiyojakApp> {
         UpdateMasterDataScreen.routeName: (ctx) => UpdateMasterDataScreen(),
         TabScreen.routeName: (ctx) => TabScreen(),
         VastiSurveyFormScreen.routeName: (ctx) => VastiSurveyFormScreen(),
-        AddVIshishthaAtithiPage.routeName: (ctx) => AddVIshishthaAtithiPage(),
+        AddMukhyaAtithi.routeName: (ctx) => AddMukhyaAtithi(),
+        AddVishisthaAtithi.routeName: (ctx) => AddVishisthaAtithi(),
         VastiSurveyReportTab1.routeName: (ctx) => VastiSurveyReportTab1(),
         VastiSurveyReportTab2.routeName: (ctx) => VastiSurveyReportTab2(),
         MandalSurveyFormScreen.routeName: (ctx) => MandalSurveyFormScreen(),

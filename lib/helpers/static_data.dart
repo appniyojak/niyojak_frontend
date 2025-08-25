@@ -165,6 +165,8 @@ const String urlGetJoinRSSGridForApp = baseUrlAPI + '/GetJoinRSSGridForApp';
 const String urlSaveJoinRSSForApp = baseUrlAPI + '/SaveJoinRSSForApp';
 const String saveupdatevijayadashamiutsav =
     baseUrlAPI + '/saveupdatevijayadashamiutsav';
+const String savesajjanskhatianyapravbhavilok =
+    baseUrlAPI + '/savesajjanskhatianyapravbhavilok';
 const String getvijayadashamiutsavbyid =
     baseUrlAPI + '/getvijayadashamiutsavbyid';
 const String urlGetJoinRSSDataForApp = baseUrlAPI + '/GetJoinRSSDataForApp';
@@ -3153,6 +3155,32 @@ Future<void> saveVijayaDashamiUtsavData(
     Uri.parse(saveupdatevijayadashamiutsav),
     headers: jHeaders,
     body: jsonEncode(inputJson), // ✅ Encode here
+  );
+
+  print("Response: ${response.body}");
+  print("response.statusCode: ${response.statusCode}");
+
+  Navigator.of(context, rootNavigator: true).pop();
+
+  if (response.statusCode == 200) {
+    Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+  } else {
+    print("Error: ${response.statusCode} - ${response.body}");
+  }
+}
+
+Future<void> saveVishishthaAtithiData(
+    BuildContext context, Map<String, dynamic> inputJson) async {
+  showLoaderDialog(context);
+  Map<String, String> jHeaders = {
+    'Content-Type': 'application/json',
+    'Accept': '*/*'
+  };
+
+  var response = await http.post(
+    Uri.parse(savesajjanskhatianyapravbhavilok),
+    headers: jHeaders,
+    body: jsonEncode(inputJson),
   );
 
   print("Response: ${response.body}");

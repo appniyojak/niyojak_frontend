@@ -5463,7 +5463,11 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           return;
                         }
                         print("8");
-
+                        if (sarpanchDoorbhasController.text.length != 10) {
+                          Statics.showToast(
+                              "${Statics.getLabel('mobileNumberLimit')}");
+                          return;
+                        }
                         submitStep1Form();
                       } else {
                         showDialog(
