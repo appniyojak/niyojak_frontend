@@ -1498,7 +1498,7 @@ Map<String, String> resMarathi = {
   'vastiGramValidation': 'वस्ती किंवा ग्राम निवडा',
   'mandalValidation': 'मंडळ  निवडा',
   'sanghakarya': 'संघ कार्य',
-  'vastiGramNivda': 'वस्ती/ग्राम निवाडा',
+  'vastiGramNivda': 'वस्ती/ग्राम निवडा',
 
   // ===================   VASTI SURVEY FORM ===================================================
 

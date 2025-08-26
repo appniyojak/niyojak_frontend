@@ -8551,9 +8551,12 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         controller: vastitSajarHonareSanAyojakNameController,
                         height: 50),
                     textControllerField2(
-                        name: "${Statics.getLabel('aayojakSamparkSootra')}",
-                        controller: vastitSajarHonareSanAyojakSamparkController,
-                        height: 50),
+                      name: "${Statics.getLabel('aayojakSamparkSootra')}",
+                      controller: vastitSajarHonareSanAyojakSamparkController,
+                      height: 50,
+                      keyboardType: TextInputType.number,
+                      maxInput: 10,
+                    ),
                     const SizedBox(height: 10),
                   ],
                 ),
@@ -8716,26 +8719,29 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     ),
                     const SizedBox(height: 10),
                     if (selectedSamajikKaryakramName == "अन्य")
-                      textControllerField(
-                          "${Statics.getLabel('otherEnter')}",
-                          vastitSajarHonareSamajikKaryakramAnya1Controller,
-                          context,
+                      textControllerField2(
+                          name: "${Statics.getLabel('otherEnter')}",
+                          controller:
+                              vastitSajarHonareSamajikKaryakramAnya1Controller,
                           height: 50),
-                    textControllerField(
-                        "${Statics.getLabel('aayojakSansthachiNave')}",
-                        vastitSajarHonareSamajikKaryakramAyojakSansthaNameController,
-                        context,
+                    textControllerField2(
+                        name: "${Statics.getLabel('aayojakSansthachiNave')}",
+                        controller:
+                            vastitSajarHonareSamajikKaryakramAyojakSansthaNameController,
                         height: 50),
-                    textControllerField(
-                        " ${Statics.getLabel('aayojakNaav')}",
-                        vastitSajarHonareSamajikKaryakramAyojakNameController,
-                        context,
+                    textControllerField2(
+                        name: " ${Statics.getLabel('aayojakNaav')}",
+                        controller:
+                            vastitSajarHonareSamajikKaryakramAyojakNameController,
                         height: 80),
-                    textControllerField(
-                        "${Statics.getLabel('aayojakSamparkSootra')}",
-                        vastitSajarHonareSamajikKaryakramAyojakSamparkController,
-                        context,
-                        height: 50),
+                    textControllerField2(
+                      name: "${Statics.getLabel('aayojakSamparkSootra')}",
+                      controller:
+                          vastitSajarHonareSamajikKaryakramAyojakSamparkController,
+                      height: 50,
+                      keyboardType: TextInputType.number,
+                      maxInput: 10,
+                    ),
                     const SizedBox(height: 10),
                   ],
                 ),

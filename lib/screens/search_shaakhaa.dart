@@ -485,7 +485,7 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
           content: Text(strInput),
           actions: <Widget>[
             TextButton(
-              child: Text('Close'),
+              child: Text('bandKara'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
