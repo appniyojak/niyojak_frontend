@@ -10,7 +10,6 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import '../helpers/static_data.dart' as Statics;
 import '../providers/bals.dart';
 import '../providers/swayamsevak_provider.dart';
-import '../widgets/legend.dart';
 
 enum SankalpAadhaarEnum { Kaaryakartaa, Shaakhaa }
 
@@ -1092,336 +1091,296 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
                         height: 10,
                       ),
 
-//===========================   OLD LOGIC =================================================================================
-//                       CheckboxListTile(
-//                         contentPadding: EdgeInsets.symmetric(horizontal: 0),
-//                         controlAffinity: ListTileControlAffinity.leading,
-//                         title: Text(Statics.getLabel('IsSankalpit'),
-//                             style: TextStyle(fontSize: 15)),
-//                         checkColor: Colors.white,
-//                         activeColor: Colors.purple,
-//                         value: _isSankalpit,
-//                         onChanged: (value) {
-//                           setState(() {
-//                             _isSankalpit = value!;
-//                           });
-//                         },
-//                       ),
-//                       SizedBox(
-//                         height: 10,
-//                       ),
-//
-//                       if (_isSankalpit == true)
-//                         Column(
-//                           children: [
-//                             Text(Statics.getLabel('SankalpAadhaar'),
-//                                 style: TextStyle(
-//                                     decoration: TextDecoration.underline)),
-//                             RadioListTile<SankalpAadhaarEnum>(
-//                               title: Text(Statics.getLabel(
-//                                   'SankalpAadhaarKaaryakartaa')),
-//                               value: SankalpAadhaarEnum.Kaaryakartaa,
-//                               groupValue: _sankalpAadhaarEnum,
-//                               onChanged: (SankalpAadhaarEnum? value) {
-//                                 setState(() {
-//                                   _sankalpAadhaarEnum = value!;
-//                                 });
-//                               },
-//                             ),
-//                             if (_sankalpAadhaarEnum
-//                                     .toString()
-//                                     .split('.')
-//                                     .last ==
-//                                 'Kaaryakartaa')
-//                               Row(
-//                                 children: [
-//                                   Container(
-//                                     width:
-//                                         Statics.getDeviceSize(context).width *
-//                                             0.63,
-//                                     child: TypeAheadField(
-//                                       controller:
-//                                           _sankalpAadhaarSwayamsevakCtrl,
-//                                       builder:
-//                                           (context, controller, focusNode) {
-//                                         return TextField(
-//                                             controller: controller,
-//                                             focusNode: focusNode,
-//                                             decoration: InputDecoration(
-//                                               isDense: true,
-//                                               border: UnderlineInputBorder(),
-//                                               labelText: Statics.getLabel(
-//                                                   'SankalpAadhaarKaaryakartaa'),
-//                                             ));
-//                                       },
-//                                       // textFieldConfiguration:
-//                                       //     TextFieldConfiguration(
-//                                       //         controller:
-//                                       //             this._sankalpAadhaarSwayamsevakCtrl,
-//                                       //         decoration: InputDecoration(
-//                                       //             labelText: Statics.getLabel(
-//                                       //                 'SankalpAadhaarKaaryakartaa'))),
-//
-//                                       suggestionsCallback: (pattern) {
-//                                         this._sankalpAadhaarSwayamsevakValue =
-//                                             "";
-//                                         return populateSankalpAadhaarSwayamsevak(
-//                                             _bhaagValue!, pattern);
-//                                       },
-//                                       itemBuilder: (context, suggestion) {
-//                                         print(suggestion);
-//                                         return ListTile(
-//                                           title: Text(suggestion["FullName"]),
-//                                         );
-//                                       },
-//                                       // validator: (value) {
-//                                       //   if ((value.isEmpty ||
-//                                       //       _sankalpAadhaarSwayamsevakValue == null ||
-//                                       //       _sankalpAadhaarSwayamsevakValue.isEmpty)) {
-//                                       //     return Statics.getLabel(
-//                                       //         'SankalpAadhaarKaaryakartaaValidationMessage');
-//                                       //   }
-//                                       //   return null;
-//                                       // },
-//                                       // transitionBuilder: (context,
-//                                       //     suggestionsBox, controller) {
-//                                       //   return suggestionsBox;
-//                                       // },
-//                                       onSelected: (suggestion) {
-//                                         this
-//                                             ._sankalpAadhaarSwayamsevakCtrl
-//                                             .text = suggestion["FullName"];
-//                                         _sankalpAadhaarSwayamsevakValue =
-//                                             suggestion["SwayamsevakID"]
-//                                                 .toString();
-//                                         shaakhaa!.sankalpAadhaarShaakhaaID =
-//                                             int.parse(
-//                                                 suggestion["SwayamsevakID"]
-//                                                     .toString());
-//
-//                                         print(
-//                                             "_sankalpAadhaarSwayamsevakValue:- ${_sankalpAadhaarSwayamsevakValue}  --- ");
-//                                       },
-//                                       // onSaved: (value) {
-//                                       //   if (_sankalpAadhaarSwayamsevakValue != null &&
-//                                       //       _sankalpAadhaarSwayamsevakValue.isNotEmpty){
-//                                       //     shaakhaa!.sankalpAadhaarSwayamsevakID =
-//                                       //         int.parse(_sankalpAadhaarSwayamsevakValue);
-//                                       //     shaakhaa!.sankalpAadhaarShaakhaaID = null;
-//                                       //       }
-//                                       //   else {
-//                                       //     shaakhaa!.sankalpAadhaarSwayamsevakID = null;
-//                                       //     shaakhaa!.sankalpAadhaarShaakhaaID = null;
-//                                       //   }
-//                                       // },
-//                                     ),
-//                                   ),
-//                                   IconButton(
-//                                       color: Colors.purple,
-//                                       onPressed: () {
-//                                         setState(() {
-//                                           this
-//                                               ._sankalpAadhaarSwayamsevakCtrl
-//                                               .text = "";
-//                                           _sankalpAadhaarSwayamsevakValue = "";
-//                                         });
-//                                       },
-//                                       icon: Icon(Icons.cancel)),
-//                                 ],
-//                               ),
-//                             RadioListTile<SankalpAadhaarEnum>(
-//                               title: Text(
-//                                   Statics.getLabel('SankalpAadhaarShaakhaa')),
-//                               value: SankalpAadhaarEnum.Shaakhaa,
-//                               groupValue: _sankalpAadhaarEnum,
-//                               onChanged: (SankalpAadhaarEnum? value) {
-//                                 setState(() {
-//                                   _sankalpAadhaarEnum = value!;
-//                                 });
-//                               },
-//                             ),
-//                             if (_sankalpAadhaarEnum
-//                                     .toString()
-//                                     .split('.')
-//                                     .last ==
-//                                 'Shaakhaa')
-//                               Row(
-//                                 children: [
-//                                   Container(
-//                                     width:
-//                                         Statics.getDeviceSize(context).width *
-//                                             0.63,
-//                                     child: TypeAheadField(
-//                                       controller: _sankalpAadhaarShaakhaaCtrl,
-//                                       builder:
-//                                           (context, controller, focusNode) {
-//                                         return TextField(
-//                                             controller: controller,
-//                                             focusNode: focusNode,
-//                                             decoration: InputDecoration(
-//                                               isDense: true,
-//                                               border: UnderlineInputBorder(),
-//                                               labelText: Statics.getLabel(
-//                                                   'SankalpAadhaarShaakhaa'),
-//                                             ));
-//                                       },
-//                                       // textFieldConfiguration:
-//                                       // TextFieldConfiguration(
-//                                       //     controller:
-//                                       //         this._sankalpAadhaarShaakhaaCtrl,
-//                                       //     decoration: InputDecoration(
-//                                       //         labelText: Statics.getLabel(
-//                                       //             'SankalpAadhaarShaakhaa'))),
-//
-//                                       suggestionsCallback: (pattern) {
-//                                         this._sankalpAadhaarShaakhaaValue = "";
-//                                         return populateSankalpAadhaarShaakhaa(
-//                                             _bhaagValue!, pattern);
-//                                       },
-//                                       itemBuilder: (context, suggestion) {
-//                                         return ListTile(
-//                                           title:
-//                                               Text(suggestion["GeoUnitName"]),
-//                                         );
-//                                       },
-//                                       // validator: (value) {
-//                                       //   if ((value.isEmpty ||
-//                                       //       _sankalpAadhaarShaakhaaValue == null ||
-//                                       //       _sankalpAadhaarShaakhaaValue.isEmpty)) {
-//                                       //     return Statics.getLabel(
-//                                       //         'SankalpAadhaarShaakhaaValidationMessage');
-//                                       //   }
-//                                       //   return null;
-//                                       // },
-//                                       // transitionBuilder: (context,
-//                                       //     suggestionsBox, controller) {
-//                                       //   return suggestionsBox;
-//                                       // },
-//                                       onSelected: (suggestion) {
-//                                         this._sankalpAadhaarShaakhaaCtrl.text =
-//                                             suggestion["GeoUnitName"];
-//                                         _sankalpAadhaarShaakhaaValue =
-//                                             suggestion["ShaakhaaID"].toString();
-//                                         shaakhaa!.sankalpAadhaarShaakhaaID =
-//                                             int.parse(suggestion["ShaakhaaID"]
-//                                                 .toString());
-//                                         print(
-//                                             "_sankalpAadhaarShaakhaaValue:--${_sankalpAadhaarShaakhaaValue}");
-//                                       },
-//                                       // onSaved: (value) {
-//                                       //   if (_sankalpAadhaarShaakhaaValue != null &&
-//                                       //       _sankalpAadhaarShaakhaaValue.isNotEmpty)
-//                                       //     {
-//                                       //       shaakhaa!.sankalpAadhaarShaakhaaID =
-//                                       //         int.parse(_sankalpAadhaarShaakhaaValue);
-//                                       //       shaakhaa!.sankalpAadhaarSwayamsevakID = null;
-//                                       //     }
-//                                       //   else {
-//                                       //     shaakhaa!.sankalpAadhaarShaakhaaID = null;
-//                                       //     shaakhaa!.sankalpAadhaarSwayamsevakID = null;
-//                                       //   }
-//                                       // },
-//                                     ),
-//                                   ),
-//                                   IconButton(
-//                                       color: Colors.purple,
-//                                       onPressed: () {
-//                                         setState(() {
-//                                           this
-//                                               ._sankalpAadhaarShaakhaaCtrl
-//                                               .text = "";
-//                                           _sankalpAadhaarShaakhaaValue = "";
-//                                         });
-//                                       },
-//                                       icon: Icon(Icons.cancel)),
-//                                 ],
-//                               ),
-//                             SizedBox(
-//                               height: 15,
-//                             ),
-//                             Text(Statics.getLabel('SankalpTimeLine'),
-//                                 style: TextStyle(
-//                                     decoration: TextDecoration.underline)),
-//                             TextFormField(
-//                               textInputAction: TextInputAction.next,
-//                               controller: _sankalpCompletionMonthCtrl,
-//                               decoration: InputDecoration(
-//                                   labelText: Statics.getLabel(
-//                                       'SankalpCompletionMonth')),
-//                               maxLength: 2,
-//                               keyboardType: TextInputType.number,
-//                               validator: (value) {
-//                                 if (_isSankalpit == true && value!.isEmpty)
-//                                   return (Statics.getLabel(
-//                                       'SankalpCompletionValidationMessage'));
-//                                 return null;
-//                               },
-//                               onSaved: (value) {
-//                                 shaakhaa!.sankalpCompletionMonth =
-//                                     int.parse(value!);
-//                               },
-//                             ),
-//                             TextFormField(
-//                               textInputAction: TextInputAction.next,
-//                               controller: _sankalpCompletionYearCtrl,
-//                               decoration: InputDecoration(
-//                                   labelText: Statics.getLabel(
-//                                       'SankalpCompletionYear')),
-//                               maxLength: 4,
-//                               keyboardType: TextInputType.number,
-//                               validator: (value) {
-//                                 if (_isSankalpit == true && value!.isEmpty)
-//                                   return (Statics.getLabel(
-//                                       'SankalpCompletionValidationMessage'));
-//                                 return null;
-//                               },
-//                               onSaved: (value) {
-//                                 shaakhaa!.sankalpCompletionYear =
-//                                     int.parse(value!);
-//                               },
-//                             ),
-//                           ],
-//                         ),
-//                       if (_frequency != null)
-//                         DropdownButtonFormField<StaticMasterBAL>(
-//                           decoration: InputDecoration(
-//                               labelText: Statics.getLabel('SelectFrequency')),
-//                           isExpanded: true,
-//                           value: _frequencyValue == null
-//                               ? null
-//                               : _frequency == null
-//                                   ? null
-//                                   : _frequency![_frequency!.indexWhere((p) =>
-//                                       p.staticID.toString() ==
-//                                       _frequencyValue.toString())],
-//                           items: _frequency != null
-//                               ? _frequency!
-//                                   .map((bg) => DropdownMenuItem(
-//                                       value: bg,
-//                                       child: Text(bg.codeForDisplay!)))
-//                                   .toList()
-//                               : [],
-//                           onChanged: (value) {
-//                             setState(() {
-//                               _frequencyValue = value!.staticID.toString();
-//                               print("_frequencyValue  =-=-> $_frequencyValue");
-//                             });
-//                           },
-//                           validator: (value) {
-//                             if (value == null)
-//                               return (Statics.getLabel(
-//                                   'FrequencyValidationMessage'));
-//                             return null;
-//                           },
-//                           onSaved: (value) {
-//                             shaakhaa!.frequencyID = value!.staticID;
-//                           },
-//                         ),
-//                       SizedBox(
-//                         height: 10,
-//                       ),
-// =========================== END OLD LOGIC =================================================================================
+// ===========================   OLD LOGIC =================================================================================
+                      CheckboxListTile(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                        controlAffinity: ListTileControlAffinity.leading,
+                        title: Text(Statics.getLabel('IsSankalpit'),
+                            style: TextStyle(fontSize: 15)),
+                        checkColor: Colors.white,
+                        activeColor: Colors.purple,
+                        value: _isSankalpit,
+                        onChanged: (value) {
+                          setState(() {
+                            _isSankalpit = value!;
+                          });
+                        },
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
 
+                      if (_isSankalpit == true)
+                        Column(
+                          children: [
+                            Text(Statics.getLabel('SankalpAadhaar'),
+                                style: TextStyle(
+                                    decoration: TextDecoration.underline)),
+                            RadioListTile<SankalpAadhaarEnum>(
+                              title: Text(Statics.getLabel(
+                                  'SankalpAadhaarKaaryakartaa')),
+                              value: SankalpAadhaarEnum.Kaaryakartaa,
+                              groupValue: _sankalpAadhaarEnum,
+                              onChanged: (SankalpAadhaarEnum? value) {
+                                setState(() {
+                                  _sankalpAadhaarEnum = value!;
+                                });
+                              },
+                            ),
+                            if (_sankalpAadhaarEnum
+                                    .toString()
+                                    .split('.')
+                                    .last ==
+                                'Kaaryakartaa')
+                              Row(
+                                children: [
+                                  Container(
+                                    width:
+                                        Statics.getDeviceSize(context).width *
+                                            0.63,
+                                    child: TypeAheadField(
+                                      controller:
+                                          _sankalpAadhaarSwayamsevakCtrl,
+                                      builder:
+                                          (context, controller, focusNode) {
+                                        return TextField(
+                                            controller: controller,
+                                            focusNode: focusNode,
+                                            decoration: InputDecoration(
+                                              isDense: true,
+                                              border: UnderlineInputBorder(),
+                                              labelText: Statics.getLabel(
+                                                  'SankalpAadhaarKaaryakartaa'),
+                                            ));
+                                      },
+                                      // textFieldConfiguration:
+                                      //     TextFieldConfiguration(
+                                      //         controller:
+                                      //             this._sankalpAadhaarSwayamsevakCtrl,
+                                      //         decoration: InputDecoration(
+                                      //             labelText: Statics.getLabel(
+                                      //                 'SankalpAadhaarKaaryakartaa'))),
+
+                                      suggestionsCallback: (pattern) {
+                                        this._sankalpAadhaarSwayamsevakValue =
+                                            "";
+                                        return populateSankalpAadhaarSwayamsevak(
+                                            _bhaagValue!, pattern);
+                                      },
+                                      itemBuilder: (context, suggestion) {
+                                        print(suggestion);
+                                        return ListTile(
+                                          title: Text(suggestion["FullName"]),
+                                        );
+                                      },
+                                      // validator: (value) {
+                                      //   if ((value.isEmpty ||
+                                      //       _sankalpAadhaarSwayamsevakValue == null ||
+                                      //       _sankalpAadhaarSwayamsevakValue.isEmpty)) {
+                                      //     return Statics.getLabel(
+                                      //         'SankalpAadhaarKaaryakartaaValidationMessage');
+                                      //   }
+                                      //   return null;
+                                      // },
+                                      // transitionBuilder: (context,
+                                      //     suggestionsBox, controller) {
+                                      //   return suggestionsBox;
+                                      // },
+                                      onSelected: (suggestion) {
+                                        this
+                                            ._sankalpAadhaarSwayamsevakCtrl
+                                            .text = suggestion["FullName"];
+                                        _sankalpAadhaarSwayamsevakValue =
+                                            suggestion["SwayamsevakID"]
+                                                .toString();
+                                        shaakhaa!.sankalpAadhaarShaakhaaID =
+                                            int.parse(
+                                                suggestion["SwayamsevakID"]
+                                                    .toString());
+
+                                        print(
+                                            "_sankalpAadhaarSwayamsevakValue:- ${_sankalpAadhaarSwayamsevakValue}  --- ");
+                                      },
+                                      // onSaved: (value) {
+                                      //   if (_sankalpAadhaarSwayamsevakValue != null &&
+                                      //       _sankalpAadhaarSwayamsevakValue.isNotEmpty){
+                                      //     shaakhaa!.sankalpAadhaarSwayamsevakID =
+                                      //         int.parse(_sankalpAadhaarSwayamsevakValue);
+                                      //     shaakhaa!.sankalpAadhaarShaakhaaID = null;
+                                      //       }
+                                      //   else {
+                                      //     shaakhaa!.sankalpAadhaarSwayamsevakID = null;
+                                      //     shaakhaa!.sankalpAadhaarShaakhaaID = null;
+                                      //   }
+                                      // },
+                                    ),
+                                  ),
+                                  IconButton(
+                                      color: Colors.purple,
+                                      onPressed: () {
+                                        setState(() {
+                                          this
+                                              ._sankalpAadhaarSwayamsevakCtrl
+                                              .text = "";
+                                          _sankalpAadhaarSwayamsevakValue = "";
+                                        });
+                                      },
+                                      icon: Icon(Icons.cancel)),
+                                ],
+                              ),
+                            RadioListTile<SankalpAadhaarEnum>(
+                              title: Text(
+                                  Statics.getLabel('SankalpAadhaarShaakhaa')),
+                              value: SankalpAadhaarEnum.Shaakhaa,
+                              groupValue: _sankalpAadhaarEnum,
+                              onChanged: (SankalpAadhaarEnum? value) {
+                                setState(() {
+                                  _sankalpAadhaarEnum = value!;
+                                });
+                              },
+                            ),
+                            if (_sankalpAadhaarEnum
+                                    .toString()
+                                    .split('.')
+                                    .last ==
+                                'Shaakhaa')
+                              Row(
+                                children: [
+                                  Container(
+                                    width:
+                                        Statics.getDeviceSize(context).width *
+                                            0.63,
+                                    child: TypeAheadField(
+                                      controller: _sankalpAadhaarShaakhaaCtrl,
+                                      builder:
+                                          (context, controller, focusNode) {
+                                        return TextField(
+                                            controller: controller,
+                                            focusNode: focusNode,
+                                            decoration: InputDecoration(
+                                              isDense: true,
+                                              border: UnderlineInputBorder(),
+                                              labelText: Statics.getLabel(
+                                                  'SankalpAadhaarShaakhaa'),
+                                            ));
+                                      },
+                                      // textFieldConfiguration:
+                                      // TextFieldConfiguration(
+                                      //     controller:
+                                      //         this._sankalpAadhaarShaakhaaCtrl,
+                                      //     decoration: InputDecoration(
+                                      //         labelText: Statics.getLabel(
+                                      //             'SankalpAadhaarShaakhaa'))),
+
+                                      suggestionsCallback: (pattern) {
+                                        this._sankalpAadhaarShaakhaaValue = "";
+                                        return populateSankalpAadhaarShaakhaa(
+                                            _bhaagValue!, pattern);
+                                      },
+                                      itemBuilder: (context, suggestion) {
+                                        return ListTile(
+                                          title:
+                                              Text(suggestion["GeoUnitName"]),
+                                        );
+                                      },
+                                      // validator: (value) {
+                                      //   if ((value.isEmpty ||
+                                      //       _sankalpAadhaarShaakhaaValue == null ||
+                                      //       _sankalpAadhaarShaakhaaValue.isEmpty)) {
+                                      //     return Statics.getLabel(
+                                      //         'SankalpAadhaarShaakhaaValidationMessage');
+                                      //   }
+                                      //   return null;
+                                      // },
+                                      // transitionBuilder: (context,
+                                      //     suggestionsBox, controller) {
+                                      //   return suggestionsBox;
+                                      // },
+                                      onSelected: (suggestion) {
+                                        this._sankalpAadhaarShaakhaaCtrl.text =
+                                            suggestion["GeoUnitName"];
+                                        _sankalpAadhaarShaakhaaValue =
+                                            suggestion["ShaakhaaID"].toString();
+                                        shaakhaa!.sankalpAadhaarShaakhaaID =
+                                            int.parse(suggestion["ShaakhaaID"]
+                                                .toString());
+                                        print(
+                                            "_sankalpAadhaarShaakhaaValue:--${_sankalpAadhaarShaakhaaValue}");
+                                      },
+                                      // onSaved: (value) {
+                                      //   if (_sankalpAadhaarShaakhaaValue != null &&
+                                      //       _sankalpAadhaarShaakhaaValue.isNotEmpty)
+                                      //     {
+                                      //       shaakhaa!.sankalpAadhaarShaakhaaID =
+                                      //         int.parse(_sankalpAadhaarShaakhaaValue);
+                                      //       shaakhaa!.sankalpAadhaarSwayamsevakID = null;
+                                      //     }
+                                      //   else {
+                                      //     shaakhaa!.sankalpAadhaarShaakhaaID = null;
+                                      //     shaakhaa!.sankalpAadhaarSwayamsevakID = null;
+                                      //   }
+                                      // },
+                                    ),
+                                  ),
+                                  IconButton(
+                                      color: Colors.purple,
+                                      onPressed: () {
+                                        setState(() {
+                                          this
+                                              ._sankalpAadhaarShaakhaaCtrl
+                                              .text = "";
+                                          _sankalpAadhaarShaakhaaValue = "";
+                                        });
+                                      },
+                                      icon: Icon(Icons.cancel)),
+                                ],
+                              ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Text(Statics.getLabel('SankalpTimeLine'),
+                                style: TextStyle(
+                                    decoration: TextDecoration.underline)),
+                            TextFormField(
+                              textInputAction: TextInputAction.next,
+                              controller: _sankalpCompletionMonthCtrl,
+                              decoration: InputDecoration(
+                                  labelText: Statics.getLabel(
+                                      'SankalpCompletionMonth')),
+                              maxLength: 2,
+                              keyboardType: TextInputType.number,
+                              validator: (value) {
+                                if (_isSankalpit == true && value!.isEmpty)
+                                  return (Statics.getLabel(
+                                      'SankalpCompletionValidationMessage'));
+                                return null;
+                              },
+                              onSaved: (value) {
+                                shaakhaa!.sankalpCompletionMonth =
+                                    int.parse(value!);
+                              },
+                            ),
+                            TextFormField(
+                              textInputAction: TextInputAction.next,
+                              controller: _sankalpCompletionYearCtrl,
+                              decoration: InputDecoration(
+                                  labelText: Statics.getLabel(
+                                      'SankalpCompletionYear')),
+                              maxLength: 4,
+                              keyboardType: TextInputType.number,
+                              validator: (value) {
+                                if (_isSankalpit == true && value!.isEmpty)
+                                  return (Statics.getLabel(
+                                      'SankalpCompletionValidationMessage'));
+                                return null;
+                              },
+                              onSaved: (value) {
+                                shaakhaa!.sankalpCompletionYear =
+                                    int.parse(value!);
+                              },
+                            ),
+                          ],
+                        ),
                       if (_frequency != null)
                         DropdownButtonFormField<StaticMasterBAL>(
                           decoration: InputDecoration(
@@ -1460,639 +1419,680 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
                       SizedBox(
                         height: 10,
                       ),
-
-                      CheckboxListTile(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                        controlAffinity: ListTileControlAffinity.leading,
-                        title: Text(Statics.getLabel('IsSankalpit'),
-                            style: TextStyle(fontSize: 15)),
-                        checkColor: Colors.white,
-                        activeColor: Colors.purple,
-                        value: _isSankalpit,
-                        onChanged: (value) {
-                          setState(() {
-                            _isSankalpit = value!;
-                          });
-                        },
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-
+// =========================== END OLD LOGIC =================================================================================
+                      Container(), // just for separate old and new locgic
 // ================================================================== NEW LOGIC  ==================================================================
-//======================= D1  SELECT  SHAKHA ==================================================================================================================
-                      if (_isSankalpit == true &&
-                          (_frequencyValue == '34' ||
-                              _frequencyValue == '35' ||
-                              _frequencyValue == '36'))
-                        Column(
-                          children: [
-                            // Text(Statics.getLabel('SankalpAadhaar') , style: TextStyle(decoration: TextDecoration.underline)),
-                            Legend(
-                                legendString: 'SankalpAadhaarShakhaa',
-                                fontsize: 18),
-                            RadioListTile<SankalpAadhaarEnum>(
-                              title: Text(Statics.getLabel(
-                                  'SankalpAadhaarKaaryakartaa')),
-                              value: SankalpAadhaarEnum.Kaaryakartaa,
-                              groupValue: _sankalpAadhaarEnum1,
-                              onChanged: (SankalpAadhaarEnum? value) {
-                                setState(() {
-                                  _sankalpAadhaarEnum1 = value!;
-                                });
-                              },
-                            ),
-                            if (_sankalpAadhaarEnum1
-                                    .toString()
-                                    .split('.')
-                                    .last ==
-                                'Kaaryakartaa')
-                              Row(
-                                children: [
-                                  Container(
-                                    width:
-                                        Statics.getDeviceSize(context).width *
-                                            0.63,
-                                    child: TypeAheadField(
-                                      controller:
-                                          _sankalpAadhaarSwayamsevakCtrl1,
-                                      builder:
-                                          (context, controller, focusNode) {
-                                        return TextField(
-                                            controller: controller,
-                                            focusNode: focusNode,
-                                            decoration: InputDecoration(
-                                              isDense: true,
-                                              border: UnderlineInputBorder(),
-                                              labelText: Statics.getLabel(
-                                                  'SankalpAadhaarKaaryakartaa'),
-                                            ));
-                                      },
-                                      suggestionsCallback: (pattern) {
-                                        this._sankalpAadhaarSwayamsevakValue1 =
-                                            "";
-                                        return populateSankalpAadhaarSwayamsevak(
-                                            _bhaagValue!, pattern);
-                                      },
-                                      itemBuilder: (context, suggestion) {
-                                        print(suggestion);
-                                        return ListTile(
-                                          title: Text(suggestion["FullName"]),
-                                        );
-                                      },
-                                      onSelected: (suggestion) {
-                                        this
-                                            ._sankalpAadhaarSwayamsevakCtrl1
-                                            .text = suggestion["FullName"];
-                                        _sankalpAadhaarSwayamsevakValue1 =
-                                            suggestion["SwayamsevakID"]
-                                                .toString();
-                                        shaakhaa!.sankalpAadhaarSwayamsevakID1 =
-                                            int.parse(
-                                                suggestion["SwayamsevakID"]
-                                                    .toString());
-                                        print(
-                                            "_sankalpAadhaarSwayamsevakValue:- ${_sankalpAadhaarSwayamsevakValue1}  --- ");
-                                      },
-                                    ),
-                                  ),
-                                  IconButton(
-                                      color: Colors.purple,
-                                      onPressed: () {
-                                        setState(() {
-                                          this
-                                              ._sankalpAadhaarSwayamsevakCtrl1
-                                              .text = "";
-                                          _sankalpAadhaarSwayamsevakValue1 = "";
-                                        });
-                                      },
-                                      icon: Icon(Icons.cancel)),
-                                ],
-                              ),
-                            RadioListTile<SankalpAadhaarEnum>(
-                              title: Text(
-                                  Statics.getLabel('SankalpAadhaarShaakhaa')),
-                              value: SankalpAadhaarEnum.Shaakhaa,
-                              groupValue: _sankalpAadhaarEnum1,
-                              onChanged: (SankalpAadhaarEnum? value) {
-                                setState(() {
-                                  _sankalpAadhaarEnum1 = value!;
-                                });
-                              },
-                            ),
-                            if (_sankalpAadhaarEnum1
-                                    .toString()
-                                    .split('.')
-                                    .last ==
-                                'Shaakhaa')
-                              Row(
-                                children: [
-                                  Container(
-                                    width:
-                                        Statics.getDeviceSize(context).width *
-                                            0.63,
-                                    child: TypeAheadField(
-                                      controller: _sankalpAadhaarShaakhaaCtrl1,
-                                      builder:
-                                          (context, controller, focusNode) {
-                                        return TextField(
-                                            controller: controller,
-                                            focusNode: focusNode,
-                                            decoration: InputDecoration(
-                                              isDense: true,
-                                              border: UnderlineInputBorder(),
-                                              labelText: Statics.getLabel(
-                                                  'SankalpAadhaarShaakhaa'),
-                                            ));
-                                      },
-                                      suggestionsCallback: (pattern) {
-                                        this._sankalpAadhaarShaakhaaValue = "";
-                                        return populateSankalpAadhaarShaakhaa(
-                                            _bhaagValue!, pattern);
-                                      },
-                                      itemBuilder: (context, suggestion) {
-                                        return ListTile(
-                                          title:
-                                              Text(suggestion["GeoUnitName"]),
-                                        );
-                                      },
-                                      onSelected: (suggestion) {
-                                        this._sankalpAadhaarShaakhaaCtrl1.text =
-                                            suggestion["GeoUnitName"];
-                                        _sankalpAadhaarShaakhaaValue =
-                                            suggestion["ShaakhaaID"].toString();
-                                        shaakhaa!.sankalpAadhaarShaakhaaID1 =
-                                            int.parse(suggestion["ShaakhaaID"]
-                                                .toString());
-                                        print(
-                                            "_sankalpAadhaarShaakhaaValue:--${_sankalpAadhaarShaakhaaValue}");
-                                      },
-                                    ),
-                                  ),
-                                  IconButton(
-                                      color: Colors.purple,
-                                      onPressed: () {
-                                        setState(() {
-                                          this
-                                              ._sankalpAadhaarShaakhaaCtrl1
-                                              .text = "";
-                                          _sankalpAadhaarShaakhaaValue = "";
-                                        });
-                                      },
-                                      icon: Icon(Icons.cancel)),
-                                ],
-                              ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            Text(Statics.getLabel('SankalpTimeLine'),
-                                style: TextStyle(
-                                    decoration: TextDecoration.underline)),
-                            TextFormField(
-                              textInputAction: TextInputAction.next,
-                              controller: _sankalpCompletionMonthCtrl1,
-                              decoration: InputDecoration(
-                                  labelText: Statics.getLabel(
-                                      'SankalpCompletionMonth')),
-                              maxLength: 2,
-                              keyboardType: TextInputType.number,
-                              validator: (value) {
-                                //   // if (_isSankalpit == true && value!.isEmpty) return (Statics.getLabel('SankalpCompletionValidationMessage'));
-                                return null;
-                              },
-                              onSaved: (value) {
-                                shaakhaa!.sankalpCompletionMonth1 =
-                                    int.parse(value!) ?? 00;
-                              },
-                            ),
-                            TextFormField(
-                              textInputAction: TextInputAction.next,
-                              controller: _sankalpCompletionYearCtrl1,
-                              decoration: InputDecoration(
-                                  labelText: Statics.getLabel(
-                                      'SankalpCompletionYear')),
-                              maxLength: 4,
-                              keyboardType: TextInputType.number,
-                              validator: (value) {
-                                //   if (_isSankalpit == true && value!.isEmpty) return (Statics.getLabel('SankalpCompletionValidationMessage'));
-                                return null;
-                              },
-                              onSaved: (value) {
-                                shaakhaa!.sankalpCompletionYear1 =
-                                    int.parse(value!);
-                              },
-                            ),
-                          ],
-                        ),
-//======================= D1-D2  SELCT SAAPTAHIK MILAN  ====================================================================
-                      if (_isSankalpit == true &&
-                          (_frequencyValue == '35' || _frequencyValue == '36'))
-                        Column(
-                          children: [
-                            // Text(Statics.getLabel('SankalpAadhaar'), style: TextStyle(decoration: TextDecoration.underline)),
-                            Legend(
-                                legendString: 'SankalpAadhaarSaptahikMilan',
-                                fontsize: 18),
-                            RadioListTile<SankalpAadhaarEnum>(
-                              title: Text(Statics.getLabel(
-                                  'SankalpAadhaarKaaryakartaa')),
-                              value: SankalpAadhaarEnum.Kaaryakartaa,
-                              groupValue: _sankalpAadhaarEnum2,
-                              onChanged: (SankalpAadhaarEnum? value) {
-                                setState(() {
-                                  _sankalpAadhaarEnum2 = value!;
-                                });
-                              },
-                            ),
-                            if (_sankalpAadhaarEnum2
-                                    .toString()
-                                    .split('.')
-                                    .last ==
-                                'Kaaryakartaa')
-                              Row(
-                                children: [
-                                  Container(
-                                    width:
-                                        Statics.getDeviceSize(context).width *
-                                            0.63,
-                                    child: TypeAheadField(
-                                      controller:
-                                          _sankalpAadhaarSwayamsevakCtrl2,
-                                      builder:
-                                          (context, controller, focusNode) {
-                                        return TextField(
-                                            controller: controller,
-                                            focusNode: focusNode,
-                                            decoration: InputDecoration(
-                                              isDense: true,
-                                              border: UnderlineInputBorder(),
-                                              labelText: Statics.getLabel(
-                                                  'SankalpAadhaarKaaryakartaa'),
-                                            ));
-                                      },
-                                      suggestionsCallback: (pattern) {
-                                        this._sankalpAadhaarSwayamsevakValue2 =
-                                            "";
-                                        return populateSankalpAadhaarSwayamsevak(
-                                            _bhaagValue!, pattern);
-                                      },
-                                      itemBuilder: (context, suggestion) {
-                                        print(suggestion);
-                                        return ListTile(
-                                          title: Text(suggestion["FullName"]),
-                                        );
-                                      },
-                                      onSelected: (suggestion) {
-                                        this
-                                            ._sankalpAadhaarSwayamsevakCtrl2
-                                            .text = suggestion["FullName"];
-                                        _sankalpAadhaarSwayamsevakValue2 =
-                                            suggestion["SwayamsevakID"]
-                                                .toString();
-                                        shaakhaa!.sankalpAadhaarSwayamsevakID2 =
-                                            int.parse(
-                                                suggestion["SwayamsevakID"]
-                                                    .toString());
 
-                                        print(
-                                            "_sankalpAadhaarSwayamsevakValue:- ${_sankalpAadhaarSwayamsevakValue2}  --- ");
-                                      },
-                                    ),
-                                  ),
-                                  IconButton(
-                                      color: Colors.purple,
-                                      onPressed: () {
-                                        setState(() {
-                                          this
-                                              ._sankalpAadhaarSwayamsevakCtrl2
-                                              .text = "";
-                                          _sankalpAadhaarSwayamsevakValue2 = "";
-                                        });
-                                      },
-                                      icon: Icon(Icons.cancel)),
-                                ],
-                              ),
-                            RadioListTile<SankalpAadhaarEnum>(
-                              title: Text(
-                                  Statics.getLabel('SankalpAadhaarShaakhaa')),
-                              value: SankalpAadhaarEnum.Shaakhaa,
-                              groupValue: _sankalpAadhaarEnum2,
-                              onChanged: (SankalpAadhaarEnum? value) {
-                                setState(() {
-                                  _sankalpAadhaarEnum2 = value!;
-                                });
-                              },
-                            ),
-                            if (_sankalpAadhaarEnum2
-                                    .toString()
-                                    .split('.')
-                                    .last ==
-                                'Shaakhaa')
-                              Row(
-                                children: [
-                                  Container(
-                                    width:
-                                        Statics.getDeviceSize(context).width *
-                                            0.63,
-                                    child: TypeAheadField(
-                                      controller: _sankalpAadhaarShaakhaaCtrl2,
-                                      builder:
-                                          (context, controller, focusNode) {
-                                        return TextField(
-                                            controller: controller,
-                                            focusNode: focusNode,
-                                            decoration: InputDecoration(
-                                              isDense: true,
-                                              border: UnderlineInputBorder(),
-                                              labelText: Statics.getLabel(
-                                                  'SankalpAadhaarShaakhaa'),
-                                            ));
-                                      },
-                                      suggestionsCallback: (pattern) {
-                                        this._sankalpAadhaarShaakhaaValue = "";
-                                        return populateSankalpAadhaarShaakhaa(
-                                            _bhaagValue!, pattern);
-                                      },
-                                      itemBuilder: (context, suggestion) {
-                                        return ListTile(
-                                          title:
-                                              Text(suggestion["GeoUnitName"]),
-                                        );
-                                      },
-                                      onSelected: (suggestion) {
-                                        this._sankalpAadhaarShaakhaaCtrl2.text =
-                                            suggestion["GeoUnitName"];
-                                        _sankalpAadhaarShaakhaaValue =
-                                            suggestion["ShaakhaaID"].toString();
-                                        shaakhaa!.sankalpAadhaarShaakhaaID2 =
-                                            int.parse(suggestion["ShaakhaaID"]
-                                                .toString());
-                                        print(
-                                            "_sankalpAadhaarShaakhaaValue:--${_sankalpAadhaarShaakhaaValue}");
-                                      },
-                                    ),
-                                  ),
-                                  IconButton(
-                                      color: Colors.purple,
-                                      onPressed: () {
-                                        setState(() {
-                                          this
-                                              ._sankalpAadhaarShaakhaaCtrl2
-                                              .text = "";
-                                          _sankalpAadhaarShaakhaaValue = "";
-                                        });
-                                      },
-                                      icon: Icon(Icons.cancel)),
-                                ],
-                              ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            Text(Statics.getLabel('SankalpTimeLine'),
-                                style: TextStyle(
-                                    decoration: TextDecoration.underline)),
-                            TextFormField(
-                              textInputAction: TextInputAction.next,
-                              controller: _sankalpCompletionMonthCtrl2,
-                              decoration: InputDecoration(
-                                  labelText: Statics.getLabel(
-                                      'SankalpCompletionMonth')),
-                              maxLength: 2,
-                              keyboardType: TextInputType.number,
-                              validator: (value) {
-                                //   if (_isSankalpit == true && value!.isEmpty) return (Statics.getLabel('SankalpCompletionValidationMessage'));
-                                return null;
-                              },
-                              onSaved: (value) {
-                                shaakhaa!.sankalpCompletionMonth2 =
-                                    int.parse(value!);
-                              },
-                            ),
-                            TextFormField(
-                              textInputAction: TextInputAction.next,
-                              controller: _sankalpCompletionYearCtrl2,
-                              decoration: InputDecoration(
-                                  labelText: Statics.getLabel(
-                                      'SankalpCompletionYear')),
-                              maxLength: 4,
-                              keyboardType: TextInputType.number,
-                              validator: (value) {
-                                //   if (_isSankalpit == true && value!.isEmpty) return (Statics.getLabel('SankalpCompletionValidationMessage'));
-                                return null;
-                              },
-                              onSaved: (value) {
-                                shaakhaa!.sankalpCompletionYear2 =
-                                    int.parse(value!);
-                              },
-                            ),
-                          ],
-                        ),
-//======================= D1-D2-D3 SELECT MASIKMILAN/ SANGH MANDALI  ====================================================================
-                      if (_isSankalpit == true && _frequencyValue == '36')
-                        Column(
-                          children: [
-                            // Text(Statics.getLabel('SankalpAadhaar'), style: TextStyle(decoration: TextDecoration.underline)),
-                            Legend(
-                                legendString:
-                                    'SankalpAadhaarMasikMilanSanghaMandali',
-                                fontsize: 18),
-                            RadioListTile<SankalpAadhaarEnum>(
-                              title: Text(Statics.getLabel(
-                                  'SankalpAadhaarKaaryakartaa')),
-                              value: SankalpAadhaarEnum.Kaaryakartaa,
-                              groupValue: _sankalpAadhaarEnum3,
-                              onChanged: (SankalpAadhaarEnum? value) {
-                                setState(() {
-                                  _sankalpAadhaarEnum3 = value!;
-                                });
-                              },
-                            ),
-                            if (_sankalpAadhaarEnum3
-                                    .toString()
-                                    .split('.')
-                                    .last ==
-                                'Kaaryakartaa')
-                              Row(
-                                children: [
-                                  Container(
-                                    width:
-                                        Statics.getDeviceSize(context).width *
-                                            0.63,
-                                    child: TypeAheadField(
-                                      controller:
-                                          _sankalpAadhaarSwayamsevakCtrl3,
-                                      builder:
-                                          (context, controller, focusNode) {
-                                        return TextField(
-                                            controller: controller,
-                                            focusNode: focusNode,
-                                            decoration: InputDecoration(
-                                              isDense: true,
-                                              border: UnderlineInputBorder(),
-                                              labelText: Statics.getLabel(
-                                                  'SankalpAadhaarKaaryakartaa'),
-                                            ));
-                                      },
-                                      suggestionsCallback: (pattern) {
-                                        this._sankalpAadhaarSwayamsevakValue3 =
-                                            "";
-                                        return populateSankalpAadhaarSwayamsevak(
-                                            _bhaagValue!, pattern);
-                                      },
-                                      itemBuilder: (context, suggestion) {
-                                        print(suggestion);
-                                        return ListTile(
-                                          title: Text(suggestion["FullName"]),
-                                        );
-                                      },
-                                      onSelected: (suggestion) {
-                                        this
-                                            ._sankalpAadhaarSwayamsevakCtrl3
-                                            .text = suggestion["FullName"];
-                                        _sankalpAadhaarSwayamsevakValue3 =
-                                            suggestion["SwayamsevakID"]
-                                                .toString();
-                                        shaakhaa!.sankalpAadhaarSwayamsevakID3 =
-                                            int.parse(
-                                                suggestion["SwayamsevakID"]
-                                                    .toString());
+                      // if (_frequency != null)
+                      //   DropdownButtonFormField<StaticMasterBAL>(
+                      //     decoration: InputDecoration(
+                      //         labelText: Statics.getLabel('SelectFrequency')),
+                      //     isExpanded: true,
+                      //     value: _frequencyValue == null
+                      //         ? null
+                      //         : _frequency == null
+                      //             ? null
+                      //             : _frequency![_frequency!.indexWhere((p) =>
+                      //                 p.staticID.toString() ==
+                      //                 _frequencyValue.toString())],
+                      //     items: _frequency != null
+                      //         ? _frequency!
+                      //             .map((bg) => DropdownMenuItem(
+                      //                 value: bg,
+                      //                 child: Text(bg.codeForDisplay!)))
+                      //             .toList()
+                      //         : [],
+                      //     onChanged: (value) {
+                      //       setState(() {
+                      //         _frequencyValue = value!.staticID.toString();
+                      //         print("_frequencyValue  =-=-> $_frequencyValue");
+                      //       });
+                      //     },
+                      //     validator: (value) {
+                      //       if (value == null)
+                      //         return (Statics.getLabel(
+                      //             'FrequencyValidationMessage'));
+                      //       return null;
+                      //     },
+                      //     onSaved: (value) {
+                      //       shaakhaa!.frequencyID = value!.staticID;
+                      //     },
+                      //   ),
+                      // SizedBox(
+                      //   height: 10,
+                      // ),
+                      //
+                      // CheckboxListTile(
+                      //   contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                      //   controlAffinity: ListTileControlAffinity.leading,
+                      //   title: Text(Statics.getLabel('IsSankalpit'),
+                      //       style: TextStyle(fontSize: 15)),
+                      //   checkColor: Colors.white,
+                      //   activeColor: Colors.purple,
+                      //   value: _isSankalpit,
+                      //   onChanged: (value) {
+                      //     setState(() {
+                      //       _isSankalpit = value!;
+                      //     });
+                      //   },
+                      // ),
+                      // SizedBox(
+                      //   height: 10,
+                      // ),
 
-                                        print(
-                                            "_sankalpAadhaarSwayamsevakValue:- ${_sankalpAadhaarSwayamsevakValue3}  --- ");
-                                      },
-                                    ),
-                                  ),
-                                  IconButton(
-                                      color: Colors.purple,
-                                      onPressed: () {
-                                        setState(() {
-                                          this
-                                              ._sankalpAadhaarSwayamsevakCtrl3
-                                              .text = "";
-                                          _sankalpAadhaarSwayamsevakValue3 = "";
-                                        });
-                                      },
-                                      icon: Icon(Icons.cancel)),
-                                ],
-                              ),
-                            RadioListTile<SankalpAadhaarEnum>(
-                              title: Text(
-                                  Statics.getLabel('SankalpAadhaarShaakhaa')),
-                              value: SankalpAadhaarEnum.Shaakhaa,
-                              groupValue: _sankalpAadhaarEnum3,
-                              onChanged: (SankalpAadhaarEnum? value) {
-                                setState(() {
-                                  _sankalpAadhaarEnum3 = value!;
-                                });
-                              },
-                            ),
-                            if (_sankalpAadhaarEnum3
-                                    .toString()
-                                    .split('.')
-                                    .last ==
-                                'Shaakhaa')
-                              Row(
-                                children: [
-                                  Container(
-                                    width:
-                                        Statics.getDeviceSize(context).width *
-                                            0.63,
-                                    child: TypeAheadField(
-                                      controller: _sankalpAadhaarShaakhaaCtrl3,
-                                      builder:
-                                          (context, controller, focusNode) {
-                                        return TextField(
-                                            controller: controller,
-                                            focusNode: focusNode,
-                                            decoration: InputDecoration(
-                                              isDense: true,
-                                              border: UnderlineInputBorder(),
-                                              labelText: Statics.getLabel(
-                                                  'SankalpAadhaarShaakhaa'),
-                                            ));
-                                      },
-                                      suggestionsCallback: (pattern) {
-                                        this._sankalpAadhaarShaakhaaValue = "";
-                                        return populateSankalpAadhaarShaakhaa(
-                                            _bhaagValue!, pattern);
-                                      },
-                                      itemBuilder: (context, suggestion) {
-                                        return ListTile(
-                                          title:
-                                              Text(suggestion["GeoUnitName"]),
-                                        );
-                                      },
-                                      onSelected: (suggestion) {
-                                        this._sankalpAadhaarShaakhaaCtrl3.text =
-                                            suggestion["GeoUnitName"];
-                                        _sankalpAadhaarShaakhaaValue =
-                                            suggestion["ShaakhaaID"].toString();
-                                        shaakhaa!.sankalpAadhaarShaakhaaID3 =
-                                            int.parse(suggestion["ShaakhaaID"]
-                                                .toString());
-                                        print(
-                                            "_sankalpAadhaarShaakhaaValue:--${_sankalpAadhaarShaakhaaValue}");
-                                      },
-                                    ),
-                                  ),
-                                  IconButton(
-                                      color: Colors.purple,
-                                      onPressed: () {
-                                        setState(() {
-                                          this
-                                              ._sankalpAadhaarShaakhaaCtrl3
-                                              .text = "";
-                                          _sankalpAadhaarShaakhaaValue = "";
-                                        });
-                                      },
-                                      icon: Icon(Icons.cancel)),
-                                ],
-                              ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            Text(Statics.getLabel('SankalpTimeLine'),
-                                style: TextStyle(
-                                    decoration: TextDecoration.underline)),
-                            TextFormField(
-                              textInputAction: TextInputAction.next,
-                              controller: _sankalpCompletionMonthCtrl3,
-                              decoration: InputDecoration(
-                                  labelText: Statics.getLabel(
-                                      'SankalpCompletionMonth')),
-                              maxLength: 2,
-                              keyboardType: TextInputType.number,
-                              validator: (value) {
-                                //   if (_isSankalpit == true && value!.isEmpty) return (Statics.getLabel('SankalpCompletionValidationMessage'));
-                                return null;
-                              },
-                              onSaved: (value) {
-                                shaakhaa!.sankalpCompletionMonth3 =
-                                    int.parse(value!);
-                              },
-                            ),
-                            TextFormField(
-                              textInputAction: TextInputAction.next,
-                              controller: _sankalpCompletionYearCtrl3,
-                              decoration: InputDecoration(
-                                  labelText: Statics.getLabel(
-                                      'SankalpCompletionYear')),
-                              maxLength: 4,
-                              keyboardType: TextInputType.number,
-                              validator: (value) {
-                                //   if (_isSankalpit == true && value!.isEmpty) return (Statics.getLabel('SankalpCompletionValidationMessage'));
-                                return null;
-                              },
-                              onSaved: (value) {
-                                shaakhaa!.sankalpCompletionYear3 =
-                                    int.parse(value!);
-                              },
-                            ),
-                          ],
-                        ),
-                      SizedBox(
-                        height: 10,
-                      ),
+// //======================= D1  SELECT  SHAKHA ==================================================================================================================
+//                       if (_isSankalpit == true &&
+//                           (_frequencyValue == '34' ||
+//                               _frequencyValue == '35' ||
+//                               _frequencyValue == '36'))
+//                         Column(
+//                           children: [
+//                             // Text(Statics.getLabel('SankalpAadhaar') , style: TextStyle(decoration: TextDecoration.underline)),
+//                             Legend(
+//                                 legendString: 'SankalpAadhaarShakhaa',
+//                                 fontsize: 18),
+//                             RadioListTile<SankalpAadhaarEnum>(
+//                               title: Text(Statics.getLabel(
+//                                   'SankalpAadhaarKaaryakartaa')),
+//                               value: SankalpAadhaarEnum.Kaaryakartaa,
+//                               groupValue: _sankalpAadhaarEnum1,
+//                               onChanged: (SankalpAadhaarEnum? value) {
+//                                 setState(() {
+//                                   _sankalpAadhaarEnum1 = value!;
+//                                 });
+//                               },
+//                             ),
+//                             if (_sankalpAadhaarEnum1
+//                                     .toString()
+//                                     .split('.')
+//                                     .last ==
+//                                 'Kaaryakartaa')
+//                               Row(
+//                                 children: [
+//                                   Container(
+//                                     width:
+//                                         Statics.getDeviceSize(context).width *
+//                                             0.63,
+//                                     child: TypeAheadField(
+//                                       controller:
+//                                           _sankalpAadhaarSwayamsevakCtrl1,
+//                                       builder:
+//                                           (context, controller, focusNode) {
+//                                         return TextField(
+//                                             controller: controller,
+//                                             focusNode: focusNode,
+//                                             decoration: InputDecoration(
+//                                               isDense: true,
+//                                               border: UnderlineInputBorder(),
+//                                               labelText: Statics.getLabel(
+//                                                   'SankalpAadhaarKaaryakartaa'),
+//                                             ));
+//                                       },
+//                                       suggestionsCallback: (pattern) {
+//                                         this._sankalpAadhaarSwayamsevakValue1 =
+//                                             "";
+//                                         return populateSankalpAadhaarSwayamsevak(
+//                                             _bhaagValue!, pattern);
+//                                       },
+//                                       itemBuilder: (context, suggestion) {
+//                                         print(suggestion);
+//                                         return ListTile(
+//                                           title: Text(suggestion["FullName"]),
+//                                         );
+//                                       },
+//                                       onSelected: (suggestion) {
+//                                         this
+//                                             ._sankalpAadhaarSwayamsevakCtrl1
+//                                             .text = suggestion["FullName"];
+//                                         _sankalpAadhaarSwayamsevakValue1 =
+//                                             suggestion["SwayamsevakID"]
+//                                                 .toString();
+//                                         shaakhaa!.sankalpAadhaarSwayamsevakID1 =
+//                                             int.parse(
+//                                                 suggestion["SwayamsevakID"]
+//                                                     .toString());
+//                                         print(
+//                                             "_sankalpAadhaarSwayamsevakValue:- ${_sankalpAadhaarSwayamsevakValue1}  --- ");
+//                                       },
+//                                     ),
+//                                   ),
+//                                   IconButton(
+//                                       color: Colors.purple,
+//                                       onPressed: () {
+//                                         setState(() {
+//                                           this
+//                                               ._sankalpAadhaarSwayamsevakCtrl1
+//                                               .text = "";
+//                                           _sankalpAadhaarSwayamsevakValue1 = "";
+//                                         });
+//                                       },
+//                                       icon: Icon(Icons.cancel)),
+//                                 ],
+//                               ),
+//                             RadioListTile<SankalpAadhaarEnum>(
+//                               title: Text(
+//                                   Statics.getLabel('SankalpAadhaarShaakhaa')),
+//                               value: SankalpAadhaarEnum.Shaakhaa,
+//                               groupValue: _sankalpAadhaarEnum1,
+//                               onChanged: (SankalpAadhaarEnum? value) {
+//                                 setState(() {
+//                                   _sankalpAadhaarEnum1 = value!;
+//                                 });
+//                               },
+//                             ),
+//                             if (_sankalpAadhaarEnum1
+//                                     .toString()
+//                                     .split('.')
+//                                     .last ==
+//                                 'Shaakhaa')
+//                               Row(
+//                                 children: [
+//                                   Container(
+//                                     width:
+//                                         Statics.getDeviceSize(context).width *
+//                                             0.63,
+//                                     child: TypeAheadField(
+//                                       controller: _sankalpAadhaarShaakhaaCtrl1,
+//                                       builder:
+//                                           (context, controller, focusNode) {
+//                                         return TextField(
+//                                             controller: controller,
+//                                             focusNode: focusNode,
+//                                             decoration: InputDecoration(
+//                                               isDense: true,
+//                                               border: UnderlineInputBorder(),
+//                                               labelText: Statics.getLabel(
+//                                                   'SankalpAadhaarShaakhaa'),
+//                                             ));
+//                                       },
+//                                       suggestionsCallback: (pattern) {
+//                                         this._sankalpAadhaarShaakhaaValue = "";
+//                                         return populateSankalpAadhaarShaakhaa(
+//                                             _bhaagValue!, pattern);
+//                                       },
+//                                       itemBuilder: (context, suggestion) {
+//                                         return ListTile(
+//                                           title:
+//                                               Text(suggestion["GeoUnitName"]),
+//                                         );
+//                                       },
+//                                       onSelected: (suggestion) {
+//                                         this._sankalpAadhaarShaakhaaCtrl1.text =
+//                                             suggestion["GeoUnitName"];
+//                                         _sankalpAadhaarShaakhaaValue =
+//                                             suggestion["ShaakhaaID"].toString();
+//                                         shaakhaa!.sankalpAadhaarShaakhaaID1 =
+//                                             int.parse(suggestion["ShaakhaaID"]
+//                                                 .toString());
+//                                         print(
+//                                             "_sankalpAadhaarShaakhaaValue:--${_sankalpAadhaarShaakhaaValue}");
+//                                       },
+//                                     ),
+//                                   ),
+//                                   IconButton(
+//                                       color: Colors.purple,
+//                                       onPressed: () {
+//                                         setState(() {
+//                                           this
+//                                               ._sankalpAadhaarShaakhaaCtrl1
+//                                               .text = "";
+//                                           _sankalpAadhaarShaakhaaValue = "";
+//                                         });
+//                                       },
+//                                       icon: Icon(Icons.cancel)),
+//                                 ],
+//                               ),
+//                             SizedBox(
+//                               height: 15,
+//                             ),
+//                             Text(Statics.getLabel('SankalpTimeLine'),
+//                                 style: TextStyle(
+//                                     decoration: TextDecoration.underline)),
+//                             TextFormField(
+//                               textInputAction: TextInputAction.next,
+//                               controller: _sankalpCompletionMonthCtrl1,
+//                               decoration: InputDecoration(
+//                                   labelText: Statics.getLabel(
+//                                       'SankalpCompletionMonth')),
+//                               maxLength: 2,
+//                               keyboardType: TextInputType.number,
+//                               validator: (value) {
+//                                 //   // if (_isSankalpit == true && value!.isEmpty) return (Statics.getLabel('SankalpCompletionValidationMessage'));
+//                                 return null;
+//                               },
+//                               onSaved: (value) {
+//                                 shaakhaa!.sankalpCompletionMonth1 =
+//                                     int.parse(value!) ?? 00;
+//                               },
+//                             ),
+//                             TextFormField(
+//                               textInputAction: TextInputAction.next,
+//                               controller: _sankalpCompletionYearCtrl1,
+//                               decoration: InputDecoration(
+//                                   labelText: Statics.getLabel(
+//                                       'SankalpCompletionYear')),
+//                               maxLength: 4,
+//                               keyboardType: TextInputType.number,
+//                               validator: (value) {
+//                                 //   if (_isSankalpit == true && value!.isEmpty) return (Statics.getLabel('SankalpCompletionValidationMessage'));
+//                                 return null;
+//                               },
+//                               onSaved: (value) {
+//                                 shaakhaa!.sankalpCompletionYear1 =
+//                                     int.parse(value!);
+//                               },
+//                             ),
+//                           ],
+//                         ),
+// //======================= D1-D2  SELCT SAAPTAHIK MILAN  ====================================================================
+//                       if (_isSankalpit == true &&
+//                           (_frequencyValue == '35' || _frequencyValue == '36'))
+//                         Column(
+//                           children: [
+//                             // Text(Statics.getLabel('SankalpAadhaar'), style: TextStyle(decoration: TextDecoration.underline)),
+//                             Legend(
+//                                 legendString: 'SankalpAadhaarSaptahikMilan',
+//                                 fontsize: 18),
+//                             RadioListTile<SankalpAadhaarEnum>(
+//                               title: Text(Statics.getLabel(
+//                                   'SankalpAadhaarKaaryakartaa')),
+//                               value: SankalpAadhaarEnum.Kaaryakartaa,
+//                               groupValue: _sankalpAadhaarEnum2,
+//                               onChanged: (SankalpAadhaarEnum? value) {
+//                                 setState(() {
+//                                   _sankalpAadhaarEnum2 = value!;
+//                                 });
+//                               },
+//                             ),
+//                             if (_sankalpAadhaarEnum2
+//                                     .toString()
+//                                     .split('.')
+//                                     .last ==
+//                                 'Kaaryakartaa')
+//                               Row(
+//                                 children: [
+//                                   Container(
+//                                     width:
+//                                         Statics.getDeviceSize(context).width *
+//                                             0.63,
+//                                     child: TypeAheadField(
+//                                       controller:
+//                                           _sankalpAadhaarSwayamsevakCtrl2,
+//                                       builder:
+//                                           (context, controller, focusNode) {
+//                                         return TextField(
+//                                             controller: controller,
+//                                             focusNode: focusNode,
+//                                             decoration: InputDecoration(
+//                                               isDense: true,
+//                                               border: UnderlineInputBorder(),
+//                                               labelText: Statics.getLabel(
+//                                                   'SankalpAadhaarKaaryakartaa'),
+//                                             ));
+//                                       },
+//                                       suggestionsCallback: (pattern) {
+//                                         this._sankalpAadhaarSwayamsevakValue2 =
+//                                             "";
+//                                         return populateSankalpAadhaarSwayamsevak(
+//                                             _bhaagValue!, pattern);
+//                                       },
+//                                       itemBuilder: (context, suggestion) {
+//                                         print(suggestion);
+//                                         return ListTile(
+//                                           title: Text(suggestion["FullName"]),
+//                                         );
+//                                       },
+//                                       onSelected: (suggestion) {
+//                                         this
+//                                             ._sankalpAadhaarSwayamsevakCtrl2
+//                                             .text = suggestion["FullName"];
+//                                         _sankalpAadhaarSwayamsevakValue2 =
+//                                             suggestion["SwayamsevakID"]
+//                                                 .toString();
+//                                         shaakhaa!.sankalpAadhaarSwayamsevakID2 =
+//                                             int.parse(
+//                                                 suggestion["SwayamsevakID"]
+//                                                     .toString());
+//
+//                                         print(
+//                                             "_sankalpAadhaarSwayamsevakValue:- ${_sankalpAadhaarSwayamsevakValue2}  --- ");
+//                                       },
+//                                     ),
+//                                   ),
+//                                   IconButton(
+//                                       color: Colors.purple,
+//                                       onPressed: () {
+//                                         setState(() {
+//                                           this
+//                                               ._sankalpAadhaarSwayamsevakCtrl2
+//                                               .text = "";
+//                                           _sankalpAadhaarSwayamsevakValue2 = "";
+//                                         });
+//                                       },
+//                                       icon: Icon(Icons.cancel)),
+//                                 ],
+//                               ),
+//                             RadioListTile<SankalpAadhaarEnum>(
+//                               title: Text(
+//                                   Statics.getLabel('SankalpAadhaarShaakhaa')),
+//                               value: SankalpAadhaarEnum.Shaakhaa,
+//                               groupValue: _sankalpAadhaarEnum2,
+//                               onChanged: (SankalpAadhaarEnum? value) {
+//                                 setState(() {
+//                                   _sankalpAadhaarEnum2 = value!;
+//                                 });
+//                               },
+//                             ),
+//                             if (_sankalpAadhaarEnum2
+//                                     .toString()
+//                                     .split('.')
+//                                     .last ==
+//                                 'Shaakhaa')
+//                               Row(
+//                                 children: [
+//                                   Container(
+//                                     width:
+//                                         Statics.getDeviceSize(context).width *
+//                                             0.63,
+//                                     child: TypeAheadField(
+//                                       controller: _sankalpAadhaarShaakhaaCtrl2,
+//                                       builder:
+//                                           (context, controller, focusNode) {
+//                                         return TextField(
+//                                             controller: controller,
+//                                             focusNode: focusNode,
+//                                             decoration: InputDecoration(
+//                                               isDense: true,
+//                                               border: UnderlineInputBorder(),
+//                                               labelText: Statics.getLabel(
+//                                                   'SankalpAadhaarShaakhaa'),
+//                                             ));
+//                                       },
+//                                       suggestionsCallback: (pattern) {
+//                                         this._sankalpAadhaarShaakhaaValue = "";
+//                                         return populateSankalpAadhaarShaakhaa(
+//                                             _bhaagValue!, pattern);
+//                                       },
+//                                       itemBuilder: (context, suggestion) {
+//                                         return ListTile(
+//                                           title:
+//                                               Text(suggestion["GeoUnitName"]),
+//                                         );
+//                                       },
+//                                       onSelected: (suggestion) {
+//                                         this._sankalpAadhaarShaakhaaCtrl2.text =
+//                                             suggestion["GeoUnitName"];
+//                                         _sankalpAadhaarShaakhaaValue =
+//                                             suggestion["ShaakhaaID"].toString();
+//                                         shaakhaa!.sankalpAadhaarShaakhaaID2 =
+//                                             int.parse(suggestion["ShaakhaaID"]
+//                                                 .toString());
+//                                         print(
+//                                             "_sankalpAadhaarShaakhaaValue:--${_sankalpAadhaarShaakhaaValue}");
+//                                       },
+//                                     ),
+//                                   ),
+//                                   IconButton(
+//                                       color: Colors.purple,
+//                                       onPressed: () {
+//                                         setState(() {
+//                                           this
+//                                               ._sankalpAadhaarShaakhaaCtrl2
+//                                               .text = "";
+//                                           _sankalpAadhaarShaakhaaValue = "";
+//                                         });
+//                                       },
+//                                       icon: Icon(Icons.cancel)),
+//                                 ],
+//                               ),
+//                             SizedBox(
+//                               height: 15,
+//                             ),
+//                             Text(Statics.getLabel('SankalpTimeLine'),
+//                                 style: TextStyle(
+//                                     decoration: TextDecoration.underline)),
+//                             TextFormField(
+//                               textInputAction: TextInputAction.next,
+//                               controller: _sankalpCompletionMonthCtrl2,
+//                               decoration: InputDecoration(
+//                                   labelText: Statics.getLabel(
+//                                       'SankalpCompletionMonth')),
+//                               maxLength: 2,
+//                               keyboardType: TextInputType.number,
+//                               validator: (value) {
+//                                 //   if (_isSankalpit == true && value!.isEmpty) return (Statics.getLabel('SankalpCompletionValidationMessage'));
+//                                 return null;
+//                               },
+//                               onSaved: (value) {
+//                                 shaakhaa!.sankalpCompletionMonth2 =
+//                                     int.parse(value!);
+//                               },
+//                             ),
+//                             TextFormField(
+//                               textInputAction: TextInputAction.next,
+//                               controller: _sankalpCompletionYearCtrl2,
+//                               decoration: InputDecoration(
+//                                   labelText: Statics.getLabel(
+//                                       'SankalpCompletionYear')),
+//                               maxLength: 4,
+//                               keyboardType: TextInputType.number,
+//                               validator: (value) {
+//                                 //   if (_isSankalpit == true && value!.isEmpty) return (Statics.getLabel('SankalpCompletionValidationMessage'));
+//                                 return null;
+//                               },
+//                               onSaved: (value) {
+//                                 shaakhaa!.sankalpCompletionYear2 =
+//                                     int.parse(value!);
+//                               },
+//                             ),
+//                           ],
+//                         ),
+// //======================= D1-D2-D3 SELECT MASIKMILAN/ SANGH MANDALI  ====================================================================
+//                       if (_isSankalpit == true && _frequencyValue == '36')
+//                         Column(
+//                           children: [
+//                             // Text(Statics.getLabel('SankalpAadhaar'), style: TextStyle(decoration: TextDecoration.underline)),
+//                             Legend(
+//                                 legendString:
+//                                     'SankalpAadhaarMasikMilanSanghaMandali',
+//                                 fontsize: 18),
+//                             RadioListTile<SankalpAadhaarEnum>(
+//                               title: Text(Statics.getLabel(
+//                                   'SankalpAadhaarKaaryakartaa')),
+//                               value: SankalpAadhaarEnum.Kaaryakartaa,
+//                               groupValue: _sankalpAadhaarEnum3,
+//                               onChanged: (SankalpAadhaarEnum? value) {
+//                                 setState(() {
+//                                   _sankalpAadhaarEnum3 = value!;
+//                                 });
+//                               },
+//                             ),
+//                             if (_sankalpAadhaarEnum3
+//                                     .toString()
+//                                     .split('.')
+//                                     .last ==
+//                                 'Kaaryakartaa')
+//                               Row(
+//                                 children: [
+//                                   Container(
+//                                     width:
+//                                         Statics.getDeviceSize(context).width *
+//                                             0.63,
+//                                     child: TypeAheadField(
+//                                       controller:
+//                                           _sankalpAadhaarSwayamsevakCtrl3,
+//                                       builder:
+//                                           (context, controller, focusNode) {
+//                                         return TextField(
+//                                             controller: controller,
+//                                             focusNode: focusNode,
+//                                             decoration: InputDecoration(
+//                                               isDense: true,
+//                                               border: UnderlineInputBorder(),
+//                                               labelText: Statics.getLabel(
+//                                                   'SankalpAadhaarKaaryakartaa'),
+//                                             ));
+//                                       },
+//                                       suggestionsCallback: (pattern) {
+//                                         this._sankalpAadhaarSwayamsevakValue3 =
+//                                             "";
+//                                         return populateSankalpAadhaarSwayamsevak(
+//                                             _bhaagValue!, pattern);
+//                                       },
+//                                       itemBuilder: (context, suggestion) {
+//                                         print(suggestion);
+//                                         return ListTile(
+//                                           title: Text(suggestion["FullName"]),
+//                                         );
+//                                       },
+//                                       onSelected: (suggestion) {
+//                                         this
+//                                             ._sankalpAadhaarSwayamsevakCtrl3
+//                                             .text = suggestion["FullName"];
+//                                         _sankalpAadhaarSwayamsevakValue3 =
+//                                             suggestion["SwayamsevakID"]
+//                                                 .toString();
+//                                         shaakhaa!.sankalpAadhaarSwayamsevakID3 =
+//                                             int.parse(
+//                                                 suggestion["SwayamsevakID"]
+//                                                     .toString());
+//
+//                                         print(
+//                                             "_sankalpAadhaarSwayamsevakValue:- ${_sankalpAadhaarSwayamsevakValue3}  --- ");
+//                                       },
+//                                     ),
+//                                   ),
+//                                   IconButton(
+//                                       color: Colors.purple,
+//                                       onPressed: () {
+//                                         setState(() {
+//                                           this
+//                                               ._sankalpAadhaarSwayamsevakCtrl3
+//                                               .text = "";
+//                                           _sankalpAadhaarSwayamsevakValue3 = "";
+//                                         });
+//                                       },
+//                                       icon: Icon(Icons.cancel)),
+//                                 ],
+//                               ),
+//                             RadioListTile<SankalpAadhaarEnum>(
+//                               title: Text(
+//                                   Statics.getLabel('SankalpAadhaarShaakhaa')),
+//                               value: SankalpAadhaarEnum.Shaakhaa,
+//                               groupValue: _sankalpAadhaarEnum3,
+//                               onChanged: (SankalpAadhaarEnum? value) {
+//                                 setState(() {
+//                                   _sankalpAadhaarEnum3 = value!;
+//                                 });
+//                               },
+//                             ),
+//                             if (_sankalpAadhaarEnum3
+//                                     .toString()
+//                                     .split('.')
+//                                     .last ==
+//                                 'Shaakhaa')
+//                               Row(
+//                                 children: [
+//                                   Container(
+//                                     width:
+//                                         Statics.getDeviceSize(context).width *
+//                                             0.63,
+//                                     child: TypeAheadField(
+//                                       controller: _sankalpAadhaarShaakhaaCtrl3,
+//                                       builder:
+//                                           (context, controller, focusNode) {
+//                                         return TextField(
+//                                             controller: controller,
+//                                             focusNode: focusNode,
+//                                             decoration: InputDecoration(
+//                                               isDense: true,
+//                                               border: UnderlineInputBorder(),
+//                                               labelText: Statics.getLabel(
+//                                                   'SankalpAadhaarShaakhaa'),
+//                                             ));
+//                                       },
+//                                       suggestionsCallback: (pattern) {
+//                                         this._sankalpAadhaarShaakhaaValue = "";
+//                                         return populateSankalpAadhaarShaakhaa(
+//                                             _bhaagValue!, pattern);
+//                                       },
+//                                       itemBuilder: (context, suggestion) {
+//                                         return ListTile(
+//                                           title:
+//                                               Text(suggestion["GeoUnitName"]),
+//                                         );
+//                                       },
+//                                       onSelected: (suggestion) {
+//                                         this._sankalpAadhaarShaakhaaCtrl3.text =
+//                                             suggestion["GeoUnitName"];
+//                                         _sankalpAadhaarShaakhaaValue =
+//                                             suggestion["ShaakhaaID"].toString();
+//                                         shaakhaa!.sankalpAadhaarShaakhaaID3 =
+//                                             int.parse(suggestion["ShaakhaaID"]
+//                                                 .toString());
+//                                         print(
+//                                             "_sankalpAadhaarShaakhaaValue:--${_sankalpAadhaarShaakhaaValue}");
+//                                       },
+//                                     ),
+//                                   ),
+//                                   IconButton(
+//                                       color: Colors.purple,
+//                                       onPressed: () {
+//                                         setState(() {
+//                                           this
+//                                               ._sankalpAadhaarShaakhaaCtrl3
+//                                               .text = "";
+//                                           _sankalpAadhaarShaakhaaValue = "";
+//                                         });
+//                                       },
+//                                       icon: Icon(Icons.cancel)),
+//                                 ],
+//                               ),
+//                             SizedBox(
+//                               height: 15,
+//                             ),
+//                             Text(Statics.getLabel('SankalpTimeLine'),
+//                                 style: TextStyle(
+//                                     decoration: TextDecoration.underline)),
+//                             TextFormField(
+//                               textInputAction: TextInputAction.next,
+//                               controller: _sankalpCompletionMonthCtrl3,
+//                               decoration: InputDecoration(
+//                                   labelText: Statics.getLabel(
+//                                       'SankalpCompletionMonth')),
+//                               maxLength: 2,
+//                               keyboardType: TextInputType.number,
+//                               validator: (value) {
+//                                 //   if (_isSankalpit == true && value!.isEmpty) return (Statics.getLabel('SankalpCompletionValidationMessage'));
+//                                 return null;
+//                               },
+//                               onSaved: (value) {
+//                                 shaakhaa!.sankalpCompletionMonth3 =
+//                                     int.parse(value!);
+//                               },
+//                             ),
+//                             TextFormField(
+//                               textInputAction: TextInputAction.next,
+//                               controller: _sankalpCompletionYearCtrl3,
+//                               decoration: InputDecoration(
+//                                   labelText: Statics.getLabel(
+//                                       'SankalpCompletionYear')),
+//                               maxLength: 4,
+//                               keyboardType: TextInputType.number,
+//                               validator: (value) {
+//                                 //   if (_isSankalpit == true && value!.isEmpty) return (Statics.getLabel('SankalpCompletionValidationMessage'));
+//                                 return null;
+//                               },
+//                               onSaved: (value) {
+//                                 shaakhaa!.sankalpCompletionYear3 =
+//                                     int.parse(value!);
+//                               },
+//                             ),
+//                           ],
+//                         ),
+//                       SizedBox(
+//                         height: 10,
+//                       ),
 // ================================================================== NEW LOGIC END  ==================================================================
                       if (_frequencyValue != null &&
                           _frequency != null &&

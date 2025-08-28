@@ -1520,7 +1520,7 @@ Map<String, String> resEnglish = {
   'mobileNumberLimit': 'Mobile number must be 10 digits long.',
   'utsavLable': "उत्सव",
   'vijayaDashamiUtsav': "विजयादशमी उत्सव ",
-  'ProgramNirdharitTime': "कार्यक्रम निर्धारित वेळेवर झाला का ?",
+  'ProgramNirdharitTime': "कार्यक्रम निर्धारित वेळेवर सुरु झालं का ?",
   'vaiyaktikGitKantashtha': "वैयक्तिक गीत कंठस्थ होते का ?",
   'programHishobh24Hour': "कार्यक्रमाचे हिशोब २४ तासात पूर्ण  झाले का ?",
   'mukhyaAtithi': "मुख्य अतिथी",
@@ -1562,6 +1562,8 @@ Map<String, String> resEnglish = {
   'selectSanghaMandali': 'मासिक मिलन/संघ मंडळी निवडा',
   'addSanghaMandali': 'मासिक मिलन/संघ मंडळी जोडा',
   'anyaUpstithMahiti': 'अन्य उपस्थित माहिती',
+  'vastiGramSelectRequired': 'वस्ती / ग्राम निवडणे अनिवार्य आहे.',
+  'allInfoRequired': 'संपूर्ण माहिती आवश्यक आहे.',
 };
 
 Map<String, String> resMarathi = {
@@ -3090,7 +3092,7 @@ Map<String, String> resMarathi = {
   'vastiLabel': "वस्ती",
   'utsavLable': "उत्सव",
   'vijayaDashamiUtsav': "विजयादशमी उत्सव ",
-  'ProgramNirdharitTime': "कार्यक्रम निर्धारित वेळेवर झाला का ?",
+  'ProgramNirdharitTime': "कार्यक्रम निर्धारित वेळेवर सुरु झालं का ?",
   'vaiyaktikGitKantashtha': "वैयक्तिक गीत कंठस्थ होते का ?",
   'programHishobh24Hour': "कार्यक्रमाचे हिशोब २४ तासात पूर्ण  झाले का ?",
   'mukhyaAtithi': "मुख्य अतिथी",
@@ -3133,6 +3135,8 @@ Map<String, String> resMarathi = {
   'selectSanghaMandali': 'मासिक मिलन/संघ मंडळी निवडा',
   'addSanghaMandali': 'मासिक मिलन/संघ मंडळी जोडा',
   'anyaUpstithMahiti': 'अन्य उपस्थित माहिती',
+  'vastiGramSelectRequired': 'वस्ती / ग्राम निवडणे अनिवार्य आहे.',
+  'allInfoRequired': 'संपूर्ण माहिती आवश्यक आहे.',
 };
 
 Map<String, String> resHindi = {
@@ -4664,7 +4668,7 @@ Map<String, String> resHindi = {
   'vastiLabel': "बस्ती",
   'utsavLable': "उत्सव",
   'vijayaDashamiUtsav': "विजयादशमी उत्सव ",
-  'ProgramNirdharitTime': "कार्यक्रम निर्धारित वेळेवर झाला का ?",
+  'ProgramNirdharitTime': "कार्यक्रम निर्धारित वेळेवर सुरु झालं का ?",
   'vaiyaktikGitKantashtha': "वैयक्तिक गीत कंठस्थ होते का ?",
   'programHishobh24Hour': "कार्यक्रमाचे हिशोब २४ तासात पूर्ण  झाले का ?",
   'mukhyaAtithi': "मुख्य अतिथी",
@@ -4707,5 +4711,6 @@ Map<String, String> resHindi = {
   'selectSanghaMandali': 'मासिक मिलन/संघ मंडळी निवडा',
   'addSanghaMandali': 'मासिक मिलन/संघ मंडळी जोडा',
   'anyaUpstithMahiti': 'अन्य उपस्थित माहिती',
-  'anyaUpstithMahiti': 'वस्ती / ग्राम निवडणे अनिवार्य आहे.',
+  'vastiGramSelectRequired': 'वस्ती / ग्राम निवडणे अनिवार्य आहे.',
+  'allInfoRequired': 'संपूर्ण माहिती आवश्यक आहे.',
 };
