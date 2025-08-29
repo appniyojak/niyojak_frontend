@@ -1098,117 +1098,151 @@ class _UpNagarkhandaAddUpdateViewState extends State<UpNagarkhandaAddUpdateView>
                   child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: SizedBox(
-                        width: MediaQuery.of(context).size.width * 1.25,
-                        child: DataTable(
+                        width: MediaQuery.of(context).size.width * 0.95,
+                        child: Table(
                           border: TableBorder.symmetric(inside: BorderSide(width: 0.4, color: Colors.grey.shade400)),
-                          showCheckboxColumn: false,
-                          headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
-                          headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
-                          columns: [
-                            DataColumn(label: SizedBox()),
-                            DataColumn(
-                                label: Text(
-                              "${Statics.getLabel('Name')}",
-                            )),
-                            DataColumn(
-                                label: Text(
-                              "${Statics.getLabel('Vasti')}/${Statics.getLabel('Mandal')}",
-                            )),
-                            DataColumn(label: SizedBox()),
-                          ],
-                          rows: vastiUpDataListModel == null
+                          columnWidths: const {
+                            0: FlexColumnWidth(0.9),
+                            1: FlexColumnWidth(1.7),
+                            2: FlexColumnWidth(0.9),
+                          },
+                          // border: TableBorder.symmetric(inside: BorderSide(width: 0.4, color: Colors.grey.shade400)),
+                          // showCheckboxColumn: false,
+                          // checkboxHorizontalMargin: 0,
+                          // // columnSpacing: 0,
+                          // headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+                          // headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
+                          // columns: [
+                          //   DataColumn(label: SizedBox()),
+                          //   DataColumn(
+                          //       label: Text(
+                          //         "${Statics.getLabel('Name')}",
+                          //       )),
+                          //   DataColumn(
+                          //       label: Text(
+                          //         "${Statics.getLabel('Vasti')}/${Statics.getLabel('Mandal')}",
+                          //       )),
+                          //   // DataColumn(label: SizedBox()),
+                          // ],
+                          children: vastiUpDataListModel == null
                               ? []
-                              : vastiUpDataListModel!.upnagarmandallist!.asMap().entries.map((entry) {
+                              : [
+                                    // Header Row
+                                    TableRow(
+                                      decoration: BoxDecoration(color: Colors.purple.shade50),
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: SizedBox(
+                                            width: MediaQuery.of(context).size.width * 0.02,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text("${Statics.getLabel('Name')}", style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Center(
+                                              child: Text("${Statics.getLabel('Vasti')}/${Statics.getLabel('Mandal')}", style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black))),
+                                        ),
+                                      ],
+                                    ),
+                                  ] +
+                                  vastiUpDataListModel!.upnagarmandallist!.asMap().entries.map((entry) {
                                     int index = entry.key;
                                     var data = entry.value;
-                                    return DataRow(cells: [
-                                      DataCell(Text((index + 1).toString())),
-                                      DataCell(Text(data.preferedname ?? '', maxLines: 2, overflow: TextOverflow.ellipsis, softWrap: true)),
-                                      DataCell(Center(child: Text(vastiUpDataListModel?.vastimandallist?.where((e) => e.linkedUpaNagarID == data.geoUnitID).length.toString() ?? '0'))),
-                                      DataCell(Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          InkWell(
-                                            // style: IconButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
-                                            onTap: () {
-                                              setState(() {
-                                                // 1. hideSelectedIds → jinke linkedUpaNagarID != value aur != 0
-                                                hideSelectedIds = vastiUpDataListModel!.vastimandallist!
-                                                    .where((item) => item.linkedUpaNagarID.toString() != data.geoUnitID.toString() && item.linkedUpaNagarID != 0)
-                                                    .map((item) => item.geoUnitID.toString())
-                                                    .join(',');
+                                    return TableRow(children: [
+                                      // DataCell(Text((index + 1).toString())),
+                                      Padding(
+                                          padding: EdgeInsets.all(8),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              InkWell(
+                                                // style: IconButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+                                                onTap: () {
+                                                  setState(() {
+                                                    // 1. hideSelectedIds → jinke linkedUpaNagarID != value aur != 0
+                                                    hideSelectedIds = vastiUpDataListModel!.vastimandallist!
+                                                        .where((item) => item.linkedUpaNagarID.toString() != data.geoUnitID.toString() && item.linkedUpaNagarID != 0)
+                                                        .map((item) => item.geoUnitID.toString())
+                                                        .join(',');
 
-                                                // 2. selectedIdString → jinke linkedUpaNagarID == value (checked in popup)
-                                                selectedIdString = vastiUpDataListModel!.vastimandallist!
-                                                    .where((item) => item.linkedUpaNagarID.toString() == data.geoUnitID.toString())
-                                                    .map((item) => item.geoUnitID.toString())
-                                                    .join(',');
-                                              });
-                                              showGeoUnitVastiMandalCountPopup(
-                                                context,
-                                                title: data.preferedname,
-                                                initiallySelectedIds: selectedIdString,
-                                                hideSelectedIds: hideSelectedIds,
-                                              );
-                                              setState(() {});
-                                            },
-                                            child: Icon(Icons.remove_red_eye, size: 18, color: Colors.purpleAccent),
-                                          ),
-                                          SizedBox(width: 8),
-                                          InkWell(
-                                            // style: IconButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
-                                            onTap: () {
-                                              setState(() {
-                                                showupnagarUpkhandaNewAdd = true;
-                                                upnagarLinkedValue = data.geoUnitID.toString() ?? "";
+                                                    // 2. selectedIdString → jinke linkedUpaNagarID == value (checked in popup)
+                                                    selectedIdString = vastiUpDataListModel!.vastimandallist!
+                                                        .where((item) => item.linkedUpaNagarID.toString() == data.geoUnitID.toString())
+                                                        .map((item) => item.geoUnitID.toString())
+                                                        .join(',');
+                                                  });
+                                                  showGeoUnitVastiMandalCountPopup(
+                                                    context,
+                                                    title: data.preferedname,
+                                                    initiallySelectedIds: selectedIdString,
+                                                    hideSelectedIds: hideSelectedIds,
+                                                  );
+                                                  setState(() {});
+                                                },
+                                                child: Icon(Icons.remove_red_eye, size: 18, color: Colors.purpleAccent),
+                                              ),
+                                              SizedBox(width: 16),
+                                              InkWell(
+                                                // style: IconButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+                                                onTap: () {
+                                                  setState(() {
+                                                    showupnagarUpkhandaNewAdd = true;
+                                                    upnagarLinkedValue = data.geoUnitID.toString() ?? "";
 
-                                                // Find selected item and populate controllers
-                                                selectedUpnagar = vastiUpDataListModel!.upnagarmandallist!.firstWhere((e) => e.geoUnitID.toString() == data.geoUnitID.toString());
+                                                    // Find selected item and populate controllers
+                                                    selectedUpnagar = vastiUpDataListModel!.upnagarmandallist!.firstWhere((e) => e.geoUnitID.toString() == data.geoUnitID.toString());
 
-                                                marathiNameController.text = selectedUpnagar!.geoUnitNameMarathi ?? "";
-                                                hindiNameController.text = selectedUpnagar!.geoUnitNameHindi ?? "";
-                                                englishNameController.text = selectedUpnagar!.geoUnitName ?? "";
+                                                    marathiNameController.text = selectedUpnagar!.geoUnitNameMarathi ?? "";
+                                                    hindiNameController.text = selectedUpnagar!.geoUnitNameHindi ?? "";
+                                                    englishNameController.text = selectedUpnagar!.geoUnitName ?? "";
 
-                                                showTextFieldEnterUpData = true;
+                                                    showTextFieldEnterUpData = true;
 
-                                                // 1. hideSelectedIds → jinke linkedUpaNagarID != value aur != 0
-                                                hideSelectedIds = vastiUpDataListModel!.vastimandallist!
-                                                    .where((item) => item.linkedUpaNagarID.toString() != data.geoUnitID.toString() && item.linkedUpaNagarID != 0)
-                                                    .map((item) => item.geoUnitID.toString())
-                                                    .join(',');
+                                                    // 1. hideSelectedIds → jinke linkedUpaNagarID != value aur != 0
+                                                    hideSelectedIds = vastiUpDataListModel!.vastimandallist!
+                                                        .where((item) => item.linkedUpaNagarID.toString() != data.geoUnitID.toString() && item.linkedUpaNagarID != 0)
+                                                        .map((item) => item.geoUnitID.toString())
+                                                        .join(',');
 
-                                                // 2. selectedIdString → jinke linkedUpaNagarID == value (checked in popup)
-                                                selectedIdString = vastiUpDataListModel!.vastimandallist!
-                                                    .where((item) => item.linkedUpaNagarID.toString() == data.geoUnitID.toString())
-                                                    .map((item) => item.geoUnitID.toString())
-                                                    .join(',');
+                                                    // 2. selectedIdString → jinke linkedUpaNagarID == value (checked in popup)
+                                                    selectedIdString = vastiUpDataListModel!.vastimandallist!
+                                                        .where((item) => item.linkedUpaNagarID.toString() == data.geoUnitID.toString())
+                                                        .map((item) => item.geoUnitID.toString())
+                                                        .join(',');
 
-                                                // Debug print
-                                                print("selectedIdString (checked) ---> $selectedIdString");
-                                                print("hideSelectedIds (hidden) ---> $hideSelectedIds");
-                                              });
-                                              showUpkhandaPopupDialog();
-                                            },
-                                            child: Icon(Icons.edit, color: Colors.blue, size: 20),
-                                          )
-                                        ],
-                                      )),
+                                                    // Debug print
+                                                    print("selectedIdString (checked) ---> $selectedIdString");
+                                                    print("hideSelectedIds (hidden) ---> $hideSelectedIds");
+                                                  });
+                                                  showUpkhandaPopupDialog();
+                                                },
+                                                child: Icon(Icons.edit, color: Colors.blue, size: 20),
+                                              )
+                                            ],
+                                          )),
+                                      Padding(padding: EdgeInsets.all(8), child: Text(data.preferedname ?? '', maxLines: 2, overflow: TextOverflow.ellipsis, softWrap: true)),
+                                      Padding(
+                                          padding: EdgeInsets.all(8),
+                                          child: Center(child: Text(vastiUpDataListModel?.vastimandallist?.where((e) => e.linkedUpaNagarID == data.geoUnitID).length.toString() ?? '0'))),
                                     ]);
                                   }).toList() +
                                   [
-                                    DataRow(color: MaterialStatePropertyAll(Colors.amber.shade50), cells: [
-                                      DataCell(SizedBox()),
-                                      DataCell(Text("${Statics.getLabel('Total')}")),
-                                      DataCell(Center(child: Text(totalCount.toString()))),
-                                      DataCell(SizedBox()),
+                                    TableRow(decoration: BoxDecoration(color: Colors.amber.shade50), children: [
+                                      Padding(padding: EdgeInsets.all(8), child: SizedBox()),
+                                      Padding(padding: EdgeInsets.all(8), child: Text("${Statics.getLabel('Total')}", style: TextStyle(fontWeight: FontWeight.w600))),
+                                      Padding(padding: EdgeInsets.all(8), child: Center(child: Text(totalCount.toString()))),
+                                      // DataCell(SizedBox()),
                                     ]),
                                     if (remainingCount != 0)
-                                      DataRow(color: MaterialStatePropertyAll(Colors.amber.shade50), cells: [
-                                        DataCell(SizedBox()),
-                                        DataCell(Text("${Statics.getLabel('remaining')}")),
-                                        DataCell(Center(child: Text(remainingCount.toString()))),
-                                        DataCell(
-                                          InkWell(
+                                      TableRow(decoration: BoxDecoration(color: Colors.lime.shade50), children: [
+                                        Padding(
+                                          padding: EdgeInsets.all(8),
+                                          child: InkWell(
                                             // style: IconButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
                                             onTap: () {
                                               setState(() {
@@ -1236,15 +1270,169 @@ class _UpNagarkhandaAddUpdateViewState extends State<UpNagarkhandaAddUpdateView>
                                             child: Icon(Icons.remove_red_eye, size: 18, color: Colors.purpleAccent),
                                           ),
                                         ),
+                                        Padding(padding: EdgeInsets.all(8), child: Text("${Statics.getLabel('remaining')}", style: TextStyle(fontWeight: FontWeight.w600))),
+                                        Padding(padding: EdgeInsets.all(8), child: Center(child: Text(remainingCount.toString()))),
                                       ]),
-                                    DataRow(color: MaterialStatePropertyAll(Colors.amberAccent.shade100), cells: [
-                                      DataCell(SizedBox()),
-                                      DataCell(Text("${Statics.getLabel('Total')} ${Statics.getLabel('Vasti')}/${Statics.getLabel('Mandal')}")),
-                                      DataCell(Center(child: Text(vastiUpDataListModel?.vastimandallist?.length.toString() ?? "0"))),
-                                      DataCell(SizedBox()),
+                                    TableRow(decoration: BoxDecoration(color: Colors.amberAccent.shade100), children: [
+                                      Padding(padding: EdgeInsets.all(8), child: SizedBox()),
+                                      Padding(
+                                          padding: EdgeInsets.all(8),
+                                          child: Text("${Statics.getLabel('Total')} ${Statics.getLabel('Vasti')}/${Statics.getLabel('Mandal')}", style: TextStyle(fontWeight: FontWeight.w700))),
+                                      Padding(padding: EdgeInsets.all(8), child: Center(child: Text(vastiUpDataListModel?.vastimandallist?.length.toString() ?? "0"))),
+                                      // DataCell(SizedBox()),
                                     ]),
                                   ],
                         ),
+                        // child: DataTable(
+                        //   border: TableBorder.symmetric(inside: BorderSide(width: 0.4, color: Colors.grey.shade400)),
+                        //   showCheckboxColumn: false,
+                        //   checkboxHorizontalMargin: 0,
+                        //   // columnSpacing: 0,
+                        //   headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+                        //   headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
+                        //   columns: [
+                        //     DataColumn(label: SizedBox()),
+                        //     DataColumn(
+                        //         label: Text(
+                        //       "${Statics.getLabel('Name')}",
+                        //     )),
+                        //     DataColumn(
+                        //         label: Text(
+                        //       "${Statics.getLabel('Vasti')}/${Statics.getLabel('Mandal')}",
+                        //     )),
+                        //     // DataColumn(label: SizedBox()),
+                        //   ],
+                        //   rows: vastiUpDataListModel == null
+                        //       ? []
+                        //       : vastiUpDataListModel!.upnagarmandallist!.asMap().entries.map((entry) {
+                        //             int index = entry.key;
+                        //             var data = entry.value;
+                        //             return DataRow(cells: [
+                        //               // DataCell(Text((index + 1).toString())),
+                        //               DataCell(SizedBox(
+                        //                 width: MediaQuery.of(context).size.width * 0.07,
+                        //                 child: Row(
+                        //                   mainAxisSize: MainAxisSize.min,
+                        //                   children: [
+                        //                     InkWell(
+                        //                       // style: IconButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+                        //                       onTap: () {
+                        //                         setState(() {
+                        //                           // 1. hideSelectedIds → jinke linkedUpaNagarID != value aur != 0
+                        //                           hideSelectedIds = vastiUpDataListModel!.vastimandallist!
+                        //                               .where((item) => item.linkedUpaNagarID.toString() != data.geoUnitID.toString() && item.linkedUpaNagarID != 0)
+                        //                               .map((item) => item.geoUnitID.toString())
+                        //                               .join(',');
+                        //
+                        //                           // 2. selectedIdString → jinke linkedUpaNagarID == value (checked in popup)
+                        //                           selectedIdString = vastiUpDataListModel!.vastimandallist!
+                        //                               .where((item) => item.linkedUpaNagarID.toString() == data.geoUnitID.toString())
+                        //                               .map((item) => item.geoUnitID.toString())
+                        //                               .join(',');
+                        //                         });
+                        //                         showGeoUnitVastiMandalCountPopup(
+                        //                           context,
+                        //                           title: data.preferedname,
+                        //                           initiallySelectedIds: selectedIdString,
+                        //                           hideSelectedIds: hideSelectedIds,
+                        //                         );
+                        //                         setState(() {});
+                        //                       },
+                        //                       child: Icon(Icons.remove_red_eye, size: 18, color: Colors.purpleAccent),
+                        //                     ),
+                        //                     SizedBox(width: 14),
+                        //                     InkWell(
+                        //                       // style: IconButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+                        //                       onTap: () {
+                        //                         setState(() {
+                        //                           showupnagarUpkhandaNewAdd = true;
+                        //                           upnagarLinkedValue = data.geoUnitID.toString() ?? "";
+                        //
+                        //                           // Find selected item and populate controllers
+                        //                           selectedUpnagar = vastiUpDataListModel!.upnagarmandallist!.firstWhere((e) => e.geoUnitID.toString() == data.geoUnitID.toString());
+                        //
+                        //                           marathiNameController.text = selectedUpnagar!.geoUnitNameMarathi ?? "";
+                        //                           hindiNameController.text = selectedUpnagar!.geoUnitNameHindi ?? "";
+                        //                           englishNameController.text = selectedUpnagar!.geoUnitName ?? "";
+                        //
+                        //                           showTextFieldEnterUpData = true;
+                        //
+                        //                           // 1. hideSelectedIds → jinke linkedUpaNagarID != value aur != 0
+                        //                           hideSelectedIds = vastiUpDataListModel!.vastimandallist!
+                        //                               .where((item) => item.linkedUpaNagarID.toString() != data.geoUnitID.toString() && item.linkedUpaNagarID != 0)
+                        //                               .map((item) => item.geoUnitID.toString())
+                        //                               .join(',');
+                        //
+                        //                           // 2. selectedIdString → jinke linkedUpaNagarID == value (checked in popup)
+                        //                           selectedIdString = vastiUpDataListModel!.vastimandallist!
+                        //                               .where((item) => item.linkedUpaNagarID.toString() == data.geoUnitID.toString())
+                        //                               .map((item) => item.geoUnitID.toString())
+                        //                               .join(',');
+                        //
+                        //                           // Debug print
+                        //                           print("selectedIdString (checked) ---> $selectedIdString");
+                        //                           print("hideSelectedIds (hidden) ---> $hideSelectedIds");
+                        //                         });
+                        //                         showUpkhandaPopupDialog();
+                        //                       },
+                        //                       child: Icon(Icons.edit, color: Colors.blue, size: 20),
+                        //                     )
+                        //                   ],
+                        //                 ),
+                        //               )),
+                        //               DataCell(Text(data.preferedname ?? '', maxLines: 2, overflow: TextOverflow.ellipsis, softWrap: true)),
+                        //               DataCell(Center(child: Text(vastiUpDataListModel?.vastimandallist?.where((e) => e.linkedUpaNagarID == data.geoUnitID).length.toString() ?? '0'))),
+                        //             ]);
+                        //           }).toList() +
+                        //           [
+                        //             DataRow(color: MaterialStatePropertyAll(Colors.amber.shade50), cells: [
+                        //               DataCell(SizedBox()),
+                        //               DataCell(Text("${Statics.getLabel('Total')}", style: TextStyle(fontWeight: FontWeight.w600))),
+                        //               DataCell(Center(child: Text(totalCount.toString()))),
+                        //               // DataCell(SizedBox()),
+                        //             ]),
+                        //             if (remainingCount != 0)
+                        //               DataRow(color: MaterialStatePropertyAll(Colors.lime.shade50), cells: [
+                        //                 DataCell(
+                        //                   InkWell(
+                        //                     // style: IconButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+                        //                     onTap: () {
+                        //                       setState(() {
+                        //                         // 1. hideSelectedIds → jinke linkedUpaNagarID != value aur != 0
+                        //                         // hideSelectedIds = vastiUpDataListModel!.vastimandallist!
+                        //                         //     .where((item) => item.linkedUpaNagarID.toString() != data.geoUnitID.toString() && item.linkedUpaNagarID != 0)
+                        //                         //     .map((item) => item.geoUnitID.toString())
+                        //                         //     .join(',');
+                        //                         //
+                        //                         // // 2. selectedIdString → jinke linkedUpaNagarID == value (checked in popup)
+                        //                         // selectedIdString = vastiUpDataListModel!.vastimandallist!
+                        //                         //     .where((item) => item.linkedUpaNagarID.toString() == data.geoUnitID.toString())
+                        //                         //     .map((item) => item.geoUnitID.toString())
+                        //                         //     .join(',');
+                        //                       });
+                        //                       showGeoUnitVastiMandalCountPopup(
+                        //                         context,
+                        //                         showUnselected: true,
+                        //                         title: "${Statics.getLabel('remaining')}",
+                        //                         initiallySelectedIds: hideSelectedIds,
+                        //                         hideSelectedIds: selectedIdString,
+                        //                       );
+                        //                       setState(() {});
+                        //                     },
+                        //                     child: Icon(Icons.remove_red_eye, size: 18, color: Colors.purpleAccent),
+                        //                   ),
+                        //                 ),
+                        //                 DataCell(Text("${Statics.getLabel('remaining')}", style: TextStyle(fontWeight: FontWeight.w600))),
+                        //                 DataCell(Center(child: Text(remainingCount.toString()))),
+                        //               ]),
+                        //             DataRow(color: MaterialStatePropertyAll(Colors.amberAccent.shade100), cells: [
+                        //               DataCell(SizedBox()),
+                        //               DataCell(Text("${Statics.getLabel('Total')} ${Statics.getLabel('Vasti')}/${Statics.getLabel('Mandal')}", style: TextStyle(fontWeight: FontWeight.w700))),
+                        //               DataCell(Center(child: Text(vastiUpDataListModel?.vastimandallist?.length.toString() ?? "0"))),
+                        //               // DataCell(SizedBox()),
+                        //             ]),
+                        //           ],
+                        // ),
                       )),
                 ),
               // if (showupnagarUpkhandaNewAdd)
