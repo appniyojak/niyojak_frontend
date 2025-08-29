@@ -40,205 +40,126 @@ import './database_helper.dart';
 
 /// Development
 const String baseUrl = 'http://108.181.165.29:8027';
-const String baseUrlAPI =
-    'http://108.181.165.29:8027/WCFServices/NiyojakProdMobileApp.svc';
+const String baseUrlAPI = 'http://108.181.165.29:8027/WCFServices/NiyojakProdMobileApp.svc';
 // ========================================================================================
 
 const String urlCheckLoginDate = baseUrlAPI + '/checklogoutdate';
 const String urlGetAbhiyaanList = baseUrlAPI + '/GetAbhiyan';
-const String urlSaveAbhiyaanSwayamsevak =
-    baseUrlAPI + '/SaveAbhiyanSwayamsevak';
-const String urlGetAbhiyaanSwayamsevakList =
-    baseUrlAPI + '/getAbhiyanSwayamsevak';
-const String urlGetAbhiyaanGruhaSamparkList =
-    baseUrlAPI + '/GetAbhiyanGruhasamparkResponse';
-const String urlGetVisheshVyaktiList =
-    baseUrlAPI + '/GruhasamparkVisheshVyakti';
-const String urlSaveAbhiyaanGruhaSampark =
-    baseUrlAPI + '/SaveUpdateAbhiyanGruhasampark';
+const String urlSaveAbhiyaanSwayamsevak = baseUrlAPI + '/SaveAbhiyanSwayamsevak';
+const String urlGetAbhiyaanSwayamsevakList = baseUrlAPI + '/getAbhiyanSwayamsevak';
+const String urlGetAbhiyaanGruhaSamparkList = baseUrlAPI + '/GetAbhiyanGruhasamparkResponse';
+const String urlGetVisheshVyaktiList = baseUrlAPI + '/GruhasamparkVisheshVyakti';
+const String urlSaveAbhiyaanGruhaSampark = baseUrlAPI + '/SaveUpdateAbhiyanGruhasampark';
 const String updatevayktivishesh = baseUrlAPI + '/updatevayktivishesh';
 const String urlValidateUser = baseUrlAPI + '/ValidateAppUser';
 const String urlGetHelpVideosForApp = baseUrlAPI + '/GetHelpVideosForApp';
-const String urlGetAnnualBaithakEkatritVruttaForApp =
-    baseUrlAPI + '/GetAnnualBaithakEkatritVruttaForApp';
-const String getSankalitBaithakVruttaDeatilsNames =
-    baseUrlAPI + '/GetSankalitBaithakVruttaDeatilsNames';
+const String urlGetAnnualBaithakEkatritVruttaForApp = baseUrlAPI + '/GetAnnualBaithakEkatritVruttaForApp';
+const String getSankalitBaithakVruttaDeatilsNames = baseUrlAPI + '/GetSankalitBaithakVruttaDeatilsNames';
 const String urlSendMail = baseUrlAPI + '/sendmail';
 
 //========================================================================================
 
-const String urlUpdatedVersion =
-    'https://play.google.com/store/apps/details?id=com.softiq.niyojak_prod';
+const String urlUpdatedVersion = 'https://play.google.com/store/apps/details?id=com.softiq.niyojak_prod';
 const String urlIOSUpdatedVersion = 'https://apps'
     '.apple.com/us/app/niyojak/id6451251464';
 const String urlUserCanUseApp = baseUrlAPI + '/UserCanUseApp';
-const String urlGetSwayamsevakBasicInfoForApp =
-    baseUrlAPI + '/GetSwayamsevakBasicInfoForApp';
-const String urlGetSwayamsevakOtherInfoForApp =
-    baseUrlAPI + '/GetSwayamsevakOtherInfoForApp';
-const String urlGetSwayamsevakSanghaShikshanShaaririkVishayForApp =
-    baseUrlAPI + '/GetSwayamsevakSanghaShikshanShaaririkVishayForApp';
-const String urlGetSwayamsevakOccupationForApp =
-    baseUrlAPI + '/GetSwayamsevakOccupationForApp';
-const String urlGetSwayamsevakDaayitvaForApp =
-    baseUrlAPI + '/GetSwayamsevakDaayitvaForApp';
-const String urlGetSwayamsevakGhoshForApp =
-    baseUrlAPI + '/GetSwayamsevakGhoshForApp';
-const String urlGetSwayamsevaksForAppGrid =
-    baseUrlAPI + '/GetSwayamsevaksForAppGrid';
-const String urlSwayamsevakExportForApp =
-    baseUrlAPI + '/SwayamsevakExportForApp';
-const String urlSaveSwayamsevakBasicInfoForApp =
-    baseUrlAPI + '/SaveSwayamsevakBasicInfoForApp';
-const String urlSaveSwayamsevakOtherInfoForApp =
-    baseUrlAPI + '/SaveSwayamsevakOtherInfoForApp';
-const String urlSaveSwayamsevakSanghaShikshanShaaririkVishayForApp =
-    baseUrlAPI + '/SaveSwayamsevakSanghaShikshanShaaririkVishayForApp';
-const String urlSaveSaveSwayamsevakOccupationForApp =
-    baseUrlAPI + '/SaveSwayamsevakOccupationForApp';
-const String urlSaveSwayamsevakDaayitvaForApp =
-    baseUrlAPI + '/SaveSwayamsevakDaayitvaForApp';
-const String urlSaveSwayamsevakGhoshForApp =
-    baseUrlAPI + '/SaveSwayamsevakGhoshForApp';
-const String urlGetSwayamsevakTransferForAppGrid =
-    baseUrlAPI + '/GetSwayamsevakTransferForAppGrid';
-const String urlGetSwayamsevakTransferDetailsForApp =
-    baseUrlAPI + '/GetSwayamsevakTransferDetailsForApp';
-const String urlSaveSwayamsevakTransferForApp =
-    baseUrlAPI + '/SaveSwayamsevakTransferForApp';
-const String urlDeleteSwayamsevakTransferForApp =
-    baseUrlAPI + '/DeleteSwayamsevakTransferForApp';
-const String deleteabhiyangruhasampark =
-    baseUrlAPI + '/deleteabhiyangruhasampark';
-const String deleteabhiyanswayamsevak =
-    baseUrlAPI + '/deleteabhiyanswayamsevak';
+const String urlGetSwayamsevakBasicInfoForApp = baseUrlAPI + '/GetSwayamsevakBasicInfoForApp';
+const String urlGetSwayamsevakOtherInfoForApp = baseUrlAPI + '/GetSwayamsevakOtherInfoForApp';
+const String urlGetSwayamsevakSanghaShikshanShaaririkVishayForApp = baseUrlAPI + '/GetSwayamsevakSanghaShikshanShaaririkVishayForApp';
+const String urlGetSwayamsevakOccupationForApp = baseUrlAPI + '/GetSwayamsevakOccupationForApp';
+const String urlGetSwayamsevakDaayitvaForApp = baseUrlAPI + '/GetSwayamsevakDaayitvaForApp';
+const String urlGetSwayamsevakGhoshForApp = baseUrlAPI + '/GetSwayamsevakGhoshForApp';
+const String urlGetSwayamsevaksForAppGrid = baseUrlAPI + '/GetSwayamsevaksForAppGrid';
+const String urlSwayamsevakExportForApp = baseUrlAPI + '/SwayamsevakExportForApp';
+const String urlSaveSwayamsevakBasicInfoForApp = baseUrlAPI + '/SaveSwayamsevakBasicInfoForApp';
+const String urlSaveSwayamsevakOtherInfoForApp = baseUrlAPI + '/SaveSwayamsevakOtherInfoForApp';
+const String urlSaveSwayamsevakSanghaShikshanShaaririkVishayForApp = baseUrlAPI + '/SaveSwayamsevakSanghaShikshanShaaririkVishayForApp';
+const String urlSaveSaveSwayamsevakOccupationForApp = baseUrlAPI + '/SaveSwayamsevakOccupationForApp';
+const String urlSaveSwayamsevakDaayitvaForApp = baseUrlAPI + '/SaveSwayamsevakDaayitvaForApp';
+const String urlSaveSwayamsevakGhoshForApp = baseUrlAPI + '/SaveSwayamsevakGhoshForApp';
+const String urlGetSwayamsevakTransferForAppGrid = baseUrlAPI + '/GetSwayamsevakTransferForAppGrid';
+const String urlGetSwayamsevakTransferDetailsForApp = baseUrlAPI + '/GetSwayamsevakTransferDetailsForApp';
+const String urlSaveSwayamsevakTransferForApp = baseUrlAPI + '/SaveSwayamsevakTransferForApp';
+const String urlDeleteSwayamsevakTransferForApp = baseUrlAPI + '/DeleteSwayamsevakTransferForApp';
+const String deleteabhiyangruhasampark = baseUrlAPI + '/deleteabhiyangruhasampark';
+const String deleteabhiyanswayamsevak = baseUrlAPI + '/deleteabhiyanswayamsevak';
 const String urlResetDataForApp = baseUrlAPI + '/ResetDataForApp';
 const String deleteUserDeviceToken = baseUrlAPI + '/logoutappuser';
 const String urlGetShaakhaasForAppGrid = baseUrlAPI + '/GetShaakhaasForAppGrid';
-const String urlGetAnnualBaithakNagarVruttaForApp =
-    baseUrlAPI + '/GetAnnualBaithakNagarVruttaForApp';
-const String urlSaveAnnualBaithakNagarVruttaForApp =
-    baseUrlAPI + '/SaveAnnualBaithakNagarVruttaForApp';
-const String urlGetAnnualBaithakShaakhaaVruttaForApp =
-    baseUrlAPI + '/GetAnnualBaithakShaakhaaVruttaForApp';
-const String GetAnnualBaithakShaakhaaVruttaForAppbyid =
-    baseUrlAPI + '/GetAnnualBaithakShaakhaaVruttaForAppbyid';
-const String urlSaveAnnualBaithakShaakhaaVruttaForApp =
-    baseUrlAPI + '/SaveAnnualBaithakShaakhaaVruttaForApp';
-const String urlGetAnnualBaithakShaakhaaViheenForApp =
-    baseUrlAPI + '/GetAnnualBaithakShaakhaaViheenVruttaForApp';
-const String urlSaveAnnualBaithakShaakhaaViheenForApp =
-    baseUrlAPI + '/SaveAnnualBaithakShaakhaaViheenVruttaForApp';
-const String urlGetAnnualBaithakMukhyaMaargForApp =
-    baseUrlAPI + '/GetAnnualBaithakMukhyaMaargVruttaForApp';
-const String urlSaveAnnualBaithakMukhyaMaargForApp =
-    baseUrlAPI + '/SaveAnnualBaithakMukhyaMaargVruttaForApp';
-const String urlGetAnnualBaithakGraamVikasForApp =
-    baseUrlAPI + '/GetAnnualBaithakGraamVikasVruttaForApp';
-const String urlSaveAnnualBaithakGraamVikasForApp =
-    baseUrlAPI + '/SaveAnnualBaithakGraamVikasVruttaForApp';
-const String urlGetShaakhaaDetailsForApp =
-    baseUrlAPI + '/GetShaakhaaDetailsForApp';
+const String urlGetAnnualBaithakNagarVruttaForApp = baseUrlAPI + '/GetAnnualBaithakNagarVruttaForApp';
+const String urlSaveAnnualBaithakNagarVruttaForApp = baseUrlAPI + '/SaveAnnualBaithakNagarVruttaForApp';
+const String urlGetAnnualBaithakShaakhaaVruttaForApp = baseUrlAPI + '/GetAnnualBaithakShaakhaaVruttaForApp';
+const String GetAnnualBaithakShaakhaaVruttaForAppbyid = baseUrlAPI + '/GetAnnualBaithakShaakhaaVruttaForAppbyid';
+const String urlSaveAnnualBaithakShaakhaaVruttaForApp = baseUrlAPI + '/SaveAnnualBaithakShaakhaaVruttaForApp';
+const String urlGetAnnualBaithakShaakhaaViheenForApp = baseUrlAPI + '/GetAnnualBaithakShaakhaaViheenVruttaForApp';
+const String urlSaveAnnualBaithakShaakhaaViheenForApp = baseUrlAPI + '/SaveAnnualBaithakShaakhaaViheenVruttaForApp';
+const String urlGetAnnualBaithakMukhyaMaargForApp = baseUrlAPI + '/GetAnnualBaithakMukhyaMaargVruttaForApp';
+const String urlSaveAnnualBaithakMukhyaMaargForApp = baseUrlAPI + '/SaveAnnualBaithakMukhyaMaargVruttaForApp';
+const String urlGetAnnualBaithakGraamVikasForApp = baseUrlAPI + '/GetAnnualBaithakGraamVikasVruttaForApp';
+const String urlSaveAnnualBaithakGraamVikasForApp = baseUrlAPI + '/SaveAnnualBaithakGraamVikasVruttaForApp';
+const String urlGetShaakhaaDetailsForApp = baseUrlAPI + '/GetShaakhaaDetailsForApp';
 const String urlSaveShaakhaaAppData = baseUrlAPI + '/SaveShaakhaaAppData';
 const String urlGetSoochisForAppGrid = baseUrlAPI + '/GetSoochisForAppGrid';
 const String urlGetSoochiDetailsForApp = baseUrlAPI + '/GetSoochiDetailsForApp';
 const String urlGetSoochiMembersForApp = baseUrlAPI + '/GetSoochiMembersForApp';
-const String urlGetSoochiSharingsForApp =
-    baseUrlAPI + '/GetSoochiSharingsForApp';
+const String urlGetSoochiSharingsForApp = baseUrlAPI + '/GetSoochiSharingsForApp';
 const String urlSaveSoochiAppData = baseUrlAPI + '/SaveSoochiAppData';
-const String urlSaveSoochiMemberAppData =
-    baseUrlAPI + '/SaveSoochiMemberAppData';
-const String urlSaveSoochiSharingAppData =
-    baseUrlAPI + '/SaveSoochiSharingAppData';
-const String urlDeleteSoochiMemberAppData =
-    baseUrlAPI + '/DeleteSoochiMemberAppData';
-const String urlDeleteSoochiSharingAppData =
-    baseUrlAPI + '/DeleteSoochiSharingAppData';
-const String urlDeleteSwayamsevakDaayitvaForApp =
-    baseUrlAPI + '/DeleteSwayamsevakDaayitvaForApp';
-const String urlIsVersionCompatibleForApp =
-    baseUrlAPI + '/IsVersionCompatibleForApp';
+const String urlSaveSoochiMemberAppData = baseUrlAPI + '/SaveSoochiMemberAppData';
+const String urlSaveSoochiSharingAppData = baseUrlAPI + '/SaveSoochiSharingAppData';
+const String urlDeleteSoochiMemberAppData = baseUrlAPI + '/DeleteSoochiMemberAppData';
+const String urlDeleteSoochiSharingAppData = baseUrlAPI + '/DeleteSoochiSharingAppData';
+const String urlDeleteSwayamsevakDaayitvaForApp = baseUrlAPI + '/DeleteSwayamsevakDaayitvaForApp';
+const String urlIsVersionCompatibleForApp = baseUrlAPI + '/IsVersionCompatibleForApp';
 const String urlChangePasswordForApp = baseUrlAPI + '/ChangePasswordForApp';
 const String urlSaveMyProfileAppData = baseUrlAPI + '/SaveMyProfileAppData';
 const String urlResetAppPassword = baseUrlAPI + '/ResetAppPassword';
 const String urlGetJoinRSSGridForApp = baseUrlAPI + '/GetJoinRSSGridForApp';
 const String urlSaveJoinRSSForApp = baseUrlAPI + '/SaveJoinRSSForApp';
-const String saveupdatevijayadashamiutsav =
-    baseUrlAPI + '/saveupdatevijayadashamiutsav';
-const String savesajjanskhatianyapravbhavilok =
-    baseUrlAPI + '/savesajjanskhatianyapravbhavilok';
-const String getvijayadashamiutsavbyid =
-    baseUrlAPI + '/getvijayadashamiutsavbyid';
+const String saveupdatevijayadashamiutsav = baseUrlAPI + '/saveupdatevijayadashamiutsav';
+const String savesajjanskhatianyapravbhavilok = baseUrlAPI + '/savesajjanskhatianyapravbhavilok';
+const String getvijayadashamiutsavbyid = baseUrlAPI + '/getvijayadashamiutsavbyid';
 const String urlGetJoinRSSDataForApp = baseUrlAPI + '/GetJoinRSSDataForApp';
 const String urlDeleteJoinRSSForApp = baseUrlAPI + '/DeleteJoinRSSForApp';
-const String urlRefreshHomeScreenForApp =
-    baseUrlAPI + '/RefreshHomeScreenForApp';
+const String urlRefreshHomeScreenForApp = baseUrlAPI + '/RefreshHomeScreenForApp';
 const String urlVastisarvekshanReport = baseUrlAPI + '/VastisarvekshanReport';
-const String urlNagarVastisarvekshanReport =
-    baseUrlAPI + '/NagarVastisarvekshanReport';
-const String getDataWhileAddUpdateUPLevel =
-    baseUrlAPI + '/GetDataWhileAddUpdateUPLevel';
-const String mandalVastisarvekshanReport =
-    baseUrlAPI + '/mandalVastisarvekshanReport';
-const String urlNagarVastisarvekshanReportForMandal =
-    baseUrlAPI + '/NagarVastisarvekshanReportformandal';
+const String urlNagarVastisarvekshanReport = baseUrlAPI + '/NagarVastisarvekshanReport';
+const String getDataWhileAddUpdateUPLevel = baseUrlAPI + '/GetDataWhileAddUpdateUPLevel';
+const String mandalVastisarvekshanReport = baseUrlAPI + '/mandalVastisarvekshanReport';
+const String urlNagarVastisarvekshanReportForMandal = baseUrlAPI + '/NagarVastisarvekshanReportformandal';
 const String urlGetShaakhaaPatForApp = baseUrlAPI + '/GetShaakhaaPatForApp';
-const String urlGetSanghaPreritSansthaaForApp =
-    baseUrlAPI + '/GetSanghaPreritSansthaaForApp';
+const String urlGetSanghaPreritSansthaaForApp = baseUrlAPI + '/GetSanghaPreritSansthaaForApp';
 const String urlGetEventListForApp = baseUrlAPI + '/GetEventListForApp';
 const String urlSaveEventDataForApp = baseUrlAPI + '/SaveEventDataForApp';
-const String urlGetSwayamsevakCalendarForApp =
-    baseUrlAPI + '/GetSwayamsevakCalendarForApp';
-const String urlGetEventApekshitListForApp =
-    baseUrlAPI + '/GetEventApekshitListForApp';
-const String urlSaveEventApekshitSwayamsevakForApp =
-    baseUrlAPI + '/SaveEventApekshitSwayamsevakForApp';
-const String urlDeleteEventApekshitSwayamsevakForApp =
-    baseUrlAPI + '/DeleteEventApekshitSwayamsevakForApp';
+const String urlGetSwayamsevakCalendarForApp = baseUrlAPI + '/GetSwayamsevakCalendarForApp';
+const String urlGetEventApekshitListForApp = baseUrlAPI + '/GetEventApekshitListForApp';
+const String urlSaveEventApekshitSwayamsevakForApp = baseUrlAPI + '/SaveEventApekshitSwayamsevakForApp';
+const String urlDeleteEventApekshitSwayamsevakForApp = baseUrlAPI + '/DeleteEventApekshitSwayamsevakForApp';
 const String urlChangeEventOwnerForApp = baseUrlAPI + '/ChangeEventOwnerForApp';
-const String urlGetEventVruttaListForApp =
-    baseUrlAPI + '/GetEventVruttaListForApp';
+const String urlGetEventVruttaListForApp = baseUrlAPI + '/GetEventVruttaListForApp';
 const String urlSaveEventVruttaForApp = baseUrlAPI + '/SaveEventVruttaForApp';
-const String urlDeleteEventVruttaForApp =
-    baseUrlAPI + '/DeleteEventVruttaForApp';
-const String urlGetShaakhaaVruttaListForApp =
-    baseUrlAPI + '/GetShaakhaaVruttaListForApp';
-const String urlSaveShaakhaaVruttaForApp =
-    baseUrlAPI + '/SaveShaakhaaVruttaForApp';
+const String urlDeleteEventVruttaForApp = baseUrlAPI + '/DeleteEventVruttaForApp';
+const String urlGetShaakhaaVruttaListForApp = baseUrlAPI + '/GetShaakhaaVruttaListForApp';
+const String urlSaveShaakhaaVruttaForApp = baseUrlAPI + '/SaveShaakhaaVruttaForApp';
 const String urlGetgeounitNamebyid = baseUrlAPI + '/GetgeounitNamebyid';
-const String getupnagarmandaldataagainstnagar =
-    baseUrlAPI + '/getupnagarmandaldataagainstnagar';
-const String urlDeleteShaakhaaVruttaForApp =
-    baseUrlAPI + '/DeleteShaakhaaVruttaForApp';
-const String urlGetSwayamsevakSoochisForApp =
-    baseUrlAPI + '/GetSwayamsevakSoochisForApp';
-const String urlSaveShaakhaaCoordinatesForApp =
-    baseUrlAPI + '/SaveShaakhaaCoordinatesForApp';
-const String urlGetEducationUniversitysForApp =
-    baseUrlAPI + '/GetEducationUniversitysForApp';
-const String urlGetEducationInstitutionsForApp =
-    baseUrlAPI + '/GetEducationInstitutionsForApp';
-const String urlGetEducationProgramsForApp =
-    baseUrlAPI + '/GetEducationProgramsForApp';
-const String urlGetEducationCoursesForApp =
-    baseUrlAPI + '/GetEducationCoursesForApp';
+const String getupnagarmandaldataagainstnagar = baseUrlAPI + '/getupnagarmandaldataagainstnagar';
+const String urlDeleteShaakhaaVruttaForApp = baseUrlAPI + '/DeleteShaakhaaVruttaForApp';
+const String urlGetSwayamsevakSoochisForApp = baseUrlAPI + '/GetSwayamsevakSoochisForApp';
+const String urlSaveShaakhaaCoordinatesForApp = baseUrlAPI + '/SaveShaakhaaCoordinatesForApp';
+const String urlGetEducationUniversitysForApp = baseUrlAPI + '/GetEducationUniversitysForApp';
+const String urlGetEducationInstitutionsForApp = baseUrlAPI + '/GetEducationInstitutionsForApp';
+const String urlGetEducationProgramsForApp = baseUrlAPI + '/GetEducationProgramsForApp';
+const String urlGetEducationCoursesForApp = baseUrlAPI + '/GetEducationCoursesForApp';
 const String urlGetDistrictsForApp = baseUrlAPI + '/GetDistrictsForApp';
 const String urlGetGeoUnitMasterForApp = baseUrlAPI + '/GetGeoUnitMasterForApp';
-const String urlGetSwayamsevakDaayitvaPageData =
-    baseUrlAPI + '/GetSwayamsevakDaayitvaPageData';
-const String urlSaveSwayamsevakDaayitvaPageData =
-    baseUrlAPI + '/SaveSwayamsevakDaayitvaPageData';
-const String urlGetSwayamsevakDaayitvaDetailForApp =
-    baseUrlAPI + '/GetSwayamsevakDaayitvaDetailForApp';
+const String urlGetSwayamsevakDaayitvaPageData = baseUrlAPI + '/GetSwayamsevakDaayitvaPageData';
+const String urlSaveSwayamsevakDaayitvaPageData = baseUrlAPI + '/SaveSwayamsevakDaayitvaPageData';
+const String urlGetSwayamsevakDaayitvaDetailForApp = baseUrlAPI + '/GetSwayamsevakDaayitvaDetailForApp';
 const String urlDeleteSoochiForApp = baseUrlAPI + '/DeleteSoochiForApp';
 const String urlDeleteShaakhaaForApp = baseUrlAPI + '/DeleteShaakhaaForApp';
-const String urlGetShaakhaaSewaVastiLinksForApp =
-    baseUrlAPI + '/GetShaakhaaSewaVastiLinksForApp';
-const String urlSaveShaakhaaSewaVastiLinkForApp =
-    baseUrlAPI + '/SaveShaakhaaSewaVastiLinkForApp';
+const String urlGetShaakhaaSewaVastiLinksForApp = baseUrlAPI + '/GetShaakhaaSewaVastiLinksForApp';
+const String urlSaveShaakhaaSewaVastiLinkForApp = baseUrlAPI + '/SaveShaakhaaSewaVastiLinkForApp';
 const String urlUpdategeounitNamebyid = baseUrlAPI + '/UpdategeounitNamebyid';
-const String updatevastimasndalparent =
-    baseUrlAPI + '/updatevastimasndalparent';
+const String updatevastimasndalparent = baseUrlAPI + '/updatevastimasndalparent';
 const String urlGetJoinRSSGridByStatus = baseUrlAPI + '/GetJoinRSSGridByStatus';
 const String urlGetSewaVastiForApp = baseUrlAPI + '/GetSewaVastiForApp';
 const String urlSaveSewaVastiForApp = baseUrlAPI + '/SaveSewaVastiForApp';
@@ -246,42 +167,28 @@ const String urlDeleteSewaVastiForApp = baseUrlAPI + '/DeleteSewaVastiForApp';
 const String urlUserManualEnglish = baseUrl + '/UserManualEnglish.html';
 const String urlUserManualMarathi = baseUrl + '/UserManualMarathi.html';
 const String urlUserManualHindi = baseUrl + '/UserManualHindi.html';
-const String urlDeleteSwayamsevakDataForApp =
-    baseUrlAPI + '/DeleteSwayamsevakDataForApp';
-const String urlGetNidhiSankalanVruttaForApp =
-    baseUrlAPI + '/GetNidhiSankalanParticipantVisheshVyaktiForApp';
-const String urlGetShaakhaaToliSadasyaForApp =
-    baseUrlAPI + '/GetShaakhaaToliSadasyaForApp';
-const String urlGetSankalpForApp =
-    baseUrlAPI + '/GetSankalpAndKaaryaSthitiForApp';
+const String urlDeleteSwayamsevakDataForApp = baseUrlAPI + '/DeleteSwayamsevakDataForApp';
+const String urlGetNidhiSankalanVruttaForApp = baseUrlAPI + '/GetNidhiSankalanParticipantVisheshVyaktiForApp';
+const String urlGetShaakhaaToliSadasyaForApp = baseUrlAPI + '/GetShaakhaaToliSadasyaForApp';
+const String urlGetSankalpForApp = baseUrlAPI + '/GetSankalpAndKaaryaSthitiForApp';
 const String urlSaveSankalForApp = baseUrlAPI + '/SaveSankalpForApp';
 const String changesavamsevakcanedit = baseUrlAPI + '/changesavamsevakcanedit';
-const String getnirikshanbhaithakvruttaforapp =
-    baseUrlAPI + '/getvarshikbhaithakvruttaforapp';
-const String tulnatmakEkatritVruttaForApp =
-    baseUrlAPI + '/tulnatmakEkatritVruttaForApp';
+const String getnirikshanbhaithakvruttaforapp = baseUrlAPI + '/getvarshikbhaithakvruttaforapp';
+const String tulnatmakEkatritVruttaForApp = baseUrlAPI + '/tulnatmakEkatritVruttaForApp';
 const String getvastiSarvekshan = baseUrlAPI + '/getvastiSarvekshan';
 const String getOtpForForgetPassWord = baseUrlAPI + '/sendotpforforgetpass';
 const String forgotPasswordApi = baseUrlAPI + '/saveSwayamsevakpassword';
-const String getofflinenotificationlist =
-    baseUrlAPI + '/getofflinenotificationlist';
-const String getVastisarvekshanmasterdata =
-    baseUrlAPI + '/Vastisarvekshanmasterdata';
-const String getMandalsarvekshanmasterdata =
-    baseUrlAPI + '/Mandalsarvekshanmasterdata';
-const String changenotificationstatus =
-    baseUrlAPI + '/changenotificationstatus';
-const String getJoinRSSGridForAppbyid =
-    baseUrlAPI + '/GetJoinRSSGridForAppbyid';
+const String getofflinenotificationlist = baseUrlAPI + '/getofflinenotificationlist';
+const String getVastisarvekshanmasterdata = baseUrlAPI + '/Vastisarvekshanmasterdata';
+const String getMandalsarvekshanmasterdata = baseUrlAPI + '/Mandalsarvekshanmasterdata';
+const String changenotificationstatus = baseUrlAPI + '/changenotificationstatus';
+const String getJoinRSSGridForAppbyid = baseUrlAPI + '/GetJoinRSSGridForAppbyid';
 const String vastiSarvekshanstep1Submit = baseUrlAPI + '/vastiSarvekshanstep1';
 const String vastiSarvekshanstep2Submit = baseUrlAPI + '/vastiSarvekshanstep2';
 const String vastiSarvekshanstep3Submit = baseUrlAPI + '/vastiSarvekshanstep3';
-const String mandalSarvekshanstep1Submit =
-    baseUrlAPI + '/mandalSarvekshanstep1';
-const String mandalSarvekshanstep2Submit =
-    baseUrlAPI + '/mandalSarvekshanstep2';
-const String mandalSarvekshanstep3Submit =
-    baseUrlAPI + '/mandalSarvekshanstep3';
+const String mandalSarvekshanstep1Submit = baseUrlAPI + '/mandalSarvekshanstep1';
+const String mandalSarvekshanstep2Submit = baseUrlAPI + '/mandalSarvekshanstep2';
+const String mandalSarvekshanstep3Submit = baseUrlAPI + '/mandalSarvekshanstep3';
 const String patchSuffix = '';
 const String dbVersion = '4';
 const int shaakhaaFrequencyDaily = 34;
@@ -299,25 +206,9 @@ const int praantikBaithak2 = 235;
 const int prachaarakBaithak = 238;
 // const int kaaryakaariMandalBaithak = 242;
 
-Map<String, String> jHeaders = {
-  'Content-Type': 'application/json',
-  'Accept': '*/*'
-};
+Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-Map<String, String> months = {
-  '1': 'Jan',
-  '2': 'Feb',
-  '3': 'Mar',
-  '4': 'Apr',
-  '5': 'May',
-  '6': 'Jun',
-  '7': 'Jul',
-  '8': 'Aug',
-  '9': 'Sept',
-  '10': 'Oct',
-  '11': 'Nov',
-  '12': 'Dec'
-};
+Map<String, String> months = {'1': 'Jan', '2': 'Feb', '3': 'Mar', '4': 'Apr', '5': 'May', '6': 'Jun', '7': 'Jul', '8': 'Aug', '9': 'Sept', '10': 'Oct', '11': 'Nov', '12': 'Dec'};
 
 Map<String, String> vaarshikotsavMonths = {
   '0': 'NotConducted',
@@ -517,8 +408,7 @@ void showErrorDialog(BuildContext context, String message) {
   );
 }
 
-void showConfirmationBox(
-    BuildContext context, String message, String action, String val) {
+void showConfirmationBox(BuildContext context, String message, String action, String val) {
   showDialog(
     context: context,
     builder: (ctx) => AlertDialog(
@@ -555,8 +445,7 @@ void showConfirmationBox(
   );
 }
 
-void showMessageDialog(BuildContext context, String message,
-    {String title = ""}) {
+void showMessageDialog(BuildContext context, String message, {String title = ""}) {
   showDialog(
     context: context,
     builder: (ctx) => AlertDialog(
@@ -574,8 +463,7 @@ void showMessageDialog(BuildContext context, String message,
   );
 }
 
-void showHelpDialog(BuildContext context, String message, String title,
-    String videoLabel, String videoLink) {
+void showHelpDialog(BuildContext context, String message, String title, String videoLabel, String videoLink) {
   showDialog(
     context: context,
     builder: (ctx) => AlertDialog(
@@ -610,14 +498,7 @@ void showHelpDialog(BuildContext context, String message, String title,
 }
 
 void showToast(var message) {
-  Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      timeInSecForIosWeb: 1,
-      backgroundColor: Colors.black,
-      textColor: Colors.white,
-      fontSize: 16.0);
+  Fluttertoast.showToast(msg: message, toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIosWeb: 1, backgroundColor: Colors.black, textColor: Colors.white, fontSize: 16.0);
 }
 
 Future<void> populateUserDetailsMap() async {
@@ -650,8 +531,7 @@ Future<void> populateUserDetailsMap() async {
     userDetails['LinkedGraamName'] = uData.linkedGraamName.toString();
     userDetails['LinkedShaakhaaID'] = uData.linkedShaakhaaID.toString();
     userDetails['LinkedShaakhaaName'] = uData.linkedShaakhaaName.toString();
-    userDetails['LinkedGeoUnitHierarchy'] =
-        uData.linkedGeoUnitHierarchy.toString();
+    userDetails['LinkedGeoUnitHierarchy'] = uData.linkedGeoUnitHierarchy.toString();
     userDetails['LastLoginTimeStamp'] = uData.lastLoginTimeStamp;
     userDetails['isLoggedIn'] = uData.isLoggedIn;
     userDetails['IsPravaasiKaaryakartaa'] = uData.isPravaasiKaaryakartaa;
@@ -693,78 +573,46 @@ Future<void> populateDashboardDetailsMap() async {
     var uData = DashboardDataBAL.fromMap(element);
     dashboardData["ShishuCount"] = uData.shishuCount.toString();
     dashboardData["BaalCount"] = uData.baalCount.toString();
-    dashboardData["TarunVidyaarthiCount"] =
-        uData.tarunVidyaarthiCount.toString();
-    dashboardData["TarunVyavasaayeeCount"] =
-        uData.tarunVyavasaayeeCount.toString();
-    dashboardData["ProudhaVyavasaayeeCount"] =
-        uData.proudhaVyavasaayeeCount.toString();
+    dashboardData["TarunVidyaarthiCount"] = uData.tarunVidyaarthiCount.toString();
+    dashboardData["TarunVyavasaayeeCount"] = uData.tarunVyavasaayeeCount.toString();
+    dashboardData["ProudhaVyavasaayeeCount"] = uData.proudhaVyavasaayeeCount.toString();
     dashboardData["UnknownAgeCount"] = uData.unknownAgeCount.toString();
-    dashboardData["TrutiyaVarshaShikshitCount"] =
-        uData.trutiyaVarshaShikshitCount.toString();
-    dashboardData["DwitiyaVarshaShikshitCount"] =
-        uData.dwitiyaVarshaShikshitCount.toString();
-    dashboardData["PrathamVarshaShikshitCount"] =
-        uData.prathamVarshaShikshitCount.toString();
-    dashboardData["PraathamikShikshitCount"] =
-        uData.praathamikShikshitCount.toString();
+    dashboardData["TrutiyaVarshaShikshitCount"] = uData.trutiyaVarshaShikshitCount.toString();
+    dashboardData["DwitiyaVarshaShikshitCount"] = uData.dwitiyaVarshaShikshitCount.toString();
+    dashboardData["PrathamVarshaShikshitCount"] = uData.prathamVarshaShikshitCount.toString();
+    dashboardData["PraathamikShikshitCount"] = uData.praathamikShikshitCount.toString();
     dashboardData["NoShikshanCount"] = uData.noShikshanCount.toString();
-    dashboardData["ShaakhaaKaaryakartaaCount"] =
-        uData.shaakhaaKaaryakartaaCount.toString();
-    dashboardData["VastiKaaryakartaaCount"] =
-        uData.vastiKaaryakartaaCount.toString();
-    dashboardData["GraamKaaryakartaaCount"] =
-        uData.graamKaaryakartaaCount.toString();
-    dashboardData["MandalKaaryakartaaCount"] =
-        uData.mandalKaaryakartaaCount.toString();
-    dashboardData["NagarKaaryakartaaCount"] =
-        uData.nagarKaaryakartaaCount.toString();
-    dashboardData["ShaharKaaryakartaaCount"] =
-        uData.shaharKaaryakartaaCount.toString();
-    dashboardData["BhaagKaaryakartaaCount"] =
-        uData.bhaagKaaryakartaaCount.toString();
-    dashboardData["VibhaagKaaryakartaaCount"] =
-        uData.vibhaagKaaryakartaaCount.toString();
-    dashboardData["MahaanagarKaaryakartaaCount"] =
-        uData.mahaanagarKaaryakartaaCount.toString();
-    dashboardData["PraantKaaryakartaaCount"] =
-        uData.praantKaaryakartaaCount.toString();
+    dashboardData["ShaakhaaKaaryakartaaCount"] = uData.shaakhaaKaaryakartaaCount.toString();
+    dashboardData["VastiKaaryakartaaCount"] = uData.vastiKaaryakartaaCount.toString();
+    dashboardData["GraamKaaryakartaaCount"] = uData.graamKaaryakartaaCount.toString();
+    dashboardData["MandalKaaryakartaaCount"] = uData.mandalKaaryakartaaCount.toString();
+    dashboardData["NagarKaaryakartaaCount"] = uData.nagarKaaryakartaaCount.toString();
+    dashboardData["ShaharKaaryakartaaCount"] = uData.shaharKaaryakartaaCount.toString();
+    dashboardData["BhaagKaaryakartaaCount"] = uData.bhaagKaaryakartaaCount.toString();
+    dashboardData["VibhaagKaaryakartaaCount"] = uData.vibhaagKaaryakartaaCount.toString();
+    dashboardData["MahaanagarKaaryakartaaCount"] = uData.mahaanagarKaaryakartaaCount.toString();
+    dashboardData["PraantKaaryakartaaCount"] = uData.praantKaaryakartaaCount.toString();
     dashboardData["Notificationcount"] = uData.notificationCount.toString();
-    dashboardData["KshetraKaaryakartaaCount"] =
-        uData.kshetraKaaryakartaaCount.toString();
-    dashboardData["PravaseeKaaryakartaaCount"] =
-        uData.pravaseeKaaryakartaaCount.toString();
-    dashboardData["GatividhiKaaryakartaaCount"] =
-        uData.gatividhiKaaryakartaaCount.toString();
-    dashboardData["AayaamKaaryakartaaCount"] =
-        uData.aayaamKaaryakartaaCount.toString();
-    dashboardData["SanghaPreritSansthaaKaaryakartaaCount"] =
-        uData.sanghaPreritSansthaaKaaryakartaaCount.toString();
-    dashboardData["TotalKaaryakartaaCount"] =
-        uData.totalKaaryakartaaCount.toString();
-    dashboardData["SocialOrganizationKaaryakartaaCount"] =
-        uData.socialOrganizationKaaryakartaaCount.toString();
+    dashboardData["KshetraKaaryakartaaCount"] = uData.kshetraKaaryakartaaCount.toString();
+    dashboardData["PravaseeKaaryakartaaCount"] = uData.pravaseeKaaryakartaaCount.toString();
+    dashboardData["GatividhiKaaryakartaaCount"] = uData.gatividhiKaaryakartaaCount.toString();
+    dashboardData["AayaamKaaryakartaaCount"] = uData.aayaamKaaryakartaaCount.toString();
+    dashboardData["SanghaPreritSansthaaKaaryakartaaCount"] = uData.sanghaPreritSansthaaKaaryakartaaCount.toString();
+    dashboardData["TotalKaaryakartaaCount"] = uData.totalKaaryakartaaCount.toString();
+    dashboardData["SocialOrganizationKaaryakartaaCount"] = uData.socialOrganizationKaaryakartaaCount.toString();
     dashboardData["PratidnyitCount"] = uData.pratidnyitCount.toString();
-    dashboardData["DailyShaakhaaKaaryakartaaCount"] =
-        uData.dailyShaakhaaKaaryakartaaCount.toString();
-    dashboardData["SaaptaahikMilanKaaryakartaaCount"] =
-        uData.saaptaahikMilanKaaryakartaaCount.toString();
-    dashboardData["MaasikMilanKaaryakartaaCount"] =
-        uData.maasikMilanKaaryakartaaCount.toString();
-    dashboardData["AkhilBhaaratiyaKaaryakartaaCount"] =
-        uData.akhilBhaaratiyaKaaryakartaaCount.toString();
-    dashboardData["TotalSwayamsevakCount"] =
-        uData.totalSwayamsevakCount.toString();
+    dashboardData["DailyShaakhaaKaaryakartaaCount"] = uData.dailyShaakhaaKaaryakartaaCount.toString();
+    dashboardData["SaaptaahikMilanKaaryakartaaCount"] = uData.saaptaahikMilanKaaryakartaaCount.toString();
+    dashboardData["MaasikMilanKaaryakartaaCount"] = uData.maasikMilanKaaryakartaaCount.toString();
+    dashboardData["AkhilBhaaratiyaKaaryakartaaCount"] = uData.akhilBhaaratiyaKaaryakartaaCount.toString();
+    dashboardData["TotalSwayamsevakCount"] = uData.totalSwayamsevakCount.toString();
   });
 }
 
 Future<List<StaticMasterBAL>> getStaticLDB(String entityType) async {
   print("getStaticLDB == $entityType");
   List<StaticMasterBAL> _staticMaster = [];
-  var result = await DatabaseHelper.getData(
-      "Select * from StaticMaster Where EntityType='" +
-          entityType +
-          "' ORDER BY DisplaySequence;");
+  var result = await DatabaseHelper.getData("Select * from StaticMaster Where EntityType='" + entityType + "' ORDER BY DisplaySequence;");
 // log("resultresult =-=->  ${result}");
   result.forEach((element) {
     var info = StaticMasterBAL.fromMap(element);
@@ -776,10 +624,8 @@ Future<List<StaticMasterBAL>> getStaticLDB(String entityType) async {
 Future<List<StateMasterBAL>> getStateLDB(String type) async {
   List<StateMasterBAL> _stateMaster = [];
   try {
-    var result = await DatabaseHelper.getData("Select * from StateMaster" +
-        (type == "Current"
-            ? " Where StateName = 'MAHARASHTRA' OR  StateName = 'GOA' OR StateName = 'महाराष्ट्र' OR StateName = 'गोवा';"
-            : ";"));
+    var result = await DatabaseHelper.getData(
+        "Select * from StateMaster" + (type == "Current" ? " Where StateName = 'MAHARASHTRA' OR  StateName = 'GOA' OR StateName = 'महाराष्ट्र' OR StateName = 'गोवा';" : ";"));
 
     result.forEach((element) {
       var info = StateMasterBAL.fromMap(element);
@@ -791,8 +637,7 @@ Future<List<StateMasterBAL>> getStateLDB(String type) async {
   return _stateMaster;
 }
 
-Future<List<GeoUnitMasterBAL>> getGeoUnitsLDB(
-    String levelID, String unitName) async {
+Future<List<GeoUnitMasterBAL>> getGeoUnitsLDB(String levelID, String unitName) async {
   List<GeoUnitMasterBAL> _geoUnitMasterBAL = [];
   var result;
 
@@ -826,9 +671,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsLDB(
       " LEFT JOIN GeoUnitMaster AS Vasti ON Vasti.GeoUnitID = GeoUnitMaster.ParentVastiID " +
       " where GeoUnitMaster.LevelID = " +
       levelID +
-      (unitName == ""
-          ? ""
-          : " AND GeoUnitMaster.GeoUnitName LIKE \'$unitName%\'") +
+      (unitName == "" ? "" : " AND GeoUnitMaster.GeoUnitName LIKE \'$unitName%\'") +
       ";");
 
   result.forEach((element) {
@@ -875,10 +718,7 @@ Future<List<GatividhiMasterBAL>> getGatividhiLDB() async {
 }
 
 Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevel(String levelID) async {
-  var result = await DatabaseHelper.getData(
-      'Select * from GeoUnitMaster WHERE LevelID=' +
-          levelID +
-          '  ORDER BY GeoUnitMaster.DisplaySequence;');
+  var result = await DatabaseHelper.getData('Select * from GeoUnitMaster WHERE LevelID=' + levelID + '  ORDER BY GeoUnitMaster.DisplaySequence;');
 
   List<GeoUnitMasterBAL> _geounitList = <GeoUnitMasterBAL>[];
   result.forEach((data) {
@@ -907,21 +747,16 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevel(String levelID) async {
 }
 
 //===================================================================================================================================================================
-Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForVasti(
-    String levelID, String parentID, String parentType, String pattern) async {
+Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForVasti(String levelID, String parentID, String parentType, String pattern) async {
   String? add = '';
   if (levelID == "9") {
-    add =
-        " AND GeoUnitID in  (select ParentMahaanagarID from GeoUnitMaster where LevelID=2)";
+    add = " AND GeoUnitID in  (select ParentMahaanagarID from GeoUnitMaster where LevelID=2)";
   } else if (levelID == "8") {
-    add =
-        " AND  GeoUnitID in  (select ParentVibhaagID from GeoUnitMaster where LevelID=2)";
+    add = " AND  GeoUnitID in  (select ParentVibhaagID from GeoUnitMaster where LevelID=2)";
   } else if (levelID == "7") {
-    add =
-        " AND GeoUnitID in  (select ParentBhaagID from GeoUnitMaster where LevelID=2)";
+    add = " AND GeoUnitID in  (select ParentBhaagID from GeoUnitMaster where LevelID=2)";
   } else if (levelID == "6") {
-    add =
-        " AND GeoUnitID in  (select ParentNagarID from GeoUnitMaster where LevelID=2)";
+    add = " AND GeoUnitID in  (select ParentNagarID from GeoUnitMaster where LevelID=2)";
   }
 
   if (parentID == '') parentID = '0';
@@ -949,9 +784,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForVasti(
                                               ? " AND ParentVastiID=" + parentID
                                               : ""
           : "") +
-      (pattern == ""
-          ? ""
-          : " AND GeoUnitMaster.GeoUnitName LIKE \'$pattern%\'") +
+      (pattern == "" ? "" : " AND GeoUnitMaster.GeoUnitName LIKE \'$pattern%\'") +
       " ORDER BY GeoUnitMaster.DisplaySequence;";
   print("strSql ==> $strSql");
   var result = await DatabaseHelper.getData(strSql);
@@ -982,20 +815,16 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForVasti(
   return _geounitList;
 }
 
-Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForMandal(
-    String levelID, String parentID, String parentType, String pattern) async {
+Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForMandal(String levelID, String parentID, String parentType, String pattern) async {
   String? add = '';
   if (levelID == "9") {
     // add = "AND GeoUnitID in  (select ParentMahaanagarID from GeoUnitMaster where LevelID=2)";
   } else if (levelID == "8") {
-    add =
-        " AND  GeoUnitID in  (select ParentVibhaagID from GeoUnitMaster where LevelID=4)";
+    add = " AND  GeoUnitID in  (select ParentVibhaagID from GeoUnitMaster where LevelID=4)";
   } else if (levelID == "7") {
-    add =
-        " AND GeoUnitID in  (select ParentBhaagID from GeoUnitMaster where LevelID=4)";
+    add = " AND GeoUnitID in  (select ParentBhaagID from GeoUnitMaster where LevelID=4)";
   } else if (levelID == "6") {
-    add =
-        " AND GeoUnitID in  (select ParentNagarID from GeoUnitMaster where LevelID=4)";
+    add = " AND GeoUnitID in  (select ParentNagarID from GeoUnitMaster where LevelID=4)";
   }
 
   if (parentID == '') parentID = '0';
@@ -1023,9 +852,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForMandal(
                                               ? " AND ParentVastiID=" + parentID
                                               : ""
           : "") +
-      (pattern == ""
-          ? ""
-          : " AND GeoUnitMaster.GeoUnitName LIKE \'$pattern%\'") +
+      (pattern == "" ? "" : " AND GeoUnitMaster.GeoUnitName LIKE \'$pattern%\'") +
       " ORDER BY GeoUnitMaster.DisplaySequence;";
   // print("strSql ==> $strSql");
   var result = await DatabaseHelper.getData(strSql);
@@ -1058,8 +885,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForMandal(
 
 //===================================================================================================================================================================
 
-Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParent(
-    String levelID, String parentID, String parentType, String pattern) async {
+Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParent(String levelID, String parentID, String parentType, String pattern) async {
   if (parentID == '') parentID = '0';
   String strSql = "Select * from GeoUnitMaster WHERE LevelID=" +
       levelID +
@@ -1084,9 +910,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParent(
                                               ? " AND ParentVastiID=" + parentID
                                               : ""
           : "") +
-      (pattern == ""
-          ? ""
-          : " AND GeoUnitMaster.GeoUnitName LIKE \'$pattern%\'") +
+      (pattern == "" ? "" : " AND GeoUnitMaster.GeoUnitName LIKE \'$pattern%\'") +
       " ORDER BY GeoUnitMaster.DisplaySequence;";
   // print("strSql ==> $strSql");
   var result = await DatabaseHelper.getData(strSql);
@@ -1118,12 +942,11 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParent(
 }
 
 Future<GeoUnitMasterBAL?> getGeoUnitsByID(String geoUnitID) async {
-  var result = await DatabaseHelper.getData(
-      " Select GeoUnitMaster.*,GeoUnitMaster.GeoUnitName || '-' || LevelMaster.LevelName AS FullName, LevelMaster.LevelName " +
-          "  from GeoUnitMaster Left JOIN LevelMaster ON LevelMaster.LevelID = GeoUnitMaster.LevelID " +
-          " WHERE GeoUnitID=" +
-          geoUnitID +
-          ";");
+  var result = await DatabaseHelper.getData(" Select GeoUnitMaster.*,GeoUnitMaster.GeoUnitName || '-' || LevelMaster.LevelName AS FullName, LevelMaster.LevelName " +
+      "  from GeoUnitMaster Left JOIN LevelMaster ON LevelMaster.LevelID = GeoUnitMaster.LevelID " +
+      " WHERE GeoUnitID=" +
+      geoUnitID +
+      ";");
 
   GeoUnitMasterBAL _geounit;
 
@@ -1154,25 +977,15 @@ Future<GeoUnitMasterBAL?> getGeoUnitsByID(String geoUnitID) async {
   }
 }
 
-Future<List<DaayitvaMasterBAL>> getDaayitvaLDB(
-    String _daayitvaForValue, String pattern, String _daayitvaValue) async {
+Future<List<DaayitvaMasterBAL>> getDaayitvaLDB(String _daayitvaForValue, String pattern, String _daayitvaValue) async {
   List<DaayitvaMasterBAL> _daayitvaMasterBAL = [];
   var result;
   if (_daayitvaValue != "") {
-    result = await DatabaseHelper.getData(
-        "Select * from DaayitvaMaster WHERE DaayitvaID = " +
-            _daayitvaValue +
-            ";");
+    result = await DatabaseHelper.getData("Select * from DaayitvaMaster WHERE DaayitvaID = " + _daayitvaValue + ";");
   } else if (_daayitvaForValue == "") {
-    result = await DatabaseHelper.getData("Select * from DaayitvaMaster " +
-        (pattern == "" ? "" : " WHERE DaayitvaName LIKE \'$pattern%\'") +
-        ";");
+    result = await DatabaseHelper.getData("Select * from DaayitvaMaster " + (pattern == "" ? "" : " WHERE DaayitvaName LIKE \'$pattern%\'") + ";");
   } else {
-    result = await DatabaseHelper.getData(
-        "Select * from DaayitvaMaster where DaayitvaForID = " +
-            _daayitvaForValue +
-            (pattern == "" ? "" : " AND DaayitvaName LIKE \'$pattern%\'") +
-            ";");
+    result = await DatabaseHelper.getData("Select * from DaayitvaMaster where DaayitvaForID = " + _daayitvaForValue + (pattern == "" ? "" : " AND DaayitvaName LIKE \'$pattern%\'") + ";");
   }
 
   result.forEach((element) {
@@ -1196,13 +1009,9 @@ Future<List<UserDataBAL>> getUserDataLDB() async {
 }
 
 Future<List<dynamic>> getHelpVideoList(String strInput) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlGetHelpVideosForApp),
-      headers: jHeaders, body: strInput);
+  var response = await http.post(Uri.parse(urlGetHelpVideosForApp), headers: jHeaders, body: strInput);
   print(Uri.parse(urlGetHelpVideosForApp));
   print(strInput.toString());
   var responseBody = json.decode(response.body);
@@ -1211,13 +1020,9 @@ Future<List<dynamic>> getHelpVideoList(String strInput) async {
 }
 
 Future<List<dynamic>> getShaakhaaList(String strInput) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlGetShaakhaasForAppGrid),
-      headers: jHeaders, body: strInput);
+  var response = await http.post(Uri.parse(urlGetShaakhaasForAppGrid), headers: jHeaders, body: strInput);
 
   var responseBody = json.decode(response.body);
   log("strInput  ==> $strInput");
@@ -1227,10 +1032,7 @@ Future<List<dynamic>> getShaakhaaList(String strInput) async {
 
 Future<dynamic> getShaakhaaByID(String shaakhaaID) async {
   print("Shakha IDD :-  {$shaakhaaID}");
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(Uri.parse(urlGetShaakhaaDetailsForApp),
       headers: jHeaders,
@@ -1299,78 +1101,43 @@ Future<dynamic> getShaakhaaByID(String shaakhaaID) async {
 }
 
 Future<String> saveShaakhaaDetails(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
   print("saveShaakhaaDetails:- $inputJson");
-  var response = await http.post(Uri.parse(urlSaveShaakhaaAppData),
-      headers: jHeaders, body: inputJson);
+  var response = await http.post(Uri.parse(urlSaveShaakhaaAppData), headers: jHeaders, body: inputJson);
   print("saveShaakhaaDetails :- ${response.body.toString()}");
   var responseBody = json.decode(response.body);
 
   return responseBody['OutputShaakhaaID'].toString();
 }
 
-Future<List<dynamic>> getSoochiList(String searchPattern,
-    bool includeOwnedSoochi, bool includeSharedSoochi) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+Future<List<dynamic>> getSoochiList(String searchPattern, bool includeOwnedSoochi, bool includeSharedSoochi) async {
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(Uri.parse(urlGetSoochisForAppGrid),
-      headers: jHeaders,
-      body: json.encode({
-        "AppUserID": userDetails['userID'],
-        "SearchCriteria": searchPattern,
-        "IncludeOwned": includeOwnedSoochi,
-        "IncludeShared": includeSharedSoochi
-      }));
+      headers: jHeaders, body: json.encode({"AppUserID": userDetails['userID'], "SearchCriteria": searchPattern, "IncludeOwned": includeOwnedSoochi, "IncludeShared": includeSharedSoochi}));
 
-  print("Request ==>  ${{
-    "AppUserID": userDetails['userID'],
-    "SearchCriteria": searchPattern,
-    "IncludeOwned": includeOwnedSoochi,
-    "IncludeShared": includeSharedSoochi
-  }}");
+  print("Request ==>  ${{"AppUserID": userDetails['userID'], "SearchCriteria": searchPattern, "IncludeOwned": includeOwnedSoochi, "IncludeShared": includeSharedSoochi}}");
   var responseBody = json.decode(response.body);
   // print("getSoochiList ==> ${responseBody['SoochiList']}");
   return responseBody['SoochiList'];
 }
 
 Future<dynamic> getSoochiDetails(var soochiID) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlGetSoochiDetailsForApp),
-      headers: jHeaders, body: json.encode({"SoochiID": soochiID}));
+  var response = await http.post(Uri.parse(urlGetSoochiDetailsForApp), headers: jHeaders, body: json.encode({"SoochiID": soochiID}));
 
   var responseBody = json.decode(response.body);
 
   var data = responseBody['SoochiItem'];
 
-  return SoochiMasterBAL(
-      data["SoochiID"],
-      data["PraantID"],
-      data["SoochiName"],
-      data["OwnerSwayamsevakID"],
-      data["OwnerSwayamsevakFullName"],
-      data["StatusID"],
-      data["StatusCode"],
-      data["Remark"]);
+  return SoochiMasterBAL(data["SoochiID"], data["PraantID"], data["SoochiName"], data["OwnerSwayamsevakID"], data["OwnerSwayamsevakFullName"], data["StatusID"], data["StatusCode"], data["Remark"]);
 }
 
 Future<List<dynamic>> getSoochiMembers(var soochiID) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlGetSoochiMembersForApp),
-      headers: jHeaders, body: json.encode({"SoochiID": soochiID}));
+  var response = await http.post(Uri.parse(urlGetSoochiMembersForApp), headers: jHeaders, body: json.encode({"SoochiID": soochiID}));
 
   var responseBody = json.decode(response.body);
 
@@ -1378,13 +1145,9 @@ Future<List<dynamic>> getSoochiMembers(var soochiID) async {
 }
 
 Future<List<dynamic>> getSoochiSharing(var soochiID) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlGetSoochiSharingsForApp),
-      headers: jHeaders, body: json.encode({"SoochiID": soochiID}));
+  var response = await http.post(Uri.parse(urlGetSoochiSharingsForApp), headers: jHeaders, body: json.encode({"SoochiID": soochiID}));
 
   var responseBody = json.decode(response.body);
   print("responseBodyresponseBody ==> $responseBody");
@@ -1393,13 +1156,9 @@ Future<List<dynamic>> getSoochiSharing(var soochiID) async {
 }
 
 Future<String> saveSoochiDetails(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlSaveSoochiAppData),
-      headers: jHeaders, body: inputJson);
+  var response = await http.post(Uri.parse(urlSaveSoochiAppData), headers: jHeaders, body: inputJson);
 
   var responseBody = json.decode(response.body);
   print("responseBodyresponseBody ==? $responseBody");
@@ -1407,28 +1166,19 @@ Future<String> saveSoochiDetails(String inputJson) async {
 }
 
 Future<String> saveSoochiMembers(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlSaveSoochiMemberAppData),
-      headers: jHeaders, body: inputJson);
+  var response = await http.post(Uri.parse(urlSaveSoochiMemberAppData), headers: jHeaders, body: inputJson);
   print("responseresponseresponseresponse==>>  ${response.body}");
   var responseBody = json.decode(response.body);
-  print(
-      "responseBodyresponseBodyresponseBodyresponseBody ::::---- $responseBody");
+  print("responseBodyresponseBodyresponseBodyresponseBody ::::---- $responseBody");
   return responseBody['OutputSoochiMemberID'].toString();
 }
 
 Future<String> saveSoochiSharing(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlSaveSoochiSharingAppData),
-      headers: jHeaders, body: inputJson);
+  var response = await http.post(Uri.parse(urlSaveSoochiSharingAppData), headers: jHeaders, body: inputJson);
   print("responseresponse ==> $response");
   var responseBody = json.decode(response.body);
 
@@ -1436,13 +1186,9 @@ Future<String> saveSoochiSharing(String inputJson) async {
 }
 
 Future<String> deleteSoochiMembers(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlDeleteSoochiMemberAppData),
-      headers: jHeaders, body: inputJson);
+  var response = await http.post(Uri.parse(urlDeleteSoochiMemberAppData), headers: jHeaders, body: inputJson);
 
   var responseBody = json.decode(response.body);
 
@@ -1450,13 +1196,9 @@ Future<String> deleteSoochiMembers(String inputJson) async {
 }
 
 Future<String> deleteSoochiSharing(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlDeleteSoochiSharingAppData),
-      headers: jHeaders, body: inputJson);
+  var response = await http.post(Uri.parse(urlDeleteSoochiSharingAppData), headers: jHeaders, body: inputJson);
 
   var responseBody = json.decode(response.body);
 
@@ -1464,13 +1206,9 @@ Future<String> deleteSoochiSharing(String inputJson) async {
 }
 
 Future<String> deleteSWDaayitva(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlDeleteSwayamsevakDaayitvaForApp),
-      headers: jHeaders, body: inputJson);
+  var response = await http.post(Uri.parse(urlDeleteSwayamsevakDaayitvaForApp), headers: jHeaders, body: inputJson);
 
   var responseBody = json.decode(response.body);
 
@@ -1478,13 +1216,9 @@ Future<String> deleteSWDaayitva(String inputJson) async {
 }
 
 Future<String> deleteJoinRSS(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
   print(inputJson);
-  var response = await http.post(Uri.parse(urlDeleteJoinRSSForApp),
-      headers: jHeaders, body: inputJson);
+  var response = await http.post(Uri.parse(urlDeleteJoinRSSForApp), headers: jHeaders, body: inputJson);
   print(response.body);
   var responseBody = json.decode(response.body);
 
@@ -1492,13 +1226,9 @@ Future<String> deleteJoinRSS(String inputJson) async {
 }
 
 Future<String> deleteSoochiForApp(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlDeleteSoochiForApp),
-      headers: jHeaders, body: inputJson);
+  var response = await http.post(Uri.parse(urlDeleteSoochiForApp), headers: jHeaders, body: inputJson);
 
   var responseBody = json.decode(response.body);
 
@@ -1506,13 +1236,9 @@ Future<String> deleteSoochiForApp(String inputJson) async {
 }
 
 Future<String> deleteShaakhaaForApp(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlDeleteShaakhaaForApp),
-      headers: jHeaders, body: inputJson);
+  var response = await http.post(Uri.parse(urlDeleteShaakhaaForApp), headers: jHeaders, body: inputJson);
 
   var responseBody = json.decode(response.body);
 
@@ -1522,13 +1248,9 @@ Future<String> deleteShaakhaaForApp(String inputJson) async {
 //Future<bool> isCompatibleVersion(String inputJson) async {
 Future<dynamic> isCompatibleVersion(String inputJson) async {
   // This method checks if version is compatible and if data sync is required
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlIsVersionCompatibleForApp),
-      headers: jHeaders, body: inputJson);
+  var response = await http.post(Uri.parse(urlIsVersionCompatibleForApp), headers: jHeaders, body: inputJson);
 
   var responseBody = json.decode(response.body);
   print(Uri.parse(urlIsVersionCompatibleForApp));
@@ -1540,26 +1262,15 @@ Future<dynamic> isCompatibleVersion(String inputJson) async {
 Future<String> updatePassword(String oldPass, String newpass) async {
   String strInput = "";
 
-  strInput = json.encode({
-    "AppUserID": userDetails["userID"],
-    "PraantID": 1,
-    "OldPassword": oldPass,
-    "NewPassword": newpass
-  });
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  strInput = json.encode({"AppUserID": userDetails["userID"], "PraantID": 1, "OldPassword": oldPass, "NewPassword": newpass});
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlChangePasswordForApp),
-      headers: jHeaders, body: strInput);
+  var response = await http.post(Uri.parse(urlChangePasswordForApp), headers: jHeaders, body: strInput);
 
   var responseBody = json.decode(response.body);
-  print(
-      "Update Password ---   strInput => $strInput  \n   responseBody  $responseBody");
+  print("Update Password ---   strInput => $strInput  \n   responseBody  $responseBody");
   var message = responseBody["Message"];
-  if (message == "Operation failed - Incorrect Data; Please try again" ||
-      message == "Operation failed - Incorrect Old Password") {
+  if (message == "Operation failed - Incorrect Data; Please try again" || message == "Operation failed - Incorrect Old Password") {
     message = "Incorrect Old Password";
   } else {
     String strSql = "UPDATE UserDataMaster SET " +
@@ -1574,10 +1285,7 @@ Future<String> updatePassword(String oldPass, String newpass) async {
 }
 
 Future<bool> checkForTableExists(String table) async {
-  String sql =
-      "SELECT name, sql FROM sqlite_master WHERE type='table' AND name='" +
-          table +
-          "'";
+  String sql = "SELECT name, sql FROM sqlite_master WHERE type='table' AND name='" + table + "'";
   var result = await DatabaseHelper.getData(sql);
   if (result.length > 0) {
     //String fieldList = result.first.values.toList()[1];
@@ -1586,12 +1294,8 @@ Future<bool> checkForTableExists(String table) async {
   return false;
 }
 
-Future<String> updateProfileData(
-    String strFieldName, String strFieldValue, String strFieldValueCode) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+Future<String> updateProfileData(String strFieldName, String strFieldValue, String strFieldValueCode) async {
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   String strInput = json.encode({
     "SwayamsevakID": int.parse(userDetails["userID"]),
@@ -1599,8 +1303,7 @@ Future<String> updateProfileData(
     "FieldValue": strFieldValue,
   });
 
-  var response = await http.post(Uri.parse(urlSaveMyProfileAppData),
-      headers: jHeaders, body: strInput);
+  var response = await http.post(Uri.parse(urlSaveMyProfileAppData), headers: jHeaders, body: strInput);
 
   var responseBody = json.decode(response.body);
 
@@ -1612,9 +1315,7 @@ Future<String> updateProfileData(
         strFieldName +
         " = " +
         strFieldValue +
-        (strFieldValueCode == ""
-            ? ""
-            : ", PreferredLanguageCode  = '" + strFieldValueCode + "' ") +
+        (strFieldValueCode == "" ? "" : ", PreferredLanguageCode  = '" + strFieldValueCode + "' ") +
         " WHERE SwayamsevakID = " +
         userDetails["userID"] +
         ";";
@@ -1626,10 +1327,7 @@ Future<String> updateProfileData(
 }
 
 Future<String> resetPassword(String swayamSevakID) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(Uri.parse(urlResetAppPassword),
       headers: jHeaders,
@@ -1645,10 +1343,7 @@ Future<String> resetPassword(String swayamSevakID) async {
 Future<String> refreshData() async {
   print("started");
   try {
-    Map<String, String> jHeaders = {
-      'Content-Type': 'application/json',
-      'Accept': '*/*'
-    };
+    Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
     var response = await http.post(Uri.parse(urlResetDataForApp),
         headers: jHeaders,
@@ -1678,13 +1373,9 @@ Future<String> refreshData() async {
   }
 }
 
-Future<dynamic> refreshDashboardData(
-    String? userID, String? targetGeoUnitID) async {
+Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) async {
   print("${userID}  --- $targetGeoUnitID  ");
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(Uri.parse(urlRefreshHomeScreenForApp),
       headers: jHeaders,
@@ -1701,30 +1392,18 @@ Future<dynamic> refreshDashboardData(
   var responseBody = json.decode(response.body);
 
   var dataList = responseBody['HomeScreenData'];
-  var listShaakhaaCountByVayogat =
-      responseBody['HomeScreenData']['ListShaakhaaCountByVayogat'];
-  var listKaaryakartaaCountByGatividhi =
-      responseBody['HomeScreenData']['ListKaaryakartaaCountByGatividhi'];
-  var listKaaryakartaaCountByAayaam =
-      responseBody['HomeScreenData']['ListKaaryakartaaCountByAayaam'];
-  var listKaaryakartaaCountByPreritSansthaa = responseBody['HomeScreenData']
-      ['ListSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation'];
-  var listKaaryakartaaCountBySocialOrg = responseBody['HomeScreenData']
-      ['ListSocialOrganizationKaaryakartaaCountByAreaOfOperation'];
-  var listStudentCountByCategory =
-      responseBody['HomeScreenData']['ListSwayamsevakCountByStudentCategory'];
-  var listVyavasaayeeCountByCategory = responseBody['HomeScreenData']
-      ['ListSwayamsevakCountByVyavasaayeeCategory'];
-  var listYesterdayVruttaDetail =
-      responseBody['HomeScreenData']['ListYesterdayVrutta'];
-  var listYesterdayVruttaSummary =
-      responseBody['HomeScreenData']['ListYesterdayVruttaSummary'];
-  var listYesterdayPraantShaakhaaCountByVayogat = responseBody['HomeScreenData']
-      ['ListYesterdayPraantShaakhaaCountByVayogat'];
-  var listSankalpByAadhaar =
-      responseBody['HomeScreenData']['ListSankalpByAadhaar'];
-  var listBhaugolikVistaar =
-      responseBody['HomeScreenData']['BhaugolikVistaarData'];
+  var listShaakhaaCountByVayogat = responseBody['HomeScreenData']['ListShaakhaaCountByVayogat'];
+  var listKaaryakartaaCountByGatividhi = responseBody['HomeScreenData']['ListKaaryakartaaCountByGatividhi'];
+  var listKaaryakartaaCountByAayaam = responseBody['HomeScreenData']['ListKaaryakartaaCountByAayaam'];
+  var listKaaryakartaaCountByPreritSansthaa = responseBody['HomeScreenData']['ListSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation'];
+  var listKaaryakartaaCountBySocialOrg = responseBody['HomeScreenData']['ListSocialOrganizationKaaryakartaaCountByAreaOfOperation'];
+  var listStudentCountByCategory = responseBody['HomeScreenData']['ListSwayamsevakCountByStudentCategory'];
+  var listVyavasaayeeCountByCategory = responseBody['HomeScreenData']['ListSwayamsevakCountByVyavasaayeeCategory'];
+  var listYesterdayVruttaDetail = responseBody['HomeScreenData']['ListYesterdayVrutta'];
+  var listYesterdayVruttaSummary = responseBody['HomeScreenData']['ListYesterdayVruttaSummary'];
+  var listYesterdayPraantShaakhaaCountByVayogat = responseBody['HomeScreenData']['ListYesterdayPraantShaakhaaCountByVayogat'];
+  var listSankalpByAadhaar = responseBody['HomeScreenData']['ListSankalpByAadhaar'];
+  var listBhaugolikVistaar = responseBody['HomeScreenData']['BhaugolikVistaarData'];
   // var listLastMonthBhaugolikVistaar = responseBody['HomeScreenData']['LastMonthBhaugolikVistaarData'];
   var listAppVersion = responseBody['HomeScreenData']['AppVersion'];
   var message = responseBody['Message'];
@@ -1732,124 +1411,73 @@ Future<dynamic> refreshDashboardData(
   if (message == "Home Screen Data Returned") {
     lstdashboardSadyaSthitiData = [];
     if (listShaakhaaCountByVayogat.length > 0) {
-      int shaakhaa = 0,
-          mandali = 0,
-          maasik = 0,
-          saaptaa = 0,
-          sankalpitShaakhaa = 0,
-          sankalpitSaaptaa = 0;
-      int sankalpitMaasikMilanCount = 0,
-          sankalpitSanghaMandaliCount = 0,
-          registersanghMandali = 0,
-          registermasikMilan = 0;
+      int shaakhaa = 0, mandali = 0, maasik = 0, saaptaa = 0, sankalpitShaakhaa = 0, sankalpitSaaptaa = 0;
+      int sankalpitMaasikMilanCount = 0, sankalpitSanghaMandaliCount = 0, registersanghMandali = 0, registermasikMilan = 0;
 
-      int shaakhaaTotal = 0,
-          mandaliTotal = 0,
-          maasikTotal = 0,
-          saaptaaTotal = 0,
-          sankalpitMaasikMilanCountTotal = 0,
-          sankalpitSanghaMandaliCountTotal = 0;
+      int shaakhaaTotal = 0, mandaliTotal = 0, maasikTotal = 0, saaptaaTotal = 0, sankalpitMaasikMilanCountTotal = 0, sankalpitSanghaMandaliCountTotal = 0;
       int sankalpitShaakhaaTotal = 0, sankalpitSaaptaaTotal = 0;
       for (var data in listShaakhaaCountByVayogat) {
         shaakhaa = data['ShaakhaaCount'] == null ? 0 : data['ShaakhaaCount'];
         shaakhaaTotal = shaakhaaTotal + shaakhaa;
 
-        mandali =
-            data['SanghaMandaliCount'] == null ? 0 : data['SanghaMandaliCount'];
+        mandali = data['SanghaMandaliCount'] == null ? 0 : data['SanghaMandaliCount'];
         mandaliTotal = mandaliTotal + mandali;
 
         saaptaa = data['SaaptaahikCount'] == null ? 0 : data['SaaptaahikCount'];
         saaptaaTotal = saaptaaTotal + saaptaa;
 
-        maasik =
-            data['MaasikMilanCount'] == null ? 0 : data['MaasikMilanCount'];
+        maasik = data['MaasikMilanCount'] == null ? 0 : data['MaasikMilanCount'];
         maasikTotal = maasikTotal + maasik;
 
-        sankalpitShaakhaa = data['SankalpitShaakhaaCount'] == null
-            ? 0
-            : data['SankalpitShaakhaaCount'];
+        sankalpitShaakhaa = data['SankalpitShaakhaaCount'] == null ? 0 : data['SankalpitShaakhaaCount'];
         sankalpitShaakhaaTotal = sankalpitShaakhaaTotal + sankalpitShaakhaa;
 
-        sankalpitSaaptaa = data['SankalpitSaaptaahikCount'] == null
-            ? 0
-            : data['SankalpitSaaptaahikCount'];
+        sankalpitSaaptaa = data['SankalpitSaaptaahikCount'] == null ? 0 : data['SankalpitSaaptaahikCount'];
         sankalpitSaaptaaTotal = sankalpitSaaptaaTotal + sankalpitSaaptaa;
 
-        sankalpitMaasikMilanCount = data['SankalpitMaasikMilanCount'] == null
-            ? 0
-            : data['SankalpitMaasikMilanCount'];
-        sankalpitMaasikMilanCountTotal =
-            sankalpitMaasikMilanCountTotal + sankalpitMaasikMilanCount;
+        sankalpitMaasikMilanCount = data['SankalpitMaasikMilanCount'] == null ? 0 : data['SankalpitMaasikMilanCount'];
+        sankalpitMaasikMilanCountTotal = sankalpitMaasikMilanCountTotal + sankalpitMaasikMilanCount;
 
-        sankalpitSanghaMandaliCount =
-            data['SankalpitSanghaMandaliCount'] == null
-                ? 0
-                : data['SankalpitSanghaMandaliCount'];
-        sankalpitSanghaMandaliCountTotal =
-            sankalpitSanghaMandaliCountTotal + sankalpitSanghaMandaliCount;
+        sankalpitSanghaMandaliCount = data['SankalpitSanghaMandaliCount'] == null ? 0 : data['SankalpitSanghaMandaliCount'];
+        sankalpitSanghaMandaliCountTotal = sankalpitSanghaMandaliCountTotal + sankalpitSanghaMandaliCount;
 
         lstdashboardSadyaSthitiData.add(new DashboardSadyaSthitiDataBAL(
-            data['VayogatID'],
-            data['VayogatCode'],
-            shaakhaa,
-            mandali,
-            saaptaa,
-            maasik,
-            sankalpitShaakhaa,
-            sankalpitSaaptaa,
-            sankalpitMaasikMilanCount,
-            sankalpitSanghaMandaliCount));
+            data['VayogatID'], data['VayogatCode'], shaakhaa, mandali, saaptaa, maasik, sankalpitShaakhaa, sankalpitSaaptaa, sankalpitMaasikMilanCount, sankalpitSanghaMandaliCount));
       }
       // Totals row
-      lstdashboardSadyaSthitiData.add(new DashboardSadyaSthitiDataBAL(
-          -1,
-          getLabel('Total'),
-          shaakhaaTotal,
-          mandaliTotal,
-          saaptaaTotal,
-          maasikTotal,
-          sankalpitShaakhaaTotal,
-          sankalpitSaaptaaTotal,
-          sankalpitMaasikMilanCountTotal,
-          sankalpitSanghaMandaliCountTotal));
+      lstdashboardSadyaSthitiData.add(new DashboardSadyaSthitiDataBAL(-1, getLabel('Total'), shaakhaaTotal, mandaliTotal, saaptaaTotal, maasikTotal, sankalpitShaakhaaTotal, sankalpitSaaptaaTotal,
+          sankalpitMaasikMilanCountTotal, sankalpitSanghaMandaliCountTotal));
     }
 
     lstGatividhiKaaryakartaa = [];
     if (listKaaryakartaaCountByGatividhi.length > 0) {
       int kartaaCount = 0, totalCount = 0;
       for (var data in listKaaryakartaaCountByGatividhi) {
-        kartaaCount =
-            (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
+        kartaaCount = (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
         totalCount = totalCount + kartaaCount;
-        lstGatividhiKaaryakartaa.add(new GatividhiKaaryakartaaCountBAL(
-            data['GatividhiID'], data['GatividhiName'], kartaaCount));
+        lstGatividhiKaaryakartaa.add(new GatividhiKaaryakartaaCountBAL(data['GatividhiID'], data['GatividhiName'], kartaaCount));
       }
       // Totals row
-      lstGatividhiKaaryakartaa.add(
-          new GatividhiKaaryakartaaCountBAL(0, getLabel('Total'), totalCount));
+      lstGatividhiKaaryakartaa.add(new GatividhiKaaryakartaaCountBAL(0, getLabel('Total'), totalCount));
     }
 
     lstAayaamKaaryakartaa = [];
     if (listKaaryakartaaCountByAayaam.length > 0) {
       int kartaaCount = 0, totalCount = 0;
       for (var data in listKaaryakartaaCountByAayaam) {
-        kartaaCount =
-            (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
+        kartaaCount = (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
         totalCount = totalCount + kartaaCount;
-        lstAayaamKaaryakartaa.add(new AayaamKaaryakartaaCountBAL(
-            data['AayaamID'], data['AayaamName'], kartaaCount));
+        lstAayaamKaaryakartaa.add(new AayaamKaaryakartaaCountBAL(data['AayaamID'], data['AayaamName'], kartaaCount));
       }
       // Totals row
-      lstAayaamKaaryakartaa.add(
-          new AayaamKaaryakartaaCountBAL(0, getLabel('Total'), totalCount));
+      lstAayaamKaaryakartaa.add(new AayaamKaaryakartaaCountBAL(0, getLabel('Total'), totalCount));
     }
 
     lstPreritKaaryakartaa = [];
     if (listKaaryakartaaCountByPreritSansthaa.length > 0) {
       int kartaaCount = 0, totalCount = 0;
       for (var data in listKaaryakartaaCountByPreritSansthaa) {
-        kartaaCount =
-            (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
+        kartaaCount = (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
         totalCount = totalCount + kartaaCount;
         lstPreritKaaryakartaa.add(new PreritKaaryakartaaCountBAL(
             // data['PreritAOOID'],
@@ -1871,8 +1499,7 @@ Future<dynamic> refreshDashboardData(
     if (listKaaryakartaaCountBySocialOrg.length > 0) {
       int kartaaCount = 0, totalCount = 0;
       for (var data in listKaaryakartaaCountBySocialOrg) {
-        kartaaCount =
-            (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
+        kartaaCount = (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
         totalCount = totalCount + kartaaCount;
         lstSocialOrgKaaryakartaa.add(new SocialOrgKaaryakartaaCountBAL(
             // data['MainAOOID'],
@@ -1894,131 +1521,66 @@ Future<dynamic> refreshDashboardData(
     if (listStudentCountByCategory.length > 0) {
       int studentCount = 0, totalStudent = 0;
       for (var data in listStudentCountByCategory) {
-        studentCount = (data['CountByStudentCategory'] == null
-            ? 0
-            : data['CountByStudentCategory']);
+        studentCount = (data['CountByStudentCategory'] == null ? 0 : data['CountByStudentCategory']);
         totalStudent = totalStudent + studentCount;
-        lstStudentCategory.add(new StudentCategoryCountBAL(
-            data['StudentCategoryID'],
-            data['StudentCategoryName'],
-            studentCount));
+        lstStudentCategory.add(new StudentCategoryCountBAL(data['StudentCategoryID'], data['StudentCategoryName'], studentCount));
       }
       // Totals row
-      lstStudentCategory
-          .add(new StudentCategoryCountBAL(0, getLabel('Total'), totalStudent));
+      lstStudentCategory.add(new StudentCategoryCountBAL(0, getLabel('Total'), totalStudent));
     }
 
     lstVyavasaayeeCategory = [];
     if (listVyavasaayeeCountByCategory.length > 0) {
       int vyavasaayeeCount = 0, totalVyavasaayee = 0;
       for (var data in listVyavasaayeeCountByCategory) {
-        vyavasaayeeCount = (data['CountByVyavasaayeeCategory'] == null
-            ? 0
-            : data['CountByVyavasaayeeCategory']);
+        vyavasaayeeCount = (data['CountByVyavasaayeeCategory'] == null ? 0 : data['CountByVyavasaayeeCategory']);
         totalVyavasaayee = totalVyavasaayee + vyavasaayeeCount;
-        lstVyavasaayeeCategory.add(new VyavasaayeeCategoryCountBAL(
-            data['VyavasaayeeCategoryID'],
-            data['VyavasaayeeCategoryName'],
-            vyavasaayeeCount));
+        lstVyavasaayeeCategory.add(new VyavasaayeeCategoryCountBAL(data['VyavasaayeeCategoryID'], data['VyavasaayeeCategoryName'], vyavasaayeeCount));
       }
       // Totals row
-      lstVyavasaayeeCategory.add(new VyavasaayeeCategoryCountBAL(
-          0, getLabel('Total'), totalVyavasaayee));
+      lstVyavasaayeeCategory.add(new VyavasaayeeCategoryCountBAL(0, getLabel('Total'), totalVyavasaayee));
     }
 
     lstYesterdayVruttaDetail = [];
     if (listYesterdayVruttaDetail.length > 0) {
-      int baalCnt = 0,
-          totalBaal = 0,
-          tarunVidyaarthiCnt = 0,
-          totalTarunVidyaarthi = 0;
-      int tarunVyavasaayeeCnt = 0,
-          totalTarunVyavasaayee = 0,
-          proudhCnt = 0,
-          totalProudh = 0;
+      int baalCnt = 0, totalBaal = 0, tarunVidyaarthiCnt = 0, totalTarunVidyaarthi = 0;
+      int tarunVyavasaayeeCnt = 0, totalTarunVyavasaayee = 0, proudhCnt = 0, totalProudh = 0;
       int shishuCnt = 0, totalShishu = 0, abhyaagatCnt = 0, totalAbhyaagat = 0;
       for (var data in listYesterdayVruttaDetail) {
-        baalCnt = (data['BaalVidyaarthiCount'] == null
-            ? 0
-            : data['BaalVidyaarthiCount']);
+        baalCnt = (data['BaalVidyaarthiCount'] == null ? 0 : data['BaalVidyaarthiCount']);
         totalBaal = totalBaal + baalCnt;
-        tarunVidyaarthiCnt = (data['TarunVidyaarthiCount'] == null
-            ? 0
-            : data['TarunVidyaarthiCount']);
+        tarunVidyaarthiCnt = (data['TarunVidyaarthiCount'] == null ? 0 : data['TarunVidyaarthiCount']);
         totalTarunVidyaarthi = totalTarunVidyaarthi + tarunVidyaarthiCnt;
-        tarunVyavasaayeeCnt = (data['TarunVyavasaayeeCount'] == null
-            ? 0
-            : data['TarunVyavasaayeeCount']);
+        tarunVyavasaayeeCnt = (data['TarunVyavasaayeeCount'] == null ? 0 : data['TarunVyavasaayeeCount']);
         totalTarunVyavasaayee = totalTarunVyavasaayee + tarunVyavasaayeeCnt;
-        proudhCnt = (data['ProudhaVyavasaayeeCount'] == null
-            ? 0
-            : data['ProudhaVyavasaayeeCount']);
+        proudhCnt = (data['ProudhaVyavasaayeeCount'] == null ? 0 : data['ProudhaVyavasaayeeCount']);
         totalProudh = totalProudh + proudhCnt;
         shishuCnt = (data['ShishuCount'] == null ? 0 : data['ShishuCount']);
         totalShishu = totalShishu + shishuCnt;
-        abhyaagatCnt =
-            (data['AbhyaagatCount'] == null ? 0 : data['AbhyaagatCount']);
+        abhyaagatCnt = (data['AbhyaagatCount'] == null ? 0 : data['AbhyaagatCount']);
         totalAbhyaagat = totalAbhyaagat + abhyaagatCnt;
-        lstYesterdayVruttaDetail.add(new YesterdayVruttaDetailBAL(
-            data['GeoUnitID'],
-            data['ShaakhaaID'],
-            data['GeoUnitName'],
-            data['FrequencyID'],
-            data['FrequencyCode'],
-            data['VayogatID'],
-            data['VayogatCode'],
-            shishuCnt,
-            baalCnt,
-            tarunVidyaarthiCnt,
-            tarunVyavasaayeeCnt,
-            proudhCnt,
-            abhyaagatCnt));
+        lstYesterdayVruttaDetail.add(new YesterdayVruttaDetailBAL(data['GeoUnitID'], data['ShaakhaaID'], data['GeoUnitName'], data['FrequencyID'], data['FrequencyCode'], data['VayogatID'],
+            data['VayogatCode'], shishuCnt, baalCnt, tarunVidyaarthiCnt, tarunVyavasaayeeCnt, proudhCnt, abhyaagatCnt));
       }
       // Totals row
-      lstYesterdayVruttaDetail.add(new YesterdayVruttaDetailBAL(
-          0,
-          0,
-          getLabel('Total'),
-          0,
-          '',
-          0,
-          '',
-          totalShishu,
-          totalBaal,
-          totalTarunVidyaarthi,
-          totalTarunVyavasaayee,
-          totalProudh,
-          totalAbhyaagat));
+      lstYesterdayVruttaDetail
+          .add(new YesterdayVruttaDetailBAL(0, 0, getLabel('Total'), 0, '', 0, '', totalShishu, totalBaal, totalTarunVidyaarthi, totalTarunVyavasaayee, totalProudh, totalAbhyaagat));
     }
 
     lstYesterdayVruttaSummary = [];
     if (listYesterdayVruttaSummary.length > 0) {
-      int shCnt = 0,
-          totalShaakhaa = 0,
-          spCnt = 0,
-          totalSaaptaa = 0,
-          mdCnt = 0,
-          totalMandali = 0;
+      int shCnt = 0, totalShaakhaa = 0, spCnt = 0, totalSaaptaa = 0, mdCnt = 0, totalMandali = 0;
       for (var data in listYesterdayVruttaSummary) {
         shCnt = (data['ShaakhaaCount'] == null ? 0 : data['ShaakhaaCount']);
         totalShaakhaa = totalShaakhaa + shCnt;
         spCnt = (data['SaaptaahikCount'] == null ? 0 : data['SaaptaahikCount']);
         totalSaaptaa = totalSaaptaa + spCnt;
-        mdCnt =
-            (data['MilanMandaliCount'] == null ? 0 : data['MilanMandaliCount']);
+        mdCnt = (data['MilanMandaliCount'] == null ? 0 : data['MilanMandaliCount']);
         totalMandali = totalMandali + mdCnt;
-        lstYesterdayVruttaSummary.add(new YesterdayVruttaSummaryBAL(
-            data['GeoUnitID'],
-            data['GeoUnitName'],
-            data['VayogatID'],
-            data['VayogatCode'],
-            shCnt,
-            spCnt,
-            mdCnt));
+        lstYesterdayVruttaSummary.add(new YesterdayVruttaSummaryBAL(data['GeoUnitID'], data['GeoUnitName'], data['VayogatID'], data['VayogatCode'], shCnt, spCnt, mdCnt));
       }
       // Totals row
-      lstYesterdayVruttaSummary.add(new YesterdayVruttaSummaryBAL(0,
-          getLabel('Total'), 0, '', totalShaakhaa, totalSaaptaa, totalMandali));
+      lstYesterdayVruttaSummary.add(new YesterdayVruttaSummaryBAL(0, getLabel('Total'), 0, '', totalShaakhaa, totalSaaptaa, totalMandali));
     }
 
     lstYesterdayPraantData = [];
@@ -2030,30 +1592,10 @@ Future<dynamic> refreshDashboardData(
         shaakhaaTotal = shaakhaaTotal + shaakhaa;
         saaptaa = data['SaaptaahikCount'] == null ? 0 : data['SaaptaahikCount'];
         saaptaaTotal = saaptaaTotal + saaptaa;
-        lstYesterdayPraantData.add(new DashboardSadyaSthitiDataBAL(
-            data['VayogatID'],
-            data['VayogatCode'],
-            shaakhaa,
-            null,
-            saaptaa,
-            null,
-            null,
-            null,
-            null,
-            null));
+        lstYesterdayPraantData.add(new DashboardSadyaSthitiDataBAL(data['VayogatID'], data['VayogatCode'], shaakhaa, null, saaptaa, null, null, null, null, null));
       }
       // Totals row
-      lstYesterdayPraantData.add(new DashboardSadyaSthitiDataBAL(
-          0,
-          getLabel('Total'),
-          shaakhaaTotal,
-          null,
-          saaptaaTotal,
-          null,
-          null,
-          null,
-          null,
-          null));
+      lstYesterdayPraantData.add(new DashboardSadyaSthitiDataBAL(0, getLabel('Total'), shaakhaaTotal, null, saaptaaTotal, null, null, null, null, null));
     }
 
     lstSankalpByAadhaarData = [];
@@ -2071,81 +1613,39 @@ Future<dynamic> refreshDashboardData(
           sankalpitSanghaMandalikCount = 0,
           sankalpitMasikMilankCount = 0;
       for (var data in listSankalpByAadhaar) {
-        shaakhaa = (data['SankalpitShaakhaaCount'] == null
-            ? 0
-            : data['SankalpitShaakhaaCount']);
+        shaakhaa = (data['SankalpitShaakhaaCount'] == null ? 0 : data['SankalpitShaakhaaCount']);
         totalShaakhaa = totalShaakhaa + shaakhaa;
 
-        saaptaa = (data['SankalpitSaaptaahikCount'] == null
-            ? 0
-            : data['SankalpitSaaptaahikCount']);
+        saaptaa = (data['SankalpitSaaptaahikCount'] == null ? 0 : data['SankalpitSaaptaahikCount']);
         totalSaaptaa = totalSaaptaa + saaptaa;
 
-        sankalpitMasikMilankCount = (data['SankalpitMasikMilankCount'] == null
-            ? 0
-            : data['SankalpitMasikMilankCount']);
-        totalsankalpitMasikMilankCount =
-            totalsankalpitMasikMilankCount + sankalpitMasikMilankCount;
+        sankalpitMasikMilankCount = (data['SankalpitMasikMilankCount'] == null ? 0 : data['SankalpitMasikMilankCount']);
+        totalsankalpitMasikMilankCount = totalsankalpitMasikMilankCount + sankalpitMasikMilankCount;
 
-        sankalpitSanghaMandalikCount =
-            (data['SankalpitSanghaMandalikCount'] == null
-                ? 0
-                : data['SankalpitSanghaMandalikCount']);
-        totalsankalpitSanghaMandalikCount =
-            totalsankalpitSanghaMandalikCount + sankalpitSanghaMandalikCount;
+        sankalpitSanghaMandalikCount = (data['SankalpitSanghaMandalikCount'] == null ? 0 : data['SankalpitSanghaMandalikCount']);
+        totalsankalpitSanghaMandalikCount = totalsankalpitSanghaMandalikCount + sankalpitSanghaMandalikCount;
 
         if (shaakhaa == 0 && saaptaa == 0) continue;
-        lstSankalpByAadhaarData.add(new SankalpByAadhaarBAL(
-            data['VayogatID'],
-            data['VayogatCode'],
-            data['SankalpAadhaar'],
-            shaakhaa,
-            saaptaa,
-            sankalpitMasikMilankCount,
-            sankalpitSanghaMandalikCount));
+        lstSankalpByAadhaarData
+            .add(new SankalpByAadhaarBAL(data['VayogatID'], data['VayogatCode'], data['SankalpAadhaar'], shaakhaa, saaptaa, sankalpitMasikMilankCount, sankalpitSanghaMandalikCount));
       }
       // Totals row
-      lstSankalpByAadhaarData.add(new SankalpByAadhaarBAL(
-          0,
-          getLabel('Total'),
-          '',
-          totalShaakhaa,
-          totalSaaptaa,
-          totalsankalpitMasikMilankCount,
-          totalsankalpitSanghaMandalikCount));
+      lstSankalpByAadhaarData.add(new SankalpByAadhaarBAL(0, getLabel('Total'), '', totalShaakhaa, totalSaaptaa, totalsankalpitMasikMilankCount, totalsankalpitSanghaMandalikCount));
     }
 
     lstBhaugolikVistaar = [];
     if (listBhaugolikVistaar.length > 0) {
-      if (listBhaugolikVistaar['TotalNagarCount'] != null &&
-          listBhaugolikVistaar['TotalNagarCount'] > 0) {
-        lstBhaugolikVistaar.add(new BhaugolikVistaarBAL(
-            'Nagar',
-            listBhaugolikVistaar['TotalNagarCount'],
-            listBhaugolikVistaar['ShaakhaaYuktaNagarCount'],
-            listBhaugolikVistaar['SaaptaahikYuktaNagarCount'],
-            listBhaugolikVistaar['MandaliYuktaNagarCount'],
-            listBhaugolikVistaar['GatividhiYuktaNagarCount']));
+      if (listBhaugolikVistaar['TotalNagarCount'] != null && listBhaugolikVistaar['TotalNagarCount'] > 0) {
+        lstBhaugolikVistaar.add(new BhaugolikVistaarBAL('Nagar', listBhaugolikVistaar['TotalNagarCount'], listBhaugolikVistaar['ShaakhaaYuktaNagarCount'],
+            listBhaugolikVistaar['SaaptaahikYuktaNagarCount'], listBhaugolikVistaar['MandaliYuktaNagarCount'], listBhaugolikVistaar['GatividhiYuktaNagarCount']));
       }
-      if (listBhaugolikVistaar['TotalNagarCountGraamin'] != null &&
-          listBhaugolikVistaar['TotalNagarCountGraamin'] > 0) {
-        lstBhaugolikVistaar.add(new BhaugolikVistaarBAL(
-            'NagarGraamin',
-            listBhaugolikVistaar['TotalNagarCountGraamin'],
-            listBhaugolikVistaar['ShaakhaaYuktaNagarCountGraamin'],
-            listBhaugolikVistaar['SaaptaahikYuktaNagarCountGraamin'],
-            listBhaugolikVistaar['MandaliYuktaNagarCountGraamin'],
-            listBhaugolikVistaar['GatividhiYuktaNagarCountGraamin']));
+      if (listBhaugolikVistaar['TotalNagarCountGraamin'] != null && listBhaugolikVistaar['TotalNagarCountGraamin'] > 0) {
+        lstBhaugolikVistaar.add(new BhaugolikVistaarBAL('NagarGraamin', listBhaugolikVistaar['TotalNagarCountGraamin'], listBhaugolikVistaar['ShaakhaaYuktaNagarCountGraamin'],
+            listBhaugolikVistaar['SaaptaahikYuktaNagarCountGraamin'], listBhaugolikVistaar['MandaliYuktaNagarCountGraamin'], listBhaugolikVistaar['GatividhiYuktaNagarCountGraamin']));
       }
-      if (listBhaugolikVistaar['TotalNagarCountShahari'] != null &&
-          listBhaugolikVistaar['TotalNagarCountShahari'] > 0) {
-        lstBhaugolikVistaar.add(new BhaugolikVistaarBAL(
-            'NagarShahari',
-            listBhaugolikVistaar['TotalNagarCountShahari'],
-            listBhaugolikVistaar['ShaakhaaYuktaNagarCountShahari'],
-            listBhaugolikVistaar['SaaptaahikYuktaNagarCountShahari'],
-            listBhaugolikVistaar['MandaliYuktaNagarCountShahari'],
-            listBhaugolikVistaar['GatividhiYuktaNagarCountShahari']));
+      if (listBhaugolikVistaar['TotalNagarCountShahari'] != null && listBhaugolikVistaar['TotalNagarCountShahari'] > 0) {
+        lstBhaugolikVistaar.add(new BhaugolikVistaarBAL('NagarShahari', listBhaugolikVistaar['TotalNagarCountShahari'], listBhaugolikVistaar['ShaakhaaYuktaNagarCountShahari'],
+            listBhaugolikVistaar['SaaptaahikYuktaNagarCountShahari'], listBhaugolikVistaar['MandaliYuktaNagarCountShahari'], listBhaugolikVistaar['GatividhiYuktaNagarCountShahari']));
       }
       // if (listBhaugolikVistaar['TotalShaharCount'] != null && listBhaugolikVistaar['TotalShaharCount'] > 0){
       //   lstBhaugolikVistaar.add(new BhaugolikVistaarBAL(
@@ -2157,35 +1657,17 @@ Future<dynamic> refreshDashboardData(
       //     listBhaugolikVistaar['GatividhiYuktaShaharCount']
       //   ));
       // }
-      if (listBhaugolikVistaar['TotalMandalCount'] != null &&
-          listBhaugolikVistaar['TotalMandalCount'] > 0) {
-        lstBhaugolikVistaar.add(new BhaugolikVistaarBAL(
-            'Mandal',
-            listBhaugolikVistaar['TotalMandalCount'],
-            listBhaugolikVistaar['ShaakhaaYuktaMandalCount'],
-            listBhaugolikVistaar['SaaptaahikYuktaMandalCount'],
-            listBhaugolikVistaar['MandaliYuktaMandalCount'],
-            listBhaugolikVistaar['GatividhiYuktaMandalCount']));
+      if (listBhaugolikVistaar['TotalMandalCount'] != null && listBhaugolikVistaar['TotalMandalCount'] > 0) {
+        lstBhaugolikVistaar.add(new BhaugolikVistaarBAL('Mandal', listBhaugolikVistaar['TotalMandalCount'], listBhaugolikVistaar['ShaakhaaYuktaMandalCount'],
+            listBhaugolikVistaar['SaaptaahikYuktaMandalCount'], listBhaugolikVistaar['MandaliYuktaMandalCount'], listBhaugolikVistaar['GatividhiYuktaMandalCount']));
       }
-      if (listBhaugolikVistaar['TotalGraamCount'] != null &&
-          listBhaugolikVistaar['TotalGraamCount'] > 0) {
-        lstBhaugolikVistaar.add(new BhaugolikVistaarBAL(
-            'Graam',
-            listBhaugolikVistaar['TotalGraamCount'],
-            listBhaugolikVistaar['ShaakhaaYuktaGraamCount'],
-            listBhaugolikVistaar['SaaptaahikYuktaGraamCount'],
-            listBhaugolikVistaar['MandaliYuktaGraamCount'],
-            listBhaugolikVistaar['GatividhiYuktaGraamCount']));
+      if (listBhaugolikVistaar['TotalGraamCount'] != null && listBhaugolikVistaar['TotalGraamCount'] > 0) {
+        lstBhaugolikVistaar.add(new BhaugolikVistaarBAL('Graam', listBhaugolikVistaar['TotalGraamCount'], listBhaugolikVistaar['ShaakhaaYuktaGraamCount'],
+            listBhaugolikVistaar['SaaptaahikYuktaGraamCount'], listBhaugolikVistaar['MandaliYuktaGraamCount'], listBhaugolikVistaar['GatividhiYuktaGraamCount']));
       }
-      if (listBhaugolikVistaar['TotalVastiCount'] != null &&
-          listBhaugolikVistaar['TotalVastiCount'] > 0) {
-        lstBhaugolikVistaar.add(new BhaugolikVistaarBAL(
-            'Vasti',
-            listBhaugolikVistaar['TotalVastiCount'],
-            listBhaugolikVistaar['ShaakhaaYuktaVastiCount'],
-            listBhaugolikVistaar['SaaptaahikYuktaVastiCount'],
-            listBhaugolikVistaar['MandaliYuktaVastiCount'],
-            listBhaugolikVistaar['GatividhiYuktaVastiCount']));
+      if (listBhaugolikVistaar['TotalVastiCount'] != null && listBhaugolikVistaar['TotalVastiCount'] > 0) {
+        lstBhaugolikVistaar.add(new BhaugolikVistaarBAL('Vasti', listBhaugolikVistaar['TotalVastiCount'], listBhaugolikVistaar['ShaakhaaYuktaVastiCount'],
+            listBhaugolikVistaar['SaaptaahikYuktaVastiCount'], listBhaugolikVistaar['MandaliYuktaVastiCount'], listBhaugolikVistaar['GatividhiYuktaVastiCount']));
       }
     }
 
@@ -2266,8 +1748,7 @@ Future<dynamic> refreshDashboardData(
     lstAppVersion = [];
     if (listAppVersion.length > 0) {
       for (var data in listAppVersion) {
-        lstAppVersion
-            .add(new AppVersionBAL(data['VersionNumber'], data['BuildNumber']));
+        lstAppVersion.add(new AppVersionBAL(data['VersionNumber'], data['BuildNumber']));
       }
     }
 
@@ -2278,15 +1759,11 @@ Future<dynamic> refreshDashboardData(
 }
 
 //===================================  NEW VastisarvekshanReport by Dom ===========================================================
-Future<VastiSurveyReportModel?> vastisarvekshanReportData(
-    context, String? userID, String? targetGeoUnitID) async {
+Future<VastiSurveyReportModel?> vastisarvekshanReportData(context, String? userID, String? targetGeoUnitID) async {
   showLoaderDialog(context);
 
   print("${userID}  --- $targetGeoUnitID  ");
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(Uri.parse(urlVastisarvekshanReport),
       headers: jHeaders,
@@ -2319,29 +1796,15 @@ Future<VastiSurveyReportModel?> vastisarvekshanReportData(
   }
 }
 
-Future<NagarVastiSampurnaModel?> vastisarvekshanAllReportData(
-    context, String? userID, String? targetGeoUnitID, String? levelType) async {
+Future<NagarVastiSampurnaModel?> vastisarvekshanAllReportData(context, String? userID, String? targetGeoUnitID, String? levelType) async {
   showLoaderDialog(context);
 
   print("${userID}  --- $targetGeoUnitID  ");
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlNagarVastisarvekshanReport),
-      headers: jHeaders,
-      body: json.encode({
-        "AppUserID": userID,
-        "GeoUnitID": int.parse(targetGeoUnitID!),
-        "type": levelType
-      }));
+  var response = await http.post(Uri.parse(urlNagarVastisarvekshanReport), headers: jHeaders, body: json.encode({"AppUserID": userID, "GeoUnitID": int.parse(targetGeoUnitID!), "type": levelType}));
 
-  print(json.encode({
-    "AppUserID": userID,
-    "GeoUnitID": int.parse(targetGeoUnitID),
-    "type": levelType
-  }));
+  print(json.encode({"AppUserID": userID, "GeoUnitID": int.parse(targetGeoUnitID), "type": levelType}));
   log("response ==>  $response");
 
   if (response.statusCode == 200) {
@@ -2362,15 +1825,11 @@ Future<NagarVastiSampurnaModel?> vastisarvekshanAllReportData(
   }
 }
 
-Future<GetVijayadashamiInitModel?> getVijayadashamiInitData(
-    context, String? userID, String? targetGeoUnitID) async {
+Future<GetVijayadashamiInitModel?> getVijayadashamiInitData(context, String? userID, String? targetGeoUnitID) async {
   showLoaderDialog(context);
 
   print("${userID}  --- $targetGeoUnitID  ");
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(Uri.parse(getDataWhileAddUpdateUPLevel),
       headers: jHeaders,
@@ -2403,29 +1862,15 @@ Future<GetVijayadashamiInitModel?> getVijayadashamiInitData(
   }
 }
 
-Future<MandalVastisarvekshanReportModel?> vastisarvekshanOnlyMandalReportData(
-    context, String? userID, String? targetGeoUnitID, String? levelType) async {
+Future<MandalVastisarvekshanReportModel?> vastisarvekshanOnlyMandalReportData(context, String? userID, String? targetGeoUnitID, String? levelType) async {
   showLoaderDialog(context);
 
   print("${userID}  --- $targetGeoUnitID  ");
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(mandalVastisarvekshanReport),
-      headers: jHeaders,
-      body: json.encode({
-        "AppUserID": userID,
-        "GeoUnitID": int.parse(targetGeoUnitID!),
-        "type": levelType
-      }));
+  var response = await http.post(Uri.parse(mandalVastisarvekshanReport), headers: jHeaders, body: json.encode({"AppUserID": userID, "GeoUnitID": int.parse(targetGeoUnitID!), "type": levelType}));
 
-  print(json.encode({
-    "AppUserID": userID,
-    "GeoUnitID": int.parse(targetGeoUnitID),
-    "type": levelType
-  }));
+  print(json.encode({"AppUserID": userID, "GeoUnitID": int.parse(targetGeoUnitID), "type": levelType}));
   log("response ==>  $response");
 
   if (response.statusCode == 200) {
@@ -2446,30 +1891,16 @@ Future<MandalVastisarvekshanReportModel?> vastisarvekshanOnlyMandalReportData(
   }
 }
 
-Future<TalukaMandalSampurnaModel?> vastisarvekshanAllReportDataForMandal(
-    context, String? userID, String? targetGeoUnitID, String? levelType) async {
+Future<TalukaMandalSampurnaModel?> vastisarvekshanAllReportDataForMandal(context, String? userID, String? targetGeoUnitID, String? levelType) async {
   showLoaderDialog(context);
 
   print("${userID}  --- $targetGeoUnitID  ");
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(
-      Uri.parse(urlNagarVastisarvekshanReportForMandal),
-      headers: jHeaders,
-      body: json.encode({
-        "AppUserID": userID,
-        "GeoUnitID": int.parse(targetGeoUnitID!),
-        "type": levelType
-      }));
+  var response =
+      await http.post(Uri.parse(urlNagarVastisarvekshanReportForMandal), headers: jHeaders, body: json.encode({"AppUserID": userID, "GeoUnitID": int.parse(targetGeoUnitID!), "type": levelType}));
 
-  print(json.encode({
-    "AppUserID": userID,
-    "GeoUnitID": int.parse(targetGeoUnitID),
-    "type": levelType
-  }));
+  print(json.encode({"AppUserID": userID, "GeoUnitID": int.parse(targetGeoUnitID), "type": levelType}));
   log("response ==>  $response");
 
   if (response.statusCode == 200) {
@@ -2492,10 +1923,7 @@ Future<TalukaMandalSampurnaModel?> vastisarvekshanAllReportDataForMandal(
 
 //==========================================================================================================================
 Future<NotificationListModel?> getNotificationDataList(String? userID) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(
     Uri.parse(getofflinenotificationlist),
@@ -2520,12 +1948,8 @@ Future<NotificationListModel?> getNotificationDataList(String? userID) async {
 }
 
 //====================================   Vasti Sarvekshan API CALLL ===============================================================================
-Future<VastisarvekshanDropDownDataModel?> getVastiSurveyDropDownList(
-    String? userID) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+Future<VastisarvekshanDropDownDataModel?> getVastiSurveyDropDownList(String? userID) async {
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(
     Uri.parse(getVastisarvekshanmasterdata),
@@ -2549,12 +1973,8 @@ Future<VastisarvekshanDropDownDataModel?> getVastiSurveyDropDownList(
   }
 }
 
-Future<dynamic> getDashboardDataByGeoUnit(
-    String userID, String targetGeoUnitID) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID) async {
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(Uri.parse(urlRefreshHomeScreenForApp),
       headers: jHeaders,
@@ -2571,142 +1991,80 @@ Future<dynamic> getDashboardDataByGeoUnit(
   log("response body getDashboardDataByGeoUnit:--  ${responseBody}");
 
   var dataList = responseBody['HomeScreenData'];
-  var listShaakhaaCountByVayogat =
-      responseBody['HomeScreenData']['ListShaakhaaCountByVayogat'];
-  var listKaaryakartaaCountByGatividhi =
-      responseBody['HomeScreenData']['ListKaaryakartaaCountByGatividhi'];
-  var listKaaryakartaaCountByAayaam =
-      responseBody['HomeScreenData']['ListKaaryakartaaCountByAayaam'];
-  var listKaaryakartaaCountByPreritSansthaa = responseBody['HomeScreenData']
-      ['ListSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation'];
-  var listKaaryakartaaCountBySocialOrg = responseBody['HomeScreenData']
-      ['ListSocialOrganizationKaaryakartaaCountByAreaOfOperation'];
-  var listStudentCountByCategory =
-      responseBody['HomeScreenData']['ListSwayamsevakCountByStudentCategory'];
-  var listVyavasaayeeCountByCategory = responseBody['HomeScreenData']
-      ['ListSwayamsevakCountByVyavasaayeeCategory'];
-  var listYesterdayVruttaDetail =
-      responseBody['HomeScreenData']['ListYesterdayVrutta'];
-  var listYesterdayVruttaSummary =
-      responseBody['HomeScreenData']['ListYesterdayVruttaSummary'];
-  var listSankalpByAadhaar =
-      responseBody['HomeScreenData']['ListSankalpByAadhaar'];
-  var listBhaugolikVistaar =
-      responseBody['HomeScreenData']['BhaugolikVistaarData'];
+  var listShaakhaaCountByVayogat = responseBody['HomeScreenData']['ListShaakhaaCountByVayogat'];
+  var listKaaryakartaaCountByGatividhi = responseBody['HomeScreenData']['ListKaaryakartaaCountByGatividhi'];
+  var listKaaryakartaaCountByAayaam = responseBody['HomeScreenData']['ListKaaryakartaaCountByAayaam'];
+  var listKaaryakartaaCountByPreritSansthaa = responseBody['HomeScreenData']['ListSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation'];
+  var listKaaryakartaaCountBySocialOrg = responseBody['HomeScreenData']['ListSocialOrganizationKaaryakartaaCountByAreaOfOperation'];
+  var listStudentCountByCategory = responseBody['HomeScreenData']['ListSwayamsevakCountByStudentCategory'];
+  var listVyavasaayeeCountByCategory = responseBody['HomeScreenData']['ListSwayamsevakCountByVyavasaayeeCategory'];
+  var listYesterdayVruttaDetail = responseBody['HomeScreenData']['ListYesterdayVrutta'];
+  var listYesterdayVruttaSummary = responseBody['HomeScreenData']['ListYesterdayVruttaSummary'];
+  var listSankalpByAadhaar = responseBody['HomeScreenData']['ListSankalpByAadhaar'];
+  var listBhaugolikVistaar = responseBody['HomeScreenData']['BhaugolikVistaarData'];
   // var listLastMonthBhaugolikVistaar = responseBody['HomeScreenData']['LastMonthBhaugolikVistaarData'];
   var message = responseBody['Message'];
 
   if (message == "Home Screen Data Returned") {
     tgLstdashboardSadyaSthitiData = [];
     if (listShaakhaaCountByVayogat.length > 0) {
-      int shaakhaa = 0,
-          mandali = 0,
-          maasik = 0,
-          saaptaa = 0,
-          sankalpitShaakhaa = 0,
-          sankalpitSaaptaa = 0;
-      int shaakhaaTotal = 0,
-          mandaliTotal = 0,
-          maasikTotal = 0,
-          saaptaaTotal = 0,
-          sankalpitMaasikMilanCount = 0,
-          sankalpitSanghaMandaliCount = 0;
-      int sankalpitShaakhaaTotal = 0,
-          sankalpitSaaptaaTotal = 0,
-          sankalpitMaasikMilanTotal = 0,
-          sankalpitSanghaMandaliTotal = 0;
+      int shaakhaa = 0, mandali = 0, maasik = 0, saaptaa = 0, sankalpitShaakhaa = 0, sankalpitSaaptaa = 0;
+      int shaakhaaTotal = 0, mandaliTotal = 0, maasikTotal = 0, saaptaaTotal = 0, sankalpitMaasikMilanCount = 0, sankalpitSanghaMandaliCount = 0;
+      int sankalpitShaakhaaTotal = 0, sankalpitSaaptaaTotal = 0, sankalpitMaasikMilanTotal = 0, sankalpitSanghaMandaliTotal = 0;
       for (var data in listShaakhaaCountByVayogat) {
         shaakhaa = data['ShaakhaaCount'] == null ? 0 : data['ShaakhaaCount'];
         shaakhaaTotal = shaakhaaTotal + shaakhaa;
-        mandali =
-            data['SanghaMandaliCount'] == null ? 0 : data['SanghaMandaliCount'];
+        mandali = data['SanghaMandaliCount'] == null ? 0 : data['SanghaMandaliCount'];
         mandaliTotal = mandaliTotal + mandali;
         saaptaa = data['SaaptaahikCount'] == null ? 0 : data['SaaptaahikCount'];
         saaptaaTotal = saaptaaTotal + saaptaa;
-        maasik =
-            data['MaasikMilanCount'] == null ? 0 : data['MaasikMilanCount'];
+        maasik = data['MaasikMilanCount'] == null ? 0 : data['MaasikMilanCount'];
         maasikTotal = maasikTotal + maasik;
-        sankalpitShaakhaa = data['SankalpitShaakhaaCount'] == null
-            ? 0
-            : data['SankalpitShaakhaaCount'];
+        sankalpitShaakhaa = data['SankalpitShaakhaaCount'] == null ? 0 : data['SankalpitShaakhaaCount'];
         sankalpitShaakhaaTotal = sankalpitShaakhaaTotal + sankalpitShaakhaa;
-        sankalpitSaaptaa = data['SankalpitSaaptaahikCount'] == null
-            ? 0
-            : data['SankalpitSaaptaahikCount'];
+        sankalpitSaaptaa = data['SankalpitSaaptaahikCount'] == null ? 0 : data['SankalpitSaaptaahikCount'];
         sankalpitSaaptaaTotal = sankalpitSaaptaaTotal + sankalpitSaaptaa;
-        sankalpitMaasikMilanCount = data['SankalpitMaasikMilanCount'] == null
-            ? 0
-            : data['SankalpitMaasikMilanCount'];
-        sankalpitMaasikMilanTotal =
-            sankalpitMaasikMilanTotal + sankalpitMaasikMilanCount;
-        sankalpitSanghaMandaliCount =
-            data['SankalpitSanghaMandaliCount'] == null
-                ? 0
-                : data['SankalpitSanghaMandaliCount'];
-        sankalpitSanghaMandaliTotal =
-            sankalpitSanghaMandaliTotal + sankalpitSanghaMandaliCount;
+        sankalpitMaasikMilanCount = data['SankalpitMaasikMilanCount'] == null ? 0 : data['SankalpitMaasikMilanCount'];
+        sankalpitMaasikMilanTotal = sankalpitMaasikMilanTotal + sankalpitMaasikMilanCount;
+        sankalpitSanghaMandaliCount = data['SankalpitSanghaMandaliCount'] == null ? 0 : data['SankalpitSanghaMandaliCount'];
+        sankalpitSanghaMandaliTotal = sankalpitSanghaMandaliTotal + sankalpitSanghaMandaliCount;
         tgLstdashboardSadyaSthitiData.add(new DashboardSadyaSthitiDataBAL(
-            data['VayogatID'],
-            data['VayogatCode'],
-            shaakhaa,
-            mandali,
-            saaptaa,
-            maasik,
-            sankalpitShaakhaa,
-            sankalpitSaaptaa,
-            sankalpitMaasikMilanCount,
-            sankalpitSanghaMandaliCount));
+            data['VayogatID'], data['VayogatCode'], shaakhaa, mandali, saaptaa, maasik, sankalpitShaakhaa, sankalpitSaaptaa, sankalpitMaasikMilanCount, sankalpitSanghaMandaliCount));
       }
       // Totals row
       tgLstdashboardSadyaSthitiData.add(new DashboardSadyaSthitiDataBAL(
-          -1,
-          getLabel('Total'),
-          shaakhaaTotal,
-          mandaliTotal,
-          saaptaaTotal,
-          maasikTotal,
-          sankalpitShaakhaaTotal,
-          sankalpitSaaptaaTotal,
-          sankalpitMaasikMilanTotal,
-          sankalpitSanghaMandaliTotal));
+          -1, getLabel('Total'), shaakhaaTotal, mandaliTotal, saaptaaTotal, maasikTotal, sankalpitShaakhaaTotal, sankalpitSaaptaaTotal, sankalpitMaasikMilanTotal, sankalpitSanghaMandaliTotal));
     }
 
     tgLstGatividhiKaaryakartaa = [];
     if (listKaaryakartaaCountByGatividhi.length > 0) {
       int kartaaCount = 0, totalCount = 0;
       for (var data in listKaaryakartaaCountByGatividhi) {
-        kartaaCount =
-            (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
+        kartaaCount = (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
         totalCount = totalCount + kartaaCount;
-        tgLstGatividhiKaaryakartaa.add(new GatividhiKaaryakartaaCountBAL(
-            data['GatividhiID'], data['GatividhiName'], kartaaCount));
+        tgLstGatividhiKaaryakartaa.add(new GatividhiKaaryakartaaCountBAL(data['GatividhiID'], data['GatividhiName'], kartaaCount));
       }
       // Totals row
-      tgLstGatividhiKaaryakartaa.add(
-          new GatividhiKaaryakartaaCountBAL(0, getLabel('Total'), totalCount));
+      tgLstGatividhiKaaryakartaa.add(new GatividhiKaaryakartaaCountBAL(0, getLabel('Total'), totalCount));
     }
 
     tgLstAayaamKaaryakartaa = [];
     if (listKaaryakartaaCountByAayaam.length > 0) {
       int kartaaCount = 0, totalCount = 0;
       for (var data in listKaaryakartaaCountByAayaam) {
-        kartaaCount =
-            (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
+        kartaaCount = (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
         totalCount = totalCount + kartaaCount;
-        tgLstAayaamKaaryakartaa.add(new AayaamKaaryakartaaCountBAL(
-            data['AayaamID'], data['AayaamName'], kartaaCount));
+        tgLstAayaamKaaryakartaa.add(new AayaamKaaryakartaaCountBAL(data['AayaamID'], data['AayaamName'], kartaaCount));
       }
       //Totals row
-      tgLstAayaamKaaryakartaa.add(
-          new AayaamKaaryakartaaCountBAL(0, getLabel('Total'), totalCount));
+      tgLstAayaamKaaryakartaa.add(new AayaamKaaryakartaaCountBAL(0, getLabel('Total'), totalCount));
     }
 
     tgLstPreritKaaryakartaa = [];
     if (listKaaryakartaaCountByPreritSansthaa.length > 0) {
       int kartaaCount = 0, totalCount = 0;
       for (var data in listKaaryakartaaCountByPreritSansthaa) {
-        kartaaCount =
-            (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
+        kartaaCount = (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
         totalCount = totalCount + kartaaCount;
         tgLstPreritKaaryakartaa.add(new PreritKaaryakartaaCountBAL(
             // data['PreritAOOID'],
@@ -2728,8 +2086,7 @@ Future<dynamic> getDashboardDataByGeoUnit(
     if (listKaaryakartaaCountBySocialOrg.length > 0) {
       int kartaaCount = 0, totalCount = 0;
       for (var data in listKaaryakartaaCountBySocialOrg) {
-        kartaaCount =
-            (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
+        kartaaCount = (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
         totalCount = totalCount + kartaaCount;
         tgLstSocialOrgKaaryakartaa.add(new SocialOrgKaaryakartaaCountBAL(
             // data['MainAOOID'],
@@ -2751,131 +2108,66 @@ Future<dynamic> getDashboardDataByGeoUnit(
     if (listStudentCountByCategory.length > 0) {
       int studentCount = 0, totalStudent = 0;
       for (var data in listStudentCountByCategory) {
-        studentCount = (data['CountByStudentCategory'] == null
-            ? 0
-            : data['CountByStudentCategory']);
+        studentCount = (data['CountByStudentCategory'] == null ? 0 : data['CountByStudentCategory']);
         totalStudent = totalStudent + studentCount;
-        tgLstStudentCategory.add(new StudentCategoryCountBAL(
-            data['StudentCategoryID'],
-            data['StudentCategoryName'],
-            studentCount));
+        tgLstStudentCategory.add(new StudentCategoryCountBAL(data['StudentCategoryID'], data['StudentCategoryName'], studentCount));
       }
       // Totals row
-      tgLstStudentCategory
-          .add(new StudentCategoryCountBAL(0, getLabel('Total'), totalStudent));
+      tgLstStudentCategory.add(new StudentCategoryCountBAL(0, getLabel('Total'), totalStudent));
     }
 
     tgLstVyavasaayeeCategory = [];
     if (listVyavasaayeeCountByCategory.length > 0) {
       int vyavasaayeeCount = 0, totalVyavasaayee = 0;
       for (var data in listVyavasaayeeCountByCategory) {
-        vyavasaayeeCount = (data['CountByVyavasaayeeCategory'] == null
-            ? 0
-            : data['CountByVyavasaayeeCategory']);
+        vyavasaayeeCount = (data['CountByVyavasaayeeCategory'] == null ? 0 : data['CountByVyavasaayeeCategory']);
         totalVyavasaayee = totalVyavasaayee + vyavasaayeeCount;
-        tgLstVyavasaayeeCategory.add(new VyavasaayeeCategoryCountBAL(
-            data['VyavasaayeeCategoryID'],
-            data['VyavasaayeeCategoryName'],
-            vyavasaayeeCount));
+        tgLstVyavasaayeeCategory.add(new VyavasaayeeCategoryCountBAL(data['VyavasaayeeCategoryID'], data['VyavasaayeeCategoryName'], vyavasaayeeCount));
       }
       // Totals row
-      tgLstVyavasaayeeCategory.add(new VyavasaayeeCategoryCountBAL(
-          0, getLabel('Total'), totalVyavasaayee));
+      tgLstVyavasaayeeCategory.add(new VyavasaayeeCategoryCountBAL(0, getLabel('Total'), totalVyavasaayee));
     }
 
     tgLstYesterdayVruttaSummary = [];
     if (listYesterdayVruttaSummary.length > 0) {
-      int shCnt = 0,
-          totalShaakhaa = 0,
-          spCnt = 0,
-          totalSaaptaa = 0,
-          mdCnt = 0,
-          totalMandali = 0;
+      int shCnt = 0, totalShaakhaa = 0, spCnt = 0, totalSaaptaa = 0, mdCnt = 0, totalMandali = 0;
       for (var data in listYesterdayVruttaSummary) {
         shCnt = (data['ShaakhaaCount'] == null ? 0 : data['ShaakhaaCount']);
         totalShaakhaa = totalShaakhaa + shCnt;
         spCnt = (data['SaaptaahikCount'] == null ? 0 : data['SaaptaahikCount']);
         totalSaaptaa = totalSaaptaa + spCnt;
-        mdCnt =
-            (data['MilanMandaliCount'] == null ? 0 : data['MilanMandaliCount']);
+        mdCnt = (data['MilanMandaliCount'] == null ? 0 : data['MilanMandaliCount']);
         totalMandali = totalMandali + mdCnt;
-        tgLstYesterdayVruttaSummary.add(new YesterdayVruttaSummaryBAL(
-            data['GeoUnitID'],
-            data['GeoUnitName'],
-            data['VayogatID'],
-            data['VayogatCode'],
-            shCnt,
-            spCnt,
-            mdCnt));
+        tgLstYesterdayVruttaSummary.add(new YesterdayVruttaSummaryBAL(data['GeoUnitID'], data['GeoUnitName'], data['VayogatID'], data['VayogatCode'], shCnt, spCnt, mdCnt));
       }
       // Totals row
-      tgLstYesterdayVruttaSummary.add(new YesterdayVruttaSummaryBAL(0,
-          getLabel('Total'), 0, '', totalShaakhaa, totalSaaptaa, totalMandali));
+      tgLstYesterdayVruttaSummary.add(new YesterdayVruttaSummaryBAL(0, getLabel('Total'), 0, '', totalShaakhaa, totalSaaptaa, totalMandali));
     }
 
     tgLstYesterdayVruttaDetail = [];
     if (listYesterdayVruttaDetail.length > 0) {
-      int baalCnt = 0,
-          totalBaal = 0,
-          tarunVidyaarthiCnt = 0,
-          totalTarunVidyaarthi = 0;
-      int tarunVyavasaayeeCnt = 0,
-          totalTarunVyavasaayee = 0,
-          proudhCnt = 0,
-          totalProudh = 0;
+      int baalCnt = 0, totalBaal = 0, tarunVidyaarthiCnt = 0, totalTarunVidyaarthi = 0;
+      int tarunVyavasaayeeCnt = 0, totalTarunVyavasaayee = 0, proudhCnt = 0, totalProudh = 0;
       int shishuCnt = 0, totalShishu = 0, abhyaagatCnt = 0, totalAbhyaagat = 0;
       for (var data in listYesterdayVruttaDetail) {
-        baalCnt = (data['BaalVidyaarthiCount'] == null
-            ? 0
-            : data['BaalVidyaarthiCount']);
+        baalCnt = (data['BaalVidyaarthiCount'] == null ? 0 : data['BaalVidyaarthiCount']);
         totalBaal = totalBaal + baalCnt;
-        tarunVidyaarthiCnt = (data['TarunVidyaarthiCount'] == null
-            ? 0
-            : data['TarunVidyaarthiCount']);
+        tarunVidyaarthiCnt = (data['TarunVidyaarthiCount'] == null ? 0 : data['TarunVidyaarthiCount']);
         totalTarunVidyaarthi = totalTarunVidyaarthi + tarunVidyaarthiCnt;
-        tarunVyavasaayeeCnt = (data['TarunVyavasaayeeCount'] == null
-            ? 0
-            : data['TarunVyavasaayeeCount']);
+        tarunVyavasaayeeCnt = (data['TarunVyavasaayeeCount'] == null ? 0 : data['TarunVyavasaayeeCount']);
         totalTarunVyavasaayee = totalTarunVyavasaayee + tarunVyavasaayeeCnt;
-        proudhCnt = (data['ProudhaVyavasaayeeCount'] == null
-            ? 0
-            : data['ProudhaVyavasaayeeCount']);
+        proudhCnt = (data['ProudhaVyavasaayeeCount'] == null ? 0 : data['ProudhaVyavasaayeeCount']);
         totalProudh = totalProudh + proudhCnt;
         shishuCnt = (data['ShishuCount'] == null ? 0 : data['ShishuCount']);
         totalShishu = totalShishu + shishuCnt;
-        abhyaagatCnt =
-            (data['AbhyaagatCount'] == null ? 0 : data['AbhyaagatCount']);
+        abhyaagatCnt = (data['AbhyaagatCount'] == null ? 0 : data['AbhyaagatCount']);
         totalAbhyaagat = totalAbhyaagat + abhyaagatCnt;
-        tgLstYesterdayVruttaDetail.add(new YesterdayVruttaDetailBAL(
-            data['GeoUnitID'],
-            data['ShaakhaaID'],
-            data['GeoUnitName'],
-            data['FrequencyID'],
-            data['FrequencyCode'],
-            data['VayogatID'],
-            data['VayogatCode'],
-            shishuCnt,
-            baalCnt,
-            tarunVidyaarthiCnt,
-            tarunVyavasaayeeCnt,
-            proudhCnt,
-            abhyaagatCnt));
+        tgLstYesterdayVruttaDetail.add(new YesterdayVruttaDetailBAL(data['GeoUnitID'], data['ShaakhaaID'], data['GeoUnitName'], data['FrequencyID'], data['FrequencyCode'], data['VayogatID'],
+            data['VayogatCode'], shishuCnt, baalCnt, tarunVidyaarthiCnt, tarunVyavasaayeeCnt, proudhCnt, abhyaagatCnt));
       }
       // Totals row
-      tgLstYesterdayVruttaDetail.add(new YesterdayVruttaDetailBAL(
-          0,
-          0,
-          getLabel('Total'),
-          0,
-          '',
-          0,
-          '',
-          totalShishu,
-          totalBaal,
-          totalTarunVidyaarthi,
-          totalTarunVyavasaayee,
-          totalProudh,
-          totalAbhyaagat));
+      tgLstYesterdayVruttaDetail
+          .add(new YesterdayVruttaDetailBAL(0, 0, getLabel('Total'), 0, '', 0, '', totalShishu, totalBaal, totalTarunVidyaarthi, totalTarunVyavasaayee, totalProudh, totalAbhyaagat));
     }
 
     tgLstSankalpByAadhaarData = [];
@@ -2893,89 +2185,44 @@ Future<dynamic> getDashboardDataByGeoUnit(
           sankalpitSanghaMandalikCount = 0,
           sankalpitMasikMilankCount = 0;
       for (var data in listSankalpByAadhaar) {
-        shaakhaa = (data['SankalpitShaakhaaCount'] == null
-            ? 0
-            : data['SankalpitShaakhaaCount']);
+        shaakhaa = (data['SankalpitShaakhaaCount'] == null ? 0 : data['SankalpitShaakhaaCount']);
         totalShaakhaa = totalShaakhaa + shaakhaa;
 
-        saaptaa = (data['SankalpitSaaptaahikCount'] == null
-            ? 0
-            : data['SankalpitSaaptaahikCount']);
+        saaptaa = (data['SankalpitSaaptaahikCount'] == null ? 0 : data['SankalpitSaaptaahikCount']);
         totalSaaptaa = totalSaaptaa + saaptaa;
 
-        sankalpitMasikMilankCount = (data['SankalpitMasikMilankCount'] == null
-            ? 0
-            : data['SankalpitMasikMilankCount']);
-        totalsankalpitMasikMilankCount =
-            totalsankalpitMasikMilankCount + sankalpitMasikMilankCount;
+        sankalpitMasikMilankCount = (data['SankalpitMasikMilankCount'] == null ? 0 : data['SankalpitMasikMilankCount']);
+        totalsankalpitMasikMilankCount = totalsankalpitMasikMilankCount + sankalpitMasikMilankCount;
 
-        sankalpitSanghaMandalikCount =
-            (data['SankalpitSanghaMandalikCount'] == null
-                ? 0
-                : data['SankalpitSanghaMandalikCount']);
-        totalsankalpitSanghaMandalikCount =
-            totalsankalpitSanghaMandalikCount + sankalpitSanghaMandalikCount;
+        sankalpitSanghaMandalikCount = (data['SankalpitSanghaMandalikCount'] == null ? 0 : data['SankalpitSanghaMandalikCount']);
+        totalsankalpitSanghaMandalikCount = totalsankalpitSanghaMandalikCount + sankalpitSanghaMandalikCount;
 
-        sanghaMandaliCount = (data['SanghaMandaliCount'] == null
-            ? 0
-            : data['SanghaMandaliCount']);
+        sanghaMandaliCount = (data['SanghaMandaliCount'] == null ? 0 : data['SanghaMandaliCount']);
         totalsanghaMandaliCount = totalsanghaMandaliCount + sanghaMandaliCount;
 
-        maasikMilanCount =
-            (data['MaasikMilanCount'] == null ? 0 : data['MaasikMilanCount']);
+        maasikMilanCount = (data['MaasikMilanCount'] == null ? 0 : data['MaasikMilanCount']);
         totalmaasikMilanCount = totalmaasikMilanCount + maasikMilanCount;
 
-        tgLstSankalpByAadhaarData.add(new SankalpByAadhaarBAL(
-            data['VayogatID'],
-            data['VayogatCode'],
-            data['SankalpAadhaar'],
-            shaakhaa,
-            saaptaa,
-            sankalpitMasikMilankCount,
-            sankalpitSanghaMandalikCount));
+        tgLstSankalpByAadhaarData
+            .add(new SankalpByAadhaarBAL(data['VayogatID'], data['VayogatCode'], data['SankalpAadhaar'], shaakhaa, saaptaa, sankalpitMasikMilankCount, sankalpitSanghaMandalikCount));
       }
       // Totals row
-      tgLstSankalpByAadhaarData.add(new SankalpByAadhaarBAL(
-          0,
-          getLabel('Total'),
-          '',
-          totalShaakhaa,
-          totalSaaptaa,
-          totalsankalpitMasikMilankCount,
-          totalsankalpitSanghaMandalikCount));
+      tgLstSankalpByAadhaarData.add(new SankalpByAadhaarBAL(0, getLabel('Total'), '', totalShaakhaa, totalSaaptaa, totalsankalpitMasikMilankCount, totalsankalpitSanghaMandalikCount));
     }
 
     tgLstBhaugolikVistaar = [];
     if (listBhaugolikVistaar.length > 0) {
-      if (listBhaugolikVistaar['TotalNagarCount'] != null &&
-          listBhaugolikVistaar['TotalNagarCount'] > 0) {
-        tgLstBhaugolikVistaar.add(new BhaugolikVistaarBAL(
-            'Nagar',
-            listBhaugolikVistaar['TotalNagarCount'],
-            listBhaugolikVistaar['ShaakhaaYuktaNagarCount'],
-            listBhaugolikVistaar['SaaptaahikYuktaNagarCount'],
-            listBhaugolikVistaar['MandaliYuktaNagarCount'],
-            listBhaugolikVistaar['GatividhiYuktaNagarCount']));
+      if (listBhaugolikVistaar['TotalNagarCount'] != null && listBhaugolikVistaar['TotalNagarCount'] > 0) {
+        tgLstBhaugolikVistaar.add(new BhaugolikVistaarBAL('Nagar', listBhaugolikVistaar['TotalNagarCount'], listBhaugolikVistaar['ShaakhaaYuktaNagarCount'],
+            listBhaugolikVistaar['SaaptaahikYuktaNagarCount'], listBhaugolikVistaar['MandaliYuktaNagarCount'], listBhaugolikVistaar['GatividhiYuktaNagarCount']));
       }
-      if (listBhaugolikVistaar['TotalNagarCountGraamin'] != null &&
-          listBhaugolikVistaar['TotalNagarCountGraamin'] > 0) {
-        tgLstBhaugolikVistaar.add(new BhaugolikVistaarBAL(
-            'NagarGraamin',
-            listBhaugolikVistaar['TotalNagarCountGraamin'],
-            listBhaugolikVistaar['ShaakhaaYuktaNagarCountGraamin'],
-            listBhaugolikVistaar['SaaptaahikYuktaNagarCountGraamin'],
-            listBhaugolikVistaar['MandaliYuktaNagarCountGraamin'],
-            listBhaugolikVistaar['GatividhiYuktaNagarCountGraamin']));
+      if (listBhaugolikVistaar['TotalNagarCountGraamin'] != null && listBhaugolikVistaar['TotalNagarCountGraamin'] > 0) {
+        tgLstBhaugolikVistaar.add(new BhaugolikVistaarBAL('NagarGraamin', listBhaugolikVistaar['TotalNagarCountGraamin'], listBhaugolikVistaar['ShaakhaaYuktaNagarCountGraamin'],
+            listBhaugolikVistaar['SaaptaahikYuktaNagarCountGraamin'], listBhaugolikVistaar['MandaliYuktaNagarCountGraamin'], listBhaugolikVistaar['GatividhiYuktaNagarCountGraamin']));
       }
-      if (listBhaugolikVistaar['TotalNagarCountShahari'] != null &&
-          listBhaugolikVistaar['TotalNagarCountShahari'] > 0) {
-        tgLstBhaugolikVistaar.add(new BhaugolikVistaarBAL(
-            'NagarShahari',
-            listBhaugolikVistaar['TotalNagarCountShahari'],
-            listBhaugolikVistaar['ShaakhaaYuktaNagarCountShahari'],
-            listBhaugolikVistaar['SaaptaahikYuktaNagarCountShahari'],
-            listBhaugolikVistaar['MandaliYuktaNagarCountShahari'],
-            listBhaugolikVistaar['GatividhiYuktaNagarCountShahari']));
+      if (listBhaugolikVistaar['TotalNagarCountShahari'] != null && listBhaugolikVistaar['TotalNagarCountShahari'] > 0) {
+        tgLstBhaugolikVistaar.add(new BhaugolikVistaarBAL('NagarShahari', listBhaugolikVistaar['TotalNagarCountShahari'], listBhaugolikVistaar['ShaakhaaYuktaNagarCountShahari'],
+            listBhaugolikVistaar['SaaptaahikYuktaNagarCountShahari'], listBhaugolikVistaar['MandaliYuktaNagarCountShahari'], listBhaugolikVistaar['GatividhiYuktaNagarCountShahari']));
       }
       // if (listBhaugolikVistaar['TotalShaharCount'] != null && listBhaugolikVistaar['TotalShaharCount'] > 0){
       //   tgLstBhaugolikVistaar.add(new BhaugolikVistaarBAL(
@@ -2987,35 +2234,17 @@ Future<dynamic> getDashboardDataByGeoUnit(
       //     listBhaugolikVistaar['GatividhiYuktaShaharCount']
       //   ));
       // }
-      if (listBhaugolikVistaar['TotalMandalCount'] != null &&
-          listBhaugolikVistaar['TotalMandalCount'] > 0) {
-        tgLstBhaugolikVistaar.add(new BhaugolikVistaarBAL(
-            'Mandal',
-            listBhaugolikVistaar['TotalMandalCount'],
-            listBhaugolikVistaar['ShaakhaaYuktaMandalCount'],
-            listBhaugolikVistaar['SaaptaahikYuktaMandalCount'],
-            listBhaugolikVistaar['MandaliYuktaMandalCount'],
-            listBhaugolikVistaar['GatividhiYuktaMandalCount']));
+      if (listBhaugolikVistaar['TotalMandalCount'] != null && listBhaugolikVistaar['TotalMandalCount'] > 0) {
+        tgLstBhaugolikVistaar.add(new BhaugolikVistaarBAL('Mandal', listBhaugolikVistaar['TotalMandalCount'], listBhaugolikVistaar['ShaakhaaYuktaMandalCount'],
+            listBhaugolikVistaar['SaaptaahikYuktaMandalCount'], listBhaugolikVistaar['MandaliYuktaMandalCount'], listBhaugolikVistaar['GatividhiYuktaMandalCount']));
       }
-      if (listBhaugolikVistaar['TotalGraamCount'] != null &&
-          listBhaugolikVistaar['TotalGraamCount'] > 0) {
-        tgLstBhaugolikVistaar.add(new BhaugolikVistaarBAL(
-            'Graam',
-            listBhaugolikVistaar['TotalGraamCount'],
-            listBhaugolikVistaar['ShaakhaaYuktaGraamCount'],
-            listBhaugolikVistaar['SaaptaahikYuktaGraamCount'],
-            listBhaugolikVistaar['MandaliYuktaGraamCount'],
-            listBhaugolikVistaar['GatividhiYuktaGraamCount']));
+      if (listBhaugolikVistaar['TotalGraamCount'] != null && listBhaugolikVistaar['TotalGraamCount'] > 0) {
+        tgLstBhaugolikVistaar.add(new BhaugolikVistaarBAL('Graam', listBhaugolikVistaar['TotalGraamCount'], listBhaugolikVistaar['ShaakhaaYuktaGraamCount'],
+            listBhaugolikVistaar['SaaptaahikYuktaGraamCount'], listBhaugolikVistaar['MandaliYuktaGraamCount'], listBhaugolikVistaar['GatividhiYuktaGraamCount']));
       }
-      if (listBhaugolikVistaar['TotalVastiCount'] != null &&
-          listBhaugolikVistaar['TotalVastiCount'] > 0) {
-        tgLstBhaugolikVistaar.add(new BhaugolikVistaarBAL(
-            'Vasti',
-            listBhaugolikVistaar['TotalVastiCount'],
-            listBhaugolikVistaar['ShaakhaaYuktaVastiCount'],
-            listBhaugolikVistaar['SaaptaahikYuktaVastiCount'],
-            listBhaugolikVistaar['MandaliYuktaVastiCount'],
-            listBhaugolikVistaar['GatividhiYuktaVastiCount']));
+      if (listBhaugolikVistaar['TotalVastiCount'] != null && listBhaugolikVistaar['TotalVastiCount'] > 0) {
+        tgLstBhaugolikVistaar.add(new BhaugolikVistaarBAL('Vasti', listBhaugolikVistaar['TotalVastiCount'], listBhaugolikVistaar['ShaakhaaYuktaVastiCount'],
+            listBhaugolikVistaar['SaaptaahikYuktaVastiCount'], listBhaugolikVistaar['MandaliYuktaVastiCount'], listBhaugolikVistaar['GatividhiYuktaVastiCount']));
       }
     }
 
@@ -3100,15 +2329,11 @@ Future<dynamic> getDashboardDataByGeoUnit(
 }
 
 Future<dynamic> getJoinRSSData(String strInputBody) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   print(Uri.parse(urlGetJoinRSSGridForApp));
   print(strInputBody);
-  var response = await http.post(Uri.parse(urlGetJoinRSSGridForApp),
-      headers: jHeaders, body: strInputBody);
+  var response = await http.post(Uri.parse(urlGetJoinRSSGridForApp), headers: jHeaders, body: strInputBody);
   log(response.body);
   var responseBody = json.decode(response.body);
 
@@ -3116,13 +2341,9 @@ Future<dynamic> getJoinRSSData(String strInputBody) async {
 }
 
 Future<List<dynamic>> getJoinRSSList(String strInputBody) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlGetJoinRSSGridForApp),
-      headers: jHeaders, body: strInputBody);
+  var response = await http.post(Uri.parse(urlGetJoinRSSGridForApp), headers: jHeaders, body: strInputBody);
 
   var responseBody = json.decode(response.body);
 
@@ -3130,26 +2351,18 @@ Future<List<dynamic>> getJoinRSSList(String strInputBody) async {
 }
 
 Future<String> saveJoinRSSForApp(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlSaveJoinRSSForApp),
-      headers: jHeaders, body: inputJson);
+  var response = await http.post(Uri.parse(urlSaveJoinRSSForApp), headers: jHeaders, body: inputJson);
 
   var responseBody = json.decode(response.body);
 
   return responseBody['OutputJoinRSSID'].toString();
 }
 
-Future<void> saveVijayaDashamiUtsavData(
-    BuildContext context, Map<String, dynamic> inputJson) async {
+Future<void> saveVijayaDashamiUtsavData(BuildContext context, Map<String, dynamic> inputJson) async {
   showLoaderDialog(context);
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(
     Uri.parse(saveupdatevijayadashamiutsav),
@@ -3169,13 +2382,9 @@ Future<void> saveVijayaDashamiUtsavData(
   }
 }
 
-Future<void> saveVishishthaAtithiData(
-    BuildContext context, Map<String, dynamic> inputJson) async {
+Future<void> saveVishishthaAtithiData(BuildContext context, Map<String, dynamic> inputJson) async {
   showLoaderDialog(context);
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(
     Uri.parse(savesajjanskhatianyapravbhavilok),
@@ -3195,13 +2404,9 @@ Future<void> saveVishishthaAtithiData(
   }
 }
 
-Future<GetVijayadashamiDataByGeoUnitModel?> getVijayaDashamiUtsavDataByGeounit(
-    BuildContext context, Map<String, dynamic> inputJson) async {
+Future<GetVijayadashamiDataByGeoUnitModel?> getVijayaDashamiUtsavDataByGeounit(BuildContext context, Map<String, dynamic> inputJson) async {
   showLoaderDialog(context);
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   try {
     var response = await http.post(
@@ -3215,8 +2420,7 @@ Future<GetVijayadashamiDataByGeoUnitModel?> getVijayaDashamiUtsavDataByGeounit(
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
 
-      GetVijayadashamiDataByGeoUnitModel model =
-          GetVijayadashamiDataByGeoUnitModel.fromJson(data);
+      GetVijayadashamiDataByGeoUnitModel model = GetVijayadashamiDataByGeoUnitModel.fromJson(data);
 
       return model; // ✅ return karna zaroori hai
     } else {
@@ -3231,16 +2435,11 @@ Future<GetVijayadashamiDataByGeoUnitModel?> getVijayaDashamiUtsavDataByGeounit(
 }
 
 Future<dynamic> getJoinRSSDataByID(String joinRSSID, String type) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var inptuData = json.encode(
-      {"AppUserID": userDetails["userID"], "JoinRSSID": int.parse(joinRSSID)});
+  var inptuData = json.encode({"AppUserID": userDetails["userID"], "JoinRSSID": int.parse(joinRSSID)});
 
-  var response = await http.post(Uri.parse(urlGetJoinRSSDataForApp),
-      headers: jHeaders, body: inptuData);
+  var response = await http.post(Uri.parse(urlGetJoinRSSDataForApp), headers: jHeaders, body: inptuData);
 
   var responseBody = json.decode(response.body);
   log("inptuData --> $inptuData");
@@ -3250,12 +2449,8 @@ Future<dynamic> getJoinRSSDataByID(String joinRSSID, String type) async {
   return data;
 }
 
-Future<Map<String, dynamic>> getSwayamSevakMembersInSoochi(
-    String swayamSevakID) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+Future<Map<String, dynamic>> getSwayamSevakMembersInSoochi(String swayamSevakID) async {
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(Uri.parse(urlGetSwayamsevakSoochisForApp),
       headers: jHeaders,
@@ -3269,10 +2464,7 @@ Future<Map<String, dynamic>> getSwayamSevakMembersInSoochi(
 }
 
 Future<List<dynamic>> getShaakhaaPatForApp(String shaakhaaID) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(Uri.parse(urlGetShaakhaaPatForApp),
       headers: jHeaders,
@@ -3285,50 +2477,24 @@ Future<List<dynamic>> getShaakhaaPatForApp(String shaakhaaID) async {
   return responseBody['ShaakhaaPat'];
 }
 
-Future<List<dynamic>> getSanghaPreritSanstha(String praantID,
-    String? sanghaPreritSansthaaID, String? sanghaPreritSansthaaName) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+Future<List<dynamic>> getSanghaPreritSanstha(String praantID, String? sanghaPreritSansthaaID, String? sanghaPreritSansthaaName) async {
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(Uri.parse(urlGetSanghaPreritSansthaaForApp),
       headers: jHeaders,
-      body: json.encode({
-        "AppUserID": userDetails["userID"],
-        "PraantID": praantID,
-        "SanghaPreritSansthaaID": sanghaPreritSansthaaID,
-        "SanghaPreritSansthaaName": sanghaPreritSansthaaName
-      }));
+      body: json.encode({"AppUserID": userDetails["userID"], "PraantID": praantID, "SanghaPreritSansthaaID": sanghaPreritSansthaaID, "SanghaPreritSansthaaName": sanghaPreritSansthaaName}));
 
   var responseBody = json.decode(response.body);
 
   return responseBody['SanghaPreritSansthaaList'];
 }
 
-Future<List<dynamic>> getEventList(int? eventID, String? searchPattern,
-    String? fromDate, String? toDate) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+Future<List<dynamic>> getEventList(int? eventID, String? searchPattern, String? fromDate, String? toDate) async {
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(Uri.parse(urlGetEventListForApp),
-      headers: jHeaders,
-      body: json.encode({
-        "EventID": eventID,
-        "AppUserID": userDetails['userID'],
-        "EventName": searchPattern,
-        "FromDateStr": fromDate,
-        "ToDateStr": toDate
-      }));
-  print({
-    "EventID": eventID,
-    "AppUserID": userDetails['userID'],
-    "EventName": searchPattern,
-    "FromDateStr": fromDate,
-    "ToDateStr": toDate
-  });
+      headers: jHeaders, body: json.encode({"EventID": eventID, "AppUserID": userDetails['userID'], "EventName": searchPattern, "FromDateStr": fromDate, "ToDateStr": toDate}));
+  print({"EventID": eventID, "AppUserID": userDetails['userID'], "EventName": searchPattern, "FromDateStr": fromDate, "ToDateStr": toDate});
   log(response.body);
   print(Uri.parse(urlGetEventListForApp));
   var responseBody = json.decode(response.body);
@@ -3337,26 +2503,18 @@ Future<List<dynamic>> getEventList(int? eventID, String? searchPattern,
 }
 
 Future<String> saveEventDetails(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
   print(inputJson);
   print(Uri.parse(urlSaveEventDataForApp));
-  var response = await http.post(Uri.parse(urlSaveEventDataForApp),
-      headers: jHeaders, body: inputJson);
+  var response = await http.post(Uri.parse(urlSaveEventDataForApp), headers: jHeaders, body: inputJson);
   log(response.body);
   var responseBody = json.decode(response.body);
 
   return responseBody['OutputEventID'].toString();
 }
 
-Future<List<dynamic>> getCalenderEventsList(
-    String? swayamsevakCalendarID, String month, String year) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+Future<List<dynamic>> getCalenderEventsList(String? swayamsevakCalendarID, String month, String year) async {
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(Uri.parse(urlGetSwayamsevakCalendarForApp),
       headers: jHeaders,
@@ -3372,20 +2530,11 @@ Future<List<dynamic>> getCalenderEventsList(
   return responseBody['ListSwayamsevakCalendar'];
 }
 
-Future<List<dynamic>> getEventMembers(
-    var eventID, var swayamSevakID, var apekshitOrSharing) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+Future<List<dynamic>> getEventMembers(var eventID, var swayamSevakID, var apekshitOrSharing) async {
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlGetEventApekshitListForApp),
-      headers: jHeaders,
-      body: json.encode({
-        "EventID": eventID,
-        "SwayamsevakID": swayamSevakID,
-        "ApekshitOrSharing": apekshitOrSharing
-      }));
+  var response =
+      await http.post(Uri.parse(urlGetEventApekshitListForApp), headers: jHeaders, body: json.encode({"EventID": eventID, "SwayamsevakID": swayamSevakID, "ApekshitOrSharing": apekshitOrSharing}));
 
   var responseBody = json.decode(response.body);
 
@@ -3395,10 +2544,7 @@ Future<List<dynamic>> getEventMembers(
 Future<void> deleteUserToken() async {
   print("started");
   try {
-    Map<String, String> jHeaders = {
-      'Content-Type': 'application/json',
-      'Accept': '*/*'
-    };
+    Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
     var response = await http.post(Uri.parse(deleteUserDeviceToken),
         headers: jHeaders,
@@ -3415,15 +2561,9 @@ Future<void> deleteUserToken() async {
 }
 
 Future<String> saveEventMembers(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(
-      Uri.parse(urlSaveEventApekshitSwayamsevakForApp),
-      headers: jHeaders,
-      body: inputJson);
+  var response = await http.post(Uri.parse(urlSaveEventApekshitSwayamsevakForApp), headers: jHeaders, body: inputJson);
 
   var responseBody = json.decode(response.body);
 
@@ -3431,15 +2571,9 @@ Future<String> saveEventMembers(String inputJson) async {
 }
 
 Future<String> deleteEventMembers(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(
-      Uri.parse(urlDeleteEventApekshitSwayamsevakForApp),
-      headers: jHeaders,
-      body: inputJson);
+  var response = await http.post(Uri.parse(urlDeleteEventApekshitSwayamsevakForApp), headers: jHeaders, body: inputJson);
 
   var responseBody = json.decode(response.body);
 
@@ -3447,13 +2581,9 @@ Future<String> deleteEventMembers(String inputJson) async {
 }
 
 Future<String> changeEventOwnerForApp(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlChangeEventOwnerForApp),
-      headers: jHeaders, body: inputJson);
+  var response = await http.post(Uri.parse(urlChangeEventOwnerForApp), headers: jHeaders, body: inputJson);
 
   var responseBody = json.decode(response.body);
 
@@ -3461,13 +2591,9 @@ Future<String> changeEventOwnerForApp(String inputJson) async {
 }
 
 Future<String> saveEventVruttaForApp(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlSaveEventVruttaForApp),
-      headers: jHeaders, body: inputJson);
+  var response = await http.post(Uri.parse(urlSaveEventVruttaForApp), headers: jHeaders, body: inputJson);
 
   var responseBody = json.decode(response.body);
 
@@ -3475,14 +2601,9 @@ Future<String> saveEventVruttaForApp(String inputJson) async {
 }
 
 Future<List<dynamic>> getEventVruttaList(var eventID, var eventVruttaID) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlGetEventVruttaListForApp),
-      headers: jHeaders,
-      body: json.encode({"EventID": eventID, "EventVruttaID": eventVruttaID}));
+  var response = await http.post(Uri.parse(urlGetEventVruttaListForApp), headers: jHeaders, body: json.encode({"EventID": eventID, "EventVruttaID": eventVruttaID}));
 
   var responseBody = json.decode(response.body);
 
@@ -3490,13 +2611,9 @@ Future<List<dynamic>> getEventVruttaList(var eventID, var eventVruttaID) async {
 }
 
 Future<String> deleteEventVrutta(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlDeleteEventVruttaForApp),
-      headers: jHeaders, body: inputJson);
+  var response = await http.post(Uri.parse(urlDeleteEventVruttaForApp), headers: jHeaders, body: inputJson);
 
   var responseBody = json.decode(response.body);
 
@@ -3504,29 +2621,19 @@ Future<String> deleteEventVrutta(String inputJson) async {
 }
 
 Future<dynamic> getAnnualBaithakEkatritVruttaForApp(String strInput) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   print(strInput);
   print(Uri.parse(urlGetAnnualBaithakEkatritVruttaForApp));
-  var response = await http.post(
-      Uri.parse(urlGetAnnualBaithakEkatritVruttaForApp),
-      headers: jHeaders,
-      body: strInput);
+  var response = await http.post(Uri.parse(urlGetAnnualBaithakEkatritVruttaForApp), headers: jHeaders, body: strInput);
 
   var responseBody = json.decode(response.body);
   log(responseBody.toString());
   return responseBody['EkatritVrutta'];
 }
 
-Future<SankalitBaithakVruttaDataNamesModel?> getSankalitBaithakVruttaDataNames(
-    String strInput) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+Future<SankalitBaithakVruttaDataNamesModel?> getSankalitBaithakVruttaDataNames(String strInput) async {
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   try {
     print(strInput);
@@ -3562,8 +2669,7 @@ Future<SankalitBaithakVruttaDataNamesModel?> getSankalitBaithakVruttaDataNames(
 //   log(responseBody.toString());
 // }
 
-Future<TulnatmakBaithakResponse?> getTulnatmakBaithakEkatritVruttaForApp(
-    String strInput) async {
+Future<TulnatmakBaithakResponse?> getTulnatmakBaithakEkatritVruttaForApp(String strInput) async {
   Map<String, String> jHeaders = {
     'Content-Type': 'application/json',
     'Accept': '*/*',
@@ -3583,8 +2689,7 @@ Future<TulnatmakBaithakResponse?> getTulnatmakBaithakEkatritVruttaForApp(
     log(responseBody.toString());
 
     // Parse the response body into the model
-    TulnatmakBaithakResponse tulnatmakBaithakResponse =
-        TulnatmakBaithakResponse.fromJson(responseBody);
+    TulnatmakBaithakResponse tulnatmakBaithakResponse = TulnatmakBaithakResponse.fromJson(responseBody);
 
     return tulnatmakBaithakResponse;
   } else {
@@ -3594,8 +2699,7 @@ Future<TulnatmakBaithakResponse?> getTulnatmakBaithakEkatritVruttaForApp(
   }
 }
 
-Future<GetVastiDataByIdModel?> getVastidataByIDForApp(
-    context, String strInput) async {
+Future<GetVastiDataByIdModel?> getVastidataByIDForApp(context, String strInput) async {
   showLoaderDialog(context);
 
   Map<String, String> jHeaders = {
@@ -3617,8 +2721,7 @@ Future<GetVastiDataByIdModel?> getVastidataByIDForApp(
     log(responseBody.toString());
 
     // Parse the response body into the model
-    GetVastiDataByIdModel vastiDataByIdModel =
-        GetVastiDataByIdModel.fromJson(responseBody);
+    GetVastiDataByIdModel vastiDataByIdModel = GetVastiDataByIdModel.fromJson(responseBody);
     Navigator.of(context, rootNavigator: true).pop();
 
     return vastiDataByIdModel;
@@ -3632,15 +2735,9 @@ Future<GetVastiDataByIdModel?> getVastidataByIDForApp(
 }
 
 Future<dynamic> getAnnualBaithakNagarVruttaForApp(String strInput) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(
-      Uri.parse(urlGetAnnualBaithakNagarVruttaForApp),
-      headers: jHeaders,
-      body: strInput);
+  var response = await http.post(Uri.parse(urlGetAnnualBaithakNagarVruttaForApp), headers: jHeaders, body: strInput);
   // print(strInput);
   // print(Uri.parse(urlGetAnnualBaithakNagarVruttaForApp));
   var responseBody = json.decode(response.body);
@@ -3648,15 +2745,13 @@ Future<dynamic> getAnnualBaithakNagarVruttaForApp(String strInput) async {
   return responseBody['NagarVrutta'];
 }
 
-Future<NIrikshanBiathakVruttaModel?> getNirikshanAnnualBaithakNagarVruttaForApp(
-    String strInput) async {
+Future<NIrikshanBiathakVruttaModel?> getNirikshanAnnualBaithakNagarVruttaForApp(String strInput) async {
   Map<String, String> jHeaders = {
     'Content-Type': 'application/json',
     'Accept': '*/*',
   };
 
-  var response = await http.post(Uri.parse(getnirikshanbhaithakvruttaforapp),
-      headers: jHeaders, body: strInput);
+  var response = await http.post(Uri.parse(getnirikshanbhaithakvruttaforapp), headers: jHeaders, body: strInput);
   print("getNirikshanAnnualBaithakNagarVruttaForApp => $strInput");
   print(Uri.parse(getnirikshanbhaithakvruttaforapp));
 
@@ -3672,32 +2767,19 @@ Future<NIrikshanBiathakVruttaModel?> getNirikshanAnnualBaithakNagarVruttaForApp(
 }
 
 Future<String> saveAnnualBaithakNagarVruttaForApp(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(
-      Uri.parse(urlSaveAnnualBaithakNagarVruttaForApp),
-      headers: jHeaders,
-      body: inputJson);
+  var response = await http.post(Uri.parse(urlSaveAnnualBaithakNagarVruttaForApp), headers: jHeaders, body: inputJson);
 
   var responseBody = json.decode(response.body);
 
   return responseBody['AnnualBaithakNagarVruttaID'].toString();
 }
 
-Future<List<dynamic>> getAnnualBaithakShaakhaaVruttaForApp(
-    String strInput) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+Future<List<dynamic>> getAnnualBaithakShaakhaaVruttaForApp(String strInput) async {
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(
-      Uri.parse(urlGetAnnualBaithakShaakhaaVruttaForApp),
-      headers: jHeaders,
-      body: strInput);
+  var response = await http.post(Uri.parse(urlGetAnnualBaithakShaakhaaVruttaForApp), headers: jHeaders, body: strInput);
 
   print(Uri.parse(urlGetAnnualBaithakShaakhaaVruttaForApp));
   print(strInput.toString());
@@ -3706,17 +2788,10 @@ Future<List<dynamic>> getAnnualBaithakShaakhaaVruttaForApp(
   return responseBody['ListShaakhaaVrutta'];
 }
 
-Future<List<dynamic>> getAnnualBaithakShaakhaaVruttaForAppById(
-    String strInput) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+Future<List<dynamic>> getAnnualBaithakShaakhaaVruttaForAppById(String strInput) async {
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(
-      Uri.parse(GetAnnualBaithakShaakhaaVruttaForAppbyid),
-      headers: jHeaders,
-      body: strInput);
+  var response = await http.post(Uri.parse(GetAnnualBaithakShaakhaaVruttaForAppbyid), headers: jHeaders, body: strInput);
 
   print(Uri.parse(GetAnnualBaithakShaakhaaVruttaForAppbyid));
   print(strInput.toString());
@@ -3726,15 +2801,9 @@ Future<List<dynamic>> getAnnualBaithakShaakhaaVruttaForAppById(
 }
 
 Future<String> saveAnnualBaithakShaakhaaVruttaForApp(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(
-      Uri.parse(urlSaveAnnualBaithakShaakhaaVruttaForApp),
-      headers: jHeaders,
-      body: inputJson);
+  var response = await http.post(Uri.parse(urlSaveAnnualBaithakShaakhaaVruttaForApp), headers: jHeaders, body: inputJson);
 
   print(Uri.parse(urlSaveAnnualBaithakShaakhaaVruttaForApp));
   var responseBody = json.decode(response.body);
@@ -3742,17 +2811,10 @@ Future<String> saveAnnualBaithakShaakhaaVruttaForApp(String inputJson) async {
   return responseBody['AnnualBaithakShaakhaaVruttaID'].toString();
 }
 
-Future<List<dynamic>> getAnnualBaithakShaakhaaViheenForApp(
-    String strInput) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+Future<List<dynamic>> getAnnualBaithakShaakhaaViheenForApp(String strInput) async {
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(
-      Uri.parse(urlGetAnnualBaithakShaakhaaViheenForApp),
-      headers: jHeaders,
-      body: strInput);
+  var response = await http.post(Uri.parse(urlGetAnnualBaithakShaakhaaViheenForApp), headers: jHeaders, body: strInput);
   print(strInput);
   // print(Uri.parse(urlGetAnnualBaithakShaakhaaViheenForApp));
   var responseBody = json.decode(response.body);
@@ -3761,15 +2823,9 @@ Future<List<dynamic>> getAnnualBaithakShaakhaaViheenForApp(
 }
 
 Future<String> saveAnnualBaithakShaakhaaViheenForApp(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(
-      Uri.parse(urlSaveAnnualBaithakShaakhaaViheenForApp),
-      headers: jHeaders,
-      body: inputJson);
+  var response = await http.post(Uri.parse(urlSaveAnnualBaithakShaakhaaViheenForApp), headers: jHeaders, body: inputJson);
 
   var responseBody = json.decode(response.body);
 
@@ -3777,15 +2833,9 @@ Future<String> saveAnnualBaithakShaakhaaViheenForApp(String inputJson) async {
 }
 
 Future<List<dynamic>> getAnnualBaithakMukhyaMaargForApp(String strInput) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(
-      Uri.parse(urlGetAnnualBaithakMukhyaMaargForApp),
-      headers: jHeaders,
-      body: strInput);
+  var response = await http.post(Uri.parse(urlGetAnnualBaithakMukhyaMaargForApp), headers: jHeaders, body: strInput);
   // print(strInput);
   // print(Uri.parse(urlGetAnnualBaithakMukhyaMaargForApp));
   var responseBody = json.decode(response.body);
@@ -3794,15 +2844,9 @@ Future<List<dynamic>> getAnnualBaithakMukhyaMaargForApp(String strInput) async {
 }
 
 Future<String> saveAnnualBaithakMukhyaMaargForApp(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(
-      Uri.parse(urlSaveAnnualBaithakMukhyaMaargForApp),
-      headers: jHeaders,
-      body: inputJson);
+  var response = await http.post(Uri.parse(urlSaveAnnualBaithakMukhyaMaargForApp), headers: jHeaders, body: inputJson);
 
   var responseBody = json.decode(response.body);
 
@@ -3810,13 +2854,9 @@ Future<String> saveAnnualBaithakMukhyaMaargForApp(String inputJson) async {
 }
 
 Future<List<dynamic>> getAnnualBaithakGraamVikasForApp(String strInput) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlGetAnnualBaithakGraamVikasForApp),
-      headers: jHeaders, body: strInput);
+  var response = await http.post(Uri.parse(urlGetAnnualBaithakGraamVikasForApp), headers: jHeaders, body: strInput);
   // print(strInput);
   // print(Uri.parse(urlGetAnnualBaithakGraamVikasForApp));
   var responseBody = json.decode(response.body);
@@ -3825,32 +2865,19 @@ Future<List<dynamic>> getAnnualBaithakGraamVikasForApp(String strInput) async {
 }
 
 Future<String> saveAnnualBaithakGraamVikasForApp(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(
-      Uri.parse(urlSaveAnnualBaithakGraamVikasForApp),
-      headers: jHeaders,
-      body: inputJson);
+  var response = await http.post(Uri.parse(urlSaveAnnualBaithakGraamVikasForApp), headers: jHeaders, body: inputJson);
 
   var responseBody = json.decode(response.body);
 
   return responseBody['AnnualBaithakGraamVikasVruttaID'].toString();
 }
 
-Future<List<dynamic>> getShaakhaaVruttaListForApp(
-    var shaakhaaID, var shaakhaaVruttaID) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+Future<List<dynamic>> getShaakhaaVruttaListForApp(var shaakhaaID, var shaakhaaVruttaID) async {
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlGetShaakhaaVruttaListForApp),
-      headers: jHeaders,
-      body: json.encode(
-          {"ShaakhaaID": shaakhaaID, "ShaakhaaVruttaID": shaakhaaVruttaID}));
+  var response = await http.post(Uri.parse(urlGetShaakhaaVruttaListForApp), headers: jHeaders, body: json.encode({"ShaakhaaID": shaakhaaID, "ShaakhaaVruttaID": shaakhaaVruttaID}));
 
   var responseBody = json.decode(response.body);
 
@@ -3865,13 +2892,9 @@ Future<List<dynamic>> getShaakhaaVruttaListForApp(
 }
 
 Future<String> saveShaakhaaVruttaForApp(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlSaveShaakhaaVruttaForApp),
-      headers: jHeaders, body: inputJson);
+  var response = await http.post(Uri.parse(urlSaveShaakhaaVruttaForApp), headers: jHeaders, body: inputJson);
 
   var responseBody = json.decode(response.body);
   print("saveShaakhaaVruttaForApp inputJson -> $inputJson");
@@ -3880,10 +2903,7 @@ Future<String> saveShaakhaaVruttaForApp(String inputJson) async {
 }
 
 Future<GetgeounitNameModel?> getlevelUpdatedata(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(
     Uri.parse(urlGetgeounitNamebyid),
@@ -3893,8 +2913,7 @@ Future<GetgeounitNameModel?> getlevelUpdatedata(String inputJson) async {
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
-    GetgeounitNameModel geounitNameModel =
-        GetgeounitNameModel.fromJson(responseBody); // Store response in model
+    GetgeounitNameModel geounitNameModel = GetgeounitNameModel.fromJson(responseBody); // Store response in model
     print("getlevelUpdatedata inputJson -> $inputJson");
     print("getlevelUpdatedata responseBody -> $responseBody");
     return geounitNameModel;
@@ -3905,10 +2924,7 @@ Future<GetgeounitNameModel?> getlevelUpdatedata(String inputJson) async {
 }
 
 Future<VastiUpDataListModel?> getVastiUpdata(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(
     Uri.parse(getupnagarmandaldataagainstnagar),
@@ -3918,8 +2934,7 @@ Future<VastiUpDataListModel?> getVastiUpdata(String inputJson) async {
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
-    VastiUpDataListModel vastiUpDataListModel =
-        VastiUpDataListModel.fromJson(responseBody); // Store response in model
+    VastiUpDataListModel vastiUpDataListModel = VastiUpDataListModel.fromJson(responseBody); // Store response in model
     print("vastiUpDataListModel inputJson -> $inputJson");
     print("vastiUpDataListModel responseBody -> $responseBody");
     return vastiUpDataListModel;
@@ -3932,10 +2947,7 @@ Future<VastiUpDataListModel?> getVastiUpdata(String inputJson) async {
 Future<void> savelevelUpdatedata(context, String inputJson) async {
   showLoaderDialog(context);
 
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(
     Uri.parse(urlUpdategeounitNamebyid),
@@ -3955,13 +2967,10 @@ Future<void> savelevelUpdatedata(context, String inputJson) async {
   }
 }
 
-Future<void> saveUpNagarUpkhandadata(context, String inputJson) async {
+Future<VastiUpDataListModel?> saveUpNagarUpkhandadata(context, String inputJson) async {
   showLoaderDialog(context);
 
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(
     Uri.parse(updatevastimasndalparent),
@@ -3974,27 +2983,24 @@ Future<void> saveUpNagarUpkhandadata(context, String inputJson) async {
 
   if (response.statusCode == 200) {
     Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
-    getVastiUpdata(inputJson);
+    final data = await getVastiUpdata(inputJson);
     Navigator.of(context, rootNavigator: true).pop();
+    return data;
   } else {
     print("Error: ${response.statusCode} - ${response.body}");
     Navigator.of(context, rootNavigator: true).pop();
+    return null;
   }
 }
 
 Future<String> deleteShaakhaaVrutta(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
-  var response = await http.post(Uri.parse(urlDeleteShaakhaaVruttaForApp),
-      headers: jHeaders, body: inputJson);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+  var response = await http.post(Uri.parse(urlDeleteShaakhaaVruttaForApp), headers: jHeaders, body: inputJson);
   var responseBody = json.decode(response.body);
   return responseBody['Message'].toString();
 }
 
-void convertToCsv(
-    List<List<dynamic>> rows, String fileName, BuildContext context) async {
+void convertToCsv(List<List<dynamic>> rows, String fileName, BuildContext context) async {
   if (Platform.isIOS) {
     if (await Permission.storage.request().isGranted) {
       try {
@@ -4078,105 +3084,57 @@ void convertToCsv(
 }
 
 Future<String> saveShaakhaaCoordinatesForApp(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlSaveShaakhaaCoordinatesForApp),
-      headers: jHeaders, body: inputJson);
+  var response = await http.post(Uri.parse(urlSaveShaakhaaCoordinatesForApp), headers: jHeaders, body: inputJson);
 
   var responseBody = json.decode(response.body);
 
   return responseBody['Message'].toString();
 }
 
-Future<List<dynamic>> getUniversity(
-    var universityID, String? strInput, bool isForDistanceLearning) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+Future<List<dynamic>> getUniversity(var universityID, String? strInput, bool isForDistanceLearning) async {
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(Uri.parse(urlGetEducationUniversitysForApp),
-      headers: jHeaders,
-      body: json.encode({
-        "PraantID": 1,
-        "EducationUniversityID": universityID,
-        "UniversityName": strInput,
-        "IsForDistanceLearning": isForDistanceLearning
-      }));
+      headers: jHeaders, body: json.encode({"PraantID": 1, "EducationUniversityID": universityID, "UniversityName": strInput, "IsForDistanceLearning": isForDistanceLearning}));
 
   var responseBody = json.decode(response.body);
 
   return responseBody['EducationUniversityList'];
 }
 
-Future<List<dynamic>> getCollege(
-    var educationInstitutionID, var universityID, String? strInput) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+Future<List<dynamic>> getCollege(var educationInstitutionID, var universityID, String? strInput) async {
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(Uri.parse(urlGetEducationInstitutionsForApp),
-      headers: jHeaders,
-      body: json.encode({
-        "PraantID": 1,
-        "EducationUniversityID": universityID,
-        "EducationInstitutionID": educationInstitutionID,
-        "InstitutionName": strInput
-      }));
+      headers: jHeaders, body: json.encode({"PraantID": 1, "EducationUniversityID": universityID, "EducationInstitutionID": educationInstitutionID, "InstitutionName": strInput}));
 
   var responseBody = json.decode(response.body);
 
   return responseBody['EducationInstitutionList'];
 }
 
-Future<List<dynamic>> getGetEducationProgramsForApp(
-    var educationProgramID, var universityID, String? strInput) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+Future<List<dynamic>> getGetEducationProgramsForApp(var educationProgramID, var universityID, String? strInput) async {
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
   var response = await http.post(Uri.parse(urlGetEducationProgramsForApp),
-      headers: jHeaders,
-      body: json.encode({
-        "PraantID": 1,
-        "EducationUniversityID": universityID,
-        "EducationProgramID": educationProgramID,
-        "ProgramName": strInput
-      }));
+      headers: jHeaders, body: json.encode({"PraantID": 1, "EducationUniversityID": universityID, "EducationProgramID": educationProgramID, "ProgramName": strInput}));
   var responseBody = json.decode(response.body);
   return responseBody['EducationProgramList'];
 }
 
-Future<List<dynamic>> getEducationCoursesForApp(
-    var educationCourseID, var universityID, String? strInput) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+Future<List<dynamic>> getEducationCoursesForApp(var educationCourseID, var universityID, String? strInput) async {
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(Uri.parse(urlGetEducationCoursesForApp),
-      headers: jHeaders,
-      body: json.encode({
-        "PraantID": 1,
-        "EducationUniversityID": universityID,
-        "EducationCourseID": educationCourseID,
-        "CourseName": strInput
-      }));
+      headers: jHeaders, body: json.encode({"PraantID": 1, "EducationUniversityID": universityID, "EducationCourseID": educationCourseID, "CourseName": strInput}));
 
   var responseBody = json.decode(response.body);
   return responseBody['EducationCourseList'];
 }
 
-Future<List<dynamic>> getDistrictForApp(
-    String praantID, String? stateID, String? districtID) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+Future<List<dynamic>> getDistrictForApp(String praantID, String? stateID, String? districtID) async {
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var request = json.encode({
     "PraantID": 1,
@@ -4187,8 +3145,7 @@ Future<List<dynamic>> getDistrictForApp(
   try {
     print(Uri.parse(urlGetDistrictsForApp));
     print(request);
-    var response = await http.post(Uri.parse(urlGetDistrictsForApp),
-        headers: jHeaders, body: request);
+    var response = await http.post(Uri.parse(urlGetDistrictsForApp), headers: jHeaders, body: request);
     log(response.body);
     var responseBody = json.decode(response.body);
     return responseBody['DistrictList'];
@@ -4199,46 +3156,28 @@ Future<List<dynamic>> getDistrictForApp(
 }
 
 Future<dynamic> getSwayamsevakOtherInfoForApp(String swayamsevakID) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   print(Uri.parse(Statics.urlGetSwayamsevakOtherInfoForApp));
   print({
     "AppUserID": userDetails['userID'],
     "SwayamsevakID": swayamsevakID,
   });
-  var response =
-      await http.post(Uri.parse(Statics.urlGetSwayamsevakOtherInfoForApp),
-          headers: jHeaders,
-          body: json.encode({
-            "AppUserID": userDetails['userID'],
-            "SwayamsevakID": swayamsevakID,
-          }));
+  var response = await http.post(Uri.parse(Statics.urlGetSwayamsevakOtherInfoForApp),
+      headers: jHeaders,
+      body: json.encode({
+        "AppUserID": userDetails['userID'],
+        "SwayamsevakID": swayamsevakID,
+      }));
   log(response.body);
   var responseBody = json.decode(response.body);
   var data = responseBody['SwayamsevakOtherInfo'];
   return data;
 }
 
-Future<List<GeoUnitMasterBAL>> getGeoUnitMasterForApp(
-    String geoUnitID,
-    String praantID,
-    String geoUnitName,
-    String levelID,
-    String parentMahaanagarID,
-    String parentVibhaagID,
-    String parentBhaagID,
-    String parentShaharID,
-    String parentNagarID,
-    String parentMandalID,
-    String parentGraamID,
-    String parentVastiID) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+Future<List<GeoUnitMasterBAL>> getGeoUnitMasterForApp(String geoUnitID, String praantID, String geoUnitName, String levelID, String parentMahaanagarID, String parentVibhaagID, String parentBhaagID,
+    String parentShaharID, String parentNagarID, String parentMandalID, String parentGraamID, String parentVastiID) async {
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(Uri.parse(urlGetGeoUnitMasterForApp),
       headers: jHeaders,
@@ -4248,8 +3187,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitMasterForApp(
         "PraantID": praantID,
         "GeoUnitName": geoUnitName == '' ? null : geoUnitName,
         "LevelID": levelID == '' ? null : levelID,
-        "ParentMahaanagarID":
-            parentMahaanagarID == '' ? null : parentMahaanagarID,
+        "ParentMahaanagarID": parentMahaanagarID == '' ? null : parentMahaanagarID,
         "ParentVibhaagID": parentVibhaagID == '' ? null : parentVibhaagID,
         "ParentBhaagID": parentBhaagID == '' ? null : parentBhaagID,
         "ParentShaharID": parentShaharID == '' ? null : parentShaharID,
@@ -4290,10 +3228,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitMasterForApp(
 }
 
 Future<List<dynamic>> getShaakhaaSewaVastiLinksForApp(var shaakhaaID) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(Uri.parse(urlGetShaakhaaSewaVastiLinksForApp),
       headers: jHeaders,
@@ -4307,13 +3242,9 @@ Future<List<dynamic>> getShaakhaaSewaVastiLinksForApp(var shaakhaaID) async {
 }
 
 Future<String> saveShaakhaaSewaVastiLinkForApp(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlSaveShaakhaaSewaVastiLinkForApp),
-      headers: jHeaders, body: inputJson);
+  var response = await http.post(Uri.parse(urlSaveShaakhaaSewaVastiLinkForApp), headers: jHeaders, body: inputJson);
 
   var responseBody = json.decode(response.body);
 
@@ -4330,8 +3261,7 @@ void showLoaderDialog(BuildContext context) {
         onWillPop: () async => false, // disables back button
         child: Dialog(
           backgroundColor: Colors.white,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
@@ -4356,10 +3286,7 @@ void showLoaderDialog(BuildContext context) {
 
 Future<String> vastiSarvekshanStep1FormSubmit(context, String inputJson) async {
   showLoaderDialog(context);
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   try {
     var response = await http.post(
@@ -4402,10 +3329,7 @@ Future<String> vastiSarvekshanStep1FormSubmit(context, String inputJson) async {
 Future<String> vastiSarvekshanStep2FormSubmit(context, String inputJson) async {
   showLoaderDialog(context);
 
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   try {
     var response = await http.post(
@@ -4449,10 +3373,7 @@ Future<String> vastiSarvekshanStep2FormSubmit(context, String inputJson) async {
 Future<String> vastiSarvekshanStep3FormSubmit(context, String inputJson) async {
   showLoaderDialog(context);
 
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   try {
     var response = await http.post(
@@ -4497,10 +3418,7 @@ Future<String> vastiSarvekshanStep3FormSubmit(context, String inputJson) async {
 }
 
 Future<String> mandalSarvekshanStep1FormSubmit(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   try {
     var response = await http.post(
@@ -4537,10 +3455,7 @@ Future<String> mandalSarvekshanStep1FormSubmit(String inputJson) async {
 }
 
 Future<String> mandalSarvekshanStep3FormSubmit(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   try {
     var response = await http.post(
@@ -4576,23 +3491,12 @@ Future<String> mandalSarvekshanStep3FormSubmit(String inputJson) async {
   }
 }
 
-Future<List<dynamic>> getJoinRSSGridByStatus(int geoUnitID, int statusID,
-    String searchString, String fromDate, String toDate) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+Future<List<dynamic>> getJoinRSSGridByStatus(int geoUnitID, int statusID, String searchString, String fromDate, String toDate) async {
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(Uri.parse(urlGetJoinRSSGridForApp),
       headers: jHeaders,
-      body: json.encode({
-        "AppUserID": userDetails["userID"],
-        "SearchCriteria": searchString,
-        "GeoUnitID": geoUnitID,
-        "StatusID": statusID,
-        "JoiningDateFrom": fromDate,
-        "JoiningDateTo": toDate
-      }));
+      body: json.encode({"AppUserID": userDetails["userID"], "SearchCriteria": searchString, "GeoUnitID": geoUnitID, "StatusID": statusID, "JoiningDateFrom": fromDate, "JoiningDateTo": toDate}));
 
   var responseBody = json.decode(response.body);
 
@@ -4600,13 +3504,9 @@ Future<List<dynamic>> getJoinRSSGridByStatus(int geoUnitID, int statusID,
 }
 
 Future<List<dynamic>> getSewaVastiForApp(String strInputBody) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlGetSewaVastiForApp),
-      headers: jHeaders, body: strInputBody);
+  var response = await http.post(Uri.parse(urlGetSewaVastiForApp), headers: jHeaders, body: strInputBody);
 
   var responseBody = json.decode(response.body);
   log("strInputBody :--  $strInputBody");
@@ -4615,13 +3515,9 @@ Future<List<dynamic>> getSewaVastiForApp(String strInputBody) async {
 }
 
 Future<String> saveSewaVastiForApp(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlSaveSewaVastiForApp),
-      headers: jHeaders, body: inputJson);
+  var response = await http.post(Uri.parse(urlSaveSewaVastiForApp), headers: jHeaders, body: inputJson);
 
   var responseBody = json.decode(response.body);
   log("saveSewaVastiForApp inputJson  :- $inputJson");
@@ -4630,13 +3526,9 @@ Future<String> saveSewaVastiForApp(String inputJson) async {
 }
 
 Future<String> deleteSewaVastiForApp(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlDeleteSewaVastiForApp),
-      headers: jHeaders, body: inputJson);
+  var response = await http.post(Uri.parse(urlDeleteSewaVastiForApp), headers: jHeaders, body: inputJson);
 
   var responseBody = json.decode(response.body);
 
@@ -4646,71 +3538,42 @@ Future<String> deleteSewaVastiForApp(String inputJson) async {
 void openUserManual(String strSection) async {
   //await launch('https://drive.google.com/drive/folders/1K6xxqtv6bz64yfBA-Rxh1ifpKah8QRoA');
   if (userDetails['languagePreference'] == 'Marathi') {
-    await canLaunch(urlUserManualMarathi + strSection)
-        ? await launch(urlUserManualMarathi + strSection)
-        : throw 'Could not launch $urlUserManualMarathi' + strSection;
+    await canLaunch(urlUserManualMarathi + strSection) ? await launch(urlUserManualMarathi + strSection) : throw 'Could not launch $urlUserManualMarathi' + strSection;
   } else if (userDetails['languagePreference'] == 'Hindi') {
-    await canLaunch(urlUserManualHindi + strSection)
-        ? await launch(urlUserManualHindi + strSection)
-        : throw 'Could not launch $urlUserManualHindi' + strSection;
+    await canLaunch(urlUserManualHindi + strSection) ? await launch(urlUserManualHindi + strSection) : throw 'Could not launch $urlUserManualHindi' + strSection;
   } else {
-    await canLaunch(urlUserManualEnglish + strSection)
-        ? await launch(urlUserManualEnglish + strSection)
-        : throw 'Could not launch $urlUserManualEnglish' + strSection;
+    await canLaunch(urlUserManualEnglish + strSection) ? await launch(urlUserManualEnglish + strSection) : throw 'Could not launch $urlUserManualEnglish' + strSection;
   }
 }
 
 Future<List<dynamic>> getSwayamsevakTransferList(String strInput) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlGetSwayamsevakTransferForAppGrid),
-      headers: jHeaders, body: strInput);
+  var response = await http.post(Uri.parse(urlGetSwayamsevakTransferForAppGrid), headers: jHeaders, body: strInput);
 
   var responseBody = json.decode(response.body);
 
   return responseBody['SwayamsevakTransferList'];
 }
 
-Future<dynamic> getSwayamsevakTransferByID(
-    String swayamsevakTransferID, String swayamsevakID) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+Future<dynamic> getSwayamsevakTransferByID(String swayamsevakTransferID, String swayamsevakID) async {
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   print(Uri.parse(urlGetSwayamsevakTransferDetailsForApp));
-  print({
-    "AppUserID": userDetails['userID'],
-    "SwayamsevakTransferID": swayamsevakTransferID,
-    "SwayamsevakID": swayamsevakID
-  });
-  var response =
-      await http.post(Uri.parse(urlGetSwayamsevakTransferDetailsForApp),
-          headers: jHeaders,
-          body: json.encode({
-            "AppUserID": userDetails['userID'],
-            "SwayamsevakTransferID": swayamsevakTransferID,
-            "SwayamsevakID": swayamsevakID
-          }));
+  print({"AppUserID": userDetails['userID'], "SwayamsevakTransferID": swayamsevakTransferID, "SwayamsevakID": swayamsevakID});
+  var response = await http.post(Uri.parse(urlGetSwayamsevakTransferDetailsForApp),
+      headers: jHeaders, body: json.encode({"AppUserID": userDetails['userID'], "SwayamsevakTransferID": swayamsevakTransferID, "SwayamsevakID": swayamsevakID}));
 
   log(response.body);
   var responseBody = json.decode(response.body);
 
-  return SwayamsevakTransferBAL.fromMap(
-      responseBody['SwayamsevakTransferItem']);
+  return SwayamsevakTransferBAL.fromMap(responseBody['SwayamsevakTransferItem']);
 }
 
 Future<String> saveSwayamsevakTransferDetails(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlSaveSwayamsevakTransferForApp),
-      headers: jHeaders, body: inputJson);
+  var response = await http.post(Uri.parse(urlSaveSwayamsevakTransferForApp), headers: jHeaders, body: inputJson);
 
   var responseBody = json.decode(response.body);
 
@@ -4718,13 +3581,9 @@ Future<String> saveSwayamsevakTransferDetails(String inputJson) async {
 }
 
 Future<String> deleteSwayamsevakTransferForApp(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlDeleteSwayamsevakTransferForApp),
-      headers: jHeaders, body: inputJson);
+  var response = await http.post(Uri.parse(urlDeleteSwayamsevakTransferForApp), headers: jHeaders, body: inputJson);
 
   var responseBody = json.decode(response.body);
 
@@ -4732,12 +3591,8 @@ Future<String> deleteSwayamsevakTransferForApp(String inputJson) async {
 }
 
 Future<String> deleteVisheshVyaktiForApp(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
-  var response = await http.post(Uri.parse(deleteabhiyangruhasampark),
-      headers: jHeaders, body: inputJson);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+  var response = await http.post(Uri.parse(deleteabhiyangruhasampark), headers: jHeaders, body: inputJson);
   print("response ${response.body}");
   print("inputJson ${inputJson}");
   var responseBody = json.decode(response.body);
@@ -4745,13 +3600,9 @@ Future<String> deleteVisheshVyaktiForApp(String inputJson) async {
 }
 
 Future<String> deleteSahbhagiKaryakarta(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(deleteabhiyanswayamsevak),
-      headers: jHeaders, body: inputJson);
+  var response = await http.post(Uri.parse(deleteabhiyanswayamsevak), headers: jHeaders, body: inputJson);
 
   print("response ${response.body}");
   print("inputJson ${inputJson}");
@@ -4760,13 +3611,9 @@ Future<String> deleteSahbhagiKaryakarta(String inputJson) async {
 }
 
 Future<String> deleteSwayamsevakDataForApp(String inputJson) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlDeleteSwayamsevakDataForApp),
-      headers: jHeaders, body: inputJson);
+  var response = await http.post(Uri.parse(urlDeleteSwayamsevakDataForApp), headers: jHeaders, body: inputJson);
 
   var responseBody = json.decode(response.body);
 
@@ -4774,55 +3621,39 @@ Future<String> deleteSwayamsevakDataForApp(String inputJson) async {
 }
 
 Future<List<dynamic>> getNidhiSankalanVruttaForApp(String strInput) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
-  var response = await http.post(Uri.parse(urlGetNidhiSankalanVruttaForApp),
-      headers: jHeaders, body: strInput);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+  var response = await http.post(Uri.parse(urlGetNidhiSankalanVruttaForApp), headers: jHeaders, body: strInput);
   log("getNidhiSankalanVruttaForApp :--- ${response.body}");
   var responseBody = json.decode(response.body);
   return responseBody['ListParticipantVisheshVyakti'] ?? [];
 }
 
 Future<List<dynamic>> getShaakhaaToliSadasyaForApp(String strInput) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  };
-  var response = await http.post(Uri.parse(urlGetShaakhaaToliSadasyaForApp),
-      headers: jHeaders, body: strInput);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+  var response = await http.post(Uri.parse(urlGetShaakhaaToliSadasyaForApp), headers: jHeaders, body: strInput);
   var responseBody = json.decode(response.body);
   return responseBody['ListToliSadasya'];
 }
 
-Widget createWidgetFromString(BuildContext context, String label, double width,
-    double height, Alignment alignment,
-    {bool isTotalRow = false}) {
+Widget createWidgetFromString(BuildContext context, String label, double width, double height, Alignment alignment, {bool isTotalRow = false}) {
   return Container(
     child: Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
     width: width,
     height: 90,
     padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
     alignment: alignment,
-    color: (isTotalRow
-        ? Theme.of(context).colorScheme.secondary.withOpacity(0.1)
-        : Colors.white),
+    color: (isTotalRow ? Theme.of(context).colorScheme.secondary.withOpacity(0.1) : Colors.white),
   );
 }
 
-Widget createWidgetFromIcon(BuildContext context, IconData? iconData,
-    double width, double height, Alignment alignment,
-    {bool isTotalRow = false}) {
+Widget createWidgetFromIcon(BuildContext context, IconData? iconData, double width, double height, Alignment alignment, {bool isTotalRow = false}) {
   return Container(
     child: Icon(iconData, color: Colors.purple),
     width: width,
     height: height,
     padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
     alignment: alignment,
-    color: (isTotalRow
-        ? Theme.of(context).colorScheme.secondary.withOpacity(0.1)
-        : Colors.white),
+    color: (isTotalRow ? Theme.of(context).colorScheme.secondary.withOpacity(0.1) : Colors.white),
   );
 }
 
@@ -4848,8 +3679,7 @@ class ScreenArgumentsNew {
   final String? email;
   final String? mobile;
 
-  ScreenArgumentsNew(this.itemID, this.viewType,
-      {this.name, this.email, this.mobile});
+  ScreenArgumentsNew(this.itemID, this.viewType, {this.name, this.email, this.mobile});
 }
 
 class ScreenArgumentsForSoochi {
@@ -4864,8 +3694,7 @@ class ScreenArgumentsSwayamsevakTransfer {
   String swID;
   String viewType;
 
-  ScreenArgumentsSwayamsevakTransfer(
-      this.swTransferID, this.swID, this.viewType);
+  ScreenArgumentsSwayamsevakTransfer(this.swTransferID, this.swID, this.viewType);
 }
 
 class ScreenArguments2 {
@@ -4876,8 +3705,7 @@ class ScreenArguments2 {
   String? daayitvaForCode;
   String? dataID;
 
-  ScreenArguments2(this.swayamsevakID, this.viewType, this.onSaveDetails,
-      this.daayitvaForID, this.daayitvaForCode, this.dataID);
+  ScreenArguments2(this.swayamsevakID, this.viewType, this.onSaveDetails, this.daayitvaForID, this.daayitvaForCode, this.dataID);
 }
 
 class ArgIdVal {
