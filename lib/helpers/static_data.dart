@@ -34,12 +34,12 @@ import '../providers/bals.dart';
 import './database_helper.dart';
 
 ///Production
-const String baseUrl = 'http://114.79.135.131:8014';
-const String baseUrlAPI = 'http://114.79.135.131:8014/WCFServices/NiyojakProdMobileApp.svc';
+// const String baseUrl = 'http://114.79.135.131:8014';
+// const String baseUrlAPI = 'http://114.79.135.131:8014/WCFServices/NiyojakProdMobileApp.svc';
 
 /// Development
-// const String baseUrl = 'http://108.181.165.29:8027';
-// const String baseUrlAPI = 'http://108.181.165.29:8027/WCFServices/NiyojakProdMobileApp.svc';
+const String baseUrl = 'http://108.181.165.29:8027';
+const String baseUrlAPI = 'http://108.181.165.29:8027/WCFServices/NiyojakProdMobileApp.svc';
 // ========================================================================================
 
 const String urlCheckLoginDate = baseUrlAPI + '/checklogoutdate';
@@ -1805,6 +1805,7 @@ Future<NagarVastiSampurnaModel?> vastisarvekshanAllReportData(context, String? u
 
   print(json.encode({"AppUserID": userID, "GeoUnitID": int.parse(targetGeoUnitID), "type": levelType}));
   log("response ==>  $response");
+  // log("response ==>  ${jsonEncode(response.body)}");
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
@@ -1842,6 +1843,7 @@ Future<GetVijayadashamiInitModel?> getVijayadashamiInitData(context, String? use
     "GeoUnitID": int.parse(targetGeoUnitID),
   }));
   log("response ==>  $response");
+  // log("response ==>  ${jsonEncode(response.body)}");
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
@@ -1871,6 +1873,7 @@ Future<MandalVastisarvekshanReportModel?> vastisarvekshanOnlyMandalReportData(co
 
   print(json.encode({"AppUserID": userID, "GeoUnitID": int.parse(targetGeoUnitID), "type": levelType}));
   log("response ==>  $response");
+  // log("response ==>  ${jsonEncode(response.body)}");
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
@@ -1901,6 +1904,7 @@ Future<TalukaMandalSampurnaModel?> vastisarvekshanAllReportDataForMandal(context
 
   print(json.encode({"AppUserID": userID, "GeoUnitID": int.parse(targetGeoUnitID), "type": levelType}));
   log("response ==>  $response");
+  // log("response ==>  ${jsonEncode(response.body)}");
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);

@@ -7,8 +7,9 @@ class SingleColumnRow extends StatelessWidget {
   var txtString;
   var value;
   double? fontsize = 0;
-  bool?  view;
-  VoidCallback?  btnAction;
+  bool? view;
+  VoidCallback? btnAction;
+
   SingleColumnRow({
     Key? key,
     this.txtString,
@@ -17,25 +18,36 @@ class SingleColumnRow extends StatelessWidget {
     this.view,
     this.btnAction,
   }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Center(
-          child: Container(
-            width: Statics.getDeviceSize(context).width * 0.84,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  child: Text(txtString, style: TextStyle(fontSize: fontsize, fontWeight: FontWeight.w500)),
-                ),
-                view == true?
-
-                IconButton(onPressed: btnAction, icon: Icon(FontAwesomeIcons.list,color: Colors.purpleAccent,size: 20,)):Flexible(
-                  child: Text(value == "null"||value == null?"0":value , style: TextStyle(fontSize: fontsize, fontWeight: FontWeight.w600)),
-                ),
-              ],
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 8),
+          // color: Colors.red,
+          child: Center(
+            child: SizedBox(
+              width: Statics.getDeviceSize(context).width * 0.84,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Text(txtString, style: TextStyle(fontSize: fontsize, fontWeight: FontWeight.w500)),
+                  ),
+                  view == true
+                      ? IconButton(
+                          onPressed: btnAction,
+                          icon: Icon(
+                            FontAwesomeIcons.list,
+                            color: Colors.purpleAccent,
+                            size: 20,
+                          ))
+                      : Flexible(
+                          child: Text(value == "null" || value == null ? "0" : value, style: TextStyle(fontSize: fontsize, fontWeight: FontWeight.w600)),
+                        ),
+                ],
+              ),
             ),
           ),
         ),
@@ -43,6 +55,7 @@ class SingleColumnRow extends StatelessWidget {
           child: Container(
             width: Statics.getDeviceSize(context).width,
             child: Divider(
+              height: 1,
               color: Colors.black,
             ),
           ),
@@ -51,12 +64,14 @@ class SingleColumnRow extends StatelessWidget {
     );
   }
 }
+
 class SingleColumnRowLegend extends StatelessWidget {
   var txtString;
   var value;
   double? fontsize = 0;
-  bool?  view;
-  VoidCallback?  btnAction;
+  bool? view;
+  VoidCallback? btnAction;
+
   SingleColumnRowLegend({
     Key? key,
     this.txtString,
@@ -65,6 +80,7 @@ class SingleColumnRowLegend extends StatelessWidget {
     this.view,
     this.btnAction,
   }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -76,15 +92,23 @@ class SingleColumnRowLegend extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Flexible(
-                  child: Text(txtString,     textAlign: TextAlign.left,
+                  child: Text(
+                    txtString,
+                    textAlign: TextAlign.left,
                     style: TextStyle(color: Colors.purple, fontSize: fontsize == 0 ? 18 : fontsize, fontWeight: FontWeight.w600),
                   ),
                 ),
-                view == true?
-
-                IconButton(onPressed: btnAction, icon: Icon(FontAwesomeIcons.list,color: Colors.purpleAccent,size: 20,)):Flexible(
-                  child: Text(value == "null"||value == null?"0":value , style: TextStyle(fontSize: fontsize, fontWeight: FontWeight.w600)),
-                ),
+                view == true
+                    ? IconButton(
+                        onPressed: btnAction,
+                        icon: Icon(
+                          FontAwesomeIcons.list,
+                          color: Colors.purpleAccent,
+                          size: 20,
+                        ))
+                    : Flexible(
+                        child: Text(value == "null" || value == null ? "0" : value, style: TextStyle(fontSize: fontsize, fontWeight: FontWeight.w600)),
+                      ),
               ],
             ),
           ),
@@ -102,17 +126,18 @@ class SingleColumnRowLegend extends StatelessWidget {
   }
 }
 
-
 class Single1ColumnRow extends StatelessWidget {
   var txtString;
   var value;
   double? fontsize = 0;
+
   Single1ColumnRow({
     Key? key,
     this.txtString,
     this.value,
     this.fontsize,
   }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -129,7 +154,7 @@ class Single1ColumnRow extends StatelessWidget {
                 ),
                 Flexible(
                   flex: 1,
-                  child: Text(value == "null"?"0":value, style: TextStyle(fontSize: fontsize, fontWeight: FontWeight.w600)),
+                  child: Text(value == "null" ? "0" : value, style: TextStyle(fontSize: fontsize, fontWeight: FontWeight.w600)),
                 ),
               ],
             ),
@@ -152,12 +177,14 @@ class Single1ColumnRowIcon extends StatelessWidget {
   var txtString;
   var value;
   double? fontsize = 0;
+
   Single1ColumnRowIcon({
     Key? key,
     this.txtString,
     this.value,
     this.fontsize,
   }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -171,7 +198,7 @@ class Single1ColumnRowIcon extends StatelessWidget {
                 Flexible(
                   child: Text(txtString, style: TextStyle(fontSize: fontsize, fontWeight: FontWeight.w500)),
                 ),
-                Icon(value == "null"?"0":value, color: Colors.purple),
+                Icon(value == "null" ? "0" : value, color: Colors.purple),
               ],
             ),
           ),

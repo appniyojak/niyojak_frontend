@@ -1492,7 +1492,7 @@ Map<String, String> resEnglish = {
   'addVasti': 'वस्ती / ग्राम जोडा',
   'upnagarUpkhanda': 'उपनगर/उपखंड',
   'upnagarUpkhandaNewAdd': 'नवीन उपनगर/उपखंड जोडा',
-  'upnagarUpkhandaLinked': 'वरील उपनगर/उपखंडाशी वस्ती जोडा.',
+  'upnagarUpkhandaLinked': 'वरील उपनगर/उपखंडाशी वस्ती / ग्राम जोडा.',
   'swayamsewakUpastithi': 'स्वयंसेवक उपस्थिति',
   'average': 'सरासरी',
   'addMukhyaAtithi': 'मुख्य अतिथी जोडा',
@@ -1513,6 +1513,7 @@ Map<String, String> resEnglish = {
   'vastiGramSelectRequired': 'वस्ती / ग्राम निवडणे अनिवार्य आहे.',
   'allInfoRequired': 'संपूर्ण माहिती आवश्यक आहे.',
   'remaining': 'Remaining',
+  'fillNewRecord': 'Add New Entry',
 };
 
 Map<String, String> resMarathi = {
@@ -3006,6 +3007,8 @@ Map<String, String> resMarathi = {
   'sanchalanGhoshVadan': "संचलनात घोष वादन ?",
   'presentMatrushakti': "मातृशक्ति",
   'presentMale': "पुरुष",
+  'presentGanveshatTotal': "गणवेशात एकूण उपस्थित",
+  'presentSamajik': "अन्य सामाजिक उपस्थित",
   'NagarSelectionImportant': 'माहिती भरण्यापूर्वी स्तर निवडणे अनिवार्य आहे',
   'mobileNumberLimit': 'मोबाईल नंबर १० अंकी असावा.',
   'upastithi': 'उपस्थिति',
@@ -3013,7 +3016,7 @@ Map<String, String> resMarathi = {
   'addVasti': 'वस्ती / ग्राम जोडा',
   'upnagarUpkhanda': 'उपनगर/उपखंड',
   'upnagarUpkhandaNewAdd': 'नवीन उपनगर/उपखंड जोडा',
-  'upnagarUpkhandaLinked': 'वरील उपनगर/उपखंडाशी वस्ती जोडा.',
+  'upnagarUpkhandaLinked': 'वरील उपनगर/उपखंडाशी वस्ती / ग्राम जोडा.',
   'swayamsewakUpastithi': 'स्वयंसेवक उपस्थिति',
   'average': 'सरासरी',
   'addMukhyaAtithi': 'मुख्य अतिथी जोडा',
@@ -3034,6 +3037,7 @@ Map<String, String> resMarathi = {
   'vastiGramSelectRequired': 'वस्ती / ग्राम निवडणे अनिवार्य आहे.',
   'allInfoRequired': 'संपूर्ण माहिती आवश्यक आहे.',
   'remaining': 'उर्वरित',
+  'fillNewRecord': 'नवीन माहिती भरा',
 };
 
 Map<String, String> resHindi = {
@@ -4533,7 +4537,7 @@ Map<String, String> resHindi = {
   'addVasti': 'वस्ती / ग्राम जोडा',
   'upnagarUpkhanda': 'उपनगर/उपखंड',
   'upnagarUpkhandaNewAdd': 'नवीन उपनगर/उपखंड जोडा',
-  'upnagarUpkhandaLinked': 'वरील उपनगर/उपखंडाशी वस्ती जोडा.',
+  'upnagarUpkhandaLinked': 'वरील उपनगर/उपखंडाशी वस्ती / ग्राम जोडा.',
   'swayamsewakUpastithi': 'स्वयंसेवक उपस्थिति',
   'average': 'सरासरी',
   'addMukhyaAtithi': 'मुख्य अतिथी जोडा',
@@ -4554,4 +4558,5 @@ Map<String, String> resHindi = {
   'vastiGramSelectRequired': 'वस्ती / ग्राम निवडणे अनिवार्य आहे.',
   'allInfoRequired': 'संपूर्ण माहिती आवश्यक आहे.',
   'remaining': 'बाकी',
+  'fillNewRecord': 'नवीन माहिती भरा',
 };

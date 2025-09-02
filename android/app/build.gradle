@@ -25,12 +25,12 @@ if (keystorePropertiesFile.exists()) {
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
-    flutterVersionCode = '79'
+    flutterVersionCode = '85'
 }
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
-    flutterVersionName = '3.5.5'
+    flutterVersionName = '3.5.9'
 }
 
 //apply plugin: 'com.android.application'
