@@ -34,12 +34,12 @@ import '../providers/bals.dart';
 import './database_helper.dart';
 
 ///Production
-// const String baseUrl = 'http://114.79.135.131:8014';
-// const String baseUrlAPI = 'http://114.79.135.131:8014/WCFServices/NiyojakProdMobileApp.svc';
+const String baseUrl = 'http://114.79.135.131:8014';
+const String baseUrlAPI = 'http://114.79.135.131:8014/WCFServices/NiyojakProdMobileApp.svc';
 
 /// Development
-const String baseUrl = 'http://108.181.165.29:8027';
-const String baseUrlAPI = 'http://108.181.165.29:8027/WCFServices/NiyojakProdMobileApp.svc';
+// const String baseUrl = 'http://108.181.165.29:8027';
+// const String baseUrlAPI = 'http://108.181.165.29:8027/WCFServices/NiyojakProdMobileApp.svc';
 // ========================================================================================
 
 const String urlCheckLoginDate = baseUrlAPI + '/checklogoutdate';
@@ -1050,6 +1050,7 @@ Future<dynamic> getShaakhaaByID(String shaakhaaID) async {
       data['GeoUnitName'],
       data['FrequencyID'],
       data['DaysOfWeek'],
+      // dayOfWeek
       data['DayOfMonth'],
       data['VayogatID'],
       data['Location'],
@@ -1064,39 +1065,40 @@ Future<dynamic> getShaakhaaByID(String shaakhaaID) async {
       data['ParentVastiID'],
       data['IsSankalpit'],
       data['SankalpAadhaar'],
-      data['SankalpAadhaarSwayamsevakID'].toString(),
-      data['SankalpAadhaarSwayamsevakName'],
-      data['SankalpAadhaarShaakhaaID'],
-      data['SankalpAadhaarShaakhaaName'],
-      data['SankalpCompletionMonth'],
-      data['SankalpCompletionYear'],
       data['SankalpAadhaar1'],
-      data['SankalpAadhaarSwayamsevakID1'],
-      data['SankalpAadhaarSwayamsevakName1'],
-      data['SankalpAadhaarShaakhaaID1'],
-      data['SankalpAadhaarShaakhaaName1'],
-      data['SankalpCompletionMonth1'],
-      data['SankalpCompletionYear1'],
       data['SankalpAadhaar2'],
-      data['SankalpAadhaarSwayamsevakID2'],
-      data['SankalpAadhaarSwayamsevakName2'],
-      data['SankalpAadhaarShaakhaaID2'],
-      data['SankalpAadhaarShaakhaaName2'],
-      data['SankalpCompletionMonth2'],
-      data['SankalpCompletionYear2'],
       data['SankalpAadhaar3'],
+      data['SankalpAadhaarSwayamsevakID'],
+      data['SankalpAadhaarSwayamsevakID1'],
+      data['SankalpAadhaarSwayamsevakID2'],
       data['SankalpAadhaarSwayamsevakID3'],
+      data['SankalpAadhaarSwayamsevakName'],
+      data['SankalpAadhaarSwayamsevakName1'],
+      data['SankalpAadhaarSwayamsevakName2'],
       data['SankalpAadhaarSwayamsevakName3'],
+      data['SankalpAadhaarShaakhaaID'],
+      data['SankalpAadhaarShaakhaaID1'],
+      data['SankalpAadhaarShaakhaaID2'],
       data['SankalpAadhaarShaakhaaID3'],
+      data['SankalpAadhaarShaakhaaName'],
+      data['SankalpAadhaarShaakhaaName1'],
+      data['SankalpAadhaarShaakhaaName2'],
       data['SankalpAadhaarShaakhaaName3'],
+      data['SankalpCompletionMonth'],
+      data['SankalpCompletionMonth1'],
+      data['SankalpCompletionMonth2'],
       data['SankalpCompletionMonth3'],
+      data['SankalpCompletionYear'],
+      data['SankalpCompletionYear1'],
+      data['SankalpCompletionYear2'],
       data['SankalpCompletionYear3'],
       data['HasToli'],
       data['HasPaalak'],
       data['OptionalShaaririkVishayID'],
       data['OtherOptionalVishay'],
       data['StartTimeStr'],
-      data['EndTimeStr']);
+      // fromTime
+      data['EndTimeStr']); // toTime
 }
 
 Future<String> saveShaakhaaDetails(String inputJson) async {
@@ -1805,7 +1807,6 @@ Future<NagarVastiSampurnaModel?> vastisarvekshanAllReportData(context, String? u
 
   print(json.encode({"AppUserID": userID, "GeoUnitID": int.parse(targetGeoUnitID), "type": levelType}));
   log("response ==>  $response");
-  // log("response ==>  ${jsonEncode(response.body)}");
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
@@ -1843,7 +1844,6 @@ Future<GetVijayadashamiInitModel?> getVijayadashamiInitData(context, String? use
     "GeoUnitID": int.parse(targetGeoUnitID),
   }));
   log("response ==>  $response");
-  // log("response ==>  ${jsonEncode(response.body)}");
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
@@ -1873,7 +1873,6 @@ Future<MandalVastisarvekshanReportModel?> vastisarvekshanOnlyMandalReportData(co
 
   print(json.encode({"AppUserID": userID, "GeoUnitID": int.parse(targetGeoUnitID), "type": levelType}));
   log("response ==>  $response");
-  // log("response ==>  ${jsonEncode(response.body)}");
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
@@ -1904,7 +1903,6 @@ Future<TalukaMandalSampurnaModel?> vastisarvekshanAllReportDataForMandal(context
 
   print(json.encode({"AppUserID": userID, "GeoUnitID": int.parse(targetGeoUnitID), "type": levelType}));
   log("response ==>  $response");
-  // log("response ==>  ${jsonEncode(response.body)}");
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
