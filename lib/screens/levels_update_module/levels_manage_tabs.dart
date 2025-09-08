@@ -7,6 +7,7 @@ import '../../widgets/app_drawer.dart';
 
 class TabScreen extends StatelessWidget {
   static const routeName = '/level-tab-update-screen';
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -18,19 +19,19 @@ class TabScreen extends StatelessWidget {
             style: TextStyle(fontSize: 24),
           ),
           bottom: TabBar(
+            unselectedLabelStyle: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w500),
+            labelStyle: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700),
             tabs: [
+              Tab(text: Statics.getLabel('upnagarUpkhanda')),
               Tab(text: Statics.getLabel('masterdataupdate')),
-              Tab(
-                text: Statics.getLabel('upnagarUpkhanda'),
-              ),
             ],
           ),
         ),
         drawer: AppDrawer(),
         body: TabBarView(
           children: [
-            UpdateMasterDataScreen(),
             UpNagarkhandaAddUpdateView(),
+            UpdateMasterDataScreen(),
           ],
         ),
       ),

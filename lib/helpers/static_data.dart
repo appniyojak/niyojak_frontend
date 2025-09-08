@@ -34,12 +34,12 @@ import '../providers/bals.dart';
 import './database_helper.dart';
 
 ///Production
-const String baseUrl = 'http://114.79.135.131:8014';
-const String baseUrlAPI = 'http://114.79.135.131:8014/WCFServices/NiyojakProdMobileApp.svc';
+// const String baseUrl = 'http://114.79.135.131:8014';
+// const String baseUrlAPI = 'http://114.79.135.131:8014/WCFServices/NiyojakProdMobileApp.svc';
 
 /// Development
-// const String baseUrl = 'http://108.181.165.29:8027';
-// const String baseUrlAPI = 'http://108.181.165.29:8027/WCFServices/NiyojakProdMobileApp.svc';
+const String baseUrl = 'http://108.181.165.29:8027';
+const String baseUrlAPI = 'http://108.181.165.29:8027/WCFServices/NiyojakProdMobileApp.svc';
 // ========================================================================================
 
 const String urlCheckLoginDate = baseUrlAPI + '/checklogoutdate';
@@ -1807,6 +1807,7 @@ Future<NagarVastiSampurnaModel?> vastisarvekshanAllReportData(context, String? u
 
   print(json.encode({"AppUserID": userID, "GeoUnitID": int.parse(targetGeoUnitID), "type": levelType}));
   log("response ==>  $response");
+  // log("response ==>  ${jsonEncode(response.body)}");
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
@@ -1826,7 +1827,7 @@ Future<NagarVastiSampurnaModel?> vastisarvekshanAllReportData(context, String? u
   }
 }
 
-Future<GetVijayadashamiInitModel?> getVijayadashamiInitData(context, String? userID, String? targetGeoUnitID) async {
+Future<GetVijayadashamiInitModel?> getVijayadashamiInitData(context, String? userID, String? targetGeoUnitID, String? levelID) async {
   showLoaderDialog(context);
 
   print("${userID}  --- $targetGeoUnitID  ");
@@ -1836,14 +1837,17 @@ Future<GetVijayadashamiInitModel?> getVijayadashamiInitData(context, String? use
       headers: jHeaders,
       body: json.encode({
         "AppUserID": userID,
-        "GeoUnitID": int.parse(targetGeoUnitID!),
+        "GeoUnitID": int.parse(targetGeoUnitID ?? "0"),
+        "isnagar": int.parse(levelID ?? "6"),
       }));
 
   print(json.encode({
     "AppUserID": userID,
-    "GeoUnitID": int.parse(targetGeoUnitID),
+    "GeoUnitID": int.parse(targetGeoUnitID ?? "0"),
+    "isnagar": int.parse(levelID ?? "6"),
   }));
   log("response ==>  $response");
+  // log("response ==>  ${jsonEncode(response.body)}");
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
@@ -1873,6 +1877,7 @@ Future<MandalVastisarvekshanReportModel?> vastisarvekshanOnlyMandalReportData(co
 
   print(json.encode({"AppUserID": userID, "GeoUnitID": int.parse(targetGeoUnitID), "type": levelType}));
   log("response ==>  $response");
+  // log("response ==>  ${jsonEncode(response.body)}");
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
@@ -1903,6 +1908,7 @@ Future<TalukaMandalSampurnaModel?> vastisarvekshanAllReportDataForMandal(context
 
   print(json.encode({"AppUserID": userID, "GeoUnitID": int.parse(targetGeoUnitID), "type": levelType}));
   log("response ==>  $response");
+  // log("response ==>  ${jsonEncode(response.body)}");
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
@@ -2380,6 +2386,7 @@ Future<void> saveVijayaDashamiUtsavData(BuildContext context, Map<String, dynami
     Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
   } else {
     print("Error: ${response.statusCode} - ${response.body}");
+    Statics.showToast(Statics.getLabel('errorOccurred'));
   }
 }
 

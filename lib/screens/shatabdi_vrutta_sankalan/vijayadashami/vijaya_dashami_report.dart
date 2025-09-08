@@ -8,14 +8,16 @@ import '../../../providers/bals.dart';
 
 class VijayadashamiFormReport extends StatefulWidget {
   static const String routeName = '/vijayadashami-form-report';
+
   const VijayadashamiFormReport({super.key});
 
   @override
-  State<VijayadashamiFormReport> createState() =>
-      _VijayadashamiFormReportState();
+  State<VijayadashamiFormReport> createState() => _VijayadashamiFormReportState();
 }
 
 class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
+  final ScrollController _scrollController = ScrollController();
+
   final List<bool> _expanded = List.generate(6, (_) => false);
 
   bool _isSearching = false;
@@ -58,72 +60,57 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
     populatelinkedVibhaagDropdown('');
     if (!mounted) return;
     _baithakTypes = data;
-    _baithakTypes = _baithakTypes!
-        .where((element) => element.showAnnualBaithakkey!.contains('1'))
-        .toList();
+    _baithakTypes = _baithakTypes!.where((element) => element.showAnnualBaithakkey!.contains('1')).toList();
     print("_baithakTypes :-- ${_baithakTypes}");
     setState(() {});
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedMahaanagarDropdown() async {
-    var data = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['MahaanagarLevelID'].toString(), '', '', '');
+    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MahaanagarLevelID'].toString(), '', '', '');
     setState(() {
       _linkedMahaanagar = data;
     });
     return data;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(
-      String vibhaagIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(String vibhaagIDStr) async {
     _linkedShaharValue = _linkedNagarValue = null;
-    var data = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
+    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
     setState(() {
       _linkedBhaag = data;
     });
     return data;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(
-      String mahaanagarIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
     _linkedBhaagValue = null;
-    var data = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['VibhaagLevelID'].toString(),
-        mahaanagarIDStr,
-        (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'),
-        '');
+    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '');
     setState(() {
       _linkedVibhaag = data;
     });
     return data;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedShaharDropdown(
-      String bhaagIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedShaharDropdown(String bhaagIDStr) async {
     _linkedShaharValue = _linkedShahar = null;
-    var shDD = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', '');
+    var shDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', '');
     setState(() {
       _linkedShahar = (shDD.length > 0 ? shDD : null);
     });
     return shDD;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(
-      String? bhaagIDStr, String? shaharIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
     _linkedNagarValue = null;
     _linkedNagar = null;
     if (shaharIDStr != null) {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParent(
-          Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
+      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
       setState(() {
         _linkedNagar = (ngDD.length > 0 ? ngDD : null);
       });
       return ngDD;
     } else {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParent(
-          Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
+      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
       setState(() {
         _linkedNagar = (ngDD.length > 0 ? ngDD : null);
       });
@@ -131,34 +118,28 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
     }
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedMandalDropdown(
-      String nagarIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedMandalDropdown(String nagarIDStr) async {
     _linkedgraamValue = null;
     _linkedmandal = _linkedgraam = null;
-    var mnDD = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['MandalLevelID'].toString(), nagarIDStr, 'Nagar', '');
+    var mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr, 'Nagar', '');
     setState(() {
       _linkedmandal = (mnDD.length > 0 ? mnDD : null);
     });
     return mnDD;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedGraamDropdown(
-      String mandalIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedGraamDropdown(String mandalIDStr) async {
     _linkedgraamValue = null;
-    var gmDD = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['GraamLevelID'].toString(), mandalIDStr, 'Mandal', '');
+    var gmDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['GraamLevelID'].toString(), mandalIDStr, 'Mandal', '');
     setState(() {
       _linkedgraam = (gmDD.length > 0 ? gmDD : null);
     });
     return gmDD;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(
-      String nagarIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(String nagarIDStr) async {
     _linkedvastiValue = null;
-    var vsDD = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['VastiLevelID'].toString(), nagarIDStr, 'Nagar', '');
+    var vsDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr, 'Nagar', '');
     setState(() {
       _linkedvasti = (vsDD.length > 0 ? vsDD : null);
     });
@@ -197,9 +178,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                       return ListTile(
                         title: Text(
                           Statics.getLabel('selectStar'),
-                          style: TextStyle(
-                              color: Colors.purpleAccent,
-                              fontWeight: FontWeight.bold),
+                          style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold),
                         ),
                       );
                     },
@@ -209,21 +188,12 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                         children: [
                           if (_linkedMahaanagar != null)
                             DropdownButtonFormField(
-                              decoration: InputDecoration(
-                                  labelText: Statics.getLabel('Mahaanagar')),
+                              decoration: InputDecoration(labelText: Statics.getLabel('Mahaanagar')),
                               isExpanded: true,
-                              value: _linkedMahaanagarValue == ""
-                                  ? null
-                                  : _linkedMahaanagarValue,
-                              items: _linkedMahaanagar!
-                                  .map((bg) => DropdownMenuItem(
-                                      value: bg.geoUnitID.toString(),
-                                      child: Text(bg.name!)))
-                                  .toList(),
+                              value: _linkedMahaanagarValue == "" ? null : _linkedMahaanagarValue,
+                              items: _linkedMahaanagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                               onChanged: (value) {
-                                final selectedItem = _linkedMahaanagar!
-                                    .firstWhere((bg) =>
-                                        bg.geoUnitID.toString() == value);
+                                final selectedItem = _linkedMahaanagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                                 print(value);
                                 setState(() {
                                   _linkedMahaanagarValue = value;
@@ -244,20 +214,12 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                           ),
                           if (_linkedVibhaag != null)
                             DropdownButtonFormField(
-                              decoration: InputDecoration(
-                                  labelText: Statics.getLabel('Vibhaag')),
+                              decoration: InputDecoration(labelText: Statics.getLabel('Vibhaag')),
                               isExpanded: true,
-                              value: _linkedVibhaagValue == ""
-                                  ? null
-                                  : _linkedVibhaagValue,
-                              items: _linkedVibhaag!
-                                  .map((bg) => DropdownMenuItem(
-                                      value: bg.geoUnitID.toString(),
-                                      child: Text(bg.name!)))
-                                  .toList(),
+                              value: _linkedVibhaagValue == "" ? null : _linkedVibhaagValue,
+                              items: _linkedVibhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                               onChanged: (value) {
-                                final selectedItem = _linkedVibhaag!.firstWhere(
-                                    (bg) => bg.geoUnitID.toString() == value);
+                                final selectedItem = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                                 print(value);
                                 setState(() {
                                   _linkedVibhaagValue = value;
@@ -276,20 +238,12 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                           ),
                           if (_linkedBhaag != null)
                             DropdownButtonFormField(
-                              decoration: InputDecoration(
-                                  labelText: Statics.getLabel('Bhaag')),
+                              decoration: InputDecoration(labelText: Statics.getLabel('Bhaag')),
                               isExpanded: true,
-                              value: _linkedBhaagValue == ""
-                                  ? null
-                                  : _linkedBhaagValue,
-                              items: _linkedBhaag!
-                                  .map((bg) => DropdownMenuItem(
-                                      value: bg.geoUnitID.toString(),
-                                      child: Text(bg.name!)))
-                                  .toList(),
+                              value: _linkedBhaagValue == "" ? null : _linkedBhaagValue,
+                              items: _linkedBhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                               onChanged: (value) {
-                                final selectedItem = _linkedBhaag!.firstWhere(
-                                    (bg) => bg.geoUnitID.toString() == value);
+                                final selectedItem = _linkedBhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                                 setState(() {
                                   _linkedBhaagValue = value;
                                   // populatelinkedShaharDropdown(value!);
@@ -302,20 +256,12 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                             ),
                           if (_linkedNagar != null && _linkedNagar!.length > 0)
                             DropdownButtonFormField(
-                              decoration: InputDecoration(
-                                  labelText: Statics.getLabel('Nagar')),
+                              decoration: InputDecoration(labelText: Statics.getLabel('Nagar')),
                               isExpanded: true,
-                              value: _linkedNagarValue == ""
-                                  ? null
-                                  : _linkedNagarValue,
-                              items: _linkedNagar!
-                                  .map((bg) => DropdownMenuItem(
-                                      value: bg.geoUnitID.toString(),
-                                      child: Text(bg.name!)))
-                                  .toList(),
+                              value: _linkedNagarValue == "" ? null : _linkedNagarValue,
+                              items: _linkedNagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                               onChanged: (value) {
-                                final selectedItem = _linkedNagar!.firstWhere(
-                                    (bg) => bg.geoUnitID.toString() == value);
+                                final selectedItem = _linkedNagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                                 populatelinkedMandalDropdown(value!);
                                 populatelinkedVastiDropdown(value);
                                 setState(() {
@@ -331,23 +277,14 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                             SizedBox(
                               height: 10,
                             ),
-                          if (_linkedmandal != null &&
-                              _linkedmandal!.length > 0)
+                          if (_linkedmandal != null && _linkedmandal!.length > 0)
                             DropdownButtonFormField(
-                              decoration: InputDecoration(
-                                  labelText: Statics.getLabel('Mandal')),
+                              decoration: InputDecoration(labelText: Statics.getLabel('Mandal')),
                               isExpanded: true,
-                              value: _linkedmandalValue == ""
-                                  ? null
-                                  : _linkedmandalValue,
-                              items: _linkedmandal!
-                                  .map((bg) => DropdownMenuItem(
-                                      value: bg.geoUnitID.toString(),
-                                      child: Text(bg.name!)))
-                                  .toList(),
+                              value: _linkedmandalValue == "" ? null : _linkedmandalValue,
+                              items: _linkedmandal!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                               onChanged: (value) {
-                                final selectedItem = _linkedmandal!.firstWhere(
-                                    (bg) => bg.geoUnitID.toString() == value);
+                                final selectedItem = _linkedmandal!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                                 setState(() {
                                   selctedLevelName = selectedItem.name ?? "";
                                   selctedLevel = 'Mandal';
@@ -364,19 +301,14 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                           Align(
                             alignment: Alignment.center,
                             child: ElevatedButton(
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStatePropertyAll(
-                                      Colors.purpleAccent)),
+                              style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.purpleAccent)),
                               onPressed: () {
                                 setState(() {
                                   _isExpanded = false;
                                   isVastiSearch = true;
                                 });
                               },
-                              child: Text("${Statics.getLabel('Filters')}",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold)),
+                              child: Text("${Statics.getLabel('Filters')}", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                             ),
                           )
                         ],
@@ -389,9 +321,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
               SizedBox(
                 height: 20,
               ),
-              if (selctedLevel != "" &&
-                  selctedLevelName != "" &&
-                  isVastiSearch == true)
+              if (selctedLevel != "" && selctedLevelName != "" && isVastiSearch == true)
                 Container(
                     height: 40,
                     width: double.infinity,
@@ -405,17 +335,11 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                       children: [
                         Text(
                           "${selctedLevel}  ->  ",
-                          style: TextStyle(
-                              color: Colors.purpleAccent,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16),
+                          style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                         Text(
                           " $selctedLevelName",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 17),
+                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17),
                         ),
                       ],
                     )),
@@ -450,38 +374,18 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                             txtString: "गणवेशात उपस्थित",
                             value: "832",
                           ),
-                          SingleColumnRow(
-                              txtString: "संचलनात उपस्थित", value: "582"),
-                          SingleColumnRow(
-                              txtString: "अन्य उपस्थित", value: "210"),
-                          SingleColumnRow(
-                              txtString: "वर्तमान शाखा प्रतिनिधित्व",
-                              value: "25"),
-                          SingleColumnRow(
-                              txtString: "वर्तमान साप्ताहिक मिलन प्रतिनिधित्व",
-                              value: "18"),
-                          SingleColumnRow(
-                              txtString: "वर्तमान मासिक मिलन प्रतिनिधित्व",
-                              value: "10"),
-                          SingleColumnRow(
-                              txtString: "वर्तमान संघ मंडली प्रतिनिधित्व",
-                              value: "4"),
-                          SingleColumnRow(
-                              txtString: "नवीन संकल्पित शाखा प्रतिनिधित्व",
-                              value: "5"),
-                          SingleColumnRow(
-                              txtString:
-                                  "नवीन संकल्पित साप्ताहिक मिलन प्रतिनिधित्व",
-                              value: "3"),
-                          SingleColumnRow(
-                              txtString: "नवीन संकल्पित संघ मंडली प्रतिनिधित्व",
-                              value: "2"),
-                          SingleColumnRow(
-                              txtString: "वस्ती प्रतिनिधित्व", value: "24"),
-                          SingleColumnRow(
-                              txtString: "ग्राम प्रतिनिधित्व", value: "15"),
-                          SingleColumnRow(
-                              txtString: "मंडल प्रतिनिधित्व", value: "8"),
+                          SingleColumnRow(txtString: "संचलनात उपस्थित", value: "582"),
+                          SingleColumnRow(txtString: "अन्य उपस्थित", value: "210"),
+                          SingleColumnRow(txtString: "वर्तमान शाखा प्रतिनिधित्व", value: "25"),
+                          SingleColumnRow(txtString: "वर्तमान साप्ताहिक मिलन प्रतिनिधित्व", value: "18"),
+                          SingleColumnRow(txtString: "वर्तमान मासिक मिलन प्रतिनिधित्व", value: "10"),
+                          SingleColumnRow(txtString: "वर्तमान संघ मंडली प्रतिनिधित्व", value: "4"),
+                          // SingleColumnRow(txtString: "नवीन संकल्पित शाखा प्रतिनिधित्व", value: "5"),
+                          // SingleColumnRow(txtString: "नवीन संकल्पित साप्ताहिक मिलन प्रतिनिधित्व", value: "3"),
+                          // SingleColumnRow(txtString: "नवीन संकल्पित संघ मंडली प्रतिनिधित्व", value: "2"),
+                          SingleColumnRow(txtString: "वस्ती प्रतिनिधित्व", value: "24"),
+                          SingleColumnRow(txtString: "ग्राम प्रतिनिधित्व", value: "15"),
+                          SingleColumnRow(txtString: "मंडल प्रतिनिधित्व", value: "8"),
                         ],
                       ),
                     ),
@@ -547,7 +451,6 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
     );
   }
 
-  final ScrollController _scrollController = ScrollController();
   ExpansionPanel _buildPanel(String title, int index, Widget child) {
     return ExpansionPanel(
       headerBuilder: (context, isExpanded) {
@@ -564,10 +467,12 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
       body: Container(
         height: 300,
         child: Scrollbar(
+          // controller: _scrollController,
+          interactive: true,
           thumbVisibility: true,
-          controller: _scrollController,
+          radius: Radius.circular(8),
           child: SingleChildScrollView(
-            controller: _scrollController,
+            // controller: _scrollController,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: child,
@@ -601,14 +506,12 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: DataTable(
-        headingRowColor:
-            MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
+        headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
         columns: headers
             .map((header) => DataColumn(
                   label: Container(
                     width: 180,
-                    child: Text(header,
-                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    child: Text(header, style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
                 ))
             .toList(),
