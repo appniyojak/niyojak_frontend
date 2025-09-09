@@ -12,29 +12,24 @@ import '../../../providers/bals.dart';
 
 class MandalSurveyFormScreen extends StatefulWidget {
   static const String routeName = '/mandal-survey';
+
   const MandalSurveyFormScreen({super.key});
 
   @override
   State<MandalSurveyFormScreen> createState() => _MandalSurveyFormScreenState();
 }
 
-class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
-    with SingleTickerProviderStateMixin {
-  final TextEditingController sanghaKaryaVastiPramukhNameController =
-      TextEditingController();
-  final TextEditingController sanghaKaryaVastiStithiController =
-      TextEditingController();
-  final TextEditingController vastiChatahuSimaController =
-      TextEditingController();
-  final TextEditingController niyamitChalnareUpkramGatividhiController =
-      TextEditingController();
-  final TextEditingController vsahatPrakarDurbhashController =
-      TextEditingController();
-  final TextEditingController vastitHonareSamajikAnyakaryakramController =
-      TextEditingController();
-  final TextEditingController sarpanchDoorbhasController =
-      TextEditingController();
+class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with SingleTickerProviderStateMixin {
+  final TextEditingController sanghaKaryaVastiPramukhNameController = TextEditingController();
+  final TextEditingController sanghaKaryaVastiStithiController = TextEditingController();
+  final TextEditingController vastiChatahuSimaController = TextEditingController();
+  final TextEditingController niyamitChalnareUpkramGatividhiController = TextEditingController();
+  final TextEditingController vsahatPrakarDurbhashController = TextEditingController();
+  final TextEditingController vastitHonareSamajikAnyakaryakramController = TextEditingController();
+  final TextEditingController sarpanchDoorbhasController = TextEditingController();
   final TextEditingController sarpanchNameController = TextEditingController();
+
+  int? isFemale;
 
   String? selectedFilePath;
   GetVastiDataByIdModel? vastiDataByIdModel;
@@ -48,136 +43,68 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
         "AppUserID": Statics.userDetails['userID'],
       });
       print("searchVastiData req param :-  $strInput");
-      vastiDataByIdModel =
-          await Statics.getVastidataByIDForApp(context, strInput);
+      vastiDataByIdModel = await Statics.getVastidataByIDForApp(context, strInput);
       setDataAfterSearch();
     } else {
-      Statics.showMessageDialog(
-          context, Statics.getLabel('internetNotConnected'));
+      Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
       return null;
     }
   }
 
   void setDataAfterSearch() async {
     setState(() {
-      gavatilMumbaikar =
-          vastiDataByIdModel!.vastisarvekshan!.isGavatilMumbaikar;
-      anyaVividhKshetracheKame =
-          vastiDataByIdModel!.vastisarvekshan!.anyaVividhKshetracheKame;
-      gavatilMumbaikarEnteredDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarGavatilMumbaikar ?? [];
-      vividhadhyatmitStsangKendraEnteredDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarVividhAdhyatmikKendra ??
-              [];
-      vividhKshetaCHeKamEnteredDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarVividhKshetracheKam ??
-              [];
-      sewaPrakalpaEnteredDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarSewaPrakalpa ?? [];
-      vadiGharLoksankhyaEnteredDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarVadiGharLoksankhya ?? [];
-      sarpanchNameController.text =
-          vastiDataByIdModel!.vastisarvekshan!.sarpanchacheNaav == null
-              ? ""
-              : vastiDataByIdModel!.vastisarvekshan!.sarpanchacheNaav!;
-      maleController.text =
-          vastiDataByIdModel!.vastisarvekshan!.maleSankhya == null
-              ? ""
-              : vastiDataByIdModel!.vastisarvekshan!.maleSankhya.toString();
-      femaleController.text =
-          vastiDataByIdModel!.vastisarvekshan!.femaleSankhya == null
-              ? ""
-              : vastiDataByIdModel!.vastisarvekshan!.femaleSankhya.toString();
-      sarpanchDoorbhasController.text =
-          vastiDataByIdModel!.vastisarvekshan!.sarpanchacheDoorbhash == null
-              ? ""
-              : vastiDataByIdModel!.vastisarvekshan!.sarpanchacheDoorbhash!;
-      sanghaKaryaVastiStithiController.text =
-          vastiDataByIdModel!.vastisarvekshan!.vastiShakhaType == null
-              ? ""
-              : vastiDataByIdModel!.vastisarvekshan!.vastiShakhaType!;
-      sanghaKaryaVastiPramukhNameController.text =
-          vastiDataByIdModel!.vastisarvekshan!.vastiShakhaPramukhName ?? "";
-      total = int.parse(vastiDataByIdModel!.vastisarvekshan!.maleSankhya == null
-              ? ""
-              : vastiDataByIdModel!.vastisarvekshan!.maleSankhya.toString()) +
-          int.parse(vastiDataByIdModel!.vastisarvekshan!.femaleSankhya == null
-              ? ""
-              : vastiDataByIdModel!.vastisarvekshan!.femaleSankhya.toString());
+      gavatilMumbaikar = vastiDataByIdModel!.vastisarvekshan!.isGavatilMumbaikar;
+      anyaVividhKshetracheKame = vastiDataByIdModel!.vastisarvekshan!.anyaVividhKshetracheKame;
+      gavatilMumbaikarEnteredDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarGavatilMumbaikar ?? [];
+      vividhadhyatmitStsangKendraEnteredDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarVividhAdhyatmikKendra ?? [];
+      vividhKshetaCHeKamEnteredDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarVividhKshetracheKam ?? [];
+      sewaPrakalpaEnteredDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarSewaPrakalpa ?? [];
+      vadiGharLoksankhyaEnteredDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarVadiGharLoksankhya ?? [];
+      sarpanchNameController.text = vastiDataByIdModel!.vastisarvekshan!.sarpanchacheNaav == null ? "" : vastiDataByIdModel!.vastisarvekshan!.sarpanchacheNaav!;
+      maleController.text = vastiDataByIdModel!.vastisarvekshan!.maleSankhya == null ? "" : vastiDataByIdModel!.vastisarvekshan!.maleSankhya.toString();
+      femaleController.text = vastiDataByIdModel!.vastisarvekshan!.femaleSankhya == null ? "" : vastiDataByIdModel!.vastisarvekshan!.femaleSankhya.toString();
+      sarpanchDoorbhasController.text = vastiDataByIdModel!.vastisarvekshan!.sarpanchacheDoorbhash == null ? "" : vastiDataByIdModel!.vastisarvekshan!.sarpanchacheDoorbhash!;
+      sanghaKaryaVastiStithiController.text = vastiDataByIdModel!.vastisarvekshan!.vastiShakhaType == null ? "" : vastiDataByIdModel!.vastisarvekshan!.vastiShakhaType!;
+      sanghaKaryaVastiPramukhNameController.text = vastiDataByIdModel!.vastisarvekshan!.vastiShakhaPramukhName ?? "";
+      total = int.parse(vastiDataByIdModel!.vastisarvekshan!.maleSankhya == null ? "" : vastiDataByIdModel!.vastisarvekshan!.maleSankhya.toString()) +
+          int.parse(vastiDataByIdModel!.vastisarvekshan!.femaleSankhya == null ? "" : vastiDataByIdModel!.vastisarvekshan!.femaleSankhya.toString());
       //     int.parse(vastiDataByIdModel!.vastisarvekshan!.lokasankhya ?? "0");
-      vadicheNaavController.text =
-          vastiDataByIdModel!.vastisarvekshan!.vadicheNave ?? "";
-      andajeGhareController.text =
-          vastiDataByIdModel!.vastisarvekshan!.andajeGhare ?? "";
-      gaavSamitiYesNo = int.parse(
-          vastiDataByIdModel!.vastisarvekshan!.vastiShakhaSamiti == null ||
-                  vastiDataByIdModel!.vastisarvekshan!.vastiShakhaSamiti! ==
-                      "null" ||
-                  vastiDataByIdModel!.vastisarvekshan!.vastiShakhaSamiti == ""
-              ? "2"
-              : vastiDataByIdModel!.vastisarvekshan!.vastiShakhaSamiti!);
-      beforsanghaonnowisoff = vastiDataByIdModel!
-                  .vastisarvekshan!.beforeShakhaSaptahikIsOnNowOff ==
-              null
-          ? 2
-          : vastiDataByIdModel!.vastisarvekshan!.beforeShakhaSaptahikIsOnNowOff;
-      kuthalaVarshiDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarKuthalyavarsi ?? [];
-      vastiChatahuSimaController.text =
-          vastiDataByIdModel!.vastisarvekshan!.vasticyacatuSima ?? "";
-      jagranShreniEnteredDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarJaagaranshreneesthiti ??
-              [];
-      enteredDataListGatividhi =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarGatividhikaryasthiti ??
-              [];
-      enteredVasahatPrakarDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarVasahatprakara ?? [];
-      enteredVividhBhashaBolnareDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarVividhaprakara ?? [];
-      enteredKontyaPraantacheDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarKonatyaprantache ?? [];
-      enteredreligionDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarReligion ?? [];
-      upasnaSthalDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarupaasana ?? [];
-      sajjanShaktiDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarsajjanshakti ?? [];
-      anyaPrabhaviLokDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarAnyaprabhavilokam ?? [];
-      vastitSajarHonareSanDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarVastitamahatvacesana ??
-              [];
-      vastitSajarHonareSamajikKaryakramDataList = vastiDataByIdModel!
-              .vastisarvekshan!.vastisarVastitasajaraSamajikkaryakram ??
-          [];
-      step1completepercentage =
-          vastiDataByIdModel!.vastisarvekshan!.step1completepercentage;
-      step1pendingpoints =
-          vastiDataByIdModel!.vastisarvekshan!.step1pendingpoints;
+      vadicheNaavController.text = vastiDataByIdModel!.vastisarvekshan!.vadicheNave ?? "";
+      andajeGhareController.text = vastiDataByIdModel!.vastisarvekshan!.andajeGhare ?? "";
+      gaavSamitiYesNo = int.parse(vastiDataByIdModel!.vastisarvekshan!.vastiShakhaSamiti == null ||
+              vastiDataByIdModel!.vastisarvekshan!.vastiShakhaSamiti! == "null" ||
+              vastiDataByIdModel!.vastisarvekshan!.vastiShakhaSamiti == ""
+          ? "2"
+          : vastiDataByIdModel!.vastisarvekshan!.vastiShakhaSamiti!);
+      beforsanghaonnowisoff = vastiDataByIdModel!.vastisarvekshan!.beforeShakhaSaptahikIsOnNowOff == null ? 2 : vastiDataByIdModel!.vastisarvekshan!.beforeShakhaSaptahikIsOnNowOff;
+      kuthalaVarshiDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarKuthalyavarsi ?? [];
+      vastiChatahuSimaController.text = vastiDataByIdModel!.vastisarvekshan!.vasticyacatuSima ?? "";
+      jagranShreniEnteredDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarJaagaranshreneesthiti ?? [];
+      enteredDataListGatividhi = vastiDataByIdModel!.vastisarvekshan!.vastisarGatividhikaryasthiti ?? [];
+      enteredVasahatPrakarDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarVasahatprakara ?? [];
+      enteredVividhBhashaBolnareDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarVividhaprakara ?? [];
+      enteredKontyaPraantacheDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarKonatyaprantache ?? [];
+      enteredreligionDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarReligion ?? [];
+      upasnaSthalDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarupaasana ?? [];
+      sajjanShaktiDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarsajjanshakti ?? [];
+      anyaPrabhaviLokDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarAnyaprabhavilokam ?? [];
+      vastitSajarHonareSanDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarVastitamahatvacesana ?? [];
+      vastitSajarHonareSamajikKaryakramDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarVastitasajaraSamajikkaryakram ?? [];
+      step1completepercentage = vastiDataByIdModel!.vastisarvekshan!.step1completepercentage;
+      step1pendingpoints = vastiDataByIdModel!.vastisarvekshan!.step1pendingpoints;
 
       /// STEP 3 FORM DATA =====================================================================================================
-      vastiPrashnaGarjaDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarVastitilasamajika ?? [];
-      dharmikNetrutvaDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisardhaarmiknetrtav ?? [];
-      durjanShaktiDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisardurjanshakti ?? [];
-      hinduVeerYadiDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarHinduvirayadi ?? [];
-      step3completepercentage =
-          vastiDataByIdModel!.vastisarvekshan!.step3completepercentage;
-      durjanShaktiYesNo =
-          vastiDataByIdModel!.vastisarvekshan!.durjanShaktiYesNo!;
-      step3pendingpoints =
-          vastiDataByIdModel!.vastisarvekshan!.step3pendingpoints;
+      vastiPrashnaGarjaDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarVastitilasamajika ?? [];
+      dharmikNetrutvaDataList = vastiDataByIdModel!.vastisarvekshan!.vastisardhaarmiknetrtav ?? [];
+      durjanShaktiDataList = vastiDataByIdModel!.vastisarvekshan!.vastisardurjanshakti ?? [];
+      hinduVeerYadiDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarHinduvirayadi ?? [];
+      step3completepercentage = vastiDataByIdModel!.vastisarvekshan!.step3completepercentage;
+      durjanShaktiYesNo = vastiDataByIdModel!.vastisarvekshan!.durjanShaktiYesNo!;
+      step3pendingpoints = vastiDataByIdModel!.vastisarvekshan!.step3pendingpoints;
       // ============================================================================================================================================================================
-      _isStep1Completed =
-          vastiDataByIdModel!.vastisarvekshan!.stepOneComplete ?? true;
-      _isStep2Completed =
-          vastiDataByIdModel!.vastisarvekshan!.stepTwoComplete ?? true;
-      print(
-          "_isStep1Completed $_isStep1Completed ----   _isStep2Completed $_isStep2Completed");
+      _isStep1Completed = vastiDataByIdModel!.vastisarvekshan!.stepOneComplete ?? true;
+      _isStep2Completed = vastiDataByIdModel!.vastisarvekshan!.stepTwoComplete ?? true;
+      print("_isStep1Completed $_isStep1Completed ----   _isStep2Completed $_isStep2Completed");
     });
   }
 
@@ -242,6 +169,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
       _linkedmandal = null;
       _linkedgraam = null;
       _linkedgraamValue = null;
+      isFemale = null;
       isVastiSearch = false;
       selctedLevelName = '';
     });
@@ -380,61 +308,48 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
     populatelinkedVibhaagDropdown('');
     if (!mounted) return;
     _baithakTypes = data;
-    _baithakTypes = _baithakTypes!
-        .where((element) => element.showAnnualBaithakkey!.contains('1'))
-        .toList();
+    _baithakTypes = _baithakTypes!.where((element) => element.showAnnualBaithakkey!.contains('1')).toList();
     // print("_baithakTypes :-- $_baithakTypes");
     setState(() {});
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedMahaanagarDropdown() async {
-    var data = await Statics.getGeoUnitsByLevelAndParentForMandal(
-        Statics.levels['MahaanagarLevelID'].toString(), '', '', '');
+    var data = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['MahaanagarLevelID'].toString(), '', '', '');
     setState(() {
       _linkedMahaanagar = data;
     });
     return data;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(
-      String vibhaagIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(String vibhaagIDStr) async {
     _linkedNagarValue = null;
-    var data = await Statics.getGeoUnitsByLevelAndParentForMandal(
-        Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
+    var data = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
     setState(() {
       _linkedBhaag = data;
     });
     return data;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(
-      String mahaanagarIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
     _linkedBhaagValue = null;
-    var data = await Statics.getGeoUnitsByLevelAndParentForMandal(
-        Statics.levels['VibhaagLevelID'].toString(),
-        mahaanagarIDStr,
-        (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'),
-        '');
+    var data = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '');
     setState(() {
       _linkedVibhaag = data;
     });
     return data;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(
-      String? bhaagIDStr, String? shaharIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
     _linkedNagarValue = null;
     _linkedNagar = null;
     if (shaharIDStr != null) {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParentForMandal(
-          Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
+      var ngDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
       setState(() {
         _linkedNagar = (ngDD.length > 0 ? ngDD : null);
       });
       return ngDD;
     } else {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParentForMandal(
-          Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
+      var ngDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
       setState(() {
         _linkedNagar = (ngDD.length > 0 ? ngDD : null);
       });
@@ -442,24 +357,20 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
     }
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedMandalDropdown(
-      String nagarIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedMandalDropdown(String nagarIDStr) async {
     _linkedgraamValue = null;
     _linkedmandal = _linkedgraam = null;
-    var mnDD = await Statics.getGeoUnitsByLevelAndParentForMandal(
-        Statics.levels['MandalLevelID'].toString(), nagarIDStr, 'Nagar', '');
+    var mnDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['MandalLevelID'].toString(), nagarIDStr, 'Nagar', '');
     setState(() {
       _linkedmandal = (mnDD.length > 0 ? mnDD : null);
     });
     return mnDD;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedGraamDropdown(
-      String mandalIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedGraamDropdown(String mandalIDStr) async {
     _linkedgraamValue = null;
     print("mandalIDStr mandalIDStr ==> $mandalIDStr");
-    var gmDD = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['GraamLevelID'].toString(), mandalIDStr, 'Mandal', '');
+    var gmDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['GraamLevelID'].toString(), mandalIDStr, 'Mandal', '');
     setState(() {
       _linkedgraam = (gmDD.length > 0 ? gmDD : null);
     });
@@ -483,6 +394,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   }
 
   int total = 0;
+
   void _updateTotal() {
     final int male = int.tryParse(maleController.text) ?? 0;
     final int female = int.tryParse(femaleController.text) ?? 0;
@@ -492,21 +404,18 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   }
 
   void _handleTabSelection() {
-    print(
-        "_tabController.index ${_tabController.index}----- _isStep1Completed ${_isStep1Completed}");
+    print("_tabController.index ${_tabController.index}----- _isStep1Completed ${_isStep1Completed}");
     if (_tabController.index == 1 && !_isStep1Completed!) {
-      showPopupForNaviagtetoOtherPage(context, Statics.getLabel('basicInfo'),
-          Statics.getLabel('OtherInfo'));
+      showPopupForNaviagtetoOtherPage(context, Statics.getLabel('basicInfo'), Statics.getLabel('OtherInfo'));
       _tabController.index = 0;
     }
   }
 
   VastisarvekshanDropDownDataModel? vastisarvekshanDropDownDataModel;
+
   Future<void> fetchVastiSurveyDropdownData() async {
     try {
-      vastisarvekshanDropDownDataModel =
-          await Statics.getVastiSurveyDropDownList(
-              Statics.userDetails["userID"]);
+      vastisarvekshanDropDownDataModel = await Statics.getVastiSurveyDropDownList(Statics.userDetails["userID"]);
       setState(() {});
     } catch (e) {
       print('Error fetching notification data: $e');
@@ -599,12 +508,9 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
           child: TextFormField(
             controller: controller,
             keyboardType: keyboardType,
-            inputFormatters: keyboardType == TextInputType.number
-                ? [FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*$'))]
-                : [],
+            inputFormatters: keyboardType == TextInputType.number ? [FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*$'))] : [],
             decoration: InputDecoration(
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
               contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               filled: true,
               fillColor: Colors.white,
@@ -619,9 +525,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
               }
             },
             maxLength: maxInput,
-            buildCounter: (context,
-                    {int? currentLength, int? maxLength, bool? isFocused}) =>
-                null,
+            buildCounter: (context, {int? currentLength, int? maxLength, bool? isFocused}) => null,
           ),
         ),
         SizedBox(height: 10),
@@ -728,8 +632,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
           text: TextSpan(
             children: [
               TextSpan(
-                text:
-                    "${questionNumber != null ? "$questionNumber. " : ""}$question",
+                text: "${questionNumber != null ? "$questionNumber. " : ""}$question",
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
@@ -823,16 +726,13 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
     Masterdata? selectedValue,
     Function(Masterdata?)? onSelectionChanged,
   }) {
-    List<Masterdata> filteredList = dataModel.masterdata!
-        .where((item) => item.typename == filterTypeName)
-        .toList();
+    List<Masterdata> filteredList = dataModel.masterdata!.where((item) => item.typename == filterTypeName).toList();
 
     Masterdata? selectedItem = selectedValue;
     if (selectedItem == null && editId != null) {
       try {
         selectedItem = filteredList.firstWhere((item) => item.id == editId);
-        onItemSelected(
-            selectedItem.id, selectedItem.value, selectedItem.isOther);
+        onItemSelected(selectedItem.id, selectedItem.value, selectedItem.isOther);
         if (onSelectionChanged != null) {
           onSelectionChanged(selectedItem);
         }
@@ -867,8 +767,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
               items: filteredList.map((Masterdata item) {
                 return DropdownMenuItem<Masterdata>(
                   value: item,
-                  child: Text(item.value ?? "",
-                      style: TextStyle(color: Colors.black)),
+                  child: Text(item.value ?? "", style: TextStyle(color: Colors.black)),
                 );
               }).toList(),
               onChanged: (Masterdata? newValue) {
@@ -886,8 +785,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
 
 // ================================================   BASIC INFO FORM =================================================================================================================================
   Widget _buildStep1() {
-    int total = (int.tryParse(maleController.text) ?? 0) +
-        (int.tryParse(femaleController.text) ?? 0);
+    int total = (int.tryParse(maleController.text) ?? 0) + (int.tryParse(femaleController.text) ?? 0);
     Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: Column(
@@ -912,10 +810,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                   backgroundColor: Colors.transparent,
                   headerBuilder: (BuildContext context, bool isExpanded) {
                     return ListTile(
-                      title: Text(Statics.getLabel('gaavNivada'),
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold)),
+                      title: Text(Statics.getLabel('gaavNivada'), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
                       trailing: IconButton(
                           onPressed: () {
                             resetData();
@@ -932,20 +827,12 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       children: [
                         if (_linkedVibhaag != null)
                           DropdownButtonFormField(
-                            decoration: InputDecoration(
-                                labelText: "${Statics.getLabel('Vibhaag')}"),
+                            decoration: InputDecoration(labelText: "${Statics.getLabel('Vibhaag')}"),
                             isExpanded: true,
-                            value: _linkedVibhaagValue == ""
-                                ? null
-                                : _linkedVibhaagValue,
-                            items: _linkedVibhaag!
-                                .map((bg) => DropdownMenuItem(
-                                    value: bg.geoUnitID.toString(),
-                                    child: Text(bg.name!)))
-                                .toList(),
+                            value: _linkedVibhaagValue == "" ? null : _linkedVibhaagValue,
+                            items: _linkedVibhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                             onChanged: (value) {
-                              final selectedItem = _linkedVibhaag!.firstWhere(
-                                  (bg) => bg.geoUnitID.toString() == value);
+                              final selectedItem = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                               print(value);
                               setState(() {
                                 _linkedVibhaagValue = value;
@@ -958,8 +845,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 selctedLevel = 'Vibhaag';
                               });
                               print("Selected Id: $value");
-                              print(
-                                  "Selected Level Name: ${selectedItem.name}");
+                              print("Selected Level Name: ${selectedItem.name}");
                             },
                           ),
                         SizedBox(
@@ -967,20 +853,12 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         ),
                         if (_linkedBhaag != null)
                           DropdownButtonFormField(
-                            decoration: InputDecoration(
-                                labelText: "${Statics.getLabel('Bhaag')}"),
+                            decoration: InputDecoration(labelText: "${Statics.getLabel('Bhaag')}"),
                             isExpanded: true,
-                            value: _linkedBhaagValue == ""
-                                ? null
-                                : _linkedBhaagValue,
-                            items: _linkedBhaag!
-                                .map((bg) => DropdownMenuItem(
-                                    value: bg.geoUnitID.toString(),
-                                    child: Text(bg.name!)))
-                                .toList(),
+                            value: _linkedBhaagValue == "" ? null : _linkedBhaagValue,
+                            items: _linkedBhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                             onChanged: (value) {
-                              final selectedItem = _linkedBhaag!.firstWhere(
-                                  (bg) => bg.geoUnitID.toString() == value);
+                              final selectedItem = _linkedBhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                               setState(() {
                                 _linkedBhaagValue = value;
                                 populatelinkedNagarDropdown(value, null);
@@ -989,8 +867,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 selctedLevel = 'Bhaag';
                               });
                               print("Selected Id: $value");
-                              print(
-                                  "Selected Level Name: ${selectedItem.name}");
+                              print("Selected Level Name: ${selectedItem.name}");
                             },
                           ),
                         SizedBox(
@@ -998,20 +875,12 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         ),
                         if (_linkedNagar != null && _linkedNagar!.length > 0)
                           DropdownButtonFormField(
-                            decoration: InputDecoration(
-                                labelText: "${Statics.getLabel('taalukaa')}"),
+                            decoration: InputDecoration(labelText: "${Statics.getLabel('taalukaa')}"),
                             isExpanded: true,
-                            value: _linkedNagarValue == ""
-                                ? null
-                                : _linkedNagarValue,
-                            items: _linkedNagar!
-                                .map((bg) => DropdownMenuItem(
-                                    value: bg.geoUnitID.toString(),
-                                    child: Text(bg.name!)))
-                                .toList(),
+                            value: _linkedNagarValue == "" ? null : _linkedNagarValue,
+                            items: _linkedNagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                             onChanged: (value) {
-                              final selectedItem = _linkedNagar!.firstWhere(
-                                  (bg) => bg.geoUnitID.toString() == value);
+                              final selectedItem = _linkedNagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                               setState(() {
                                 _linkedNagarValue = value;
                                 populatelinkedMandalDropdown(value!);
@@ -1020,8 +889,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 selctedLevel = 'Nagar';
                               });
                               print("Selected Id: $value");
-                              print(
-                                  "Selected Level Name: ${selectedItem.name}");
+                              print("Selected Level Name: ${selectedItem.name}");
                             },
                           ),
                         if (_linkedNagar != null && _linkedNagar!.length > 0)
@@ -1030,20 +898,12 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           ),
                         if (_linkedmandal != null && _linkedmandal!.length > 0)
                           DropdownButtonFormField(
-                            decoration: InputDecoration(
-                                labelText: "${Statics.getLabel('Mandal')}"),
+                            decoration: InputDecoration(labelText: "${Statics.getLabel('Mandal')}"),
                             isExpanded: true,
-                            value: _linkedmandalValue == ""
-                                ? null
-                                : _linkedmandalValue,
-                            items: _linkedmandal!
-                                .map((bg) => DropdownMenuItem(
-                                    value: bg.geoUnitID.toString(),
-                                    child: Text(bg.name!)))
-                                .toList(),
+                            value: _linkedmandalValue == "" ? null : _linkedmandalValue,
+                            items: _linkedmandal!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                             onChanged: (value) {
-                              final selectedItem = _linkedmandal!.firstWhere(
-                                  (bg) => bg.geoUnitID.toString() == value);
+                              final selectedItem = _linkedmandal!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                               setState(() {
                                 _linkedmandalValue = value;
                                 selctedLevelId = value;
@@ -1052,8 +912,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 populatelinkedGraamDropdown(value!);
                               });
                               print("Selected Id: $value");
-                              print(
-                                  "Selected Level Name: ${selectedItem.name}");
+                              print("Selected Level Name: ${selectedItem.name}");
                             },
                           ),
                         if (_linkedmandal != null && _linkedmandal!.length > 0)
@@ -1062,20 +921,12 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           ),
                         if (_linkedgraam != null && _linkedgraam!.length > 0)
                           DropdownButtonFormField(
-                            decoration: InputDecoration(
-                                labelText: "${Statics.getLabel('Graam')}"),
+                            decoration: InputDecoration(labelText: "${Statics.getLabel('Graam')}"),
                             isExpanded: true,
-                            value: _linkedgraamValue == ""
-                                ? null
-                                : _linkedgraamValue,
-                            items: _linkedgraam!
-                                .map((bg) => DropdownMenuItem(
-                                    value: bg.geoUnitID.toString(),
-                                    child: Text(bg.name!)))
-                                .toList(),
+                            value: _linkedgraamValue == "" ? null : _linkedgraamValue,
+                            items: _linkedgraam!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                             onChanged: (value) {
-                              final selectedItem = _linkedgraam!.firstWhere(
-                                  (bg) => bg.geoUnitID.toString() == value);
+                              final selectedItem = _linkedgraam!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                               setState(() {
                                 _linkedgraamValue = value;
                                 selctedLevelId = value;
@@ -1083,8 +934,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 selctedLevel = 'Graam';
                               });
                               print("Selected Id: $value");
-                              print(
-                                  "Selected Level Name: ${selectedItem.name}");
+                              print("Selected Level Name: ${selectedItem.name}");
                             },
                           ),
                         if (_linkedgraam != null && _linkedgraam!.length > 0)
@@ -1095,27 +945,20 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           Align(
                             alignment: Alignment.center,
                             child: ElevatedButton(
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStatePropertyAll(
-                                      Colors.purpleAccent)),
+                              style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.purpleAccent)),
                               onPressed: () {
                                 if (selctedLevel == "Graam") {
                                   setState(() {
                                     isVastiSearch = true;
                                     _isExpanded = false;
                                   });
-                                  print(
-                                      "selctedLevel $selctedLevel -- selctedLevelId $selctedLevelId -- selctedLevelName $selctedLevelName");
+                                  print("selctedLevel $selctedLevel -- selctedLevelId $selctedLevelId -- selctedLevelName $selctedLevelName");
                                   searchVastiData(selctedLevelId);
                                 } else {
-                                  Statics.showToast(
-                                      Statics.getLabel('mandalValidation'));
+                                  Statics.showToast(Statics.getLabel('mandalValidation'));
                                 }
                               },
-                              child: Text("${Statics.getLabel('Filters')}",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold)),
+                              child: Text("${Statics.getLabel('Filters')}", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                             ),
                           )
                       ],
@@ -1149,15 +992,11 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                 ),
               ],
             ),
-          if (selctedLevel == "Graam" &&
-              selctedLevelName != "" &&
-              isVastiSearch == true)
+          if (selctedLevel == "Graam" && selctedLevelName != "" && isVastiSearch == true)
             SizedBox(
               height: 20,
             ),
-          if (selctedLevel == "Graam" &&
-              selctedLevelName != "" &&
-              isVastiSearch == true)
+          if (selctedLevel == "Graam" && selctedLevelName != "" && isVastiSearch == true)
             Container(
                 height: 40,
                 width: double.infinity,
@@ -1171,17 +1010,11 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                   children: [
                     Text(
                       "${Statics.getLabel('gaav')} ->  ",
-                      style: TextStyle(
-                          color: Colors.purpleAccent,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16),
+                      style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                     Text(
                       " $selctedLevelName",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 17),
+                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17),
                     ),
                   ],
                 )),
@@ -1192,23 +1025,16 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                 padding: EdgeInsets.symmetric(vertical: 10),
                 child: Column(
                   children: [
-                    dynamicProgressBar(
-                        context: context,
-                        value: double.parse(step1completepercentage.toString()),
-                        detailListItems: step1pendingpoints!.split(',')),
+                    dynamicProgressBar(context: context, value: double.parse(step1completepercentage.toString()), detailListItems: step1pendingpoints!.split(',')),
                     SizedBox(
                       height: 10,
                     ),
                     InkWell(
                       onTap: () {
                         // Filter out empty or whitespace-only strings
-                        final filteredDetails = step1pendingpoints!
-                            .split(',')
-                            .where((item) => item.trim().isNotEmpty)
-                            .toList();
+                        final filteredDetails = step1pendingpoints!.split(',').where((item) => item.trim().isNotEmpty).toList();
 
-                        print(
-                            "Filtered step1pendingpoints!.split(','): $filteredDetails");
+                        print("Filtered step1pendingpoints!.split(','): $filteredDetails");
 
                         if (filteredDetails.isEmpty) {
                           Statics.showToast(Statics.getLabel('allInfoSubmit'));
@@ -1219,8 +1045,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           context: context,
                           builder: (ctx) {
                             return Dialog(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                               backgroundColor: Colors.white,
                               child: Padding(
                                 padding: const EdgeInsets.all(20),
@@ -1229,11 +1054,9 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   children: [
                                     // Icon and Title
                                     Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Icon(Icons.warning_amber_rounded,
-                                            color: Colors.red, size: 30),
+                                        Icon(Icons.warning_amber_rounded, color: Colors.red, size: 30),
                                         SizedBox(width: 8),
                                         Text(
                                           Statics.getLabel('remainingQuestion'),
@@ -1273,16 +1096,12 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                           backgroundColor: Colors.red,
                                           foregroundColor: Colors.white,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 12),
+                                          padding: EdgeInsets.symmetric(vertical: 12),
                                         ),
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(),
-                                        child:
-                                            Text(Statics.getLabel('bandKara')),
+                                        onPressed: () => Navigator.of(context).pop(),
+                                        child: Text(Statics.getLabel('bandKara')),
                                       ),
                                     ),
                                   ],
@@ -1326,15 +1145,13 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("• ",
-                        style: TextStyle(fontSize: 18, color: Colors.grey)),
+                    Text("• ", style: TextStyle(fontSize: 18, color: Colors.grey)),
                     Wrap(
                       alignment: WrapAlignment.center,
                       spacing: 10,
                       runSpacing: 10,
                       children: const [
-                        Icon(Icons.remove_red_eye,
-                            color: Colors.green, size: 15),
+                        Icon(Icons.remove_red_eye, color: Colors.green, size: 15),
                         Icon(Icons.edit, color: Colors.blue, size: 15),
                         Icon(Icons.delete, color: Colors.red, size: 15),
                       ],
@@ -1355,8 +1172,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("• ",
-                        style: TextStyle(fontSize: 18, color: Colors.grey)),
+                    Text("• ", style: TextStyle(fontSize: 18, color: Colors.grey)),
                     Expanded(
                       child: Text(
                         "${Statics.getLabel('wholeNoValidation')}",
@@ -1393,8 +1209,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text:
-                                      '${Statics.getLabel('vadipadyacheInfo')}',
+                                  text: '${Statics.getLabel('vadipadyacheInfo')}',
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
@@ -1415,8 +1230,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           InkWell(
                             onTap: () {
                               if (isVastiSearch) {
-                                showVadiGharLoksankhyaPopup(context,
-                                    onDataChanged: () {
+                                showVadiGharLoksankhyaPopup(context, onDataChanged: () {
                                   setState(() {});
                                 });
                               } else {
@@ -1428,22 +1242,15 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             child: Container(
                               padding: EdgeInsets.symmetric(vertical: 5),
                               width: 100,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Colors.purpleAccent.shade100),
-                                  color: Colors.purpleAccent.withOpacity(0.7),
-                                  borderRadius: BorderRadius.circular(15)),
+                              decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                               child: Center(
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Icon(Icons.add,
-                                        color: Colors.white, size: 15),
+                                    Icon(Icons.add, color: Colors.white, size: 15),
                                     Text(
                                       "${Statics.getLabel('AddButton')}",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
+                                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
@@ -1454,14 +1261,11 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       ),
                       SizedBox(height: 10),
                       GestureDetector(
-                        behavior: HitTestBehavior
-                            .translucent, // ensures tap detection even on empty areas
+                        behavior: HitTestBehavior.translucent, // ensures tap detection even on empty areas
                         onTap: () {
-                          FocusScope.of(context)
-                              .unfocus(); // dismiss keyboard if any
+                          FocusScope.of(context).unfocus(); // dismiss keyboard if any
                           setState(() {
-                            selectedvadiGharLoksankhyaIndex =
-                                null; // deselect row
+                            selectedvadiGharLoksankhyaIndex = null; // deselect row
                           });
                         },
                         child: Container(
@@ -1477,13 +1281,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               width: MediaQuery.of(context).size.width * 1.5,
                               child: DataTable(
                                 showCheckboxColumn: false,
-                                headingRowColor: MaterialStatePropertyAll(
-                                    Colors.purple.shade50),
+                                headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
                                 columnSpacing: 30,
                                 horizontalMargin: 16,
-                                headingTextStyle: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87),
+                                headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                                 columns: [
                                   DataColumn(
                                       label: Text(
@@ -1498,39 +1299,30 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     "${Statics.getLabel('andajeLoksankhya')}",
                                   )),
                                 ],
-                                rows: vadiGharLoksankhyaEnteredDataList!
-                                    .asMap()
-                                    .entries
-                                    .where((entry) => entry.value.isactive == 1)
-                                    .map((entry) {
+                                rows: vadiGharLoksankhyaEnteredDataList!.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                                   int index = entry.key;
                                   var data = entry.value;
-                                  bool isSelected =
-                                      selectedvadiGharLoksankhyaIndex == index;
+                                  bool isSelected = selectedvadiGharLoksankhyaIndex == index;
 
                                   return DataRow(
                                     selected: isSelected,
-                                    color: MaterialStateProperty.resolveWith<
-                                        Color?>(
+                                    color: MaterialStateProperty.resolveWith<Color?>(
                                       (Set<MaterialState> states) {
-                                        if (isSelected)
-                                          return Colors.yellow.shade100;
+                                        if (isSelected) return Colors.yellow.shade100;
                                         return null;
                                       },
                                     ),
                                     onSelectChanged: (bool? selected) {
                                       if (selected != null && selected) {
                                         setState(() {
-                                          selectedvadiGharLoksankhyaIndex =
-                                              index;
+                                          selectedvadiGharLoksankhyaIndex = index;
                                         });
                                       }
                                     },
                                     cells: [
                                       DataCell(Text(data.vadiCheNav ?? "")),
                                       DataCell(Text(data.andajeGhar ?? "")),
-                                      DataCell(
-                                          Text(data.andajeLoksankhya ?? "")),
+                                      DataCell(Text(data.andajeLoksankhya ?? "")),
                                     ],
                                   );
                                 }).toList(),
@@ -1550,16 +1342,13 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             InkWell(
                               onTap: () {
                                 if (selectedvadiGharLoksankhyaIndex != null) {
-                                  var selectedData =
-                                      vadiGharLoksankhyaEnteredDataList![
-                                          selectedvadiGharLoksankhyaIndex!];
+                                  var selectedData = vadiGharLoksankhyaEnteredDataList![selectedvadiGharLoksankhyaIndex!];
                                   showDialog(
                                     context: context,
                                     builder: (context) {
                                       return AlertDialog(
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
+                                          borderRadius: BorderRadius.circular(20),
                                         ),
                                         backgroundColor: Colors.white,
                                         title: Center(
@@ -1574,45 +1363,27 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                         ),
                                         content: Column(
                                           mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Divider(
-                                                thickness: 1,
-                                                color: Colors
-                                                    .purpleAccent.shade100),
+                                            Divider(thickness: 1, color: Colors.purpleAccent.shade100),
                                             SizedBox(height: 12),
-                                            _buildInfoRow(
-                                                "${Statics.getLabel('vadipadyacheNaav')}",
-                                                selectedData.vadiCheNav),
+                                            _buildInfoRow("${Statics.getLabel('vadipadyacheNaav')}", selectedData.vadiCheNav),
                                             SizedBox(height: 12),
-                                            _buildInfoRow(
-                                                "${Statics.getLabel('andaajeGhar')}",
-                                                selectedData.andajeGhar),
+                                            _buildInfoRow("${Statics.getLabel('andaajeGhar')}", selectedData.andajeGhar),
                                             SizedBox(height: 12),
-                                            _buildInfoRow(
-                                                "${Statics.getLabel('andajeLoksankhya')}",
-                                                selectedData.andajeLoksankhya),
+                                            _buildInfoRow("${Statics.getLabel('andajeLoksankhya')}", selectedData.andajeLoksankhya),
                                           ],
                                         ),
-                                        actionsAlignment:
-                                            MainAxisAlignment.center,
+                                        actionsAlignment: MainAxisAlignment.center,
                                         actions: [
                                           ElevatedButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                            child: Text(
-                                                "${Statics.getLabel('bandKara')}",
-                                                style: TextStyle(
-                                                    color: Colors.white)),
+                                            onPressed: () => Navigator.pop(context),
+                                            child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                             style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  Colors.purpleAccent,
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 24, vertical: 12),
+                                              backgroundColor: Colors.purpleAccent,
+                                              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                               shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
+                                                borderRadius: BorderRadius.circular(12),
                                               ),
                                             ),
                                           ),
@@ -1622,23 +1393,19 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   );
                                 }
                               },
-                              child: Icon(Icons.remove_red_eye,
-                                  color: Colors.green, size: 20),
+                              child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                             ),
                             SizedBox(
                               width: 20,
                             ),
                             InkWell(
                               onTap: () {
-                                showVadiGharLoksankhyaPopup(context,
-                                    onDataChanged: () {
+                                showVadiGharLoksankhyaPopup(context, onDataChanged: () {
                                   setState(() {});
                                 }, editIndex: selectedvadiGharLoksankhyaIndex);
-                                print(
-                                    "selectedJagranShreniStithiRowIndex --> $selectedvadiGharLoksankhyaIndex");
+                                print("selectedJagranShreniStithiRowIndex --> $selectedvadiGharLoksankhyaIndex");
                               },
-                              child: Icon(Icons.edit,
-                                  color: Colors.blue, size: 20),
+                              child: Icon(Icons.edit, color: Colors.blue, size: 20),
                             ),
                             SizedBox(
                               width: 20,
@@ -1663,8 +1430,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                       ),
                                     ),
                                     content: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10.0),
+                                      padding: const EdgeInsets.symmetric(vertical: 10.0),
                                       child: Text(
                                         "${Statics.getLabel('deleteconfirmText')}",
                                         textAlign: TextAlign.center,
@@ -1674,19 +1440,16 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                         ),
                                       ),
                                     ),
-                                    actionsAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                    actionsAlignment: MainAxisAlignment.spaceEvenly,
                                     actions: [
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.grey.shade300,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
                                         ),
-                                        onPressed: () =>
-                                            Navigator.pop(context, false),
+                                        onPressed: () => Navigator.pop(context, false),
                                         child: Text(
                                           "${Statics.getLabel('ConfirmationNo')}",
                                           style: TextStyle(color: Colors.black),
@@ -1696,12 +1459,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.redAccent,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
                                         ),
-                                        onPressed: () =>
-                                            Navigator.pop(context, true),
+                                        onPressed: () => Navigator.pop(context, true),
                                         child: Text(
                                           "${Statics.getLabel('ConfirmationYes')}",
                                           style: TextStyle(color: Colors.white),
@@ -1710,27 +1471,20 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     ],
                                   ),
                                 );
-                                if (shouldDelete == true &&
-                                    selectedvadiGharLoksankhyaIndex != null) {
+                                if (shouldDelete == true && selectedvadiGharLoksankhyaIndex != null) {
                                   setState(() {
-                                    vadiGharLoksankhyaEnteredDataList![
-                                            selectedvadiGharLoksankhyaIndex!]
-                                        .isactive = 0;
+                                    vadiGharLoksankhyaEnteredDataList![selectedvadiGharLoksankhyaIndex!].isactive = 0;
                                     selectedvadiGharLoksankhyaIndex = null;
                                   });
                                 }
                               },
-                              child: Icon(Icons.delete,
-                                  color: Colors.red, size: 20),
+                              child: Icon(Icons.delete, color: Colors.red, size: 20),
                             ),
                           ],
                         ),
                       ),
                       SizedBox(height: 10),
-                      textControllerField2(
-                          name: "${Statics.getLabel('SarpanchacheNaav')}",
-                          controller: sarpanchNameController,
-                          imp: "*"),
+                      textControllerField2(name: "${Statics.getLabel('SarpanchacheNaav')}", controller: sarpanchNameController, imp: "*"),
                       SizedBox(height: 10),
                       textControllerField2(
                         name: "${Statics.getLabel('doorBhash')}",
@@ -1813,10 +1567,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           SizedBox(height: 10),
                           Text(
                             '${Statics.getLabel('ekunLoksankhya')}: $total',
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.purple),
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.purple),
                           ),
                         ],
                       ),
@@ -1825,7 +1576,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                 ),
               ],
             ),
-          ), // =====================================  SANGHA KARYA  STITHI ==================================================================================
+          ),
+          // =====================================  SANGHA KARYA  STITHI ==================================================================================
           mainContainer(
             "${Statics.getLabel('sanghakarya')}",
             Column(
@@ -1835,8 +1587,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                   child: Column(
                     children: [
                       yesNoRadioButton(
-                          question:
-                              "${Statics.getLabel('purvuKadhitarishakha')}",
+                          question: "${Statics.getLabel('purvuKadhitarishakha')}",
                           selectedOption: beforsanghaonnowisoff ?? 2,
                           onChanged: (value) {
                             if (isVastiSearch) {
@@ -1856,14 +1607,12 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           children: [
                             Text(
                               "${Statics.getLabel('tapshil')}",
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
+                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                             ),
                             InkWell(
                               onTap: () {
                                 if (isVastiSearch) {
-                                  showKuthalaVarshiPopup(context,
-                                      onDataChanged: () => setState(() {}));
+                                  showKuthalaVarshiPopup(context, onDataChanged: () => setState(() {}));
                                 } else {
                                   showPopupForVastiValidation(
                                     context,
@@ -1873,22 +1622,16 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               child: Container(
                                 padding: EdgeInsets.symmetric(vertical: 5),
                                 width: 100,
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: Colors.purpleAccent.shade100),
-                                    color: Colors.purpleAccent.withOpacity(0.7),
-                                    borderRadius: BorderRadius.circular(15)),
+                                decoration:
+                                    BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                                 child: Center(
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Icon(Icons.add,
-                                          color: Colors.white, size: 15),
+                                      Icon(Icons.add, color: Colors.white, size: 15),
                                       Text(
                                         "${Statics.getLabel('AddButton')}",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
+                                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),
@@ -1904,8 +1647,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.black54),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(15)),
+                            borderRadius: const BorderRadius.all(Radius.circular(15)),
                           ),
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
@@ -1913,11 +1655,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               width: MediaQuery.of(context).size.width * 1,
                               child: DataTable(
                                 showCheckboxColumn: false,
-                                headingRowColor: MaterialStatePropertyAll(
-                                    Colors.purple.shade50),
-                                headingTextStyle: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87),
+                                headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+                                headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                                 columns: [
                                   DataColumn(
                                       label: Center(
@@ -1935,45 +1674,30 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     "${Statics.getLabel('SankalpCompletionYear')}",
                                   ))),
                                 ],
-                                rows: (kuthalaVarshiDataList != null &&
-                                        kuthalaVarshiDataList!.isNotEmpty)
-                                    ? kuthalaVarshiDataList!
-                                        .asMap()
-                                        .entries
-                                        .where((entry) =>
-                                            entry.value.isactive == 1)
-                                        .map((entry) {
+                                rows: (kuthalaVarshiDataList != null && kuthalaVarshiDataList!.isNotEmpty)
+                                    ? kuthalaVarshiDataList!.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                                         int index = entry.key;
                                         var data = entry.value;
-                                        bool isSelected =
-                                            selectedKuthalaVarshiIdIndex ==
-                                                index;
+                                        bool isSelected = selectedKuthalaVarshiIdIndex == index;
                                         return DataRow(
                                           selected: isSelected,
-                                          color: MaterialStateProperty
-                                              .resolveWith<Color?>(
+                                          color: MaterialStateProperty.resolveWith<Color?>(
                                             (Set<MaterialState> states) {
-                                              if (isSelected)
-                                                return Colors.yellow.shade100;
+                                              if (isSelected) return Colors.yellow.shade100;
                                               return null;
                                             },
                                           ),
                                           onSelectChanged: (bool? selected) {
                                             if (selected != null && selected) {
                                               setState(() {
-                                                selectedKuthalaVarshiIdIndex =
-                                                    index;
-                                                print(
-                                                    " selectedKuthalaVarshiIdIndex Data :- $data");
+                                                selectedKuthalaVarshiIdIndex = index;
+                                                print(" selectedKuthalaVarshiIdIndex Data :- $data");
                                               });
                                             }
                                           },
                                           cells: [
-                                            DataCell(Text(
-                                                data.selectedDropdownValueName ??
-                                                    '')),
-                                            DataCell(
-                                                Text(data.prakarName ?? '')),
+                                            DataCell(Text(data.selectedDropdownValueName ?? '')),
+                                            DataCell(Text(data.prakarName ?? '')),
                                             DataCell(Text(
                                               data.isShaakhaa == 1
                                                   ? data.shaakhaa ?? ''
@@ -2001,15 +1725,13 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               InkWell(
                                 onTap: () {
                                   if (selectedKuthalaVarshiIdIndex != null) {
-                                    var selectedData = kuthalaVarshiDataList![
-                                        selectedKuthalaVarshiIdIndex!];
+                                    var selectedData = kuthalaVarshiDataList![selectedKuthalaVarshiIdIndex!];
                                     showDialog(
                                       context: context,
                                       builder: (context) {
                                         return AlertDialog(
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
+                                            borderRadius: BorderRadius.circular(20),
                                           ),
                                           backgroundColor: Colors.white,
                                           title: Center(
@@ -2024,54 +1746,33 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                           ),
                                           content: Column(
                                             mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Divider(
-                                                  thickness: 1,
-                                                  color: Colors
-                                                      .purpleAccent.shade100),
+                                              Divider(thickness: 1, color: Colors.purpleAccent.shade100),
                                               SizedBox(height: 12),
-                                              _buildInfoRow(
-                                                  "${Statics.getLabel('Vayogat')}",
-                                                  selectedData
-                                                      .selectedDropdownValueName),
+                                              _buildInfoRow("${Statics.getLabel('Vayogat')}", selectedData.selectedDropdownValueName),
                                               SizedBox(height: 12),
-                                              _buildInfoRow(
-                                                  "${Statics.getLabel('shaakhaPrakar')}",
-                                                  selectedData.prakarName),
+                                              _buildInfoRow("${Statics.getLabel('shaakhaPrakar')}", selectedData.prakarName),
                                               SizedBox(height: 12),
                                               _buildInfoRow(
                                                   "${Statics.getLabel('SankalpCompletionYear')}",
                                                   selectedData.isShaakhaa == 1
                                                       ? selectedData.shaakhaa
-                                                      : selectedData
-                                                                  .isShaakhaa ==
-                                                              2
-                                                          ? selectedData
-                                                              .saptahik
+                                                      : selectedData.isShaakhaa == 2
+                                                          ? selectedData.saptahik
                                                           : ""),
                                             ],
                                           ),
-                                          actionsAlignment:
-                                              MainAxisAlignment.center,
+                                          actionsAlignment: MainAxisAlignment.center,
                                           actions: [
                                             ElevatedButton(
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                              child: Text(
-                                                  "${Statics.getLabel('bandKara')}",
-                                                  style: TextStyle(
-                                                      color: Colors.white)),
+                                              onPressed: () => Navigator.pop(context),
+                                              child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                               style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    Colors.purpleAccent,
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 24,
-                                                    vertical: 12),
+                                                backgroundColor: Colors.purpleAccent,
+                                                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
+                                                  borderRadius: BorderRadius.circular(12),
                                                 ),
                                               ),
                                             ),
@@ -2081,20 +1782,16 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     );
                                   }
                                 },
-                                child: Icon(Icons.remove_red_eye,
-                                    color: Colors.green, size: 20),
+                                child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                               ),
                               SizedBox(
                                 width: 20,
                               ),
                               InkWell(
                                 onTap: () {
-                                  showKuthalaVarshiPopup(context,
-                                      onDataChanged: () => setState(() {}),
-                                      editIndex: selectedKuthalaVarshiIdIndex);
+                                  showKuthalaVarshiPopup(context, onDataChanged: () => setState(() {}), editIndex: selectedKuthalaVarshiIdIndex);
                                 },
-                                child: Icon(Icons.edit,
-                                    color: Colors.blue, size: 20),
+                                child: Icon(Icons.edit, color: Colors.blue, size: 20),
                               ),
                               SizedBox(
                                 width: 20,
@@ -2119,8 +1816,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                         ),
                                       ),
                                       content: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10.0),
+                                        padding: const EdgeInsets.symmetric(vertical: 10.0),
                                         child: Text(
                                           "${Statics.getLabel('deleteconfirmText')}",
                                           textAlign: TextAlign.center,
@@ -2130,58 +1826,46 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                           ),
                                         ),
                                       ),
-                                      actionsAlignment:
-                                          MainAxisAlignment.spaceEvenly,
+                                      actionsAlignment: MainAxisAlignment.spaceEvenly,
                                       actions: [
                                         ElevatedButton(
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                Colors.grey.shade300,
+                                            backgroundColor: Colors.grey.shade300,
                                             shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
+                                              borderRadius: BorderRadius.circular(12),
                                             ),
                                           ),
-                                          onPressed: () =>
-                                              Navigator.pop(context, false),
+                                          onPressed: () => Navigator.pop(context, false),
                                           child: Text(
                                             "${Statics.getLabel('ConfirmationNo')}",
-                                            style:
-                                                TextStyle(color: Colors.black),
+                                            style: TextStyle(color: Colors.black),
                                           ),
                                         ),
                                         ElevatedButton(
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.redAccent,
                                             shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
+                                              borderRadius: BorderRadius.circular(12),
                                             ),
                                           ),
-                                          onPressed: () =>
-                                              Navigator.pop(context, true),
+                                          onPressed: () => Navigator.pop(context, true),
                                           child: Text(
                                             "${Statics.getLabel('ConfirmationYes')}",
-                                            style:
-                                                TextStyle(color: Colors.white),
+                                            style: TextStyle(color: Colors.white),
                                           ),
                                         ),
                                       ],
                                     ),
                                   );
 
-                                  if (shouldDelete == true &&
-                                      selectedKuthalaVarshiIdIndex != null) {
+                                  if (shouldDelete == true && selectedKuthalaVarshiIdIndex != null) {
                                     setState(() {
-                                      kuthalaVarshiDataList![
-                                              selectedKuthalaVarshiIdIndex!]
-                                          .isactive = 0;
+                                      kuthalaVarshiDataList![selectedKuthalaVarshiIdIndex!].isactive = 0;
                                       selectedKuthalaVarshiIdIndex = null;
                                     });
                                   }
                                 },
-                                child: Icon(Icons.delete,
-                                    color: Colors.red, size: 20),
+                                child: Icon(Icons.delete, color: Colors.red, size: 20),
                               ),
                             ],
                           ),
@@ -2216,11 +1900,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 5),
                         width: 100,
-                        decoration: BoxDecoration(
-                            border:
-                                Border.all(color: Colors.purpleAccent.shade100),
-                            color: Colors.purpleAccent.withOpacity(0.7),
-                            borderRadius: BorderRadius.circular(15)),
+                        decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                         child: Center(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -2228,9 +1908,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               Icon(Icons.add, color: Colors.white, size: 15),
                               Text(
                                 "${Statics.getLabel('AddButton')}",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
@@ -2253,12 +1931,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       width: MediaQuery.of(context).size.width,
                       child: DataTable(
                         showCheckboxColumn: false,
-                        headingRowColor:
-                            MaterialStatePropertyAll(Colors.purple.shade50),
+                        headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
                         columnSpacing: 30,
                         horizontalMargin: 16,
-                        headingTextStyle: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.black87),
+                        headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                         columns: [
                           DataColumn(
                               label: Text(
@@ -2269,15 +1945,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             "${Statics.getLabel('chalavnariSanghatana')}",
                           )),
                         ],
-                        rows: sewaPrakalpaEnteredDataList!
-                            .asMap()
-                            .entries
-                            .where((entry) => entry.value.isactive == 1)
-                            .map((entry) {
+                        rows: sewaPrakalpaEnteredDataList!.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                           int index = entry.key;
                           var data = entry.value;
-                          bool isSelected =
-                              selectedSewaprakalpaRowIndex == index;
+                          bool isSelected = selectedSewaprakalpaRowIndex == index;
 
                           return DataRow(
                             selected: isSelected,
@@ -2295,10 +1966,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               }
                             },
                             cells: [
-                              DataCell(
-                                  Text(data.selectedDropdownValueName ?? "")),
-                              DataCell(
-                                  Text(data.selectedDropdownValueName1 ?? "")),
+                              DataCell(Text(data.selectedDropdownValueName ?? "")),
+                              DataCell(Text(data.selectedDropdownValueName1 ?? "")),
                             ],
                           );
                         }).toList(),
@@ -2317,8 +1986,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       InkWell(
                         onTap: () {
                           if (selectedSewaprakalpaRowIndex != null) {
-                            var selectedData = sewaPrakalpaEnteredDataList![
-                                selectedSewaprakalpaRowIndex!];
+                            var selectedData = sewaPrakalpaEnteredDataList![selectedSewaprakalpaRowIndex!];
                             showDialog(
                               context: context,
                               builder: (context) {
@@ -2339,49 +2007,29 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   ),
                                   content: Column(
                                     mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Divider(
-                                          thickness: 1,
-                                          color: Colors.purpleAccent.shade100),
+                                      Divider(thickness: 1, color: Colors.purpleAccent.shade100),
                                       SizedBox(height: 12),
-                                      _buildInfoRow(
-                                          "${Statics.getLabel('SelectFrequency')}",
-                                          selectedData
-                                              .selectedDropdownValueName),
+                                      _buildInfoRow("${Statics.getLabel('SelectFrequency')}", selectedData.selectedDropdownValueName),
                                       SizedBox(height: 12),
-                                      _buildInfoRow(
-                                          "${Statics.getLabel('otherType')}",
-                                          selectedData
-                                              .otherSewaPrakalpaPrakaar),
+                                      _buildInfoRow("${Statics.getLabel('otherType')}", selectedData.otherSewaPrakalpaPrakaar),
                                       SizedBox(height: 12),
-                                      _buildInfoRow(
-                                          "${Statics.getLabel('chalavnariSansthaSanghatana')}",
-                                          selectedData
-                                              .selectedDropdownValueName1),
+                                      _buildInfoRow("${Statics.getLabel('chalavnariSansthaSanghatana')}", selectedData.selectedDropdownValueName1),
                                       SizedBox(height: 12),
-                                      _buildInfoRow(
-                                          "${Statics.getLabel('chalavnariSansthaSanghatanaOther')}",
-                                          selectedData
-                                              .otherSewaPrakalpaChalavinareShanstha),
+                                      _buildInfoRow("${Statics.getLabel('chalavnariSansthaSanghatanaOther')}", selectedData.otherSewaPrakalpaChalavinareShanstha),
                                     ],
                                   ),
                                   actionsAlignment: MainAxisAlignment.center,
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text(
-                                          "${Statics.getLabel('bandKara')}",
-                                          style:
-                                              TextStyle(color: Colors.white)),
+                                      child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.purpleAccent,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 24, vertical: 12),
+                                        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(12),
                                         ),
                                       ),
                                     ),
@@ -2391,8 +2039,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             );
                           }
                         },
-                        child: Icon(Icons.remove_red_eye,
-                            color: Colors.green, size: 20),
+                        child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                       ),
                       SizedBox(
                         width: 20,
@@ -2402,8 +2049,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           showSewaPrakalpaPopup(context, onDataChanged: () {
                             setState(() {});
                           }, editIndex: selectedSewaprakalpaRowIndex);
-                          print(
-                              "selectedJagranShreniStithiRowIndex --> $selectedSewaprakalpaRowIndex");
+                          print("selectedJagranShreniStithiRowIndex --> $selectedSewaprakalpaRowIndex");
                         },
                         child: Icon(Icons.edit, color: Colors.blue, size: 20),
                       ),
@@ -2430,8 +2076,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 ),
                               ),
                               content: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10.0),
+                                padding: const EdgeInsets.symmetric(vertical: 10.0),
                                 child: Text(
                                   "${Statics.getLabel('deleteconfirmText')}",
                                   textAlign: TextAlign.center,
@@ -2450,8 +2095,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                   ),
-                                  onPressed: () =>
-                                      Navigator.pop(context, false),
+                                  onPressed: () => Navigator.pop(context, false),
                                   child: Text(
                                     "${Statics.getLabel('ConfirmationNo')}",
                                     style: TextStyle(color: Colors.black),
@@ -2474,17 +2118,14 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             ),
                           );
 
-                          if (shouldDelete == true &&
-                              selectedSewaprakalpaRowIndex != null) {
+                          if (shouldDelete == true && selectedSewaprakalpaRowIndex != null) {
                             // setState(() {
                             //   jagranShreniEnteredDataList!
                             //       .removeAt(selectedJagranShreniStithiRowIndex!);
                             //   selectedJagranShreniStithiRowIndex = null;
                             // });
                             setState(() {
-                              sewaPrakalpaEnteredDataList![
-                                      selectedSewaprakalpaRowIndex!]
-                                  .isactive = 0;
+                              sewaPrakalpaEnteredDataList![selectedSewaprakalpaRowIndex!].isactive = 0;
                               selectedSewaprakalpaRowIndex = null;
                             });
                           }
@@ -2524,8 +2165,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       InkWell(
                         onTap: () {
                           if (isVastiSearch) {
-                            showVividhKshetraCheKamePopup(context,
-                                onDataChanged: () {
+                            showVividhKshetraCheKamePopup(context, onDataChanged: () {
                               setState(() {});
                             });
                           } else {
@@ -2537,11 +2177,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 5),
                           width: 100,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.purpleAccent.shade100),
-                              color: Colors.purpleAccent.withOpacity(0.7),
-                              borderRadius: BorderRadius.circular(15)),
+                          decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                           child: Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -2549,9 +2185,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 Icon(Icons.add, color: Colors.white, size: 15),
                                 Text(
                                   "${Statics.getLabel('AddButton')}",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
@@ -2575,13 +2209,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         width: MediaQuery.of(context).size.width,
                         child: DataTable(
                           showCheckboxColumn: false,
-                          headingRowColor:
-                              MaterialStatePropertyAll(Colors.purple.shade50),
+                          headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
                           columnSpacing: 30,
                           horizontalMargin: 16,
-                          headingTextStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87),
+                          headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                           columns: [
                             DataColumn(
                                 label: Text(
@@ -2592,15 +2223,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               "${Statics.getLabel('chalavnariSanghatana')}",
                             )),
                           ],
-                          rows: vividhKshetaCHeKamEnteredDataList!
-                              .asMap()
-                              .entries
-                              .where((entry) => entry.value.isactive == 1)
-                              .map((entry) {
+                          rows: vividhKshetaCHeKamEnteredDataList!.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                             int index = entry.key;
                             var data = entry.value;
-                            bool isSelected =
-                                selectedVastisarVividhKshetracheIndex == index;
+                            bool isSelected = selectedVastisarVividhKshetracheIndex == index;
 
                             return DataRow(
                               selected: isSelected,
@@ -2613,15 +2239,13 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               onSelectChanged: (bool? selected) {
                                 if (selected != null && selected) {
                                   setState(() {
-                                    selectedVastisarVividhKshetracheIndex =
-                                        index;
+                                    selectedVastisarVividhKshetracheIndex = index;
                                   });
                                 }
                               },
                               cells: [
                                 DataCell(Text(data.kaam ?? "")),
-                                DataCell(Text(
-                                    data.chalavnariSansthaSanghatamn ?? "")),
+                                DataCell(Text(data.chalavnariSansthaSanghatamn ?? "")),
                               ],
                             );
                           }).toList(),
@@ -2641,9 +2265,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         InkWell(
                           onTap: () {
                             if (selectedVastisarVividhKshetracheIndex != null) {
-                              var selectedData =
-                                  vividhKshetaCHeKamEnteredDataList![
-                                      selectedVastisarVividhKshetracheIndex!];
+                              var selectedData = vividhKshetaCHeKamEnteredDataList![selectedVastisarVividhKshetracheIndex!];
                               showDialog(
                                 context: context,
                                 builder: (context) {
@@ -2664,22 +2286,13 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     ),
                                     content: Column(
                                       mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Divider(
-                                            thickness: 1,
-                                            color:
-                                                Colors.purpleAccent.shade100),
+                                        Divider(thickness: 1, color: Colors.purpleAccent.shade100),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('kaam')}",
-                                            selectedData.kaam),
+                                        _buildInfoRow("${Statics.getLabel('kaam')}", selectedData.kaam),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('chalavnariSansthaSanghatana')}",
-                                            selectedData
-                                                .chalavnariSansthaSanghatamn),
+                                        _buildInfoRow("${Statics.getLabel('chalavnariSansthaSanghatana')}", selectedData.chalavnariSansthaSanghatamn),
                                         SizedBox(height: 12),
                                       ],
                                     ),
@@ -2687,17 +2300,12 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     actions: [
                                       ElevatedButton(
                                         onPressed: () => Navigator.pop(context),
-                                        child: Text(
-                                            "${Statics.getLabel('bandKara')}",
-                                            style:
-                                                TextStyle(color: Colors.white)),
+                                        child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.purpleAccent,
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 24, vertical: 12),
+                                          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
                                         ),
                                       ),
@@ -2707,22 +2315,17 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               );
                             }
                           },
-                          child: Icon(Icons.remove_red_eye,
-                              color: Colors.green, size: 20),
+                          child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                         ),
                         SizedBox(
                           width: 20,
                         ),
                         InkWell(
                           onTap: () {
-                            showVividhKshetraCheKamePopup(context,
-                                onDataChanged: () {
+                            showVividhKshetraCheKamePopup(context, onDataChanged: () {
                               setState(() {});
-                            },
-                                editIndex:
-                                    selectedVastisarVividhKshetracheIndex);
-                            print(
-                                "selectedJagranShreniStithiRowIndex --> $selectedVastisarVividhKshetracheIndex");
+                            }, editIndex: selectedVastisarVividhKshetracheIndex);
+                            print("selectedJagranShreniStithiRowIndex --> $selectedVastisarVividhKshetracheIndex");
                           },
                           child: Icon(Icons.edit, color: Colors.blue, size: 20),
                         ),
@@ -2749,8 +2352,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   ),
                                 ),
                                 content: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10.0),
+                                  padding: const EdgeInsets.symmetric(vertical: 10.0),
                                   child: Text(
                                     "${Statics.getLabel('deleteconfirmText')}",
                                     textAlign: TextAlign.center,
@@ -2769,8 +2371,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                     ),
-                                    onPressed: () =>
-                                        Navigator.pop(context, false),
+                                    onPressed: () => Navigator.pop(context, false),
                                     child: Text(
                                       "${Statics.getLabel('ConfirmationNo')}",
                                       style: TextStyle(color: Colors.black),
@@ -2783,8 +2384,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                     ),
-                                    onPressed: () =>
-                                        Navigator.pop(context, true),
+                                    onPressed: () => Navigator.pop(context, true),
                                     child: Text(
                                       "${Statics.getLabel('ConfirmationYes')}",
                                       style: TextStyle(color: Colors.white),
@@ -2794,23 +2394,19 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               ),
                             );
 
-                            if (shouldDelete == true &&
-                                selectedVastisarVividhKshetracheIndex != null) {
+                            if (shouldDelete == true && selectedVastisarVividhKshetracheIndex != null) {
                               // setState(() {
                               //   jagranShreniEnteredDataList!
                               //       .removeAt(selectedJagranShreniStithiRowIndex!);
                               //   selectedJagranShreniStithiRowIndex = null;
                               // });
                               setState(() {
-                                vividhKshetaCHeKamEnteredDataList![
-                                        selectedVastisarVividhKshetracheIndex!]
-                                    .isactive = 0;
+                                vividhKshetaCHeKamEnteredDataList![selectedVastisarVividhKshetracheIndex!].isactive = 0;
                                 selectedVastisarVividhKshetracheIndex = null;
                               });
                             }
                           },
-                          child:
-                              Icon(Icons.delete, color: Colors.red, size: 20),
+                          child: Icon(Icons.delete, color: Colors.red, size: 20),
                         ),
                       ],
                     ),
@@ -2829,8 +2425,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     InkWell(
                       onTap: () {
                         if (isVastiSearch) {
-                          showVividhadhyatmitStsangKendraPopup(context,
-                              onDataChanged: () {
+                          showVividhadhyatmitStsangKendraPopup(context, onDataChanged: () {
                             setState(() {});
                           });
                         } else {
@@ -2842,11 +2437,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 5),
                         width: 100,
-                        decoration: BoxDecoration(
-                            border:
-                                Border.all(color: Colors.purpleAccent.shade100),
-                            color: Colors.purpleAccent.withOpacity(0.7),
-                            borderRadius: BorderRadius.circular(15)),
+                        decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                         child: Center(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -2854,9 +2445,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               Icon(Icons.add, color: Colors.white, size: 15),
                               Text(
                                 "${Statics.getLabel('AddButton')}",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
@@ -2879,12 +2468,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       width: MediaQuery.of(context).size.width,
                       child: DataTable(
                         showCheckboxColumn: false,
-                        headingRowColor:
-                            MaterialStatePropertyAll(Colors.purple.shade50),
+                        headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
                         columnSpacing: 30,
                         horizontalMargin: 16,
-                        headingTextStyle: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.black87),
+                        headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                         columns: [
                           DataColumn(
                               label: Text(
@@ -2895,16 +2482,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             "${Statics.getLabel('gaavPramukhName')}",
                           )),
                         ],
-                        rows: vividhadhyatmitStsangKendraEnteredDataList!
-                            .asMap()
-                            .entries
-                            .where((entry) => entry.value.isactive == 1)
-                            .map((entry) {
+                        rows: vividhadhyatmitStsangKendraEnteredDataList!.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                           int index = entry.key;
                           var data = entry.value;
-                          bool isSelected =
-                              selectedVastisarVividhadhyatmitStsangKendraIndex ==
-                                  index;
+                          bool isSelected = selectedVastisarVividhadhyatmitStsangKendraIndex == index;
                           return DataRow(
                             selected: isSelected,
                             color: MaterialStateProperty.resolveWith<Color?>(
@@ -2916,14 +2497,12 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             onSelectChanged: (bool? selected) {
                               if (selected != null && selected) {
                                 setState(() {
-                                  selectedVastisarVividhadhyatmitStsangKendraIndex =
-                                      index;
+                                  selectedVastisarVividhadhyatmitStsangKendraIndex = index;
                                 });
                               }
                             },
                             cells: [
-                              DataCell(Text(
-                                  data.selectedDropdownValueName.toString())),
+                              DataCell(Text(data.selectedDropdownValueName.toString())),
                               DataCell(Text(data.gaavPramukhName.toString())),
                             ],
                           );
@@ -2942,11 +2521,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     children: [
                       InkWell(
                         onTap: () {
-                          if (selectedVastisarVividhadhyatmitStsangKendraIndex !=
-                              null) {
-                            var selectedData =
-                                vividhadhyatmitStsangKendraEnteredDataList![
-                                    selectedVastisarVividhadhyatmitStsangKendraIndex!];
+                          if (selectedVastisarVividhadhyatmitStsangKendraIndex != null) {
+                            var selectedData = vividhadhyatmitStsangKendraEnteredDataList![selectedVastisarVividhadhyatmitStsangKendraIndex!];
                             showDialog(
                               context: context,
                               builder: (context) {
@@ -2967,34 +2543,19 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   ),
                                   content: Column(
                                     mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Divider(
-                                          thickness: 1,
-                                          color: Colors.purpleAccent.shade100),
+                                      Divider(thickness: 1, color: Colors.purpleAccent.shade100),
                                       SizedBox(height: 12),
                                       // _buildInfoRow("${Statics.getLabel('gaav')}", selectedData.selectedDropdownValueName1.toString()),
                                       // SizedBox(height: 12),
-                                      _buildInfoRow(
-                                          "${Statics.getLabel('sansthaa')}",
-                                          selectedData.selectedDropdownValueName
-                                              .toString()),
+                                      _buildInfoRow("${Statics.getLabel('sansthaa')}", selectedData.selectedDropdownValueName.toString()),
                                       SizedBox(height: 12),
-                                      _buildInfoRow(
-                                          "${Statics.getLabel('otherSanstha')}",
-                                          selectedData.isOtherAdhyatmitKendra
-                                              .toString()),
+                                      _buildInfoRow("${Statics.getLabel('otherSanstha')}", selectedData.isOtherAdhyatmitKendra.toString()),
                                       SizedBox(height: 12),
-                                      _buildInfoRow(
-                                          "${Statics.getLabel('gaavPramukhName')}",
-                                          selectedData.gaavPramukhName
-                                              .toString()),
+                                      _buildInfoRow("${Statics.getLabel('gaavPramukhName')}", selectedData.gaavPramukhName.toString()),
                                       SizedBox(height: 12),
-                                      _buildInfoRow(
-                                          "${Statics.getLabel('samparkSootraNaav')}",
-                                          selectedData.samparkSootra
-                                              .toString()),
+                                      _buildInfoRow("${Statics.getLabel('samparkSootraNaav')}", selectedData.samparkSootra.toString()),
                                       SizedBox(height: 12),
                                     ],
                                   ),
@@ -3002,17 +2563,12 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text(
-                                          "${Statics.getLabel('bandKara')}",
-                                          style:
-                                              TextStyle(color: Colors.white)),
+                                      child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.purpleAccent,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 24, vertical: 12),
+                                        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(12),
                                         ),
                                       ),
                                     ),
@@ -3022,22 +2578,17 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             );
                           }
                         },
-                        child: Icon(Icons.remove_red_eye,
-                            color: Colors.green, size: 20),
+                        child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                       ),
                       SizedBox(
                         width: 20,
                       ),
                       InkWell(
                         onTap: () {
-                          showVividhadhyatmitStsangKendraPopup(context,
-                              onDataChanged: () {
+                          showVividhadhyatmitStsangKendraPopup(context, onDataChanged: () {
                             setState(() {});
-                          },
-                              editIndex:
-                                  selectedVastisarVividhadhyatmitStsangKendraIndex);
-                          print(
-                              "selectedJagranShreniStithiRowIndex --> $selectedVastisarVividhadhyatmitStsangKendraIndex");
+                          }, editIndex: selectedVastisarVividhadhyatmitStsangKendraIndex);
+                          print("selectedJagranShreniStithiRowIndex --> $selectedVastisarVividhadhyatmitStsangKendraIndex");
                         },
                         child: Icon(Icons.edit, color: Colors.blue, size: 20),
                       ),
@@ -3064,8 +2615,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 ),
                               ),
                               content: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10.0),
+                                padding: const EdgeInsets.symmetric(vertical: 10.0),
                                 child: Text(
                                   "${Statics.getLabel('deleteconfirmText')}",
                                   textAlign: TextAlign.center,
@@ -3084,8 +2634,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                   ),
-                                  onPressed: () =>
-                                      Navigator.pop(context, false),
+                                  onPressed: () => Navigator.pop(context, false),
                                   child: Text(
                                     "${Statics.getLabel('ConfirmationNo')}",
                                     style: TextStyle(color: Colors.black),
@@ -3108,15 +2657,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             ),
                           );
 
-                          if (shouldDelete == true &&
-                              selectedVastisarVividhadhyatmitStsangKendraIndex !=
-                                  null) {
+                          if (shouldDelete == true && selectedVastisarVividhadhyatmitStsangKendraIndex != null) {
                             setState(() {
-                              vividhadhyatmitStsangKendraEnteredDataList![
-                                      selectedVastisarVividhadhyatmitStsangKendraIndex!]
-                                  .isactive = 0;
-                              selectedVastisarVividhadhyatmitStsangKendraIndex =
-                                  null;
+                              vividhadhyatmitStsangKendraEnteredDataList![selectedVastisarVividhadhyatmitStsangKendraIndex!].isactive = 0;
+                              selectedVastisarVividhadhyatmitStsangKendraIndex = null;
                             });
                           }
                         },
@@ -3134,8 +2678,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
             Column(
               children: [
                 yesNoRadioButton(
-                    question:
-                        "${Statics.getLabel('gavatilMuymbaikarMandalAahe')}",
+                    question: "${Statics.getLabel('gavatilMuymbaikarMandalAahe')}",
                     selectedOption: gavatilMumbaikar ?? 2,
                     onChanged: (value) {
                       if (isVastiSearch) {
@@ -3156,8 +2699,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       InkWell(
                         onTap: () {
                           if (isVastiSearch) {
-                            showGavatilMumbaikarPopup(context,
-                                onDataChanged: () {
+                            showGavatilMumbaikarPopup(context, onDataChanged: () {
                               setState(() {});
                             });
                           } else {
@@ -3169,11 +2711,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 5),
                           width: 100,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.purpleAccent.shade100),
-                              color: Colors.purpleAccent.withOpacity(0.7),
-                              borderRadius: BorderRadius.circular(15)),
+                          decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                           child: Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -3181,9 +2719,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 Icon(Icons.add, color: Colors.white, size: 15),
                                 Text(
                                   "${Statics.getLabel('AddButton')}",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
@@ -3207,13 +2743,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         width: MediaQuery.of(context).size.width,
                         child: DataTable(
                           showCheckboxColumn: false,
-                          headingRowColor:
-                              MaterialStatePropertyAll(Colors.purple.shade50),
+                          headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
                           columnSpacing: 30,
                           horizontalMargin: 16,
-                          headingTextStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87),
+                          headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                           columns: [
                             DataColumn(
                                 label: Text(
@@ -3224,15 +2757,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               "${Statics.getLabel('pramukhaacheNaav')}",
                             )),
                           ],
-                          rows: gavatilMumbaikarEnteredDataList!
-                              .asMap()
-                              .entries
-                              .where((entry) => entry.value.isactive == 1)
-                              .map((entry) {
+                          rows: gavatilMumbaikarEnteredDataList!.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                             int index = entry.key;
                             var data = entry.value;
-                            bool isSelected =
-                                selectedGavatilMumbaikarIndex == index;
+                            bool isSelected = selectedGavatilMumbaikarIndex == index;
 
                             return DataRow(
                               selected: isSelected,
@@ -3271,9 +2799,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         InkWell(
                           onTap: () {
                             if (selectedGavatilMumbaikarIndex != null) {
-                              var selectedData =
-                                  gavatilMumbaikarEnteredDataList![
-                                      selectedGavatilMumbaikarIndex!];
+                              var selectedData = gavatilMumbaikarEnteredDataList![selectedGavatilMumbaikarIndex!];
                               showDialog(
                                 context: context,
                                 builder: (context) {
@@ -3294,21 +2820,13 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     ),
                                     content: Column(
                                       mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Divider(
-                                            thickness: 1,
-                                            color:
-                                                Colors.purpleAccent.shade100),
+                                        Divider(thickness: 1, color: Colors.purpleAccent.shade100),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('kaam')}",
-                                            selectedData.sthaan),
+                                        _buildInfoRow("${Statics.getLabel('kaam')}", selectedData.sthaan),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('chalavnariSansthaSanghatana')}",
-                                            selectedData.pramukhachrNaav),
+                                        _buildInfoRow("${Statics.getLabel('chalavnariSansthaSanghatana')}", selectedData.pramukhachrNaav),
                                         SizedBox(height: 12),
                                       ],
                                     ),
@@ -3316,17 +2834,12 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     actions: [
                                       ElevatedButton(
                                         onPressed: () => Navigator.pop(context),
-                                        child: Text(
-                                            "${Statics.getLabel('bandKara')}",
-                                            style:
-                                                TextStyle(color: Colors.white)),
+                                        child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.purpleAccent,
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 24, vertical: 12),
+                                          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
                                         ),
                                       ),
@@ -3336,20 +2849,17 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               );
                             }
                           },
-                          child: Icon(Icons.remove_red_eye,
-                              color: Colors.green, size: 20),
+                          child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                         ),
                         SizedBox(
                           width: 20,
                         ),
                         InkWell(
                           onTap: () {
-                            showGavatilMumbaikarPopup(context,
-                                onDataChanged: () {
+                            showGavatilMumbaikarPopup(context, onDataChanged: () {
                               setState(() {});
                             }, editIndex: selectedGavatilMumbaikarIndex);
-                            print(
-                                "selectedJagranShreniStithiRowIndex --> $selectedGavatilMumbaikarIndex");
+                            print("selectedJagranShreniStithiRowIndex --> $selectedGavatilMumbaikarIndex");
                           },
                           child: Icon(Icons.edit, color: Colors.blue, size: 20),
                         ),
@@ -3376,8 +2886,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   ),
                                 ),
                                 content: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10.0),
+                                  padding: const EdgeInsets.symmetric(vertical: 10.0),
                                   child: Text(
                                     "${Statics.getLabel('deleteconfirmText')}",
                                     textAlign: TextAlign.center,
@@ -3396,8 +2905,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                     ),
-                                    onPressed: () =>
-                                        Navigator.pop(context, false),
+                                    onPressed: () => Navigator.pop(context, false),
                                     child: Text(
                                       "${Statics.getLabel('ConfirmationNo')}",
                                       style: TextStyle(color: Colors.black),
@@ -3410,8 +2918,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                     ),
-                                    onPressed: () =>
-                                        Navigator.pop(context, true),
+                                    onPressed: () => Navigator.pop(context, true),
                                     child: Text(
                                       "${Statics.getLabel('ConfirmationYes')}",
                                       style: TextStyle(color: Colors.white),
@@ -3420,18 +2927,14 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 ],
                               ),
                             );
-                            if (shouldDelete == true &&
-                                selectedGavatilMumbaikarIndex != null) {
+                            if (shouldDelete == true && selectedGavatilMumbaikarIndex != null) {
                               setState(() {
-                                gavatilMumbaikarEnteredDataList![
-                                        selectedGavatilMumbaikarIndex!]
-                                    .isactive = 0;
+                                gavatilMumbaikarEnteredDataList![selectedGavatilMumbaikarIndex!].isactive = 0;
                                 selectedGavatilMumbaikarIndex = null;
                               });
                             }
                           },
-                          child:
-                              Icon(Icons.delete, color: Colors.red, size: 20),
+                          child: Icon(Icons.delete, color: Colors.red, size: 20),
                         ),
                       ],
                     ),
@@ -3456,10 +2959,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               children: [
                                 Text(
                                   "${Statics.getLabel('religion')}",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.purpleAccent),
+                                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.purpleAccent),
                                 ),
                                 InkWell(
                                   onTap: () {
@@ -3477,26 +2977,16 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   child: Container(
                                     padding: EdgeInsets.symmetric(vertical: 5),
                                     width: 100,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color:
-                                                Colors.purpleAccent.shade100),
-                                        color: Colors.purpleAccent
-                                            .withOpacity(0.7),
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
+                                    decoration:
+                                        BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                                     child: Center(
                                       child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Icon(Icons.add,
-                                              color: Colors.white, size: 15),
+                                          Icon(Icons.add, color: Colors.white, size: 15),
                                           Text(
                                             "${Statics.getLabel('AddButton')}",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
+                                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                           ),
                                         ],
                                       ),
@@ -3511,8 +3001,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
                                 border: Border.all(color: Colors.black54),
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(15)),
+                                borderRadius: const BorderRadius.all(Radius.circular(15)),
                               ),
                               child: SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
@@ -3520,12 +3009,9 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   width: MediaQuery.of(context).size.width * 1,
                                   child: DataTable(
                                     showCheckboxColumn: false,
-                                    headingRowColor: MaterialStatePropertyAll(
-                                        Colors.purple.shade50),
+                                    headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
                                     columnSpacing: 1,
-                                    headingTextStyle: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black87),
+                                    headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                                     columns: [
                                       DataColumn(
                                           label: Text(
@@ -3536,38 +3022,27 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                         '${Statics.getLabel('avgPersent')}',
                                       )),
                                     ],
-                                    rows: enteredreligionDataList
-                                        .asMap()
-                                        .entries
-                                        .where((entry) =>
-                                            entry.value.isactive == 1)
-                                        .map((entry) {
+                                    rows: enteredreligionDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                                       int index = entry.key;
                                       var data = entry.value;
-                                      bool isSelected =
-                                          selectedReligionIdRowIndex == index;
+                                      bool isSelected = selectedReligionIdRowIndex == index;
                                       return DataRow(
                                           selected: isSelected,
-                                          color: MaterialStateProperty
-                                              .resolveWith<Color?>(
+                                          color: MaterialStateProperty.resolveWith<Color?>(
                                             (Set<MaterialState> states) {
-                                              if (isSelected)
-                                                return Colors.yellow.shade100;
+                                              if (isSelected) return Colors.yellow.shade100;
                                               return null;
                                             },
                                           ),
                                           onSelectChanged: (bool? selected) {
                                             if (selected != null && selected) {
                                               setState(() {
-                                                selectedReligionIdRowIndex =
-                                                    index;
+                                                selectedReligionIdRowIndex = index;
                                               });
                                             }
                                           },
                                           cells: [
-                                            DataCell(Text(
-                                                data.selectedDropdownValueName ??
-                                                    "")),
+                                            DataCell(Text(data.selectedDropdownValueName ?? "")),
                                             DataCell(Text(data.andaje ?? "")),
                                           ]);
                                     }).toList(),
@@ -3586,16 +3061,13 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   InkWell(
                                     onTap: () {
                                       if (selectedReligionIdRowIndex != null) {
-                                        var selectedData =
-                                            enteredreligionDataList[
-                                                selectedReligionIdRowIndex!];
+                                        var selectedData = enteredreligionDataList[selectedReligionIdRowIndex!];
                                         showDialog(
                                           context: context,
                                           builder: (context) {
                                             return AlertDialog(
                                               shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
+                                                borderRadius: BorderRadius.circular(20),
                                               ),
                                               backgroundColor: Colors.white,
                                               title: Center(
@@ -3610,47 +3082,25 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                               ),
                                               content: Column(
                                                 mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
-                                                  Divider(
-                                                      thickness: 1,
-                                                      color: Colors.purpleAccent
-                                                          .shade100),
+                                                  Divider(thickness: 1, color: Colors.purpleAccent.shade100),
                                                   SizedBox(height: 12),
-                                                  _buildInfoRow(
-                                                      "${Statics.getLabel('konteReligion')}",
-                                                      selectedData
-                                                          .selectedDropdownValueName),
+                                                  _buildInfoRow("${Statics.getLabel('konteReligion')}", selectedData.selectedDropdownValueName),
                                                   SizedBox(height: 12),
-                                                  _buildInfoRow(
-                                                      "${Statics.getLabel('avgPersent')}",
-                                                      selectedData.andaje),
+                                                  _buildInfoRow("${Statics.getLabel('avgPersent')}", selectedData.andaje),
                                                 ],
                                               ),
-                                              actionsAlignment:
-                                                  MainAxisAlignment.center,
+                                              actionsAlignment: MainAxisAlignment.center,
                                               actions: [
                                                 ElevatedButton(
-                                                  onPressed: () =>
-                                                      Navigator.pop(context),
-                                                  child: Text(
-                                                      "${Statics.getLabel('bandKara')}",
-                                                      style: TextStyle(
-                                                          color: Colors.white)),
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                        Colors.purpleAccent,
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 24,
-                                                            vertical: 12),
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              12),
+                                                  onPressed: () => Navigator.pop(context),
+                                                  child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor: Colors.purpleAccent,
+                                                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(12),
                                                     ),
                                                   ),
                                                 ),
@@ -3660,35 +3110,29 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                         );
                                       }
                                     },
-                                    child: Icon(Icons.remove_red_eye,
-                                        color: Colors.green, size: 20),
+                                    child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                                   ),
                                   SizedBox(
                                     width: 20,
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      showReligionPopup(context,
-                                          editIndex: selectedReligionIdRowIndex,
-                                          onDataChanged: () {
+                                      showReligionPopup(context, editIndex: selectedReligionIdRowIndex, onDataChanged: () {
                                         setState(() {});
                                       });
                                     },
-                                    child: Icon(Icons.edit,
-                                        color: Colors.blue, size: 20),
+                                    child: Icon(Icons.edit, color: Colors.blue, size: 20),
                                   ),
                                   SizedBox(
                                     width: 20,
                                   ),
                                   InkWell(
                                     onTap: () async {
-                                      final shouldDelete =
-                                          await showDialog<bool>(
+                                      final shouldDelete = await showDialog<bool>(
                                         context: context,
                                         builder: (context) => AlertDialog(
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
+                                            borderRadius: BorderRadius.circular(20),
                                           ),
                                           backgroundColor: Colors.white,
                                           title: Center(
@@ -3702,8 +3146,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                             ),
                                           ),
                                           content: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 10.0),
+                                            padding: const EdgeInsets.symmetric(vertical: 10.0),
                                             child: Text(
                                               "${Statics.getLabel('deleteconfirmText')}",
                                               textAlign: TextAlign.center,
@@ -3713,63 +3156,50 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                               ),
                                             ),
                                           ),
-                                          actionsAlignment:
-                                              MainAxisAlignment.spaceEvenly,
+                                          actionsAlignment: MainAxisAlignment.spaceEvenly,
                                           actions: [
                                             ElevatedButton(
                                               style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    Colors.grey.shade300,
+                                                backgroundColor: Colors.grey.shade300,
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
+                                                  borderRadius: BorderRadius.circular(12),
                                                 ),
                                               ),
-                                              onPressed: () =>
-                                                  Navigator.pop(context, false),
+                                              onPressed: () => Navigator.pop(context, false),
                                               child: Text(
                                                 "${Statics.getLabel('ConfirmationNo')}",
-                                                style: TextStyle(
-                                                    color: Colors.black),
+                                                style: TextStyle(color: Colors.black),
                                               ),
                                             ),
                                             ElevatedButton(
                                               style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    Colors.redAccent,
+                                                backgroundColor: Colors.redAccent,
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
+                                                  borderRadius: BorderRadius.circular(12),
                                                 ),
                                               ),
-                                              onPressed: () =>
-                                                  Navigator.pop(context, true),
+                                              onPressed: () => Navigator.pop(context, true),
                                               child: Text(
                                                 "${Statics.getLabel('ConfirmationYes')}",
-                                                style: TextStyle(
-                                                    color: Colors.white),
+                                                style: TextStyle(color: Colors.white),
                                               ),
                                             ),
                                           ],
                                         ),
                                       );
-                                      if (shouldDelete == true &&
-                                          selectedReligionIdRowIndex != null) {
+                                      if (shouldDelete == true && selectedReligionIdRowIndex != null) {
                                         // setState(() {
                                         //   enteredreligionDataList
                                         //       .removeAt(selectedReligionIdRowIndex!);
                                         //   selectedReligionIdRowIndex = null;
                                         // });
                                         setState(() {
-                                          enteredreligionDataList[
-                                                  selectedReligionIdRowIndex!]
-                                              .isactive = 0;
+                                          enteredreligionDataList[selectedReligionIdRowIndex!].isactive = 0;
                                           selectedReligionIdRowIndex = null;
                                         });
                                       }
                                     },
-                                    child: Icon(Icons.delete,
-                                        color: Colors.red, size: 20),
+                                    child: Icon(Icons.delete, color: Colors.red, size: 20),
                                   ),
                                 ],
                               ),
@@ -3787,10 +3217,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     children: [
                       Text(
                         "${Statics.getLabel('UpasanaSthal')}",
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.purpleAccent),
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.purpleAccent),
                       ),
                       InkWell(
                         onTap: () {
@@ -3808,11 +3235,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 5),
                           width: 100,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.purpleAccent.shade100),
-                              color: Colors.purpleAccent.withOpacity(0.7),
-                              borderRadius: BorderRadius.circular(15)),
+                          decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                           child: Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -3820,9 +3243,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 Icon(Icons.add, color: Colors.white, size: 15),
                                 Text(
                                   "${Statics.getLabel('AddButton')}",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
@@ -3846,12 +3267,9 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           width: MediaQuery.of(context).size.width * 1,
                           child: DataTable(
                             showCheckboxColumn: false,
-                            headingRowColor:
-                                MaterialStatePropertyAll(Colors.purple.shade50),
+                            headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
                             columnSpacing: 20,
-                            headingTextStyle: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87),
+                            headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                             columns: [
                               DataColumn(
                                   label: Text(
@@ -3866,22 +3284,15 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 "${Statics.getLabel('count')}",
                               )),
                             ],
-                            rows: upasnaSthalDataList
-                                .asMap()
-                                .entries
-                                .where((entry) => entry.value.isactive == 1)
-                                .map((entry) {
+                            rows: upasnaSthalDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                               int index = entry.key;
                               var data = entry.value;
-                              bool isSelected =
-                                  selectedUpasnaSthalRowIndex == index;
+                              bool isSelected = selectedUpasnaSthalRowIndex == index;
                               return DataRow(
                                   selected: isSelected,
-                                  color:
-                                      MaterialStateProperty.resolveWith<Color?>(
+                                  color: MaterialStateProperty.resolveWith<Color?>(
                                     (Set<MaterialState> states) {
-                                      if (isSelected)
-                                        return Colors.yellow.shade100;
+                                      if (isSelected) return Colors.yellow.shade100;
                                       return null;
                                     },
                                   ),
@@ -3893,10 +3304,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     }
                                   },
                                   cells: [
-                                    DataCell(Text(
-                                        data.selectedDropdownValueName ?? "")),
-                                    DataCell(Text(
-                                        data.selectedDropdownValueName1 ?? "")),
+                                    DataCell(Text(data.selectedDropdownValueName ?? "")),
+                                    DataCell(Text(data.selectedDropdownValueName1 ?? "")),
                                     DataCell(Text(data.sankhya ?? "")),
                                     // DataCell(Row(
                                     //   children: [
@@ -3930,8 +3339,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         InkWell(
                           onTap: () {
                             if (selectedUpasnaSthalRowIndex != null) {
-                              var selectedData = upasnaSthalDataList[
-                                  selectedUpasnaSthalRowIndex!];
+                              var selectedData = upasnaSthalDataList[selectedUpasnaSthalRowIndex!];
                               showDialog(
                                 context: context,
                                 builder: (context) {
@@ -3952,48 +3360,29 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     ),
                                     content: Column(
                                       mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Divider(
-                                            thickness: 1,
-                                            color:
-                                                Colors.purpleAccent.shade100),
+                                        Divider(thickness: 1, color: Colors.purpleAccent.shade100),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('UpasanaSthal')}",
-                                            selectedData
-                                                .selectedDropdownValueName),
+                                        _buildInfoRow("${Statics.getLabel('UpasanaSthal')}", selectedData.selectedDropdownValueName),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('otherUpasanaSthal')}",
-                                            selectedData.otherupaasanasthala),
+                                        _buildInfoRow("${Statics.getLabel('otherUpasanaSthal')}", selectedData.otherupaasanasthala),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('SelectFrequency')}",
-                                            selectedData
-                                                .selectedDropdownValueName1),
+                                        _buildInfoRow("${Statics.getLabel('SelectFrequency')}", selectedData.selectedDropdownValueName1),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('count')}",
-                                            selectedData.sankhya),
+                                        _buildInfoRow("${Statics.getLabel('count')}", selectedData.sankhya),
                                       ],
                                     ),
                                     actionsAlignment: MainAxisAlignment.center,
                                     actions: [
                                       ElevatedButton(
                                         onPressed: () => Navigator.pop(context),
-                                        child: Text(
-                                            "${Statics.getLabel('bandKara')}",
-                                            style:
-                                                TextStyle(color: Colors.white)),
+                                        child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.purpleAccent,
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 24, vertical: 12),
+                                          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
                                         ),
                                       ),
@@ -4003,17 +3392,14 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               );
                             }
                           },
-                          child: Icon(Icons.remove_red_eye,
-                              color: Colors.green, size: 20),
+                          child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                         ),
                         SizedBox(
                           width: 20,
                         ),
                         InkWell(
                           onTap: () {
-                            showUpasnaSthalPopup(context,
-                                editIndex: selectedUpasnaSthalRowIndex,
-                                onDataChanged: () {
+                            showUpasnaSthalPopup(context, editIndex: selectedUpasnaSthalRowIndex, onDataChanged: () {
                               setState(() {});
                             });
                           },
@@ -4042,8 +3428,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   ),
                                 ),
                                 content: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10.0),
+                                  padding: const EdgeInsets.symmetric(vertical: 10.0),
                                   child: Text(
                                     "${Statics.getLabel('deleteconfirmText')}",
                                     textAlign: TextAlign.center,
@@ -4062,8 +3447,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                     ),
-                                    onPressed: () =>
-                                        Navigator.pop(context, false),
+                                    onPressed: () => Navigator.pop(context, false),
                                     child: Text(
                                       "${Statics.getLabel('ConfirmationNo')}",
                                       style: TextStyle(color: Colors.black),
@@ -4076,8 +3460,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                     ),
-                                    onPressed: () =>
-                                        Navigator.pop(context, true),
+                                    onPressed: () => Navigator.pop(context, true),
                                     child: Text(
                                       "${Statics.getLabel('ConfirmationYes')}",
                                       style: TextStyle(color: Colors.white),
@@ -4087,21 +3470,17 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               ),
                             );
 
-                            if (shouldDelete == true &&
-                                selectedUpasnaSthalRowIndex != null) {
+                            if (shouldDelete == true && selectedUpasnaSthalRowIndex != null) {
                               // upasnaSthalDataList
                               //     .removeAt(selectedUpasnaSthalRowIndex!);
                               // selectedUpasnaSthalRowIndex = null;
                               setState(() {
-                                upasnaSthalDataList[
-                                        selectedUpasnaSthalRowIndex!]
-                                    .isactive = 0;
+                                upasnaSthalDataList[selectedUpasnaSthalRowIndex!].isactive = 0;
                                 selectedUpasnaSthalRowIndex = null;
                               });
                             }
                           },
-                          child:
-                              Icon(Icons.delete, color: Colors.red, size: 20),
+                          child: Icon(Icons.delete, color: Colors.red, size: 20),
                         ),
                       ],
                     ),
@@ -4134,11 +3513,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 5),
                         width: 100,
-                        decoration: BoxDecoration(
-                            border:
-                                Border.all(color: Colors.purpleAccent.shade100),
-                            color: Colors.purpleAccent.withOpacity(0.7),
-                            borderRadius: BorderRadius.circular(15)),
+                        decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                         child: Center(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -4146,9 +3521,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               Icon(Icons.add, color: Colors.white, size: 15),
                               Text(
                                 "${Statics.getLabel('AddButton')}",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
@@ -4171,11 +3544,9 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       width: MediaQuery.of(context).size.width * 1,
                       child: DataTable(
                         showCheckboxColumn: false,
-                        headingRowColor:
-                            MaterialStatePropertyAll(Colors.purple.shade50),
+                        headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
                         columnSpacing: 40,
-                        headingTextStyle: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.black87),
+                        headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                         columns: [
                           DataColumn(
                               label: Text(
@@ -4190,15 +3561,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             "${Statics.getLabel('samparkStithi')}",
                           )),
                         ],
-                        rows: sajjanShaktiDataList
-                            .asMap()
-                            .entries
-                            .where((entry) => entry.value.isactive == 1)
-                            .map((entry) {
+                        rows: sajjanShaktiDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                           int index = entry.key;
                           var data = entry.value;
-                          bool isSelected =
-                              selectedsajjanShaktiRowIndex == index;
+                          bool isSelected = selectedsajjanShaktiRowIndex == index;
                           return DataRow(
                               selected: isSelected,
                               color: MaterialStateProperty.resolveWith<Color?>(
@@ -4216,10 +3582,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               },
                               cells: [
                                 DataCell(Text(data.name ?? "")),
-                                DataCell(
-                                    Text(data.selectedDropdownValueName ?? "")),
-                                DataCell(Text(
-                                    data.selectedDropdownValueName1 ?? "")),
+                                DataCell(Text(data.selectedDropdownValueName ?? "")),
+                                DataCell(Text(data.selectedDropdownValueName1 ?? "")),
                               ]);
                         }).toList(),
                       ),
@@ -4237,8 +3601,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       InkWell(
                         onTap: () {
                           if (selectedsajjanShaktiRowIndex != null) {
-                            var selectedData = sajjanShaktiDataList[
-                                selectedsajjanShaktiRowIndex!];
+                            var selectedData = sajjanShaktiDataList[selectedsajjanShaktiRowIndex!];
                             showDialog(
                               context: context,
                               builder: (context) {
@@ -4260,71 +3623,37 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   content: SingleChildScrollView(
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
+                                      crossAxisAlignment: CrossAxisAlignment.end,
                                       children: [
-                                        Divider(
-                                            thickness: 1,
-                                            color:
-                                                Colors.purpleAccent.shade100),
+                                        Divider(thickness: 1, color: Colors.purpleAccent.shade100),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('Name')}",
-                                            selectedData.name),
+                                        _buildInfoRow("${Statics.getLabel('Name')}", selectedData.name),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('Address')}",
-                                            selectedData.address),
+                                        _buildInfoRow("${Statics.getLabel('Address')}", selectedData.address),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('doorBhash')}",
-                                            selectedData.doorabhaash),
+                                        _buildInfoRow("${Statics.getLabel('doorBhash')}", selectedData.doorabhaash),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('Category')}",
-                                            selectedData
-                                                .selectedDropdownValueName),
+                                        _buildInfoRow("${Statics.getLabel('Gender')}", Statics.getLabel(selectedData.isfemale == 1 ? 'Female' : 'Male')),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('OtherCategory')}",
-                                            selectedData.otherShreniName),
+                                        _buildInfoRow("${Statics.getLabel('Category')}", selectedData.selectedDropdownValueName),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('OrganizationName')}",
-                                            selectedData.sanstheCheNaav),
+                                        _buildInfoRow("${Statics.getLabel('OtherCategory')}", selectedData.otherShreniName),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('kontyaPadavar')}",
-                                            selectedData
-                                                .sansthechaKuthalaPadavar),
+                                        _buildInfoRow("${Statics.getLabel('OrganizationName')}", selectedData.sanstheCheNaav),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('samparkStithi')}",
-                                            selectedData
-                                                .selectedDropdownValueName1),
+                                        _buildInfoRow("${Statics.getLabel('kontyaPadavar')}", selectedData.sansthechaKuthalaPadavar),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('special')}",
-                                            selectedData
-                                                .selectedDropdownValueName2),
+                                        _buildInfoRow("${Statics.getLabel('samparkStithi')}", selectedData.selectedDropdownValueName1),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('otherSpecial')}",
-                                            selectedData.otherVisheshName),
+                                        _buildInfoRow("${Statics.getLabel('special')}", selectedData.selectedDropdownValueName2),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('prabhavKshetra')}",
-                                            selectedData
-                                                .selectedDropdownValueName3),
+                                        _buildInfoRow("${Statics.getLabel('otherSpecial')}", selectedData.otherVisheshName),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('samparkSootraNaav')}",
-                                            selectedData.samparkasutranava),
+                                        _buildInfoRow("${Statics.getLabel('prabhavKshetra')}", selectedData.selectedDropdownValueName3),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('samparakSootraDoorbhash')}",
-                                            selectedData
-                                                .samparkasutraMobileNumber),
+                                        _buildInfoRow("${Statics.getLabel('samparkSootraNaav')}", selectedData.samparkasutranava),
+                                        SizedBox(height: 12),
+                                        _buildInfoRow("${Statics.getLabel('samparakSootraDoorbhash')}", selectedData.samparkasutraMobileNumber),
                                       ],
                                     ),
                                   ),
@@ -4332,17 +3661,12 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text(
-                                          "${Statics.getLabel('bandKara')}",
-                                          style:
-                                              TextStyle(color: Colors.white)),
+                                      child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.purpleAccent,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 24, vertical: 12),
+                                        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(12),
                                         ),
                                       ),
                                     ),
@@ -4352,17 +3676,14 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             );
                           }
                         },
-                        child: Icon(Icons.remove_red_eye,
-                            color: Colors.green, size: 20),
+                        child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                       ),
                       SizedBox(
                         width: 20,
                       ),
                       InkWell(
                         onTap: () {
-                          showSajjanShaktiPopup(context,
-                              editIndex: selectedsajjanShaktiRowIndex,
-                              onDataChanged: () {
+                          showSajjanShaktiPopup(context, editIndex: selectedsajjanShaktiRowIndex, onDataChanged: () {
                             setState(() {});
                           });
                         },
@@ -4391,8 +3712,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 ),
                               ),
                               content: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10.0),
+                                padding: const EdgeInsets.symmetric(vertical: 10.0),
                                 child: Text(
                                   "${Statics.getLabel('deleteconfirmText')}",
                                   textAlign: TextAlign.center,
@@ -4411,8 +3731,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                   ),
-                                  onPressed: () =>
-                                      Navigator.pop(context, false),
+                                  onPressed: () => Navigator.pop(context, false),
                                   child: Text(
                                     "${Statics.getLabel('ConfirmationNo')}",
                                     style: TextStyle(color: Colors.black),
@@ -4435,12 +3754,9 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             ),
                           );
 
-                          if (shouldDelete == true &&
-                              selectedsajjanShaktiRowIndex != null) {
+                          if (shouldDelete == true && selectedsajjanShaktiRowIndex != null) {
                             setState(() {
-                              sajjanShaktiDataList[
-                                      selectedsajjanShaktiRowIndex!]
-                                  .isactive = 0;
+                              sajjanShaktiDataList[selectedsajjanShaktiRowIndex!].isactive = 0;
                               selectedsajjanShaktiRowIndex = null;
                             });
                           }
@@ -4475,11 +3791,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 5),
                         width: 100,
-                        decoration: BoxDecoration(
-                            border:
-                                Border.all(color: Colors.purpleAccent.shade100),
-                            color: Colors.purpleAccent.withOpacity(0.7),
-                            borderRadius: BorderRadius.circular(15)),
+                        decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                         child: Center(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -4487,9 +3799,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               Icon(Icons.add, color: Colors.white, size: 15),
                               Text(
                                 "${Statics.getLabel('AddButton')}",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
@@ -4512,11 +3822,9 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       width: MediaQuery.of(context).size.width * 1,
                       child: DataTable(
                         showCheckboxColumn: false,
-                        headingRowColor:
-                            MaterialStatePropertyAll(Colors.purple.shade50),
+                        headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
                         columnSpacing: 1,
-                        headingTextStyle: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.black87),
+                        headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                         columns: [
                           // DataColumn(label: Text("क्रिया", style: TextStyle(color: Colors.black54))),
                           DataColumn(
@@ -4532,15 +3840,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             "${Statics.getLabel('prabhavKshetra')}",
                           )),
                         ],
-                        rows: anyaPrabhaviLokDataList
-                            .asMap()
-                            .entries
-                            .where((entry) => entry.value.isactive == 1)
-                            .map((entry) {
+                        rows: anyaPrabhaviLokDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                           int index = entry.key;
                           var data = entry.value;
-                          bool isSelected =
-                              selectedanyaPrabhaviLokRowIndex == index;
+                          bool isSelected = selectedanyaPrabhaviLokRowIndex == index;
                           return DataRow(
                               selected: isSelected,
                               color: MaterialStateProperty.resolveWith<Color?>(
@@ -4558,10 +3861,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               },
                               cells: [
                                 DataCell(Text(data.name ?? "")),
-                                DataCell(Text(
-                                    data.selectedDropdownValueName3 ?? "")),
-                                DataCell(Text(
-                                    data.selectedDropdownValueName4 ?? "")),
+                                DataCell(Text(data.selectedDropdownValueName3 ?? "")),
+                                DataCell(Text(data.selectedDropdownValueName4 ?? "")),
                               ]);
                         }).toList(),
                       ),
@@ -4579,8 +3880,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       InkWell(
                         onTap: () {
                           if (selectedanyaPrabhaviLokRowIndex != null) {
-                            var selectedData = anyaPrabhaviLokDataList[
-                                selectedanyaPrabhaviLokRowIndex!];
+                            var selectedData = anyaPrabhaviLokDataList[selectedanyaPrabhaviLokRowIndex!];
                             showDialog(
                               context: context,
                               builder: (context) {
@@ -4602,59 +3902,24 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   content: SingleChildScrollView(
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Divider(
-                                            thickness: 1,
-                                            color: Colors.deepPurple.shade100),
+                                        Divider(thickness: 1, color: Colors.deepPurple.shade100),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('Name')}",
-                                            selectedData.name),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('Address')}",
-                                            selectedData.address),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('doorBhash')}",
-                                            selectedData.doorabhaash),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('Category')}",
-                                            selectedData
-                                                .selectedDropdownValueName),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('upshreni')}",
-                                            selectedData
-                                                .selectedDropdownValueName1),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('otherUpshreni')}",
-                                            selectedData.otherupshrenee),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('upshreni')} 1",
-                                            selectedData
-                                                .selectedDropdownValueName2),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('special')}",
-                                            selectedData
-                                                .selectedDropdownValueName3),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('prabhavKshetra')}",
-                                            selectedData
-                                                .selectedDropdownValueName4),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('anyaVisheshMahiti')}",
-                                            selectedData.othervishesh),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('samparkStithi')}",
-                                            selectedData
-                                                .selectedDropdownValueName5),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('samparkSootraNaav')}",
-                                            selectedData.samparkasutranav),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('samparakSootraDoorbhash')}",
-                                            selectedData
-                                                .samparkaSutraDoorbhash),
+                                        _buildInfoRow("${Statics.getLabel('Name')}", selectedData.name),
+                                        _buildInfoRow("${Statics.getLabel('Address')}", selectedData.address),
+                                        _buildInfoRow("${Statics.getLabel('doorBhash')}", selectedData.doorabhaash),
+                                        _buildInfoRow("${Statics.getLabel('Gender')}", Statics.getLabel(selectedData.isfemale == 1 ? 'Female' : 'Male')),
+                                        _buildInfoRow("${Statics.getLabel('Category')}", selectedData.selectedDropdownValueName),
+                                        _buildInfoRow("${Statics.getLabel('upshreni')}", selectedData.selectedDropdownValueName1),
+                                        _buildInfoRow("${Statics.getLabel('otherUpshreni')}", selectedData.otherupshrenee),
+                                        _buildInfoRow("${Statics.getLabel('upshreni')} 1", selectedData.selectedDropdownValueName2),
+                                        _buildInfoRow("${Statics.getLabel('special')}", selectedData.selectedDropdownValueName3),
+                                        _buildInfoRow("${Statics.getLabel('prabhavKshetra')}", selectedData.selectedDropdownValueName4),
+                                        _buildInfoRow("${Statics.getLabel('anyaVisheshMahiti')}", selectedData.othervishesh),
+                                        _buildInfoRow("${Statics.getLabel('samparkStithi')}", selectedData.selectedDropdownValueName5),
+                                        _buildInfoRow("${Statics.getLabel('samparkSootraNaav')}", selectedData.samparkasutranav),
+                                        _buildInfoRow("${Statics.getLabel('samparakSootraDoorbhash')}", selectedData.samparkaSutraDoorbhash),
                                       ],
                                     ),
                                   ),
@@ -4662,17 +3927,12 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text(
-                                          "${Statics.getLabel('bandKara')}",
-                                          style:
-                                              TextStyle(color: Colors.white)),
+                                      child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.purpleAccent,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 24, vertical: 12),
+                                        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(12),
                                         ),
                                       ),
                                     ),
@@ -4682,8 +3942,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             );
                           }
                         },
-                        child: Icon(Icons.remove_red_eye,
-                            color: Colors.green, size: 20),
+                        child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                       ),
                       SizedBox(
                         width: 20,
@@ -4719,8 +3978,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 ),
                               ),
                               content: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10.0),
+                                padding: const EdgeInsets.symmetric(vertical: 10.0),
                                 child: Text(
                                   "${Statics.getLabel('deleteconfirmText')}",
                                   textAlign: TextAlign.center,
@@ -4739,8 +3997,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                   ),
-                                  onPressed: () =>
-                                      Navigator.pop(context, false),
+                                  onPressed: () => Navigator.pop(context, false),
                                   child: Text(
                                     "${Statics.getLabel('ConfirmationNo')}",
                                     style: TextStyle(color: Colors.black),
@@ -4762,12 +4019,9 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               ],
                             ),
                           );
-                          if (shouldDelete == true &&
-                              selectedanyaPrabhaviLokRowIndex != null) {
+                          if (shouldDelete == true && selectedanyaPrabhaviLokRowIndex != null) {
                             setState(() {
-                              anyaPrabhaviLokDataList[
-                                      selectedanyaPrabhaviLokRowIndex!]
-                                  .isactive = 0;
+                              anyaPrabhaviLokDataList[selectedanyaPrabhaviLokRowIndex!].isactive = 0;
                               selectedanyaPrabhaviLokRowIndex = null;
                             });
                           }
@@ -4784,10 +4038,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                   children: [
                     Text(
                       "${Statics.getLabel('GavatsajareHonareSan')}",
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.purpleAccent),
+                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.purpleAccent),
                     ),
                     InkWell(
                       onTap: () {
@@ -4805,11 +4056,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 5),
                         width: 100,
-                        decoration: BoxDecoration(
-                            border:
-                                Border.all(color: Colors.purpleAccent.shade100),
-                            color: Colors.purpleAccent.shade100,
-                            borderRadius: BorderRadius.circular(15)),
+                        decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.shade100, borderRadius: BorderRadius.circular(15)),
                         child: Center(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -4817,9 +4064,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               Icon(Icons.add, color: Colors.white, size: 15),
                               Text(
                                 "${Statics.getLabel('AddButton')}",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
@@ -4842,11 +4087,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         width: MediaQuery.of(context).size.width * 1.5,
                         child: DataTable(
                           showCheckboxColumn: false,
-                          headingRowColor:
-                              MaterialStatePropertyAll(Colors.purple.shade50),
-                          headingTextStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87),
+                          headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+                          headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                           columns: [
                             DataColumn(
                                 label: Text(
@@ -4865,21 +4107,15 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               "${Statics.getLabel('Sampark')}",
                             )),
                           ],
-                          rows: vastitSajarHonareSanDataList
-                              .asMap()
-                              .entries
-                              .where((entry) => entry.value.isactive == 1)
-                              .map((entry) {
+                          rows: vastitSajarHonareSanDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                             int index = entry.key;
                             var data = entry.value;
                             bool isSelected = selectedSanIdIndex == index;
                             return DataRow(
                                 selected: isSelected,
-                                color:
-                                    MaterialStateProperty.resolveWith<Color?>(
+                                color: MaterialStateProperty.resolveWith<Color?>(
                                   (Set<MaterialState> states) {
-                                    if (isSelected)
-                                      return Colors.yellow.shade100;
+                                    if (isSelected) return Colors.yellow.shade100;
                                     return null;
                                   },
                                 ),
@@ -4892,14 +4128,11 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 },
                                 cells: [
                                   DataCell(Text(
-                                      /*data['sanName'] == "अन्य"? "${data['sanName']} - ${data['vastitSajarHonareAnyaSan']}" :*/ data
-                                              .selectedDropdownValueName ??
-                                          '')),
-                                  DataCell(
-                                      Text(data.ayojakasansthacinave ?? '')),
+                                      /*data['sanName'] == "अन्य"? "${data['sanName']} - ${data['vastitSajarHonareAnyaSan']}" :*/
+                                      data.selectedDropdownValueName ?? '')),
+                                  DataCell(Text(data.ayojakasansthacinave ?? '')),
                                   DataCell(Text(data.ayojakancinave ?? '')),
-                                  DataCell(
-                                      Text(data.aayojaksamparksootr ?? '')),
+                                  DataCell(Text(data.aayojaksamparksootr ?? '')),
                                 ]);
                           }).toList(),
                         ),
@@ -4916,8 +4149,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       InkWell(
                         onTap: () {
                           if (selectedSanIdIndex != null) {
-                            var selectedData = vastitSajarHonareSanDataList[
-                                selectedSanIdIndex!];
+                            var selectedData = vastitSajarHonareSanDataList[selectedSanIdIndex!];
                             showDialog(
                               context: context,
                               builder: (context) {
@@ -4939,29 +4171,15 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   content: SingleChildScrollView(
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Divider(
-                                            thickness: 1,
-                                            color: Colors.deepPurple.shade100),
+                                        Divider(thickness: 1, color: Colors.deepPurple.shade100),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('festivals')}",
-                                            selectedData
-                                                .selectedDropdownValueName),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('otherFestivals')}",
-                                            selectedData.otherSajareSan),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('aayojakSansthachiNave')}",
-                                            selectedData.ayojakasansthacinave),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('aayojakNaav')}",
-                                            selectedData.ayojakancinave),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('samparkSootraNaav')}",
-                                            selectedData.aayojaksamparksootr),
+                                        _buildInfoRow("${Statics.getLabel('festivals')}", selectedData.selectedDropdownValueName),
+                                        _buildInfoRow("${Statics.getLabel('otherFestivals')}", selectedData.otherSajareSan),
+                                        _buildInfoRow("${Statics.getLabel('aayojakSansthachiNave')}", selectedData.ayojakasansthacinave),
+                                        _buildInfoRow("${Statics.getLabel('aayojakNaav')}", selectedData.ayojakancinave),
+                                        _buildInfoRow("${Statics.getLabel('samparkSootraNaav')}", selectedData.aayojaksamparksootr),
                                       ],
                                     ),
                                   ),
@@ -4969,17 +4187,12 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text(
-                                          "${Statics.getLabel('bandKara')}",
-                                          style:
-                                              TextStyle(color: Colors.white)),
+                                      child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.purpleAccent,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 24, vertical: 12),
+                                        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(12),
                                         ),
                                       ),
                                     ),
@@ -4989,16 +4202,14 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             );
                           }
                         },
-                        child: Icon(Icons.remove_red_eye,
-                            color: Colors.green, size: 20),
+                        child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                       ),
                       SizedBox(
                         width: 20,
                       ),
                       InkWell(
                         onTap: () {
-                          showVastitSajarHonareSanPopup(context,
-                              editIndex: selectedSanIdIndex, onDataChanged: () {
+                          showVastitSajarHonareSanPopup(context, editIndex: selectedSanIdIndex, onDataChanged: () {
                             setState(() {});
                           });
                         },
@@ -5027,8 +4238,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 ),
                               ),
                               content: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10.0),
+                                padding: const EdgeInsets.symmetric(vertical: 10.0),
                                 child: Text(
                                   "${Statics.getLabel('deleteconfirmText')}",
                                   textAlign: TextAlign.center,
@@ -5047,8 +4257,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                   ),
-                                  onPressed: () =>
-                                      Navigator.pop(context, false),
+                                  onPressed: () => Navigator.pop(context, false),
                                   child: Text(
                                     "${Statics.getLabel('ConfirmationNo')}",
                                     style: TextStyle(color: Colors.black),
@@ -5070,16 +4279,14 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               ],
                             ),
                           );
-                          if (shouldDelete == true &&
-                              selectedSanIdIndex != null) {
+                          if (shouldDelete == true && selectedSanIdIndex != null) {
                             // setState(() {
                             //   vastitSajarHonareSanDataList
                             //       .removeAt(selectedSanIdIndex!);
                             //   selectedSanIdIndex = null;
                             // });
                             setState(() {
-                              vastitSajarHonareSanDataList[selectedSanIdIndex!]
-                                  .isactive = 0;
+                              vastitSajarHonareSanDataList[selectedSanIdIndex!].isactive = 0;
                               selectedSanIdIndex = null;
                             });
                           }
@@ -5098,10 +4305,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     Flexible(
                       child: Text(
                         "${Statics.getLabel('GavatHonareKaryakram')}",
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.purpleAccent),
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.purpleAccent),
                         softWrap: true,
                         overflow: TextOverflow.visible,
                       ),
@@ -5123,11 +4327,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 5),
                         width: 100,
-                        decoration: BoxDecoration(
-                            border:
-                                Border.all(color: Colors.purpleAccent.shade100),
-                            color: Colors.purpleAccent.shade100,
-                            borderRadius: BorderRadius.circular(15)),
+                        decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.shade100, borderRadius: BorderRadius.circular(15)),
                         child: Center(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -5136,9 +4336,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               SizedBox(width: 5),
                               Text(
                                 "${Statics.getLabel('AddButton')}",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
@@ -5159,10 +4357,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       scrollDirection: Axis.horizontal,
                       child: DataTable(
                         showCheckboxColumn: false,
-                        headingRowColor:
-                            MaterialStatePropertyAll(Colors.purple.shade50),
-                        headingTextStyle: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.black87),
+                        headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+                        headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                         columns: [
                           DataColumn(
                               label: Text(
@@ -5181,15 +4377,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             "${Statics.getLabel('Sampark')}",
                           )),
                         ],
-                        rows: vastitSajarHonareSamajikKaryakramDataList
-                            .asMap()
-                            .entries
-                            .where((entry) => entry.value.isactive == 1)
-                            .map((entry) {
+                        rows: vastitSajarHonareSamajikKaryakramDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                           int index = entry.key;
                           var data = entry.value;
-                          bool isSelected =
-                              selectedSamajikKaryakramIdIndex == index;
+                          bool isSelected = selectedSamajikKaryakramIdIndex == index;
                           return DataRow(
                               selected: isSelected,
                               color: MaterialStateProperty.resolveWith<Color?>(
@@ -5206,8 +4397,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 }
                               },
                               cells: [
-                                DataCell(
-                                    Text(data.selectedDropdownValueName ?? '')),
+                                DataCell(Text(data.selectedDropdownValueName ?? '')),
                                 DataCell(Text(data.ayojakasansthacinave ?? '')),
                                 DataCell(Text(data.ayojakancinave ?? '')),
                                 DataCell(Text(data.aayojaksamparksootr ?? '')),
@@ -5226,9 +4416,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       InkWell(
                         onTap: () {
                           if (selectedSamajikKaryakramIdIndex != null) {
-                            var selectedData =
-                                vastitSajarHonareSamajikKaryakramDataList[
-                                    selectedSamajikKaryakramIdIndex!];
+                            var selectedData = vastitSajarHonareSamajikKaryakramDataList[selectedSamajikKaryakramIdIndex!];
                             showDialog(
                               context: context,
                               builder: (context) {
@@ -5250,29 +4438,15 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   content: SingleChildScrollView(
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Divider(
-                                            thickness: 1,
-                                            color: Colors.deepPurple.shade100),
+                                        Divider(thickness: 1, color: Colors.deepPurple.shade100),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('samajikKaryakram')}",
-                                            selectedData
-                                                .selectedDropdownValueName),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('other')}",
-                                            selectedData.otherKaryakram),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('aayojakSansthachiNave')}",
-                                            selectedData.ayojakasansthacinave),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('aayojakNaav')}",
-                                            selectedData.ayojakancinave),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('Sampark')}",
-                                            selectedData.aayojaksamparksootr),
+                                        _buildInfoRow("${Statics.getLabel('samajikKaryakram')}", selectedData.selectedDropdownValueName),
+                                        _buildInfoRow("${Statics.getLabel('other')}", selectedData.otherKaryakram),
+                                        _buildInfoRow("${Statics.getLabel('aayojakSansthachiNave')}", selectedData.ayojakasansthacinave),
+                                        _buildInfoRow("${Statics.getLabel('aayojakNaav')}", selectedData.ayojakancinave),
+                                        _buildInfoRow("${Statics.getLabel('Sampark')}", selectedData.aayojaksamparksootr),
                                       ],
                                     ),
                                   ),
@@ -5280,17 +4454,12 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text(
-                                          "${Statics.getLabel('bandKara')}",
-                                          style:
-                                              TextStyle(color: Colors.white)),
+                                      child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.purpleAccent,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 24, vertical: 12),
+                                        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(12),
                                         ),
                                       ),
                                     ),
@@ -5300,17 +4469,14 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             );
                           }
                         },
-                        child: Icon(Icons.remove_red_eye,
-                            color: Colors.green, size: 20),
+                        child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                       ),
                       SizedBox(
                         width: 20,
                       ),
                       InkWell(
                         onTap: () {
-                          showVastitSajarHonareSamajikKaryakramPopup(context,
-                              editIndex: selectedSamajikKaryakramIdIndex,
-                              onDataChanged: () {
+                          showVastitSajarHonareSamajikKaryakramPopup(context, editIndex: selectedSamajikKaryakramIdIndex, onDataChanged: () {
                             setState(() {});
                           });
                         },
@@ -5339,8 +4505,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 ),
                               ),
                               content: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10.0),
+                                padding: const EdgeInsets.symmetric(vertical: 10.0),
                                 child: Text(
                                   "${Statics.getLabel('deleteconfirmText')}",
                                   textAlign: TextAlign.center,
@@ -5359,8 +4524,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                   ),
-                                  onPressed: () =>
-                                      Navigator.pop(context, false),
+                                  onPressed: () => Navigator.pop(context, false),
                                   child: Text(
                                     "${Statics.getLabel('ConfirmationNo')}",
                                     style: TextStyle(color: Colors.black),
@@ -5382,17 +4546,14 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               ],
                             ),
                           );
-                          if (shouldDelete == true &&
-                              selectedSamajikKaryakramIdIndex != null) {
+                          if (shouldDelete == true && selectedSamajikKaryakramIdIndex != null) {
                             // setState(() {
                             //   vastitSajarHonareSamajikKaryakramDataList
                             //       .removeAt(selectedSamajikKaryakramIdIndex!);
                             //   selectedSamajikKaryakramIdIndex = null;
                             // });
                             setState(() {
-                              vastitSajarHonareSamajikKaryakramDataList[
-                                      selectedSamajikKaryakramIdIndex!]
-                                  .isactive = 0;
+                              vastitSajarHonareSamajikKaryakramDataList[selectedSamajikKaryakramIdIndex!].isactive = 0;
                               selectedSamajikKaryakramIdIndex = null;
                             });
                           }
@@ -5413,59 +4574,48 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       if (gaavSamitiYesNo == 0 || gaavSamitiYesNo == 1) {
                         print("1");
 
-                        String sarpanchName =
-                            sarpanchNameController.text.trim();
+                        String sarpanchName = sarpanchNameController.text.trim();
                         if (sarpanchName.isEmpty) {
                           print("2");
 
-                          Statics.showToast(
-                              "${Statics.getLabel('sarpanchNavValidation')}");
+                          Statics.showToast("${Statics.getLabel('sarpanchNavValidation')}");
                           return;
                         }
-                        if (beforsanghaonnowisoff != 0 &&
-                            beforsanghaonnowisoff != 1) {
+                        if (beforsanghaonnowisoff != 0 && beforsanghaonnowisoff != 1) {
                           print("3");
 
-                          Statics.showToast(
-                              "${Statics.getLabel('purviShakhaValidation')}");
+                          Statics.showToast("${Statics.getLabel('purviShakhaValidation')}");
                           return;
                         }
-                        if (anyaVividhKshetracheKame != 0 &&
-                            anyaVividhKshetracheKame != 1) {
+                        if (anyaVividhKshetracheKame != 0 && anyaVividhKshetracheKame != 1) {
                           print("4");
 
-                          Statics.showToast(
-                              "${Statics.getLabel('anyaVividhValidation')}");
+                          Statics.showToast("${Statics.getLabel('anyaVividhValidation')}");
                           return;
                         }
                         if (gavatilMumbaikar != 0 && gavatilMumbaikar != 1) {
                           print("5");
 
-                          Statics.showToast(
-                              "${Statics.getLabel('mumbaikarValidation')}");
+                          Statics.showToast("${Statics.getLabel('mumbaikarValidation')}");
                           return;
                         }
                         if (vadiGharLoksankhyaEnteredDataList!.isEmpty) {
                           print("6");
 
-                          Statics.showToast(
-                              "${Statics.getLabel('vadipadyachiInfoValidation')}");
+                          Statics.showToast("${Statics.getLabel('vadipadyachiInfoValidation')}");
                           return;
                         }
-                        if (maleController.text == "" &&
-                            femaleController.text == "") {
+                        if (maleController.text == "" && femaleController.text == "") {
                           print(maleController.text);
                           print(femaleController.text);
                           print("7");
 
-                          Statics.showToast(
-                              "${Statics.getLabel('maleFemaleCountValidation')}");
+                          Statics.showToast("${Statics.getLabel('maleFemaleCountValidation')}");
                           return;
                         }
                         print("8");
                         if (sarpanchDoorbhasController.text.length != 10) {
-                          Statics.showToast(
-                              "${Statics.getLabel('mobileNumberLimit')}");
+                          Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
                           return;
                         }
                         submitStep1Form();
@@ -5497,8 +4647,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 style: TextButton.styleFrom(
                                   backgroundColor: Colors.red.shade700,
                                   foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                 ),
                                 onPressed: () => Navigator.pop(context),
                                 child: Text(
@@ -5518,8 +4667,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     width: double.infinity,
                     height: 40,
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    margin:
-                        const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                    margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
                     decoration: BoxDecoration(
                       color: Colors.purpleAccent,
                       borderRadius: BorderRadius.circular(15),
@@ -5565,16 +4713,14 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
       "VastisarSewaPrakalpa": sewaPrakalpaEnteredDataList,
       "VastisarvividhKshetaCheKam": vividhKshetaCHeKamEnteredDataList,
       "anyaVividhKshetracheKame": anyaVividhKshetracheKame,
-      "VastisarvividhSampradhaySatsangKendra":
-          vividhadhyatmitStsangKendraEnteredDataList,
+      "VastisarvividhSampradhaySatsangKendra": vividhadhyatmitStsangKendraEnteredDataList,
       "VastisargavatilMumbaikar": gavatilMumbaikarEnteredDataList,
       "isGavatilMumbaikar": gavatilMumbaikar,
       "VastisarReligion": enteredreligionDataList,
       "Vastisarupaasana": upasnaSthalDataList,
       "Vastisarsajjanshakti": sajjanShaktiDataList,
       "VastisarAnyaprabhavilokam": anyaPrabhaviLokDataList,
-      "VastisarVastitasajaraSamajikkaryakram":
-          vastitSajarHonareSamajikKaryakramDataList,
+      "VastisarVastitasajaraSamajikkaryakram": vastitSajarHonareSamajikKaryakramDataList,
       "VastisarVastitamahatvacesana": vastitSajarHonareSanDataList,
       "sarpanchaName": sarpanchNameController.text,
       "maleCount": maleController.text,
@@ -5587,8 +4733,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
       "beforeShakhaSaptahikIsOnNowOff": beforsanghaonnowisoff,
       "VasticyacatuSima": vastiChatahuSimaController.text,
       "googlemap": selectedFilePath,
-      "Vastitasajaraanyakaryakaram":
-          vastitHonareSamajikAnyakaryakramController.text,
+      "Vastitasajaraanyakaryakaram": vastitHonareSamajikAnyakaryakramController.text,
       "VastisarJaagaranshreneesthiti": jagranShreniEnteredDataList,
       "VastisarGatividhikaryasthiti": enteredDataListGatividhi,
       "VastisarVasahatprakara": enteredVasahatPrakarDataList,
@@ -5598,11 +4743,11 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
       "andajeGhare": andajeGhareController.text,
       "isImage": 0,
       "isvasti": 0,
+      // "isfemale": isFemale ? 1 : 0,
     };
     String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
     log("Step 1 Form Data (JSON):\n$formattedJson");
-    String response = await Statics.vastiSarvekshanStep1FormSubmit(
-        context, jsonEncode(formData));
+    String response = await Statics.vastiSarvekshanStep1FormSubmit(context, jsonEncode(formData));
     setState(() {
       _isStep1Completed = response == "success";
       _isStep2Completed = response == "success";
@@ -5651,17 +4796,26 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   String? anyaPrabhaviLokPrabhavKshetraName;
   int? selectedAnyaPrabhaviLokPrabhavKshetraIDEdit;
   Masterdata? selectedAnyaPrabhaviLokPrabhavKshetra;
+
 //=================================================== ANYA PRABHAVI VISHESH FORM ====================================================================================
   int? anyaPrabhaviLokVisheshId;
   String? anyaPrabhaviLokVisheshName;
   int? selectedAnyaPrabhaviLokVisheshIDEdit;
   Masterdata? selectedAnyaPrabhaviLokVishesh;
+
 //=====================================================================================================================================
   void resetDropdowns() {
+    log("reset called >>>>>>>>>>>>>>>>>>>>>>> ");
     setState(() {
       selectedShreni = null;
       selectedUpShreni = null;
       selectedUpShreni2 = null;
+      anyaPrabhaviLokShreniId = null;
+      anyaPrabhaviLokUpShreniId = null;
+      anyaPrabhaviLokUpShreni1Id = null;
+      anyaPrabhaviLokShreniIdEdit = null;
+      anyaPrabhaviLokUpShreniIdEdit = null;
+      anyaPrabhaviLokUpShreni1IdEdit = null;
     });
   }
 
@@ -5680,37 +4834,42 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
     Color? iconColor,
     bool? viewName,
   }) {
-    List<Masterdata> masterDataList =
-        vastisarvekshanDropDownDataModel!.masterdata!;
-    List<Masterdata> filteredItems =
-        masterDataList.where((e) => e.typename == filterTypeName).toList();
+    Masterdata? selectedValue = selectedShreni;
+    Masterdata? selectedDependentValue = selectedUpShreni;
+    Masterdata? selectedThirdLevelValue = selectedUpShreni2;
 
-    Masterdata? selectedValue = anyaPrabhaviLokShreniId != null
-        ? filteredItems.firstWhere((e) => e.id == anyaPrabhaviLokShreniId,
-            orElse: () => Masterdata())
-        : null;
+    List<Masterdata> masterDataList = vastisarvekshanDropDownDataModel?.masterdata ?? [];
+    List<Masterdata> filteredItems = masterDataList.where((e) => e.typename == filterTypeName).toList();
 
-    List<Masterdata> dependentItems = selectedValue != null &&
-            selectedValue.id != null
-        ? masterDataList.where((e) => e.parentid == selectedValue.id).toList()
-        : [];
+    if (anyaPrabhaviLokShreniId != null && selectedValue == null) {
+      selectedValue = filteredItems.firstWhere(
+        (e) => e.id == anyaPrabhaviLokShreniId,
+        orElse: () => filteredItems.isNotEmpty ? filteredItems.first : Masterdata(),
+      );
+      selectedShreni = selectedValue;
+    }
 
-    Masterdata? selectedDependentValue = anyaPrabhaviLokUpShreniId != null
-        ? dependentItems.firstWhere((e) => e.id == anyaPrabhaviLokUpShreniId,
-            orElse: () => Masterdata())
-        : null;
+    List<Masterdata> dependentItems = selectedValue != null ? masterDataList.where((e) => e.parentid == selectedValue!.id).toList() : [];
 
-    List<Masterdata> thirdLevelItems =
-        selectedDependentValue != null && selectedDependentValue.id != null
-            ? masterDataList
-                .where((e) => e.parentid == selectedDependentValue.id)
-                .toList()
-            : [];
+    if (anyaPrabhaviLokUpShreniId != null && selectedDependentValue == null) {
+      selectedDependentValue = dependentItems.firstWhere(
+        (e) => e.id == anyaPrabhaviLokUpShreniId,
+        orElse: () => dependentItems.isNotEmpty ? dependentItems.first : Masterdata(),
+      );
 
-    Masterdata? selectedThirdLevelValue = anyaPrabhaviLokUpShreni1Id != null
-        ? thirdLevelItems.firstWhere((e) => e.id == anyaPrabhaviLokUpShreni1Id,
-            orElse: () => Masterdata())
-        : null;
+      selectedUpShreni = selectedDependentValue;
+    }
+
+    List<Masterdata> thirdLevelItems = selectedDependentValue != null ? masterDataList.where((e) => e.parentid == selectedDependentValue!.id).toList() : [];
+
+    if (anyaPrabhaviLokUpShreni1Id != null && selectedThirdLevelValue == null) {
+      selectedThirdLevelValue = thirdLevelItems.firstWhere(
+        (e) => e.id == anyaPrabhaviLokUpShreni1Id,
+        orElse: () => thirdLevelItems.isNotEmpty ? thirdLevelItems.first : Masterdata(),
+      );
+
+      selectedUpShreni2 = selectedThirdLevelValue;
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -5718,10 +4877,19 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
         if (filteredItems.isNotEmpty)
           _buildDropdown2(
             hintText: hintText,
-            value: selectedValue?.id != null ? selectedValue : null,
+            value: selectedValue,
             items: filteredItems,
             onChanged: (newValue) {
               if (newValue != null) {
+                anyaPrabhaviLokShreniId = newValue.id;
+                anyaPrabhaviLokShreniName = newValue.value;
+
+                setState(() {
+                  selectedShreni = newValue;
+                  selectedUpShreni = null;
+                  selectedUpShreni2 = null;
+                });
+
                 onValueSelected(newValue.id!, newValue.value!, newValue);
               }
             },
@@ -5735,14 +4903,21 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
         if (dependentItems.isNotEmpty)
           _buildDropdown2(
             hintText: "${Statics.getLabel('selectUpshreni')}",
-            value: selectedDependentValue?.id != null
-                ? selectedDependentValue
-                : null,
+            value: selectedDependentValue,
             items: dependentItems,
             onChanged: (newValue) {
-              if (newValue != null && onDependentValueSelected != null) {
-                onDependentValueSelected(
-                    newValue.id!, newValue.value!, newValue);
+              if (newValue != null) {
+                anyaPrabhaviLokUpShreniId = newValue.id;
+                anyaPrabhaviLokUpShreniName = newValue.value;
+
+                setState(() {
+                  selectedUpShreni = newValue;
+                  selectedUpShreni2 = null;
+                });
+
+                if (onDependentValueSelected != null) {
+                  onDependentValueSelected(newValue.id!, newValue.value!, newValue);
+                }
               }
             },
             decoration: decoration,
@@ -5755,14 +4930,20 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
         if (thirdLevelItems.isNotEmpty)
           _buildDropdown2(
             hintText: "${Statics.getLabel('selectUpshreni2')}",
-            value: selectedThirdLevelValue?.id != null
-                ? selectedThirdLevelValue
-                : null,
+            value: selectedThirdLevelValue,
             items: thirdLevelItems,
             onChanged: (newValue) {
-              if (newValue != null && onThirdLevelValueSelected != null) {
-                onThirdLevelValueSelected(
-                    newValue.id!, newValue.value!, newValue);
+              if (newValue != null) {
+                anyaPrabhaviLokUpShreni1Id = newValue.id;
+                anyaPrabhaviLokUpShreni1Name = newValue.value;
+
+                setState(() {
+                  selectedUpShreni2 = newValue;
+                });
+
+                if (onThirdLevelValueSelected != null) {
+                  onThirdLevelValueSelected(newValue.id!, newValue.value!, newValue);
+                }
               }
             },
             decoration: decoration,
@@ -5798,9 +4979,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
         child: DropdownButton<T>(
           iconEnabledColor: iconColor ?? Colors.black,
           hint: Text(
-            value != null && viewName == true
-                ? value.value ?? "No Value"
-                : hintText,
+            value != null && viewName == true ? value.value ?? "No Value" : hintText,
             style: TextStyle(color: textColor ?? Colors.black),
           ),
           value: value,
@@ -5828,8 +5007,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   TextEditingController loksankhyaController = TextEditingController();
   int? isActiveVadiGharLoksankhya = 1;
   int? pkIdVadiGharLoksankhya = 0;
-  void showVadiGharLoksankhyaPopup(BuildContext context,
-      {int? editIndex, VoidCallback? onDataChanged}) {
+
+  void showVadiGharLoksankhyaPopup(BuildContext context, {int? editIndex, VoidCallback? onDataChanged}) {
     if (editIndex != null) {
       var data = vadiGharLoksankhyaEnteredDataList![editIndex];
       vadicheNaavController.text = data.vadiCheNav ?? "";
@@ -5842,8 +5021,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
       context: context,
       builder: (ctx) {
         return Dialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           child: StatefulBuilder(
             builder: (context, setState) {
               return Container(
@@ -5882,23 +5060,16 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               controller: vadicheNaavController,
                             ),
                             const SizedBox(height: 10),
-                            textControllerField2(
-                                name: "${Statics.getLabel('andaajeGhar')}",
-                                controller: andajeGhareController,
-                                keyboardType: TextInputType.number),
+                            textControllerField2(name: "${Statics.getLabel('andaajeGhar')}", controller: andajeGhareController, keyboardType: TextInputType.number),
                             const SizedBox(height: 10),
-                            textControllerField2(
-                                name: "${Statics.getLabel('andajeLoksankhya')}",
-                                controller: loksankhyaController,
-                                keyboardType: TextInputType.number),
+                            textControllerField2(name: "${Statics.getLabel('andajeLoksankhya')}", controller: loksankhyaController, keyboardType: TextInputType.number),
                             const SizedBox(height: 20),
                             Align(
                               alignment: Alignment.center,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.purple,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8)),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                 ),
                                 // onPressed: () {
                                 //   VastisarVadiGharLoksankhya data =
@@ -5925,25 +5096,19 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 //   }
                                 // },
                                 onPressed: () {
-                                  String andajeGharInput =
-                                      loksankhyaController.text.trim();
+                                  String andajeGharInput = loksankhyaController.text.trim();
 
                                   // Check if input is a valid number between 0 and 100
-                                  if (!RegExp(r'^\d+$').hasMatch(
-                                          andajeGharInput) || // only digits
-                                      int.tryParse(andajeGharInput) ==
-                                          null || // not a number
+                                  if (!RegExp(r'^\d+$').hasMatch(andajeGharInput) || // only digits
+                                      int.tryParse(andajeGharInput) == null || // not a number
                                       int.parse(andajeGharInput) < 0 ||
                                       int.parse(andajeGharInput) > 100) {
-                                    Statics.showToast(
-                                        "${Statics.getLabel('persentValidation')}");
+                                    Statics.showToast("${Statics.getLabel('persentValidation')}");
                                     return;
                                   }
-                                  VastisarVadiGharLoksankhya data =
-                                      VastisarVadiGharLoksankhya(
+                                  VastisarVadiGharLoksankhya data = VastisarVadiGharLoksankhya(
                                     pkid: VastisarVividhKshetracheKamPkId,
-                                    isactive:
-                                        isActiveVastisarVividhKshetracheKam,
+                                    isactive: isActiveVastisarVividhKshetracheKam,
                                     vastiid: int.parse(selctedLevelId!),
                                     vadiCheNav: vadicheNaavController.text,
                                     andajeGhar: andajeGhareController.text,
@@ -5951,11 +5116,9 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   );
 
                                   if (editIndex != null) {
-                                    vadiGharLoksankhyaEnteredDataList![
-                                        editIndex] = data;
+                                    vadiGharLoksankhyaEnteredDataList![editIndex] = data;
                                   } else {
-                                    vadiGharLoksankhyaEnteredDataList!
-                                        .add(data);
+                                    vadiGharLoksankhyaEnteredDataList!.add(data);
                                   }
 
                                   Navigator.of(ctx).pop();
@@ -6028,10 +5191,9 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   String? selectedYearType = "shaakha";
   int? selectedisActive = 1;
   int? selectedPkId = 0;
-  TextEditingController kuthalaVarshiVayogatShaakhaYearController =
-      TextEditingController();
-  TextEditingController kuthalaVarshiVayogatSaptahikYearController =
-      TextEditingController();
+  TextEditingController kuthalaVarshiVayogatShaakhaYearController = TextEditingController();
+  TextEditingController kuthalaVarshiVayogatSaptahikYearController = TextEditingController();
+
   void showKuthalaVarshiPopup(
     BuildContext context, {
     int? editIndex,
@@ -6049,9 +5211,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
               ? "saptahikMilan"
               : "";
       selectedisActive = data.isactive;
-      selectedMasterKuthalaVarshiName = vastisarvekshanDropDownDataModel!
-          .masterdata!
-          .firstWhere((item) => item.id == selectedKuthalaVarshiId);
+      selectedMasterKuthalaVarshiName = vastisarvekshanDropDownDataModel!.masterdata!.firstWhere((item) => item.id == selectedKuthalaVarshiId);
       if (selectedYearType == 'shaakha') {
         kuthalaVarshiVayogatShaakhaYearController.text = data.shaakhaa ?? '';
       } else if (selectedYearType == 'saptahikMilan') {
@@ -6117,8 +5277,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           onChanged: (value) {
                             setState(() {
                               selectedYearType = value;
-                              kuthalaVarshiVayogatSaptahikYearController
-                                  .clear();
+                              kuthalaVarshiVayogatSaptahikYearController.clear();
                             });
                           },
                         ),
@@ -6147,8 +5306,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     if (selectedYearType == 'saptahikMilan')
                       textControllerField2(
                           name: "${Statics.getLabel('kuthalaVarshi')}",
-                          controller:
-                              kuthalaVarshiVayogatSaptahikYearController,
+                          controller: kuthalaVarshiVayogatSaptahikYearController,
                           keyboardType: TextInputType.number,
                           hintTextString: "e.g. 2025",
                           maxInput: 4),
@@ -6168,18 +5326,11 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                   ),
                 ),
                 onPressed: () {
-                  int? saptahikYear = int.tryParse(
-                      kuthalaVarshiVayogatSaptahikYearController.text);
-                  int? shaakhaYear = int.tryParse(
-                      kuthalaVarshiVayogatShaakhaYearController.text);
+                  int? saptahikYear = int.tryParse(kuthalaVarshiVayogatSaptahikYearController.text);
+                  int? shaakhaYear = int.tryParse(kuthalaVarshiVayogatShaakhaYearController.text);
 
                   // ✅ Step 1: Check if years are in valid range
-                  if ((saptahikYear != null &&
-                          saptahikYear >= 1925 &&
-                          saptahikYear <= 2025) ||
-                      (shaakhaYear != null &&
-                          shaakhaYear >= 1925 &&
-                          shaakhaYear <= 2025)) {
+                  if ((saptahikYear != null && saptahikYear >= 1925 && saptahikYear <= 2025) || (shaakhaYear != null && shaakhaYear >= 1925 && shaakhaYear <= 2025)) {
                     // ✅ Step 2: Validation - Already exists check
                     int currentType = selectedYearType == "shaakha"
                         ? 1
@@ -6188,27 +5339,20 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             : 2;
 
                     // Get all entries with same ID
-                    var matchedEntries = kuthalaVarshiDataList!
-                        .where((e) => e.id == selectedKuthalaVarshiId)
-                        .toList();
+                    var matchedEntries = kuthalaVarshiDataList!.where((e) => e.id == selectedKuthalaVarshiId).toList();
 
-                    bool hasShaakha =
-                        matchedEntries.any((e) => e.isShaakhaa == 1);
-                    bool hasSaptahik =
-                        matchedEntries.any((e) => e.isShaakhaa == 0);
+                    bool hasShaakha = matchedEntries.any((e) => e.isShaakhaa == 1);
+                    bool hasSaptahik = matchedEntries.any((e) => e.isShaakhaa == 0);
 
                     if (editIndex == null && matchedEntries.isNotEmpty) {
                       if (currentType == 1 && hasShaakha) {
-                        Statics.showToast(
-                            "${Statics.getLabel('alreadyShakhaSelected')}");
+                        Statics.showToast("${Statics.getLabel('alreadyShakhaSelected')}");
                         return;
                       } else if (currentType == 0 && hasSaptahik) {
-                        Statics.showToast(
-                            "${Statics.getLabel('alreadySaptahikSelected')}");
+                        Statics.showToast("${Statics.getLabel('alreadySaptahikSelected')}");
                         return;
                       } else if (hasShaakha && hasSaptahik) {
-                        Statics.showToast(
-                            "${Statics.getLabel('alreadyVayogatSelected')}");
+                        Statics.showToast("${Statics.getLabel('alreadyVayogatSelected')}");
                         return;
                       }
                     }
@@ -6224,14 +5368,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       isShaakhaa: currentType,
                       pkid: selectedPkId,
                       vastiid: int.parse(selctedLevelId!),
-                      shaakhaa: currentType == 1
-                          ? kuthalaVarshiVayogatShaakhaYearController.text
-                              .trim()
-                          : "",
-                      saptahik: currentType == 0
-                          ? kuthalaVarshiVayogatSaptahikYearController.text
-                              .trim()
-                          : "",
+                      shaakhaa: currentType == 1 ? kuthalaVarshiVayogatShaakhaYearController.text.trim() : "",
+                      saptahik: currentType == 0 ? kuthalaVarshiVayogatSaptahikYearController.text.trim() : "",
                       isactive: selectedisActive,
                       selectedDropdownValueName: selectedKuthalaVarshiName,
                     );
@@ -6255,8 +5393,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     );
                   }
                 },
-                child: Text("${Statics.getLabel('Submit')}",
-                    style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -6278,6 +5415,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
 
 //========================  2. JAAGRAN SHRENI FORM ===========================================
   List<VastisarJaagaranshreneesthiti>? jagranShreniEnteredDataList = [];
+
 //========================  Sewa PRAKALPA FORM ===========================================
   List<VastisarSewaPrakalpa>? sewaPrakalpaEnteredDataList = [];
   int? selectedSewaprakalpaRowIndex;
@@ -6292,27 +5430,20 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   int? isActiveSewaprakalpa = 1;
   int? sewaprakalpaPkId = 0;
 
-  TextEditingController isOtherSewaprakalpaPrakaarConroller =
-      TextEditingController();
-  TextEditingController isOtherSewaprakalpaChalanvariSansthaConroller =
-      TextEditingController();
-  void showSewaPrakalpaPopup(BuildContext context,
-      {int? editIndex, VoidCallback? onDataChanged}) {
+  TextEditingController isOtherSewaprakalpaPrakaarConroller = TextEditingController();
+  TextEditingController isOtherSewaprakalpaChalanvariSansthaConroller = TextEditingController();
+
+  void showSewaPrakalpaPopup(BuildContext context, {int? editIndex, VoidCallback? onDataChanged}) {
     if (editIndex != null) {
       var data = sewaPrakalpaEnteredDataList![editIndex];
       selectedSewaprakalpaPrakaarID = data.sewaPrakalpaPrakaarId;
       selectedSewaprakalpaPrakaarIDEdit = data.sewaPrakalpaPrakaarId;
       selectedSewaprakalpaPrakaarName = data.selectedDropdownValueName;
-      selectedSewaprakalpaChalanvariSansthaIDEdit =
-          data.sewaprakalpaChalvanariSansthaId!;
-      selectedSewaprakalpaChalanvariSansthaID =
-          data.sewaprakalpaChalvanariSansthaId!;
-      selectedSewaprakalpaChalanvariSansthaName =
-          data.selectedDropdownValueName1;
-      isOtherSewaprakalpaPrakaarConroller.text =
-          data.otherSewaPrakalpaPrakaar ?? "";
-      isOtherSewaprakalpaChalanvariSansthaConroller.text =
-          data.otherSewaPrakalpaChalavinareShanstha ?? "";
+      selectedSewaprakalpaChalanvariSansthaIDEdit = data.sewaprakalpaChalvanariSansthaId!;
+      selectedSewaprakalpaChalanvariSansthaID = data.sewaprakalpaChalvanariSansthaId!;
+      selectedSewaprakalpaChalanvariSansthaName = data.selectedDropdownValueName1;
+      isOtherSewaprakalpaPrakaarConroller.text = data.otherSewaPrakalpaPrakaar ?? "";
+      isOtherSewaprakalpaChalanvariSansthaConroller.text = data.otherSewaPrakalpaChalavinareShanstha ?? "";
       isActiveSewaprakalpa = data.isactive;
       sewaprakalpaPkId = data.pkid;
     }
@@ -6320,8 +5451,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
       context: context,
       builder: (ctx) {
         return Dialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           child: StatefulBuilder(
             builder: (context, setState) {
               return Container(
@@ -6357,17 +5487,14 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           children: [
                             vastisarvekshanDropDownDataModel != null
                                 ? vastisarvekshanDropdown2(
-                                    dataModel:
-                                        vastisarvekshanDropDownDataModel!,
+                                    dataModel: vastisarvekshanDropDownDataModel!,
                                     filterTypeName: "सेवाप्रकल्पप्रकार",
                                     onItemSelected: (id, value, isOther) {
                                       selectedSewaprakalpaPrakaarID = id;
                                       selectedSewaprakalpaPrakaarName = value;
                                     },
-                                    hintText:
-                                        "${Statics.getLabel('SelectPrakar')}",
-                                    question:
-                                        "${Statics.getLabel('SelectPrakar')}",
+                                    hintText: "${Statics.getLabel('SelectPrakar')}",
+                                    question: "${Statics.getLabel('SelectPrakar')}",
                                     editId: selectedSewaprakalpaPrakaarIDEdit,
                                     selectedValue: selectedSewaprakalpaPrakaar,
                                     onSelectionChanged: (newValue) {
@@ -6386,77 +5513,50 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             const SizedBox(height: 10),
                             vastisarvekshanDropDownDataModel != null
                                 ? vastisarvekshanDropdown2(
-                                    dataModel:
-                                        vastisarvekshanDropDownDataModel!,
-                                    filterTypeName:
-                                        "सेवाप्रकल्पचालवणारीसंस्थासंघटन",
+                                    dataModel: vastisarvekshanDropDownDataModel!,
+                                    filterTypeName: "सेवाप्रकल्पचालवणारीसंस्थासंघटन",
                                     onItemSelected: (id, value, isOther) {
-                                      selectedSewaprakalpaChalanvariSansthaID =
-                                          id;
-                                      selectedSewaprakalpaChalanvariSansthaName =
-                                          value;
-                                      print(
-                                          "selectedVaramvaritaID $selectedSewaprakalpaChalanvariSansthaID |||| selectedVaramvaritaName $selectedSewaprakalpaChalanvariSansthaName");
-                                      isOtherSewaprakalpaChalanvariSansthaConroller
-                                          .clear();
+                                      selectedSewaprakalpaChalanvariSansthaID = id;
+                                      selectedSewaprakalpaChalanvariSansthaName = value;
+                                      print("selectedVaramvaritaID $selectedSewaprakalpaChalanvariSansthaID |||| selectedVaramvaritaName $selectedSewaprakalpaChalanvariSansthaName");
+                                      isOtherSewaprakalpaChalanvariSansthaConroller.clear();
                                     },
-                                    hintText:
-                                        "${Statics.getLabel('sansthaSanghatan')}",
-                                    question:
-                                        "${Statics.getLabel('sansthaSanghatan')}",
-                                    editId:
-                                        selectedSewaprakalpaChalanvariSansthaIDEdit,
-                                    selectedValue:
-                                        selectedSewaprakalpaChalanvariSanstha,
+                                    hintText: "${Statics.getLabel('sansthaSanghatan')}",
+                                    question: "${Statics.getLabel('sansthaSanghatan')}",
+                                    editId: selectedSewaprakalpaChalanvariSansthaIDEdit,
+                                    selectedValue: selectedSewaprakalpaChalanvariSanstha,
                                     onSelectionChanged: (newValue) {
                                       setState(() {
-                                        selectedSewaprakalpaChalanvariSanstha =
-                                            newValue;
+                                        selectedSewaprakalpaChalanvariSanstha = newValue;
                                       });
                                     },
                                   )
                                 : Container(),
                             const SizedBox(height: 10),
-                            if (selectedSewaprakalpaChalanvariSanstha
-                                    ?.isOther ==
-                                1)
-                              textControllerField2(
-                                  name: "${Statics.getLabel('other')}",
-                                  controller:
-                                      isOtherSewaprakalpaChalanvariSansthaConroller),
+                            if (selectedSewaprakalpaChalanvariSanstha?.isOther == 1)
+                              textControllerField2(name: "${Statics.getLabel('other')}", controller: isOtherSewaprakalpaChalanvariSansthaConroller),
                             const SizedBox(height: 20),
                             Align(
                               alignment: Alignment.center,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.purple,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8)),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                 ),
                                 onPressed: () {
-                                  VastisarSewaPrakalpa data =
-                                      VastisarSewaPrakalpa(
+                                  VastisarSewaPrakalpa data = VastisarSewaPrakalpa(
                                     pkid: sewaprakalpaPkId,
                                     isactive: isActiveSewaprakalpa,
                                     vastiid: int.parse(selctedLevelId!),
-                                    sewaPrakalpaPrakaarId:
-                                        selectedSewaprakalpaPrakaarID,
-                                    otherSewaPrakalpaPrakaar:
-                                        isOtherSewaprakalpaPrakaarConroller
-                                            .text,
-                                    selectedDropdownValueName:
-                                        selectedSewaprakalpaPrakaarName,
-                                    sewaprakalpaChalvanariSansthaId:
-                                        selectedSewaprakalpaChalanvariSansthaID,
-                                    selectedDropdownValueName1:
-                                        selectedSewaprakalpaChalanvariSansthaName,
-                                    otherSewaPrakalpaChalavinareShanstha:
-                                        isOtherSewaprakalpaChalanvariSansthaConroller
-                                            .text,
+                                    sewaPrakalpaPrakaarId: selectedSewaprakalpaPrakaarID,
+                                    otherSewaPrakalpaPrakaar: isOtherSewaprakalpaPrakaarConroller.text,
+                                    selectedDropdownValueName: selectedSewaprakalpaPrakaarName,
+                                    sewaprakalpaChalvanariSansthaId: selectedSewaprakalpaChalanvariSansthaID,
+                                    selectedDropdownValueName1: selectedSewaprakalpaChalanvariSansthaName,
+                                    otherSewaPrakalpaChalavinareShanstha: isOtherSewaprakalpaChalanvariSansthaConroller.text,
                                   );
                                   if (editIndex != null) {
-                                    sewaPrakalpaEnteredDataList![editIndex] =
-                                        data;
+                                    sewaPrakalpaEnteredDataList![editIndex] = data;
                                   } else {
                                     sewaPrakalpaEnteredDataList!.add(data);
                                   }
@@ -6506,17 +5606,15 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   List<VastisarVividhKshetracheKam>? vividhKshetaCHeKamEnteredDataList = [];
   int? selectedVastisarVividhKshetracheIndex;
   TextEditingController vividhkshetraKaamConroller = TextEditingController();
-  TextEditingController vividhkshetraChalavnareSansthaSanghatanConroller =
-      TextEditingController();
+  TextEditingController vividhkshetraChalavnareSansthaSanghatanConroller = TextEditingController();
   int? isActiveVastisarVividhKshetracheKam = 1;
   int? VastisarVividhKshetracheKamPkId = 0;
-  void showVividhKshetraCheKamePopup(BuildContext context,
-      {int? editIndex, VoidCallback? onDataChanged}) {
+
+  void showVividhKshetraCheKamePopup(BuildContext context, {int? editIndex, VoidCallback? onDataChanged}) {
     if (editIndex != null) {
       var data = vividhKshetaCHeKamEnteredDataList![editIndex];
       vividhkshetraKaamConroller.text = data.kaam ?? "";
-      vividhkshetraChalavnareSansthaSanghatanConroller.text =
-          data.chalavnariSansthaSanghatamn ?? "";
+      vividhkshetraChalavnareSansthaSanghatanConroller.text = data.chalavnariSansthaSanghatamn ?? "";
       isActiveVastisarVividhKshetracheKam = data.isactive;
       VastisarVividhKshetracheKamPkId = data.pkid;
     }
@@ -6524,8 +5622,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
       context: context,
       builder: (ctx) {
         return Dialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           child: StatefulBuilder(
             builder: (context, setState) {
               return Container(
@@ -6564,38 +5661,27 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               controller: vividhkshetraKaamConroller,
                             ),
                             const SizedBox(height: 10),
-                            textControllerField2(
-                                name:
-                                    "${Statics.getLabel('chalavnariSanghatana')}",
-                                controller:
-                                    vividhkshetraChalavnareSansthaSanghatanConroller),
+                            textControllerField2(name: "${Statics.getLabel('chalavnariSanghatana')}", controller: vividhkshetraChalavnareSansthaSanghatanConroller),
                             const SizedBox(height: 20),
                             Align(
                               alignment: Alignment.center,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.purple,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8)),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                 ),
                                 onPressed: () {
-                                  VastisarVividhKshetracheKam data =
-                                      VastisarVividhKshetracheKam(
+                                  VastisarVividhKshetracheKam data = VastisarVividhKshetracheKam(
                                     pkid: VastisarVividhKshetracheKamPkId,
-                                    isactive:
-                                        isActiveVastisarVividhKshetracheKam,
+                                    isactive: isActiveVastisarVividhKshetracheKam,
                                     vastiid: int.parse(selctedLevelId!),
                                     kaam: vividhkshetraKaamConroller.text,
-                                    chalavnariSansthaSanghatamn:
-                                        vividhkshetraChalavnareSansthaSanghatanConroller
-                                            .text,
+                                    chalavnariSansthaSanghatamn: vividhkshetraChalavnareSansthaSanghatanConroller.text,
                                   );
                                   if (editIndex != null) {
-                                    vividhKshetaCHeKamEnteredDataList![
-                                        editIndex] = data;
+                                    vividhKshetaCHeKamEnteredDataList![editIndex] = data;
                                   } else {
-                                    vividhKshetaCHeKamEnteredDataList!
-                                        .add(data);
+                                    vividhKshetaCHeKamEnteredDataList!.add(data);
                                   }
                                   Navigator.of(ctx).pop();
                                   clearFieldsVastisarVividhKshetracheKam();
@@ -6632,33 +5718,29 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   }
 
 //======================== ==================================================================
-  List<VastisarVividhAdhyatmikKendra>?
-      vividhadhyatmitStsangKendraEnteredDataList = [];
+  List<VastisarVividhAdhyatmikKendra>? vividhadhyatmitStsangKendraEnteredDataList = [];
   int? selectedVastisarVividhadhyatmitStsangKendraIndex;
   int? selectedVividhAAdhyatmikKendraIDEdit;
   int? selectedVividhAAdhyatmikKendraID;
   String? selectedVividhAAdhyatmikKendraName;
   Masterdata? selectedVividhAAdhyatmikKendraMasterDAta;
+
   // String? selectedVividhAAdhyatmikKendraGaavID;
   // String? selectedVividhAAdhyatmikKendraGaavIDEdit;
   // String? selectedVividhAAdhyatmikKendraGaavName;
   int? isActiveVividhAAdhyatmikKendra = 1;
   int? pkIdVividhAAdhyatmikKendra = 0;
-  TextEditingController isOtherVividhAAdhyatmikKendraController =
-      TextEditingController();
-  TextEditingController gavPramukhAdhyatmikKendraController =
-      TextEditingController();
-  TextEditingController samparkSootraAdhyatmikKendraController =
-      TextEditingController();
-  void showVividhadhyatmitStsangKendraPopup(BuildContext context,
-      {int? editIndex, VoidCallback? onDataChanged}) {
+  TextEditingController isOtherVividhAAdhyatmikKendraController = TextEditingController();
+  TextEditingController gavPramukhAdhyatmikKendraController = TextEditingController();
+  TextEditingController samparkSootraAdhyatmikKendraController = TextEditingController();
+
+  void showVividhadhyatmitStsangKendraPopup(BuildContext context, {int? editIndex, VoidCallback? onDataChanged}) {
     if (editIndex != null) {
       var data = vividhadhyatmitStsangKendraEnteredDataList![editIndex];
       selectedVividhAAdhyatmikKendraID = data.aadhyatmikKendraId;
       selectedVividhAAdhyatmikKendraIDEdit = data.aadhyatmikKendraId;
       selectedVividhAAdhyatmikKendraName = data.selectedDropdownValueName;
-      isOtherVividhAAdhyatmikKendraController.text =
-          data.isOtherAdhyatmitKendra ?? "";
+      isOtherVividhAAdhyatmikKendraController.text = data.isOtherAdhyatmitKendra ?? "";
       gavPramukhAdhyatmikKendraController.text = data.gaavPramukhName ?? "";
       samparkSootraAdhyatmikKendraController.text = data.samparkSootra ?? "";
       isActiveVividhAAdhyatmikKendra = data.isactive;
@@ -6672,8 +5754,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
       context: context,
       builder: (ctx) {
         return Dialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           child: StatefulBuilder(
             builder: (context, setState) {
               return Container(
@@ -6712,78 +5793,50 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 selectedVividhAAdhyatmikKendraID = id;
                                 selectedVividhAAdhyatmikKendraName = value;
                               },
-                              hintText:
-                                  "${Statics.getLabel('aadhyatmikKendra')}",
-                              question:
-                                  "${Statics.getLabel('aadhyatmikKendra')}",
+                              hintText: "${Statics.getLabel('aadhyatmikKendra')}",
+                              question: "${Statics.getLabel('aadhyatmikKendra')}",
                               editId: selectedVividhAAdhyatmikKendraID,
-                              selectedValue:
-                                  selectedVividhAAdhyatmikKendraMasterDAta,
+                              selectedValue: selectedVividhAAdhyatmikKendraMasterDAta,
                               onSelectionChanged: (newValue) {
                                 setState(() {
-                                  selectedVividhAAdhyatmikKendraMasterDAta =
-                                      newValue;
+                                  selectedVividhAAdhyatmikKendraMasterDAta = newValue;
                                 });
                               },
                             )
                           : Container(),
                       const SizedBox(height: 10),
-                      if (selectedVividhAAdhyatmikKendraMasterDAta?.isOther ==
-                          1)
-                        textControllerField2(
-                            name: "${Statics.getLabel('other')}",
-                            controller:
-                                isOtherVividhAAdhyatmikKendraController),
-                      textControllerField2(
-                          name: "${Statics.getLabel('gaavPramukhName')}",
-                          controller: gavPramukhAdhyatmikKendraController),
-                      textControllerField2(
-                          name: "${Statics.getLabel('doorBhash')}",
-                          controller: samparkSootraAdhyatmikKendraController,
-                          keyboardType: TextInputType.number,
-                          maxInput: 10,
-                          height: 80),
+                      if (selectedVividhAAdhyatmikKendraMasterDAta?.isOther == 1) textControllerField2(name: "${Statics.getLabel('other')}", controller: isOtherVividhAAdhyatmikKendraController),
+                      textControllerField2(name: "${Statics.getLabel('gaavPramukhName')}", controller: gavPramukhAdhyatmikKendraController),
+                      textControllerField2(name: "${Statics.getLabel('doorBhash')}", controller: samparkSootraAdhyatmikKendraController, keyboardType: TextInputType.number, maxInput: 10, height: 80),
                       Align(
                         alignment: Alignment.center,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.purple,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                           ),
                           onPressed: () {
-                            if (samparkSootraAdhyatmikKendraController
-                                    .text.length !=
-                                10) {
-                              Statics.showToast(
-                                  "${Statics.getLabel('mobileNumberLimit')}");
+                            if (samparkSootraAdhyatmikKendraController.text.length != 10) {
+                              Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
                               return;
                             }
-                            VastisarVividhAdhyatmikKendra data =
-                                VastisarVividhAdhyatmikKendra(
+                            VastisarVividhAdhyatmikKendra data = VastisarVividhAdhyatmikKendra(
                               pkid: pkIdVividhAAdhyatmikKendra,
                               isactive: isActiveVividhAAdhyatmikKendra,
                               vastiid: int.parse(selctedLevelId!),
-                              selectedDropdownValueName:
-                                  selectedVividhAAdhyatmikKendraName,
-                              aadhyatmikKendraId:
-                                  selectedVividhAAdhyatmikKendraID,
-                              gaavPramukhName:
-                                  gavPramukhAdhyatmikKendraController.text,
-                              isOtherAdhyatmitKendra:
-                                  isOtherVividhAAdhyatmikKendraController.text,
-                              samparkSootra:
-                                  samparkSootraAdhyatmikKendraController.text,
+                              selectedDropdownValueName: selectedVividhAAdhyatmikKendraName,
+                              aadhyatmikKendraId: selectedVividhAAdhyatmikKendraID,
+                              gaavPramukhName: gavPramukhAdhyatmikKendraController.text,
+                              isOtherAdhyatmitKendra: isOtherVividhAAdhyatmikKendraController.text,
+                              samparkSootra: samparkSootraAdhyatmikKendraController.text,
                               // selectedGaavId: selectedVividhAAdhyatmikKendraGaavID,
                               // selectedDropdownValueName1: selectedVividhAAdhyatmikKendraGaavName,
                             );
 
                             if (editIndex != null) {
-                              vividhadhyatmitStsangKendraEnteredDataList![
-                                  editIndex] = data;
+                              vividhadhyatmitStsangKendraEnteredDataList![editIndex] = data;
                             } else {
-                              vividhadhyatmitStsangKendraEnteredDataList!
-                                  .add(data);
+                              vividhadhyatmitStsangKendraEnteredDataList!.add(data);
                             }
 
                             Navigator.of(ctx).pop();
@@ -6792,8 +5845,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               onDataChanged();
                             }
                           },
-                          child: Text("${Statics.getLabel('Submit')}",
-                              style: TextStyle(color: Colors.white)),
+                          child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
                         ),
                       ),
                     ],
@@ -6826,16 +5878,13 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   //======================== ==================================================================
   List<VastisarGavatilMumbaikar>? gavatilMumbaikarEnteredDataList = [];
   int? selectedGavatilMumbaikarIndex;
-  TextEditingController gavatilMumbaikarSthanNameConroller =
-      TextEditingController();
-  TextEditingController gavatilMumbaikarPramukhNameConroller =
-      TextEditingController();
-  TextEditingController gavatilMumbaikarDoorbhashConroller =
-      TextEditingController();
+  TextEditingController gavatilMumbaikarSthanNameConroller = TextEditingController();
+  TextEditingController gavatilMumbaikarPramukhNameConroller = TextEditingController();
+  TextEditingController gavatilMumbaikarDoorbhashConroller = TextEditingController();
   int? isActiveGavatilMumbaikar = 1;
   int? pkIdGavatilMumbaikar = 0;
-  void showGavatilMumbaikarPopup(BuildContext context,
-      {int? editIndex, VoidCallback? onDataChanged}) {
+
+  void showGavatilMumbaikarPopup(BuildContext context, {int? editIndex, VoidCallback? onDataChanged}) {
     if (editIndex != null) {
       var data = gavatilMumbaikarEnteredDataList![editIndex];
       gavatilMumbaikarSthanNameConroller.text = data.sthaan ?? "";
@@ -6848,8 +5897,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
       context: context,
       builder: (ctx) {
         return Dialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           child: StatefulBuilder(
             builder: (context, setState) {
               return Container(
@@ -6888,50 +5936,32 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               controller: gavatilMumbaikarSthanNameConroller,
                             ),
                             const SizedBox(height: 10),
-                            textControllerField2(
-                                name: "${Statics.getLabel('pramukhaacheNaav')}",
-                                controller:
-                                    gavatilMumbaikarPramukhNameConroller),
+                            textControllerField2(name: "${Statics.getLabel('pramukhaacheNaav')}", controller: gavatilMumbaikarPramukhNameConroller),
                             const SizedBox(height: 20),
                             textControllerField2(
-                                name: "${Statics.getLabel('doorBhash')}",
-                                controller: gavatilMumbaikarDoorbhashConroller,
-                                keyboardType: TextInputType.number,
-                                maxInput: 10,
-                                height: 80),
+                                name: "${Statics.getLabel('doorBhash')}", controller: gavatilMumbaikarDoorbhashConroller, keyboardType: TextInputType.number, maxInput: 10, height: 80),
                             Align(
                               alignment: Alignment.center,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.purple,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8)),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                 ),
                                 onPressed: () {
-                                  if (gavatilMumbaikarDoorbhashConroller
-                                          .text.length !=
-                                      10) {
-                                    Statics.showToast(
-                                        "${Statics.getLabel('mobileNumberLimit')}");
+                                  if (gavatilMumbaikarDoorbhashConroller.text.length != 10) {
+                                    Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
                                     return;
                                   }
-                                  VastisarGavatilMumbaikar data =
-                                      VastisarGavatilMumbaikar(
+                                  VastisarGavatilMumbaikar data = VastisarGavatilMumbaikar(
                                     pkid: VastisarVividhKshetracheKamPkId,
-                                    isactive:
-                                        isActiveVastisarVividhKshetracheKam,
+                                    isactive: isActiveVastisarVividhKshetracheKam,
                                     vastiid: int.parse(selctedLevelId!),
-                                    sthaan:
-                                        gavatilMumbaikarSthanNameConroller.text,
-                                    pramukhachrNaav:
-                                        gavatilMumbaikarPramukhNameConroller
-                                            .text,
-                                    doorbhash:
-                                        gavatilMumbaikarDoorbhashConroller.text,
+                                    sthaan: gavatilMumbaikarSthanNameConroller.text,
+                                    pramukhachrNaav: gavatilMumbaikarPramukhNameConroller.text,
+                                    doorbhash: gavatilMumbaikarDoorbhashConroller.text,
                                   );
                                   if (editIndex != null) {
-                                    gavatilMumbaikarEnteredDataList![
-                                        editIndex] = data;
+                                    gavatilMumbaikarEnteredDataList![editIndex] = data;
                                   } else {
                                     gavatilMumbaikarEnteredDataList!.add(data);
                                   }
@@ -6971,12 +6001,16 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
 
 //========================  GATIVIDHI FORM ===========================================
   List<VastisarGatividhikaryasthiti> enteredDataListGatividhi = [];
+
 //========================  4. VASAHAT PRAKAR FORM ===========================================
   List<VastisarVasahatprakara> enteredVasahatPrakarDataList = [];
+
 //========================  5. VIVIDH BHASHA BOLNARE FORM ===========================================
   List<VastisarVividhaprakara> enteredVividhBhashaBolnareDataList = [];
+
 //========================  6.KONTYA PRANTACHE FORM ===========================================
   List<VastisarKonatyaprantache> enteredKontyaPraantacheDataList = [];
+
 //========================  7. RELIGION FORM ===========================================
   List<VastisarReligion> enteredreligionDataList = [];
   int? selectedReligionIdRowIndex;
@@ -6987,8 +6021,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   int? isActiveReligion = 1;
   int? pkIdReligion = 0;
   TextEditingController religionAveragePersentCount = TextEditingController();
-  void showReligionPopup(BuildContext context,
-      {int? editIndex, VoidCallback? onDataChanged}) {
+
+  void showReligionPopup(BuildContext context, {int? editIndex, VoidCallback? onDataChanged}) {
     if (editIndex != null) {
       var data = enteredreligionDataList[editIndex];
       religionId = data.konatyarilijanaceid;
@@ -7005,8 +6039,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
       context: context,
       builder: (ctx) {
         return Dialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           child: StatefulBuilder(
             builder: (context, setState) {
               return Container(
@@ -7021,10 +6054,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         children: [
                           Text(
                             "${Statics.getLabel('religion')}",
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.purpleAccent),
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.purpleAccent),
                           ),
                           IconButton(
                             icon: const Icon(Icons.close),
@@ -7038,8 +6068,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       const SizedBox(height: 10),
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: Text("${Statics.getLabel('wichRiligion')}",
-                            style: TextStyle(fontSize: 15)),
+                        child: Text("${Statics.getLabel('wichRiligion')}", style: TextStyle(fontSize: 15)),
                       ),
                       vastisarvekshanDropdown4(
                         dataModel: vastisarvekshanDropDownDataModel!,
@@ -7057,9 +6086,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           });
                         },
                         editId: selectedreligionEditId,
-                        excludedItemIds: enteredreligionDataList
-                            .map((e) => e.konatyarilijanaceid!)
-                            .toList(),
+                        excludedItemIds: enteredreligionDataList.map((e) => e.konatyarilijanaceid!).toList(),
                       ),
                       SizedBox(height: 10),
                       textControllerField2(
@@ -7075,8 +6102,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.purple,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                           ),
                           // onPressed: () {
                           //   VastisarReligion newReligion = VastisarReligion(
@@ -7099,13 +6125,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           // },
                           onPressed: () {
                             // Convert text to double for comparison
-                            double? average = double.tryParse(
-                                religionAveragePersentCount.text.trim());
+                            double? average = double.tryParse(religionAveragePersentCount.text.trim());
 
                             // Check if the value is null or not in range
-                            if (average == null ||
-                                average < 0 ||
-                                average > 100) {
+                            if (average == null || average < 0 || average > 100) {
                               Statics.showToast(
                                 "${Statics.getLabel('persentValidation')}",
                               );
@@ -7133,8 +6156,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             if (onDataChanged != null) onDataChanged();
                           },
 
-                          child: Text("${Statics.getLabel('Submit')}",
-                              style: TextStyle(color: Colors.white)),
+                          child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
                         ),
                       ),
                     ],
@@ -7169,12 +6191,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   int? editUpasnaSthalTypeId;
   int? isActiveUpasanaSthal = 1;
   int? upasnaSthalPkid = 0;
-  final TextEditingController upasnaSthalCountController =
-      TextEditingController();
-  final TextEditingController anyaUpasnaSthalNameController =
-      TextEditingController();
-  void showUpasnaSthalPopup(BuildContext context,
-      {int? editIndex, VoidCallback? onDataChanged}) {
+  final TextEditingController upasnaSthalCountController = TextEditingController();
+  final TextEditingController anyaUpasnaSthalNameController = TextEditingController();
+
+  void showUpasnaSthalPopup(BuildContext context, {int? editIndex, VoidCallback? onDataChanged}) {
     if (editIndex != null) {
       var data = upasnaSthalDataList[editIndex];
       selectedUpasnaSthalName = data.selectedDropdownValueName1;
@@ -7237,11 +6257,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     if (selectedUpasnaSthal?.isOther == 1) SizedBox(height: 10),
                     if (selectedUpasnaSthal?.isOther == 1)
                       textControllerField2(
-                          controller: anyaUpasnaSthalNameController,
-                          name: "${Statics.getLabel('otherUpasanaSthal')}",
-                          height: 50,
-                          hintTextString:
-                              "${Statics.getLabel('otherUpasanaSthal')}"),
+                          controller: anyaUpasnaSthalNameController, name: "${Statics.getLabel('otherUpasanaSthal')}", height: 50, hintTextString: "${Statics.getLabel('otherUpasanaSthal')}"),
                     const SizedBox(height: 10),
                     vastisarvekshanDropdown2(
                       dataModel: vastisarvekshanDropDownDataModel!,
@@ -7270,8 +6286,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         fillColor: Colors.white,
                         filled: true,
                         isDense: true,
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                       ),
                       keyboardType: TextInputType.number,
                     ),
@@ -7287,18 +6302,14 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
                 onPressed: () {
-                  if (selectedUpasnaSthal?.isOther == 1 &&
-                      anyaUpasnaSthalNameController.text == "") {
-                    Statics.showToast(
-                        "${Statics.getLabel('otherInfoValidation')}");
+                  if (selectedUpasnaSthal?.isOther == 1 && anyaUpasnaSthalNameController.text == "") {
+                    Statics.showToast("${Statics.getLabel('otherInfoValidation')}");
                   } else {
                     if (gavatilMumbaikarDoorbhashConroller.text.length != 10) {
-                      Statics.showToast(
-                          "${Statics.getLabel('mobileNumberLimit')}");
+                      Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
                       return;
                     }
                     Vastisarupaasana newData = Vastisarupaasana(
@@ -7322,8 +6333,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     Navigator.of(ctx).pop();
                   }
                 },
-                child: Text("${Statics.getLabel('Submit')}",
-                    style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -7375,20 +6385,14 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   TextEditingController sajjanShaktiNameController = TextEditingController();
   TextEditingController sajjanShaktiAddressController = TextEditingController();
   TextEditingController sajjanShaktiPhoneController = TextEditingController();
-  TextEditingController sajjanShaktiContactPersonNameController =
-      TextEditingController();
-  TextEditingController sajjanShaktiContactPersonDoorbhashController =
-      TextEditingController();
-  TextEditingController sajjanShaktiSansthecheNaavController =
-      TextEditingController();
-  TextEditingController sajjanShaktiSansthKuthalyaPadavarController =
-      TextEditingController();
-  TextEditingController sajjanShaktiAnyaShreniNameController =
-      TextEditingController();
-  TextEditingController sajjanShaktiAnyaVisheshNameController =
-      TextEditingController();
-  void showSajjanShaktiPopup(BuildContext context,
-      {int? editIndex, VoidCallback? onDataChanged}) {
+  TextEditingController sajjanShaktiContactPersonNameController = TextEditingController();
+  TextEditingController sajjanShaktiContactPersonDoorbhashController = TextEditingController();
+  TextEditingController sajjanShaktiSansthecheNaavController = TextEditingController();
+  TextEditingController sajjanShaktiSansthKuthalyaPadavarController = TextEditingController();
+  TextEditingController sajjanShaktiAnyaShreniNameController = TextEditingController();
+  TextEditingController sajjanShaktiAnyaVisheshNameController = TextEditingController();
+
+  void showSajjanShaktiPopup(BuildContext context, {int? editIndex, VoidCallback? onDataChanged}) {
     if (editIndex != null) {
       var data = sajjanShaktiDataList[editIndex];
       sajjanShaktiNameController.text = data.name ?? '';
@@ -7406,16 +6410,14 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
       sajjanShaktiVisheshName = data.selectedDropdownValueName2;
       sajjanShaktiVisheshId = data.visheshId;
       sajjanShaktiVisheshEditId = data.visheshId;
-      sajjanShaktiContactPersonNameController.text =
-          data.samparkasutranava ?? '';
-      sajjanShaktiContactPersonDoorbhashController.text =
-          data.samparkasutraMobileNumber ?? '';
+      sajjanShaktiContactPersonNameController.text = data.samparkasutranava ?? '';
+      sajjanShaktiContactPersonDoorbhashController.text = data.samparkasutraMobileNumber ?? '';
       sajjanShaktiSansthecheNaavController.text = data.sanstheCheNaav ?? '';
-      sajjanShaktiSansthKuthalyaPadavarController.text =
-          data.sansthechaKuthalaPadavar ?? '';
+      sajjanShaktiSansthKuthalyaPadavarController.text = data.sansthechaKuthalaPadavar ?? '';
       sajjanShaktiAnyaShreniNameController.text = data.otherShreniName ?? '';
       sajjanShaktiAnyaVisheshNameController.text = data.otherVisheshName ?? '';
       isActiveSajjanShakti = data.isactive;
+      isFemale = data.isfemale;
     }
 
     showDialog(
@@ -7452,14 +6454,40 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       name: "${Statics.getLabel('Name')}",
                       controller: sajjanShaktiNameController,
                     ),
-                    textControllerField2(
-                        name: "${Statics.getLabel('Address')}",
-                        controller: sajjanShaktiAddressController),
+                    textControllerField2(name: "${Statics.getLabel('Address')}", controller: sajjanShaktiAddressController),
                     textControllerField2(
                       name: "${Statics.getLabel('doorBhash')}",
                       controller: sajjanShaktiPhoneController,
                       keyboardType: TextInputType.number,
                       maxInput: 10,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: RadioListTile<int>(
+                            contentPadding: EdgeInsets.zero,
+                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            title: Text("${Statics.getLabel('Male')}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                            value: 0,
+                            groupValue: isFemale,
+                            onChanged: (value) => setState(() {
+                              isFemale = value;
+                            }),
+                          ),
+                        ),
+                        Expanded(
+                          child: RadioListTile<int>(
+                            contentPadding: EdgeInsets.zero,
+                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            title: Text("${Statics.getLabel('Female')}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                            value: 1,
+                            groupValue: isFemale,
+                            onChanged: (value) => setState(() {
+                              isFemale = value;
+                            }),
+                          ),
+                        ),
+                      ],
                     ),
                     vastisarvekshanDropdown2(
                       question: "${Statics.getLabel('Category')}",
@@ -7479,21 +6507,12 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       },
                       editId: sajjanShaktiShreniEditId,
                     ),
-                    if (sajjanShaktiShreniEditDataId?.isOther == 1)
-                      const SizedBox(height: 5),
-                    if (sajjanShaktiShreniEditDataId?.isOther == 1)
-                      textControllerField2(
-                          name: "${Statics.getLabel('OtherCategory')}",
-                          controller: sajjanShaktiAnyaShreniNameController),
+                    if (sajjanShaktiShreniEditDataId?.isOther == 1) const SizedBox(height: 5),
+                    if (sajjanShaktiShreniEditDataId?.isOther == 1) textControllerField2(name: "${Statics.getLabel('OtherCategory')}", controller: sajjanShaktiAnyaShreniNameController),
                     const SizedBox(height: 5),
-                    textControllerField2(
-                        name: "${Statics.getLabel('OrganizationName')}",
-                        controller: sajjanShaktiSansthecheNaavController),
+                    textControllerField2(name: "${Statics.getLabel('OrganizationName')}", controller: sajjanShaktiSansthecheNaavController),
                     const SizedBox(height: 5),
-                    textControllerField2(
-                        name: "${Statics.getLabel('sansthetKuthalaPadavar')}",
-                        controller:
-                            sajjanShaktiSansthKuthalyaPadavarController),
+                    textControllerField2(name: "${Statics.getLabel('sansthetKuthalaPadavar')}", controller: sajjanShaktiSansthKuthalyaPadavarController),
                     const SizedBox(height: 5),
                     vastisarvekshanDropdown2(
                       question: "${Statics.getLabel('samparkStithi')}",
@@ -7532,12 +6551,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       },
                       editId: sajjanShaktiVisheshEditId,
                     ),
-                    if (sajjanShaktiVisheshEditDataId?.isOther == 1)
-                      const SizedBox(height: 5),
-                    if (sajjanShaktiVisheshEditDataId?.isOther == 1)
-                      textControllerField2(
-                          name: "${Statics.getLabel('otherSpecial')}",
-                          controller: sajjanShaktiAnyaVisheshNameController),
+                    if (sajjanShaktiVisheshEditDataId?.isOther == 1) const SizedBox(height: 5),
+                    if (sajjanShaktiVisheshEditDataId?.isOther == 1) textControllerField2(name: "${Statics.getLabel('otherSpecial')}", controller: sajjanShaktiAnyaVisheshNameController),
                     const SizedBox(height: 5),
                     vastisarvekshanDropdown2(
                       dataModel: vastisarvekshanDropDownDataModel!,
@@ -7558,9 +6573,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       editId: sajjanShaktiPrabhavKeshtraEditId,
                     ),
                     const SizedBox(height: 5),
-                    textControllerField2(
-                        name: "${Statics.getLabel('samparkSootraNaav')}",
-                        controller: sajjanShaktiContactPersonNameController),
+                    textControllerField2(name: "${Statics.getLabel('samparkSootraNaav')}", controller: sajjanShaktiContactPersonNameController),
                     const SizedBox(height: 5),
                     textControllerField2(
                       name: "${Statics.getLabel('samparakSootraDoorbhash')}",
@@ -7579,8 +6592,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
                 // onPressed: () {
                 //
@@ -7621,55 +6633,40 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                 // },
                 onPressed: () {
                   if (sajjanShaktiPhoneController.text.length != 10) {
-                    Statics.showToast(
-                        "${Statics.getLabel('mobileNumberLimit')}");
+                    Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
                     return;
                   }
-                  if (sajjanShaktiContactPersonDoorbhashController
-                          .text.length !=
-                      10) {
-                    Statics.showToast(
-                        "${Statics.getLabel('mobileNumberLimit')}");
+                  if (sajjanShaktiContactPersonDoorbhashController.text.length != 10) {
+                    Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
                     return;
                   }
-                  if ((sajjanShaktiShreniEditDataId?.isOther == 1 &&
-                          sajjanShaktiAnyaShreniNameController.text == "") ||
-                      (sajjanShaktiVisheshEditDataId?.isOther == 1 &&
-                          sajjanShaktiAnyaVisheshNameController.text == "")) {
-                    Statics.showToast(
-                        "${Statics.getLabel('otherInfoValidation')}");
+                  if ((sajjanShaktiShreniEditDataId?.isOther == 1 && sajjanShaktiAnyaShreniNameController.text == "") ||
+                      (sajjanShaktiVisheshEditDataId?.isOther == 1 && sajjanShaktiAnyaVisheshNameController.text == "")) {
+                    Statics.showToast("${Statics.getLabel('otherInfoValidation')}");
                   } else {
                     Vastisarsajjanshakti newData = Vastisarsajjanshakti(
-                        name: sajjanShaktiNameController.text.trim(),
-                        address: sajjanShaktiAddressController.text.trim(),
-                        doorabhaash: sajjanShaktiPhoneController.text.trim(),
-                        shreneeid: sajjanShaktiShreniId,
-                        selectedDropdownValueName: sajjanShaktiShreniName,
-                        otherShreniName:
-                            sajjanShaktiAnyaShreniNameController.text.trim(),
-                        sanstheCheNaav:
-                            sajjanShaktiSansthecheNaavController.text.trim(),
-                        sansthechaKuthalaPadavar:
-                            sajjanShaktiSansthKuthalyaPadavarController.text
-                                .trim(),
-                        samparksthitiid: sajjanShaktiSamparkStithiId,
-                        selectedDropdownValueName1:
-                            sajjanShaktiSamparkStithiName,
-                        visheshId: sajjanShaktiVisheshId,
-                        selectedDropdownValueName2: sajjanShaktiVisheshName,
-                        otherVisheshName:
-                            sajjanShaktiAnyaVisheshNameController.text.trim(),
-                        prabhaavkshetrid: sajjanShaktiPrabhavKeshtraId,
-                        selectedDropdownValueName3:
-                            sajjanShaktiPrabhavKeshtraName,
-                        samparkasutranava:
-                            sajjanShaktiContactPersonNameController.text.trim(),
-                        samparkasutraMobileNumber:
-                            sajjanShaktiContactPersonDoorbhashController.text
-                                .trim(),
-                        isactive: isActiveSajjanShakti,
-                        vastiid: int.parse(selctedLevelId!),
-                        pkid: pkidSajjanShakti);
+                      name: sajjanShaktiNameController.text.trim(),
+                      address: sajjanShaktiAddressController.text.trim(),
+                      doorabhaash: sajjanShaktiPhoneController.text.trim(),
+                      shreneeid: sajjanShaktiShreniId,
+                      selectedDropdownValueName: sajjanShaktiShreniName,
+                      otherShreniName: sajjanShaktiAnyaShreniNameController.text.trim(),
+                      sanstheCheNaav: sajjanShaktiSansthecheNaavController.text.trim(),
+                      sansthechaKuthalaPadavar: sajjanShaktiSansthKuthalyaPadavarController.text.trim(),
+                      samparksthitiid: sajjanShaktiSamparkStithiId,
+                      selectedDropdownValueName1: sajjanShaktiSamparkStithiName,
+                      visheshId: sajjanShaktiVisheshId,
+                      selectedDropdownValueName2: sajjanShaktiVisheshName,
+                      otherVisheshName: sajjanShaktiAnyaVisheshNameController.text.trim(),
+                      prabhaavkshetrid: sajjanShaktiPrabhavKeshtraId,
+                      selectedDropdownValueName3: sajjanShaktiPrabhavKeshtraName,
+                      samparkasutranava: sajjanShaktiContactPersonNameController.text.trim(),
+                      samparkasutraMobileNumber: sajjanShaktiContactPersonDoorbhashController.text.trim(),
+                      isactive: isActiveSajjanShakti,
+                      vastiid: int.parse(selctedLevelId!),
+                      pkid: pkidSajjanShakti,
+                      isfemale: isFemale,
+                    );
                     if (editIndex != null) {
                       sajjanShaktiDataList[editIndex] = newData;
                     } else {
@@ -7682,8 +6679,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     Navigator.of(ctx).pop();
                   }
                 },
-                child: Text("${Statics.getLabel('Submit')}",
-                    style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -7718,6 +6714,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
     sajjanShaktiPrabhavKeshtraName = null;
     sajjanShaktiPrabhavKeshtraEditId = null;
     sajjanShaktiPrabhavKeshtraEditDataId = null;
+    isFemale = null;
   }
 
   //=================================================== 9. AnyaPrabhavi Lok FORM ====================================================================================
@@ -7741,22 +6738,14 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   Masterdata? selectedShreni;
   Masterdata? selectedUpShreni;
   Masterdata? selectedUpShreni2;
-  final TextEditingController anyaPrabhaviLokNaavController =
-      TextEditingController();
-  final TextEditingController anyaPrabhaviLokAddressController =
-      TextEditingController();
-  final TextEditingController anyaPrabhaviLokAnyaVisheshMahitiController =
-      TextEditingController();
-  final TextEditingController anyaPrabhaviLokSamparkSutraNaavController =
-      TextEditingController();
-  final TextEditingController anyaPrabhaviLokSamparkSutraDoorbhashController =
-      TextEditingController();
-  final TextEditingController anyaPrabhaviLokMobileNoController =
-      TextEditingController();
-  final TextEditingController anyaPrabhaviLokAnyaUppshreniController =
-      TextEditingController();
-  final TextEditingController anyaPrabhaviLokAnyaUppshreni1Controller =
-      TextEditingController();
+  final TextEditingController anyaPrabhaviLokNaavController = TextEditingController();
+  final TextEditingController anyaPrabhaviLokAddressController = TextEditingController();
+  final TextEditingController anyaPrabhaviLokAnyaVisheshMahitiController = TextEditingController();
+  final TextEditingController anyaPrabhaviLokSamparkSutraNaavController = TextEditingController();
+  final TextEditingController anyaPrabhaviLokSamparkSutraDoorbhashController = TextEditingController();
+  final TextEditingController anyaPrabhaviLokMobileNoController = TextEditingController();
+  final TextEditingController anyaPrabhaviLokAnyaUppshreniController = TextEditingController();
+  final TextEditingController anyaPrabhaviLokAnyaUppshreni1Controller = TextEditingController();
 
   // void showAnyaPrabhaviPopup(BuildContext context,
   //     {int? editIndex, VoidCallback? onDataChanged}) {
@@ -8086,8 +7075,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   //     },
   //   );
   // }
-  void showAnyaPrabhaviPopup(BuildContext context,
-      {int? editIndex, VoidCallback? onDataChanged}) {
+  void showAnyaPrabhaviPopup(BuildContext context, {int? editIndex, VoidCallback? onDataChanged}) {
     if (editIndex != null) {
       var data = anyaPrabhaviLokDataList[editIndex];
       anyaPrabhaviLokNaavController.text = data.name ?? "";
@@ -8114,11 +7102,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
       anyaPrabhaviLokSamparkStithiId = data.samparksthitiid;
       selectedAnyaPrabhaviLokSamparkStithiIDEdit = data.samparksthitiid;
       anyaPrabhaviLokSamparkStithiName = data.selectedDropdownValueName5;
-      anyaPrabhaviLokSamparkSutraNaavController.text =
-          data.samparkasutranav ?? "";
-      anyaPrabhaviLokSamparkSutraDoorbhashController.text =
-          data.samparkaSutraDoorbhash ?? "";
+      anyaPrabhaviLokSamparkSutraNaavController.text = data.samparkasutranav ?? "";
+      anyaPrabhaviLokSamparkSutraDoorbhashController.text = data.samparkaSutraDoorbhash ?? "";
       pkidAnyaPrabhaviLok = data.pkid;
+      isFemale = data.isfemale;
     }
     showDialog(
       context: context,
@@ -8137,7 +7124,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
               ),
               IconButton(
                 icon: Icon(Icons.close, color: Colors.grey),
-                onPressed: () => Navigator.of(context).pop(),
+                onPressed: () {
+                  clearAnyaPrabhaviLokFields();
+                  Navigator.of(context).pop();
+                },
               ),
             ],
           ),
@@ -8147,14 +7137,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    textControllerField2(
-                        name: "${Statics.getLabel('Name')}",
-                        controller: anyaPrabhaviLokNaavController,
-                        height: 50),
-                    textControllerField2(
-                        name: "${Statics.getLabel('Address')}",
-                        controller: anyaPrabhaviLokAddressController,
-                        height: 50),
+                    textControllerField2(name: "${Statics.getLabel('Name')}", controller: anyaPrabhaviLokNaavController, height: 50),
+                    textControllerField2(name: "${Statics.getLabel('Address')}", controller: anyaPrabhaviLokAddressController, height: 50),
                     textControllerField2(
                       name: "${Statics.getLabel('doorBhash')}",
                       controller: anyaPrabhaviLokMobileNoController,
@@ -8163,12 +7147,40 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       maxInput: 10,
                     ),
                     SizedBox(height: 5),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: RadioListTile<int>(
+                            contentPadding: EdgeInsets.zero,
+                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            title: Text("${Statics.getLabel('Male')}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                            value: 0,
+                            groupValue: isFemale,
+                            onChanged: (value) => setState(() {
+                              isFemale = value;
+                            }),
+                          ),
+                        ),
+                        Expanded(
+                          child: RadioListTile<int>(
+                            contentPadding: EdgeInsets.zero,
+                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            title: Text("${Statics.getLabel('Female')}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                            value: 1,
+                            groupValue: isFemale,
+                            onChanged: (value) => setState(() {
+                              isFemale = value;
+                            }),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 5),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
                         "${Statics.getLabel('Category')}/${Statics.getLabel('upshreni')}",
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.w500),
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
                       ),
                     ),
                     SizedBox(height: 5),
@@ -8176,12 +7188,9 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         ? vastisarvekshanDropdown3(
                             filterTypeName: "श्रेणी",
                             hintText: "${Statics.getLabel('otherUpshreni')}",
-                            anyaPrabhaviLokShreniId:
-                                anyaPrabhaviLokShreniIdEdit,
-                            anyaPrabhaviLokUpShreniId:
-                                anyaPrabhaviLokUpShreniIdEdit,
-                            anyaPrabhaviLokUpShreni1Id:
-                                anyaPrabhaviLokUpShreni1IdEdit,
+                            anyaPrabhaviLokShreniId: anyaPrabhaviLokShreniIdEdit,
+                            anyaPrabhaviLokUpShreniId: anyaPrabhaviLokUpShreniIdEdit,
+                            anyaPrabhaviLokUpShreni1Id: anyaPrabhaviLokUpShreni1IdEdit,
                             onValueSelected: (id, name, value) {
                               anyaPrabhaviLokShreniId = id;
                               anyaPrabhaviLokShreniName = name;
@@ -8213,18 +7222,12 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       SizedBox(
                         height: 10,
                       ),
-                    if (selectedUpShreni?.isOther == 1)
-                      textControllerField2(
-                          name: "${Statics.getLabel('otherUpshreni')}",
-                          controller: anyaPrabhaviLokAnyaUppshreniController),
+                    if (selectedUpShreni?.isOther == 1) textControllerField2(name: "${Statics.getLabel('otherUpshreni')}", controller: anyaPrabhaviLokAnyaUppshreniController),
                     if (selectedUpShreni2?.isOther == 1)
                       SizedBox(
                         height: 10,
                       ),
-                    if (selectedUpShreni2?.isOther == 1)
-                      textControllerField2(
-                          name: "${Statics.getLabel('otherUpshreni2')}",
-                          controller: anyaPrabhaviLokAnyaUppshreni1Controller),
+                    if (selectedUpShreni2?.isOther == 1) textControllerField2(name: "${Statics.getLabel('otherUpshreni2')}", controller: anyaPrabhaviLokAnyaUppshreni1Controller),
                     SizedBox(
                       height: 10,
                     ),
@@ -8253,8 +7256,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     ),
                     vastisarvekshanDropDownDataModel != null
                         ? vastisarvekshanDropdown2(
-                            hintText:
-                                "${Statics.getLabel('prabhavKshetraSelect')}",
+                            hintText: "${Statics.getLabel('prabhavKshetraSelect')}",
                             filterTypeName: "अन्यप्रभावीलोकंप्रभावक्षेत्र",
                             onItemSelected: (valueId, valueName, isOther) {
                               anyaPrabhaviLokPrabhavKshetraId = valueId;
@@ -8264,12 +7266,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             dataModel: vastisarvekshanDropDownDataModel!,
                             question: "${Statics.getLabel('prabhavKshetra')}",
                             editId: selectedAnyaPrabhaviLokPrabhavKshetraIDEdit,
-                            selectedValue:
-                                selectedAnyaPrabhaviLokPrabhavKshetra,
+                            selectedValue: selectedAnyaPrabhaviLokPrabhavKshetra,
                             onSelectionChanged: (newValue) {
                               setState(() {
-                                selectedAnyaPrabhaviLokPrabhavKshetra =
-                                    newValue;
+                                selectedAnyaPrabhaviLokPrabhavKshetra = newValue;
                               });
                             },
                           )
@@ -8277,17 +7277,13 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     SizedBox(
                       height: 10,
                     ),
-                    textControllerField2(
-                        name: "${Statics.getLabel('anyaVisheshMahiti')}",
-                        controller: anyaPrabhaviLokAnyaVisheshMahitiController,
-                        height: 50),
+                    textControllerField2(name: "${Statics.getLabel('anyaVisheshMahiti')}", controller: anyaPrabhaviLokAnyaVisheshMahitiController, height: 50),
                     SizedBox(
                       height: 10,
                     ),
                     vastisarvekshanDropDownDataModel != null
                         ? vastisarvekshanDropdown2(
-                            hintText:
-                                "${Statics.getLabel('samparkSthitiSelect')}",
+                            hintText: "${Statics.getLabel('samparkSthitiSelect')}",
                             filterTypeName: "अन्यप्रभावीलोकंसंपर्कस्थिति",
                             onItemSelected: (valueId, valueName, isOther) {
                               anyaPrabhaviLokSamparkStithiId = valueId;
@@ -8309,14 +7305,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       height: 10,
                     ),
                     // textControllerField(${Statics.getLabel('anyaVisheshMahiti')}, anyaPrabhaviLokAnyaVisheshMahitiController, context, height: 80),
-                    textControllerField2(
-                        name: "${Statics.getLabel('samparkSootraNaav')}",
-                        controller: anyaPrabhaviLokSamparkSutraNaavController,
-                        height: 50),
+                    textControllerField2(name: "${Statics.getLabel('samparkSootraNaav')}", controller: anyaPrabhaviLokSamparkSutraNaavController, height: 50),
                     textControllerField2(
                       name: "${Statics.getLabel('samparakSootraDoorbhash')}",
-                      controller:
-                          anyaPrabhaviLokSamparkSutraDoorbhashController,
+                      controller: anyaPrabhaviLokSamparkSutraDoorbhashController,
                       keyboardType: TextInputType.number,
                       maxInput: 10,
                     ),
@@ -8331,28 +7323,20 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
                 onPressed: () {
                   if (anyaPrabhaviLokMobileNoController.text.length != 10) {
-                    Statics.showToast(
-                        "${Statics.getLabel('mobileNumberLimit')}");
+                    Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
                     return;
                   }
-                  if (anyaPrabhaviLokSamparkSutraDoorbhashController
-                          .text.length !=
-                      10) {
-                    Statics.showToast(
-                        "${Statics.getLabel('mobileNumberLimit')}");
+                  if (anyaPrabhaviLokSamparkSutraDoorbhashController.text.length != 10) {
+                    Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
                     return;
                   }
-                  if ((selectedUpShreni?.isOther == 1 &&
-                          anyaPrabhaviLokAnyaUppshreniController.text == "") ||
-                      (selectedUpShreni2?.isOther == 1 &&
-                          anyaPrabhaviLokAnyaUppshreni1Controller.text == "")) {
-                    Statics.showToast(
-                        "${Statics.getLabel('otherInfoValidation')}");
+                  if ((selectedUpShreni?.isOther == 1 && anyaPrabhaviLokAnyaUppshreniController.text == "") ||
+                      (selectedUpShreni2?.isOther == 1 && anyaPrabhaviLokAnyaUppshreni1Controller.text == "")) {
+                    Statics.showToast("${Statics.getLabel('otherInfoValidation')}");
                   } else {
                     VastisarAnyaprabhavilokam data = VastisarAnyaprabhavilokam(
                       name: anyaPrabhaviLokNaavController.text,
@@ -8367,26 +7351,19 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       visheshid: anyaPrabhaviLokVisheshId,
                       selectedDropdownValueName3: anyaPrabhaviLokVisheshName,
                       prabhaavkshetrid: anyaPrabhaviLokPrabhavKshetraId,
-                      selectedDropdownValueName4:
-                          anyaPrabhaviLokPrabhavKshetraName,
-                      othervishesh:
-                          anyaPrabhaviLokAnyaVisheshMahitiController.text,
+                      selectedDropdownValueName4: anyaPrabhaviLokPrabhavKshetraName,
+                      othervishesh: anyaPrabhaviLokAnyaVisheshMahitiController.text,
                       samparksthitiid: anyaPrabhaviLokSamparkStithiId,
-                      selectedDropdownValueName5:
-                          anyaPrabhaviLokSamparkStithiName,
-                      samparkasutranav:
-                          anyaPrabhaviLokSamparkSutraNaavController.text,
-                      samparkaSutraDoorbhash:
-                          anyaPrabhaviLokSamparkSutraDoorbhashController.text,
+                      selectedDropdownValueName5: anyaPrabhaviLokSamparkStithiName,
+                      samparkasutranav: anyaPrabhaviLokSamparkSutraNaavController.text,
+                      samparkaSutraDoorbhash: anyaPrabhaviLokSamparkSutraDoorbhashController.text,
                       pkid: pkidAnyaPrabhaviLok,
-                      anyavisesamahiti:
-                          anyaPrabhaviLokAnyaVisheshMahitiController.text,
-                      otherupshrenee:
-                          anyaPrabhaviLokAnyaUppshreniController.text,
-                      otherupshrenee2:
-                          anyaPrabhaviLokAnyaUppshreni1Controller.text,
+                      anyavisesamahiti: anyaPrabhaviLokAnyaVisheshMahitiController.text,
+                      otherupshrenee: anyaPrabhaviLokAnyaUppshreniController.text,
+                      otherupshrenee2: anyaPrabhaviLokAnyaUppshreni1Controller.text,
                       isactive: isActiveAnyaPrabhavilok,
                       vastiid: int.parse(selctedLevelId!),
+                      isfemale: isFemale,
                     );
                     if (editIndex != null) {
                       anyaPrabhaviLokDataList[editIndex] = data;
@@ -8400,8 +7377,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     Navigator.of(ctx).pop();
                   }
                 },
-                child: Text("${Statics.getLabel('Submit')}",
-                    style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -8444,6 +7420,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
     selectedAnyaPrabhaviLokVisheshIDEdit = null;
     selectedAnyaPrabhaviLokPrabhavKshetraIDEdit = null;
     selectedAnyaPrabhaviLokSamparkStithiIDEdit = null;
+    isFemale = null;
     resetDropdowns();
   }
 
@@ -8456,26 +7433,20 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   Masterdata? selectedMasterSanName;
   int? isActiveSajareHonareSan = 1;
   int? pkidSajareHonareSan = 0;
-  final TextEditingController vastitSajarHonareSanAyojakSansthaNameController =
-      TextEditingController();
-  final TextEditingController vastitSajarHonareSanAyojakNameController =
-      TextEditingController();
-  final TextEditingController vastitSajarHonareSanAyojakSamparkController =
-      TextEditingController();
-  final TextEditingController vastitSajarHonareAnyaSanController =
-      TextEditingController();
-  void showVastitSajarHonareSanPopup(BuildContext context,
-      {int? editIndex, VoidCallback? onDataChanged}) {
+  final TextEditingController vastitSajarHonareSanAyojakSansthaNameController = TextEditingController();
+  final TextEditingController vastitSajarHonareSanAyojakNameController = TextEditingController();
+  final TextEditingController vastitSajarHonareSanAyojakSamparkController = TextEditingController();
+  final TextEditingController vastitSajarHonareAnyaSanController = TextEditingController();
+
+  void showVastitSajarHonareSanPopup(BuildContext context, {int? editIndex, VoidCallback? onDataChanged}) {
     if (editIndex != null) {
       var data = vastitSajarHonareSanDataList[editIndex];
       selectedSanId = data.id;
       selectedSanIdEdit = data.id;
       selectedSanName = data.selectedDropdownValueName;
-      vastitSajarHonareSanAyojakSansthaNameController.text =
-          data.ayojakasansthacinave ?? "";
+      vastitSajarHonareSanAyojakSansthaNameController.text = data.ayojakasansthacinave ?? "";
       vastitSajarHonareSanAyojakNameController.text = data.ayojakancinave ?? "";
-      vastitSajarHonareSanAyojakSamparkController.text =
-          data.aayojaksamparksootr ?? "";
+      vastitSajarHonareSanAyojakSamparkController.text = data.aayojaksamparksootr ?? "";
       vastitSajarHonareAnyaSanController.text = data.otherSajareSan ?? "";
       pkidSajareHonareSan = data.pkid;
 
@@ -8522,8 +7493,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       onItemSelected: (id, value, isOther) {
                         selectedSanId = id;
                         selectedSanName = value;
-                        print(
-                            "selectedMasterSanName ${json.encode(selectedMasterSanName)}");
+                        print("selectedMasterSanName ${json.encode(selectedMasterSanName)}");
                       },
                       width: 250,
                       selectedValue: selectedMasterSanName,
@@ -8536,20 +7506,9 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       editId: selectedSanIdEdit,
                     ),
                     const SizedBox(height: 10),
-                    if (selectedMasterSanName?.isOther == 1)
-                      textControllerField2(
-                          name: "${Statics.getLabel('otherFestivals')}",
-                          controller: vastitSajarHonareAnyaSanController,
-                          height: 50),
-                    textControllerField2(
-                        name: "${Statics.getLabel('aayojakSansthachiNave')}",
-                        controller:
-                            vastitSajarHonareSanAyojakSansthaNameController,
-                        height: 50),
-                    textControllerField2(
-                        name: "${Statics.getLabel('aayojakNaav')}",
-                        controller: vastitSajarHonareSanAyojakNameController,
-                        height: 50),
+                    if (selectedMasterSanName?.isOther == 1) textControllerField2(name: "${Statics.getLabel('otherFestivals')}", controller: vastitSajarHonareAnyaSanController, height: 50),
+                    textControllerField2(name: "${Statics.getLabel('aayojakSansthachiNave')}", controller: vastitSajarHonareSanAyojakSansthaNameController, height: 50),
+                    textControllerField2(name: "${Statics.getLabel('aayojakNaav')}", controller: vastitSajarHonareSanAyojakNameController, height: 50),
                     textControllerField2(
                       name: "${Statics.getLabel('aayojakSamparkSootra')}",
                       controller: vastitSajarHonareSanAyojakSamparkController,
@@ -8570,31 +7529,22 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
                 onPressed: () {
-                  if (vastitSajarHonareSanAyojakSamparkController.text.length !=
-                      10) {
-                    Statics.showToast(
-                        "${Statics.getLabel('mobileNumberLimit')}");
+                  if (vastitSajarHonareSanAyojakSamparkController.text.length != 10) {
+                    Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
                     return;
                   }
-                  if ((selectedMasterSanName?.isOther == 1 &&
-                      vastitSajarHonareAnyaSanController.text == "")) {
-                    Statics.showToast(
-                        "${Statics.getLabel('otherInfoValidation')}");
+                  if ((selectedMasterSanName?.isOther == 1 && vastitSajarHonareAnyaSanController.text == "")) {
+                    Statics.showToast("${Statics.getLabel('otherInfoValidation')}");
                   } else {
-                    VastisarVastitamahatvacesana data =
-                        VastisarVastitamahatvacesana(
+                    VastisarVastitamahatvacesana data = VastisarVastitamahatvacesana(
                       id: selectedSanId,
                       selectedDropdownValueName: selectedSanName,
-                      ayojakasansthacinave:
-                          vastitSajarHonareSanAyojakSansthaNameController.text,
-                      ayojakancinave:
-                          vastitSajarHonareSanAyojakNameController.text,
-                      aayojaksamparksootr:
-                          vastitSajarHonareSanAyojakSamparkController.text,
+                      ayojakasansthacinave: vastitSajarHonareSanAyojakSansthaNameController.text,
+                      ayojakancinave: vastitSajarHonareSanAyojakNameController.text,
+                      aayojaksamparksootr: vastitSajarHonareSanAyojakSamparkController.text,
                       // selectedMasterSanName = data['sanObj'];
                       otherSajareSan: vastitSajarHonareAnyaSanController.text,
                       isactive: isActiveSajareHonareSan,
@@ -8613,8 +7563,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     Navigator.of(ctx).pop();
                   }
                 },
-                child: Text("${Statics.getLabel('Submit')}",
-                    style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -8634,8 +7583,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   }
 
   //=================================================== 10. VASTIT SAJAR HONARE SAN Lok FORM ====================================================================================
-  List<VastisarVastitasajaraSamajikkaryakram>
-      vastitSajarHonareSamajikKaryakramDataList = [];
+  List<VastisarVastitasajaraSamajikkaryakram> vastitSajarHonareSamajikKaryakramDataList = [];
   int? selectedSamajikKaryakramIdIndex;
   int? selectedSamajikKaryakramId;
   int? selectedSamajikKaryakramIdEdit;
@@ -8643,33 +7591,22 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   Masterdata? selectedMasterSamajikKaryakramName;
   int? isActiveSamajikKaryakram = 1;
   int? pkidSamajikKaryakram = 0;
-  final TextEditingController
-      vastitSajarHonareSamajikKaryakramAyojakSansthaNameController =
-      TextEditingController();
-  final TextEditingController
-      vastitSajarHonareSamajikKaryakramAyojakNameController =
-      TextEditingController();
-  final TextEditingController
-      vastitSajarHonareSamajikKaryakramAyojakSamparkController =
-      TextEditingController();
-  final TextEditingController vastitSajarHonareSamajikKaryakramAnya1Controller =
-      TextEditingController();
-  void showVastitSajarHonareSamajikKaryakramPopup(BuildContext context,
-      {int? editIndex, VoidCallback? onDataChanged}) {
+  final TextEditingController vastitSajarHonareSamajikKaryakramAyojakSansthaNameController = TextEditingController();
+  final TextEditingController vastitSajarHonareSamajikKaryakramAyojakNameController = TextEditingController();
+  final TextEditingController vastitSajarHonareSamajikKaryakramAyojakSamparkController = TextEditingController();
+  final TextEditingController vastitSajarHonareSamajikKaryakramAnya1Controller = TextEditingController();
+
+  void showVastitSajarHonareSamajikKaryakramPopup(BuildContext context, {int? editIndex, VoidCallback? onDataChanged}) {
     if (editIndex != null) {
       var data = vastitSajarHonareSamajikKaryakramDataList[editIndex];
       pkidSamajikKaryakram = data.pkid;
       selectedSamajikKaryakramId = data.id;
       selectedSamajikKaryakramIdEdit = data.id;
       selectedSamajikKaryakramName = data.selectedDropdownValueName;
-      vastitSajarHonareSamajikKaryakramAyojakSansthaNameController.text =
-          data.ayojakasansthacinave ?? "";
-      vastitSajarHonareSamajikKaryakramAyojakNameController.text =
-          data.ayojakancinave ?? "";
-      vastitSajarHonareSamajikKaryakramAyojakSamparkController.text =
-          data.aayojaksamparksootr ?? "";
-      vastitSajarHonareSamajikKaryakramAnya1Controller.text =
-          data.otherKaryakram ?? "";
+      vastitSajarHonareSamajikKaryakramAyojakSansthaNameController.text = data.ayojakasansthacinave ?? "";
+      vastitSajarHonareSamajikKaryakramAyojakNameController.text = data.ayojakancinave ?? "";
+      vastitSajarHonareSamajikKaryakramAyojakSamparkController.text = data.aayojaksamparksootr ?? "";
+      vastitSajarHonareSamajikKaryakramAnya1Controller.text = data.otherKaryakram ?? "";
       // selectedMasterSamajikKaryakramName = data['samajikKaryakramObj'];
     }
     showDialog(
@@ -8701,8 +7638,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                   children: [
                     vastisarvekshanDropdown2(
                       dataModel: vastisarvekshanDropDownDataModel!,
-                      filterTypeName:
-                          "वस्तीतसाजरहोणारेमहत्वाचेसामाजिककार्यक्रम",
+                      filterTypeName: "वस्तीतसाजरहोणारेमहत्वाचेसामाजिककार्यक्रम",
                       hintText: "${Statics.getLabel('SelectKaryakram')}",
                       onItemSelected: (id, value, isOther) {
                         selectedSamajikKaryakramId = id;
@@ -8719,25 +7655,12 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     ),
                     const SizedBox(height: 10),
                     if (selectedSamajikKaryakramName == "अन्य")
-                      textControllerField2(
-                          name: "${Statics.getLabel('otherEnter')}",
-                          controller:
-                              vastitSajarHonareSamajikKaryakramAnya1Controller,
-                          height: 50),
-                    textControllerField2(
-                        name: "${Statics.getLabel('aayojakSansthachiNave')}",
-                        controller:
-                            vastitSajarHonareSamajikKaryakramAyojakSansthaNameController,
-                        height: 50),
-                    textControllerField2(
-                        name: " ${Statics.getLabel('aayojakNaav')}",
-                        controller:
-                            vastitSajarHonareSamajikKaryakramAyojakNameController,
-                        height: 80),
+                      textControllerField2(name: "${Statics.getLabel('otherEnter')}", controller: vastitSajarHonareSamajikKaryakramAnya1Controller, height: 50),
+                    textControllerField2(name: "${Statics.getLabel('aayojakSansthachiNave')}", controller: vastitSajarHonareSamajikKaryakramAyojakSansthaNameController, height: 50),
+                    textControllerField2(name: " ${Statics.getLabel('aayojakNaav')}", controller: vastitSajarHonareSamajikKaryakramAyojakNameController, height: 80),
                     textControllerField2(
                       name: "${Statics.getLabel('aayojakSamparkSootra')}",
-                      controller:
-                          vastitSajarHonareSamajikKaryakramAyojakSamparkController,
+                      controller: vastitSajarHonareSamajikKaryakramAyojakSamparkController,
                       height: 50,
                       keyboardType: TextInputType.number,
                       maxInput: 10,
@@ -8755,8 +7678,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
                 // onPressed: () {
                 //   VastisarVastitasajaraSamajikkaryakram data = VastisarVastitasajaraSamajikkaryakram(
@@ -8782,42 +7704,25 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                 //   Navigator.of(ctx).pop();
                 // },
                 onPressed: () {
-                  if (vastitSajarHonareSamajikKaryakramAyojakSamparkController
-                          .text.length !=
-                      10) {
-                    Statics.showToast(
-                        "${Statics.getLabel('mobileNumberLimit')}");
+                  if (vastitSajarHonareSamajikKaryakramAyojakSamparkController.text.length != 10) {
+                    Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
                     return;
                   }
-                  if ((selectedMasterSamajikKaryakramName?.isOther == 1 &&
-                      vastitSajarHonareSamajikKaryakramAnya1Controller.text ==
-                          "")) {
-                    Statics.showToast(
-                        "${Statics.getLabel('otherInfoValidation')}");
+                  if ((selectedMasterSamajikKaryakramName?.isOther == 1 && vastitSajarHonareSamajikKaryakramAnya1Controller.text == "")) {
+                    Statics.showToast("${Statics.getLabel('otherInfoValidation')}");
                   } else {
-                    VastisarVastitasajaraSamajikkaryakram data =
-                        VastisarVastitasajaraSamajikkaryakram(
-                            id: selectedSamajikKaryakramId,
-                            vastiid: int.parse(selctedLevelId!),
-                            pkid: pkidSamajikKaryakram,
-                            isactive: isActiveSamajikKaryakram,
-                            selectedDropdownValueName:
-                                selectedSamajikKaryakramName,
-                            otherKaryakram:
-                                vastitSajarHonareSamajikKaryakramAnya1Controller
-                                    .text,
-                            ayojakasansthacinave:
-                                vastitSajarHonareSamajikKaryakramAyojakSansthaNameController
-                                    .text,
-                            ayojakancinave:
-                                vastitSajarHonareSamajikKaryakramAyojakNameController
-                                    .text,
-                            aayojaksamparksootr:
-                                vastitSajarHonareSamajikKaryakramAyojakSamparkController
-                                    .text);
+                    VastisarVastitasajaraSamajikkaryakram data = VastisarVastitasajaraSamajikkaryakram(
+                        id: selectedSamajikKaryakramId,
+                        vastiid: int.parse(selctedLevelId!),
+                        pkid: pkidSamajikKaryakram,
+                        isactive: isActiveSamajikKaryakram,
+                        selectedDropdownValueName: selectedSamajikKaryakramName,
+                        otherKaryakram: vastitSajarHonareSamajikKaryakramAnya1Controller.text,
+                        ayojakasansthacinave: vastitSajarHonareSamajikKaryakramAyojakSansthaNameController.text,
+                        ayojakancinave: vastitSajarHonareSamajikKaryakramAyojakNameController.text,
+                        aayojaksamparksootr: vastitSajarHonareSamajikKaryakramAyojakSamparkController.text);
                     if (editIndex != null) {
-                      vastitSajarHonareSamajikKaryakramDataList[editIndex] =
-                          data;
+                      vastitSajarHonareSamajikKaryakramDataList[editIndex] = data;
                     } else {
                       vastitSajarHonareSamajikKaryakramDataList.add(data);
                     }
@@ -8829,8 +7734,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                   }
                 },
 
-                child: Text("${Statics.getLabel('Submit')}",
-                    style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -8863,8 +7767,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   //=================================================== 18. Vasti Prashna Garja FORM ====================================================================================
 
   List<VastisarVastitilasamajika> vastiPrashnaGarjaDataList = [];
+
   //=================================================== 19. DHARMIK NETRUTVA FORM ====================================================================================
   List<Vastisardhaarmiknetrtav> dharmikNetrutvaDataList = [];
+
   //=================================================== 19. DHARMIK NETRUTVA FORM ====================================================================================
   List<Vastisardurjanshakti> durjanShaktiDataList = [];
 
@@ -8886,10 +7792,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   String? selectedDurjanShaktiGunhaName;
   Masterdata? selectedMasterDurjanShaktiGunhaName;
 
-  TextEditingController durjanShaktiAnyaPrkarController =
-      TextEditingController();
+  TextEditingController durjanShaktiAnyaPrkarController = TextEditingController();
   int? pkidDurjanShaktiGunha = 0;
   int? isActivedDurjanShaktiGunha = 1;
+
   void showDurjanShaktiPopup(
     BuildContext context, {
     int? editIndex,
@@ -8922,11 +7828,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("${Statics.getLabel('DurjanShakti')}",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Colors.purpleAccent)),
+              Text("${Statics.getLabel('DurjanShakti')}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.purpleAccent)),
               IconButton(
                 icon: Icon(Icons.close, color: Colors.grey),
                 onPressed: () {
@@ -8942,9 +7844,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    textControllerField("${Statics.getLabel('Name')}",
-                        durjanShaktiNaavController, context,
-                        height: 50),
+                    textControllerField("${Statics.getLabel('Name')}", durjanShaktiNaavController, context, height: 50),
                     vastisarvekshanDropdown2(
                       dataModel: vastisarvekshanDropDownDataModel!,
                       filterTypeName: "दुर्जनशक्तिप्रकार",
@@ -8963,10 +7863,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                       editId: selectedDurjanShaktiPrakarIdEdit,
                     ),
                     const SizedBox(height: 5),
-                    if (selectedMasterDurjanShaktiPrakarName?.isOther == 1)
-                      textControllerField("${Statics.getLabel('otherType')}",
-                          durjanShaktiAnyaPrkarController, context,
-                          height: 50),
+                    if (selectedMasterDurjanShaktiPrakarName?.isOther == 1) textControllerField("${Statics.getLabel('otherType')}", durjanShaktiAnyaPrkarController, context, height: 50),
                     const SizedBox(height: 5),
                     vastisarvekshanDropdown2(
                       dataModel: vastisarvekshanDropDownDataModel!,
@@ -9014,26 +7911,20 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
                 onPressed: () {
-                  if ((selectedMasterDurjanShaktiPrakarName?.isOther == 1 &&
-                      durjanShaktiAnyaPrkarController.text == "")) {
-                    Statics.showToast(
-                        "${Statics.getLabel('otherInfoValidation')}");
+                  if ((selectedMasterDurjanShaktiPrakarName?.isOther == 1 && durjanShaktiAnyaPrkarController.text == "")) {
+                    Statics.showToast("${Statics.getLabel('otherInfoValidation')}");
                   } else {
                     Vastisardurjanshakti data = Vastisardurjanshakti(
                         name: durjanShaktiNaavController.text,
                         pkid: pkidDurjanShaktiGunha,
                         isactive: isActivedDurjanShaktiGunha,
                         vastiid: int.parse(selctedLevelId!),
-                        selectedDropdownValueName:
-                            selectedDurjanShaktiPrakarName,
-                        selectedDropdownValueName1:
-                            selectedDurjanShaktiShikashaName,
-                        selectedDropdownValueName2:
-                            selectedDurjanShaktiGunhaName,
+                        selectedDropdownValueName: selectedDurjanShaktiPrakarName,
+                        selectedDropdownValueName1: selectedDurjanShaktiShikashaName,
+                        selectedDropdownValueName2: selectedDurjanShaktiGunhaName,
                         gunha: selectedDurjanShaktiGunhaId,
                         prakar: selectedDurjanShaktiPrakarId,
                         shiksha: selectedDurjanShaktiShikshaId,
@@ -9050,8 +7941,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                     clearDurjanShakti();
                   }
                 },
-                child: Text("${Statics.getLabel('Submit')}",
-                    style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -9085,6 +7975,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
   int? pkidHinduVeerYadi = 0;
   int? isActiveHinduVeerYadi = 1;
   TextEditingController hinduVeerYadiNameControler = TextEditingController();
+
   void showHinduVeerYadiPopup(
     BuildContext context, {
     int? editIndex,
@@ -9170,8 +8061,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                   Navigator.of(ctx).pop();
                   hinduVeerYadiNameControler.clear();
                 },
-                child: Text("${Statics.getLabel('Submit')}",
-                    style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -9190,23 +8080,16 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                 padding: EdgeInsets.symmetric(vertical: 10),
                 child: Column(
                   children: [
-                    dynamicProgressBar(
-                        context: context,
-                        value: double.parse(step1completepercentage.toString()),
-                        detailListItems: step3pendingpoints!.split(',')),
+                    dynamicProgressBar(context: context, value: double.parse(step1completepercentage.toString()), detailListItems: step3pendingpoints!.split(',')),
                     SizedBox(
                       height: 10,
                     ),
                     InkWell(
                       onTap: () {
                         // Filter out empty or whitespace-only strings
-                        final filteredDetails = step3pendingpoints!
-                            .split(',')
-                            .where((item) => item.trim().isNotEmpty)
-                            .toList();
+                        final filteredDetails = step3pendingpoints!.split(',').where((item) => item.trim().isNotEmpty).toList();
 
-                        print(
-                            "Filtered step3pendingpoints!.split(','): $filteredDetails");
+                        print("Filtered step3pendingpoints!.split(','): $filteredDetails");
 
                         if (filteredDetails.isEmpty) {
                           Statics.showToast(Statics.getLabel('allInfoSubmit'));
@@ -9217,8 +8100,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           context: context,
                           builder: (ctx) {
                             return Dialog(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                               backgroundColor: Colors.white,
                               child: Padding(
                                 padding: const EdgeInsets.all(20),
@@ -9227,11 +8109,9 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   children: [
                                     // Icon and Title
                                     Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Icon(Icons.warning_amber_rounded,
-                                            color: Colors.red, size: 30),
+                                        Icon(Icons.warning_amber_rounded, color: Colors.red, size: 30),
                                         SizedBox(width: 8),
                                         Text(
                                           Statics.getLabel('remainingQuestion'),
@@ -9271,16 +8151,12 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                           backgroundColor: Colors.red,
                                           foregroundColor: Colors.white,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 12),
+                                          padding: EdgeInsets.symmetric(vertical: 12),
                                         ),
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(),
-                                        child:
-                                            Text(Statics.getLabel('bandKara')),
+                                        onPressed: () => Navigator.of(context).pop(),
+                                        child: Text(Statics.getLabel('bandKara')),
                                       ),
                                     ),
                                   ],
@@ -9349,23 +8225,16 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 5),
                             width: 100,
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Colors.purpleAccent.shade100),
-                                color: Colors.purpleAccent.withOpacity(0.7),
-                                borderRadius: BorderRadius.circular(15)),
+                            decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                             child: Center(
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(Icons.add,
-                                      color: Colors.white, size: 15),
+                                  Icon(Icons.add, color: Colors.white, size: 15),
                                   SizedBox(width: 5),
                                   Text(
                                     "${Statics.getLabel('AddButton')}",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold),
+                                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
@@ -9392,11 +8261,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 child: DataTable(
                                   columnSpacing: 20,
                                   showCheckboxColumn: false,
-                                  headingRowColor: MaterialStatePropertyAll(
-                                      Colors.purple.shade50),
-                                  headingTextStyle: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black87),
+                                  headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+                                  headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                                   columns: [
                                     DataColumn(
                                         label: Text(
@@ -9415,45 +8281,30 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                       "${Statics.getLabel('crime')}",
                                     )),
                                   ],
-                                  rows: durjanShaktiDataList
-                                      .asMap()
-                                      .entries
-                                      .where(
-                                          (entry) => entry.value.isactive == 1)
-                                      .map((entry) {
+                                  rows: durjanShaktiDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                                     int index = entry.key;
                                     var data = entry.value;
-                                    bool isSelected =
-                                        selectedDurjanShaktiIdIndex == index;
+                                    bool isSelected = selectedDurjanShaktiIdIndex == index;
                                     return DataRow(
                                         selected: isSelected,
-                                        color: MaterialStateProperty
-                                            .resolveWith<Color?>(
+                                        color: MaterialStateProperty.resolveWith<Color?>(
                                           (Set<MaterialState> states) {
-                                            if (isSelected)
-                                              return Colors.yellow.shade100;
+                                            if (isSelected) return Colors.yellow.shade100;
                                             return null;
                                           },
                                         ),
                                         onSelectChanged: (bool? selected) {
                                           if (selected != null && selected) {
                                             setState(() {
-                                              selectedDurjanShaktiIdIndex =
-                                                  index;
+                                              selectedDurjanShaktiIdIndex = index;
                                             });
                                           }
                                         },
                                         cells: [
                                           DataCell(Text(data.name ?? '')),
-                                          DataCell(Text(
-                                              data.selectedDropdownValueName ??
-                                                  '')),
-                                          DataCell(Text(
-                                              data.selectedDropdownValueName1 ??
-                                                  '')),
-                                          DataCell(Text(
-                                              data.selectedDropdownValueName2 ??
-                                                  '')),
+                                          DataCell(Text(data.selectedDropdownValueName ?? '')),
+                                          DataCell(Text(data.selectedDropdownValueName1 ?? '')),
+                                          DataCell(Text(data.selectedDropdownValueName2 ?? '')),
                                         ]);
                                   }).toList(),
                                 ),
@@ -9470,15 +8321,13 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               InkWell(
                                 onTap: () {
                                   if (selectedDurjanShaktiIdIndex != null) {
-                                    var selectedData = durjanShaktiDataList[
-                                        selectedDurjanShaktiIdIndex!];
+                                    var selectedData = durjanShaktiDataList[selectedDurjanShaktiIdIndex!];
                                     showDialog(
                                       context: context,
                                       builder: (context) {
                                         return AlertDialog(
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
+                                            borderRadius: BorderRadius.circular(20),
                                           ),
                                           backgroundColor: Colors.white,
                                           title: Center(
@@ -9494,54 +8343,28 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                           content: SingleChildScrollView(
                                             child: Column(
                                               mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                                Divider(
-                                                    thickness: 1,
-                                                    color: Colors
-                                                        .deepPurple.shade100),
+                                                Divider(thickness: 1, color: Colors.deepPurple.shade100),
                                                 SizedBox(height: 12),
-                                                _buildInfoRow(
-                                                    "${Statics.getLabel('Name')}",
-                                                    selectedData.name),
-                                                _buildInfoRow(
-                                                    "${Statics.getLabel('SelectFrequency')}",
-                                                    selectedData
-                                                        .selectedDropdownValueName),
-                                                _buildInfoRow(
-                                                    "${Statics.getLabel('otherType')}",
-                                                    selectedData.otherPrakar),
-                                                _buildInfoRow(
-                                                    "${Statics.getLabel('shiksha')}",
-                                                    selectedData
-                                                        .selectedDropdownValueName1),
-                                                _buildInfoRow(
-                                                    "${Statics.getLabel('crime')}",
-                                                    selectedData
-                                                        .selectedDropdownValueName2),
+                                                _buildInfoRow("${Statics.getLabel('Name')}", selectedData.name),
+                                                _buildInfoRow("${Statics.getLabel('SelectFrequency')}", selectedData.selectedDropdownValueName),
+                                                _buildInfoRow("${Statics.getLabel('otherType')}", selectedData.otherPrakar),
+                                                _buildInfoRow("${Statics.getLabel('shiksha')}", selectedData.selectedDropdownValueName1),
+                                                _buildInfoRow("${Statics.getLabel('crime')}", selectedData.selectedDropdownValueName2),
                                               ],
                                             ),
                                           ),
-                                          actionsAlignment:
-                                              MainAxisAlignment.center,
+                                          actionsAlignment: MainAxisAlignment.center,
                                           actions: [
                                             ElevatedButton(
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                              child: Text(
-                                                  "${Statics.getLabel('bandKara')}",
-                                                  style: TextStyle(
-                                                      color: Colors.white)),
+                                              onPressed: () => Navigator.pop(context),
+                                              child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                               style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    Colors.purpleAccent,
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 24,
-                                                    vertical: 12),
+                                                backgroundColor: Colors.purpleAccent,
+                                                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
+                                                  borderRadius: BorderRadius.circular(12),
                                                 ),
                                               ),
                                             ),
@@ -9551,22 +8374,18 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     );
                                   }
                                 },
-                                child: Icon(Icons.remove_red_eye,
-                                    color: Colors.green, size: 20),
+                                child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                               ),
                               SizedBox(
                                 width: 20,
                               ),
                               InkWell(
                                 onTap: () {
-                                  showDurjanShaktiPopup(context,
-                                      editIndex: selectedDurjanShaktiIdIndex,
-                                      onDataChanged: () {
+                                  showDurjanShaktiPopup(context, editIndex: selectedDurjanShaktiIdIndex, onDataChanged: () {
                                     setState(() {});
                                   });
                                 },
-                                child: Icon(Icons.edit,
-                                    color: Colors.blue, size: 20),
+                                child: Icon(Icons.edit, color: Colors.blue, size: 20),
                               ),
                               SizedBox(
                                 width: 20,
@@ -9591,8 +8410,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                         ),
                                       ),
                                       content: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10.0),
+                                        padding: const EdgeInsets.symmetric(vertical: 10.0),
                                         child: Text(
                                           "${Statics.getLabel('deleteconfirmText')}",
                                           textAlign: TextAlign.center,
@@ -9602,57 +8420,45 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                           ),
                                         ),
                                       ),
-                                      actionsAlignment:
-                                          MainAxisAlignment.spaceEvenly,
+                                      actionsAlignment: MainAxisAlignment.spaceEvenly,
                                       actions: [
                                         ElevatedButton(
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                Colors.grey.shade300,
+                                            backgroundColor: Colors.grey.shade300,
                                             shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
+                                              borderRadius: BorderRadius.circular(12),
                                             ),
                                           ),
-                                          onPressed: () =>
-                                              Navigator.pop(context, false),
+                                          onPressed: () => Navigator.pop(context, false),
                                           child: Text(
                                             "${Statics.getLabel('ConfirmationNo')}",
-                                            style:
-                                                TextStyle(color: Colors.black),
+                                            style: TextStyle(color: Colors.black),
                                           ),
                                         ),
                                         ElevatedButton(
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.redAccent,
                                             shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
+                                              borderRadius: BorderRadius.circular(12),
                                             ),
                                           ),
-                                          onPressed: () =>
-                                              Navigator.pop(context, true),
+                                          onPressed: () => Navigator.pop(context, true),
                                           child: Text(
                                             "${Statics.getLabel('ConfirmationYes')}",
-                                            style:
-                                                TextStyle(color: Colors.white),
+                                            style: TextStyle(color: Colors.white),
                                           ),
                                         ),
                                       ],
                                     ),
                                   );
-                                  if (shouldDelete == true &&
-                                      selectedDurjanShaktiIdIndex != null) {
+                                  if (shouldDelete == true && selectedDurjanShaktiIdIndex != null) {
                                     setState(() {
-                                      durjanShaktiDataList[
-                                              selectedDurjanShaktiIdIndex!]
-                                          .isactive = 0;
+                                      durjanShaktiDataList[selectedDurjanShaktiIdIndex!].isactive = 0;
                                       selectedDurjanShaktiIdIndex = null;
                                     });
                                   }
                                 },
-                                child: Icon(Icons.delete,
-                                    color: Colors.red, size: 20),
+                                child: Icon(Icons.delete, color: Colors.red, size: 20),
                               ),
                             ],
                           ),
@@ -9682,11 +8488,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 5),
                           width: 100,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.purpleAccent.shade100),
-                              color: Colors.purpleAccent.withOpacity(0.7),
-                              borderRadius: BorderRadius.circular(15)),
+                          decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                           child: Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -9695,9 +8497,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                 SizedBox(width: 5),
                                 Text(
                                   "${Statics.getLabel('AddButton')}",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
@@ -9723,44 +8523,31 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                               child: DataTable(
                                 columnSpacing: 20,
                                 showCheckboxColumn: false,
-                                headingRowColor: MaterialStatePropertyAll(
-                                    Colors.purple.shade50),
-                                headingTextStyle: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87),
+                                headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+                                headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                                 columns: [
-                                  DataColumn(
-                                      label: Text(
-                                          "${Statics.getLabel('serialNo')}")),
+                                  DataColumn(label: Text("${Statics.getLabel('serialNo')}")),
                                   DataColumn(
                                       label: Text(
                                     "${Statics.getLabel('Name')}",
                                   )),
                                 ],
-                                rows: hinduVeerYadiDataList
-                                    .asMap()
-                                    .entries
-                                    .where((entry) => entry.value.isactive == 1)
-                                    .map((entry) {
+                                rows: hinduVeerYadiDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                                   int index = entry.key;
                                   var data = entry.value;
-                                  bool isSelected =
-                                      selectedHinduVeerYadiIdIndex == index;
+                                  bool isSelected = selectedHinduVeerYadiIdIndex == index;
                                   return DataRow(
                                       selected: isSelected,
-                                      color: MaterialStateProperty.resolveWith<
-                                          Color?>(
+                                      color: MaterialStateProperty.resolveWith<Color?>(
                                         (Set<MaterialState> states) {
-                                          if (isSelected)
-                                            return Colors.yellow.shade100;
+                                          if (isSelected) return Colors.yellow.shade100;
                                           return null;
                                         },
                                       ),
                                       onSelectChanged: (bool? selected) {
                                         if (selected != null && selected) {
                                           setState(() {
-                                            selectedHinduVeerYadiIdIndex =
-                                                index;
+                                            selectedHinduVeerYadiIdIndex = index;
                                           });
                                         }
                                       },
@@ -9783,15 +8570,13 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                             InkWell(
                               onTap: () {
                                 if (selectedHinduVeerYadiIdIndex != null) {
-                                  var selectedData = hinduVeerYadiDataList[
-                                      selectedHinduVeerYadiIdIndex!];
+                                  var selectedData = hinduVeerYadiDataList[selectedHinduVeerYadiIdIndex!];
                                   showDialog(
                                     context: context,
                                     builder: (context) {
                                       return AlertDialog(
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
+                                          borderRadius: BorderRadius.circular(20),
                                         ),
                                         backgroundColor: Colors.white,
                                         title: Center(
@@ -9807,38 +8592,24 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                         content: SingleChildScrollView(
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Divider(
-                                                  thickness: 1,
-                                                  color: Colors
-                                                      .deepPurple.shade100),
+                                              Divider(thickness: 1, color: Colors.deepPurple.shade100),
                                               SizedBox(height: 12),
-                                              _buildInfoRow(
-                                                  "${Statics.getLabel('Name')}",
-                                                  selectedData.name),
+                                              _buildInfoRow("${Statics.getLabel('Name')}", selectedData.name),
                                             ],
                                           ),
                                         ),
-                                        actionsAlignment:
-                                            MainAxisAlignment.center,
+                                        actionsAlignment: MainAxisAlignment.center,
                                         actions: [
                                           ElevatedButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                            child: Text(
-                                                "${Statics.getLabel('bandKara')}",
-                                                style: TextStyle(
-                                                    color: Colors.white)),
+                                            onPressed: () => Navigator.pop(context),
+                                            child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                             style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  Colors.purpleAccent,
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 24, vertical: 12),
+                                              backgroundColor: Colors.purpleAccent,
+                                              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                               shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
+                                                borderRadius: BorderRadius.circular(12),
                                               ),
                                             ),
                                           ),
@@ -9848,22 +8619,18 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                   );
                                 }
                               },
-                              child: Icon(Icons.remove_red_eye,
-                                  color: Colors.green, size: 20),
+                              child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                             ),
                             SizedBox(
                               width: 20,
                             ),
                             InkWell(
                               onTap: () {
-                                showHinduVeerYadiPopup(context,
-                                    editIndex: selectedHinduVeerYadiIdIndex,
-                                    onDataChanged: () {
+                                showHinduVeerYadiPopup(context, editIndex: selectedHinduVeerYadiIdIndex, onDataChanged: () {
                                   setState(() {});
                                 });
                               },
-                              child: Icon(Icons.edit,
-                                  color: Colors.blue, size: 20),
+                              child: Icon(Icons.edit, color: Colors.blue, size: 20),
                             ),
                             SizedBox(
                               width: 20,
@@ -9888,8 +8655,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                       ),
                                     ),
                                     content: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10.0),
+                                      padding: const EdgeInsets.symmetric(vertical: 10.0),
                                       child: Text(
                                         "${Statics.getLabel('deleteconfirmText')}",
                                         textAlign: TextAlign.center,
@@ -9899,19 +8665,16 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                         ),
                                       ),
                                     ),
-                                    actionsAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                    actionsAlignment: MainAxisAlignment.spaceEvenly,
                                     actions: [
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.grey.shade300,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
                                         ),
-                                        onPressed: () =>
-                                            Navigator.pop(context, false),
+                                        onPressed: () => Navigator.pop(context, false),
                                         child: Text(
                                           "${Statics.getLabel('ConfirmationNo')}",
                                           style: TextStyle(color: Colors.black),
@@ -9921,12 +8684,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.redAccent,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
                                         ),
-                                        onPressed: () =>
-                                            Navigator.pop(context, true),
+                                        onPressed: () => Navigator.pop(context, true),
                                         child: Text(
                                           "${Statics.getLabel('ConfirmationYes')}",
                                           style: TextStyle(color: Colors.white),
@@ -9935,18 +8696,14 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                                     ],
                                   ),
                                 );
-                                if (shouldDelete == true &&
-                                    selectedHinduVeerYadiIdIndex != null) {
+                                if (shouldDelete == true && selectedHinduVeerYadiIdIndex != null) {
                                   setState(() {
-                                    hinduVeerYadiDataList[
-                                            selectedHinduVeerYadiIdIndex!]
-                                        .isactive = 0;
+                                    hinduVeerYadiDataList[selectedHinduVeerYadiIdIndex!].isactive = 0;
                                     selectedHinduVeerYadiIdIndex = null;
                                   });
                                 }
                               },
-                              child: Icon(Icons.delete,
-                                  color: Colors.red, size: 20),
+                              child: Icon(Icons.delete, color: Colors.red, size: 20),
                             ),
                           ],
                         ),
@@ -9961,8 +8718,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
                           width: double.infinity,
                           height: 40,
                           padding: const EdgeInsets.symmetric(horizontal: 20),
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 8),
+                          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
                           decoration: BoxDecoration(
                             color: Colors.purpleAccent,
                             borderRadius: BorderRadius.circular(15),
@@ -10067,21 +8823,15 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
     Function(Masterdata?)? onSelectionChanged,
   }) {
     // 🔹 Start with filtered list
-    List<Masterdata> filteredList = dataModel.masterdata!
-        .where((item) =>
-            item.typename == filterTypeName &&
-            !excludedItemIds.contains(item.id))
-        .toList();
+    List<Masterdata> filteredList = dataModel.masterdata!.where((item) => item.typename == filterTypeName && !excludedItemIds.contains(item.id)).toList();
 
     Masterdata? selectedItem = selectedValue;
 
     // 🔹 If selectedItem is not already set and editId is provided, get it
     if (selectedItem == null && editId != null) {
       try {
-        selectedItem = dataModel.masterdata!.firstWhere(
-            (item) => item.id == editId && item.typename == filterTypeName);
-        onItemSelected(
-            selectedItem.id, selectedItem.value, selectedItem.isOther);
+        selectedItem = dataModel.masterdata!.firstWhere((item) => item.id == editId && item.typename == filterTypeName);
+        onItemSelected(selectedItem.id, selectedItem.value, selectedItem.isOther);
         if (onSelectionChanged != null) {
           onSelectionChanged(selectedItem);
         }
@@ -10091,8 +8841,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
     }
 
     // 🔹 Ensure selectedItem is in the dropdown list
-    if (selectedItem != null &&
-        !filteredList.any((item) => item.id == selectedItem!.id)) {
+    if (selectedItem != null && !filteredList.any((item) => item.id == selectedItem!.id)) {
       filteredList.add(selectedItem!);
     }
 
@@ -10124,8 +8873,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
               items: filteredList.map((Masterdata item) {
                 return DropdownMenuItem<Masterdata>(
                   value: item,
-                  child: Text(item.value ?? "",
-                      style: TextStyle(color: Colors.black)),
+                  child: Text(item.value ?? "", style: TextStyle(color: Colors.black)),
                 );
               }).toList(),
               onChanged: (Masterdata? newValue) {
@@ -10159,10 +8907,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen>
               height: 24,
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFFcfd8dc),
-                    Color(0xFF90a4ae)
-                  ], // Blue-grey background
+                  colors: [Color(0xFFcfd8dc), Color(0xFF90a4ae)], // Blue-grey background
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),

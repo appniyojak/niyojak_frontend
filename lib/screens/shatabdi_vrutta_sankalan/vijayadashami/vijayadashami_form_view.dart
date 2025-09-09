@@ -40,6 +40,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
   List<GeoUnitMasterBAL>? _linkedBhaag;
   List<GeoUnitMasterBAL>? _linkedShahar;
   List<GeoUnitMasterBAL>? _linkedNagar;
+  List<UpnagarmandallistVijayaDashami>? _linkedUpnagar;
   List<GeoUnitMasterBAL>? _linkedmandal;
   List<GeoUnitMasterBAL>? _linkedgraam;
   List<GeoUnitMasterBAL>? _linkedvasti;
@@ -1252,6 +1253,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       VastiCounts counts,
     ) onSubmit,
   }) async {
+    log("showShakhaalistPopup Opened >>>>>>>>>>>>>>>>>>>>> ");
     List<Shakhaalist> selectedItems = List.from(preselectedItems ?? []);
 
     final List<String> vayogatOptions = shakhaalist.map((e) => e.vayogatname ?? "").where((e) => e.isNotEmpty).toSet().toList();
@@ -1899,7 +1901,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     if (vastiUpDataListModel != null) {
       print("Data fetched successfully");
       setState(() {
-        print("selectedIdString getVastiUpDataList  --->>>   $vastiUpDataListModel");
+        print("selectedIdString getVastiUpDataList  --->>>   ${jsonDecode(jsonEncode(vastiUpDataListModel))}");
       });
     } else {
       print("Failed to fetch data");
@@ -2282,6 +2284,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                             // print(selectedSajjanshaktiItems);
                             // print(selectedAnyaprabhaviItems);
                           }, onAdd: () {
+                            submitForm(showLoader: false);
                             Navigator.of(context)
                                 .pushReplacementNamed(
                                   AddVishisthaAtithi.routeName,
@@ -2633,7 +2636,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                     height: 10,
                   ),
                   SingleColumnRow(
-                    txtString: "${Statics.getLabel('Total')} ${Statics.getLabel('Vasti')} ",
+                    txtString: "${Statics.getLabel('Total')} ${Statics.getLabel('Vasti')} / ${Statics.getLabel('Graam')}",
                     value: totalVastiCount.toString(),
                   ),
                   SingleColumnRow(
@@ -2720,7 +2723,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                   // ✅ Results after submit
                   SingleColumnRow(
                     txtString: "${Statics.getLabel('Total')} ${Statics.getLabel('Shaakhaa')} ",
-                    value: "$totalShakhaCount",
+                    value: "${(data?.shakhaalist ?? []).where((item) => item.frequencyName == "शाखा").length}",
                   ),
                   SingleColumnRow(
                     txtString: " ${Statics.getLabel('Shaakhaa')} ${Statics.getLabel('pratinidhitva')}",
@@ -2728,7 +2731,10 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                   ),
                   SingleColumnRow(
                     txtString: " ${Statics.getLabel('Shaakhaa')} ${Statics.getLabel('average')} ${Statics.getLabel('pratinidhitva')} ",
-                    value: "$averageShakhaCount %",
+                    value: ((data?.shakhaalist ?? []).where((item) => item.frequencyName == "शाखा").length > 0
+                            ? ((selectedShakhaCount / (data?.shakhaalist ?? []).where((item) => item.frequencyName == "शाखा").length) * 100).round().toString()
+                            : "0") +
+                        " %",
                   ),
                 ],
               ),
@@ -2806,7 +2812,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                   // ✅ Results after submit
                   SingleColumnRow(
                     txtString: "${Statics.getLabel('Total')} ${Statics.getLabel('SaaptaahikMilan')} ",
-                    value: "$totalMilanCount",
+                    value: "${(data?.shakhaalist ?? []).where((item) => item.frequencyName == "साप्ताहिक मिलन").length}",
                   ),
                   SingleColumnRow(
                     txtString: " ${Statics.getLabel('SaaptaahikMilan')} ${Statics.getLabel('pratinidhitva')} ",
@@ -2814,7 +2820,10 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                   ),
                   SingleColumnRow(
                     txtString: " ${Statics.getLabel('SaaptaahikMilan')} ${Statics.getLabel('average')} ${Statics.getLabel('pratinidhitva')} ",
-                    value: "$averageMilanCount %",
+                    value: ((data?.shakhaalist ?? []).where((item) => item.frequencyName == "साप्ताहिक मिलन").length > 0
+                            ? ((selectedMilanCount / ((data?.shakhaalist ?? []).where((item) => item.frequencyName == "साप्ताहिक मिलन").length)) * 100).round().toString()
+                            : "0") +
+                        " %",
                   ),
                 ],
               ),
@@ -2892,7 +2901,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                   // ✅ Results after submit
                   SingleColumnRow(
                     txtString: "${Statics.getLabel('Total')} ${Statics.getLabel('milanMandali')} ",
-                    value: "$totalSanghaMandaliCount",
+                    value: "${(data?.shakhaalist ?? []).where((item) => item.frequencyName == "मासिक मिलन/संघ मंडळी").length}",
                   ),
                   SingleColumnRow(
                     txtString: " ${Statics.getLabel('milanMandali')} ${Statics.getLabel('pratinidhitva')} ",
@@ -2900,7 +2909,10 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                   ),
                   SingleColumnRow(
                     txtString: "${Statics.getLabel('milanMandali')}  ${Statics.getLabel('average')}  ${Statics.getLabel('pratinidhitva')} ",
-                    value: "$averageSanghaMandaliCount %",
+                    value: ((data?.shakhaalist ?? []).where((item) => item.frequencyName == "मासिक मिलन/संघ मंडळी").length > 0
+                            ? ((selectedSanghaMandaliCount / ((data?.shakhaalist ?? []).where((item) => item.frequencyName == "मासिक मिलन/संघ मंडळी").length)) * 100).round().toString()
+                            : "0") +
+                        " %",
                   ),
                 ],
               ),
@@ -2913,7 +2925,8 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                   // ✅ Total
                   SingleColumnRow(
                     txtString: "${Statics.getLabel('Total')} ",
-                    value: "${totalShakhaCount + totalMilanCount + totalSanghaMandaliCount}",
+                    value:
+                        "${((data?.shakhaalist ?? []).where((item) => item.frequencyName == "शाखा").length) + ((data?.shakhaalist ?? []).where((item) => item.frequencyName == "साप्ताहिक मिलन").length) + ((data?.shakhaalist ?? []).where((item) => item.frequencyName == "मासिक मिलन/संघ मंडळी").length)}",
                   ),
 
                   // ✅ Selected
@@ -2926,7 +2939,9 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                   SingleColumnRow(
                     txtString: "${Statics.getLabel('Total')}  ${Statics.getLabel('average')}  ${Statics.getLabel('pratinidhitva')} ",
                     value: (() {
-                      final total = totalShakhaCount + totalMilanCount + totalSanghaMandaliCount;
+                      final total = ((data?.shakhaalist ?? []).where((item) => item.frequencyName == "शाखा").length) +
+                          ((data?.shakhaalist ?? []).where((item) => item.frequencyName == "साप्ताहिक मिलन").length) +
+                          ((data?.shakhaalist ?? []).where((item) => item.frequencyName == "मासिक मिलन/संघ मंडळी").length);
                       final selected = selectedShakhaCount + selectedMilanCount + selectedSanghaMandaliCount;
 
                       if (total == 0) return "0 %";
@@ -3043,9 +3058,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
                 onPressed: () {
                   if (_isSearching == false) {
-                    Fluttertoast.showToast(
-                      msg: "${Statics.getLabel('NagarSelectionImportant')}",
-                    );
+                    Fluttertoast.showToast(msg: "${Statics.getLabel('NagarSelectionImportant')}");
                     return;
                   }
                   submitForm();
@@ -3528,56 +3541,56 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
 
                           _linkedNagarValue = value;
                         });
-                        if (utsavKontyaStaravar == "13") {
-                          data = await Statics.getVijayadashamiInitData(context, Statics.userDetails["userID"], selctedLevelId, utsavKontyaStaravar);
-                          print("searchVijayaDashami data ${data?.upnagarmandallist}");
-                          selectedPrabhavi = null;
-                          selectedPerson = null;
-                          setState(() {});
-                          if (data?.upnagarmandallist == null || data?.upnagarmandallist?.length == 0) {
-                            showDialog(
-                              context: context,
-                              builder: (ctx) => AlertDialog(
-                                title: Text(Statics.getLabel('AskConfirmation')),
-                                content: Text(Statics.getLabel('addUpnagarDialogBox')),
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: Text(Statics.getLabel('add')),
-                                    onPressed: () async {
-                                      Navigator.of(context).pushReplacementNamed(TabScreen.routeName).then((value) {
-                                        if (mounted) clearForm();
-                                      }); //.then((value) => searchVijayaDashami());
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: Text(Statics.getLabel('clear')),
-                                    onPressed: () {
-                                      Navigator.of(ctx).pop();
-                                    },
-                                  )
-                                ],
-                              ),
-                            );
-                          }
-
-                          return;
+                        data = await Statics.getVijayadashamiInitData(context, Statics.userDetails["userID"], selctedLevelId, selctedLevel == 'Nagar' ? "6" : utsavKontyaStaravar);
+                        log("searchVijayaDashami data ${jsonDecode(jsonEncode(data))}");
+                        selectedPrabhavi = null;
+                        selectedPerson = null;
+                        setState(() {
+                          _linkedUpnagar = data?.upnagarmandallist ?? [];
+                        });
+                        if (_linkedUpnagar == null || _linkedUpnagar?.length == 0) {
+                          showDialog(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                              title: Text(Statics.getLabel('AskConfirmation')),
+                              content: Text(Statics.getLabel('addUpnagarDialogBox')),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: Text(Statics.getLabel('add')),
+                                  onPressed: () async {
+                                    Navigator.of(context).pushReplacementNamed(TabScreen.routeName).then((value) {
+                                      if (mounted) clearForm();
+                                    }); //.then((value) => searchVijayaDashami());
+                                  },
+                                ),
+                                TextButton(
+                                  child: Text(Statics.getLabel('clear')),
+                                  onPressed: () {
+                                    Navigator.of(ctx).pop();
+                                  },
+                                )
+                              ],
+                            ),
+                          );
                         }
-                        populatelinkedMandalDropdown(value!);
-                        populatelinkedVastiDropdown(value);
+
+                        return;
+                        // populatelinkedMandalDropdown(value!);
+                        // populatelinkedVastiDropdown(value);
                       },
                     ),
-                  if (data?.upnagarmandallist != null && data!.upnagarmandallist!.length > 0)
+                  if (_linkedUpnagar != null && _linkedUpnagar!.length > 0)
                     SizedBox(
                       height: 10,
                     ),
-                  if ((selctedLevel == 'Nagar' || selctedLevel == 'upnagarUpkhanda') && data?.upnagarmandallist != null && data!.upnagarmandallist!.length > 0)
+                  if ((selctedLevel == 'Nagar' || selctedLevel == 'upnagarUpkhanda') && _linkedUpnagar != null && _linkedUpnagar!.length > 0)
                     DropdownButtonFormField(
                       decoration: InputDecoration(labelText: Statics.getLabel('upnagarUpkhanda')),
                       isExpanded: true,
                       value: _linkedupnaragValue == "" ? null : _linkedupnaragValue,
-                      items: data?.upnagarmandallist?.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.preferedname.toString()))).toList(),
+                      items: _linkedUpnagar?.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.preferedname.toString()))).toList(),
                       onChanged: (value) {
-                        final selectedItem = data?.upnagarmandallist!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                        final selectedItem = _linkedUpnagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                         setState(() {
                           selctedLevelName = selectedItem?.preferedname ?? "";
                           selctedLevel = 'upnagarUpkhanda';
@@ -3586,6 +3599,8 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                           _linkedupnaragValue = value;
                           // populatelinkedGraamDropdown(value!);
                         });
+
+                        print("selctedLevelId >>>>>>>>>>>>>>>>> $selctedLevelId");
                       },
                     ),
                   SizedBox(
@@ -3737,13 +3752,6 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
 
                           _linkedNagarValue = value;
                         });
-                        if (utsavKontyaStaravar == "0") {
-                          data = await Statics.getVijayadashamiInitData(context, Statics.userDetails["userID"], selctedLevelId, utsavKontyaStaravar);
-                          print("searchVijayaDashami data ${data?.vastisarsajjanshakti}");
-                          selectedPrabhavi = null;
-                          selectedPerson = null;
-                          return;
-                        }
                         populatelinkedMandalDropdown(value!);
                         populatelinkedVastiDropdown(value);
                       },
@@ -3962,7 +3970,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     );
   }
 
-  Future<void> submitForm() async {
+  Future<void> submitForm({bool showLoader = true}) async {
     Map<String, dynamic> formData = {
       "GeoUnitID": int.parse(selctedLevelId!),
       "AppUserID": int.parse(Statics.userDetails['userID']),
@@ -4003,7 +4011,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
 
     String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
     log("Form Data (JSON):\n$formattedJson");
-    await Statics.saveVijayaDashamiUtsavData(context, formData);
+    await Statics.saveVijayaDashamiUtsavData(context, formData, showLoader);
     getFormData();
   }
 
@@ -4019,7 +4027,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
     log("Form Data (JSON):\n$formattedJson");
     getVijayaDashamiUtsavDataByGeounitData = await Statics.getVijayaDashamiUtsavDataByGeounit(context, formData);
-    log("getVijayaDashamiUtsavDataByGeounitData $getVijayaDashamiUtsavDataByGeounitData");
+    log("getVijayaDashamiUtsavDataByGeounitData ${jsonDecode(jsonEncode(getVijayaDashamiUtsavDataByGeounitData))}");
     setState(() {
       VijayadashamiUtsav utsav = getVijayaDashamiUtsavDataByGeounitData!.vijayadashamiUtsav!;
 

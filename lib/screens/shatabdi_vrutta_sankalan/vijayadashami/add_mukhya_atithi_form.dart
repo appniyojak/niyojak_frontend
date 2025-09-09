@@ -11,6 +11,7 @@ import '../../../providers/bals.dart';
 
 class AddMukhyaAtithi extends StatefulWidget {
   static const String routeName = '/add-mukhya-atithi';
+
   const AddMukhyaAtithi({Key? key}) : super(key: key);
 
   @override
@@ -20,6 +21,7 @@ class AddMukhyaAtithi extends StatefulWidget {
 class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
   List<Vastisarsajjanshakti> sajjanShaktiDataList = [];
   int? isVastiOrGraam;
+
   // All your variables here
   int? sajjanShaktiShreniId;
   String? sajjanShaktiShreniName;
@@ -36,6 +38,8 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
   int? sajjanShaktiPrabhavKeshtraEditId;
   Masterdata? sajjanShaktiPrabhavKeshtraEditDataId;
 
+  int? isFemale = 0;
+
   int? sajjanShaktiVisheshId;
   String? sajjanShaktiVisheshName;
   int? sajjanShaktiVisheshEditId;
@@ -44,18 +48,12 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
   TextEditingController sajjanShaktiNameController = TextEditingController();
   TextEditingController sajjanShaktiAddressController = TextEditingController();
   TextEditingController sajjanShaktiPhoneController = TextEditingController();
-  TextEditingController sajjanShaktiContactPersonNameController =
-      TextEditingController();
-  TextEditingController sajjanShaktiContactPersonDoorbhashController =
-      TextEditingController();
-  TextEditingController sajjanShaktiSansthecheNaavController =
-      TextEditingController();
-  TextEditingController sajjanShaktiSansthKuthalyaPadavarController =
-      TextEditingController();
-  TextEditingController sajjanShaktiAnyaShreniNameController =
-      TextEditingController();
-  TextEditingController sajjanShaktiAnyaVisheshNameController =
-      TextEditingController();
+  TextEditingController sajjanShaktiContactPersonNameController = TextEditingController();
+  TextEditingController sajjanShaktiContactPersonDoorbhashController = TextEditingController();
+  TextEditingController sajjanShaktiSansthecheNaavController = TextEditingController();
+  TextEditingController sajjanShaktiSansthKuthalyaPadavarController = TextEditingController();
+  TextEditingController sajjanShaktiAnyaShreniNameController = TextEditingController();
+  TextEditingController sajjanShaktiAnyaVisheshNameController = TextEditingController();
 
   VastisarvekshanDropDownDataModel? vastisarvekshanDropDownDataModel;
 
@@ -80,34 +78,28 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
   List<GeoUnitMasterBAL>? _linkedgraam;
   List<GeoUnitMasterBAL>? _linkedvasti;
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedMandalDropdown(
-      String nagarIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedMandalDropdown(String nagarIDStr) async {
     _linkedgraamValue = null;
     _linkedmandal = _linkedgraam = null;
-    var mnDD = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['MandalLevelID'].toString(), nagarIDStr, 'Nagar', '');
+    var mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr, 'Nagar', '');
     setState(() {
       _linkedmandal = (mnDD.length > 0 ? mnDD : null);
     });
     return mnDD;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedGraamDropdown(
-      String mandalIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedGraamDropdown(String mandalIDStr) async {
     _linkedgraamValue = null;
-    var gmDD = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['GraamLevelID'].toString(), mandalIDStr, 'Mandal', '');
+    var gmDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['GraamLevelID'].toString(), mandalIDStr, 'Mandal', '');
     setState(() {
       _linkedgraam = (gmDD.length > 0 ? gmDD : null);
     });
     return gmDD;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(
-      String nagarIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(String nagarIDStr) async {
     _linkedvastiValue = null;
-    var vsDD = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['VastiLevelID'].toString(), nagarIDStr, 'Nagar', '');
+    var vsDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr, 'Nagar', '');
     setState(() {
       _linkedvasti = (vsDD.length > 0 ? vsDD : null);
     });
@@ -119,8 +111,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
     super.didChangeDependencies();
 
     // 👇 Receive the arguments properly
-    final args =
-        ModalRoute.of(context)!.settings.arguments as List<GeoUnitMasterBAL>?;
+    final args = ModalRoute.of(context)!.settings.arguments as List<GeoUnitMasterBAL>?;
 
     if (args != null && args.isNotEmpty) {
       setState(() {
@@ -131,9 +122,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
 
   Future<void> fetchVastiSurveyDropdownData() async {
     try {
-      vastisarvekshanDropDownDataModel =
-          await Statics.getVastiSurveyDropDownList(
-              Statics.userDetails["userID"]);
+      vastisarvekshanDropDownDataModel = await Statics.getVastiSurveyDropDownList(Statics.userDetails["userID"]);
       setState(() {});
     } catch (e) {
       print('Error fetching notification data: $e');
@@ -170,22 +159,14 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
   String? anyaPrabhaviLokPrabhavKshetraName;
   int? selectedAnyaPrabhaviLokPrabhavKshetraIDEdit;
   Masterdata? selectedAnyaPrabhaviLokPrabhavKshetra;
-  final TextEditingController anyaPrabhaviLokNaavController =
-      TextEditingController();
-  final TextEditingController anyaPrabhaviLokAddressController =
-      TextEditingController();
-  final TextEditingController anyaPrabhaviLokAnyaVisheshMahitiController =
-      TextEditingController();
-  final TextEditingController anyaPrabhaviLokSamparkSutraNaavController =
-      TextEditingController();
-  final TextEditingController anyaPrabhaviLokSamparkSutraDoorbhashController =
-      TextEditingController();
-  final TextEditingController anyaPrabhaviLokMobileNoController =
-      TextEditingController();
-  final TextEditingController anyaPrabhaviLokAnyaUppshreniController =
-      TextEditingController();
-  final TextEditingController anyaPrabhaviLokAnyaUppshreni1Controller =
-      TextEditingController();
+  final TextEditingController anyaPrabhaviLokNaavController = TextEditingController();
+  final TextEditingController anyaPrabhaviLokAddressController = TextEditingController();
+  final TextEditingController anyaPrabhaviLokAnyaVisheshMahitiController = TextEditingController();
+  final TextEditingController anyaPrabhaviLokSamparkSutraNaavController = TextEditingController();
+  final TextEditingController anyaPrabhaviLokSamparkSutraDoorbhashController = TextEditingController();
+  final TextEditingController anyaPrabhaviLokMobileNoController = TextEditingController();
+  final TextEditingController anyaPrabhaviLokAnyaUppshreniController = TextEditingController();
+  final TextEditingController anyaPrabhaviLokAnyaUppshreni1Controller = TextEditingController();
 
   void resetSajjanShaktiAndAnyaPrabhaviLokData() {
     // Sajjan Shakti list
@@ -236,6 +217,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
 
     isActiveAnyaPrabhavilok = 1;
     pkidAnyaPrabhaviLok = 0;
+    isFemale = 0;
 
     anyaPrabhaviLokShreniId = null;
     anyaPrabhaviLokShreniIdEdit = null;
@@ -299,8 +281,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(Statics.getLabel('addVIshishthaAtithi'),
-            style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(Statics.getLabel('addVIshishthaAtithi'), style: TextStyle(fontWeight: FontWeight.bold)),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(8),
@@ -310,16 +291,11 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
             children: [
               Container(
                 padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    border: Border.all(color: Colors.purpleAccent)),
+                decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), border: Border.all(color: Colors.purpleAccent)),
                 child: Column(children: [
                   Text(
                     "${Statics.getLabel('selectedBhougolikkaryastithi')}",
-                    style: TextStyle(
-                        color: Colors.purpleAccent,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 20),
+                    style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.w600, fontSize: 20),
                   ),
                   Divider(
                     color: Colors.grey,
@@ -329,18 +305,12 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                   ),
                   if (_linkedNagar != null && _linkedNagar!.length > 0)
                     DropdownButtonFormField(
-                      decoration:
-                          InputDecoration(labelText: Statics.getLabel('Nagar')),
+                      decoration: InputDecoration(labelText: Statics.getLabel('Nagar')),
                       isExpanded: true,
                       value: _linkedNagarValue == "" ? null : _linkedNagarValue,
-                      items: _linkedNagar!
-                          .map((bg) => DropdownMenuItem(
-                              value: bg.geoUnitID.toString(),
-                              child: Text(bg.name!)))
-                          .toList(),
+                      items: _linkedNagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                       onChanged: (value) {
-                        final selectedItem = _linkedNagar!.firstWhere(
-                            (bg) => bg.geoUnitID.toString() == value);
+                        final selectedItem = _linkedNagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                         populatelinkedMandalDropdown(value!);
                         populatelinkedVastiDropdown(value);
                         setState(() {
@@ -358,19 +328,12 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                     ),
                   if (_linkedmandal != null && _linkedmandal!.length > 0)
                     DropdownButtonFormField(
-                      decoration: InputDecoration(
-                          labelText: Statics.getLabel('Mandal')),
+                      decoration: InputDecoration(labelText: Statics.getLabel('Mandal')),
                       isExpanded: true,
-                      value:
-                          _linkedmandalValue == "" ? null : _linkedmandalValue,
-                      items: _linkedmandal!
-                          .map((bg) => DropdownMenuItem(
-                              value: bg.geoUnitID.toString(),
-                              child: Text(bg.name!)))
-                          .toList(),
+                      value: _linkedmandalValue == "" ? null : _linkedmandalValue,
+                      items: _linkedmandal!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                       onChanged: (value) {
-                        final selectedItem = _linkedmandal!.firstWhere(
-                            (bg) => bg.geoUnitID.toString() == value);
+                        final selectedItem = _linkedmandal!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                         setState(() {
                           selctedLevelName = selectedItem.name ?? "";
                           selctedLevel = 'Mandal';
@@ -387,18 +350,12 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                     ),
                   if (_linkedgraam != null && _linkedgraam!.length > 0)
                     DropdownButtonFormField(
-                      decoration:
-                          InputDecoration(labelText: Statics.getLabel('Graam')),
+                      decoration: InputDecoration(labelText: Statics.getLabel('Graam')),
                       isExpanded: true,
                       value: _linkedgraamValue == "" ? null : _linkedgraamValue,
-                      items: _linkedgraam!
-                          .map((bg) => DropdownMenuItem(
-                              value: bg.geoUnitID.toString(),
-                              child: Text(bg.name!)))
-                          .toList(),
+                      items: _linkedgraam!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                       onChanged: (value) {
-                        final selectedItem = _linkedgraam!.firstWhere(
-                            (bg) => bg.geoUnitID.toString() == value);
+                        final selectedItem = _linkedgraam!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                         setState(() {
                           _linkedgraamValue = value;
                           selctedLevelName = selectedItem.name ?? "";
@@ -411,18 +368,12 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                     ),
                   if (_linkedvasti != null && _linkedvasti!.length > 0)
                     DropdownButtonFormField(
-                      decoration:
-                          InputDecoration(labelText: Statics.getLabel('Vasti')),
+                      decoration: InputDecoration(labelText: Statics.getLabel('Vasti')),
                       isExpanded: true,
                       value: _linkedvastiValue == "" ? null : _linkedvastiValue,
-                      items: _linkedvasti!
-                          .map((bg) => DropdownMenuItem(
-                              value: bg.geoUnitID.toString(),
-                              child: Text(bg.name!)))
-                          .toList(),
+                      items: _linkedvasti!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                       onChanged: (value) {
-                        final selectedItem = _linkedvasti!.firstWhere(
-                            (bg) => bg.geoUnitID.toString() == value);
+                        final selectedItem = _linkedvasti!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                         setState(() {
                           _linkedvastiValue = value;
                           selctedLevelName = selectedItem.name ?? "";
@@ -472,17 +423,12 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
               if (sajjanShaktiType == 1)
                 Container(
                   padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      border: Border.all(color: Colors.purpleAccent)),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), border: Border.all(color: Colors.purpleAccent)),
                   child: Column(
                     children: [
                       Text(
                         "${Statics.getLabel('SajjanShakti')}",
-                        style: TextStyle(
-                            color: Colors.purpleAccent,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 20),
+                        style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.w600, fontSize: 20),
                       ),
                       Divider(
                         color: Colors.grey,
@@ -602,8 +548,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                       ),
                       textControllerField2(
                         name: Statics.getLabel('samparakSootraDoorbhash'),
-                        controller:
-                            sajjanShaktiContactPersonDoorbhashController,
+                        controller: sajjanShaktiContactPersonDoorbhashController,
                         keyboardType: TextInputType.number,
                         maxInput: 10,
                       ),
@@ -613,18 +558,13 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
               if (sajjanShaktiType == 0)
                 Container(
                   padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      border: Border.all(color: Colors.purpleAccent)),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), border: Border.all(color: Colors.purpleAccent)),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         "${Statics.getLabel('anyaPrabhaviLok')}",
-                        style: TextStyle(
-                            color: Colors.purpleAccent,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 20),
+                        style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.w600, fontSize: 20),
                       ),
                       Divider(
                         color: Colors.grey,
@@ -645,6 +585,35 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                         controller: anyaPrabhaviLokMobileNoController,
                         keyboardType: TextInputType.number,
                         maxInput: 10,
+                      ),
+                      SizedBox(height: 5),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: RadioListTile<int>(
+                              contentPadding: EdgeInsets.zero,
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              title: Text("${Statics.getLabel('Male')}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                              value: 0,
+                              groupValue: isFemale,
+                              onChanged: (value) => setState(() {
+                                isFemale = value;
+                              }),
+                            ),
+                          ),
+                          Expanded(
+                            child: RadioListTile<int>(
+                              contentPadding: EdgeInsets.zero,
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              title: Text("${Statics.getLabel('Female')}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                              value: 1,
+                              groupValue: isFemale,
+                              onChanged: (value) => setState(() {
+                                isFemale = value;
+                              }),
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(height: 5),
                       Row(
@@ -686,14 +655,10 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                                   if (vastisarvekshanDropDownDataModel != null)
                                     vastisarvekshanDropdown3(
                                       filterTypeName: "श्रेणी",
-                                      hintText:
-                                          "${Statics.getLabel('otherUpshreni')}",
-                                      anyaPrabhaviLokShreniId:
-                                          anyaPrabhaviLokShreniIdEdit,
-                                      anyaPrabhaviLokUpShreniId:
-                                          anyaPrabhaviLokUpShreniIdEdit,
-                                      anyaPrabhaviLokUpShreni1Id:
-                                          anyaPrabhaviLokUpShreni1IdEdit,
+                                      hintText: "${Statics.getLabel('otherUpshreni')}",
+                                      anyaPrabhaviLokShreniId: anyaPrabhaviLokShreniIdEdit,
+                                      anyaPrabhaviLokUpShreniId: anyaPrabhaviLokUpShreniIdEdit,
+                                      anyaPrabhaviLokUpShreni1Id: anyaPrabhaviLokUpShreni1IdEdit,
                                       onValueSelected: (id, name, value) {
                                         anyaPrabhaviLokShreniId = id;
                                         anyaPrabhaviLokShreniName = name;
@@ -703,8 +668,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                                           selectedUpShreni2 = null;
                                         });
                                       },
-                                      onDependentValueSelected:
-                                          (id, name, value) {
+                                      onDependentValueSelected: (id, name, value) {
                                         anyaPrabhaviLokUpShreniId = id;
                                         anyaPrabhaviLokUpShreniName = name;
                                         setState(() {
@@ -712,8 +676,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                                           selectedUpShreni2 = null;
                                         });
                                       },
-                                      onThirdLevelValueSelected:
-                                          (id, name, value) {
+                                      onThirdLevelValueSelected: (id, name, value) {
                                         anyaPrabhaviLokUpShreni1Id = id;
                                         anyaPrabhaviLokUpShreni1Name = name;
                                         setState(() {
@@ -728,26 +691,20 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                                   /// Other Upshreni (1st level)
                                   if (selectedUpShreni?.isOther == 1)
                                     textControllerField2(
-                                      name:
-                                          "${Statics.getLabel('otherUpshreni')}",
-                                      controller:
-                                          anyaPrabhaviLokAnyaUppshreniController,
+                                      name: "${Statics.getLabel('otherUpshreni')}",
+                                      controller: anyaPrabhaviLokAnyaUppshreniController,
                                     ),
 
-                                  if (selectedUpShreni?.isOther == 1)
-                                    const SizedBox(height: 10),
+                                  if (selectedUpShreni?.isOther == 1) const SizedBox(height: 10),
 
                                   /// Other Upshreni (2nd level)
                                   if (selectedUpShreni2?.isOther == 1)
                                     textControllerField2(
-                                      name:
-                                          "${Statics.getLabel('otherUpshreni2')}",
-                                      controller:
-                                          anyaPrabhaviLokAnyaUppshreni1Controller,
+                                      name: "${Statics.getLabel('otherUpshreni2')}",
+                                      controller: anyaPrabhaviLokAnyaUppshreni1Controller,
                                     ),
 
-                                  if (selectedUpShreni2?.isOther == 1)
-                                    const SizedBox(height: 10),
+                                  if (selectedUpShreni2?.isOther == 1) const SizedBox(height: 10),
                                 ],
                               ),
                             ),
@@ -782,8 +739,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                       ),
                       vastisarvekshanDropDownDataModel != null
                           ? vastisarvekshanDropdown2(
-                              hintText:
-                                  "${Statics.getLabel('prabhavKshetraSelect')}",
+                              hintText: "${Statics.getLabel('prabhavKshetraSelect')}",
                               filterTypeName: "अन्यप्रभावीलोकंप्रभावक्षेत्र",
                               onItemSelected: (valueId, valueName, isOther) {
                                 anyaPrabhaviLokPrabhavKshetraId = valueId;
@@ -792,14 +748,11 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                               },
                               dataModel: vastisarvekshanDropDownDataModel!,
                               question: "${Statics.getLabel('prabhavKshetra')}",
-                              editId:
-                                  selectedAnyaPrabhaviLokPrabhavKshetraIDEdit,
-                              selectedValue:
-                                  selectedAnyaPrabhaviLokPrabhavKshetra,
+                              editId: selectedAnyaPrabhaviLokPrabhavKshetraIDEdit,
+                              selectedValue: selectedAnyaPrabhaviLokPrabhavKshetra,
                               onSelectionChanged: (newValue) {
                                 setState(() {
-                                  selectedAnyaPrabhaviLokPrabhavKshetra =
-                                      newValue;
+                                  selectedAnyaPrabhaviLokPrabhavKshetra = newValue;
                                 });
                               },
                             )
@@ -816,8 +769,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                       ),
                       vastisarvekshanDropDownDataModel != null
                           ? vastisarvekshanDropdown2(
-                              hintText:
-                                  "${Statics.getLabel('samparkSthitiSelect')}",
+                              hintText: "${Statics.getLabel('samparkSthitiSelect')}",
                               filterTypeName: "अन्यप्रभावीलोकंसंपर्कस्थिति",
                               onItemSelected: (valueId, valueName, isOther) {
                                 anyaPrabhaviLokSamparkStithiId = valueId;
@@ -826,14 +778,11 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                               },
                               dataModel: vastisarvekshanDropDownDataModel!,
                               question: "${Statics.getLabel('samparkStithi')}",
-                              editId:
-                                  selectedAnyaPrabhaviLokSamparkStithiIDEdit,
-                              selectedValue:
-                                  selectedAnyaPrabhaviLokSamparkStithi,
+                              editId: selectedAnyaPrabhaviLokSamparkStithiIDEdit,
+                              selectedValue: selectedAnyaPrabhaviLokSamparkStithi,
                               onSelectionChanged: (newValue) {
                                 setState(() {
-                                  selectedAnyaPrabhaviLokSamparkStithi =
-                                      newValue;
+                                  selectedAnyaPrabhaviLokSamparkStithi = newValue;
                                 });
                               },
                             )
@@ -848,8 +797,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                       ),
                       textControllerField2(
                         name: "${Statics.getLabel('samparakSootraDoorbhash')}",
-                        controller:
-                            anyaPrabhaviLokSamparkSutraDoorbhashController,
+                        controller: anyaPrabhaviLokSamparkSutraDoorbhashController,
                         keyboardType: TextInputType.number,
                         maxInput: 10,
                       ),
@@ -989,100 +937,60 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                         bool isValid = true;
 
                         // Helper function
-                        bool isEmpty(String? text) =>
-                            text == null || text.trim().isEmpty;
+                        bool isEmpty(String? text) => text == null || text.trim().isEmpty;
 
                         if (sajjanShaktiType == 1) {
                           // 🔹 Required field checks
                           if (isEmpty(sajjanShaktiNameController.text)) {
-                            Statics.showToast(
-                                "${Statics.getLabel('allInfoRequired')}");
+                            Statics.showToast("${Statics.getLabel('allInfoRequired')}");
                             isValid = false;
-                          } else if (isEmpty(
-                              sajjanShaktiAddressController.text)) {
-                            Statics.showToast(
-                                "${Statics.getLabel('allInfoRequired')}");
+                          } else if (isEmpty(sajjanShaktiAddressController.text)) {
+                            Statics.showToast("${Statics.getLabel('allInfoRequired')}");
                             isValid = false;
-                          } else if (sajjanShaktiPhoneController.text.length !=
-                              10) {
-                            Statics.showToast(
-                                "${Statics.getLabel('mobileNumberLimit')}");
+                          } else if (sajjanShaktiPhoneController.text.length != 10) {
+                            Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
                             isValid = false;
-                          } else if (isEmpty(
-                              sajjanShaktiSansthecheNaavController.text)) {
-                            Statics.showToast(
-                                "${Statics.getLabel('allInfoRequired')}");
+                          } else if (isEmpty(sajjanShaktiSansthecheNaavController.text)) {
+                            Statics.showToast("${Statics.getLabel('allInfoRequired')}");
                             isValid = false;
-                          } else if (isEmpty(
-                              sajjanShaktiSansthKuthalyaPadavarController
-                                  .text)) {
-                            Statics.showToast(
-                                "${Statics.getLabel('allInfoRequired')}");
+                          } else if (isEmpty(sajjanShaktiSansthKuthalyaPadavarController.text)) {
+                            Statics.showToast("${Statics.getLabel('allInfoRequired')}");
                             isValid = false;
-                          } else if (isEmpty(
-                              sajjanShaktiContactPersonNameController.text)) {
-                            Statics.showToast(
-                                "${Statics.getLabel('allInfoRequired')}");
+                          } else if (isEmpty(sajjanShaktiContactPersonNameController.text)) {
+                            Statics.showToast("${Statics.getLabel('allInfoRequired')}");
                             isValid = false;
-                          } else if (sajjanShaktiContactPersonDoorbhashController
-                                  .text.length !=
-                              10) {
-                            Statics.showToast(
-                                "${Statics.getLabel('mobileNumberLimit')}");
+                          } else if (sajjanShaktiContactPersonDoorbhashController.text.length != 10) {
+                            Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
                             isValid = false;
-                          } else if ((sajjanShaktiShreniEditDataId?.isOther ==
-                                      1 &&
-                                  isEmpty(sajjanShaktiAnyaShreniNameController
-                                      .text)) ||
-                              (sajjanShaktiVisheshEditDataId?.isOther == 1 &&
-                                  isEmpty(sajjanShaktiAnyaVisheshNameController
-                                      .text))) {
-                            Statics.showToast(
-                                "${Statics.getLabel('otherInfoValidation')}");
+                          } else if ((sajjanShaktiShreniEditDataId?.isOther == 1 && isEmpty(sajjanShaktiAnyaShreniNameController.text)) ||
+                              (sajjanShaktiVisheshEditDataId?.isOther == 1 && isEmpty(sajjanShaktiAnyaVisheshNameController.text))) {
+                            Statics.showToast("${Statics.getLabel('otherInfoValidation')}");
                             isValid = false;
                           }
 
                           if (isValid) {
                             Vastisarsajjanshakti newData = Vastisarsajjanshakti(
                               name: sajjanShaktiNameController.text.trim(),
-                              address:
-                                  sajjanShaktiAddressController.text.trim(),
-                              doorabhaash:
-                                  sajjanShaktiPhoneController.text.trim(),
+                              address: sajjanShaktiAddressController.text.trim(),
+                              doorabhaash: sajjanShaktiPhoneController.text.trim(),
                               shreneeid: sajjanShaktiShreniId,
                               selectedDropdownValueName: sajjanShaktiShreniName,
-                              otherShreniName:
-                                  sajjanShaktiAnyaShreniNameController.text
-                                      .trim(),
-                              sanstheCheNaav:
-                                  sajjanShaktiSansthecheNaavController.text
-                                      .trim(),
-                              sansthechaKuthalaPadavar:
-                                  sajjanShaktiSansthKuthalyaPadavarController
-                                      .text
-                                      .trim(),
+                              otherShreniName: sajjanShaktiAnyaShreniNameController.text.trim(),
+                              sanstheCheNaav: sajjanShaktiSansthecheNaavController.text.trim(),
+                              sansthechaKuthalaPadavar: sajjanShaktiSansthKuthalyaPadavarController.text.trim(),
                               samparksthitiid: sajjanShaktiSamparkStithiId,
-                              selectedDropdownValueName1:
-                                  sajjanShaktiSamparkStithiName,
+                              selectedDropdownValueName1: sajjanShaktiSamparkStithiName,
                               visheshId: sajjanShaktiVisheshId,
-                              selectedDropdownValueName2:
-                                  sajjanShaktiVisheshName,
-                              otherVisheshName:
-                                  sajjanShaktiAnyaVisheshNameController.text
-                                      .trim(),
+                              selectedDropdownValueName2: sajjanShaktiVisheshName,
+                              otherVisheshName: sajjanShaktiAnyaVisheshNameController.text.trim(),
                               prabhaavkshetrid: sajjanShaktiPrabhavKeshtraId,
-                              selectedDropdownValueName3:
-                                  sajjanShaktiPrabhavKeshtraName,
-                              samparkasutranava:
-                                  sajjanShaktiContactPersonNameController.text
-                                      .trim(),
-                              samparkasutraMobileNumber:
-                                  sajjanShaktiContactPersonDoorbhashController
-                                      .text
-                                      .trim(),
+                              selectedDropdownValueName3: sajjanShaktiPrabhavKeshtraName,
+                              samparkasutranava: sajjanShaktiContactPersonNameController.text.trim(),
+                              samparkasutraMobileNumber: sajjanShaktiContactPersonDoorbhashController.text.trim(),
                               isactive: 1,
                               vastiid: int.parse(selctedLevelId!),
                               pkid: 0,
+                              isfemale: isFemale,
                             );
                             sajjanShaktiDataList.add(newData);
                           }
@@ -1091,86 +999,52 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                         if (sajjanShaktiType == 0) {
                           // 🔹 Required field checks
                           if (isEmpty(anyaPrabhaviLokNaavController.text)) {
-                            Statics.showToast(
-                                "${Statics.getLabel('allInfoRequired')}");
+                            Statics.showToast("${Statics.getLabel('allInfoRequired')}");
                             isValid = false;
-                          } else if (isEmpty(
-                              anyaPrabhaviLokAddressController.text)) {
-                            Statics.showToast(
-                                "${Statics.getLabel('allInfoRequired')}");
+                          } else if (isEmpty(anyaPrabhaviLokAddressController.text)) {
+                            Statics.showToast("${Statics.getLabel('allInfoRequired')}");
                             isValid = false;
-                          } else if (anyaPrabhaviLokMobileNoController
-                                  .text.length !=
-                              10) {
-                            Statics.showToast(
-                                "${Statics.getLabel('mobileNumberLimit')}");
+                          } else if (anyaPrabhaviLokMobileNoController.text.length != 10) {
+                            Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
                             isValid = false;
-                          } else if ((selectedUpShreni?.isOther == 1 &&
-                                  isEmpty(anyaPrabhaviLokAnyaUppshreniController
-                                      .text)) ||
-                              (selectedUpShreni2?.isOther == 1 &&
-                                  isEmpty(
-                                      anyaPrabhaviLokAnyaUppshreni1Controller
-                                          .text))) {
-                            Statics.showToast(
-                                "${Statics.getLabel('otherInfoValidation')}");
+                          } else if ((selectedUpShreni?.isOther == 1 && isEmpty(anyaPrabhaviLokAnyaUppshreniController.text)) ||
+                              (selectedUpShreni2?.isOther == 1 && isEmpty(anyaPrabhaviLokAnyaUppshreni1Controller.text))) {
+                            Statics.showToast("${Statics.getLabel('otherInfoValidation')}");
                             isValid = false;
-                          } else if (isEmpty(
-                              anyaPrabhaviLokSamparkSutraNaavController.text)) {
-                            Statics.showToast(
-                                "${Statics.getLabel('allInfoRequired')}");
+                          } else if (isEmpty(anyaPrabhaviLokSamparkSutraNaavController.text)) {
+                            Statics.showToast("${Statics.getLabel('allInfoRequired')}");
                             isValid = false;
-                          } else if (anyaPrabhaviLokSamparkSutraDoorbhashController
-                                  .text.length !=
-                              10) {
-                            Statics.showToast(
-                                "${Statics.getLabel('mobileNumberLimit')}");
+                          } else if (anyaPrabhaviLokSamparkSutraDoorbhashController.text.length != 10) {
+                            Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
                             isValid = false;
                           }
 
                           if (isValid) {
-                            VastisarAnyaprabhavilokam newData =
-                                VastisarAnyaprabhavilokam(
+                            VastisarAnyaprabhavilokam newData = VastisarAnyaprabhavilokam(
                               name: anyaPrabhaviLokNaavController.text,
                               address: anyaPrabhaviLokAddressController.text,
-                              doorabhaash:
-                                  anyaPrabhaviLokMobileNoController.text,
+                              doorabhaash: anyaPrabhaviLokMobileNoController.text,
                               shreneeid: anyaPrabhaviLokShreniId,
-                              selectedDropdownValueName:
-                                  anyaPrabhaviLokShreniName,
+                              selectedDropdownValueName: anyaPrabhaviLokShreniName,
                               upshreneeid: anyaPrabhaviLokUpShreniId,
-                              selectedDropdownValueName1:
-                                  anyaPrabhaviLokUpShreniName,
+                              selectedDropdownValueName1: anyaPrabhaviLokUpShreniName,
                               upshreneeid2: anyaPrabhaviLokUpShreni1Id,
-                              selectedDropdownValueName2:
-                                  anyaPrabhaviLokUpShreni1Name,
+                              selectedDropdownValueName2: anyaPrabhaviLokUpShreni1Name,
                               visheshid: anyaPrabhaviLokVisheshId,
-                              selectedDropdownValueName3:
-                                  anyaPrabhaviLokVisheshName,
+                              selectedDropdownValueName3: anyaPrabhaviLokVisheshName,
                               prabhaavkshetrid: anyaPrabhaviLokPrabhavKshetraId,
-                              selectedDropdownValueName4:
-                                  anyaPrabhaviLokPrabhavKshetraName,
-                              othervishesh:
-                                  anyaPrabhaviLokAnyaVisheshMahitiController
-                                      .text,
+                              selectedDropdownValueName4: anyaPrabhaviLokPrabhavKshetraName,
+                              othervishesh: anyaPrabhaviLokAnyaVisheshMahitiController.text,
                               samparksthitiid: anyaPrabhaviLokSamparkStithiId,
-                              selectedDropdownValueName5:
-                                  anyaPrabhaviLokSamparkStithiName,
-                              samparkasutranav:
-                                  anyaPrabhaviLokSamparkSutraNaavController
-                                      .text,
-                              samparkaSutraDoorbhash:
-                                  anyaPrabhaviLokSamparkSutraDoorbhashController
-                                      .text,
+                              selectedDropdownValueName5: anyaPrabhaviLokSamparkStithiName,
+                              samparkasutranav: anyaPrabhaviLokSamparkSutraNaavController.text,
+                              samparkaSutraDoorbhash: anyaPrabhaviLokSamparkSutraDoorbhashController.text,
                               pkid: 0,
-                              anyavisesamahiti:
-                                  anyaPrabhaviLokAnyaVisheshMahitiController
-                                      .text,
-                              otherupshrenee:
-                                  anyaPrabhaviLokAnyaUppshreniController.text,
-                              otherupshrenee2:
-                                  anyaPrabhaviLokAnyaUppshreni1Controller.text,
+                              anyavisesamahiti: anyaPrabhaviLokAnyaVisheshMahitiController.text,
+                              otherupshrenee: anyaPrabhaviLokAnyaUppshreniController.text,
+                              otherupshrenee2: anyaPrabhaviLokAnyaUppshreni1Controller.text,
                               isactive: 1,
+                              isfemale: isFemale,
                               vastiid: int.parse(selctedLevelId!),
                             );
                             anyaPrabhaviLokDataList.add(newData);
@@ -1262,8 +1136,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
-                  borderSide:
-                      const BorderSide(color: Colors.purpleAccent, width: 1.5),
+                  borderSide: const BorderSide(color: Colors.purpleAccent, width: 1.5),
                 ),
               ),
             ),
@@ -1283,16 +1156,13 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
     Masterdata? selectedValue,
     Function(Masterdata?)? onSelectionChanged,
   }) {
-    List<Masterdata> filteredList = dataModel.masterdata!
-        .where((item) => item.typename == filterTypeName)
-        .toList();
+    List<Masterdata> filteredList = dataModel.masterdata!.where((item) => item.typename == filterTypeName).toList();
 
     Masterdata? selectedItem = selectedValue;
     if (selectedItem == null && editId != null) {
       try {
         selectedItem = filteredList.firstWhere((item) => item.id == editId);
-        onItemSelected(
-            selectedItem.id, selectedItem.value, selectedItem.isOther);
+        onItemSelected(selectedItem.id, selectedItem.value, selectedItem.isOther);
         onSelectionChanged?.call(selectedItem);
       } catch (_) {}
     }
@@ -1352,8 +1222,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                   }).toList(),
                   onChanged: (Masterdata? newValue) {
                     if (newValue != null) {
-                      onItemSelected(
-                          newValue.id, newValue.value, newValue.isOther);
+                      onItemSelected(newValue.id, newValue.value, newValue.isOther);
                       onSelectionChanged?.call(newValue);
                     }
                   },
@@ -1396,45 +1265,34 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
     Masterdata? selectedDependentValue = selectedUpShreni;
     Masterdata? selectedThirdLevelValue = selectedUpShreni2;
 
-    List<Masterdata> masterDataList =
-        vastisarvekshanDropDownDataModel?.masterdata ?? [];
-    List<Masterdata> filteredItems =
-        masterDataList.where((e) => e.typename == filterTypeName).toList();
+    List<Masterdata> masterDataList = vastisarvekshanDropDownDataModel?.masterdata ?? [];
+    List<Masterdata> filteredItems = masterDataList.where((e) => e.typename == filterTypeName).toList();
 
     if (anyaPrabhaviLokShreniId != null && selectedValue == null) {
       selectedValue = filteredItems.firstWhere(
         (e) => e.id == anyaPrabhaviLokShreniId,
-        orElse: () =>
-            filteredItems.isNotEmpty ? filteredItems.first : Masterdata(),
+        orElse: () => filteredItems.isNotEmpty ? filteredItems.first : Masterdata(),
       );
       selectedShreni = selectedValue;
     }
 
-    List<Masterdata> dependentItems = selectedValue != null
-        ? masterDataList.where((e) => e.parentid == selectedValue!.id).toList()
-        : [];
+    List<Masterdata> dependentItems = selectedValue != null ? masterDataList.where((e) => e.parentid == selectedValue!.id).toList() : [];
 
     if (anyaPrabhaviLokUpShreniId != null && selectedDependentValue == null) {
       selectedDependentValue = dependentItems.firstWhere(
         (e) => e.id == anyaPrabhaviLokUpShreniId,
-        orElse: () =>
-            dependentItems.isNotEmpty ? dependentItems.first : Masterdata(),
+        orElse: () => dependentItems.isNotEmpty ? dependentItems.first : Masterdata(),
       );
 
       selectedUpShreni = selectedDependentValue;
     }
 
-    List<Masterdata> thirdLevelItems = selectedDependentValue != null
-        ? masterDataList
-            .where((e) => e.parentid == selectedDependentValue!.id)
-            .toList()
-        : [];
+    List<Masterdata> thirdLevelItems = selectedDependentValue != null ? masterDataList.where((e) => e.parentid == selectedDependentValue!.id).toList() : [];
 
     if (anyaPrabhaviLokUpShreni1Id != null && selectedThirdLevelValue == null) {
       selectedThirdLevelValue = thirdLevelItems.firstWhere(
         (e) => e.id == anyaPrabhaviLokUpShreni1Id,
-        orElse: () =>
-            thirdLevelItems.isNotEmpty ? thirdLevelItems.first : Masterdata(),
+        orElse: () => thirdLevelItems.isNotEmpty ? thirdLevelItems.first : Masterdata(),
       );
 
       selectedUpShreni2 = selectedThirdLevelValue;
@@ -1485,8 +1343,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                 });
 
                 if (onDependentValueSelected != null) {
-                  onDependentValueSelected(
-                      newValue.id!, newValue.value!, newValue);
+                  onDependentValueSelected(newValue.id!, newValue.value!, newValue);
                 }
               }
             },
@@ -1512,8 +1369,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                 });
 
                 if (onThirdLevelValueSelected != null) {
-                  onThirdLevelValueSelected(
-                      newValue.id!, newValue.value!, newValue);
+                  onThirdLevelValueSelected(newValue.id!, newValue.value!, newValue);
                 }
               }
             },

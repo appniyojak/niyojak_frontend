@@ -20,6 +20,7 @@ import '../models/response_model/TulnatmakResponseModel.dart';
 import '../models/response_model/geounit_name_model.dart';
 import '../models/response_model/get_vasti_data_by_id_model.dart';
 import '../models/response_model/get_vijaya_dashami_geounit_data.dart';
+import '../models/response_model/get_vijayadashmi_report_resp_model.dart';
 import '../models/response_model/mandalVastisarvekshanReportModel.dart';
 import '../models/response_model/nagar_vasti_model.dart';
 import '../models/response_model/nirikshan_baithak_vrutta.dart';
@@ -117,6 +118,7 @@ const String urlSaveJoinRSSForApp = baseUrlAPI + '/SaveJoinRSSForApp';
 const String saveupdatevijayadashamiutsav = baseUrlAPI + '/saveupdatevijayadashamiutsav';
 const String savesajjanskhatianyapravbhavilok = baseUrlAPI + '/savesajjanskhatianyapravbhavilok';
 const String getvijayadashamiutsavbyid = baseUrlAPI + '/getvijayadashamiutsavbyid';
+const String getvijayadashamiutsavreport = baseUrlAPI + '/vijayadashamiutsavreport';
 const String urlGetJoinRSSDataForApp = baseUrlAPI + '/GetJoinRSSDataForApp';
 const String urlDeleteJoinRSSForApp = baseUrlAPI + '/DeleteJoinRSSForApp';
 const String urlRefreshHomeScreenForApp = baseUrlAPI + '/RefreshHomeScreenForApp';
@@ -2367,8 +2369,8 @@ Future<String> saveJoinRSSForApp(String inputJson) async {
   return responseBody['OutputJoinRSSID'].toString();
 }
 
-Future<void> saveVijayaDashamiUtsavData(BuildContext context, Map<String, dynamic> inputJson) async {
-  showLoaderDialog(context);
+Future<void> saveVijayaDashamiUtsavData(BuildContext context, Map<String, dynamic> inputJson, bool showLoader) async {
+  if (showLoader) showLoaderDialog(context);
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(
@@ -2380,7 +2382,7 @@ Future<void> saveVijayaDashamiUtsavData(BuildContext context, Map<String, dynami
   print("Response: ${response.body}");
   print("response.statusCode: ${response.statusCode}");
 
-  Navigator.of(context, rootNavigator: true).pop();
+  if (showLoader) Navigator.of(context, rootNavigator: true).pop();
 
   if (response.statusCode == 200) {
     Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
@@ -2429,6 +2431,36 @@ Future<GetVijayadashamiDataByGeoUnitModel?> getVijayaDashamiUtsavDataByGeounit(B
       final Map<String, dynamic> data = jsonDecode(response.body);
 
       GetVijayadashamiDataByGeoUnitModel model = GetVijayadashamiDataByGeoUnitModel.fromJson(data);
+
+      return model; // ✅ return karna zaroori hai
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null; // ✅ error case
+    }
+  } catch (e) {
+    Navigator.of(context, rootNavigator: true).pop();
+    print("Exception: $e");
+    return null;
+  }
+}
+
+Future<GetVijayadashamiReportModel?> getVijayaDashamiUtsavReportData(BuildContext context, Map<String, dynamic> inputJson) async {
+  showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  try {
+    var response = await http.post(
+      Uri.parse(getvijayadashamiutsavreport),
+      headers: jHeaders,
+      body: jsonEncode(inputJson),
+    );
+
+    Navigator.of(context, rootNavigator: true).pop();
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+
+      GetVijayadashamiReportModel model = GetVijayadashamiReportModel.fromJson(data);
 
       return model; // ✅ return karna zaroori hai
     } else {
@@ -2944,7 +2976,7 @@ Future<VastiUpDataListModel?> getVastiUpdata(String inputJson) async {
     var responseBody = json.decode(response.body);
     VastiUpDataListModel vastiUpDataListModel = VastiUpDataListModel.fromJson(responseBody); // Store response in model
     print("vastiUpDataListModel inputJson -> $inputJson");
-    print("vastiUpDataListModel responseBody -> $responseBody");
+    log("vastiUpDataListModel responseBody -> $responseBody");
     return vastiUpDataListModel;
   } else {
     print("Error: ${response.statusCode} - ${response.body}");

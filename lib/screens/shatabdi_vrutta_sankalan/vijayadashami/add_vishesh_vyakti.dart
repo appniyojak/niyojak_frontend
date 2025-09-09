@@ -11,6 +11,7 @@ import '../../../providers/bals.dart';
 
 class AddVishisthaAtithi extends StatefulWidget {
   static const String routeName = '/add-vishishtha-atithi';
+
   const AddVishisthaAtithi({Key? key}) : super(key: key);
 
   @override
@@ -21,6 +22,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
   int? isVastiOrGraam;
   List<Vastisarsajjanshakti> sajjanShaktiDataList = [];
   int? selectedsajjanShaktiRowIndex;
+
   // All your variables here
   int? sajjanShaktiShreniId;
   String? sajjanShaktiShreniName;
@@ -45,18 +47,12 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
   TextEditingController sajjanShaktiNameController = TextEditingController();
   TextEditingController sajjanShaktiAddressController = TextEditingController();
   TextEditingController sajjanShaktiPhoneController = TextEditingController();
-  TextEditingController sajjanShaktiContactPersonNameController =
-      TextEditingController();
-  TextEditingController sajjanShaktiContactPersonDoorbhashController =
-      TextEditingController();
-  TextEditingController sajjanShaktiSansthecheNaavController =
-      TextEditingController();
-  TextEditingController sajjanShaktiSansthKuthalyaPadavarController =
-      TextEditingController();
-  TextEditingController sajjanShaktiAnyaShreniNameController =
-      TextEditingController();
-  TextEditingController sajjanShaktiAnyaVisheshNameController =
-      TextEditingController();
+  TextEditingController sajjanShaktiContactPersonNameController = TextEditingController();
+  TextEditingController sajjanShaktiContactPersonDoorbhashController = TextEditingController();
+  TextEditingController sajjanShaktiSansthecheNaavController = TextEditingController();
+  TextEditingController sajjanShaktiSansthKuthalyaPadavarController = TextEditingController();
+  TextEditingController sajjanShaktiAnyaShreniNameController = TextEditingController();
+  TextEditingController sajjanShaktiAnyaVisheshNameController = TextEditingController();
 
   VastisarvekshanDropDownDataModel? vastisarvekshanDropDownDataModel;
 
@@ -81,34 +77,28 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
   List<GeoUnitMasterBAL>? _linkedgraam;
   List<GeoUnitMasterBAL>? _linkedvasti;
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedMandalDropdown(
-      String nagarIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedMandalDropdown(String nagarIDStr) async {
     _linkedgraamValue = null;
     _linkedmandal = _linkedgraam = null;
-    var mnDD = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['MandalLevelID'].toString(), nagarIDStr, 'Nagar', '');
+    var mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr, 'Nagar', '');
     setState(() {
       _linkedmandal = (mnDD.length > 0 ? mnDD : null);
     });
     return mnDD;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedGraamDropdown(
-      String mandalIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedGraamDropdown(String mandalIDStr) async {
     _linkedgraamValue = null;
-    var gmDD = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['GraamLevelID'].toString(), mandalIDStr, 'Mandal', '');
+    var gmDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['GraamLevelID'].toString(), mandalIDStr, 'Mandal', '');
     setState(() {
       _linkedgraam = (gmDD.length > 0 ? gmDD : null);
     });
     return gmDD;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(
-      String nagarIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(String nagarIDStr) async {
     _linkedvastiValue = null;
-    var vsDD = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['VastiLevelID'].toString(), nagarIDStr, 'Nagar', '');
+    var vsDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr, 'Nagar', '');
     setState(() {
       _linkedvasti = (vsDD.length > 0 ? vsDD : null);
     });
@@ -120,8 +110,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
     super.didChangeDependencies();
 
     // 👇 Receive the arguments properly
-    final args =
-        ModalRoute.of(context)!.settings.arguments as List<GeoUnitMasterBAL>?;
+    final args = ModalRoute.of(context)!.settings.arguments as List<GeoUnitMasterBAL>?;
 
     if (args != null && args.isNotEmpty) {
       setState(() {
@@ -132,9 +121,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
 
   Future<void> fetchVastiSurveyDropdownData() async {
     try {
-      vastisarvekshanDropDownDataModel =
-          await Statics.getVastiSurveyDropDownList(
-              Statics.userDetails["userID"]);
+      vastisarvekshanDropDownDataModel = await Statics.getVastiSurveyDropDownList(Statics.userDetails["userID"]);
       setState(() {});
     } catch (e) {
       print('Error fetching notification data: $e');
@@ -151,6 +138,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
   Masterdata? selectedAnyaPrabhaviLokSamparkStithi;
   int? isActiveAnyaPrabhavilok = 1;
   int? pkidAnyaPrabhaviLok = 0;
+  int? isFemale = 0;
   int? anyaPrabhaviLokShreniId;
   int? anyaPrabhaviLokShreniIdEdit;
   String? anyaPrabhaviLokShreniName;
@@ -171,22 +159,14 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
   String? anyaPrabhaviLokPrabhavKshetraName;
   int? selectedAnyaPrabhaviLokPrabhavKshetraIDEdit;
   Masterdata? selectedAnyaPrabhaviLokPrabhavKshetra;
-  final TextEditingController anyaPrabhaviLokNaavController =
-      TextEditingController();
-  final TextEditingController anyaPrabhaviLokAddressController =
-      TextEditingController();
-  final TextEditingController anyaPrabhaviLokAnyaVisheshMahitiController =
-      TextEditingController();
-  final TextEditingController anyaPrabhaviLokSamparkSutraNaavController =
-      TextEditingController();
-  final TextEditingController anyaPrabhaviLokSamparkSutraDoorbhashController =
-      TextEditingController();
-  final TextEditingController anyaPrabhaviLokMobileNoController =
-      TextEditingController();
-  final TextEditingController anyaPrabhaviLokAnyaUppshreniController =
-      TextEditingController();
-  final TextEditingController anyaPrabhaviLokAnyaUppshreni1Controller =
-      TextEditingController();
+  final TextEditingController anyaPrabhaviLokNaavController = TextEditingController();
+  final TextEditingController anyaPrabhaviLokAddressController = TextEditingController();
+  final TextEditingController anyaPrabhaviLokAnyaVisheshMahitiController = TextEditingController();
+  final TextEditingController anyaPrabhaviLokSamparkSutraNaavController = TextEditingController();
+  final TextEditingController anyaPrabhaviLokSamparkSutraDoorbhashController = TextEditingController();
+  final TextEditingController anyaPrabhaviLokMobileNoController = TextEditingController();
+  final TextEditingController anyaPrabhaviLokAnyaUppshreniController = TextEditingController();
+  final TextEditingController anyaPrabhaviLokAnyaUppshreni1Controller = TextEditingController();
 
   void resetSajjanShaktiAndAnyaPrabhaviLokData() {
     // Sajjan Shakti list
@@ -300,8 +280,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(Statics.getLabel('addVIshishthaAtithi'),
-            style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(Statics.getLabel('addVIshishthaAtithi'), style: TextStyle(fontWeight: FontWeight.bold)),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(8),
@@ -311,16 +290,11 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
             children: [
               Container(
                 padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    border: Border.all(color: Colors.purpleAccent)),
+                decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), border: Border.all(color: Colors.purpleAccent)),
                 child: Column(children: [
                   Text(
                     "${Statics.getLabel('selectedBhougolikkaryastithi')}",
-                    style: TextStyle(
-                        color: Colors.purpleAccent,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 20),
+                    style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.w600, fontSize: 20),
                   ),
                   Divider(
                     color: Colors.grey,
@@ -330,18 +304,12 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                   ),
                   if (_linkedNagar != null && _linkedNagar!.length > 0)
                     DropdownButtonFormField(
-                      decoration:
-                          InputDecoration(labelText: Statics.getLabel('Nagar')),
+                      decoration: InputDecoration(labelText: Statics.getLabel('Nagar')),
                       isExpanded: true,
                       value: _linkedNagarValue == "" ? null : _linkedNagarValue,
-                      items: _linkedNagar!
-                          .map((bg) => DropdownMenuItem(
-                              value: bg.geoUnitID.toString(),
-                              child: Text(bg.name!)))
-                          .toList(),
+                      items: _linkedNagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                       onChanged: (value) {
-                        final selectedItem = _linkedNagar!.firstWhere(
-                            (bg) => bg.geoUnitID.toString() == value);
+                        final selectedItem = _linkedNagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                         populatelinkedMandalDropdown(value!);
                         populatelinkedVastiDropdown(value);
                         setState(() {
@@ -359,19 +327,12 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                     ),
                   if (_linkedmandal != null && _linkedmandal!.length > 0)
                     DropdownButtonFormField(
-                      decoration: InputDecoration(
-                          labelText: Statics.getLabel('Mandal')),
+                      decoration: InputDecoration(labelText: Statics.getLabel('Mandal')),
                       isExpanded: true,
-                      value:
-                          _linkedmandalValue == "" ? null : _linkedmandalValue,
-                      items: _linkedmandal!
-                          .map((bg) => DropdownMenuItem(
-                              value: bg.geoUnitID.toString(),
-                              child: Text(bg.name!)))
-                          .toList(),
+                      value: _linkedmandalValue == "" ? null : _linkedmandalValue,
+                      items: _linkedmandal!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                       onChanged: (value) {
-                        final selectedItem = _linkedmandal!.firstWhere(
-                            (bg) => bg.geoUnitID.toString() == value);
+                        final selectedItem = _linkedmandal!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                         setState(() {
                           selctedLevelName = selectedItem.name ?? "";
                           selctedLevel = 'Mandal';
@@ -388,18 +349,12 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                     ),
                   if (_linkedgraam != null && _linkedgraam!.length > 0)
                     DropdownButtonFormField(
-                      decoration:
-                          InputDecoration(labelText: Statics.getLabel('Graam')),
+                      decoration: InputDecoration(labelText: Statics.getLabel('Graam')),
                       isExpanded: true,
                       value: _linkedgraamValue == "" ? null : _linkedgraamValue,
-                      items: _linkedgraam!
-                          .map((bg) => DropdownMenuItem(
-                              value: bg.geoUnitID.toString(),
-                              child: Text(bg.name!)))
-                          .toList(),
+                      items: _linkedgraam!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                       onChanged: (value) {
-                        final selectedItem = _linkedgraam!.firstWhere(
-                            (bg) => bg.geoUnitID.toString() == value);
+                        final selectedItem = _linkedgraam!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                         setState(() {
                           _linkedgraamValue = value;
                           selctedLevelName = selectedItem.name ?? "";
@@ -411,18 +366,12 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                     ),
                   if (_linkedvasti != null && _linkedvasti!.length > 0)
                     DropdownButtonFormField(
-                      decoration:
-                          InputDecoration(labelText: Statics.getLabel('Vasti')),
+                      decoration: InputDecoration(labelText: Statics.getLabel('Vasti')),
                       isExpanded: true,
                       value: _linkedvastiValue == "" ? null : _linkedvastiValue,
-                      items: _linkedvasti!
-                          .map((bg) => DropdownMenuItem(
-                              value: bg.geoUnitID.toString(),
-                              child: Text(bg.name!)))
-                          .toList(),
+                      items: _linkedvasti!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                       onChanged: (value) {
-                        final selectedItem = _linkedvasti!.firstWhere(
-                            (bg) => bg.geoUnitID.toString() == value);
+                        final selectedItem = _linkedvasti!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                         setState(() {
                           _linkedvastiValue = value;
                           selctedLevelName = selectedItem.name ?? "";
@@ -453,9 +402,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 12),
                             decoration: BoxDecoration(
-                              color: selectedTypes.contains(1)
-                                  ? Colors.purpleAccent
-                                  : Colors.transparent,
+                              color: selectedTypes.contains(1) ? Colors.purpleAccent : Colors.transparent,
                               border: Border.all(color: Colors.purpleAccent),
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -463,9 +410,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                               child: Text(
                                 "${Statics.getLabel('SajjanShakti')}",
                                 style: TextStyle(
-                                  color: selectedTypes.contains(1)
-                                      ? Colors.white
-                                      : Colors.purpleAccent,
+                                  color: selectedTypes.contains(1) ? Colors.white : Colors.purpleAccent,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -491,9 +436,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 12),
                             decoration: BoxDecoration(
-                              color: selectedTypes.contains(0)
-                                  ? Colors.purpleAccent
-                                  : Colors.transparent,
+                              color: selectedTypes.contains(0) ? Colors.purpleAccent : Colors.transparent,
                               border: Border.all(color: Colors.purpleAccent),
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -501,9 +444,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                               child: Text(
                                 "${Statics.getLabel('anyaPrabhaviLok')}",
                                 style: TextStyle(
-                                  color: selectedTypes.contains(0)
-                                      ? Colors.white
-                                      : Colors.purpleAccent,
+                                  color: selectedTypes.contains(0) ? Colors.white : Colors.purpleAccent,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -524,17 +465,12 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
               if (selectedTypes.contains(1))
                 Container(
                   padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      border: Border.all(color: Colors.purpleAccent)),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), border: Border.all(color: Colors.purpleAccent)),
                   child: Column(
                     children: [
                       Text(
                         "${Statics.getLabel('SajjanShakti')}",
-                        style: TextStyle(
-                            color: Colors.purpleAccent,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 20),
+                        style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.w600, fontSize: 20),
                       ),
                       Divider(
                         color: Colors.grey,
@@ -556,22 +492,15 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                             child: Container(
                               padding: EdgeInsets.symmetric(vertical: 5),
                               width: 100,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Colors.purpleAccent.shade100),
-                                  color: Colors.purpleAccent.withOpacity(0.7),
-                                  borderRadius: BorderRadius.circular(15)),
+                              decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                               child: Center(
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Icon(Icons.add,
-                                        color: Colors.white, size: 15),
+                                    Icon(Icons.add, color: Colors.white, size: 15),
                                     Text(
                                       "${Statics.getLabel('AddButton')}",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
+                                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
@@ -594,12 +523,9 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                             width: MediaQuery.of(context).size.width * 1,
                             child: DataTable(
                               showCheckboxColumn: false,
-                              headingRowColor: MaterialStatePropertyAll(
-                                  Colors.purple.shade50),
+                              headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
                               columnSpacing: 40,
-                              headingTextStyle: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87),
+                              headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                               columns: [
                                 DataColumn(
                                     label: Text(
@@ -614,22 +540,15 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                                   "${Statics.getLabel('samparkStithi')}",
                                 )),
                               ],
-                              rows: sajjanShaktiDataList
-                                  .asMap()
-                                  .entries
-                                  .where((entry) => entry.value.isactive == 1)
-                                  .map((entry) {
+                              rows: sajjanShaktiDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                                 int index = entry.key;
                                 var data = entry.value;
-                                bool isSelected =
-                                    selectedsajjanShaktiRowIndex == index;
+                                bool isSelected = selectedsajjanShaktiRowIndex == index;
                                 return DataRow(
                                     selected: isSelected,
-                                    color: MaterialStateProperty.resolveWith<
-                                        Color?>(
+                                    color: MaterialStateProperty.resolveWith<Color?>(
                                       (Set<MaterialState> states) {
-                                        if (isSelected)
-                                          return Colors.yellow.shade100;
+                                        if (isSelected) return Colors.yellow.shade100;
                                         return null;
                                       },
                                     ),
@@ -642,12 +561,8 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                                     },
                                     cells: [
                                       DataCell(Text(data.name ?? "")),
-                                      DataCell(Text(
-                                          data.selectedDropdownValueName ??
-                                              "")),
-                                      DataCell(Text(
-                                          data.selectedDropdownValueName1 ??
-                                              "")),
+                                      DataCell(Text(data.selectedDropdownValueName ?? "")),
+                                      DataCell(Text(data.selectedDropdownValueName1 ?? "")),
                                     ]);
                               }).toList(),
                             ),
@@ -663,18 +578,13 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
               if (selectedTypes.contains(0))
                 Container(
                   padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      border: Border.all(color: Colors.purpleAccent)),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), border: Border.all(color: Colors.purpleAccent)),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         "${Statics.getLabel('anyaPrabhaviLok')}",
-                        style: TextStyle(
-                            color: Colors.purpleAccent,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 20),
+                        style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.w600, fontSize: 20),
                       ),
                       Divider(
                         color: Colors.grey,
@@ -687,8 +597,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                         children: [
                           InkWell(
                             onTap: () async {
-                              final result =
-                                  await showAnyaPrabhaviLokFormPopup(context);
+                              final result = await showAnyaPrabhaviLokFormPopup(context);
                               if (result != null) {
                                 setState(() {
                                   anyaPrabhaviLokDataList.add(result);
@@ -698,22 +607,15 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                             child: Container(
                               padding: EdgeInsets.symmetric(vertical: 5),
                               width: 100,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Colors.purpleAccent.shade100),
-                                  color: Colors.purpleAccent.withOpacity(0.7),
-                                  borderRadius: BorderRadius.circular(15)),
+                              decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                               child: Center(
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Icon(Icons.add,
-                                        color: Colors.white, size: 15),
+                                    Icon(Icons.add, color: Colors.white, size: 15),
                                     Text(
                                       "${Statics.getLabel('AddButton')}",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
+                                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
@@ -730,8 +632,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.black54),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(15)),
+                          borderRadius: const BorderRadius.all(Radius.circular(15)),
                         ),
                         child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
@@ -739,12 +640,9 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                             width: MediaQuery.of(context).size.width * 1,
                             child: DataTable(
                               showCheckboxColumn: false,
-                              headingRowColor: MaterialStatePropertyAll(
-                                  Colors.purple.shade50),
+                              headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
                               columnSpacing: 1,
-                              headingTextStyle: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87),
+                              headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                               columns: [
                                 DataColumn(
                                     label: Text(
@@ -759,41 +657,29 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                                   "${Statics.getLabel('prabhavKshetra')}",
                                 )),
                               ],
-                              rows: anyaPrabhaviLokDataList
-                                  .asMap()
-                                  .entries
-                                  .where((entry) => entry.value.isactive == 1)
-                                  .map((entry) {
+                              rows: anyaPrabhaviLokDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                                 int index = entry.key;
                                 var data = entry.value;
-                                bool isSelected =
-                                    selectedanyaPrabhaviLokRowIndex == index;
+                                bool isSelected = selectedanyaPrabhaviLokRowIndex == index;
                                 return DataRow(
                                     selected: isSelected,
-                                    color: MaterialStateProperty.resolveWith<
-                                        Color?>(
+                                    color: MaterialStateProperty.resolveWith<Color?>(
                                       (Set<MaterialState> states) {
-                                        if (isSelected)
-                                          return Colors.yellow.shade100;
+                                        if (isSelected) return Colors.yellow.shade100;
                                         return null;
                                       },
                                     ),
                                     onSelectChanged: (bool? selected) {
                                       if (selected != null && selected) {
                                         setState(() {
-                                          selectedanyaPrabhaviLokRowIndex =
-                                              index;
+                                          selectedanyaPrabhaviLokRowIndex = index;
                                         });
                                       }
                                     },
                                     cells: [
                                       DataCell(Text(data.name ?? "")),
-                                      DataCell(Text(
-                                          data.selectedDropdownValueName3 ??
-                                              "")),
-                                      DataCell(Text(
-                                          data.selectedDropdownValueName4 ??
-                                              "")),
+                                      DataCell(Text(data.selectedDropdownValueName3 ?? "")),
+                                      DataCell(Text(data.selectedDropdownValueName4 ?? "")),
                                     ]);
                               }).toList(),
                             ),
@@ -803,8 +689,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                     ],
                   ),
                 ),
-              if (sajjanShaktiDataList.isNotEmpty ||
-                  anyaPrabhaviLokDataList.isNotEmpty)
+              if (sajjanShaktiDataList.isNotEmpty || anyaPrabhaviLokDataList.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
                   child: SizedBox(
@@ -838,8 +723,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
     );
   }
 
-  Future<Vastisarsajjanshakti?> showSajjanShaktiFormPopup(
-      BuildContext context) async {
+  Future<Vastisarsajjanshakti?> showSajjanShaktiFormPopup(BuildContext context) async {
     return await showDialog<Vastisarsajjanshakti>(
       context: context,
       builder: (context) {
@@ -886,6 +770,36 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                         keyboardType: TextInputType.number,
                         maxInput: 10,
                       ),
+
+                      Row(
+                        children: [
+                          Expanded(
+                            child: RadioListTile<int>(
+                              contentPadding: EdgeInsets.zero,
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              title: Text("${Statics.getLabel('Male')}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                              value: 0,
+                              groupValue: isFemale,
+                              onChanged: (value) => setState(() {
+                                isFemale = value;
+                              }),
+                            ),
+                          ),
+                          Expanded(
+                            child: RadioListTile<int>(
+                              contentPadding: EdgeInsets.zero,
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              title: Text("${Statics.getLabel('Female')}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                              value: 1,
+                              groupValue: isFemale,
+                              onChanged: (value) => setState(() {
+                                isFemale = value;
+                              }),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
 
                       if (vastisarvekshanDropDownDataModel != null)
                         vastisarvekshanDropdown2(
@@ -992,8 +906,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
 
                       textControllerField2(
                         name: Statics.getLabel('samparakSootraDoorbhash'),
-                        controller:
-                            sajjanShaktiContactPersonDoorbhashController,
+                        controller: sajjanShaktiContactPersonDoorbhashController,
                         keyboardType: TextInputType.number,
                         maxInput: 10,
                       ),
@@ -1006,8 +919,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                         children: [
                           OutlinedButton.icon(
                             style: OutlinedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 12),
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -1017,20 +929,17 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                               clearSajjanShaktiForm();
                               Navigator.pop(context);
                             },
-                            icon: const Icon(Icons.close,
-                                size: 18, color: Colors.grey),
+                            icon: const Icon(Icons.close, size: 18, color: Colors.grey),
                             label: Text(
                               Statics.getLabel('Cancel'),
-                              style: const TextStyle(
-                                  fontSize: 14, color: Colors.grey),
+                              style: const TextStyle(fontSize: 14, color: Colors.grey),
                             ),
                           ),
                           const SizedBox(width: 12),
                           ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.purpleAccent,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 24, vertical: 12),
+                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -1110,119 +1019,62 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                             // },
                             onPressed: () {
                               // ✅ पहले check करो कि कोई भी field खाली तो नहीं है
-                              if (sajjanShaktiNameController.text
-                                      .trim()
-                                      .isEmpty ||
-                                  sajjanShaktiAddressController.text
-                                      .trim()
-                                      .isEmpty ||
-                                  sajjanShaktiPhoneController.text
-                                      .trim()
-                                      .isEmpty ||
+                              if (sajjanShaktiNameController.text.trim().isEmpty ||
+                                  sajjanShaktiAddressController.text.trim().isEmpty ||
+                                  sajjanShaktiPhoneController.text.trim().isEmpty ||
                                   (sajjanShaktiShreniEditDataId == null) ||
-                                  (sajjanShaktiShreniEditDataId?.isOther == 1 &&
-                                      sajjanShaktiAnyaShreniNameController.text
-                                          .trim()
-                                          .isEmpty) ||
-                                  sajjanShaktiSansthecheNaavController.text
-                                      .trim()
-                                      .isEmpty ||
-                                  sajjanShaktiSansthKuthalyaPadavarController
-                                      .text
-                                      .trim()
-                                      .isEmpty ||
-                                  (sajjanShaktiSamparkStithiEditDataId ==
-                                      null) ||
+                                  (sajjanShaktiShreniEditDataId?.isOther == 1 && sajjanShaktiAnyaShreniNameController.text.trim().isEmpty) ||
+                                  sajjanShaktiSansthecheNaavController.text.trim().isEmpty ||
+                                  sajjanShaktiSansthKuthalyaPadavarController.text.trim().isEmpty ||
+                                  (sajjanShaktiSamparkStithiEditDataId == null) ||
                                   (sajjanShaktiVisheshEditDataId == null) ||
-                                  (sajjanShaktiVisheshEditDataId?.isOther ==
-                                          1 &&
-                                      sajjanShaktiAnyaVisheshNameController.text
-                                          .trim()
-                                          .isEmpty) ||
-                                  (sajjanShaktiPrabhavKeshtraEditDataId ==
-                                      null) ||
-                                  sajjanShaktiContactPersonNameController.text
-                                      .trim()
-                                      .isEmpty ||
-                                  sajjanShaktiContactPersonDoorbhashController
-                                      .text
-                                      .trim()
-                                      .isEmpty) {
-                                Statics.showToast(
-                                    "${Statics.getLabel('allInfoRequired')}");
+                                  (sajjanShaktiVisheshEditDataId?.isOther == 1 && sajjanShaktiAnyaVisheshNameController.text.trim().isEmpty) ||
+                                  (sajjanShaktiPrabhavKeshtraEditDataId == null) ||
+                                  sajjanShaktiContactPersonNameController.text.trim().isEmpty ||
+                                  sajjanShaktiContactPersonDoorbhashController.text.trim().isEmpty) {
+                                Statics.showToast("${Statics.getLabel('allInfoRequired')}");
                                 return;
                               }
 
                               // ✅ Mobile number validation
-                              if (sajjanShaktiPhoneController.text
-                                          .trim()
-                                          .length !=
-                                      10 ||
-                                  sajjanShaktiContactPersonDoorbhashController
-                                          .text
-                                          .trim()
-                                          .length !=
-                                      10) {
-                                Statics.showToast(
-                                    "${Statics.getLabel('mobileNumberLimit')}");
+                              if (sajjanShaktiPhoneController.text.trim().length != 10 || sajjanShaktiContactPersonDoorbhashController.text.trim().length != 10) {
+                                Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
                                 return;
                               }
 
                               // ✅ अगर सब ठीक है तो data बनाओ
-                              Vastisarsajjanshakti newData =
-                                  Vastisarsajjanshakti(
+                              Vastisarsajjanshakti newData = Vastisarsajjanshakti(
                                 name: sajjanShaktiNameController.text.trim(),
-                                address:
-                                    sajjanShaktiAddressController.text.trim(),
-                                doorabhaash:
-                                    sajjanShaktiPhoneController.text.trim(),
+                                address: sajjanShaktiAddressController.text.trim(),
+                                doorabhaash: sajjanShaktiPhoneController.text.trim(),
                                 shreneeid: sajjanShaktiShreniId,
-                                selectedDropdownValueName:
-                                    sajjanShaktiShreniName,
-                                otherShreniName:
-                                    sajjanShaktiAnyaShreniNameController.text
-                                        .trim(),
-                                sanstheCheNaav:
-                                    sajjanShaktiSansthecheNaavController.text
-                                        .trim(),
-                                sansthechaKuthalaPadavar:
-                                    sajjanShaktiSansthKuthalyaPadavarController
-                                        .text
-                                        .trim(),
+                                selectedDropdownValueName: sajjanShaktiShreniName,
+                                otherShreniName: sajjanShaktiAnyaShreniNameController.text.trim(),
+                                sanstheCheNaav: sajjanShaktiSansthecheNaavController.text.trim(),
+                                sansthechaKuthalaPadavar: sajjanShaktiSansthKuthalyaPadavarController.text.trim(),
                                 samparksthitiid: sajjanShaktiSamparkStithiId,
-                                selectedDropdownValueName1:
-                                    sajjanShaktiSamparkStithiName,
+                                selectedDropdownValueName1: sajjanShaktiSamparkStithiName,
                                 visheshId: sajjanShaktiVisheshId,
-                                selectedDropdownValueName2:
-                                    sajjanShaktiVisheshName,
-                                otherVisheshName:
-                                    sajjanShaktiAnyaVisheshNameController.text
-                                        .trim(),
+                                selectedDropdownValueName2: sajjanShaktiVisheshName,
+                                otherVisheshName: sajjanShaktiAnyaVisheshNameController.text.trim(),
                                 prabhaavkshetrid: sajjanShaktiPrabhavKeshtraId,
-                                selectedDropdownValueName3:
-                                    sajjanShaktiPrabhavKeshtraName,
-                                samparkasutranava:
-                                    sajjanShaktiContactPersonNameController.text
-                                        .trim(),
-                                samparkasutraMobileNumber:
-                                    sajjanShaktiContactPersonDoorbhashController
-                                        .text
-                                        .trim(),
+                                selectedDropdownValueName3: sajjanShaktiPrabhavKeshtraName,
+                                samparkasutranava: sajjanShaktiContactPersonNameController.text.trim(),
+                                samparkasutraMobileNumber: sajjanShaktiContactPersonDoorbhashController.text.trim(),
                                 isactive: 1,
                                 vastiid: int.parse(selctedLevelId!),
                                 pkid: 0,
+                                isfemale: isFemale,
                               );
 
                               clearSajjanShaktiForm(); // reset
                               Navigator.pop(context, newData);
                             },
 
-                            icon: const Icon(Icons.check,
-                                size: 18, color: Colors.white),
+                            icon: const Icon(Icons.check, size: 18, color: Colors.white),
                             label: Text(
                               Statics.getLabel('Submit'),
-                              style: const TextStyle(
-                                  fontSize: 14, color: Colors.white),
+                              style: const TextStyle(fontSize: 14, color: Colors.white),
                             ),
                           ),
                         ],
@@ -1270,8 +1122,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
     sajjanShaktiPrabhavKeshtraEditId = null;
   }
 
-  Future<VastisarAnyaprabhavilokam?> showAnyaPrabhaviLokFormPopup(
-      BuildContext context) async {
+  Future<VastisarAnyaprabhavilokam?> showAnyaPrabhaviLokFormPopup(BuildContext context) async {
     return await showDialog<VastisarAnyaprabhavilokam>(
       context: context,
       builder: (context) {
@@ -1317,6 +1168,34 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                         maxInput: 10,
                       ),
 
+                      Row(
+                        children: [
+                          Expanded(
+                            child: RadioListTile<int>(
+                              contentPadding: EdgeInsets.zero,
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              title: Text("${Statics.getLabel('Male')}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                              value: 0,
+                              groupValue: isFemale,
+                              onChanged: (value) => setState(() {
+                                isFemale = value;
+                              }),
+                            ),
+                          ),
+                          Expanded(
+                            child: RadioListTile<int>(
+                              contentPadding: EdgeInsets.zero,
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              title: Text("${Statics.getLabel('Female')}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                              value: 1,
+                              groupValue: isFemale,
+                              onChanged: (value) => setState(() {
+                                isFemale = value;
+                              }),
+                            ),
+                          ),
+                        ],
+                      ),
                       const SizedBox(height: 10),
 
                       /// Category / UpShreni
@@ -1324,10 +1203,8 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                         filterTypeName: "श्रेणी",
                         hintText: Statics.getLabel('otherUpshreni'),
                         anyaPrabhaviLokShreniId: anyaPrabhaviLokShreniIdEdit,
-                        anyaPrabhaviLokUpShreniId:
-                            anyaPrabhaviLokUpShreniIdEdit,
-                        anyaPrabhaviLokUpShreni1Id:
-                            anyaPrabhaviLokUpShreni1IdEdit,
+                        anyaPrabhaviLokUpShreniId: anyaPrabhaviLokUpShreniIdEdit,
+                        anyaPrabhaviLokUpShreni1Id: anyaPrabhaviLokUpShreni1IdEdit,
                         onValueSelected: (id, name, value) {
                           anyaPrabhaviLokShreniId = id;
                           anyaPrabhaviLokShreniName = name;
@@ -1438,8 +1315,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
 
                       textControllerField2(
                         name: Statics.getLabel('samparakSootraDoorbhash'),
-                        controller:
-                            anyaPrabhaviLokSamparkSutraDoorbhashController,
+                        controller: anyaPrabhaviLokSamparkSutraDoorbhashController,
                         keyboardType: TextInputType.number,
                         maxInput: 10,
                       ),
@@ -1455,8 +1331,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                               _clearAnyaPrabhaviLokForm();
                               Navigator.pop(context);
                             },
-                            icon: const Icon(Icons.close,
-                                size: 18, color: Colors.grey),
+                            icon: const Icon(Icons.close, size: 18, color: Colors.grey),
                             label: Text(
                               Statics.getLabel('Cancel'),
                               style: const TextStyle(color: Colors.grey),
@@ -1546,114 +1421,59 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                             // },
                             onPressed: () {
                               // ✅ पहले सभी fields required check
-                              if (anyaPrabhaviLokNaavController.text
-                                      .trim()
-                                      .isEmpty ||
-                                  anyaPrabhaviLokAddressController.text
-                                      .trim()
-                                      .isEmpty ||
-                                  anyaPrabhaviLokMobileNoController.text
-                                      .trim()
-                                      .isEmpty ||
+                              if (anyaPrabhaviLokNaavController.text.trim().isEmpty ||
+                                  anyaPrabhaviLokAddressController.text.trim().isEmpty ||
+                                  anyaPrabhaviLokMobileNoController.text.trim().isEmpty ||
                                   anyaPrabhaviLokShreniId == null ||
                                   anyaPrabhaviLokUpShreniId == null ||
-                                  (selectedUpShreni?.isOther == 1 &&
-                                      anyaPrabhaviLokAnyaUppshreniController
-                                          .text
-                                          .trim()
-                                          .isEmpty) ||
+                                  (selectedUpShreni?.isOther == 1 && anyaPrabhaviLokAnyaUppshreniController.text.trim().isEmpty) ||
                                   anyaPrabhaviLokUpShreni1Id == null ||
-                                  (selectedUpShreni2?.isOther == 1 &&
-                                      anyaPrabhaviLokAnyaUppshreni1Controller
-                                          .text
-                                          .trim()
-                                          .isEmpty) ||
+                                  (selectedUpShreni2?.isOther == 1 && anyaPrabhaviLokAnyaUppshreni1Controller.text.trim().isEmpty) ||
                                   anyaPrabhaviLokVisheshId == null ||
                                   anyaPrabhaviLokPrabhavKshetraId == null ||
                                   anyaPrabhaviLokSamparkStithiId == null ||
-                                  anyaPrabhaviLokSamparkSutraNaavController.text
-                                      .trim()
-                                      .isEmpty ||
-                                  anyaPrabhaviLokSamparkSutraDoorbhashController
-                                      .text
-                                      .trim()
-                                      .isEmpty) {
-                                Statics.showToast(
-                                    "${Statics.getLabel('allInfoRequired')}");
+                                  anyaPrabhaviLokSamparkSutraNaavController.text.trim().isEmpty ||
+                                  anyaPrabhaviLokSamparkSutraDoorbhashController.text.trim().isEmpty) {
+                                Statics.showToast("${Statics.getLabel('allInfoRequired')}");
                                 return;
                               }
 
                               // ✅ Mobile number length check
-                              if (anyaPrabhaviLokMobileNoController.text
-                                      .trim()
-                                      .length !=
-                                  10) {
-                                Statics.showToast(
-                                    "${Statics.getLabel('mobileNumberLimit')}");
+                              if (anyaPrabhaviLokMobileNoController.text.trim().length != 10) {
+                                Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
                                 return;
                               }
-                              if (anyaPrabhaviLokSamparkSutraDoorbhashController
-                                      .text
-                                      .trim()
-                                      .length !=
-                                  10) {
-                                Statics.showToast(
-                                    "${Statics.getLabel('mobileNumberLimit')}");
+                              if (anyaPrabhaviLokSamparkSutraDoorbhashController.text.trim().length != 10) {
+                                Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
                                 return;
                               }
 
                               // ✅ सब ठीक है तो data बनाओ
-                              VastisarAnyaprabhavilokam newData =
-                                  VastisarAnyaprabhavilokam(
+                              VastisarAnyaprabhavilokam newData = VastisarAnyaprabhavilokam(
                                 name: anyaPrabhaviLokNaavController.text.trim(),
-                                address: anyaPrabhaviLokAddressController.text
-                                    .trim(),
-                                doorabhaash: anyaPrabhaviLokMobileNoController
-                                    .text
-                                    .trim(),
+                                address: anyaPrabhaviLokAddressController.text.trim(),
+                                doorabhaash: anyaPrabhaviLokMobileNoController.text.trim(),
                                 shreneeid: anyaPrabhaviLokShreniId,
-                                selectedDropdownValueName:
-                                    anyaPrabhaviLokShreniName,
+                                selectedDropdownValueName: anyaPrabhaviLokShreniName,
                                 upshreneeid: anyaPrabhaviLokUpShreniId,
-                                selectedDropdownValueName1:
-                                    anyaPrabhaviLokUpShreniName,
+                                selectedDropdownValueName1: anyaPrabhaviLokUpShreniName,
                                 upshreneeid2: anyaPrabhaviLokUpShreni1Id,
-                                selectedDropdownValueName2:
-                                    anyaPrabhaviLokUpShreni1Name,
+                                selectedDropdownValueName2: anyaPrabhaviLokUpShreni1Name,
                                 visheshid: anyaPrabhaviLokVisheshId,
-                                selectedDropdownValueName3:
-                                    anyaPrabhaviLokVisheshName,
-                                prabhaavkshetrid:
-                                    anyaPrabhaviLokPrabhavKshetraId,
-                                selectedDropdownValueName4:
-                                    anyaPrabhaviLokPrabhavKshetraName,
-                                othervishesh:
-                                    anyaPrabhaviLokAnyaVisheshMahitiController
-                                        .text
-                                        .trim(),
+                                selectedDropdownValueName3: anyaPrabhaviLokVisheshName,
+                                prabhaavkshetrid: anyaPrabhaviLokPrabhavKshetraId,
+                                selectedDropdownValueName4: anyaPrabhaviLokPrabhavKshetraName,
+                                othervishesh: anyaPrabhaviLokAnyaVisheshMahitiController.text.trim(),
                                 samparksthitiid: anyaPrabhaviLokSamparkStithiId,
-                                selectedDropdownValueName5:
-                                    anyaPrabhaviLokSamparkStithiName,
-                                samparkasutranav:
-                                    anyaPrabhaviLokSamparkSutraNaavController
-                                        .text
-                                        .trim(),
-                                samparkaSutraDoorbhash:
-                                    anyaPrabhaviLokSamparkSutraDoorbhashController
-                                        .text
-                                        .trim(),
+                                selectedDropdownValueName5: anyaPrabhaviLokSamparkStithiName,
+                                samparkasutranav: anyaPrabhaviLokSamparkSutraNaavController.text.trim(),
+                                samparkaSutraDoorbhash: anyaPrabhaviLokSamparkSutraDoorbhashController.text.trim(),
                                 pkid: 0,
-                                anyavisesamahiti:
-                                    anyaPrabhaviLokAnyaVisheshMahitiController
-                                        .text
-                                        .trim(),
-                                otherupshrenee:
-                                    anyaPrabhaviLokAnyaUppshreniController.text
-                                        .trim(),
-                                otherupshrenee2:
-                                    anyaPrabhaviLokAnyaUppshreni1Controller.text
-                                        .trim(),
+                                anyavisesamahiti: anyaPrabhaviLokAnyaVisheshMahitiController.text.trim(),
+                                otherupshrenee: anyaPrabhaviLokAnyaUppshreniController.text.trim(),
+                                otherupshrenee2: anyaPrabhaviLokAnyaUppshreni1Controller.text.trim(),
                                 isactive: 1,
+                                isfemale: isFemale,
                                 vastiid: int.parse(selctedLevelId!),
                               );
 
@@ -1662,8 +1482,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                             },
 
                             icon: const Icon(Icons.check, color: Colors.white),
-                            label: Text(Statics.getLabel('Submit'),
-                                style: const TextStyle(color: Colors.white)),
+                            label: Text(Statics.getLabel('Submit'), style: const TextStyle(color: Colors.white)),
                           ),
                         ],
                       )
@@ -1759,8 +1578,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
-                  borderSide:
-                      const BorderSide(color: Colors.purpleAccent, width: 1.5),
+                  borderSide: const BorderSide(color: Colors.purpleAccent, width: 1.5),
                 ),
               ),
             ),
@@ -1780,16 +1598,13 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
     Masterdata? selectedValue,
     Function(Masterdata?)? onSelectionChanged,
   }) {
-    List<Masterdata> filteredList = dataModel.masterdata!
-        .where((item) => item.typename == filterTypeName)
-        .toList();
+    List<Masterdata> filteredList = dataModel.masterdata!.where((item) => item.typename == filterTypeName).toList();
 
     Masterdata? selectedItem = selectedValue;
     if (selectedItem == null && editId != null) {
       try {
         selectedItem = filteredList.firstWhere((item) => item.id == editId);
-        onItemSelected(
-            selectedItem.id, selectedItem.value, selectedItem.isOther);
+        onItemSelected(selectedItem.id, selectedItem.value, selectedItem.isOther);
         onSelectionChanged?.call(selectedItem);
       } catch (_) {}
     }
@@ -1849,8 +1664,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                   }).toList(),
                   onChanged: (Masterdata? newValue) {
                     if (newValue != null) {
-                      onItemSelected(
-                          newValue.id, newValue.value, newValue.isOther);
+                      onItemSelected(newValue.id, newValue.value, newValue.isOther);
                       onSelectionChanged?.call(newValue);
                     }
                   },
@@ -1893,45 +1707,34 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
     Masterdata? selectedDependentValue = selectedUpShreni;
     Masterdata? selectedThirdLevelValue = selectedUpShreni2;
 
-    List<Masterdata> masterDataList =
-        vastisarvekshanDropDownDataModel?.masterdata ?? [];
-    List<Masterdata> filteredItems =
-        masterDataList.where((e) => e.typename == filterTypeName).toList();
+    List<Masterdata> masterDataList = vastisarvekshanDropDownDataModel?.masterdata ?? [];
+    List<Masterdata> filteredItems = masterDataList.where((e) => e.typename == filterTypeName).toList();
 
     if (anyaPrabhaviLokShreniId != null && selectedValue == null) {
       selectedValue = filteredItems.firstWhere(
         (e) => e.id == anyaPrabhaviLokShreniId,
-        orElse: () =>
-            filteredItems.isNotEmpty ? filteredItems.first : Masterdata(),
+        orElse: () => filteredItems.isNotEmpty ? filteredItems.first : Masterdata(),
       );
       selectedShreni = selectedValue;
     }
 
-    List<Masterdata> dependentItems = selectedValue != null
-        ? masterDataList.where((e) => e.parentid == selectedValue!.id).toList()
-        : [];
+    List<Masterdata> dependentItems = selectedValue != null ? masterDataList.where((e) => e.parentid == selectedValue!.id).toList() : [];
 
     if (anyaPrabhaviLokUpShreniId != null && selectedDependentValue == null) {
       selectedDependentValue = dependentItems.firstWhere(
         (e) => e.id == anyaPrabhaviLokUpShreniId,
-        orElse: () =>
-            dependentItems.isNotEmpty ? dependentItems.first : Masterdata(),
+        orElse: () => dependentItems.isNotEmpty ? dependentItems.first : Masterdata(),
       );
 
       selectedUpShreni = selectedDependentValue;
     }
 
-    List<Masterdata> thirdLevelItems = selectedDependentValue != null
-        ? masterDataList
-            .where((e) => e.parentid == selectedDependentValue!.id)
-            .toList()
-        : [];
+    List<Masterdata> thirdLevelItems = selectedDependentValue != null ? masterDataList.where((e) => e.parentid == selectedDependentValue!.id).toList() : [];
 
     if (anyaPrabhaviLokUpShreni1Id != null && selectedThirdLevelValue == null) {
       selectedThirdLevelValue = thirdLevelItems.firstWhere(
         (e) => e.id == anyaPrabhaviLokUpShreni1Id,
-        orElse: () =>
-            thirdLevelItems.isNotEmpty ? thirdLevelItems.first : Masterdata(),
+        orElse: () => thirdLevelItems.isNotEmpty ? thirdLevelItems.first : Masterdata(),
       );
 
       selectedUpShreni2 = selectedThirdLevelValue;
@@ -1982,8 +1785,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                 });
 
                 if (onDependentValueSelected != null) {
-                  onDependentValueSelected(
-                      newValue.id!, newValue.value!, newValue);
+                  onDependentValueSelected(newValue.id!, newValue.value!, newValue);
                 }
               }
             },
@@ -2009,8 +1811,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                 });
 
                 if (onThirdLevelValueSelected != null) {
-                  onThirdLevelValueSelected(
-                      newValue.id!, newValue.value!, newValue);
+                  onThirdLevelValueSelected(newValue.id!, newValue.value!, newValue);
                 }
               }
             },

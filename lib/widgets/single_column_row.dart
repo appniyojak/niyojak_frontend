@@ -6,19 +6,27 @@ import '../helpers/static_data.dart' as Statics;
 class SingleColumnRow extends StatelessWidget {
   var txtString;
   var value;
-  double? fontsize = 0;
+  double? fontsize;
+  FontWeight? fontWeight;
   bool? view;
   VoidCallback? btnAction;
-  Widget? child;
+  Widget? subChild;
+  bool showDivider;
+  EdgeInsetsGeometry? subChildPadding;
+  EdgeInsetsGeometry? subChildMargin;
 
   SingleColumnRow({
     Key? key,
     this.txtString,
     this.value,
     this.fontsize,
+    this.fontWeight,
     this.view,
     this.btnAction,
-    this.child,
+    this.subChild,
+    this.showDivider = true,
+    this.subChildPadding,
+    this.subChildMargin,
   }) : super(key: key);
 
   @override
@@ -35,7 +43,7 @@ class SingleColumnRow extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                    child: Text(txtString, style: TextStyle(fontSize: fontsize, fontWeight: FontWeight.w500)),
+                    child: Text(txtString, style: TextStyle(fontSize: fontsize, fontWeight: fontWeight ?? FontWeight.w500)),
                   ),
                   view == true
                       ? IconButton(
@@ -47,13 +55,25 @@ class SingleColumnRow extends StatelessWidget {
                           ))
                       : Container(
                           margin: EdgeInsets.only(left: 8),
-                          child: Text(value == "null" || value == null ? "0" : value, style: TextStyle(fontSize: fontsize, fontWeight: FontWeight.w600)),
+                          child: Text(value == "null" || value == null ? "0" : value.toString(), style: TextStyle(fontSize: fontsize, fontWeight: fontWeight ?? FontWeight.w600)),
                         ),
                 ],
               ),
             ),
           ),
         ),
+        if (subChild != null)
+          Container(
+            padding: subChildPadding ?? EdgeInsets.only(top: 2, bottom: 6),
+            margin: subChildMargin ?? EdgeInsets.only(left: 16, right: 8),
+            // color: Colors.red,
+            child: Center(
+              child: SizedBox(
+                width: Statics.getDeviceSize(context).width,
+                child: subChild,
+              ),
+            ),
+          ),
         Center(
           child: Container(
             width: Statics.getDeviceSize(context).width,

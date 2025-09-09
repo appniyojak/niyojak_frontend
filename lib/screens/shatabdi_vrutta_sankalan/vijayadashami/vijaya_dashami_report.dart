@@ -1,10 +1,13 @@
-import 'dart:math';
+import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:niyojak_prod/widgets/single_column_row.dart';
 
 import '../../../helpers/static_data.dart' as Statics;
+import '../../../models/response_model/get_vijayadashmi_report_resp_model.dart';
 import '../../../providers/bals.dart';
+import '../../../utils/cust_painters.dart';
 
 class VijayadashamiFormReport extends StatefulWidget {
   static const String routeName = '/vijayadashami-form-report';
@@ -16,13 +19,17 @@ class VijayadashamiFormReport extends StatefulWidget {
 }
 
 class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
-  final ScrollController _scrollController = ScrollController();
+  late ScrollController _scrollController;
 
-  final List<bool> _expanded = List.generate(6, (_) => false);
+  GetVijayadashamiReportModel? vijayadashamiReport;
 
+  final List<bool> _expanded = List.generate(2, (_) => true);
+
+  bool _isLoading = false;
   bool _isSearching = false;
-  bool _isExpanded = false;
-  bool isVastiSearch = false;
+  bool _isExpanded = true;
+
+  // bool isVastiSearch = false;
 
   List<GeoUnitMasterBAL>? _linkedMahaanagar;
   List<GeoUnitMasterBAL>? _linkedVibhaag;
@@ -55,14 +62,35 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
   }
 
   void populateDropdown() async {
+    _scrollController = ScrollController();
     var data = await Statics.getStaticLDB('AnnualBaithakType');
     populatelinkedMahaanagarDropdown();
     populatelinkedVibhaagDropdown('');
     if (!mounted) return;
     _baithakTypes = data;
     _baithakTypes = _baithakTypes!.where((element) => element.showAnnualBaithakkey!.contains('1')).toList();
-    print("_baithakTypes :-- ${_baithakTypes}");
+    print("_baithakTypes :-- $_baithakTypes");
     setState(() {});
+  }
+
+  getReportDataFun() async {
+    setState(() {
+      vijayadashamiReport = null;
+      _isLoading = true;
+    });
+    Map<String, dynamic> formData = {
+      "GeoUnitID": int.tryParse(selctedLevelId.toString()) ?? null,
+      "AppUserID": int.tryParse(Statics.userDetails['userID']) ?? null,
+    };
+
+    String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
+    log("Form Data (JSON):\n$formattedJson");
+    vijayadashamiReport = await Statics.getVijayaDashamiUtsavReportData(context, formData);
+    log("vijayadashamiReport >>>>>>>>>>>>>>>>> ${jsonDecode(jsonEncode(vijayadashamiReport))}");
+    setState(() {
+      _isLoading = false;
+      vijayadashamiReport;
+    });
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedMahaanagarDropdown() async {
@@ -174,6 +202,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                 },
                 children: [
                   ExpansionPanel(
+                    isExpanded: _isExpanded,
                     headerBuilder: (BuildContext context, bool isExpanded) {
                       return ListTile(
                         title: Text(
@@ -298,14 +327,16 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                           SizedBox(
                             height: 15,
                           ),
+                          // if (selctedLevelId != '')
                           Align(
                             alignment: Alignment.center,
                             child: ElevatedButton(
                               style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.purpleAccent)),
-                              onPressed: () {
+                              onPressed: () async {
+                                await getReportDataFun();
                                 setState(() {
                                   _isExpanded = false;
-                                  isVastiSearch = true;
+                                  // isVastiSearch = true;
                                 });
                               },
                               child: Text("${Statics.getLabel('Filters')}", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
@@ -314,14 +345,13 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                         ],
                       ),
                     ),
-                    isExpanded: _isExpanded,
                   ),
                 ],
               ),
               SizedBox(
                 height: 20,
               ),
-              if (selctedLevel != "" && selctedLevelName != "" && isVastiSearch == true)
+              if (selctedLevel != "" && selctedLevelName != "")
                 Container(
                     height: 40,
                     width: double.infinity,
@@ -334,7 +364,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          "${selctedLevel}  ->  ",
+                          "${Statics.getLabel(selctedLevel ?? "Mahaanagar")}  ->  ",
                           style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                         Text(
@@ -343,107 +373,14 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                         ),
                       ],
                     )),
-              SizedBox(
-                height: 10,
-              ),
-              Divider(
-                color: Colors.black,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              buildMarathiDataTable(),
-              SingleChildScrollView(
-                child: ExpansionPanelList(
-                  expansionCallback: (index, isExpanded) {
-                    setState(() {
-                      _expanded[index] = !_expanded[index];
-                    });
-                  },
-                  children: [
-                    _buildPanel(
-                      "स्वयंसेवक",
-                      0,
-                      Column(
-                        children: [
-                          SingleColumnRow(
-                            txtString: "एकूण पट",
-                            value: "1254",
-                          ),
-                          SingleColumnRow(
-                            txtString: "गणवेशात उपस्थित",
-                            value: "832",
-                          ),
-                          SingleColumnRow(txtString: "संचलनात उपस्थित", value: "582"),
-                          SingleColumnRow(txtString: "अन्य उपस्थित", value: "210"),
-                          SingleColumnRow(txtString: "वर्तमान शाखा प्रतिनिधित्व", value: "25"),
-                          SingleColumnRow(txtString: "वर्तमान साप्ताहिक मिलन प्रतिनिधित्व", value: "18"),
-                          SingleColumnRow(txtString: "वर्तमान मासिक मिलन प्रतिनिधित्व", value: "10"),
-                          SingleColumnRow(txtString: "वर्तमान संघ मंडली प्रतिनिधित्व", value: "4"),
-                          // SingleColumnRow(txtString: "नवीन संकल्पित शाखा प्रतिनिधित्व", value: "5"),
-                          // SingleColumnRow(txtString: "नवीन संकल्पित साप्ताहिक मिलन प्रतिनिधित्व", value: "3"),
-                          // SingleColumnRow(txtString: "नवीन संकल्पित संघ मंडली प्रतिनिधित्व", value: "2"),
-                          SingleColumnRow(txtString: "वस्ती प्रतिनिधित्व", value: "24"),
-                          SingleColumnRow(txtString: "ग्राम प्रतिनिधित्व", value: "15"),
-                          SingleColumnRow(txtString: "मंडल प्रतिनिधित्व", value: "8"),
-                        ],
-                      ),
-                    ),
-                    _buildPanel(
-                      "समाज",
-                      1,
-                      Column(
-                        children: [
-                          SingleColumnRow(
-                            txtString: "मुख्य अतिथी",
-                            value: "",
-                            fontsize: 16,
-                          ),
-                          SingleColumnRow(
-                            txtString: "पुरुष",
-                            value: "22",
-                          ),
-                          SingleColumnRow(
-                            txtString: "महिला",
-                            value: "11",
-                          ),
-                          SingleColumnRow(
-                            txtString: "एकूण",
-                            value: "33",
-                          ),
-                          SingleColumnRow(
-                            txtString: "सद्भाव कार्य",
-                            value: "",
-                            fontsize: 16,
-                          ),
-                          SingleColumnRow(
-                            txtString: "यादी",
-                            value: "dbsjhs kdjskdg",
-                            fontsize: 16,
-                          ),
-                          SingleColumnRow(
-                            txtString: "उपस्थित",
-                            value: "",
-                            fontsize: 16,
-                          ),
-                          SingleColumnRow(
-                            txtString: "पुरुष",
-                            value: "22",
-                          ),
-                          SingleColumnRow(
-                            txtString: "महिला",
-                            value: "11",
-                          ),
-                          SingleColumnRow(
-                            txtString: "एकूण",
-                            value: "33",
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              SizedBox(height: 10),
+              Divider(color: Colors.black),
+              SizedBox(height: 10),
+              if (_isLoading) SizedBox(height: MediaQuery.sizeOf(context).height * 0.2, child: Center(child: CircularProgressIndicator())),
+              if (vijayadashamiReport?.vijayadashaminagarlist != null && vijayadashamiReport?.vijayadashaminagarlist != []) buildMarathiDataTable(vijayadashamiReport!.vijayadashaminagarlist!),
+              SizedBox(height: 18),
+              if (vijayadashamiReport?.vijayadashamiReport != null) buildCountCards(vijayadashamiReport!.vijayadashamiReport!),
+              SizedBox(height: 30),
             ],
           ),
         ),
@@ -451,8 +388,284 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
     );
   }
 
+  Widget buildCountCards(VijayadashamiReport data) {
+    int calculateTotalMale() {
+      final total = (data.mukhyaatithimale ?? 0) + (data.sadbavkaryamale ?? 0) + (data.sajjanskhatiuppasstitimale ?? 0) + (data.pramukhjhanuppasstitimale ?? 0) + (data.anyauppasstitimale ?? 0);
+      return total;
+    }
+
+    int calculateTotalFemale() {
+      final total =
+          (data.mukhyaatithifemale ?? 0) + (data.sadbavkaryafemale ?? 0) + (data.sajjanskhatiuppasstitifemale ?? 0) + (data.pramukhjhanuppasstitifemale ?? 0) + (data.anyanuppasstitifemale ?? 0);
+      return total;
+    }
+
+    return ExpansionPanelList(
+      expansionCallback: (index, isExpanded) {
+        setState(() {
+          _expanded[index] = !_expanded[index];
+        });
+      },
+      children: [
+        _buildPanel(
+          "स्वयंसेवक",
+          0,
+          Column(
+            children: [
+              SingleColumnRow(
+                txtString: "एकूण पट",
+                value: data.ekunpat,
+              ),
+              SingleColumnRow(
+                txtString: "गणवेशात उपस्थित",
+                value: data.ekungan,
+              ),
+              SingleColumnRow(txtString: "संचलनात उपस्थित", value: data.ekunsanchalan),
+              SingleColumnRow(txtString: "अन्य उपस्थित", value: data.ekunupastiti),
+              SingleColumnRow(txtString: "वर्तमान शाखा प्रतिनिधित्व", value: data.vartamansaakhapratinidhatva),
+              SingleColumnRow(txtString: "वर्तमान साप्ताहिक मिलन प्रतिनिधित्व", value: data.vartamansapthahikpratinidhatva),
+              SingleColumnRow(txtString: "वर्तमान मासिक मिलन प्रतिनिधित्व", value: data.vartamansanghmandalipratinidhatva),
+              // SingleColumnRow(txtString: "वर्तमान संघ मंडली प्रतिनिधित्व", value: data.),
+              // SingleColumnRow(txtString: "नवीन संकल्पित शाखा प्रतिनिधित्व", value: "5"),
+              // SingleColumnRow(txtString: "नवीन संकल्पित साप्ताहिक मिलन प्रतिनिधित्व", value: "3"),
+              // SingleColumnRow(txtString: "नवीन संकल्पित संघ मंडली प्रतिनिधित्व", value: "2"),
+              SingleColumnRow(txtString: "वस्ती प्रतिनिधित्व", value: data.vasticountpratinidhatva),
+              SingleColumnRow(txtString: "मंडल प्रतिनिधित्व", value: data.mandalcountpratinidhatva),
+              SingleColumnRow(txtString: "ग्राम प्रतिनिधित्व", value: data.gramcountpratinidhatva),
+            ],
+          ),
+        ),
+        _buildPanel(
+          "समाज",
+          1,
+          Column(
+            children: [
+              SingleColumnRow(
+                txtString: Statics.getLabel('mukhyaAtithi'),
+                value: "",
+                fontsize: 16,
+                subChild: Column(
+                  children: [
+                    Row(children: [
+                      Expanded(child: Text(Statics.getLabel('Male'))),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text((data.mukhyaatithimale ?? 0).toString()),
+                      ),
+                    ]),
+                    SizedBox(height: 8),
+                    Row(children: [
+                      Expanded(child: Text(Statics.getLabel('Female'))),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text((data.mukhyaatithifemale ?? 0).toString()),
+                      ),
+                    ]),
+                    SizedBox(height: 6),
+                    SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+                    SizedBox(height: 6),
+                    Row(children: [
+                      Expanded(child: Text(Statics.getLabel('Total'))),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text(((data.mukhyaatithimale ?? 0) + (data.mukhyaatithifemale ?? 0)).toString()),
+                      ),
+                    ]),
+                  ],
+                ),
+              ),
+              SingleColumnRow(
+                txtString: Statics.getLabel('sadhbhavKarya'),
+                value: "",
+                fontsize: 16,
+                subChild: Column(
+                  children: [
+                    Row(children: [
+                      Expanded(child: Text(Statics.getLabel('Male'))),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text((data.sadbavkaryamale ?? 0).toString()),
+                      ),
+                    ]),
+                    SizedBox(height: 8),
+                    Row(children: [
+                      Expanded(child: Text(Statics.getLabel('Female'))),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text((data.sadbavkaryafemale ?? 0).toString()),
+                      ),
+                    ]),
+                    SizedBox(height: 6),
+                    SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+                    SizedBox(height: 6),
+                    Row(children: [
+                      Expanded(child: Text(Statics.getLabel('Total'))),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text(((data.sadbavkaryamale ?? 0) + (data.sadbavkaryafemale ?? 0)).toString()),
+                      ),
+                    ]),
+                  ],
+                ),
+              ),
+              SingleColumnRow(
+                txtString: Statics.getLabel("SajjanShakti"),
+                value: "",
+                fontsize: 16,
+                subChild: Column(
+                  children: [
+                    Row(children: [
+                      Expanded(child: Text(Statics.getLabel('Male'))),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text((data.sajjanskhatiuppasstitimale ?? 0).toString()),
+                      ),
+                    ]),
+                    SizedBox(height: 8),
+                    Row(children: [
+                      Expanded(child: Text(Statics.getLabel('Female'))),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text((data.sajjanskhatiuppasstitifemale ?? 0).toString()),
+                      ),
+                    ]),
+                    SizedBox(height: 6),
+                    SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+                    SizedBox(height: 6),
+                    Row(children: [
+                      Expanded(child: Text(Statics.getLabel('Total'))),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text(((data.sajjanskhatiuppasstitimale ?? 0) + (data.sajjanskhatiuppasstitifemale ?? 0)).toString()),
+                      ),
+                    ]),
+                  ],
+                ),
+              ),
+              // SingleColumnRow(
+              //   txtString: "पुरुष",
+              //   value: "22",
+              // ),
+              // SingleColumnRow(
+              //   txtString: "महिला",
+              //   value: "11",
+              // ),
+              // SingleColumnRow(
+              //   txtString: "एकूण",
+              //   value: "33",
+              // ),
+              SingleColumnRow(
+                txtString: Statics.getLabel("PramukhJan"),
+                value: "",
+                fontsize: 16,
+                subChild: Column(
+                  children: [
+                    Row(children: [
+                      Expanded(child: Text(Statics.getLabel('Male'))),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text((data.pramukhjhanuppasstitimale ?? 0).toString()),
+                      ),
+                    ]),
+                    SizedBox(height: 8),
+                    Row(children: [
+                      Expanded(child: Text(Statics.getLabel('Female'))),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text((data.pramukhjhanuppasstitifemale ?? 0).toString()),
+                      ),
+                    ]),
+                    SizedBox(height: 6),
+                    SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+                    SizedBox(height: 6),
+                    Row(children: [
+                      Expanded(child: Text(Statics.getLabel('Total'))),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text(((data.pramukhjhanuppasstitimale ?? 0) + (data.pramukhjhanuppasstitifemale ?? 0)).toString()),
+                      ),
+                    ]),
+                  ],
+                ),
+              ),
+              SingleColumnRow(
+                txtString: "अन्य उपस्थित",
+                value: "",
+                fontsize: 16,
+                subChild: Column(
+                  children: [
+                    Row(children: [
+                      Expanded(child: Text(Statics.getLabel('Male'))),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text((data.anyauppasstitimale ?? 0).toString()),
+                      ),
+                    ]),
+                    SizedBox(height: 8),
+                    Row(children: [
+                      Expanded(child: Text(Statics.getLabel('Female'))),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text((data.anyanuppasstitifemale ?? 0).toString()),
+                      ),
+                    ]),
+                    SizedBox(height: 6),
+                    SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+                    SizedBox(height: 6),
+                    Row(children: [
+                      Expanded(child: Text(Statics.getLabel('Total'))),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text(((data.anyauppasstitimale ?? 0) + (data.anyanuppasstitifemale ?? 0)).toString()),
+                      ),
+                    ]),
+                  ],
+                ),
+              ),
+              SingleColumnRow(
+                txtString: Statics.getLabel("Total"),
+                value: "",
+                fontsize: 16,
+                subChild: Column(
+                  children: [
+                    Row(children: [
+                      Expanded(child: Text(Statics.getLabel('Male'))),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text(calculateTotalMale().toString()),
+                      ),
+                    ]),
+                    SizedBox(height: 8),
+                    Row(children: [
+                      Expanded(child: Text(Statics.getLabel('Female'))),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text(calculateTotalFemale().toString()),
+                      ),
+                    ]),
+                    SizedBox(height: 6),
+                    SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+                    SizedBox(height: 6),
+                    Row(children: [
+                      Expanded(child: Text(Statics.getLabel('Total'))),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text((calculateTotalMale() + calculateTotalFemale()).toString()),
+                      ),
+                    ]),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   ExpansionPanel _buildPanel(String title, int index, Widget child) {
     return ExpansionPanel(
+      isExpanded: _expanded[index],
       headerBuilder: (context, isExpanded) {
         return ListTile(
           title: Text(
@@ -464,66 +677,65 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
           ),
         );
       },
-      body: Container(
-        height: 300,
-        child: Scrollbar(
-          // controller: _scrollController,
-          interactive: true,
-          thumbVisibility: true,
-          radius: Radius.circular(8),
-          child: SingleChildScrollView(
-            // controller: _scrollController,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: child,
-            ),
-          ),
-        ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        child: child,
       ),
-      isExpanded: _expanded[index],
-      canTapOnHeader: true,
     );
   }
 
-  Widget buildMarathiDataTable() {
-    final List<String> levels = ['नगर', 'तालुका', 'उपनगर', 'उपखंड', 'मंडल'];
+  Widget buildMarathiDataTable(List<Vijayadashaminagarlist> data) {
     final List<String> headers = [
       'कार्यक्रम स्तर',
       'किती कार्यक्रम झाले',
       'किती संचालन झाले ?',
-      'किती कार्यक्रम ठरलेल्या बैठक सुरु झाले ?',
-      'किती कार्यक्रमात वैदिक गीत पाठ स्तुती गेले ?',
-      'किती कार्यक्रमात घोष वादन झाले ?',
-      'किती कार्यक्रमांचे हिसाब २४ तासात पूर्ण झाले ?',
+      'किती कार्यक्रम ठरलेल्या\n बैठक सुरु झाले ?',
+      'किती कार्यक्रमात वैदिक\n गीत पाठ स्तुती गेले ?',
+      'किती कार्यक्रमात घोष\n वादन झाले ?',
+      'किती कार्यक्रमांचे हिसाब\n २४ तासात पूर्ण झाले ?',
     ];
 
-    final Random random = Random();
-
-    String getRandomValue() {
-      return random.nextBool() ? random.nextInt(10).toString() : '•';
-    }
-
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: DataTable(
-        headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
-        columns: headers
-            .map((header) => DataColumn(
-                  label: Container(
-                    width: 180,
-                    child: Text(header, style: TextStyle(fontWeight: FontWeight.bold)),
-                  ),
-                ))
-            .toList(),
-        rows: levels.map((level) {
-          return DataRow(cells: [
-            DataCell(Text(level)),
-            ...List.generate(headers.length - 1, (_) {
-              return DataCell(Center(child: Text(getRandomValue())));
-            }),
-          ]);
-        }).toList(),
-      ),
+    return Column(
+      children: [
+        Scrollbar(
+          controller: _scrollController,
+          thumbVisibility: true,
+          interactive: true,
+          thickness: 5,
+          radius: Radius.circular(10),
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            scrollDirection: Axis.horizontal,
+            child: DataTable(
+              columnSpacing: 18,
+              headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
+              border: TableBorder(verticalInside: BorderSide(width: 0.7, color: Colors.grey.shade200)),
+              columns: headers
+                  .map((header) => DataColumn(
+                        label: Container(
+                          // constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.2),
+                          child: Text(header, softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold)),
+                        ),
+                      ))
+                  .toList(),
+              rows: data.map((level) {
+                return DataRow(cells: [
+                  DataCell(Text(level.levelname.toString())),
+                  DataCell(Center(child: Text(level.karykakramcount.toString()))),
+                  DataCell(Center(child: Text(level.shanchalancount.toString()))),
+                  DataCell(Center(child: Text(level.karyakramnirdharitvedhvarcount.toString()))),
+                  DataCell(Center(child: Text(level.vyaktigeetkhantastakcount.toString()))),
+                  DataCell(Center(child: Text(level.shanchalanghosvandancount.toString()))),
+                  DataCell(Center(child: Text(level.skaraykramhisob24tasapurnacount.toString()))),
+                ]);
+              }).toList(),
+            ),
+          ),
+        ),
+        SizedBox(height: 12),
+        Divider(color: Colors.black),
+        SizedBox(height: 12),
+      ],
     );
   }
 }

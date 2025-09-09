@@ -15,35 +15,26 @@ import '../../../../providers/bals.dart';
 
 class VastiSurveyFormScreen extends StatefulWidget {
   static const String routeName = '/vasti-survey';
+
   const VastiSurveyFormScreen({super.key});
 
   @override
   State<VastiSurveyFormScreen> createState() => _VastiSurveyFormScreenState();
 }
 
-class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
-    with SingleTickerProviderStateMixin {
-  final TextEditingController sanghaKaryaVastiPramukhNameController =
-      TextEditingController();
-  final TextEditingController sanghaKaryaVastiStithiController =
-      TextEditingController();
+class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with SingleTickerProviderStateMixin {
+  final TextEditingController sanghaKaryaVastiPramukhNameController = TextEditingController();
+  final TextEditingController sanghaKaryaVastiStithiController = TextEditingController();
   final TextEditingController loksankhyaController = TextEditingController();
   final TextEditingController femaleController = TextEditingController();
   final TextEditingController maleController = TextEditingController();
-  final TextEditingController vastiChatahuSimaController =
-      TextEditingController();
-  final TextEditingController niyamitChalnareUpkramController =
-      TextEditingController();
-  final TextEditingController niyamitChalnareUpkramGatividhiController =
-      TextEditingController();
-  final TextEditingController vsahatPrakarBhavnacheNavController =
-      TextEditingController();
-  final TextEditingController vsahatPrakarSamparkKshetraController =
-      TextEditingController();
-  final TextEditingController vsahatPrakarDurbhashController =
-      TextEditingController();
-  final TextEditingController vastitHonareSamajikAnyakaryakramController =
-      TextEditingController();
+  final TextEditingController vastiChatahuSimaController = TextEditingController();
+  final TextEditingController niyamitChalnareUpkramController = TextEditingController();
+  final TextEditingController niyamitChalnareUpkramGatividhiController = TextEditingController();
+  final TextEditingController vsahatPrakarBhavnacheNavController = TextEditingController();
+  final TextEditingController vsahatPrakarSamparkKshetraController = TextEditingController();
+  final TextEditingController vsahatPrakarDurbhashController = TextEditingController();
+  final TextEditingController vastitHonareSamajikAnyakaryakramController = TextEditingController();
 
   GetVastiDataByIdModel? vastiDataByIdModel;
 
@@ -57,12 +48,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
         "AppUserID": Statics.userDetails['userID'],
       });
       print("searchVastiData req param :-  $strInput");
-      vastiDataByIdModel =
-          await Statics.getVastidataByIDForApp(context, strInput);
+      vastiDataByIdModel = await Statics.getVastidataByIDForApp(context, strInput);
       setDataAfterSearch();
     } else {
-      Statics.showMessageDialog(
-          context, Statics.getLabel('internetNotConnected'));
+      Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
       return null;
     }
   }
@@ -77,119 +66,62 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
 
   void setDataAfterSearch() async {
     setState(() {
-      sanghaKaryaVastiStithiController.text =
-          vastiDataByIdModel!.vastisarvekshan!.vastiShakhaType == null
-              ? ""
-              : vastiDataByIdModel!.vastisarvekshan!.vastiShakhaType!;
-      sanghaKaryaVastiPramukhNameController.text =
-          vastiDataByIdModel!.vastisarvekshan!.vastiShakhaPramukhName ?? "";
-      loksankhyaController.text =
-          vastiDataByIdModel!.vastisarvekshan!.lokasankhya ?? "";
-      vastiSamitiYesNo = int.parse(
-          vastiDataByIdModel!.vastisarvekshan!.vastiShakhaSamiti == null ||
-                  vastiDataByIdModel!.vastisarvekshan!.vastiShakhaSamiti! ==
-                      "null" ||
-                  vastiDataByIdModel!.vastisarvekshan!.vastiShakhaSamiti == ""
-              ? "2"
-              : vastiDataByIdModel!.vastisarvekshan!.vastiShakhaSamiti!);
-      durjanShaktiYesNo =
-          vastiDataByIdModel!.vastisarvekshan!.durjanShaktiYesNo!;
-      beforsanghaonnowisoff = vastiDataByIdModel!
-                  .vastisarvekshan!.beforeShakhaSaptahikIsOnNowOff ==
-              null
-          ? 2
-          : vastiDataByIdModel!.vastisarvekshan!.beforeShakhaSaptahikIsOnNowOff;
-      kuthalaVarshiDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarKuthalyavarsi ?? [];
-      vastiChatahuSimaController.text =
-          vastiDataByIdModel!.vastisarvekshan!.vasticyacatuSima ?? "";
+      sanghaKaryaVastiStithiController.text = vastiDataByIdModel!.vastisarvekshan!.vastiShakhaType == null ? "" : vastiDataByIdModel!.vastisarvekshan!.vastiShakhaType!;
+      sanghaKaryaVastiPramukhNameController.text = vastiDataByIdModel!.vastisarvekshan!.vastiShakhaPramukhName ?? "";
+      loksankhyaController.text = vastiDataByIdModel!.vastisarvekshan!.lokasankhya ?? "";
+      vastiSamitiYesNo = int.parse(vastiDataByIdModel!.vastisarvekshan!.vastiShakhaSamiti == null ||
+              vastiDataByIdModel!.vastisarvekshan!.vastiShakhaSamiti! == "null" ||
+              vastiDataByIdModel!.vastisarvekshan!.vastiShakhaSamiti == ""
+          ? "2"
+          : vastiDataByIdModel!.vastisarvekshan!.vastiShakhaSamiti!);
+      durjanShaktiYesNo = vastiDataByIdModel!.vastisarvekshan!.durjanShaktiYesNo!;
+      beforsanghaonnowisoff = vastiDataByIdModel!.vastisarvekshan!.beforeShakhaSaptahikIsOnNowOff == null ? 2 : vastiDataByIdModel!.vastisarvekshan!.beforeShakhaSaptahikIsOnNowOff;
+      kuthalaVarshiDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarKuthalyavarsi ?? [];
+      vastiChatahuSimaController.text = vastiDataByIdModel!.vastisarvekshan!.vasticyacatuSima ?? "";
       selectedFileName = vastiDataByIdModel!.vastisarvekshan!.googlemap ?? "";
-      jagranShreniEnteredDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarJaagaranshreneesthiti ??
-              [];
-      enteredDataListGatividhi =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarGatividhikaryasthiti ??
-              [];
-      enteredVasahatPrakarDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarVasahatprakara ?? [];
-      enteredVividhBhashaBolnareDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarVividhaprakara ?? [];
-      enteredKontyaPraantacheDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarKonatyaprantache ?? [];
-      enteredreligionDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarReligion ?? [];
-      upasnaSthalDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarupaasana ?? [];
-      sajjanShaktiDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarsajjanshakti ?? [];
-      anyaPrabhaviLokDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarAnyaprabhavilokam ?? [];
-      vastitSajarHonareSanDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarVastitamahatvacesana ??
-              [];
-      vastitSajarHonareSamajikKaryakramDataList = vastiDataByIdModel!
-              .vastisarvekshan!.vastisarVastitasajaraSamajikkaryakram ??
-          [];
+      jagranShreniEnteredDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarJaagaranshreneesthiti ?? [];
+      enteredDataListGatividhi = vastiDataByIdModel!.vastisarvekshan!.vastisarGatividhikaryasthiti ?? [];
+      enteredVasahatPrakarDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarVasahatprakara ?? [];
+      enteredVividhBhashaBolnareDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarVividhaprakara ?? [];
+      enteredKontyaPraantacheDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarKonatyaprantache ?? [];
+      enteredreligionDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarReligion ?? [];
+      upasnaSthalDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarupaasana ?? [];
+      sajjanShaktiDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarsajjanshakti ?? [];
+      anyaPrabhaviLokDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarAnyaprabhavilokam ?? [];
+      vastitSajarHonareSanDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarVastitamahatvacesana ?? [];
+      vastitSajarHonareSamajikKaryakramDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarVastitasajaraSamajikkaryakram ?? [];
 
-      step1completepercentage =
-          vastiDataByIdModel!.vastisarvekshan!.step1completepercentage;
+      step1completepercentage = vastiDataByIdModel!.vastisarvekshan!.step1completepercentage;
 
-      step1pendingpoints =
-          vastiDataByIdModel!.vastisarvekshan!.step1pendingpoints;
+      step1pendingpoints = vastiDataByIdModel!.vastisarvekshan!.step1pendingpoints;
 
       /// STEP 2 FORM DATA =====================================================================================================
-      vastitBalopasanaKendraDataList = vastiDataByIdModel!
-              .vastisarvekshan!.vastisarVastitilabalopasanakendra ??
-          [];
-      motheVyasayikKendraDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarMothevyavasayikakendra ??
-              [];
-      nirmandhinMothePrakalpaDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarNirmanadhinamothe ?? [];
-      motheRugnalayDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarMotherugnalaya ?? [];
-      agniShamanDalKendraAhe =
-          vastiDataByIdModel!.vastisarvekshan!.agnishamandal == null
-              ? 2
-              : vastiDataByIdModel!.vastisarvekshan!.agnishamandal;
-      polichChoukiAhe = vastiDataByIdModel!.vastisarvekshan!.policethane == null
-          ? 2
-          : vastiDataByIdModel!.vastisarvekshan!.policethane;
-      allShaikshanikPrakarDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarschooltapasila ?? [];
-      maidanUddyanDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarmaidan ?? [];
-      jahirKaryakramDataList = vastiDataByIdModel!
-              .vastisarvekshan!.vastisarJahirakaryakramasambandhi ??
-          [];
+      vastitBalopasanaKendraDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarVastitilabalopasanakendra ?? [];
+      motheVyasayikKendraDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarMothevyavasayikakendra ?? [];
+      nirmandhinMothePrakalpaDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarNirmanadhinamothe ?? [];
+      motheRugnalayDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarMotherugnalaya ?? [];
+      agniShamanDalKendraAhe = vastiDataByIdModel!.vastisarvekshan!.agnishamandal == null ? 2 : vastiDataByIdModel!.vastisarvekshan!.agnishamandal;
+      polichChoukiAhe = vastiDataByIdModel!.vastisarvekshan!.policethane == null ? 2 : vastiDataByIdModel!.vastisarvekshan!.policethane;
+      allShaikshanikPrakarDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarschooltapasila ?? [];
+      maidanUddyanDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarmaidan ?? [];
+      jahirKaryakramDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarJahirakaryakramasambandhi ?? [];
 
-      step2completepercentage =
-          vastiDataByIdModel!.vastisarvekshan!.step2completepercentage;
+      step2completepercentage = vastiDataByIdModel!.vastisarvekshan!.step2completepercentage;
 
-      step2pendingpoints =
-          vastiDataByIdModel!.vastisarvekshan!.step2pendingpoints;
+      step2pendingpoints = vastiDataByIdModel!.vastisarvekshan!.step2pendingpoints;
 
       /// STEP 3 FORM DATA =====================================================================================================
-      vastiPrashnaGarjaDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarVastitilasamajika ?? [];
-      dharmikNetrutvaDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisardhaarmiknetrtav ?? [];
-      durjanShaktiDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisardurjanshakti ?? [];
-      hinduVeerYadiDataList =
-          vastiDataByIdModel!.vastisarvekshan!.vastisarHinduvirayadi ?? [];
+      vastiPrashnaGarjaDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarVastitilasamajika ?? [];
+      dharmikNetrutvaDataList = vastiDataByIdModel!.vastisarvekshan!.vastisardhaarmiknetrtav ?? [];
+      durjanShaktiDataList = vastiDataByIdModel!.vastisarvekshan!.vastisardurjanshakti ?? [];
+      hinduVeerYadiDataList = vastiDataByIdModel!.vastisarvekshan!.vastisarHinduvirayadi ?? [];
 
-      step3completepercentage =
-          vastiDataByIdModel!.vastisarvekshan!.step3completepercentage;
-      step3pendingpoints =
-          vastiDataByIdModel!.vastisarvekshan!.step3pendingpoints;
+      step3completepercentage = vastiDataByIdModel!.vastisarvekshan!.step3completepercentage;
+      step3pendingpoints = vastiDataByIdModel!.vastisarvekshan!.step3pendingpoints;
       // ===========================================
-      _isStep1Completed =
-          vastiDataByIdModel!.vastisarvekshan!.stepOneComplete ?? true;
-      _isStep2Completed =
-          vastiDataByIdModel!.vastisarvekshan!.stepTwoComplete ?? true;
-      print(
-          "_isStep1Completed $_isStep1Completed ----   _isStep2Completed $_isStep2Completed");
+      _isStep1Completed = vastiDataByIdModel!.vastisarvekshan!.stepOneComplete ?? true;
+      _isStep2Completed = vastiDataByIdModel!.vastisarvekshan!.stepTwoComplete ?? true;
+      print("_isStep1Completed $_isStep1Completed ----   _isStep2Completed $_isStep2Completed");
     });
   }
 
@@ -255,6 +187,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   }
 
   void showPopupForVastiValidation(BuildContext context) {
+    log("showPopupForVastiValidation is opened >>>>>>>>>>>>>> ");
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -393,61 +326,48 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
     populatelinkedVibhaagDropdown('');
     if (!mounted) return;
     _baithakTypes = data;
-    _baithakTypes = _baithakTypes!
-        .where((element) => element.showAnnualBaithakkey!.contains('1'))
-        .toList();
+    _baithakTypes = _baithakTypes!.where((element) => element.showAnnualBaithakkey!.contains('1')).toList();
     print("_baithakTypes :-- $_baithakTypes");
     setState(() {});
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedMahaanagarDropdown() async {
-    var data = await Statics.getGeoUnitsByLevelAndParentForVasti(
-        Statics.levels['MahaanagarLevelID'].toString(), '', '', '');
+    var data = await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['MahaanagarLevelID'].toString(), '', '', '');
     setState(() {
       _linkedMahaanagar = data;
     });
     return data;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(
-      String vibhaagIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(String vibhaagIDStr) async {
     _linkedNagarValue = null;
-    var data = await Statics.getGeoUnitsByLevelAndParentForVasti(
-        Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
+    var data = await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
     setState(() {
       _linkedBhaag = data;
     });
     return data;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(
-      String mahaanagarIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
     _linkedBhaagValue = null;
-    var data = await Statics.getGeoUnitsByLevelAndParentForVasti(
-        Statics.levels['VibhaagLevelID'].toString(),
-        mahaanagarIDStr,
-        (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'),
-        '');
+    var data = await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '');
     setState(() {
       _linkedVibhaag = data;
     });
     return data;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(
-      String? bhaagIDStr, String? shaharIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
     _linkedNagarValue = null;
     _linkedNagar = null;
     if (shaharIDStr != null) {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParentForVasti(
-          Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
+      var ngDD = await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
       setState(() {
         _linkedNagar = (ngDD.length > 0 ? ngDD : null);
       });
       return ngDD;
     } else {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParentForVasti(
-          Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
+      var ngDD = await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
       setState(() {
         _linkedNagar = (ngDD.length > 0 ? ngDD : null);
       });
@@ -455,11 +375,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
     }
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(
-      String nagarIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(String nagarIDStr) async {
     _linkedvastiValue = null;
-    var vsDD = await Statics.getGeoUnitsByLevelAndParentForVasti(
-        Statics.levels['VastiLevelID'].toString(), nagarIDStr, 'Nagar', '');
+    var vsDD = await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['VastiLevelID'].toString(), nagarIDStr, 'Nagar', '');
     setState(() {
       _linkedvasti = (vsDD.length > 0 ? vsDD : null);
     });
@@ -486,8 +404,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
         selctedLevel = "Vasti";
       });
       searchVastiData(Statics.userDetails['LinkedVastiID'].toString());
-      print(
-          "Statics.userDetails['LinkedVastiID']  ${Statics.userDetails['LinkedVastiID']}");
+      print("Statics.userDetails['LinkedVastiID']  ${Statics.userDetails['LinkedVastiID']}");
       print("DOOOOOOOOOOOOOOOOOOOOONE");
     } else {
       print("NOOOOOOOOOOOOOOOOOOOTTTTTTTTTT   DOOOOOOOOOOOOOOOOOOOOONE");
@@ -496,28 +413,24 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
 
   void _handleTabSelection() {
     if (_tabController.index == 1 && !_isStep1Completed!) {
-      showPopupForNaviagtetoOtherPage(context, Statics.getLabel('basicInfo'),
-          Statics.getLabel('OtherInfo'));
+      showPopupForNaviagtetoOtherPage(context, Statics.getLabel('basicInfo'), Statics.getLabel('OtherInfo'));
       _tabController.index = 0;
     } else if (_tabController.index == 2) {
       if (!_isStep1Completed!) {
-        showPopupForNaviagtetoOtherPage(context, Statics.getLabel('basicInfo'),
-            Statics.getLabel('detailedInfo'));
+        showPopupForNaviagtetoOtherPage(context, Statics.getLabel('basicInfo'), Statics.getLabel('detailedInfo'));
         _tabController.index = 0;
       } else if (!_isStep2Completed!) {
-        showPopupForNaviagtetoOtherPage(context, Statics.getLabel('OtherInfo'),
-            Statics.getLabel('detailedInfo'));
+        showPopupForNaviagtetoOtherPage(context, Statics.getLabel('OtherInfo'), Statics.getLabel('detailedInfo'));
         _tabController.index = 1;
       }
     }
   }
 
   VastisarvekshanDropDownDataModel? vastisarvekshanDropDownDataModel;
+
   Future<void> fetchVastiSurveyDropdownData() async {
     try {
-      vastisarvekshanDropDownDataModel =
-          await Statics.getVastiSurveyDropDownList(
-              Statics.userDetails["userID"]);
+      vastisarvekshanDropDownDataModel = await Statics.getVastiSurveyDropDownList(Statics.userDetails["userID"]);
       setState(() {});
     } catch (e) {
       print('Error fetching notification data: $e');
@@ -581,6 +494,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   String? selectedFileName; // To display the file name
   int? imageAdd = 0;
   ValueNotifier<bool> loadingNotifier = ValueNotifier(false);
+
   Widget filePickerField({
     required BuildContext context,
     required String question,
@@ -650,8 +564,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
             loadingNotifier?.value = true;
             try {
               FilePickerResult? result = await FilePicker.platform.pickFiles(
-                type:
-                    allowedExtensions == null ? FileType.any : FileType.custom,
+                type: allowedExtensions == null ? FileType.any : FileType.custom,
                 allowedExtensions: allowedExtensions,
               );
               if (result != null && result.files.isNotEmpty) {
@@ -659,17 +572,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                 filePathOg = result.files.single.path!;
                 String fileName = result.files.single.name;
                 File file = File(filePath);
-                img.Image? originalImage =
-                    img.decodeImage(file.readAsBytesSync());
+                img.Image? originalImage = img.decodeImage(file.readAsBytesSync());
                 if (originalImage != null) {
-                  img.Image compressedImage =
-                      img.copyResize(originalImage, width: originalImage.width);
+                  img.Image compressedImage = img.copyResize(originalImage, width: originalImage.width);
                   while (compressedImage.length > 2 * 1024 * 1024) {
-                    compressedImage = img.copyResize(compressedImage,
-                        width: (compressedImage.width * 0.9).toInt());
+                    compressedImage = img.copyResize(compressedImage, width: (compressedImage.width * 0.9).toInt());
                   }
-                  List<int> compressedBytes =
-                      img.encodeJpg(compressedImage, quality: 85);
+                  List<int> compressedBytes = img.encodeJpg(compressedImage, quality: 85);
                   String base64String = base64Encode(compressedBytes);
                   String base64File = "data:image/jpg;base64,$base64String";
                   onFileSelected(base64File, fileName);
@@ -704,8 +613,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               ? SizedBox(
                                   width: 20,
                                   height: 20,
-                                  child:
-                                      CircularProgressIndicator(strokeWidth: 2),
+                                  child: CircularProgressIndicator(strokeWidth: 2),
                                 )
                               : Icon(Icons.attach_file, color: Colors.blue);
                         },
@@ -760,8 +668,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
             controller: controller,
             keyboardType: keyboardType,
             decoration: InputDecoration(
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
               contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               filled: true,
               fillColor: Colors.white,
@@ -776,12 +683,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
               }
             },
             maxLength: maxInput,
-            buildCounter: (context,
-                    {int? currentLength, int? maxLength, bool? isFocused}) =>
-                null,
-            inputFormatters: keyboardType == TextInputType.number
-                ? [FilteringTextInputFormatter.digitsOnly]
-                : null,
+            buildCounter: (context, {int? currentLength, int? maxLength, bool? isFocused}) => null,
+            inputFormatters: keyboardType == TextInputType.number ? [FilteringTextInputFormatter.digitsOnly] : null,
           ),
         ),
         SizedBox(height: 10),
@@ -888,8 +791,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
           text: TextSpan(
             children: [
               TextSpan(
-                text:
-                    "${questionNumber != null ? "$questionNumber. " : ""}$question",
+                text: "${questionNumber != null ? "$questionNumber. " : ""}$question",
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
@@ -982,21 +884,18 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       Color? borderColor,
       Color? iconColor,
       bool? viewName}) {
-    List<Masterdata> masterDataList =
-        vastisarvekshanDropDownDataModel!.masterdata!;
+    List<Masterdata> masterDataList = vastisarvekshanDropDownDataModel!.masterdata!;
     Masterdata? selectedValue;
     Masterdata? selectedDependentValue;
     Masterdata? selectedThirdLevelValue;
 
-    List<Masterdata> filteredItems =
-        masterDataList.where((e) => e.typename == filterTypeName).toList();
+    List<Masterdata> filteredItems = masterDataList.where((e) => e.typename == filterTypeName).toList();
     List<Masterdata> dependentItems = [];
     List<Masterdata> thirdLevelItems = [];
 
     void updateDependentItems(int parentId, Function setState) {
       setState(() {
-        dependentItems =
-            masterDataList.where((e) => e.parentid == parentId).toList();
+        dependentItems = masterDataList.where((e) => e.parentid == parentId).toList();
         selectedDependentValue = null;
         thirdLevelItems = [];
         selectedThirdLevelValue = null;
@@ -1005,8 +904,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
 
     void updateThirdLevelItems(int parentId, Function setState) {
       setState(() {
-        thirdLevelItems =
-            masterDataList.where((e) => e.parentid == parentId).toList();
+        thirdLevelItems = masterDataList.where((e) => e.parentid == parentId).toList();
         selectedThirdLevelValue = null;
       });
     }
@@ -1025,10 +923,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     if (newValue != null) {
                       setState(() {
                         selectedValue = newValue;
-                        print(
-                            "Selected ID: ${selectedValue!.id}, Selected Name: ${selectedValue!.value}");
-                        onValueSelected(
-                            selectedValue!.id!, selectedValue!.value!);
+                        print("Selected ID: ${selectedValue!.id}, Selected Name: ${selectedValue!.value}");
+                        onValueSelected(selectedValue!.id!, selectedValue!.value!);
                         updateDependentItems(selectedValue!.id!, setState);
                       });
                     }
@@ -1048,14 +944,11 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     if (newValue != null) {
                       setState(() {
                         selectedDependentValue = newValue;
-                        print(
-                            "Selected Dependent ID: ${selectedDependentValue!.id}, Name: ${selectedDependentValue!.value}");
+                        print("Selected Dependent ID: ${selectedDependentValue!.id}, Name: ${selectedDependentValue!.value}");
                         if (onDependentValueSelected != null) {
-                          onDependentValueSelected(selectedDependentValue!.id!,
-                              selectedDependentValue!.value!);
+                          onDependentValueSelected(selectedDependentValue!.id!, selectedDependentValue!.value!);
                         }
-                        updateThirdLevelItems(
-                            selectedDependentValue!.id!, setState);
+                        updateThirdLevelItems(selectedDependentValue!.id!, setState);
                       });
                     }
                   },
@@ -1074,11 +967,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   if (newValue != null) {
                     setState(() {
                       selectedThirdLevelValue = newValue;
-                      print(
-                          "Selected Third Level ID: ${selectedThirdLevelValue!.id}, Name: ${selectedThirdLevelValue!.value}");
+                      print("Selected Third Level ID: ${selectedThirdLevelValue!.id}, Name: ${selectedThirdLevelValue!.value}");
                       if (onThirdLevelValueSelected != null) {
-                        onThirdLevelValueSelected(selectedThirdLevelValue!.id!,
-                            selectedThirdLevelValue!.value!);
+                        onThirdLevelValueSelected(selectedThirdLevelValue!.id!, selectedThirdLevelValue!.value!);
                       }
                     });
                   }
@@ -1115,12 +1006,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
           ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<T>(
-          iconEnabledColor:
-              iconColor ?? Colors.white, // Customizable icon color
+          iconEnabledColor: iconColor ?? Colors.white,
+          // Customizable icon color
           hint: Text(
-            value != null && viewName == true
-                ? value.value ?? "No Value"
-                : hintText,
+            value != null && viewName == true ? value.value ?? "No Value" : hintText,
             style: TextStyle(color: textColor ?? Colors.white),
           ),
           value: value,
@@ -1130,9 +1019,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     value: item,
                     child: Text(
                       item.value ?? "No Value",
-                      style: TextStyle(
-                          color: textColor ??
-                              Colors.black), // Dropdown items color
+                      style: TextStyle(color: textColor ?? Colors.black), // Dropdown items color
                     ),
                   ))
               .toList(),
@@ -1155,16 +1042,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
     Masterdata? selectedValue,
     Function(Masterdata?)? onSelectionChanged,
   }) {
-    List<Masterdata> filteredList = dataModel.masterdata!
-        .where((item) => item.typename == filterTypeName)
-        .toList();
+    List<Masterdata> filteredList = dataModel.masterdata!.where((item) => item.typename == filterTypeName).toList();
 
     Masterdata? selectedItem = selectedValue;
     if (selectedItem == null && editId != null) {
       try {
         selectedItem = filteredList.firstWhere((item) => item.id == editId);
-        onItemSelected(
-            selectedItem.id, selectedItem.value, selectedItem.isOther);
+        onItemSelected(selectedItem.id, selectedItem.value, selectedItem.isOther);
         if (onSelectionChanged != null) {
           onSelectionChanged(selectedItem);
         }
@@ -1199,8 +1083,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
               items: filteredList.map((Masterdata item) {
                 return DropdownMenuItem<Masterdata>(
                   value: item,
-                  child: Text(item.value ?? "",
-                      style: TextStyle(color: Colors.black)),
+                  child: Text(item.value ?? "", style: TextStyle(color: Colors.black)),
                 );
               }).toList(),
               onChanged: (Masterdata? newValue) {
@@ -1231,20 +1114,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
     Masterdata? selectedValue,
     Function(Masterdata?)? onSelectionChanged,
   }) {
-    List<Masterdata> filteredList = dataModel.masterdata!
-        .where((item) =>
-            item.typename == filterTypeName &&
-            !excludedItemIds.contains(item.id))
-        .toList();
+    List<Masterdata> filteredList = dataModel.masterdata!.where((item) => item.typename == filterTypeName && !excludedItemIds.contains(item.id)).toList();
 
     Masterdata? selectedItem = selectedValue;
 
     if (selectedItem == null && editId != null) {
       try {
-        selectedItem = dataModel.masterdata!.firstWhere(
-            (item) => item.id == editId && item.typename == filterTypeName);
-        onItemSelected(
-            selectedItem.id, selectedItem.value, selectedItem.isOther);
+        selectedItem = dataModel.masterdata!.firstWhere((item) => item.id == editId && item.typename == filterTypeName);
+        onItemSelected(selectedItem.id, selectedItem.value, selectedItem.isOther);
         if (onSelectionChanged != null) {
           onSelectionChanged(selectedItem);
         }
@@ -1253,8 +1130,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       }
     }
 
-    if (selectedItem != null &&
-        !filteredList.any((item) => item.id == selectedItem!.id)) {
+    if (selectedItem != null && !filteredList.any((item) => item.id == selectedItem!.id)) {
       filteredList.add(selectedItem!);
     }
 
@@ -1286,8 +1162,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
               items: filteredList.map((Masterdata item) {
                 return DropdownMenuItem<Masterdata>(
                   value: item,
-                  child: Text(item.value ?? "",
-                      style: TextStyle(color: Colors.black)),
+                  child: Text(item.value ?? "", style: TextStyle(color: Colors.black)),
                 );
               }).toList(),
               onChanged: (Masterdata? newValue) {
@@ -1331,10 +1206,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     backgroundColor: Colors.transparent,
                     headerBuilder: (BuildContext context, bool isExpanded) {
                       return ListTile(
-                        title: Text("${Statics.getLabel('selectStar')}",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold)),
+                        title: Text("${Statics.getLabel('selectStar')}", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
                         trailing: IconButton(
                             onPressed: () {
                               resetData();
@@ -1351,13 +1223,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         children: [
                           if (_linkedMahaanagar != null)
                             DropdownButtonFormField(
-                              decoration: InputDecoration(
-                                  labelText:
-                                      "${Statics.getLabel('MahaanagarKaaryakartaaCount')}"),
+                              decoration: InputDecoration(labelText: "${Statics.getLabel('MahaanagarKaaryakartaaCount')}"),
                               isExpanded: true,
-                              value: _linkedMahaanagarValue == ""
-                                  ? null
-                                  : _linkedMahaanagarValue,
+                              value: _linkedMahaanagarValue == "" ? null : _linkedMahaanagarValue,
                               items: _linkedMahaanagar!
                                   .map((bg) => DropdownMenuItem(
                                         value: bg.geoUnitID.toString(),
@@ -1365,9 +1233,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                       ))
                                   .toList(),
                               onChanged: (value) {
-                                final selectedItem = _linkedMahaanagar!
-                                    .firstWhere((bg) =>
-                                        bg.geoUnitID.toString() == value);
+                                final selectedItem = _linkedMahaanagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                                 setState(() {
                                   _linkedMahaanagarValue = value;
                                   _linkedVibhaagValue = null;
@@ -1380,8 +1246,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   selctedLevel = 'Mahanagar';
                                 });
                                 print("Selected Id: $value");
-                                print(
-                                    "Selected Level Name: ${selectedItem.name}");
+                                print("Selected Level Name: ${selectedItem.name}");
                               },
                             ),
                           SizedBox(
@@ -1389,20 +1254,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           ),
                           if (_linkedVibhaag != null)
                             DropdownButtonFormField(
-                              decoration: InputDecoration(
-                                  labelText: "${Statics.getLabel('Vibhaag')}"),
+                              decoration: InputDecoration(labelText: "${Statics.getLabel('Vibhaag')}"),
                               isExpanded: true,
-                              value: _linkedVibhaagValue == ""
-                                  ? null
-                                  : _linkedVibhaagValue,
-                              items: _linkedVibhaag!
-                                  .map((bg) => DropdownMenuItem(
-                                      value: bg.geoUnitID.toString(),
-                                      child: Text(bg.name!)))
-                                  .toList(),
+                              value: _linkedVibhaagValue == "" ? null : _linkedVibhaagValue,
+                              items: _linkedVibhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                               onChanged: (value) {
-                                final selectedItem = _linkedVibhaag!.firstWhere(
-                                    (bg) => bg.geoUnitID.toString() == value);
+                                final selectedItem = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                                 print(value);
                                 setState(() {
                                   _linkedVibhaagValue = value;
@@ -1415,8 +1272,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   selctedLevel = 'Vibhaag';
                                 });
                                 print("Selected Id: $value");
-                                print(
-                                    "Selected Level Name: ${selectedItem.name}");
+                                print("Selected Level Name: ${selectedItem.name}");
                               },
                             ),
                           SizedBox(
@@ -1424,20 +1280,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           ),
                           if (_linkedBhaag != null)
                             DropdownButtonFormField(
-                              decoration: InputDecoration(
-                                  labelText: "${Statics.getLabel('Bhaag')}"),
+                              decoration: InputDecoration(labelText: "${Statics.getLabel('Bhaag')}"),
                               isExpanded: true,
-                              value: _linkedBhaagValue == ""
-                                  ? null
-                                  : _linkedBhaagValue,
-                              items: _linkedBhaag!
-                                  .map((bg) => DropdownMenuItem(
-                                      value: bg.geoUnitID.toString(),
-                                      child: Text(bg.name!)))
-                                  .toList(),
+                              value: _linkedBhaagValue == "" ? null : _linkedBhaagValue,
+                              items: _linkedBhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                               onChanged: (value) {
-                                final selectedItem = _linkedBhaag!.firstWhere(
-                                    (bg) => bg.geoUnitID.toString() == value);
+                                final selectedItem = _linkedBhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                                 setState(() {
                                   _linkedBhaagValue = value;
                                   populatelinkedNagarDropdown(value, null);
@@ -1446,8 +1294,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   selctedLevel = 'Bhaag';
                                 });
                                 print("Selected Id: $value");
-                                print(
-                                    "Selected Level Name: ${selectedItem.name}");
+                                print("Selected Level Name: ${selectedItem.name}");
                               },
                             ),
                           SizedBox(
@@ -1455,20 +1302,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           ),
                           if (_linkedNagar != null && _linkedNagar!.length > 0)
                             DropdownButtonFormField(
-                              decoration: InputDecoration(
-                                  labelText: "${Statics.getLabel('Nagar')}"),
+                              decoration: InputDecoration(labelText: "${Statics.getLabel('Nagar')}"),
                               isExpanded: true,
-                              value: _linkedNagarValue == ""
-                                  ? null
-                                  : _linkedNagarValue,
-                              items: _linkedNagar!
-                                  .map((bg) => DropdownMenuItem(
-                                      value: bg.geoUnitID.toString(),
-                                      child: Text(bg.name!)))
-                                  .toList(),
+                              value: _linkedNagarValue == "" ? null : _linkedNagarValue,
+                              items: _linkedNagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                               onChanged: (value) {
-                                final selectedItem = _linkedNagar!.firstWhere(
-                                    (bg) => bg.geoUnitID.toString() == value);
+                                final selectedItem = _linkedNagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                                 setState(() {
                                   _linkedNagarValue = value;
                                   populatelinkedVastiDropdown(value!);
@@ -1477,8 +1316,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   selctedLevel = 'Nagar';
                                 });
                                 print("Selected Id: $value");
-                                print(
-                                    "Selected Level Name: ${selectedItem.name}");
+                                print("Selected Level Name: ${selectedItem.name}");
                               },
                             ),
                           if (_linkedNagar != null && _linkedNagar!.length > 0)
@@ -1487,20 +1325,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             ),
                           if (_linkedvasti != null && _linkedvasti!.length > 0)
                             DropdownButtonFormField(
-                              decoration: InputDecoration(
-                                  labelText: "${Statics.getLabel('Vasti')}"),
+                              decoration: InputDecoration(labelText: "${Statics.getLabel('Vasti')}"),
                               isExpanded: true,
-                              value: _linkedvastiValue == ""
-                                  ? null
-                                  : _linkedvastiValue,
-                              items: _linkedvasti!
-                                  .map((bg) => DropdownMenuItem(
-                                      value: bg.geoUnitID.toString(),
-                                      child: Text(bg.name!)))
-                                  .toList(),
+                              value: _linkedvastiValue == "" ? null : _linkedvastiValue,
+                              items: _linkedvasti!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                               onChanged: (value) {
-                                final selectedItem = _linkedvasti!.firstWhere(
-                                    (bg) => bg.geoUnitID.toString() == value);
+                                final selectedItem = _linkedvasti!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                                 setState(() {
                                   _linkedvastiValue = value;
                                   selctedLevelId = value;
@@ -1508,8 +1338,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   selctedLevel = 'Vasti';
                                 });
                                 print("Selected Id: $value");
-                                print(
-                                    "Selected Level Name: ${selectedItem.name}");
+                                print("Selected Level Name: ${selectedItem.name}");
                               },
                             ),
                           if (_linkedvasti != null && _linkedvasti!.length > 0)
@@ -1520,27 +1349,20 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             Align(
                               alignment: Alignment.center,
                               child: ElevatedButton(
-                                style: ButtonStyle(
-                                    backgroundColor: MaterialStatePropertyAll(
-                                        Colors.purpleAccent)),
+                                style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.purpleAccent)),
                                 onPressed: () {
                                   if (selctedLevel == "Vasti") {
                                     setState(() {
                                       isVastiSearch = true;
                                       _isExpanded = false;
                                     });
-                                    print(
-                                        "selctedLevel $selctedLevel -- selctedLevelId $selctedLevelId -- selctedLevelName $selctedLevelName");
+                                    print("selctedLevel $selctedLevel -- selctedLevelId $selctedLevelId -- selctedLevelName $selctedLevelName");
                                     searchVastiData(selctedLevelId);
                                   } else {
-                                    Statics.showToast(Statics.getLabel(
-                                        'vastiGramValidation'));
+                                    Statics.showToast(Statics.getLabel('vastiGramValidation'));
                                   }
                                 },
-                                child: Text("${Statics.getLabel('Filters')}",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold)),
+                                child: Text("${Statics.getLabel('Filters')}", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                               ),
                             )
                         ],
@@ -1574,15 +1396,11 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                 ),
               ],
             ),
-          if (selctedLevel == "Vasti" &&
-              selctedLevelName != "" &&
-              isVastiSearch == true)
+          if (selctedLevel == "Vasti" && selctedLevelName != "" && isVastiSearch == true)
             SizedBox(
               height: 20,
             ),
-          if (selctedLevel == "Vasti" &&
-              selctedLevelName != "" &&
-              isVastiSearch == true)
+          if (selctedLevel == "Vasti" && selctedLevelName != "" && isVastiSearch == true)
             Container(
                 height: 40,
                 width: double.infinity,
@@ -1596,17 +1414,11 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   children: [
                     Text(
                       "${Statics.getLabel('VastiKaaryakartaaCount')} ->  ",
-                      style: TextStyle(
-                          color: Colors.purpleAccent,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16),
+                      style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                     Text(
                       " $selctedLevelName",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 17),
+                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17),
                     ),
                   ],
                 )),
@@ -1620,23 +1432,16 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                 padding: EdgeInsets.symmetric(vertical: 10),
                 child: Column(
                   children: [
-                    dynamicProgressBar(
-                        context: context,
-                        value: double.parse(step1completepercentage.toString()),
-                        detailListItems: step1pendingpoints!.split(',')),
+                    dynamicProgressBar(context: context, value: double.parse(step1completepercentage.toString()), detailListItems: step1pendingpoints!.split(',')),
                     SizedBox(
                       height: 10,
                     ),
                     InkWell(
                       onTap: () {
                         // Filter out empty or whitespace-only strings
-                        final filteredDetails = step1pendingpoints!
-                            .split(',')
-                            .where((item) => item.trim().isNotEmpty)
-                            .toList();
+                        final filteredDetails = step1pendingpoints!.split(',').where((item) => item.trim().isNotEmpty).toList();
 
-                        print(
-                            "Filtered step1pendingpoints!.split(','): $filteredDetails");
+                        print("Filtered step1pendingpoints!.split(','): $filteredDetails");
 
                         if (filteredDetails.isEmpty) {
                           Statics.showToast(Statics.getLabel('allInfoSubmit'));
@@ -1647,8 +1452,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           context: context,
                           builder: (ctx) {
                             return Dialog(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                               backgroundColor: Colors.white,
                               child: Padding(
                                 padding: const EdgeInsets.all(20),
@@ -1657,11 +1461,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   children: [
                                     // Icon and Title
                                     Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Icon(Icons.warning_amber_rounded,
-                                            color: Colors.red, size: 30),
+                                        Icon(Icons.warning_amber_rounded, color: Colors.red, size: 30),
                                         SizedBox(width: 8),
                                         Text(
                                           Statics.getLabel('remainingQuestion'),
@@ -1701,16 +1503,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                           backgroundColor: Colors.red,
                                           foregroundColor: Colors.white,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 12),
+                                          padding: EdgeInsets.symmetric(vertical: 12),
                                         ),
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(),
-                                        child:
-                                            Text(Statics.getLabel('bandKara')),
+                                        onPressed: () => Navigator.of(context).pop(),
+                                        child: Text(Statics.getLabel('bandKara')),
                                       ),
                                     ),
                                   ],
@@ -1754,15 +1552,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("• ",
-                        style: TextStyle(fontSize: 18, color: Colors.grey)),
+                    Text("• ", style: TextStyle(fontSize: 18, color: Colors.grey)),
                     Wrap(
                       alignment: WrapAlignment.center,
                       spacing: 10,
                       runSpacing: 10,
                       children: [
-                        Icon(Icons.remove_red_eye,
-                            color: Colors.green, size: 15),
+                        Icon(Icons.remove_red_eye, color: Colors.green, size: 15),
                         Icon(Icons.edit, color: Colors.blue, size: 15),
                         Icon(Icons.delete, color: Colors.red, size: 15),
                       ],
@@ -1783,8 +1579,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("• ",
-                        style: TextStyle(fontSize: 18, color: Colors.grey)),
+                    Text("• ", style: TextStyle(fontSize: 18, color: Colors.grey)),
                     Expanded(
                       child: Text(
                         "${Statics.getLabel('wholeNoValidation')}",
@@ -1809,37 +1604,22 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
               children: [
                 Container(
                   padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(15)),
+                  decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.circular(15)),
                   child: Column(
                     children: [
-                      Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text("${Statics.getLabel('vastiPramukhName')}",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                  fontSize: 15))),
+                      Align(alignment: Alignment.centerLeft, child: Text("${Statics.getLabel('vastiPramukhName')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 15))),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           "- ${sanghaKaryaVastiPramukhNameController.text}",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: sanghaKaryaVastiPramukhNameController.text ==
-                                    "नियुक्त नाही"
-                                ? Colors.red
-                                : Colors.purple,
+                            color: sanghaKaryaVastiPramukhNameController.text == "नियुक्त नाही" ? Colors.red : Colors.purple,
                           ),
                         ),
                       ),
                       SizedBox(height: 10),
-                      textControllerField2(
-                          name: "${Statics.getLabel('Population')}",
-                          controller: loksankhyaController,
-                          keyboardType: TextInputType.number,
-                          imp: "*"),
+                      textControllerField2(name: "${Statics.getLabel('Population')}", controller: loksankhyaController, keyboardType: TextInputType.number, imp: "*"),
                       // Column(
                       //   children: [
                       //     Row(
@@ -1895,14 +1675,11 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                 ),
                 Container(
                   padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(15)),
+                  decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.circular(15)),
                   child: Column(
                     children: [
                       yesNoRadioButton(
-                          question:
-                              "${Statics.getLabel('purvuKadhitarishakha')}",
+                          question: "${Statics.getLabel('purvuKadhitarishakha')}",
                           selectedOption: beforsanghaonnowisoff ?? 2,
                           onChanged: (value) {
                             if (isVastiSearch) {
@@ -1921,14 +1698,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           children: [
                             Text(
                               "${Statics.getLabel('tapshil')}",
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.w500),
+                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
                             ),
                             InkWell(
                               onTap: () {
                                 if (isVastiSearch) {
-                                  showKuthalaVarshiPopup(context,
-                                      onDataChanged: () => setState(() {}));
+                                  showKuthalaVarshiPopup(context, onDataChanged: () => setState(() {}));
                                 } else {
                                   showPopupForVastiValidation(
                                     context,
@@ -1938,22 +1713,16 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               child: Container(
                                 padding: EdgeInsets.symmetric(vertical: 5),
                                 width: 100,
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: Colors.purpleAccent.shade100),
-                                    color: Colors.purpleAccent.withOpacity(0.7),
-                                    borderRadius: BorderRadius.circular(15)),
+                                decoration:
+                                    BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                                 child: Center(
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Icon(Icons.add,
-                                          color: Colors.white, size: 15),
+                                      Icon(Icons.add, color: Colors.white, size: 15),
                                       Text(
                                         "${Statics.getLabel('AddButton')}",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
+                                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),
@@ -1969,8 +1738,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.black54),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(15)),
+                            borderRadius: const BorderRadius.all(Radius.circular(15)),
                           ),
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
@@ -1978,11 +1746,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               width: MediaQuery.of(context).size.width * 1,
                               child: DataTable(
                                 showCheckboxColumn: false,
-                                headingRowColor: MaterialStatePropertyAll(
-                                    Colors.purple.shade50),
-                                headingTextStyle: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87),
+                                headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+                                headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                                 columns: [
                                   DataColumn(
                                       label: Center(
@@ -2000,45 +1765,30 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     "${Statics.getLabel('SankalpCompletionYear')}",
                                   ))),
                                 ],
-                                rows: (kuthalaVarshiDataList != null &&
-                                        kuthalaVarshiDataList!.isNotEmpty)
-                                    ? kuthalaVarshiDataList!
-                                        .asMap()
-                                        .entries
-                                        .where((entry) =>
-                                            entry.value.isactive == 1)
-                                        .map((entry) {
+                                rows: (kuthalaVarshiDataList != null && kuthalaVarshiDataList!.isNotEmpty)
+                                    ? kuthalaVarshiDataList!.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                                         int index = entry.key;
                                         var data = entry.value;
-                                        bool isSelected =
-                                            selectedKuthalaVarshiIdIndex ==
-                                                index;
+                                        bool isSelected = selectedKuthalaVarshiIdIndex == index;
                                         return DataRow(
                                           selected: isSelected,
-                                          color: MaterialStateProperty
-                                              .resolveWith<Color?>(
+                                          color: MaterialStateProperty.resolveWith<Color?>(
                                             (Set<MaterialState> states) {
-                                              if (isSelected)
-                                                return Colors.yellow.shade100;
+                                              if (isSelected) return Colors.yellow.shade100;
                                               return null;
                                             },
                                           ),
                                           onSelectChanged: (bool? selected) {
                                             if (selected != null && selected) {
                                               setState(() {
-                                                selectedKuthalaVarshiIdIndex =
-                                                    index;
-                                                print(
-                                                    " selectedKuthalaVarshiIdIndex Data :- $data");
+                                                selectedKuthalaVarshiIdIndex = index;
+                                                print(" selectedKuthalaVarshiIdIndex Data :- $data");
                                               });
                                             }
                                           },
                                           cells: [
-                                            DataCell(Text(
-                                                data.selectedDropdownValueName ??
-                                                    '')),
-                                            DataCell(
-                                                Text(data.prakarName ?? '')),
+                                            DataCell(Text(data.selectedDropdownValueName ?? '')),
+                                            DataCell(Text(data.prakarName ?? '')),
                                             DataCell(Text(
                                               data.isShaakhaa == 1
                                                   ? data.shaakhaa ?? ''
@@ -2066,15 +1816,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               InkWell(
                                 onTap: () {
                                   if (selectedKuthalaVarshiIdIndex != null) {
-                                    var selectedData = kuthalaVarshiDataList![
-                                        selectedKuthalaVarshiIdIndex!];
+                                    var selectedData = kuthalaVarshiDataList![selectedKuthalaVarshiIdIndex!];
                                     showDialog(
                                       context: context,
                                       builder: (context) {
                                         return AlertDialog(
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
+                                            borderRadius: BorderRadius.circular(20),
                                           ),
                                           backgroundColor: Colors.white,
                                           title: Center(
@@ -2089,54 +1837,33 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                           ),
                                           content: Column(
                                             mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Divider(
-                                                  thickness: 1,
-                                                  color: Colors
-                                                      .purpleAccent.shade100),
+                                              Divider(thickness: 1, color: Colors.purpleAccent.shade100),
                                               SizedBox(height: 12),
-                                              _buildInfoRow(
-                                                  "${Statics.getLabel('Vayogat')}",
-                                                  selectedData
-                                                      .selectedDropdownValueName),
+                                              _buildInfoRow("${Statics.getLabel('Vayogat')}", selectedData.selectedDropdownValueName),
                                               SizedBox(height: 12),
-                                              _buildInfoRow(
-                                                  "${Statics.getLabel('shaakhaPrakar')}",
-                                                  selectedData.prakarName),
+                                              _buildInfoRow("${Statics.getLabel('shaakhaPrakar')}", selectedData.prakarName),
                                               SizedBox(height: 12),
                                               _buildInfoRow(
                                                   "${Statics.getLabel('SankalpCompletionYear')}",
                                                   selectedData.isShaakhaa == 1
                                                       ? selectedData.shaakhaa
-                                                      : selectedData
-                                                                  .isShaakhaa ==
-                                                              2
-                                                          ? selectedData
-                                                              .saptahik
+                                                      : selectedData.isShaakhaa == 2
+                                                          ? selectedData.saptahik
                                                           : ""),
                                             ],
                                           ),
-                                          actionsAlignment:
-                                              MainAxisAlignment.center,
+                                          actionsAlignment: MainAxisAlignment.center,
                                           actions: [
                                             ElevatedButton(
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                              child: Text(
-                                                  "${Statics.getLabel('bandKara')}",
-                                                  style: TextStyle(
-                                                      color: Colors.white)),
+                                              onPressed: () => Navigator.pop(context),
+                                              child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                               style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    Colors.purpleAccent,
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 24,
-                                                    vertical: 12),
+                                                backgroundColor: Colors.purpleAccent,
+                                                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
+                                                  borderRadius: BorderRadius.circular(12),
                                                 ),
                                               ),
                                             ),
@@ -2146,20 +1873,16 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     );
                                   }
                                 },
-                                child: Icon(Icons.remove_red_eye,
-                                    color: Colors.green, size: 20),
+                                child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                               ),
                               SizedBox(
                                 width: 20,
                               ),
                               InkWell(
                                 onTap: () {
-                                  showKuthalaVarshiPopup(context,
-                                      onDataChanged: () => setState(() {}),
-                                      editIndex: selectedKuthalaVarshiIdIndex);
+                                  showKuthalaVarshiPopup(context, onDataChanged: () => setState(() {}), editIndex: selectedKuthalaVarshiIdIndex);
                                 },
-                                child: Icon(Icons.edit,
-                                    color: Colors.blue, size: 20),
+                                child: Icon(Icons.edit, color: Colors.blue, size: 20),
                               ),
                               SizedBox(
                                 width: 20,
@@ -2184,8 +1907,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         ),
                                       ),
                                       content: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10.0),
+                                        padding: const EdgeInsets.symmetric(vertical: 10.0),
                                         child: Text(
                                           "${Statics.getLabel('deleteconfirmText')}",
                                           textAlign: TextAlign.center,
@@ -2195,63 +1917,51 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                           ),
                                         ),
                                       ),
-                                      actionsAlignment:
-                                          MainAxisAlignment.spaceEvenly,
+                                      actionsAlignment: MainAxisAlignment.spaceEvenly,
                                       actions: [
                                         ElevatedButton(
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                Colors.grey.shade300,
+                                            backgroundColor: Colors.grey.shade300,
                                             shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
+                                              borderRadius: BorderRadius.circular(12),
                                             ),
                                           ),
-                                          onPressed: () =>
-                                              Navigator.pop(context, false),
+                                          onPressed: () => Navigator.pop(context, false),
                                           child: Text(
                                             "${Statics.getLabel('ConfirmationNo')}",
-                                            style:
-                                                TextStyle(color: Colors.black),
+                                            style: TextStyle(color: Colors.black),
                                           ),
                                         ),
                                         ElevatedButton(
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.redAccent,
                                             shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
+                                              borderRadius: BorderRadius.circular(12),
                                             ),
                                           ),
-                                          onPressed: () =>
-                                              Navigator.pop(context, true),
+                                          onPressed: () => Navigator.pop(context, true),
                                           child: Text(
                                             "${Statics.getLabel('ConfirmationYes')}",
-                                            style:
-                                                TextStyle(color: Colors.white),
+                                            style: TextStyle(color: Colors.white),
                                           ),
                                         ),
                                       ],
                                     ),
                                   );
 
-                                  if (shouldDelete == true &&
-                                      selectedKuthalaVarshiIdIndex != null) {
+                                  if (shouldDelete == true && selectedKuthalaVarshiIdIndex != null) {
                                     // setState(() {
                                     //   kuthalaVarshiDataList
                                     //       .removeAt(selectedKuthalaVarshiIdIndex!);
                                     //   selectedKuthalaVarshiIdIndex = null;
                                     // });
                                     setState(() {
-                                      kuthalaVarshiDataList![
-                                              selectedKuthalaVarshiIdIndex!]
-                                          .isactive = 0;
+                                      kuthalaVarshiDataList![selectedKuthalaVarshiIdIndex!].isactive = 0;
                                       selectedKuthalaVarshiIdIndex = null;
                                     });
                                   }
                                 },
-                                child: Icon(Icons.delete,
-                                    color: Colors.red, size: 20),
+                                child: Icon(Icons.delete, color: Colors.red, size: 20),
                               ),
                             ],
                           ),
@@ -2268,11 +1978,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
             "${Statics.getLabel('bhougolikSthiti')}",
             Column(
               children: [
-                textControllerField(
-                    "${Statics.getLabel('vastichaChatahuSima')}",
-                    vastiChatahuSimaController,
-                    context,
-                    height: 100),
+                textControllerField("${Statics.getLabel('vastichaChatahuSima')}", vastiChatahuSimaController, context, height: 100),
                 filePickerField(
                   question: "${Statics.getLabel('vastiGoogleMap')}",
                   selectedFileName: selectedFileName,
@@ -2313,11 +2019,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 5),
                         width: 100,
-                        decoration: BoxDecoration(
-                            border:
-                                Border.all(color: Colors.purpleAccent.shade100),
-                            color: Colors.purpleAccent.withOpacity(0.7),
-                            borderRadius: BorderRadius.circular(15)),
+                        decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                         child: Center(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -2325,9 +2027,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               Icon(Icons.add, color: Colors.white, size: 15),
                               Text(
                                 "${Statics.getLabel('AddButton')}",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
@@ -2350,12 +2050,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       width: MediaQuery.of(context).size.width,
                       child: DataTable(
                         showCheckboxColumn: false,
-                        headingRowColor:
-                            MaterialStatePropertyAll(Colors.purple.shade50),
+                        headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
                         columnSpacing: 30,
                         horizontalMargin: 16,
-                        headingTextStyle: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.black87),
+                        headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                         columns: [
                           DataColumn(
                               label: Text(
@@ -2370,15 +2068,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             "${Statics.getLabel('varamvarita')}",
                           )),
                         ],
-                        rows: jagranShreniEnteredDataList!
-                            .asMap()
-                            .entries
-                            .where((entry) => entry.value.isactive == 1)
-                            .map((entry) {
+                        rows: jagranShreniEnteredDataList!.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                           int index = entry.key;
                           var data = entry.value;
-                          bool isSelected =
-                              selectedJagranShreniStithiRowIndex == index;
+                          bool isSelected = selectedJagranShreniStithiRowIndex == index;
 
                           return DataRow(
                             selected: isSelected,
@@ -2396,8 +2089,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               }
                             },
                             cells: [
-                              DataCell(
-                                  Text(data.selectedDropdownValueName ?? "")),
+                              DataCell(Text(data.selectedDropdownValueName ?? "")),
                               DataCell(
                                 ConstrainedBox(
                                   constraints: BoxConstraints(maxWidth: 200),
@@ -2408,9 +2100,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 ),
                               ),
                               DataCell(
-                                Text(data.selectedDropdownValueName1 == "अन्य"
-                                    ? "${data.selectedDropdownValueName1} - ${data.otherVaranvarita}"
-                                    : data.selectedDropdownValueName1 ?? ""),
+                                Text(data.selectedDropdownValueName1 == "अन्य" ? "${data.selectedDropdownValueName1} - ${data.otherVaranvarita}" : data.selectedDropdownValueName1 ?? ""),
                               ),
                             ],
                           );
@@ -2430,8 +2120,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       InkWell(
                         onTap: () {
                           if (selectedJagranShreniStithiRowIndex != null) {
-                            var selectedData = jagranShreniEnteredDataList![
-                                selectedJagranShreniStithiRowIndex!];
+                            var selectedData = jagranShreniEnteredDataList![selectedJagranShreniStithiRowIndex!];
                             showDialog(
                               context: context,
                               builder: (context) {
@@ -2452,48 +2141,29 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   ),
                                   content: Column(
                                     mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Divider(
-                                          thickness: 1,
-                                          color: Colors.purpleAccent.shade100),
+                                      Divider(thickness: 1, color: Colors.purpleAccent.shade100),
                                       SizedBox(height: 12),
-                                      _buildInfoRow(
-                                          "${Statics.getLabel('Category')}",
-                                          selectedData
-                                              .selectedDropdownValueName),
+                                      _buildInfoRow("${Statics.getLabel('Category')}", selectedData.selectedDropdownValueName),
                                       SizedBox(height: 12),
-                                      _buildInfoRow(
-                                          "${Statics.getLabel('niyamitUpkram')}",
-                                          selectedData
-                                              .niyamitacalanareupakrama),
+                                      _buildInfoRow("${Statics.getLabel('niyamitUpkram')}", selectedData.niyamitacalanareupakrama),
                                       SizedBox(height: 12),
-                                      _buildInfoRow(
-                                          "${Statics.getLabel('varamvarita')}",
-                                          selectedData
-                                              .selectedDropdownValueName1),
+                                      _buildInfoRow("${Statics.getLabel('varamvarita')}", selectedData.selectedDropdownValueName1),
                                       SizedBox(height: 12),
-                                      _buildInfoRow(
-                                          "${Statics.getLabel('anyaVaramvarita')}",
-                                          selectedData.otherVaranvarita),
+                                      _buildInfoRow("${Statics.getLabel('anyaVaramvarita')}", selectedData.otherVaranvarita),
                                     ],
                                   ),
                                   actionsAlignment: MainAxisAlignment.center,
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text(
-                                          "${Statics.getLabel('bandKara')}",
-                                          style:
-                                              TextStyle(color: Colors.white)),
+                                      child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.purpleAccent,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 24, vertical: 12),
+                                        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(12),
                                         ),
                                       ),
                                     ),
@@ -2503,8 +2173,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             );
                           }
                         },
-                        child: Icon(Icons.remove_red_eye,
-                            color: Colors.green, size: 20),
+                        child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                       ),
                       SizedBox(
                         width: 20,
@@ -2514,8 +2183,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           showJagranShreniPopup(context, onDataChanged: () {
                             setState(() {});
                           }, editIndex: selectedJagranShreniStithiRowIndex);
-                          print(
-                              "selectedJagranShreniStithiRowIndex --> $selectedJagranShreniStithiRowIndex");
+                          print("selectedJagranShreniStithiRowIndex --> $selectedJagranShreniStithiRowIndex");
                         },
                         child: Icon(Icons.edit, color: Colors.blue, size: 20),
                       ),
@@ -2542,8 +2210,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 ),
                               ),
                               content: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10.0),
+                                padding: const EdgeInsets.symmetric(vertical: 10.0),
                                 child: Text(
                                   "${Statics.getLabel('deleteconfirmText')}",
                                   textAlign: TextAlign.center,
@@ -2562,8 +2229,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                   ),
-                                  onPressed: () =>
-                                      Navigator.pop(context, false),
+                                  onPressed: () => Navigator.pop(context, false),
                                   child: Text(
                                     "${Statics.getLabel('ConfirmationNo')}",
                                     style: TextStyle(color: Colors.black),
@@ -2586,12 +2252,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             ),
                           );
 
-                          if (shouldDelete == true &&
-                              selectedJagranShreniStithiRowIndex != null) {
+                          if (shouldDelete == true && selectedJagranShreniStithiRowIndex != null) {
                             setState(() {
-                              jagranShreniEnteredDataList![
-                                      selectedJagranShreniStithiRowIndex!]
-                                  .isactive = 0;
+                              jagranShreniEnteredDataList![selectedJagranShreniStithiRowIndex!].isactive = 0;
                               selectedJagranShreniStithiRowIndex = null;
                             });
                           }
@@ -2627,11 +2290,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 5),
                         width: 100,
-                        decoration: BoxDecoration(
-                            border:
-                                Border.all(color: Colors.purpleAccent.shade100),
-                            color: Colors.purpleAccent.withOpacity(0.7),
-                            borderRadius: BorderRadius.circular(15)),
+                        decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                         child: Center(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -2639,9 +2298,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               Icon(Icons.add, color: Colors.white, size: 15),
                               Text(
                                 "${Statics.getLabel('AddButton')}",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
@@ -2667,12 +2324,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       ),
                       child: DataTable(
                         showCheckboxColumn: false,
-                        headingRowColor:
-                            MaterialStatePropertyAll(Colors.purple.shade50),
+                        headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
                         columnSpacing: 30,
                         horizontalMargin: 16,
-                        headingTextStyle: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.black87),
+                        headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                         columns: [
                           DataColumn(
                               label: Text(
@@ -2687,15 +2342,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             "${Statics.getLabel('varamvarita')}",
                           )),
                         ],
-                        rows: enteredDataListGatividhi
-                            .asMap()
-                            .entries
-                            .where((entry) => entry.value.isactive == 1)
-                            .map((entry) {
+                        rows: enteredDataListGatividhi.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                           int index = entry.key;
                           var data = entry.value;
-                          bool isSelected =
-                              selectedGatividhiKaryaStithiRowIndex == index;
+                          bool isSelected = selectedGatividhiKaryaStithiRowIndex == index;
                           return DataRow(
                             selected: isSelected,
                             color: MaterialStateProperty.resolveWith<Color?>(
@@ -2714,30 +2364,21 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             cells: [
                               DataCell(
                                 ConstrainedBox(
-                                  constraints:
-                                      const BoxConstraints(maxWidth: 200),
-                                  child: Text(
-                                      data.selectedDropdownValueName ?? "",
-                                      softWrap: true),
+                                  constraints: const BoxConstraints(maxWidth: 200),
+                                  child: Text(data.selectedDropdownValueName ?? "", softWrap: true),
                                 ),
                               ),
                               DataCell(
                                 ConstrainedBox(
-                                  constraints:
-                                      const BoxConstraints(maxWidth: 200),
-                                  child: Text(
-                                      data.niyamitacalanareupakrama ?? "",
-                                      softWrap: true),
+                                  constraints: const BoxConstraints(maxWidth: 200),
+                                  child: Text(data.niyamitacalanareupakrama ?? "", softWrap: true),
                                 ),
                               ),
                               DataCell(
                                 ConstrainedBox(
-                                  constraints:
-                                      const BoxConstraints(maxWidth: 200),
+                                  constraints: const BoxConstraints(maxWidth: 200),
                                   child: Text(
-                                    data.selectedDropdownValueName1 == "अन्य"
-                                        ? "अन्य - ${data.otherVaranvarita ?? ''}"
-                                        : data.selectedDropdownValueName1 ?? "",
+                                    data.selectedDropdownValueName1 == "अन्य" ? "अन्य - ${data.otherVaranvarita ?? ''}" : data.selectedDropdownValueName1 ?? "",
                                     softWrap: true,
                                   ),
                                 ),
@@ -2760,8 +2401,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       InkWell(
                         onTap: () {
                           if (selectedGatividhiKaryaStithiRowIndex != null) {
-                            var selectedData = enteredDataListGatividhi![
-                                selectedGatividhiKaryaStithiRowIndex!];
+                            var selectedData = enteredDataListGatividhi![selectedGatividhiKaryaStithiRowIndex!];
                             showDialog(
                               context: context,
                               builder: (context) {
@@ -2782,48 +2422,29 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   ),
                                   content: Column(
                                     mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Divider(
-                                          thickness: 1,
-                                          color: Colors.purpleAccent.shade100),
+                                      Divider(thickness: 1, color: Colors.purpleAccent.shade100),
                                       SizedBox(height: 12),
-                                      _buildInfoRow(
-                                          "${Statics.getLabel('GatividhiKaaryakartaaCount')}",
-                                          selectedData
-                                              .selectedDropdownValueName),
+                                      _buildInfoRow("${Statics.getLabel('GatividhiKaaryakartaaCount')}", selectedData.selectedDropdownValueName),
                                       SizedBox(height: 12),
-                                      _buildInfoRow(
-                                          "${Statics.getLabel('niyamitUpkram')}",
-                                          selectedData
-                                              .niyamitacalanareupakrama),
+                                      _buildInfoRow("${Statics.getLabel('niyamitUpkram')}", selectedData.niyamitacalanareupakrama),
                                       SizedBox(height: 12),
-                                      _buildInfoRow(
-                                          "${Statics.getLabel('varamvarita')}",
-                                          selectedData
-                                              .selectedDropdownValueName1),
+                                      _buildInfoRow("${Statics.getLabel('varamvarita')}", selectedData.selectedDropdownValueName1),
                                       SizedBox(height: 12),
-                                      _buildInfoRow(
-                                          "${Statics.getLabel('anyaVaramvarita')}",
-                                          selectedData.otherVaranvarita),
+                                      _buildInfoRow("${Statics.getLabel('anyaVaramvarita')}", selectedData.otherVaranvarita),
                                     ],
                                   ),
                                   actionsAlignment: MainAxisAlignment.center,
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text(
-                                          "${Statics.getLabel('bandKara')}",
-                                          style:
-                                              TextStyle(color: Colors.white)),
+                                      child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.purpleAccent,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 24, vertical: 12),
+                                        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(12),
                                         ),
                                       ),
                                     ),
@@ -2833,8 +2454,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             );
                           }
                         },
-                        child: Icon(Icons.remove_red_eye,
-                            color: Colors.green, size: 20),
+                        child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                       ),
                       SizedBox(
                         width: 20,
@@ -2870,8 +2490,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 ),
                               ),
                               content: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10.0),
+                                padding: const EdgeInsets.symmetric(vertical: 10.0),
                                 child: Text(
                                   "${Statics.getLabel('deleteconfirmText')}",
                                   textAlign: TextAlign.center,
@@ -2890,8 +2509,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                   ),
-                                  onPressed: () =>
-                                      Navigator.pop(context, false),
+                                  onPressed: () => Navigator.pop(context, false),
                                   child: Text(
                                     "${Statics.getLabel('ConfirmationNo')}",
                                     style: TextStyle(color: Colors.black),
@@ -2914,12 +2532,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             ),
                           );
 
-                          if (shouldDelete == true &&
-                              selectedGatividhiKaryaStithiRowIndex != null) {
+                          if (shouldDelete == true && selectedGatividhiKaryaStithiRowIndex != null) {
                             setState(() {
-                              enteredDataListGatividhi[
-                                      selectedGatividhiKaryaStithiRowIndex!]
-                                  .isactive = 0;
+                              enteredDataListGatividhi[selectedGatividhiKaryaStithiRowIndex!].isactive = 0;
                               selectedGatividhiKaryaStithiRowIndex = null;
                             });
                           }
@@ -2955,11 +2570,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 5),
                           width: 100,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.purpleAccent.shade100),
-                              color: Colors.purpleAccent.withOpacity(0.7),
-                              borderRadius: BorderRadius.circular(15)),
+                          decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                           child: Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -2967,9 +2578,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 Icon(Icons.add, color: Colors.white, size: 15),
                                 Text(
                                   "${Statics.getLabel('AddButton')}",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
@@ -2981,8 +2590,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   SizedBox(height: 10),
                   Container(
                     width: double.infinity,
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.black54),
                       borderRadius: const BorderRadius.all(Radius.circular(15)),
@@ -2991,30 +2599,24 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       scrollDirection: Axis.horizontal,
                       child: ConstrainedBox(
                         constraints: BoxConstraints(
-                          minWidth: MediaQuery.of(context).size.width *
-                              1.1, // Ensure min width
+                          minWidth: MediaQuery.of(context).size.width * 1.1, // Ensure min width
                         ),
                         child: DataTable(
                           showCheckboxColumn: false,
-                          headingRowColor:
-                              MaterialStatePropertyAll(Colors.purple.shade50),
+                          headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
                           headingTextStyle: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.black87,
-                            fontSize: MediaQuery.of(context).size.width < 400
-                                ? 12
-                                : 14,
+                            fontSize: MediaQuery.of(context).size.width < 400 ? 12 : 14,
                           ),
-                          dataRowHeight: MediaQuery.of(context).size.width < 400
-                              ? 40
-                              : 48, // smaller rows on mobile
-                          columnSpacing: 16, // spacing between columns
+                          dataRowHeight: MediaQuery.of(context).size.width < 400 ? 40 : 48,
+                          // smaller rows on mobile
+                          columnSpacing: 16,
+                          // spacing between columns
                           columns: [
                             DataColumn(
                               label: SizedBox(
-                                width: MediaQuery.of(context).size.width < 400
-                                    ? 120
-                                    : 160,
+                                width: MediaQuery.of(context).size.width < 400 ? 120 : 160,
                                 child: Text(
                                   "${Statics.getLabel('SelectFrequency')}",
                                   overflow: TextOverflow.ellipsis,
@@ -3023,9 +2625,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             ),
                             DataColumn(
                               label: SizedBox(
-                                width: MediaQuery.of(context).size.width < 400
-                                    ? 100
-                                    : 140,
+                                width: MediaQuery.of(context).size.width < 400 ? 100 : 140,
                                 child: Text(
                                   "${Statics.getLabel('bhavnacheNaav')}",
                                   overflow: TextOverflow.ellipsis,
@@ -3034,9 +2634,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             ),
                             DataColumn(
                               label: SizedBox(
-                                width: MediaQuery.of(context).size.width < 400
-                                    ? 120
-                                    : 160,
+                                width: MediaQuery.of(context).size.width < 400 ? 120 : 160,
                                 child: Text(
                                   "${Statics.getLabel('samparkStithi')}",
                                   overflow: TextOverflow.ellipsis,
@@ -3044,15 +2642,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               ),
                             ),
                           ],
-                          rows: enteredVasahatPrakarDataList
-                              .asMap()
-                              .entries
-                              .where((entry) => entry.value.isactive == 1)
-                              .map((entry) {
+                          rows: enteredVasahatPrakarDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                             int index = entry.key;
                             var data = entry.value;
-                            bool isSelected =
-                                selectedvsahatPrakarIdRowIndex == index;
+                            bool isSelected = selectedvsahatPrakarIdRowIndex == index;
 
                             return DataRow(
                               selected: isSelected,
@@ -3072,10 +2665,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               cells: [
                                 DataCell(
                                   SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width < 400
-                                            ? 120
-                                            : 160,
+                                    width: MediaQuery.of(context).size.width < 400 ? 120 : 160,
                                     child: Text(
                                       data.selectedDropdownValueName ?? "",
                                       overflow: TextOverflow.ellipsis,
@@ -3084,10 +2674,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 ),
                                 DataCell(
                                   SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width < 400
-                                            ? 100
-                                            : 140,
+                                    width: MediaQuery.of(context).size.width < 400 ? 100 : 140,
                                     child: Text(
                                       data.bhavanachenav ?? "",
                                       overflow: TextOverflow.ellipsis,
@@ -3096,10 +2683,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 ),
                                 DataCell(
                                   SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width < 400
-                                            ? 120
-                                            : 160,
+                                    width: MediaQuery.of(context).size.width < 400 ? 120 : 160,
                                     child: Text(
                                       data.selectedDropdownValueName1 ?? "",
                                       overflow: TextOverflow.ellipsis,
@@ -3124,8 +2708,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         InkWell(
                           onTap: () {
                             if (selectedvsahatPrakarIdRowIndex != null) {
-                              var selectedData = enteredVasahatPrakarDataList[
-                                  selectedvsahatPrakarIdRowIndex!];
+                              var selectedData = enteredVasahatPrakarDataList[selectedvsahatPrakarIdRowIndex!];
                               showDialog(
                                 context: context,
                                 builder: (context) {
@@ -3146,52 +2729,31 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     ),
                                     content: Column(
                                       mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Divider(
-                                            thickness: 1,
-                                            color:
-                                                Colors.purpleAccent.shade100),
+                                        Divider(thickness: 1, color: Colors.purpleAccent.shade100),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('SelectFrequency')}",
-                                            selectedData
-                                                .selectedDropdownValueName),
+                                        _buildInfoRow("${Statics.getLabel('SelectFrequency')}", selectedData.selectedDropdownValueName),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('bhavnacheNaav')}",
-                                            selectedData.bhavanachenav),
+                                        _buildInfoRow("${Statics.getLabel('bhavnacheNaav')}", selectedData.bhavanachenav),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('samparkStithi')}",
-                                            selectedData
-                                                .selectedDropdownValueName1),
+                                        _buildInfoRow("${Statics.getLabel('samparkStithi')}", selectedData.selectedDropdownValueName1),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('samparkSootraNaav')}",
-                                            selectedData.samparksootr),
+                                        _buildInfoRow("${Statics.getLabel('samparkSootraNaav')}", selectedData.samparksootr),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('samparakSootraDoorbhash')}",
-                                            selectedData.doorabhaash),
+                                        _buildInfoRow("${Statics.getLabel('samparakSootraDoorbhash')}", selectedData.doorabhaash),
                                       ],
                                     ),
                                     actionsAlignment: MainAxisAlignment.center,
                                     actions: [
                                       ElevatedButton(
                                         onPressed: () => Navigator.pop(context),
-                                        child: Text(
-                                            "${Statics.getLabel('bandKara')}",
-                                            style:
-                                                TextStyle(color: Colors.white)),
+                                        child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.purpleAccent,
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 24, vertical: 12),
+                                          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
                                         ),
                                       ),
@@ -3201,8 +2763,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               );
                             }
                           },
-                          child: Icon(Icons.remove_red_eye,
-                              color: Colors.green, size: 20),
+                          child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                         ),
                         SizedBox(
                           width: 20,
@@ -3238,8 +2799,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   ),
                                 ),
                                 content: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10.0),
+                                  padding: const EdgeInsets.symmetric(vertical: 10.0),
                                   child: Text(
                                     "${Statics.getLabel('deleteconfirmText')}",
                                     textAlign: TextAlign.center,
@@ -3258,8 +2818,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                     ),
-                                    onPressed: () =>
-                                        Navigator.pop(context, false),
+                                    onPressed: () => Navigator.pop(context, false),
                                     child: Text(
                                       "${Statics.getLabel('ConfirmationNo')}",
                                       style: TextStyle(color: Colors.black),
@@ -3272,8 +2831,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                     ),
-                                    onPressed: () =>
-                                        Navigator.pop(context, true),
+                                    onPressed: () => Navigator.pop(context, true),
                                     child: Text(
                                       "${Statics.getLabel('ConfirmationYes')}",
                                       style: TextStyle(color: Colors.white),
@@ -3283,18 +2841,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               ),
                             );
 
-                            if (shouldDelete == true &&
-                                selectedvsahatPrakarIdRowIndex != null) {
+                            if (shouldDelete == true && selectedvsahatPrakarIdRowIndex != null) {
                               setState(() {
-                                enteredVasahatPrakarDataList[
-                                        selectedvsahatPrakarIdRowIndex!]
-                                    .isactive = 0;
+                                enteredVasahatPrakarDataList[selectedvsahatPrakarIdRowIndex!].isactive = 0;
                                 selectedvsahatPrakarIdRowIndex = null;
                               });
                             }
                           },
-                          child:
-                              Icon(Icons.delete, color: Colors.red, size: 20),
+                          child: Icon(Icons.delete, color: Colors.red, size: 20),
                         ),
                       ],
                     ),
@@ -3313,10 +2867,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               children: [
                                 Text(
                                   "${Statics.getLabel('vividhBhashaBolnare')}",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.purpleAccent),
+                                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.purpleAccent),
                                 ),
                                 InkWell(
                                   onTap: () {
@@ -3336,26 +2887,16 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   child: Container(
                                     padding: EdgeInsets.symmetric(vertical: 5),
                                     width: 100,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color:
-                                                Colors.purpleAccent.shade100),
-                                        color: Colors.purpleAccent
-                                            .withOpacity(0.7),
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
+                                    decoration:
+                                        BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                                     child: Center(
                                       child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Icon(Icons.add,
-                                              color: Colors.white, size: 16),
+                                          Icon(Icons.add, color: Colors.white, size: 16),
                                           Text(
                                             "${Statics.getLabel('AddButton')}",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
+                                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                           ),
                                         ],
                                       ),
@@ -3370,8 +2911,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
                                 border: Border.all(color: Colors.black54),
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(15)),
+                                borderRadius: const BorderRadius.all(Radius.circular(15)),
                               ),
                               child: Center(
                                 child: SingleChildScrollView(
@@ -3380,12 +2920,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     width: 220,
                                     child: DataTable(
                                       showCheckboxColumn: false,
-                                      headingRowColor: MaterialStatePropertyAll(
-                                          Colors.purple.shade50),
+                                      headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
                                       columnSpacing: 1,
-                                      headingTextStyle: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black87),
+                                      headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                                       columns: [
                                         DataColumn(
                                             label: Text(
@@ -3398,47 +2935,28 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                           ),
                                         )),
                                       ],
-                                      rows: enteredVividhBhashaBolnareDataList
-                                          .asMap()
-                                          .entries
-                                          .where((entry) =>
-                                              entry.value.isactive == 1)
-                                          .map((entry) {
+                                      rows: enteredVividhBhashaBolnareDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                                         int index = entry.key;
                                         var data = entry.value;
-                                        bool isSelected =
-                                            selectedVividhBhashaBolnarerIdRowIndex ==
-                                                index;
+                                        bool isSelected = selectedVividhBhashaBolnarerIdRowIndex == index;
                                         return DataRow(
                                             selected: isSelected,
-                                            color: MaterialStateProperty
-                                                .resolveWith<Color?>(
+                                            color: MaterialStateProperty.resolveWith<Color?>(
                                               (Set<MaterialState> states) {
-                                                if (isSelected)
-                                                  return Colors.yellow.shade100;
+                                                if (isSelected) return Colors.yellow.shade100;
                                                 return null;
                                               },
                                             ),
                                             onSelectChanged: (bool? selected) {
-                                              if (selected != null &&
-                                                  selected) {
+                                              if (selected != null && selected) {
                                                 setState(() {
-                                                  selectedVividhBhashaBolnarerIdRowIndex =
-                                                      index;
+                                                  selectedVividhBhashaBolnarerIdRowIndex = index;
                                                 });
                                               }
                                             },
                                             cells: [
-                                              DataCell(Text(data.otherbhaasha !=
-                                                      ""
-                                                  ? "${data.selectedDropdownValueName} - ${data.otherbhaasha}"
-                                                  : data.selectedDropdownValueName ??
-                                                      "")),
-                                              DataCell(Align(
-                                                  alignment:
-                                                      Alignment.centerRight,
-                                                  child:
-                                                      Text(data.andaje ?? ""))),
+                                              DataCell(Text(data.otherbhaasha != "" ? "${data.selectedDropdownValueName} - ${data.otherbhaasha}" : data.selectedDropdownValueName ?? "")),
+                                              DataCell(Align(alignment: Alignment.centerRight, child: Text(data.andaje ?? ""))),
                                             ]);
                                       }).toList(),
                                     ),
@@ -3456,18 +2974,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 children: [
                                   InkWell(
                                     onTap: () {
-                                      if (selectedVividhBhashaBolnarerIdRowIndex !=
-                                          null) {
-                                        var selectedData =
-                                            enteredVividhBhashaBolnareDataList[
-                                                selectedVividhBhashaBolnarerIdRowIndex!];
+                                      if (selectedVividhBhashaBolnarerIdRowIndex != null) {
+                                        var selectedData = enteredVividhBhashaBolnareDataList[selectedVividhBhashaBolnarerIdRowIndex!];
                                         showDialog(
                                           context: context,
                                           builder: (context) {
                                             return AlertDialog(
                                               shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
+                                                borderRadius: BorderRadius.circular(20),
                                               ),
                                               backgroundColor: Colors.white,
                                               title: Center(
@@ -3482,52 +2996,27 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                               ),
                                               content: Column(
                                                 mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
-                                                  Divider(
-                                                      thickness: 1,
-                                                      color: Colors.purpleAccent
-                                                          .shade100),
+                                                  Divider(thickness: 1, color: Colors.purpleAccent.shade100),
                                                   SizedBox(height: 12),
-                                                  _buildInfoRow(
-                                                      "${Statics.getLabel('onlyBhasha')}",
-                                                      selectedData
-                                                          .selectedDropdownValueName),
+                                                  _buildInfoRow("${Statics.getLabel('onlyBhasha')}", selectedData.selectedDropdownValueName),
                                                   SizedBox(height: 12),
-                                                  _buildInfoRow(
-                                                      "${Statics.getLabel('OtherLanguage')}",
-                                                      selectedData
-                                                          .otherbhaasha),
+                                                  _buildInfoRow("${Statics.getLabel('OtherLanguage')}", selectedData.otherbhaasha),
                                                   SizedBox(height: 12),
-                                                  _buildInfoRow(
-                                                      "${Statics.getLabel('avgPersent')}",
-                                                      selectedData.andaje),
+                                                  _buildInfoRow("${Statics.getLabel('avgPersent')}", selectedData.andaje),
                                                 ],
                                               ),
-                                              actionsAlignment:
-                                                  MainAxisAlignment.center,
+                                              actionsAlignment: MainAxisAlignment.center,
                                               actions: [
                                                 ElevatedButton(
-                                                  onPressed: () =>
-                                                      Navigator.pop(context),
-                                                  child: Text(
-                                                      "${Statics.getLabel('bandKara')}",
-                                                      style: TextStyle(
-                                                          color: Colors.white)),
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                        Colors.purpleAccent,
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 24,
-                                                            vertical: 12),
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              12),
+                                                  onPressed: () => Navigator.pop(context),
+                                                  child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor: Colors.purpleAccent,
+                                                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(12),
                                                     ),
                                                   ),
                                                 ),
@@ -3537,36 +3026,29 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         );
                                       }
                                     },
-                                    child: Icon(Icons.remove_red_eye,
-                                        color: Colors.green, size: 20),
+                                    child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                                   ),
                                   SizedBox(
                                     width: 20,
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      showVividhBhashaBolnarePopup(context,
-                                          editIndex:
-                                              selectedVividhBhashaBolnarerIdRowIndex,
-                                          onDataChanged: () {
+                                      showVividhBhashaBolnarePopup(context, editIndex: selectedVividhBhashaBolnarerIdRowIndex, onDataChanged: () {
                                         setState(() {});
                                       });
                                     },
-                                    child: Icon(Icons.edit,
-                                        color: Colors.blue, size: 20),
+                                    child: Icon(Icons.edit, color: Colors.blue, size: 20),
                                   ),
                                   SizedBox(
                                     width: 20,
                                   ),
                                   InkWell(
                                     onTap: () async {
-                                      final shouldDelete =
-                                          await showDialog<bool>(
+                                      final shouldDelete = await showDialog<bool>(
                                         context: context,
                                         builder: (context) => AlertDialog(
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
+                                            borderRadius: BorderRadius.circular(20),
                                           ),
                                           backgroundColor: Colors.white,
                                           title: Center(
@@ -3580,8 +3062,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                             ),
                                           ),
                                           content: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 10.0),
+                                            padding: const EdgeInsets.symmetric(vertical: 10.0),
                                             child: Text(
                                               "${Statics.getLabel('deleteconfirmText')}",
                                               textAlign: TextAlign.center,
@@ -3591,61 +3072,46 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                               ),
                                             ),
                                           ),
-                                          actionsAlignment:
-                                              MainAxisAlignment.spaceEvenly,
+                                          actionsAlignment: MainAxisAlignment.spaceEvenly,
                                           actions: [
                                             ElevatedButton(
                                               style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    Colors.grey.shade300,
+                                                backgroundColor: Colors.grey.shade300,
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
+                                                  borderRadius: BorderRadius.circular(12),
                                                 ),
                                               ),
-                                              onPressed: () =>
-                                                  Navigator.pop(context, false),
+                                              onPressed: () => Navigator.pop(context, false),
                                               child: Text(
                                                 "${Statics.getLabel('ConfirmationNo')}",
-                                                style: TextStyle(
-                                                    color: Colors.black),
+                                                style: TextStyle(color: Colors.black),
                                               ),
                                             ),
                                             ElevatedButton(
                                               style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    Colors.redAccent,
+                                                backgroundColor: Colors.redAccent,
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
+                                                  borderRadius: BorderRadius.circular(12),
                                                 ),
                                               ),
-                                              onPressed: () =>
-                                                  Navigator.pop(context, true),
+                                              onPressed: () => Navigator.pop(context, true),
                                               child: Text(
                                                 "${Statics.getLabel('ConfirmationYes')}",
-                                                style: TextStyle(
-                                                    color: Colors.white),
+                                                style: TextStyle(color: Colors.white),
                                               ),
                                             ),
                                           ],
                                         ),
                                       );
 
-                                      if (shouldDelete == true &&
-                                          selectedVividhBhashaBolnarerIdRowIndex !=
-                                              null) {
+                                      if (shouldDelete == true && selectedVividhBhashaBolnarerIdRowIndex != null) {
                                         setState(() {
-                                          enteredVividhBhashaBolnareDataList[
-                                                  selectedVividhBhashaBolnarerIdRowIndex!]
-                                              .isactive = 0;
-                                          selectedVividhBhashaBolnarerIdRowIndex =
-                                              null;
+                                          enteredVividhBhashaBolnareDataList[selectedVividhBhashaBolnarerIdRowIndex!].isactive = 0;
+                                          selectedVividhBhashaBolnarerIdRowIndex = null;
                                         });
                                       }
                                     },
-                                    child: Icon(Icons.delete,
-                                        color: Colors.red, size: 20),
+                                    child: Icon(Icons.delete, color: Colors.red, size: 20),
                                   ),
                                 ],
                               ),
@@ -3669,10 +3135,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               children: [
                                 Text(
                                   "${Statics.getLabel('kontyaPrantache')}",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.purpleAccent),
+                                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.purpleAccent),
                                 ),
                                 InkWell(
                                   onTap: () {
@@ -3690,26 +3153,16 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   child: Container(
                                     padding: EdgeInsets.symmetric(vertical: 5),
                                     width: 100,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color:
-                                                Colors.purpleAccent.shade100),
-                                        color: Colors.purpleAccent
-                                            .withOpacity(0.7),
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
+                                    decoration:
+                                        BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                                     child: Center(
                                       child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Icon(Icons.add,
-                                              color: Colors.white, size: 15),
+                                          Icon(Icons.add, color: Colors.white, size: 15),
                                           Text(
                                             "${Statics.getLabel('AddButton')}",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
+                                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                           ),
                                         ],
                                       ),
@@ -3724,23 +3177,18 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
                                 border: Border.all(color: Colors.black54),
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(15)),
+                                borderRadius: const BorderRadius.all(Radius.circular(15)),
                               ),
                               child: Center(
                                 child: SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
                                   child: SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.6,
+                                    width: MediaQuery.of(context).size.width * 0.6,
                                     child: DataTable(
                                       showCheckboxColumn: false,
-                                      headingRowColor: MaterialStatePropertyAll(
-                                          Colors.purple.shade50),
+                                      headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
                                       columnSpacing: 1,
-                                      headingTextStyle: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black87),
+                                      headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                                       columns: [
                                         DataColumn(
                                             label: Text(
@@ -3751,45 +3199,28 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                           "${Statics.getLabel('avgPersent')}",
                                         )),
                                       ],
-                                      rows: enteredKontyaPraantacheDataList
-                                          .asMap()
-                                          .entries
-                                          .where((entry) =>
-                                              entry.value.isactive == 1)
-                                          .map((entry) {
+                                      rows: enteredKontyaPraantacheDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                                         int index = entry.key;
                                         var data = entry.value;
-                                        bool isSelected =
-                                            selectedKontyaPraantacheIdRowIndex ==
-                                                index;
+                                        bool isSelected = selectedKontyaPraantacheIdRowIndex == index;
                                         return DataRow(
                                             selected: isSelected,
-                                            color: MaterialStateProperty
-                                                .resolveWith<Color?>(
+                                            color: MaterialStateProperty.resolveWith<Color?>(
                                               (Set<MaterialState> states) {
-                                                if (isSelected)
-                                                  return Colors.yellow.shade100;
+                                                if (isSelected) return Colors.yellow.shade100;
                                                 return null;
                                               },
                                             ),
                                             onSelectChanged: (bool? selected) {
-                                              if (selected != null &&
-                                                  selected) {
+                                              if (selected != null && selected) {
                                                 setState(() {
-                                                  selectedKontyaPraantacheIdRowIndex =
-                                                      index;
+                                                  selectedKontyaPraantacheIdRowIndex = index;
                                                 });
                                               }
                                             },
                                             cells: [
-                                              DataCell(Text(
-                                                  data.selectedDropdownValueName ??
-                                                      "")),
-                                              DataCell(Align(
-                                                  alignment:
-                                                      Alignment.centerRight,
-                                                  child:
-                                                      Text(data.andaje ?? ""))),
+                                              DataCell(Text(data.selectedDropdownValueName ?? "")),
+                                              DataCell(Align(alignment: Alignment.centerRight, child: Text(data.andaje ?? ""))),
                                             ]);
                                       }).toList(),
                                     ),
@@ -3807,18 +3238,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 children: [
                                   InkWell(
                                     onTap: () {
-                                      if (selectedKontyaPraantacheIdRowIndex !=
-                                          null) {
-                                        var selectedData =
-                                            enteredKontyaPraantacheDataList[
-                                                selectedKontyaPraantacheIdRowIndex!];
+                                      if (selectedKontyaPraantacheIdRowIndex != null) {
+                                        var selectedData = enteredKontyaPraantacheDataList[selectedKontyaPraantacheIdRowIndex!];
                                         showDialog(
                                           context: context,
                                           builder: (context) {
                                             return AlertDialog(
                                               shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
+                                                borderRadius: BorderRadius.circular(20),
                                               ),
                                               backgroundColor: Colors.white,
                                               title: Center(
@@ -3833,52 +3260,27 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                               ),
                                               content: Column(
                                                 mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
-                                                  Divider(
-                                                      thickness: 1,
-                                                      color: Colors.purpleAccent
-                                                          .shade100),
+                                                  Divider(thickness: 1, color: Colors.purpleAccent.shade100),
                                                   SizedBox(height: 12),
-                                                  _buildInfoRow(
-                                                      "${Statics.getLabel('Praant')}",
-                                                      selectedData
-                                                          .selectedDropdownValueName),
+                                                  _buildInfoRow("${Statics.getLabel('Praant')}", selectedData.selectedDropdownValueName),
                                                   SizedBox(height: 12),
-                                                  _buildInfoRow(
-                                                      "${Statics.getLabel('anyaPraant')}",
-                                                      selectedData
-                                                          .anyaPraantName),
+                                                  _buildInfoRow("${Statics.getLabel('anyaPraant')}", selectedData.anyaPraantName),
                                                   SizedBox(height: 12),
-                                                  _buildInfoRow(
-                                                      "${Statics.getLabel('avgPersent')}",
-                                                      selectedData.andaje),
+                                                  _buildInfoRow("${Statics.getLabel('avgPersent')}", selectedData.andaje),
                                                 ],
                                               ),
-                                              actionsAlignment:
-                                                  MainAxisAlignment.center,
+                                              actionsAlignment: MainAxisAlignment.center,
                                               actions: [
                                                 ElevatedButton(
-                                                  onPressed: () =>
-                                                      Navigator.pop(context),
-                                                  child: Text(
-                                                      "${Statics.getLabel('bandKara')}",
-                                                      style: TextStyle(
-                                                          color: Colors.white)),
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                        Colors.purpleAccent,
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 24,
-                                                            vertical: 12),
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              12),
+                                                  onPressed: () => Navigator.pop(context),
+                                                  child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor: Colors.purpleAccent,
+                                                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(12),
                                                     ),
                                                   ),
                                                 ),
@@ -3888,36 +3290,29 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         );
                                       }
                                     },
-                                    child: Icon(Icons.remove_red_eye,
-                                        color: Colors.green, size: 20),
+                                    child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                                   ),
                                   SizedBox(
                                     width: 20,
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      showKontyaPraantachePopup(context,
-                                          editIndex:
-                                              selectedKontyaPraantacheIdRowIndex,
-                                          onDataChanged: () {
+                                      showKontyaPraantachePopup(context, editIndex: selectedKontyaPraantacheIdRowIndex, onDataChanged: () {
                                         setState(() {});
                                       });
                                     },
-                                    child: Icon(Icons.edit,
-                                        color: Colors.blue, size: 20),
+                                    child: Icon(Icons.edit, color: Colors.blue, size: 20),
                                   ),
                                   SizedBox(
                                     width: 20,
                                   ),
                                   InkWell(
                                     onTap: () async {
-                                      final shouldDelete =
-                                          await showDialog<bool>(
+                                      final shouldDelete = await showDialog<bool>(
                                         context: context,
                                         builder: (context) => AlertDialog(
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
+                                            borderRadius: BorderRadius.circular(20),
                                           ),
                                           backgroundColor: Colors.white,
                                           title: Center(
@@ -3931,8 +3326,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                             ),
                                           ),
                                           content: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 10.0),
+                                            padding: const EdgeInsets.symmetric(vertical: 10.0),
                                             child: Text(
                                               "${Statics.getLabel('deleteconfirmText')}",
                                               textAlign: TextAlign.center,
@@ -3942,61 +3336,46 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                               ),
                                             ),
                                           ),
-                                          actionsAlignment:
-                                              MainAxisAlignment.spaceEvenly,
+                                          actionsAlignment: MainAxisAlignment.spaceEvenly,
                                           actions: [
                                             ElevatedButton(
                                               style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    Colors.grey.shade300,
+                                                backgroundColor: Colors.grey.shade300,
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
+                                                  borderRadius: BorderRadius.circular(12),
                                                 ),
                                               ),
-                                              onPressed: () =>
-                                                  Navigator.pop(context, false),
+                                              onPressed: () => Navigator.pop(context, false),
                                               child: Text(
                                                 "${Statics.getLabel('ConfirmationNo')}",
-                                                style: TextStyle(
-                                                    color: Colors.black),
+                                                style: TextStyle(color: Colors.black),
                                               ),
                                             ),
                                             ElevatedButton(
                                               style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    Colors.redAccent,
+                                                backgroundColor: Colors.redAccent,
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
+                                                  borderRadius: BorderRadius.circular(12),
                                                 ),
                                               ),
-                                              onPressed: () =>
-                                                  Navigator.pop(context, true),
+                                              onPressed: () => Navigator.pop(context, true),
                                               child: Text(
                                                 "${Statics.getLabel('ConfirmationYes')}",
-                                                style: TextStyle(
-                                                    color: Colors.white),
+                                                style: TextStyle(color: Colors.white),
                                               ),
                                             ),
                                           ],
                                         ),
                                       );
 
-                                      if (shouldDelete == true &&
-                                          selectedKontyaPraantacheIdRowIndex !=
-                                              null) {
+                                      if (shouldDelete == true && selectedKontyaPraantacheIdRowIndex != null) {
                                         setState(() {
-                                          enteredKontyaPraantacheDataList[
-                                                  selectedKontyaPraantacheIdRowIndex!]
-                                              .isactive = 0;
-                                          selectedKontyaPraantacheIdRowIndex =
-                                              null;
+                                          enteredKontyaPraantacheDataList[selectedKontyaPraantacheIdRowIndex!].isactive = 0;
+                                          selectedKontyaPraantacheIdRowIndex = null;
                                         });
                                       }
                                     },
-                                    child: Icon(Icons.delete,
-                                        color: Colors.red, size: 20),
+                                    child: Icon(Icons.delete, color: Colors.red, size: 20),
                                   ),
                                 ],
                               ),
@@ -4020,10 +3399,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               children: [
                                 Text(
                                   "${Statics.getLabel('religion')}",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.purpleAccent),
+                                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.purpleAccent),
                                 ),
                                 InkWell(
                                   onTap: () {
@@ -4041,26 +3417,16 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   child: Container(
                                     padding: EdgeInsets.symmetric(vertical: 5),
                                     width: 100,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color:
-                                                Colors.purpleAccent.shade100),
-                                        color: Colors.purpleAccent
-                                            .withOpacity(0.7),
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
+                                    decoration:
+                                        BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                                     child: Center(
                                       child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Icon(Icons.add,
-                                              color: Colors.white, size: 15),
+                                          Icon(Icons.add, color: Colors.white, size: 15),
                                           Text(
                                             "${Statics.getLabel('AddButton')}",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
+                                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                           ),
                                         ],
                                       ),
@@ -4075,23 +3441,18 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
                                 border: Border.all(color: Colors.black54),
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(15)),
+                                borderRadius: const BorderRadius.all(Radius.circular(15)),
                               ),
                               child: Center(
                                 child: SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
                                   child: SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.8,
+                                    width: MediaQuery.of(context).size.width * 0.8,
                                     child: DataTable(
                                       showCheckboxColumn: false,
-                                      headingRowColor: MaterialStatePropertyAll(
-                                          Colors.purple.shade50),
+                                      headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
                                       columnSpacing: 1,
-                                      headingTextStyle: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black87),
+                                      headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                                       columns: [
                                         DataColumn(
                                             label: Text(
@@ -4102,44 +3463,28 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                           '${Statics.getLabel('avgPersent')}',
                                         )),
                                       ],
-                                      rows: enteredreligionDataList
-                                          .asMap()
-                                          .entries
-                                          .where((entry) =>
-                                              entry.value.isactive == 1)
-                                          .map((entry) {
+                                      rows: enteredreligionDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                                         int index = entry.key;
                                         var data = entry.value;
-                                        bool isSelected =
-                                            selectedReligionIdRowIndex == index;
+                                        bool isSelected = selectedReligionIdRowIndex == index;
                                         return DataRow(
                                             selected: isSelected,
-                                            color: MaterialStateProperty
-                                                .resolveWith<Color?>(
+                                            color: MaterialStateProperty.resolveWith<Color?>(
                                               (Set<MaterialState> states) {
-                                                if (isSelected)
-                                                  return Colors.yellow.shade100;
+                                                if (isSelected) return Colors.yellow.shade100;
                                                 return null;
                                               },
                                             ),
                                             onSelectChanged: (bool? selected) {
-                                              if (selected != null &&
-                                                  selected) {
+                                              if (selected != null && selected) {
                                                 setState(() {
-                                                  selectedReligionIdRowIndex =
-                                                      index;
+                                                  selectedReligionIdRowIndex = index;
                                                 });
                                               }
                                             },
                                             cells: [
-                                              DataCell(Text(
-                                                  data.selectedDropdownValueName ??
-                                                      "")),
-                                              DataCell(Align(
-                                                  alignment:
-                                                      Alignment.centerRight,
-                                                  child:
-                                                      Text(data.andaje ?? ""))),
+                                              DataCell(Text(data.selectedDropdownValueName ?? "")),
+                                              DataCell(Align(alignment: Alignment.centerRight, child: Text(data.andaje ?? ""))),
                                             ]);
                                       }).toList(),
                                     ),
@@ -4158,16 +3503,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   InkWell(
                                     onTap: () {
                                       if (selectedReligionIdRowIndex != null) {
-                                        var selectedData =
-                                            enteredreligionDataList[
-                                                selectedReligionIdRowIndex!];
+                                        var selectedData = enteredreligionDataList[selectedReligionIdRowIndex!];
                                         showDialog(
                                           context: context,
                                           builder: (context) {
                                             return AlertDialog(
                                               shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
+                                                borderRadius: BorderRadius.circular(20),
                                               ),
                                               backgroundColor: Colors.white,
                                               title: Center(
@@ -4182,47 +3524,25 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                               ),
                                               content: Column(
                                                 mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
-                                                  Divider(
-                                                      thickness: 1,
-                                                      color: Colors.purpleAccent
-                                                          .shade100),
+                                                  Divider(thickness: 1, color: Colors.purpleAccent.shade100),
                                                   SizedBox(height: 12),
-                                                  _buildInfoRow(
-                                                      "${Statics.getLabel('konteReligion')}",
-                                                      selectedData
-                                                          .selectedDropdownValueName),
+                                                  _buildInfoRow("${Statics.getLabel('konteReligion')}", selectedData.selectedDropdownValueName),
                                                   SizedBox(height: 12),
-                                                  _buildInfoRow(
-                                                      "${Statics.getLabel('avgPersent')}",
-                                                      selectedData.andaje),
+                                                  _buildInfoRow("${Statics.getLabel('avgPersent')}", selectedData.andaje),
                                                 ],
                                               ),
-                                              actionsAlignment:
-                                                  MainAxisAlignment.center,
+                                              actionsAlignment: MainAxisAlignment.center,
                                               actions: [
                                                 ElevatedButton(
-                                                  onPressed: () =>
-                                                      Navigator.pop(context),
-                                                  child: Text(
-                                                      "${Statics.getLabel('bandKara')}",
-                                                      style: TextStyle(
-                                                          color: Colors.white)),
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                        Colors.purpleAccent,
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 24,
-                                                            vertical: 12),
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              12),
+                                                  onPressed: () => Navigator.pop(context),
+                                                  child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor: Colors.purpleAccent,
+                                                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(12),
                                                     ),
                                                   ),
                                                 ),
@@ -4232,35 +3552,29 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         );
                                       }
                                     },
-                                    child: Icon(Icons.remove_red_eye,
-                                        color: Colors.green, size: 20),
+                                    child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                                   ),
                                   SizedBox(
                                     width: 20,
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      showReligionPopup(context,
-                                          editIndex: selectedReligionIdRowIndex,
-                                          onDataChanged: () {
+                                      showReligionPopup(context, editIndex: selectedReligionIdRowIndex, onDataChanged: () {
                                         setState(() {});
                                       });
                                     },
-                                    child: Icon(Icons.edit,
-                                        color: Colors.blue, size: 20),
+                                    child: Icon(Icons.edit, color: Colors.blue, size: 20),
                                   ),
                                   SizedBox(
                                     width: 20,
                                   ),
                                   InkWell(
                                     onTap: () async {
-                                      final shouldDelete =
-                                          await showDialog<bool>(
+                                      final shouldDelete = await showDialog<bool>(
                                         context: context,
                                         builder: (context) => AlertDialog(
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
+                                            borderRadius: BorderRadius.circular(20),
                                           ),
                                           backgroundColor: Colors.white,
                                           title: Center(
@@ -4274,8 +3588,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                             ),
                                           ),
                                           content: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 10.0),
+                                            padding: const EdgeInsets.symmetric(vertical: 10.0),
                                             child: Text(
                                               "${Statics.getLabel('deleteconfirmText')}",
                                               textAlign: TextAlign.center,
@@ -4285,58 +3598,45 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                               ),
                                             ),
                                           ),
-                                          actionsAlignment:
-                                              MainAxisAlignment.spaceEvenly,
+                                          actionsAlignment: MainAxisAlignment.spaceEvenly,
                                           actions: [
                                             ElevatedButton(
                                               style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    Colors.grey.shade300,
+                                                backgroundColor: Colors.grey.shade300,
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
+                                                  borderRadius: BorderRadius.circular(12),
                                                 ),
                                               ),
-                                              onPressed: () =>
-                                                  Navigator.pop(context, false),
+                                              onPressed: () => Navigator.pop(context, false),
                                               child: Text(
                                                 "${Statics.getLabel('ConfirmationNo')}",
-                                                style: TextStyle(
-                                                    color: Colors.black),
+                                                style: TextStyle(color: Colors.black),
                                               ),
                                             ),
                                             ElevatedButton(
                                               style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    Colors.redAccent,
+                                                backgroundColor: Colors.redAccent,
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
+                                                  borderRadius: BorderRadius.circular(12),
                                                 ),
                                               ),
-                                              onPressed: () =>
-                                                  Navigator.pop(context, true),
+                                              onPressed: () => Navigator.pop(context, true),
                                               child: Text(
                                                 "${Statics.getLabel('ConfirmationYes')}",
-                                                style: TextStyle(
-                                                    color: Colors.white),
+                                                style: TextStyle(color: Colors.white),
                                               ),
                                             ),
                                           ],
                                         ),
                                       );
-                                      if (shouldDelete == true &&
-                                          selectedReligionIdRowIndex != null) {
+                                      if (shouldDelete == true && selectedReligionIdRowIndex != null) {
                                         setState(() {
-                                          enteredreligionDataList[
-                                                  selectedReligionIdRowIndex!]
-                                              .isactive = 0;
+                                          enteredreligionDataList[selectedReligionIdRowIndex!].isactive = 0;
                                           selectedReligionIdRowIndex = null;
                                         });
                                       }
                                     },
-                                    child: Icon(Icons.delete,
-                                        color: Colors.red, size: 20),
+                                    child: Icon(Icons.delete, color: Colors.red, size: 20),
                                   ),
                                 ],
                               ),
@@ -4353,10 +3653,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     children: [
                       Text(
                         "${Statics.getLabel('UpasanaSthal')}",
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.purpleAccent),
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.purpleAccent),
                       ),
                       InkWell(
                         onTap: () {
@@ -4374,11 +3671,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 5),
                           width: 100,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.purpleAccent.shade100),
-                              color: Colors.purpleAccent.withOpacity(0.7),
-                              borderRadius: BorderRadius.circular(15)),
+                          decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                           child: Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -4386,9 +3679,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 Icon(Icons.add, color: Colors.white, size: 15),
                                 Text(
                                   "${Statics.getLabel('AddButton')}",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
@@ -4412,12 +3703,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           width: MediaQuery.of(context).size.width * 1,
                           child: DataTable(
                             showCheckboxColumn: false,
-                            headingRowColor:
-                                MaterialStatePropertyAll(Colors.purple.shade50),
+                            headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
                             columnSpacing: 20,
-                            headingTextStyle: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87),
+                            headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                             columns: [
                               DataColumn(
                                   label: Text(
@@ -4432,22 +3720,15 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 "${Statics.getLabel('count')}",
                               )),
                             ],
-                            rows: upasnaSthalDataList
-                                .asMap()
-                                .entries
-                                .where((entry) => entry.value.isactive == 1)
-                                .map((entry) {
+                            rows: upasnaSthalDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                               int index = entry.key;
                               var data = entry.value;
-                              bool isSelected =
-                                  selectedUpasnaSthalRowIndex == index;
+                              bool isSelected = selectedUpasnaSthalRowIndex == index;
                               return DataRow(
                                   selected: isSelected,
-                                  color:
-                                      MaterialStateProperty.resolveWith<Color?>(
+                                  color: MaterialStateProperty.resolveWith<Color?>(
                                     (Set<MaterialState> states) {
-                                      if (isSelected)
-                                        return Colors.yellow.shade100;
+                                      if (isSelected) return Colors.yellow.shade100;
                                       return null;
                                     },
                                   ),
@@ -4459,10 +3740,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     }
                                   },
                                   cells: [
-                                    DataCell(Text(
-                                        data.selectedDropdownValueName ?? "")),
-                                    DataCell(Text(
-                                        data.selectedDropdownValueName1 ?? "")),
+                                    DataCell(Text(data.selectedDropdownValueName ?? "")),
+                                    DataCell(Text(data.selectedDropdownValueName1 ?? "")),
                                     DataCell(Text(data.sankhya ?? "")),
                                   ]);
                             }).toList(),
@@ -4480,8 +3759,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         InkWell(
                           onTap: () {
                             if (selectedUpasnaSthalRowIndex != null) {
-                              var selectedData = upasnaSthalDataList[
-                                  selectedUpasnaSthalRowIndex!];
+                              var selectedData = upasnaSthalDataList[selectedUpasnaSthalRowIndex!];
                               showDialog(
                                 context: context,
                                 builder: (context) {
@@ -4502,48 +3780,29 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     ),
                                     content: Column(
                                       mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Divider(
-                                            thickness: 1,
-                                            color:
-                                                Colors.purpleAccent.shade100),
+                                        Divider(thickness: 1, color: Colors.purpleAccent.shade100),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('UpasanaSthal')}",
-                                            selectedData
-                                                .selectedDropdownValueName),
+                                        _buildInfoRow("${Statics.getLabel('UpasanaSthal')}", selectedData.selectedDropdownValueName),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('otherUpasanaSthal')}",
-                                            selectedData.otherupaasanasthala),
+                                        _buildInfoRow("${Statics.getLabel('otherUpasanaSthal')}", selectedData.otherupaasanasthala),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('SelectFrequency')}",
-                                            selectedData
-                                                .selectedDropdownValueName1),
+                                        _buildInfoRow("${Statics.getLabel('SelectFrequency')}", selectedData.selectedDropdownValueName1),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('count')}",
-                                            selectedData.sankhya),
+                                        _buildInfoRow("${Statics.getLabel('count')}", selectedData.sankhya),
                                       ],
                                     ),
                                     actionsAlignment: MainAxisAlignment.center,
                                     actions: [
                                       ElevatedButton(
                                         onPressed: () => Navigator.pop(context),
-                                        child: Text(
-                                            "${Statics.getLabel('bandKara')}",
-                                            style:
-                                                TextStyle(color: Colors.white)),
+                                        child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.purpleAccent,
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 24, vertical: 12),
+                                          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
                                         ),
                                       ),
@@ -4553,17 +3812,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               );
                             }
                           },
-                          child: Icon(Icons.remove_red_eye,
-                              color: Colors.green, size: 20),
+                          child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                         ),
                         SizedBox(
                           width: 20,
                         ),
                         InkWell(
                           onTap: () {
-                            showUpasnaSthalPopup(context,
-                                editIndex: selectedUpasnaSthalRowIndex,
-                                onDataChanged: () {
+                            showUpasnaSthalPopup(context, editIndex: selectedUpasnaSthalRowIndex, onDataChanged: () {
                               setState(() {});
                             });
                           },
@@ -4592,8 +3848,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   ),
                                 ),
                                 content: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10.0),
+                                  padding: const EdgeInsets.symmetric(vertical: 10.0),
                                   child: Text(
                                     "${Statics.getLabel('deleteconfirmText')}",
                                     textAlign: TextAlign.center,
@@ -4612,8 +3867,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                     ),
-                                    onPressed: () =>
-                                        Navigator.pop(context, false),
+                                    onPressed: () => Navigator.pop(context, false),
                                     child: Text(
                                       "${Statics.getLabel('ConfirmationNo')}",
                                       style: TextStyle(color: Colors.black),
@@ -4626,8 +3880,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                     ),
-                                    onPressed: () =>
-                                        Navigator.pop(context, true),
+                                    onPressed: () => Navigator.pop(context, true),
                                     child: Text(
                                       "${Statics.getLabel('ConfirmationYes')}",
                                       style: TextStyle(color: Colors.white),
@@ -4637,18 +3890,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               ),
                             );
 
-                            if (shouldDelete == true &&
-                                selectedUpasnaSthalRowIndex != null) {
+                            if (shouldDelete == true && selectedUpasnaSthalRowIndex != null) {
                               setState(() {
-                                upasnaSthalDataList[
-                                        selectedUpasnaSthalRowIndex!]
-                                    .isactive = 0;
+                                upasnaSthalDataList[selectedUpasnaSthalRowIndex!].isactive = 0;
                                 selectedUpasnaSthalRowIndex = null;
                               });
                             }
                           },
-                          child:
-                              Icon(Icons.delete, color: Colors.red, size: 20),
+                          child: Icon(Icons.delete, color: Colors.red, size: 20),
                         ),
                       ],
                     ),
@@ -4681,11 +3930,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 5),
                         width: 100,
-                        decoration: BoxDecoration(
-                            border:
-                                Border.all(color: Colors.purpleAccent.shade100),
-                            color: Colors.purpleAccent.withOpacity(0.7),
-                            borderRadius: BorderRadius.circular(15)),
+                        decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                         child: Center(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -4693,9 +3938,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               Icon(Icons.add, color: Colors.white, size: 15),
                               Text(
                                 "${Statics.getLabel('AddButton')}",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
@@ -4718,11 +3961,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       width: MediaQuery.of(context).size.width * 1,
                       child: DataTable(
                         showCheckboxColumn: false,
-                        headingRowColor:
-                            MaterialStatePropertyAll(Colors.purple.shade50),
+                        headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
                         columnSpacing: 40,
-                        headingTextStyle: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.black87),
+                        headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                         columns: [
                           DataColumn(
                               label: Text(
@@ -4737,15 +3978,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             "${Statics.getLabel('samparkStithi')}",
                           )),
                         ],
-                        rows: sajjanShaktiDataList
-                            .asMap()
-                            .entries
-                            .where((entry) => entry.value.isactive == 1)
-                            .map((entry) {
+                        rows: sajjanShaktiDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                           int index = entry.key;
                           var data = entry.value;
-                          bool isSelected =
-                              selectedsajjanShaktiRowIndex == index;
+                          bool isSelected = selectedsajjanShaktiRowIndex == index;
                           return DataRow(
                               selected: isSelected,
                               color: MaterialStateProperty.resolveWith<Color?>(
@@ -4763,10 +3999,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               },
                               cells: [
                                 DataCell(Text(data.name ?? "")),
-                                DataCell(
-                                    Text(data.selectedDropdownValueName ?? "")),
-                                DataCell(Text(
-                                    data.selectedDropdownValueName1 ?? "")),
+                                DataCell(Text(data.selectedDropdownValueName ?? "")),
+                                DataCell(Text(data.selectedDropdownValueName1 ?? "")),
                               ]);
                         }).toList(),
                       ),
@@ -4784,8 +4018,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       InkWell(
                         onTap: () {
                           if (selectedsajjanShaktiRowIndex != null) {
-                            var selectedData = sajjanShaktiDataList[
-                                selectedsajjanShaktiRowIndex!];
+                            var selectedData = sajjanShaktiDataList[selectedsajjanShaktiRowIndex!];
                             showDialog(
                               context: context,
                               builder: (context) {
@@ -4807,71 +4040,37 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   content: SingleChildScrollView(
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
+                                      crossAxisAlignment: CrossAxisAlignment.end,
                                       children: [
-                                        Divider(
-                                            thickness: 1,
-                                            color:
-                                                Colors.purpleAccent.shade100),
+                                        Divider(thickness: 1, color: Colors.purpleAccent.shade100),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('Name')}",
-                                            selectedData.name),
+                                        _buildInfoRow("${Statics.getLabel('Name')}", selectedData.name),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('Address')}",
-                                            selectedData.address),
+                                        _buildInfoRow("${Statics.getLabel('Address')}", selectedData.address),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('doorBhash')}",
-                                            selectedData.doorabhaash),
+                                        _buildInfoRow("${Statics.getLabel('doorBhash')}", selectedData.doorabhaash),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('Category')}",
-                                            selectedData
-                                                .selectedDropdownValueName),
+                                        _buildInfoRow("${Statics.getLabel('Gender')}", Statics.getLabel(selectedData.isfemale == 1 ? 'Female' : 'Male')),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('OtherCategory')}",
-                                            selectedData.otherShreniName),
+                                        _buildInfoRow("${Statics.getLabel('Category')}", selectedData.selectedDropdownValueName),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('OrganizationName')}",
-                                            selectedData.sanstheCheNaav),
+                                        _buildInfoRow("${Statics.getLabel('OtherCategory')}", selectedData.otherShreniName),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('kontyaPadavar')}",
-                                            selectedData
-                                                .sansthechaKuthalaPadavar),
+                                        _buildInfoRow("${Statics.getLabel('OrganizationName')}", selectedData.sanstheCheNaav),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('samparkStithi')}",
-                                            selectedData
-                                                .selectedDropdownValueName1),
+                                        _buildInfoRow("${Statics.getLabel('kontyaPadavar')}", selectedData.sansthechaKuthalaPadavar),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('special')}",
-                                            selectedData
-                                                .selectedDropdownValueName2),
+                                        _buildInfoRow("${Statics.getLabel('samparkStithi')}", selectedData.selectedDropdownValueName1),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('otherSpecial')}",
-                                            selectedData.otherVisheshName),
+                                        _buildInfoRow("${Statics.getLabel('special')}", selectedData.selectedDropdownValueName2),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('prabhavKshetra')}",
-                                            selectedData
-                                                .selectedDropdownValueName3),
+                                        _buildInfoRow("${Statics.getLabel('otherSpecial')}", selectedData.otherVisheshName),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('samparkSootraNaav')}",
-                                            selectedData.samparkasutranava),
+                                        _buildInfoRow("${Statics.getLabel('prabhavKshetra')}", selectedData.selectedDropdownValueName3),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('samparakSootraDoorbhash')}",
-                                            selectedData
-                                                .samparkasutraMobileNumber),
+                                        _buildInfoRow("${Statics.getLabel('samparkSootraNaav')}", selectedData.samparkasutranava),
+                                        SizedBox(height: 12),
+                                        _buildInfoRow("${Statics.getLabel('samparakSootraDoorbhash')}", selectedData.samparkasutraMobileNumber),
                                       ],
                                     ),
                                   ),
@@ -4879,17 +4078,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text(
-                                          "${Statics.getLabel('bandKara')}",
-                                          style:
-                                              TextStyle(color: Colors.white)),
+                                      child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.purpleAccent,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 24, vertical: 12),
+                                        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(12),
                                         ),
                                       ),
                                     ),
@@ -4899,17 +4093,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             );
                           }
                         },
-                        child: Icon(Icons.remove_red_eye,
-                            color: Colors.green, size: 20),
+                        child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                       ),
                       SizedBox(
                         width: 20,
                       ),
                       InkWell(
                         onTap: () {
-                          showSajjanShaktiPopup(context,
-                              editIndex: selectedsajjanShaktiRowIndex,
-                              onDataChanged: () {
+                          showSajjanShaktiPopup(context, editIndex: selectedsajjanShaktiRowIndex, onDataChanged: () {
                             setState(() {});
                           });
                         },
@@ -4938,8 +4129,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 ),
                               ),
                               content: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10.0),
+                                padding: const EdgeInsets.symmetric(vertical: 10.0),
                                 child: Text(
                                   "${Statics.getLabel('deleteconfirmText')}",
                                   textAlign: TextAlign.center,
@@ -4958,8 +4148,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                   ),
-                                  onPressed: () =>
-                                      Navigator.pop(context, false),
+                                  onPressed: () => Navigator.pop(context, false),
                                   child: Text(
                                     "${Statics.getLabel('ConfirmationNo')}",
                                     style: TextStyle(color: Colors.black),
@@ -4982,12 +4171,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             ),
                           );
 
-                          if (shouldDelete == true &&
-                              selectedsajjanShaktiRowIndex != null) {
+                          if (shouldDelete == true && selectedsajjanShaktiRowIndex != null) {
                             setState(() {
-                              sajjanShaktiDataList[
-                                      selectedsajjanShaktiRowIndex!]
-                                  .isactive = 0;
+                              sajjanShaktiDataList[selectedsajjanShaktiRowIndex!].isactive = 0;
                               selectedsajjanShaktiRowIndex = null;
                             });
                           }
@@ -5012,7 +4198,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     InkWell(
                       onTap: () {
                         if (isVastiSearch) {
-                          showAnyaPrabhaviPopup(context, onDataChanged: () {
+                          showAnyaPrabhaviPopup(context, editIndex: null, onDataChanged: () {
                             setState(() {});
                           });
                         } else {
@@ -5022,11 +4208,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 5),
                         width: 100,
-                        decoration: BoxDecoration(
-                            border:
-                                Border.all(color: Colors.purpleAccent.shade100),
-                            color: Colors.purpleAccent.withOpacity(0.7),
-                            borderRadius: BorderRadius.circular(15)),
+                        decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                         child: Center(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -5034,9 +4216,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               Icon(Icons.add, color: Colors.white, size: 15),
                               Text(
                                 "${Statics.getLabel('AddButton')}",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
@@ -5059,11 +4239,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       width: MediaQuery.of(context).size.width * 1,
                       child: DataTable(
                         showCheckboxColumn: false,
-                        headingRowColor:
-                            MaterialStatePropertyAll(Colors.purple.shade50),
+                        headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
                         columnSpacing: 1,
-                        headingTextStyle: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.black87),
+                        headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                         columns: [
                           DataColumn(
                               label: Text(
@@ -5078,15 +4256,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             "${Statics.getLabel('prabhavKshetra')}",
                           )),
                         ],
-                        rows: anyaPrabhaviLokDataList
-                            .asMap()
-                            .entries
-                            .where((entry) => entry.value.isactive == 1)
-                            .map((entry) {
+                        rows: anyaPrabhaviLokDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                           int index = entry.key;
                           var data = entry.value;
-                          bool isSelected =
-                              selectedanyaPrabhaviLokRowIndex == index;
+                          bool isSelected = selectedanyaPrabhaviLokRowIndex == index;
                           return DataRow(
                               selected: isSelected,
                               color: MaterialStateProperty.resolveWith<Color?>(
@@ -5104,10 +4277,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               },
                               cells: [
                                 DataCell(Text(data.name ?? "")),
-                                DataCell(Text(
-                                    data.selectedDropdownValueName3 ?? "")),
-                                DataCell(Text(
-                                    data.selectedDropdownValueName4 ?? "")),
+                                DataCell(Text(data.selectedDropdownValueName3 ?? "")),
+                                DataCell(Text(data.selectedDropdownValueName4 ?? "")),
                               ]);
                         }).toList(),
                       ),
@@ -5125,8 +4296,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       InkWell(
                         onTap: () {
                           if (selectedanyaPrabhaviLokRowIndex != null) {
-                            var selectedData = anyaPrabhaviLokDataList[
-                                selectedanyaPrabhaviLokRowIndex!];
+                            var selectedData = anyaPrabhaviLokDataList[selectedanyaPrabhaviLokRowIndex!];
                             showDialog(
                               context: context,
                               builder: (context) {
@@ -5148,59 +4318,24 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   content: SingleChildScrollView(
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Divider(
-                                            thickness: 1,
-                                            color: Colors.deepPurple.shade100),
+                                        Divider(thickness: 1, color: Colors.deepPurple.shade100),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('Name')}",
-                                            selectedData.name),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('Address')}",
-                                            selectedData.address),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('doorBhash')}",
-                                            selectedData.doorabhaash),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('Category')}",
-                                            selectedData
-                                                .selectedDropdownValueName),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('upshreni')}",
-                                            selectedData
-                                                .selectedDropdownValueName1),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('otherUpshreni')}",
-                                            selectedData.otherupshrenee),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('upshreni')} 1",
-                                            selectedData
-                                                .selectedDropdownValueName2),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('special')}",
-                                            selectedData
-                                                .selectedDropdownValueName3),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('prabhavKshetra')}",
-                                            selectedData
-                                                .selectedDropdownValueName4),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('anyaVisheshMahiti')}",
-                                            selectedData.othervishesh),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('samparkStithi')}",
-                                            selectedData
-                                                .selectedDropdownValueName5),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('samparkSootraNaav')}",
-                                            selectedData.samparkasutranav),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('samparakSootraDoorbhash')}",
-                                            selectedData
-                                                .samparkaSutraDoorbhash),
+                                        _buildInfoRow("${Statics.getLabel('Name')}", selectedData.name),
+                                        _buildInfoRow("${Statics.getLabel('Address')}", selectedData.address),
+                                        _buildInfoRow("${Statics.getLabel('doorBhash')}", selectedData.doorabhaash),
+                                        _buildInfoRow("${Statics.getLabel('Gender')}", Statics.getLabel(selectedData.isfemale == 1 ? 'Female' : 'Male')),
+                                        _buildInfoRow("${Statics.getLabel('Category')}", selectedData.selectedDropdownValueName),
+                                        _buildInfoRow("${Statics.getLabel('upshreni')}", selectedData.selectedDropdownValueName1),
+                                        _buildInfoRow("${Statics.getLabel('otherUpshreni')}", selectedData.otherupshrenee),
+                                        _buildInfoRow("${Statics.getLabel('upshreni')} 1", selectedData.selectedDropdownValueName2),
+                                        _buildInfoRow("${Statics.getLabel('special')}", selectedData.selectedDropdownValueName3),
+                                        _buildInfoRow("${Statics.getLabel('prabhavKshetra')}", selectedData.selectedDropdownValueName4),
+                                        _buildInfoRow("${Statics.getLabel('anyaVisheshMahiti')}", selectedData.othervishesh),
+                                        _buildInfoRow("${Statics.getLabel('samparkStithi')}", selectedData.selectedDropdownValueName5),
+                                        _buildInfoRow("${Statics.getLabel('samparkSootraNaav')}", selectedData.samparkasutranav),
+                                        _buildInfoRow("${Statics.getLabel('samparakSootraDoorbhash')}", selectedData.samparkaSutraDoorbhash),
                                       ],
                                     ),
                                   ),
@@ -5208,17 +4343,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text(
-                                          "${Statics.getLabel('bandKara')}",
-                                          style:
-                                              TextStyle(color: Colors.white)),
+                                      child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.purpleAccent,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 24, vertical: 12),
+                                        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(12),
                                         ),
                                       ),
                                     ),
@@ -5228,8 +4358,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             );
                           }
                         },
-                        child: Icon(Icons.remove_red_eye,
-                            color: Colors.green, size: 20),
+                        child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                       ),
                       SizedBox(
                         width: 20,
@@ -5265,8 +4394,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 ),
                               ),
                               content: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10.0),
+                                padding: const EdgeInsets.symmetric(vertical: 10.0),
                                 child: Text(
                                   "${Statics.getLabel('deleteconfirmText')}",
                                   textAlign: TextAlign.center,
@@ -5285,8 +4413,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                   ),
-                                  onPressed: () =>
-                                      Navigator.pop(context, false),
+                                  onPressed: () => Navigator.pop(context, false),
                                   child: Text(
                                     "${Statics.getLabel('ConfirmationNo')}",
                                     style: TextStyle(color: Colors.black),
@@ -5308,12 +4435,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               ],
                             ),
                           );
-                          if (shouldDelete == true &&
-                              selectedanyaPrabhaviLokRowIndex != null) {
+                          if (shouldDelete == true && selectedanyaPrabhaviLokRowIndex != null) {
                             setState(() {
-                              anyaPrabhaviLokDataList[
-                                      selectedanyaPrabhaviLokRowIndex!]
-                                  .isactive = 0;
+                              anyaPrabhaviLokDataList[selectedanyaPrabhaviLokRowIndex!].isactive = 0;
                               selectedanyaPrabhaviLokRowIndex = null;
                             });
                           }
@@ -5330,10 +4454,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   children: [
                     Text(
                       "${Statics.getLabel('sajareHonareSan')}",
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.purpleAccent),
+                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.purpleAccent),
                     ),
                     InkWell(
                       onTap: () {
@@ -5351,11 +4472,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 5),
                         width: 100,
-                        decoration: BoxDecoration(
-                            border:
-                                Border.all(color: Colors.purpleAccent.shade100),
-                            color: Colors.purpleAccent.shade100,
-                            borderRadius: BorderRadius.circular(15)),
+                        decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.shade100, borderRadius: BorderRadius.circular(15)),
                         child: Center(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -5363,9 +4480,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               Icon(Icons.add, color: Colors.white, size: 15),
                               Text(
                                 "${Statics.getLabel('AddButton')}",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
@@ -5388,11 +4503,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         width: MediaQuery.of(context).size.width * 1.5,
                         child: DataTable(
                           showCheckboxColumn: false,
-                          headingRowColor:
-                              MaterialStatePropertyAll(Colors.purple.shade50),
-                          headingTextStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87),
+                          headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+                          headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                           columns: [
                             DataColumn(
                                 label: Text(
@@ -5411,21 +4523,15 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               "${Statics.getLabel('Sampark')}",
                             )),
                           ],
-                          rows: vastitSajarHonareSanDataList
-                              .asMap()
-                              .entries
-                              .where((entry) => entry.value.isactive == 1)
-                              .map((entry) {
+                          rows: vastitSajarHonareSanDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                             int index = entry.key;
                             var data = entry.value;
                             bool isSelected = selectedSanIdIndex == index;
                             return DataRow(
                                 selected: isSelected,
-                                color:
-                                    MaterialStateProperty.resolveWith<Color?>(
+                                color: MaterialStateProperty.resolveWith<Color?>(
                                   (Set<MaterialState> states) {
-                                    if (isSelected)
-                                      return Colors.yellow.shade100;
+                                    if (isSelected) return Colors.yellow.shade100;
                                     return null;
                                   },
                                 ),
@@ -5438,14 +4544,11 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 },
                                 cells: [
                                   DataCell(Text(
-                                      /*data['sanName'] == "अन्य"? "${data['sanName']} - ${data['vastitSajarHonareAnyaSan']}" :*/ data
-                                              .selectedDropdownValueName ??
-                                          '')),
-                                  DataCell(
-                                      Text(data.ayojakasansthacinave ?? '')),
+                                      /*data['sanName'] == "अन्य"? "${data['sanName']} - ${data['vastitSajarHonareAnyaSan']}" :*/
+                                      data.selectedDropdownValueName ?? '')),
+                                  DataCell(Text(data.ayojakasansthacinave ?? '')),
                                   DataCell(Text(data.ayojakancinave ?? '')),
-                                  DataCell(
-                                      Text(data.aayojaksamparksootr ?? '')),
+                                  DataCell(Text(data.aayojaksamparksootr ?? '')),
                                 ]);
                           }).toList(),
                         ),
@@ -5462,8 +4565,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       InkWell(
                         onTap: () {
                           if (selectedSanIdIndex != null) {
-                            var selectedData = vastitSajarHonareSanDataList[
-                                selectedSanIdIndex!];
+                            var selectedData = vastitSajarHonareSanDataList[selectedSanIdIndex!];
                             showDialog(
                               context: context,
                               builder: (context) {
@@ -5485,29 +4587,15 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   content: SingleChildScrollView(
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Divider(
-                                            thickness: 1,
-                                            color: Colors.deepPurple.shade100),
+                                        Divider(thickness: 1, color: Colors.deepPurple.shade100),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('festivals')}",
-                                            selectedData
-                                                .selectedDropdownValueName),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('otherFestivals')}",
-                                            selectedData.otherSajareSan),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('aayojakSansthachiNave')}",
-                                            selectedData.ayojakasansthacinave),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('aayojakNaav')}",
-                                            selectedData.ayojakancinave),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('samparkSootraNaav')}",
-                                            selectedData.aayojaksamparksootr),
+                                        _buildInfoRow("${Statics.getLabel('festivals')}", selectedData.selectedDropdownValueName),
+                                        _buildInfoRow("${Statics.getLabel('otherFestivals')}", selectedData.otherSajareSan),
+                                        _buildInfoRow("${Statics.getLabel('aayojakSansthachiNave')}", selectedData.ayojakasansthacinave),
+                                        _buildInfoRow("${Statics.getLabel('aayojakNaav')}", selectedData.ayojakancinave),
+                                        _buildInfoRow("${Statics.getLabel('samparkSootraNaav')}", selectedData.aayojaksamparksootr),
                                       ],
                                     ),
                                   ),
@@ -5515,17 +4603,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text(
-                                          "${Statics.getLabel('bandKara')}",
-                                          style:
-                                              TextStyle(color: Colors.white)),
+                                      child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.purpleAccent,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 24, vertical: 12),
+                                        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(12),
                                         ),
                                       ),
                                     ),
@@ -5535,16 +4618,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             );
                           }
                         },
-                        child: Icon(Icons.remove_red_eye,
-                            color: Colors.green, size: 20),
+                        child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                       ),
                       SizedBox(
                         width: 20,
                       ),
                       InkWell(
                         onTap: () {
-                          showVastitSajarHonareSanPopup(context,
-                              editIndex: selectedSanIdIndex, onDataChanged: () {
+                          showVastitSajarHonareSanPopup(context, editIndex: selectedSanIdIndex, onDataChanged: () {
                             setState(() {});
                           });
                         },
@@ -5573,8 +4654,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 ),
                               ),
                               content: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10.0),
+                                padding: const EdgeInsets.symmetric(vertical: 10.0),
                                 child: Text(
                                   "${Statics.getLabel('deleteconfirmText')}",
                                   textAlign: TextAlign.center,
@@ -5593,8 +4673,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                   ),
-                                  onPressed: () =>
-                                      Navigator.pop(context, false),
+                                  onPressed: () => Navigator.pop(context, false),
                                   child: Text(
                                     "${Statics.getLabel('ConfirmationNo')}",
                                     style: TextStyle(color: Colors.black),
@@ -5616,11 +4695,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               ],
                             ),
                           );
-                          if (shouldDelete == true &&
-                              selectedSanIdIndex != null) {
+                          if (shouldDelete == true && selectedSanIdIndex != null) {
                             setState(() {
-                              vastitSajarHonareSanDataList[selectedSanIdIndex!]
-                                  .isactive = 0;
+                              vastitSajarHonareSanDataList[selectedSanIdIndex!].isactive = 0;
                               selectedSanIdIndex = null;
                             });
                           }
@@ -5639,10 +4716,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     Flexible(
                       child: Text(
                         "${Statics.getLabel('sajareHonareKaryakram')}",
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.purpleAccent),
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.purpleAccent),
                         softWrap: true,
                         overflow: TextOverflow.visible,
                       ),
@@ -5664,11 +4738,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 5),
                         width: 100,
-                        decoration: BoxDecoration(
-                            border:
-                                Border.all(color: Colors.purpleAccent.shade100),
-                            color: Colors.purpleAccent.shade100,
-                            borderRadius: BorderRadius.circular(15)),
+                        decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.shade100, borderRadius: BorderRadius.circular(15)),
                         child: Center(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -5677,9 +4747,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               SizedBox(width: 5),
                               Text(
                                 "${Statics.getLabel('AddButton')}",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
@@ -5702,11 +4770,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         width: MediaQuery.of(context).size.width * 1.5,
                         child: DataTable(
                           showCheckboxColumn: false,
-                          headingRowColor:
-                              MaterialStatePropertyAll(Colors.purple.shade50),
-                          headingTextStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87),
+                          headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+                          headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                           columns: [
                             DataColumn(
                                 label: Text(
@@ -5725,22 +4790,15 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               "${Statics.getLabel('Sampark')}",
                             )),
                           ],
-                          rows: vastitSajarHonareSamajikKaryakramDataList
-                              .asMap()
-                              .entries
-                              .where((entry) => entry.value.isactive == 1)
-                              .map((entry) {
+                          rows: vastitSajarHonareSamajikKaryakramDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                             int index = entry.key;
                             var data = entry.value;
-                            bool isSelected =
-                                selectedSamajikKaryakramIdIndex == index;
+                            bool isSelected = selectedSamajikKaryakramIdIndex == index;
                             return DataRow(
                                 selected: isSelected,
-                                color:
-                                    MaterialStateProperty.resolveWith<Color?>(
+                                color: MaterialStateProperty.resolveWith<Color?>(
                                   (Set<MaterialState> states) {
-                                    if (isSelected)
-                                      return Colors.yellow.shade100;
+                                    if (isSelected) return Colors.yellow.shade100;
                                     return null;
                                   },
                                 ),
@@ -5752,13 +4810,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   }
                                 },
                                 cells: [
-                                  DataCell(Text(
-                                      data.selectedDropdownValueName ?? '')),
-                                  DataCell(
-                                      Text(data.ayojakasansthacinave ?? '')),
+                                  DataCell(Text(data.selectedDropdownValueName ?? '')),
+                                  DataCell(Text(data.ayojakasansthacinave ?? '')),
                                   DataCell(Text(data.ayojakancinave ?? '')),
-                                  DataCell(
-                                      Text(data.aayojaksamparksootr ?? '')),
+                                  DataCell(Text(data.aayojaksamparksootr ?? '')),
                                 ]);
                           }).toList(),
                         ),
@@ -5775,9 +4830,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       InkWell(
                         onTap: () {
                           if (selectedSamajikKaryakramIdIndex != null) {
-                            var selectedData =
-                                vastitSajarHonareSamajikKaryakramDataList[
-                                    selectedSamajikKaryakramIdIndex!];
+                            var selectedData = vastitSajarHonareSamajikKaryakramDataList[selectedSamajikKaryakramIdIndex!];
                             showDialog(
                               context: context,
                               builder: (context) {
@@ -5799,29 +4852,15 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   content: SingleChildScrollView(
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Divider(
-                                            thickness: 1,
-                                            color: Colors.deepPurple.shade100),
+                                        Divider(thickness: 1, color: Colors.deepPurple.shade100),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('samajikKaryakram')}",
-                                            selectedData
-                                                .selectedDropdownValueName),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('otherEnter')}",
-                                            selectedData.otherKaryakram),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('aayojakSansthachiNave')}",
-                                            selectedData.ayojakasansthacinave),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('aayojakNaav')}",
-                                            selectedData.ayojakancinave),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('Sampark')}",
-                                            selectedData.aayojaksamparksootr),
+                                        _buildInfoRow("${Statics.getLabel('samajikKaryakram')}", selectedData.selectedDropdownValueName),
+                                        _buildInfoRow("${Statics.getLabel('otherEnter')}", selectedData.otherKaryakram),
+                                        _buildInfoRow("${Statics.getLabel('aayojakSansthachiNave')}", selectedData.ayojakasansthacinave),
+                                        _buildInfoRow("${Statics.getLabel('aayojakNaav')}", selectedData.ayojakancinave),
+                                        _buildInfoRow("${Statics.getLabel('Sampark')}", selectedData.aayojaksamparksootr),
                                       ],
                                     ),
                                   ),
@@ -5829,17 +4868,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text(
-                                          "${Statics.getLabel('bandKara')}",
-                                          style:
-                                              TextStyle(color: Colors.white)),
+                                      child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.purpleAccent,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 24, vertical: 12),
+                                        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(12),
                                         ),
                                       ),
                                     ),
@@ -5849,17 +4883,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             );
                           }
                         },
-                        child: Icon(Icons.remove_red_eye,
-                            color: Colors.green, size: 20),
+                        child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                       ),
                       SizedBox(
                         width: 20,
                       ),
                       InkWell(
                         onTap: () {
-                          showVastitSajarHonareSamajikKaryakramPopup(context,
-                              editIndex: selectedSamajikKaryakramIdIndex,
-                              onDataChanged: () {
+                          showVastitSajarHonareSamajikKaryakramPopup(context, editIndex: selectedSamajikKaryakramIdIndex, onDataChanged: () {
                             setState(() {});
                           });
                         },
@@ -5888,8 +4919,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 ),
                               ),
                               content: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10.0),
+                                padding: const EdgeInsets.symmetric(vertical: 10.0),
                                 child: Text(
                                   "${Statics.getLabel('deleteconfirmText')}",
                                   textAlign: TextAlign.center,
@@ -5908,8 +4938,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                   ),
-                                  onPressed: () =>
-                                      Navigator.pop(context, false),
+                                  onPressed: () => Navigator.pop(context, false),
                                   child: Text(
                                     "${Statics.getLabel('ConfirmationNo')}",
                                     style: TextStyle(color: Colors.black),
@@ -5931,12 +4960,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               ],
                             ),
                           );
-                          if (shouldDelete == true &&
-                              selectedSamajikKaryakramIdIndex != null) {
+                          if (shouldDelete == true && selectedSamajikKaryakramIdIndex != null) {
                             setState(() {
-                              vastitSajarHonareSamajikKaryakramDataList[
-                                      selectedSamajikKaryakramIdIndex!]
-                                  .isactive = 0;
+                              vastitSajarHonareSamajikKaryakramDataList[selectedSamajikKaryakramIdIndex!].isactive = 0;
                               selectedSamajikKaryakramIdIndex = null;
                             });
                           }
@@ -5955,9 +4981,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                 InkWell(
                   onTap: () {
                     if (isVastiSearch) {
-                      if (loksankhyaController.text != "" &&
-                              vastiSamitiYesNo == 0 ||
-                          vastiSamitiYesNo == 1) {
+                      if (loksankhyaController.text != "" && vastiSamitiYesNo == 0 || vastiSamitiYesNo == 1) {
                         submitStep1Form();
                       } else {
                         showDialog(
@@ -5987,8 +5011,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 style: TextButton.styleFrom(
                                   backgroundColor: Colors.red.shade700,
                                   foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                 ),
                                 onPressed: () => Navigator.pop(context),
                                 child: Text(
@@ -6008,8 +5031,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     width: double.infinity,
                     height: 40,
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    margin:
-                        const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                    margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
                     decoration: BoxDecoration(
                       color: Colors.purpleAccent,
                       borderRadius: BorderRadius.circular(15),
@@ -6056,8 +5078,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       "beforeShakhaSaptahikIsOnNowOff": beforsanghaonnowisoff,
       "VasticyacatuSima": vastiChatahuSimaController.text,
       "googlemap": imageAdd == 1 ? selectedFilePath : selectedFileName,
-      "Vastitasajaraanyakaryakaram":
-          vastitHonareSamajikAnyakaryakramController.text,
+      "Vastitasajaraanyakaryakaram": vastitHonareSamajikAnyakaryakramController.text,
       "VastisarKuthalyavarsi": kuthalaVarshiDataList,
       "VastisarJaagaranshreneesthiti": jagranShreniEnteredDataList,
       "VastisarGatividhikaryasthiti": enteredDataListGatividhi,
@@ -6069,8 +5090,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       "Vastisarsajjanshakti": sajjanShaktiDataList,
       "VastisarAnyaprabhavilokam": anyaPrabhaviLokDataList,
       "VastisarVastitamahatvacesana": vastitSajarHonareSanDataList,
-      "VastisarVastitasajaraSamajikkaryakram":
-          vastitSajarHonareSamajikKaryakramDataList,
+      "VastisarVastitasajaraSamajikkaryakram": vastitSajarHonareSamajikKaryakramDataList,
       "stepOneComplete": _isStep1Completed == true ? 1 : 0,
       "isImage": imageAdd,
       "isvasti": 1,
@@ -6086,8 +5106,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
     String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
     log("Step 1 Form Data (JSON):\n$formattedJson");
 
-    String result = await Statics.vastiSarvekshanStep1FormSubmit(
-        context, jsonEncode(formData));
+    String result = await Statics.vastiSarvekshanStep1FormSubmit(context, jsonEncode(formData));
     if (result == "success") {
       setState(() {
         sanghaKaryaVastiStithiController.clear();
@@ -6147,11 +5166,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   String? anyaPrabhaviLokPrabhavKshetraName;
   int? selectedAnyaPrabhaviLokPrabhavKshetraIDEdit;
   Masterdata? selectedAnyaPrabhaviLokPrabhavKshetra;
+
 //=================================================== ANYA PRABHAVI VISHESH FORM ====================================================================================
   int? anyaPrabhaviLokVisheshId;
   String? anyaPrabhaviLokVisheshName;
   int? selectedAnyaPrabhaviLokVisheshIDEdit;
   Masterdata? selectedAnyaPrabhaviLokVishesh;
+
 //=====================================================================================================================================
 
   void resetDropdowns() {
@@ -6184,45 +5205,34 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
     Masterdata? selectedDependentValue = selectedUpShreni;
     Masterdata? selectedThirdLevelValue = selectedUpShreni2;
 
-    List<Masterdata> masterDataList =
-        vastisarvekshanDropDownDataModel?.masterdata ?? [];
-    List<Masterdata> filteredItems =
-        masterDataList.where((e) => e.typename == filterTypeName).toList();
+    List<Masterdata> masterDataList = vastisarvekshanDropDownDataModel?.masterdata ?? [];
+    List<Masterdata> filteredItems = masterDataList.where((e) => e.typename == filterTypeName).toList();
 
     if (anyaPrabhaviLokShreniId != null && selectedValue == null) {
       selectedValue = filteredItems.firstWhere(
         (e) => e.id == anyaPrabhaviLokShreniId,
-        orElse: () =>
-            filteredItems.isNotEmpty ? filteredItems.first : Masterdata(),
+        orElse: () => filteredItems.isNotEmpty ? filteredItems.first : Masterdata(),
       );
       selectedShreni = selectedValue;
     }
 
-    List<Masterdata> dependentItems = selectedValue != null
-        ? masterDataList.where((e) => e.parentid == selectedValue!.id).toList()
-        : [];
+    List<Masterdata> dependentItems = selectedValue != null ? masterDataList.where((e) => e.parentid == selectedValue!.id).toList() : [];
 
     if (anyaPrabhaviLokUpShreniId != null && selectedDependentValue == null) {
       selectedDependentValue = dependentItems.firstWhere(
         (e) => e.id == anyaPrabhaviLokUpShreniId,
-        orElse: () =>
-            dependentItems.isNotEmpty ? dependentItems.first : Masterdata(),
+        orElse: () => dependentItems.isNotEmpty ? dependentItems.first : Masterdata(),
       );
 
       selectedUpShreni = selectedDependentValue;
     }
 
-    List<Masterdata> thirdLevelItems = selectedDependentValue != null
-        ? masterDataList
-            .where((e) => e.parentid == selectedDependentValue!.id)
-            .toList()
-        : [];
+    List<Masterdata> thirdLevelItems = selectedDependentValue != null ? masterDataList.where((e) => e.parentid == selectedDependentValue!.id).toList() : [];
 
     if (anyaPrabhaviLokUpShreni1Id != null && selectedThirdLevelValue == null) {
       selectedThirdLevelValue = thirdLevelItems.firstWhere(
         (e) => e.id == anyaPrabhaviLokUpShreni1Id,
-        orElse: () =>
-            thirdLevelItems.isNotEmpty ? thirdLevelItems.first : Masterdata(),
+        orElse: () => thirdLevelItems.isNotEmpty ? thirdLevelItems.first : Masterdata(),
       );
 
       selectedUpShreni2 = selectedThirdLevelValue;
@@ -6273,8 +5283,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                 });
 
                 if (onDependentValueSelected != null) {
-                  onDependentValueSelected(
-                      newValue.id!, newValue.value!, newValue);
+                  onDependentValueSelected(newValue.id!, newValue.value!, newValue);
                 }
               }
             },
@@ -6300,8 +5309,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                 });
 
                 if (onThirdLevelValueSelected != null) {
-                  onThirdLevelValueSelected(
-                      newValue.id!, newValue.value!, newValue);
+                  onThirdLevelValueSelected(newValue.id!, newValue.value!, newValue);
                 }
               }
             },
@@ -6485,10 +5493,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   String? selectedYearType = "shaakha";
   int? selectedisActive = 1;
   int? selectedPkId = 0;
-  TextEditingController kuthalaVarshiVayogatShaakhaYearController =
-      TextEditingController();
-  TextEditingController kuthalaVarshiVayogatSaptahikYearController =
-      TextEditingController();
+  TextEditingController kuthalaVarshiVayogatShaakhaYearController = TextEditingController();
+  TextEditingController kuthalaVarshiVayogatSaptahikYearController = TextEditingController();
+
   void showKuthalaVarshiPopup(
     BuildContext context, {
     int? editIndex,
@@ -6500,12 +5507,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       selectedKuthalaVarshiIdEdit = data.id;
       selectedPkId = data.pkid;
       selectedKuthalaVarshiName = data.selectedDropdownValueName;
-      selectedYearType =
-          data.isShaakhaa == 1 ? "shaakha" : "saptahikMilan" ?? "";
+      selectedYearType = data.isShaakhaa == 1 ? "shaakha" : "saptahikMilan" ?? "";
       selectedisActive = data.isactive;
-      selectedMasterKuthalaVarshiName = vastisarvekshanDropDownDataModel!
-          .masterdata!
-          .firstWhere((item) => item.id == selectedKuthalaVarshiId);
+      selectedMasterKuthalaVarshiName = vastisarvekshanDropDownDataModel!.masterdata!.firstWhere((item) => item.id == selectedKuthalaVarshiId);
       if (selectedYearType == 'shaakha') {
         kuthalaVarshiVayogatShaakhaYearController.text = data.shaakhaa ?? '';
       } else if (selectedYearType == 'saptahikMilan') {
@@ -6573,8 +5577,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           onChanged: (value) {
                             setState(() {
                               selectedYearType = value;
-                              kuthalaVarshiVayogatSaptahikYearController
-                                  .clear();
+                              kuthalaVarshiVayogatSaptahikYearController.clear();
                             });
                           },
                         ),
@@ -6603,8 +5606,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     if (selectedYearType == 'saptahikMilan')
                       textControllerField2(
                           name: "${Statics.getLabel('kuthalaVarshi')}",
-                          controller:
-                              kuthalaVarshiVayogatSaptahikYearController,
+                          controller: kuthalaVarshiVayogatSaptahikYearController,
                           keyboardType: TextInputType.number,
                           hintTextString: "e.g. 2025",
                           maxInput: 4),
@@ -6624,44 +5626,30 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   ),
                 ),
                 onPressed: () {
-                  int? saptahikYear = int.tryParse(
-                      kuthalaVarshiVayogatSaptahikYearController.text);
-                  int? shaakhaYear = int.tryParse(
-                      kuthalaVarshiVayogatShaakhaYearController.text);
+                  int? saptahikYear = int.tryParse(kuthalaVarshiVayogatSaptahikYearController.text);
+                  int? shaakhaYear = int.tryParse(kuthalaVarshiVayogatShaakhaYearController.text);
 
-                  if ((saptahikYear != null &&
-                          saptahikYear >= 1925 &&
-                          saptahikYear <= 2025) ||
-                      (shaakhaYear != null &&
-                          shaakhaYear >= 1925 &&
-                          shaakhaYear <= 2025)) {
+                  if ((saptahikYear != null && saptahikYear >= 1925 && saptahikYear <= 2025) || (shaakhaYear != null && shaakhaYear >= 1925 && shaakhaYear <= 2025)) {
                     int currentType = selectedYearType == "shaakha"
                         ? 1
                         : selectedYearType == "saptahikMilan"
                             ? 0
                             : 2;
 
-                    var matchedEntries = kuthalaVarshiDataList!
-                        .where((e) => e.id == selectedKuthalaVarshiId)
-                        .toList();
+                    var matchedEntries = kuthalaVarshiDataList!.where((e) => e.id == selectedKuthalaVarshiId).toList();
 
-                    bool hasShaakha =
-                        matchedEntries.any((e) => e.isShaakhaa == 1);
-                    bool hasSaptahik =
-                        matchedEntries.any((e) => e.isShaakhaa == 0);
+                    bool hasShaakha = matchedEntries.any((e) => e.isShaakhaa == 1);
+                    bool hasSaptahik = matchedEntries.any((e) => e.isShaakhaa == 0);
 
                     if (editIndex == null && matchedEntries.isNotEmpty) {
                       if (currentType == 1 && hasShaakha) {
-                        Statics.showToast(
-                            "${Statics.getLabel('alreadyShakhaSelected')}");
+                        Statics.showToast("${Statics.getLabel('alreadyShakhaSelected')}");
                         return;
                       } else if (currentType == 0 && hasSaptahik) {
-                        Statics.showToast(
-                            "${Statics.getLabel('alreadySaptahikSelected')}");
+                        Statics.showToast("${Statics.getLabel('alreadySaptahikSelected')}");
                         return;
                       } else if (hasShaakha && hasSaptahik) {
-                        Statics.showToast(
-                            "${Statics.getLabel('alreadyVayogatSelected')}");
+                        Statics.showToast("${Statics.getLabel('alreadyVayogatSelected')}");
                         return;
                       }
                     }
@@ -6676,14 +5664,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       isShaakhaa: currentType,
                       pkid: selectedPkId,
                       vastiid: int.parse(selctedLevelId!),
-                      shaakhaa: currentType == 1
-                          ? kuthalaVarshiVayogatShaakhaYearController.text
-                              .trim()
-                          : "",
-                      saptahik: currentType == 0
-                          ? kuthalaVarshiVayogatSaptahikYearController.text
-                              .trim()
-                          : "",
+                      shaakhaa: currentType == 1 ? kuthalaVarshiVayogatShaakhaYearController.text.trim() : "",
+                      saptahik: currentType == 0 ? kuthalaVarshiVayogatSaptahikYearController.text.trim() : "",
                       isactive: selectedisActive,
                       selectedDropdownValueName: selectedKuthalaVarshiName,
                     );
@@ -6707,8 +5689,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     );
                   }
                 },
-                child: Text("${Statics.getLabel('Submit')}",
-                    style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -6742,18 +5723,15 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   Masterdata? selectedVaramvarita;
   int? isActiveJagranShreniStithi = 1;
   int? jagranShreniPkId;
-  TextEditingController isOtherJaganVaramvaritaConroller =
-      TextEditingController();
+  TextEditingController isOtherJaganVaramvaritaConroller = TextEditingController();
 
-  void showJagranShreniPopup(BuildContext context,
-      {int? editIndex, VoidCallback? onDataChanged}) {
+  void showJagranShreniPopup(BuildContext context, {int? editIndex, VoidCallback? onDataChanged}) {
     if (editIndex != null) {
       var data = jagranShreniEnteredDataList![editIndex];
       selectedShreniID = data.shreneeid;
       selectedShreniIDEdit = data.shreneeid;
       selectedShreniName = data.selectedDropdownValueName;
-      niyamitChalnareUpkramController.text =
-          data.niyamitacalanareupakrama ?? '';
+      niyamitChalnareUpkramController.text = data.niyamitacalanareupakrama ?? '';
       selectedVaramvaritaIDEdit = data.varanvaritaid;
       selectedVaramvaritaName = data.selectedDropdownValueName1;
       isActiveJagranShreniStithi = data.isactive;
@@ -6761,25 +5739,16 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       isOtherJaganVaramvaritaConroller.text = data.otherVaranvarita ?? '';
 
       // ✅ Get selected Masterdata objects for editing dropdowns
-      selectedJagranShreni = vastisarvekshanDropDownDataModel?.masterdata
-          ?.firstWhere(
-              (e) => e.id == selectedShreniID && e.typename == "जागरण श्रेणी",
-              orElse: () => Masterdata());
+      selectedJagranShreni = vastisarvekshanDropDownDataModel?.masterdata?.firstWhere((e) => e.id == selectedShreniID && e.typename == "जागरण श्रेणी", orElse: () => Masterdata());
 
-      selectedVaramvarita = vastisarvekshanDropDownDataModel?.masterdata
-          ?.firstWhere(
-              (e) =>
-                  e.id == selectedVaramvaritaIDEdit &&
-                  e.typename == "जागरण वारंवारिता",
-              orElse: () => Masterdata());
+      selectedVaramvarita = vastisarvekshanDropDownDataModel?.masterdata?.firstWhere((e) => e.id == selectedVaramvaritaIDEdit && e.typename == "जागरण वारंवारिता", orElse: () => Masterdata());
     }
 
     showDialog(
       context: context,
       builder: (ctx) {
         return Dialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           child: StatefulBuilder(
             builder: (context, setState) {
               return Container(
@@ -6854,8 +5823,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 isOtherJaganVaramvaritaConroller.clear();
                               },
                               hintText: "${Statics.getLabel('varamvarita')}",
-                              question:
-                                  "${Statics.getLabel('selectVaramvarita')}",
+                              question: "${Statics.getLabel('selectVaramvarita')}",
                               editId: selectedVaramvaritaIDEdit,
                               selectedValue: selectedVaramvarita,
                               onSelectionChanged: (newValue) {
@@ -6879,28 +5847,22 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.purple,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                           ),
                           onPressed: () {
-                            if (selectedVaramvarita?.isOther == 1 &&
-                                isOtherJaganVaramvaritaConroller.text == "") {
-                              Statics.showToast(
-                                  "${Statics.getLabel('otherInfoValidation')}");
+                            if (selectedVaramvarita?.isOther == 1 && isOtherJaganVaramvaritaConroller.text == "") {
+                              Statics.showToast("${Statics.getLabel('otherInfoValidation')}");
                             } else {
                               final data = VastisarJaagaranshreneesthiti(
                                 pkid: jagranShreniPkId,
                                 vastiid: int.parse(selctedLevelId!),
                                 shreneeid: selectedShreniID,
-                                niyamitacalanareupakrama:
-                                    niyamitChalnareUpkramController.text.trim(),
+                                niyamitacalanareupakrama: niyamitChalnareUpkramController.text.trim(),
                                 varanvaritaid: selectedVaramvaritaID,
                                 isactive: isActiveJagranShreniStithi,
-                                otherVaranvarita:
-                                    isOtherJaganVaramvaritaConroller.text,
+                                otherVaranvarita: isOtherJaganVaramvaritaConroller.text,
                                 selectedDropdownValueName: selectedShreniName,
-                                selectedDropdownValueName1:
-                                    selectedVaramvaritaName,
+                                selectedDropdownValueName1: selectedVaramvaritaName,
                               );
 
                               if (editIndex != null) {
@@ -6962,24 +5924,19 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   Masterdata? selectedVaramvaritaGatividhi;
   int? isActiveGatividhi = 1;
   int? gatividhiPkId;
-  TextEditingController anyaGatividhiVaramvaritaController =
-      TextEditingController();
-  void showGatividhiPopup(BuildContext context,
-      {int? editIndex, VoidCallback? onDataChanged}) {
+  TextEditingController anyaGatividhiVaramvaritaController = TextEditingController();
+
+  void showGatividhiPopup(BuildContext context, {int? editIndex, VoidCallback? onDataChanged}) {
     // Pre-fill data if editing
     if (editIndex != null) {
       var data = enteredDataListGatividhi[editIndex];
       selectedShreniIDGatividhi = data.gatividhiid;
       selectedShreniNameGatividhi = data.selectedDropdownValueName;
-      selectedShreniGatividhi = vastisarvekshanDropDownDataModel!.masterdata!
-          .firstWhere((item) => item.id == selectedShreniIDGatividhi);
-      niyamitChalnareUpkramGatividhiController.text =
-          data.niyamitacalanareupakrama ?? "";
+      selectedShreniGatividhi = vastisarvekshanDropDownDataModel!.masterdata!.firstWhere((item) => item.id == selectedShreniIDGatividhi);
+      niyamitChalnareUpkramGatividhiController.text = data.niyamitacalanareupakrama ?? "";
       selectedVaramvaritaIDGatividhi = data.varanvaritaid;
       selectedVaramvaritaNameGatividhi = data.selectedDropdownValueName1;
-      selectedVaramvaritaGatividhi = vastisarvekshanDropDownDataModel!
-          .masterdata!
-          .firstWhere((item) => item.id == selectedVaramvaritaIDGatividhi);
+      selectedVaramvaritaGatividhi = vastisarvekshanDropDownDataModel!.masterdata!.firstWhere((item) => item.id == selectedVaramvaritaIDGatividhi);
       isActiveGatividhi = data.isactive;
       gatividhiPkId = data.pkid;
       anyaGatividhiVaramvaritaController.text = data.otherVaranvarita ?? "";
@@ -6989,8 +5946,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       context: context,
       builder: (ctx) {
         return Dialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           child: StatefulBuilder(
             builder: (context, setState) {
               return Container(
@@ -7003,11 +5959,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("${Statics.getLabel('gatividhiKaryaStithi')}",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.purpleAccent,
-                                  fontWeight: FontWeight.bold)),
+                          Text("${Statics.getLabel('gatividhiKaryaStithi')}", style: TextStyle(fontSize: 20, color: Colors.purpleAccent, fontWeight: FontWeight.bold)),
                           IconButton(
                             icon: Icon(Icons.close, color: Colors.grey[700]),
                             onPressed: () {
@@ -7026,10 +5978,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 selectedShreniIDGatividhi = id;
                                 selectedShreniNameGatividhi = value;
                               },
-                              hintText:
-                                  "${Statics.getLabel('gatividhiNivada')}",
-                              question:
-                                  "${Statics.getLabel('gatividhiNivada')}",
+                              hintText: "${Statics.getLabel('gatividhiNivada')}",
+                              question: "${Statics.getLabel('gatividhiNivada')}",
                               editId: selectedShreniIDGatividhi,
                               selectedValue: selectedShreniGatividhi,
                               onSelectionChanged: (newValue) {
@@ -7040,11 +5990,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             )
                           : Container(),
                       SizedBox(height: 10),
-                      textControllerField(
-                          "${Statics.getLabel('niyamitUpkram')}",
-                          niyamitChalnareUpkramGatividhiController,
-                          context,
-                          height: 100),
+                      textControllerField("${Statics.getLabel('niyamitUpkram')}", niyamitChalnareUpkramGatividhiController, context, height: 100),
                       SizedBox(height: 10),
                       vastisarvekshanDropDownDataModel != null
                           ? vastisarvekshanDropdown2(
@@ -7055,8 +6001,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 selectedVaramvaritaNameGatividhi = value;
                               },
                               hintText: "${Statics.getLabel('varamvarita')}",
-                              question:
-                                  "${Statics.getLabel('selectVaramvarita')}",
+                              question: "${Statics.getLabel('selectVaramvarita')}",
                               editId: selectedVaramvaritaIDGatividhi,
                               selectedValue: selectedVaramvaritaGatividhi,
                               onSelectionChanged: (newValue) {
@@ -7069,32 +6014,22 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           : Container(),
                       SizedBox(height: 10),
                       if (selectedVaramvaritaGatividhi?.isOther == 1)
-                        textControllerField2(
-                            name: "${Statics.getLabel('other')}",
-                            controller: anyaGatividhiVaramvaritaController,
-                            hintTextString:
-                                "${Statics.getLabel('anyaVaramvarita')}"),
+                        textControllerField2(name: "${Statics.getLabel('other')}", controller: anyaGatividhiVaramvaritaController, hintTextString: "${Statics.getLabel('anyaVaramvarita')}"),
                       SizedBox(height: 20),
                       Align(
                         alignment: Alignment.center,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.purple,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                           ),
                           onPressed: () {
-                            if (selectedVaramvaritaGatividhi?.isOther == 1 &&
-                                anyaGatividhiVaramvaritaController.text == "") {
-                              Statics.showToast(
-                                  "${Statics.getLabel('otherInfoValidation')}");
+                            if (selectedVaramvaritaGatividhi?.isOther == 1 && anyaGatividhiVaramvaritaController.text == "") {
+                              Statics.showToast("${Statics.getLabel('otherInfoValidation')}");
                             } else {
-                              if (selectedShreniIDGatividhi == null ||
-                                  selectedVaramvaritaIDGatividhi == null) {
+                              if (selectedShreniIDGatividhi == null || selectedVaramvaritaIDGatividhi == null) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text(
-                                          "${Statics.getLabel('fillAllIMPInfo')}")),
+                                  SnackBar(content: Text("${Statics.getLabel('fillAllIMPInfo')}")),
                                 );
                                 return;
                               }
@@ -7102,18 +6037,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 pkid: gatividhiPkId ?? 0,
                                 vastiid: int.parse(selctedLevelId!),
                                 gatividhiid: selectedShreniIDGatividhi!,
-                                selectedDropdownValueName:
-                                    selectedShreniNameGatividhi,
-                                niyamitacalanareupakrama:
-                                    niyamitChalnareUpkramGatividhiController
-                                        .text
-                                        .trim(),
+                                selectedDropdownValueName: selectedShreniNameGatividhi,
+                                niyamitacalanareupakrama: niyamitChalnareUpkramGatividhiController.text.trim(),
                                 varanvaritaid: selectedVaramvaritaIDGatividhi,
-                                selectedDropdownValueName1:
-                                    selectedVaramvaritaNameGatividhi,
+                                selectedDropdownValueName1: selectedVaramvaritaNameGatividhi,
                                 isactive: isActiveGatividhi,
-                                otherVaranvarita:
-                                    anyaGatividhiVaramvaritaController.text,
+                                otherVaranvarita: anyaGatividhiVaramvaritaController.text,
                               );
                               if (editIndex != null) {
                                 enteredDataListGatividhi[editIndex] = data;
@@ -7125,8 +6054,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               if (onDataChanged != null) onDataChanged();
                             }
                           },
-                          child: Text("${Statics.getLabel('Submit')}",
-                              style: TextStyle(color: Colors.white)),
+                          child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
                         ),
                       )
                     ],
@@ -7168,8 +6096,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   int? isActiveVsahatPrakar = 1;
   int? pkIdVsahatPrakar = 0;
 
-  void showVsahatTypePopup(BuildContext context,
-      {int? editIndex, VoidCallback? onDataChanged}) {
+  void showVsahatTypePopup(BuildContext context, {int? editIndex, VoidCallback? onDataChanged}) {
     if (editIndex != null) {
       var data = enteredVasahatPrakarDataList[editIndex];
       vsahatPrakarName = data.selectedDropdownValueName;
@@ -7187,8 +6114,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       context: context,
       builder: (ctx) {
         return Dialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           child: StatefulBuilder(
             builder: (context, setState) {
               return Container(
@@ -7219,11 +6145,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         ],
                       ),
                       const SizedBox(height: 10),
-                      textControllerField2(
-                          controller: vsahatPrakarBhavnacheNavController,
-                          name: "${Statics.getLabel('bhavnacheNaav')}",
-                          keyboardType: TextInputType.text,
-                          height: 50),
+                      textControllerField2(controller: vsahatPrakarBhavnacheNavController, name: "${Statics.getLabel('bhavnacheNaav')}", keyboardType: TextInputType.text, height: 50),
                       const SizedBox(height: 10),
                       // Dropdown 1
                       Align(
@@ -7283,11 +6205,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         editId: selectedvsahatSamparkEditId,
                       ),
                       const SizedBox(height: 10),
-                      textControllerField2(
-                          controller: vsahatPrakarSamparkKshetraController,
-                          name: "${Statics.getLabel('samparkSootraNaav')}",
-                          keyboardType: TextInputType.text,
-                          height: 50),
+                      textControllerField2(controller: vsahatPrakarSamparkKshetraController, name: "${Statics.getLabel('samparkSootraNaav')}", keyboardType: TextInputType.text, height: 50),
                       const SizedBox(height: 10),
                       textControllerField2(
                         controller: vsahatPrakarDurbhashController,
@@ -7302,8 +6220,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.purple,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                           ),
                           // onPressed: () {
                           //   final data = VastisarVasahatprakara(
@@ -7337,28 +6254,19 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           // },
 
                           onPressed: () {
-                            if (vsahatPrakarDurbhashController.text.length !=
-                                10) {
-                              Statics.showToast(
-                                  "${Statics.getLabel('mobileNumberLimit')}");
+                            if (vsahatPrakarDurbhashController.text.length != 10) {
+                              Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
                             } else {
                               final data = VastisarVasahatprakara(
                                 pkid: pkIdVsahatPrakar,
                                 vastiid: int.parse(selctedLevelId!),
                                 prakarid: vsahatPrakarId ?? 0,
-                                selectedDropdownValueName:
-                                    vsahatPrakarName ?? '',
-                                bhavanachenav:
-                                    vsahatPrakarBhavnacheNavController.text
-                                        .trim(),
+                                selectedDropdownValueName: vsahatPrakarName ?? '',
+                                bhavanachenav: vsahatPrakarBhavnacheNavController.text.trim(),
                                 samparksthitiid: vsahatSamparkId ?? 0,
-                                selectedDropdownValueName1:
-                                    vsahatSamparkName ?? '',
-                                samparksootr:
-                                    vsahatPrakarSamparkKshetraController.text
-                                        .trim(),
-                                doorabhaash:
-                                    vsahatPrakarDurbhashController.text.trim(),
+                                selectedDropdownValueName1: vsahatSamparkName ?? '',
+                                samparksootr: vsahatPrakarSamparkKshetraController.text.trim(),
+                                doorabhaash: vsahatPrakarDurbhashController.text.trim(),
                                 isactive: isActiveVsahatPrakar,
                               );
 
@@ -7374,8 +6282,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             }
                           },
 
-                          child: Text("${Statics.getLabel('Submit')}",
-                              style: TextStyle(color: Colors.white)),
+                          child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
                         ),
                       )
                     ],
@@ -7416,8 +6323,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   TextEditingController bhashaPersentCount = TextEditingController();
   TextEditingController anyaBhashaNameController = TextEditingController();
   String? bhashaCount;
-  void showVividhBhashaBolnarePopup(BuildContext context,
-      {int? editIndex, VoidCallback? onDataChanged}) {
+
+  void showVividhBhashaBolnarePopup(BuildContext context, {int? editIndex, VoidCallback? onDataChanged}) {
     if (editIndex != null) {
       var data = enteredVividhBhashaBolnareDataList[editIndex];
       bhashaId = data.bhaashaid;
@@ -7433,8 +6340,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       context: context,
       builder: (ctx) {
         return Dialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           child: StatefulBuilder(
             builder: (context, setState) {
               return Container(
@@ -7449,10 +6355,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         children: [
                           Text(
                             "${Statics.getLabel('vividhBhashaBolnare')}",
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.purpleAccent),
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.purpleAccent),
                           ),
                           IconButton(
                             icon: const Icon(Icons.close),
@@ -7495,12 +6398,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       ),
                       SizedBox(height: 10),
                       if (selectedbhasha?.isOther == 1)
-                        textControllerField2(
-                            controller: anyaBhashaNameController,
-                            name: "${Statics.getLabel('OtherLanguage')}",
-                            height: 50,
-                            hintTextString:
-                                "${Statics.getLabel('onlyBhasha')}"),
+                        textControllerField2(controller: anyaBhashaNameController, name: "${Statics.getLabel('OtherLanguage')}", height: 50, hintTextString: "${Statics.getLabel('onlyBhasha')}"),
                       SizedBox(height: 10),
                       textControllerField2(
                         controller: bhashaPersentCount,
@@ -7515,54 +6413,35 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.purple,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                           ),
                           onPressed: () {
-                            double? average =
-                                double.tryParse(bhashaPersentCount.text.trim());
-                            if (selectedbhasha?.isOther == 1 &&
-                                anyaBhashaNameController.text == "") {
-                              Statics.showToast(
-                                  "${Statics.getLabel('otherInfoValidation')}");
+                            double? average = double.tryParse(bhashaPersentCount.text.trim());
+                            if (selectedbhasha?.isOther == 1 && anyaBhashaNameController.text == "") {
+                              Statics.showToast("${Statics.getLabel('otherInfoValidation')}");
                               return;
                             }
-                            if (average == null ||
-                                average < 0 ||
-                                average > 100) {
-                              Statics.showToast(
-                                  "${Statics.getLabel('persentValidation')}");
+                            if (average == null || average < 0 || average > 100) {
+                              Statics.showToast("${Statics.getLabel('persentValidation')}");
                               return;
                             }
 
                             bool isDuplicate =
-                                enteredVividhBhashaBolnareDataList.any((item) =>
-                                    item.bhaashaid == bhashaId &&
-                                    (editIndex == null ||
-                                        enteredVividhBhashaBolnareDataList
-                                                .indexOf(item) !=
-                                            editIndex));
+                                enteredVividhBhashaBolnareDataList.any((item) => item.bhaashaid == bhashaId && (editIndex == null || enteredVividhBhashaBolnareDataList.indexOf(item) != editIndex));
 
                             if (isDuplicate) {
-                              Statics.showToast(
-                                  "${Statics.getLabel('bhashaValidation')}");
+                              Statics.showToast("${Statics.getLabel('bhashaValidation')}");
                               return;
                             }
                             double totalPercent = 0;
-                            for (int i = 0;
-                                i < enteredVividhBhashaBolnareDataList.length;
-                                i++) {
+                            for (int i = 0; i < enteredVividhBhashaBolnareDataList.length; i++) {
                               if (editIndex != null && i == editIndex) continue;
-                              totalPercent += double.tryParse(
-                                      enteredVividhBhashaBolnareDataList[i]
-                                          .andaje!) ??
-                                  0;
+                              totalPercent += double.tryParse(enteredVividhBhashaBolnareDataList[i].andaje!) ?? 0;
                             }
                             totalPercent += average;
 
                             if (totalPercent > 100) {
-                              Statics.showToast(
-                                  "${Statics.getLabel('notMoreThan100')}");
+                              Statics.showToast("${Statics.getLabel('notMoreThan100')}");
                               return;
                             }
 
@@ -7577,8 +6456,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             );
                             print("newData ${json.encode(newData)}");
                             if (editIndex != null) {
-                              enteredVividhBhashaBolnareDataList[editIndex] =
-                                  newData;
+                              enteredVividhBhashaBolnareDataList[editIndex] = newData;
                             } else {
                               enteredVividhBhashaBolnareDataList.add(newData);
                             }
@@ -7587,8 +6465,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             Navigator.of(ctx).pop();
                             if (onDataChanged != null) onDataChanged();
                           },
-                          child: Text("${Statics.getLabel('Submit')}",
-                              style: TextStyle(color: Colors.white)),
+                          child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
                         ),
                       )
                     ],
@@ -7890,10 +6767,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   int? isActiveKontyaPraantache = 1;
   int? pkIdKontyaPrantache = 0;
   TextEditingController loksankhyaAveragePersentCount = TextEditingController();
-  TextEditingController anyaKontyaPrantacheNameController =
-      TextEditingController();
-  void showKontyaPraantachePopup(BuildContext context,
-      {int? editIndex, VoidCallback? onDataChanged}) {
+  TextEditingController anyaKontyaPrantacheNameController = TextEditingController();
+
+  void showKontyaPraantachePopup(BuildContext context, {int? editIndex, VoidCallback? onDataChanged}) {
     if (editIndex != null) {
       var data = enteredKontyaPraantacheDataList[editIndex];
       KontyaPraantacheId = data.praantid;
@@ -7907,8 +6783,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       context: context,
       builder: (ctx) {
         return Dialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           child: StatefulBuilder(
             builder: (context, setState) {
               return Container(
@@ -7962,9 +6837,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           });
                         },
                         editId: selectedKontyaPraantacheEditId,
-                        excludedItemIds: enteredKontyaPraantacheDataList
-                            .map((e) => e.praantid!)
-                            .toList(),
+                        excludedItemIds: enteredKontyaPraantacheDataList.map((e) => e.praantid!).toList(),
                       ),
                       SizedBox(height: 10),
                       if (selectedKontyaPraantache?.isOther == 1)
@@ -7986,8 +6859,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.purple,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                           ),
                           // onPressed: () {
                           //   if (selectedKontyaPraantache?.isOther == 1 &&
@@ -8063,17 +6935,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           //   }
                           // },
                           onPressed: () {
-                            String input =
-                                loksankhyaAveragePersentCount.text.trim();
+                            String input = loksankhyaAveragePersentCount.text.trim();
 
                             // Check if input is a valid number between 0-100
-                            if (!RegExp(r'^\d+$')
-                                    .hasMatch(input) || // only digits
+                            if (!RegExp(r'^\d+$').hasMatch(input) || // only digits
                                 int.tryParse(input) == null || // valid integer
                                 int.parse(input) < 0 ||
                                 int.parse(input) > 100) {
-                              Statics.showToast(
-                                  "${Statics.getLabel('persentValidation')}");
+                              Statics.showToast("${Statics.getLabel('persentValidation')}");
                               return;
                             }
 
@@ -8081,57 +6950,39 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
 
                             // Calculate total of andaje where isactive == 1
                             int total = 0;
-                            for (int i = 0;
-                                i < enteredKontyaPraantacheDataList.length;
-                                i++) {
-                              if (enteredKontyaPraantacheDataList[i].isactive ==
-                                  1) {
-                                total += int.tryParse(
-                                        enteredKontyaPraantacheDataList[i]
-                                            .andaje!) ??
-                                    0;
+                            for (int i = 0; i < enteredKontyaPraantacheDataList.length; i++) {
+                              if (enteredKontyaPraantacheDataList[i].isactive == 1) {
+                                total += int.tryParse(enteredKontyaPraantacheDataList[i].andaje!) ?? 0;
                               }
                             }
 
                             // If editing, subtract old value before adding new one
-                            if (editIndex != null &&
-                                enteredKontyaPraantacheDataList[editIndex]
-                                        .isactive ==
-                                    1) {
-                              total -= int.tryParse(
-                                      enteredKontyaPraantacheDataList[editIndex]
-                                          .andaje!) ??
-                                  0;
+                            if (editIndex != null && enteredKontyaPraantacheDataList[editIndex].isactive == 1) {
+                              total -= int.tryParse(enteredKontyaPraantacheDataList[editIndex].andaje!) ?? 0;
                             }
 
                             total += newValue;
 
                             // Check if total exceeds 100
                             if (total > 100) {
-                              Statics.showToast(
-                                  "${Statics.getLabel('notMoreThan100')}");
+                              Statics.showToast("${Statics.getLabel('notMoreThan100')}");
                               return;
                             }
 
-                            if (selectedKontyaPraantache?.isOther == 1 &&
-                                anyaKontyaPrantacheNameController.text == "") {
-                              Statics.showToast(
-                                  "${Statics.getLabel('otherInfoValidation')}");
+                            if (selectedKontyaPraantache?.isOther == 1 && anyaKontyaPrantacheNameController.text == "") {
+                              Statics.showToast("${Statics.getLabel('otherInfoValidation')}");
                             } else {
                               final item = VastisarKonatyaprantache(
                                 pkid: pkIdKontyaPrantache ?? 0,
                                 vastiid: int.parse(selctedLevelId!),
                                 praantid: KontyaPraantacheId,
                                 andaje: input,
-                                anyaPraantName:
-                                    anyaKontyaPrantacheNameController.text
-                                        .trim(),
+                                anyaPraantName: anyaKontyaPrantacheNameController.text.trim(),
                                 isactive: isActiveKontyaPraantache,
                                 selectedDropdownValueName: KontyaPraantacheName,
                               );
                               if (editIndex != null) {
-                                enteredKontyaPraantacheDataList[editIndex] =
-                                    item;
+                                enteredKontyaPraantacheDataList[editIndex] = item;
                               } else {
                                 enteredKontyaPraantacheDataList.add(item);
                               }
@@ -8142,8 +6993,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             }
                           },
 
-                          child: Text("${Statics.getLabel('Submit')}",
-                              style: TextStyle(color: Colors.white)),
+                          child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
                         ),
                       ),
                     ],
@@ -8176,8 +7026,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   int? isActiveReligion = 1;
   int? pkIdReligion = 0;
   TextEditingController religionAveragePersentCount = TextEditingController();
-  void showReligionPopup(BuildContext context,
-      {int? editIndex, VoidCallback? onDataChanged}) {
+
+  void showReligionPopup(BuildContext context, {int? editIndex, VoidCallback? onDataChanged}) {
     if (editIndex != null) {
       var data = enteredreligionDataList[editIndex];
       religionId = data.konatyarilijanaceid;
@@ -8190,8 +7040,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       context: context,
       builder: (ctx) {
         return Dialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           child: StatefulBuilder(
             builder: (context, setState) {
               return Container(
@@ -8206,10 +7055,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         children: [
                           Text(
                             "${Statics.getLabel('religion')}",
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.purpleAccent),
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.purpleAccent),
                           ),
                           IconButton(
                             icon: const Icon(Icons.close),
@@ -8223,8 +7069,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       const SizedBox(height: 10),
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: Text("${Statics.getLabel('wichRiligion')}",
-                            style: TextStyle(fontSize: 15)),
+                        child: Text("${Statics.getLabel('wichRiligion')}", style: TextStyle(fontSize: 15)),
                       ),
                       vastisarvekshanDropdown4(
                         dataModel: vastisarvekshanDropDownDataModel!,
@@ -8242,9 +7087,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           });
                         },
                         editId: selectedreligionEditId,
-                        excludedItemIds: enteredreligionDataList
-                            .map((e) => e.konatyarilijanaceid!)
-                            .toList(),
+                        excludedItemIds: enteredreligionDataList.map((e) => e.konatyarilijanaceid!).toList(),
                       ),
                       SizedBox(height: 10),
                       textControllerField2(
@@ -8260,15 +7103,11 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.purple,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                           ),
                           onPressed: () {
-                            double? average = double.tryParse(
-                                religionAveragePersentCount.text.trim());
-                            if (average == null ||
-                                average < 0 ||
-                                average > 100) {
+                            double? average = double.tryParse(religionAveragePersentCount.text.trim());
+                            if (average == null || average < 0 || average > 100) {
                               Statics.showToast(
                                 "${Statics.getLabel('persentValidation')}",
                               );
@@ -8295,8 +7134,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             Navigator.of(ctx).pop();
                             if (onDataChanged != null) onDataChanged();
                           },
-                          child: Text("${Statics.getLabel('Submit')}",
-                              style: TextStyle(color: Colors.white)),
+                          child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
                         ),
                       ),
                     ],
@@ -8331,12 +7169,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   int? editUpasnaSthalTypeId;
   int? isActiveUpasanaSthal = 1;
   int? upasnaSthalPkid = 0;
-  final TextEditingController upasnaSthalCountController =
-      TextEditingController();
-  final TextEditingController anyaUpasnaSthalNameController =
-      TextEditingController();
-  void showUpasnaSthalPopup(BuildContext context,
-      {int? editIndex, VoidCallback? onDataChanged}) {
+  final TextEditingController upasnaSthalCountController = TextEditingController();
+  final TextEditingController anyaUpasnaSthalNameController = TextEditingController();
+
+  void showUpasnaSthalPopup(BuildContext context, {int? editIndex, VoidCallback? onDataChanged}) {
     if (editIndex != null) {
       var data = upasnaSthalDataList[editIndex];
       selectedUpasnaSthalName = data.selectedDropdownValueName1;
@@ -8399,11 +7235,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     if (selectedUpasnaSthal?.isOther == 1) SizedBox(height: 10),
                     if (selectedUpasnaSthal?.isOther == 1)
                       textControllerField2(
-                          controller: anyaUpasnaSthalNameController,
-                          name: "${Statics.getLabel('otherUpasanaSthal')}",
-                          height: 50,
-                          hintTextString:
-                              "${Statics.getLabel('otherUpasanaSthal')}"),
+                          controller: anyaUpasnaSthalNameController, name: "${Statics.getLabel('otherUpasanaSthal')}", height: 50, hintTextString: "${Statics.getLabel('otherUpasanaSthal')}"),
                     const SizedBox(height: 10),
                     vastisarvekshanDropdown2(
                       dataModel: vastisarvekshanDropDownDataModel!,
@@ -8432,8 +7264,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         fillColor: Colors.white,
                         filled: true,
                         isDense: true,
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                       ),
                       keyboardType: TextInputType.number,
                     ),
@@ -8449,8 +7280,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
                 onPressed: () {
                   // Trimmed inputs
@@ -8459,19 +7289,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
 
                   // Validation block
                   if (selectedUpasnaSthal == null) {
-                    Statics.showToast(
-                        "${Statics.getLabel('upasanaSthalMandetory')}");
-                  } else if (selectedUpasnaSthal?.isOther == 1 &&
-                      anyaName.isEmpty) {
-                    Statics.showToast(
-                        "${Statics.getLabel('anyaInfoMandetory')}");
-                  } else if (selectedUpasnaSthalTypeId == null ||
-                      selectedUpasnaSthalTypeId.toString().trim().isEmpty) {
-                    Statics.showToast(
-                        "${Statics.getLabel('PrakarSelectMandetory')}");
+                    Statics.showToast("${Statics.getLabel('upasanaSthalMandetory')}");
+                  } else if (selectedUpasnaSthal?.isOther == 1 && anyaName.isEmpty) {
+                    Statics.showToast("${Statics.getLabel('anyaInfoMandetory')}");
+                  } else if (selectedUpasnaSthalTypeId == null || selectedUpasnaSthalTypeId.toString().trim().isEmpty) {
+                    Statics.showToast("${Statics.getLabel('PrakarSelectMandetory')}");
                   } else if (upasnaCount.isEmpty) {
-                    Statics.showToast(
-                        "${Statics.getLabel('sankhyaFillMandetory')}");
+                    Statics.showToast("${Statics.getLabel('sankhyaFillMandetory')}");
                   } else {
                     // All validations passed, proceed
                     Vastisarupaasana newData = Vastisarupaasana(
@@ -8497,8 +7321,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     Navigator.of(ctx).pop();
                   }
                 },
-                child: Text("${Statics.getLabel('Submit')}",
-                    style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -8547,23 +7370,19 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   int? isActiveSajjanShakti = 1;
   int? pkidSajjanShakti = 0;
 
+  int? isFemale = 0;
+
   TextEditingController sajjanShaktiNameController = TextEditingController();
   TextEditingController sajjanShaktiAddressController = TextEditingController();
   TextEditingController sajjanShaktiPhoneController = TextEditingController();
-  TextEditingController sajjanShaktiContactPersonNameController =
-      TextEditingController();
-  TextEditingController sajjanShaktiContactPersonDoorbhashController =
-      TextEditingController();
-  TextEditingController sajjanShaktiSansthecheNaavController =
-      TextEditingController();
-  TextEditingController sajjanShaktiSansthKuthalyaPadavarController =
-      TextEditingController();
-  TextEditingController sajjanShaktiAnyaShreniNameController =
-      TextEditingController();
-  TextEditingController sajjanShaktiAnyaVisheshNameController =
-      TextEditingController();
-  void showSajjanShaktiPopup(BuildContext context,
-      {int? editIndex, VoidCallback? onDataChanged}) {
+  TextEditingController sajjanShaktiContactPersonNameController = TextEditingController();
+  TextEditingController sajjanShaktiContactPersonDoorbhashController = TextEditingController();
+  TextEditingController sajjanShaktiSansthecheNaavController = TextEditingController();
+  TextEditingController sajjanShaktiSansthKuthalyaPadavarController = TextEditingController();
+  TextEditingController sajjanShaktiAnyaShreniNameController = TextEditingController();
+  TextEditingController sajjanShaktiAnyaVisheshNameController = TextEditingController();
+
+  void showSajjanShaktiPopup(BuildContext context, {int? editIndex, VoidCallback? onDataChanged}) {
     if (editIndex != null) {
       var data = sajjanShaktiDataList[editIndex];
       sajjanShaktiNameController.text = data.name ?? '';
@@ -8581,16 +7400,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       sajjanShaktiVisheshName = data.selectedDropdownValueName2;
       sajjanShaktiVisheshId = data.visheshId;
       sajjanShaktiVisheshEditId = data.visheshId;
-      sajjanShaktiContactPersonNameController.text =
-          data.samparkasutranava ?? '';
-      sajjanShaktiContactPersonDoorbhashController.text =
-          data.samparkasutraMobileNumber ?? '';
+      sajjanShaktiContactPersonNameController.text = data.samparkasutranava ?? '';
+      sajjanShaktiContactPersonDoorbhashController.text = data.samparkasutraMobileNumber ?? '';
       sajjanShaktiSansthecheNaavController.text = data.sanstheCheNaav ?? '';
-      sajjanShaktiSansthKuthalyaPadavarController.text =
-          data.sansthechaKuthalaPadavar ?? '';
+      sajjanShaktiSansthKuthalyaPadavarController.text = data.sansthechaKuthalaPadavar ?? '';
       sajjanShaktiAnyaShreniNameController.text = data.otherShreniName ?? '';
       sajjanShaktiAnyaVisheshNameController.text = data.otherVisheshName ?? '';
       isActiveSajjanShakti = data.isactive;
+      isFemale = data.isfemale;
     }
 
     showDialog(
@@ -8627,15 +7444,44 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       name: "${Statics.getLabel('Name')}",
                       controller: sajjanShaktiNameController,
                     ),
-                    textControllerField2(
-                        name: "${Statics.getLabel('Address')}",
-                        controller: sajjanShaktiAddressController),
+                    textControllerField2(name: "${Statics.getLabel('Address')}", controller: sajjanShaktiAddressController),
                     textControllerField2(
                       name: "${Statics.getLabel('doorBhash')}",
                       controller: sajjanShaktiPhoneController,
                       keyboardType: TextInputType.number,
                       maxInput: 10,
                     ),
+                    //
+                    Row(
+                      children: [
+                        Expanded(
+                          child: RadioListTile<int>(
+                            contentPadding: EdgeInsets.zero,
+                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            title: Text("${Statics.getLabel('Male')}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                            value: 0,
+                            groupValue: isFemale,
+                            onChanged: (value) => setState(() {
+                              isFemale = value;
+                            }),
+                          ),
+                        ),
+                        Expanded(
+                          child: RadioListTile<int>(
+                            contentPadding: EdgeInsets.zero,
+                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            title: Text("${Statics.getLabel('Female')}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                            value: 1,
+                            groupValue: isFemale,
+                            onChanged: (value) => setState(() {
+                              isFemale = value;
+                            }),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    //
                     vastisarvekshanDropdown2(
                       question: "${Statics.getLabel('Category')}",
                       dataModel: vastisarvekshanDropDownDataModel!,
@@ -8654,21 +7500,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       },
                       editId: sajjanShaktiShreniEditId,
                     ),
-                    if (sajjanShaktiShreniEditDataId?.isOther == 1)
-                      const SizedBox(height: 5),
-                    if (sajjanShaktiShreniEditDataId?.isOther == 1)
-                      textControllerField2(
-                          name: "${Statics.getLabel('OtherCategory')}",
-                          controller: sajjanShaktiAnyaShreniNameController),
+                    if (sajjanShaktiShreniEditDataId?.isOther == 1) const SizedBox(height: 5),
+                    if (sajjanShaktiShreniEditDataId?.isOther == 1) textControllerField2(name: "${Statics.getLabel('OtherCategory')}", controller: sajjanShaktiAnyaShreniNameController),
                     const SizedBox(height: 5),
-                    textControllerField2(
-                        name: "${Statics.getLabel('OrganizationName')}",
-                        controller: sajjanShaktiSansthecheNaavController),
+                    textControllerField2(name: "${Statics.getLabel('OrganizationName')}", controller: sajjanShaktiSansthecheNaavController),
                     const SizedBox(height: 5),
-                    textControllerField2(
-                        name: "${Statics.getLabel('sansthetKuthalaPadavar')}",
-                        controller:
-                            sajjanShaktiSansthKuthalyaPadavarController),
+                    textControllerField2(name: "${Statics.getLabel('sansthetKuthalaPadavar')}", controller: sajjanShaktiSansthKuthalyaPadavarController),
                     const SizedBox(height: 5),
                     vastisarvekshanDropdown2(
                       question: "${Statics.getLabel('samparkStithi')}",
@@ -8707,12 +7544,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       },
                       editId: sajjanShaktiVisheshEditId,
                     ),
-                    if (sajjanShaktiVisheshEditDataId?.isOther == 1)
-                      const SizedBox(height: 5),
-                    if (sajjanShaktiVisheshEditDataId?.isOther == 1)
-                      textControllerField2(
-                          name: "${Statics.getLabel('otherSpecial')}",
-                          controller: sajjanShaktiAnyaVisheshNameController),
+                    if (sajjanShaktiVisheshEditDataId?.isOther == 1) const SizedBox(height: 5),
+                    if (sajjanShaktiVisheshEditDataId?.isOther == 1) textControllerField2(name: "${Statics.getLabel('otherSpecial')}", controller: sajjanShaktiAnyaVisheshNameController),
                     const SizedBox(height: 5),
                     vastisarvekshanDropdown2(
                       dataModel: vastisarvekshanDropDownDataModel!,
@@ -8733,9 +7566,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       editId: sajjanShaktiPrabhavKeshtraEditId,
                     ),
                     const SizedBox(height: 5),
-                    textControllerField2(
-                        name: "${Statics.getLabel('samparkSootraNaav')}",
-                        controller: sajjanShaktiContactPersonNameController),
+                    textControllerField2(name: "${Statics.getLabel('samparkSootraNaav')}", controller: sajjanShaktiContactPersonNameController),
                     const SizedBox(height: 5),
                     textControllerField2(
                       name: "${Statics.getLabel('samparakSootraDoorbhash')}",
@@ -8754,8 +7585,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
                 // onPressed: () {
                 //   if ((sajjanShaktiShreniEditDataId?.isOther == 1 &&
@@ -8809,15 +7639,11 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                 //   }
                 // },
                 onPressed: () {
-                  if ((sajjanShaktiShreniEditDataId?.isOther == 1 &&
-                          sajjanShaktiAnyaShreniNameController.text == "") ||
-                      (sajjanShaktiVisheshEditDataId?.isOther == 1 &&
-                          sajjanShaktiAnyaVisheshNameController.text == "")) {
-                    Statics.showToast(
-                        "${Statics.getLabel('otherInfoValidation')}");
+                  if ((sajjanShaktiShreniEditDataId?.isOther == 1 && sajjanShaktiAnyaShreniNameController.text == "") ||
+                      (sajjanShaktiVisheshEditDataId?.isOther == 1 && sajjanShaktiAnyaVisheshNameController.text == "")) {
+                    Statics.showToast("${Statics.getLabel('otherInfoValidation')}");
                   } else if (sajjanShaktiPhoneController.text.length != 10) {
-                    Statics.showToast(
-                        "${Statics.getLabel('mobileNumberLimit')}");
+                    Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
                   } else {
                     Vastisarsajjanshakti newData = Vastisarsajjanshakti(
                       name: sajjanShaktiNameController.text.trim(),
@@ -8825,30 +7651,22 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       doorabhaash: sajjanShaktiPhoneController.text.trim(),
                       shreneeid: sajjanShaktiShreniId,
                       selectedDropdownValueName: sajjanShaktiShreniName,
-                      otherShreniName:
-                          sajjanShaktiAnyaShreniNameController.text.trim(),
-                      sanstheCheNaav:
-                          sajjanShaktiSansthecheNaavController.text.trim(),
-                      sansthechaKuthalaPadavar:
-                          sajjanShaktiSansthKuthalyaPadavarController.text
-                              .trim(),
+                      otherShreniName: sajjanShaktiAnyaShreniNameController.text.trim(),
+                      sanstheCheNaav: sajjanShaktiSansthecheNaavController.text.trim(),
+                      sansthechaKuthalaPadavar: sajjanShaktiSansthKuthalyaPadavarController.text.trim(),
                       samparksthitiid: sajjanShaktiSamparkStithiId,
                       selectedDropdownValueName1: sajjanShaktiSamparkStithiName,
                       visheshId: sajjanShaktiVisheshId,
                       selectedDropdownValueName2: sajjanShaktiVisheshName,
-                      otherVisheshName:
-                          sajjanShaktiAnyaVisheshNameController.text.trim(),
+                      otherVisheshName: sajjanShaktiAnyaVisheshNameController.text.trim(),
                       prabhaavkshetrid: sajjanShaktiPrabhavKeshtraId,
-                      selectedDropdownValueName3:
-                          sajjanShaktiPrabhavKeshtraName,
-                      samparkasutranava:
-                          sajjanShaktiContactPersonNameController.text.trim(),
-                      samparkasutraMobileNumber:
-                          sajjanShaktiContactPersonDoorbhashController.text
-                              .trim(),
+                      selectedDropdownValueName3: sajjanShaktiPrabhavKeshtraName,
+                      samparkasutranava: sajjanShaktiContactPersonNameController.text.trim(),
+                      samparkasutraMobileNumber: sajjanShaktiContactPersonDoorbhashController.text.trim(),
                       isactive: isActiveSajjanShakti,
                       vastiid: int.parse(selctedLevelId!),
                       pkid: pkidSajjanShakti,
+                      isfemale: isFemale,
                     );
                     if (editIndex != null) {
                       sajjanShaktiDataList[editIndex] = newData;
@@ -8863,8 +7681,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   }
                 },
 
-                child: Text("${Statics.getLabel('Submit')}",
-                    style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -8922,24 +7739,17 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   Masterdata? selectedShreni;
   Masterdata? selectedUpShreni;
   Masterdata? selectedUpShreni2;
-  final TextEditingController anyaPrabhaviLokNaavController =
-      TextEditingController();
-  final TextEditingController anyaPrabhaviLokAddressController =
-      TextEditingController();
-  final TextEditingController anyaPrabhaviLokAnyaVisheshMahitiController =
-      TextEditingController();
-  final TextEditingController anyaPrabhaviLokSamparkSutraNaavController =
-      TextEditingController();
-  final TextEditingController anyaPrabhaviLokSamparkSutraDoorbhashController =
-      TextEditingController();
-  final TextEditingController anyaPrabhaviLokMobileNoController =
-      TextEditingController();
-  final TextEditingController anyaPrabhaviLokAnyaUppshreniController =
-      TextEditingController();
-  final TextEditingController anyaPrabhaviLokAnyaUppshreni1Controller =
-      TextEditingController();
-  void showAnyaPrabhaviPopup(BuildContext context,
-      {int? editIndex, VoidCallback? onDataChanged}) {
+  final TextEditingController anyaPrabhaviLokNaavController = TextEditingController();
+  final TextEditingController anyaPrabhaviLokAddressController = TextEditingController();
+  final TextEditingController anyaPrabhaviLokAnyaVisheshMahitiController = TextEditingController();
+  final TextEditingController anyaPrabhaviLokSamparkSutraNaavController = TextEditingController();
+  final TextEditingController anyaPrabhaviLokSamparkSutraDoorbhashController = TextEditingController();
+  final TextEditingController anyaPrabhaviLokMobileNoController = TextEditingController();
+  final TextEditingController anyaPrabhaviLokAnyaUppshreniController = TextEditingController();
+  final TextEditingController anyaPrabhaviLokAnyaUppshreni1Controller = TextEditingController();
+
+  void showAnyaPrabhaviPopup(BuildContext context, {int? editIndex, VoidCallback? onDataChanged}) {
+    log("showAnyaPrabhaviPopup is opened >>>>>>>>>>>>>> ");
     if (editIndex != null) {
       var data = anyaPrabhaviLokDataList[editIndex];
       anyaPrabhaviLokNaavController.text = data.name ?? "";
@@ -8966,11 +7776,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       anyaPrabhaviLokSamparkStithiId = data.samparksthitiid;
       selectedAnyaPrabhaviLokSamparkStithiIDEdit = data.samparksthitiid;
       anyaPrabhaviLokSamparkStithiName = data.selectedDropdownValueName5;
-      anyaPrabhaviLokSamparkSutraNaavController.text =
-          data.samparkasutranav ?? "";
-      anyaPrabhaviLokSamparkSutraDoorbhashController.text =
-          data.samparkaSutraDoorbhash ?? "";
+      anyaPrabhaviLokSamparkSutraNaavController.text = data.samparkasutranav ?? "";
+      anyaPrabhaviLokSamparkSutraDoorbhashController.text = data.samparkaSutraDoorbhash ?? "";
       pkidAnyaPrabhaviLok = data.pkid;
+      isFemale = data.isfemale;
     }
     showDialog(
       context: context,
@@ -8989,7 +7798,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
               ),
               IconButton(
                 icon: Icon(Icons.close, color: Colors.grey),
-                onPressed: () => Navigator.of(context).pop(),
+                onPressed: () {
+                  clearAnyaPrabhaviLokFields();
+                  Navigator.of(context).pop();
+                },
               ),
             ],
           ),
@@ -8999,14 +7811,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    textControllerField2(
-                        name: "${Statics.getLabel('Name')}",
-                        controller: anyaPrabhaviLokNaavController,
-                        height: 50),
-                    textControllerField2(
-                        name: "${Statics.getLabel('Address')}",
-                        controller: anyaPrabhaviLokAddressController,
-                        height: 50),
+                    textControllerField2(name: "${Statics.getLabel('Name')}", controller: anyaPrabhaviLokNaavController, height: 50),
+                    textControllerField2(name: "${Statics.getLabel('Address')}", controller: anyaPrabhaviLokAddressController, height: 50),
                     textControllerField2(
                       name: "${Statics.getLabel('doorBhash')}",
                       controller: anyaPrabhaviLokMobileNoController,
@@ -9015,12 +7821,42 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       maxInput: 10,
                     ),
                     SizedBox(height: 5),
+                    //
+                    Row(
+                      children: [
+                        Expanded(
+                          child: RadioListTile<int>(
+                            contentPadding: EdgeInsets.zero,
+                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            title: Text("${Statics.getLabel('Male')}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                            value: 0,
+                            groupValue: isFemale,
+                            onChanged: (value) => setState(() {
+                              isFemale = value;
+                            }),
+                          ),
+                        ),
+                        Expanded(
+                          child: RadioListTile<int>(
+                            contentPadding: EdgeInsets.zero,
+                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            title: Text("${Statics.getLabel('Female')}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                            value: 1,
+                            groupValue: isFemale,
+                            onChanged: (value) => setState(() {
+                              isFemale = value;
+                            }),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    //
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
                         "${Statics.getLabel('Category')}/${Statics.getLabel('upshreni')}",
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.w500),
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
                       ),
                     ),
                     SizedBox(height: 5),
@@ -9028,12 +7864,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         ? vastisarvekshanDropdown3(
                             filterTypeName: "श्रेणी",
                             hintText: "${Statics.getLabel('otherUpshreni')}",
-                            anyaPrabhaviLokShreniId:
-                                anyaPrabhaviLokShreniIdEdit,
-                            anyaPrabhaviLokUpShreniId:
-                                anyaPrabhaviLokUpShreniIdEdit,
-                            anyaPrabhaviLokUpShreni1Id:
-                                anyaPrabhaviLokUpShreni1IdEdit,
+                            anyaPrabhaviLokShreniId: anyaPrabhaviLokShreniIdEdit,
+                            anyaPrabhaviLokUpShreniId: anyaPrabhaviLokUpShreniIdEdit,
+                            anyaPrabhaviLokUpShreni1Id: anyaPrabhaviLokUpShreni1IdEdit,
                             onValueSelected: (id, name, value) {
                               anyaPrabhaviLokShreniId = id;
                               anyaPrabhaviLokShreniName = name;
@@ -9065,18 +7898,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       SizedBox(
                         height: 10,
                       ),
-                    if (selectedUpShreni?.isOther == 1)
-                      textControllerField2(
-                          name: "${Statics.getLabel('otherUpshreni')}",
-                          controller: anyaPrabhaviLokAnyaUppshreniController),
+                    if (selectedUpShreni?.isOther == 1) textControllerField2(name: "${Statics.getLabel('otherUpshreni')}", controller: anyaPrabhaviLokAnyaUppshreniController),
                     if (selectedUpShreni2?.isOther == 1)
                       SizedBox(
                         height: 10,
                       ),
-                    if (selectedUpShreni2?.isOther == 1)
-                      textControllerField2(
-                          name: "${Statics.getLabel('otherUpshreni2')}",
-                          controller: anyaPrabhaviLokAnyaUppshreni1Controller),
+                    if (selectedUpShreni2?.isOther == 1) textControllerField2(name: "${Statics.getLabel('otherUpshreni2')}", controller: anyaPrabhaviLokAnyaUppshreni1Controller),
                     SizedBox(
                       height: 10,
                     ),
@@ -9105,8 +7932,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     ),
                     vastisarvekshanDropDownDataModel != null
                         ? vastisarvekshanDropdown2(
-                            hintText:
-                                "${Statics.getLabel('prabhavKshetraSelect')}",
+                            hintText: "${Statics.getLabel('prabhavKshetraSelect')}",
                             filterTypeName: "अन्यप्रभावीलोकंप्रभावक्षेत्र",
                             onItemSelected: (valueId, valueName, isOther) {
                               anyaPrabhaviLokPrabhavKshetraId = valueId;
@@ -9116,12 +7942,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             dataModel: vastisarvekshanDropDownDataModel!,
                             question: "${Statics.getLabel('prabhavKshetra')}",
                             editId: selectedAnyaPrabhaviLokPrabhavKshetraIDEdit,
-                            selectedValue:
-                                selectedAnyaPrabhaviLokPrabhavKshetra,
+                            selectedValue: selectedAnyaPrabhaviLokPrabhavKshetra,
                             onSelectionChanged: (newValue) {
                               setState(() {
-                                selectedAnyaPrabhaviLokPrabhavKshetra =
-                                    newValue;
+                                selectedAnyaPrabhaviLokPrabhavKshetra = newValue;
                               });
                             },
                           )
@@ -9129,17 +7953,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     SizedBox(
                       height: 10,
                     ),
-                    textControllerField2(
-                        name: "${Statics.getLabel('anyaVisheshMahiti')}",
-                        controller: anyaPrabhaviLokAnyaVisheshMahitiController,
-                        height: 50),
+                    textControllerField2(name: "${Statics.getLabel('anyaVisheshMahiti')}", controller: anyaPrabhaviLokAnyaVisheshMahitiController, height: 50),
                     SizedBox(
                       height: 10,
                     ),
                     vastisarvekshanDropDownDataModel != null
                         ? vastisarvekshanDropdown2(
-                            hintText:
-                                "${Statics.getLabel('samparkSthitiSelect')}",
+                            hintText: "${Statics.getLabel('samparkSthitiSelect')}",
                             filterTypeName: "अन्यप्रभावीलोकंसंपर्कस्थिति",
                             onItemSelected: (valueId, valueName, isOther) {
                               anyaPrabhaviLokSamparkStithiId = valueId;
@@ -9161,14 +7981,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       height: 10,
                     ),
                     // textControllerField(${Statics.getLabel('anyaVisheshMahiti')}, anyaPrabhaviLokAnyaVisheshMahitiController, context, height: 80),
-                    textControllerField2(
-                        name: "${Statics.getLabel('samparkSootraNaav')}",
-                        controller: anyaPrabhaviLokSamparkSutraNaavController,
-                        height: 50),
+                    textControllerField2(name: "${Statics.getLabel('samparkSootraNaav')}", controller: anyaPrabhaviLokSamparkSutraNaavController, height: 50),
                     textControllerField2(
                       name: "${Statics.getLabel('samparakSootraDoorbhash')}",
-                      controller:
-                          anyaPrabhaviLokSamparkSutraDoorbhashController,
+                      controller: anyaPrabhaviLokSamparkSutraDoorbhashController,
                       keyboardType: TextInputType.number,
                       maxInput: 10,
                     ),
@@ -9183,27 +7999,18 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
                 onPressed: () {
-                  if ((selectedUpShreni?.isOther == 1 &&
-                          anyaPrabhaviLokAnyaUppshreniController.text == "") ||
-                      (selectedUpShreni2?.isOther == 1 &&
-                          anyaPrabhaviLokAnyaUppshreni1Controller.text == "")) {
-                    Statics.showToast(
-                        "${Statics.getLabel('otherInfoValidation')}");
-                  } else if (anyaPrabhaviLokMobileNoController.text.length !=
-                      10) {
+                  if ((selectedUpShreni?.isOther == 1 && anyaPrabhaviLokAnyaUppshreniController.text == "") ||
+                      (selectedUpShreni2?.isOther == 1 && anyaPrabhaviLokAnyaUppshreni1Controller.text == "")) {
+                    Statics.showToast("${Statics.getLabel('otherInfoValidation')}");
+                  } else if (anyaPrabhaviLokMobileNoController.text.length != 10) {
                     log("anyaPrabhaviLokMobileNoController.text.length  -->> ${anyaPrabhaviLokMobileNoController.text.length}");
-                    Statics.showToast(
-                        "${Statics.getLabel('mobileNumberLimit')}");
-                  } else if (anyaPrabhaviLokSamparkSutraDoorbhashController
-                          .text.length !=
-                      10) {
+                    Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
+                  } else if (anyaPrabhaviLokSamparkSutraDoorbhashController.text.length != 10) {
                     log("anyaPrabhaviLokSamparkSutraDoorbhashController.text.length  -->> ${anyaPrabhaviLokSamparkSutraDoorbhashController.text.length}");
-                    Statics.showToast(
-                        "${Statics.getLabel('mobileNumberLimit')}");
+                    Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
                   } else {
                     VastisarAnyaprabhavilokam data = VastisarAnyaprabhavilokam(
                       name: anyaPrabhaviLokNaavController.text,
@@ -9218,26 +8025,19 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       visheshid: anyaPrabhaviLokVisheshId,
                       selectedDropdownValueName3: anyaPrabhaviLokVisheshName,
                       prabhaavkshetrid: anyaPrabhaviLokPrabhavKshetraId,
-                      selectedDropdownValueName4:
-                          anyaPrabhaviLokPrabhavKshetraName,
-                      othervishesh:
-                          anyaPrabhaviLokAnyaVisheshMahitiController.text,
+                      selectedDropdownValueName4: anyaPrabhaviLokPrabhavKshetraName,
+                      othervishesh: anyaPrabhaviLokAnyaVisheshMahitiController.text,
                       samparksthitiid: anyaPrabhaviLokSamparkStithiId,
-                      selectedDropdownValueName5:
-                          anyaPrabhaviLokSamparkStithiName,
-                      samparkasutranav:
-                          anyaPrabhaviLokSamparkSutraNaavController.text,
-                      samparkaSutraDoorbhash:
-                          anyaPrabhaviLokSamparkSutraDoorbhashController.text,
+                      selectedDropdownValueName5: anyaPrabhaviLokSamparkStithiName,
+                      samparkasutranav: anyaPrabhaviLokSamparkSutraNaavController.text,
+                      samparkaSutraDoorbhash: anyaPrabhaviLokSamparkSutraDoorbhashController.text,
                       pkid: pkidAnyaPrabhaviLok,
-                      anyavisesamahiti:
-                          anyaPrabhaviLokAnyaVisheshMahitiController.text,
-                      otherupshrenee:
-                          anyaPrabhaviLokAnyaUppshreniController.text,
-                      otherupshrenee2:
-                          anyaPrabhaviLokAnyaUppshreni1Controller.text,
+                      anyavisesamahiti: anyaPrabhaviLokAnyaVisheshMahitiController.text,
+                      otherupshrenee: anyaPrabhaviLokAnyaUppshreniController.text,
+                      otherupshrenee2: anyaPrabhaviLokAnyaUppshreni1Controller.text,
                       isactive: isActiveAnyaPrabhavilok,
                       vastiid: int.parse(selctedLevelId!),
+                      isfemale: isFemale,
                     );
                     if (editIndex != null) {
                       anyaPrabhaviLokDataList[editIndex] = data;
@@ -9251,8 +8051,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     Navigator.of(ctx).pop();
                   }
                 },
-                child: Text("${Statics.getLabel('Submit')}",
-                    style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -9295,6 +8094,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
     selectedAnyaPrabhaviLokVisheshIDEdit = null;
     selectedAnyaPrabhaviLokPrabhavKshetraIDEdit = null;
     selectedAnyaPrabhaviLokSamparkStithiIDEdit = null;
+    isFemale = null;
     resetDropdowns();
   }
 
@@ -9307,26 +8107,20 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   Masterdata? selectedMasterSanName;
   int? isActiveSajareHonareSan = 1;
   int? pkidSajareHonareSan = 0;
-  final TextEditingController vastitSajarHonareSanAyojakSansthaNameController =
-      TextEditingController();
-  final TextEditingController vastitSajarHonareSanAyojakNameController =
-      TextEditingController();
-  final TextEditingController vastitSajarHonareSanAyojakSamparkController =
-      TextEditingController();
-  final TextEditingController vastitSajarHonareAnyaSanController =
-      TextEditingController();
-  void showVastitSajarHonareSanPopup(BuildContext context,
-      {int? editIndex, VoidCallback? onDataChanged}) {
+  final TextEditingController vastitSajarHonareSanAyojakSansthaNameController = TextEditingController();
+  final TextEditingController vastitSajarHonareSanAyojakNameController = TextEditingController();
+  final TextEditingController vastitSajarHonareSanAyojakSamparkController = TextEditingController();
+  final TextEditingController vastitSajarHonareAnyaSanController = TextEditingController();
+
+  void showVastitSajarHonareSanPopup(BuildContext context, {int? editIndex, VoidCallback? onDataChanged}) {
     if (editIndex != null) {
       var data = vastitSajarHonareSanDataList[editIndex];
       selectedSanId = data.id;
       selectedSanIdEdit = data.id;
       selectedSanName = data.selectedDropdownValueName;
-      vastitSajarHonareSanAyojakSansthaNameController.text =
-          data.ayojakasansthacinave ?? "";
+      vastitSajarHonareSanAyojakSansthaNameController.text = data.ayojakasansthacinave ?? "";
       vastitSajarHonareSanAyojakNameController.text = data.ayojakancinave ?? "";
-      vastitSajarHonareSanAyojakSamparkController.text =
-          data.aayojaksamparksootr ?? "";
+      vastitSajarHonareSanAyojakSamparkController.text = data.aayojaksamparksootr ?? "";
       // selectedMasterSanName = data['sanObj'];
       vastitSajarHonareAnyaSanController.text = data.otherSajareSan ?? "";
       pkidSajareHonareSan = data.pkid;
@@ -9366,8 +8160,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       onItemSelected: (id, value, isOther) {
                         selectedSanId = id;
                         selectedSanName = value;
-                        print(
-                            "selectedMasterSanName ${json.encode(selectedMasterSanName)}");
+                        print("selectedMasterSanName ${json.encode(selectedMasterSanName)}");
                       },
                       width: 250,
                       selectedValue: selectedMasterSanName,
@@ -9380,26 +8173,11 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       editId: selectedSanIdEdit,
                     ),
                     const SizedBox(height: 10),
-                    if (selectedMasterSanName?.isOther == 1)
-                      textControllerField(
-                          "${Statics.getLabel('otherFestivals')}",
-                          vastitSajarHonareAnyaSanController,
-                          context,
-                          height: 50),
-                    textControllerField(
-                        "${Statics.getLabel('aayojakSansthachiNave')}",
-                        vastitSajarHonareSanAyojakSansthaNameController,
-                        context,
-                        height: 50),
-                    textControllerField("${Statics.getLabel('aayojakNaav')}",
-                        vastitSajarHonareSanAyojakNameController, context,
-                        height: 80),
+                    if (selectedMasterSanName?.isOther == 1) textControllerField("${Statics.getLabel('otherFestivals')}", vastitSajarHonareAnyaSanController, context, height: 50),
+                    textControllerField("${Statics.getLabel('aayojakSansthachiNave')}", vastitSajarHonareSanAyojakSansthaNameController, context, height: 50),
+                    textControllerField("${Statics.getLabel('aayojakNaav')}", vastitSajarHonareSanAyojakNameController, context, height: 80),
                     textControllerField2(
-                        name: "${Statics.getLabel('aayojakSamparkSootra')}",
-                        controller: vastitSajarHonareSanAyojakSamparkController,
-                        keyboardType: TextInputType.number,
-                        maxInput: 10,
-                        height: 50),
+                        name: "${Statics.getLabel('aayojakSamparkSootra')}", controller: vastitSajarHonareSanAyojakSamparkController, keyboardType: TextInputType.number, maxInput: 10, height: 50),
                     const SizedBox(height: 10),
                   ],
                 ),
@@ -9413,8 +8191,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
                 // onPressed: () {
                 //   if ((selectedMasterSanName?.isOther == 1 &&
@@ -9451,26 +8228,17 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                 //   }
                 // },
                 onPressed: () {
-                  if ((selectedMasterSanName?.isOther == 1 &&
-                      vastitSajarHonareAnyaSanController.text == "")) {
-                    Statics.showToast(
-                        "${Statics.getLabel('otherInfoValidation')}");
-                  } else if (vastitSajarHonareSanAyojakSamparkController
-                          .text.length !=
-                      10) {
-                    Statics.showToast(
-                        "${Statics.getLabel('mobileNumberLimit')}");
+                  if ((selectedMasterSanName?.isOther == 1 && vastitSajarHonareAnyaSanController.text == "")) {
+                    Statics.showToast("${Statics.getLabel('otherInfoValidation')}");
+                  } else if (vastitSajarHonareSanAyojakSamparkController.text.length != 10) {
+                    Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
                   } else {
-                    VastisarVastitamahatvacesana data =
-                        VastisarVastitamahatvacesana(
+                    VastisarVastitamahatvacesana data = VastisarVastitamahatvacesana(
                       id: selectedSanId,
                       selectedDropdownValueName: selectedSanName,
-                      ayojakasansthacinave:
-                          vastitSajarHonareSanAyojakSansthaNameController.text,
-                      ayojakancinave:
-                          vastitSajarHonareSanAyojakNameController.text,
-                      aayojaksamparksootr:
-                          vastitSajarHonareSanAyojakSamparkController.text,
+                      ayojakasansthacinave: vastitSajarHonareSanAyojakSansthaNameController.text,
+                      ayojakancinave: vastitSajarHonareSanAyojakNameController.text,
+                      aayojaksamparksootr: vastitSajarHonareSanAyojakSamparkController.text,
                       otherSajareSan: vastitSajarHonareAnyaSanController.text,
                       isactive: isActiveSajareHonareSan,
                       pkid: pkidSajareHonareSan ?? 0,
@@ -9489,8 +8257,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   }
                 },
 
-                child: Text("${Statics.getLabel('Submit')}",
-                    style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -9510,8 +8277,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   }
 
   //=================================================== 10. VASTIT SAJAR HONARE SAMAJIK KARYAKRAM FORM ====================================================================================
-  List<VastisarVastitasajaraSamajikkaryakram>
-      vastitSajarHonareSamajikKaryakramDataList = [];
+  List<VastisarVastitasajaraSamajikkaryakram> vastitSajarHonareSamajikKaryakramDataList = [];
   int? selectedSamajikKaryakramIdIndex;
   int? selectedSamajikKaryakramId;
   int? selectedSamajikKaryakramIdEdit;
@@ -9519,32 +8285,21 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   Masterdata? selectedMasterSamajikKaryakramName;
   int? isActiveSamajikKaryakram = 1;
   int? pkidSamajikKaryakram = 0;
-  final TextEditingController
-      vastitSajarHonareSamajikKaryakramAyojakSansthaNameController =
-      TextEditingController();
-  final TextEditingController
-      vastitSajarHonareSamajikKaryakramAyojakNameController =
-      TextEditingController();
-  final TextEditingController
-      vastitSajarHonareSamajikKaryakramAyojakSamparkController =
-      TextEditingController();
-  final TextEditingController vastitSajarHonareSamajikKaryakramAnya1Controller =
-      TextEditingController();
-  void showVastitSajarHonareSamajikKaryakramPopup(BuildContext context,
-      {int? editIndex, VoidCallback? onDataChanged}) {
+  final TextEditingController vastitSajarHonareSamajikKaryakramAyojakSansthaNameController = TextEditingController();
+  final TextEditingController vastitSajarHonareSamajikKaryakramAyojakNameController = TextEditingController();
+  final TextEditingController vastitSajarHonareSamajikKaryakramAyojakSamparkController = TextEditingController();
+  final TextEditingController vastitSajarHonareSamajikKaryakramAnya1Controller = TextEditingController();
+
+  void showVastitSajarHonareSamajikKaryakramPopup(BuildContext context, {int? editIndex, VoidCallback? onDataChanged}) {
     if (editIndex != null) {
       var data = vastitSajarHonareSamajikKaryakramDataList[editIndex];
       pkidSamajikKaryakram = data.pkid;
       selectedSamajikKaryakramId = data.id;
       selectedSamajikKaryakramName = data.selectedDropdownValueName;
-      vastitSajarHonareSamajikKaryakramAyojakSansthaNameController.text =
-          data.ayojakasansthacinave ?? "";
-      vastitSajarHonareSamajikKaryakramAyojakNameController.text =
-          data.ayojakancinave ?? "";
-      vastitSajarHonareSamajikKaryakramAyojakSamparkController.text =
-          data.aayojaksamparksootr ?? "";
-      vastitSajarHonareSamajikKaryakramAnya1Controller.text =
-          data.otherKaryakram ?? "";
+      vastitSajarHonareSamajikKaryakramAyojakSansthaNameController.text = data.ayojakasansthacinave ?? "";
+      vastitSajarHonareSamajikKaryakramAyojakNameController.text = data.ayojakancinave ?? "";
+      vastitSajarHonareSamajikKaryakramAyojakSamparkController.text = data.aayojaksamparksootr ?? "";
+      vastitSajarHonareSamajikKaryakramAnya1Controller.text = data.otherKaryakram ?? "";
       // selectedMasterSamajikKaryakramName = data['samajikKaryakramObj'];
     }
     showDialog(
@@ -9576,8 +8331,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   children: [
                     vastisarvekshanDropdown2(
                       dataModel: vastisarvekshanDropDownDataModel!,
-                      filterTypeName:
-                          "वस्तीतसाजरहोणारेमहत्वाचेसामाजिककार्यक्रम",
+                      filterTypeName: "वस्तीतसाजरहोणारेमहत्वाचेसामाजिककार्यक्रम",
                       hintText: "${Statics.getLabel('SelectKaryakram')}",
                       onItemSelected: (id, value, isOther) {
                         selectedSamajikKaryakramId = id;
@@ -9593,26 +8347,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       editId: selectedSamajikKaryakramIdEdit,
                     ),
                     const SizedBox(height: 10),
-                    if (selectedMasterSamajikKaryakramName?.isOther == 1)
-                      textControllerField(
-                          "${Statics.getLabel('other')}",
-                          vastitSajarHonareSamajikKaryakramAnya1Controller,
-                          context,
-                          height: 50),
-                    textControllerField(
-                        "${Statics.getLabel('aayojakSansthachiNave')}",
-                        vastitSajarHonareSamajikKaryakramAyojakSansthaNameController,
-                        context,
-                        height: 50),
-                    textControllerField(
-                        "${Statics.getLabel('aayojakNaav')}",
-                        vastitSajarHonareSamajikKaryakramAyojakNameController,
-                        context,
-                        height: 80),
+                    if (selectedMasterSamajikKaryakramName?.isOther == 1) textControllerField("${Statics.getLabel('other')}", vastitSajarHonareSamajikKaryakramAnya1Controller, context, height: 50),
+                    textControllerField("${Statics.getLabel('aayojakSansthachiNave')}", vastitSajarHonareSamajikKaryakramAyojakSansthaNameController, context, height: 50),
+                    textControllerField("${Statics.getLabel('aayojakNaav')}", vastitSajarHonareSamajikKaryakramAyojakNameController, context, height: 80),
                     textControllerField2(
                         name: "${Statics.getLabel('aayojakSamparkSootra')}",
-                        controller:
-                            vastitSajarHonareSamajikKaryakramAyojakSamparkController,
+                        controller: vastitSajarHonareSamajikKaryakramAyojakSamparkController,
                         height: 50,
                         keyboardType: TextInputType.number,
                         maxInput: 10),
@@ -9629,8 +8369,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
                 // onPressed: () {
                 //   if ((selectedMasterSamajikKaryakramName?.isOther == 1 &&
@@ -9673,39 +8412,24 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                 //   }
                 // },
                 onPressed: () {
-                  if ((selectedMasterSamajikKaryakramName?.isOther == 1 &&
-                      vastitSajarHonareSamajikKaryakramAnya1Controller.text ==
-                          "")) {
-                    Statics.showToast(
-                        "${Statics.getLabel('otherInfoValidation')}");
-                  } else if (vastitSajarHonareSamajikKaryakramAyojakSamparkController
-                          .text.length !=
-                      10) {
-                    Statics.showToast(
-                        "${Statics.getLabel('mobileNumberLimit')}");
+                  if ((selectedMasterSamajikKaryakramName?.isOther == 1 && vastitSajarHonareSamajikKaryakramAnya1Controller.text == "")) {
+                    Statics.showToast("${Statics.getLabel('otherInfoValidation')}");
+                  } else if (vastitSajarHonareSamajikKaryakramAyojakSamparkController.text.length != 10) {
+                    Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
                   } else {
-                    VastisarVastitasajaraSamajikkaryakram data =
-                        VastisarVastitasajaraSamajikkaryakram(
+                    VastisarVastitasajaraSamajikkaryakram data = VastisarVastitasajaraSamajikkaryakram(
                       id: selectedSamajikKaryakramId,
                       vastiid: int.parse(selctedLevelId!),
                       pkid: pkidSamajikKaryakram,
                       isactive: isActiveSamajikKaryakram,
                       selectedDropdownValueName: selectedSamajikKaryakramName,
-                      otherKaryakram:
-                          vastitSajarHonareSamajikKaryakramAnya1Controller.text,
-                      ayojakasansthacinave:
-                          vastitSajarHonareSamajikKaryakramAyojakSansthaNameController
-                              .text,
-                      ayojakancinave:
-                          vastitSajarHonareSamajikKaryakramAyojakNameController
-                              .text,
-                      aayojaksamparksootr:
-                          vastitSajarHonareSamajikKaryakramAyojakSamparkController
-                              .text,
+                      otherKaryakram: vastitSajarHonareSamajikKaryakramAnya1Controller.text,
+                      ayojakasansthacinave: vastitSajarHonareSamajikKaryakramAyojakSansthaNameController.text,
+                      ayojakancinave: vastitSajarHonareSamajikKaryakramAyojakNameController.text,
+                      aayojaksamparksootr: vastitSajarHonareSamajikKaryakramAyojakSamparkController.text,
                     );
                     if (editIndex != null) {
-                      vastitSajarHonareSamajikKaryakramDataList[editIndex] =
-                          data;
+                      vastitSajarHonareSamajikKaryakramDataList[editIndex] = data;
                     } else {
                       vastitSajarHonareSamajikKaryakramDataList.add(data);
                     }
@@ -9717,8 +8441,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   }
                 },
 
-                child: Text("${Statics.getLabel('Submit')}",
-                    style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -9754,23 +8477,16 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                 padding: EdgeInsets.symmetric(vertical: 10),
                 child: Column(
                   children: [
-                    dynamicProgressBar(
-                        context: context,
-                        value: double.parse(step2completepercentage.toString()),
-                        detailListItems: step2pendingpoints!.split(',')),
+                    dynamicProgressBar(context: context, value: double.parse(step2completepercentage.toString()), detailListItems: step2pendingpoints!.split(',')),
                     SizedBox(
                       height: 10,
                     ),
                     InkWell(
                       onTap: () {
                         // Filter out empty or whitespace-only strings
-                        final filteredDetails = step2pendingpoints!
-                            .split(',')
-                            .where((item) => item.trim().isNotEmpty)
-                            .toList();
+                        final filteredDetails = step2pendingpoints!.split(',').where((item) => item.trim().isNotEmpty).toList();
 
-                        print(
-                            "Filtered step1pendingpoints!.split(','): $filteredDetails");
+                        print("Filtered step1pendingpoints!.split(','): $filteredDetails");
 
                         if (filteredDetails.isEmpty) {
                           Statics.showToast(Statics.getLabel('allInfoSubmit'));
@@ -9781,8 +8497,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           context: context,
                           builder: (ctx) {
                             return Dialog(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                               backgroundColor: Colors.white,
                               child: Padding(
                                 padding: const EdgeInsets.all(20),
@@ -9791,11 +8506,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   children: [
                                     // Icon and Title
                                     Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Icon(Icons.warning_amber_rounded,
-                                            color: Colors.red, size: 30),
+                                        Icon(Icons.warning_amber_rounded, color: Colors.red, size: 30),
                                         SizedBox(width: 8),
                                         Text(
                                           Statics.getLabel('remainingQuestion'),
@@ -9835,16 +8548,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                           backgroundColor: Colors.red,
                                           foregroundColor: Colors.white,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 12),
+                                          padding: EdgeInsets.symmetric(vertical: 12),
                                         ),
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(),
-                                        child:
-                                            Text(Statics.getLabel('bandKara')),
+                                        onPressed: () => Navigator.of(context).pop(),
+                                        child: Text(Statics.getLabel('bandKara')),
                                       ),
                                     ),
                                   ],
@@ -9900,11 +8609,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       width: 100,
-                      decoration: BoxDecoration(
-                          border:
-                              Border.all(color: Colors.purpleAccent.shade100),
-                          color: Colors.purpleAccent.withOpacity(0.7),
-                          borderRadius: BorderRadius.circular(15)),
+                      decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                       child: Center(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -9913,9 +8618,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             SizedBox(width: 5),
                             Text(
                               "${Statics.getLabel('AddButton')}",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
+                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
@@ -9937,11 +8640,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         width: MediaQuery.of(context).size.width * 1.2,
                         child: DataTable(
                           showCheckboxColumn: false,
-                          headingRowColor:
-                              MaterialStatePropertyAll(Colors.purple.shade50),
-                          headingTextStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87),
+                          headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+                          headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                           columns: [
                             DataColumn(
                                 label: Text(
@@ -9956,36 +8656,27 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               "${Statics.getLabel('konasathi')}",
                             )),
                           ],
-                          rows: vastitBalopasanaKendraDataList
-                              .asMap()
-                              .entries
-                              .where((entry) => entry.value.isactive == 1)
-                              .map((entry) {
+                          rows: vastitBalopasanaKendraDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                             int index = entry.key;
                             var data = entry.value;
-                            bool isSelected =
-                                selectedVastitBalopasanaKendraIdIndex == index;
+                            bool isSelected = selectedVastitBalopasanaKendraIdIndex == index;
                             return DataRow(
                                 selected: isSelected,
-                                color:
-                                    MaterialStateProperty.resolveWith<Color?>(
+                                color: MaterialStateProperty.resolveWith<Color?>(
                                   (Set<MaterialState> states) {
-                                    if (isSelected)
-                                      return Colors.yellow.shade100;
+                                    if (isSelected) return Colors.yellow.shade100;
                                     return null;
                                   },
                                 ),
                                 onSelectChanged: (bool? selected) {
                                   if (selected != null && selected) {
                                     setState(() {
-                                      selectedVastitBalopasanaKendraIdIndex =
-                                          index;
+                                      selectedVastitBalopasanaKendraIdIndex = index;
                                     });
                                   }
                                 },
                                 cells: [
-                                  DataCell(Text(
-                                      data.selectedDropdownValueName ?? '')),
+                                  DataCell(Text(data.selectedDropdownValueName ?? '')),
                                   DataCell(Text(data.name ?? '')),
                                   DataCell(Text(data.konasathi ?? '')),
                                 ]);
@@ -10004,8 +8695,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       InkWell(
                         onTap: () {
                           if (selectedVastitBalopasanaKendraIdIndex != null) {
-                            var selectedData = vastitBalopasanaKendraDataList[
-                                selectedVastitBalopasanaKendraIdIndex!];
+                            var selectedData = vastitBalopasanaKendraDataList[selectedVastitBalopasanaKendraIdIndex!];
                             showDialog(
                               context: context,
                               builder: (context) {
@@ -10027,27 +8717,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   content: SingleChildScrollView(
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Divider(
-                                            thickness: 1,
-                                            color: Colors.deepPurple.shade100),
+                                        Divider(thickness: 1, color: Colors.deepPurple.shade100),
                                         SizedBox(height: 12),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('balopasanaOnly')}",
-                                            selectedData
-                                                .selectedDropdownValueName),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('otherBalopasanaKendra')}",
-                                            selectedData
-                                                .otherBalopasanaShreniName),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('Name')}",
-                                            selectedData.name),
-                                        _buildInfoRow(
-                                            "${Statics.getLabel('konasathi')}",
-                                            selectedData.konasathi),
+                                        _buildInfoRow("${Statics.getLabel('balopasanaOnly')}", selectedData.selectedDropdownValueName),
+                                        _buildInfoRow("${Statics.getLabel('otherBalopasanaKendra')}", selectedData.otherBalopasanaShreniName),
+                                        _buildInfoRow("${Statics.getLabel('Name')}", selectedData.name),
+                                        _buildInfoRow("${Statics.getLabel('konasathi')}", selectedData.konasathi),
                                       ],
                                     ),
                                   ),
@@ -10055,17 +8732,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text(
-                                          "${Statics.getLabel('bandKara')}",
-                                          style:
-                                              TextStyle(color: Colors.white)),
+                                      child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.purpleAccent,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 24, vertical: 12),
+                                        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(12),
                                         ),
                                       ),
                                     ),
@@ -10075,17 +8747,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             );
                           }
                         },
-                        child: Icon(Icons.remove_red_eye,
-                            color: Colors.green, size: 20),
+                        child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                       ),
                       SizedBox(
                         width: 20,
                       ),
                       InkWell(
                         onTap: () {
-                          showVastitBalopasanaKendraPopup(context,
-                              editIndex: selectedVastitBalopasanaKendraIdIndex,
-                              onDataChanged: () {
+                          showVastitBalopasanaKendraPopup(context, editIndex: selectedVastitBalopasanaKendraIdIndex, onDataChanged: () {
                             setState(() {});
                           });
                         },
@@ -10114,8 +8783,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 ),
                               ),
                               content: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10.0),
+                                padding: const EdgeInsets.symmetric(vertical: 10.0),
                                 child: Text(
                                   "${Statics.getLabel('deleteconfirmText')}",
                                   textAlign: TextAlign.center,
@@ -10134,8 +8802,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                   ),
-                                  onPressed: () =>
-                                      Navigator.pop(context, false),
+                                  onPressed: () => Navigator.pop(context, false),
                                   child: Text(
                                     "${Statics.getLabel('ConfirmationNo')}",
                                     style: TextStyle(color: Colors.black),
@@ -10157,12 +8824,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               ],
                             ),
                           );
-                          if (shouldDelete == true &&
-                              selectedVastitBalopasanaKendraIdIndex != null) {
+                          if (shouldDelete == true && selectedVastitBalopasanaKendraIdIndex != null) {
                             setState(() {
-                              vastitBalopasanaKendraDataList[
-                                      selectedVastitBalopasanaKendraIdIndex!]
-                                  .isactive = 0;
+                              vastitBalopasanaKendraDataList[selectedVastitBalopasanaKendraIdIndex!].isactive = 0;
                               selectedVastitBalopasanaKendraIdIndex = null;
                             });
                           }
@@ -10185,8 +8849,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     child: InkWell(
                       onTap: () {
                         if (isVastiSearch) {
-                          showMotheVyavsayikKendraPopup(context,
-                              onDataChanged: () {
+                          showMotheVyavsayikKendraPopup(context, onDataChanged: () {
                             setState(() {});
                           });
                         } else {
@@ -10196,11 +8859,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 5),
                         width: 100,
-                        decoration: BoxDecoration(
-                            border:
-                                Border.all(color: Colors.purpleAccent.shade100),
-                            color: Colors.purpleAccent.withOpacity(0.7),
-                            borderRadius: BorderRadius.circular(15)),
+                        decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                         child: Center(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -10209,9 +8868,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               SizedBox(width: 5),
                               Text(
                                 "${Statics.getLabel('AddButton')}",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
@@ -10233,11 +8890,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           width: MediaQuery.of(context).size.width,
                           child: DataTable(
                             showCheckboxColumn: false,
-                            headingRowColor:
-                                MaterialStatePropertyAll(Colors.purple.shade50),
-                            headingTextStyle: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87),
+                            headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+                            headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                             columns: [
                               DataColumn(
                                   label: Text(
@@ -10248,36 +8902,27 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 "${Statics.getLabel('Name')}",
                               )),
                             ],
-                            rows: motheVyasayikKendraDataList
-                                .asMap()
-                                .entries
-                                .where((entry) => entry.value.isactive == 1)
-                                .map((entry) {
+                            rows: motheVyasayikKendraDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                               int index = entry.key;
                               var data = entry.value;
-                              bool isSelected =
-                                  selectedMotheVyasayikKendraIdIndex == index;
+                              bool isSelected = selectedMotheVyasayikKendraIdIndex == index;
                               return DataRow(
                                   selected: isSelected,
-                                  color:
-                                      MaterialStateProperty.resolveWith<Color?>(
+                                  color: MaterialStateProperty.resolveWith<Color?>(
                                     (Set<MaterialState> states) {
-                                      if (isSelected)
-                                        return Colors.yellow.shade100;
+                                      if (isSelected) return Colors.yellow.shade100;
                                       return null;
                                     },
                                   ),
                                   onSelectChanged: (bool? selected) {
                                     if (selected != null && selected) {
                                       setState(() {
-                                        selectedMotheVyasayikKendraIdIndex =
-                                            index;
+                                        selectedMotheVyasayikKendraIdIndex = index;
                                       });
                                     }
                                   },
                                   cells: [
-                                    DataCell(Text(
-                                        data.selectedDropdownValueName ?? '')),
+                                    DataCell(Text(data.selectedDropdownValueName ?? '')),
                                     DataCell(Text(data.name ?? '')),
                                   ]);
                             }).toList(),
@@ -10295,8 +8940,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         InkWell(
                           onTap: () {
                             if (selectedMotheVyasayikKendraIdIndex != null) {
-                              var selectedData = motheVyasayikKendraDataList[
-                                  selectedMotheVyasayikKendraIdIndex!];
+                              var selectedData = motheVyasayikKendraDataList[selectedMotheVyasayikKendraIdIndex!];
                               showDialog(
                                 context: context,
                                 builder: (context) {
@@ -10318,21 +8962,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     content: SingleChildScrollView(
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Divider(
-                                              thickness: 1,
-                                              color:
-                                                  Colors.deepPurple.shade100),
+                                          Divider(thickness: 1, color: Colors.deepPurple.shade100),
                                           SizedBox(height: 12),
-                                          _buildInfoRow(
-                                              "${Statics.getLabel('MotheVyasaayiKendra')}",
-                                              selectedData
-                                                  .selectedDropdownValueName),
-                                          _buildInfoRow(
-                                              "${Statics.getLabel('Name')}",
-                                              selectedData.name),
+                                          _buildInfoRow("${Statics.getLabel('MotheVyasaayiKendra')}", selectedData.selectedDropdownValueName),
+                                          _buildInfoRow("${Statics.getLabel('Name')}", selectedData.name),
                                         ],
                                       ),
                                     ),
@@ -10340,17 +8975,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     actions: [
                                       ElevatedButton(
                                         onPressed: () => Navigator.pop(context),
-                                        child: Text(
-                                            "${Statics.getLabel('bandKara')}",
-                                            style:
-                                                TextStyle(color: Colors.white)),
+                                        child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.purpleAccent,
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 24, vertical: 12),
+                                          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
                                         ),
                                       ),
@@ -10360,17 +8990,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               );
                             }
                           },
-                          child: Icon(Icons.remove_red_eye,
-                              color: Colors.green, size: 20),
+                          child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                         ),
                         SizedBox(
                           width: 20,
                         ),
                         InkWell(
                           onTap: () {
-                            showMotheVyavsayikKendraPopup(context,
-                                editIndex: selectedMotheVyasayikKendraIdIndex,
-                                onDataChanged: () {
+                            showMotheVyavsayikKendraPopup(context, editIndex: selectedMotheVyasayikKendraIdIndex, onDataChanged: () {
                               setState(() {});
                             });
                           },
@@ -10399,8 +9026,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   ),
                                 ),
                                 content: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10.0),
+                                  padding: const EdgeInsets.symmetric(vertical: 10.0),
                                   child: Text(
                                     "${Statics.getLabel('deleteconfirmText')}",
                                     textAlign: TextAlign.center,
@@ -10419,8 +9045,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                     ),
-                                    onPressed: () =>
-                                        Navigator.pop(context, false),
+                                    onPressed: () => Navigator.pop(context, false),
                                     child: Text(
                                       "${Statics.getLabel('ConfirmationNo')}",
                                       style: TextStyle(color: Colors.black),
@@ -10433,8 +9058,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                     ),
-                                    onPressed: () =>
-                                        Navigator.pop(context, true),
+                                    onPressed: () => Navigator.pop(context, true),
                                     child: Text(
                                       "${Statics.getLabel('ConfirmationYes')}",
                                       style: TextStyle(color: Colors.white),
@@ -10443,18 +9067,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 ],
                               ),
                             );
-                            if (shouldDelete == true &&
-                                selectedMotheVyasayikKendraIdIndex != null) {
+                            if (shouldDelete == true && selectedMotheVyasayikKendraIdIndex != null) {
                               setState(() {
-                                motheVyasayikKendraDataList[
-                                        selectedMotheVyasayikKendraIdIndex!]
-                                    .isactive = 0;
+                                motheVyasayikKendraDataList[selectedMotheVyasayikKendraIdIndex!].isactive = 0;
                                 selectedMotheVyasayikKendraIdIndex = null;
                               });
                             }
                           },
-                          child:
-                              Icon(Icons.delete, color: Colors.red, size: 20),
+                          child: Icon(Icons.delete, color: Colors.red, size: 20),
                         ),
                       ],
                     ),
@@ -10481,11 +9101,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 5),
                         width: 100,
-                        decoration: BoxDecoration(
-                            border:
-                                Border.all(color: Colors.purpleAccent.shade100),
-                            color: Colors.purpleAccent.withOpacity(0.7),
-                            borderRadius: BorderRadius.circular(15)),
+                        decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                         child: Center(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -10494,9 +9110,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               SizedBox(width: 5),
                               Text(
                                 "${Statics.getLabel('AddButton')}",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
@@ -10518,11 +9132,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           width: MediaQuery.of(context).size.width,
                           child: DataTable(
                             showCheckboxColumn: false,
-                            headingRowColor:
-                                MaterialStatePropertyAll(Colors.purple.shade50),
-                            headingTextStyle: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87),
+                            headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+                            headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                             columns: [
                               DataColumn(
                                   label: Text(
@@ -10533,38 +9144,28 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 "${Statics.getLabel('prakalpaOnly')}",
                               )),
                             ],
-                            rows: nirmandhinMothePrakalpaDataList
-                                .asMap()
-                                .entries
-                                .where((entry) => entry.value.isactive == 1)
-                                .map((entry) {
+                            rows: nirmandhinMothePrakalpaDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                               int index = entry.key;
                               var data = entry.value;
-                              bool isSelected =
-                                  selectednirmandhinMothePrakalpaIdIndex ==
-                                      index;
+                              bool isSelected = selectednirmandhinMothePrakalpaIdIndex == index;
                               return DataRow(
                                   selected: isSelected,
-                                  color:
-                                      MaterialStateProperty.resolveWith<Color?>(
+                                  color: MaterialStateProperty.resolveWith<Color?>(
                                     (Set<MaterialState> states) {
-                                      if (isSelected)
-                                        return Colors.yellow.shade100;
+                                      if (isSelected) return Colors.yellow.shade100;
                                       return null;
                                     },
                                   ),
                                   onSelectChanged: (bool? selected) {
                                     if (selected != null && selected) {
                                       setState(() {
-                                        selectednirmandhinMothePrakalpaIdIndex =
-                                            index;
+                                        selectednirmandhinMothePrakalpaIdIndex = index;
                                       });
                                     }
                                   },
                                   cells: [
                                     DataCell(Text(data.name ?? '')),
-                                    DataCell(Text(
-                                        data.selectedDropdownValueName ?? '')),
+                                    DataCell(Text(data.selectedDropdownValueName ?? '')),
                                   ]);
                             }).toList(),
                           ),
@@ -10580,11 +9181,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       children: [
                         InkWell(
                           onTap: () {
-                            if (selectednirmandhinMothePrakalpaIdIndex !=
-                                null) {
-                              var selectedData =
-                                  nirmandhinMothePrakalpaDataList[
-                                      selectednirmandhinMothePrakalpaIdIndex!];
+                            if (selectednirmandhinMothePrakalpaIdIndex != null) {
+                              var selectedData = nirmandhinMothePrakalpaDataList[selectednirmandhinMothePrakalpaIdIndex!];
                               showDialog(
                                 context: context,
                                 builder: (context) {
@@ -10606,21 +9204,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     content: SingleChildScrollView(
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Divider(
-                                              thickness: 1,
-                                              color:
-                                                  Colors.deepPurple.shade100),
+                                          Divider(thickness: 1, color: Colors.deepPurple.shade100),
                                           SizedBox(height: 12),
-                                          _buildInfoRow(
-                                              "${Statics.getLabel('Name')}",
-                                              selectedData.name),
-                                          _buildInfoRow(
-                                              "${Statics.getLabel('prakalpaOnly')}",
-                                              selectedData
-                                                  .selectedDropdownValueName),
+                                          _buildInfoRow("${Statics.getLabel('Name')}", selectedData.name),
+                                          _buildInfoRow("${Statics.getLabel('prakalpaOnly')}", selectedData.selectedDropdownValueName),
                                         ],
                                       ),
                                     ),
@@ -10628,17 +9217,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     actions: [
                                       ElevatedButton(
                                         onPressed: () => Navigator.pop(context),
-                                        child: Text(
-                                            "${Statics.getLabel('bandKara')}",
-                                            style:
-                                                TextStyle(color: Colors.white)),
+                                        child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.purpleAccent,
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 24, vertical: 12),
+                                          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
                                         ),
                                       ),
@@ -10648,18 +9232,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               );
                             }
                           },
-                          child: Icon(Icons.remove_red_eye,
-                              color: Colors.green, size: 20),
+                          child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                         ),
                         SizedBox(
                           width: 20,
                         ),
                         InkWell(
                           onTap: () {
-                            showNirmaandhinMothePopup(context,
-                                editIndex:
-                                    selectednirmandhinMothePrakalpaIdIndex,
-                                onDataChanged: () {
+                            showNirmaandhinMothePopup(context, editIndex: selectednirmandhinMothePrakalpaIdIndex, onDataChanged: () {
                               setState(() {});
                             });
                           },
@@ -10688,8 +9268,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   ),
                                 ),
                                 content: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10.0),
+                                  padding: const EdgeInsets.symmetric(vertical: 10.0),
                                   child: Text(
                                     "${Statics.getLabel('deleteconfirmText')}",
                                     textAlign: TextAlign.center,
@@ -10708,8 +9287,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                     ),
-                                    onPressed: () =>
-                                        Navigator.pop(context, false),
+                                    onPressed: () => Navigator.pop(context, false),
                                     child: Text(
                                       "${Statics.getLabel('ConfirmationNo')}",
                                       style: TextStyle(color: Colors.black),
@@ -10722,8 +9300,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                     ),
-                                    onPressed: () =>
-                                        Navigator.pop(context, true),
+                                    onPressed: () => Navigator.pop(context, true),
                                     child: Text(
                                       "${Statics.getLabel('ConfirmationYes')}",
                                       style: TextStyle(color: Colors.white),
@@ -10732,19 +9309,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 ],
                               ),
                             );
-                            if (shouldDelete == true &&
-                                selectednirmandhinMothePrakalpaIdIndex !=
-                                    null) {
+                            if (shouldDelete == true && selectednirmandhinMothePrakalpaIdIndex != null) {
                               setState(() {
-                                nirmandhinMothePrakalpaDataList[
-                                        selectednirmandhinMothePrakalpaIdIndex!]
-                                    .isactive = 0;
+                                nirmandhinMothePrakalpaDataList[selectednirmandhinMothePrakalpaIdIndex!].isactive = 0;
                                 selectednirmandhinMothePrakalpaIdIndex = null;
                               });
                             }
                           },
-                          child:
-                              Icon(Icons.delete, color: Colors.red, size: 20),
+                          child: Icon(Icons.delete, color: Colors.red, size: 20),
                         ),
                       ],
                     ),
@@ -10771,11 +9343,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 5),
                         width: 100,
-                        decoration: BoxDecoration(
-                            border:
-                                Border.all(color: Colors.purpleAccent.shade100),
-                            color: Colors.purpleAccent.withOpacity(0.7),
-                            borderRadius: BorderRadius.circular(15)),
+                        decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                         child: Center(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -10784,9 +9352,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               SizedBox(width: 5),
                               Text(
                                 "${Statics.getLabel('AddButton')}",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
@@ -10808,11 +9374,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           width: MediaQuery.of(context).size.width,
                           child: DataTable(
                             showCheckboxColumn: false,
-                            headingRowColor:
-                                MaterialStatePropertyAll(Colors.purple.shade50),
-                            headingTextStyle: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87),
+                            headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+                            headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                             columns: [
                               DataColumn(
                                   label: Text(
@@ -10823,22 +9386,15 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 "${Statics.getLabel('Name')}",
                               )),
                             ],
-                            rows: motheRugnalayDataList
-                                .asMap()
-                                .entries
-                                .where((entry) => entry.value.isactive == 1)
-                                .map((entry) {
+                            rows: motheRugnalayDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                               int index = entry.key;
                               var data = entry.value;
-                              bool isSelected =
-                                  selectedmotheRugnalayIdIndex == index;
+                              bool isSelected = selectedmotheRugnalayIdIndex == index;
                               return DataRow(
                                   selected: isSelected,
-                                  color:
-                                      MaterialStateProperty.resolveWith<Color?>(
+                                  color: MaterialStateProperty.resolveWith<Color?>(
                                     (Set<MaterialState> states) {
-                                      if (isSelected)
-                                        return Colors.yellow.shade100;
+                                      if (isSelected) return Colors.yellow.shade100;
                                       return null;
                                     },
                                   ),
@@ -10850,8 +9406,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     }
                                   },
                                   cells: [
-                                    DataCell(Text(
-                                        data.selectedDropdownValueName ?? '')),
+                                    DataCell(Text(data.selectedDropdownValueName ?? '')),
                                     DataCell(Text(data.name ?? '')),
                                   ]);
                             }).toList(),
@@ -10869,8 +9424,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         InkWell(
                           onTap: () {
                             if (selectedmotheRugnalayIdIndex != null) {
-                              var selectedData = motheRugnalayDataList[
-                                  selectedmotheRugnalayIdIndex!];
+                              var selectedData = motheRugnalayDataList[selectedmotheRugnalayIdIndex!];
                               showDialog(
                                 context: context,
                                 builder: (context) {
@@ -10892,21 +9446,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     content: SingleChildScrollView(
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Divider(
-                                              thickness: 1,
-                                              color:
-                                                  Colors.deepPurple.shade100),
+                                          Divider(thickness: 1, color: Colors.deepPurple.shade100),
                                           SizedBox(height: 12),
-                                          _buildInfoRow(
-                                              "${Statics.getLabel('hospitals')}",
-                                              selectedData
-                                                  .selectedDropdownValueName),
-                                          _buildInfoRow(
-                                              "${Statics.getLabel('Name')}",
-                                              selectedData.name),
+                                          _buildInfoRow("${Statics.getLabel('hospitals')}", selectedData.selectedDropdownValueName),
+                                          _buildInfoRow("${Statics.getLabel('Name')}", selectedData.name),
                                         ],
                                       ),
                                     ),
@@ -10914,17 +9459,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     actions: [
                                       ElevatedButton(
                                         onPressed: () => Navigator.pop(context),
-                                        child: Text(
-                                            "${Statics.getLabel('bandKara')}",
-                                            style:
-                                                TextStyle(color: Colors.white)),
+                                        child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.purpleAccent,
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 24, vertical: 12),
+                                          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
                                         ),
                                       ),
@@ -10934,17 +9474,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               );
                             }
                           },
-                          child: Icon(Icons.remove_red_eye,
-                              color: Colors.green, size: 20),
+                          child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                         ),
                         SizedBox(
                           width: 20,
                         ),
                         InkWell(
                           onTap: () {
-                            showMotheRugnalayPopup(context,
-                                editIndex: selectedmotheRugnalayIdIndex,
-                                onDataChanged: () {
+                            showMotheRugnalayPopup(context, editIndex: selectedmotheRugnalayIdIndex, onDataChanged: () {
                               setState(() {});
                             });
                           },
@@ -10973,8 +9510,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   ),
                                 ),
                                 content: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10.0),
+                                  padding: const EdgeInsets.symmetric(vertical: 10.0),
                                   child: Text(
                                     "${Statics.getLabel('deleteconfirmText')}",
                                     textAlign: TextAlign.center,
@@ -10993,8 +9529,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                     ),
-                                    onPressed: () =>
-                                        Navigator.pop(context, false),
+                                    onPressed: () => Navigator.pop(context, false),
                                     child: Text(
                                       "${Statics.getLabel('ConfirmationNo')}",
                                       style: TextStyle(color: Colors.black),
@@ -11007,8 +9542,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                     ),
-                                    onPressed: () =>
-                                        Navigator.pop(context, true),
+                                    onPressed: () => Navigator.pop(context, true),
                                     child: Text(
                                       "${Statics.getLabel('ConfirmationYes')}",
                                       style: TextStyle(color: Colors.white),
@@ -11017,18 +9551,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 ],
                               ),
                             );
-                            if (shouldDelete == true &&
-                                selectedmotheRugnalayIdIndex != null) {
+                            if (shouldDelete == true && selectedmotheRugnalayIdIndex != null) {
                               setState(() {
-                                motheRugnalayDataList[
-                                        selectedmotheRugnalayIdIndex!]
-                                    .isactive = 0;
+                                motheRugnalayDataList[selectedmotheRugnalayIdIndex!].isactive = 0;
                                 selectedmotheRugnalayIdIndex = null;
                               });
                             }
                           },
-                          child:
-                              Icon(Icons.delete, color: Colors.red, size: 20),
+                          child: Icon(Icons.delete, color: Colors.red, size: 20),
                         ),
                       ],
                     ),
@@ -11101,11 +9631,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 5),
                           width: 100,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.purpleAccent.shade100),
-                              color: Colors.purpleAccent.withOpacity(0.7),
-                              borderRadius: BorderRadius.circular(15)),
+                          decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                           child: Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -11114,9 +9640,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 SizedBox(width: 5),
                                 Text(
                                   "${Statics.getLabel('AddButton')}",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
@@ -11141,11 +9665,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               width: MediaQuery.of(context).size.width * 1.3,
                               child: DataTable(
                                 showCheckboxColumn: false,
-                                headingRowColor: MaterialStatePropertyAll(
-                                    Colors.purple.shade50),
-                                headingTextStyle: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87),
+                                headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+                                headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                                 columns: [
                                   DataColumn(
                                       label: Text(
@@ -11156,38 +9677,27 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     "${Statics.getLabel('shaikshnikSansthaNaav')}",
                                   )),
                                 ],
-                                rows: allShaikshanikPrakarDataList
-                                    .asMap()
-                                    .entries
-                                    .where((entry) => entry.value.isactive == 1)
-                                    .map((entry) {
+                                rows: allShaikshanikPrakarDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                                   int index = entry.key;
                                   var data = entry.value;
-                                  bool isSelected =
-                                      selectedShaikshanikSansthaIdIndex ==
-                                          index;
+                                  bool isSelected = selectedShaikshanikSansthaIdIndex == index;
                                   return DataRow(
                                       selected: isSelected,
-                                      color: MaterialStateProperty.resolveWith<
-                                          Color?>(
+                                      color: MaterialStateProperty.resolveWith<Color?>(
                                         (Set<MaterialState> states) {
-                                          if (isSelected)
-                                            return Colors.yellow.shade100;
+                                          if (isSelected) return Colors.yellow.shade100;
                                           return null;
                                         },
                                       ),
                                       onSelectChanged: (bool? selected) {
                                         if (selected != null && selected) {
                                           setState(() {
-                                            selectedShaikshanikSansthaIdIndex =
-                                                index;
+                                            selectedShaikshanikSansthaIdIndex = index;
                                           });
                                         }
                                       },
                                       cells: [
-                                        DataCell(Text(
-                                            data.selectedDropdownValueName ??
-                                                '')),
+                                        DataCell(Text(data.selectedDropdownValueName ?? '')),
                                         DataCell(Text(data.name ?? '')),
                                       ]);
                                 }).toList(),
@@ -11205,16 +9715,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             InkWell(
                               onTap: () {
                                 if (selectedShaikshanikSansthaIdIndex != null) {
-                                  var selectedData =
-                                      allShaikshanikPrakarDataList[
-                                          selectedShaikshanikSansthaIdIndex!];
+                                  var selectedData = allShaikshanikPrakarDataList[selectedShaikshanikSansthaIdIndex!];
                                   showDialog(
                                     context: context,
                                     builder: (context) {
                                       return AlertDialog(
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
+                                          borderRadius: BorderRadius.circular(20),
                                         ),
                                         backgroundColor: Colors.white,
                                         title: Center(
@@ -11230,73 +9737,30 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         content: SingleChildScrollView(
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
+                                            crossAxisAlignment: CrossAxisAlignment.end,
                                             children: [
-                                              Divider(
-                                                  thickness: 1,
-                                                  color: Colors
-                                                      .deepPurple.shade100),
+                                              Divider(thickness: 1, color: Colors.deepPurple.shade100),
                                               SizedBox(height: 12),
-                                              _buildInfoRow(
-                                                  "${Statics.getLabel('shaikshanikSanstha')}",
-                                                  selectedData.name),
-                                              if (selectedData
-                                                      .shaikshaniksansthaan ==
-                                                  315)
-                                                _buildInfoRow(
-                                                    "${Statics.getLabel('schoolPrakar')}",
-                                                    selectedData
-                                                        .selectedDropdownValueName),
-                                              if (selectedData
-                                                      .shaikshaniksansthaan ==
-                                                  315)
-                                                _buildInfoRow(
-                                                    "${Statics.getLabel('shikshanacheMadhyam')}",
-                                                    selectedData
-                                                        .selectedDropdownValueName1),
-                                              if (selectedData
-                                                      .shaikshaniksansthaan ==
-                                                  315)
-                                                _buildInfoRow(
-                                                    "${Statics.getLabel('sansthaCHalakPrakar')}",
-                                                    selectedData
-                                                        .selectedDropdownValueName2),
-                                              if (selectedData
-                                                      .shaikshaniksansthaan ==
-                                                  316)
-                                                _buildInfoRow(
-                                                    "${Statics.getLabel('mahavidyalayinPrakaar')}",
-                                                    selectedData
-                                                        .selectedDropdownValueName),
-                                              _buildInfoRow(
-                                                  "${Statics.getLabel('Name')}",
-                                                  selectedData.name),
-                                              _buildInfoRow(
-                                                  "${Statics.getLabel('milkat')}",
-                                                  selectedData
-                                                      .selectedDropdownValueName4),
+                                              _buildInfoRow("${Statics.getLabel('shaikshanikSanstha')}", selectedData.name),
+                                              if (selectedData.shaikshaniksansthaan == 315) _buildInfoRow("${Statics.getLabel('schoolPrakar')}", selectedData.selectedDropdownValueName),
+                                              if (selectedData.shaikshaniksansthaan == 315) _buildInfoRow("${Statics.getLabel('shikshanacheMadhyam')}", selectedData.selectedDropdownValueName1),
+                                              if (selectedData.shaikshaniksansthaan == 315) _buildInfoRow("${Statics.getLabel('sansthaCHalakPrakar')}", selectedData.selectedDropdownValueName2),
+                                              if (selectedData.shaikshaniksansthaan == 316) _buildInfoRow("${Statics.getLabel('mahavidyalayinPrakaar')}", selectedData.selectedDropdownValueName),
+                                              _buildInfoRow("${Statics.getLabel('Name')}", selectedData.name),
+                                              _buildInfoRow("${Statics.getLabel('milkat')}", selectedData.selectedDropdownValueName4),
                                             ],
                                           ),
                                         ),
-                                        actionsAlignment:
-                                            MainAxisAlignment.center,
+                                        actionsAlignment: MainAxisAlignment.center,
                                         actions: [
                                           ElevatedButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                            child: Text(
-                                                "${Statics.getLabel('bandKara')}",
-                                                style: TextStyle(
-                                                    color: Colors.white)),
+                                            onPressed: () => Navigator.pop(context),
+                                            child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                             style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  Colors.purpleAccent,
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 24, vertical: 12),
+                                              backgroundColor: Colors.purpleAccent,
+                                              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                               shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
+                                                borderRadius: BorderRadius.circular(12),
                                               ),
                                             ),
                                           ),
@@ -11306,8 +9770,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   );
                                 }
                               },
-                              child: Icon(Icons.remove_red_eye,
-                                  color: Colors.green, size: 20),
+                              child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                             ),
                             SizedBox(
                               width: 20,
@@ -11322,8 +9785,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   },
                                 );
                               },
-                              child: Icon(Icons.edit,
-                                  color: Colors.blue, size: 20),
+                              child: Icon(Icons.edit, color: Colors.blue, size: 20),
                             ),
                             SizedBox(
                               width: 20,
@@ -11348,8 +9810,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                       ),
                                     ),
                                     content: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10.0),
+                                      padding: const EdgeInsets.symmetric(vertical: 10.0),
                                       child: Text(
                                         "${Statics.getLabel('deleteconfirmText')}",
                                         textAlign: TextAlign.center,
@@ -11359,19 +9820,16 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         ),
                                       ),
                                     ),
-                                    actionsAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                    actionsAlignment: MainAxisAlignment.spaceEvenly,
                                     actions: [
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.grey.shade300,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
                                         ),
-                                        onPressed: () =>
-                                            Navigator.pop(context, false),
+                                        onPressed: () => Navigator.pop(context, false),
                                         child: Text(
                                           "${Statics.getLabel('ConfirmationNo')}",
                                           style: TextStyle(color: Colors.black),
@@ -11381,12 +9839,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.redAccent,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
                                         ),
-                                        onPressed: () =>
-                                            Navigator.pop(context, true),
+                                        onPressed: () => Navigator.pop(context, true),
                                         child: Text(
                                           "${Statics.getLabel('ConfirmationYes')}",
                                           style: TextStyle(color: Colors.white),
@@ -11395,18 +9851,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     ],
                                   ),
                                 );
-                                if (shouldDelete == true &&
-                                    selectedShaikshanikSansthaIdIndex != null) {
+                                if (shouldDelete == true && selectedShaikshanikSansthaIdIndex != null) {
                                   setState(() {
-                                    allShaikshanikPrakarDataList[
-                                            selectedShaikshanikSansthaIdIndex!]
-                                        .isactive = 0;
+                                    allShaikshanikPrakarDataList[selectedShaikshanikSansthaIdIndex!].isactive = 0;
                                     selectedShaikshanikSansthaIdIndex = null;
                                   });
                                 }
                               },
-                              child: Icon(Icons.delete,
-                                  color: Colors.red, size: 20),
+                              child: Icon(Icons.delete, color: Colors.red, size: 20),
                             ),
                           ],
                         ),
@@ -11436,11 +9888,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 5),
                           width: 100,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.purpleAccent.shade100),
-                              color: Colors.purpleAccent.withOpacity(0.7),
-                              borderRadius: BorderRadius.circular(15)),
+                          decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                           child: Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -11449,9 +9897,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 SizedBox(width: 5),
                                 Text(
                                   "${Statics.getLabel('AddButton')}",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
@@ -11477,11 +9923,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               child: DataTable(
                                 columnSpacing: 20,
                                 showCheckboxColumn: false,
-                                headingRowColor: MaterialStatePropertyAll(
-                                    Colors.purple.shade50),
-                                headingTextStyle: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87),
+                                headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+                                headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                                 columns: [
                                   DataColumn(
                                       label: Text(
@@ -11492,22 +9935,15 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     "${Statics.getLabel('Name')}",
                                   )),
                                 ],
-                                rows: maidanUddyanDataList
-                                    .asMap()
-                                    .entries
-                                    .where((entry) => entry.value.isactive == 1)
-                                    .map((entry) {
+                                rows: maidanUddyanDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                                   int index = entry.key;
                                   var data = entry.value;
-                                  bool isSelected =
-                                      selectedMaidanUdyanIdIndex == index;
+                                  bool isSelected = selectedMaidanUdyanIdIndex == index;
                                   return DataRow(
                                       selected: isSelected,
-                                      color: MaterialStateProperty.resolveWith<
-                                          Color?>(
+                                      color: MaterialStateProperty.resolveWith<Color?>(
                                         (Set<MaterialState> states) {
-                                          if (isSelected)
-                                            return Colors.yellow.shade100;
+                                          if (isSelected) return Colors.yellow.shade100;
                                           return null;
                                         },
                                       ),
@@ -11537,15 +9973,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             InkWell(
                               onTap: () {
                                 if (selectedMaidanUdyanIdIndex != null) {
-                                  var selectedData = maidanUddyanDataList[
-                                      selectedMaidanUdyanIdIndex!];
+                                  var selectedData = maidanUddyanDataList[selectedMaidanUdyanIdIndex!];
                                   showDialog(
                                     context: context,
                                     builder: (context) {
                                       return AlertDialog(
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
+                                          borderRadius: BorderRadius.circular(20),
                                         ),
                                         backgroundColor: Colors.white,
                                         title: Center(
@@ -11561,38 +9995,24 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         content: SingleChildScrollView(
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Divider(
-                                                  thickness: 1,
-                                                  color: Colors
-                                                      .deepPurple.shade100),
+                                              Divider(thickness: 1, color: Colors.deepPurple.shade100),
                                               SizedBox(height: 12),
-                                              _buildInfoRow(
-                                                  "${Statics.getLabel('Name')}",
-                                                  selectedData.name),
+                                              _buildInfoRow("${Statics.getLabel('Name')}", selectedData.name),
                                             ],
                                           ),
                                         ),
-                                        actionsAlignment:
-                                            MainAxisAlignment.center,
+                                        actionsAlignment: MainAxisAlignment.center,
                                         actions: [
                                           ElevatedButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                            child: Text(
-                                                "${Statics.getLabel('bandKara')}",
-                                                style: TextStyle(
-                                                    color: Colors.white)),
+                                            onPressed: () => Navigator.pop(context),
+                                            child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                             style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  Colors.purpleAccent,
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 24, vertical: 12),
+                                              backgroundColor: Colors.purpleAccent,
+                                              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                               shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
+                                                borderRadius: BorderRadius.circular(12),
                                               ),
                                             ),
                                           ),
@@ -11602,22 +10022,18 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   );
                                 }
                               },
-                              child: Icon(Icons.remove_red_eye,
-                                  color: Colors.green, size: 20),
+                              child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                             ),
                             SizedBox(
                               width: 20,
                             ),
                             InkWell(
                               onTap: () {
-                                showMaidanUdyanPopup(context,
-                                    editIndex: selectedMaidanUdyanIdIndex,
-                                    onDataChanged: () {
+                                showMaidanUdyanPopup(context, editIndex: selectedMaidanUdyanIdIndex, onDataChanged: () {
                                   setState(() {});
                                 });
                               },
-                              child: Icon(Icons.edit,
-                                  color: Colors.blue, size: 20),
+                              child: Icon(Icons.edit, color: Colors.blue, size: 20),
                             ),
                             SizedBox(
                               width: 20,
@@ -11642,8 +10058,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                       ),
                                     ),
                                     content: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10.0),
+                                      padding: const EdgeInsets.symmetric(vertical: 10.0),
                                       child: Text(
                                         "${Statics.getLabel('deleteconfirmText')}",
                                         textAlign: TextAlign.center,
@@ -11653,19 +10068,16 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         ),
                                       ),
                                     ),
-                                    actionsAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                    actionsAlignment: MainAxisAlignment.spaceEvenly,
                                     actions: [
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.grey.shade300,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
                                         ),
-                                        onPressed: () =>
-                                            Navigator.pop(context, false),
+                                        onPressed: () => Navigator.pop(context, false),
                                         child: Text(
                                           "${Statics.getLabel('ConfirmationNo')}",
                                           style: TextStyle(color: Colors.black),
@@ -11675,12 +10087,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.redAccent,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
                                         ),
-                                        onPressed: () =>
-                                            Navigator.pop(context, true),
+                                        onPressed: () => Navigator.pop(context, true),
                                         child: Text(
                                           "${Statics.getLabel('ConfirmationYes')}",
                                           style: TextStyle(color: Colors.white),
@@ -11689,18 +10099,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     ],
                                   ),
                                 );
-                                if (shouldDelete == true &&
-                                    selectedMaidanUdyanIdIndex != null) {
+                                if (shouldDelete == true && selectedMaidanUdyanIdIndex != null) {
                                   setState(() {
-                                    maidanUddyanDataList[
-                                            selectedMaidanUdyanIdIndex!]
-                                        .isactive = 0;
+                                    maidanUddyanDataList[selectedMaidanUdyanIdIndex!].isactive = 0;
                                     selectedMaidanUdyanIdIndex = null;
                                   });
                                 }
                               },
-                              child: Icon(Icons.delete,
-                                  color: Colors.red, size: 20),
+                              child: Icon(Icons.delete, color: Colors.red, size: 20),
                             ),
                           ],
                         ),
@@ -11730,11 +10136,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 5),
                           width: 100,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.purpleAccent.shade100),
-                              color: Colors.purpleAccent.withOpacity(0.7),
-                              borderRadius: BorderRadius.circular(15)),
+                          decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                           child: Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -11743,9 +10145,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 SizedBox(width: 5),
                                 Text(
                                   "${Statics.getLabel('AddButton')}",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
@@ -11771,11 +10171,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               child: DataTable(
                                 columnSpacing: 20,
                                 showCheckboxColumn: false,
-                                headingRowColor: MaterialStatePropertyAll(
-                                    Colors.purple.shade50),
-                                headingTextStyle: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87),
+                                headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+                                headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                                 columns: [
                                   DataColumn(
                                       label: Text(
@@ -11798,48 +10195,35 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     "${Statics.getLabel('nivaasShamta')}",
                                   )),
                                 ],
-                                rows: jahirKaryakramDataList
-                                    .asMap()
-                                    .entries
-                                    .where((entry) => entry.value.isactive == 1)
-                                    .map((entry) {
+                                rows: jahirKaryakramDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                                   int index = entry.key;
                                   var data = entry.value;
-                                  bool isSelected =
-                                      selectedjahirKaryakramIdIndex == index;
+                                  bool isSelected = selectedjahirKaryakramIdIndex == index;
                                   return DataRow(
                                       selected: isSelected,
-                                      color: MaterialStateProperty.resolveWith<
-                                          Color?>(
+                                      color: MaterialStateProperty.resolveWith<Color?>(
                                         (Set<MaterialState> states) {
-                                          if (isSelected)
-                                            return Colors.yellow.shade100;
+                                          if (isSelected) return Colors.yellow.shade100;
                                           return null;
                                         },
                                       ),
                                       onSelectChanged: (bool? selected) {
                                         if (selected != null && selected) {
                                           setState(() {
-                                            selectedjahirKaryakramIdIndex =
-                                                index;
+                                            selectedjahirKaryakramIdIndex = index;
                                           });
                                         }
                                       },
                                       cells: [
-                                        DataCell(Text(
-                                            data.selectedDropdownValueName ??
-                                                '')),
+                                        DataCell(Text(data.selectedDropdownValueName ?? '')),
                                         DataCell(Text(data.name ?? '')),
                                         DataCell(Text(data.shamta ?? '')),
-                                        DataCell(Text(data
-                                                    .nivasasathiupalabdha ==
-                                                1
+                                        DataCell(Text(data.nivasasathiupalabdha == 1
                                             ? "${Statics.getLabel('ConfirmationYes')}"
                                             : data.nivasasathiupalabdha == 0
                                                 ? "${Statics.getLabel('ConfirmationNo')}"
                                                 : "-")),
-                                        DataCell(
-                                            Text(data.nivaaskshamata ?? '')),
+                                        DataCell(Text(data.nivaaskshamata ?? '')),
                                       ]);
                                 }).toList(),
                               ),
@@ -11856,15 +10240,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             InkWell(
                               onTap: () {
                                 if (selectedjahirKaryakramIdIndex != null) {
-                                  var selectedData = jahirKaryakramDataList[
-                                      selectedjahirKaryakramIdIndex!];
+                                  var selectedData = jahirKaryakramDataList[selectedjahirKaryakramIdIndex!];
                                   showDialog(
                                     context: context,
                                     builder: (context) {
                                       return AlertDialog(
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
+                                          borderRadius: BorderRadius.circular(20),
                                         ),
                                         backgroundColor: Colors.white,
                                         title: Center(
@@ -11880,58 +10262,34 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         content: SingleChildScrollView(
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Divider(
-                                                  thickness: 1,
-                                                  color: Colors
-                                                      .deepPurple.shade100),
+                                              Divider(thickness: 1, color: Colors.deepPurple.shade100),
                                               SizedBox(height: 12),
-                                              _buildInfoRow(
-                                                  "${Statics.getLabel('SelectFrequency')}",
-                                                  selectedData
-                                                      .selectedDropdownValueName),
-                                              _buildInfoRow(
-                                                  "${Statics.getLabel('Name')}",
-                                                  selectedData.name),
-                                              _buildInfoRow(
-                                                  "${Statics.getLabel('shamta')}",
-                                                  selectedData.shamta),
+                                              _buildInfoRow("${Statics.getLabel('SelectFrequency')}", selectedData.selectedDropdownValueName),
+                                              _buildInfoRow("${Statics.getLabel('Name')}", selectedData.name),
+                                              _buildInfoRow("${Statics.getLabel('shamta')}", selectedData.shamta),
                                               _buildInfoRow(
                                                   "${Statics.getLabel('NnivaasAvailable')}",
-                                                  selectedData.nivasasathiupalabdha ==
-                                                          1
+                                                  selectedData.nivasasathiupalabdha == 1
                                                       ? "${Statics.getLabel('ConfirmationYes')}"
-                                                      : selectedData
-                                                                  .nivasasathiupalabdha ==
-                                                              0
+                                                      : selectedData.nivasasathiupalabdha == 0
                                                           ? "${Statics.getLabel('ConfirmationNo')}"
                                                           : "-"),
-                                              _buildInfoRow(
-                                                  "${Statics.getLabel('nivaasShamta')}",
-                                                  selectedData.nivaaskshamata),
+                                              _buildInfoRow("${Statics.getLabel('nivaasShamta')}", selectedData.nivaaskshamata),
                                             ],
                                           ),
                                         ),
-                                        actionsAlignment:
-                                            MainAxisAlignment.center,
+                                        actionsAlignment: MainAxisAlignment.center,
                                         actions: [
                                           ElevatedButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                            child: Text(
-                                                "${Statics.getLabel('bandKara')}",
-                                                style: TextStyle(
-                                                    color: Colors.white)),
+                                            onPressed: () => Navigator.pop(context),
+                                            child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                             style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  Colors.purpleAccent,
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 24, vertical: 12),
+                                              backgroundColor: Colors.purpleAccent,
+                                              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                               shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
+                                                borderRadius: BorderRadius.circular(12),
                                               ),
                                             ),
                                           ),
@@ -11941,22 +10299,18 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   );
                                 }
                               },
-                              child: Icon(Icons.remove_red_eye,
-                                  color: Colors.green, size: 20),
+                              child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                             ),
                             SizedBox(
                               width: 20,
                             ),
                             InkWell(
                               onTap: () {
-                                showjahirKaryakramPopup(context,
-                                    editIndex: selectedjahirKaryakramIdIndex,
-                                    onDataChanged: () {
+                                showjahirKaryakramPopup(context, editIndex: selectedjahirKaryakramIdIndex, onDataChanged: () {
                                   setState(() {});
                                 });
                               },
-                              child: Icon(Icons.edit,
-                                  color: Colors.blue, size: 20),
+                              child: Icon(Icons.edit, color: Colors.blue, size: 20),
                             ),
                             SizedBox(
                               width: 20,
@@ -11981,8 +10335,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                       ),
                                     ),
                                     content: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10.0),
+                                      padding: const EdgeInsets.symmetric(vertical: 10.0),
                                       child: Text(
                                         "${Statics.getLabel('deleteconfirmText')}",
                                         textAlign: TextAlign.center,
@@ -11992,19 +10345,16 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         ),
                                       ),
                                     ),
-                                    actionsAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                    actionsAlignment: MainAxisAlignment.spaceEvenly,
                                     actions: [
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.grey.shade300,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
                                         ),
-                                        onPressed: () =>
-                                            Navigator.pop(context, false),
+                                        onPressed: () => Navigator.pop(context, false),
                                         child: Text(
                                           "${Statics.getLabel('ConfirmationNo')}",
                                           style: TextStyle(color: Colors.black),
@@ -12014,12 +10364,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.redAccent,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
                                         ),
-                                        onPressed: () =>
-                                            Navigator.pop(context, true),
+                                        onPressed: () => Navigator.pop(context, true),
                                         child: Text(
                                           "${Statics.getLabel('ConfirmationYes')}",
                                           style: TextStyle(color: Colors.white),
@@ -12028,18 +10376,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     ],
                                   ),
                                 );
-                                if (shouldDelete == true &&
-                                    selectedjahirKaryakramIdIndex != null) {
+                                if (shouldDelete == true && selectedjahirKaryakramIdIndex != null) {
                                   setState(() {
-                                    jahirKaryakramDataList[
-                                            selectedjahirKaryakramIdIndex!]
-                                        .isactive = 0;
+                                    jahirKaryakramDataList[selectedjahirKaryakramIdIndex!].isactive = 0;
                                     selectedjahirKaryakramIdIndex = null;
                                   });
                                 }
                               },
-                              child: Icon(Icons.delete,
-                                  color: Colors.red, size: 20),
+                              child: Icon(Icons.delete, color: Colors.red, size: 20),
                             ),
                           ],
                         ),
@@ -12124,29 +10468,22 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   int? selectedVastitBalopasanaKendraIdEdit;
   String? selectedVastitBalopasanaKendraName;
   Masterdata? selectedMasterVastitBalopasanaKendraName;
-  final TextEditingController vastitBalopasanaKendraAnyaController =
-      TextEditingController();
-  final TextEditingController vastitBalopasanaKendraAnyaNameController =
-      TextEditingController();
-  final TextEditingController vastitBalopasanaKendraNaavController =
-      TextEditingController();
+  final TextEditingController vastitBalopasanaKendraAnyaController = TextEditingController();
+  final TextEditingController vastitBalopasanaKendraAnyaNameController = TextEditingController();
+  final TextEditingController vastitBalopasanaKendraNaavController = TextEditingController();
   String? _selectedGender;
   int? selectedGenderIndex;
   int? isActiveBalopasanakendra = 1;
   int? pkidBalopasanakendra = 0;
-  void showVastitBalopasanaKendraPopup(BuildContext context,
-      {int? editIndex, VoidCallback? onDataChanged}) {
+
+  void showVastitBalopasanaKendraPopup(BuildContext context, {int? editIndex, VoidCallback? onDataChanged}) {
     if (editIndex != null) {
       var data = vastitBalopasanaKendraDataList[editIndex];
       selectedVastitBalopasanaKendraId = data.shreneeid;
       selectedVastitBalopasanaKendraIdEdit = data.shreneeid;
       selectedVastitBalopasanaKendraName = data.selectedDropdownValueName;
-      selectedMasterVastitBalopasanaKendraName =
-          vastisarvekshanDropDownDataModel!.masterdata!.firstWhere(
-              (e) => e.id == data.shreneeid,
-              orElse: () => Masterdata());
-      vastitBalopasanaKendraAnyaNameController.text =
-          data.otherBalopasanaShreniName ?? "";
+      selectedMasterVastitBalopasanaKendraName = vastisarvekshanDropDownDataModel!.masterdata!.firstWhere((e) => e.id == data.shreneeid, orElse: () => Masterdata());
+      vastitBalopasanaKendraAnyaNameController.text = data.otherBalopasanaShreniName ?? "";
       vastitBalopasanaKendraNaavController.text = data.name ?? "";
       _selectedGender = data.konasathi;
       isActiveBalopasanakendra = data.isactive;
@@ -12187,10 +10524,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
               };
               int? getGenderIndexFromLabel(String? label) {
                 if (label == null) return null;
-                return genderMap.entries
-                    .firstWhere((entry) => entry.value == label,
-                        orElse: () => const MapEntry(-1, ''))
-                    .key;
+                return genderMap.entries.firstWhere((entry) => entry.value == label, orElse: () => const MapEntry(-1, '')).key;
               }
 
               selectedGenderIndex = getGenderIndexFromLabel(_selectedGender);
@@ -12205,8 +10539,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       onItemSelected: (id, value, isOther) {
                         selectedVastitBalopasanaKendraId = id;
                         selectedVastitBalopasanaKendraName = value;
-                        print(
-                            "id = $selectedVastitBalopasanaKendraId //////  name = $selectedVastitBalopasanaKendraName");
+                        print("id = $selectedVastitBalopasanaKendraId //////  name = $selectedVastitBalopasanaKendraName");
                       },
                       width: 250,
                       selectedValue: selectedMasterVastitBalopasanaKendraName,
@@ -12219,20 +10552,15 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     ),
                     const SizedBox(height: 10),
                     if (selectedMasterVastitBalopasanaKendraName?.isOther == 1)
-                      textControllerField("${Statics.getLabel('otherKendra')}",
-                          vastitBalopasanaKendraAnyaNameController, context,
-                          height: 50),
-                    textControllerField("${Statics.getLabel('Name')}",
-                        vastitBalopasanaKendraNaavController, context,
-                        height: 50),
+                      textControllerField("${Statics.getLabel('otherKendra')}", vastitBalopasanaKendraAnyaNameController, context, height: 50),
+                    textControllerField("${Statics.getLabel('Name')}", vastitBalopasanaKendraNaavController, context, height: 50),
                     const SizedBox(height: 10),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "${Statics.getLabel('balopasanaKendraForWhom')}",
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         ...genderMap.entries.map((entry) {
                           return RadioListTile<int>(
@@ -12242,11 +10570,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             onChanged: (value) {
                               setState(() {
                                 selectedGenderIndex = value;
-                                _selectedGender =
-                                    genderMap[value!]; // Store label
+                                _selectedGender = genderMap[value!]; // Store label
                               });
-                              print(
-                                  'Selected Gender: $_selectedGender (index: $value)');
+                              print('Selected Gender: $_selectedGender (index: $value)');
                             },
                           );
                         }).toList(),
@@ -12265,27 +10591,21 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
                 onPressed: () {
-                  if ((selectedMasterVastitBalopasanaKendraName?.isOther == 1 &&
-                      vastitBalopasanaKendraAnyaNameController.text == "")) {
-                    Statics.showToast(
-                        "${Statics.getLabel('otherInfoValidation')}");
+                  if ((selectedMasterVastitBalopasanaKendraName?.isOther == 1 && vastitBalopasanaKendraAnyaNameController.text == "")) {
+                    Statics.showToast("${Statics.getLabel('otherInfoValidation')}");
                   } else {
-                    VastisarVastitilabalopasanakendra data =
-                        VastisarVastitilabalopasanakendra(
-                            shreneeid: selectedVastitBalopasanaKendraId,
-                            selectedDropdownValueName:
-                                selectedVastitBalopasanaKendraName,
-                            isactive: isActiveBalopasanakendra,
-                            pkid: pkidBalopasanakendra,
-                            vastiid: int.parse(selctedLevelId!),
-                            name: vastitBalopasanaKendraNaavController.text,
-                            konasathi: _selectedGender,
-                            otherBalopasanaShreniName:
-                                vastitBalopasanaKendraAnyaNameController.text);
+                    VastisarVastitilabalopasanakendra data = VastisarVastitilabalopasanakendra(
+                        shreneeid: selectedVastitBalopasanaKendraId,
+                        selectedDropdownValueName: selectedVastitBalopasanaKendraName,
+                        isactive: isActiveBalopasanakendra,
+                        pkid: pkidBalopasanakendra,
+                        vastiid: int.parse(selctedLevelId!),
+                        name: vastitBalopasanaKendraNaavController.text,
+                        konasathi: _selectedGender,
+                        otherBalopasanaShreniName: vastitBalopasanaKendraAnyaNameController.text);
                     if (editIndex != null) {
                       vastitBalopasanaKendraDataList[editIndex] = data;
                     } else {
@@ -12298,8 +10618,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     clearvastitBalopasanaKendraFields();
                   }
                 },
-                child: Text("${Statics.getLabel('Submit')}",
-                    style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -12331,10 +10650,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   Masterdata? selectedMasterMotheVyasayikKendraName;
   int? pkidMotheVyasayikKendra = 0;
   int? isActiveMotheVyasayikKendra = 1;
-  final TextEditingController motheVyasayikKendraNaavController =
-      TextEditingController();
-  void showMotheVyavsayikKendraPopup(BuildContext context,
-      {int? editIndex, VoidCallback? onDataChanged}) {
+  final TextEditingController motheVyasayikKendraNaavController = TextEditingController();
+
+  void showMotheVyavsayikKendraPopup(BuildContext context, {int? editIndex, VoidCallback? onDataChanged}) {
     if (editIndex != null) {
       var data = motheVyasayikKendraDataList[editIndex];
       selectedMotheVyasayikKendraId = data.id;
@@ -12381,8 +10699,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       onItemSelected: (id, value, isOther) {
                         selectedMotheVyasayikKendraId = id;
                         selectedMotheVyasayikKendraName = value;
-                        print(
-                            "id = $selectedMotheVyasayikKendraId //////  name = $selectedMotheVyasayikKendraName");
+                        print("id = $selectedMotheVyasayikKendraId //////  name = $selectedMotheVyasayikKendraName");
                       },
                       width: 250,
                       selectedValue: selectedMasterMotheVyasayikKendraName,
@@ -12394,9 +10711,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       editId: selectedMotheVyasayikKendraIdEdit,
                     ),
                     const SizedBox(height: 10),
-                    textControllerField("${Statics.getLabel('Name')}",
-                        motheVyasayikKendraNaavController, context,
-                        height: 50),
+                    textControllerField("${Statics.getLabel('Name')}", motheVyasayikKendraNaavController, context, height: 50),
                     const SizedBox(height: 5),
                   ],
                 ),
@@ -12410,12 +10725,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
                 onPressed: () {
-                  VastisarMothevyavasayikakendra data =
-                      VastisarMothevyavasayikakendra(
+                  VastisarMothevyavasayikakendra data = VastisarMothevyavasayikakendra(
                     name: motheVyasayikKendraNaavController.text,
                     vastiid: int.parse(selctedLevelId!),
                     pkid: pkidMotheVyasayikKendra,
@@ -12434,8 +10747,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   Navigator.of(ctx).pop();
                   clearMotheVyasayikFields();
                 },
-                child: Text("${Statics.getLabel('Submit')}",
-                    style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -12464,10 +10776,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   Masterdata? selectedMasternirmandhinMothePrakalpaName;
   int? nirmandhinMothePrakalpaPkid = 0;
   int? nirmandhinMothePrakalpaIsActive = 1;
-  final TextEditingController nirmandhinMothePrakalpaNaavController =
-      TextEditingController();
-  void showNirmaandhinMothePopup(BuildContext context,
-      {int? editIndex, VoidCallback? onDataChanged}) {
+  final TextEditingController nirmandhinMothePrakalpaNaavController = TextEditingController();
+
+  void showNirmaandhinMothePopup(BuildContext context, {int? editIndex, VoidCallback? onDataChanged}) {
     if (editIndex != null) {
       var data = nirmandhinMothePrakalpaDataList[editIndex];
       selectednirmandhinMothePrakalpaId = data.id;
@@ -12477,9 +10788,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       nirmandhinMothePrakalpaPkid = data.pkid;
       nirmandhinMothePrakalpaIsActive = data.isactive;
 
-      selectedMasternirmandhinMothePrakalpaName =
-          vastisarvekshanDropDownDataModel!.masterdata!
-              .firstWhere((e) => e.id == data.id, orElse: () => Masterdata());
+      selectedMasternirmandhinMothePrakalpaName = vastisarvekshanDropDownDataModel!.masterdata!.firstWhere((e) => e.id == data.id, orElse: () => Masterdata());
     }
 
     showDialog(
@@ -12509,9 +10818,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    textControllerField("${Statics.getLabel('Name')}",
-                        nirmandhinMothePrakalpaNaavController, context,
-                        height: 50),
+                    textControllerField("${Statics.getLabel('Name')}", nirmandhinMothePrakalpaNaavController, context, height: 50),
                     const SizedBox(height: 5),
                     vastisarvekshanDropdown2(
                       dataModel: vastisarvekshanDropDownDataModel!,
@@ -12520,8 +10827,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       onItemSelected: (id, value, isOther) {
                         selectednirmandhinMothePrakalpaId = id;
                         selectednirmandhinMothePrakalpaName = value;
-                        print(
-                            "id = $selectednirmandhinMothePrakalpaId //////  name = $selectednirmandhinMothePrakalpaName");
+                        print("id = $selectednirmandhinMothePrakalpaId //////  name = $selectednirmandhinMothePrakalpaName");
                       },
                       width: 250,
                       selectedValue: selectedMasternirmandhinMothePrakalpaName,
@@ -12545,14 +10851,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
                 onPressed: () {
                   VastisarNirmanadhinamothe data = VastisarNirmanadhinamothe(
                     id: selectednirmandhinMothePrakalpaId,
-                    selectedDropdownValueName:
-                        selectednirmandhinMothePrakalpaName,
+                    selectedDropdownValueName: selectednirmandhinMothePrakalpaName,
                     name: nirmandhinMothePrakalpaNaavController.text,
                     pkid: nirmandhinMothePrakalpaPkid,
                     isactive: nirmandhinMothePrakalpaIsActive,
@@ -12569,8 +10873,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   Navigator.of(ctx).pop();
                   clearNirmandhinMothePrakalpaFields();
                 },
-                child: Text("${Statics.getLabel('Submit')}",
-                    style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -12600,10 +10903,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   int? selectedmotheRugnalayPkId = 0;
   int? selectedmotheRugnalayIsActive = 1;
 
-  final TextEditingController motheRugnalayNaavController =
-      TextEditingController();
-  void showMotheRugnalayPopup(BuildContext context,
-      {int? editIndex, VoidCallback? onDataChanged}) {
+  final TextEditingController motheRugnalayNaavController = TextEditingController();
+
+  void showMotheRugnalayPopup(BuildContext context, {int? editIndex, VoidCallback? onDataChanged}) {
     if (editIndex != null) {
       var data = motheRugnalayDataList[editIndex];
       selectedmotheRugnalayId = data.id;
@@ -12614,9 +10916,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       selectedmotheRugnalayIsActive = data.isactive;
 
       /// ✅ Set selected dropdown item for edit
-      selectedMastermotheRugnalayName = vastisarvekshanDropDownDataModel!
-          .masterdata!
-          .firstWhere((e) => e.id == data.id, orElse: () => Masterdata());
+      selectedMastermotheRugnalayName = vastisarvekshanDropDownDataModel!.masterdata!.firstWhere((e) => e.id == data.id, orElse: () => Masterdata());
     }
 
     showDialog(
@@ -12656,8 +10956,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       onItemSelected: (id, value, isOther) {
                         selectedmotheRugnalayId = id;
                         selectedmotheRugnalayName = value;
-                        print(
-                            "id = $selectedmotheRugnalayId //////  name = $selectedmotheRugnalayName");
+                        print("id = $selectedmotheRugnalayId //////  name = $selectedmotheRugnalayName");
                       },
                       width: 250,
                       selectedValue: selectedMastermotheRugnalayName,
@@ -12669,9 +10968,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       editId: selectedmotheRugnalayIdEdit,
                     ),
                     const SizedBox(height: 10),
-                    textControllerField("${Statics.getLabel('Name')}",
-                        motheRugnalayNaavController, context,
-                        height: 50),
+                    textControllerField("${Statics.getLabel('Name')}", motheRugnalayNaavController, context, height: 50),
                     const SizedBox(height: 5),
                   ],
                 ),
@@ -12685,8 +10982,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
                 onPressed: () {
                   VastisarMotherugnalaya data = VastisarMotherugnalaya(
@@ -12708,8 +11004,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   Navigator.of(ctx).pop();
                   clearMotheRugnalayFields();
                 },
-                child: Text("${Statics.getLabel('Submit')}",
-                    style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -12729,13 +11024,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
 
 //================================  15. SHAIKSHANIK SANSTHA FORM ===================================================================================================
   List<Vastisarschooltapasila> allShaikshanikPrakarDataList = [];
-  TextEditingController allShaikshanikPrakarNaavController =
-      TextEditingController();
+  TextEditingController allShaikshanikPrakarNaavController = TextEditingController();
   int? selectedShaikshanikSansthaIdIndex;
   int? selectedShaikshanikSansthaId;
   int? selectedShaikshanikSansthaIdEdit;
   String? selectedShaikshanikSansthaName;
   Masterdata? selectedMasterShaikshanikSansthaName;
+
   //========== if(sansthaType == 315) ============
   int? selectedShalaPrakarIdIndex;
   int? selectedShalaPrakarId;
@@ -12750,12 +11045,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   int? selectedSansthaChalakPrakarIdEdit;
   String? selectedSansthaChalakPrakarName;
   Masterdata? selectedMasterSansthaChalakPrakarName;
+
   //========== if(sansthaType == 316) ====================================
   int? selectedMahavidyalayinPrakarIdIndex;
   int? selectedMahavidyalayinPrakarId;
   int? selectedMahavidyalayinPrakarIdEdit;
   String? selectedMahavidyalayinPrakarName;
   Masterdata? selectedMasterMahavidyalayinPrakarName;
+
   //========== if(sansthaType == 317) ====================================
   int? selectedAllShaikshanikPrakarIdIndex;
   int? selectedAllShaikshanikPrakarTapshilMilkatId;
@@ -12765,6 +11062,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
 
   int? isActiveSchool = 1;
   int? pkidSchool = 0;
+
   void showShaikshanikSansthaPopup(
     BuildContext context, {
     int? editIndex,
@@ -12793,8 +11091,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
       selectedShaikshanikSansthaName = data.selectedDropdownValueName;
       selectedAllShaikshanikPrakarTapshilMilkatId = data.milkat;
       selectedAllShaikshanikPrakarTapshilMilkatIdEdit = data.milkat;
-      selectedAllShaikshanikPrakarTapshilMilkatName =
-          data.selectedDropdownValueName4;
+      selectedAllShaikshanikPrakarTapshilMilkatName = data.selectedDropdownValueName4;
 
       allShaikshanikPrakarNaavController.text = data.name ?? "";
       pkidSchool = data.pkid;
@@ -12808,11 +11105,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("${Statics.getLabel('shaikshanikSanstha')}",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Colors.purpleAccent)),
+              Text("${Statics.getLabel('shaikshanikSanstha')}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.purpleAccent)),
               IconButton(
                 icon: Icon(Icons.close, color: Colors.grey),
                 onPressed: () {
@@ -12833,21 +11126,17 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               ? vastisarvekshanDropdown2(
                                   dataModel: vastisarvekshanDropDownDataModel!,
                                   filterTypeName: "शैक्षणिकसंस्थान",
-                                  hintText:
-                                      "${Statics.getLabel('selectShaikshanikSanstha')}",
+                                  hintText: "${Statics.getLabel('selectShaikshanikSanstha')}",
                                   onItemSelected: (id, value, isOther) {
                                     selectedShaikshanikSansthaId = id;
                                     selectedShaikshanikSansthaName = value;
-                                    print(
-                                        "id = $selectedShaikshanikSansthaId //////  name = $selectedShaikshanikSansthaName//////  iD Edit = $selectedShaikshanikSansthaIdEdit");
+                                    print("id = $selectedShaikshanikSansthaId //////  name = $selectedShaikshanikSansthaName//////  iD Edit = $selectedShaikshanikSansthaIdEdit");
                                   },
                                   width: 250,
-                                  selectedValue:
-                                      selectedMasterShaikshanikSansthaName,
+                                  selectedValue: selectedMasterShaikshanikSansthaName,
                                   onSelectionChanged: (newValue) {
                                     setState(() {
-                                      selectedMasterShaikshanikSansthaName =
-                                          newValue;
+                                      selectedMasterShaikshanikSansthaName = newValue;
                                     });
                                   },
                                   editId: selectedShaikshanikSansthaIdEdit,
@@ -12881,12 +11170,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               selectedShikshanacheMadhyamName = value;
                             },
                             width: 250,
-                            selectedValue:
-                                selectedMasterShikshanacheMadhyamName,
+                            selectedValue: selectedMasterShikshanacheMadhyamName,
                             onSelectionChanged: (newValue) {
                               setState(() {
-                                selectedMasterShikshanacheMadhyamName =
-                                    newValue;
+                                selectedMasterShikshanacheMadhyamName = newValue;
                               });
                             },
                             editId: selectedShikshanacheMadhyamIdEdit,
@@ -12895,47 +11182,38 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           vastisarvekshanDropdown2(
                             dataModel: vastisarvekshanDropDownDataModel!,
                             filterTypeName: "संस्थाचालकप्रकार",
-                            hintText:
-                                "${Statics.getLabel('sansthaCHalakPrakar')}",
+                            hintText: "${Statics.getLabel('sansthaCHalakPrakar')}",
                             onItemSelected: (id, value, isOther) {
                               selectedSansthaChalakPrakarId = id;
                               selectedSansthaChalakPrakarName = value;
                             },
                             width: 250,
-                            selectedValue:
-                                selectedMasterSansthaChalakPrakarName,
+                            selectedValue: selectedMasterSansthaChalakPrakarName,
                             onSelectionChanged: (newValue) {
                               setState(() {
-                                selectedMasterSansthaChalakPrakarName =
-                                    newValue;
+                                selectedMasterSansthaChalakPrakarName = newValue;
                               });
                             },
                             editId: selectedSansthaChalakPrakarIdEdit,
                           ),
                           const SizedBox(height: 5),
-                          textControllerField("${Statics.getLabel('Name')}",
-                              allShaikshanikPrakarNaavController, context,
-                              height: 50),
+                          textControllerField("${Statics.getLabel('Name')}", allShaikshanikPrakarNaavController, context, height: 50),
                           vastisarvekshanDropdown2(
                             dataModel: vastisarvekshanDropDownDataModel!,
                             filterTypeName: "शाळातपशीलमिळकत",
                             hintText: "${Statics.getLabel('milkat')}",
                             onItemSelected: (id, value, isOther) {
                               selectedAllShaikshanikPrakarTapshilMilkatId = id;
-                              selectedAllShaikshanikPrakarTapshilMilkatName =
-                                  value;
+                              selectedAllShaikshanikPrakarTapshilMilkatName = value;
                             },
                             width: 250,
-                            selectedValue:
-                                selectedMasterAllShaikshanikPrakarTapshilMilkatName,
+                            selectedValue: selectedMasterAllShaikshanikPrakarTapshilMilkatName,
                             onSelectionChanged: (newValue) {
                               setState(() {
-                                selectedMasterAllShaikshanikPrakarTapshilMilkatName =
-                                    newValue;
+                                selectedMasterAllShaikshanikPrakarTapshilMilkatName = newValue;
                               });
                             },
-                            editId:
-                                selectedAllShaikshanikPrakarTapshilMilkatIdEdit,
+                            editId: selectedAllShaikshanikPrakarTapshilMilkatIdEdit,
                           ),
                           const SizedBox(height: 5),
                         ]
@@ -12943,24 +11221,19 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           ? [
                               vastisarvekshanDropDownDataModel != null
                                   ? vastisarvekshanDropdown2(
-                                      dataModel:
-                                          vastisarvekshanDropDownDataModel!,
+                                      dataModel: vastisarvekshanDropDownDataModel!,
                                       filterTypeName: "शैक्षणिकसंस्थान",
-                                      hintText:
-                                          "${Statics.getLabel('selectShaikshanikSanstha')}",
+                                      hintText: "${Statics.getLabel('selectShaikshanikSanstha')}",
                                       onItemSelected: (id, value, isOther) {
                                         selectedShaikshanikSansthaId = id;
                                         selectedShaikshanikSansthaName = value;
-                                        print(
-                                            "id = $selectedShaikshanikSansthaId //////  name = $selectedShaikshanikSansthaName//////  iD Edit = $selectedShaikshanikSansthaIdEdit");
+                                        print("id = $selectedShaikshanikSansthaId //////  name = $selectedShaikshanikSansthaName//////  iD Edit = $selectedShaikshanikSansthaIdEdit");
                                       },
                                       width: 250,
-                                      selectedValue:
-                                          selectedMasterShaikshanikSansthaName,
+                                      selectedValue: selectedMasterShaikshanikSansthaName,
                                       onSelectionChanged: (newValue) {
                                         setState(() {
-                                          selectedMasterShaikshanikSansthaName =
-                                              newValue;
+                                          selectedMasterShaikshanikSansthaName = newValue;
                                         });
                                       },
                                       editId: selectedShaikshanikSansthaIdEdit,
@@ -12969,54 +11242,41 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               const SizedBox(height: 5),
                               vastisarvekshanDropDownDataModel != null
                                   ? vastisarvekshanDropdown2(
-                                      dataModel:
-                                          vastisarvekshanDropDownDataModel!,
+                                      dataModel: vastisarvekshanDropDownDataModel!,
                                       filterTypeName: "महाविद्यालयीनप्रकार",
                                       hintText: "महाविद्यालयीन प्रकार",
                                       onItemSelected: (id, value, isOther) {
                                         selectedMahavidyalayinPrakarId = id;
-                                        selectedMahavidyalayinPrakarName =
-                                            value;
-                                        print(
-                                            "id = $selectedMahavidyalayinPrakarId //////  name = $selectedMahavidyalayinPrakarName");
+                                        selectedMahavidyalayinPrakarName = value;
+                                        print("id = $selectedMahavidyalayinPrakarId //////  name = $selectedMahavidyalayinPrakarName");
                                       },
                                       width: 250,
-                                      selectedValue:
-                                          selectedMasterMahavidyalayinPrakarName,
+                                      selectedValue: selectedMasterMahavidyalayinPrakarName,
                                       onSelectionChanged: (newValue) {
                                         setState(() {
-                                          selectedMasterMahavidyalayinPrakarName =
-                                              newValue;
+                                          selectedMasterMahavidyalayinPrakarName = newValue;
                                         });
                                       },
-                                      editId:
-                                          selectedMahavidyalayinPrakarIdEdit,
+                                      editId: selectedMahavidyalayinPrakarIdEdit,
                                     )
                                   : Container(),
-                              textControllerField("${Statics.getLabel('Name')}",
-                                  allShaikshanikPrakarNaavController, context,
-                                  height: 50),
+                              textControllerField("${Statics.getLabel('Name')}", allShaikshanikPrakarNaavController, context, height: 50),
                               vastisarvekshanDropdown2(
                                 dataModel: vastisarvekshanDropDownDataModel!,
                                 filterTypeName: "महाविद्यालयीनतपशीलमिळकत",
                                 hintText: "${Statics.getLabel('milkat')}",
                                 onItemSelected: (id, value, isOther) {
-                                  selectedAllShaikshanikPrakarTapshilMilkatId =
-                                      id;
-                                  selectedAllShaikshanikPrakarTapshilMilkatName =
-                                      value;
+                                  selectedAllShaikshanikPrakarTapshilMilkatId = id;
+                                  selectedAllShaikshanikPrakarTapshilMilkatName = value;
                                 },
                                 width: 250,
-                                selectedValue:
-                                    selectedMasterAllShaikshanikPrakarTapshilMilkatName,
+                                selectedValue: selectedMasterAllShaikshanikPrakarTapshilMilkatName,
                                 onSelectionChanged: (newValue) {
                                   setState(() {
-                                    selectedMasterAllShaikshanikPrakarTapshilMilkatName =
-                                        newValue;
+                                    selectedMasterAllShaikshanikPrakarTapshilMilkatName = newValue;
                                   });
                                 },
-                                editId:
-                                    selectedAllShaikshanikPrakarTapshilMilkatIdEdit,
+                                editId: selectedAllShaikshanikPrakarTapshilMilkatIdEdit,
                               ),
                               const SizedBox(height: 5),
                             ]
@@ -13024,92 +11284,67 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               ? [
                                   vastisarvekshanDropDownDataModel != null
                                       ? vastisarvekshanDropdown2(
-                                          dataModel:
-                                              vastisarvekshanDropDownDataModel!,
+                                          dataModel: vastisarvekshanDropDownDataModel!,
                                           filterTypeName: "शैक्षणिकसंस्थान",
-                                          hintText:
-                                              "${Statics.getLabel('selectShaikshanikSanstha')}",
+                                          hintText: "${Statics.getLabel('selectShaikshanikSanstha')}",
                                           onItemSelected: (id, value, isOther) {
                                             selectedShaikshanikSansthaId = id;
-                                            selectedShaikshanikSansthaName =
-                                                value;
-                                            print(
-                                                "id = $selectedShaikshanikSansthaId //////  name = $selectedShaikshanikSansthaName//////  iD Edit = $selectedShaikshanikSansthaIdEdit");
+                                            selectedShaikshanikSansthaName = value;
+                                            print("id = $selectedShaikshanikSansthaId //////  name = $selectedShaikshanikSansthaName//////  iD Edit = $selectedShaikshanikSansthaIdEdit");
                                           },
                                           width: 250,
-                                          selectedValue:
-                                              selectedMasterShaikshanikSansthaName,
+                                          selectedValue: selectedMasterShaikshanikSansthaName,
                                           onSelectionChanged: (newValue) {
                                             setState(() {
-                                              selectedMasterShaikshanikSansthaName =
-                                                  newValue;
+                                              selectedMasterShaikshanikSansthaName = newValue;
                                             });
                                           },
-                                          editId:
-                                              selectedShaikshanikSansthaIdEdit,
+                                          editId: selectedShaikshanikSansthaIdEdit,
                                         )
                                       : Container(),
-                                  textControllerField(
-                                      "${Statics.getLabel('Name')}",
-                                      allShaikshanikPrakarNaavController,
-                                      context,
-                                      height: 50),
+                                  textControllerField("${Statics.getLabel('Name')}", allShaikshanikPrakarNaavController, context, height: 50),
                                   vastisarvekshanDropdown2(
-                                    dataModel:
-                                        vastisarvekshanDropDownDataModel!,
+                                    dataModel: vastisarvekshanDropDownDataModel!,
                                     filterTypeName: "विशिष्टसंस्थामिळकत",
                                     hintText: "${Statics.getLabel('milkat')}",
                                     onItemSelected: (id, value, isOther) {
-                                      selectedAllShaikshanikPrakarTapshilMilkatId =
-                                          id;
-                                      selectedAllShaikshanikPrakarTapshilMilkatName =
-                                          value;
+                                      selectedAllShaikshanikPrakarTapshilMilkatId = id;
+                                      selectedAllShaikshanikPrakarTapshilMilkatName = value;
                                     },
                                     width: 250,
-                                    selectedValue:
-                                        selectedMasterAllShaikshanikPrakarTapshilMilkatName,
+                                    selectedValue: selectedMasterAllShaikshanikPrakarTapshilMilkatName,
                                     onSelectionChanged: (newValue) {
                                       setState(() {
-                                        selectedMasterAllShaikshanikPrakarTapshilMilkatName =
-                                            newValue;
+                                        selectedMasterAllShaikshanikPrakarTapshilMilkatName = newValue;
                                       });
                                     },
-                                    editId:
-                                        selectedAllShaikshanikPrakarTapshilMilkatIdEdit,
+                                    editId: selectedAllShaikshanikPrakarTapshilMilkatIdEdit,
                                   ),
                                   const SizedBox(height: 5),
                                 ]
                               : [
                                   vastisarvekshanDropDownDataModel != null
                                       ? vastisarvekshanDropdown2(
-                                          dataModel:
-                                              vastisarvekshanDropDownDataModel!,
+                                          dataModel: vastisarvekshanDropDownDataModel!,
                                           filterTypeName: "शैक्षणिकसंस्थान",
-                                          hintText:
-                                              "${Statics.getLabel('selectShaikshanikSanstha')}",
+                                          hintText: "${Statics.getLabel('selectShaikshanikSanstha')}",
                                           onItemSelected: (id, value, isOther) {
                                             selectedShaikshanikSansthaId = id;
-                                            selectedShaikshanikSansthaName =
-                                                value;
-                                            print(
-                                                "id = $selectedShaikshanikSansthaId //////  name = $selectedShaikshanikSansthaName");
+                                            selectedShaikshanikSansthaName = value;
+                                            print("id = $selectedShaikshanikSansthaId //////  name = $selectedShaikshanikSansthaName");
                                           },
                                           width: 250,
-                                          selectedValue:
-                                              selectedMasterShaikshanikSansthaName,
+                                          selectedValue: selectedMasterShaikshanikSansthaName,
                                           onSelectionChanged: (newValue) {
                                             setState(() {
-                                              selectedMasterShaikshanikSansthaName =
-                                                  newValue;
+                                              selectedMasterShaikshanikSansthaName = newValue;
                                             });
                                           },
-                                          editId:
-                                              selectedShaikshanikSansthaIdEdit,
+                                          editId: selectedShaikshanikSansthaIdEdit,
                                         )
                                       : Container(),
                                   SizedBox(height: 10),
-                                  Text(
-                                      "${Statics.getLabel('selectShaikshanikSanstha')}")
+                                  Text("${Statics.getLabel('selectShaikshanikSanstha')}")
                                 ],
                 ),
               );
@@ -13121,8 +11356,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
                 onPressed: () {
                   Vastisarschooltapasila data = Vastisarschooltapasila(
@@ -13131,14 +11365,11 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     isactive: isActiveSchool,
                     vastiid: int.parse(selctedLevelId!),
                     selectedDropdownValueName: selectedShaikshanikSansthaName,
-                    prakaarid:
-                        selectedShalaPrakarId ?? selectedMahavidyalayinPrakarId,
-                    selectedDropdownValueName3: selectedShalaPrakarName ??
-                        selectedMahavidyalayinPrakarName,
+                    prakaarid: selectedShalaPrakarId ?? selectedMahavidyalayinPrakarId,
+                    selectedDropdownValueName3: selectedShalaPrakarName ?? selectedMahavidyalayinPrakarName,
                     selectedDropdownValueName2: selectedSansthaChalakPrakarName,
                     selectedDropdownValueName1: selectedShikshanacheMadhyamName,
-                    selectedDropdownValueName4:
-                        selectedAllShaikshanikPrakarTapshilMilkatName,
+                    selectedDropdownValueName4: selectedAllShaikshanikPrakarTapshilMilkatName,
                     maadhyam: selectedShikshanacheMadhyamId,
                     milkat: selectedAllShaikshanikPrakarTapshilMilkatId,
                     shaikshaniksansthaan: selectedShaikshanikSansthaId,
@@ -13156,8 +11387,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   Navigator.of(ctx).pop();
                   clearShalaPrakarDataListFields();
                 },
-                child: Text("${Statics.getLabel('Submit')}",
-                    style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -13201,6 +11431,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   int? pkidMaidanUdyan = 0;
   int? isActiveMaidanUdyan = 1;
   TextEditingController maidanUdyanNameControler = TextEditingController();
+
   void showMaidanUdyanPopup(
     BuildContext context, {
     int? editIndex,
@@ -13284,8 +11515,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   Navigator.of(ctx).pop();
                   maidanUdyanNameControler.clear();
                 },
-                child: Text("${Statics.getLabel('Submit')}",
-                    style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -13307,6 +11537,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   int? nivasaSathiUplabdhaYesNo;
   int? isActiveJahirKaryakram = 1;
   int? pkidJahirKaryakram = 0;
+
   void showjahirKaryakramPopup(
     BuildContext context, {
     int? editIndex,
@@ -13372,12 +11603,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       editId: selectedJahirKaryakramIdEdit,
                       question: "${Statics.getLabel('SelectFrequency')}",
                     ),
-                    textControllerField("${Statics.getLabel('Name')}",
-                        jahirKaryakramNaavControler, context,
-                        height: 50),
-                    textControllerField("${Statics.getLabel('shamta')}",
-                        jahirKaryakramShamtaControler, context,
-                        height: 50),
+                    textControllerField("${Statics.getLabel('Name')}", jahirKaryakramNaavControler, context, height: 50),
+                    textControllerField("${Statics.getLabel('shamta')}", jahirKaryakramShamtaControler, context, height: 50),
                     yesNoRadioButton(
                       question: "${Statics.getLabel('NnivaasAvailable')}",
                       onChanged: (value) {
@@ -13393,10 +11620,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       },
                       selectedOption: nivasaSathiUplabdhaYesNo ?? 2,
                     ),
-                    if (nivasaSathiUplabdhaYesNo == 1)
-                      textControllerField("${Statics.getLabel('nivaasShamta')}",
-                          jahirKaryakramNivasControler, context,
-                          height: 50),
+                    if (nivasaSathiUplabdhaYesNo == 1) textControllerField("${Statics.getLabel('nivaasShamta')}", jahirKaryakramNivasControler, context, height: 50),
                   ],
                 ),
               );
@@ -13413,8 +11637,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   ),
                 ),
                 onPressed: () {
-                  VastisarJahirakaryakramasambandhi data =
-                      VastisarJahirakaryakramasambandhi(
+                  VastisarJahirakaryakramasambandhi data = VastisarJahirakaryakramasambandhi(
                     vastiid: int.parse(selctedLevelId!),
                     isactive: isActiveJahirKaryakram,
                     pkid: pkidJahirKaryakram,
@@ -13438,8 +11661,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   Navigator.of(ctx).pop();
                   clearjahirKaryakram(); // ✅ Clear fields after saving
                 },
-                child: Text("${Statics.getLabel('Submit')}",
-                    style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -13474,8 +11696,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   Masterdata? selectedMasterVastiPrashnaGarjaName;
   int? pkidVastiPrashnaGarjaName = 0;
   int? isActiveVastiPrashnaGarjaName = 1;
-  TextEditingController vastiPrashnaGarjaTapshilController =
-      TextEditingController();
+  TextEditingController vastiPrashnaGarjaTapshilController = TextEditingController();
+
   void showVastiPrashnaGarjaPopup(
     BuildContext context, {
     int? editIndex,
@@ -13498,11 +11720,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("${Statics.getLabel('VastiSamajikGarja')}",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Colors.purpleAccent)),
+              Text("${Statics.getLabel('VastiSamajikGarja')}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.purpleAccent)),
               IconButton(
                 icon: Icon(Icons.close, color: Colors.grey),
                 onPressed: () {
@@ -13536,9 +11754,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       editId: selectedVastiPrashnaGarjaIdEdit,
                     ),
                     const SizedBox(height: 5),
-                    textControllerField("${Statics.getLabel('tapshil')}",
-                        vastiPrashnaGarjaTapshilController, context,
-                        height: 50),
+                    textControllerField("${Statics.getLabel('tapshil')}", vastiPrashnaGarjaTapshilController, context, height: 50),
                   ],
                 ),
               );
@@ -13550,8 +11766,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
                 onPressed: () {
                   VastisarVastitilasamajika data = VastisarVastitilasamajika(
@@ -13574,8 +11789,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   Navigator.of(ctx).pop();
                   clearVastiPrashnaGarja();
                 },
-                child: Text("${Statics.getLabel('Submit')}",
-                    style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -13593,6 +11807,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   }
 
   TextEditingController vastiPrashnaAnyaController = TextEditingController();
+
   //=================================================== 19. DHARMIK NETRUTVA FORM ====================================================================================
 
   List<Vastisardhaarmiknetrtav> dharmikNetrutvaDataList = [];
@@ -13605,8 +11820,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   int? isActiveDharmikNetrutva = 1;
 
   TextEditingController dharmikNetrutvaController = TextEditingController();
-  TextEditingController dharmikNetrutvaAnyaNameController =
-      TextEditingController();
+  TextEditingController dharmikNetrutvaAnyaNameController = TextEditingController();
+
   void showDharmikNetrutvaPopup(
     BuildContext context, {
     int? editIndex,
@@ -13630,11 +11845,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("${Statics.getLabel('DharmikNetrutwa')}",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Colors.purpleAccent)),
+              Text("${Statics.getLabel('DharmikNetrutwa')}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.purpleAccent)),
               IconButton(
                 icon: Icon(Icons.close, color: Colors.grey),
                 onPressed: () {
@@ -13668,16 +11879,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       editId: selectedDharmikNetrutvaIdEdit,
                     ),
                     const SizedBox(height: 5),
-                    if (selectedMasterDharmikNetrutvaName?.isOther == 1)
-                      textControllerField(
-                          "${Statics.getLabel('anyaDharmikNetrutva')}",
-                          dharmikNetrutvaAnyaNameController,
-                          context,
-                          height: 50),
+                    if (selectedMasterDharmikNetrutvaName?.isOther == 1) textControllerField("${Statics.getLabel('anyaDharmikNetrutva')}", dharmikNetrutvaAnyaNameController, context, height: 50),
                     const SizedBox(height: 5),
-                    textControllerField("${Statics.getLabel('Name')}",
-                        dharmikNetrutvaController, context,
-                        height: 50),
+                    textControllerField("${Statics.getLabel('Name')}", dharmikNetrutvaController, context, height: 50),
                   ],
                 ),
               );
@@ -13689,14 +11893,11 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
                 onPressed: () {
-                  if ((selectedMasterDharmikNetrutvaName?.isOther == 1 &&
-                      dharmikNetrutvaAnyaNameController.text == "")) {
-                    Statics.showToast(
-                        "${Statics.getLabel('otherInfoValidation')}");
+                  if ((selectedMasterDharmikNetrutvaName?.isOther == 1 && dharmikNetrutvaAnyaNameController.text == "")) {
+                    Statics.showToast("${Statics.getLabel('otherInfoValidation')}");
                   } else {
                     Vastisardhaarmiknetrtav data = Vastisardhaarmiknetrtav(
                       id: selectedDharmikNetrutvaId,
@@ -13720,8 +11921,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     clearDharmikNetrutva();
                   }
                 },
-                child: Text("${Statics.getLabel('Submit')}",
-                    style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -13740,6 +11940,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   }
 
   TextEditingController dharmikNetrutvaAnyaController = TextEditingController();
+
   //=================================================== 19. DHARMIK NETRUTVA FORM ====================================================================================
   List<Vastisardurjanshakti> durjanShaktiDataList = [];
 
@@ -13761,8 +11962,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   String? selectedDurjanShaktiGunhaName;
   Masterdata? selectedMasterDurjanShaktiGunhaName;
 
-  TextEditingController durjanShaktiAnyaPrkarController =
-      TextEditingController();
+  TextEditingController durjanShaktiAnyaPrkarController = TextEditingController();
 
   int? pkidDurjanShaktiGunha = 0;
   int? isActivedDurjanShaktiGunha = 1;
@@ -13799,11 +11999,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("${Statics.getLabel('DurjanShakti')}",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Colors.purpleAccent)),
+              Text("${Statics.getLabel('DurjanShakti')}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.purpleAccent)),
               IconButton(
                 icon: Icon(Icons.close, color: Colors.grey),
                 onPressed: () {
@@ -13819,9 +12015,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    textControllerField("${Statics.getLabel('Name')}",
-                        durjanShaktiNaavController, context,
-                        height: 50),
+                    textControllerField("${Statics.getLabel('Name')}", durjanShaktiNaavController, context, height: 50),
                     vastisarvekshanDropdown2(
                       dataModel: vastisarvekshanDropDownDataModel!,
                       filterTypeName: "दुर्जनशक्तिप्रकार",
@@ -13840,10 +12034,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       editId: selectedDurjanShaktiPrakarIdEdit,
                     ),
                     const SizedBox(height: 5),
-                    if (selectedMasterDurjanShaktiPrakarName?.isOther == 1)
-                      textControllerField("${Statics.getLabel('otherType')}",
-                          durjanShaktiAnyaPrkarController, context,
-                          height: 50),
+                    if (selectedMasterDurjanShaktiPrakarName?.isOther == 1) textControllerField("${Statics.getLabel('otherType')}", durjanShaktiAnyaPrkarController, context, height: 50),
                     const SizedBox(height: 5),
                     vastisarvekshanDropdown2(
                       dataModel: vastisarvekshanDropDownDataModel!,
@@ -13891,26 +12082,20 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
                 onPressed: () {
-                  if ((selectedMasterDurjanShaktiPrakarName?.isOther == 1 &&
-                      durjanShaktiAnyaPrkarController.text == "")) {
-                    Statics.showToast(
-                        "${Statics.getLabel('otherInfoValidation')}");
+                  if ((selectedMasterDurjanShaktiPrakarName?.isOther == 1 && durjanShaktiAnyaPrkarController.text == "")) {
+                    Statics.showToast("${Statics.getLabel('otherInfoValidation')}");
                   } else {
                     Vastisardurjanshakti data = Vastisardurjanshakti(
                         name: durjanShaktiNaavController.text,
                         pkid: pkidDurjanShaktiGunha,
                         isactive: isActivedDurjanShaktiGunha,
                         vastiid: int.parse(selctedLevelId!),
-                        selectedDropdownValueName:
-                            selectedDurjanShaktiPrakarName,
-                        selectedDropdownValueName1:
-                            selectedDurjanShaktiShikashaName,
-                        selectedDropdownValueName2:
-                            selectedDurjanShaktiGunhaName,
+                        selectedDropdownValueName: selectedDurjanShaktiPrakarName,
+                        selectedDropdownValueName1: selectedDurjanShaktiShikashaName,
+                        selectedDropdownValueName2: selectedDurjanShaktiGunhaName,
                         gunha: selectedDurjanShaktiGunhaId,
                         prakar: selectedDurjanShaktiPrakarId,
                         shiksha: selectedDurjanShaktiShikshaId,
@@ -13927,8 +12112,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                     clearDurjanShakti();
                   }
                 },
-                child: Text("${Statics.getLabel('Submit')}",
-                    style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -13962,6 +12146,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
   int? pkidHinduVeerYadi = 0;
   int? isActiveHinduVeerYadi = 1;
   TextEditingController hinduVeerYadiNameControler = TextEditingController();
+
   void showHinduVeerYadiPopup(
     BuildContext context, {
     int? editIndex,
@@ -14050,8 +12235,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                   Navigator.of(ctx).pop();
                   hinduVeerYadiNameControler.clear();
                 },
-                child: Text("${Statics.getLabel('Submit')}",
-                    style: TextStyle(color: Colors.white)),
+                child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
               ),
             )
           ],
@@ -14071,23 +12255,16 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                 padding: EdgeInsets.symmetric(vertical: 10),
                 child: Column(
                   children: [
-                    dynamicProgressBar(
-                        context: context,
-                        value: double.parse(step3completepercentage.toString()),
-                        detailListItems: step3pendingpoints!.split(',')),
+                    dynamicProgressBar(context: context, value: double.parse(step3completepercentage.toString()), detailListItems: step3pendingpoints!.split(',')),
                     SizedBox(
                       height: 10,
                     ),
                     InkWell(
                       onTap: () {
                         // Filter out empty or whitespace-only strings
-                        final filteredDetails = step3pendingpoints!
-                            .split(',')
-                            .where((item) => item.trim().isNotEmpty)
-                            .toList();
+                        final filteredDetails = step3pendingpoints!.split(',').where((item) => item.trim().isNotEmpty).toList();
 
-                        print(
-                            "Filtered step3pendingpoints!.split(','): $filteredDetails");
+                        print("Filtered step3pendingpoints!.split(','): $filteredDetails");
 
                         if (filteredDetails.isEmpty) {
                           Statics.showToast(Statics.getLabel('allInfoSubmit'));
@@ -14098,8 +12275,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           context: context,
                           builder: (ctx) {
                             return Dialog(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                               backgroundColor: Colors.white,
                               child: Padding(
                                 padding: const EdgeInsets.all(20),
@@ -14108,11 +12284,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   children: [
                                     // Icon and Title
                                     Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Icon(Icons.warning_amber_rounded,
-                                            color: Colors.red, size: 30),
+                                        Icon(Icons.warning_amber_rounded, color: Colors.red, size: 30),
                                         SizedBox(width: 8),
                                         Text(
                                           Statics.getLabel('remainingQuestion'),
@@ -14152,16 +12326,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                           backgroundColor: Colors.red,
                                           foregroundColor: Colors.white,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 12),
+                                          padding: EdgeInsets.symmetric(vertical: 12),
                                         ),
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(),
-                                        child:
-                                            Text(Statics.getLabel('bandKara')),
+                                        onPressed: () => Navigator.of(context).pop(),
+                                        child: Text(Statics.getLabel('bandKara')),
                                       ),
                                     ),
                                   ],
@@ -14205,8 +12375,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       InkWell(
                         onTap: () {
                           if (isVastiSearch) {
-                            showVastiPrashnaGarjaPopup(context,
-                                onDataChanged: () {
+                            showVastiPrashnaGarjaPopup(context, onDataChanged: () {
                               setState(() {});
                             });
                           } else {
@@ -14216,11 +12385,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 5),
                           width: 100,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.purpleAccent.shade100),
-                              color: Colors.purpleAccent.withOpacity(0.7),
-                              borderRadius: BorderRadius.circular(15)),
+                          decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                           child: Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -14229,9 +12394,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 SizedBox(width: 5),
                                 Text(
                                   "${Statics.getLabel('AddButton')}",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
@@ -14254,11 +12417,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             scrollDirection: Axis.horizontal,
                             child: DataTable(
                               showCheckboxColumn: false,
-                              headingRowColor: MaterialStatePropertyAll(
-                                  Colors.purple.shade50),
-                              headingTextStyle: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87),
+                              headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+                              headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                               columns: [
                                 DataColumn(
                                     label: Text(
@@ -14271,37 +12431,27 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   ),
                                 )),
                               ],
-                              rows: vastiPrashnaGarjaDataList
-                                  .asMap()
-                                  .entries
-                                  .where((entry) => entry.value.isactive == 1)
-                                  .map((entry) {
+                              rows: vastiPrashnaGarjaDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                                 int index = entry.key;
                                 var data = entry.value;
-                                bool isSelected =
-                                    selectedVastiPrashnaGarjaIdIndex == index;
+                                bool isSelected = selectedVastiPrashnaGarjaIdIndex == index;
                                 return DataRow(
                                     selected: isSelected,
-                                    color: MaterialStateProperty.resolveWith<
-                                        Color?>(
+                                    color: MaterialStateProperty.resolveWith<Color?>(
                                       (Set<MaterialState> states) {
-                                        if (isSelected)
-                                          return Colors.yellow.shade100;
+                                        if (isSelected) return Colors.yellow.shade100;
                                         return null;
                                       },
                                     ),
                                     onSelectChanged: (bool? selected) {
                                       if (selected != null && selected) {
                                         setState(() {
-                                          selectedVastiPrashnaGarjaIdIndex =
-                                              index;
+                                          selectedVastiPrashnaGarjaIdIndex = index;
                                         });
                                       }
                                     },
                                     cells: [
-                                      DataCell(Text(
-                                          data.selectedDropdownValueName ??
-                                              '')),
+                                      DataCell(Text(data.selectedDropdownValueName ?? '')),
                                       DataCell(Text(data.name ?? '')),
                                     ]);
                               }).toList(),
@@ -14318,15 +12468,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             InkWell(
                               onTap: () {
                                 if (selectedVastiPrashnaGarjaIdIndex != null) {
-                                  var selectedData = vastiPrashnaGarjaDataList[
-                                      selectedVastiPrashnaGarjaIdIndex!];
+                                  var selectedData = vastiPrashnaGarjaDataList[selectedVastiPrashnaGarjaIdIndex!];
                                   showDialog(
                                     context: context,
                                     builder: (context) {
                                       return AlertDialog(
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
+                                          borderRadius: BorderRadius.circular(20),
                                         ),
                                         backgroundColor: Colors.white,
                                         title: Center(
@@ -14342,42 +12490,25 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         content: SingleChildScrollView(
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Divider(
-                                                  thickness: 1,
-                                                  color: Colors
-                                                      .deepPurple.shade100),
+                                              Divider(thickness: 1, color: Colors.deepPurple.shade100),
                                               SizedBox(height: 12),
-                                              _buildInfoRow(
-                                                  "${Statics.getLabel('VastiSamajikGarja')}",
-                                                  selectedData
-                                                      .selectedDropdownValueName),
-                                              _buildInfoRow(
-                                                  "${Statics.getLabel('tapshil')}",
-                                                  selectedData.name),
+                                              _buildInfoRow("${Statics.getLabel('VastiSamajikGarja')}", selectedData.selectedDropdownValueName),
+                                              _buildInfoRow("${Statics.getLabel('tapshil')}", selectedData.name),
                                             ],
                                           ),
                                         ),
-                                        actionsAlignment:
-                                            MainAxisAlignment.center,
+                                        actionsAlignment: MainAxisAlignment.center,
                                         actions: [
                                           ElevatedButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                            child: Text(
-                                                "${Statics.getLabel('bandKara')}",
-                                                style: TextStyle(
-                                                    color: Colors.white)),
+                                            onPressed: () => Navigator.pop(context),
+                                            child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                             style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  Colors.purpleAccent,
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 24, vertical: 12),
+                                              backgroundColor: Colors.purpleAccent,
+                                              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                               shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
+                                                borderRadius: BorderRadius.circular(12),
                                               ),
                                             ),
                                           ),
@@ -14387,22 +12518,18 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   );
                                 }
                               },
-                              child: Icon(Icons.remove_red_eye,
-                                  color: Colors.green, size: 20),
+                              child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                             ),
                             SizedBox(
                               width: 20,
                             ),
                             InkWell(
                               onTap: () {
-                                showVastiPrashnaGarjaPopup(context,
-                                    editIndex: selectedVastiPrashnaGarjaIdIndex,
-                                    onDataChanged: () {
+                                showVastiPrashnaGarjaPopup(context, editIndex: selectedVastiPrashnaGarjaIdIndex, onDataChanged: () {
                                   setState(() {});
                                 });
                               },
-                              child: Icon(Icons.edit,
-                                  color: Colors.blue, size: 20),
+                              child: Icon(Icons.edit, color: Colors.blue, size: 20),
                             ),
                             SizedBox(
                               width: 20,
@@ -14427,8 +12554,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                       ),
                                     ),
                                     content: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10.0),
+                                      padding: const EdgeInsets.symmetric(vertical: 10.0),
                                       child: Text(
                                         "${Statics.getLabel('deleteconfirmText')}",
                                         textAlign: TextAlign.center,
@@ -14438,19 +12564,16 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         ),
                                       ),
                                     ),
-                                    actionsAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                    actionsAlignment: MainAxisAlignment.spaceEvenly,
                                     actions: [
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.grey.shade300,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
                                         ),
-                                        onPressed: () =>
-                                            Navigator.pop(context, false),
+                                        onPressed: () => Navigator.pop(context, false),
                                         child: Text(
                                           "${Statics.getLabel('ConfirmationNo')}",
                                           style: TextStyle(color: Colors.black),
@@ -14460,12 +12583,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.redAccent,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
                                         ),
-                                        onPressed: () =>
-                                            Navigator.pop(context, true),
+                                        onPressed: () => Navigator.pop(context, true),
                                         child: Text(
                                           "${Statics.getLabel('ConfirmationYes')}",
                                           style: TextStyle(color: Colors.white),
@@ -14474,18 +12595,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     ],
                                   ),
                                 );
-                                if (shouldDelete == true &&
-                                    selectedVastiPrashnaGarjaIdIndex != null) {
+                                if (shouldDelete == true && selectedVastiPrashnaGarjaIdIndex != null) {
                                   setState(() {
-                                    vastiPrashnaGarjaDataList[
-                                            selectedVastiPrashnaGarjaIdIndex!]
-                                        .isactive = 0;
+                                    vastiPrashnaGarjaDataList[selectedVastiPrashnaGarjaIdIndex!].isactive = 0;
                                     selectedVastiPrashnaGarjaIdIndex = null;
                                   });
                                 }
                               },
-                              child: Icon(Icons.delete,
-                                  color: Colors.red, size: 20),
+                              child: Icon(Icons.delete, color: Colors.red, size: 20),
                             ),
                           ],
                         ),
@@ -14505,8 +12622,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                       InkWell(
                         onTap: () {
                           if (isVastiSearch) {
-                            showDharmikNetrutvaPopup(context,
-                                onDataChanged: () {
+                            showDharmikNetrutvaPopup(context, onDataChanged: () {
                               setState(() {});
                             });
                           } else {
@@ -14516,11 +12632,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 5),
                           width: 100,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.purpleAccent.shade100),
-                              color: Colors.purpleAccent.withOpacity(0.7),
-                              borderRadius: BorderRadius.circular(15)),
+                          decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                           child: Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -14529,9 +12641,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 SizedBox(width: 5),
                                 Text(
                                   "${Statics.getLabel('AddButton')}",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
@@ -14557,11 +12667,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               child: DataTable(
                                 columnSpacing: 20,
                                 showCheckboxColumn: false,
-                                headingRowColor: MaterialStatePropertyAll(
-                                    Colors.purple.shade50),
-                                headingTextStyle: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87),
+                                headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+                                headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                                 columns: [
                                   DataColumn(
                                       label: Text(
@@ -14572,37 +12679,27 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     "${Statics.getLabel('Name')}",
                                   )),
                                 ],
-                                rows: dharmikNetrutvaDataList
-                                    .asMap()
-                                    .entries
-                                    .where((entry) => entry.value.isactive == 1)
-                                    .map((entry) {
+                                rows: dharmikNetrutvaDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                                   int index = entry.key;
                                   var data = entry.value;
-                                  bool isSelected =
-                                      selectedDharmikNetrutvaIdIndex == index;
+                                  bool isSelected = selectedDharmikNetrutvaIdIndex == index;
                                   return DataRow(
                                       selected: isSelected,
-                                      color: MaterialStateProperty.resolveWith<
-                                          Color?>(
+                                      color: MaterialStateProperty.resolveWith<Color?>(
                                         (Set<MaterialState> states) {
-                                          if (isSelected)
-                                            return Colors.yellow.shade100;
+                                          if (isSelected) return Colors.yellow.shade100;
                                           return null;
                                         },
                                       ),
                                       onSelectChanged: (bool? selected) {
                                         if (selected != null && selected) {
                                           setState(() {
-                                            selectedDharmikNetrutvaIdIndex =
-                                                index;
+                                            selectedDharmikNetrutvaIdIndex = index;
                                           });
                                         }
                                       },
                                       cells: [
-                                        DataCell(Text(
-                                            data.selectedDropdownValueName ??
-                                                '')),
+                                        DataCell(Text(data.selectedDropdownValueName ?? '')),
                                         DataCell(Text(data.name ?? '')),
                                       ]);
                                 }).toList(),
@@ -14620,15 +12717,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             InkWell(
                               onTap: () {
                                 if (selectedDharmikNetrutvaIdIndex != null) {
-                                  var selectedData = dharmikNetrutvaDataList[
-                                      selectedDharmikNetrutvaIdIndex!];
+                                  var selectedData = dharmikNetrutvaDataList[selectedDharmikNetrutvaIdIndex!];
                                   showDialog(
                                     context: context,
                                     builder: (context) {
                                       return AlertDialog(
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
+                                          borderRadius: BorderRadius.circular(20),
                                         ),
                                         backgroundColor: Colors.white,
                                         title: Center(
@@ -14644,45 +12739,26 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         content: SingleChildScrollView(
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Divider(
-                                                  thickness: 1,
-                                                  color: Colors
-                                                      .deepPurple.shade100),
+                                              Divider(thickness: 1, color: Colors.deepPurple.shade100),
                                               SizedBox(height: 12),
-                                              _buildInfoRow(
-                                                  "${Statics.getLabel('DharmikNetrutwa')}",
-                                                  selectedData
-                                                      .selectedDropdownValueName),
-                                              _buildInfoRow(
-                                                  "${Statics.getLabel('anyaDharmikNetrutva')}",
-                                                  selectedData.otherNetrutwa),
-                                              _buildInfoRow(
-                                                  "${Statics.getLabel('Name')}",
-                                                  selectedData.name),
+                                              _buildInfoRow("${Statics.getLabel('DharmikNetrutwa')}", selectedData.selectedDropdownValueName),
+                                              _buildInfoRow("${Statics.getLabel('anyaDharmikNetrutva')}", selectedData.otherNetrutwa),
+                                              _buildInfoRow("${Statics.getLabel('Name')}", selectedData.name),
                                             ],
                                           ),
                                         ),
-                                        actionsAlignment:
-                                            MainAxisAlignment.center,
+                                        actionsAlignment: MainAxisAlignment.center,
                                         actions: [
                                           ElevatedButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                            child: Text(
-                                                "${Statics.getLabel('bandKara')}",
-                                                style: TextStyle(
-                                                    color: Colors.white)),
+                                            onPressed: () => Navigator.pop(context),
+                                            child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                             style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  Colors.purpleAccent,
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 24, vertical: 12),
+                                              backgroundColor: Colors.purpleAccent,
+                                              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                               shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
+                                                borderRadius: BorderRadius.circular(12),
                                               ),
                                             ),
                                           ),
@@ -14692,22 +12768,18 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   );
                                 }
                               },
-                              child: Icon(Icons.remove_red_eye,
-                                  color: Colors.green, size: 20),
+                              child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                             ),
                             SizedBox(
                               width: 20,
                             ),
                             InkWell(
                               onTap: () {
-                                showDharmikNetrutvaPopup(context,
-                                    editIndex: selectedDharmikNetrutvaIdIndex,
-                                    onDataChanged: () {
+                                showDharmikNetrutvaPopup(context, editIndex: selectedDharmikNetrutvaIdIndex, onDataChanged: () {
                                   setState(() {});
                                 });
                               },
-                              child: Icon(Icons.edit,
-                                  color: Colors.blue, size: 20),
+                              child: Icon(Icons.edit, color: Colors.blue, size: 20),
                             ),
                             SizedBox(
                               width: 20,
@@ -14732,8 +12804,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                       ),
                                     ),
                                     content: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10.0),
+                                      padding: const EdgeInsets.symmetric(vertical: 10.0),
                                       child: Text(
                                         "${Statics.getLabel('deleteconfirmText')}",
                                         textAlign: TextAlign.center,
@@ -14743,19 +12814,16 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         ),
                                       ),
                                     ),
-                                    actionsAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                    actionsAlignment: MainAxisAlignment.spaceEvenly,
                                     actions: [
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.grey.shade300,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
                                         ),
-                                        onPressed: () =>
-                                            Navigator.pop(context, false),
+                                        onPressed: () => Navigator.pop(context, false),
                                         child: Text(
                                           "${Statics.getLabel('ConfirmationNo')}",
                                           style: TextStyle(color: Colors.black),
@@ -14765,12 +12833,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.redAccent,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
                                         ),
-                                        onPressed: () =>
-                                            Navigator.pop(context, true),
+                                        onPressed: () => Navigator.pop(context, true),
                                         child: Text(
                                           "${Statics.getLabel('ConfirmationYes')}",
                                           style: TextStyle(color: Colors.white),
@@ -14779,18 +12845,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     ],
                                   ),
                                 );
-                                if (shouldDelete == true &&
-                                    selectedDharmikNetrutvaIdIndex != null) {
+                                if (shouldDelete == true && selectedDharmikNetrutvaIdIndex != null) {
                                   setState(() {
-                                    dharmikNetrutvaDataList[
-                                            selectedDharmikNetrutvaIdIndex!]
-                                        .isactive = 0;
+                                    dharmikNetrutvaDataList[selectedDharmikNetrutvaIdIndex!].isactive = 0;
                                     selectedDharmikNetrutvaIdIndex = null;
                                   });
                                 }
                               },
-                              child: Icon(Icons.delete,
-                                  color: Colors.red, size: 20),
+                              child: Icon(Icons.delete, color: Colors.red, size: 20),
                             ),
                           ],
                         ),
@@ -14835,23 +12897,16 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 5),
                             width: 100,
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Colors.purpleAccent.shade100),
-                                color: Colors.purpleAccent.withOpacity(0.7),
-                                borderRadius: BorderRadius.circular(15)),
+                            decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                             child: Center(
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(Icons.add,
-                                      color: Colors.white, size: 15),
+                                  Icon(Icons.add, color: Colors.white, size: 15),
                                   SizedBox(width: 5),
                                   Text(
                                     "${Statics.getLabel('AddButton')}",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold),
+                                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
@@ -14878,11 +12933,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 child: DataTable(
                                   columnSpacing: 20,
                                   showCheckboxColumn: false,
-                                  headingRowColor: MaterialStatePropertyAll(
-                                      Colors.purple.shade50),
-                                  headingTextStyle: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black87),
+                                  headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+                                  headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                                   columns: [
                                     DataColumn(
                                         label: Text(
@@ -14901,45 +12953,30 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                       "${Statics.getLabel('crime')}",
                                     )),
                                   ],
-                                  rows: durjanShaktiDataList
-                                      .asMap()
-                                      .entries
-                                      .where(
-                                          (entry) => entry.value.isactive == 1)
-                                      .map((entry) {
+                                  rows: durjanShaktiDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                                     int index = entry.key;
                                     var data = entry.value;
-                                    bool isSelected =
-                                        selectedDurjanShaktiIdIndex == index;
+                                    bool isSelected = selectedDurjanShaktiIdIndex == index;
                                     return DataRow(
                                         selected: isSelected,
-                                        color: MaterialStateProperty
-                                            .resolveWith<Color?>(
+                                        color: MaterialStateProperty.resolveWith<Color?>(
                                           (Set<MaterialState> states) {
-                                            if (isSelected)
-                                              return Colors.yellow.shade100;
+                                            if (isSelected) return Colors.yellow.shade100;
                                             return null;
                                           },
                                         ),
                                         onSelectChanged: (bool? selected) {
                                           if (selected != null && selected) {
                                             setState(() {
-                                              selectedDurjanShaktiIdIndex =
-                                                  index;
+                                              selectedDurjanShaktiIdIndex = index;
                                             });
                                           }
                                         },
                                         cells: [
                                           DataCell(Text(data.name ?? '')),
-                                          DataCell(Text(
-                                              data.selectedDropdownValueName ??
-                                                  '')),
-                                          DataCell(Text(
-                                              data.selectedDropdownValueName1 ??
-                                                  '')),
-                                          DataCell(Text(
-                                              data.selectedDropdownValueName2 ??
-                                                  '')),
+                                          DataCell(Text(data.selectedDropdownValueName ?? '')),
+                                          DataCell(Text(data.selectedDropdownValueName1 ?? '')),
+                                          DataCell(Text(data.selectedDropdownValueName2 ?? '')),
                                         ]);
                                   }).toList(),
                                 ),
@@ -14956,15 +12993,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               InkWell(
                                 onTap: () {
                                   if (selectedDurjanShaktiIdIndex != null) {
-                                    var selectedData = durjanShaktiDataList[
-                                        selectedDurjanShaktiIdIndex!];
+                                    var selectedData = durjanShaktiDataList[selectedDurjanShaktiIdIndex!];
                                     showDialog(
                                       context: context,
                                       builder: (context) {
                                         return AlertDialog(
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
+                                            borderRadius: BorderRadius.circular(20),
                                           ),
                                           backgroundColor: Colors.white,
                                           title: Center(
@@ -14980,54 +13015,28 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                           content: SingleChildScrollView(
                                             child: Column(
                                               mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                                Divider(
-                                                    thickness: 1,
-                                                    color: Colors
-                                                        .deepPurple.shade100),
+                                                Divider(thickness: 1, color: Colors.deepPurple.shade100),
                                                 SizedBox(height: 12),
-                                                _buildInfoRow(
-                                                    "${Statics.getLabel('Name')}",
-                                                    selectedData.name),
-                                                _buildInfoRow(
-                                                    "${Statics.getLabel('SelectFrequency')}",
-                                                    selectedData
-                                                        .selectedDropdownValueName),
-                                                _buildInfoRow(
-                                                    "${Statics.getLabel('otherType')}",
-                                                    selectedData.otherPrakar),
-                                                _buildInfoRow(
-                                                    "${Statics.getLabel('shiksha')}",
-                                                    selectedData
-                                                        .selectedDropdownValueName1),
-                                                _buildInfoRow(
-                                                    "${Statics.getLabel('crime')}",
-                                                    selectedData
-                                                        .selectedDropdownValueName2),
+                                                _buildInfoRow("${Statics.getLabel('Name')}", selectedData.name),
+                                                _buildInfoRow("${Statics.getLabel('SelectFrequency')}", selectedData.selectedDropdownValueName),
+                                                _buildInfoRow("${Statics.getLabel('otherType')}", selectedData.otherPrakar),
+                                                _buildInfoRow("${Statics.getLabel('shiksha')}", selectedData.selectedDropdownValueName1),
+                                                _buildInfoRow("${Statics.getLabel('crime')}", selectedData.selectedDropdownValueName2),
                                               ],
                                             ),
                                           ),
-                                          actionsAlignment:
-                                              MainAxisAlignment.center,
+                                          actionsAlignment: MainAxisAlignment.center,
                                           actions: [
                                             ElevatedButton(
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                              child: Text(
-                                                  "${Statics.getLabel('bandKara')}",
-                                                  style: TextStyle(
-                                                      color: Colors.white)),
+                                              onPressed: () => Navigator.pop(context),
+                                              child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                               style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    Colors.purpleAccent,
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 24,
-                                                    vertical: 12),
+                                                backgroundColor: Colors.purpleAccent,
+                                                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
+                                                  borderRadius: BorderRadius.circular(12),
                                                 ),
                                               ),
                                             ),
@@ -15037,22 +13046,18 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     );
                                   }
                                 },
-                                child: Icon(Icons.remove_red_eye,
-                                    color: Colors.green, size: 20),
+                                child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                               ),
                               SizedBox(
                                 width: 20,
                               ),
                               InkWell(
                                 onTap: () {
-                                  showDurjanShaktiPopup(context,
-                                      editIndex: selectedDurjanShaktiIdIndex,
-                                      onDataChanged: () {
+                                  showDurjanShaktiPopup(context, editIndex: selectedDurjanShaktiIdIndex, onDataChanged: () {
                                     setState(() {});
                                   });
                                 },
-                                child: Icon(Icons.edit,
-                                    color: Colors.blue, size: 20),
+                                child: Icon(Icons.edit, color: Colors.blue, size: 20),
                               ),
                               SizedBox(
                                 width: 20,
@@ -15077,8 +13082,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         ),
                                       ),
                                       content: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10.0),
+                                        padding: const EdgeInsets.symmetric(vertical: 10.0),
                                         child: Text(
                                           "${Statics.getLabel('deleteconfirmText')}",
                                           textAlign: TextAlign.center,
@@ -15088,57 +13092,45 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                           ),
                                         ),
                                       ),
-                                      actionsAlignment:
-                                          MainAxisAlignment.spaceEvenly,
+                                      actionsAlignment: MainAxisAlignment.spaceEvenly,
                                       actions: [
                                         ElevatedButton(
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                Colors.grey.shade300,
+                                            backgroundColor: Colors.grey.shade300,
                                             shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
+                                              borderRadius: BorderRadius.circular(12),
                                             ),
                                           ),
-                                          onPressed: () =>
-                                              Navigator.pop(context, false),
+                                          onPressed: () => Navigator.pop(context, false),
                                           child: Text(
                                             "${Statics.getLabel('ConfirmationNo')}",
-                                            style:
-                                                TextStyle(color: Colors.black),
+                                            style: TextStyle(color: Colors.black),
                                           ),
                                         ),
                                         ElevatedButton(
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.redAccent,
                                             shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
+                                              borderRadius: BorderRadius.circular(12),
                                             ),
                                           ),
-                                          onPressed: () =>
-                                              Navigator.pop(context, true),
+                                          onPressed: () => Navigator.pop(context, true),
                                           child: Text(
                                             "${Statics.getLabel('ConfirmationYes')}",
-                                            style:
-                                                TextStyle(color: Colors.white),
+                                            style: TextStyle(color: Colors.white),
                                           ),
                                         ),
                                       ],
                                     ),
                                   );
-                                  if (shouldDelete == true &&
-                                      selectedDurjanShaktiIdIndex != null) {
+                                  if (shouldDelete == true && selectedDurjanShaktiIdIndex != null) {
                                     setState(() {
-                                      durjanShaktiDataList[
-                                              selectedDurjanShaktiIdIndex!]
-                                          .isactive = 0;
+                                      durjanShaktiDataList[selectedDurjanShaktiIdIndex!].isactive = 0;
                                       selectedDurjanShaktiIdIndex = null;
                                     });
                                   }
                                 },
-                                child: Icon(Icons.delete,
-                                    color: Colors.red, size: 20),
+                                child: Icon(Icons.delete, color: Colors.red, size: 20),
                               ),
                             ],
                           ),
@@ -15168,11 +13160,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 5),
                           width: 100,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.purpleAccent.shade100),
-                              color: Colors.purpleAccent.withOpacity(0.7),
-                              borderRadius: BorderRadius.circular(15)),
+                          decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
                           child: Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -15181,9 +13169,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                 SizedBox(width: 5),
                                 Text(
                                   "${Statics.getLabel('AddButton')}",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
@@ -15209,11 +13195,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                               child: DataTable(
                                 columnSpacing: 20,
                                 showCheckboxColumn: false,
-                                headingRowColor: MaterialStatePropertyAll(
-                                    Colors.purple.shade50),
-                                headingTextStyle: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87),
+                                headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+                                headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
                                 columns: [
                                   DataColumn(
                                       label: Text(
@@ -15224,30 +13207,22 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     "${Statics.getLabel('Name')}",
                                   )),
                                 ],
-                                rows: hinduVeerYadiDataList
-                                    .asMap()
-                                    .entries
-                                    .where((entry) => entry.value.isactive == 1)
-                                    .map((entry) {
+                                rows: hinduVeerYadiDataList.asMap().entries.where((entry) => entry.value.isactive == 1).map((entry) {
                                   int index = entry.key;
                                   var data = entry.value;
-                                  bool isSelected =
-                                      selectedHinduVeerYadiIdIndex == index;
+                                  bool isSelected = selectedHinduVeerYadiIdIndex == index;
                                   return DataRow(
                                       selected: isSelected,
-                                      color: MaterialStateProperty.resolveWith<
-                                          Color?>(
+                                      color: MaterialStateProperty.resolveWith<Color?>(
                                         (Set<MaterialState> states) {
-                                          if (isSelected)
-                                            return Colors.yellow.shade100;
+                                          if (isSelected) return Colors.yellow.shade100;
                                           return null;
                                         },
                                       ),
                                       onSelectChanged: (bool? selected) {
                                         if (selected != null && selected) {
                                           setState(() {
-                                            selectedHinduVeerYadiIdIndex =
-                                                index;
+                                            selectedHinduVeerYadiIdIndex = index;
                                           });
                                         }
                                       },
@@ -15270,15 +13245,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                             InkWell(
                               onTap: () {
                                 if (selectedHinduVeerYadiIdIndex != null) {
-                                  var selectedData = hinduVeerYadiDataList[
-                                      selectedHinduVeerYadiIdIndex!];
+                                  var selectedData = hinduVeerYadiDataList[selectedHinduVeerYadiIdIndex!];
                                   showDialog(
                                     context: context,
                                     builder: (context) {
                                       return AlertDialog(
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
+                                          borderRadius: BorderRadius.circular(20),
                                         ),
                                         backgroundColor: Colors.white,
                                         title: Center(
@@ -15294,38 +13267,24 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         content: SingleChildScrollView(
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Divider(
-                                                  thickness: 1,
-                                                  color: Colors
-                                                      .deepPurple.shade100),
+                                              Divider(thickness: 1, color: Colors.deepPurple.shade100),
                                               SizedBox(height: 12),
-                                              _buildInfoRow(
-                                                  "${Statics.getLabel('Name')}",
-                                                  selectedData.name),
+                                              _buildInfoRow("${Statics.getLabel('Name')}", selectedData.name),
                                             ],
                                           ),
                                         ),
-                                        actionsAlignment:
-                                            MainAxisAlignment.center,
+                                        actionsAlignment: MainAxisAlignment.center,
                                         actions: [
                                           ElevatedButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                            child: Text(
-                                                "${Statics.getLabel('bandKara')}",
-                                                style: TextStyle(
-                                                    color: Colors.white)),
+                                            onPressed: () => Navigator.pop(context),
+                                            child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
                                             style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  Colors.purpleAccent,
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 24, vertical: 12),
+                                              backgroundColor: Colors.purpleAccent,
+                                              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                               shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
+                                                borderRadius: BorderRadius.circular(12),
                                               ),
                                             ),
                                           ),
@@ -15335,22 +13294,18 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                   );
                                 }
                               },
-                              child: Icon(Icons.remove_red_eye,
-                                  color: Colors.green, size: 20),
+                              child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
                             ),
                             SizedBox(
                               width: 20,
                             ),
                             InkWell(
                               onTap: () {
-                                showHinduVeerYadiPopup(context,
-                                    editIndex: selectedHinduVeerYadiIdIndex,
-                                    onDataChanged: () {
+                                showHinduVeerYadiPopup(context, editIndex: selectedHinduVeerYadiIdIndex, onDataChanged: () {
                                   setState(() {});
                                 });
                               },
-                              child: Icon(Icons.edit,
-                                  color: Colors.blue, size: 20),
+                              child: Icon(Icons.edit, color: Colors.blue, size: 20),
                             ),
                             SizedBox(
                               width: 20,
@@ -15375,8 +13330,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                       ),
                                     ),
                                     content: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10.0),
+                                      padding: const EdgeInsets.symmetric(vertical: 10.0),
                                       child: Text(
                                         "${Statics.getLabel('deleteconfirmText')}",
                                         textAlign: TextAlign.center,
@@ -15386,19 +13340,16 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         ),
                                       ),
                                     ),
-                                    actionsAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                    actionsAlignment: MainAxisAlignment.spaceEvenly,
                                     actions: [
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.grey.shade300,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
                                         ),
-                                        onPressed: () =>
-                                            Navigator.pop(context, false),
+                                        onPressed: () => Navigator.pop(context, false),
                                         child: Text(
                                           "${Statics.getLabel('ConfirmationNo')}",
                                           style: TextStyle(color: Colors.black),
@@ -15408,12 +13359,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.redAccent,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
                                         ),
-                                        onPressed: () =>
-                                            Navigator.pop(context, true),
+                                        onPressed: () => Navigator.pop(context, true),
                                         child: Text(
                                           "${Statics.getLabel('ConfirmationYes')}",
                                           style: TextStyle(color: Colors.white),
@@ -15422,18 +13371,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                                     ],
                                   ),
                                 );
-                                if (shouldDelete == true &&
-                                    selectedHinduVeerYadiIdIndex != null) {
+                                if (shouldDelete == true && selectedHinduVeerYadiIdIndex != null) {
                                   setState(() {
-                                    hinduVeerYadiDataList[
-                                            selectedHinduVeerYadiIdIndex!]
-                                        .isactive = 0;
+                                    hinduVeerYadiDataList[selectedHinduVeerYadiIdIndex!].isactive = 0;
                                     selectedHinduVeerYadiIdIndex = null;
                                   });
                                 }
                               },
-                              child: Icon(Icons.delete,
-                                  color: Colors.red, size: 20),
+                              child: Icon(Icons.delete, color: Colors.red, size: 20),
                             ),
                           ],
                         ),
@@ -15448,8 +13393,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
                           width: double.infinity,
                           height: 40,
                           padding: const EdgeInsets.symmetric(horizontal: 20),
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 8),
+                          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
                           decoration: BoxDecoration(
                             color: Colors.purpleAccent,
                             borderRadius: BorderRadius.circular(15),
@@ -15583,10 +13527,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen>
               height: 24,
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFFcfd8dc),
-                    Color(0xFF90a4ae)
-                  ], // Blue-grey background
+                  colors: [Color(0xFFcfd8dc), Color(0xFF90a4ae)], // Blue-grey background
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),

@@ -162,6 +162,7 @@ class _UpNagarkhandaAddUpdateViewState extends State<UpNagarkhandaAddUpdateView>
     var inputData = json.encode({
       "AppUserID": Statics.userDetails['userID'],
       "GeoUnitID": selctedLevelId,
+      "isnagar": 6,
     });
 
     print("_submitForm $inputData");
@@ -201,6 +202,7 @@ class _UpNagarkhandaAddUpdateViewState extends State<UpNagarkhandaAddUpdateView>
       "GeoUnitName": englishNameController.text,
       "GeoUnitNameMarathi": marathiNameController.text,
       "GeoUnitNameHindi": hindiNameController.text,
+      "isnagar": 6,
     });
     print("_submitForm" + inputData);
     vastiUpDataListModel = await Statics.saveUpNagarUpkhandadata(context, inputData);
