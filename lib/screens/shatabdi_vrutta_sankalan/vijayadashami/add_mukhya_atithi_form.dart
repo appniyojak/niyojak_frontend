@@ -271,9 +271,12 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
 
     String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
     log("Form Data (JSON):\n$formattedJson");
-    await Statics.saveVishishthaAtithiData(context, formData);
+    final _result = await Statics.saveVishishthaAtithiData(context, formData);
     resetSajjanShaktiAndAnyaPrabhaviLokData();
     setState(() {});
+    if (_result) {
+      Navigator.of(context).pop();
+    }
   }
 
   @override
@@ -440,6 +443,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                         name: Statics.getLabel('Name'),
                         controller: sajjanShaktiNameController,
                         fieldHeight: 45,
+                        isRequired: true,
                       ),
                       textControllerField2(
                         name: Statics.getLabel('Address'),
@@ -451,7 +455,38 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                         controller: sajjanShaktiPhoneController,
                         keyboardType: TextInputType.number,
                         maxInput: 10,
+                        isRequired: true,
                       ),
+                      SizedBox(height: 5),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: RadioListTile<int>(
+                              contentPadding: EdgeInsets.zero,
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              title: Text("${Statics.getLabel('Male')}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                              value: 0,
+                              groupValue: isFemale,
+                              onChanged: (value) => setState(() {
+                                isFemale = value;
+                              }),
+                            ),
+                          ),
+                          Expanded(
+                            child: RadioListTile<int>(
+                              contentPadding: EdgeInsets.zero,
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              title: Text("${Statics.getLabel('Female')}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                              value: 1,
+                              groupValue: isFemale,
+                              onChanged: (value) => setState(() {
+                                isFemale = value;
+                              }),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 5),
                       if (vastisarvekshanDropDownDataModel != null)
                         vastisarvekshanDropdown2(
                           question: Statics.getLabel('Category'),
@@ -545,12 +580,14 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                       textControllerField2(
                         name: Statics.getLabel('samparkSootraNaav'),
                         controller: sajjanShaktiContactPersonNameController,
+                        isRequired: true,
                       ),
                       textControllerField2(
                         name: Statics.getLabel('samparakSootraDoorbhash'),
                         controller: sajjanShaktiContactPersonDoorbhashController,
                         keyboardType: TextInputType.number,
                         maxInput: 10,
+                        isRequired: true,
                       ),
                     ],
                   ),
@@ -621,7 +658,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                         children: [
                           /// ---- Left side label ----
                           SizedBox(
-                            width: 120,
+                            // width: 120,
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
@@ -794,12 +831,14 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                       textControllerField2(
                         name: "${Statics.getLabel('samparkSootraNaav')}",
                         controller: anyaPrabhaviLokSamparkSutraNaavController,
+                        isRequired: true,
                       ),
                       textControllerField2(
                         name: "${Statics.getLabel('samparakSootraDoorbhash')}",
                         controller: anyaPrabhaviLokSamparkSutraDoorbhashController,
                         keyboardType: TextInputType.number,
                         maxInput: 10,
+                        isRequired: true,
                       ),
                     ],
                   ),
@@ -944,18 +983,18 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                           if (isEmpty(sajjanShaktiNameController.text)) {
                             Statics.showToast("${Statics.getLabel('allInfoRequired')}");
                             isValid = false;
-                          } else if (isEmpty(sajjanShaktiAddressController.text)) {
-                            Statics.showToast("${Statics.getLabel('allInfoRequired')}");
-                            isValid = false;
+                            // } else if (isEmpty(sajjanShaktiAddressController.text)) {
+                            //   Statics.showToast("${Statics.getLabel('allInfoRequired')}");
+                            //   isValid = false;
                           } else if (sajjanShaktiPhoneController.text.length != 10) {
                             Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
                             isValid = false;
-                          } else if (isEmpty(sajjanShaktiSansthecheNaavController.text)) {
-                            Statics.showToast("${Statics.getLabel('allInfoRequired')}");
-                            isValid = false;
-                          } else if (isEmpty(sajjanShaktiSansthKuthalyaPadavarController.text)) {
-                            Statics.showToast("${Statics.getLabel('allInfoRequired')}");
-                            isValid = false;
+                            // } else if (isEmpty(sajjanShaktiSansthecheNaavController.text)) {
+                            //   Statics.showToast("${Statics.getLabel('allInfoRequired')}");
+                            //   isValid = false;
+                            // } else if (isEmpty(sajjanShaktiSansthKuthalyaPadavarController.text)) {
+                            //   Statics.showToast("${Statics.getLabel('allInfoRequired')}");
+                            //   isValid = false;
                           } else if (isEmpty(sajjanShaktiContactPersonNameController.text)) {
                             Statics.showToast("${Statics.getLabel('allInfoRequired')}");
                             isValid = false;
@@ -1084,21 +1123,51 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
     double fieldHeight = 48, // 👈 sirf textfield ke liye height
     int minLines = 1,
     int maxLines = 1,
+    int textFlex = 1,
+    int valueFlex = 3,
+    bool isRequired = false,
   }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(
-            width: 120, // Label width fixed
-            child: Text(
-              "$name",
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: Colors.black87,
-              ),
+          Expanded(
+            flex: (name == Statics.getLabel('samparkSootraNaav') || name == Statics.getLabel('samparakSootraDoorbhash')) ? 2 : 1,
+            // width: 120, // Label width fixed
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Flexible(
+                  child: Text(
+                    "$name",
+                    maxLines: 2,
+                    softWrap: true,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 13.5,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+                if (isRequired)
+                  Container(
+                    margin: EdgeInsets.only(right: 4),
+                    child: Text(
+                      "  *",
+                      maxLines: 2,
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 13.5,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ),
           Text(
@@ -1111,6 +1180,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
           ),
           const SizedBox(width: 10),
           Expanded(
+            flex: (name == Statics.getLabel('samparkSootraNaav') || name == Statics.getLabel('samparakSootraDoorbhash')) ? 5 : 3,
             child: TextFormField(
               controller: controller,
               keyboardType: keyboardType,
@@ -1139,6 +1209,14 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                   borderSide: const BorderSide(color: Colors.purpleAccent, width: 1.5),
                 ),
               ),
+              // validator: (value) {
+              //   if(isRequired){
+              //     if(value == null || value.trim().isEmpty){
+              //       return ;
+              //     }
+              //   }
+              //   return null;
+              // },
             ),
           ),
         ],
@@ -1155,6 +1233,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
     int? editId,
     Masterdata? selectedValue,
     Function(Masterdata?)? onSelectionChanged,
+    bool isRequired = true,
   }) {
     List<Masterdata> filteredList = dataModel.masterdata!.where((item) => item.typename == filterTypeName).toList();
 
@@ -1174,15 +1253,38 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           if (question != null)
-            SizedBox(
-              width: 120, // 👈 label ka fixed width (adjustable)
-              child: Text(
-                "$question",
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black87,
-                ),
+            Expanded(
+              flex: 1,
+              // width: 120, // 👈 label ka fixed width (adjustable)
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Flexible(
+                    child: Text(
+                      "$question",
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ),
+                  if (isRequired)
+                    Flexible(
+                      child: Text(
+                        "*",
+                        maxLines: 2,
+                        softWrap: true,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ),
           if (question != null)
@@ -1196,6 +1298,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
             ),
           if (question != null) const SizedBox(width: 12),
           Expanded(
+            flex: 3,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
@@ -1260,6 +1363,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
     Color? borderColor,
     Color? iconColor,
     bool? viewName,
+    bool isRequired = true,
   }) {
     Masterdata? selectedValue = selectedShreni;
     Masterdata? selectedDependentValue = selectedUpShreni;

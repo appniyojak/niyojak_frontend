@@ -270,9 +270,12 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
 
     String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
     log("Form Data (JSON):\n$formattedJson");
-    await Statics.saveVishishthaAtithiData(context, formData);
+    final _result = await Statics.saveVishishthaAtithiData(context, formData);
     resetSajjanShaktiAndAnyaPrabhaviLokData();
     setState(() {});
+    if (_result) {
+      Navigator.of(context).pop();
+    }
   }
 
   @override

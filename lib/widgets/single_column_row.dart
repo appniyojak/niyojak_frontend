@@ -7,6 +7,7 @@ class SingleColumnRow extends StatelessWidget {
   var txtString;
   var value;
   double? fontsize;
+  Color? rowColor;
   FontWeight? fontWeight;
   bool? view;
   VoidCallback? btnAction;
@@ -22,6 +23,7 @@ class SingleColumnRow extends StatelessWidget {
     this.fontsize,
     this.fontWeight,
     this.view,
+    this.rowColor,
     this.btnAction,
     this.subChild,
     this.showDivider = true,
@@ -34,6 +36,7 @@ class SingleColumnRow extends StatelessWidget {
     return Column(
       children: [
         Container(
+          decoration: BoxDecoration(color: rowColor),
           padding: EdgeInsets.symmetric(vertical: 8),
           // color: Colors.red,
           child: Center(

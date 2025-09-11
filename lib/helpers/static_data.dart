@@ -2392,7 +2392,7 @@ Future<void> saveVijayaDashamiUtsavData(BuildContext context, Map<String, dynami
   }
 }
 
-Future<void> saveVishishthaAtithiData(BuildContext context, Map<String, dynamic> inputJson) async {
+Future<bool> saveVishishthaAtithiData(BuildContext context, Map<String, dynamic> inputJson) async {
   showLoaderDialog(context);
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
@@ -2409,8 +2409,10 @@ Future<void> saveVishishthaAtithiData(BuildContext context, Map<String, dynamic>
 
   if (response.statusCode == 200) {
     Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+    return true;
   } else {
     print("Error: ${response.statusCode} - ${response.body}");
+    return false;
   }
 }
 
