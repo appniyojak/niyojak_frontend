@@ -413,25 +413,129 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
           Column(
             children: [
               SingleColumnRow(
-                txtString: "एकूण पट",
-                value: data.ekunpat,
+                txtString: Statics.getLabel('present'),
+                value: "",
+                fontsize: 16,
+                subChild: Column(
+                  children: [
+                    Row(children: [
+                      Expanded(child: Text(Statics.getLabel('totalPat'))),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text((data.ekunpat ?? 0).toString()),
+                      ),
+                    ]),
+                    SizedBox(height: 8),
+                    Row(children: [
+                      Expanded(child: Text(Statics.getLabel('presentGanveshatTotal'))),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text((data.ekungan ?? 0).toString()),
+                      ),
+                    ]),
+                    SizedBox(height: 8),
+                    Row(children: [
+                      Expanded(child: Text(Statics.getLabel('presentSanchalanatTotal'))),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text((data.ekunsanchalan ?? 0).toString()),
+                      ),
+                    ]),
+                    SizedBox(height: 8),
+                    Row(children: [
+                      Expanded(child: Text(Statics.getLabel('anyaUpasthit'))),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text((data.ekunupastiti ?? 0).toString()),
+                      ),
+                    ]),
+                  ],
+                ),
               ),
               SingleColumnRow(
-                txtString: "गणवेशात उपस्थित",
-                value: data.ekungan,
+                txtString: Statics.getLabel('shakhaMilanPratinidhitwaReport'),
+                value: "",
+                fontsize: 16,
+                subChild: Column(
+                  children: [
+                    Row(children: [
+                      Expanded(child: Text(Statics.getLabel('vartamaan') + " " + Statics.getLabel('shakhaMilanPratinidhitwa'))),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text((data.vartamansaakhapratinidhatva ?? 0).toString()),
+                      ),
+                    ]),
+                    SizedBox(height: 8),
+                    Row(children: [
+                      Expanded(child: Text(Statics.getLabel('vartamaan') + " " + Statics.getLabel('MilanPratinidhitwa'))),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text((data.vartamansapthahikpratinidhatva ?? 0).toString()),
+                      ),
+                    ]),
+                    SizedBox(height: 8),
+                    Row(children: [
+                      Expanded(child: Text(Statics.getLabel('vartamaan') + " " + Statics.getLabel('MaasikMilanPratinidhitwa'))),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text((data.vartamansanghmandalipratinidhatva ?? 0).toString()),
+                      ),
+                    ]),
+                  ],
+                ),
               ),
-              SingleColumnRow(txtString: "संचलनात उपस्थित", value: data.ekunsanchalan),
-              SingleColumnRow(txtString: "अन्य उपस्थित", value: data.ekunupastiti),
-              SingleColumnRow(txtString: "वर्तमान शाखा प्रतिनिधित्व", value: data.vartamansaakhapratinidhatva),
-              SingleColumnRow(txtString: "वर्तमान साप्ताहिक मिलन प्रतिनिधित्व", value: data.vartamansapthahikpratinidhatva),
-              SingleColumnRow(txtString: "वर्तमान मासिक मिलन प्रतिनिधित्व", value: data.vartamansanghmandalipratinidhatva),
-              // SingleColumnRow(txtString: "वर्तमान संघ मंडली प्रतिनिधित्व", value: data.),
-              // SingleColumnRow(txtString: "नवीन संकल्पित शाखा प्रतिनिधित्व", value: "5"),
-              // SingleColumnRow(txtString: "नवीन संकल्पित साप्ताहिक मिलन प्रतिनिधित्व", value: "3"),
-              // SingleColumnRow(txtString: "नवीन संकल्पित संघ मंडली प्रतिनिधित्व", value: "2"),
-              SingleColumnRow(txtString: "वस्ती प्रतिनिधित्व", value: data.vasticountpratinidhatva),
-              SingleColumnRow(txtString: "मंडल प्रतिनिधित्व", value: data.mandalcountpratinidhatva),
-              SingleColumnRow(txtString: "ग्राम प्रतिनिधित्व", value: data.gramcountpratinidhatva),
+              SingleColumnRow(
+                txtString: Statics.getLabel('bhougolikPratinidhitwa'),
+                value: "",
+                fontsize: 16,
+                subChild: Column(
+                  children: [
+                    Row(children: [
+                      Expanded(child: Text(Statics.getLabel('vastiPratinidhitwa'))),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text((data.vasticountpratinidhatva ?? 0).toString()),
+                      ),
+                    ]),
+                    SizedBox(height: 8),
+                    Row(children: [
+                      Expanded(child: Text(Statics.getLabel('mandalPratinidhitwa'))),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text((data.mandalcountpratinidhatva ?? 0).toString()),
+                      ),
+                    ]),
+                    SizedBox(height: 8),
+                    Row(children: [
+                      Expanded(child: Text(Statics.getLabel('gramPratinidhitwa'))),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text((data.gramcountpratinidhatva ?? 0).toString()),
+                      ),
+                    ]),
+                  ],
+                ),
+              ),
+              // SingleColumnRow(
+              //   txtString: "एकूण पट",
+              //   value: data.ekunpat,
+              // ),
+              // SingleColumnRow(
+              //   txtString: "गणवेशात उपस्थित",
+              //   value: data.ekungan,
+              // ),
+              // SingleColumnRow(txtString: "संचलनात उपस्थित", value: data.ekunsanchalan),
+              // SingleColumnRow(txtString: "अन्य उपस्थित", value: data.ekunupastiti),
+              // SingleColumnRow(txtString: "वर्तमान शाखा प्रतिनिधित्व", value: data.vartamansaakhapratinidhatva),
+              // SingleColumnRow(txtString: "वर्तमान साप्ताहिक मिलन प्रतिनिधित्व", value: data.vartamansapthahikpratinidhatva),
+              // SingleColumnRow(txtString: "वर्तमान मासिक मिलन प्रतिनिधित्व", value: data.vartamansanghmandalipratinidhatva),
+              // // SingleColumnRow(txtString: "वर्तमान संघ मंडली प्रतिनिधित्व", value: data.),
+              // // SingleColumnRow(txtString: "नवीन संकल्पित शाखा प्रतिनिधित्व", value: "5"),
+              // // SingleColumnRow(txtString: "नवीन संकल्पित साप्ताहिक मिलन प्रतिनिधित्व", value: "3"),
+              // // SingleColumnRow(txtString: "नवीन संकल्पित संघ मंडली प्रतिनिधित्व", value: "2"),
+              // SingleColumnRow(txtString: "वस्ती प्रतिनिधित्व", value: data.vasticountpratinidhatva),
+              // SingleColumnRow(txtString: "मंडल प्रतिनिधित्व", value: data.mandalcountpratinidhatva),
+              // SingleColumnRow(txtString: "ग्राम प्रतिनिधित्व", value: data.gramcountpratinidhatva),
             ],
           ),
         ),
@@ -686,7 +790,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
 
   Widget buildMarathiDataTable(List<Vijayadashaminagarlist> data) {
     final List<String> headers = [
-      'कार्यक्रम स्तर',
+      // 'कार्यक्रम स्तर',
       'किती कार्यक्रम झाले',
       'किती संचालन झाले ?',
       'किती कार्यक्रम ठरलेल्या\n बैठक सुरु झाले ?',
@@ -695,46 +799,113 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
       'किती कार्यक्रमांचे हिसाब\n २४ तासात पूर्ण झाले ?',
     ];
 
-    return Column(
+    // return Column(
+    //   children: [
+    //     Scrollbar(
+    //       controller: _scrollController,
+    //       thumbVisibility: true,
+    //       interactive: true,
+    //       thickness: 5,
+    //       radius: Radius.circular(10),
+    //       child: SingleChildScrollView(
+    //         controller: _scrollController,
+    //         scrollDirection: Axis.horizontal,
+    //         child: DataTable(
+    //           columnSpacing: 18,
+    //           headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
+    //           border: TableBorder(verticalInside: BorderSide(width: 0.7, color: Colors.grey.shade200)),
+    //           columns: headers
+    //               .map((header) => DataColumn(
+    //                     label: Container(
+    //                       // constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.2),
+    //                       child: Text(header, softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold)),
+    //                     ),
+    //                   ))
+    //               .toList(),
+    //           rows: data.map((level) {
+    //             return DataRow(cells: [
+    //               DataCell(Text(level.levelname.toString())),
+    //               DataCell(Center(child: Text(level.karykakramcount.toString()))),
+    //               DataCell(Center(child: Text(level.shanchalancount.toString()))),
+    //               DataCell(Center(child: Text(level.karyakramnirdharitvedhvarcount.toString()))),
+    //               DataCell(Center(child: Text(level.vyaktigeetkhantastakcount.toString()))),
+    //               DataCell(Center(child: Text(level.shanchalanghosvandancount.toString()))),
+    //               DataCell(Center(child: Text(level.skaraykramhisob24tasapurnacount.toString()))),
+    //             ]);
+    //           }).toList(),
+    //         ),
+    //       ),
+    //     ),
+    //     SizedBox(height: 12),
+    //     Divider(color: Colors.black),
+    //     SizedBox(height: 12),
+    //   ],
+    // );
+    return Row(
       children: [
-        Scrollbar(
-          controller: _scrollController,
-          thumbVisibility: true,
-          interactive: true,
-          thickness: 5,
-          radius: Radius.circular(10),
-          child: SingleChildScrollView(
+        DataTable(
+          headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
+          columnSpacing: 0,
+          border: TableBorder.all(color: Colors.black26),
+          columns: [
+            DataColumn(
+              label: Center(
+                child: SizedBox(
+                  width: 50,
+                  child: Text(
+                    "कार्यक्रम स्तर",
+                    softWrap: true,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ),
+          ],
+          rows: data.map((level) {
+            return DataRow(cells: [
+              DataCell(Text(level.levelname.toString())),
+            ]);
+          }).toList(),
+        ),
+        Expanded(
+          child: Scrollbar(
             controller: _scrollController,
-            scrollDirection: Axis.horizontal,
-            child: DataTable(
-              columnSpacing: 18,
-              headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
-              border: TableBorder(verticalInside: BorderSide(width: 0.7, color: Colors.grey.shade200)),
-              columns: headers
-                  .map((header) => DataColumn(
-                        label: Container(
-                          // constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.2),
-                          child: Text(header, softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold)),
-                        ),
-                      ))
-                  .toList(),
-              rows: data.map((level) {
-                return DataRow(cells: [
-                  DataCell(Text(level.levelname.toString())),
-                  DataCell(Center(child: Text(level.karykakramcount.toString()))),
-                  DataCell(Center(child: Text(level.shanchalancount.toString()))),
-                  DataCell(Center(child: Text(level.karyakramnirdharitvedhvarcount.toString()))),
-                  DataCell(Center(child: Text(level.vyaktigeetkhantastakcount.toString()))),
-                  DataCell(Center(child: Text(level.shanchalanghosvandancount.toString()))),
-                  DataCell(Center(child: Text(level.skaraykramhisob24tasapurnacount.toString()))),
-                ]);
-              }).toList(),
+            thumbVisibility: true,
+            interactive: true,
+            thickness: 5,
+            radius: Radius.circular(10),
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              scrollDirection: Axis.horizontal,
+              child: DataTable(
+                columnSpacing: 14,
+                headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
+                border: TableBorder(verticalInside: BorderSide(width: 0.7, color: Colors.grey.shade200)),
+                columns: headers
+                    .map((header) => DataColumn(
+                          label: Container(
+                            constraints: BoxConstraints(minWidth: 40, maxWidth: [headers[0], headers[1]].contains(header) ? 80 : 150),
+                            // constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.2),
+                            child: Text(header, softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold)),
+                          ),
+                        ))
+                    .toList(),
+                rows: data.map((level) {
+                  return DataRow(cells: [
+                    DataCell(Center(child: Text(level.karykakramcount.toString()))),
+                    DataCell(Center(child: Text(level.shanchalancount.toString()))),
+                    DataCell(Center(child: Text(level.karyakramnirdharitvedhvarcount.toString()))),
+                    DataCell(Center(child: Text(level.vyaktigeetkhantastakcount.toString()))),
+                    DataCell(Center(child: Text(level.shanchalanghosvandancount.toString()))),
+                    DataCell(Center(child: Text(level.skaraykramhisob24tasapurnacount.toString()))),
+                  ]);
+                }).toList(),
+              ),
             ),
           ),
         ),
-        SizedBox(height: 12),
-        Divider(color: Colors.black),
-        SizedBox(height: 12),
       ],
     );
   }

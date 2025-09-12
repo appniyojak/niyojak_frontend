@@ -63,6 +63,34 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
     fetchVastiSurveyDropdownData();
   }
 
+  getDataFromScreen() {
+    // 👇 Receive the arguments properly
+    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+
+    if (args.isNotEmpty) {
+      if (args["linkedNagar"] != null) {
+        setState(() {
+          _linkedNagar = args["linkedNagar"];
+        });
+      }
+      if (args["selectedLevelId"] != null) {
+        setState(() {
+          final selectedItem = _linkedNagar!.firstWhere((bg) => bg.geoUnitID.toString() == args["selectedLevelId"]);
+          populatelinkedMandalDropdown(args["selectedLevelId"]);
+          populatelinkedVastiDropdown(args["selectedLevelId"]);
+          setState(() {
+            selctedLevelName = selectedItem.name ?? "";
+            selctedLevel = 'Nagar';
+            selctedLevelId = args["selectedLevelId"];
+
+            _linkedNagarValue = args["selectedLevelId"];
+          });
+        });
+      }
+    }
+    setState(() {});
+  }
+
   List<Upnagarmandallist> vastimandallist = [];
   Upnagarmandallist? vastimandalData;
 
@@ -109,15 +137,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
-    // 👇 Receive the arguments properly
-    final args = ModalRoute.of(context)!.settings.arguments as List<GeoUnitMasterBAL>?;
-
-    if (args != null && args.isNotEmpty) {
-      setState(() {
-        _linkedNagar = args;
-      });
-    }
+    getDataFromScreen();
   }
 
   Future<void> fetchVastiSurveyDropdownData() async {
@@ -168,7 +188,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
   final TextEditingController anyaPrabhaviLokAnyaUppshreniController = TextEditingController();
   final TextEditingController anyaPrabhaviLokAnyaUppshreni1Controller = TextEditingController();
 
-  void resetSajjanShaktiAndAnyaPrabhaviLokData() {
+  resetSajjanShaktiAndAnyaPrabhaviLokData() async {
     // Sajjan Shakti list
     sajjanShaktiDataList.clear();
 
@@ -272,11 +292,17 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
     String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
     log("Form Data (JSON):\n$formattedJson");
     final _result = await Statics.saveVishishthaAtithiData(context, formData);
-    resetSajjanShaktiAndAnyaPrabhaviLokData();
+    await resetSajjanShaktiAndAnyaPrabhaviLokData();
     setState(() {});
     if (_result) {
       Navigator.of(context).pop();
     }
+  }
+
+  @override
+  void dispose() {
+    resetSajjanShaktiAndAnyaPrabhaviLokData();
+    super.dispose();
   }
 
   @override
@@ -496,12 +522,14 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                           onItemSelected: (id, value, isOther) {
                             sajjanShaktiShreniName = value;
                             sajjanShaktiShreniId = id;
+                            print("id = $id --- Name = $value");
                           },
                           selectedValue: sajjanShaktiShreniEditDataId,
                           onSelectionChanged: (newValue) {
                             setState(() {
                               sajjanShaktiShreniEditDataId = newValue;
                             });
+                            print("Selection changes called >>>>>>>>>>");
                           },
                           editId: sajjanShaktiShreniEditId,
                         ),
@@ -527,6 +555,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                           onItemSelected: (id, value, isOther) {
                             sajjanShaktiSamparkStithiName = value;
                             sajjanShaktiSamparkStithiId = id;
+                            print("id = $id --- Name = $value");
                           },
                           selectedValue: sajjanShaktiSamparkStithiEditDataId,
                           onSelectionChanged: (newValue) {
@@ -545,6 +574,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                           onItemSelected: (id, value, isOther) {
                             sajjanShaktiVisheshName = value;
                             sajjanShaktiVisheshId = id;
+                            print("id = $id --- Name = $value");
                           },
                           selectedValue: sajjanShaktiVisheshEditDataId,
                           onSelectionChanged: (newValue) {
@@ -568,6 +598,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                           onItemSelected: (id, value, isOther) {
                             sajjanShaktiPrabhavKeshtraName = value;
                             sajjanShaktiPrabhavKeshtraId = id;
+                            print("id = $id --- Name = $value");
                           },
                           selectedValue: sajjanShaktiPrabhavKeshtraEditDataId,
                           onSelectionChanged: (newValue) {
@@ -612,6 +643,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                       textControllerField2(
                         name: "${Statics.getLabel('Name')}",
                         controller: anyaPrabhaviLokNaavController,
+                        isRequired: true,
                       ),
                       textControllerField2(
                         name: "${Statics.getLabel('Address')}",
@@ -622,6 +654,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                         controller: anyaPrabhaviLokMobileNoController,
                         keyboardType: TextInputType.number,
                         maxInput: 10,
+                        isRequired: true,
                       ),
                       SizedBox(height: 5),
                       Row(
@@ -657,18 +690,31 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           /// ---- Left side label ----
-                          SizedBox(
-                            // width: 120,
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "${Statics.getLabel('Category')}/${Statics.getLabel('upshreni')}",
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                "${Statics.getLabel('Category')}/\n${Statics.getLabel('upshreni')}",
+                                maxLines: 2,
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
-                            ),
+                              Container(
+                                margin: EdgeInsets.only(right: 6),
+                                child: Text(
+                                  "  *",
+                                  style: const TextStyle(
+                                    fontSize: 13.5,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
 
                           /// ---- Separator ----
@@ -704,6 +750,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                                           selectedUpShreni = null;
                                           selectedUpShreni2 = null;
                                         });
+                                        print("id = $id --- Name = $value");
                                       },
                                       onDependentValueSelected: (id, name, value) {
                                         anyaPrabhaviLokUpShreniId = id;
@@ -712,6 +759,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                                           selectedUpShreni = value;
                                           selectedUpShreni2 = null;
                                         });
+                                        print("id = $id --- Name = $value");
                                       },
                                       onThirdLevelValueSelected: (id, name, value) {
                                         anyaPrabhaviLokUpShreni1Id = id;
@@ -719,6 +767,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                                         setState(() {
                                           selectedUpShreni2 = value;
                                         });
+                                        print("id = $id --- Name = $value");
                                       },
                                       viewName: true,
                                     ),
@@ -981,7 +1030,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                         if (sajjanShaktiType == 1) {
                           // 🔹 Required field checks
                           if (isEmpty(sajjanShaktiNameController.text)) {
-                            Statics.showToast("${Statics.getLabel('allInfoRequired')}");
+                            Statics.showToast("${Statics.getLabel('impInfoRequired')}");
                             isValid = false;
                             // } else if (isEmpty(sajjanShaktiAddressController.text)) {
                             //   Statics.showToast("${Statics.getLabel('allInfoRequired')}");
@@ -996,14 +1045,19 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                             //   Statics.showToast("${Statics.getLabel('allInfoRequired')}");
                             //   isValid = false;
                           } else if (isEmpty(sajjanShaktiContactPersonNameController.text)) {
-                            Statics.showToast("${Statics.getLabel('allInfoRequired')}");
+                            Statics.showToast("${Statics.getLabel('impInfoRequired')}");
                             isValid = false;
                           } else if (sajjanShaktiContactPersonDoorbhashController.text.length != 10) {
                             Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
                             isValid = false;
-                          } else if ((sajjanShaktiShreniEditDataId?.isOther == 1 && isEmpty(sajjanShaktiAnyaShreniNameController.text)) ||
-                              (sajjanShaktiVisheshEditDataId?.isOther == 1 && isEmpty(sajjanShaktiAnyaVisheshNameController.text))) {
-                            Statics.showToast("${Statics.getLabel('otherInfoValidation')}");
+                          } else if (sajjanShaktiPrabhavKeshtraId == null || sajjanShaktiVisheshId == null || sajjanShaktiSamparkStithiId == null || sajjanShaktiShreniId == null) {
+                            Statics.showToast("${Statics.getLabel('impInfoRequired')}");
+                            isValid = false;
+                          } else if (isEmpty(sajjanShaktiContactPersonNameController.text)) {
+                            Statics.showToast("${Statics.getLabel('impInfoRequired')}");
+                            isValid = false;
+                          } else if (sajjanShaktiContactPersonDoorbhashController.text.length != 10) {
+                            Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
                             isValid = false;
                           }
 
@@ -1038,20 +1092,24 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                         if (sajjanShaktiType == 0) {
                           // 🔹 Required field checks
                           if (isEmpty(anyaPrabhaviLokNaavController.text)) {
-                            Statics.showToast("${Statics.getLabel('allInfoRequired')}");
+                            Statics.showToast("${Statics.getLabel('impInfoRequired')}");
                             isValid = false;
-                          } else if (isEmpty(anyaPrabhaviLokAddressController.text)) {
-                            Statics.showToast("${Statics.getLabel('allInfoRequired')}");
-                            isValid = false;
+                            // } else if (isEmpty(anyaPrabhaviLokAddressController.text)) {
+                            //   Statics.showToast("${Statics.getLabel('impInfoRequired')}");
+                            //   isValid = false;
                           } else if (anyaPrabhaviLokMobileNoController.text.length != 10) {
                             Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
                             isValid = false;
-                          } else if ((selectedUpShreni?.isOther == 1 && isEmpty(anyaPrabhaviLokAnyaUppshreniController.text)) ||
-                              (selectedUpShreni2?.isOther == 1 && isEmpty(anyaPrabhaviLokAnyaUppshreni1Controller.text))) {
-                            Statics.showToast("${Statics.getLabel('otherInfoValidation')}");
+                          } else if (anyaPrabhaviLokSamparkStithiId == null ||
+                              anyaPrabhaviLokPrabhavKshetraId == null ||
+                              anyaPrabhaviLokVisheshId == null ||
+                              // anyaPrabhaviLokUpShreni1Id == null ||
+                              anyaPrabhaviLokUpShreniId == null ||
+                              anyaPrabhaviLokShreniId == null) {
+                            Statics.showToast("${Statics.getLabel('impInfoRequired')}");
                             isValid = false;
                           } else if (isEmpty(anyaPrabhaviLokSamparkSutraNaavController.text)) {
-                            Statics.showToast("${Statics.getLabel('allInfoRequired')}");
+                            Statics.showToast("${Statics.getLabel('impInfoRequired')}");
                             isValid = false;
                           } else if (anyaPrabhaviLokSamparkSutraDoorbhashController.text.length != 10) {
                             Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
@@ -1133,7 +1191,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-            flex: (name == Statics.getLabel('samparkSootraNaav') || name == Statics.getLabel('samparakSootraDoorbhash')) ? 2 : 1,
+            flex: (name == Statics.getLabel('samparkSootraNaav') || name == Statics.getLabel('samparakSootraDoorbhash') || name == Statics.getLabel('sansthetKuthalaPadavar')) ? 2 : 1,
             // width: 120, // Label width fixed
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -1180,7 +1238,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
           ),
           const SizedBox(width: 10),
           Expanded(
-            flex: (name == Statics.getLabel('samparkSootraNaav') || name == Statics.getLabel('samparakSootraDoorbhash')) ? 5 : 3,
+            flex: (name == Statics.getLabel('samparkSootraNaav') || name == Statics.getLabel('samparakSootraDoorbhash') || name == Statics.getLabel('sansthetKuthalaPadavar')) ? 5 : 3,
             child: TextFormField(
               controller: controller,
               keyboardType: keyboardType,

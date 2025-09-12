@@ -793,7 +793,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                                 children: [
                                   Padding(
                                     padding: EdgeInsets.all(8),
-                                    child: Text("✔", style: TextStyle(fontWeight: FontWeight.bold)),
+                                    child: Text("🔘", style: TextStyle(fontWeight: FontWeight.bold)),
                                   ),
                                   Padding(
                                     padding: EdgeInsets.all(8),
@@ -2462,12 +2462,10 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                               });
                             },
                             onAdd: () {
-                              Navigator.of(context)
-                                  .pushReplacementNamed(
-                                    AddMukhyaAtithi.routeName,
-                                    arguments: _linkedNagar,
-                                  )
-                                  .then((value) => searchVijayaDashami());
+                              Navigator.of(context).pushReplacementNamed(
+                                AddMukhyaAtithi.routeName,
+                                arguments: {'linkedNagar': _linkedNagar, 'selectedLevelId': selctedLevelId},
+                              ).then((value) => searchVijayaDashami());
                             },
                           );
                         },
@@ -2740,25 +2738,25 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text("${Statics.getLabel('Vayogat')}", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white)),
+                                  child: Text("${Statics.getLabel('Vayogat')}", style: const TextStyle(fontSize: 15.6, fontWeight: FontWeight.bold, color: Colors.white)),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text("${Statics.getLabel('patSankhyaa')}", style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                                  child: Text("${Statics.getLabel('patSankhyaa')}", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white)),
                                 ),
                                 Center(
                                   child: Padding(
                                     padding: EdgeInsets.all(8.0),
-                                    child: Text("${Statics.getLabel('Total')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                                    child: Text("${Statics.getLabel('Total')}", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white)),
                                   ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text("${Statics.getLabel('ganveshatPresentCount')}", style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                                  child: Text("${Statics.getLabel('ganveshatPresentCount')}", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white)),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text("${Statics.getLabel('otherSwayamsewakPresentCount')}", style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                                  child: Text("${Statics.getLabel('otherSwayamsewakPresentCount')}", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white)),
                                 ),
                               ],
                             ),
@@ -2769,7 +2767,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text("${Statics.getLabel('Shishu')}/${Statics.getLabel('Baal')}"),
+                                  child: Text("${Statics.getLabel('Shishu')}/${Statics.getLabel('Baal')}", style: TextStyle(fontSize: 14.5)),
                                 ),
                                 _numberField(patShishuBaalCtrl, textBoxColor: Colors.grey.shade300, containerColor: Colors.grey.shade300),
                                 Container(
@@ -2787,7 +2785,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
-                                  child: Text("${Statics.getLabel('MahaavidyaalayeenTarunLabel')}"),
+                                  child: Text("${Statics.getLabel('MahaavidyaalayeenTarunLabel')}", style: TextStyle(fontSize: 14.5)),
                                 ),
                                 _numberField(patMahavidyaCtrl, padding: const EdgeInsets.symmetric(vertical: 12.0), textBoxColor: Colors.grey.shade300, containerColor: Colors.grey.shade300),
                                 Container(
@@ -2805,7 +2803,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text("${Statics.getLabel('TarunVyavasaayee')}"),
+                                  child: Text("${Statics.getLabel('TarunVyavasaayee')}", style: TextStyle(fontSize: 14.5)),
                                 ),
                                 _numberField(patTarunVyavCtrl, textBoxColor: Colors.grey.shade300, containerColor: Colors.grey.shade300),
                                 Container(
@@ -2823,7 +2821,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text("${Statics.getLabel('ProudhaVyavasaayeeLabel')}"),
+                                  child: Text("${Statics.getLabel('ProudhaVyavasaayeeLabel')}", style: TextStyle(fontSize: 14.5)),
                                 ),
                                 _numberField(patProudhVyavCtrl, textBoxColor: Colors.grey.shade300, containerColor: Colors.grey.shade300),
                                 Container(
@@ -2843,7 +2841,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                               children: [
                                 Padding(
                                   padding: EdgeInsets.all(8.0),
-                                  child: Text("${Statics.getLabel('Total')}", style: TextStyle(fontWeight: FontWeight.w900)),
+                                  child: Text("${Statics.getLabel('Total')}", style: TextStyle(fontSize: 14.7, fontWeight: FontWeight.w900)),
                                 ),
                                 Center(
                                   child: Padding(
