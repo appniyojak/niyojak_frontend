@@ -5,6 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:niyojak_prod/screens/shatabdi_vrutta_sankalan/vijayadashami/vijaya_dashami_report.dart';
 import 'package:niyojak_prod/widgets/app_drawer.dart';
 import 'package:niyojak_prod/widgets/single_column_row.dart';
@@ -62,6 +63,8 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
   String? mahanagarId = '';
   String? vibhagId = '';
 
+  List<int?> selectedUpnagarList = [];
+
   @override
   void initState() {
     super.initState();
@@ -109,6 +112,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       _linkedupnaragValue = null;
       _linkedgraamValue = null;
       _linkedvastiValue = null;
+      selectedUpnagarList = [];
 
       // Reset data lists
       _linkedBhaag = null;
@@ -549,7 +553,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
   GetVijayadashamiInitModel? data;
 
   Future<void> searchVijayaDashami() async {
-    data = await Statics.getVijayadashamiInitData(context, Statics.userDetails["userID"], selctedLevelId, utsavKontyaStaravar);
+    data = await Statics.getVijayadashamiInitData(context, Statics.userDetails["userID"], selectedUpnagarList.isEmpty ? selctedLevelId.toString() : selectedUpnagarList.join(","), utsavKontyaStaravar);
     print("searchVijayaDashami data ${data?.vastisarsajjanshakti}");
     selectedPrabhavi = null;
     selectedPerson = null;
@@ -2192,14 +2196,18 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
   Future<void> getVastiUpDataList() async {
     var inputData = json.encode({
       "AppUserID": Statics.userDetails['userID'],
-      "GeoUnitID": selctedLevelId,
+      "GeoUnitID": selectedUpnagarList.isEmpty ? selctedLevelId.toString() : selectedUpnagarList.join(","),
       "isnagar": int.parse(utsavKontyaStaravar ?? "6"),
     });
 
     print("_submitForm $inputData");
 
     vastiUpDataListModel = await Statics.getVastiUpdata(inputData);
+
+    ///
     getFormData();
+
+    ///
     if (vastiUpDataListModel != null) {
       print("Data fetched successfully");
       setState(() {
@@ -3841,6 +3849,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                       value: _linkedNagarValue == "" ? null : _linkedNagarValue,
                       items: _linkedNagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                       onChanged: (value) async {
+                        selectedUpnagarList = [];
                         final selectedItem = _linkedNagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                         setState(() {
                           _linkedupnaragValue = null;
@@ -3893,29 +3902,84 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                       height: 10,
                     ),
                   if ((selctedLevel == 'Nagar' || selctedLevel == 'upnagarUpkhanda') && _linkedUpnagar != null && _linkedUpnagar!.length > 0)
-                    DropdownButtonFormField(
-                      decoration: InputDecoration(labelText: Statics.getLabel('upnagarUpkhanda')),
-                      isExpanded: true,
-                      value: _linkedupnaragValue == "" ? null : _linkedupnaragValue,
-                      items: _linkedUpnagar?.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.preferedname.toString()))).toList(),
-                      onChanged: (value) {
-                        final selectedItem = _linkedUpnagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
-                        setState(() {
-                          selctedLevelName = selectedItem?.preferedname ?? "";
-                          selctedLevel = 'upnagarUpkhanda';
-                          selctedLevelId = value;
+                    MultiSelectDialogField(
+                      title: Text(Statics.getLabel('upnagarUpkhanda')),
+                      buttonText: Text(Statics.getLabel('upnagarUpkhanda')),
+                      buttonIcon: Icon(Icons.arrow_drop_down),
+                      decoration: BoxDecoration(
+                        // borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                        border: Border(bottom: selectedUpnagarList.isEmpty ? BorderSide(color: Colors.grey) : BorderSide.none),
+                      ),
+                      confirmText: Text(
+                        Statics.getLabel('Submit'),
+                        style: const TextStyle(color: Colors.purple),
+                      ),
+                      cancelText: Text(
+                        Statics.getLabel('clear'),
+                        style: const TextStyle(color: Colors.purple),
+                      ),
+                      searchable: false,
+                      listType: MultiSelectListType.LIST,
+                      items: _linkedUpnagar!.map((bg) => MultiSelectItem(bg.geoUnitID, bg.preferedname.toString())).toList(),
+                      initialValue: selectedUpnagarList,
+                      chipDisplay: MultiSelectChipDisplay(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.purple, width: 0.7),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          // icon: Icon(Icons.done, color: Colors.purple, size: 16),
+                          chipColor: Colors.white,
+                          textStyle: TextStyle(fontSize: 12, color: Colors.purple, fontWeight: FontWeight.w500)),
+                      // onSaved: (newValue) {},
+                      onConfirm: (values) {
+                        selectedUpnagarList = values.map((e) {
+                          // Check if the element is an integer
+                          if (e is int) {
+                            return e;
+                          }
+                          // If it's a string, try to parse it
+                          else if (e is String) {
+                            return int.tryParse(e); // Use tryParse to handle invalid strings and return null
+                          }
+                          // Otherwise, return null or handle as needed
+                          return null;
+                        }).toList();
+                        print("valueeeeeeeesssss >>>>>>>>>>>>>>> $values");
+                        // if (selectedUpnagarList.contains(values)) {
+                        selctedLevel = 'upnagarUpkhanda';
+                        //   selectedUpnagarList.add(bg);
+                        // } else {
+                        //   selectedUpnagarList.remove(bg);
+                        // }
+                        setState(() {});
 
-                          _linkedupnaragValue = value;
-                          // populatelinkedGraamDropdown(value!);
-                        });
-
-                        print("selctedLevelId >>>>>>>>>>>>>>>>> $selctedLevelId");
+                        // print("selctedLevelId >>>>>>>>>>>>>>>>> $selctedLevelId");
+                        print("valueeeeeeeesssss >>>>>>>>>>>>>>> ${selectedUpnagarList.join(",")}");
                       },
                     ),
+                  // DropdownButtonFormField(
+                  //   decoration: InputDecoration(labelText: Statics.getLabel('upnagarUpkhanda')),
+                  //   isExpanded: true,
+                  //   value: _linkedupnaragValue == "" ? null : _linkedupnaragValue,
+                  //   items: _linkedUpnagar?.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.preferedname.toString()))).toList(),
+                  //   onChanged: (value) {
+                  //     final selectedItem = _linkedUpnagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                  //     setState(() {
+                  //       selctedLevelName = selectedItem?.preferedname ?? "";
+                  //       selctedLevel = 'upnagarUpkhanda';
+                  //       selctedLevelId = value;
+                  //
+                  //       _linkedupnaragValue = value;
+                  //       // populatelinkedGraamDropdown(value!);
+                  //     });
+                  //
+                  //     print("selctedLevelId >>>>>>>>>>>>>>>>> $selctedLevelId");
+                  //   },
+                  // ),
                   SizedBox(
                     height: 15,
                   ),
-                  if (selctedLevel == 'upnagarUpkhanda')
+                  if (selctedLevel == 'upnagarUpkhanda' && selectedUpnagarList.isNotEmpty)
                     Align(
                       alignment: Alignment.center,
                       child: ElevatedButton(
@@ -4281,7 +4345,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
 
   Future<void> submitForm({bool showLoader = true}) async {
     Map<String, dynamic> formData = {
-      "GeoUnitID": int.parse(selctedLevelId!),
+      "GeoUnitID": selectedUpnagarList.isEmpty ? selctedLevelId.toString() : selectedUpnagarList.join(","),
       "AppUserID": int.parse(Statics.userDetails['userID']),
       "is_nagar": int.parse(utsavKontyaStaravar!),
       "shanchalan_zaleka": sanchalanZaleKa,
@@ -4328,12 +4392,12 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
 
   Future<void> getFormData() async {
     Map<String, dynamic> formData = {
-      "GeoUnitID": int.parse(selctedLevelId!),
+      "GeoUnitID": selectedUpnagarList.isEmpty ? selctedLevelId.toString() : selectedUpnagarList.join(","),
       "AppUserID": int.parse(Statics.userDetails['userID']),
       "isnagar": int.parse(utsavKontyaStaravar!),
     };
 
-    String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
+    String formattedJson = jsonEncode(formData);
     log("Form Data (JSON):\n$formattedJson");
     getVijayaDashamiUtsavDataByGeounitData = await Statics.getVijayaDashamiUtsavDataByGeounit(context, formData);
     log("getVijayaDashamiUtsavDataByGeounitData ${jsonDecode(jsonEncode(getVijayaDashamiUtsavDataByGeounitData))}");

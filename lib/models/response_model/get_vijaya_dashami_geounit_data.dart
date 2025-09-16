@@ -3,15 +3,12 @@ class GetVijayadashamiDataByGeoUnitModel {
   String? status;
   VijayadashamiUtsav? vijayadashamiUtsav;
 
-  GetVijayadashamiDataByGeoUnitModel(
-      {this.message, this.status, this.vijayadashamiUtsav});
+  GetVijayadashamiDataByGeoUnitModel({this.message, this.status, this.vijayadashamiUtsav});
 
   GetVijayadashamiDataByGeoUnitModel.fromJson(Map<String, dynamic> json) {
     message = json['Message'];
     status = json['Status'];
-    vijayadashamiUtsav = json['VijayadashamiUtsav'] != null
-        ? new VijayadashamiUtsav.fromJson(json['VijayadashamiUtsav'])
-        : null;
+    vijayadashamiUtsav = json['VijayadashamiUtsav'] != null ? new VijayadashamiUtsav.fromJson(json['VijayadashamiUtsav']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -26,7 +23,7 @@ class GetVijayadashamiDataByGeoUnitModel {
 }
 
 class VijayadashamiUtsav {
-  int? geoUnitID;
+  String? geoUnitID;
   int? mahavidyaAnya;
   int? mahavidyaGan;
   int? mahavidyaPat;
@@ -145,18 +142,12 @@ class VijayadashamiUtsav {
     ekunPercentage = json['ekun_percentage'];
     ekunSelected = json['ekun_selected'];
     isNagar = json['is_nagar'];
-    karaykramHisob24TasaPurnaZaleka =
-        json['karaykram_hisob_24_tasa_purna_zaleka'];
-    karyakramNirdharitVedhvarZaleka =
-        json['karyakram_nirdharit_vedhvar_zaleka'];
-    manasikSanghMandaliPratinidhatvaCount =
-        json['manasik_sangh_mandali_pratinidhatva_count'];
-    manasikSanghMandaliPratinidhatvaEkun =
-        json['manasik_sangh_mandali_pratinidhatva_ekun'];
-    manasikSanghMandaliPratinidhatvaIds =
-        json['manasik_sangh_mandali_pratinidhatva_ids'];
-    manasikSanghMandaliPratinidhatvaSahasari =
-        json['manasik_sangh_mandali_pratinidhatva_sahasari'];
+    karaykramHisob24TasaPurnaZaleka = json['karaykram_hisob_24_tasa_purna_zaleka'];
+    karyakramNirdharitVedhvarZaleka = json['karyakram_nirdharit_vedhvar_zaleka'];
+    manasikSanghMandaliPratinidhatvaCount = json['manasik_sangh_mandali_pratinidhatva_count'];
+    manasikSanghMandaliPratinidhatvaEkun = json['manasik_sangh_mandali_pratinidhatva_ekun'];
+    manasikSanghMandaliPratinidhatvaIds = json['manasik_sangh_mandali_pratinidhatva_ids'];
+    manasikSanghMandaliPratinidhatvaSahasari = json['manasik_sangh_mandali_pratinidhatva_sahasari'];
     milanPratinidhatvaCount = json['milan_pratinidhatva_count'];
     milanPratinidhatvaEkun = json['milan_pratinidhatva_ekun'];
     milanPratinidhatvaIds = json['milan_pratinidhatva_ids'];
@@ -171,8 +162,7 @@ class VijayadashamiUtsav {
     shanchalanGhosvandanZaleka = json['shanchalan_ghosvandan_zaleka'];
     shanchalanSadanZaleka = json['shanchalan_sadan_zaleka'];
     shanchalanZaleka = json['shanchalan_zaleka'];
-    visititAtithiAnyaprabhaViLokamids =
-        json['visitit_atithi_anyaprabha_vi_lokamids'];
+    visititAtithiAnyaprabhaViLokamids = json['visitit_atithi_anyaprabha_vi_lokamids'];
     visititAtithiSajjanShaktiids = json['visitit_atithi_sajjan_shaktiids'];
     vyaktiGeetKhantastaKhoteka = json['vyakti_geet_khantasta_khoteka'];
   }
@@ -202,18 +192,12 @@ class VijayadashamiUtsav {
     data['ekun_percentage'] = this.ekunPercentage;
     data['ekun_selected'] = this.ekunSelected;
     data['is_nagar'] = this.isNagar;
-    data['karaykram_hisob_24_tasa_purna_zaleka'] =
-        this.karaykramHisob24TasaPurnaZaleka;
-    data['karyakram_nirdharit_vedhvar_zaleka'] =
-        this.karyakramNirdharitVedhvarZaleka;
-    data['manasik_sangh_mandali_pratinidhatva_count'] =
-        this.manasikSanghMandaliPratinidhatvaCount;
-    data['manasik_sangh_mandali_pratinidhatva_ekun'] =
-        this.manasikSanghMandaliPratinidhatvaEkun;
-    data['manasik_sangh_mandali_pratinidhatva_ids'] =
-        this.manasikSanghMandaliPratinidhatvaIds;
-    data['manasik_sangh_mandali_pratinidhatva_sahasari'] =
-        this.manasikSanghMandaliPratinidhatvaSahasari;
+    data['karaykram_hisob_24_tasa_purna_zaleka'] = this.karaykramHisob24TasaPurnaZaleka;
+    data['karyakram_nirdharit_vedhvar_zaleka'] = this.karyakramNirdharitVedhvarZaleka;
+    data['manasik_sangh_mandali_pratinidhatva_count'] = this.manasikSanghMandaliPratinidhatvaCount;
+    data['manasik_sangh_mandali_pratinidhatva_ekun'] = this.manasikSanghMandaliPratinidhatvaEkun;
+    data['manasik_sangh_mandali_pratinidhatva_ids'] = this.manasikSanghMandaliPratinidhatvaIds;
+    data['manasik_sangh_mandali_pratinidhatva_sahasari'] = this.manasikSanghMandaliPratinidhatvaSahasari;
     data['milan_pratinidhatva_count'] = this.milanPratinidhatvaCount;
     data['milan_pratinidhatva_ekun'] = this.milanPratinidhatvaEkun;
     data['milan_pratinidhatva_ids'] = this.milanPratinidhatvaIds;
@@ -228,8 +212,7 @@ class VijayadashamiUtsav {
     data['shanchalan_ghosvandan_zaleka'] = this.shanchalanGhosvandanZaleka;
     data['shanchalan_sadan_zaleka'] = this.shanchalanSadanZaleka;
     data['shanchalan_zaleka'] = this.shanchalanZaleka;
-    data['visitit_atithi_anyaprabha_vi_lokamids'] =
-        this.visititAtithiAnyaprabhaViLokamids;
+    data['visitit_atithi_anyaprabha_vi_lokamids'] = this.visititAtithiAnyaprabhaViLokamids;
     data['visitit_atithi_sajjan_shaktiids'] = this.visititAtithiSajjanShaktiids;
     data['vyakti_geet_khantasta_khoteka'] = this.vyaktiGeetKhantastaKhoteka;
     return data;

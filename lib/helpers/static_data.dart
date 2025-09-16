@@ -1839,13 +1839,13 @@ Future<GetVijayadashamiInitModel?> getVijayadashamiInitData(context, String? use
       headers: jHeaders,
       body: json.encode({
         "AppUserID": userID,
-        "GeoUnitID": int.parse(targetGeoUnitID ?? "0"),
+        "GeoUnitID": targetGeoUnitID ?? "0",
         "isnagar": int.parse(levelID ?? "6"),
       }));
 
   print(json.encode({
     "AppUserID": userID,
-    "GeoUnitID": int.parse(targetGeoUnitID ?? "0"),
+    "GeoUnitID": targetGeoUnitID ?? "0",
     "isnagar": int.parse(levelID ?? "6"),
   }));
   log("response ==>  $response");
