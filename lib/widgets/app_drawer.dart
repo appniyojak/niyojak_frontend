@@ -37,55 +37,87 @@ class AppDrawer extends StatefulWidget {
 
 class _AppDrawerState extends State<AppDrawer> {
   AbhiyanSwayamsevakdata? initialData;
-  List<String> allowedLevels = ["Praant", "Mahaanagar", "Vibhaag", "Bhaag", "Shahar", "Nagar", "Nagar/Taalukaa", "प्रांत", "महानगर", "विभाग", "भाग", "भाग/जिल्हा", "भाग/जिला", "शहर", "नगर/तालुका"];
 
-  List<String> allowedDayitva = [
-    "Praudh Vyavsayee Pramukh",
-    "प्रौढ व्यवसायी प्रमुख",
-    "Tarun Vyavsayee Sah Pramukh",
-    "तरुण व्यवसायी सह प्रमुख",
-    "Mahavidyaleen Vidyarthi Sah Pramukh",
-    "महाविद्यालयीन विद्यार्थी सह प्रमुख",
-    "App Sanyojak",
-    "एप संयोजक",
-    "Join RSS Sanyojak",
-    "जॉयन आर.एस.एस. संयोजक",
-    "Join RSS Pramukh",
-    "जॉयन आर.एस.एस. प्रमुख",
-    "Baal Vidyaarthi Pramukh",
-    "बाल विद्यार्थी प्रमुख",
-    "Vyavasaayee Pramukh",
-    "व्यवसायी प्रमुख",
-    "Vyavasaayee Saha-Pramukh",
-    "व्यवसायी सह प्रमुख",
-    "Tarun Vyavsayee Pramukh",
-    "तरुण व्यवसायी प्रमुख",
-    "Kaaryavaah",
-    "कार्यवाह",
-    "Saha-Kaaryavaah",
-    "सह कार्यवाह",
-    "Prachaarak",
-    "प्रचारक",
-    "Saha-Prachaarak",
-    "सह प्रचारक",
-    "Praudh Vyavsayee Saha -Pramukh",
-    "प्रौढ़ व्यवसायी सह प्रमुख",
-    "Mahaavidyaalayeen Vidyaarthi Pramukh",
-    "महाविद्यालयीन विद्यार्थी प्रमुख",
-    "Mahaavidyaalayeen Pramukh",
-    "महाविद्यालयीन प्रमुख",
-    "Baal Vidyaarthi Saha Pramukh",
-    "बाल विद्यार्थी सह प्रमुख",
-    "Prachaar Pramukh",
-    "प्रचार प्रमुख",
-    "Kaaryaalay Pramukh",
-    "कार्यालय प्रमुख"
+  List<String> deniedLevels = ["Shakha", "Saptahik Milan", "शाखा", "साप्ताहिक मिलन"];
+
+  List<String> allowedLevels = [
+    "Praant",
+    "Mahaanagar",
+    "Vibhaag",
+    "Bhaag",
+    "Shahar",
+    "Nagar",
+    "Nagar/Taalukaa",
+    "Upnagar/Upkhanda",
+    "Vasti",
+    "Mandal",
+    "Gram",
+    "प्रांत",
+    "महानगर",
+    "विभाग",
+    "भाग",
+    "भाग/जिल्हा",
+    "भाग/जिला",
+    "शहर",
+    "नगर/तालुका",
+    "उपनगर/उपखंड",
+    "वस्ती",
+    "मंडल",
+    "ग्राम",
+    "गाव",
   ];
+
+  // List<String> allowedDayitva = [
+  //   "Praudh Vyavsayee Pramukh",
+  //   "प्रौढ व्यवसायी प्रमुख",
+  //   "Tarun Vyavsayee Sah Pramukh",
+  //   "तरुण व्यवसायी सह प्रमुख",
+  //   "Mahavidyaleen Vidyarthi Sah Pramukh",
+  //   "महाविद्यालयीन विद्यार्थी सह प्रमुख",
+  //   "App Sanyojak",
+  //   "एप संयोजक",
+  //   "Join RSS Sanyojak",
+  //   "जॉयन आर.एस.एस. संयोजक",
+  //   "Join RSS Pramukh",
+  //   "जॉयन आर.एस.एस. प्रमुख",
+  //   "Baal Vidyaarthi Pramukh",
+  //   "बाल विद्यार्थी प्रमुख",
+  //   "Vyavasaayee Pramukh",
+  //   "व्यवसायी प्रमुख",
+  //   "Vyavasaayee Saha-Pramukh",
+  //   "व्यवसायी सह प्रमुख",
+  //   "Tarun Vyavsayee Pramukh",
+  //   "तरुण व्यवसायी प्रमुख",
+  //   "Kaaryavaah",
+  //   "कार्यवाह",
+  //   "Saha-Kaaryavaah",
+  //   "सह कार्यवाह",
+  //   "Prachaarak",
+  //   "प्रचारक",
+  //   "Saha-Prachaarak",
+  //   "सह प्रचारक",
+  //   "Praudh Vyavsayee Saha -Pramukh",
+  //   "प्रौढ़ व्यवसायी सह प्रमुख",
+  //   "Mahaavidyaalayeen Vidyaarthi Pramukh",
+  //   "महाविद्यालयीन विद्यार्थी प्रमुख",
+  //   "Mahaavidyaalayeen Pramukh",
+  //   "महाविद्यालयीन प्रमुख",
+  //   "Baal Vidyaarthi Saha Pramukh",
+  //   "बाल विद्यार्थी सह प्रमुख",
+  //   "Prachaar Pramukh",
+  //   "प्रचार प्रमुख",
+  //   "Kaaryaalay Pramukh",
+  //   "कार्यालय प्रमुख"
+  // ];
 
   bool shouldShowListTile(String userLevel, String userDayitva) {
     // print("userLevel --> $userLevel  === userDayitva --> $userDayitva");
     // print(allowedLevels.contains(userLevel) && allowedDayitva.contains(userDayitva));
-    return allowedLevels.contains(userLevel) && allowedDayitva.contains(userDayitva);
+    ///
+    return !deniedLevels.contains(userLevel);
+
+    ///
+    // return allowedLevels.contains(userLevel); // && allowedDayitva.contains(userDayitva);
   }
 
   //================================================================================================================================================

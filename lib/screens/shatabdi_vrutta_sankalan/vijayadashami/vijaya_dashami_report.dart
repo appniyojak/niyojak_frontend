@@ -184,8 +184,8 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "विजयादशमी कार्यक्रम रिपोर्ट",
+        title: Text(
+          Statics.getLabel('VijayadashmiReport'),
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
       ),
