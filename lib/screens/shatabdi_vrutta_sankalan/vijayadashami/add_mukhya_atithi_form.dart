@@ -1200,7 +1200,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
                 Flexible(
                   child: Text(
                     "$name",
-                    maxLines: 2,
+                    maxLines: 3,
                     softWrap: true,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
