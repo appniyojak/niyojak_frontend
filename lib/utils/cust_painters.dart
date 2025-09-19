@@ -40,3 +40,20 @@ class DashedLinePainter extends CustomPainter {
     return false; // No need to repaint since the dashed line doesn't change
   }
 }
+
+class LabelClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final path = Path();
+    path.lineTo(0, size.height);
+    path.lineTo(size.width * 0.8, size.height);
+    path.lineTo(size.width, size.height / 2);
+    path.lineTo(size.width * 0.8, 0);
+    path.lineTo(0, 0);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(LabelClipper oldClipper) => false;
+}

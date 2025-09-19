@@ -47,6 +47,7 @@ Map<String, String> resEnglish = {
   'SampurnaReportMandal': 'Mandal Sarvekshan Abhiyan Sthiti',
   'Report': 'Survey Report',
   'mandalSurvey': 'Mandal Survey',
+  'Reportonly': 'Report',
   'basicInfo': 'Basic Information',
   'otherInfo': 'Other Information',
   'detailedInfo': 'Detailed Information',
@@ -1469,8 +1470,10 @@ Map<String, String> resEnglish = {
   'ProgramNirdharitTime': "कार्यक्रम निर्धारित वेळेवर सुरु झालं का ?",
   'vaiyaktikGitKantashtha': "वैयक्तिक गीत कंठस्थ होते का ?",
   'programHishobh24Hour': "कार्यक्रमाचे हिशोब २४ तासात पूर्ण  झाले का ?",
-  'mukhyaAtithi': "मुख्य अतिथी",
-  'specialAtithi': "विशिष्ट अतिथी ",
+  'mukhyaAtithi': "Main Guest",
+  'specialAtithi': "Important Guest ",
+  'shatabdiVarshaVruttaSankalan': "शताब्दी वर्ष वृत्त संकलन",
+  'shatabdiVarshaVruttaTitle': "शताब्दी वर्ष वृत्त",
   'present': 'Present',
   'totalPat': 'Total Roll',
   'NagarSelectionImportant': 'Please select Geo Level',
@@ -1514,6 +1517,8 @@ Map<String, String> resEnglish = {
   'IsChotaBaithak': 'Small Baithak',
   'allInfoSubmit': 'All information is filled',
   'remainingVasti': 'Remaining Vasti',
+  'workInProgress': "Work in progress on this page!",
+  'mainScreenOther': "More"
 };
 
 Map<String, String> resMarathi = {
@@ -1564,6 +1569,7 @@ Map<String, String> resMarathi = {
   'SampurnaReport': 'वस्ती सर्वेक्षण अभियान स्थिती ',
   'SampurnaReportMandal': 'सर्वेक्षण अभियान स्थिती ',
   'Report': 'सर्वेक्षण अहवाल',
+  'Reportonly': 'अहवाल',
   'mandalSurvey': 'मंडल सर्वेक्षण',
   'basicInfo': 'प्राथमिक माहिती',
   'otherInfo': 'अन्य माहिती',
@@ -2998,6 +3004,7 @@ Map<String, String> resMarathi = {
   'ganveshatPresentCount': "गणवेषात उपस्थित एकूण",
   'otherSwayamsewakPresentCount': "अन्य उपस्थित स्वयंसेवक",
   'shatabdiVarshaVruttaSankalan': "शताब्दी वर्ष वृत्त संकलन",
+  'shatabdiVarshaVruttaTitle': "शताब्दी वर्ष वृत्त",
   'gruhSamparkAbhiyaan': "गृह संपर्क अभियान",
   'sanchalanSadanda': "संचलनात सदण्ड ?",
   'sanchalanGhoshVadan': "संचलनात घोष वादन ?",
@@ -3051,6 +3058,8 @@ Map<String, String> resMarathi = {
   'IsChotaBaithak': 'छोटि बैठक?',
   'allInfoSubmit': 'सर्व माहिती भरली आहे.',
   'remainingVasti': 'उर्वरित वस्ती',
+  'workInProgress': "या पेजवर काम सुरू आहे !",
+  'mainScreenOther': "संकीर्ण"
 };
 
 Map<String, String> resHindi = {
@@ -3101,6 +3110,7 @@ Map<String, String> resHindi = {
   'SampurnaReport': 'वस्ती सर्वेक्षण अभियान स्थिती ',
   'SampurnaReportMandal': 'सर्वेक्षण अभियान स्थिती ',
   'Report': 'सर्वेक्षण अहवाल',
+  'Reportonly': 'अहवाल',
   'mandalSurvey': 'मंडल सर्वेक्षण',
   'basicInfo': 'मूल जानकारी',
   'otherInfo': 'अन्य सूचना',
@@ -4563,4 +4573,8 @@ Map<String, String> resHindi = {
   'IsChotaBaithak': 'छोटि बैठक?',
   'allInfoSubmit': 'सभी जानकारी दे दि गयी है ',
   'remainingVasti': 'शेष वस्ती',
+  'shatabdiVarshaVruttaSankalan': "शताब्दी वर्ष वृत्त संकलन",
+  'shatabdiVarshaVruttaTitle': "शताब्दी वर्ष वृत्त",
+  'workInProgress': "इस पृष्ठ पर कार्य प्रगति पर है !",
+  'mainScreenOther': "संकीर्ण"
 };
