@@ -387,76 +387,77 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                   SizedBox(
                     height: 15,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Sajjan Shakti Button
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              if (selectedTypes.contains(1)) {
-                                selectedTypes.remove(1);
-                              } else {
-                                selectedTypes.add(1);
-                              }
-                            });
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            decoration: BoxDecoration(
-                              color: selectedTypes.contains(1) ? Colors.purpleAccent : Colors.transparent,
-                              border: Border.all(color: Colors.purpleAccent),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Center(
-                              child: Text(
-                                "${Statics.getLabel('SajjanShakti')}",
-                                style: TextStyle(
-                                  color: selectedTypes.contains(1) ? Colors.white : Colors.purpleAccent,
-                                  fontWeight: FontWeight.bold,
+                  if (selctedLevel == 'Vasti')
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Sajjan Shakti Button
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                if (selectedTypes.contains(1)) {
+                                  selectedTypes.remove(1);
+                                } else {
+                                  selectedTypes.add(1);
+                                }
+                              });
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              decoration: BoxDecoration(
+                                color: selectedTypes.contains(1) ? Colors.purpleAccent : Colors.transparent,
+                                border: Border.all(color: Colors.purpleAccent),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "${Statics.getLabel('SajjanShakti')}",
+                                  style: TextStyle(
+                                    color: selectedTypes.contains(1) ? Colors.white : Colors.purpleAccent,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
 
-                      const SizedBox(width: 10),
+                        const SizedBox(width: 10),
 
-                      // Anya Prabhavi Lok Button
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              if (selectedTypes.contains(0)) {
-                                selectedTypes.remove(0);
-                              } else {
-                                selectedTypes.add(0);
-                              }
-                            });
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            decoration: BoxDecoration(
-                              color: selectedTypes.contains(0) ? Colors.purpleAccent : Colors.transparent,
-                              border: Border.all(color: Colors.purpleAccent),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Center(
-                              child: Text(
-                                "${Statics.getLabel('anyaPrabhaviLok')}",
-                                style: TextStyle(
-                                  color: selectedTypes.contains(0) ? Colors.white : Colors.purpleAccent,
-                                  fontWeight: FontWeight.bold,
+                        // Anya Prabhavi Lok Button
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                if (selectedTypes.contains(0)) {
+                                  selectedTypes.remove(0);
+                                } else {
+                                  selectedTypes.add(0);
+                                }
+                              });
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              decoration: BoxDecoration(
+                                color: selectedTypes.contains(0) ? Colors.purpleAccent : Colors.transparent,
+                                border: Border.all(color: Colors.purpleAccent),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "${Statics.getLabel('anyaPrabhaviLok')}",
+                                  style: TextStyle(
+                                    color: selectedTypes.contains(0) ? Colors.white : Colors.purpleAccent,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
                   SizedBox(
                     height: 10,
                   ),
@@ -759,6 +760,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                         name: Statics.getLabel('Name'),
                         controller: sajjanShaktiNameController,
                         fieldHeight: 45,
+                        isRequired: true,
                       ),
 
                       textControllerField2(
@@ -772,6 +774,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                         controller: sajjanShaktiPhoneController,
                         keyboardType: TextInputType.number,
                         maxInput: 10,
+                        isRequired: true,
                       ),
 
                       Row(
@@ -905,6 +908,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                       textControllerField2(
                         name: Statics.getLabel('samparkSootraNaav'),
                         controller: sajjanShaktiContactPersonNameController,
+                        isRequired: true,
                       ),
 
                       textControllerField2(
@@ -912,6 +916,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                         controller: sajjanShaktiContactPersonDoorbhashController,
                         keyboardType: TextInputType.number,
                         maxInput: 10,
+                        isRequired: true,
                       ),
 
                       const SizedBox(height: 20),
@@ -1023,19 +1028,16 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                             onPressed: () {
                               // ✅ पहले check करो कि कोई भी field खाली तो नहीं है
                               if (sajjanShaktiNameController.text.trim().isEmpty ||
-                                  sajjanShaktiAddressController.text.trim().isEmpty ||
                                   sajjanShaktiPhoneController.text.trim().isEmpty ||
                                   (sajjanShaktiShreniEditDataId == null) ||
                                   (sajjanShaktiShreniEditDataId?.isOther == 1 && sajjanShaktiAnyaShreniNameController.text.trim().isEmpty) ||
-                                  sajjanShaktiSansthecheNaavController.text.trim().isEmpty ||
-                                  sajjanShaktiSansthKuthalyaPadavarController.text.trim().isEmpty ||
                                   (sajjanShaktiSamparkStithiEditDataId == null) ||
                                   (sajjanShaktiVisheshEditDataId == null) ||
                                   (sajjanShaktiVisheshEditDataId?.isOther == 1 && sajjanShaktiAnyaVisheshNameController.text.trim().isEmpty) ||
                                   (sajjanShaktiPrabhavKeshtraEditDataId == null) ||
                                   sajjanShaktiContactPersonNameController.text.trim().isEmpty ||
                                   sajjanShaktiContactPersonDoorbhashController.text.trim().isEmpty) {
-                                Statics.showToast("${Statics.getLabel('allInfoRequired')}");
+                                Statics.showToast("${Statics.getLabel('impInfoRequired')}");
                                 return;
                               }
 
@@ -1065,7 +1067,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                                 samparkasutranava: sajjanShaktiContactPersonNameController.text.trim(),
                                 samparkasutraMobileNumber: sajjanShaktiContactPersonDoorbhashController.text.trim(),
                                 isactive: 1,
-                                vastiid: int.parse(selctedLevelId!),
+                                vastiid: int.parse(selctedLevelId ?? "0"),
                                 pkid: 0,
                                 isfemale: isFemale,
                               );
@@ -1157,6 +1159,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                       textControllerField2(
                         name: Statics.getLabel('Name'),
                         controller: anyaPrabhaviLokNaavController,
+                        isRequired: true,
                       ),
 
                       textControllerField2(
@@ -1169,6 +1172,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                         controller: anyaPrabhaviLokMobileNoController,
                         keyboardType: TextInputType.number,
                         maxInput: 10,
+                        isRequired: true,
                       ),
 
                       Row(
@@ -1314,6 +1318,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                       textControllerField2(
                         name: Statics.getLabel('samparkSootraNaav'),
                         controller: anyaPrabhaviLokSamparkSutraNaavController,
+                        isRequired: true,
                       ),
 
                       textControllerField2(
@@ -1321,6 +1326,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                         controller: anyaPrabhaviLokSamparkSutraDoorbhashController,
                         keyboardType: TextInputType.number,
                         maxInput: 10,
+                        isRequired: true,
                       ),
 
                       const SizedBox(height: 20),
@@ -1425,19 +1431,18 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                             onPressed: () {
                               // ✅ पहले सभी fields required check
                               if (anyaPrabhaviLokNaavController.text.trim().isEmpty ||
-                                  anyaPrabhaviLokAddressController.text.trim().isEmpty ||
                                   anyaPrabhaviLokMobileNoController.text.trim().isEmpty ||
                                   anyaPrabhaviLokShreniId == null ||
                                   anyaPrabhaviLokUpShreniId == null ||
-                                  (selectedUpShreni?.isOther == 1 && anyaPrabhaviLokAnyaUppshreniController.text.trim().isEmpty) ||
-                                  anyaPrabhaviLokUpShreni1Id == null ||
-                                  (selectedUpShreni2?.isOther == 1 && anyaPrabhaviLokAnyaUppshreni1Controller.text.trim().isEmpty) ||
+                                  // (selectedUpShreni?.isOther == 1 && anyaPrabhaviLokAnyaUppshreniController.text.trim().isEmpty) ||
+                                  // anyaPrabhaviLokUpShreni1Id == null ||
+                                  // (selectedUpShreni2?.isOther == 1 && anyaPrabhaviLokAnyaUppshreni1Controller.text.trim().isEmpty) ||
                                   anyaPrabhaviLokVisheshId == null ||
                                   anyaPrabhaviLokPrabhavKshetraId == null ||
                                   anyaPrabhaviLokSamparkStithiId == null ||
                                   anyaPrabhaviLokSamparkSutraNaavController.text.trim().isEmpty ||
                                   anyaPrabhaviLokSamparkSutraDoorbhashController.text.trim().isEmpty) {
-                                Statics.showToast("${Statics.getLabel('allInfoRequired')}");
+                                Statics.showToast("${Statics.getLabel('impInfoRequired')}");
                                 return;
                               }
 
@@ -1477,7 +1482,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                                 otherupshrenee2: anyaPrabhaviLokAnyaUppshreni1Controller.text.trim(),
                                 isactive: 1,
                                 isfemale: isFemale,
-                                vastiid: int.parse(selctedLevelId!),
+                                vastiid: int.parse(selctedLevelId ?? "0"),
                               );
 
                               _clearAnyaPrabhaviLokForm(); // clear after submit
@@ -1529,21 +1534,49 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
     double fieldHeight = 48, // 👈 sirf textfield ke liye height
     int minLines = 1,
     int maxLines = 1,
+    bool isRequired = false,
   }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(
-            width: 120, // Label width fixed
-            child: Text(
-              "$name",
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: Colors.black87,
-              ),
+          Expanded(
+            flex: (name == Statics.getLabel('samparkSootraNaav') || name == Statics.getLabel('samparakSootraDoorbhash') || name == Statics.getLabel('sansthetKuthalaPadavar')) ? 2 : 1,
+            // width: 120, // Label width fixed
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Flexible(
+                  child: Text(
+                    "$name",
+                    maxLines: 3,
+                    softWrap: true,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 13.5,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+                if (isRequired)
+                  Container(
+                    margin: EdgeInsets.only(right: 4),
+                    child: Text(
+                      "  *",
+                      maxLines: 2,
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 13.5,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ),
           Text(
@@ -1556,6 +1589,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
           ),
           const SizedBox(width: 10),
           Expanded(
+            flex: (name == Statics.getLabel('samparkSootraNaav') || name == Statics.getLabel('samparakSootraDoorbhash') || name == Statics.getLabel('sansthetKuthalaPadavar')) ? 5 : 3,
             child: TextFormField(
               controller: controller,
               keyboardType: keyboardType,
@@ -1600,6 +1634,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
     int? editId,
     Masterdata? selectedValue,
     Function(Masterdata?)? onSelectionChanged,
+    bool isRequired = true,
   }) {
     List<Masterdata> filteredList = dataModel.masterdata!.where((item) => item.typename == filterTypeName).toList();
 
@@ -1619,15 +1654,42 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           if (question != null)
-            SizedBox(
-              width: 120, // 👈 label ka fixed width (adjustable)
-              child: Text(
-                "$question",
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black87,
-                ),
+            Expanded(
+              flex: 1,
+              // width: 120, // Label width fixed
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Flexible(
+                    child: Text(
+                      "$question",
+                      maxLines: 3,
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 13.5,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ),
+                  if (isRequired)
+                    Container(
+                      margin: EdgeInsets.only(right: 4),
+                      child: Text(
+                        "  *",
+                        maxLines: 2,
+                        softWrap: true,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 13.5,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ),
           if (question != null)
@@ -1641,6 +1703,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
             ),
           if (question != null) const SizedBox(width: 12),
           Expanded(
+            flex: 3,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(

@@ -3023,7 +3023,7 @@ Map<String, String> resMarathi = {
   'vastiPratinidhitwa': 'वस्ती प्रतिनिधित्व',
   'mandalPratinidhitwa': 'मंडल प्रतिनिधित्व',
   'gramPratinidhitwa': 'ग्राम प्रतिनिधित्व',
-  'addVasti': 'वस्ती / ग्राम जोडा',
+  'addVasti': 'वस्ती / मंडल जोडा',
   'upnagarUpkhanda': 'उपनगर/उपखंड',
   'addUpnagarDialogBox': 'उपनगर/उपखंड उपलब्ध नाही. कृपया जोडावे',
   'upnagarUpkhandaNewAdd': 'नवीन उपनगर/उपखंड जोडा',

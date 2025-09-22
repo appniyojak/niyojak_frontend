@@ -26,6 +26,7 @@ import './annual_baithak_ekatrit_vrutta.dart';
 import './profile_settings.dart';
 import './search_annual_baithak_vrutta.dart';
 import 'AbhiyanScreen.dart';
+import 'levels_update_module/levels_manage_tabs.dart';
 import 'notification_list_page.dart';
 import 'search_event.dart';
 import 'search_join_rss.dart';
@@ -385,6 +386,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  ///
   List<String> deniedLevels = ["Shakha", "Saptahik Milan", "शाखा", "साप्ताहिक मिलन"];
 
   bool shouldShowListTile(String userLevel, String userDayitva) {
@@ -396,6 +398,40 @@ class _HomeScreenState extends State<HomeScreen> {
     ///
     // return allowedLevels.contains(userLevel); // && allowedDayitva.contains(userDayitva);
   }
+
+  ///
+  List<String> allowedLevelsforGeounitCHange = ["Praant", "प्रांत", "Mahaanagar", "महानगर", "Vibhaag", "विभाग", "Bhaag", "भाग", "भाग/जिल्हा", "भाग/जिला", "Nagar", "Nagar/Taalukaa", "नगर/तालुका"];
+
+  List<String> allowedDayitvaforGeounitCHange = [
+    "Kaaryavaah",
+    "कार्यवाह",
+    "Saha-Kaaryavaah",
+    "सह कार्यवाह",
+    "Prachaarak",
+    "प्रचारक",
+    "Vyavasthaa Pramukh",
+    "व्यवस्था प्रमुख",
+    "karyalay sachiv",
+    "कार्यालय सचिव",
+    "App Sanyojak",
+    "एप संयोजक",
+    "Saha-Prachaarak",
+    "सह प्रचारक",
+    "Vyavasaayee Saha-Pramukh",
+    "व्यवसायी सह प्रमुख",
+    "Kaaryaalay Pramukh",
+    "कार्यालय प्रमुख",
+    "Saha-kaaryaalay Pramukh",
+    "सह कार्यालय प्रमुख",
+  ];
+
+  bool shouldShowListTileforGeounitCHange(String userLevel, String userDayitva) {
+    // print("userLevel --> $userLevel  === userDayitva --> $userDayitva");
+    // print(allowedLevels.contains(userLevel) && allowedDayitva.contains(userDayitva));
+    return allowedLevelsforGeounitCHange.contains(userLevel) && allowedDayitvaforGeounitCHange.contains(userDayitva);
+  }
+
+  ///
 
   // Widget _myLastMonthBhagolikVistaarFirstColumn(BuildContext context, int index) {
   //   bool isTotalRow = false;
@@ -1778,609 +1814,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(height: 30),
 
                   /// 1st CARD
-                  Row(
-                    children: [
-                      // SizedBox(height: 50, child: VerticalDivider(color: Colors.purple)),
-                      // SizedBox(width: 6),
-                      // SizedBox(height: 50, child: VerticalDivider(color: Colors.purple)),
-                      Expanded(
-                        child: Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                              decoration: BoxDecoration(color: Colors.purple.shade50, borderRadius: BorderRadius.circular(12)),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  SizedBox(height: 19),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: InkWell(
-                                          onTap: () => Navigator.of(context).pushReplacementNamed(VijayadashamiFormView.routeName),
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-                                            child: Row(children: [
-                                              Expanded(
-                                                child: Text(
-                                                  "${Statics.getLabel('vijayaDashamiUtsav')} \n${Statics.getLabel('Vrutta')}",
-                                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                                                ),
-                                              ),
-                                              Icon(Icons.arrow_forward_ios_rounded, size: 16),
-                                            ]),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(width: 8),
-                                      Expanded(
-                                        child: InkWell(
-                                          onTap: () => Navigator.of(context).pushNamed(VijayadashamiFormReport.routeName),
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-                                            child: Row(children: [
-                                              Expanded(
-                                                child: Text(
-                                                  "${Statics.getLabel('vijayaDashamiUtsav')} ${Statics.getLabel('Reportonly')}",
-                                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                                                ),
-                                              ),
-                                              Icon(Icons.arrow_forward_ios_rounded, size: 16),
-                                            ]),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 8),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: InkWell(
-                                          onTap: () {
-                                            Fluttertoast.showToast(
-                                              msg: Statics.getLabel("workInProgress"),
-                                              toastLength: Toast.LENGTH_SHORT,
-                                              gravity: ToastGravity.BOTTOM,
-                                            );
-                                          },
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-                                            child: Row(children: [
-                                              Expanded(
-                                                child: Text(
-                                                  "गृह संपर्क अभियान",
-                                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                                                ),
-                                              ),
-                                              Icon(Icons.arrow_forward_ios_rounded, size: 16),
-                                            ]),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(width: 8),
-                                      Expanded(
-                                        child: InkWell(
-                                          onTap: () {
-                                            Fluttertoast.showToast(
-                                              msg: Statics.getLabel("workInProgress"),
-                                              toastLength: Toast.LENGTH_SHORT,
-                                              gravity: ToastGravity.BOTTOM,
-                                            );
-                                          },
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-                                            child: Row(children: [
-                                              Expanded(
-                                                child: Text(
-                                                  "हिंदु संमेलन",
-                                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                                                ),
-                                              ),
-                                              Icon(Icons.arrow_forward_ios_rounded, size: 16),
-                                            ]),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 8),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: InkWell(
-                                          onTap: () {
-                                            Fluttertoast.showToast(
-                                              msg: Statics.getLabel("workInProgress"),
-                                              toastLength: Toast.LENGTH_SHORT,
-                                              gravity: ToastGravity.BOTTOM,
-                                            );
-                                          },
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-                                            child: Row(children: [
-                                              Expanded(
-                                                child: Text(
-                                                  "सद्भाव बैठक",
-                                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                                                ),
-                                              ),
-                                              Icon(Icons.arrow_forward_ios_rounded, size: 16),
-                                            ]),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(width: 8),
-                                      Expanded(
-                                        child: InkWell(
-                                          onTap: () {
-                                            Fluttertoast.showToast(
-                                              msg: Statics.getLabel("workInProgress"),
-                                              toastLength: Toast.LENGTH_SHORT,
-                                              gravity: ToastGravity.BOTTOM,
-                                            );
-                                          },
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-                                            child: Row(children: [
-                                              Expanded(
-                                                child: Text(
-                                                  "प्रमुख जनसंवाद",
-                                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                                                ),
-                                              ),
-                                              Icon(Icons.arrow_forward_ios_rounded, size: 16),
-                                            ]),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 8),
-                                  InkWell(
-                                    onTap: () {
-                                      Fluttertoast.showToast(
-                                        msg: Statics.getLabel("workInProgress"),
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.BOTTOM,
-                                      );
-                                    },
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-                                      child: Row(children: [
-                                        Expanded(
-                                          child: Text(
-                                            "युवा संगम/संमेलन",
-                                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                                          ),
-                                        ),
-                                        Icon(Icons.arrow_forward_ios_rounded, size: 16),
-                                      ]),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Positioned(
-                              top: -13,
-                              child: ClipPath(
-                                clipBehavior: Clip.antiAlias,
-                                clipper: LabelClipper(),
-                                child: Container(
-                                  padding: EdgeInsets.only(right: 24, top: 3, bottom: 2, left: 8),
-                                  decoration: BoxDecoration(color: Colors.purple.shade300, borderRadius: BorderRadius.circular(12)),
-                                  child: Text(Statics.getLabel("shatabdiVarshaVruttaTitle"), style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 25),
+                  shatabdiVrutaCard(),
+                  SizedBox(height: 27),
 
                   /// 2nd CARD
-                  Row(
-                    children: [
-                      // SizedBox(height: 50, child: VerticalDivider(color: Colors.purple)),
-                      // SizedBox(width: 6),
-                      // SizedBox(height: 50, child: VerticalDivider(color: Colors.purple)),
-                      Expanded(
-                        child: Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                              decoration: BoxDecoration(color: Colors.purple.shade50, borderRadius: BorderRadius.circular(12)),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  SizedBox(height: 19),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: InkWell(
-                                          onTap: () => Navigator.of(context).pushNamed(VastiSurveyFormScreen.routeName),
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-                                            child: Row(children: [
-                                              Expanded(
-                                                child: Text(
-                                                  "${Statics.getLabel('vastiSurvey')}",
-                                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                                                ),
-                                              ),
-                                              Icon(Icons.arrow_forward_ios_rounded, size: 16),
-                                            ]),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(width: 8),
-                                      Expanded(
-                                        child: InkWell(
-                                          onTap: () => Navigator.of(context).pushNamed(MandalSurveyFormScreen.routeName),
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-                                            child: Row(children: [
-                                              Expanded(
-                                                child: Text(
-                                                  "${Statics.getLabel('mandalSurvey')}",
-                                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                                                ),
-                                              ),
-                                              Icon(Icons.arrow_forward_ios_rounded, size: 16),
-                                            ]),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 8),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: InkWell(
-                                          onTap: () => Navigator.of(context).pushNamed(VastiSurveyReportScreen.routeName),
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-                                            child: Row(children: [
-                                              Expanded(
-                                                child: Text(
-                                                  "${Statics.getLabel('vastiSurveyReport')}",
-                                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                                                ),
-                                              ),
-                                              Icon(Icons.arrow_forward_ios_rounded, size: 16),
-                                            ]),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(width: 8),
-                                      Expanded(
-                                        child: InkWell(
-                                          onTap: () => Navigator.of(context).pushNamed(MandalSurveyReportScreen.routeName),
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-                                            child: Row(children: [
-                                              Expanded(
-                                                child: Text(
-                                                  "${Statics.getLabel('mandalSurveyReport')}",
-                                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                                                ),
-                                              ),
-                                              Icon(Icons.arrow_forward_ios_rounded, size: 16),
-                                            ]),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Positioned(
-                              top: -13,
-                              child: ClipPath(
-                                clipBehavior: Clip.antiAlias,
-                                clipper: LabelClipper(),
-                                child: Container(
-                                  padding: EdgeInsets.only(right: 16, top: 3, bottom: 2, left: 8),
-                                  decoration: BoxDecoration(color: Colors.purple.shade300, borderRadius: BorderRadius.circular(12)),
-                                  child: Text("${Statics.getLabel("Survey")}", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 25),
+                  surveyCard(),
+                  SizedBox(height: 27),
 
                   /// 3rd CARD
-                  Row(
-                    children: [
-                      // SizedBox(height: 50, child: VerticalDivider(color: Colors.purple)),
-                      // SizedBox(width: 6),
-                      // SizedBox(height: 50, child: VerticalDivider(color: Colors.purple)),
-                      Expanded(
-                        child: Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                              decoration: BoxDecoration(color: Colors.purple.shade50, borderRadius: BorderRadius.circular(12)),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  SizedBox(height: 19),
-                                  Row(
-                                    children: [
-                                      if (shouldShowListTile(Statics.userDetails['LevelName'], Statics.userDetails["DaayitvaName"]) == true)
-                                        Expanded(
-                                          child: InkWell(
-                                            onTap: () => Navigator.of(context).pushReplacementNamed(SearchJoinRss.routeName),
-                                            child: Container(
-                                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-                                              child: Row(children: [
-                                                Expanded(
-                                                  child: Text(
-                                                    "${Statics.getLabel('searchJoinRSSScreenLabel')}",
-                                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                                                  ),
-                                                ),
-                                                Icon(Icons.arrow_forward_ios_rounded, size: 16),
-                                              ]),
-                                            ),
-                                          ),
-                                        ),
-                                      SizedBox(width: 8),
-                                      Expanded(
-                                        child: InkWell(
-                                          onTap: () => Navigator.of(context).pushReplacementNamed(SwayamSevakSearch.routeName),
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-                                            child: Row(children: [
-                                              Expanded(
-                                                child: Text(
-                                                  "${Statics.getLabel('searchSwayamsevakScreenBanner')}",
-                                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                                                ),
-                                              ),
-                                              Icon(Icons.arrow_forward_ios_rounded, size: 16),
-                                            ]),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 8),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: InkWell(
-                                          onTap: () => Navigator.of(context).pushReplacementNamed(AbhiyanScreen.routeName),
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-                                            child: Row(children: [
-                                              Expanded(
-                                                child: Text(
-                                                  "${Statics.getLabel('Abhiyaan')}",
-                                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                                                ),
-                                              ),
-                                              Icon(Icons.arrow_forward_ios_rounded, size: 16),
-                                            ]),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(width: 8),
-                                      if (
-                                          // (Statics.userDetails["LevelName"] == "Praant" ||
-                                          //         Statics.userDetails["LevelName"] == "Mahaanagar" ||
-                                          //         Statics.userDetails["LevelName"] == "Vibhaag" ||
-                                          //         Statics.userDetails["LevelName"] == "Bhaag" ||
-                                          //         Statics.userDetails["LevelName"] == "Shahar" ||
-                                          //         Statics.userDetails['LevelName'] == 'Nagar/Taalukaa'  || Statics.userDetails['LevelName'] == 'Nagar' |||
-                                          //         Statics.userDetails["LevelName"] == "Graam" ||
-                                          //         Statics.userDetails["LevelName"] == "Vasti")
-                                          (Statics.userDetails["LevelName"] == "Praant" ||
-                                                      Statics.userDetails["LevelName"] == "प्रांत" ||
-                                                      Statics.userDetails["LevelName"] == "Mahaanagar" ||
-                                                      Statics.userDetails["LevelName"] == "महानगर" ||
-                                                      Statics.userDetails["LevelName"] == "Vibhaag" ||
-                                                      Statics.userDetails["LevelName"] == "विभाग" ||
-                                                      Statics.userDetails["LevelName"] == "Bhaag" ||
-                                                      Statics.userDetails["LevelName"] == "भाग/जिला" ||
-                                                      Statics.userDetails["LevelName"] == "भाग/जिल्हा" ||
-                                                      Statics.userDetails["LevelName"] == "Shahar" ||
-                                                      Statics.userDetails["LevelName"] == "शहर" ||
-                                                      Statics.userDetails['LevelName'] == 'Nagar/Taalukaa' ||
-                                                      Statics.userDetails['LevelName'] == 'Nagar' ||
-                                                      Statics.userDetails["LevelName"] == "नगर/तालुका" ||
-                                                      Statics.userDetails["LevelName"] == "Graam" ||
-                                                      Statics.userDetails["LevelName"] == "ग्राम" ||
-                                                      Statics.userDetails["LevelName"] == "Vasti" ||
-                                                      Statics.userDetails["LevelName"] == "वस्ती") &&
-                                                  // (Statics.userDetails["DaayitvaName"] == "Kaaryaalay Pramukh" ||
-                                                  //     Statics.userDetails["DaayitvaName"] == "Kaaryavaah" ||
-                                                  //     Statics.userDetails["DaayitvaName"] == "Saha-Kaaryavaah" ||
-                                                  //     Statics.userDetails["DaayitvaName"] == "Prachaarak" ||
-                                                  //     Statics.userDetails["DaayitvaName"] == "Saha-Prachaarak" ||
-                                                  //     Statics.userDetails["DaayitvaName"] == "Baal Vidyaarthi Pramukh"   || Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी प्रमुख"   || Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी प्रमुख"  ||Statics.userDetails["DaayitvaName"] == "Mahaavidyaalayeen Vidyaarthi Pramukh"   || Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन प्रमुख"   || Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन प्रमुख"  ||Statics.userDetails["DaayitvaName"] == "Vyavasaayee Pramukh"   || Statics.userDetails["DaayitvaName"] == "व्यवसायी प्रमुख"   || Statics.userDetails["DaayitvaName"] == "व्यवसायी प्रमुख"  ||Statics.userDetails["DaayitvaName"] == "Vyavasaayee Saha-Pramukh"   || Statics.userDetails["DaayitvaName"] == "व्यवसायी सह प्रमुख"   || Statics.userDetails["DaayitvaName"] == "व्यवसायी सह प्रमुख"  || Statics.userDetails["DaayitvaName"] == "Tarun Vyavsayee Pramukh" || Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी प्रमुख" || Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी प्रमुख" ||
-                                                  Statics.userDetails["DaayitvaName"] == "Praudh Vyavsayee Pramukh" ||
-                                              Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी प्रमुख" ||
-                                              Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी प्रमुख" ||
-                                              Statics.userDetails["DaayitvaName"] == "Tarun Vyavsayee Sah Pramukh" ||
-                                              Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी सह प्रमुख" ||
-                                              Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी सह प्रमुख" ||
-                                              Statics.userDetails["DaayitvaName"] == "Praudh Vyavsayee Sah Pramukh" ||
-                                              Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी सह प्रमुख" ||
-                                              Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी सह प्रमुख" ||
-                                              Statics.userDetails["DaayitvaName"] == "Bal Vidyarthi Sah Pramukh" ||
-                                              Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी सह प्रमुख" ||
-                                              Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी सह प्रमुख" ||
-                                              Statics.userDetails["DaayitvaName"] == "Mahavidyaleen Vidyarthi Sah Pramukh" ||
-                                              Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन विद्यार्थी सह प्रमुख" ||
-                                              Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन विद्यार्थी सह प्रमुख" ||
-                                              Statics.userDetails["DaayitvaName"] == "App Sanyojak" ||
-                                              //     Statics.userDetails["DaayitvaName"] == "Pramukh")
-                                              (Statics.userDetails["DaayitvaName"] == "Join RSS Sanyojak" ||
-                                                  Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. संयोजक" ||
-                                                  Statics.userDetails["DaayitvaName"] == "Join RSS Pramukh" ||
-                                                  Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. प्रमुख" ||
-                                                  Statics.userDetails["DaayitvaName"] == "Kaaryaalay Pramukh" ||
-                                                  Statics.userDetails["DaayitvaName"] == "कार्यालय प्रमुख" ||
-                                                  Statics.userDetails["DaayitvaName"] == "Kaaryavaah" ||
-                                                  Statics.userDetails["DaayitvaName"] == "कार्यवाह" ||
-                                                  Statics.userDetails["DaayitvaName"] == "karyalay sachiv" ||
-                                                  Statics.userDetails["DaayitvaName"] == "कार्यालय सचिव" ||
-                                                  Statics.userDetails["DaayitvaName"] == "Saha-Kaaryavaah" ||
-                                                  Statics.userDetails["DaayitvaName"] == "सह कार्यवाह" ||
-                                                  Statics.userDetails["DaayitvaName"] == "Prachaarak" ||
-                                                  Statics.userDetails["DaayitvaName"] == "प्रचारक" ||
-                                                  Statics.userDetails["DaayitvaName"] == "Saha-Prachaarak" ||
-                                                  Statics.userDetails["DaayitvaName"] == "सह प्रचारक" ||
-                                                  Statics.userDetails["DaayitvaName"] == "Baal Vidyaarthi Pramukh" ||
-                                                  Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी प्रमुख" ||
-                                                  Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी प्रमुख" ||
-                                                  Statics.userDetails["DaayitvaName"] == "Mahaavidyaalayeen Vidyaarthi Pramukh" ||
-                                                  Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन प्रमुख" ||
-                                                  Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन प्रमुख" ||
-                                                  Statics.userDetails["DaayitvaName"] == "Vyavasaayee Pramukh" ||
-                                                  Statics.userDetails["DaayitvaName"] == "व्यवसायी प्रमुख" ||
-                                                  Statics.userDetails["DaayitvaName"] == "व्यवसायी प्रमुख" ||
-                                                  Statics.userDetails["DaayitvaName"] == "Vyavasaayee Saha-Pramukh" ||
-                                                  Statics.userDetails["DaayitvaName"] == "व्यवसायी सह प्रमुख" ||
-                                                  Statics.userDetails["DaayitvaName"] == "व्यवसायी सह प्रमुख" ||
-                                                  Statics.userDetails["DaayitvaName"] == "Tarun Vyavsayee Pramukh" ||
-                                                  Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी प्रमुख" ||
-                                                  Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी प्रमुख" ||
-                                                  Statics.userDetails["DaayitvaName"] == "Praudh Vyavsayee Pramukh" ||
-                                                  Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी प्रमुख" ||
-                                                  Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी प्रमुख" ||
-                                                  Statics.userDetails["DaayitvaName"] == "Tarun Vyavsayee Sah Pramukh" ||
-                                                  Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी सह प्रमुख" ||
-                                                  Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी सह प्रमुख" ||
-                                                  Statics.userDetails["DaayitvaName"] == "Praudh Vyavsayee Sah Pramukh" ||
-                                                  Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी सह प्रमुख" ||
-                                                  Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी सह प्रमुख" ||
-                                                  Statics.userDetails["DaayitvaName"] == "Bal Vidyarthi Sah Pramukh" ||
-                                                  Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी सह प्रमुख" ||
-                                                  Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी सह प्रमुख" ||
-                                                  Statics.userDetails["DaayitvaName"] == "Mahavidyaleen Vidyarthi Sah Pramukh" ||
-                                                  Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन विद्यार्थी सह प्रमुख" ||
-                                                  Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन विद्यार्थी सह प्रमुख" ||
-                                                  Statics.userDetails["DaayitvaName"] == "App Sanyojak" ||
-                                                  Statics.userDetails["DaayitvaName"] == "एप संयोजक" ||
-                                                  Statics.userDetails["DaayitvaName"] == "Pramukh" ||
-                                                  Statics.userDetails["DaayitvaName"] == "प्रमुख"))
-                                        Expanded(
-                                          child: InkWell(
-                                            onTap: () => Navigator.of(context).pushReplacementNamed(SearchRamJanmaBhoomiNidhiSankalan.routeName),
-                                            child: Container(
-                                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-                                              child: Row(children: [
-                                                Expanded(
-                                                  child: Text(
-                                                    "${Statics.getLabel('searchRamJanmabhoomiNidhiSankalanVrutta')}",
-                                                    maxLines: 2,
-                                                    softWrap: true,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                                                  ),
-                                                ),
-                                                Icon(Icons.arrow_forward_ios_rounded, size: 16),
-                                              ]),
-                                            ),
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 8),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: InkWell(
-                                          onTap: () => Navigator.of(context).pushReplacementNamed(SearchSoochiScreen.routeName),
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-                                            child: Row(children: [
-                                              Expanded(
-                                                child: Text(
-                                                  "${Statics.getLabel('searchSoochiScreenLabel')}",
-                                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                                                ),
-                                              ),
-                                              Icon(Icons.arrow_forward_ios_rounded, size: 16),
-                                            ]),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(width: 8),
-                                      Expanded(
-                                        child: InkWell(
-                                          onTap: () => Navigator.of(context).pushReplacementNamed(SearchEvent.routeName),
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-                                            child: Row(children: [
-                                              Expanded(
-                                                child: Text(
-                                                  "${Statics.getLabel('searchEventsScreenLabel')}",
-                                                  maxLines: 2,
-                                                  softWrap: true,
-                                                  overflow: TextOverflow.ellipsis,
-                                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                                                ),
-                                              ),
-                                              Icon(Icons.arrow_forward_ios_rounded, size: 16),
-                                            ]),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Positioned(
-                              top: -13,
-                              child: ClipPath(
-                                clipBehavior: Clip.antiAlias,
-                                clipper: LabelClipper(),
-                                child: Container(
-                                  padding: EdgeInsets.only(right: 16, top: 4, bottom: 2, left: 8),
-                                  decoration: BoxDecoration(color: Colors.purple.shade300, borderRadius: BorderRadius.circular(12)),
-                                  child: Text(Statics.getLabel("mainScreenOther"), style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                  moreCard(),
                   SizedBox(height: 40),
-                  //////
+
+                  ///
                   Legend(legendString: "YesterdayPraantData", fontsize: 18),
                   Container(
                     height: Statics.getDeviceSize(context).height * (_yesterdayPraantHeaderRow != null ? 0.45 : 0.07),
@@ -3745,6 +3190,659 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           inAsyncCall: _isSearching),
+    );
+  }
+
+  shatabdiVrutaCard() {
+    return Row(
+      children: [
+        // SizedBox(height: 50, child: VerticalDivider(color: Colors.purple)),
+        // SizedBox(width: 6),
+        // SizedBox(height: 50, child: VerticalDivider(color: Colors.purple)),
+        Expanded(
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                decoration: BoxDecoration(color: Colors.purple.shade50, borderRadius: BorderRadius.circular(12)),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(height: 19),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () => Navigator.of(context).pushNamed(VijayadashamiFormView.routeName),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                              child: Row(children: [
+                                Expanded(
+                                  child: Text(
+                                    "${Statics.getLabel('vijayaDashamiUtsav')} \n${Statics.getLabel('Vrutta')}",
+                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                                Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                              ]),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () => Navigator.of(context).pushNamed(VijayadashamiFormReport.routeName),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                              child: Row(children: [
+                                Expanded(
+                                  child: Text(
+                                    "${Statics.getLabel('vijayaDashamiUtsav')} ${Statics.getLabel('Reportonly')}",
+                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                                Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                              ]),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              Fluttertoast.showToast(
+                                msg: Statics.getLabel("workInProgress"),
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                              );
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                              child: Row(children: [
+                                Expanded(
+                                  child: Text(
+                                    "गृह संपर्क अभियान",
+                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                                Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                              ]),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              Fluttertoast.showToast(
+                                msg: Statics.getLabel("workInProgress"),
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                              );
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                              child: Row(children: [
+                                Expanded(
+                                  child: Text(
+                                    "हिंदु संमेलन",
+                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                                Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                              ]),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              Fluttertoast.showToast(
+                                msg: Statics.getLabel("workInProgress"),
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                              );
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                              child: Row(children: [
+                                Expanded(
+                                  child: Text(
+                                    "सद्भाव बैठक",
+                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                                Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                              ]),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              Fluttertoast.showToast(
+                                msg: Statics.getLabel("workInProgress"),
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                              );
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                              child: Row(children: [
+                                Expanded(
+                                  child: Text(
+                                    "प्रमुख जनसंवाद",
+                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                                Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                              ]),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              Fluttertoast.showToast(
+                                msg: Statics.getLabel("workInProgress"),
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                              );
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                              child: Row(children: [
+                                Expanded(
+                                  child: Text(
+                                    "युवा संगम/संमेलन",
+                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                                Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                              ]),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              Fluttertoast.showToast(
+                                msg: Statics.getLabel("workInProgress"),
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                              );
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                              child: Row(children: [
+                                Expanded(
+                                  child: Text(
+                                    "शाखा विस्तार सप्ताह",
+                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                                Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                              ]),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              Positioned(
+                top: -13,
+                child: ClipPath(
+                  clipBehavior: Clip.antiAlias,
+                  clipper: LabelClipper(),
+                  child: Container(
+                    padding: EdgeInsets.only(right: 24, top: 3, bottom: 2, left: 8),
+                    decoration: BoxDecoration(color: Colors.purple.shade300, borderRadius: BorderRadius.circular(12)),
+                    child: Text(Statics.getLabel("shatabdiVarshaVruttaTitle"), style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  surveyCard() {
+    return Row(
+      children: [
+        // SizedBox(height: 50, child: VerticalDivider(color: Colors.purple)),
+        // SizedBox(width: 6),
+        // SizedBox(height: 50, child: VerticalDivider(color: Colors.purple)),
+        Expanded(
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                decoration: BoxDecoration(color: Colors.purple.shade50, borderRadius: BorderRadius.circular(12)),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(height: 19),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () => Navigator.of(context).pushNamed(VastiSurveyFormScreen.routeName),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                              child: Row(children: [
+                                Expanded(
+                                  child: Text(
+                                    "${Statics.getLabel('vastiSurvey')}",
+                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                                Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                              ]),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () => Navigator.of(context).pushNamed(MandalSurveyFormScreen.routeName),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                              child: Row(children: [
+                                Expanded(
+                                  child: Text(
+                                    "${Statics.getLabel('mandalSurvey')}",
+                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                                Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                              ]),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () => Navigator.of(context).pushNamed(VastiSurveyReportScreen.routeName),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                              child: Row(children: [
+                                Expanded(
+                                  child: Text(
+                                    "${Statics.getLabel('vastiSurveyReport')}",
+                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                                Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                              ]),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () => Navigator.of(context).pushNamed(MandalSurveyReportScreen.routeName),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                              child: Row(children: [
+                                Expanded(
+                                  child: Text(
+                                    "${Statics.getLabel('mandalSurveyReport')}",
+                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                                Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                              ]),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Positioned(
+                top: -13,
+                child: ClipPath(
+                  clipBehavior: Clip.antiAlias,
+                  clipper: LabelClipper(),
+                  child: Container(
+                    padding: EdgeInsets.only(right: 16, top: 3, bottom: 2, left: 8),
+                    decoration: BoxDecoration(color: Colors.purple.shade300, borderRadius: BorderRadius.circular(12)),
+                    child: Text("${Statics.getLabel("Survey")}", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  moreCard() {
+    return Row(
+      children: [
+        // SizedBox(height: 50, child: VerticalDivider(color: Colors.purple)),
+        // SizedBox(width: 6),
+        // SizedBox(height: 50, child: VerticalDivider(color: Colors.purple)),
+        Expanded(
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                decoration: BoxDecoration(color: Colors.purple.shade50, borderRadius: BorderRadius.circular(12)),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(height: 19),
+                    Row(
+                      children: [
+                        if (shouldShowListTile(Statics.userDetails['LevelName'], Statics.userDetails["DaayitvaName"]) == true)
+                          Expanded(
+                            child: InkWell(
+                              onTap: () => Navigator.of(context).pushNamed(SearchJoinRss.routeName),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                                child: Row(children: [
+                                  Expanded(
+                                    child: Text(
+                                      "${Statics.getLabel('searchJoinRSSScreenLabel')}",
+                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                    ),
+                                  ),
+                                  Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                                ]),
+                              ),
+                            ),
+                          ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () => Navigator.of(context).pushNamed(SwayamSevakSearch.routeName),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                              child: Row(children: [
+                                Expanded(
+                                  child: Text(
+                                    "${Statics.getLabel('searchSwayamsevakScreenBanner')}",
+                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                                Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                              ]),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () => Navigator.of(context).pushNamed(AbhiyanScreen.routeName),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                              child: Row(children: [
+                                Expanded(
+                                  child: Text(
+                                    "${Statics.getLabel('Abhiyaan')}",
+                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                                Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                              ]),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () => Navigator.of(context).pushNamed(SearchSoochiScreen.routeName),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                              child: Row(children: [
+                                Expanded(
+                                  child: Text(
+                                    "${Statics.getLabel('searchSoochiScreenLabel')}",
+                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                                Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                              ]),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    Row(
+                      children: [
+                        if (shouldShowListTileforGeounitCHange(Statics.userDetails['LevelName'], Statics.userDetails["DaayitvaName"]) == true)
+                          Expanded(
+                            child: InkWell(
+                              onTap: () => Navigator.of(context).pushNamed(TabScreen.routeName),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                                child: Row(children: [
+                                  Expanded(
+                                    child: Text(
+                                      "${Statics.getLabel('masterdataupdate')}",
+                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                    ),
+                                  ),
+                                  Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                                ]),
+                              ),
+                            ),
+                          ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () => Navigator.of(context).pushNamed(SearchEvent.routeName),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                              child: Row(children: [
+                                Expanded(
+                                  child: Text(
+                                    "${Statics.getLabel('searchEventsScreenLabel')}",
+                                    maxLines: 2,
+                                    softWrap: true,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                                Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                              ]),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    if (
+                        // (Statics.userDetails["LevelName"] == "Praant" ||
+                        //         Statics.userDetails["LevelName"] == "Mahaanagar" ||
+                        //         Statics.userDetails["LevelName"] == "Vibhaag" ||
+                        //         Statics.userDetails["LevelName"] == "Bhaag" ||
+                        //         Statics.userDetails["LevelName"] == "Shahar" ||
+                        //         Statics.userDetails['LevelName'] == 'Nagar/Taalukaa'  || Statics.userDetails['LevelName'] == 'Nagar' |||
+                        //         Statics.userDetails["LevelName"] == "Graam" ||
+                        //         Statics.userDetails["LevelName"] == "Vasti")
+                        (Statics.userDetails["LevelName"] == "Praant" ||
+                                    Statics.userDetails["LevelName"] == "प्रांत" ||
+                                    Statics.userDetails["LevelName"] == "Mahaanagar" ||
+                                    Statics.userDetails["LevelName"] == "महानगर" ||
+                                    Statics.userDetails["LevelName"] == "Vibhaag" ||
+                                    Statics.userDetails["LevelName"] == "विभाग" ||
+                                    Statics.userDetails["LevelName"] == "Bhaag" ||
+                                    Statics.userDetails["LevelName"] == "भाग/जिला" ||
+                                    Statics.userDetails["LevelName"] == "भाग/जिल्हा" ||
+                                    Statics.userDetails["LevelName"] == "Shahar" ||
+                                    Statics.userDetails["LevelName"] == "शहर" ||
+                                    Statics.userDetails['LevelName'] == 'Nagar/Taalukaa' ||
+                                    Statics.userDetails['LevelName'] == 'Nagar' ||
+                                    Statics.userDetails["LevelName"] == "नगर/तालुका" ||
+                                    Statics.userDetails["LevelName"] == "Graam" ||
+                                    Statics.userDetails["LevelName"] == "ग्राम" ||
+                                    Statics.userDetails["LevelName"] == "Vasti" ||
+                                    Statics.userDetails["LevelName"] == "वस्ती") &&
+                                // (Statics.userDetails["DaayitvaName"] == "Kaaryaalay Pramukh" ||
+                                //     Statics.userDetails["DaayitvaName"] == "Kaaryavaah" ||
+                                //     Statics.userDetails["DaayitvaName"] == "Saha-Kaaryavaah" ||
+                                //     Statics.userDetails["DaayitvaName"] == "Prachaarak" ||
+                                //     Statics.userDetails["DaayitvaName"] == "Saha-Prachaarak" ||
+                                //     Statics.userDetails["DaayitvaName"] == "Baal Vidyaarthi Pramukh"   || Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी प्रमुख"   || Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी प्रमुख"  ||Statics.userDetails["DaayitvaName"] == "Mahaavidyaalayeen Vidyaarthi Pramukh"   || Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन प्रमुख"   || Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन प्रमुख"  ||Statics.userDetails["DaayitvaName"] == "Vyavasaayee Pramukh"   || Statics.userDetails["DaayitvaName"] == "व्यवसायी प्रमुख"   || Statics.userDetails["DaayitvaName"] == "व्यवसायी प्रमुख"  ||Statics.userDetails["DaayitvaName"] == "Vyavasaayee Saha-Pramukh"   || Statics.userDetails["DaayitvaName"] == "व्यवसायी सह प्रमुख"   || Statics.userDetails["DaayitvaName"] == "व्यवसायी सह प्रमुख"  || Statics.userDetails["DaayitvaName"] == "Tarun Vyavsayee Pramukh" || Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी प्रमुख" || Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी प्रमुख" ||
+                                Statics.userDetails["DaayitvaName"] == "Praudh Vyavsayee Pramukh" ||
+                            Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी प्रमुख" ||
+                            Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी प्रमुख" ||
+                            Statics.userDetails["DaayitvaName"] == "Tarun Vyavsayee Sah Pramukh" ||
+                            Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी सह प्रमुख" ||
+                            Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी सह प्रमुख" ||
+                            Statics.userDetails["DaayitvaName"] == "Praudh Vyavsayee Sah Pramukh" ||
+                            Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी सह प्रमुख" ||
+                            Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी सह प्रमुख" ||
+                            Statics.userDetails["DaayitvaName"] == "Bal Vidyarthi Sah Pramukh" ||
+                            Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी सह प्रमुख" ||
+                            Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी सह प्रमुख" ||
+                            Statics.userDetails["DaayitvaName"] == "Mahavidyaleen Vidyarthi Sah Pramukh" ||
+                            Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन विद्यार्थी सह प्रमुख" ||
+                            Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन विद्यार्थी सह प्रमुख" ||
+                            Statics.userDetails["DaayitvaName"] == "App Sanyojak" ||
+                            //     Statics.userDetails["DaayitvaName"] == "Pramukh")
+                            (Statics.userDetails["DaayitvaName"] == "Join RSS Sanyojak" ||
+                                Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. संयोजक" ||
+                                Statics.userDetails["DaayitvaName"] == "Join RSS Pramukh" ||
+                                Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. प्रमुख" ||
+                                Statics.userDetails["DaayitvaName"] == "Kaaryaalay Pramukh" ||
+                                Statics.userDetails["DaayitvaName"] == "कार्यालय प्रमुख" ||
+                                Statics.userDetails["DaayitvaName"] == "Kaaryavaah" ||
+                                Statics.userDetails["DaayitvaName"] == "कार्यवाह" ||
+                                Statics.userDetails["DaayitvaName"] == "karyalay sachiv" ||
+                                Statics.userDetails["DaayitvaName"] == "कार्यालय सचिव" ||
+                                Statics.userDetails["DaayitvaName"] == "Saha-Kaaryavaah" ||
+                                Statics.userDetails["DaayitvaName"] == "सह कार्यवाह" ||
+                                Statics.userDetails["DaayitvaName"] == "Prachaarak" ||
+                                Statics.userDetails["DaayitvaName"] == "प्रचारक" ||
+                                Statics.userDetails["DaayitvaName"] == "Saha-Prachaarak" ||
+                                Statics.userDetails["DaayitvaName"] == "सह प्रचारक" ||
+                                Statics.userDetails["DaayitvaName"] == "Baal Vidyaarthi Pramukh" ||
+                                Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी प्रमुख" ||
+                                Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी प्रमुख" ||
+                                Statics.userDetails["DaayitvaName"] == "Mahaavidyaalayeen Vidyaarthi Pramukh" ||
+                                Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन प्रमुख" ||
+                                Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन प्रमुख" ||
+                                Statics.userDetails["DaayitvaName"] == "Vyavasaayee Pramukh" ||
+                                Statics.userDetails["DaayitvaName"] == "व्यवसायी प्रमुख" ||
+                                Statics.userDetails["DaayitvaName"] == "व्यवसायी प्रमुख" ||
+                                Statics.userDetails["DaayitvaName"] == "Vyavasaayee Saha-Pramukh" ||
+                                Statics.userDetails["DaayitvaName"] == "व्यवसायी सह प्रमुख" ||
+                                Statics.userDetails["DaayitvaName"] == "व्यवसायी सह प्रमुख" ||
+                                Statics.userDetails["DaayitvaName"] == "Tarun Vyavsayee Pramukh" ||
+                                Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी प्रमुख" ||
+                                Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी प्रमुख" ||
+                                Statics.userDetails["DaayitvaName"] == "Praudh Vyavsayee Pramukh" ||
+                                Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी प्रमुख" ||
+                                Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी प्रमुख" ||
+                                Statics.userDetails["DaayitvaName"] == "Tarun Vyavsayee Sah Pramukh" ||
+                                Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी सह प्रमुख" ||
+                                Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी सह प्रमुख" ||
+                                Statics.userDetails["DaayitvaName"] == "Praudh Vyavsayee Sah Pramukh" ||
+                                Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी सह प्रमुख" ||
+                                Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी सह प्रमुख" ||
+                                Statics.userDetails["DaayitvaName"] == "Bal Vidyarthi Sah Pramukh" ||
+                                Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी सह प्रमुख" ||
+                                Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी सह प्रमुख" ||
+                                Statics.userDetails["DaayitvaName"] == "Mahavidyaleen Vidyarthi Sah Pramukh" ||
+                                Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन विद्यार्थी सह प्रमुख" ||
+                                Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन विद्यार्थी सह प्रमुख" ||
+                                Statics.userDetails["DaayitvaName"] == "App Sanyojak" ||
+                                Statics.userDetails["DaayitvaName"] == "एप संयोजक" ||
+                                Statics.userDetails["DaayitvaName"] == "Pramukh" ||
+                                Statics.userDetails["DaayitvaName"] == "प्रमुख"))
+                      InkWell(
+                        onTap: () => Navigator.of(context).pushNamed(SearchRamJanmaBhoomiNidhiSankalan.routeName),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                          child: Row(children: [
+                            Expanded(
+                              child: Text(
+                                "${Statics.getLabel('searchRamJanmabhoomiNidhiSankalanVrutta')}",
+                                maxLines: 2,
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                              ),
+                            ),
+                            Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                          ]),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              Positioned(
+                top: -13,
+                child: ClipPath(
+                  clipBehavior: Clip.antiAlias,
+                  clipper: LabelClipper(),
+                  child: Container(
+                    padding: EdgeInsets.only(right: 16, top: 4, bottom: 2, left: 8),
+                    decoration: BoxDecoration(color: Colors.purple.shade300, borderRadius: BorderRadius.circular(12)),
+                    child: Text(Statics.getLabel("mainScreenOther"), style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
