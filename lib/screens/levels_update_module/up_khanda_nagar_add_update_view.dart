@@ -1956,7 +1956,7 @@ class _UpNagarkhandaAddUpdateViewState extends State<UpNagarkhandaAddUpdateView>
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: Text(title ?? "Select Items"),
+              title: Text(title ?? Statics.getLabel("Selects")),
               content: SizedBox(
                 width: double.maxFinite,
                 child: ListView(

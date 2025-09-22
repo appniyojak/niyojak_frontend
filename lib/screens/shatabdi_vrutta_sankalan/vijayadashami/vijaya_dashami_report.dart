@@ -376,7 +376,9 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
               SizedBox(height: 10),
               Divider(color: Colors.black),
               SizedBox(height: 10),
-              if (_isLoading) SizedBox(height: MediaQuery.sizeOf(context).height * 0.2, child: Center(child: CircularProgressIndicator())),
+              if (_isLoading) SizedBox(height: MediaQuery
+                  .sizeOf(context)
+                  .height * 0.2, child: Center(child: CircularProgressIndicator())),
               if (vijayadashamiReport?.vijayadashaminagarlist != null && vijayadashamiReport?.vijayadashaminagarlist != []) buildMarathiDataTable(vijayadashamiReport!.vijayadashaminagarlist!),
               SizedBox(height: 18),
               if (vijayadashamiReport?.vijayadashamiReport != null) buildCountCards(vijayadashamiReport!.vijayadashamiReport!),
@@ -408,14 +410,16 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
       },
       children: [
         _buildPanel(
-          "स्वयंसेवक",
+          Statics.getLabel("searchSwayamsevakScreenLabel"),
           0,
           Column(
             children: [
               SingleColumnRow(
                 txtString: Statics.getLabel('present'),
+                fontWeight: FontWeight.w700,
                 value: "",
                 fontsize: 16,
+                rowColor: Colors.purple.shade50,
                 subChild: Column(
                   children: [
                     Row(children: [
@@ -454,8 +458,10 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
               ),
               SingleColumnRow(
                 txtString: Statics.getLabel('shakhaMilanPratinidhitwaReport'),
+                fontWeight: FontWeight.w700,
                 value: "",
                 fontsize: 16,
+                rowColor: Colors.purple.shade50,
                 subChild: Column(
                   children: [
                     Row(children: [
@@ -486,8 +492,10 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
               ),
               SingleColumnRow(
                 txtString: Statics.getLabel('bhougolikPratinidhitwa'),
+                fontWeight: FontWeight.w700,
                 value: "",
                 fontsize: 16,
+                rowColor: Colors.purple.shade50,
                 subChild: Column(
                   children: [
                     Row(children: [
@@ -540,7 +548,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
           ),
         ),
         _buildPanel(
-          "समाज",
+          Statics.getLabel("samajScreenLabel"),
           1,
           Column(
             children: [
@@ -548,6 +556,8 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                 txtString: Statics.getLabel('mukhyaAtithi'),
                 value: "",
                 fontsize: 16,
+                fontWeight: FontWeight.w600,
+                rowColor: Colors.purple.shade50,
                 subChild: Column(
                   children: [
                     Row(children: [
@@ -566,7 +576,9 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                       ),
                     ]),
                     SizedBox(height: 6),
-                    SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+                    SizedBox(width: MediaQuery
+                        .sizeOf(context)
+                        .width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
                     SizedBox(height: 6),
                     Row(children: [
                       Expanded(child: Text(Statics.getLabel('Total'))),
@@ -582,6 +594,8 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                 txtString: Statics.getLabel('sadhbhavKarya'),
                 value: "",
                 fontsize: 16,
+                fontWeight: FontWeight.w600,
+                rowColor: Colors.purple.shade50,
                 subChild: Column(
                   children: [
                     Row(children: [
@@ -600,7 +614,9 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                       ),
                     ]),
                     SizedBox(height: 6),
-                    SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+                    SizedBox(width: MediaQuery
+                        .sizeOf(context)
+                        .width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
                     SizedBox(height: 6),
                     Row(children: [
                       Expanded(child: Text(Statics.getLabel('Total'))),
@@ -616,6 +632,8 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                 txtString: Statics.getLabel("SajjanShakti"),
                 value: "",
                 fontsize: 16,
+                fontWeight: FontWeight.w600,
+                rowColor: Colors.purple.shade50,
                 subChild: Column(
                   children: [
                     Row(children: [
@@ -634,7 +652,9 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                       ),
                     ]),
                     SizedBox(height: 6),
-                    SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+                    SizedBox(width: MediaQuery
+                        .sizeOf(context)
+                        .width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
                     SizedBox(height: 6),
                     Row(children: [
                       Expanded(child: Text(Statics.getLabel('Total'))),
@@ -662,6 +682,8 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                 txtString: Statics.getLabel("PramukhJan"),
                 value: "",
                 fontsize: 16,
+                fontWeight: FontWeight.w600,
+                rowColor: Colors.purple.shade50,
                 subChild: Column(
                   children: [
                     Row(children: [
@@ -680,7 +702,9 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                       ),
                     ]),
                     SizedBox(height: 6),
-                    SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+                    SizedBox(width: MediaQuery
+                        .sizeOf(context)
+                        .width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
                     SizedBox(height: 6),
                     Row(children: [
                       Expanded(child: Text(Statics.getLabel('Total'))),
@@ -696,6 +720,8 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                 txtString: "अन्य उपस्थित",
                 value: "",
                 fontsize: 16,
+                fontWeight: FontWeight.w600,
+                rowColor: Colors.purple.shade50,
                 subChild: Column(
                   children: [
                     Row(children: [
@@ -714,7 +740,9 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                       ),
                     ]),
                     SizedBox(height: 6),
-                    SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+                    SizedBox(width: MediaQuery
+                        .sizeOf(context)
+                        .width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
                     SizedBox(height: 6),
                     Row(children: [
                       Expanded(child: Text(Statics.getLabel('Total'))),
@@ -730,6 +758,8 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                 txtString: Statics.getLabel("Total"),
                 value: "",
                 fontsize: 16,
+                fontWeight: FontWeight.w600,
+                rowColor: Colors.purple.shade50,
                 subChild: Column(
                   children: [
                     Row(children: [
@@ -748,7 +778,9 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                       ),
                     ]),
                     SizedBox(height: 6),
-                    SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+                    SizedBox(width: MediaQuery
+                        .sizeOf(context)
+                        .width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
                     SizedBox(height: 6),
                     Row(children: [
                       Expanded(child: Text(Statics.getLabel('Total'))),
@@ -791,12 +823,12 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
   Widget buildMarathiDataTable(List<Vijayadashaminagarlist> data) {
     final List<String> headers = [
       // 'कार्यक्रम स्तर',
-      'किती कार्यक्रम झाले',
-      'किती संचालन झाले ?',
-      'किती कार्यक्रम ठरलेल्या\n बैठक सुरु झाले ?',
-      'किती कार्यक्रमात वैदिक\n गीत पाठ स्तुती गेले ?',
-      'किती कार्यक्रमात घोष\n वादन झाले ?',
-      'किती कार्यक्रमांचे हिसाब\n २४ तासात पूर्ण झाले ?',
+      Statics.getLabel('vijayadashmiReportTable1'),
+      Statics.getLabel('vijayadashmiReportTable2'),
+      Statics.getLabel('vijayadashmiReportTable3'),
+      Statics.getLabel('vijayadashmiReportTable4'),
+      Statics.getLabel('vijayadashmiReportTable5'),
+      Statics.getLabel('vijayadashmiReportTable6'),
     ];
 
     // return Column(
@@ -853,7 +885,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                 child: SizedBox(
                   width: 50,
                   child: Text(
-                    "कार्यक्रम स्तर",
+                    Statics.getLabel("vijayadashmiReportTable0"),
                     softWrap: true,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -884,13 +916,14 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                 headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
                 border: TableBorder(verticalInside: BorderSide(width: 0.7, color: Colors.grey.shade200)),
                 columns: headers
-                    .map((header) => DataColumn(
-                          label: Container(
-                            constraints: BoxConstraints(minWidth: 40, maxWidth: [headers[0], headers[1]].contains(header) ? 80 : 150),
-                            // constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.2),
-                            child: Text(header, softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold)),
-                          ),
-                        ))
+                    .map((header) =>
+                    DataColumn(
+                      label: Container(
+                        constraints: BoxConstraints(minWidth: 40, maxWidth: [headers[0], headers[1]].contains(header) ? 100 : 170),
+                        // constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.2),
+                        child: Text(header, softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                    ))
                     .toList(),
                 rows: data.map((level) {
                   return DataRow(cells: [
