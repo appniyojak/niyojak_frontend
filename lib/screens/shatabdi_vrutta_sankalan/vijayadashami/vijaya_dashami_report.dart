@@ -15,7 +15,8 @@ class VijayadashamiFormReport extends StatefulWidget {
   const VijayadashamiFormReport({super.key});
 
   @override
-  State<VijayadashamiFormReport> createState() => _VijayadashamiFormReportState();
+  State<VijayadashamiFormReport> createState() =>
+      _VijayadashamiFormReportState();
 }
 
 class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
@@ -68,7 +69,9 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
     populatelinkedVibhaagDropdown('');
     if (!mounted) return;
     _baithakTypes = data;
-    _baithakTypes = _baithakTypes!.where((element) => element.showAnnualBaithakkey!.contains('1')).toList();
+    _baithakTypes = _baithakTypes!
+        .where((element) => element.showAnnualBaithakkey!.contains('1'))
+        .toList();
     print("_baithakTypes :-- $_baithakTypes");
     setState(() {});
   }
@@ -85,7 +88,8 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
 
     String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
     log("Form Data (JSON):\n$formattedJson");
-    vijayadashamiReport = await Statics.getVijayaDashamiUtsavReportData(context, formData);
+    vijayadashamiReport =
+        await Statics.getVijayaDashamiUtsavReportData(context, formData);
     log("vijayadashamiReport >>>>>>>>>>>>>>>>> ${jsonDecode(jsonEncode(vijayadashamiReport))}");
     setState(() {
       _isLoading = false;
@@ -94,51 +98,64 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedMahaanagarDropdown() async {
-    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MahaanagarLevelID'].toString(), '', '', '');
+    var data = await Statics.getGeoUnitsByLevelAndParent(
+        Statics.levels['MahaanagarLevelID'].toString(), '', '', '');
     setState(() {
       _linkedMahaanagar = data;
     });
     return data;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(String vibhaagIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(
+      String vibhaagIDStr) async {
     _linkedShaharValue = _linkedNagarValue = null;
-    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
+    var data = await Statics.getGeoUnitsByLevelAndParent(
+        Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
     setState(() {
       _linkedBhaag = data;
     });
     return data;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(
+      String mahaanagarIDStr) async {
     _linkedBhaagValue = null;
-    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '');
+    var data = await Statics.getGeoUnitsByLevelAndParent(
+        Statics.levels['VibhaagLevelID'].toString(),
+        mahaanagarIDStr,
+        (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'),
+        '');
     setState(() {
       _linkedVibhaag = data;
     });
     return data;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedShaharDropdown(String bhaagIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedShaharDropdown(
+      String bhaagIDStr) async {
     _linkedShaharValue = _linkedShahar = null;
-    var shDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', '');
+    var shDD = await Statics.getGeoUnitsByLevelAndParent(
+        Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', '');
     setState(() {
       _linkedShahar = (shDD.length > 0 ? shDD : null);
     });
     return shDD;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(
+      String? bhaagIDStr, String? shaharIDStr) async {
     _linkedNagarValue = null;
     _linkedNagar = null;
     if (shaharIDStr != null) {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
+      var ngDD = await Statics.getGeoUnitsByLevelAndParent(
+          Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
       setState(() {
         _linkedNagar = (ngDD.length > 0 ? ngDD : null);
       });
       return ngDD;
     } else {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
+      var ngDD = await Statics.getGeoUnitsByLevelAndParent(
+          Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
       setState(() {
         _linkedNagar = (ngDD.length > 0 ? ngDD : null);
       });
@@ -146,28 +163,34 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
     }
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedMandalDropdown(String nagarIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedMandalDropdown(
+      String nagarIDStr) async {
     _linkedgraamValue = null;
     _linkedmandal = _linkedgraam = null;
-    var mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr, 'Nagar', '');
+    var mnDD = await Statics.getGeoUnitsByLevelAndParent(
+        Statics.levels['MandalLevelID'].toString(), nagarIDStr, 'Nagar', '');
     setState(() {
       _linkedmandal = (mnDD.length > 0 ? mnDD : null);
     });
     return mnDD;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedGraamDropdown(String mandalIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedGraamDropdown(
+      String mandalIDStr) async {
     _linkedgraamValue = null;
-    var gmDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['GraamLevelID'].toString(), mandalIDStr, 'Mandal', '');
+    var gmDD = await Statics.getGeoUnitsByLevelAndParent(
+        Statics.levels['GraamLevelID'].toString(), mandalIDStr, 'Mandal', '');
     setState(() {
       _linkedgraam = (gmDD.length > 0 ? gmDD : null);
     });
     return gmDD;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(String nagarIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(
+      String nagarIDStr) async {
     _linkedvastiValue = null;
-    var vsDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr, 'Nagar', '');
+    var vsDD = await Statics.getGeoUnitsByLevelAndParent(
+        Statics.levels['VastiLevelID'].toString(), nagarIDStr, 'Nagar', '');
     setState(() {
       _linkedvasti = (vsDD.length > 0 ? vsDD : null);
     });
@@ -207,7 +230,9 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                       return ListTile(
                         title: Text(
                           Statics.getLabel('selectStar'),
-                          style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              color: Colors.purpleAccent,
+                              fontWeight: FontWeight.bold),
                         ),
                       );
                     },
@@ -217,12 +242,21 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                         children: [
                           if (_linkedMahaanagar != null)
                             DropdownButtonFormField(
-                              decoration: InputDecoration(labelText: Statics.getLabel('Mahaanagar')),
+                              decoration: InputDecoration(
+                                  labelText: Statics.getLabel('Mahaanagar')),
                               isExpanded: true,
-                              value: _linkedMahaanagarValue == "" ? null : _linkedMahaanagarValue,
-                              items: _linkedMahaanagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                              value: _linkedMahaanagarValue == ""
+                                  ? null
+                                  : _linkedMahaanagarValue,
+                              items: _linkedMahaanagar!
+                                  .map((bg) => DropdownMenuItem(
+                                      value: bg.geoUnitID.toString(),
+                                      child: Text(bg.name!)))
+                                  .toList(),
                               onChanged: (value) {
-                                final selectedItem = _linkedMahaanagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                                final selectedItem = _linkedMahaanagar!
+                                    .firstWhere((bg) =>
+                                        bg.geoUnitID.toString() == value);
                                 print(value);
                                 setState(() {
                                   _linkedMahaanagarValue = value;
@@ -243,12 +277,20 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                           ),
                           if (_linkedVibhaag != null)
                             DropdownButtonFormField(
-                              decoration: InputDecoration(labelText: Statics.getLabel('Vibhaag')),
+                              decoration: InputDecoration(
+                                  labelText: Statics.getLabel('Vibhaag')),
                               isExpanded: true,
-                              value: _linkedVibhaagValue == "" ? null : _linkedVibhaagValue,
-                              items: _linkedVibhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                              value: _linkedVibhaagValue == ""
+                                  ? null
+                                  : _linkedVibhaagValue,
+                              items: _linkedVibhaag!
+                                  .map((bg) => DropdownMenuItem(
+                                      value: bg.geoUnitID.toString(),
+                                      child: Text(bg.name!)))
+                                  .toList(),
                               onChanged: (value) {
-                                final selectedItem = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                                final selectedItem = _linkedVibhaag!.firstWhere(
+                                    (bg) => bg.geoUnitID.toString() == value);
                                 print(value);
                                 setState(() {
                                   _linkedVibhaagValue = value;
@@ -267,12 +309,20 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                           ),
                           if (_linkedBhaag != null)
                             DropdownButtonFormField(
-                              decoration: InputDecoration(labelText: Statics.getLabel('Bhaag')),
+                              decoration: InputDecoration(
+                                  labelText: Statics.getLabel('Bhaag')),
                               isExpanded: true,
-                              value: _linkedBhaagValue == "" ? null : _linkedBhaagValue,
-                              items: _linkedBhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                              value: _linkedBhaagValue == ""
+                                  ? null
+                                  : _linkedBhaagValue,
+                              items: _linkedBhaag!
+                                  .map((bg) => DropdownMenuItem(
+                                      value: bg.geoUnitID.toString(),
+                                      child: Text(bg.name!)))
+                                  .toList(),
                               onChanged: (value) {
-                                final selectedItem = _linkedBhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                                final selectedItem = _linkedBhaag!.firstWhere(
+                                    (bg) => bg.geoUnitID.toString() == value);
                                 setState(() {
                                   _linkedBhaagValue = value;
                                   // populatelinkedShaharDropdown(value!);
@@ -285,12 +335,20 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                             ),
                           if (_linkedNagar != null && _linkedNagar!.length > 0)
                             DropdownButtonFormField(
-                              decoration: InputDecoration(labelText: Statics.getLabel('Nagar')),
+                              decoration: InputDecoration(
+                                  labelText: Statics.getLabel('Nagar')),
                               isExpanded: true,
-                              value: _linkedNagarValue == "" ? null : _linkedNagarValue,
-                              items: _linkedNagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                              value: _linkedNagarValue == ""
+                                  ? null
+                                  : _linkedNagarValue,
+                              items: _linkedNagar!
+                                  .map((bg) => DropdownMenuItem(
+                                      value: bg.geoUnitID.toString(),
+                                      child: Text(bg.name!)))
+                                  .toList(),
                               onChanged: (value) {
-                                final selectedItem = _linkedNagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                                final selectedItem = _linkedNagar!.firstWhere(
+                                    (bg) => bg.geoUnitID.toString() == value);
                                 populatelinkedMandalDropdown(value!);
                                 populatelinkedVastiDropdown(value);
                                 setState(() {
@@ -306,14 +364,23 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                             SizedBox(
                               height: 10,
                             ),
-                          if (_linkedmandal != null && _linkedmandal!.length > 0)
+                          if (_linkedmandal != null &&
+                              _linkedmandal!.length > 0)
                             DropdownButtonFormField(
-                              decoration: InputDecoration(labelText: Statics.getLabel('Mandal')),
+                              decoration: InputDecoration(
+                                  labelText: Statics.getLabel('Mandal')),
                               isExpanded: true,
-                              value: _linkedmandalValue == "" ? null : _linkedmandalValue,
-                              items: _linkedmandal!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                              value: _linkedmandalValue == ""
+                                  ? null
+                                  : _linkedmandalValue,
+                              items: _linkedmandal!
+                                  .map((bg) => DropdownMenuItem(
+                                      value: bg.geoUnitID.toString(),
+                                      child: Text(bg.name!)))
+                                  .toList(),
                               onChanged: (value) {
-                                final selectedItem = _linkedmandal!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                                final selectedItem = _linkedmandal!.firstWhere(
+                                    (bg) => bg.geoUnitID.toString() == value);
                                 setState(() {
                                   selctedLevelName = selectedItem.name ?? "";
                                   selctedLevel = 'Mandal';
@@ -331,7 +398,9 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                           Align(
                             alignment: Alignment.center,
                             child: ElevatedButton(
-                              style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.purpleAccent)),
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStatePropertyAll(
+                                      Colors.purpleAccent)),
                               onPressed: () async {
                                 await getReportDataFun();
                                 setState(() {
@@ -339,7 +408,10 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                                   // isVastiSearch = true;
                                 });
                               },
-                              child: Text("${Statics.getLabel('Filters')}", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                              child: Text("${Statics.getLabel('Filters')}",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold)),
                             ),
                           )
                         ],
@@ -365,23 +437,34 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                       children: [
                         Text(
                           "${Statics.getLabel(selctedLevel ?? "Mahaanagar")}  ->  ",
-                          style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold, fontSize: 16),
+                          style: TextStyle(
+                              color: Colors.purpleAccent,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),
                         ),
                         Text(
                           " $selctedLevelName",
-                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17),
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17),
                         ),
                       ],
                     )),
               SizedBox(height: 10),
               Divider(color: Colors.black),
               SizedBox(height: 10),
-              if (_isLoading) SizedBox(height: MediaQuery
-                  .sizeOf(context)
-                  .height * 0.2, child: Center(child: CircularProgressIndicator())),
-              if (vijayadashamiReport?.vijayadashaminagarlist != null && vijayadashamiReport?.vijayadashaminagarlist != []) buildMarathiDataTable(vijayadashamiReport!.vijayadashaminagarlist!),
+              if (_isLoading)
+                SizedBox(
+                    height: MediaQuery.sizeOf(context).height * 0.2,
+                    child: Center(child: CircularProgressIndicator())),
+              if (vijayadashamiReport?.vijayadashaminagarlist != null &&
+                  vijayadashamiReport?.vijayadashaminagarlist != [])
+                buildMarathiDataTable(
+                    vijayadashamiReport!.vijayadashaminagarlist!),
               SizedBox(height: 18),
-              if (vijayadashamiReport?.vijayadashamiReport != null) buildCountCards(vijayadashamiReport!.vijayadashamiReport!),
+              if (vijayadashamiReport?.vijayadashamiReport != null)
+                buildCountCards(vijayadashamiReport!.vijayadashamiReport!),
               SizedBox(height: 30),
             ],
           ),
@@ -392,13 +475,20 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
 
   Widget buildCountCards(VijayadashamiReport data) {
     int calculateTotalMale() {
-      final total = (data.mukhyaatithimale ?? 0) + (data.sadbavkaryamale ?? 0) + (data.sajjanskhatiuppasstitimale ?? 0) + (data.pramukhjhanuppasstitimale ?? 0) + (data.anyauppasstitimale ?? 0);
+      final total = (data.mukhyaatithimale ?? 0) +
+          (data.sadbavkaryamale ?? 0) +
+          (data.sajjanskhatiuppasstitimale ?? 0) +
+          (data.pramukhjhanuppasstitimale ?? 0) +
+          (data.anyauppasstitimale ?? 0);
       return total;
     }
 
     int calculateTotalFemale() {
-      final total =
-          (data.mukhyaatithifemale ?? 0) + (data.sadbavkaryafemale ?? 0) + (data.sajjanskhatiuppasstitifemale ?? 0) + (data.pramukhjhanuppasstitifemale ?? 0) + (data.anyanuppasstitifemale ?? 0);
+      final total = (data.mukhyaatithifemale ?? 0) +
+          (data.sadbavkaryafemale ?? 0) +
+          (data.sajjanskhatiuppasstitifemale ?? 0) +
+          (data.pramukhjhanuppasstitifemale ?? 0) +
+          (data.anyanuppasstitifemale ?? 0);
       return total;
     }
 
@@ -431,20 +521,22 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                     ]),
                     SizedBox(height: 8),
                     Row(children: [
-                      Expanded(child: Text(Statics.getLabel('presentGanveshatTotal'))),
+                      Expanded(
+                          child:
+                              Text(Statics.getLabel('presentGanveshatTotal'))),
                       Container(
                         margin: EdgeInsets.only(left: 8),
                         child: Text((data.ekungan ?? 0).toString()),
                       ),
                     ]),
-                    SizedBox(height: 8),
-                    Row(children: [
-                      Expanded(child: Text(Statics.getLabel('presentSanchalanatTotal'))),
-                      Container(
-                        margin: EdgeInsets.only(left: 8),
-                        child: Text((data.ekunsanchalan ?? 0).toString()),
-                      ),
-                    ]),
+                    // SizedBox(height: 8),
+                    // Row(children: [
+                    //   Expanded(child: Text(Statics.getLabel('presentSanchalanatTotal'))),
+                    //   Container(
+                    //     margin: EdgeInsets.only(left: 8),
+                    //     child: Text((data.ekunsanchalan ?? 0).toString()),
+                    //   ),
+                    // ]),
                     SizedBox(height: 8),
                     Row(children: [
                       Expanded(child: Text(Statics.getLabel('anyaUpasthit'))),
@@ -465,26 +557,39 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                 subChild: Column(
                   children: [
                     Row(children: [
-                      Expanded(child: Text(Statics.getLabel('vartamaan') + " " + Statics.getLabel('shakhaMilanPratinidhitwa'))),
+                      Expanded(
+                          child: Text(Statics.getLabel('vartamaan') +
+                              " " +
+                              Statics.getLabel('shakhaMilanPratinidhitwa'))),
                       Container(
                         margin: EdgeInsets.only(left: 8),
-                        child: Text((data.vartamansaakhapratinidhatva ?? 0).toString()),
+                        child: Text(
+                            (data.vartamansaakhapratinidhatva ?? 0).toString()),
                       ),
                     ]),
                     SizedBox(height: 8),
                     Row(children: [
-                      Expanded(child: Text(Statics.getLabel('vartamaan') + " " + Statics.getLabel('MilanPratinidhitwa'))),
+                      Expanded(
+                          child: Text(Statics.getLabel('vartamaan') +
+                              " " +
+                              Statics.getLabel('MilanPratinidhitwa'))),
                       Container(
                         margin: EdgeInsets.only(left: 8),
-                        child: Text((data.vartamansapthahikpratinidhatva ?? 0).toString()),
+                        child: Text((data.vartamansapthahikpratinidhatva ?? 0)
+                            .toString()),
                       ),
                     ]),
                     SizedBox(height: 8),
                     Row(children: [
-                      Expanded(child: Text(Statics.getLabel('vartamaan') + " " + Statics.getLabel('MaasikMilanPratinidhitwa'))),
+                      Expanded(
+                          child: Text(Statics.getLabel('vartamaan') +
+                              " " +
+                              Statics.getLabel('MaasikMilanPratinidhitwa'))),
                       Container(
                         margin: EdgeInsets.only(left: 8),
-                        child: Text((data.vartamansanghmandalipratinidhatva ?? 0).toString()),
+                        child: Text(
+                            (data.vartamansanghmandalipratinidhatva ?? 0)
+                                .toString()),
                       ),
                     ]),
                   ],
@@ -499,26 +604,32 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                 subChild: Column(
                   children: [
                     Row(children: [
-                      Expanded(child: Text(Statics.getLabel('vastiPratinidhitwa'))),
+                      Expanded(
+                          child: Text(Statics.getLabel('vastiPratinidhitwa'))),
                       Container(
                         margin: EdgeInsets.only(left: 8),
-                        child: Text((data.vasticountpratinidhatva ?? 0).toString()),
+                        child: Text(
+                            (data.vasticountpratinidhatva ?? 0).toString()),
                       ),
                     ]),
                     SizedBox(height: 8),
                     Row(children: [
-                      Expanded(child: Text(Statics.getLabel('mandalPratinidhitwa'))),
+                      Expanded(
+                          child: Text(Statics.getLabel('mandalPratinidhitwa'))),
                       Container(
                         margin: EdgeInsets.only(left: 8),
-                        child: Text((data.mandalcountpratinidhatva ?? 0).toString()),
+                        child: Text(
+                            (data.mandalcountpratinidhatva ?? 0).toString()),
                       ),
                     ]),
                     SizedBox(height: 8),
                     Row(children: [
-                      Expanded(child: Text(Statics.getLabel('gramPratinidhitwa'))),
+                      Expanded(
+                          child: Text(Statics.getLabel('gramPratinidhitwa'))),
                       Container(
                         margin: EdgeInsets.only(left: 8),
-                        child: Text((data.gramcountpratinidhatva ?? 0).toString()),
+                        child:
+                            Text((data.gramcountpratinidhatva ?? 0).toString()),
                       ),
                     ]),
                   ],
@@ -576,15 +687,19 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                       ),
                     ]),
                     SizedBox(height: 6),
-                    SizedBox(width: MediaQuery
-                        .sizeOf(context)
-                        .width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+                    SizedBox(
+                        width: MediaQuery.sizeOf(context).width,
+                        child: CustomPaint(
+                            painter: DashedLinePainter(
+                                dashWidth: 7, thickness: 0.7))),
                     SizedBox(height: 6),
                     Row(children: [
                       Expanded(child: Text(Statics.getLabel('Total'))),
                       Container(
                         margin: EdgeInsets.only(left: 8),
-                        child: Text(((data.mukhyaatithimale ?? 0) + (data.mukhyaatithifemale ?? 0)).toString()),
+                        child: Text(((data.mukhyaatithimale ?? 0) +
+                                (data.mukhyaatithifemale ?? 0))
+                            .toString()),
                       ),
                     ]),
                   ],
@@ -614,15 +729,19 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                       ),
                     ]),
                     SizedBox(height: 6),
-                    SizedBox(width: MediaQuery
-                        .sizeOf(context)
-                        .width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+                    SizedBox(
+                        width: MediaQuery.sizeOf(context).width,
+                        child: CustomPaint(
+                            painter: DashedLinePainter(
+                                dashWidth: 7, thickness: 0.7))),
                     SizedBox(height: 6),
                     Row(children: [
                       Expanded(child: Text(Statics.getLabel('Total'))),
                       Container(
                         margin: EdgeInsets.only(left: 8),
-                        child: Text(((data.sadbavkaryamale ?? 0) + (data.sadbavkaryafemale ?? 0)).toString()),
+                        child: Text(((data.sadbavkaryamale ?? 0) +
+                                (data.sadbavkaryafemale ?? 0))
+                            .toString()),
                       ),
                     ]),
                   ],
@@ -640,7 +759,8 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                       Expanded(child: Text(Statics.getLabel('Male'))),
                       Container(
                         margin: EdgeInsets.only(left: 8),
-                        child: Text((data.sajjanskhatiuppasstitimale ?? 0).toString()),
+                        child: Text(
+                            (data.sajjanskhatiuppasstitimale ?? 0).toString()),
                       ),
                     ]),
                     SizedBox(height: 8),
@@ -648,19 +768,24 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                       Expanded(child: Text(Statics.getLabel('Female'))),
                       Container(
                         margin: EdgeInsets.only(left: 8),
-                        child: Text((data.sajjanskhatiuppasstitifemale ?? 0).toString()),
+                        child: Text((data.sajjanskhatiuppasstitifemale ?? 0)
+                            .toString()),
                       ),
                     ]),
                     SizedBox(height: 6),
-                    SizedBox(width: MediaQuery
-                        .sizeOf(context)
-                        .width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+                    SizedBox(
+                        width: MediaQuery.sizeOf(context).width,
+                        child: CustomPaint(
+                            painter: DashedLinePainter(
+                                dashWidth: 7, thickness: 0.7))),
                     SizedBox(height: 6),
                     Row(children: [
                       Expanded(child: Text(Statics.getLabel('Total'))),
                       Container(
                         margin: EdgeInsets.only(left: 8),
-                        child: Text(((data.sajjanskhatiuppasstitimale ?? 0) + (data.sajjanskhatiuppasstitifemale ?? 0)).toString()),
+                        child: Text(((data.sajjanskhatiuppasstitimale ?? 0) +
+                                (data.sajjanskhatiuppasstitifemale ?? 0))
+                            .toString()),
                       ),
                     ]),
                   ],
@@ -690,7 +815,8 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                       Expanded(child: Text(Statics.getLabel('Male'))),
                       Container(
                         margin: EdgeInsets.only(left: 8),
-                        child: Text((data.pramukhjhanuppasstitimale ?? 0).toString()),
+                        child: Text(
+                            (data.pramukhjhanuppasstitimale ?? 0).toString()),
                       ),
                     ]),
                     SizedBox(height: 8),
@@ -698,19 +824,24 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                       Expanded(child: Text(Statics.getLabel('Female'))),
                       Container(
                         margin: EdgeInsets.only(left: 8),
-                        child: Text((data.pramukhjhanuppasstitifemale ?? 0).toString()),
+                        child: Text(
+                            (data.pramukhjhanuppasstitifemale ?? 0).toString()),
                       ),
                     ]),
                     SizedBox(height: 6),
-                    SizedBox(width: MediaQuery
-                        .sizeOf(context)
-                        .width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+                    SizedBox(
+                        width: MediaQuery.sizeOf(context).width,
+                        child: CustomPaint(
+                            painter: DashedLinePainter(
+                                dashWidth: 7, thickness: 0.7))),
                     SizedBox(height: 6),
                     Row(children: [
                       Expanded(child: Text(Statics.getLabel('Total'))),
                       Container(
                         margin: EdgeInsets.only(left: 8),
-                        child: Text(((data.pramukhjhanuppasstitimale ?? 0) + (data.pramukhjhanuppasstitifemale ?? 0)).toString()),
+                        child: Text(((data.pramukhjhanuppasstitimale ?? 0) +
+                                (data.pramukhjhanuppasstitifemale ?? 0))
+                            .toString()),
                       ),
                     ]),
                   ],
@@ -736,19 +867,24 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                       Expanded(child: Text(Statics.getLabel('Female'))),
                       Container(
                         margin: EdgeInsets.only(left: 8),
-                        child: Text((data.anyanuppasstitifemale ?? 0).toString()),
+                        child:
+                            Text((data.anyanuppasstitifemale ?? 0).toString()),
                       ),
                     ]),
                     SizedBox(height: 6),
-                    SizedBox(width: MediaQuery
-                        .sizeOf(context)
-                        .width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+                    SizedBox(
+                        width: MediaQuery.sizeOf(context).width,
+                        child: CustomPaint(
+                            painter: DashedLinePainter(
+                                dashWidth: 7, thickness: 0.7))),
                     SizedBox(height: 6),
                     Row(children: [
                       Expanded(child: Text(Statics.getLabel('Total'))),
                       Container(
                         margin: EdgeInsets.only(left: 8),
-                        child: Text(((data.anyauppasstitimale ?? 0) + (data.anyanuppasstitifemale ?? 0)).toString()),
+                        child: Text(((data.anyauppasstitimale ?? 0) +
+                                (data.anyanuppasstitifemale ?? 0))
+                            .toString()),
                       ),
                     ]),
                   ],
@@ -778,15 +914,19 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                       ),
                     ]),
                     SizedBox(height: 6),
-                    SizedBox(width: MediaQuery
-                        .sizeOf(context)
-                        .width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+                    SizedBox(
+                        width: MediaQuery.sizeOf(context).width,
+                        child: CustomPaint(
+                            painter: DashedLinePainter(
+                                dashWidth: 7, thickness: 0.7))),
                     SizedBox(height: 6),
                     Row(children: [
                       Expanded(child: Text(Statics.getLabel('Total'))),
                       Container(
                         margin: EdgeInsets.only(left: 8),
-                        child: Text((calculateTotalMale() + calculateTotalFemale()).toString()),
+                        child: Text(
+                            (calculateTotalMale() + calculateTotalFemale())
+                                .toString()),
                       ),
                     ]),
                   ],
@@ -876,7 +1016,8 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
     return Row(
       children: [
         DataTable(
-          headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
+          headingRowColor:
+              MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
           columnSpacing: 0,
           border: TableBorder.all(color: Colors.black26),
           columns: [
@@ -913,26 +1054,47 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
               scrollDirection: Axis.horizontal,
               child: DataTable(
                 columnSpacing: 14,
-                headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
-                border: TableBorder(verticalInside: BorderSide(width: 0.7, color: Colors.grey.shade200)),
+                headingRowColor: MaterialStateColor.resolveWith(
+                    (_) => Colors.purple.shade100),
+                border: TableBorder(
+                    verticalInside:
+                        BorderSide(width: 0.7, color: Colors.grey.shade200)),
                 columns: headers
-                    .map((header) =>
-                    DataColumn(
-                      label: Container(
-                        constraints: BoxConstraints(minWidth: 40, maxWidth: [headers[0], headers[1]].contains(header) ? 100 : 170),
-                        // constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.2),
-                        child: Text(header, softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold)),
-                      ),
-                    ))
+                    .map((header) => DataColumn(
+                          label: Container(
+                            constraints: BoxConstraints(
+                                minWidth: 40,
+                                maxWidth:
+                                    [headers[0], headers[1]].contains(header)
+                                        ? 100
+                                        : 170),
+                            // constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.2),
+                            child: Text(header,
+                                softWrap: true,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                          ),
+                        ))
                     .toList(),
                 rows: data.map((level) {
                   return DataRow(cells: [
-                    DataCell(Center(child: Text(level.karykakramcount.toString()))),
-                    DataCell(Center(child: Text(level.shanchalancount.toString()))),
-                    DataCell(Center(child: Text(level.karyakramnirdharitvedhvarcount.toString()))),
-                    DataCell(Center(child: Text(level.vyaktigeetkhantastakcount.toString()))),
-                    DataCell(Center(child: Text(level.shanchalanghosvandancount.toString()))),
-                    DataCell(Center(child: Text(level.skaraykramhisob24tasapurnacount.toString()))),
+                    DataCell(
+                        Center(child: Text(level.karykakramcount.toString()))),
+                    DataCell(
+                        Center(child: Text(level.shanchalancount.toString()))),
+                    DataCell(Center(
+                        child: Text(
+                            level.karyakramnirdharitvedhvarcount.toString()))),
+                    DataCell(Center(
+                        child:
+                            Text(level.vyaktigeetkhantastakcount.toString()))),
+                    DataCell(Center(
+                        child:
+                            Text(level.shanchalanghosvandancount.toString()))),
+                    DataCell(Center(
+                        child: Text(
+                            level.skaraykramhisob24tasapurnacount.toString()))),
                   ]);
                 }).toList(),
               ),

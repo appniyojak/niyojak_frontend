@@ -116,6 +116,8 @@ const String urlResetAppPassword = baseUrlAPI + '/ResetAppPassword';
 const String urlGetJoinRSSGridForApp = baseUrlAPI + '/GetJoinRSSGridForApp';
 const String urlSaveJoinRSSForApp = baseUrlAPI + '/SaveJoinRSSForApp';
 const String saveupdatevijayadashamiutsav = baseUrlAPI + '/saveupdatevijayadashamiutsav';
+const String savevijayadashamiutsavfiles = baseUrlAPI + '/savevijayadashamiutsavfiles';
+const String deletevijayadashamiutsavfiles = baseUrlAPI + '/Deletevijayadashamiutsavfiles';
 const String savesajjanskhatianyapravbhavilok = baseUrlAPI + '/savesajjanskhatianyapravbhavilok';
 const String getvijayadashamiutsavbyid = baseUrlAPI + '/getvijayadashamiutsavbyid';
 const String getvijayadashamiutsavreport = baseUrlAPI + '/vijayadashamiutsavreport';
@@ -2392,6 +2394,61 @@ Future<void> saveVijayaDashamiUtsavData(BuildContext context, Map<String, dynami
   }
 }
 
+Future<String?> saveVijayaDashamiImageData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
+  if (showLoader) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  var response = await http.post(
+    Uri.parse(savevijayadashamiutsavfiles),
+    headers: jHeaders,
+    body: jsonEncode(inputJson), // ✅ Encode here
+  );
+
+  print("Response saveVijayaDashamiImageData >>>>>>>>>>>> ${response.body}");
+  print("response.statusCode: ${response.statusCode}");
+
+  if (showLoader) Navigator.of(context, rootNavigator: true).pop();
+
+  if (response.statusCode == 200) {
+    // Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+    final responseData = json.decode(response.body);
+    return responseData["Message"].toString();
+  } else {
+    print("Error: ${response.statusCode} - ${response.body}");
+    Statics.showToast(Statics.getLabel('errorOccurred'));
+    return null;
+  }
+}
+
+Future<bool> deleteVijayaDashamiImageData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
+  if (showLoader) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  var response = await http.post(
+    Uri.parse(deletevijayadashamiutsavfiles),
+    headers: jHeaders,
+    body: jsonEncode(inputJson), // ✅ Encode here
+  );
+
+  print("Response deleteVijayaDashamiImageData >>>>>>>>>>>> ${response.body}");
+  print("response.statusCode: ${response.statusCode}");
+
+  if (showLoader) Navigator.of(context, rootNavigator: true).pop();
+
+  if (response.statusCode == 200) {
+    // Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+    final responseData = json.decode(response.body);
+    if (responseData["Status"].toString() == "Success") {
+      return true;
+    }
+    return false;
+  } else {
+    print("Error: ${response.statusCode} - ${response.body}");
+    Statics.showToast(Statics.getLabel('errorOccurred'));
+    return false;
+  }
+}
+
 Future<bool> saveVishishthaAtithiData(BuildContext context, Map<String, dynamic> inputJson) async {
   showLoaderDialog(context);
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -2431,6 +2488,9 @@ Future<GetVijayadashamiDataByGeoUnitModel?> getVijayaDashamiUtsavDataByGeounit(B
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
+
+      final responseData = json.decode(response.body);
+      log("getvijayadashamiutsavbyid >>>>>>> $responseData");
 
       GetVijayadashamiDataByGeoUnitModel model = GetVijayadashamiDataByGeoUnitModel.fromJson(data);
 

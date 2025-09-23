@@ -1,13 +1,34 @@
 class GetVijayadashamiDataByGeoUnitModel {
   String? message;
   String? status;
+  List<TypeValueData>? adddata;
+  List<TypeValueData>? eventdata;
+  List<TypeValueData>? urldata;
   VijayadashamiUtsav? vijayadashamiUtsav;
 
-  GetVijayadashamiDataByGeoUnitModel({this.message, this.status, this.vijayadashamiUtsav});
+  GetVijayadashamiDataByGeoUnitModel({this.message, this.status, this.adddata, this.eventdata, this.urldata, this.vijayadashamiUtsav});
 
   GetVijayadashamiDataByGeoUnitModel.fromJson(Map<String, dynamic> json) {
     message = json['Message'];
     status = json['Status'];
+    if (json['Adddata'] != null) {
+      adddata = <TypeValueData>[];
+      json['Adddata'].forEach((v) {
+        adddata!.add(new TypeValueData.fromJson(v));
+      });
+    }
+    if (json['eventdata'] != null) {
+      eventdata = <TypeValueData>[];
+      json['eventdata'].forEach((v) {
+        eventdata!.add(new TypeValueData.fromJson(v));
+      });
+    }
+    if (json['urldata'] != null) {
+      urldata = <TypeValueData>[];
+      json['urldata'].forEach((v) {
+        urldata!.add(new TypeValueData.fromJson(v));
+      });
+    }
     vijayadashamiUtsav = json['VijayadashamiUtsav'] != null ? new VijayadashamiUtsav.fromJson(json['VijayadashamiUtsav']) : null;
   }
 
@@ -15,6 +36,15 @@ class GetVijayadashamiDataByGeoUnitModel {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['Message'] = this.message;
     data['Status'] = this.status;
+    if (this.adddata != null) {
+      data['Adddata'] = this.adddata!.map((v) => v.toJson()).toList();
+    }
+    if (this.eventdata != null) {
+      data['eventdata'] = this.eventdata!.map((v) => v.toJson()).toList();
+    }
+    if (this.urldata != null) {
+      data['urldata'] = this.urldata!.map((v) => v.toJson()).toList();
+    }
     if (this.vijayadashamiUtsav != null) {
       data['VijayadashamiUtsav'] = this.vijayadashamiUtsav!.toJson();
     }
@@ -215,6 +245,25 @@ class VijayadashamiUtsav {
     data['visitit_atithi_anyaprabha_vi_lokamids'] = this.visititAtithiAnyaprabhaViLokamids;
     data['visitit_atithi_sajjan_shaktiids'] = this.visititAtithiSajjanShaktiids;
     data['vyakti_geet_khantasta_khoteka'] = this.vyaktiGeetKhantastaKhoteka;
+    return data;
+  }
+}
+
+class TypeValueData {
+  String? type;
+  String? value;
+
+  TypeValueData({this.type, this.value});
+
+  TypeValueData.fromJson(Map<String, dynamic> json) {
+    type = json['type'];
+    value = json['value'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['type'] = this.type;
+    data['value'] = this.value;
     return data;
   }
 }

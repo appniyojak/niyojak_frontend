@@ -1,10 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
+import 'dart:math' as m;
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image/image.dart' as img;
+import 'package:image_picker/image_picker.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:niyojak_prod/screens/shatabdi_vrutta_sankalan/vijayadashami/vijaya_dashami_report.dart';
 import 'package:niyojak_prod/widgets/app_drawer.dart';
@@ -31,6 +35,8 @@ class VijayadashamiFormView extends StatefulWidget {
 class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
   final _formKey = GlobalKey<FormState>();
   final ScrollController _scrollController = ScrollController();
+
+  TextEditingController txtUrlsController = TextEditingController();
 
   bool _isSearching = false;
   bool _isExpanded = true;
@@ -126,7 +132,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       selctedLevel = '';
       selctedLevelName = '';
       selctedLevelId = null;
-      utsavKontyaStaravar = "1";
+      utsavKontyaStaravar = "6";
 
       // Reset selections
       selectedMukhyaAtithi = null;
@@ -2405,8 +2411,9 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
               ),
             if (selctedLevel != "" && selctedLevelName != "" && isVastiSearch == true)
               Container(
-                  height: 40,
-                  width: double.infinity,
+                  // height: 40,
+                  width: MediaQuery.sizeOf(context).width,
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.purpleAccent, width: 1),
                     borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -2415,13 +2422,20 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        "${Statics.getLabel(selctedLevel ?? 'Nagar')}  ->  ",
-                        style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold, fontSize: 16),
+                      Flexible(
+                        child: Text(
+                          "${Statics.getLabel(selctedLevel ?? 'Nagar')}  ->  ",
+                          style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
                       ),
-                      Text(
-                        " $selctedLevelName",
-                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17),
+                      Flexible(
+                        child: Text(
+                          " $selctedLevelName",
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: true,
+                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17),
+                        ),
                       ),
                     ],
                   )),
@@ -3398,6 +3412,40 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                 ],
               ),
             ),
+// ================================== 12 QUESTIONS Box =======================================================================
+            mainContainer(
+              "${Statics.getLabel('moreInfo')}",
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  filePickerField1(
+                    question: "${Statics.getLabel('AddUtsavFiles')}",
+                    // selectedFileName: selectedFileName,
+                    // onFileSelected: (base64File, fileName) {
+                    //   setState(() {
+                    //     selectedFilePath = base64File;
+                    //     // selectedFileName = fileName;
+                    //     imageAdd = 1;
+                    //   });
+                    //   log("Selected File Path (Base64): $selectedFilePath");
+                    // },
+                    loadingNotifier: loadingNotifier1,
+                    context: context,
+                  ),
+                  Divider(height: 32),
+                  filePickerField2(
+                    question: "${Statics.getLabel('AddAdvUtsavFiles')}",
+                    loadingNotifier: loadingNotifier2,
+                    context: context,
+                  ),
+                  Divider(height: 32),
+                  addUrlsListWidget(
+                    question: "${Statics.getLabel('AddLinks')}",
+                    context: context,
+                  )
+                ],
+              ),
+            ),
 //==============================  SUBMIT BUTTON =======================================================================
             Container(
               child: MaterialButton(
@@ -3978,6 +4026,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                         print("valueeeeeeeesssss >>>>>>>>>>>>>>> $values");
                         // if (selectedUpnagarList.contains(values)) {
                         selctedLevel = 'upnagarUpkhanda';
+                        selctedLevelName = _linkedUpnagar!.where((upnagar) => selectedUpnagarList.contains(upnagar.geoUnitID)).map((upnagar) => upnagar.preferedname).toList().join(",");
                         //   selectedUpnagarList.add(bg);
                         // } else {
                         //   selectedUpnagarList.remove(bg);
@@ -4184,6 +4233,699 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
           ),
         ],
       ),
+    );
+  }
+
+  String? selectedFilePath;
+  String? filePathOg;
+  List<String?> _selectedFileNames1 = []; // To display the file name
+  List<String?> _selectedFileNames2 = []; // To display the file name
+  List<String?> _urlsList = []; // To display the file name
+  // int? imageAdd = 0;
+  final int _maxImages = 5;
+  ValueNotifier<bool> loadingNotifier1 = ValueNotifier(false);
+  ValueNotifier<bool> loadingNotifier2 = ValueNotifier(false);
+
+  Widget filePickerField1({
+    required BuildContext context,
+    required String question,
+    // required Function(String?, String?) onFileSelected,
+    // List<String?> selectedFileNames,
+    int? questionNumber,
+    bool isLoading = false,
+    ValueNotifier<bool>? loadingNotifier,
+  }) {
+    final canAddMore = _selectedFileNames1.length < _maxImages;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text(
+                "${questionNumber != null ? "$questionNumber. " : ""}$question",
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              ),
+            ),
+            // IconButton(
+            //   onPressed: () {
+            //     // if (selectedFileNames.isNotEmpty) {
+            //     //   showDialog(
+            //     //     context: context,
+            //     //     builder: (BuildContext context) {
+            //     //       return Container(
+            //     //         color: Colors.transparent,
+            //     //         padding: const EdgeInsets.all(20),
+            //     //         child: Column(
+            //     //           mainAxisSize: MainAxisSize.min,
+            //     //           children: [
+            //     //             Align(
+            //     //               alignment: Alignment.topRight,
+            //     //               child: IconButton(
+            //     //                 onPressed: () {
+            //     //                   Navigator.of(context).pop();
+            //     //                 },
+            //     //                 icon: Icon(Icons.close, color: Colors.white),
+            //     //               ),
+            //     //             ),
+            //     //             SizedBox(height: 10),
+            //     //             // Expanded(
+            //     //             //   child: imageAdd == 1
+            //     //             //       ? Image.file(
+            //     //             //           File(filePathOg!),
+            //     //             //           fit: BoxFit.contain,
+            //     //             //         )
+            //     //             //       : Image.network(
+            //     //             //           '${Statics.baseUrl}/Files/Vastisarvekshanforms/$selectedFileName',
+            //     //             //           fit: BoxFit.contain,
+            //     //             //         ),
+            //     //             // ),
+            //     //           ],
+            //     //         ),
+            //     //       );
+            //     //     },
+            //     //   );
+            //     // }
+            //   },
+            //   icon: Icon(Icons.remove_red_eye, color: Colors.purpleAccent),
+            // ),
+          ],
+        ),
+        SizedBox(height: 8),
+        ..._selectedFileNames1.map(
+          (img) => Container(
+            margin: EdgeInsets.only(bottom: 8),
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black54, width: 1),
+              borderRadius: BorderRadius.circular(11),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    img ?? "${Statics.getLabel('selectFile')}",
+                    style: TextStyle(color: Colors.black87),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                IconButton(
+                  style: IconButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+                  onPressed: () async {
+                    final _shouldDelete = await showDialog(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        backgroundColor: Colors.white,
+                        title: Text(
+                          "${Statics.getLabel('AskConfirmation')}",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red.shade700,
+                            fontSize: 18,
+                          ),
+                        ),
+                        content: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Text(
+                            "${Statics.getLabel('AreyouSureYouWantToDeleteImage')}",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.red.shade800,
+                            ),
+                          ),
+                        ),
+                        actions: [
+                          TextButton(
+                            child: Text(Statics.getLabel('ConfirmationNo')),
+                            onPressed: () {
+                              Navigator.of(ctx).pop(false);
+                            },
+                          ),
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: Colors.red.shade700,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            ),
+                            onPressed: () => Navigator.of(ctx).pop(true),
+                            child: Text(
+                              "${Statics.getLabel('ConfirmationYes')}",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+
+                    if (_shouldDelete) {
+                      final _result = await deleteImageDataFun(imageName: img.toString());
+                      if (_result) {
+                        setState(() {
+                          _selectedFileNames1.remove(img);
+                        });
+                      }
+                    }
+                  },
+                  icon: Icon(Icons.cancel, color: Colors.red),
+                ),
+              ],
+            ),
+          ),
+        ),
+        if (canAddMore)
+          Align(
+            alignment: Alignment.centerRight,
+            child: OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                textStyle: const TextStyle(fontSize: 14, color: Colors.purple),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              ),
+              onPressed: () async {
+                if (!_isSearching) {
+                  Fluttertoast.showToast(
+                    msg: "${Statics.getLabel('NagarSelectionImportant')}",
+                  );
+                  return;
+                }
+                loadingNotifier?.value = true;
+                XFile? result;
+                final isCamera = await showDialog(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    title: Text(Statics.getLabel('chooseAnOption')),
+                    content: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        IconButton.filled(
+                          onPressed: () async {
+                            Navigator.of(ctx).pop(true);
+                          },
+                          icon: Icon(Icons.camera_alt),
+                        ),
+                        IconButton.filled(
+                          onPressed: () async {
+                            Navigator.of(ctx).pop(false);
+                          },
+                          icon: Icon(Icons.photo_library),
+                        ),
+                      ],
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        child: Text(Statics.getLabel('clear')),
+                        onPressed: () {
+                          Navigator.of(ctx).pop();
+                          setState(() {
+                            loadingNotifier?.value = false;
+                          });
+                        },
+                      )
+                    ],
+                  ),
+                );
+                setState(() {});
+
+                if (isCamera) {
+                  result = await ImagePicker().pickImage(source: ImageSource.camera);
+                } else {
+                  result = await ImagePicker().pickImage(source: ImageSource.gallery);
+                }
+                setState(() {});
+                // showLoaderDialog(context);
+                try {
+                  if (result != null) {
+                    // final random = m.Random();
+                    final _imgName = m.Random().nextInt(99999999);
+                    String filePath = File(result.path).path;
+                    filePathOg = File(result.path).path;
+                    String fileName = isCamera ? "Img_${_imgName}.${filePathOg?.split("/").last.split(".").last}" : filePathOg!.split("/").last;
+                    File file = File(filePath);
+                    img.Image? originalImage = img.decodeImage(file.readAsBytesSync());
+                    if (originalImage != null) {
+                      img.Image compressedImage = img.copyResize(originalImage, width: originalImage.width);
+                      while (compressedImage.length > 2 * 1024 * 1024) {
+                        compressedImage = img.copyResize(compressedImage, width: (compressedImage.width * 0.9).toInt());
+                      }
+                      List<int> compressedBytes = img.encodeJpg(compressedImage, quality: 85);
+                      String base64String = base64Encode(compressedBytes);
+                      String base64File = "data:image/jpg;base64,$base64String";
+                      selectedFilePath = base64File;
+                      final _result = await submitImageDataFun(type: "utsavImgData", showLoader: true);
+                      _selectedFileNames1.add(_result ?? fileName);
+                      setState(() {});
+                    }
+                  }
+                } catch (e) {
+                  log("Error during file processing: $e");
+                } finally {
+                  loadingNotifier?.value = false;
+                }
+                setState(() {});
+                // Navigator.of(context).pop();
+
+                // log("Selected File Path (Base64): $selectedFilePath");
+              },
+              child: loadingNotifier != null
+                  ? ValueListenableBuilder<bool>(
+                      valueListenable: loadingNotifier,
+                      builder: (context, isLoading, _) {
+                        return isLoading
+                            ? SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(strokeWidth: 2),
+                              )
+                            : Text(
+                                "+ ${Statics.getLabel("AddMore")}",
+                                style: const TextStyle(fontSize: 14, color: Colors.purple),
+                              );
+                      },
+                    )
+                  : Text(
+                      "+ ${Statics.getLabel("AddMore")}",
+                      style: const TextStyle(fontSize: 14, color: Colors.purple),
+                    ),
+            ),
+          )
+      ],
+    );
+  }
+
+  Widget filePickerField2({
+    required BuildContext context,
+    required String question,
+    // required Function(String?, String?) onFileSelected,
+    // List<String?> selectedFileNames,
+    int? questionNumber,
+    bool isLoading = false,
+    ValueNotifier<bool>? loadingNotifier,
+  }) {
+    final canAddMore = _selectedFileNames2.length < _maxImages;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text(
+                "${questionNumber != null ? "$questionNumber. " : ""}$question",
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              ),
+            ),
+            // IconButton(
+            //   onPressed: () {
+            //     // if (selectedFileNames.isNotEmpty) {
+            //     //   showDialog(
+            //     //     context: context,
+            //     //     builder: (BuildContext context) {
+            //     //       return Container(
+            //     //         color: Colors.transparent,
+            //     //         padding: const EdgeInsets.all(20),
+            //     //         child: Column(
+            //     //           mainAxisSize: MainAxisSize.min,
+            //     //           children: [
+            //     //             Align(
+            //     //               alignment: Alignment.topRight,
+            //     //               child: IconButton(
+            //     //                 onPressed: () {
+            //     //                   Navigator.of(context).pop();
+            //     //                 },
+            //     //                 icon: Icon(Icons.close, color: Colors.white),
+            //     //               ),
+            //     //             ),
+            //     //             SizedBox(height: 10),
+            //     //             // Expanded(
+            //     //             //   child: imageAdd == 1
+            //     //             //       ? Image.file(
+            //     //             //           File(filePathOg!),
+            //     //             //           fit: BoxFit.contain,
+            //     //             //         )
+            //     //             //       : Image.network(
+            //     //             //           '${Statics.baseUrl}/Files/Vastisarvekshanforms/$selectedFileName',
+            //     //             //           fit: BoxFit.contain,
+            //     //             //         ),
+            //     //             // ),
+            //     //           ],
+            //     //         ),
+            //     //       );
+            //     //     },
+            //     //   );
+            //     // }
+            //   },
+            //   icon: Icon(Icons.remove_red_eye, color: Colors.purpleAccent),
+            // ),
+          ],
+        ),
+        SizedBox(height: 8),
+        ..._selectedFileNames2.map(
+          (img) => Container(
+            margin: EdgeInsets.only(bottom: 8),
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black54, width: 1),
+              borderRadius: BorderRadius.circular(11),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    img ?? "${Statics.getLabel('selectFile')}",
+                    style: TextStyle(color: Colors.black87),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                IconButton(
+                  style: IconButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+                  onPressed: () async {
+                    final _shouldDelete = await showDialog(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        backgroundColor: Colors.white,
+                        title: Text(
+                          "${Statics.getLabel('AskConfirmation')}",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red.shade700,
+                            fontSize: 18,
+                          ),
+                        ),
+                        content: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Text(
+                            "${Statics.getLabel('AreyouSureYouWantToDeleteImage')}",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.red.shade800,
+                            ),
+                          ),
+                        ),
+                        actions: [
+                          TextButton(
+                            child: Text(Statics.getLabel('ConfirmationNo')),
+                            onPressed: () {
+                              Navigator.of(ctx).pop(false);
+                            },
+                          ),
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: Colors.red.shade700,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            ),
+                            onPressed: () => Navigator.of(ctx).pop(true),
+                            child: Text(
+                              "${Statics.getLabel('ConfirmationYes')}",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+
+                    if (_shouldDelete) {
+                      final _result = await deleteImageDataFun(imageName: img.toString());
+                      if (_result) {
+                        setState(() {
+                          _selectedFileNames2.remove(img);
+                        });
+                      }
+                    }
+                  },
+                  icon: Icon(Icons.cancel, color: Colors.red),
+                ),
+              ],
+            ),
+          ),
+        ),
+        if (canAddMore)
+          Align(
+            alignment: Alignment.centerRight,
+            child: OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                textStyle: const TextStyle(fontSize: 14, color: Colors.purple),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              ),
+              onPressed: () async {
+                if (!_isSearching) {
+                  Fluttertoast.showToast(
+                    msg: "${Statics.getLabel('NagarSelectionImportant')}",
+                  );
+                  return;
+                }
+                loadingNotifier?.value = true;
+                XFile? result;
+                final isCamera = await showDialog(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    title: Text(Statics.getLabel('chooseAnOption')),
+                    content: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        IconButton.filled(
+                          onPressed: () async {
+                            Navigator.of(ctx).pop(true);
+                          },
+                          icon: Icon(Icons.camera_alt),
+                        ),
+                        IconButton.filled(
+                          onPressed: () async {
+                            Navigator.of(ctx).pop(false);
+                          },
+                          icon: Icon(Icons.photo_library),
+                        ),
+                      ],
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        child: Text(Statics.getLabel('clear')),
+                        onPressed: () {
+                          Navigator.of(ctx).pop();
+                          setState(() {
+                            loadingNotifier?.value = false;
+                          });
+                        },
+                      )
+                    ],
+                  ),
+                );
+                setState(() {});
+
+                if (isCamera) {
+                  result = await ImagePicker().pickImage(source: ImageSource.camera);
+                } else {
+                  result = await ImagePicker().pickImage(source: ImageSource.gallery);
+                }
+                setState(() {});
+                // showLoaderDialog(context);
+                try {
+                  if (result != null) {
+                    // final random = m.Random();
+                    final _imgName = m.Random().nextInt(9999999);
+                    String filePath = File(result.path).path;
+                    filePathOg = File(result.path).path;
+                    String fileName = isCamera ? "Img_${_imgName}.${filePathOg?.split("/").last.split(".").last}" : filePathOg!.split("/").last;
+                    File file = File(filePath);
+                    img.Image? originalImage = img.decodeImage(file.readAsBytesSync());
+                    if (originalImage != null) {
+                      img.Image compressedImage = img.copyResize(originalImage, width: originalImage.width);
+                      while (compressedImage.length > 2 * 1024 * 1024) {
+                        compressedImage = img.copyResize(compressedImage, width: (compressedImage.width * 0.9).toInt());
+                      }
+                      List<int> compressedBytes = img.encodeJpg(compressedImage, quality: 85);
+                      String base64String = base64Encode(compressedBytes);
+                      String base64File = "data:image/jpg;base64,$base64String";
+                      selectedFilePath = base64File;
+                      final _result = await submitImageDataFun(type: "Add", showLoader: true);
+                      _selectedFileNames2.add(_result ?? fileName);
+                      setState(() {});
+                    }
+                  }
+                } catch (e) {
+                  log("Error during file processing: $e");
+                } finally {
+                  loadingNotifier?.value = false;
+                }
+                setState(() {
+                  loadingNotifier?.value = false;
+                });
+                // Navigator.of(context).pop();
+
+                // log("Selected File Path (Base64): $selectedFilePath");
+              },
+              child: loadingNotifier != null
+                  ? ValueListenableBuilder<bool>(
+                      valueListenable: loadingNotifier,
+                      builder: (context, isLoading, _) {
+                        return isLoading
+                            ? SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(strokeWidth: 2),
+                              )
+                            : Text(
+                                "+ ${Statics.getLabel("AddMore")}",
+                                style: const TextStyle(fontSize: 14, color: Colors.purple),
+                              );
+                      },
+                    )
+                  : Text(
+                      "+ ${Statics.getLabel("AddMore")}",
+                      style: const TextStyle(fontSize: 14, color: Colors.purple),
+                    ),
+            ),
+          )
+      ],
+    );
+  }
+
+  Widget addUrlsListWidget({
+    required BuildContext context,
+    required String question,
+    int? questionNumber,
+  }) {
+    final canAddMore = _urlsList.length < _maxImages;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "${questionNumber != null ? "$questionNumber. " : ""}$question",
+          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 8),
+        if (canAddMore)
+          Row(
+            children: [
+              Expanded(
+                flex: 3,
+                child: TextFormField(
+                  controller: txtUrlsController,
+                  textAlignVertical: TextAlignVertical.center,
+                  // textAlign: TextAlign.left,
+                  autofocus: false,
+                  onChanged: (value) => setState(() {}),
+                  onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
+                  decoration: InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6), border: OutlineInputBorder(), enabledBorder: OutlineInputBorder(), focusedBorder: OutlineInputBorder()),
+                  // validator: (value) {
+                  //   // if (value != null && value.trim().isNotEmpty && value.length < 9 && memberController.contactList.value.isEmpty){
+                  //   //   return "Invalid contact number";
+                  //   // }else
+                  //   if (memberController.contactList.value.isEmpty) {
+                  //     if (value == null || value.trim().isEmpty) {
+                  //       return "Please enter contact number";
+                  //     }
+                  //     if (value.length < 9) {
+                  //       return "Invalid contact number";
+                  //     }
+                  //     return null;
+                  //     // return "Please enter at least one contact number";
+                  //   } else {
+                  //     if (value != null && value.trim().isNotEmpty && value.length < 9) {
+                  //       return "Invalid contact number";
+                  //     }
+                  //   }
+                  //
+                  //   return null;
+                  // },
+                ),
+              ),
+              SizedBox(width: 6),
+              Expanded(
+                flex: 1,
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    textStyle: const TextStyle(fontSize: 14, color: Colors.purple),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  ),
+                  onPressed: () {
+                    // print(contactList.value.toString());
+                    if (txtUrlsController.text.trim().isNotEmpty) {
+                      _urlsList.add(txtUrlsController.text.trim());
+                      txtUrlsController.clear();
+                    } else {
+                      Fluttertoast.showToast(
+                        msg: "${Statics.getLabel('NagarSelectionImportant')}",
+                      );
+                      // formKey.currentState?.validate();
+                    }
+                    setState(() {});
+                  },
+                  child: Text("+ ${Statics.getLabel("Add")}"),
+                ),
+              )
+            ],
+          ),
+        SizedBox(height: 8),
+        Wrap(
+          runSpacing: 8,
+          spacing: 8,
+          direction: Axis.horizontal,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          alignment: WrapAlignment.start,
+          runAlignment: WrapAlignment.center,
+          children: _urlsList
+              .map(
+                (url) => Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.grey.shade200,
+                    border: Border.all(color: Colors.grey, width: 0.7),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        url.toString(),
+                        // style: AppTextStyles.labels(Get.context!).copyWith(fontWeight: FontWeight.w500),
+                      ),
+                      SizedBox(width: 8),
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            _urlsList.removeWhere((e) => e == url);
+                          });
+                        },
+                        child: Icon(Icons.cancel, color: Colors.red, size: 18),
+                      )
+                    ],
+                  ),
+                ),
+              )
+              .toList(),
+        ),
+        // if (canAddMore)
+        //   Align(
+        //     alignment: Alignment.centerRight,
+        //     child: OutlinedButton(
+        //       style: OutlinedButton.styleFrom(
+        //         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        //         side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
+        //         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        //         textStyle: const TextStyle(fontSize: 14, color: Colors.purple),
+        //         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        //       ),
+        //       onPressed: () async {
+        //         // _urlsList.add();
+        //       },
+        //       child: Text(
+        //         "+ Add more",
+        //         style: const TextStyle(fontSize: 14, color: Colors.purple),
+        //       ),
+        //     ),
+        //   )
+      ],
     );
   }
 
@@ -4411,12 +5153,40 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       "ProudhVyav_pat": patProudhVyavCtrl.text,
       "ProudhVyav_gan": ganProudhVyavCtrl.text,
       "ProudhVyav_anya": anyaProudhVyavCtrl.text,
+      "urls": _urlsList,
     };
 
     String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
     log("Form Data (JSON):\n$formattedJson");
     await Statics.saveVijayaDashamiUtsavData(context, formData, showLoader);
     getFormData();
+  }
+
+  Future<String?> submitImageDataFun({bool showLoader = false, required String type}) async {
+    Map<String, dynamic> formData = {
+      "GeoUnitID": selectedUpnagarList.isEmpty ? selctedLevelId.toString() : selectedUpnagarList.join(","),
+      "filebase": selectedFilePath,
+      "type": type,
+    };
+
+    String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
+    log("Form Data (JSON):\n$formattedJson");
+    final _result = await Statics.saveVijayaDashamiImageData(context: context, inputJson: formData, showLoader: showLoader);
+    // getFormData();
+    return _result;
+  }
+
+  Future<bool> deleteImageDataFun({bool showLoader = true, required String imageName}) async {
+    Map<String, dynamic> formData = {
+      "GeoUnitID": selectedUpnagarList.isEmpty ? selctedLevelId.toString() : selectedUpnagarList.join(","),
+      "filepath": imageName,
+    };
+
+    String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
+    log("Form Data (JSON):\n$formattedJson");
+    final _result = await Statics.deleteVijayaDashamiImageData(context: context, inputJson: formData, showLoader: showLoader);
+    // getFormData();
+    return _result;
   }
 
   GetVijayadashamiDataByGeoUnitModel? getVijayaDashamiUtsavDataByGeounitData;
@@ -4434,6 +5204,10 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     log("getVijayaDashamiUtsavDataByGeounitData ${jsonDecode(jsonEncode(getVijayaDashamiUtsavDataByGeounitData))}");
     setState(() {
       VijayadashamiUtsav utsav = getVijayaDashamiUtsavDataByGeounitData!.vijayadashamiUtsav!;
+
+      _urlsList = getVijayaDashamiUtsavDataByGeounitData?.urldata?.map((url) => url.value).toList() ?? [];
+      _selectedFileNames1 = getVijayaDashamiUtsavDataByGeounitData?.eventdata?.map((url) => url.value).toList() ?? [];
+      _selectedFileNames2 = getVijayaDashamiUtsavDataByGeounitData?.adddata?.map((url) => url.value).toList() ?? [];
 
       // Example text controllers
       presentMatrushaktiController.text = utsav.anyaUpastitiMatrushakti?.toString() ?? '';
