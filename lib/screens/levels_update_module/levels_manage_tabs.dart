@@ -22,7 +22,7 @@ class TabScreen extends StatelessWidget {
             unselectedLabelStyle: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w500),
             labelStyle: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700),
             tabs: [
-              Tab(text: Statics.getLabel('upnagarUpkhanda')),
+              Tab(text: Statics.getLabel('addUpnagarUpkhanda')),
               Tab(text: Statics.getLabel('masterdataupdate')),
             ],
           ),

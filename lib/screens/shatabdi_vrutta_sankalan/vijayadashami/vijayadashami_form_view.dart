@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:math' as m;
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,12 +14,14 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:niyojak_prod/screens/shatabdi_vrutta_sankalan/vijayadashami/vijaya_dashami_report.dart';
 import 'package:niyojak_prod/widgets/app_drawer.dart';
 import 'package:niyojak_prod/widgets/single_column_row.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../helpers/static_data.dart' as Statics;
 import '../../../models/response_model/get_vijaya_dashami_geounit_data.dart';
 import '../../../models/response_model/vasti_up_data_model.dart';
 import '../../../models/response_model/vijayaDashamiInitModel.dart';
 import '../../../providers/bals.dart';
+import '../../../validation_blocks/validator.dart';
 import '../../levels_update_module/levels_manage_tabs.dart';
 import 'add_mukhya_atithi_form.dart';
 import 'add_vishesh_vyakti.dart';
@@ -4268,48 +4271,62 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
             ),
-            // IconButton(
-            //   onPressed: () {
-            //     // if (selectedFileNames.isNotEmpty) {
-            //     //   showDialog(
-            //     //     context: context,
-            //     //     builder: (BuildContext context) {
-            //     //       return Container(
-            //     //         color: Colors.transparent,
-            //     //         padding: const EdgeInsets.all(20),
-            //     //         child: Column(
-            //     //           mainAxisSize: MainAxisSize.min,
-            //     //           children: [
-            //     //             Align(
-            //     //               alignment: Alignment.topRight,
-            //     //               child: IconButton(
-            //     //                 onPressed: () {
-            //     //                   Navigator.of(context).pop();
-            //     //                 },
-            //     //                 icon: Icon(Icons.close, color: Colors.white),
-            //     //               ),
-            //     //             ),
-            //     //             SizedBox(height: 10),
-            //     //             // Expanded(
-            //     //             //   child: imageAdd == 1
-            //     //             //       ? Image.file(
-            //     //             //           File(filePathOg!),
-            //     //             //           fit: BoxFit.contain,
-            //     //             //         )
-            //     //             //       : Image.network(
-            //     //             //           '${Statics.baseUrl}/Files/Vastisarvekshanforms/$selectedFileName',
-            //     //             //           fit: BoxFit.contain,
-            //     //             //         ),
-            //     //             // ),
-            //     //           ],
-            //     //         ),
-            //     //       );
-            //     //     },
-            //     //   );
-            //     // }
-            //   },
-            //   icon: Icon(Icons.remove_red_eye, color: Colors.purpleAccent),
-            // ),
+            IconButton(
+              onPressed: () {
+                if (_selectedFileNames1.isNotEmpty) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Material(
+                        child: Container(
+                          color: Colors.transparent,
+                          padding: const EdgeInsets.all(20),
+                          child: ListView(
+                            // mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: IconButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  icon: Icon(Icons.close, color: Colors.black),
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              ..._selectedFileNames1.asMap().entries.map((entry) {
+                                int index = entry.key; // index
+                                var img = entry.value;
+                                return Container(
+                                  margin: EdgeInsets.only(bottom: 12),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text("${(index + 1)}. $img"),
+                                      SizedBox(height: 6),
+                                      CachedNetworkImage(
+                                        imageUrl: '${Statics.baseUrl}/Files/vijayadhasmifiles/$img',
+                                        errorWidget: (context, error, stackTrace) =>
+                                            SizedBox(width: MediaQuery.sizeOf(context).width, height: 120, child: Center(child: Text(Statics.getLabel("errorOccurred")))),
+                                        progressIndicatorBuilder: (context, child, loadingProgress) =>
+                                            SizedBox(width: MediaQuery.sizeOf(context).width, height: 120, child: Center(child: CircularProgressIndicator())),
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                }
+              },
+              icon: Icon(Icons.remove_red_eye, color: Colors.purpleAccent),
+            ),
           ],
         ),
         SizedBox(height: 8),
@@ -4537,48 +4554,62 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
             ),
-            // IconButton(
-            //   onPressed: () {
-            //     // if (selectedFileNames.isNotEmpty) {
-            //     //   showDialog(
-            //     //     context: context,
-            //     //     builder: (BuildContext context) {
-            //     //       return Container(
-            //     //         color: Colors.transparent,
-            //     //         padding: const EdgeInsets.all(20),
-            //     //         child: Column(
-            //     //           mainAxisSize: MainAxisSize.min,
-            //     //           children: [
-            //     //             Align(
-            //     //               alignment: Alignment.topRight,
-            //     //               child: IconButton(
-            //     //                 onPressed: () {
-            //     //                   Navigator.of(context).pop();
-            //     //                 },
-            //     //                 icon: Icon(Icons.close, color: Colors.white),
-            //     //               ),
-            //     //             ),
-            //     //             SizedBox(height: 10),
-            //     //             // Expanded(
-            //     //             //   child: imageAdd == 1
-            //     //             //       ? Image.file(
-            //     //             //           File(filePathOg!),
-            //     //             //           fit: BoxFit.contain,
-            //     //             //         )
-            //     //             //       : Image.network(
-            //     //             //           '${Statics.baseUrl}/Files/Vastisarvekshanforms/$selectedFileName',
-            //     //             //           fit: BoxFit.contain,
-            //     //             //         ),
-            //     //             // ),
-            //     //           ],
-            //     //         ),
-            //     //       );
-            //     //     },
-            //     //   );
-            //     // }
-            //   },
-            //   icon: Icon(Icons.remove_red_eye, color: Colors.purpleAccent),
-            // ),
+            IconButton(
+              onPressed: () {
+                if (_selectedFileNames2.isNotEmpty) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Material(
+                        child: Container(
+                          color: Colors.transparent,
+                          padding: const EdgeInsets.all(20),
+                          child: ListView(
+                            // mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: IconButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  icon: Icon(Icons.close, color: Colors.black),
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              ..._selectedFileNames2.asMap().entries.map((entry) {
+                                int index = entry.key; // index
+                                var img = entry.value;
+                                return Container(
+                                  margin: EdgeInsets.only(bottom: 12),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text("${(index + 1)}. $img"),
+                                      SizedBox(height: 6),
+                                      CachedNetworkImage(
+                                        imageUrl: '${Statics.baseUrl}/Files/vijayadhasmifiles/$img',
+                                        errorWidget: (context, error, stackTrace) =>
+                                            SizedBox(width: MediaQuery.sizeOf(context).width, height: 120, child: Center(child: Text(Statics.getLabel("errorOccurred")))),
+                                        progressIndicatorBuilder: (context, child, loadingProgress) =>
+                                            SizedBox(width: MediaQuery.sizeOf(context).width, height: 120, child: Center(child: CircularProgressIndicator())),
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                }
+              },
+              icon: Icon(Icons.remove_red_eye, color: Colors.purpleAccent),
+            ),
           ],
         ),
         SizedBox(height: 8),
@@ -4848,15 +4879,25 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                     textStyle: const TextStyle(fontSize: 14, color: Colors.purple),
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     // print(contactList.value.toString());
                     if (txtUrlsController.text.trim().isNotEmpty) {
+                      bool valid = await isValidUrl(txtUrlsController.text.trim());
+                      if (!valid) {
+                        Fluttertoast.showToast(msg: "${Statics.getLabel('urlValidation')}");
+                        return;
+                      }
                       _urlsList.add(txtUrlsController.text.trim());
                       txtUrlsController.clear();
                     } else {
-                      Fluttertoast.showToast(
-                        msg: "${Statics.getLabel('NagarSelectionImportant')}",
-                      );
+                      if (!_isSearching) {
+                        Fluttertoast.showToast(
+                          msg: "${Statics.getLabel('NagarSelectionImportant')}",
+                        );
+                        setState(() {});
+                        return;
+                      }
+                      Fluttertoast.showToast(msg: "${Statics.getLabel('urlValidation')}");
                       // formKey.currentState?.validate();
                     }
                     setState(() {});
@@ -4886,9 +4927,20 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        url.toString(),
-                        // style: AppTextStyles.labels(Get.context!).copyWith(fontWeight: FontWeight.w500),
+                      InkWell(
+                        onTap: () async {
+                          final Uri uri = Uri.parse(url.toString());
+                          if (await canLaunchUrl(uri)) {
+                            await launchUrl(uri, mode: LaunchMode.externalApplication);
+                          } else {
+                            Fluttertoast.showToast(msg: "${Statics.getLabel('errorOccurred')}");
+                          }
+                        },
+                        child: Text(
+                          url.toString(),
+                          style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline, decorationColor: Colors.blue),
+                          // style: AppTextStyles.labels(Get.context!).copyWith(fontWeight: FontWeight.w500),
+                        ),
                       ),
                       SizedBox(width: 8),
                       InkWell(

@@ -310,7 +310,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(Statics.getLabel('addVIshishthaAtithi'), style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(Statics.getLabel('addMukhyaAtithi'), style: TextStyle(fontWeight: FontWeight.bold)),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(8),

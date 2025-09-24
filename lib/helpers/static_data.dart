@@ -27,6 +27,7 @@ import '../models/response_model/nirikshan_baithak_vrutta.dart';
 import '../models/response_model/notification_list_model.dart';
 import '../models/response_model/sankalit_data_names_model.dart';
 import '../models/response_model/taluka_mandal_model.dart';
+import '../models/response_model/upkhanda_upnagar_report_data_model.dart';
 import '../models/response_model/vasti_sarvekshan_dropdown_model.dart';
 import '../models/response_model/vasti_survey_report_model.dart';
 import '../models/response_model/vasti_up_data_model.dart';
@@ -124,6 +125,7 @@ const String getvijayadashamiutsavreport = baseUrlAPI + '/vijayadashamiutsavrepo
 const String urlGetJoinRSSDataForApp = baseUrlAPI + '/GetJoinRSSDataForApp';
 const String urlDeleteJoinRSSForApp = baseUrlAPI + '/DeleteJoinRSSForApp';
 const String urlRefreshHomeScreenForApp = baseUrlAPI + '/RefreshHomeScreenForApp';
+const String urlUpkhandupnagarreport = baseUrlAPI + '/upkhandupnagarreport';
 const String urlVastisarvekshanReport = baseUrlAPI + '/VastisarvekshanReport';
 const String urlNagarVastisarvekshanReport = baseUrlAPI + '/NagarVastisarvekshanReport';
 const String getDataWhileAddUpdateUPLevel = baseUrlAPI + '/GetDataWhileAddUpdateUPLevel';
@@ -1761,6 +1763,36 @@ Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) as
   }
   //return "Successfull";
   return responseBody;
+}
+
+Future<UpnagarUpkhandaReportModel?> upkhandUpnagarReportData({required String userID, required String? targetGeoUnitID, required String? type}) async {
+  print("${userID}  --- $targetGeoUnitID  ");
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  var response = await http.post(Uri.parse(urlUpkhandupnagarreport),
+      headers: jHeaders,
+      body: json.encode({
+        "iAppUserID": userID,
+        "iGeoUnitID": targetGeoUnitID,
+        "type": type,
+      }));
+
+  print(json.encode({
+    "iAppUserID": userID,
+    "iGeoUnitID": targetGeoUnitID,
+    "type": type,
+  }));
+
+  if (response.statusCode == 200) {
+    var responseBody = json.decode(response.body);
+    final respData = UpnagarUpkhandaReportModel.fromJson(responseBody);
+    log("Print the body for urlUpkhandupnagarreport >>>>>>>>>>>>>>>>> $responseBody");
+    if (respData.status == "Success") {
+      return respData;
+    }
+    return null;
+  }
+  return null;
 }
 
 //===================================  NEW VastisarvekshanReport by Dom ===========================================================

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../helpers/static_data.dart' as Statics;
 import '../models/response_model/notification_list_model.dart';
+import '../models/response_model/upkhanda_upnagar_report_data_model.dart';
 import '../providers/bals.dart';
 import '../providers/login.dart';
 import '../screens/change_password.dart';
@@ -48,6 +50,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  ScrollController _scrollController = ScrollController();
   var geoUnitID;
   var geoUnitName;
   PopupMenu? menu;
@@ -55,8 +58,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<MenuChoices> choices = [];
 
+  bool _isLoading = false;
   bool _isSwExpanded = false;
   bool _isGeounitExpanded = false;
+  bool _isNagarTableExpanded = false;
   bool _isSearching = false, _isMySearching = false, _isTgSearching = false;
 
   List<Widget>? _mySadyasthitiHeaderRow, _tgSadyasthitiHeaderRow;
@@ -92,6 +97,15 @@ class _HomeScreenState extends State<HomeScreen> {
   List<GeoUnitMasterBAL>? _linkedgraam;
   List<GeoUnitMasterBAL>? _linkedvasti;
 
+  List<GeoUnitMasterBAL>? _linkedMahaanagar2; //6-12-24
+  List<GeoUnitMasterBAL>? _linkedVibhaag2;
+  List<GeoUnitMasterBAL>? _linkedbhaag2;
+  List<GeoUnitMasterBAL>? _linkedshahar2;
+  List<GeoUnitMasterBAL>? _linkednagar2;
+  List<GeoUnitMasterBAL>? _linkedmandal2;
+  List<GeoUnitMasterBAL>? _linkedgraam2;
+  List<GeoUnitMasterBAL>? _linkedvasti2;
+
   String? _linkedMahaanagarValue = "";
   String? _linkedVibhaagValue = "";
   String? _linkedbhaagValue = "";
@@ -100,6 +114,15 @@ class _HomeScreenState extends State<HomeScreen> {
   String? _linkedmandalValue = "";
   String? _linkedgraamValue = "";
   String? _linkedvastiValue = "";
+
+  String? _linkedMahaanagarValue2 = "";
+  String? _linkedVibhaagValue2 = "";
+  String? _linkedbhaagValue2 = "";
+  String? _linkedshaharValue2 = "";
+  String? _linkednagarValue2 = "";
+  String? _linkedmandalValue2 = "";
+  String? _linkedgraamValue2 = "";
+  String? _linkedvastiValue2 = "";
 
   String? tgMaasikEQ0 = '', myMaasikEQ0 = '';
   String? tgMaasikEQ1 = '', myMaasikEQ1 = '';
@@ -167,6 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   AbhiyanSwayamsevakdata? initialData;
   NotificationListModel? notificationListdata;
+  List<UpkhandaDataList> upkhandaDataList = [];
 
   @override
   void initState() {
@@ -175,8 +199,11 @@ class _HomeScreenState extends State<HomeScreen> {
     populateChoice();
     populatelinkedMahanagarDropdown();
     populatelinkedVibhaagDropdown();
+    populatelinkedMahanagarDropdown2();
+    populatelinkedVibhaagDropdown2();
     getGeoUnitID();
     getMyDetailsColumnsAndRows();
+    getUpkhandUpnagarReportFun("0", "praant");
 
     // Load notification data
     fetchNotificationData();
@@ -204,6 +231,22 @@ class _HomeScreenState extends State<HomeScreen> {
     var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), "", "", "");
     setState(() {
       _linkedVibhaag = data;
+    });
+  }
+
+  void populatelinkedMahanagarDropdown2() async {
+    _linkedVibhaagValue2 = _linkedbhaagValue2 = _linkedshaharValue2 = _linkednagarValue2 = _linkedmandalValue2 = _linkedgraamValue2 = _linkedvastiValue2 = null;
+    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MahaanagarLevelID'].toString(), "", "", "");
+    setState(() {
+      _linkedMahaanagar2 = data;
+    });
+  }
+
+  void populatelinkedVibhaagDropdown2() async {
+    _linkedbhaagValue2 = _linkedshaharValue2 = _linkednagarValue2 = _linkedmandalValue2 = _linkedgraamValue2 = _linkedvastiValue2 = null;
+    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), "", "", "");
+    setState(() {
+      _linkedVibhaag2 = data;
     });
   }
 
@@ -841,6 +884,21 @@ class _HomeScreenState extends State<HomeScreen> {
         _createWidget(Statics.tgLstYesterdayVruttaDetail[index].abhyaagatCount.toString(), 100, 52, Alignment.center, isTotalRow: isTotalRow),
       ],
     );
+  }
+
+  getUpkhandUpnagarReportFun(String? targetGeoUnitID, String levelName) async {
+    setState(() {
+      _isLoading = true;
+    });
+    var data = await Statics.upkhandUpnagarReportData(userID: Statics.userDetails["userID"], targetGeoUnitID: targetGeoUnitID, type: levelName);
+    setState(() {
+      _isLoading = false;
+    });
+    if (data != null) {
+      setState(() {
+        upkhandaDataList = data.dataList ?? [];
+      });
+    }
   }
 
   void getMyDetailsColumnsAndRows() async {
@@ -1697,1003 +1755,390 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-    return Scaffold(
-      appBar: AppBar(
-        title: InkWell(
-          onTap: () {
-            var user = Statics.userDetails["userID"];
-            print(user);
-          },
-          child: Text(
-            Statics.getLabel('homeScreenTitle'),
-            style: TextStyle(fontSize: 20),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: InkWell(
+            onTap: () {
+              var user = Statics.userDetails["userID"];
+              print(user);
+            },
+            child: Text(
+              Statics.getLabel('homeScreenTitle'),
+              style: TextStyle(fontSize: 20),
+            ),
           ),
+          bottom: TabBar(
+            unselectedLabelStyle: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w500),
+            labelStyle: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700),
+            onTap: (value) {
+              log("Printing the value >>>>>>> $value");
+              if (value == 1) {
+                getInitialData();
+                populateChoice();
+                populatelinkedMahanagarDropdown();
+                populatelinkedVibhaagDropdown();
+                populatelinkedMahanagarDropdown2();
+                populatelinkedVibhaagDropdown2();
+                getGeoUnitID();
+                getMyDetailsColumnsAndRows();
+                getUpkhandUpnagarReportFun("0", "praant");
+              }
+            },
+            tabs: [
+              Tab(text: Statics.getLabel('menu')),
+              Tab(text: Statics.getLabel('YesterdayPraantData')),
+            ],
+          ),
+          actions: <Widget>[
+            // if (Statics.lstAppVersion.length > 0 && '-' + Statics.lstAppVersion[0].buildNumber! != Statics.patchSuffix)
+            Stack(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.notifications),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => NotificationListPage(
+                          userId: Statics.userDetails['userID'],
+                        ),
+                      ),
+                    ).then((value) => fetchNotificationData());
+                    setState(() {});
+                  },
+                ),
+                if (notificationListdata?.notificationcount != "null" && notificationListdata?.notificationcount != '0' && notificationListdata?.notificationcount != '')
+                  Positioned(
+                    right: 4,
+                    top: 4,
+                    child: Container(
+                      padding: EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      constraints: BoxConstraints(
+                        minWidth: 16,
+                        minHeight: 16,
+                      ),
+                      child: Text(
+                        '${notificationListdata?.notificationcount}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            PopupMenuButton<MenuChoices>(
+              onSelected: onMenuSelected,
+              icon: Icon(Icons.settings),
+              itemBuilder: (BuildContext context) {
+                return choices.map((MenuChoices choice) {
+                  return PopupMenuItem<MenuChoices>(
+                    value: choice,
+                    child: ListTile(leading: Icon(choice.icon), title: Text(choice.menuText!)),
+                  );
+                }).toList();
+              },
+            ),
+          ],
         ),
-        actions: <Widget>[
-          // if (Statics.lstAppVersion.length > 0 && '-' + Statics.lstAppVersion[0].buildNumber! != Statics.patchSuffix)
-          Stack(
-            children: [
-              IconButton(
-                icon: Icon(Icons.notifications),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => NotificationListPage(
-                        userId: Statics.userDetails['userID'],
-                      ),
-                    ),
-                  ).then((value) => fetchNotificationData());
-                  setState(() {});
-                },
-              ),
-              if (notificationListdata?.notificationcount != "null" && notificationListdata?.notificationcount != '0' && notificationListdata?.notificationcount != '')
-                Positioned(
-                  right: 4,
-                  top: 4,
+        drawer: AppDrawer(),
+        body: TabBarView(
+          children: [
+            ModalProgressHUD(
+                child: SingleChildScrollView(
                   child: Container(
-                    padding: EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    constraints: BoxConstraints(
-                      minWidth: 16,
-                      minHeight: 16,
-                    ),
-                    child: Text(
-                      '${notificationListdata?.notificationcount}',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
+                    padding: EdgeInsets.all(20),
+                    width: Statics.getDeviceSize(context).width,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                    child: Text(
+                                  Statics.userDetails['FullName'] + ', ' + Statics.userDetails['MobileNumber'],
+                                  style: TextStyle(fontSize: 18),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                )),
+                              ],
+                            ),
+                            Wrap(
+                              spacing: 5,
+                              children: [
+                                Text(
+                                  Statics.userDetails['DaayitvaGeoUnitName'],
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                                Text(
+                                  Statics.userDetails['LevelName'],
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                                Text(
+                                  '$userDaayitvaNameforshow',
+                                  style: TextStyle(fontSize: 12),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 20),
+                        SizedBox(height: 30),
+
+                        /// 1st CARD
+                        shatabdiVrutaCard(),
+                        SizedBox(height: 27),
+
+                        /// 2nd CARD
+                        surveyCard(),
+                        SizedBox(height: 27),
+
+                        /// 3rd CARD
+                        moreCard(),
+                        SizedBox(height: 40),
+                      ],
                     ),
                   ),
                 ),
-            ],
-          ),
-          PopupMenuButton<MenuChoices>(
-            onSelected: onMenuSelected,
-            icon: Icon(Icons.settings),
-            itemBuilder: (BuildContext context) {
-              return choices.map((MenuChoices choice) {
-                return PopupMenuItem<MenuChoices>(
-                  value: choice,
-                  child: ListTile(leading: Icon(choice.icon), title: Text(choice.menuText!)),
-                );
-              }).toList();
-            },
-          ),
-        ],
-      ),
-      drawer: AppDrawer(),
-      body: ModalProgressHUD(
-          child: SingleChildScrollView(
-            child: Container(
-              padding: EdgeInsets.all(20),
-              width: Statics.getDeviceSize(context).width,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                              child: Text(
-                            Statics.userDetails['FullName'] + ', ' + Statics.userDetails['MobileNumber'],
-                            style: TextStyle(fontSize: 18),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                          )),
-                        ],
-                      ),
-                      Wrap(
-                        spacing: 5,
-                        children: [
-                          Text(
-                            Statics.userDetails['DaayitvaGeoUnitName'],
-                            style: TextStyle(fontSize: 12),
-                          ),
-                          Text(
-                            Statics.userDetails['LevelName'],
-                            style: TextStyle(fontSize: 12),
-                          ),
-                          Text(
-                            '$userDaayitvaNameforshow',
-                            style: TextStyle(fontSize: 12),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  SizedBox(height: 30),
-
-                  /// 1st CARD
-                  shatabdiVrutaCard(),
-                  SizedBox(height: 27),
-
-                  /// 2nd CARD
-                  surveyCard(),
-                  SizedBox(height: 27),
-
-                  /// 3rd CARD
-                  moreCard(),
-                  SizedBox(height: 40),
-
-                  ///
-                  Legend(legendString: "YesterdayPraantData", fontsize: 18),
-                  Container(
-                    height: Statics.getDeviceSize(context).height * (_yesterdayPraantHeaderRow != null ? 0.45 : 0.07),
+                inAsyncCall: _isSearching),
+            ModalProgressHUD(
+                child: SingleChildScrollView(
+                  child: Container(
+                    padding: EdgeInsets.all(20),
                     width: Statics.getDeviceSize(context).width,
-                    child: _isMySearching == true
-                        ? Column(
-                            children: [CircularProgressIndicator()],
-                          )
-                        : _yesterdayPraantHeaderRow != null
-                            ? HorizontalDataTable(
-                                leftHandSideColumnWidth: 100,
-                                rightHandSideColumnWidth: 200,
-                                isFixedHeader: true,
-                                headerWidgets: _yesterdayPraantHeaderRow,
-                                leftSideItemBuilder: _yesterdayPraantFirstColumn,
-                                rightSideItemBuilder: _yesterdayPraantOtherColumns,
-                                itemCount: (Statics.lstYesterdayPraantData.length),
-                                rowSeparatorWidget: const Divider(
-                                  color: Colors.black54,
-                                  height: 1.0,
-                                  thickness: 0.0,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                    child: Text(
+                                  Statics.userDetails['FullName'] + ', ' + Statics.userDetails['MobileNumber'],
+                                  style: TextStyle(fontSize: 18),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                )),
+                              ],
+                            ),
+                            Wrap(
+                              spacing: 5,
+                              children: [
+                                Text(
+                                  Statics.userDetails['DaayitvaGeoUnitName'],
+                                  style: TextStyle(fontSize: 12),
                                 ),
-                                leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                                rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                              )
-                            : Column(
-                                children: [
-                                  Text(
-                                    Statics.getLabel('NoDataFound'),
-                                    style: TextStyle(fontWeight: FontWeight.normal),
-                                  ),
-                                ],
-                              ),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  ExpansionPanelList(
-                    expansionCallback: (int index, bool isExpanded) {
-                      setState(() {
-                        _isSwExpanded = isExpanded;
-                      });
-                    },
-                    children: [
-                      ExpansionPanel(
-                        isExpanded: _isSwExpanded,
-                        headerBuilder: (BuildContext context, bool isExpanded) {
-                          return ListTile(
-                            title: Text(Statics.getLabel('MyGeoUnitDetails')),
-                          );
-                        },
-                        body: Container(
-                          margin: EdgeInsets.all(20),
-                          child: Column(
-                            children: [
-                              Legend(legendString: "yesterdayNews", fontsize: 18),
-                              if (int.parse(Statics.userDetails['LevelID']) > 6)
-                                Container(
-                                  height: Statics.getDeviceSize(context).height * (_myYesterdaySummaryHeaderRow != null ? 0.40 : 0.07),
-                                  width: Statics.getDeviceSize(context).width,
-                                  child: _myYesterdaySummaryHeaderRow != null
-                                      ? HorizontalDataTable(
-                                          leftHandSideColumnWidth: 100,
-                                          rightHandSideColumnWidth: 400,
-                                          isFixedHeader: true,
-                                          headerWidgets: _myYesterdaySummaryHeaderRow,
-                                          leftSideItemBuilder: _myYesterdaySummaryFirstColumn,
-                                          rightSideItemBuilder: _myYesterdaySummaryOtherColumns,
-                                          itemCount: (Statics.lstYesterdayVruttaSummary == null ? 0 : Statics.lstYesterdayVruttaSummary.length),
-                                          rowSeparatorWidget: const Divider(
-                                            color: Colors.black54,
-                                            height: 1.0,
-                                            thickness: 0.0,
-                                          ),
-                                          leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                                          rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                                        )
-                                      : Column(
-                                          children: [
-                                            Text(
-                                              Statics.getLabel('NoDataFound'),
-                                              style: TextStyle(fontWeight: FontWeight.normal),
-                                            ),
-                                          ],
-                                        ),
+                                Text(
+                                  Statics.userDetails['LevelName'],
+                                  style: TextStyle(fontSize: 12),
                                 ),
-                              if (int.parse(Statics.userDetails['LevelID']) <= 6)
-                                Container(
-                                  height: Statics.getDeviceSize(context).height * (_myYesterdayDetailHeaderRow != null ? 0.40 : 0.07),
-                                  width: Statics.getDeviceSize(context).width,
-                                  child: _myYesterdayDetailHeaderRow != null
-                                      ? HorizontalDataTable(
-                                          leftHandSideColumnWidth: 100,
-                                          rightHandSideColumnWidth: 800,
-                                          isFixedHeader: true,
-                                          headerWidgets: _myYesterdayDetailHeaderRow,
-                                          leftSideItemBuilder: _myYesterdayDetailFirstColumn,
-                                          rightSideItemBuilder: _myYesterdayDetailOtherColumns,
-                                          itemCount: (Statics.lstYesterdayVruttaDetail == null ? 0 : Statics.lstYesterdayVruttaDetail.length),
-                                          rowSeparatorWidget: const Divider(
-                                            color: Colors.black54,
-                                            height: 1.0,
-                                            thickness: 0.0,
-                                          ),
-                                          leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                                          rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                                        )
-                                      : Column(
-                                          children: [
-                                            Text(
-                                              Statics.getLabel('NoDataFound'),
-                                              style: TextStyle(fontWeight: FontWeight.normal),
-                                            ),
-                                          ],
-                                        ),
-                                ),
-                              SizedBox(
-                                height: 15,
-                              ),
-                              Legend(legendString: "ShaakhaaVruttaSummaryLabel", fontsize: 18),
-                              SingleColumnRow(txtString: Statics.getLabel('Shaakhaa') + ':-', value: '', fontsize: 18),
-                              SingleColumnRow(txtString: Statics.getLabel('ShaakhaaEQ0'), value: myShaakhaaEQ0, fontsize: 15),
-                              SingleColumnRow(txtString: Statics.getLabel('Shaakhaa1To24'), value: myShaakhaa1To24, fontsize: 15),
-                              SingleColumnRow(txtString: Statics.getLabel('ShaakhaaGTE25'), value: myShaakhaaGTE25, fontsize: 15),
-                              SingleColumnRow(txtString: Statics.getLabel('ShaakhaaEQ30'), value: myShaakhaaEQ30, fontsize: 15),
-                              SingleColumnRow(txtString: Statics.getLabel('SaaptaahikMilan') + ':-', value: '', fontsize: 18),
-                              SingleColumnRow(txtString: Statics.getLabel('SaaptaahikEQ0'), value: mySaaptaahikEQ0, fontsize: 15),
-                              SingleColumnRow(txtString: Statics.getLabel('Saaptaahik1To3'), value: mySaaptaahik1To3, fontsize: 15),
-                              SingleColumnRow(txtString: Statics.getLabel('SaaptaahikGTE4'), value: mySaaptaahikGTE4, fontsize: 15),
-                              SingleColumnRow(txtString: Statics.getLabel('MaasikMilan') + '/' + Statics.getLabel('SanghaMandali') + ':-', value: '', fontsize: 18),
-                              SingleColumnRow(txtString: Statics.getLabel('MaasikEQ0'), value: myMaasikEQ0, fontsize: 15),
-                              SingleColumnRow(txtString: Statics.getLabel('MaasikEQ1'), value: myMaasikEQ1, fontsize: 15),
-                              SizedBox(
-                                height: 15,
-                              ),
-
-                              Legend(legendString: "SankalpTable", fontsize: 18),
-                              Container(
-                                height: Statics.getDeviceSize(context).height * (_mySadyasthitiHeaderRow != null ? 0.40 : 0.07),
-                                width: Statics.getDeviceSize(context).width,
-                                child: _mySadyasthitiHeaderRow != null
-                                    ? HorizontalDataTable(
-                                        leftHandSideColumnWidth: 100,
-                                        rightHandSideColumnWidth: 1160,
-                                        isFixedHeader: true,
-                                        headerWidgets: _mySadyasthitiHeaderRow,
-                                        leftSideItemBuilder: _mySadyasthitiFirstColumn,
-                                        rightSideItemBuilder: _mySadyasthitiOtherColumns,
-                                        itemCount: (Statics.lstdashboardSadyaSthitiData == null ? 0 : Statics.lstdashboardSadyaSthitiData.length),
-                                        rowSeparatorWidget: const Divider(
-                                          color: Colors.black54,
-                                          height: 1.0,
-                                          thickness: 0.0,
-                                        ),
-                                        leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                                        rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                                      )
-                                    : Column(
-                                        children: [
-                                          Text(
-                                            Statics.getLabel('NoDataFound'),
-                                            style: TextStyle(fontWeight: FontWeight.normal),
-                                          ),
-                                        ],
-                                      ),
-                              ),
-                              SizedBox(
-                                height: 15,
-                              ),
-                              // SingleColumnRow(txtString: Statics.getLabel('MaasikMilan'), value: masikMilanCount, fontsize: 15),
-                              // SingleColumnRow(txtString: Statics.getLabel('SanghaMandali'), value: sanghaMandaliCount, fontsize: 15),
-                              // SingleColumnRow(txtString: Statics.getLabel('EkunSankalpitShakha'), value:totalsankalpitshakhaCount, fontsize: 15),
-                              // SingleColumnRow(txtString: Statics.getLabel('EkunSankalpitSaptahikMilan'), value: totalsankalpitSaaptaahikCount, fontsize: 15),
-                              SizedBox(
-                                height: 15,
-                              ),
-
-                              Legend(legendString: "NewSankalpTable", fontsize: 18),
-                              Container(
-                                height: Statics.getDeviceSize(context).height * (_mySankalpDataHeaderRow != null ? 0.40 : 0.07),
-                                width: Statics.getDeviceSize(context).width,
-                                child: _mySankalpDataHeaderRow != null
-                                    ? HorizontalDataTable(
-                                        leftHandSideColumnWidth: 100,
-                                        rightHandSideColumnWidth: 500,
-                                        isFixedHeader: true,
-                                        headerWidgets: _mySankalpDataHeaderRow,
-                                        leftSideItemBuilder: _mySankalpDataFirstColumn,
-                                        rightSideItemBuilder: _mySankalpDataOtherColumns,
-                                        itemCount: (Statics.lstSankalpByAadhaarData == null ? 0 : Statics.lstSankalpByAadhaarData.length),
-                                        rowSeparatorWidget: const Divider(
-                                          color: Colors.black54,
-                                          height: 1.0,
-                                          thickness: 0.0,
-                                        ),
-                                        leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                                        rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                                      )
-                                    : Column(
-                                        children: [
-                                          Text(
-                                            Statics.getLabel('NoDataFound'),
-                                            style: TextStyle(fontWeight: FontWeight.normal),
-                                          ),
-                                        ],
-                                      ),
-                              ),
-                              SizedBox(
-                                height: 15,
-                              ),
-
-                              Legend(legendString: "BhaugolikVistaar", fontsize: 18),
-                              Container(
-                                height: Statics.getDeviceSize(context).height * (_myBhaugolikHeaderRow != null ? 0.40 : 0.07),
-                                width: Statics.getDeviceSize(context).width,
-                                child: _myBhaugolikHeaderRow != null
-                                    ? HorizontalDataTable(
-                                        leftHandSideColumnWidth: 100,
-                                        rightHandSideColumnWidth: 400,
-                                        isFixedHeader: true,
-                                        headerWidgets: _myBhaugolikHeaderRow,
-                                        leftSideItemBuilder: _myBhagolikVistaarFirstColumn,
-                                        rightSideItemBuilder: _myBhagolikVistaarOtherColumns,
-                                        itemCount: (Statics.lstBhaugolikVistaar == null ? 0 : Statics.lstBhaugolikVistaar.length),
-                                        rowSeparatorWidget: const Divider(
-                                          color: Colors.black54,
-                                          height: 1.0,
-                                          thickness: 0.0,
-                                        ),
-                                        leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                                        rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                                      )
-                                    : Column(
-                                        children: [
-                                          Text(
-                                            Statics.getLabel('NoDataFound'),
-                                            style: TextStyle(fontWeight: FontWeight.normal),
-                                          ),
-                                        ],
-                                      ),
-                              ),
-                              SizedBox(
-                                height: 15,
-                              ),
-
-                              // Legend(legendString: "LastMonthBhaugolikVistaar", fontsize: 18),
-                              // Container(
-                              //   height: Statics.getDeviceSize(context).height *
-                              //       (_myLastMonthBhaugolikHeaderRow != null ? 0.40 : 0.07),
-                              //   width: Statics.getDeviceSize(context).width,
-                              //   child: _myLastMonthBhaugolikHeaderRow != null
-                              //     ? HorizontalDataTable(
-                              //       leftHandSideColumnWidth: 100,
-                              //       rightHandSideColumnWidth: 400,
-                              //       isFixedHeader: true,
-                              //       headerWidgets: _myLastMonthBhaugolikHeaderRow,
-                              //       leftSideItemBuilder: _myLastMonthBhagolikVistaarFirstColumn,
-                              //       rightSideItemBuilder: _myLastMonthBhagolikVistaarOtherColumns,
-                              //       itemCount: (Statics.lstLastMonthBhaugolikVistaar == null ? 0 : Statics.lstLastMonthBhaugolikVistaar.length),
-                              //       rowSeparatorWidget: const Divider(
-                              //         color: Colors.black54,
-                              //         height: 1.0,
-                              //         thickness: 0.0,
-                              //       ),
-                              //       leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                              //       rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                              //     )
-                              //     : Column(
-                              //         children:[
-                              //           Text(Statics.getLabel('NoDataFound'),
-                              //             style: TextStyle(fontWeight: FontWeight.normal),),
-                              //         ],
-                              //     ),
-                              // ),
-
-                              Legend(legendString: "SwayamsevakCount", fontsize: 18),
-                              SingleColumnRow(txtString: Statics.getLabel('TotalKaaryakartaaCount'), value: myTotalSwayamsevakCount, fontsize: 15),
-                              SingleColumnRow(txtString: Statics.getLabel('PratidnyitCount'), value: myPratidnyitCount, fontsize: 15),
-                              SizedBox(
-                                height: 15,
-                              ),
-
-                              Legend(legendString: "SwayamsevakCountByAge", fontsize: 18),
-                              SingleColumnRow(txtString: Statics.getLabel('Shishu'), value: myShishuCount, fontsize: 15),
-                              SingleColumnRow(txtString: Statics.getLabel('Baal'), value: myBaalCount, fontsize: 15),
-                              SingleColumnRow(txtString: Statics.getLabel('TarunVidyaarthi'), value: myTarunVidyaarthiCount, fontsize: 15),
-                              SingleColumnRow(txtString: Statics.getLabel('TarunVyavasaayee'), value: myTarunVyavasaayeeCount, fontsize: 15),
-                              SingleColumnRow(txtString: Statics.getLabel('ProudhVyavasaayee'), value: myProudhaVyavasaayeeCount, fontsize: 15),
-                              SingleColumnRow(txtString: Statics.getLabel('UnkownAge'), value: myUnknownAgeCount, fontsize: 15),
-                              SizedBox(
-                                height: 15,
-                              ),
-
-                              Legend(legendString: "ShikshitSwayamsevakCount", fontsize: 18),
-                              SingleColumnRow(txtString: Statics.getLabel('PrarambhikShikshit'), value: myPraarambhikShikshitCount, fontsize: 15),
-                              SingleColumnRow(txtString: Statics.getLabel('PraathamikShikshit'), value: myPraathamikShikshitCount, fontsize: 15),
-                              SingleColumnRow(txtString: Statics.getLabel('PrathamVarshShikshit'), value: myPrathamVarshaShikshitCount, fontsize: 15),
-                              SingleColumnRow(txtString: Statics.getLabel('DwitiyaVarshShikshit'), value: myDwitiyaVarshaShikshitCount, fontsize: 15),
-                              SingleColumnRow(txtString: Statics.getLabel('TrutiyaVarshShikshit'), value: myTrutiyaVarshaShikshitCount, fontsize: 15),
-                              SingleColumnRow(txtString: Statics.getLabel('NoShikshan'), value: myNoShikshanCount, fontsize: 15),
-                              SizedBox(
-                                height: 15,
-                              ),
-
-                              Legend(legendString: "KaaryakartaaCountByLevel", fontsize: 18),
-                              TwoColumnRow(
-                                txtString: Statics.getLabel('Shaakhaa'),
-                                value: myDailyShaakhaaKaaryakartaaCount,
-                                txtString2: Statics.getLabel('SaaptaahikLabelShort'),
-                                value2: mySaaptaahikMilanKaaryakartaaCount,
-                                fontsize: 15,
-                              ),
-                              TwoColumnRow(
-                                txtString: Statics.getLabel('MilanMandali'),
-                                value: myMaasikMilanKaaryakartaaCount,
-                                txtString2: Statics.getLabel('VastiKaaryakartaaCount'),
-                                value2: myVastiKaaryakartaaCount,
-                                fontsize: 15,
-                              ),
-                              TwoColumnRow(
-                                txtString: Statics.getLabel('GraamKaaryakartaaCount'),
-                                value: myGraamKaaryakartaaCount,
-                                txtString2: Statics.getLabel('MandalKaaryakartaaCount'),
-                                value2: myMandalKaaryakartaaCount,
-                                fontsize: 15,
-                              ),
-                              TwoColumnRow(
-                                txtString: Statics.getLabel('NagarKaaryakartaaCount'),
-                                value: myNagarKaaryakartaaCount,
-                                txtString2: Statics.getLabel('ShaharKaaryakartaaCount'),
-                                value2: myShaharKaaryakartaaCount,
-                                fontsize: 15,
-                              ),
-                              TwoColumnRow(
-                                txtString: Statics.getLabel('BhaagKaaryakartaaCount'),
-                                value: myBhaagKaaryakartaaCount,
-                                txtString2: Statics.getLabel('VibhaagKaaryakartaaCount'),
-                                value2: myVibhaagKaaryakartaaCount,
-                                fontsize: 15,
-                              ),
-                              TwoColumnRow(
-                                txtString: Statics.getLabel('MahaanagarKaaryakartaaCount'),
-                                value: myMahaanagarKaaryakartaaCount,
-                                txtString2: Statics.getLabel('PraantKaaryakartaaCount'),
-                                value2: myPraantKaaryakartaaCount,
-                                fontsize: 15,
-                              ),
-                              TwoColumnRow(
-                                txtString: Statics.getLabel('KshetraKaaryakartaaCount'),
-                                value: myKshetraKaaryakartaaCount,
-                                txtString2: Statics.getLabel('AkhilBhaaratiyaKaaryakartaaCount'),
-                                value2: myAkhilBhaaratiyaKaaryakartaaCount,
-                                fontsize: 15,
-                              ),
-                              TwoColumnRow(
-                                txtString: Statics.getLabel('PravaaseeKaaryakartaaCount'),
-                                value: myPravaaseeKaaryakartaaCount,
-                                txtString2: Statics.getLabel('TotalKaaryakartaaCount'),
-                                value2: myTotalKaaryakartaaCount,
-                                fontsize: 15,
-                              ),
-                              SizedBox(
-                                height: 15,
-                              ),
-
-                              Legend(legendString: "GatividhiAayaamSansthaaKaaryakartaaCount", fontsize: 18),
-                              SingleColumnRow(txtString: Statics.getLabel('GatividhiKaaryakartaaCount'), value: Statics.dashboardData['GatividhiKaaryakartaaCount'], fontsize: 15),
-                              SingleColumnRow(txtString: Statics.getLabel('AayaamKaaryakartaaCount'), value: Statics.dashboardData['AayaamKaaryakartaaCount'], fontsize: 15),
-                              SingleColumnRow(
-                                  txtString: Statics.getLabel('SanghaPreritSansthaaKaaryakartaaCount'), value: Statics.dashboardData['SanghaPreritSansthaaKaaryakartaaCount'], fontsize: 15),
-                              SingleColumnRow(txtString: Statics.getLabel('SocialOrganizationKaaryakartaaCount'), value: Statics.dashboardData['SocialOrganizationKaaryakartaaCount'], fontsize: 15),
-                              SizedBox(
-                                height: 15,
-                              ),
-
-                              Legend(legendString: "Gatividhi", fontsize: 18),
-                              Container(
-                                height: Statics.getDeviceSize(context).height * (_myGatividhiKaaryakartaaHeaderRow != null ? 0.40 : 0.07),
-                                width: Statics.getDeviceSize(context).width,
-                                child: _myGatividhiKaaryakartaaHeaderRow != null
-                                    ? HorizontalDataTable(
-                                        leftHandSideColumnWidth: 150,
-                                        rightHandSideColumnWidth: 150,
-                                        isFixedHeader: true,
-                                        headerWidgets: _myGatividhiKaaryakartaaHeaderRow,
-                                        leftSideItemBuilder: _myGatividhiKaaryakartaaFirstColumn,
-                                        rightSideItemBuilder: _myGatividhiKaaryakartaaOtherColumns,
-                                        itemCount: (Statics.lstGatividhiKaaryakartaa == null ? 0 : Statics.lstGatividhiKaaryakartaa.length),
-                                        rowSeparatorWidget: const Divider(
-                                          color: Colors.black54,
-                                          height: 1.0,
-                                          thickness: 0.0,
-                                        ),
-                                        leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                                        rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                                      )
-                                    : Column(
-                                        children: [
-                                          Text(
-                                            Statics.getLabel('NoDataFound'),
-                                            style: TextStyle(fontWeight: FontWeight.normal),
-                                          ),
-                                        ],
-                                      ),
-                              ),
-                              SizedBox(
-                                height: 15,
-                              ),
-
-                              Legend(legendString: "Aayaam", fontsize: 18),
-                              Container(
-                                height: Statics.getDeviceSize(context).height * (_myAayaamKaaryakartaaHeaderRow != null ? 0.40 : 0.07),
-                                width: Statics.getDeviceSize(context).width,
-                                child: _myAayaamKaaryakartaaHeaderRow != null
-                                    ? HorizontalDataTable(
-                                        leftHandSideColumnWidth: 150,
-                                        rightHandSideColumnWidth: 150,
-                                        isFixedHeader: true,
-                                        headerWidgets: _myAayaamKaaryakartaaHeaderRow,
-                                        leftSideItemBuilder: _myAayaamKaaryakartaaFirstColumn,
-                                        rightSideItemBuilder: _myAayaamKaaryakartaaOtherColumns,
-                                        itemCount: (Statics.lstAayaamKaaryakartaa == null ? 0 : Statics.lstAayaamKaaryakartaa.length),
-                                        rowSeparatorWidget: const Divider(
-                                          color: Colors.black54,
-                                          height: 1.0,
-                                          thickness: 0.0,
-                                        ),
-                                        leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                                        rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                                      )
-                                    : Column(
-                                        children: [
-                                          Text(
-                                            Statics.getLabel('NoDataFound'),
-                                            style: TextStyle(fontWeight: FontWeight.normal),
-                                          ),
-                                        ],
-                                      ),
-                              ),
-                              SizedBox(
-                                height: 15,
-                              ),
-
-                              Legend(legendString: "Sangha-PreritSansthaa", fontsize: 18),
-                              Container(
-                                height: Statics.getDeviceSize(context).height * (_myPreritKaaryakartaaHeaderRow != null ? 0.40 : 0.07),
-                                width: Statics.getDeviceSize(context).width,
-                                child: _myPreritKaaryakartaaHeaderRow != null
-                                    ? HorizontalDataTable(
-                                        leftHandSideColumnWidth: 150,
-                                        rightHandSideColumnWidth: 150,
-                                        isFixedHeader: true,
-                                        headerWidgets: _myPreritKaaryakartaaHeaderRow,
-                                        leftSideItemBuilder: _myPreritKaaryakartaaFirstColumn,
-                                        rightSideItemBuilder: _myPreritKaaryakartaaOtherColumns,
-                                        itemCount: (Statics.lstPreritKaaryakartaa == null ? 0 : Statics.lstPreritKaaryakartaa.length),
-                                        rowSeparatorWidget: const Divider(
-                                          color: Colors.black54,
-                                          height: 1.0,
-                                          thickness: 0.0,
-                                        ),
-                                        leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                                        rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                                      )
-                                    : Column(
-                                        children: [
-                                          Text(
-                                            Statics.getLabel('NoDataFound'),
-                                            style: TextStyle(fontWeight: FontWeight.normal),
-                                          ),
-                                        ],
-                                      ),
-                              ),
-                              SizedBox(
-                                height: 15,
-                              ),
-
-                              Legend(legendString: "OtherSocialOrganization", fontsize: 18),
-                              Container(
-                                height: Statics.getDeviceSize(context).height * (_mySocialOrgKaaryakartaaHeaderRow != null ? 0.40 : 0.07),
-                                width: Statics.getDeviceSize(context).width,
-                                child: _mySocialOrgKaaryakartaaHeaderRow != null
-                                    ? HorizontalDataTable(
-                                        leftHandSideColumnWidth: 150,
-                                        rightHandSideColumnWidth: 150,
-                                        isFixedHeader: true,
-                                        headerWidgets: _mySocialOrgKaaryakartaaHeaderRow,
-                                        leftSideItemBuilder: _mySocialOrgKaaryakartaaFirstColumn,
-                                        rightSideItemBuilder: _mySocialOrgKaaryakartaaOtherColumns,
-                                        itemCount: (Statics.lstSocialOrgKaaryakartaa == null ? 0 : Statics.lstSocialOrgKaaryakartaa.length),
-                                        rowSeparatorWidget: const Divider(
-                                          color: Colors.black54,
-                                          height: 1.0,
-                                          thickness: 0.0,
-                                        ),
-                                        leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                                        rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                                      )
-                                    : Column(
-                                        children: [
-                                          Text(
-                                            Statics.getLabel('NoDataFound'),
-                                            style: TextStyle(fontWeight: FontWeight.normal),
-                                          ),
-                                        ],
-                                      ),
-                              ),
-                              SizedBox(
-                                height: 15,
-                              ),
-
-                              Legend(legendString: "StudentCategory", fontsize: 18),
-                              Container(
-                                height: Statics.getDeviceSize(context).height * (_myStudentCategoryHeaderRow != null ? 0.40 : 0.07),
-                                width: Statics.getDeviceSize(context).width,
-                                child: _myStudentCategoryHeaderRow != null
-                                    ? HorizontalDataTable(
-                                        leftHandSideColumnWidth: 150,
-                                        rightHandSideColumnWidth: 150,
-                                        isFixedHeader: true,
-                                        headerWidgets: _myStudentCategoryHeaderRow,
-                                        leftSideItemBuilder: _myStudentCategoryFirstColumn,
-                                        rightSideItemBuilder: _myStudentCategoryOtherColumns,
-                                        itemCount: (Statics.lstStudentCategory == null ? 0 : Statics.lstStudentCategory.length),
-                                        rowSeparatorWidget: const Divider(
-                                          color: Colors.black54,
-                                          height: 1.0,
-                                          thickness: 0.0,
-                                        ),
-                                        leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                                        rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                                      )
-                                    : Column(
-                                        children: [
-                                          Text(
-                                            Statics.getLabel('NoDataFound'),
-                                            style: TextStyle(fontWeight: FontWeight.normal),
-                                          ),
-                                        ],
-                                      ),
-                              ),
-                              SizedBox(
-                                height: 15,
-                              ),
-
-                              Legend(legendString: "VyavasaayeeCategory", fontsize: 18),
-                              Container(
-                                height: Statics.getDeviceSize(context).height * (_myVyavasaayeeCategoryHeaderRow != null ? 0.40 : 0.07),
-                                width: Statics.getDeviceSize(context).width,
-                                child: _myVyavasaayeeCategoryHeaderRow != null
-                                    ? HorizontalDataTable(
-                                        leftHandSideColumnWidth: 150,
-                                        rightHandSideColumnWidth: 150,
-                                        isFixedHeader: true,
-                                        headerWidgets: _myVyavasaayeeCategoryHeaderRow,
-                                        leftSideItemBuilder: _myVyavasaayeeCategoryFirstColumn,
-                                        rightSideItemBuilder: _myVyavasaayeeCategoryOtherColumns,
-                                        itemCount: (Statics.lstVyavasaayeeCategory == null ? 0 : Statics.lstVyavasaayeeCategory.length),
-                                        rowSeparatorWidget: const Divider(
-                                          color: Colors.black54,
-                                          height: 1.0,
-                                          thickness: 0.0,
-                                        ),
-                                        leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                                        rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                                      )
-                                    : Column(
-                                        children: [
-                                          Text(
-                                            Statics.getLabel('NoDataFound'),
-                                            style: TextStyle(fontWeight: FontWeight.normal),
-                                          ),
-                                        ],
-                                      ),
-                              ),
-                              SizedBox(
-                                height: 15,
-                              ),
-                            ],
-                          ),
+                                Text(
+                                  '$userDaayitvaNameforshow',
+                                  style: TextStyle(fontSize: 12),
+                                )
+                              ],
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ExpansionPanelList(
-                    expansionCallback: (int index, bool isExpanded) {
-                      setState(() {
-                        _isGeounitExpanded = isExpanded;
-                      });
-                    },
-                    children: [
-                      ExpansionPanel(
-                        isExpanded: _isGeounitExpanded,
-                        headerBuilder: (BuildContext context, bool isExpanded) {
-                          return ListTile(
-                            title: Text(Statics.getLabel('TargetGeoUnitDetails')),
-                          );
-                        },
-                        body: Container(
-                          margin: EdgeInsets.all(20),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  SizedBox(
-                                    height: 20,
-                                    width: 80,
-                                    child: MaterialButton(
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                                      color: Theme.of(context).primaryColor,
-                                      textColor: Theme.of(context).primaryTextTheme.button!.color,
-                                      onPressed: () {
-                                        setState(() {
-                                          _linkedMahaanagarValue =
-                                              _linkedVibhaagValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-                                          _linkedMahaanagar = _linkedVibhaag = _linkedbhaag = _linkedshahar = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
+                        SizedBox(height: 20),
 
-                                          tgShishuCount = "";
-                                          tgBaalCount = "";
-                                          tgTarunVidyaarthiCount = "";
-                                          tgTarunVyavasaayeeCount = "";
-                                          tgProudhaVyavasaayeeCount = "";
-                                          tgUnknownAgeCount = "";
-                                          tgTrutiyaVarshaShikshitCount = "";
-                                          tgDwitiyaVarshaShikshitCount = "";
-                                          tgPrathamVarshaShikshitCount = "";
-                                          tgPraarambhikShikshitCount = "";
-                                          tgPraathamikShikshitCount = "";
-                                          tgNoShikshanCount = "";
-                                          tgShaakhaaKaaryakartaaCount = "";
-                                          tgVastiKaaryakartaaCount = "";
-                                          tgGraamKaaryakartaaCount = "";
-                                          tgMandalKaaryakartaaCount = "";
-                                          tgNagarKaaryakartaaCount = "";
-                                          tgShaharKaaryakartaaCount = "";
-                                          tgBhaagKaaryakartaaCount = "";
-                                          tgVibhaagKaaryakartaaCount = "";
-                                          tgMahaanagarKaaryakartaaCount = "";
-                                          tgPraantKaaryakartaaCount = "";
-                                          notificationCount = "";
-                                          tgKshetraKaaryakartaaCount = "";
-                                          tgPravaaseeKaaryakartaaCount = "";
-                                          tgGatividhiKaaryakartaaCount = "";
-                                          tgAayaamKaaryakartaaCount = "";
-                                          tgSanghaPreritSansthaaKaaryakartaaCount = "";
-                                          tgTotalKaaryakartaaCount = "";
-                                          tgSocialOrganizationKaaryakartaaCount = "";
-                                          tgPratidnyitCount = "";
-                                          _tgSadyasthitiHeaderRow = null;
-                                          _tgSankalpDataHeaderRow = null;
-                                          _tgBhaugolikHeaderRow = null;
-                                          // _tgLastMonthBhaugolikHeaderRow = null;
-                                          _tgGatividhiKaaryakartaaHeaderRow = null;
-                                          _tgAayaamKaaryakartaaHeaderRow = null;
-                                          _tgPreritKaaryakartaaHeaderRow = null;
-                                          _tgSocialOrgKaaryakartaaHeaderRow = null;
-                                          _tgStudentCategoryHeaderRow = null;
-                                          _tgVyavasaayeeCategoryHeaderRow = null;
-                                          _tgYesterdayDetailHeaderRow = null;
-                                          _tgYesterdaySummaryHeaderRow = null;
-
-                                          tgMasikMilanCount = '0';
-                                          tgSanghaMandaliCount = '0';
-                                          tgDailyShaakhaaKaaryakartaaCount = "";
-                                          tgSaaptaahikMilanKaaryakartaaCount = "";
-                                          tgMaasikMilanKaaryakartaaCount = "";
-                                          tgAkhilBhaaratiyaKaaryakartaaCount = "";
-                                          tgTotalSwayamsevakCount = "";
-
-                                          tgMaasikEQ0 = tgMaasikEQ1 = tgSaaptaahikEQ0 = "";
-                                          tgSaaptaahik1To3 = tgSaaptaahikGTE4 = "";
-                                          tgShaakhaaEQ0 = tgShaakhaa1To24 = tgShaakhaaGTE25 = tgShaakhaaEQ30 = "";
-                                        });
-
-                                        populatelinkedMahanagarDropdown();
-                                        populatelinkedVibhaagDropdown();
-                                      },
-                                      child: Text(Statics.getLabel("clear"), style: TextStyle(fontSize: 12)),
+                        ///
+                        Legend(legendString: "YesterdayPraantData", fontsize: 18),
+                        Container(
+                          height: Statics.getDeviceSize(context).height * (_yesterdayPraantHeaderRow != null ? 0.45 : 0.07),
+                          width: Statics.getDeviceSize(context).width,
+                          child: _isMySearching == true
+                              ? Column(
+                                  children: [CircularProgressIndicator()],
+                                )
+                              : _yesterdayPraantHeaderRow != null
+                                  ? HorizontalDataTable(
+                                      leftHandSideColumnWidth: 100,
+                                      rightHandSideColumnWidth: 200,
+                                      isFixedHeader: true,
+                                      headerWidgets: _yesterdayPraantHeaderRow,
+                                      leftSideItemBuilder: _yesterdayPraantFirstColumn,
+                                      rightSideItemBuilder: _yesterdayPraantOtherColumns,
+                                      itemCount: (Statics.lstYesterdayPraantData.length),
+                                      rowSeparatorWidget: const Divider(
+                                        color: Colors.black54,
+                                        height: 1.0,
+                                        thickness: 0.0,
+                                      ),
+                                      leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                      rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                    )
+                                  : Column(
+                                      children: [
+                                        Text(
+                                          Statics.getLabel('NoDataFound'),
+                                          style: TextStyle(fontWeight: FontWeight.normal),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ],
+                        ),
+                        SizedBox(height: 15),
+                        ExpansionPanelList(
+                          expansionCallback: (int index, bool isExpanded) {
+                            setState(() {
+                              _isNagarTableExpanded = isExpanded;
+                            });
+                          },
+                          children: [
+                            ExpansionPanel(
+                              isExpanded: _isNagarTableExpanded,
+                              headerBuilder: (BuildContext context, bool isExpanded) {
+                                return ListTile(
+                                  title: Text(Statics.getLabel('mainPageTableCount')),
+                                );
+                              },
+                              body: Container(
+                                margin: EdgeInsets.all(20),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        SizedBox(
+                                          height: 20,
+                                          width: 80,
+                                          child: MaterialButton(
+                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                                            color: Theme.of(context).primaryColor,
+                                            textColor: Theme.of(context).primaryTextTheme.button!.color,
+                                            onPressed: () {
+                                              setState(() {
+                                                _linkedMahaanagarValue2 = _linkedVibhaagValue2 =
+                                                    _linkedbhaagValue2 = _linkedshaharValue2 = _linkednagarValue2 = _linkedmandalValue2 = _linkedgraamValue2 = _linkedvastiValue2 = null;
+                                                _linkedMahaanagar2 = _linkedVibhaag2 = _linkedbhaag2 = _linkedshahar2 = _linkednagar2 = _linkedmandal2 = _linkedgraam2 = _linkedvasti2 = null;
+                                              });
+
+                                              populatelinkedMahanagarDropdown2();
+                                              populatelinkedVibhaagDropdown2();
+                                              getUpkhandUpnagarReportFun("0", "praant");
+                                            },
+                                            child: Text(Statics.getLabel("clear"), style: TextStyle(fontSize: 12)),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    if (_linkedMahaanagar2 != null)
+                                      DropdownButtonFormField(
+                                        decoration: InputDecoration(labelText: Statics.getLabel('Mahaanagar')),
+                                        isExpanded: true,
+                                        value: _linkedMahaanagarValue2 == "" ? null : _linkedMahaanagarValue2,
+                                        items: _linkedMahaanagar2?.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _linkedMahaanagarValue2 = value!;
+                                            _linkedVibhaagValue2 = null;
+                                            populatelinkedVibhaagDropdown2();
+                                            getUpkhandUpnagarReportFun(value, "mahanagar");
+                                          });
+                                        },
+                                      ),
+                                    if (_linkedVibhaag2 != null)
+                                      DropdownButtonFormField(
+                                        decoration: InputDecoration(labelText: Statics.getLabel('Vibhaag')),
+                                        isExpanded: true,
+                                        value: _linkedVibhaagValue2 == "" ? null : _linkedVibhaagValue2,
+                                        items: _linkedVibhaag2?.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _linkedVibhaagValue2 = value!;
+                                            getUpkhandUpnagarReportFun(value, "vibhaag");
+                                          });
+                                        },
+                                      ),
+                                    SizedBox(height: 18),
+
+                                    ///
+                                    _isLoading ? CircularProgressIndicator() : buildUpnagarCountDataTable(upkhandaDataList),
+
+                                    ///
+                                  ],
+                                ),
                               ),
-                              if (_linkedMahaanagar != null)
-                                DropdownButtonFormField(
-                                  decoration: InputDecoration(labelText: Statics.getLabel('Mahaanagar')),
-                                  isExpanded: true,
-                                  value: _linkedMahaanagarValue == "" ? null : _linkedMahaanagarValue,
-                                  items: _linkedMahaanagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _linkedMahaanagarValue = value!;
-                                      populatelinkedVibhaagDropdown();
-                                      getTargetDetailsColumnsAndRows(value, 8);
-                                    });
-                                  },
-                                ),
-                              if (_linkedVibhaag != null)
-                                DropdownButtonFormField(
-                                  decoration: InputDecoration(labelText: Statics.getLabel('Vibhaag')),
-                                  isExpanded: true,
-                                  value: _linkedVibhaagValue == "" ? null : _linkedVibhaagValue,
-                                  items: _linkedVibhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _linkedVibhaagValue = value!;
-                                      populatelinkedBhaagDropdown(value);
-                                      getTargetDetailsColumnsAndRows(value, 8);
-                                    });
-                                  },
-                                ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              if (_linkedbhaag != null && _linkedbhaag!.length > 0)
-                                DropdownButtonFormField(
-                                  decoration: InputDecoration(labelText: Statics.getLabel('Bhaag')),
-                                  isExpanded: true,
-                                  value: _linkedbhaagValue == "" ? null : _linkedbhaagValue,
-                                  items: _linkedbhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _linkedbhaagValue = value;
-                                      populatelinkedShaharDropdown(value!);
-                                      populatelinkedNagarDropdown(value, null);
-                                      getTargetDetailsColumnsAndRows(value, 7);
-                                    });
-                                  },
-                                ),
-                              if (_linkedbhaag != null && _linkedbhaag!.length > 0)
-                                SizedBox(
-                                  height: 10,
-                                ),
-                              if (_linkedshahar != null && _linkedshahar!.length > 0)
-                                DropdownButtonFormField(
-                                  decoration: InputDecoration(labelText: Statics.getLabel('Shahar')),
-                                  isExpanded: true,
-                                  value: _linkedshaharValue == "" ? null : _linkedshaharValue,
-                                  items: _linkedshahar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _linkedshaharValue = value;
-                                      populatelinkedNagarDropdown(null, value);
-                                      getTargetDetailsColumnsAndRows(value, 5);
-                                    });
-                                  },
-                                ),
-                              if (_linkedshahar != null && _linkedshahar!.length > 0)
-                                SizedBox(
-                                  height: 10,
-                                ),
-                              if (_linkednagar != null && _linkednagar!.length > 0)
-                                DropdownButtonFormField(
-                                  decoration: InputDecoration(labelText: Statics.getLabel('Nagar')),
-                                  isExpanded: true,
-                                  value: _linkednagarValue == "" ? null : _linkednagarValue,
-                                  items: _linkednagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _linkednagarValue = value;
-                                      populatelinkedMandalDropdown(value!);
-                                      populatelinkedVastiDropdown(value);
-                                      getTargetDetailsColumnsAndRows(value, 6);
-                                    });
-                                  },
-                                ),
-                              if (_linkednagar != null && _linkednagar!.length > 0)
-                                SizedBox(
-                                  height: 10,
-                                ),
-                              if (_linkedmandal != null && _linkedmandal!.length > 0)
-                                DropdownButtonFormField(
-                                  decoration: InputDecoration(labelText: Statics.getLabel('Mandal')),
-                                  isExpanded: true,
-                                  value: _linkedmandalValue == "" ? null : _linkedmandalValue,
-                                  items: _linkedmandal!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _linkedmandalValue = value;
-                                      populatelinkedGraamDropdown(value!);
-                                      getTargetDetailsColumnsAndRows(value, 4);
-                                    });
-                                  },
-                                ),
-                              if (_linkedmandal != null && _linkedmandal!.length > 0)
-                                SizedBox(
-                                  height: 10,
-                                ),
-                              if (_linkedgraam != null && _linkedgraam!.length > 0)
-                                DropdownButtonFormField(
-                                  decoration: InputDecoration(labelText: Statics.getLabel('Graam')),
-                                  isExpanded: true,
-                                  value: _linkedgraamValue == "" ? null : _linkedgraamValue,
-                                  items: _linkedgraam!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _linkedgraamValue = value;
-                                      getTargetDetailsColumnsAndRows(value, 3);
-                                    });
-                                  },
-                                ),
-                              if (_linkedvasti != null && _linkedvasti!.length > 0)
-                                DropdownButtonFormField(
-                                  decoration: InputDecoration(labelText: Statics.getLabel('Vasti')),
-                                  isExpanded: true,
-                                  value: _linkedvastiValue == "" ? null : _linkedvastiValue,
-                                  items: _linkedvasti!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _linkedvastiValue = value;
-                                      getTargetDetailsColumnsAndRows(value, 2);
-                                    });
-                                  },
-                                ),
-                              SizedBox(
-                                height: 40,
-                              ),
-                              if (_isTgSearching)
-                                CircularProgressIndicator()
-                              else
-                                Column(
+                            )
+                          ],
+                        ),
+                        SizedBox(height: 15),
+                        ExpansionPanelList(
+                          expansionCallback: (int index, bool isExpanded) {
+                            setState(() {
+                              _isSwExpanded = isExpanded;
+                            });
+                          },
+                          children: [
+                            ExpansionPanel(
+                              isExpanded: _isSwExpanded,
+                              headerBuilder: (BuildContext context, bool isExpanded) {
+                                return ListTile(
+                                  title: Text(Statics.getLabel('MyGeoUnitDetails')),
+                                );
+                              },
+                              body: Container(
+                                margin: EdgeInsets.all(20),
+                                child: Column(
                                   children: [
                                     Legend(legendString: "yesterdayNews", fontsize: 18),
-                                    Container(
-                                      height: Statics.getDeviceSize(context).height * (_tgYesterdaySummaryHeaderRow != null ? 0.40 : 0.07),
-                                      width: Statics.getDeviceSize(context).width,
-                                      child: _tgYesterdaySummaryHeaderRow != null
-                                          ? HorizontalDataTable(
-                                              leftHandSideColumnWidth: 100,
-                                              rightHandSideColumnWidth: 400,
-                                              isFixedHeader: true,
-                                              headerWidgets: _tgYesterdaySummaryHeaderRow,
-                                              leftSideItemBuilder: _tgYesterdaySummaryFirstColumn,
-                                              rightSideItemBuilder: _tgYesterdaySummaryOtherColumns,
-                                              itemCount: (Statics.tgLstYesterdayVruttaSummary == null ? 0 : Statics.tgLstYesterdayVruttaSummary.length),
-                                              rowSeparatorWidget: const Divider(
-                                                color: Colors.black54,
-                                                height: 1.0,
-                                                thickness: 0.0,
-                                              ),
-                                              leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                                              rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                                            )
-                                          : Column(
-                                              children: [
-                                                Text(
-                                                  Statics.getLabel('NoDataFound'),
-                                                  style: TextStyle(fontWeight: FontWeight.normal),
-                                                ),
-                                              ],
-                                            ),
-                                    ),
-                                    if (_tgLevelID <= 6)
+                                    if (int.parse(Statics.userDetails['LevelID']) > 6)
                                       Container(
-                                        height: Statics.getDeviceSize(context).height * (_tgYesterdayDetailHeaderRow != null ? 0.40 : 0.07),
+                                        height: Statics.getDeviceSize(context).height * (_myYesterdaySummaryHeaderRow != null ? 0.40 : 0.07),
                                         width: Statics.getDeviceSize(context).width,
-                                        child: _tgYesterdayDetailHeaderRow != null
+                                        child: _myYesterdaySummaryHeaderRow != null
+                                            ? HorizontalDataTable(
+                                                leftHandSideColumnWidth: 100,
+                                                rightHandSideColumnWidth: 400,
+                                                isFixedHeader: true,
+                                                headerWidgets: _myYesterdaySummaryHeaderRow,
+                                                leftSideItemBuilder: _myYesterdaySummaryFirstColumn,
+                                                rightSideItemBuilder: _myYesterdaySummaryOtherColumns,
+                                                itemCount: (Statics.lstYesterdayVruttaSummary == null ? 0 : Statics.lstYesterdayVruttaSummary.length),
+                                                rowSeparatorWidget: const Divider(
+                                                  color: Colors.black54,
+                                                  height: 1.0,
+                                                  thickness: 0.0,
+                                                ),
+                                                leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                                rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                              )
+                                            : Column(
+                                                children: [
+                                                  Text(
+                                                    Statics.getLabel('NoDataFound'),
+                                                    style: TextStyle(fontWeight: FontWeight.normal),
+                                                  ),
+                                                ],
+                                              ),
+                                      ),
+                                    if (int.parse(Statics.userDetails['LevelID']) <= 6)
+                                      Container(
+                                        height: Statics.getDeviceSize(context).height * (_myYesterdayDetailHeaderRow != null ? 0.40 : 0.07),
+                                        width: Statics.getDeviceSize(context).width,
+                                        child: _myYesterdayDetailHeaderRow != null
                                             ? HorizontalDataTable(
                                                 leftHandSideColumnWidth: 100,
                                                 rightHandSideColumnWidth: 800,
                                                 isFixedHeader: true,
-                                                headerWidgets: _tgYesterdayDetailHeaderRow,
-                                                leftSideItemBuilder: _tgYesterdayDetailFirstColumn,
-                                                rightSideItemBuilder: _tgYesterdayDetailOtherColumns,
-                                                itemCount: (Statics.tgLstYesterdayVruttaDetail == null ? 0 : Statics.tgLstYesterdayVruttaDetail.length),
+                                                headerWidgets: _myYesterdayDetailHeaderRow,
+                                                leftSideItemBuilder: _myYesterdayDetailFirstColumn,
+                                                rightSideItemBuilder: _myYesterdayDetailOtherColumns,
+                                                itemCount: (Statics.lstYesterdayVruttaDetail == null ? 0 : Statics.lstYesterdayVruttaDetail.length),
                                                 rowSeparatorWidget: const Divider(
                                                   color: Colors.black54,
                                                   height: 1.0,
@@ -2714,37 +2159,36 @@ class _HomeScreenState extends State<HomeScreen> {
                                     SizedBox(
                                       height: 15,
                                     ),
-
                                     Legend(legendString: "ShaakhaaVruttaSummaryLabel", fontsize: 18),
                                     SingleColumnRow(txtString: Statics.getLabel('Shaakhaa') + ':-', value: '', fontsize: 18),
-                                    SingleColumnRow(txtString: Statics.getLabel('ShaakhaaEQ0'), value: tgShaakhaaEQ0 == "null" ? "0" : tgShaakhaaEQ0, fontsize: 15),
-                                    SingleColumnRow(txtString: Statics.getLabel('Shaakhaa1To24'), value: tgShaakhaa1To24 == "null" ? "0" : tgShaakhaa1To24, fontsize: 15),
-                                    SingleColumnRow(txtString: Statics.getLabel('ShaakhaaGTE25'), value: tgShaakhaaGTE25 == "null" ? "0" : tgShaakhaaGTE25, fontsize: 15),
-                                    SingleColumnRow(txtString: Statics.getLabel('ShaakhaaEQ30'), value: tgShaakhaaEQ30 == "null" ? "0" : tgShaakhaaEQ30, fontsize: 15),
+                                    SingleColumnRow(txtString: Statics.getLabel('ShaakhaaEQ0'), value: myShaakhaaEQ0, fontsize: 15),
+                                    SingleColumnRow(txtString: Statics.getLabel('Shaakhaa1To24'), value: myShaakhaa1To24, fontsize: 15),
+                                    SingleColumnRow(txtString: Statics.getLabel('ShaakhaaGTE25'), value: myShaakhaaGTE25, fontsize: 15),
+                                    SingleColumnRow(txtString: Statics.getLabel('ShaakhaaEQ30'), value: myShaakhaaEQ30, fontsize: 15),
                                     SingleColumnRow(txtString: Statics.getLabel('SaaptaahikMilan') + ':-', value: '', fontsize: 18),
-                                    SingleColumnRow(txtString: Statics.getLabel('SaaptaahikEQ0'), value: tgSaaptaahikEQ0 == "null" ? "0" : tgSaaptaahikEQ0, fontsize: 15),
-                                    SingleColumnRow(txtString: Statics.getLabel('Saaptaahik1To3'), value: tgSaaptaahik1To3 == "null" ? "0" : tgSaaptaahik1To3, fontsize: 15),
-                                    SingleColumnRow(txtString: Statics.getLabel('SaaptaahikGTE4'), value: tgSaaptaahikGTE4 == "null" ? "0" : tgSaaptaahikGTE4, fontsize: 15),
+                                    SingleColumnRow(txtString: Statics.getLabel('SaaptaahikEQ0'), value: mySaaptaahikEQ0, fontsize: 15),
+                                    SingleColumnRow(txtString: Statics.getLabel('Saaptaahik1To3'), value: mySaaptaahik1To3, fontsize: 15),
+                                    SingleColumnRow(txtString: Statics.getLabel('SaaptaahikGTE4'), value: mySaaptaahikGTE4, fontsize: 15),
                                     SingleColumnRow(txtString: Statics.getLabel('MaasikMilan') + '/' + Statics.getLabel('SanghaMandali') + ':-', value: '', fontsize: 18),
-                                    SingleColumnRow(txtString: Statics.getLabel('MaasikEQ0'), value: tgMaasikEQ0 == "null" ? "0" : tgMaasikEQ0, fontsize: 15),
-                                    SingleColumnRow(txtString: Statics.getLabel('MaasikEQ1'), value: tgMaasikEQ1 == "null" ? "0" : tgMaasikEQ1, fontsize: 15),
+                                    SingleColumnRow(txtString: Statics.getLabel('MaasikEQ0'), value: myMaasikEQ0, fontsize: 15),
+                                    SingleColumnRow(txtString: Statics.getLabel('MaasikEQ1'), value: myMaasikEQ1, fontsize: 15),
                                     SizedBox(
                                       height: 15,
                                     ),
 
                                     Legend(legendString: "SankalpTable", fontsize: 18),
                                     Container(
-                                      height: Statics.getDeviceSize(context).height * (_tgSadyasthitiHeaderRow != null ? 0.40 : 0.07),
+                                      height: Statics.getDeviceSize(context).height * (_mySadyasthitiHeaderRow != null ? 0.40 : 0.07),
                                       width: Statics.getDeviceSize(context).width,
-                                      child: _tgSadyasthitiHeaderRow != null
+                                      child: _mySadyasthitiHeaderRow != null
                                           ? HorizontalDataTable(
                                               leftHandSideColumnWidth: 100,
                                               rightHandSideColumnWidth: 1160,
                                               isFixedHeader: true,
-                                              headerWidgets: _tgSadyasthitiHeaderRow,
-                                              leftSideItemBuilder: _tgSadyasthitiFirstColumn,
-                                              rightSideItemBuilder: _tgSadyasthitiOtherColumns,
-                                              itemCount: (Statics.tgLstdashboardSadyaSthitiData == null ? 0 : Statics.tgLstdashboardSadyaSthitiData.length),
+                                              headerWidgets: _mySadyasthitiHeaderRow,
+                                              leftSideItemBuilder: _mySadyasthitiFirstColumn,
+                                              rightSideItemBuilder: _mySadyasthitiOtherColumns,
+                                              itemCount: (Statics.lstdashboardSadyaSthitiData == null ? 0 : Statics.lstdashboardSadyaSthitiData.length),
                                               rowSeparatorWidget: const Divider(
                                                 color: Colors.black54,
                                                 height: 1.0,
@@ -2765,25 +2209,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                     SizedBox(
                                       height: 15,
                                     ),
-                                    // SingleColumnRow(txtString: Statics.getLabel('MaasikMilan'), value: tgMasikMilanCount, fontsize: 15),
-                                    // SingleColumnRow(txtString: Statics.getLabel('SanghaMandali'), value: tgSanghaMandaliCount, fontsize: 15),
+                                    // SingleColumnRow(txtString: Statics.getLabel('MaasikMilan'), value: masikMilanCount, fontsize: 15),
+                                    // SingleColumnRow(txtString: Statics.getLabel('SanghaMandali'), value: sanghaMandaliCount, fontsize: 15),
                                     // SingleColumnRow(txtString: Statics.getLabel('EkunSankalpitShakha'), value:totalsankalpitshakhaCount, fontsize: 15),
                                     // SingleColumnRow(txtString: Statics.getLabel('EkunSankalpitSaptahikMilan'), value: totalsankalpitSaaptaahikCount, fontsize: 15),
-                                    // SizedBox(height: 15,),
+                                    SizedBox(
+                                      height: 15,
+                                    ),
 
                                     Legend(legendString: "NewSankalpTable", fontsize: 18),
                                     Container(
-                                      height: Statics.getDeviceSize(context).height * (_tgSankalpDataHeaderRow != null ? 0.40 : 0.07),
+                                      height: Statics.getDeviceSize(context).height * (_mySankalpDataHeaderRow != null ? 0.40 : 0.07),
                                       width: Statics.getDeviceSize(context).width,
-                                      child: _tgSankalpDataHeaderRow != null
+                                      child: _mySankalpDataHeaderRow != null
                                           ? HorizontalDataTable(
                                               leftHandSideColumnWidth: 100,
                                               rightHandSideColumnWidth: 500,
                                               isFixedHeader: true,
-                                              headerWidgets: _tgSankalpDataHeaderRow,
-                                              leftSideItemBuilder: _tgSankalpDataFirstColumn,
-                                              rightSideItemBuilder: _tgSankalpDataOtherColumns,
-                                              itemCount: (Statics.tgLstSankalpByAadhaarData == null ? 0 : Statics.tgLstSankalpByAadhaarData.length),
+                                              headerWidgets: _mySankalpDataHeaderRow,
+                                              leftSideItemBuilder: _mySankalpDataFirstColumn,
+                                              rightSideItemBuilder: _mySankalpDataOtherColumns,
+                                              itemCount: (Statics.lstSankalpByAadhaarData == null ? 0 : Statics.lstSankalpByAadhaarData.length),
                                               rowSeparatorWidget: const Divider(
                                                 color: Colors.black54,
                                                 height: 1.0,
@@ -2807,17 +2253,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                     Legend(legendString: "BhaugolikVistaar", fontsize: 18),
                                     Container(
-                                      height: Statics.getDeviceSize(context).height * (_tgBhaugolikHeaderRow != null ? 0.40 : 0.07),
+                                      height: Statics.getDeviceSize(context).height * (_myBhaugolikHeaderRow != null ? 0.40 : 0.07),
                                       width: Statics.getDeviceSize(context).width,
-                                      child: _tgBhaugolikHeaderRow != null
+                                      child: _myBhaugolikHeaderRow != null
                                           ? HorizontalDataTable(
                                               leftHandSideColumnWidth: 100,
                                               rightHandSideColumnWidth: 400,
                                               isFixedHeader: true,
-                                              headerWidgets: _tgBhaugolikHeaderRow,
-                                              leftSideItemBuilder: _tgBhagolikVistaarFirstColumn,
-                                              rightSideItemBuilder: _tgBhagolikVistaarOtherColumns,
-                                              itemCount: (Statics.tgLstBhaugolikVistaar == null ? 0 : Statics.tgLstBhaugolikVistaar.length),
+                                              headerWidgets: _myBhaugolikHeaderRow,
+                                              leftSideItemBuilder: _myBhagolikVistaarFirstColumn,
+                                              rightSideItemBuilder: _myBhagolikVistaarOtherColumns,
+                                              itemCount: (Statics.lstBhaugolikVistaar == null ? 0 : Statics.lstBhaugolikVistaar.length),
                                               rowSeparatorWidget: const Divider(
                                                 color: Colors.black54,
                                                 height: 1.0,
@@ -2842,24 +2288,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                     // Legend(legendString: "LastMonthBhaugolikVistaar", fontsize: 18),
                                     // Container(
                                     //   height: Statics.getDeviceSize(context).height *
-                                    //       (_tgLastMonthBhaugolikHeaderRow != null ? 0.40 : 0.07),
+                                    //       (_myLastMonthBhaugolikHeaderRow != null ? 0.40 : 0.07),
                                     //   width: Statics.getDeviceSize(context).width,
-                                    //   child: _tgLastMonthBhaugolikHeaderRow != null
+                                    //   child: _myLastMonthBhaugolikHeaderRow != null
                                     //     ? HorizontalDataTable(
-                                    //         leftHandSideColumnWidth: 100,
-                                    //         rightHandSideColumnWidth: 400,
-                                    //         isFixedHeader: true,
-                                    //         headerWidgets: _tgLastMonthBhaugolikHeaderRow,
-                                    //         leftSideItemBuilder: _tgLastMonthBhagolikVistaarFirstColumn,
-                                    //         rightSideItemBuilder: _tgLastMonthBhagolikVistaarOtherColumns,
-                                    //         itemCount: (Statics.tgLstLastMonthBhaugolikVistaar == null ? 0 : Statics.tgLstLastMonthBhaugolikVistaar.length),
-                                    //         rowSeparatorWidget: const Divider(
-                                    //           color: Colors.black54,
-                                    //           height: 1.0,
-                                    //           thickness: 0.0,
-                                    //         ),
-                                    //         leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                                    //         rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                    //       leftHandSideColumnWidth: 100,
+                                    //       rightHandSideColumnWidth: 400,
+                                    //       isFixedHeader: true,
+                                    //       headerWidgets: _myLastMonthBhaugolikHeaderRow,
+                                    //       leftSideItemBuilder: _myLastMonthBhagolikVistaarFirstColumn,
+                                    //       rightSideItemBuilder: _myLastMonthBhagolikVistaarOtherColumns,
+                                    //       itemCount: (Statics.lstLastMonthBhaugolikVistaar == null ? 0 : Statics.lstLastMonthBhaugolikVistaar.length),
+                                    //       rowSeparatorWidget: const Divider(
+                                    //         color: Colors.black54,
+                                    //         height: 1.0,
+                                    //         thickness: 0.0,
+                                    //       ),
+                                    //       leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                    //       rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
                                     //     )
                                     //     : Column(
                                     //         children:[
@@ -2870,33 +2316,30 @@ class _HomeScreenState extends State<HomeScreen> {
                                     // ),
 
                                     Legend(legendString: "SwayamsevakCount", fontsize: 18),
-                                    SingleColumnRow(txtString: Statics.getLabel('TotalKaaryakartaaCount'), value: tgTotalSwayamsevakCount, fontsize: 15),
-                                    SingleColumnRow(txtString: Statics.getLabel('PratidnyitCount'), value: tgPratidnyitCount, fontsize: 15),
+                                    SingleColumnRow(txtString: Statics.getLabel('TotalKaaryakartaaCount'), value: myTotalSwayamsevakCount, fontsize: 15),
+                                    SingleColumnRow(txtString: Statics.getLabel('PratidnyitCount'), value: myPratidnyitCount, fontsize: 15),
                                     SizedBox(
                                       height: 15,
                                     ),
 
                                     Legend(legendString: "SwayamsevakCountByAge", fontsize: 18),
-                                    SingleColumnRow(txtString: Statics.getLabel('Shishu'), value: tgShishuCount, fontsize: 15),
-                                    SingleColumnRow(txtString: Statics.getLabel('Baal'), value: tgBaalCount, fontsize: 15),
-                                    SingleColumnRow(txtString: Statics.getLabel('TarunVidyaarthi'), value: tgTarunVidyaarthiCount, fontsize: 15),
-                                    SingleColumnRow(txtString: Statics.getLabel('TarunVyavasaayee'), value: tgTarunVyavasaayeeCount, fontsize: 15),
-                                    SingleColumnRow(txtString: Statics.getLabel('ProudhVyavasaayee'), value: tgProudhaVyavasaayeeCount, fontsize: 15),
-                                    SingleColumnRow(txtString: Statics.getLabel('UnkownAge'), value: tgUnknownAgeCount, fontsize: 15),
+                                    SingleColumnRow(txtString: Statics.getLabel('Shishu'), value: myShishuCount, fontsize: 15),
+                                    SingleColumnRow(txtString: Statics.getLabel('Baal'), value: myBaalCount, fontsize: 15),
+                                    SingleColumnRow(txtString: Statics.getLabel('TarunVidyaarthi'), value: myTarunVidyaarthiCount, fontsize: 15),
+                                    SingleColumnRow(txtString: Statics.getLabel('TarunVyavasaayee'), value: myTarunVyavasaayeeCount, fontsize: 15),
+                                    SingleColumnRow(txtString: Statics.getLabel('ProudhVyavasaayee'), value: myProudhaVyavasaayeeCount, fontsize: 15),
+                                    SingleColumnRow(txtString: Statics.getLabel('UnkownAge'), value: myUnknownAgeCount, fontsize: 15),
                                     SizedBox(
                                       height: 15,
                                     ),
 
                                     Legend(legendString: "ShikshitSwayamsevakCount", fontsize: 18),
-                                    SingleColumnRow(txtString: Statics.getLabel('PrarambhikShikshit'), value: tgPraarambhikShikshitCount == 'null' ? "0" : tgPraarambhikShikshitCount, fontsize: 15),
-                                    SingleColumnRow(txtString: Statics.getLabel('PraathamikShikshit'), value: tgPraathamikShikshitCount == 'null' ? "0" : tgPraathamikShikshitCount, fontsize: 15),
-                                    SingleColumnRow(
-                                        txtString: Statics.getLabel('PrathamVarshShikshit'), value: tgPrathamVarshaShikshitCount == 'null' ? "0" : tgPrathamVarshaShikshitCount, fontsize: 15),
-                                    SingleColumnRow(
-                                        txtString: Statics.getLabel('DwitiyaVarshShikshit'), value: tgDwitiyaVarshaShikshitCount == 'null' ? "0" : tgDwitiyaVarshaShikshitCount, fontsize: 15),
-                                    SingleColumnRow(
-                                        txtString: Statics.getLabel('TrutiyaVarshShikshit'), value: tgTrutiyaVarshaShikshitCount == 'null' ? "0" : tgTrutiyaVarshaShikshitCount, fontsize: 15),
-                                    SingleColumnRow(txtString: Statics.getLabel('NoShikshan'), value: tgNoShikshanCount, fontsize: 15),
+                                    SingleColumnRow(txtString: Statics.getLabel('PrarambhikShikshit'), value: myPraarambhikShikshitCount, fontsize: 15),
+                                    SingleColumnRow(txtString: Statics.getLabel('PraathamikShikshit'), value: myPraathamikShikshitCount, fontsize: 15),
+                                    SingleColumnRow(txtString: Statics.getLabel('PrathamVarshShikshit'), value: myPrathamVarshaShikshitCount, fontsize: 15),
+                                    SingleColumnRow(txtString: Statics.getLabel('DwitiyaVarshShikshit'), value: myDwitiyaVarshaShikshitCount, fontsize: 15),
+                                    SingleColumnRow(txtString: Statics.getLabel('TrutiyaVarshShikshit'), value: myTrutiyaVarshaShikshitCount, fontsize: 15),
+                                    SingleColumnRow(txtString: Statics.getLabel('NoShikshan'), value: myNoShikshanCount, fontsize: 15),
                                     SizedBox(
                                       height: 15,
                                     ),
@@ -2904,58 +2347,58 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Legend(legendString: "KaaryakartaaCountByLevel", fontsize: 18),
                                     TwoColumnRow(
                                       txtString: Statics.getLabel('Shaakhaa'),
-                                      value: tgDailyShaakhaaKaaryakartaaCount,
+                                      value: myDailyShaakhaaKaaryakartaaCount,
                                       txtString2: Statics.getLabel('SaaptaahikLabelShort'),
-                                      value2: tgSaaptaahikMilanKaaryakartaaCount,
+                                      value2: mySaaptaahikMilanKaaryakartaaCount,
                                       fontsize: 15,
                                     ),
                                     TwoColumnRow(
                                       txtString: Statics.getLabel('MilanMandali'),
-                                      value: tgMaasikMilanKaaryakartaaCount,
+                                      value: myMaasikMilanKaaryakartaaCount,
                                       txtString2: Statics.getLabel('VastiKaaryakartaaCount'),
-                                      value2: tgVastiKaaryakartaaCount,
+                                      value2: myVastiKaaryakartaaCount,
                                       fontsize: 15,
                                     ),
                                     TwoColumnRow(
                                       txtString: Statics.getLabel('GraamKaaryakartaaCount'),
-                                      value: tgGraamKaaryakartaaCount,
+                                      value: myGraamKaaryakartaaCount,
                                       txtString2: Statics.getLabel('MandalKaaryakartaaCount'),
-                                      value2: tgMandalKaaryakartaaCount,
+                                      value2: myMandalKaaryakartaaCount,
                                       fontsize: 15,
                                     ),
                                     TwoColumnRow(
                                       txtString: Statics.getLabel('NagarKaaryakartaaCount'),
-                                      value: tgNagarKaaryakartaaCount,
+                                      value: myNagarKaaryakartaaCount,
                                       txtString2: Statics.getLabel('ShaharKaaryakartaaCount'),
-                                      value2: tgShaharKaaryakartaaCount,
+                                      value2: myShaharKaaryakartaaCount,
                                       fontsize: 15,
                                     ),
                                     TwoColumnRow(
                                       txtString: Statics.getLabel('BhaagKaaryakartaaCount'),
-                                      value: tgBhaagKaaryakartaaCount,
+                                      value: myBhaagKaaryakartaaCount,
                                       txtString2: Statics.getLabel('VibhaagKaaryakartaaCount'),
-                                      value2: tgVibhaagKaaryakartaaCount,
+                                      value2: myVibhaagKaaryakartaaCount,
                                       fontsize: 15,
                                     ),
                                     TwoColumnRow(
                                       txtString: Statics.getLabel('MahaanagarKaaryakartaaCount'),
-                                      value: tgMahaanagarKaaryakartaaCount,
+                                      value: myMahaanagarKaaryakartaaCount,
                                       txtString2: Statics.getLabel('PraantKaaryakartaaCount'),
-                                      value2: tgPraantKaaryakartaaCount,
+                                      value2: myPraantKaaryakartaaCount,
                                       fontsize: 15,
                                     ),
                                     TwoColumnRow(
                                       txtString: Statics.getLabel('KshetraKaaryakartaaCount'),
-                                      value: tgKshetraKaaryakartaaCount,
+                                      value: myKshetraKaaryakartaaCount,
                                       txtString2: Statics.getLabel('AkhilBhaaratiyaKaaryakartaaCount'),
-                                      value2: tgAkhilBhaaratiyaKaaryakartaaCount,
+                                      value2: myAkhilBhaaratiyaKaaryakartaaCount,
                                       fontsize: 15,
                                     ),
                                     TwoColumnRow(
                                       txtString: Statics.getLabel('PravaaseeKaaryakartaaCount'),
-                                      value: tgPravaaseeKaaryakartaaCount,
+                                      value: myPravaaseeKaaryakartaaCount,
                                       txtString2: Statics.getLabel('TotalKaaryakartaaCount'),
-                                      value2: tgTotalKaaryakartaaCount,
+                                      value2: myTotalKaaryakartaaCount,
                                       fontsize: 15,
                                     ),
                                     SizedBox(
@@ -2963,27 +2406,29 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
 
                                     Legend(legendString: "GatividhiAayaamSansthaaKaaryakartaaCount", fontsize: 18),
-                                    SingleColumnRow(txtString: Statics.getLabel('GatividhiKaaryakartaaCount'), value: tgGatividhiKaaryakartaaCount, fontsize: 15),
-                                    SingleColumnRow(txtString: Statics.getLabel('AayaamKaaryakartaaCount'), value: tgAayaamKaaryakartaaCount, fontsize: 15),
-                                    SingleColumnRow(txtString: Statics.getLabel('SanghaPreritSansthaaKaaryakartaaCount'), value: tgSanghaPreritSansthaaKaaryakartaaCount, fontsize: 15),
-                                    SingleColumnRow(txtString: Statics.getLabel('SocialOrganizationKaaryakartaaCount'), value: tgSocialOrganizationKaaryakartaaCount, fontsize: 15),
+                                    SingleColumnRow(txtString: Statics.getLabel('GatividhiKaaryakartaaCount'), value: Statics.dashboardData['GatividhiKaaryakartaaCount'], fontsize: 15),
+                                    SingleColumnRow(txtString: Statics.getLabel('AayaamKaaryakartaaCount'), value: Statics.dashboardData['AayaamKaaryakartaaCount'], fontsize: 15),
+                                    SingleColumnRow(
+                                        txtString: Statics.getLabel('SanghaPreritSansthaaKaaryakartaaCount'), value: Statics.dashboardData['SanghaPreritSansthaaKaaryakartaaCount'], fontsize: 15),
+                                    SingleColumnRow(
+                                        txtString: Statics.getLabel('SocialOrganizationKaaryakartaaCount'), value: Statics.dashboardData['SocialOrganizationKaaryakartaaCount'], fontsize: 15),
                                     SizedBox(
                                       height: 15,
                                     ),
 
                                     Legend(legendString: "Gatividhi", fontsize: 18),
                                     Container(
-                                      height: Statics.getDeviceSize(context).height * (_tgGatividhiKaaryakartaaHeaderRow != null ? 0.40 : 0.07),
+                                      height: Statics.getDeviceSize(context).height * (_myGatividhiKaaryakartaaHeaderRow != null ? 0.40 : 0.07),
                                       width: Statics.getDeviceSize(context).width,
-                                      child: _tgGatividhiKaaryakartaaHeaderRow != null
+                                      child: _myGatividhiKaaryakartaaHeaderRow != null
                                           ? HorizontalDataTable(
                                               leftHandSideColumnWidth: 150,
                                               rightHandSideColumnWidth: 150,
                                               isFixedHeader: true,
-                                              headerWidgets: _tgGatividhiKaaryakartaaHeaderRow,
-                                              leftSideItemBuilder: _tgGatividhiKaaryakartaaFirstColumn,
-                                              rightSideItemBuilder: _tgGatividhiKaaryakartaaOtherColumns,
-                                              itemCount: (Statics.tgLstGatividhiKaaryakartaa == null ? 0 : Statics.tgLstGatividhiKaaryakartaa.length),
+                                              headerWidgets: _myGatividhiKaaryakartaaHeaderRow,
+                                              leftSideItemBuilder: _myGatividhiKaaryakartaaFirstColumn,
+                                              rightSideItemBuilder: _myGatividhiKaaryakartaaOtherColumns,
+                                              itemCount: (Statics.lstGatividhiKaaryakartaa == null ? 0 : Statics.lstGatividhiKaaryakartaa.length),
                                               rowSeparatorWidget: const Divider(
                                                 color: Colors.black54,
                                                 height: 1.0,
@@ -3007,17 +2452,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                     Legend(legendString: "Aayaam", fontsize: 18),
                                     Container(
-                                      height: Statics.getDeviceSize(context).height * (_tgAayaamKaaryakartaaHeaderRow != null ? 0.40 : 0.07),
+                                      height: Statics.getDeviceSize(context).height * (_myAayaamKaaryakartaaHeaderRow != null ? 0.40 : 0.07),
                                       width: Statics.getDeviceSize(context).width,
-                                      child: _tgAayaamKaaryakartaaHeaderRow != null
+                                      child: _myAayaamKaaryakartaaHeaderRow != null
                                           ? HorizontalDataTable(
                                               leftHandSideColumnWidth: 150,
                                               rightHandSideColumnWidth: 150,
                                               isFixedHeader: true,
-                                              headerWidgets: _tgAayaamKaaryakartaaHeaderRow,
-                                              leftSideItemBuilder: _tgAayaamKaaryakartaaFirstColumn,
-                                              rightSideItemBuilder: _tgAayaamKaaryakartaaOtherColumns,
-                                              itemCount: (Statics.tgLstAayaamKaaryakartaa == null ? 0 : Statics.tgLstAayaamKaaryakartaa.length),
+                                              headerWidgets: _myAayaamKaaryakartaaHeaderRow,
+                                              leftSideItemBuilder: _myAayaamKaaryakartaaFirstColumn,
+                                              rightSideItemBuilder: _myAayaamKaaryakartaaOtherColumns,
+                                              itemCount: (Statics.lstAayaamKaaryakartaa == null ? 0 : Statics.lstAayaamKaaryakartaa.length),
                                               rowSeparatorWidget: const Divider(
                                                 color: Colors.black54,
                                                 height: 1.0,
@@ -3041,17 +2486,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                     Legend(legendString: "Sangha-PreritSansthaa", fontsize: 18),
                                     Container(
-                                      height: Statics.getDeviceSize(context).height * (_tgPreritKaaryakartaaHeaderRow != null ? 0.40 : 0.07),
+                                      height: Statics.getDeviceSize(context).height * (_myPreritKaaryakartaaHeaderRow != null ? 0.40 : 0.07),
                                       width: Statics.getDeviceSize(context).width,
-                                      child: _tgPreritKaaryakartaaHeaderRow != null
+                                      child: _myPreritKaaryakartaaHeaderRow != null
                                           ? HorizontalDataTable(
                                               leftHandSideColumnWidth: 150,
                                               rightHandSideColumnWidth: 150,
                                               isFixedHeader: true,
-                                              headerWidgets: _tgPreritKaaryakartaaHeaderRow,
-                                              leftSideItemBuilder: _tgPreritKaaryakartaaFirstColumn,
-                                              rightSideItemBuilder: _tgPreritKaaryakartaaOtherColumns,
-                                              itemCount: (Statics.tgLstPreritKaaryakartaa == null ? 0 : Statics.tgLstPreritKaaryakartaa.length),
+                                              headerWidgets: _myPreritKaaryakartaaHeaderRow,
+                                              leftSideItemBuilder: _myPreritKaaryakartaaFirstColumn,
+                                              rightSideItemBuilder: _myPreritKaaryakartaaOtherColumns,
+                                              itemCount: (Statics.lstPreritKaaryakartaa == null ? 0 : Statics.lstPreritKaaryakartaa.length),
                                               rowSeparatorWidget: const Divider(
                                                 color: Colors.black54,
                                                 height: 1.0,
@@ -3075,17 +2520,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                     Legend(legendString: "OtherSocialOrganization", fontsize: 18),
                                     Container(
-                                      height: Statics.getDeviceSize(context).height * (_tgSocialOrgKaaryakartaaHeaderRow != null ? 0.40 : 0.07),
+                                      height: Statics.getDeviceSize(context).height * (_mySocialOrgKaaryakartaaHeaderRow != null ? 0.40 : 0.07),
                                       width: Statics.getDeviceSize(context).width,
-                                      child: _tgSocialOrgKaaryakartaaHeaderRow != null
+                                      child: _mySocialOrgKaaryakartaaHeaderRow != null
                                           ? HorizontalDataTable(
                                               leftHandSideColumnWidth: 150,
                                               rightHandSideColumnWidth: 150,
                                               isFixedHeader: true,
-                                              headerWidgets: _tgSocialOrgKaaryakartaaHeaderRow,
-                                              leftSideItemBuilder: _tgSocialOrgKaaryakartaaFirstColumn,
-                                              rightSideItemBuilder: _tgSocialOrgKaaryakartaaOtherColumns,
-                                              itemCount: (Statics.tgLstSocialOrgKaaryakartaa == null ? 0 : Statics.tgLstSocialOrgKaaryakartaa.length),
+                                              headerWidgets: _mySocialOrgKaaryakartaaHeaderRow,
+                                              leftSideItemBuilder: _mySocialOrgKaaryakartaaFirstColumn,
+                                              rightSideItemBuilder: _mySocialOrgKaaryakartaaOtherColumns,
+                                              itemCount: (Statics.lstSocialOrgKaaryakartaa == null ? 0 : Statics.lstSocialOrgKaaryakartaa.length),
                                               rowSeparatorWidget: const Divider(
                                                 color: Colors.black54,
                                                 height: 1.0,
@@ -3109,17 +2554,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                     Legend(legendString: "StudentCategory", fontsize: 18),
                                     Container(
-                                      height: Statics.getDeviceSize(context).height * (_tgStudentCategoryHeaderRow != null ? 0.40 : 0.07),
+                                      height: Statics.getDeviceSize(context).height * (_myStudentCategoryHeaderRow != null ? 0.40 : 0.07),
                                       width: Statics.getDeviceSize(context).width,
-                                      child: _tgStudentCategoryHeaderRow != null
+                                      child: _myStudentCategoryHeaderRow != null
                                           ? HorizontalDataTable(
                                               leftHandSideColumnWidth: 150,
                                               rightHandSideColumnWidth: 150,
                                               isFixedHeader: true,
-                                              headerWidgets: _tgStudentCategoryHeaderRow,
-                                              leftSideItemBuilder: _tgStudentCategoryFirstColumn,
-                                              rightSideItemBuilder: _tgStudentCategoryOtherColumns,
-                                              itemCount: (Statics.tgLstStudentCategory == null ? 0 : Statics.tgLstStudentCategory.length),
+                                              headerWidgets: _myStudentCategoryHeaderRow,
+                                              leftSideItemBuilder: _myStudentCategoryFirstColumn,
+                                              rightSideItemBuilder: _myStudentCategoryOtherColumns,
+                                              itemCount: (Statics.lstStudentCategory == null ? 0 : Statics.lstStudentCategory.length),
                                               rowSeparatorWidget: const Divider(
                                                 color: Colors.black54,
                                                 height: 1.0,
@@ -3143,17 +2588,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                     Legend(legendString: "VyavasaayeeCategory", fontsize: 18),
                                     Container(
-                                      height: Statics.getDeviceSize(context).height * (_tgVyavasaayeeCategoryHeaderRow != null ? 0.40 : 0.07),
+                                      height: Statics.getDeviceSize(context).height * (_myVyavasaayeeCategoryHeaderRow != null ? 0.40 : 0.07),
                                       width: Statics.getDeviceSize(context).width,
-                                      child: _tgVyavasaayeeCategoryHeaderRow != null
+                                      child: _myVyavasaayeeCategoryHeaderRow != null
                                           ? HorizontalDataTable(
                                               leftHandSideColumnWidth: 150,
                                               rightHandSideColumnWidth: 150,
                                               isFixedHeader: true,
-                                              headerWidgets: _tgVyavasaayeeCategoryHeaderRow,
-                                              leftSideItemBuilder: _tgVyavasaayeeCategoryFirstColumn,
-                                              rightSideItemBuilder: _tgVyavasaayeeCategoryOtherColumns,
-                                              itemCount: (Statics.tgLstVyavasaayeeCategory == null ? 0 : Statics.tgLstVyavasaayeeCategory.length),
+                                              headerWidgets: _myVyavasaayeeCategoryHeaderRow,
+                                              leftSideItemBuilder: _myVyavasaayeeCategoryFirstColumn,
+                                              rightSideItemBuilder: _myVyavasaayeeCategoryOtherColumns,
+                                              itemCount: (Statics.lstVyavasaayeeCategory == null ? 0 : Statics.lstVyavasaayeeCategory.length),
                                               rowSeparatorWidget: const Divider(
                                                 color: Colors.black54,
                                                 height: 1.0,
@@ -3176,20 +2621,908 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ],
                                 ),
-                            ],
-                          ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
+                        SizedBox(height: 10),
+                        ExpansionPanelList(
+                          expansionCallback: (int index, bool isExpanded) {
+                            setState(() {
+                              _isGeounitExpanded = isExpanded;
+                            });
+                          },
+                          children: [
+                            ExpansionPanel(
+                              isExpanded: _isGeounitExpanded,
+                              headerBuilder: (BuildContext context, bool isExpanded) {
+                                return ListTile(
+                                  title: Text(Statics.getLabel('TargetGeoUnitDetails')),
+                                );
+                              },
+                              body: Container(
+                                margin: EdgeInsets.all(20),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        SizedBox(
+                                          height: 20,
+                                          width: 80,
+                                          child: MaterialButton(
+                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                                            color: Theme.of(context).primaryColor,
+                                            textColor: Theme.of(context).primaryTextTheme.button!.color,
+                                            onPressed: () {
+                                              setState(() {
+                                                _linkedMahaanagarValue = _linkedVibhaagValue =
+                                                    _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+                                                _linkedMahaanagar = _linkedVibhaag = _linkedbhaag = _linkedshahar = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
+
+                                                tgShishuCount = "";
+                                                tgBaalCount = "";
+                                                tgTarunVidyaarthiCount = "";
+                                                tgTarunVyavasaayeeCount = "";
+                                                tgProudhaVyavasaayeeCount = "";
+                                                tgUnknownAgeCount = "";
+                                                tgTrutiyaVarshaShikshitCount = "";
+                                                tgDwitiyaVarshaShikshitCount = "";
+                                                tgPrathamVarshaShikshitCount = "";
+                                                tgPraarambhikShikshitCount = "";
+                                                tgPraathamikShikshitCount = "";
+                                                tgNoShikshanCount = "";
+                                                tgShaakhaaKaaryakartaaCount = "";
+                                                tgVastiKaaryakartaaCount = "";
+                                                tgGraamKaaryakartaaCount = "";
+                                                tgMandalKaaryakartaaCount = "";
+                                                tgNagarKaaryakartaaCount = "";
+                                                tgShaharKaaryakartaaCount = "";
+                                                tgBhaagKaaryakartaaCount = "";
+                                                tgVibhaagKaaryakartaaCount = "";
+                                                tgMahaanagarKaaryakartaaCount = "";
+                                                tgPraantKaaryakartaaCount = "";
+                                                notificationCount = "";
+                                                tgKshetraKaaryakartaaCount = "";
+                                                tgPravaaseeKaaryakartaaCount = "";
+                                                tgGatividhiKaaryakartaaCount = "";
+                                                tgAayaamKaaryakartaaCount = "";
+                                                tgSanghaPreritSansthaaKaaryakartaaCount = "";
+                                                tgTotalKaaryakartaaCount = "";
+                                                tgSocialOrganizationKaaryakartaaCount = "";
+                                                tgPratidnyitCount = "";
+                                                _tgSadyasthitiHeaderRow = null;
+                                                _tgSankalpDataHeaderRow = null;
+                                                _tgBhaugolikHeaderRow = null;
+                                                // _tgLastMonthBhaugolikHeaderRow = null;
+                                                _tgGatividhiKaaryakartaaHeaderRow = null;
+                                                _tgAayaamKaaryakartaaHeaderRow = null;
+                                                _tgPreritKaaryakartaaHeaderRow = null;
+                                                _tgSocialOrgKaaryakartaaHeaderRow = null;
+                                                _tgStudentCategoryHeaderRow = null;
+                                                _tgVyavasaayeeCategoryHeaderRow = null;
+                                                _tgYesterdayDetailHeaderRow = null;
+                                                _tgYesterdaySummaryHeaderRow = null;
+
+                                                tgMasikMilanCount = '0';
+                                                tgSanghaMandaliCount = '0';
+                                                tgDailyShaakhaaKaaryakartaaCount = "";
+                                                tgSaaptaahikMilanKaaryakartaaCount = "";
+                                                tgMaasikMilanKaaryakartaaCount = "";
+                                                tgAkhilBhaaratiyaKaaryakartaaCount = "";
+                                                tgTotalSwayamsevakCount = "";
+
+                                                tgMaasikEQ0 = tgMaasikEQ1 = tgSaaptaahikEQ0 = "";
+                                                tgSaaptaahik1To3 = tgSaaptaahikGTE4 = "";
+                                                tgShaakhaaEQ0 = tgShaakhaa1To24 = tgShaakhaaGTE25 = tgShaakhaaEQ30 = "";
+                                              });
+
+                                              populatelinkedMahanagarDropdown();
+                                              populatelinkedVibhaagDropdown();
+                                            },
+                                            child: Text(Statics.getLabel("clear"), style: TextStyle(fontSize: 12)),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    if (_linkedMahaanagar != null)
+                                      DropdownButtonFormField(
+                                        decoration: InputDecoration(labelText: Statics.getLabel('Mahaanagar')),
+                                        isExpanded: true,
+                                        value: _linkedMahaanagarValue == "" ? null : _linkedMahaanagarValue,
+                                        items: _linkedMahaanagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _linkedMahaanagarValue = value!;
+                                            populatelinkedVibhaagDropdown();
+                                            getTargetDetailsColumnsAndRows(value, 8);
+                                          });
+                                        },
+                                      ),
+                                    if (_linkedVibhaag != null)
+                                      DropdownButtonFormField(
+                                        decoration: InputDecoration(labelText: Statics.getLabel('Vibhaag')),
+                                        isExpanded: true,
+                                        value: _linkedVibhaagValue == "" ? null : _linkedVibhaagValue,
+                                        items: _linkedVibhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _linkedVibhaagValue = value!;
+                                            populatelinkedBhaagDropdown(value);
+                                            getTargetDetailsColumnsAndRows(value, 8);
+                                          });
+                                        },
+                                      ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    if (_linkedbhaag != null && _linkedbhaag!.length > 0)
+                                      DropdownButtonFormField(
+                                        decoration: InputDecoration(labelText: Statics.getLabel('Bhaag')),
+                                        isExpanded: true,
+                                        value: _linkedbhaagValue == "" ? null : _linkedbhaagValue,
+                                        items: _linkedbhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _linkedbhaagValue = value;
+                                            populatelinkedShaharDropdown(value!);
+                                            populatelinkedNagarDropdown(value, null);
+                                            getTargetDetailsColumnsAndRows(value, 7);
+                                          });
+                                        },
+                                      ),
+                                    if (_linkedbhaag != null && _linkedbhaag!.length > 0)
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                    if (_linkedshahar != null && _linkedshahar!.length > 0)
+                                      DropdownButtonFormField(
+                                        decoration: InputDecoration(labelText: Statics.getLabel('Shahar')),
+                                        isExpanded: true,
+                                        value: _linkedshaharValue == "" ? null : _linkedshaharValue,
+                                        items: _linkedshahar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _linkedshaharValue = value;
+                                            populatelinkedNagarDropdown(null, value);
+                                            getTargetDetailsColumnsAndRows(value, 5);
+                                          });
+                                        },
+                                      ),
+                                    if (_linkedshahar != null && _linkedshahar!.length > 0)
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                    if (_linkednagar != null && _linkednagar!.length > 0)
+                                      DropdownButtonFormField(
+                                        decoration: InputDecoration(labelText: Statics.getLabel('Nagar')),
+                                        isExpanded: true,
+                                        value: _linkednagarValue == "" ? null : _linkednagarValue,
+                                        items: _linkednagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _linkednagarValue = value;
+                                            populatelinkedMandalDropdown(value!);
+                                            populatelinkedVastiDropdown(value);
+                                            getTargetDetailsColumnsAndRows(value, 6);
+                                          });
+                                        },
+                                      ),
+                                    if (_linkednagar != null && _linkednagar!.length > 0)
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                    if (_linkedmandal != null && _linkedmandal!.length > 0)
+                                      DropdownButtonFormField(
+                                        decoration: InputDecoration(labelText: Statics.getLabel('Mandal')),
+                                        isExpanded: true,
+                                        value: _linkedmandalValue == "" ? null : _linkedmandalValue,
+                                        items: _linkedmandal!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _linkedmandalValue = value;
+                                            populatelinkedGraamDropdown(value!);
+                                            getTargetDetailsColumnsAndRows(value, 4);
+                                          });
+                                        },
+                                      ),
+                                    if (_linkedmandal != null && _linkedmandal!.length > 0)
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                    if (_linkedgraam != null && _linkedgraam!.length > 0)
+                                      DropdownButtonFormField(
+                                        decoration: InputDecoration(labelText: Statics.getLabel('Graam')),
+                                        isExpanded: true,
+                                        value: _linkedgraamValue == "" ? null : _linkedgraamValue,
+                                        items: _linkedgraam!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _linkedgraamValue = value;
+                                            getTargetDetailsColumnsAndRows(value, 3);
+                                          });
+                                        },
+                                      ),
+                                    if (_linkedvasti != null && _linkedvasti!.length > 0)
+                                      DropdownButtonFormField(
+                                        decoration: InputDecoration(labelText: Statics.getLabel('Vasti')),
+                                        isExpanded: true,
+                                        value: _linkedvastiValue == "" ? null : _linkedvastiValue,
+                                        items: _linkedvasti!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _linkedvastiValue = value;
+                                            getTargetDetailsColumnsAndRows(value, 2);
+                                          });
+                                        },
+                                      ),
+                                    SizedBox(
+                                      height: 40,
+                                    ),
+                                    if (_isTgSearching)
+                                      CircularProgressIndicator()
+                                    else
+                                      Column(
+                                        children: [
+                                          Legend(legendString: "yesterdayNews", fontsize: 18),
+                                          Container(
+                                            height: Statics.getDeviceSize(context).height * (_tgYesterdaySummaryHeaderRow != null ? 0.40 : 0.07),
+                                            width: Statics.getDeviceSize(context).width,
+                                            child: _tgYesterdaySummaryHeaderRow != null
+                                                ? HorizontalDataTable(
+                                                    leftHandSideColumnWidth: 100,
+                                                    rightHandSideColumnWidth: 400,
+                                                    isFixedHeader: true,
+                                                    headerWidgets: _tgYesterdaySummaryHeaderRow,
+                                                    leftSideItemBuilder: _tgYesterdaySummaryFirstColumn,
+                                                    rightSideItemBuilder: _tgYesterdaySummaryOtherColumns,
+                                                    itemCount: (Statics.tgLstYesterdayVruttaSummary == null ? 0 : Statics.tgLstYesterdayVruttaSummary.length),
+                                                    rowSeparatorWidget: const Divider(
+                                                      color: Colors.black54,
+                                                      height: 1.0,
+                                                      thickness: 0.0,
+                                                    ),
+                                                    leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                                    rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                                  )
+                                                : Column(
+                                                    children: [
+                                                      Text(
+                                                        Statics.getLabel('NoDataFound'),
+                                                        style: TextStyle(fontWeight: FontWeight.normal),
+                                                      ),
+                                                    ],
+                                                  ),
+                                          ),
+                                          if (_tgLevelID <= 6)
+                                            Container(
+                                              height: Statics.getDeviceSize(context).height * (_tgYesterdayDetailHeaderRow != null ? 0.40 : 0.07),
+                                              width: Statics.getDeviceSize(context).width,
+                                              child: _tgYesterdayDetailHeaderRow != null
+                                                  ? HorizontalDataTable(
+                                                      leftHandSideColumnWidth: 100,
+                                                      rightHandSideColumnWidth: 800,
+                                                      isFixedHeader: true,
+                                                      headerWidgets: _tgYesterdayDetailHeaderRow,
+                                                      leftSideItemBuilder: _tgYesterdayDetailFirstColumn,
+                                                      rightSideItemBuilder: _tgYesterdayDetailOtherColumns,
+                                                      itemCount: (Statics.tgLstYesterdayVruttaDetail == null ? 0 : Statics.tgLstYesterdayVruttaDetail.length),
+                                                      rowSeparatorWidget: const Divider(
+                                                        color: Colors.black54,
+                                                        height: 1.0,
+                                                        thickness: 0.0,
+                                                      ),
+                                                      leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                                      rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                                    )
+                                                  : Column(
+                                                      children: [
+                                                        Text(
+                                                          Statics.getLabel('NoDataFound'),
+                                                          style: TextStyle(fontWeight: FontWeight.normal),
+                                                        ),
+                                                      ],
+                                                    ),
+                                            ),
+                                          SizedBox(
+                                            height: 15,
+                                          ),
+
+                                          Legend(legendString: "ShaakhaaVruttaSummaryLabel", fontsize: 18),
+                                          SingleColumnRow(txtString: Statics.getLabel('Shaakhaa') + ':-', value: '', fontsize: 18),
+                                          SingleColumnRow(txtString: Statics.getLabel('ShaakhaaEQ0'), value: tgShaakhaaEQ0 == "null" ? "0" : tgShaakhaaEQ0, fontsize: 15),
+                                          SingleColumnRow(txtString: Statics.getLabel('Shaakhaa1To24'), value: tgShaakhaa1To24 == "null" ? "0" : tgShaakhaa1To24, fontsize: 15),
+                                          SingleColumnRow(txtString: Statics.getLabel('ShaakhaaGTE25'), value: tgShaakhaaGTE25 == "null" ? "0" : tgShaakhaaGTE25, fontsize: 15),
+                                          SingleColumnRow(txtString: Statics.getLabel('ShaakhaaEQ30'), value: tgShaakhaaEQ30 == "null" ? "0" : tgShaakhaaEQ30, fontsize: 15),
+                                          SingleColumnRow(txtString: Statics.getLabel('SaaptaahikMilan') + ':-', value: '', fontsize: 18),
+                                          SingleColumnRow(txtString: Statics.getLabel('SaaptaahikEQ0'), value: tgSaaptaahikEQ0 == "null" ? "0" : tgSaaptaahikEQ0, fontsize: 15),
+                                          SingleColumnRow(txtString: Statics.getLabel('Saaptaahik1To3'), value: tgSaaptaahik1To3 == "null" ? "0" : tgSaaptaahik1To3, fontsize: 15),
+                                          SingleColumnRow(txtString: Statics.getLabel('SaaptaahikGTE4'), value: tgSaaptaahikGTE4 == "null" ? "0" : tgSaaptaahikGTE4, fontsize: 15),
+                                          SingleColumnRow(txtString: Statics.getLabel('MaasikMilan') + '/' + Statics.getLabel('SanghaMandali') + ':-', value: '', fontsize: 18),
+                                          SingleColumnRow(txtString: Statics.getLabel('MaasikEQ0'), value: tgMaasikEQ0 == "null" ? "0" : tgMaasikEQ0, fontsize: 15),
+                                          SingleColumnRow(txtString: Statics.getLabel('MaasikEQ1'), value: tgMaasikEQ1 == "null" ? "0" : tgMaasikEQ1, fontsize: 15),
+                                          SizedBox(
+                                            height: 15,
+                                          ),
+
+                                          Legend(legendString: "SankalpTable", fontsize: 18),
+                                          Container(
+                                            height: Statics.getDeviceSize(context).height * (_tgSadyasthitiHeaderRow != null ? 0.40 : 0.07),
+                                            width: Statics.getDeviceSize(context).width,
+                                            child: _tgSadyasthitiHeaderRow != null
+                                                ? HorizontalDataTable(
+                                                    leftHandSideColumnWidth: 100,
+                                                    rightHandSideColumnWidth: 1160,
+                                                    isFixedHeader: true,
+                                                    headerWidgets: _tgSadyasthitiHeaderRow,
+                                                    leftSideItemBuilder: _tgSadyasthitiFirstColumn,
+                                                    rightSideItemBuilder: _tgSadyasthitiOtherColumns,
+                                                    itemCount: (Statics.tgLstdashboardSadyaSthitiData == null ? 0 : Statics.tgLstdashboardSadyaSthitiData.length),
+                                                    rowSeparatorWidget: const Divider(
+                                                      color: Colors.black54,
+                                                      height: 1.0,
+                                                      thickness: 0.0,
+                                                    ),
+                                                    leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                                    rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                                  )
+                                                : Column(
+                                                    children: [
+                                                      Text(
+                                                        Statics.getLabel('NoDataFound'),
+                                                        style: TextStyle(fontWeight: FontWeight.normal),
+                                                      ),
+                                                    ],
+                                                  ),
+                                          ),
+                                          SizedBox(
+                                            height: 15,
+                                          ),
+                                          // SingleColumnRow(txtString: Statics.getLabel('MaasikMilan'), value: tgMasikMilanCount, fontsize: 15),
+                                          // SingleColumnRow(txtString: Statics.getLabel('SanghaMandali'), value: tgSanghaMandaliCount, fontsize: 15),
+                                          // SingleColumnRow(txtString: Statics.getLabel('EkunSankalpitShakha'), value:totalsankalpitshakhaCount, fontsize: 15),
+                                          // SingleColumnRow(txtString: Statics.getLabel('EkunSankalpitSaptahikMilan'), value: totalsankalpitSaaptaahikCount, fontsize: 15),
+                                          // SizedBox(height: 15,),
+
+                                          Legend(legendString: "NewSankalpTable", fontsize: 18),
+                                          Container(
+                                            height: Statics.getDeviceSize(context).height * (_tgSankalpDataHeaderRow != null ? 0.40 : 0.07),
+                                            width: Statics.getDeviceSize(context).width,
+                                            child: _tgSankalpDataHeaderRow != null
+                                                ? HorizontalDataTable(
+                                                    leftHandSideColumnWidth: 100,
+                                                    rightHandSideColumnWidth: 500,
+                                                    isFixedHeader: true,
+                                                    headerWidgets: _tgSankalpDataHeaderRow,
+                                                    leftSideItemBuilder: _tgSankalpDataFirstColumn,
+                                                    rightSideItemBuilder: _tgSankalpDataOtherColumns,
+                                                    itemCount: (Statics.tgLstSankalpByAadhaarData == null ? 0 : Statics.tgLstSankalpByAadhaarData.length),
+                                                    rowSeparatorWidget: const Divider(
+                                                      color: Colors.black54,
+                                                      height: 1.0,
+                                                      thickness: 0.0,
+                                                    ),
+                                                    leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                                    rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                                  )
+                                                : Column(
+                                                    children: [
+                                                      Text(
+                                                        Statics.getLabel('NoDataFound'),
+                                                        style: TextStyle(fontWeight: FontWeight.normal),
+                                                      ),
+                                                    ],
+                                                  ),
+                                          ),
+                                          SizedBox(
+                                            height: 15,
+                                          ),
+
+                                          Legend(legendString: "BhaugolikVistaar", fontsize: 18),
+                                          Container(
+                                            height: Statics.getDeviceSize(context).height * (_tgBhaugolikHeaderRow != null ? 0.40 : 0.07),
+                                            width: Statics.getDeviceSize(context).width,
+                                            child: _tgBhaugolikHeaderRow != null
+                                                ? HorizontalDataTable(
+                                                    leftHandSideColumnWidth: 100,
+                                                    rightHandSideColumnWidth: 400,
+                                                    isFixedHeader: true,
+                                                    headerWidgets: _tgBhaugolikHeaderRow,
+                                                    leftSideItemBuilder: _tgBhagolikVistaarFirstColumn,
+                                                    rightSideItemBuilder: _tgBhagolikVistaarOtherColumns,
+                                                    itemCount: (Statics.tgLstBhaugolikVistaar == null ? 0 : Statics.tgLstBhaugolikVistaar.length),
+                                                    rowSeparatorWidget: const Divider(
+                                                      color: Colors.black54,
+                                                      height: 1.0,
+                                                      thickness: 0.0,
+                                                    ),
+                                                    leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                                    rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                                  )
+                                                : Column(
+                                                    children: [
+                                                      Text(
+                                                        Statics.getLabel('NoDataFound'),
+                                                        style: TextStyle(fontWeight: FontWeight.normal),
+                                                      ),
+                                                    ],
+                                                  ),
+                                          ),
+                                          SizedBox(
+                                            height: 15,
+                                          ),
+
+                                          // Legend(legendString: "LastMonthBhaugolikVistaar", fontsize: 18),
+                                          // Container(
+                                          //   height: Statics.getDeviceSize(context).height *
+                                          //       (_tgLastMonthBhaugolikHeaderRow != null ? 0.40 : 0.07),
+                                          //   width: Statics.getDeviceSize(context).width,
+                                          //   child: _tgLastMonthBhaugolikHeaderRow != null
+                                          //     ? HorizontalDataTable(
+                                          //         leftHandSideColumnWidth: 100,
+                                          //         rightHandSideColumnWidth: 400,
+                                          //         isFixedHeader: true,
+                                          //         headerWidgets: _tgLastMonthBhaugolikHeaderRow,
+                                          //         leftSideItemBuilder: _tgLastMonthBhagolikVistaarFirstColumn,
+                                          //         rightSideItemBuilder: _tgLastMonthBhagolikVistaarOtherColumns,
+                                          //         itemCount: (Statics.tgLstLastMonthBhaugolikVistaar == null ? 0 : Statics.tgLstLastMonthBhaugolikVistaar.length),
+                                          //         rowSeparatorWidget: const Divider(
+                                          //           color: Colors.black54,
+                                          //           height: 1.0,
+                                          //           thickness: 0.0,
+                                          //         ),
+                                          //         leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                          //         rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                          //     )
+                                          //     : Column(
+                                          //         children:[
+                                          //           Text(Statics.getLabel('NoDataFound'),
+                                          //             style: TextStyle(fontWeight: FontWeight.normal),),
+                                          //         ],
+                                          //     ),
+                                          // ),
+
+                                          Legend(legendString: "SwayamsevakCount", fontsize: 18),
+                                          SingleColumnRow(txtString: Statics.getLabel('TotalKaaryakartaaCount'), value: tgTotalSwayamsevakCount, fontsize: 15),
+                                          SingleColumnRow(txtString: Statics.getLabel('PratidnyitCount'), value: tgPratidnyitCount, fontsize: 15),
+                                          SizedBox(
+                                            height: 15,
+                                          ),
+
+                                          Legend(legendString: "SwayamsevakCountByAge", fontsize: 18),
+                                          SingleColumnRow(txtString: Statics.getLabel('Shishu'), value: tgShishuCount, fontsize: 15),
+                                          SingleColumnRow(txtString: Statics.getLabel('Baal'), value: tgBaalCount, fontsize: 15),
+                                          SingleColumnRow(txtString: Statics.getLabel('TarunVidyaarthi'), value: tgTarunVidyaarthiCount, fontsize: 15),
+                                          SingleColumnRow(txtString: Statics.getLabel('TarunVyavasaayee'), value: tgTarunVyavasaayeeCount, fontsize: 15),
+                                          SingleColumnRow(txtString: Statics.getLabel('ProudhVyavasaayee'), value: tgProudhaVyavasaayeeCount, fontsize: 15),
+                                          SingleColumnRow(txtString: Statics.getLabel('UnkownAge'), value: tgUnknownAgeCount, fontsize: 15),
+                                          SizedBox(
+                                            height: 15,
+                                          ),
+
+                                          Legend(legendString: "ShikshitSwayamsevakCount", fontsize: 18),
+                                          SingleColumnRow(
+                                              txtString: Statics.getLabel('PrarambhikShikshit'), value: tgPraarambhikShikshitCount == 'null' ? "0" : tgPraarambhikShikshitCount, fontsize: 15),
+                                          SingleColumnRow(
+                                              txtString: Statics.getLabel('PraathamikShikshit'), value: tgPraathamikShikshitCount == 'null' ? "0" : tgPraathamikShikshitCount, fontsize: 15),
+                                          SingleColumnRow(
+                                              txtString: Statics.getLabel('PrathamVarshShikshit'), value: tgPrathamVarshaShikshitCount == 'null' ? "0" : tgPrathamVarshaShikshitCount, fontsize: 15),
+                                          SingleColumnRow(
+                                              txtString: Statics.getLabel('DwitiyaVarshShikshit'), value: tgDwitiyaVarshaShikshitCount == 'null' ? "0" : tgDwitiyaVarshaShikshitCount, fontsize: 15),
+                                          SingleColumnRow(
+                                              txtString: Statics.getLabel('TrutiyaVarshShikshit'), value: tgTrutiyaVarshaShikshitCount == 'null' ? "0" : tgTrutiyaVarshaShikshitCount, fontsize: 15),
+                                          SingleColumnRow(txtString: Statics.getLabel('NoShikshan'), value: tgNoShikshanCount, fontsize: 15),
+                                          SizedBox(
+                                            height: 15,
+                                          ),
+
+                                          Legend(legendString: "KaaryakartaaCountByLevel", fontsize: 18),
+                                          TwoColumnRow(
+                                            txtString: Statics.getLabel('Shaakhaa'),
+                                            value: tgDailyShaakhaaKaaryakartaaCount,
+                                            txtString2: Statics.getLabel('SaaptaahikLabelShort'),
+                                            value2: tgSaaptaahikMilanKaaryakartaaCount,
+                                            fontsize: 15,
+                                          ),
+                                          TwoColumnRow(
+                                            txtString: Statics.getLabel('MilanMandali'),
+                                            value: tgMaasikMilanKaaryakartaaCount,
+                                            txtString2: Statics.getLabel('VastiKaaryakartaaCount'),
+                                            value2: tgVastiKaaryakartaaCount,
+                                            fontsize: 15,
+                                          ),
+                                          TwoColumnRow(
+                                            txtString: Statics.getLabel('GraamKaaryakartaaCount'),
+                                            value: tgGraamKaaryakartaaCount,
+                                            txtString2: Statics.getLabel('MandalKaaryakartaaCount'),
+                                            value2: tgMandalKaaryakartaaCount,
+                                            fontsize: 15,
+                                          ),
+                                          TwoColumnRow(
+                                            txtString: Statics.getLabel('NagarKaaryakartaaCount'),
+                                            value: tgNagarKaaryakartaaCount,
+                                            txtString2: Statics.getLabel('ShaharKaaryakartaaCount'),
+                                            value2: tgShaharKaaryakartaaCount,
+                                            fontsize: 15,
+                                          ),
+                                          TwoColumnRow(
+                                            txtString: Statics.getLabel('BhaagKaaryakartaaCount'),
+                                            value: tgBhaagKaaryakartaaCount,
+                                            txtString2: Statics.getLabel('VibhaagKaaryakartaaCount'),
+                                            value2: tgVibhaagKaaryakartaaCount,
+                                            fontsize: 15,
+                                          ),
+                                          TwoColumnRow(
+                                            txtString: Statics.getLabel('MahaanagarKaaryakartaaCount'),
+                                            value: tgMahaanagarKaaryakartaaCount,
+                                            txtString2: Statics.getLabel('PraantKaaryakartaaCount'),
+                                            value2: tgPraantKaaryakartaaCount,
+                                            fontsize: 15,
+                                          ),
+                                          TwoColumnRow(
+                                            txtString: Statics.getLabel('KshetraKaaryakartaaCount'),
+                                            value: tgKshetraKaaryakartaaCount,
+                                            txtString2: Statics.getLabel('AkhilBhaaratiyaKaaryakartaaCount'),
+                                            value2: tgAkhilBhaaratiyaKaaryakartaaCount,
+                                            fontsize: 15,
+                                          ),
+                                          TwoColumnRow(
+                                            txtString: Statics.getLabel('PravaaseeKaaryakartaaCount'),
+                                            value: tgPravaaseeKaaryakartaaCount,
+                                            txtString2: Statics.getLabel('TotalKaaryakartaaCount'),
+                                            value2: tgTotalKaaryakartaaCount,
+                                            fontsize: 15,
+                                          ),
+                                          SizedBox(
+                                            height: 15,
+                                          ),
+
+                                          Legend(legendString: "GatividhiAayaamSansthaaKaaryakartaaCount", fontsize: 18),
+                                          SingleColumnRow(txtString: Statics.getLabel('GatividhiKaaryakartaaCount'), value: tgGatividhiKaaryakartaaCount, fontsize: 15),
+                                          SingleColumnRow(txtString: Statics.getLabel('AayaamKaaryakartaaCount'), value: tgAayaamKaaryakartaaCount, fontsize: 15),
+                                          SingleColumnRow(txtString: Statics.getLabel('SanghaPreritSansthaaKaaryakartaaCount'), value: tgSanghaPreritSansthaaKaaryakartaaCount, fontsize: 15),
+                                          SingleColumnRow(txtString: Statics.getLabel('SocialOrganizationKaaryakartaaCount'), value: tgSocialOrganizationKaaryakartaaCount, fontsize: 15),
+                                          SizedBox(
+                                            height: 15,
+                                          ),
+
+                                          Legend(legendString: "Gatividhi", fontsize: 18),
+                                          Container(
+                                            height: Statics.getDeviceSize(context).height * (_tgGatividhiKaaryakartaaHeaderRow != null ? 0.40 : 0.07),
+                                            width: Statics.getDeviceSize(context).width,
+                                            child: _tgGatividhiKaaryakartaaHeaderRow != null
+                                                ? HorizontalDataTable(
+                                                    leftHandSideColumnWidth: 150,
+                                                    rightHandSideColumnWidth: 150,
+                                                    isFixedHeader: true,
+                                                    headerWidgets: _tgGatividhiKaaryakartaaHeaderRow,
+                                                    leftSideItemBuilder: _tgGatividhiKaaryakartaaFirstColumn,
+                                                    rightSideItemBuilder: _tgGatividhiKaaryakartaaOtherColumns,
+                                                    itemCount: (Statics.tgLstGatividhiKaaryakartaa == null ? 0 : Statics.tgLstGatividhiKaaryakartaa.length),
+                                                    rowSeparatorWidget: const Divider(
+                                                      color: Colors.black54,
+                                                      height: 1.0,
+                                                      thickness: 0.0,
+                                                    ),
+                                                    leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                                    rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                                  )
+                                                : Column(
+                                                    children: [
+                                                      Text(
+                                                        Statics.getLabel('NoDataFound'),
+                                                        style: TextStyle(fontWeight: FontWeight.normal),
+                                                      ),
+                                                    ],
+                                                  ),
+                                          ),
+                                          SizedBox(
+                                            height: 15,
+                                          ),
+
+                                          Legend(legendString: "Aayaam", fontsize: 18),
+                                          Container(
+                                            height: Statics.getDeviceSize(context).height * (_tgAayaamKaaryakartaaHeaderRow != null ? 0.40 : 0.07),
+                                            width: Statics.getDeviceSize(context).width,
+                                            child: _tgAayaamKaaryakartaaHeaderRow != null
+                                                ? HorizontalDataTable(
+                                                    leftHandSideColumnWidth: 150,
+                                                    rightHandSideColumnWidth: 150,
+                                                    isFixedHeader: true,
+                                                    headerWidgets: _tgAayaamKaaryakartaaHeaderRow,
+                                                    leftSideItemBuilder: _tgAayaamKaaryakartaaFirstColumn,
+                                                    rightSideItemBuilder: _tgAayaamKaaryakartaaOtherColumns,
+                                                    itemCount: (Statics.tgLstAayaamKaaryakartaa == null ? 0 : Statics.tgLstAayaamKaaryakartaa.length),
+                                                    rowSeparatorWidget: const Divider(
+                                                      color: Colors.black54,
+                                                      height: 1.0,
+                                                      thickness: 0.0,
+                                                    ),
+                                                    leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                                    rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                                  )
+                                                : Column(
+                                                    children: [
+                                                      Text(
+                                                        Statics.getLabel('NoDataFound'),
+                                                        style: TextStyle(fontWeight: FontWeight.normal),
+                                                      ),
+                                                    ],
+                                                  ),
+                                          ),
+                                          SizedBox(
+                                            height: 15,
+                                          ),
+
+                                          Legend(legendString: "Sangha-PreritSansthaa", fontsize: 18),
+                                          Container(
+                                            height: Statics.getDeviceSize(context).height * (_tgPreritKaaryakartaaHeaderRow != null ? 0.40 : 0.07),
+                                            width: Statics.getDeviceSize(context).width,
+                                            child: _tgPreritKaaryakartaaHeaderRow != null
+                                                ? HorizontalDataTable(
+                                                    leftHandSideColumnWidth: 150,
+                                                    rightHandSideColumnWidth: 150,
+                                                    isFixedHeader: true,
+                                                    headerWidgets: _tgPreritKaaryakartaaHeaderRow,
+                                                    leftSideItemBuilder: _tgPreritKaaryakartaaFirstColumn,
+                                                    rightSideItemBuilder: _tgPreritKaaryakartaaOtherColumns,
+                                                    itemCount: (Statics.tgLstPreritKaaryakartaa == null ? 0 : Statics.tgLstPreritKaaryakartaa.length),
+                                                    rowSeparatorWidget: const Divider(
+                                                      color: Colors.black54,
+                                                      height: 1.0,
+                                                      thickness: 0.0,
+                                                    ),
+                                                    leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                                    rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                                  )
+                                                : Column(
+                                                    children: [
+                                                      Text(
+                                                        Statics.getLabel('NoDataFound'),
+                                                        style: TextStyle(fontWeight: FontWeight.normal),
+                                                      ),
+                                                    ],
+                                                  ),
+                                          ),
+                                          SizedBox(
+                                            height: 15,
+                                          ),
+
+                                          Legend(legendString: "OtherSocialOrganization", fontsize: 18),
+                                          Container(
+                                            height: Statics.getDeviceSize(context).height * (_tgSocialOrgKaaryakartaaHeaderRow != null ? 0.40 : 0.07),
+                                            width: Statics.getDeviceSize(context).width,
+                                            child: _tgSocialOrgKaaryakartaaHeaderRow != null
+                                                ? HorizontalDataTable(
+                                                    leftHandSideColumnWidth: 150,
+                                                    rightHandSideColumnWidth: 150,
+                                                    isFixedHeader: true,
+                                                    headerWidgets: _tgSocialOrgKaaryakartaaHeaderRow,
+                                                    leftSideItemBuilder: _tgSocialOrgKaaryakartaaFirstColumn,
+                                                    rightSideItemBuilder: _tgSocialOrgKaaryakartaaOtherColumns,
+                                                    itemCount: (Statics.tgLstSocialOrgKaaryakartaa == null ? 0 : Statics.tgLstSocialOrgKaaryakartaa.length),
+                                                    rowSeparatorWidget: const Divider(
+                                                      color: Colors.black54,
+                                                      height: 1.0,
+                                                      thickness: 0.0,
+                                                    ),
+                                                    leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                                    rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                                  )
+                                                : Column(
+                                                    children: [
+                                                      Text(
+                                                        Statics.getLabel('NoDataFound'),
+                                                        style: TextStyle(fontWeight: FontWeight.normal),
+                                                      ),
+                                                    ],
+                                                  ),
+                                          ),
+                                          SizedBox(
+                                            height: 15,
+                                          ),
+
+                                          Legend(legendString: "StudentCategory", fontsize: 18),
+                                          Container(
+                                            height: Statics.getDeviceSize(context).height * (_tgStudentCategoryHeaderRow != null ? 0.40 : 0.07),
+                                            width: Statics.getDeviceSize(context).width,
+                                            child: _tgStudentCategoryHeaderRow != null
+                                                ? HorizontalDataTable(
+                                                    leftHandSideColumnWidth: 150,
+                                                    rightHandSideColumnWidth: 150,
+                                                    isFixedHeader: true,
+                                                    headerWidgets: _tgStudentCategoryHeaderRow,
+                                                    leftSideItemBuilder: _tgStudentCategoryFirstColumn,
+                                                    rightSideItemBuilder: _tgStudentCategoryOtherColumns,
+                                                    itemCount: (Statics.tgLstStudentCategory == null ? 0 : Statics.tgLstStudentCategory.length),
+                                                    rowSeparatorWidget: const Divider(
+                                                      color: Colors.black54,
+                                                      height: 1.0,
+                                                      thickness: 0.0,
+                                                    ),
+                                                    leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                                    rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                                  )
+                                                : Column(
+                                                    children: [
+                                                      Text(
+                                                        Statics.getLabel('NoDataFound'),
+                                                        style: TextStyle(fontWeight: FontWeight.normal),
+                                                      ),
+                                                    ],
+                                                  ),
+                                          ),
+                                          SizedBox(
+                                            height: 15,
+                                          ),
+
+                                          Legend(legendString: "VyavasaayeeCategory", fontsize: 18),
+                                          Container(
+                                            height: Statics.getDeviceSize(context).height * (_tgVyavasaayeeCategoryHeaderRow != null ? 0.40 : 0.07),
+                                            width: Statics.getDeviceSize(context).width,
+                                            child: _tgVyavasaayeeCategoryHeaderRow != null
+                                                ? HorizontalDataTable(
+                                                    leftHandSideColumnWidth: 150,
+                                                    rightHandSideColumnWidth: 150,
+                                                    isFixedHeader: true,
+                                                    headerWidgets: _tgVyavasaayeeCategoryHeaderRow,
+                                                    leftSideItemBuilder: _tgVyavasaayeeCategoryFirstColumn,
+                                                    rightSideItemBuilder: _tgVyavasaayeeCategoryOtherColumns,
+                                                    itemCount: (Statics.tgLstVyavasaayeeCategory == null ? 0 : Statics.tgLstVyavasaayeeCategory.length),
+                                                    rowSeparatorWidget: const Divider(
+                                                      color: Colors.black54,
+                                                      height: 1.0,
+                                                      thickness: 0.0,
+                                                    ),
+                                                    leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                                    rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                                  )
+                                                : Column(
+                                                    children: [
+                                                      Text(
+                                                        Statics.getLabel('NoDataFound'),
+                                                        style: TextStyle(fontWeight: FontWeight.normal),
+                                                      ),
+                                                    ],
+                                                  ),
+                                          ),
+                                          SizedBox(
+                                            height: 15,
+                                          ),
+                                        ],
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                inAsyncCall: _isSearching),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildUpnagarCountDataTable(List<UpkhandaDataList> data) {
+    final List<String> headers = [
+      Statics.getLabel('hoomeScreenUpnagarTable1'),
+      Statics.getLabel('hoomeScreenUpnagarTable2'),
+      Statics.getLabel('hoomeScreenUpnagarTable3'),
+    ];
+
+    if (data.isEmpty) {
+      return SizedBox(
+        width: MediaQuery.sizeOf(context).width,
+        height: 150,
+        child: Center(
+          child: Text(
+            Statics.getLabel('NoDataFound'),
+            style: TextStyle(fontWeight: FontWeight.normal),
+          ),
+        ),
+      );
+    }
+
+    return Row(
+      children: [
+        DataTable(
+          headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
+          columnSpacing: 0,
+          horizontalMargin: 16,
+          border: TableBorder.all(color: Colors.black26),
+          columns: [
+            DataColumn(
+              label: Center(
+                child: SizedBox(
+                  width: 50,
+                  child: Text(
+                    Statics.getLabel("hoomeScreenUpnagarTable0"),
+                    softWrap: true,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ),
+          ],
+          rows: data.map((level) {
+                return DataRow(color: MaterialStatePropertyAll(Colors.white), cells: [
+                  DataCell(Text(level.goUnitName.toString())),
+                ]);
+              }).toList() +
+              [
+                DataRow(color: MaterialStatePropertyAll(Colors.yellow.shade100), cells: [
+                  DataCell(Text(
+                    Statics.getLabel("Total"),
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  )),
+                ])
+              ],
+        ),
+        Expanded(
+          child: Scrollbar(
+            controller: _scrollController,
+            thumbVisibility: true,
+            interactive: true,
+            thickness: 5,
+            radius: Radius.circular(10),
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              scrollDirection: Axis.horizontal,
+              child: DataTable(
+                columnSpacing: 14,
+                horizontalMargin: 12,
+                headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
+                border: TableBorder(verticalInside: BorderSide(width: 0.7, color: Colors.grey.shade200)),
+                columns: headers
+                    .map((header) => DataColumn(
+                          label: Container(
+                            constraints: BoxConstraints(minWidth: 40, maxWidth: 100),
+                            // constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.2),
+                            child: Text(header, softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold)),
+                          ),
+                        ))
+                    .toList(),
+                rows: data.map((level) {
+                      return DataRow(color: MaterialStatePropertyAll(Colors.white), cells: [
+                        DataCell(Center(child: Text(level.nagarCount.toString()))),
+                        DataCell(Center(child: Text(level.upKhandCount.toString()))),
+                        DataCell(Center(child: Text(level.upNagarCount.toString()))),
+                      ]);
+                    }).toList() +
+                    [
+                      DataRow(color: MaterialStatePropertyAll(Colors.yellow.shade100), cells: [
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.nagarCount ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.upKhandCount ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.upNagarCount ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                      ])
                     ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                ],
               ),
             ),
           ),
-          inAsyncCall: _isSearching),
+        ),
+      ],
     );
   }
 
@@ -3269,7 +3602,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Row(children: [
                                 Expanded(
                                   child: Text(
-                                    "गृह संपर्क अभियान",
+                                    Statics.getLabel("gruhSamparkAbhiyan"),
                                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                                   ),
                                 ),
@@ -3294,7 +3627,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Row(children: [
                                 Expanded(
                                   child: Text(
-                                    "हिंदु संमेलन",
+                                    Statics.getLabel("hinduSammelan"),
                                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                                   ),
                                 ),
@@ -3323,7 +3656,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Row(children: [
                                 Expanded(
                                   child: Text(
-                                    "सद्भाव बैठक",
+                                    Statics.getLabel("sadbhavBaithak"),
                                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                                   ),
                                 ),
@@ -3348,7 +3681,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Row(children: [
                                 Expanded(
                                   child: Text(
-                                    "प्रमुख जनसंवाद",
+                                    Statics.getLabel("pramukhJansanvaad"),
                                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                                   ),
                                 ),
@@ -3377,7 +3710,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Row(children: [
                                 Expanded(
                                   child: Text(
-                                    "युवा संगम/संमेलन",
+                                    Statics.getLabel("yuvaSangam"),
                                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                                   ),
                                 ),
@@ -3402,7 +3735,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Row(children: [
                                 Expanded(
                                   child: Text(
-                                    "शाखा विस्तार सप्ताह",
+                                    Statics.getLabel("shakhaVistaar"),
                                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                                   ),
                                 ),
@@ -3671,7 +4004,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Row(children: [
                                   Expanded(
                                     child: Text(
-                                      "${Statics.getLabel('masterdataupdate')}",
+                                      "${Statics.getLabel('masterdataupdate2')}",
                                       style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                                     ),
                                   ),
