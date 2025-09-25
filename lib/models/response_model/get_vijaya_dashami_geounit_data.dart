@@ -99,54 +99,59 @@ class VijayadashamiUtsav {
   String? visititAtithiAnyaprabhaViLokamids;
   String? visititAtithiSajjanShaktiids;
   int? vyaktiGeetKhantastaKhoteka;
+  String? karyakramVaktaName;
+  String? karyakramVaktaTask;
 
-  VijayadashamiUtsav(
-      {this.geoUnitID,
-      this.mahavidyaAnya,
-      this.mahavidyaGan,
-      this.mahavidyaPat,
-      this.proudhVyavAnya,
-      this.proudhVyavGan,
-      this.proudhVyavPat,
-      this.tarunVyavAnya,
-      this.tarunVyavGan,
-      this.tarunVyavPat,
-      this.anyaUpastitiMale,
-      this.anyaUpastitiMatrushakti,
-      this.baalAnya,
-      this.baalGan,
-      this.baalPat,
-      this.bhougolikEkunvasti,
-      this.bhougolikPratinidhatvaCount,
-      this.bhougolikPratinidhatvaIds,
-      this.bhougolikSahasari,
-      this.ekunCount,
-      this.ekunPercentage,
-      this.ekunSelected,
-      this.isNagar,
-      this.karaykramHisob24TasaPurnaZaleka,
-      this.karyakramNirdharitVedhvarZaleka,
-      this.manasikSanghMandaliPratinidhatvaCount,
-      this.manasikSanghMandaliPratinidhatvaEkun,
-      this.manasikSanghMandaliPratinidhatvaIds,
-      this.manasikSanghMandaliPratinidhatvaSahasari,
-      this.milanPratinidhatvaCount,
-      this.milanPratinidhatvaEkun,
-      this.milanPratinidhatvaIds,
-      this.milanPratinidhatvaSahasari,
-      this.mukhyaAtithiId,
-      this.mukhyaAtithiIsSajjanShakti,
-      this.pkid,
-      this.shakhaPratinidhatvaCount,
-      this.shakhaPratinidhatvaEkun,
-      this.shakhaPratinidhatvaIds,
-      this.shakhaPratinidhatvaSahasari,
-      this.shanchalanGhosvandanZaleka,
-      this.shanchalanSadanZaleka,
-      this.shanchalanZaleka,
-      this.visititAtithiAnyaprabhaViLokamids,
-      this.visititAtithiSajjanShaktiids,
-      this.vyaktiGeetKhantastaKhoteka});
+  VijayadashamiUtsav({
+    this.geoUnitID,
+    this.mahavidyaAnya,
+    this.mahavidyaGan,
+    this.mahavidyaPat,
+    this.proudhVyavAnya,
+    this.proudhVyavGan,
+    this.proudhVyavPat,
+    this.tarunVyavAnya,
+    this.tarunVyavGan,
+    this.tarunVyavPat,
+    this.anyaUpastitiMale,
+    this.anyaUpastitiMatrushakti,
+    this.baalAnya,
+    this.baalGan,
+    this.baalPat,
+    this.bhougolikEkunvasti,
+    this.bhougolikPratinidhatvaCount,
+    this.bhougolikPratinidhatvaIds,
+    this.bhougolikSahasari,
+    this.ekunCount,
+    this.ekunPercentage,
+    this.ekunSelected,
+    this.isNagar,
+    this.karaykramHisob24TasaPurnaZaleka,
+    this.karyakramNirdharitVedhvarZaleka,
+    this.manasikSanghMandaliPratinidhatvaCount,
+    this.manasikSanghMandaliPratinidhatvaEkun,
+    this.manasikSanghMandaliPratinidhatvaIds,
+    this.manasikSanghMandaliPratinidhatvaSahasari,
+    this.milanPratinidhatvaCount,
+    this.milanPratinidhatvaEkun,
+    this.milanPratinidhatvaIds,
+    this.milanPratinidhatvaSahasari,
+    this.mukhyaAtithiId,
+    this.mukhyaAtithiIsSajjanShakti,
+    this.pkid,
+    this.shakhaPratinidhatvaCount,
+    this.shakhaPratinidhatvaEkun,
+    this.shakhaPratinidhatvaIds,
+    this.shakhaPratinidhatvaSahasari,
+    this.shanchalanGhosvandanZaleka,
+    this.shanchalanSadanZaleka,
+    this.shanchalanZaleka,
+    this.visititAtithiAnyaprabhaViLokamids,
+    this.visititAtithiSajjanShaktiids,
+    this.vyaktiGeetKhantastaKhoteka,
+    this.karyakramVaktaName,
+    this.karyakramVaktaTask,
+  });
 
   VijayadashamiUtsav.fromJson(Map<String, dynamic> json) {
     geoUnitID = json['GeoUnitID'];
@@ -195,6 +200,8 @@ class VijayadashamiUtsav {
     visititAtithiAnyaprabhaViLokamids = json['visitit_atithi_anyaprabha_vi_lokamids'];
     visititAtithiSajjanShaktiids = json['visitit_atithi_sajjan_shaktiids'];
     vyaktiGeetKhantastaKhoteka = json['vyakti_geet_khantasta_khoteka'];
+    karyakramVaktaName = json['karyakramVaktaName'];
+    karyakramVaktaTask = json['karyakramVaktaTask'];
   }
 
   Map<String, dynamic> toJson() {
@@ -245,6 +252,8 @@ class VijayadashamiUtsav {
     data['visitit_atithi_anyaprabha_vi_lokamids'] = this.visititAtithiAnyaprabhaViLokamids;
     data['visitit_atithi_sajjan_shaktiids'] = this.visititAtithiSajjanShaktiids;
     data['vyakti_geet_khantasta_khoteka'] = this.vyaktiGeetKhantastaKhoteka;
+    data['karyakramVaktaName'] = this.karyakramVaktaName;
+    data['karyakramVaktaTask'] = this.karyakramVaktaTask;
     return data;
   }
 }
@@ -252,18 +261,21 @@ class VijayadashamiUtsav {
 class TypeValueData {
   String? type;
   String? value;
+  String? description;
 
-  TypeValueData({this.type, this.value});
+  TypeValueData({this.type, this.value, this.description});
 
   TypeValueData.fromJson(Map<String, dynamic> json) {
     type = json['type'];
     value = json['value'];
+    description = json['description'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['type'] = this.type;
     data['value'] = this.value;
+    data['description'] = this.description;
     return data;
   }
 }

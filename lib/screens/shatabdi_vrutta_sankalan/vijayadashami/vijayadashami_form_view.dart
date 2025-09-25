@@ -40,6 +40,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
   final ScrollController _scrollController = ScrollController();
 
   TextEditingController txtUrlsController = TextEditingController();
+  TextEditingController txtUrlDescController = TextEditingController();
 
   bool _isSearching = false;
   bool _isExpanded = true;
@@ -387,6 +388,9 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
 
   final TextEditingController presentMaleController = TextEditingController();
   final TextEditingController presentMatrushaktiController = TextEditingController();
+
+  final TextEditingController txtVaktaNameController = TextEditingController();
+  final TextEditingController txtVaktaTaskController = TextEditingController();
 
   // Pat Sankhya controllers
   final patShishuBaalCtrl = TextEditingController();
@@ -2763,6 +2767,25 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
             ),
 // ================================== 4 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
             mainContainer(
+              "${Statics.getLabel('karyakramVakta')}",
+              Column(
+                children: [
+                  textControllerField2(
+                    name: Statics.getLabel("karyakramVaktaName"),
+                    controller: txtVaktaNameController,
+                    keyboardType: TextInputType.name,
+                  ),
+                  const SizedBox(height: 12),
+                  textControllerField2(
+                    name: Statics.getLabel("karyakramVaktaTask"),
+                    controller: txtVaktaTaskController,
+                    keyboardType: TextInputType.name,
+                  ),
+                ],
+              ),
+            ),
+// ================================== 5 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
+            mainContainer(
               "${Statics.getLabel('swayamsewakUpastithi')}",
               Column(
                 children: [
@@ -2938,7 +2961,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                 ],
               ),
             ),
-// ================================== 5 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
+// ================================== 6 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
             mainContainer(
               "${Statics.getLabel('bhougolikPratinidhitwa')}",
               Column(
@@ -2995,11 +3018,11 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                     height: 10,
                   ),
                   SingleColumnRow(
-                    txtString: "${Statics.getLabel('Total')} ${Statics.getLabel('Vasti')} / ${Statics.getLabel('Graam')}",
+                    txtString: "${Statics.getLabel('Total')} ${Statics.getLabel('Vasti')} / ${Statics.getLabel('Mandal')}",
                     value: totalVastiCount.toString(),
                   ),
                   SingleColumnRow(
-                    txtString: "${Statics.getLabel('pratinidhitva')} ${Statics.getLabel('Vasti')} ",
+                    txtString: "${Statics.getLabel('Vasti')} ${Statics.getLabel('pratinidhitva')}  ",
                     value: selectedVastiCount.toString(),
                   ),
                   SingleColumnRow(
@@ -3010,7 +3033,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                 ],
               ),
             ),
-// ================================== 6 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
+// ================================== 7 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
             mainContainer(
               "${Statics.getLabel('shakhaMilanPratinidhitwa')}",
               Column(
@@ -3100,7 +3123,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                 ],
               ),
             ),
-// ================================== 7 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
+// ================================== 8 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
             mainContainer(
               "${Statics.getLabel('MilanPratinidhitwa')}",
               Column(
@@ -3190,7 +3213,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                 ],
               ),
             ),
-// ================================== 8 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
+// ================================== 9 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
             mainContainer(
               "${Statics.getLabel('milanMandali')} ${Statics.getLabel('pratinidhitva')}",
               Column(
@@ -3280,7 +3303,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                 ],
               ),
             ),
-// ================================== 9 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
+// ================================== 10 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
             mainContainer(
               "${Statics.getLabel('Total')} ${Statics.getLabel('pratinidhitva')}",
               Column(
@@ -3316,7 +3339,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                 ],
               ),
             ),
-// ================================== 10 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
+// ================================== 11 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
             mainContainer(
               "${Statics.getLabel('anyaUpstithMahiti')}",
               Column(
@@ -3379,7 +3402,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                 ],
               ),
             ),
-// ================================== 11 QUESTIONS Box =======================================================================
+// ================================== 12 QUESTIONS Box =======================================================================
             mainContainer(
               "${Statics.getLabel('sanchalan')}",
               Column(
@@ -3415,7 +3438,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                 ],
               ),
             ),
-// ================================== 12 QUESTIONS Box =======================================================================
+// ================================== 13 QUESTIONS Box =======================================================================
             mainContainer(
               "${Statics.getLabel('moreInfo')}",
               Column(
@@ -4243,7 +4266,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
   String? filePathOg;
   List<String?> _selectedFileNames1 = []; // To display the file name
   List<String?> _selectedFileNames2 = []; // To display the file name
-  List<String?> _urlsList = []; // To display the file name
+  List<TypeValueData?> _urlsList = []; // To display the file name
   // int? imageAdd = 0;
   final int _maxImages = 5;
   ValueNotifier<bool> loadingNotifier1 = ValueNotifier(false);
@@ -4832,45 +4855,66 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
         ),
         SizedBox(height: 8),
         if (canAddMore)
-          Row(
+          Column(
             children: [
-              Expanded(
-                flex: 3,
-                child: TextFormField(
-                  controller: txtUrlsController,
-                  textAlignVertical: TextAlignVertical.center,
-                  // textAlign: TextAlign.left,
-                  autofocus: false,
-                  onChanged: (value) => setState(() {}),
-                  onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
-                  decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6), border: OutlineInputBorder(), enabledBorder: OutlineInputBorder(), focusedBorder: OutlineInputBorder()),
-                  // validator: (value) {
-                  //   // if (value != null && value.trim().isNotEmpty && value.length < 9 && memberController.contactList.value.isEmpty){
-                  //   //   return "Invalid contact number";
-                  //   // }else
-                  //   if (memberController.contactList.value.isEmpty) {
-                  //     if (value == null || value.trim().isEmpty) {
-                  //       return "Please enter contact number";
-                  //     }
-                  //     if (value.length < 9) {
-                  //       return "Invalid contact number";
-                  //     }
-                  //     return null;
-                  //     // return "Please enter at least one contact number";
-                  //   } else {
-                  //     if (value != null && value.trim().isNotEmpty && value.length < 9) {
-                  //       return "Invalid contact number";
-                  //     }
-                  //   }
-                  //
-                  //   return null;
-                  // },
+              TextFormField(
+                controller: txtUrlsController,
+                textAlignVertical: TextAlignVertical.center,
+                // textAlign: TextAlign.left,
+                autofocus: false,
+                onChanged: (value) => setState(() {}),
+                onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
+                decoration: InputDecoration(
+                  hintText: Statics.getLabel("url"),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+                // validator: (value) {
+                //   // if (value != null && value.trim().isNotEmpty && value.length < 9 && memberController.contactList.value.isEmpty){
+                //   //   return "Invalid contact number";
+                //   // }else
+                //   if (memberController.contactList.value.isEmpty) {
+                //     if (value == null || value.trim().isEmpty) {
+                //       return "Please enter contact number";
+                //     }
+                //     if (value.length < 9) {
+                //       return "Invalid contact number";
+                //     }
+                //     return null;
+                //     // return "Please enter at least one contact number";
+                //   } else {
+                //     if (value != null && value.trim().isNotEmpty && value.length < 9) {
+                //       return "Invalid contact number";
+                //     }
+                //   }
+                //
+                //   return null;
+                // },
+              ),
+              SizedBox(height: 8),
+              TextFormField(
+                controller: txtUrlDescController,
+                textAlignVertical: TextAlignVertical.center,
+                // textAlign: TextAlign.left,
+                autofocus: false,
+                maxLength: 160,
+                minLines: 1,
+                maxLines: 5,
+                onChanged: (value) => setState(() {}),
+                onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
+                decoration: InputDecoration(
+                  hintText: Statics.getLabel("urlDesc"),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                 ),
               ),
-              SizedBox(width: 6),
-              Expanded(
-                flex: 1,
+              SizedBox(height: 8),
+              Align(
+                alignment: Alignment.centerRight,
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -4881,18 +4925,27 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                   ),
                   onPressed: () async {
                     // print(contactList.value.toString());
-                    if (txtUrlsController.text.trim().isNotEmpty) {
+                    if (txtUrlsController.text.trim().isNotEmpty && txtUrlDescController.text.trim().isNotEmpty) {
                       bool valid = await isValidUrl(txtUrlsController.text.trim());
+                      print(valid);
                       if (!valid) {
                         Fluttertoast.showToast(msg: "${Statics.getLabel('urlValidation')}");
                         return;
                       }
-                      _urlsList.add(txtUrlsController.text.trim());
+                      _urlsList.add(TypeValueData(value: txtUrlsController.text.trim(), description: txtUrlDescController.text.trim()));
                       txtUrlsController.clear();
+                      txtUrlDescController.clear();
                     } else {
                       if (!_isSearching) {
                         Fluttertoast.showToast(
                           msg: "${Statics.getLabel('NagarSelectionImportant')}",
+                        );
+                        setState(() {});
+                        return;
+                      }
+                      if (txtUrlDescController.text.trim().isEmpty) {
+                        Fluttertoast.showToast(
+                          msg: "${Statics.getLabel('urlDescIsImp')}",
                         );
                         setState(() {});
                         return;
@@ -4904,7 +4957,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                   },
                   child: Text("+ ${Statics.getLabel("Add")}"),
                 ),
-              )
+              ),
             ],
           ),
         SizedBox(height: 8),
@@ -4915,47 +4968,72 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
           crossAxisAlignment: WrapCrossAlignment.center,
           alignment: WrapAlignment.start,
           runAlignment: WrapAlignment.center,
-          children: _urlsList
-              .map(
-                (url) => Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Colors.grey.shade200,
-                    border: Border.all(color: Colors.grey, width: 0.7),
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      InkWell(
-                        onTap: () async {
-                          final Uri uri = Uri.parse(url.toString());
-                          if (await canLaunchUrl(uri)) {
-                            await launchUrl(uri, mode: LaunchMode.externalApplication);
-                          } else {
-                            Fluttertoast.showToast(msg: "${Statics.getLabel('errorOccurred')}");
-                          }
-                        },
-                        child: Text(
-                          url.toString(),
-                          style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline, decorationColor: Colors.blue),
-                          // style: AppTextStyles.labels(Get.context!).copyWith(fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            _urlsList.removeWhere((e) => e == url);
-                          });
-                        },
-                        child: Icon(Icons.cancel, color: Colors.red, size: 18),
-                      )
-                    ],
-                  ),
+          children: _urlsList.asMap().entries.map(
+            (entry) {
+              int srNo = entry.key + 1;
+              final url = entry.value;
+              return Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.grey.shade200,
+                  border: Border.all(color: Colors.grey.shade200, width: 0.7),
                 ),
-              )
-              .toList(),
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      srNo.toString() + ". ",
+                      // maxLines: 2, softWrap: true, overflow: TextOverflow.ellipsis,
+                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
+                      // style: AppTextStyles.labels(Get.context!).copyWith(fontWeight: FontWeight.w500),
+                    ),
+                    SizedBox(width: 4),
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          InkWell(
+                            onTap: () async {
+                              final Uri uri = Uri.parse((url?.value).toString());
+                              if (await isValidUrl((url?.value).toString())) {
+                                await launchUrl(uri, mode: LaunchMode.externalApplication);
+                              } else {
+                                Fluttertoast.showToast(msg: "${Statics.getLabel('errorOccurred')}");
+                              }
+                            },
+                            child: Text(
+                              (url?.value).toString(),
+                              maxLines: 2, softWrap: true, overflow: TextOverflow.ellipsis,
+                              style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline, decorationColor: Colors.blue),
+                              // style: AppTextStyles.labels(Get.context!).copyWith(fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            (url?.description).toString(),
+                            // maxLines: 2, softWrap: true, overflow: TextOverflow.ellipsis,
+                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
+                            // style: AppTextStyles.labels(Get.context!).copyWith(fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          _urlsList.removeWhere((e) => e == url);
+                        });
+                      },
+                      child: Icon(Icons.cancel, color: Colors.red, size: 18),
+                    )
+                  ],
+                ),
+              );
+            },
+          ).toList(),
         ),
         // if (canAddMore)
         //   Align(
@@ -5206,6 +5284,8 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       "ProudhVyav_gan": ganProudhVyavCtrl.text,
       "ProudhVyav_anya": anyaProudhVyavCtrl.text,
       "urls": _urlsList,
+      "karyakramVaktaName": txtVaktaNameController.text.trim(),
+      "karyakramVaktaTask": txtVaktaTaskController.text.trim(),
     };
 
     String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
@@ -5257,7 +5337,9 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     setState(() {
       VijayadashamiUtsav utsav = getVijayaDashamiUtsavDataByGeounitData!.vijayadashamiUtsav!;
 
-      _urlsList = getVijayaDashamiUtsavDataByGeounitData?.urldata?.map((url) => url.value).toList() ?? [];
+      _urlsList = getVijayaDashamiUtsavDataByGeounitData?.urldata ?? [];
+      txtVaktaNameController.text = getVijayaDashamiUtsavDataByGeounitData?.vijayadashamiUtsav?.karyakramVaktaName ?? "";
+      txtVaktaTaskController.text = getVijayaDashamiUtsavDataByGeounitData?.vijayadashamiUtsav?.karyakramVaktaTask ?? "";
       _selectedFileNames1 = getVijayaDashamiUtsavDataByGeounitData?.eventdata?.map((url) => url.value).toList() ?? [];
       _selectedFileNames2 = getVijayaDashamiUtsavDataByGeounitData?.adddata?.map((url) => url.value).toList() ?? [];
 

@@ -1,18 +1,17 @@
 import 'dart:async';
 
-import 'package:url_launcher/url_launcher.dart';
-
 Future<bool> isValidUrl(String text) async {
   if (text.isEmpty) return false;
 
-  final Uri uri = Uri.tryParse(text) ?? Uri();
+  final Uri? uri = Uri.tryParse(text);
 
-  // Make sure scheme is included
-  if (!uri.hasScheme) {
+  // A valid URI must be non-null and have a host
+  if (uri == null || uri.host.isEmpty) {
     return false;
   }
 
-  return await canLaunchUrl(uri);
+  // You can add more checks here, e.g., for schemes
+  return uri.isAbsolute;
 }
 
 mixin SankalpValidator {

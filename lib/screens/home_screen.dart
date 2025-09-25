@@ -3416,6 +3416,8 @@ class _HomeScreenState extends State<HomeScreen> {
       Statics.getLabel('hoomeScreenUpnagarTable1'),
       Statics.getLabel('hoomeScreenUpnagarTable2'),
       Statics.getLabel('hoomeScreenUpnagarTable3'),
+      Statics.getLabel('hoomeScreenUpnagarTable4'),
+      Statics.getLabel('hoomeScreenUpnagarTable5'),
     ];
 
     if (data.isEmpty) {
@@ -3497,6 +3499,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         DataCell(Center(child: Text(level.nagarCount.toString()))),
                         DataCell(Center(child: Text(level.upKhandCount.toString()))),
                         DataCell(Center(child: Text(level.upNagarCount.toString()))),
+                        DataCell(Center(child: Text(level.gramCount.toString()))),
+                        DataCell(Center(child: Text(level.vastiCount.toString()))),
                       ]);
                     }).toList() +
                     [
@@ -3514,6 +3518,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         DataCell(Center(
                             child: Text(
                           data.fold(0, (sum, item) => sum + (item.upNagarCount ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.gramCount ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.vastiCount ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                       ])
