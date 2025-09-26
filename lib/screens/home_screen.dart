@@ -2003,7 +2003,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               isExpanded: _isNagarTableExpanded,
                               headerBuilder: (BuildContext context, bool isExpanded) {
                                 return ListTile(
-                                  title: Text(Statics.getLabel('mainPageTableCount')),
+                                  title: Text(Statics.getLabel('prantachiBhaugolikRachanaa')),
                                 );
                               },
                               body: Container(

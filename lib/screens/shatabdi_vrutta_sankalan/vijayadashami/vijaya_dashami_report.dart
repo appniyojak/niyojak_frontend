@@ -341,7 +341,45 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                               },
                               child: Text("${Statics.getLabel('Filters')}", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                             ),
-                          )
+                          ),
+                          if (selctedLevelId != '' || vijayadashamiReport != null)
+                            Align(
+                              alignment: Alignment.center,
+                              child: TextButton(
+                                child: Text(Statics.getLabel('clear')),
+                                onPressed: () {
+                                  setState(() {
+                                    // _isExpanded = false;
+
+                                    // Reset dropdowns / linked values
+                                    _linkedMahaanagarValue = null;
+                                    _linkedVibhaagValue = null;
+                                    _linkedBhaagValue = null;
+                                    _linkedShaharValue = null;
+                                    _linkedNagarValue = null;
+                                    _linkedmandalValue = null;
+                                    _linkedgraamValue = null;
+                                    _linkedvastiValue = null;
+
+                                    // Reset data lists
+                                    _linkedBhaag = null;
+                                    _linkedShahar = null;
+                                    _linkedNagar = null;
+                                    _linkedmandal = null;
+                                    _linkedgraam = null;
+                                    _linkedvasti = null;
+
+                                    // Reset level tracking
+                                    selctedLevel = '';
+                                    selctedLevelName = '';
+                                    selctedLevelId = null;
+
+                                    vijayadashamiReport = null;
+                                    populatelinkedVibhaagDropdown('');
+                                  });
+                                },
+                              ),
+                            ),
                         ],
                       ),
                     ),

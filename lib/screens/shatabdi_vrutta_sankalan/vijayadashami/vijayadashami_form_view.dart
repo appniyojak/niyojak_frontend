@@ -21,6 +21,7 @@ import '../../../models/response_model/get_vijaya_dashami_geounit_data.dart';
 import '../../../models/response_model/vasti_up_data_model.dart';
 import '../../../models/response_model/vijayaDashamiInitModel.dart';
 import '../../../providers/bals.dart';
+import '../../../utils/globals.dart';
 import '../../../validation_blocks/validator.dart';
 import '../../levels_update_module/levels_manage_tabs.dart';
 import 'add_mukhya_atithi_form.dart';
@@ -3446,6 +3447,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                 children: [
                   filePickerField1(
                     question: "${Statics.getLabel('AddUtsavFiles')}",
+                    subtitle: "${Statics.getLabel('AddUtsavFilesSubtitle')}",
                     // selectedFileName: selectedFileName,
                     // onFileSelected: (base64File, fileName) {
                     //   setState(() {
@@ -3456,12 +3458,15 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                     //   log("Selected File Path (Base64): $selectedFilePath");
                     // },
                     loadingNotifier: loadingNotifier1,
+                    // loadingNotifier2: loadingNotifier3,
                     context: context,
                   ),
                   Divider(height: 32),
                   filePickerField2(
                     question: "${Statics.getLabel('AddAdvUtsavFiles')}",
+                    subtitle: "${Statics.getLabel('AddAdvUtsavFilesSubtitle')}",
                     loadingNotifier: loadingNotifier2,
+                    // loadingNotifier2: loadingNotifier3,
                     context: context,
                   ),
                   Divider(height: 32),
@@ -4268,18 +4273,22 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
   List<String?> _selectedFileNames2 = []; // To display the file name
   List<TypeValueData?> _urlsList = []; // To display the file name
   // int? imageAdd = 0;
-  final int _maxImages = 5;
+  final int _maxImages = 3;
+  final int _maxAddImages = 10;
   ValueNotifier<bool> loadingNotifier1 = ValueNotifier(false);
   ValueNotifier<bool> loadingNotifier2 = ValueNotifier(false);
+  ValueNotifier<bool> loadingNotifier3 = ValueNotifier(false);
 
   Widget filePickerField1({
     required BuildContext context,
     required String question,
+    required String subtitle,
     // required Function(String?, String?) onFileSelected,
     // List<String?> selectedFileNames,
     int? questionNumber,
     bool isLoading = false,
     ValueNotifier<bool>? loadingNotifier,
+    // required ValueNotifier<bool> loadingNotifier2,
   }) {
     final canAddMore = _selectedFileNames1.length < _maxImages;
     return Column(
@@ -4289,9 +4298,18 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: Text(
-                "${questionNumber != null ? "$questionNumber. " : ""}$question",
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "${questionNumber != null ? "$questionNumber. " : ""}$question",
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    subtitle,
+                    style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w400),
+                  ),
+                ],
               ),
             ),
             IconButton(
@@ -4301,48 +4319,96 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                     context: context,
                     builder: (BuildContext context) {
                       return Material(
-                        child: Container(
-                          color: Colors.transparent,
-                          padding: const EdgeInsets.all(20),
-                          child: ListView(
-                            // mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Align(
-                                alignment: Alignment.topRight,
-                                child: IconButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  icon: Icon(Icons.close, color: Colors.black),
-                                ),
-                              ),
-                              SizedBox(height: 10),
-                              ..._selectedFileNames1.asMap().entries.map((entry) {
-                                int index = entry.key; // index
-                                var img = entry.value;
-                                return Container(
-                                  margin: EdgeInsets.only(bottom: 12),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text("${(index + 1)}. $img"),
-                                      SizedBox(height: 6),
-                                      CachedNetworkImage(
-                                        imageUrl: '${Statics.baseUrl}/Files/vijayadhasmifiles/$img',
-                                        errorWidget: (context, error, stackTrace) =>
-                                            SizedBox(width: MediaQuery.sizeOf(context).width, height: 120, child: Center(child: Text(Statics.getLabel("errorOccurred")))),
-                                        progressIndicatorBuilder: (context, child, loadingProgress) =>
-                                            SizedBox(width: MediaQuery.sizeOf(context).width, height: 120, child: Center(child: CircularProgressIndicator())),
-                                        fit: BoxFit.contain,
-                                      ),
-                                    ],
+                        child: StatefulBuilder(builder: (context, set) {
+                          String _currentImg = "";
+                          return Container(
+                            color: Colors.transparent,
+                            padding: const EdgeInsets.all(20),
+                            child: ListView(
+                              // mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Align(
+                                  alignment: Alignment.topRight,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    icon: Icon(Icons.close, color: Colors.black),
                                   ),
-                                );
-                              }),
-                            ],
-                          ),
-                        ),
+                                ),
+                                SizedBox(height: 10),
+                                ..._selectedFileNames1.asMap().entries.map((entry) {
+                                  int index = entry.key; // index
+                                  var img = entry.value;
+                                  return Container(
+                                    margin: EdgeInsets.only(bottom: 12),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                "${(index + 1)}. $img",
+                                                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                                              ),
+                                            ),
+                                            IconButton(
+                                              onPressed: () async {
+                                                set(() {
+                                                  _currentImg = img.toString();
+                                                });
+                                                set(() {
+                                                  loadingNotifier3.value = true;
+                                                });
+                                                setState(() {});
+                                                print(img.toString() == _currentImg);
+                                                await MyAppGlobals.downloadFile('${Statics.baseUrl}/Files/vijayadhasmifiles/$img', img.toString());
+                                                set(() {
+                                                  loadingNotifier3.value = false;
+                                                });
+
+                                                setState(() {});
+                                                set(() {
+                                                  _currentImg = "";
+                                                });
+                                              },
+                                              icon: ValueListenableBuilder<bool>(
+                                                valueListenable: loadingNotifier3,
+                                                builder: (context, isLoading, _) {
+                                                  return (isLoading && img.toString() == _currentImg)
+                                                      ? SizedBox(
+                                                          width: 17,
+                                                          height: 17,
+                                                          child: CircularProgressIndicator(strokeWidth: 2),
+                                                        )
+                                                      : Icon(
+                                                          Icons.download,
+                                                          color: Colors.purple,
+                                                        );
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 6),
+                                        CachedNetworkImage(
+                                          imageUrl: '${Statics.baseUrl}/Files/vijayadhasmifiles/$img',
+                                          errorWidget: (context, error, stackTrace) =>
+                                              SizedBox(width: MediaQuery.sizeOf(context).width, height: 120, child: Center(child: Text(Statics.getLabel("errorOccurred")))),
+                                          progressIndicatorBuilder: (context, child, loadingProgress) =>
+                                              SizedBox(width: MediaQuery.sizeOf(context).width, height: 120, child: Center(child: CircularProgressIndicator())),
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }),
+                              ],
+                            ),
+                          );
+                        }),
                       );
                     },
                   );
@@ -4558,13 +4624,15 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
   Widget filePickerField2({
     required BuildContext context,
     required String question,
+    required String subtitle,
     // required Function(String?, String?) onFileSelected,
     // List<String?> selectedFileNames,
     int? questionNumber,
     bool isLoading = false,
     ValueNotifier<bool>? loadingNotifier,
+    // ValueNotifier<bool>? loadingNotifier2,
   }) {
-    final canAddMore = _selectedFileNames2.length < _maxImages;
+    final canAddMore = _selectedFileNames2.length < _maxAddImages;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -4572,9 +4640,18 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: Text(
-                "${questionNumber != null ? "$questionNumber. " : ""}$question",
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "${questionNumber != null ? "$questionNumber. " : ""}$question",
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    subtitle,
+                    style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w400),
+                  ),
+                ],
               ),
             ),
             IconButton(
@@ -4584,48 +4661,92 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                     context: context,
                     builder: (BuildContext context) {
                       return Material(
-                        child: Container(
-                          color: Colors.transparent,
-                          padding: const EdgeInsets.all(20),
-                          child: ListView(
-                            // mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Align(
-                                alignment: Alignment.topRight,
-                                child: IconButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  icon: Icon(Icons.close, color: Colors.black),
-                                ),
-                              ),
-                              SizedBox(height: 10),
-                              ..._selectedFileNames2.asMap().entries.map((entry) {
-                                int index = entry.key; // index
-                                var img = entry.value;
-                                return Container(
-                                  margin: EdgeInsets.only(bottom: 12),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text("${(index + 1)}. $img"),
-                                      SizedBox(height: 6),
-                                      CachedNetworkImage(
-                                        imageUrl: '${Statics.baseUrl}/Files/vijayadhasmifiles/$img',
-                                        errorWidget: (context, error, stackTrace) =>
-                                            SizedBox(width: MediaQuery.sizeOf(context).width, height: 120, child: Center(child: Text(Statics.getLabel("errorOccurred")))),
-                                        progressIndicatorBuilder: (context, child, loadingProgress) =>
-                                            SizedBox(width: MediaQuery.sizeOf(context).width, height: 120, child: Center(child: CircularProgressIndicator())),
-                                        fit: BoxFit.contain,
-                                      ),
-                                    ],
+                        child: StatefulBuilder(builder: (context, set) {
+                          String _currentImg = "";
+                          return Container(
+                            color: Colors.transparent,
+                            padding: const EdgeInsets.all(20),
+                            child: ListView(
+                              // mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Align(
+                                  alignment: Alignment.topRight,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    icon: Icon(Icons.close, color: Colors.black),
                                   ),
-                                );
-                              }),
-                            ],
-                          ),
-                        ),
+                                ),
+                                SizedBox(height: 10),
+                                ..._selectedFileNames2.asMap().entries.map((entry) {
+                                  int index = entry.key; // index
+                                  var img = entry.value;
+                                  return Container(
+                                    margin: EdgeInsets.only(bottom: 12),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                "${(index + 1)}. $img",
+                                                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                                              ),
+                                            ),
+                                            IconButton(
+                                              onPressed: () async {
+                                                set(() {
+                                                  _currentImg = img.toString();
+                                                });
+                                                set(() {
+                                                  loadingNotifier3.value = true;
+                                                });
+                                                await MyAppGlobals.downloadFile('${Statics.baseUrl}/Files/vijayadhasmifiles/$img', img.toString());
+                                                set(() {
+                                                  loadingNotifier3.value = false;
+                                                });
+                                                set(() {
+                                                  _currentImg = "";
+                                                });
+                                              },
+                                              icon: ValueListenableBuilder<bool>(
+                                                valueListenable: loadingNotifier3,
+                                                builder: (context, isLoading, _) {
+                                                  return (isLoading && img.toString() == _currentImg)
+                                                      ? SizedBox(
+                                                          width: 17,
+                                                          height: 17,
+                                                          child: CircularProgressIndicator(strokeWidth: 2),
+                                                        )
+                                                      : Icon(
+                                                          Icons.download,
+                                                          color: Colors.purple,
+                                                        );
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 6),
+                                        CachedNetworkImage(
+                                          imageUrl: '${Statics.baseUrl}/Files/vijayadhasmifiles/$img',
+                                          errorWidget: (context, error, stackTrace) =>
+                                              SizedBox(width: MediaQuery.sizeOf(context).width, height: 120, child: Center(child: Text(Statics.getLabel("errorOccurred")))),
+                                          progressIndicatorBuilder: (context, child, loadingProgress) =>
+                                              SizedBox(width: MediaQuery.sizeOf(context).width, height: 120, child: Center(child: CircularProgressIndicator())),
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }),
+                              ],
+                            ),
+                          );
+                        }),
                       );
                     },
                   );
@@ -4845,7 +4966,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     required String question,
     int? questionNumber,
   }) {
-    final canAddMore = _urlsList.length < _maxImages;
+    // final canAddMore = _urlsList.length < _maxImages;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -4854,128 +4975,128 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
           style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
         ),
         SizedBox(height: 8),
-        if (canAddMore)
-          Column(
-            children: [
-              TextFormField(
-                controller: txtUrlsController,
-                textAlignVertical: TextAlignVertical.center,
-                // textAlign: TextAlign.left,
-                autofocus: false,
-                readOnly: _isSearching == false,
-                onTap: () {
-                  if (_isSearching == false) {
-                    Fluttertoast.showToast(
-                      msg: "${Statics.getLabel('NagarSelectionImportant')}",
-                    );
-                  }
-                },
-                onChanged: (value) => setState(() {}),
-                onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
-                decoration: InputDecoration(
-                  hintText: Statics.getLabel("url"),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                  // enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                  // focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.purple),borderRadius: BorderRadius.circular(12)),
-                ),
-                // validator: (value) {
-                //   // if (value != null && value.trim().isNotEmpty && value.length < 9 && memberController.contactList.value.isEmpty){
-                //   //   return "Invalid contact number";
-                //   // }else
-                //   if (memberController.contactList.value.isEmpty) {
-                //     if (value == null || value.trim().isEmpty) {
-                //       return "Please enter contact number";
-                //     }
-                //     if (value.length < 9) {
-                //       return "Invalid contact number";
-                //     }
-                //     return null;
-                //     // return "Please enter at least one contact number";
-                //   } else {
-                //     if (value != null && value.trim().isNotEmpty && value.length < 9) {
-                //       return "Invalid contact number";
-                //     }
-                //   }
-                //
-                //   return null;
-                // },
+        // if (canAddMore)
+        Column(
+          children: [
+            TextFormField(
+              controller: txtUrlsController,
+              textAlignVertical: TextAlignVertical.center,
+              // textAlign: TextAlign.left,
+              autofocus: false,
+              readOnly: _isSearching == false,
+              onTap: () {
+                if (_isSearching == false) {
+                  Fluttertoast.showToast(
+                    msg: "${Statics.getLabel('NagarSelectionImportant')}",
+                  );
+                }
+              },
+              onChanged: (value) => setState(() {}),
+              onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
+              decoration: InputDecoration(
+                hintText: Statics.getLabel("url"),
+                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                // enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                // focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.purple),borderRadius: BorderRadius.circular(12)),
               ),
-              SizedBox(height: 8),
-              TextFormField(
-                controller: txtUrlDescController,
-                textAlignVertical: TextAlignVertical.center,
-                // textAlign: TextAlign.left,
-                autofocus: false,
-                maxLength: 160,
-                minLines: 1,
-                maxLines: 5,
-                readOnly: _isSearching == false,
-                onTap: () {
-                  if (_isSearching == false) {
-                    Fluttertoast.showToast(
-                      msg: "${Statics.getLabel('NagarSelectionImportant')}",
-                    );
-                  }
-                },
-                onChanged: (value) => setState(() {}),
-                onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
-                decoration: InputDecoration(
-                  hintText: Statics.getLabel("urlDesc"),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                  // enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                  // focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                ),
+              // validator: (value) {
+              //   // if (value != null && value.trim().isNotEmpty && value.length < 9 && memberController.contactList.value.isEmpty){
+              //   //   return "Invalid contact number";
+              //   // }else
+              //   if (memberController.contactList.value.isEmpty) {
+              //     if (value == null || value.trim().isEmpty) {
+              //       return "Please enter contact number";
+              //     }
+              //     if (value.length < 9) {
+              //       return "Invalid contact number";
+              //     }
+              //     return null;
+              //     // return "Please enter at least one contact number";
+              //   } else {
+              //     if (value != null && value.trim().isNotEmpty && value.length < 9) {
+              //       return "Invalid contact number";
+              //     }
+              //   }
+              //
+              //   return null;
+              // },
+            ),
+            SizedBox(height: 8),
+            TextFormField(
+              controller: txtUrlDescController,
+              textAlignVertical: TextAlignVertical.center,
+              // textAlign: TextAlign.left,
+              autofocus: false,
+              maxLength: 160,
+              minLines: 1,
+              maxLines: 5,
+              readOnly: _isSearching == false,
+              onTap: () {
+                if (_isSearching == false) {
+                  Fluttertoast.showToast(
+                    msg: "${Statics.getLabel('NagarSelectionImportant')}",
+                  );
+                }
+              },
+              onChanged: (value) => setState(() {}),
+              onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
+              decoration: InputDecoration(
+                hintText: Statics.getLabel("urlDesc"),
+                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                // enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                // focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
               ),
-              SizedBox(height: 8),
-              Align(
-                alignment: Alignment.centerRight,
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    textStyle: const TextStyle(fontSize: 14, color: Colors.purple),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                  ),
-                  onPressed: () async {
-                    // print(contactList.value.toString());
-                    if (txtUrlsController.text.trim().isNotEmpty && txtUrlDescController.text.trim().isNotEmpty) {
-                      bool valid = await isValidUrl(txtUrlsController.text.trim());
-                      print(valid);
-                      if (!valid) {
-                        Fluttertoast.showToast(msg: "${Statics.getLabel('urlValidation')}");
-                        return;
-                      }
-                      _urlsList.add(TypeValueData(value: txtUrlsController.text.trim(), description: txtUrlDescController.text.trim()));
-                      txtUrlsController.clear();
-                      txtUrlDescController.clear();
-                    } else {
-                      if (!_isSearching) {
-                        Fluttertoast.showToast(
-                          msg: "${Statics.getLabel('NagarSelectionImportant')}",
-                        );
-                        setState(() {});
-                        return;
-                      }
-                      if (txtUrlDescController.text.trim().isEmpty) {
-                        Fluttertoast.showToast(
-                          msg: "${Statics.getLabel('urlDescIsImp')}",
-                        );
-                        setState(() {});
-                        return;
-                      }
+            ),
+            SizedBox(height: 8),
+            Align(
+              alignment: Alignment.centerRight,
+              child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  textStyle: const TextStyle(fontSize: 14, color: Colors.purple),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                ),
+                onPressed: () async {
+                  // print(contactList.value.toString());
+                  if (txtUrlsController.text.trim().isNotEmpty && txtUrlDescController.text.trim().isNotEmpty) {
+                    bool valid = await isValidUrl(txtUrlsController.text.trim());
+                    print(valid);
+                    if (!valid) {
                       Fluttertoast.showToast(msg: "${Statics.getLabel('urlValidation')}");
-                      // formKey.currentState?.validate();
+                      return;
                     }
-                    setState(() {});
-                  },
-                  child: Text("+ ${Statics.getLabel("Add")}"),
-                ),
+                    _urlsList.add(TypeValueData(value: txtUrlsController.text.trim(), description: txtUrlDescController.text.trim()));
+                    txtUrlsController.clear();
+                    txtUrlDescController.clear();
+                  } else {
+                    if (!_isSearching) {
+                      Fluttertoast.showToast(
+                        msg: "${Statics.getLabel('NagarSelectionImportant')}",
+                      );
+                      setState(() {});
+                      return;
+                    }
+                    if (txtUrlDescController.text.trim().isEmpty) {
+                      Fluttertoast.showToast(
+                        msg: "${Statics.getLabel('urlDescIsImp')}",
+                      );
+                      setState(() {});
+                      return;
+                    }
+                    Fluttertoast.showToast(msg: "${Statics.getLabel('urlValidation')}");
+                    // formKey.currentState?.validate();
+                  }
+                  setState(() {});
+                },
+                child: Text("+ ${Statics.getLabel("Add")}"),
               ),
-            ],
-          ),
+            ),
+          ],
+        ),
         SizedBox(height: 8),
         Wrap(
           runSpacing: 8,
