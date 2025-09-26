@@ -4862,14 +4862,22 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                 textAlignVertical: TextAlignVertical.center,
                 // textAlign: TextAlign.left,
                 autofocus: false,
+                readOnly: _isSearching == false,
+                onTap: () {
+                  if (_isSearching == false) {
+                    Fluttertoast.showToast(
+                      msg: "${Statics.getLabel('NagarSelectionImportant')}",
+                    );
+                  }
+                },
                 onChanged: (value) => setState(() {}),
                 onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
                 decoration: InputDecoration(
                   hintText: Statics.getLabel("url"),
                   contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                  enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                  focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  // enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  // focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.purple),borderRadius: BorderRadius.circular(12)),
                 ),
                 // validator: (value) {
                 //   // if (value != null && value.trim().isNotEmpty && value.length < 9 && memberController.contactList.value.isEmpty){
@@ -4902,14 +4910,22 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                 maxLength: 160,
                 minLines: 1,
                 maxLines: 5,
+                readOnly: _isSearching == false,
+                onTap: () {
+                  if (_isSearching == false) {
+                    Fluttertoast.showToast(
+                      msg: "${Statics.getLabel('NagarSelectionImportant')}",
+                    );
+                  }
+                },
                 onChanged: (value) => setState(() {}),
                 onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
                 decoration: InputDecoration(
                   hintText: Statics.getLabel("urlDesc"),
                   contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                  enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                  focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  // enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  // focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                 ),
               ),
               SizedBox(height: 8),
