@@ -34,8 +34,19 @@ class UpkhandaDataList {
   int? upNagarCount;
   int? gramCount;
   int? vastiCount;
+  int? mapUpKhandCount;
+  int? mapUpNagarCount;
 
-  UpkhandaDataList({this.goUnitName, this.nagarCount, this.upKhandCount, this.upNagarCount, this.gramCount, this.vastiCount});
+  UpkhandaDataList({
+    this.goUnitName,
+    this.nagarCount,
+    this.upKhandCount,
+    this.upNagarCount,
+    this.gramCount,
+    this.vastiCount,
+    this.mapUpKhandCount,
+    this.mapUpNagarCount,
+  });
 
   UpkhandaDataList.fromJson(Map<String, dynamic> json) {
     goUnitName = json['GoUnitName'];
@@ -44,6 +55,8 @@ class UpkhandaDataList {
     upNagarCount = json['UpNagarCount'];
     gramCount = json['gramCount'];
     vastiCount = json['vastiCount'];
+    mapUpKhandCount = json['mapUpKhandCount'];
+    mapUpNagarCount = json['mapUpNagarCount'];
   }
 
   Map<String, dynamic> toJson() {
@@ -54,6 +67,8 @@ class UpkhandaDataList {
     data['UpNagarCount'] = this.upNagarCount;
     data['gramCount'] = this.gramCount;
     data['vastiCount'] = this.vastiCount;
+    data['mapUpKhandCount'] = this.mapUpKhandCount;
+    data['mapUpNagarCount'] = this.mapUpNagarCount;
     return data;
   }
 }

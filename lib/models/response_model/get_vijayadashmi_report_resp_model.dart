@@ -127,41 +127,66 @@ class VijayadashamiReport {
 
 class Vijayadashaminagarlist {
   int? karyakramnirdharitvedhvarcount;
+  String? karyakramnirdharitvedhvarcountNames;
   int? karykakramcount;
+  String? karykakramcountNames;
   String? levelname;
   int? shanchalancount;
+  String? shanchalancountNames;
   int? shanchalanghosvandancount;
+  String? shanchalanghosvandancountNames;
   int? skaraykramhisob24tasapurnacount;
+  String? skaraykramhisob24tasapurnacountNames;
   int? vyaktigeetkhantastakcount;
+  String? vyaktigeetkhantastakcountNames;
 
-  Vijayadashaminagarlist(
-      {this.karyakramnirdharitvedhvarcount,
-      this.karykakramcount,
-      this.levelname,
-      this.shanchalancount,
-      this.shanchalanghosvandancount,
-      this.skaraykramhisob24tasapurnacount,
-      this.vyaktigeetkhantastakcount});
+  Vijayadashaminagarlist({
+    this.karyakramnirdharitvedhvarcount,
+    this.karyakramnirdharitvedhvarcountNames,
+    this.karykakramcount,
+    this.karykakramcountNames,
+    this.levelname,
+    this.shanchalancount,
+    this.shanchalancountNames,
+    this.shanchalanghosvandancount,
+    this.shanchalanghosvandancountNames,
+    this.skaraykramhisob24tasapurnacount,
+    this.skaraykramhisob24tasapurnacountNames,
+    this.vyaktigeetkhantastakcount,
+    this.vyaktigeetkhantastakcountNames,
+  });
 
   Vijayadashaminagarlist.fromJson(Map<String, dynamic> json) {
     karyakramnirdharitvedhvarcount = json['karyakramnirdharitvedhvarcount'];
+    karyakramnirdharitvedhvarcountNames = json['karyakramnirdharitvedhvarcount_names'];
     karykakramcount = json['karykakramcount'];
+    karykakramcountNames = json['karykakramcount_names'];
     levelname = json['levelname'];
     shanchalancount = json['shanchalancount'];
+    shanchalancountNames = json['shanchalancount_names'];
     shanchalanghosvandancount = json['shanchalanghosvandancount'];
+    shanchalanghosvandancountNames = json['shanchalanghosvandancount_names'];
     skaraykramhisob24tasapurnacount = json['skaraykramhisob24tasapurnacount'];
+    skaraykramhisob24tasapurnacountNames = json['skaraykramhisob24tasapurnacount_names'];
     vyaktigeetkhantastakcount = json['vyaktigeetkhantastakcount'];
+    vyaktigeetkhantastakcountNames = json['vyaktigeetkhantastakcount_names'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['karyakramnirdharitvedhvarcount'] = this.karyakramnirdharitvedhvarcount;
+    data['karyakramnirdharitvedhvarcount_names'] = this.karyakramnirdharitvedhvarcountNames;
     data['karykakramcount'] = this.karykakramcount;
+    data['karykakramcount_names'] = this.karykakramcountNames;
     data['levelname'] = this.levelname;
     data['shanchalancount'] = this.shanchalancount;
+    data['shanchalancount_names'] = this.shanchalancountNames;
     data['shanchalanghosvandancount'] = this.shanchalanghosvandancount;
+    data['shanchalanghosvandancount_names'] = this.shanchalanghosvandancountNames;
     data['skaraykramhisob24tasapurnacount'] = this.skaraykramhisob24tasapurnacount;
+    data['skaraykramhisob24tasapurnacount_names'] = this.skaraykramhisob24tasapurnacountNames;
     data['vyaktigeetkhantastakcount'] = this.vyaktigeetkhantastakcount;
+    data['vyaktigeetkhantastakcount_names'] = this.vyaktigeetkhantastakcountNames;
     return data;
   }
 }

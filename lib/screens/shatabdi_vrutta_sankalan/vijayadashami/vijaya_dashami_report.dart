@@ -86,7 +86,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
     String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
     log("Form Data (JSON):\n$formattedJson");
     vijayadashamiReport = await Statics.getVijayaDashamiUtsavReportData(context, formData);
-    log("vijayadashamiReport >>>>>>>>>>>>>>>>> ${jsonDecode(jsonEncode(vijayadashamiReport))}");
+    // log("vijayadashamiReport >>>>>>>>>>>>>>>>> ${jsonDecode(jsonEncode(vijayadashamiReport))}");
     setState(() {
       _isLoading = false;
       vijayadashamiReport;
@@ -949,12 +949,102 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                     .toList(),
                 rows: data.map((level) {
                   return DataRow(cells: [
-                    DataCell(Center(child: Text(level.karykakramcount.toString()))),
-                    DataCell(Center(child: Text(level.shanchalancount.toString()))),
-                    DataCell(Center(child: Text(level.karyakramnirdharitvedhvarcount.toString()))),
-                    DataCell(Center(child: Text(level.vyaktigeetkhantastakcount.toString()))),
-                    DataCell(Center(child: Text(level.shanchalanghosvandancount.toString()))),
-                    DataCell(Center(child: Text(level.skaraykramhisob24tasapurnacount.toString()))),
+                    DataCell(Center(
+                        child: Row(
+                      mainAxisAlignment: (level.karykakramcount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                      children: [
+                        if (level.karykakramcount != 0) SizedBox(width: 1),
+                        Container(margin: EdgeInsets.only(right: level.karykakramcount != 0 ? 0 : 10), child: Text(level.karykakramcount.toString())),
+                        if (level.karykakramcount != 0)
+                          InkWell(
+                            borderRadius: BorderRadius.circular(50),
+                            onTap: () {
+                              showInfoDialogBox(names: level.karykakramcountNames ?? "", title: Statics.getLabel("vijayadashmiReportTable1"));
+                            },
+                            child: Icon(Icons.info_rounded, size: 14),
+                          ),
+                      ],
+                    ))),
+                    DataCell(Center(
+                        child: Row(
+                      mainAxisAlignment: (level.shanchalancount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                      children: [
+                        if (level.shanchalancount != 0) SizedBox(width: 1),
+                        Container(margin: EdgeInsets.only(right: level.shanchalancount != 0 ? 0 : 10), child: Text(level.shanchalancount.toString())),
+                        if (level.shanchalancount != 0)
+                          InkWell(
+                            borderRadius: BorderRadius.circular(50),
+                            onTap: () {
+                              showInfoDialogBox(names: level.shanchalancountNames ?? "", title: Statics.getLabel("vijayadashmiReportTable2"));
+                            },
+                            child: Icon(Icons.info_rounded, size: 14),
+                          ),
+                      ],
+                    ))),
+                    DataCell(Center(
+                        child: Row(
+                      mainAxisAlignment: (level.karyakramnirdharitvedhvarcount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                      children: [
+                        if (level.karyakramnirdharitvedhvarcount != 0) SizedBox(width: 1),
+                        Container(margin: EdgeInsets.only(right: level.karyakramnirdharitvedhvarcount != 0 ? 0 : 10), child: Text(level.karyakramnirdharitvedhvarcount.toString())),
+                        if (level.karyakramnirdharitvedhvarcount != 0)
+                          InkWell(
+                            borderRadius: BorderRadius.circular(50),
+                            onTap: () {
+                              showInfoDialogBox(names: level.karyakramnirdharitvedhvarcountNames ?? "", title: Statics.getLabel("vijayadashmiReportTable3"));
+                            },
+                            child: Icon(Icons.info_rounded, size: 14),
+                          ),
+                      ],
+                    ))),
+                    DataCell(Center(
+                        child: Row(
+                      mainAxisAlignment: (level.vyaktigeetkhantastakcount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                      children: [
+                        if (level.vyaktigeetkhantastakcount != 0) SizedBox(width: 1),
+                        Container(margin: EdgeInsets.only(right: level.vyaktigeetkhantastakcount != 0 ? 0 : 10), child: Text(level.vyaktigeetkhantastakcount.toString())),
+                        if (level.vyaktigeetkhantastakcount != 0)
+                          InkWell(
+                            borderRadius: BorderRadius.circular(50),
+                            onTap: () {
+                              showInfoDialogBox(names: level.vyaktigeetkhantastakcountNames ?? "", title: Statics.getLabel("vijayadashmiReportTable4"));
+                            },
+                            child: Icon(Icons.info_rounded, size: 14),
+                          ),
+                      ],
+                    ))),
+                    DataCell(Center(
+                        child: Row(
+                      mainAxisAlignment: (level.shanchalanghosvandancount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                      children: [
+                        if (level.shanchalanghosvandancount != 0) SizedBox(width: 1),
+                        Container(margin: EdgeInsets.only(right: level.shanchalanghosvandancount != 0 ? 0 : 10), child: Text(level.shanchalanghosvandancount.toString())),
+                        if (level.shanchalanghosvandancount != 0)
+                          InkWell(
+                            borderRadius: BorderRadius.circular(50),
+                            onTap: () {
+                              showInfoDialogBox(names: level.shanchalanghosvandancountNames ?? "", title: Statics.getLabel("vijayadashmiReportTable5"));
+                            },
+                            child: Icon(Icons.info_rounded, size: 14),
+                          ),
+                      ],
+                    ))),
+                    DataCell(Center(
+                        child: Row(
+                      mainAxisAlignment: (level.skaraykramhisob24tasapurnacount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                      children: [
+                        if (level.skaraykramhisob24tasapurnacount != 0) SizedBox(width: 1),
+                        Container(margin: EdgeInsets.only(right: level.skaraykramhisob24tasapurnacount != 0 ? 0 : 10), child: Text(level.skaraykramhisob24tasapurnacount.toString())),
+                        if (level.skaraykramhisob24tasapurnacount != 0)
+                          InkWell(
+                            borderRadius: BorderRadius.circular(50),
+                            onTap: () {
+                              showInfoDialogBox(names: level.skaraykramhisob24tasapurnacountNames ?? "", title: Statics.getLabel("vijayadashmiReportTable6"));
+                            },
+                            child: Icon(Icons.info_rounded, size: 14),
+                          ),
+                      ],
+                    ))),
                   ]);
                 }).toList(),
               ),
@@ -962,6 +1052,58 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
           ),
         ),
       ],
+    );
+  }
+
+  showInfoDialogBox({required String names, required String title}) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, set) {
+            return AlertDialog(
+              // contentPadding: EdgeInsets.zero,
+              backgroundColor: Colors.white,
+              surfaceTintColor: Colors.white,
+              title: Text(title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Colors.purple.shade400)),
+              content: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: SingleChildScrollView(
+                  child: DataTable(
+                    border: TableBorder.symmetric(inside: BorderSide(width: 0.4, color: Colors.grey.shade400)),
+                    showCheckboxColumn: false,
+                    headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+                    headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
+                    columns: [
+                      DataColumn(label: SizedBox()),
+                      DataColumn(
+                          label: Text(
+                        "${Statics.getLabel('Name')}",
+                      )),
+                    ],
+                    rows: names.split(",").toList().asMap().entries.map((entry) {
+                      int index = entry.key;
+                      var data = entry.value;
+                      return DataRow(cells: [
+                        DataCell(Text((index + 1).toString())),
+                        DataCell(Text(data, maxLines: 2, overflow: TextOverflow.ellipsis, softWrap: true)),
+                      ]);
+                    }).toList(),
+                  ),
+                ),
+              ),
+              actions: [
+                ElevatedButton(
+                  child: Text(Statics.getLabel("Submit")),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            );
+          },
+        );
+      },
     );
   }
 }

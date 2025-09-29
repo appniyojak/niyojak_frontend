@@ -101,6 +101,8 @@ class VijayadashamiUtsav {
   int? vyaktiGeetKhantastaKhoteka;
   String? karyakramVaktaName;
   String? karyakramVaktaTask;
+  String? utsavPhotoDesc;
+  String? utsavAddPhotoDesc;
 
   VijayadashamiUtsav({
     this.geoUnitID,
@@ -151,6 +153,8 @@ class VijayadashamiUtsav {
     this.vyaktiGeetKhantastaKhoteka,
     this.karyakramVaktaName,
     this.karyakramVaktaTask,
+    this.utsavPhotoDesc,
+    this.utsavAddPhotoDesc,
   });
 
   VijayadashamiUtsav.fromJson(Map<String, dynamic> json) {
@@ -202,6 +206,8 @@ class VijayadashamiUtsav {
     vyaktiGeetKhantastaKhoteka = json['vyakti_geet_khantasta_khoteka'];
     karyakramVaktaName = json['karyakramVaktaName'];
     karyakramVaktaTask = json['karyakramVaktaTask'];
+    utsavPhotoDesc = json['utsavPhotoDesc'];
+    utsavAddPhotoDesc = json['utsavAddPhotoDesc'];
   }
 
   Map<String, dynamic> toJson() {
@@ -254,6 +260,8 @@ class VijayadashamiUtsav {
     data['vyakti_geet_khantasta_khoteka'] = this.vyaktiGeetKhantastaKhoteka;
     data['karyakramVaktaName'] = this.karyakramVaktaName;
     data['karyakramVaktaTask'] = this.karyakramVaktaTask;
+    data['utsavPhotoDesc'] = this.utsavPhotoDesc;
+    data['utsavAddPhotoDesc'] = this.utsavAddPhotoDesc;
     return data;
   }
 }

@@ -1788,7 +1788,7 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             tabs: [
               Tab(text: Statics.getLabel('menu')),
-              Tab(text: Statics.getLabel('YesterdayPraantData')),
+              Tab(text: Statics.getLabel('mainScreenTab2')),
             ],
           ),
           actions: <Widget>[
@@ -3397,9 +3397,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
+                        SizedBox(height: 10),
                       ],
                     ),
                   ),
@@ -3418,6 +3416,8 @@ class _HomeScreenState extends State<HomeScreen> {
       Statics.getLabel('hoomeScreenUpnagarTable3'),
       Statics.getLabel('hoomeScreenUpnagarTable4'),
       Statics.getLabel('hoomeScreenUpnagarTable5'),
+      Statics.getLabel('hoomeScreenUpnagarTable6'),
+      Statics.getLabel('hoomeScreenUpnagarTable7'),
     ];
 
     if (data.isEmpty) {
@@ -3497,10 +3497,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 rows: data.map((level) {
                       return DataRow(color: MaterialStatePropertyAll(Colors.white), cells: [
                         DataCell(Center(child: Text(level.nagarCount.toString()))),
-                        DataCell(Center(child: Text(level.upKhandCount.toString()))),
-                        DataCell(Center(child: Text(level.upNagarCount.toString()))),
-                        DataCell(Center(child: Text(level.gramCount.toString()))),
                         DataCell(Center(child: Text(level.vastiCount.toString()))),
+                        DataCell(Center(child: Text(level.gramCount.toString()))),
+                        DataCell(Center(child: Text(level.upNagarCount.toString()))),
+                        DataCell(Center(child: Text(level.mapUpNagarCount.toString()))),
+                        DataCell(Center(child: Text(level.upKhandCount.toString()))),
+                        DataCell(Center(child: Text(level.mapUpKhandCount.toString()))),
                       ]);
                     }).toList() +
                     [
@@ -3512,12 +3514,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.upKhandCount ?? 0)).toString(),
-                          style: TextStyle(fontWeight: FontWeight.w700),
-                        ))),
-                        DataCell(Center(
-                            child: Text(
-                          data.fold(0, (sum, item) => sum + (item.upNagarCount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.vastiCount ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
@@ -3527,7 +3524,22 @@ class _HomeScreenState extends State<HomeScreen> {
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.vastiCount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.upNagarCount ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.mapUpNagarCount ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.upKhandCount ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.mapUpKhandCount ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                       ])

@@ -2069,7 +2069,7 @@ class _UpNagarkhandaAddUpdateViewState extends State<UpNagarkhandaAddUpdateView>
               ),
               actions: [
                 ElevatedButton(
-                  child: Text("OK"),
+                  child: Text(Statics.getLabel("Submit")),
                   onPressed: () {
                     // List<String> selectedIds = selectedMap.entries.where((e) => e.value).map((e) => e.key).toList();
                     //
