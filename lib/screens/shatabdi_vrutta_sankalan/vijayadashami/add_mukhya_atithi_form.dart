@@ -75,11 +75,11 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
       }
       if (args["selectedLevelId"] != null) {
         setState(() {
-          final selectedItem = _linkedNagar!.firstWhere((bg) => bg.geoUnitID.toString() == args["selectedLevelId"]);
+          final selectedItem = _linkedNagar?.firstWhere((bg) => bg.geoUnitID.toString() == args["selectedLevelId"]);
           populatelinkedMandalDropdown(args["selectedLevelId"]);
           populatelinkedVastiDropdown(args["selectedLevelId"]);
           setState(() {
-            selctedLevelName = selectedItem.name ?? "";
+            selctedLevelName = selectedItem?.name ?? "";
             selctedLevel = 'Nagar';
             selctedLevelId = args["selectedLevelId"];
 

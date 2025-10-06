@@ -16,6 +16,7 @@ import '../widgets/legend.dart';
 
 class SearchJoinRss extends StatefulWidget {
   static const routeName = '/search-joinrss-screen';
+
   @override
   _SearchJoinRssState createState() => _SearchJoinRssState();
 }
@@ -85,8 +86,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
   final TextEditingController _fromAgeController = TextEditingController();
   final TextEditingController _toAgeController = TextEditingController();
 
-  final GlobalKey<LevelWiseDropdownState> dropdownKey =
-      GlobalKey<LevelWiseDropdownState>();
+  final GlobalKey<LevelWiseDropdownState> dropdownKey = GlobalKey<LevelWiseDropdownState>();
 
   @override
   void initState() {
@@ -197,38 +197,25 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
   }
 
   populatelinkedMahaanagarDropdown() async {
-    _linkedVibhaagValue = _linkedbhaagValue = _linkednagarValue =
-        _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-    var data = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['MahaanagarLevelID'].toString(), '', '', '');
+    _linkedVibhaagValue = _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MahaanagarLevelID'].toString(), '', '', '');
     setState(() {
       _linkedMahaanagar = data;
     });
   }
 
   populatelinkedVibhaagDropdown(String? mahaanagarIDStr) async {
-    _linkedbhaagValue = _linkednagarValue =
-        _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-    var data = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['VibhaagLevelID'].toString(),
-        mahaanagarIDStr!,
-        (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'),
-        '');
+    _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr!, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '');
     setState(() {
       _linkedVibhaag = data;
     });
   }
 
   void populatelinkedBhaagDropdown(String? vibhaagIDStr) async {
-    _linkedbhaagValue = _linkednagarValue =
-        _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-    _linkedbhaag =
-        _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = [];
-    var data = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['BhaagLevelID'].toString(),
-        vibhaagIDStr!,
-        'Vibhaag',
-        '');
+    _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = [];
+    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr!, 'Vibhaag', '');
     setState(() {
       _linkedbhaag = data;
     });
@@ -236,27 +223,22 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
 
   void populatelinkedShaharDropdown(String? bhaagIDStr) async {
     _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-    var shDD = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['ShaharLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
+    var shDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
     setState(() {
       _linkedshahar = (shDD.length > 0 ? shDD : null);
     });
   }
 
-  void populatelinkedNagarDropdown(
-      String? bhaagIDStr, String? shaharIDStr) async {
-    _linkednagarValue =
-        _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+  void populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
+    _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
     if (shaharIDStr != null) {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParent(
-          Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
+      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
       setState(() {
         _linkednagar = (ngDD.length > 0 ? ngDD : null);
       });
     } else {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParent(
-          Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
+      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
       setState(() {
         _linkednagar = (ngDD.length > 0 ? ngDD : null);
       });
@@ -266,8 +248,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
   void populatelinkedMandalDropdown(String? nagarIDStr) async {
     _linkedmandalValue = _linkedgraamValue = null;
     _linkedmandal = _linkedgraam = null;
-    var mnDD = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['MandalLevelID'].toString(), nagarIDStr!, 'Nagar', '');
+    var mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, 'Nagar', '');
     setState(() {
       _linkedmandal = (mnDD.length > 0 ? mnDD : null);
     });
@@ -275,8 +256,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
 
   void populatelinkedGraamDropdown(String? mandalIDStr) async {
     _linkedgraamValue = null;
-    var gmDD = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['GraamLevelID'].toString(), mandalIDStr!, 'Mandal', '');
+    var gmDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['GraamLevelID'].toString(), mandalIDStr!, 'Mandal', '');
     setState(() {
       _linkedgraam = (gmDD.length > 0 ? gmDD : null);
     });
@@ -284,8 +264,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
 
   void populatelinkedVastiDropdown(String? nagarIDStr) async {
     _linkedvastiValue = null;
-    var vsDD = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['VastiLevelID'].toString(), nagarIDStr!, 'Nagar', '');
+    var vsDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, 'Nagar', '');
     setState(() {
       _linkedvasti = (vsDD.length > 0 ? vsDD : null);
     });
@@ -297,8 +276,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
     });
     List<dynamic> dataList = list;
     if (dataList.length == 0) {
-      Statics.showMessageDialog(
-          context, Statics.getLabel('noDataFoundTryAnotherSearch'));
+      Statics.showMessageDialog(context, Statics.getLabel('noDataFoundTryAnotherSearch'));
 
       setState(() {
         _isSearching = false;
@@ -339,8 +317,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
       row.add(data["Age"] == null ? "" : data["Age"].toString());
       row.add(data["Address"] == null ? "" : data["Address"].toString());
       row.add(data["CityName"] == null ? "" : data["CityName"].toString());
-      row.add(
-          data["DistrictName"] == null ? "" : data["DistrictName"].toString());
+      row.add(data["DistrictName"] == null ? "" : data["DistrictName"].toString());
       row.add(data["StateName"] == null ? "" : data["StateName"].toString());
       row.add(data["Country"] == null ? "" : data["Country"].toString());
       row.add(data["BhaagName"] == null ? "" : data["BhaagName"].toString());
@@ -348,27 +325,17 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
       row.add(data["ShaharName"] == null ? "" : data["ShaharName"].toString());
       row.add(data["Occupation"] == null ? "" : data["Occupation"].toString());
       row.add(data["Remark"] == null ? "" : data["Remark"].toString());
-      row.add(data["JoiningDateStr"] == null
-          ? ""
-          : data["JoiningDateStr"].toString());
+      row.add(data["JoiningDateStr"] == null ? "" : data["JoiningDateStr"].toString());
       row.add(data["JRSRemark"] == null ? "" : data["JRSRemark"].toString());
       row.add(data["StatusCode"] == null ? "" : data["StatusCode"].toString());
-      row.add(data["StatusDateStr"] == null
-          ? ""
-          : data["StatusDateStr"].toString());
-      row.add(
-          data["StatusRemark"] == null ? "" : data["StatusRemark"].toString());
+      row.add(data["StatusDateStr"] == null ? "" : data["StatusDateStr"].toString());
+      row.add(data["StatusRemark"] == null ? "" : data["StatusRemark"].toString());
 
       rows.add(row);
     }
 
     if (rows.length > 1) {
-      Statics.convertToCsv(
-          rows,
-          "JoinRssList" +
-              "_" +
-              DateFormat('ddmmyyyyHHmmss').format(DateTime.now()),
-          context);
+      Statics.convertToCsv(rows, "JoinRssList" + "_" + DateFormat('ddmmyyyyHHmmss').format(DateTime.now()), context);
     }
     setState(() {
       _isSearching = false;
@@ -379,15 +346,11 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
     DateTime? date = await showDatePicker(
         context: context,
         initialDate: _fromDate == null ? DateTime.now() : _fromDate!,
-        firstDate: DateTime(
-            (_fromDate == null ? DateTime.now().year : _fromDate!.year) - 80),
-        lastDate: DateTime(
-            (_fromDate == null ? DateTime.now().year : _fromDate!.year) + 80));
+        firstDate: DateTime((_fromDate == null ? DateTime.now().year : _fromDate!.year) - 80),
+        lastDate: DateTime((_fromDate == null ? DateTime.now().year : _fromDate!.year) + 80));
 
     if (_toDate != null) {
-      if (_toDate!.year < date!.year ||
-          _toDate!.month < date.month ||
-          _toDate!.day < date.day) {
+      if (_toDate!.year < date!.year || _toDate!.month < date.month || _toDate!.day < date.day) {
         Statics.showToast("From date should be less than To Date");
         return;
       }
@@ -402,15 +365,11 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
     DateTime? date = await showDatePicker(
         context: context,
         initialDate: _toDate == null ? DateTime.now() : _toDate!,
-        firstDate: DateTime(
-            (_toDate == null ? DateTime.now().year : _toDate!.year) - 80),
-        lastDate: DateTime(
-            (_toDate == null ? DateTime.now().year : _toDate!.year) + 80));
+        firstDate: DateTime((_toDate == null ? DateTime.now().year : _toDate!.year) - 80),
+        lastDate: DateTime((_toDate == null ? DateTime.now().year : _toDate!.year) + 80));
 
     if (_fromDate != null) {
-      if (date!.year < _fromDate!.year ||
-          date.month < _fromDate!.month ||
-          date.day < _fromDate!.day) {
+      if (date!.year < _fromDate!.year || date.month < _fromDate!.month || date.day < _fromDate!.day) {
         Statics.showToast("From date should be less than To Date");
         return;
       }
@@ -425,23 +384,16 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
   late List<dynamic> setStatusCodes;
   late List<dynamic> setNaavList;
   Map<String, Map<String, Map<String, int>>>? setGroupedData;
+
   Future<void> _searchNew(var outputType) async {
     setState(() {
       _isSearching = true;
     });
 
-    int? bhaagVal = _bhaagValue == null || _bhaagValue == ""
-        ? null
-        : int.parse(_bhaagValue!);
-    int? shaharVal = _shaharValue == null || _shaharValue == ""
-        ? null
-        : int.parse(_shaharValue!);
-    int? nagarVal = _nagarValue == null || _nagarValue == ""
-        ? null
-        : int.parse(_nagarValue!);
-    int? statusVal = _statusValue == null || _statusValue == ""
-        ? null
-        : int.parse(_statusValue!);
+    int? bhaagVal = _bhaagValue == null || _bhaagValue == "" ? null : int.parse(_bhaagValue!);
+    int? shaharVal = _shaharValue == null || _shaharValue == "" ? null : int.parse(_shaharValue!);
+    int? nagarVal = _nagarValue == null || _nagarValue == "" ? null : int.parse(_nagarValue!);
+    int? statusVal = _statusValue == null || _statusValue == "" ? null : int.parse(_statusValue!);
     int? geoUnitID;
     geoUnitID = nagarVal != null
         ? nagarVal
@@ -450,10 +402,8 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
             : bhaagVal != null
                 ? bhaagVal
                 : null;
-    var fromDate =
-        _fromDate == null ? null : DateFormat('dd-MM-yyyy').format(_fromDate!);
-    var toDate =
-        _toDate == null ? null : DateFormat('dd-MM-yyyy').format(_toDate!);
+    var fromDate = _fromDate == null ? null : DateFormat('dd-MM-yyyy').format(_fromDate!);
+    var toDate = _toDate == null ? null : DateFormat('dd-MM-yyyy').format(_toDate!);
 
     String strInput = json.encode({
       "AppUserID": Statics.userDetails['userID'],
@@ -462,10 +412,8 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
       "StatusID": statusVal,
       "JoiningDateFrom": fromDate,
       "JoiningDateTo": toDate,
-      "fromage": int.parse(
-          _fromAgeController.text == '' ? '0' : _fromAgeController.text),
-      "toage":
-          int.parse(_toAgeController.text == '' ? '0' : _toAgeController.text),
+      "fromage": int.parse(_fromAgeController.text == '' ? '0' : _fromAgeController.text),
+      "toage": int.parse(_toAgeController.text == '' ? '0' : _toAgeController.text),
       "isgender": isGender,
       "type": type,
     });
@@ -574,10 +522,8 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
 
 // ======  horizntal data table viewww code ================
       var summaryData = joinRSSData['ListJoinRSSByStatustypewise'];
-      List<dynamic> naavList =
-          summaryData.map((e) => e['naav']).toSet().toList();
-      List<dynamic> statusCodes =
-          summaryData.map((e) => e['StatusCode']).toSet().toList();
+      List<dynamic> naavList = summaryData.map((e) => e['naav']).toSet().toList();
+      List<dynamic> statusCodes = summaryData.map((e) => e['StatusCode']).toSet().toList();
       Map<String, Map<String, Map<String, int>>> groupedData = {};
       for (var entry in summaryData) {
         String naav = entry['naav'];
@@ -586,8 +532,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
         int maleCount = entry['MaleCountByStatus'];
 
         groupedData.putIfAbsent(naav, () => {});
-        groupedData[naav]!
-            .putIfAbsent(statusCode, () => {"female": 0, "male": 0});
+        groupedData[naav]!.putIfAbsent(statusCode, () => {"female": 0, "male": 0});
         groupedData[naav]![statusCode]!["female"] = femaleCount;
         groupedData[naav]![statusCode]!["male"] = maleCount;
       }
@@ -660,20 +605,15 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
           ),
           actions: <Widget>[
             if ((Statics.userDetails["LevelName"] == "Praant" ||
-                Statics.userDetails["LevelName"] == "प्रांत" &&
-                    Statics.userDetails["DaayitvaName"] ==
-                        "Join RSS Sanyojak" ||
-                Statics.userDetails["DaayitvaName"] ==
-                    "जॉयन आर.एस.एस. संयोजक" ||
+                Statics.userDetails["LevelName"] == "प्रांत" && Statics.userDetails["DaayitvaName"] == "Join RSS Sanyojak" ||
+                Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. संयोजक" ||
                 Statics.userDetails["DaayitvaName"] == "Join RSS Pramukh" ||
                 Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. प्रमुख"))
               IconButton(
                 padding: EdgeInsets.all(8),
                 icon: const Icon(Icons.add),
                 onPressed: () {
-                  Navigator.of(context).pushNamed(EditJoinRss.routeName,
-                      arguments: Statics.ScreenArguments(
-                          0, Statics.getLabel('EditMenu')));
+                  Navigator.of(context).pushNamed(EditJoinRss.routeName, arguments: Statics.ScreenArguments(0, Statics.getLabel('EditMenu')));
                 },
               ),
           ],
@@ -702,69 +642,48 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                           children: [
                             if (setSummerData == null)
                               Container(
-                                height: Statics.getDeviceSize(context).height *
-                                    0.30,
+                                height: Statics.getDeviceSize(context).height * 0.30,
                                 width: Statics.getDeviceSize(context).width,
                                 alignment: Alignment.center,
                                 child: CircularProgressIndicator(),
                               )
                             else if (setSummerData.isEmpty)
                               Container(
-                                height: Statics.getDeviceSize(context).height *
-                                    0.30,
+                                height: Statics.getDeviceSize(context).height * 0.30,
                                 width: Statics.getDeviceSize(context).width,
                                 alignment: Alignment.center,
                                 child: Text('No Data Found'),
                               )
                             else
                               Container(
-                                height: Statics.getDeviceSize(context).height *
-                                    0.50,
+                                height: Statics.getDeviceSize(context).height * 0.50,
                                 width: Statics.getDeviceSize(context).width,
                                 child: HorizontalDataTable(
                                   leftHandSideColumnWidth: leftColumnWidth,
-                                  rightHandSideColumnWidth:
-                                      setStatusCodes.length * columnWidth +
-                                          columnWidth,
+                                  rightHandSideColumnWidth: setStatusCodes.length * columnWidth + columnWidth,
                                   isFixedHeader: true,
                                   headerWidgets: [
                                     Container(
                                       width: leftColumnWidth,
                                       height: rowHeight,
                                       alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.grey)),
-                                      child: Text(Statics.getLabel('Level'),
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold)),
+                                      decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
+                                      child: Text(Statics.getLabel('Level'), style: TextStyle(fontWeight: FontWeight.bold)),
                                     ),
-                                    ...setStatusCodes!
-                                        .map((status) => Container(
-                                              width: columnWidth,
-                                              height: rowHeight,
-                                              alignment: Alignment.center,
-                                              decoration: BoxDecoration(
-                                                  border: Border.symmetric(
-                                                      horizontal: BorderSide(
-                                                          color: Colors.grey))),
-                                              child: Text(status,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold)),
-                                            )),
                                     Container(
                                       width: columnWidth,
                                       height: rowHeight,
                                       alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                          border: Border.symmetric(
-                                              horizontal: BorderSide(
-                                                  color: Colors.grey))),
-                                      child: Text(Statics.getLabel('Total'),
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold)),
+                                      decoration: BoxDecoration(border: Border.symmetric(horizontal: BorderSide(color: Colors.grey))),
+                                      child: Text(Statics.getLabel('Total'), style: TextStyle(fontWeight: FontWeight.bold)),
                                     ),
+                                    ...setStatusCodes!.map((status) => Container(
+                                          width: columnWidth,
+                                          height: rowHeight,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(border: Border.symmetric(horizontal: BorderSide(color: Colors.grey))),
+                                          child: Text(status, style: TextStyle(fontWeight: FontWeight.bold)),
+                                        )),
                                   ],
                                   leftSideItemBuilder: (context, index) {
                                     if (index == setNaavList!.length) {
@@ -772,14 +691,10 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                                         width: leftColumnWidth,
                                         height: rowHeight,
                                         alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                            border:
-                                                Border.all(color: Colors.grey),
-                                            color: Colors.grey[300]),
+                                        decoration: BoxDecoration(border: Border.all(color: Colors.grey), color: Colors.grey[300]),
                                         child: Text(
                                           Statics.getLabel('Total'),
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       );
                                     }
@@ -788,9 +703,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                                       height: rowHeight,
                                       padding: EdgeInsets.all(8),
                                       alignment: Alignment.centerLeft,
-                                      decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.grey)),
+                                      decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
                                       child: Text(setNaavList![index]),
                                     );
                                   },
@@ -798,57 +711,34 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                                     if (index == setNaavList!.length) {
                                       return Row(
                                         children: [
+                                          Container(
+                                            width: columnWidth,
+                                            height: rowHeight,
+                                            alignment: Alignment.center,
+                                            decoration: BoxDecoration(border: Border.all(color: Colors.grey), color: Colors.grey[400]),
+                                            child: Text(
+                                              "${Statics.getLabel('Total')} ${Statics.getLabel('Women')}: ${setNaavList!.fold(0, (sum, naav) => sum + setStatusCodes!.fold(0, (s, status) => s + (setGroupedData![naav]?[status]?['female'] ?? 0)))}\n"
+                                              "${Statics.getLabel('Total')} ${Statics.getLabel('Men')}: ${setNaavList!.fold(0, (sum, naav) => sum + setStatusCodes!.fold(0, (s, status) => s + (setGroupedData![naav]?[status]?['male'] ?? 0)))}",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
                                           ...setStatusCodes!.map((status) {
-                                            int totalFemale = setNaavList!.fold(
-                                                0,
-                                                (sum, naav) =>
-                                                    sum +
-                                                    (setGroupedData![naav]
-                                                                ?[status]
-                                                            ?['female'] ??
-                                                        0));
-                                            int totalMale = setNaavList!.fold(
-                                                0,
-                                                (sum, naav) =>
-                                                    sum +
-                                                    (setGroupedData![naav]
-                                                                ?[status]
-                                                            ?['male'] ??
-                                                        0));
+                                            int totalFemale = setNaavList!.fold(0, (sum, naav) => sum + (setGroupedData![naav]?[status]?['female'] ?? 0));
+                                            int totalMale = setNaavList!.fold(0, (sum, naav) => sum + (setGroupedData![naav]?[status]?['male'] ?? 0));
 
                                             return Container(
                                               width: columnWidth,
                                               height: rowHeight,
                                               alignment: Alignment.center,
-                                              decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      color: Colors.grey),
-                                                  color: Colors.grey[300]),
+                                              decoration: BoxDecoration(border: Border.all(color: Colors.grey), color: Colors.grey[300]),
                                               child: Text(
                                                 "${Statics.getLabel('Women')}: $totalFemale\n${Statics.getLabel('Men')}: $totalMale",
                                                 textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                                style: TextStyle(fontWeight: FontWeight.bold),
                                               ),
                                             );
                                           }),
-                                          Container(
-                                            width: columnWidth,
-                                            height: rowHeight,
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    color: Colors.grey),
-                                                color: Colors.grey[400]),
-                                            child: Text(
-                                              "${Statics.getLabel('Total')} ${Statics.getLabel('Women')}: ${setNaavList!.fold(0, (sum, naav) => sum + setStatusCodes!.fold(0, (s, status) => s + (setGroupedData![naav]?[status]?['female'] ?? 0)))}\n"
-                                              "${Statics.getLabel('Total')} ${Statics.getLabel('Men')}: ${setNaavList!.fold(0, (sum, naav) => sum + setStatusCodes!.fold(0, (s, status) => s + (setGroupedData![naav]?[status]?['male'] ?? 0)))}",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
                                         ],
                                       );
                                     }
@@ -857,11 +747,8 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                                     int totalFemale = 0;
                                     int totalMale = 0;
 
-                                    List<Widget> rowCells =
-                                        setStatusCodes!.map((status) {
-                                      var counts = setGroupedData![naav]
-                                              ?[status] ??
-                                          {"female": 0, "male": 0};
+                                    List<Widget> rowCells = setStatusCodes!.map((status) {
+                                      var counts = setGroupedData![naav]?[status] ?? {"female": 0, "male": 0};
                                       totalFemale += counts['female'] ?? 0;
                                       totalMale += counts['male'] ?? 0;
 
@@ -870,10 +757,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                                         height: rowHeight,
                                         padding: EdgeInsets.all(8),
                                         alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                            border: Border.symmetric(
-                                                horizontal: BorderSide(
-                                                    color: Colors.grey))),
+                                        decoration: BoxDecoration(border: Border.symmetric(horizontal: BorderSide(color: Colors.grey))),
                                         child: Text(
                                           "${Statics.getLabel('Women')}: ${counts['female']}\n${Statics.getLabel('Men')}: ${counts['male']}",
                                           textAlign: TextAlign.center,
@@ -881,32 +765,41 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                                       );
                                     }).toList();
 
-                                    rowCells.add(Container(
-                                      width: columnWidth,
-                                      height: rowHeight,
-                                      padding: EdgeInsets.all(8),
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                          border: Border.symmetric(
-                                              horizontal: BorderSide(
-                                                  color: Colors.grey))),
-                                      child: Text(
-                                        "${Statics.getLabel('Total')} ${Statics.getLabel('Women')}: $totalFemale\n${Statics.getLabel('Total')} ${Statics.getLabel('Men')}: $totalMale",
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ));
+                                    // rowCells.add(Container(
+                                    //   width: columnWidth,
+                                    //   height: rowHeight,
+                                    //   padding: EdgeInsets.all(8),
+                                    //   alignment: Alignment.center,
+                                    //   decoration: BoxDecoration(
+                                    //       border: Border.symmetric(
+                                    //           horizontal: BorderSide(
+                                    //               color: Colors.grey))),
+                                    //   child: Text(
+                                    //     "${Statics.getLabel('Total')} ${Statics.getLabel('Women')}: $totalFemale\n${Statics.getLabel('Total')} ${Statics.getLabel('Men')}: $totalMale",
+                                    //     textAlign: TextAlign.center,
+                                    //   ),
+                                    // ));
 
-                                    return Row(children: rowCells);
+                                    return Row(
+                                        children: <Widget>[
+                                              Container(
+                                                width: columnWidth,
+                                                height: rowHeight,
+                                                padding: EdgeInsets.all(8),
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(border: Border.symmetric(horizontal: BorderSide(color: Colors.grey))),
+                                                child: Text(
+                                                  "${Statics.getLabel('Total')} ${Statics.getLabel('Women')}: $totalFemale\n${Statics.getLabel('Total')} ${Statics.getLabel('Men')}: $totalMale",
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              )
+                                            ] +
+                                            rowCells);
                                   },
                                   itemCount: setNaavList!.length + 1,
-                                  rowSeparatorWidget: Divider(
-                                      color: Colors.grey,
-                                      height: 1.0,
-                                      thickness: 0.5),
-                                  leftHandSideColBackgroundColor:
-                                      Color(0xFFFFFFFF),
-                                  rightHandSideColBackgroundColor:
-                                      Color(0xFFFFFFFF),
+                                  rowSeparatorWidget: Divider(color: Colors.grey, height: 1.0, thickness: 0.5),
+                                  leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                  rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
                                 ),
                               ),
                           ],
@@ -945,19 +838,14 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                                 controller: _searchController,
                                 textInputAction: TextInputAction.done,
                                 keyboardType: TextInputType.text,
-                                decoration: InputDecoration(
-                                    labelText: Statics.getLabel('Name') +
-                                        "/" +
-                                        Statics.getLabel('mobileNumberLabel')),
+                                decoration: InputDecoration(labelText: Statics.getLabel('Name') + "/" + Statics.getLabel('mobileNumberLabel')),
                               ),
                               SizedBox(height: 10),
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
                                   "${Statics.getLabel('agegroup')}",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                 ),
                               ),
                               SizedBox(height: 10),
@@ -967,8 +855,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                                     child: TextFormField(
                                       controller: _fromAgeController,
                                       decoration: InputDecoration(
-                                        labelText:
-                                            "${Statics.getLabel('fromAge')}",
+                                        labelText: "${Statics.getLabel('fromAge')}",
                                         border: OutlineInputBorder(),
                                       ),
                                       keyboardType: TextInputType.number,
@@ -979,8 +866,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                                     child: TextFormField(
                                       controller: _toAgeController,
                                       decoration: InputDecoration(
-                                        labelText:
-                                            "${Statics.getLabel('toAge')}",
+                                        labelText: "${Statics.getLabel('toAge')}",
                                         border: OutlineInputBorder(),
                                       ),
                                       keyboardType: TextInputType.number,
@@ -994,23 +880,17 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                                 children: [
                                   Text(
                                     "${Statics.getLabel('Gender')}",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
+                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                   ),
                                   const SizedBox(height: 10),
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
                                       ChoiceChip(
                                         selectedColor: Colors.purple,
                                         label: Text(
                                           Statics.getLabel('Male'),
-                                          style: TextStyle(
-                                              color: isGender == 1
-                                                  ? Colors.white
-                                                  : Colors.black),
+                                          style: TextStyle(color: isGender == 1 ? Colors.white : Colors.black),
                                         ),
                                         selected: isGender == 1,
                                         onSelected: (bool selected) {
@@ -1023,10 +903,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                                         selectedColor: Colors.purple,
                                         label: Text(
                                           Statics.getLabel('Female'),
-                                          style: TextStyle(
-                                              color: isGender == 2
-                                                  ? Colors.white
-                                                  : Colors.black),
+                                          style: TextStyle(color: isGender == 2 ? Colors.white : Colors.black),
                                         ),
                                         selected: isGender == 2,
                                         onSelected: (bool selected) {
@@ -1064,19 +941,10 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                                       IgnorePointer(
                                         ignoring: _linkedMahaanagarDisable!,
                                         child: DropdownButtonFormField(
-                                          decoration: InputDecoration(
-                                              labelText: Statics.getLabel(
-                                                  'Mahaanagar')),
+                                          decoration: InputDecoration(labelText: Statics.getLabel('Mahaanagar')),
                                           isExpanded: true,
-                                          value: _linkedMahaanagarValue == ""
-                                              ? null
-                                              : _linkedMahaanagarValue,
-                                          items: _linkedMahaanagar!
-                                              .map((bg) => DropdownMenuItem(
-                                                  value:
-                                                      bg.geoUnitID.toString(),
-                                                  child: Text(bg.name!)))
-                                              .toList(),
+                                          value: _linkedMahaanagarValue == "" ? null : _linkedMahaanagarValue,
+                                          items: _linkedMahaanagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                           onChanged: (value) {
                                             print(value);
                                             setState(() {
@@ -1092,13 +960,9 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                                               _linkedgraamDisable = false;
                                               _linkedvastiDisable = false;
 
-                                              _linkedVibhaag = _linkedbhaag =
-                                                  _linkednagar = _linkedmandal =
-                                                      _linkedgraam =
-                                                          _linkedvasti = null;
+                                              _linkedVibhaag = _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
                                               type = "mahanagar";
-                                              populatelinkedVibhaagDropdown(
-                                                  value);
+                                              populatelinkedVibhaagDropdown(value);
                                             });
                                           },
                                         ),
@@ -1106,198 +970,126 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                                     SizedBox(
                                       height: 10,
                                     ),
-                                    if (_linkedVibhaag != null &&
-                                        _linkedVibhaag!.length > 0)
+                                    if (_linkedVibhaag != null && _linkedVibhaag!.length > 0)
                                       IgnorePointer(
                                         ignoring: false,
                                         child: DropdownButtonFormField(
-                                          decoration: InputDecoration(
-                                              labelText:
-                                                  Statics.getLabel('Vibhaag')),
+                                          decoration: InputDecoration(labelText: Statics.getLabel('Vibhaag')),
                                           isExpanded: true,
-                                          value: _linkedVibhaagValue == ""
-                                              ? null
-                                              : _linkedVibhaagValue,
-                                          items: _linkedVibhaag!
-                                              .map((bg) => DropdownMenuItem(
-                                                  value:
-                                                      bg.geoUnitID.toString(),
-                                                  child: Text(bg.name!)))
-                                              .toList(),
+                                          value: _linkedVibhaagValue == "" ? null : _linkedVibhaagValue,
+                                          items: _linkedVibhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                           onChanged: (value) {
                                             setState(() {
                                               _linkedVibhaagValue = value;
-                                              populatelinkedBhaagDropdown(
-                                                  value);
+                                              populatelinkedBhaagDropdown(value);
                                               type = "vibhag";
                                               geoUnitIDnew = value;
                                             });
                                           },
                                         ),
                                       ),
-                                    if (_linkedVibhaag != null &&
-                                        _linkedVibhaag!.length > 0)
+                                    if (_linkedVibhaag != null && _linkedVibhaag!.length > 0)
                                       SizedBox(
                                         height: 10,
                                       ),
-                                    if (_linkedbhaag != null &&
-                                        _linkedbhaag!.length > 0)
+                                    if (_linkedbhaag != null && _linkedbhaag!.length > 0)
                                       IgnorePointer(
                                         ignoring: _linkedbhaagDisable!,
                                         child: DropdownButtonFormField(
-                                          decoration: InputDecoration(
-                                              labelText:
-                                                  Statics.getLabel('Bhaag')),
+                                          decoration: InputDecoration(labelText: Statics.getLabel('Bhaag')),
                                           isExpanded: true,
-                                          value: _linkedbhaagValue == ""
-                                              ? null
-                                              : _linkedbhaagValue,
-                                          items: _linkedbhaag!
-                                              .map((bg) => DropdownMenuItem(
-                                                  value:
-                                                      bg.geoUnitID.toString(),
-                                                  child: Text(bg.name!)))
-                                              .toList(),
+                                          value: _linkedbhaagValue == "" ? null : _linkedbhaagValue,
+                                          items: _linkedbhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                           onChanged: (value) {
                                             setState(() {
                                               _linkedbhaagValue = value;
-                                              populatelinkedShaharDropdown(
-                                                  value);
-                                              populatelinkedNagarDropdown(
-                                                  value, null);
+                                              populatelinkedShaharDropdown(value);
+                                              populatelinkedNagarDropdown(value, null);
                                               type = "bhag";
                                               geoUnitIDnew = value;
                                             });
                                           },
                                         ),
                                       ),
-                                    if (_linkedbhaag != null &&
-                                        _linkedbhaag!.length > 0)
+                                    if (_linkedbhaag != null && _linkedbhaag!.length > 0)
                                       SizedBox(
                                         height: 10,
                                       ),
-                                    if (_linkedshahar != null &&
-                                        _linkedshahar!.length > 0)
+                                    if (_linkedshahar != null && _linkedshahar!.length > 0)
                                       IgnorePointer(
                                         ignoring: _linkedshaharDisable!,
                                         child: DropdownButtonFormField(
-                                          decoration: InputDecoration(
-                                              labelText:
-                                                  Statics.getLabel('Shahar')),
+                                          decoration: InputDecoration(labelText: Statics.getLabel('Shahar')),
                                           isExpanded: true,
-                                          value: _linkedshaharValue == ""
-                                              ? null
-                                              : _linkedshaharValue,
-                                          items: _linkedshahar!
-                                              .map((bg) => DropdownMenuItem(
-                                                  value:
-                                                      bg.geoUnitID.toString(),
-                                                  child: Text(bg.name!)))
-                                              .toList(),
+                                          value: _linkedshaharValue == "" ? null : _linkedshaharValue,
+                                          items: _linkedshahar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                           onChanged: (value) {
                                             setState(() {
                                               _linkedshaharValue = value;
-                                              populatelinkedNagarDropdown(
-                                                  null, value);
+                                              populatelinkedNagarDropdown(null, value);
                                               type = "shahar";
                                               geoUnitIDnew = value;
                                             });
                                           },
                                         ),
                                       ),
-                                    if (_linkedshahar != null &&
-                                        _linkedshahar!.length > 0)
+                                    if (_linkedshahar != null && _linkedshahar!.length > 0)
                                       SizedBox(
                                         height: 10,
                                       ),
-                                    if (_linkednagar != null &&
-                                        _linkednagar!.length > 0)
+                                    if (_linkednagar != null && _linkednagar!.length > 0)
                                       IgnorePointer(
                                         ignoring: _linkednagarDisable!,
                                         child: DropdownButtonFormField(
-                                          decoration: InputDecoration(
-                                              labelText:
-                                                  Statics.getLabel('Nagar')),
+                                          decoration: InputDecoration(labelText: Statics.getLabel('Nagar')),
                                           isExpanded: true,
-                                          value: _linkednagarValue == ""
-                                              ? null
-                                              : _linkednagarValue,
-                                          items: _linkednagar!
-                                              .map((bg) => DropdownMenuItem(
-                                                  value:
-                                                      bg.geoUnitID.toString(),
-                                                  child: Text(bg.name!)))
-                                              .toList(),
+                                          value: _linkednagarValue == "" ? null : _linkednagarValue,
+                                          items: _linkednagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                           onChanged: (value) {
                                             setState(() {
                                               _linkednagarValue = value;
-                                              populatelinkedMandalDropdown(
-                                                  value);
-                                              populatelinkedVastiDropdown(
-                                                  value);
+                                              populatelinkedMandalDropdown(value);
+                                              populatelinkedVastiDropdown(value);
                                               type = "nagar";
                                               geoUnitIDnew = value;
                                             });
                                           },
                                         ),
                                       ),
-                                    if (_linkednagar != null &&
-                                        _linkednagar!.length > 0)
+                                    if (_linkednagar != null && _linkednagar!.length > 0)
                                       SizedBox(
                                         height: 10,
                                       ),
-                                    if (_linkedmandal != null &&
-                                        _linkedmandal!.length > 0)
+                                    if (_linkedmandal != null && _linkedmandal!.length > 0)
                                       IgnorePointer(
                                         ignoring: _linkedmandalDisable!,
                                         child: DropdownButtonFormField(
-                                          decoration: InputDecoration(
-                                              labelText:
-                                                  Statics.getLabel('Mandal')),
+                                          decoration: InputDecoration(labelText: Statics.getLabel('Mandal')),
                                           isExpanded: true,
-                                          value: _linkedmandalValue == ""
-                                              ? null
-                                              : _linkedmandalValue,
-                                          items: _linkedmandal!
-                                              .map((bg) => DropdownMenuItem(
-                                                  value:
-                                                      bg.geoUnitID.toString(),
-                                                  child: Text(bg.name!)))
-                                              .toList(),
+                                          value: _linkedmandalValue == "" ? null : _linkedmandalValue,
+                                          items: _linkedmandal!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                           onChanged: (value) {
                                             setState(() {
                                               _linkedmandalValue = value;
-                                              populatelinkedGraamDropdown(
-                                                  value);
+                                              populatelinkedGraamDropdown(value);
                                               type = "mandal";
                                               geoUnitIDnew = value;
                                             });
                                           },
                                         ),
                                       ),
-                                    if (_linkedmandal != null &&
-                                        _linkedmandal!.length > 0)
+                                    if (_linkedmandal != null && _linkedmandal!.length > 0)
                                       SizedBox(
                                         height: 10,
                                       ),
-                                    if (_linkedgraam != null &&
-                                        _linkedgraam!.length > 0)
+                                    if (_linkedgraam != null && _linkedgraam!.length > 0)
                                       IgnorePointer(
                                         ignoring: _linkedgraamDisable!,
                                         child: DropdownButtonFormField(
-                                          decoration: InputDecoration(
-                                              labelText:
-                                                  Statics.getLabel('Graam')),
+                                          decoration: InputDecoration(labelText: Statics.getLabel('Graam')),
                                           isExpanded: true,
-                                          value: _linkedgraamValue == ""
-                                              ? null
-                                              : _linkedgraamValue,
-                                          items: _linkedgraam!
-                                              .map((bg) => DropdownMenuItem(
-                                                  value:
-                                                      bg.geoUnitID.toString(),
-                                                  child: Text(bg.name!)))
-                                              .toList(),
+                                          value: _linkedgraamValue == "" ? null : _linkedgraamValue,
+                                          items: _linkedgraam!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                           onChanged: (value) {
                                             setState(() {
                                               _linkedgraamValue = value;
@@ -1307,24 +1099,14 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                                           },
                                         ),
                                       ),
-                                    if (_linkedvasti != null &&
-                                        _linkedvasti!.length > 0)
+                                    if (_linkedvasti != null && _linkedvasti!.length > 0)
                                       IgnorePointer(
                                         ignoring: _linkedvastiDisable!,
                                         child: DropdownButtonFormField(
-                                          decoration: InputDecoration(
-                                              labelText:
-                                                  Statics.getLabel('Vasti')),
+                                          decoration: InputDecoration(labelText: Statics.getLabel('Vasti')),
                                           isExpanded: true,
-                                          value: _linkedvastiValue == ""
-                                              ? null
-                                              : _linkedvastiValue,
-                                          items: _linkedvasti!
-                                              .map((bg) => DropdownMenuItem(
-                                                  value:
-                                                      bg.geoUnitID.toString(),
-                                                  child: Text(bg.name!)))
-                                              .toList(),
+                                          value: _linkedvastiValue == "" ? null : _linkedvastiValue,
+                                          items: _linkedvasti!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                           onChanged: (value) {
                                             setState(() {
                                               _linkedvastiValue = value;
@@ -1339,16 +1121,10 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                               ),
                               if (_status != null)
                                 DropdownButtonFormField(
-                                  decoration: InputDecoration(
-                                      labelText: Statics.getLabel('Status')),
+                                  decoration: InputDecoration(labelText: Statics.getLabel('Status')),
                                   isExpanded: true,
-                                  value:
-                                      _statusValue == "" ? null : _statusValue,
-                                  items: _status!
-                                      .map((bg) => DropdownMenuItem(
-                                          value: bg.staticID.toString(),
-                                          child: Text(bg.codeForDisplay!)))
-                                      .toList(),
+                                  value: _statusValue == "" ? null : _statusValue,
+                                  items: _status!.map((bg) => DropdownMenuItem(value: bg.staticID.toString(), child: Text(bg.codeForDisplay!))).toList(),
                                   onChanged: (value) {
                                     setState(() {
                                       _statusValue = value;
@@ -1361,22 +1137,17 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                               Row(
                                 children: [
                                   SizedBox(
-                                    width:
-                                        Statics.getDeviceSize(context).width *
-                                            0.7,
+                                    width: Statics.getDeviceSize(context).width * 0.7,
                                     child: TextField(
                                       enabled: false,
                                       controller: _fromDateCntrl,
-                                      decoration: InputDecoration(
-                                          labelText:
-                                              Statics.getLabel('FromDate')),
+                                      decoration: InputDecoration(labelText: Statics.getLabel('FromDate')),
                                       textInputAction: TextInputAction.done,
                                     ),
                                   ),
                                   IconButton(
                                     color: Colors.purple,
-                                    icon: FaIcon(
-                                        FontAwesomeIcons.solidCalendarAlt),
+                                    icon: FaIcon(FontAwesomeIcons.solidCalendarAlt),
                                     onPressed: _pickFromDate,
                                   ),
                                 ],
@@ -1387,22 +1158,17 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                               Row(
                                 children: [
                                   SizedBox(
-                                    width:
-                                        Statics.getDeviceSize(context).width *
-                                            0.7,
+                                    width: Statics.getDeviceSize(context).width * 0.7,
                                     child: TextField(
                                       enabled: false,
                                       controller: _toDateCntrl,
-                                      decoration: InputDecoration(
-                                          labelText:
-                                              Statics.getLabel('ToDate')),
+                                      decoration: InputDecoration(labelText: Statics.getLabel('ToDate')),
                                       textInputAction: TextInputAction.done,
                                     ),
                                   ),
                                   IconButton(
                                     color: Colors.purple,
-                                    icon: FaIcon(
-                                        FontAwesomeIcons.solidCalendarAlt),
+                                    icon: FaIcon(FontAwesomeIcons.solidCalendarAlt),
                                     onPressed: _pickToDate,
                                   ),
                                 ],
@@ -1428,17 +1194,13 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                         Wrap(
                           children: [
                             MaterialButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30)),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                               padding: EdgeInsets.symmetric(
                                 horizontal: 15,
                                 vertical: 8,
                               ),
                               color: Theme.of(context).primaryColor,
-                              textColor: Theme.of(context)
-                                  .primaryTextTheme
-                                  .button!
-                                  .color,
+                              textColor: Theme.of(context).primaryTextTheme.button!.color,
                               onPressed: () {
                                 _searchNew("Search");
                               },
@@ -1451,17 +1213,13 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                               width: 10,
                             ),
                             MaterialButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30)),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                               padding: EdgeInsets.symmetric(
                                 horizontal: 15,
                                 vertical: 8,
                               ),
                               color: Theme.of(context).primaryColor,
-                              textColor: Theme.of(context)
-                                  .primaryTextTheme
-                                  .button!
-                                  .color,
+                              textColor: Theme.of(context).primaryTextTheme.button!.color,
                               onPressed: () {
                                 _searchNew("Export");
                               },
@@ -1478,24 +1236,13 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                                   geoUnitIDnew = null;
                                   type = "prant";
                                   setState(() {
-                                    _bhaagValue =
-                                        _shaharValue = _nagarValue = null;
-                                    _bhaag = _shahar = _statusValue =
-                                        _nagar = _fromDate = _toDate = null;
-                                    _searchController.text = _toDateCntrl.text =
-                                        _fromDateCntrl.text = _fromAgeController
-                                            .text = _toAgeController.text = "";
+                                    _bhaagValue = _shaharValue = _nagarValue = null;
+                                    _bhaag = _shahar = _statusValue = _nagar = _fromDate = _toDate = null;
+                                    _searchController.text = _toDateCntrl.text = _fromDateCntrl.text = _fromAgeController.text = _toAgeController.text = "";
                                     isGender = 0;
                                     dropdownKey.currentState?.clearSelections();
-                                    _linkedMahaanagarValue = _linkedbhaagValue =
-                                        _linkedshaharValue = _linkednagarValue =
-                                            _linkedmandalValue =
-                                                _linkedvastiValue =
-                                                    _linkedgraamValue = null;
-                                    _linkedVibhaagValue = _linkedbhaag =
-                                        _linkedshahar = _linkedgraam =
-                                            _linkedmandal = _linkedvasti =
-                                                _linkednagar = null;
+                                    _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedvastiValue = _linkedgraamValue = null;
+                                    _linkedVibhaagValue = _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
                                     type = "prant";
                                   });
                                   populateDropdown();
@@ -1512,27 +1259,23 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                     child: FutureBuilder<List<dynamic>>(
                       future: _joinRSSList,
                       builder: (ctx, dataSnapshot) {
-                        if (dataSnapshot.connectionState !=
-                            ConnectionState.done) {
+                        if (dataSnapshot.connectionState != ConnectionState.done) {
                           return Center(child: CircularProgressIndicator());
                         }
                         if (dataSnapshot.hasError) {
                           return Center(
                               child: Text(
                             'Server Error, Please Try Again Later',
-                            style:
-                                TextStyle(color: Theme.of(context).errorColor),
+                            style: TextStyle(color: Theme.of(context).errorColor),
                           ));
                         }
                         _isSearching = false;
-                        return dataSnapshot.hasData &&
-                                dataSnapshot.data!.length > 0
+                        return dataSnapshot.hasData && dataSnapshot.data!.length > 0
                             ? ListView.builder(
                                 shrinkWrap: true,
                                 itemCount: dataSnapshot.data!.length,
                                 itemBuilder: (context, index) {
-                                  return JoinRSSCard(
-                                      dataSnapshot.data![index], _searchNew);
+                                  return JoinRSSCard(dataSnapshot.data![index], _searchNew);
                                 })
                             // Column(
                             //         children: dataSnapshot.data!.map((joinRSSItem) =>
@@ -1540,9 +1283,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                             //             JoinRSSCard(joinRSSItem , _searchNew)
                             //         ).toList(),
                             //       )
-                            : Center(
-                                child: Text(Statics.getLabel(
-                                    'noDataFoundTryAnotherSearch')));
+                            : Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch')));
                       },
                     ),
                   ),

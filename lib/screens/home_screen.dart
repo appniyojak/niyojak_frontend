@@ -307,11 +307,23 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  Widget _createWidget(String label, double width, double height, Alignment alignment, {bool isTotalRow = false}) {
+  Widget _createWidget(String label, double width, double? height, Alignment? alignment, {bool isTotalRow = false}) {
     return Container(
       child: Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
       width: width,
       height: height,
+      padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+      alignment: alignment,
+      color: (isTotalRow ? Theme.of(context).colorScheme.secondary.withOpacity(0.1) : Colors.white),
+    );
+  }
+
+  Widget _createWidget2({required String label, BoxConstraints? constraints, double? width, double? height, Alignment? alignment, bool isTotalRow = false}) {
+    return Container(
+      child: Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
+      width: width,
+      height: height,
+      constraints: constraints,
       padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
       alignment: alignment,
       color: (isTotalRow ? Theme.of(context).colorScheme.secondary.withOpacity(0.1) : Colors.white),
@@ -994,23 +1006,35 @@ class _HomeScreenState extends State<HomeScreen> {
 
       if (Statics.lstdashboardSadyaSthitiData.length > 0) {
         mySadyasthitiHeaderRow = [];
-        mySadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('Vayogat'), 100, 56, Alignment.centerLeft, isTotalRow: false));
+        mySadyasthitiHeaderRow.add(_createWidget2(label: Statics.getLabel('Vayogat'), constraints: BoxConstraints(minWidth: 80, maxWidth: 110, minHeight: 60, maxHeight: 80), isTotalRow: false));
 
-        mySadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('RegisterShaakhaa'), 60, 56, Alignment.centerLeft, isTotalRow: false));
-        mySadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('SankalpitShaakhaa'), 100, 56, Alignment.centerLeft, isTotalRow: false));
-        mySadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('TotalSankalpitShaakhaa'), 100, 56, Alignment.centerLeft, isTotalRow: false));
+        mySadyasthitiHeaderRow
+            .add(_createWidget2(label: Statics.getLabel('RegisterShaakhaa'), constraints: BoxConstraints(minWidth: 80, maxWidth: 100, minHeight: 60, maxHeight: 80), isTotalRow: false));
+        mySadyasthitiHeaderRow
+            .add(_createWidget2(label: Statics.getLabel('SankalpitShaakhaa'), constraints: BoxConstraints(minWidth: 80, maxWidth: 110, minHeight: 60, maxHeight: 80), isTotalRow: false));
+        mySadyasthitiHeaderRow
+            .add(_createWidget2(label: Statics.getLabel('TotalSankalpitShaakhaa'), constraints: BoxConstraints(minWidth: 80, maxWidth: 110, minHeight: 60, maxHeight: 80), isTotalRow: false));
 
-        mySadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('RegisteredSaaptaahikMilan'), 100, 56, Alignment.centerLeft, isTotalRow: false));
-        mySadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('SankalpitSaaptaahikMilan'), 100, 56, Alignment.centerLeft, isTotalRow: false));
-        mySadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('TotalSankalpitSaaptaahikMilan'), 100, 56, Alignment.centerLeft, isTotalRow: false));
+        mySadyasthitiHeaderRow
+            .add(_createWidget2(label: Statics.getLabel('RegisteredSaaptaahikMilan'), constraints: BoxConstraints(minWidth: 80, maxWidth: 110, minHeight: 60, maxHeight: 80), isTotalRow: false));
+        mySadyasthitiHeaderRow
+            .add(_createWidget2(label: Statics.getLabel('SankalpitSaaptaahikMilan'), constraints: BoxConstraints(minWidth: 80, maxWidth: 110, minHeight: 60, maxHeight: 80), isTotalRow: false));
+        mySadyasthitiHeaderRow
+            .add(_createWidget2(label: Statics.getLabel('TotalSankalpitSaaptaahikMilan'), constraints: BoxConstraints(minWidth: 80, maxWidth: 110, minHeight: 60, maxHeight: 80), isTotalRow: false));
 
-        mySadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('RegisteredMasikMilan'), 100, 56, Alignment.centerLeft, isTotalRow: false));
-        mySadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('SankalpitMasikMilan'), 100, 56, Alignment.centerLeft, isTotalRow: false));
-        mySadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('TotalSankalpitMasikMilan'), 100, 56, Alignment.centerLeft, isTotalRow: false));
+        mySadyasthitiHeaderRow
+            .add(_createWidget2(label: Statics.getLabel('RegisteredMasikMilan'), constraints: BoxConstraints(minWidth: 80, maxWidth: 110, minHeight: 60, maxHeight: 80), isTotalRow: false));
+        mySadyasthitiHeaderRow
+            .add(_createWidget2(label: Statics.getLabel('SankalpitMasikMilan'), constraints: BoxConstraints(minWidth: 80, maxWidth: 110, minHeight: 60, maxHeight: 80), isTotalRow: false));
+        mySadyasthitiHeaderRow
+            .add(_createWidget2(label: Statics.getLabel('TotalSankalpitMasikMilan'), constraints: BoxConstraints(minWidth: 80, maxWidth: 110, minHeight: 60, maxHeight: 80), isTotalRow: false));
 
-        mySadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('RegisteredSanghaMandali'), 100, 56, Alignment.centerLeft, isTotalRow: false));
-        mySadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('SankalpitSanghMandali'), 100, 56, Alignment.centerLeft, isTotalRow: false));
-        mySadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('TotalSankalpitSanghMandali'), 100, 56, Alignment.centerLeft, isTotalRow: false));
+        mySadyasthitiHeaderRow
+            .add(_createWidget2(label: Statics.getLabel('RegisteredSanghaMandali'), constraints: BoxConstraints(minWidth: 80, maxWidth: 110, minHeight: 60, maxHeight: 80), isTotalRow: false));
+        mySadyasthitiHeaderRow
+            .add(_createWidget2(label: Statics.getLabel('SankalpitSanghMandali'), constraints: BoxConstraints(minWidth: 80, maxWidth: 110, minHeight: 60, maxHeight: 80), isTotalRow: false));
+        mySadyasthitiHeaderRow
+            .add(_createWidget2(label: Statics.getLabel('TotalSankalpitSanghMandali'), constraints: BoxConstraints(minWidth: 80, maxWidth: 110, minHeight: 60, maxHeight: 80), isTotalRow: false));
 
         for (var data in Statics.lstdashboardSadyaSthitiData) {
           if (data.vayogatID == -1) {

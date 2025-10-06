@@ -29,7 +29,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
   final TextEditingController sarpanchDoorbhasController = TextEditingController();
   final TextEditingController sarpanchNameController = TextEditingController();
 
-  int? isFemale;
+  int? isFemale = 0;
 
   String? selectedFilePath;
   GetVastiDataByIdModel? vastiDataByIdModel;
@@ -720,6 +720,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
     required String hintText,
     required Function(int?, String?, int?) onItemSelected,
     String? question,
+    String? imp,
     double? width,
     int? questionNumber,
     int? editId,
@@ -745,9 +746,22 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (question != null)
-          Text(
-            "${questionNumber != null ? "$questionNumber. " : ""}$question",
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+          Row(
+            children: [
+              Text(
+                "${questionNumber != null ? "$questionNumber. " : ""}$question",
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              ),
+              if (imp != null)
+                Text(
+                  imp,
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                  ),
+                ),
+            ],
           ),
         SizedBox(height: 5),
         Container(
@@ -7137,7 +7151,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    textControllerField2(name: "${Statics.getLabel('Name')}", controller: anyaPrabhaviLokNaavController, height: 50),
+                    textControllerField2(name: "${Statics.getLabel('Name')}", controller: anyaPrabhaviLokNaavController, height: 50, imp: " *"),
                     textControllerField2(name: "${Statics.getLabel('Address')}", controller: anyaPrabhaviLokAddressController, height: 50),
                     textControllerField2(
                       name: "${Statics.getLabel('doorBhash')}",
@@ -7145,6 +7159,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                       height: 50,
                       keyboardType: TextInputType.number,
                       maxInput: 10,
+                      imp: " *",
                     ),
                     SizedBox(height: 5),
                     Row(
@@ -7176,12 +7191,21 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                       ],
                     ),
                     SizedBox(height: 5),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "${Statics.getLabel('Category')}/${Statics.getLabel('upshreni')}",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
-                      ),
+                    Row(
+                      children: [
+                        Text(
+                          "${Statics.getLabel('Category')}/${Statics.getLabel('upshreni')}",
+                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                        ),
+                        Text(
+                          " *",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(height: 5),
                     vastisarvekshanDropDownDataModel != null
@@ -7222,17 +7246,18 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                       SizedBox(
                         height: 10,
                       ),
-                    if (selectedUpShreni?.isOther == 1) textControllerField2(name: "${Statics.getLabel('otherUpshreni')}", controller: anyaPrabhaviLokAnyaUppshreniController),
+                    if (selectedUpShreni?.isOther == 1) textControllerField2(name: "${Statics.getLabel('otherUpshreni')}", controller: anyaPrabhaviLokAnyaUppshreniController, imp: " *"),
                     if (selectedUpShreni2?.isOther == 1)
                       SizedBox(
                         height: 10,
                       ),
-                    if (selectedUpShreni2?.isOther == 1) textControllerField2(name: "${Statics.getLabel('otherUpshreni2')}", controller: anyaPrabhaviLokAnyaUppshreni1Controller),
+                    if (selectedUpShreni2?.isOther == 1) textControllerField2(name: "${Statics.getLabel('otherUpshreni2')}", controller: anyaPrabhaviLokAnyaUppshreni1Controller, imp: " *"),
                     SizedBox(
                       height: 10,
                     ),
                     vastisarvekshanDropDownDataModel != null
                         ? vastisarvekshanDropdown2(
+                            imp: " *",
                             hintText: "${Statics.getLabel('selectVishesh')}",
                             filterTypeName: "अन्यप्रभावीलोकंविशेष",
                             onItemSelected: (valueId, valueName, isOther) {
@@ -7256,6 +7281,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                     ),
                     vastisarvekshanDropDownDataModel != null
                         ? vastisarvekshanDropdown2(
+                            imp: " *",
                             hintText: "${Statics.getLabel('prabhavKshetraSelect')}",
                             filterTypeName: "अन्यप्रभावीलोकंप्रभावक्षेत्र",
                             onItemSelected: (valueId, valueName, isOther) {
@@ -7283,6 +7309,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                     ),
                     vastisarvekshanDropDownDataModel != null
                         ? vastisarvekshanDropdown2(
+                            imp: " *",
                             hintText: "${Statics.getLabel('samparkSthitiSelect')}",
                             filterTypeName: "अन्यप्रभावीलोकंसंपर्कस्थिति",
                             onItemSelected: (valueId, valueName, isOther) {
@@ -7305,12 +7332,13 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                       height: 10,
                     ),
                     // textControllerField(${Statics.getLabel('anyaVisheshMahiti')}, anyaPrabhaviLokAnyaVisheshMahitiController, context, height: 80),
-                    textControllerField2(name: "${Statics.getLabel('samparkSootraNaav')}", controller: anyaPrabhaviLokSamparkSutraNaavController, height: 50),
+                    textControllerField2(name: "${Statics.getLabel('samparkSootraNaav')}", controller: anyaPrabhaviLokSamparkSutraNaavController, height: 50, imp: " *"),
                     textControllerField2(
                       name: "${Statics.getLabel('samparakSootraDoorbhash')}",
                       controller: anyaPrabhaviLokSamparkSutraDoorbhashController,
                       keyboardType: TextInputType.number,
                       maxInput: 10,
+                      imp: " *",
                     ),
                   ],
                 ),
@@ -7326,17 +7354,31 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
                 onPressed: () {
-                  if (anyaPrabhaviLokMobileNoController.text.length != 10) {
+                  bool isEmpty(String? text) => text == null || text.trim().isEmpty;
+                  // 🔹 Required field checks
+                  if (isEmpty(anyaPrabhaviLokNaavController.text)) {
+                    Statics.showToast("${Statics.getLabel('impInfoRequired')}");
+                    // isValid = false;
+                    // } else if (isEmpty(anyaPrabhaviLokAddressController.text)) {
+                    //   Statics.showToast("${Statics.getLabel('impInfoRequired')}");
+                    //   isValid = false;
+                  } else if (anyaPrabhaviLokMobileNoController.text.length != 10) {
                     Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
-                    return;
-                  }
-                  if (anyaPrabhaviLokSamparkSutraDoorbhashController.text.length != 10) {
+                    // isValid = false;
+                  } else if (anyaPrabhaviLokSamparkStithiId == null ||
+                      anyaPrabhaviLokPrabhavKshetraId == null ||
+                      anyaPrabhaviLokVisheshId == null ||
+                      // anyaPrabhaviLokUpShreni1Id == null ||
+                      anyaPrabhaviLokUpShreniId == null ||
+                      anyaPrabhaviLokShreniId == null) {
+                    Statics.showToast("${Statics.getLabel('impInfoRequired')}");
+                    // isValid = false;
+                  } else if (isEmpty(anyaPrabhaviLokSamparkSutraNaavController.text)) {
+                    Statics.showToast("${Statics.getLabel('impInfoRequired')}");
+                    // isValid = false;
+                  } else if (anyaPrabhaviLokSamparkSutraDoorbhashController.text.length != 10) {
                     Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
-                    return;
-                  }
-                  if ((selectedUpShreni?.isOther == 1 && anyaPrabhaviLokAnyaUppshreniController.text == "") ||
-                      (selectedUpShreni2?.isOther == 1 && anyaPrabhaviLokAnyaUppshreni1Controller.text == "")) {
-                    Statics.showToast("${Statics.getLabel('otherInfoValidation')}");
+                    // isValid = false;
                   } else {
                     VastisarAnyaprabhavilokam data = VastisarAnyaprabhavilokam(
                       name: anyaPrabhaviLokNaavController.text,

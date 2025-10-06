@@ -137,6 +137,8 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       selctedLevel = '';
       selctedLevelName = '';
       selctedLevelId = null;
+      selctedLevelIdForMandalDropdown = null;
+      selctedLevelIdForVastiDropdown = null;
       utsavKontyaStaravar = "6";
 
       // Reset selections
@@ -377,6 +379,8 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
   String? selctedLevel = 'praant';
   String? selctedLevelName = '';
   String? selctedLevelId = '';
+  String? selctedLevelIdForMandalDropdown = '';
+  String? selctedLevelIdForVastiDropdown = '';
   String? selctedSanchalanLevelId = '';
   String? selctedSanchalanLevelName = '';
 
@@ -2527,7 +2531,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                             onAdd: () {
                               Navigator.of(context).pushReplacementNamed(
                                 AddMukhyaAtithi.routeName,
-                                arguments: {'linkedNagar': _linkedNagar, 'selectedLevelId': selctedLevelId},
+                                arguments: {'linkedNagar': _linkedNagar, 'selectedLevelId': _linkedNagarValue},
                               ).then((value) => searchVijayaDashami());
                             },
                           );
@@ -3025,7 +3029,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                   SingleColumnRow(
                     rowColor: Colors.grey.shade300,
                     txtString: "${Statics.getLabel('average')} ${Statics.getLabel('pratinidhitva')} ",
-                    value: "${totalVastiCount > 0 ? ((selectedVastiCount! / totalVastiCount) * 100).toStringAsFixed(0) : 0} %",
+                    value: "${(data?.vastimandallist ?? []).length > 0 ? ((selectedVastiCount! / (data?.vastimandallist ?? []).length) * 100).toStringAsFixed(0) : 0} %",
                   )
                 ],
               ),
@@ -3623,6 +3627,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                           _linkedNagarValue = value;
                           populatelinkedVastiDropdown(value!);
                           selctedLevelId = value;
+                          selctedLevelIdForVastiDropdown = value;
                           selctedLevelName = selectedItem.name ?? "";
                           selctedLevel = 'Nagar';
                         });
@@ -3781,6 +3786,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                           _linkedNagarValue = value;
                           populatelinkedMandalDropdownForMandal(value!);
                           selctedLevelId = value;
+                          selctedLevelIdForMandalDropdown = value;
                           selctedLevelName = selectedItem.name ?? "";
                           selctedLevel = 'nagar';
                           _linkedmandalValue = null;
@@ -4484,7 +4490,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                       }
                     }
                   },
-                  icon: Icon(Icons.cancel, color: Colors.red),
+                  icon: Icon(Icons.delete_forever, color: Colors.red),
                 ),
               ],
             ),
@@ -4868,7 +4874,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                       }
                     }
                   },
-                  icon: Icon(Icons.cancel, color: Colors.red),
+                  icon: Icon(Icons.delete_forever, color: Colors.red),
                 ),
               ],
             ),
@@ -5242,12 +5248,59 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                     ),
                     SizedBox(width: 8),
                     InkWell(
-                      onTap: () {
-                        setState(() {
-                          _urlsList.removeWhere((e) => e == url);
-                        });
+                      onTap: () async {
+                        final _shouldDelete = await showDialog(
+                          context: context,
+                          builder: (ctx) => AlertDialog(
+                            backgroundColor: Colors.white,
+                            title: Text(
+                              "${Statics.getLabel('AskConfirmation')}",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red.shade700,
+                                fontSize: 18,
+                              ),
+                            ),
+                            content: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Text(
+                                "${Statics.getLabel('AreyouSureYouWantToDeleteUrl')}",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.red.shade800,
+                                ),
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                child: Text(Statics.getLabel('ConfirmationNo')),
+                                onPressed: () {
+                                  Navigator.of(ctx).pop(false);
+                                },
+                              ),
+                              TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor: Colors.red.shade700,
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                ),
+                                onPressed: () => Navigator.of(ctx).pop(true),
+                                child: Text(
+                                  "${Statics.getLabel('ConfirmationYes')}",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+
+                        if (_shouldDelete) {
+                          setState(() {
+                            _urlsList.removeWhere((e) => e == url);
+                          });
+                        }
                       },
-                      child: Icon(Icons.cancel, color: Colors.red, size: 18),
+                      child: Icon(Icons.delete_forever, color: Colors.red, size: 18),
                     )
                   ],
                 ),
