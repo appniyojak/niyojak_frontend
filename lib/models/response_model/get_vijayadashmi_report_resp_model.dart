@@ -38,7 +38,7 @@ class VijayadashamiReport {
   int? ekungan;
   int? ekunpat;
   int? ekunsanchalan;
-  int? ekunupastiti;
+  int? ekunupastiti; //FOR SWAYAMSEVAK
   int? gramcountpratinidhatva;
   int? mandalcountpratinidhatva;
   int? mukhyaatithifemale;
@@ -53,28 +53,41 @@ class VijayadashamiReport {
   int? vartamansanghmandalipratinidhatva;
   int? vartamansapthahikpratinidhatva;
   int? vasticountpratinidhatva;
+  int? ekunfemale;
+  int? ekunmale;
+  int? ekumalenfemale;
+  int? ekunganvash;
+  int? ekunanya;
+  int? ekunupastitisummary;
 
-  VijayadashamiReport(
-      {this.anyanuppasstitifemale,
-      this.anyauppasstitimale,
-      this.ekungan,
-      this.ekunpat,
-      this.ekunsanchalan,
-      this.ekunupastiti,
-      this.gramcountpratinidhatva,
-      this.mandalcountpratinidhatva,
-      this.mukhyaatithifemale,
-      this.mukhyaatithimale,
-      this.pramukhjhanuppasstitifemale,
-      this.pramukhjhanuppasstitimale,
-      this.sadbavkaryafemale,
-      this.sadbavkaryamale,
-      this.sajjanskhatiuppasstitifemale,
-      this.sajjanskhatiuppasstitimale,
-      this.vartamansaakhapratinidhatva,
-      this.vartamansanghmandalipratinidhatva,
-      this.vartamansapthahikpratinidhatva,
-      this.vasticountpratinidhatva});
+  VijayadashamiReport({
+    this.anyanuppasstitifemale,
+    this.anyauppasstitimale,
+    this.ekungan,
+    this.ekunpat,
+    this.ekunsanchalan,
+    this.ekunupastiti,
+    this.gramcountpratinidhatva,
+    this.mandalcountpratinidhatva,
+    this.mukhyaatithifemale,
+    this.mukhyaatithimale,
+    this.pramukhjhanuppasstitifemale,
+    this.pramukhjhanuppasstitimale,
+    this.sadbavkaryafemale,
+    this.sadbavkaryamale,
+    this.sajjanskhatiuppasstitifemale,
+    this.sajjanskhatiuppasstitimale,
+    this.vartamansaakhapratinidhatva,
+    this.vartamansanghmandalipratinidhatva,
+    this.vartamansapthahikpratinidhatva,
+    this.vasticountpratinidhatva,
+    this.ekunfemale,
+    this.ekunmale,
+    this.ekumalenfemale,
+    this.ekunganvash,
+    this.ekunanya,
+    this.ekunupastitisummary,
+  });
 
   VijayadashamiReport.fromJson(Map<String, dynamic> json) {
     anyanuppasstitifemale = json['anyanuppasstitifemale'];
@@ -97,6 +110,12 @@ class VijayadashamiReport {
     vartamansanghmandalipratinidhatva = json['vartamansanghmandalipratinidhatva'];
     vartamansapthahikpratinidhatva = json['vartamansapthahikpratinidhatva'];
     vasticountpratinidhatva = json['vasticountpratinidhatva'];
+    ekunfemale = json['ekunfemale'];
+    ekunmale = json['ekunmale'];
+    ekumalenfemale = json['ekumalenfemale'];
+    ekunganvash = json['ekunganvash'];
+    ekunanya = json['ekunanya'];
+    ekunupastitisummary = json['ekunupastitisummary'];
   }
 
   Map<String, dynamic> toJson() {
@@ -121,6 +140,12 @@ class VijayadashamiReport {
     data['vartamansanghmandalipratinidhatva'] = this.vartamansanghmandalipratinidhatva;
     data['vartamansapthahikpratinidhatva'] = this.vartamansapthahikpratinidhatva;
     data['vasticountpratinidhatva'] = this.vasticountpratinidhatva;
+    data['ekunfemale'] = this.ekunfemale;
+    data['ekunmale'] = this.ekunmale;
+    data['ekumalenfemale'] = this.ekumalenfemale;
+    data['ekunganvash'] = this.ekunganvash;
+    data['ekunanya'] = this.ekunanya;
+    data['ekunupastitisummary'] = this.ekunupastitisummary;
     return data;
   }
 }
@@ -133,6 +158,8 @@ class Vijayadashaminagarlist {
   String? levelname;
   int? shanchalancount;
   String? shanchalancountNames;
+  int? shanchalansadandacount;
+  String? shanchalansadandacountNames;
   int? shanchalanghosvandancount;
   String? shanchalanghosvandancountNames;
   int? skaraykramhisob24tasapurnacount;
@@ -148,6 +175,8 @@ class Vijayadashaminagarlist {
     this.levelname,
     this.shanchalancount,
     this.shanchalancountNames,
+    this.shanchalansadandacount,
+    this.shanchalansadandacountNames,
     this.shanchalanghosvandancount,
     this.shanchalanghosvandancountNames,
     this.skaraykramhisob24tasapurnacount,
@@ -164,6 +193,8 @@ class Vijayadashaminagarlist {
     levelname = json['levelname'];
     shanchalancount = json['shanchalancount'];
     shanchalancountNames = json['shanchalancount_names'];
+    shanchalansadandacount = json['shanchalansadandacount'];
+    shanchalansadandacountNames = json['shanchalansadandacount_names'];
     shanchalanghosvandancount = json['shanchalanghosvandancount'];
     shanchalanghosvandancountNames = json['shanchalanghosvandancount_names'];
     skaraykramhisob24tasapurnacount = json['skaraykramhisob24tasapurnacount'];
@@ -181,6 +212,8 @@ class Vijayadashaminagarlist {
     data['levelname'] = this.levelname;
     data['shanchalancount'] = this.shanchalancount;
     data['shanchalancount_names'] = this.shanchalancountNames;
+    data['shanchalansadandacount'] = this.shanchalansadandacount;
+    data['shanchalansadandacount_names'] = this.shanchalansadandacountNames;
     data['shanchalanghosvandancount'] = this.shanchalanghosvandancount;
     data['shanchalanghosvandancount_names'] = this.shanchalanghosvandancountNames;
     data['skaraykramhisob24tasapurnacount'] = this.skaraykramhisob24tasapurnacount;

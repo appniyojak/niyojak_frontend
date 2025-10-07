@@ -364,6 +364,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                           selctedLevel = 'Graam';
                           selctedLevelId = value;
                           isVastiOrGraam = 0;
+                          populatelinkedVastiDropdown(value!);
                         });
                       },
                     ),
@@ -387,7 +388,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                   SizedBox(
                     height: 15,
                   ),
-                  if (selctedLevel == 'Vasti')
+                  if (selctedLevel == 'Vasti' || selctedLevel == 'Graam')
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

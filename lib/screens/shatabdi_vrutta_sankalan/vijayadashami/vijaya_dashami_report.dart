@@ -484,7 +484,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                     // ]),
                     SizedBox(height: 8),
                     Row(children: [
-                      Expanded(child: Text(Statics.getLabel('anyaUpasthit'))),
+                      Expanded(child: Text(Statics.getLabel('anyaUpasthit') + " " + Statics.getLabel('searchSwayamsevakScreenLabel'))),
                       Container(
                         margin: EdgeInsets.only(left: 8),
                         child: Text((data.ekunupastiti ?? 0).toString()),
@@ -820,6 +820,92 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
             ],
           ),
         ),
+        _buildPanel(
+          Statics.getLabel("anyaUpstithSummary"),
+          1,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Column(
+              children: [
+                Row(children: [
+                  Expanded(child: Text(Statics.getLabel('Male'))),
+                  Container(
+                    margin: EdgeInsets.only(left: 8),
+                    child: Text((data.ekunmale ?? 0).toString()),
+                  ),
+                ]),
+                SizedBox(height: 8),
+                Row(children: [
+                  Expanded(child: Text(Statics.getLabel('Female'))),
+                  Container(
+                    margin: EdgeInsets.only(left: 8),
+                    child: Text((data.ekunfemale ?? 0).toString()),
+                  ),
+                ]),
+                SizedBox(height: 6),
+                SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+                SizedBox(height: 6),
+                Row(children: [
+                  Expanded(child: Text(Statics.getLabel('presentTotalMaleFemale2'))),
+                  Container(
+                    margin: EdgeInsets.only(left: 8),
+                    child: Text((data.ekumalenfemale ?? 0).toString()),
+                  ),
+                ]),
+                SizedBox(height: 6),
+                SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+                SizedBox(height: 6),
+                //
+                // SingleColumnRow(
+                //   txtString: "${Statics.getLabel('presentTotalMaleFemale')} ",
+                //   value: data.ekumalenfemale.toString(),
+                // ),
+                //
+                Row(children: [
+                  Expanded(child: Text(Statics.getLabel('presentGanveshatTotal'))),
+                  Container(
+                    margin: EdgeInsets.only(left: 8),
+                    child: Text((data.ekunganvash ?? 0).toString()),
+                  ),
+                ]),
+                SizedBox(height: 8),
+                // SingleColumnRow(
+                //   txtString: "${Statics.getLabel('presentGanveshatTotal')} ",
+                //   value: data.ekunganvash.toString(),
+                // ),
+                //
+                Row(children: [
+                  Expanded(child: Text(Statics.getLabel('otherSwayamsewakPresentCount'))),
+                  Container(
+                    margin: EdgeInsets.only(left: 8),
+                    child: Text((data.ekunanya ?? 0).toString()),
+                  ),
+                ]),
+                SizedBox(height: 8),
+                // SingleColumnRow(
+                //   txtString: "${Statics.getLabel('otherSwayamsewakPresentCount')} ",
+                //   value: data.ekunanya.toString(),
+                // ),
+                //
+                // SingleColumnRow(
+                //   txtString: "${Statics.getLabel('presentSamajik')} ",
+                //   value: "${totalShakhaCount + totalMilanCount + totalSanghaMandaliCount}",
+                // ),
+                // ✅ Total
+                SingleColumnRow(
+                  rowColor: Colors.grey.shade300,
+                  txtString: "${Statics.getLabel('presentAllTotal')} ",
+                  value: data.ekunupastitisummary.toString(),
+                ),
+                // const SizedBox(height: 10),
+                // Text(
+                //   "${Statics.getLabel('Total')} : $total",
+                //   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                // ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -849,11 +935,13 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
     final List<String> headers = [
       // 'कार्यक्रम स्तर',
       Statics.getLabel('vijayadashmiReportTable1'),
-      Statics.getLabel('vijayadashmiReportTable2'),
       Statics.getLabel('vijayadashmiReportTable3'),
       Statics.getLabel('vijayadashmiReportTable4'),
-      Statics.getLabel('vijayadashmiReportTable5'),
       Statics.getLabel('vijayadashmiReportTable6'),
+      //sanchalan
+      Statics.getLabel('vijayadashmiReportTable2'),
+      Statics.getLabel('vijayadashmiReportTable5'),
+      Statics.getLabel('vijayadashmiReportTable7'),
     ];
 
     // return Column(
@@ -976,23 +1064,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                         ))),
                         DataCell(Center(
                             child: Row(
-                          mainAxisAlignment: (level.shanchalancount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
-                          children: [
-                            if (level.shanchalancount != 0) SizedBox(width: 1),
-                            Container(margin: EdgeInsets.only(right: level.shanchalancount != 0 ? 0 : 10), child: Text(level.shanchalancount.toString())),
-                            if (level.shanchalancount != 0)
-                              InkWell(
-                                borderRadius: BorderRadius.circular(50),
-                                onTap: () {
-                                  showInfoDialogBox(names: level.shanchalancountNames ?? "", title: Statics.getLabel("vijayadashmiReportTable2"));
-                                },
-                                child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
-                              ),
-                          ],
-                        ))),
-                        DataCell(Center(
-                            child: Row(
-                          mainAxisAlignment: (level.shanchalancount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                          mainAxisAlignment: (level.karyakramnirdharitvedhvarcount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
                           children: [
                             if (level.karyakramnirdharitvedhvarcount != 0) SizedBox(width: 1),
                             Container(margin: EdgeInsets.only(right: level.karyakramnirdharitvedhvarcount != 0 ? 0 : 10), child: Text(level.karyakramnirdharitvedhvarcount.toString())),
@@ -1024,7 +1096,41 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                         ))),
                         DataCell(Center(
                             child: Row(
-                          mainAxisAlignment: (level.vyaktigeetkhantastakcount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                          mainAxisAlignment: (level.skaraykramhisob24tasapurnacount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                          children: [
+                            if (level.skaraykramhisob24tasapurnacount != 0) SizedBox(width: 1),
+                            Container(margin: EdgeInsets.only(right: level.skaraykramhisob24tasapurnacount != 0 ? 0 : 10), child: Text(level.skaraykramhisob24tasapurnacount.toString())),
+                            if (level.skaraykramhisob24tasapurnacount != 0)
+                              InkWell(
+                                borderRadius: BorderRadius.circular(50),
+                                onTap: () {
+                                  showInfoDialogBox(names: level.skaraykramhisob24tasapurnacountNames ?? "", title: Statics.getLabel("vijayadashmiReportTable6"));
+                                },
+                                child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
+                              ),
+                          ],
+                        ))),
+
+                        //sanchalan
+                        DataCell(Center(
+                            child: Row(
+                          mainAxisAlignment: (level.shanchalancount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                          children: [
+                            if (level.shanchalancount != 0) SizedBox(width: 1),
+                            Container(margin: EdgeInsets.only(right: level.shanchalancount != 0 ? 0 : 10), child: Text(level.shanchalancount.toString())),
+                            if (level.shanchalancount != 0)
+                              InkWell(
+                                borderRadius: BorderRadius.circular(50),
+                                onTap: () {
+                                  showInfoDialogBox(names: level.shanchalancountNames ?? "", title: Statics.getLabel("vijayadashmiReportTable2"));
+                                },
+                                child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
+                              ),
+                          ],
+                        ))),
+                        DataCell(Center(
+                            child: Row(
+                          mainAxisAlignment: (level.shanchalanghosvandancount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
                           children: [
                             if (level.shanchalanghosvandancount != 0) SizedBox(width: 1),
                             Container(margin: EdgeInsets.only(right: level.shanchalanghosvandancount != 0 ? 0 : 10), child: Text(level.shanchalanghosvandancount.toString())),
@@ -1040,15 +1146,15 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                         ))),
                         DataCell(Center(
                             child: Row(
-                          mainAxisAlignment: (level.skaraykramhisob24tasapurnacount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                          mainAxisAlignment: (level.shanchalansadandacount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
                           children: [
-                            if (level.skaraykramhisob24tasapurnacount != 0) SizedBox(width: 1),
-                            Container(margin: EdgeInsets.only(right: level.skaraykramhisob24tasapurnacount != 0 ? 0 : 10), child: Text(level.skaraykramhisob24tasapurnacount.toString())),
-                            if (level.skaraykramhisob24tasapurnacount != 0)
+                            if (level.shanchalansadandacount != 0) SizedBox(width: 1),
+                            Container(margin: EdgeInsets.only(right: level.shanchalansadandacount != 0 ? 0 : 10), child: Text(level.shanchalansadandacount.toString())),
+                            if (level.shanchalansadandacount != 0)
                               InkWell(
                                 borderRadius: BorderRadius.circular(50),
                                 onTap: () {
-                                  showInfoDialogBox(names: level.skaraykramhisob24tasapurnacountNames ?? "", title: Statics.getLabel("vijayadashmiReportTable6"));
+                                  showInfoDialogBox(names: level.shanchalansadandacountNames ?? "", title: Statics.getLabel("vijayadashmiReportTable7"));
                                 },
                                 child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
                               ),
@@ -1065,17 +1171,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.shanchalancount ?? 0)).toString(),
-                          style: TextStyle(fontWeight: FontWeight.w700),
-                        ))),
-                        DataCell(Center(
-                            child: Text(
-                          data.fold(0, (sum, item) => sum + (item.shanchalancount ?? 0)).toString(),
-                          style: TextStyle(fontWeight: FontWeight.w700),
-                        ))),
-                        DataCell(Center(
-                            child: Text(
-                          data.fold(0, (sum, item) => sum + (item.vyaktigeetkhantastakcount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.karyakramnirdharitvedhvarcount ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
@@ -1086,6 +1182,23 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                         DataCell(Center(
                             child: Text(
                           data.fold(0, (sum, item) => sum + (item.skaraykramhisob24tasapurnacount ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+
+                        //sanchalan
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.shanchalancount ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.shanchalanghosvandancount ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.shanchalansadandacount ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                       ])
@@ -1133,7 +1246,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                         columns: [
                           DataColumn(
                               label: Container(
-                            constraints: BoxConstraints(maxWidth: 27),
+                            constraints: BoxConstraints(maxWidth: 40),
                             child: Text(" "),
                           )),
                           DataColumn(
@@ -1148,7 +1261,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                           int index = entry.key;
                           var data = entry.value;
                           return DataRow(cells: [
-                            DataCell(Container(constraints: BoxConstraints(maxWidth: 27), child: Text((index + 100).toString()))),
+                            DataCell(Container(constraints: BoxConstraints(maxWidth: 40), child: Text((index + 1).toString()))),
                             DataCell(Text(data, maxLines: 2, overflow: TextOverflow.ellipsis, softWrap: true)),
                           ]);
                         }).toList(),
