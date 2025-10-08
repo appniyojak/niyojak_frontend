@@ -1038,7 +1038,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                 columns: headers
                     .map((header) => DataColumn(
                           label: Container(
-                            constraints: BoxConstraints(minWidth: 40, maxWidth: [headers[0], headers[1]].contains(header) ? 100 : 170),
+                            constraints: BoxConstraints(minWidth: 40, maxWidth: 200),
                             // constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.2),
                             child: Text(header, softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold)),
                           ),
