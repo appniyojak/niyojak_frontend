@@ -57,23 +57,19 @@ class GetVijayadashamiInitModel {
     data['Message'] = this.message;
     data['Status'] = this.status;
     if (this.vastisarsajjanshakti != null) {
-      data['Vastisarsajjanshakti'] =
-          this.vastisarsajjanshakti!.map((v) => v.toJson()).toList();
+      data['Vastisarsajjanshakti'] = this.vastisarsajjanshakti!.map((v) => v.toJson()).toList();
     }
     if (this.shakhaalist != null) {
       data['shakhaalist'] = this.shakhaalist!.map((v) => v.toJson()).toList();
     }
     if (this.upnagarmandallist != null) {
-      data['upnagarmandallist'] =
-          this.upnagarmandallist!.map((v) => v.toJson()).toList();
+      data['upnagarmandallist'] = this.upnagarmandallist!.map((v) => v.toJson()).toList();
     }
     if (this.vastimandallist != null) {
-      data['vastimandallist'] =
-          this.vastimandallist!.map((v) => v.toJson()).toList();
+      data['vastimandallist'] = this.vastimandallist!.map((v) => v.toJson()).toList();
     }
     if (this.vastisanyaprabhavi != null) {
-      data['Vastisanyaprabhavi'] =
-          this.vastisanyaprabhavi!.map((v) => v.toJson()).toList();
+      data['Vastisanyaprabhavi'] = this.vastisanyaprabhavi!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -99,6 +95,7 @@ class Vastisarsajjanshakti {
   String? shreneedhiName;
   int? shreneeid;
   int? vastiid;
+  int? nagarid;
   String? vastiname;
   int? visheshId;
   String? visheshname;
@@ -123,6 +120,7 @@ class Vastisarsajjanshakti {
       this.shreneedhiName,
       this.shreneeid,
       this.vastiid,
+      this.nagarid,
       this.vastiname,
       this.visheshId,
       this.visheshname});
@@ -147,6 +145,7 @@ class Vastisarsajjanshakti {
     shreneedhiName = json['shreneedhiName'];
     shreneeid = json['shreneeid'];
     vastiid = json['vastiid'];
+    nagarid = json['NagarID'];
     vastiname = json['vastiname'];
     visheshId = json['visheshId'];
     visheshname = json['visheshname'];
@@ -173,6 +172,7 @@ class Vastisarsajjanshakti {
     data['shreneedhiName'] = this.shreneedhiName;
     data['shreneeid'] = this.shreneeid;
     data['vastiid'] = this.vastiid;
+    data['NagarID'] = this.nagarid;
     data['vastiname'] = this.vastiname;
     data['visheshId'] = this.visheshId;
     data['visheshname'] = this.visheshname;
@@ -240,15 +240,7 @@ class UpnagarmandallistVijayaDashami {
   String? vayogatname;
   int? linkedUpaNagarID;
 
-  UpnagarmandallistVijayaDashami(
-      {this.frequencyName,
-      this.geoUnitID,
-      this.geoUnitName,
-      this.geoUnitNameHindi,
-      this.geoUnitNameMarathi,
-      this.preferedname,
-      this.vayogatname,
-      this.linkedUpaNagarID});
+  UpnagarmandallistVijayaDashami({this.frequencyName, this.geoUnitID, this.geoUnitName, this.geoUnitNameHindi, this.geoUnitNameMarathi, this.preferedname, this.vayogatname, this.linkedUpaNagarID});
 
   UpnagarmandallistVijayaDashami.fromJson(Map<String, dynamic> json) {
     frequencyName = json['FrequencyName'];
@@ -298,6 +290,7 @@ class Vastisanyaprabhavi {
   int? upshreneeId2;
   String? upshreneeName;
   int? vastiId;
+  int? nagarid;
   String? vastiName;
   int? visheshId;
   String? visheshName;
@@ -325,6 +318,7 @@ class Vastisanyaprabhavi {
       this.upshreneeId2,
       this.upshreneeName,
       this.vastiId,
+      this.nagarid,
       this.vastiName,
       this.visheshId,
       this.visheshName});
@@ -352,6 +346,7 @@ class Vastisanyaprabhavi {
     upshreneeId2 = json['UpshreneeId2'];
     upshreneeName = json['UpshreneeName'];
     vastiId = json['VastiId'];
+    nagarid = json['NagarID'];
     vastiName = json['VastiName'];
     visheshId = json['VisheshId'];
     visheshName = json['VisheshName'];
@@ -381,6 +376,7 @@ class Vastisanyaprabhavi {
     data['UpshreneeId2'] = this.upshreneeId2;
     data['UpshreneeName'] = this.upshreneeName;
     data['VastiId'] = this.vastiId;
+    data['NagarID'] = this.nagarid;
     data['VastiName'] = this.vastiName;
     data['VisheshId'] = this.visheshId;
     data['VisheshName'] = this.visheshName;

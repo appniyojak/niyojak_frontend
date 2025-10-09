@@ -76,6 +76,11 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
 
   List<int?> selectedUpnagarList = [];
 
+  Vastisarsajjanshakti? selectedPerson;
+  Vastisanyaprabhavi? selectedPrabhavi;
+  List<Vastisarsajjanshakti> selectedSajjanshaktiItems = [];
+  List<Vastisanyaprabhavi> selectedAnyaprabhaviItems = [];
+
   @override
   void initState() {
     super.initState();
@@ -581,8 +586,6 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     setState(() {});
   }
 
-  Vastisarsajjanshakti? selectedPerson;
-  Vastisanyaprabhavi? selectedPrabhavi;
   String? selectedType;
   int? selectedMukhyaAtithi;
 
@@ -930,8 +933,6 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     );
   }
 
-  List<Vastisarsajjanshakti> selectedSajjanshaktiItems = [];
-  List<Vastisanyaprabhavi> selectedAnyaprabhaviItems = [];
   String? selectedSajjanshaktiItemsIds;
   String? selectedAnyaprabhaviItemsIds;
 
@@ -1446,7 +1447,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     ) onSubmit,
   }) async {
     List<UpnagarmandallistVijayaDashami> selectedItems = List.from(preselectedItems ?? []);
-
+    print((vastiList.length));
     await showDialog(
       context: context,
       builder: (context) {
@@ -5656,18 +5657,18 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       selectedSajjanshaktiItemsIds = utsav.visititAtithiSajjanShaktiids;
       // Sajjan Shakti
       if (selectedSajjanshaktiItemsIds != null && selectedSajjanshaktiItemsIds!.isNotEmpty && data?.vastisarsajjanshakti != null) {
-        final idSet = selectedSajjanshaktiItemsIds!.split(",").map((e) => e.trim()).where((e) => e.isNotEmpty).toSet(); // remove duplicates
+        // final idSet = selectedSajjanshaktiItemsIds!.split(",").map((e) => e.trim()).where((e) => e.isNotEmpty).toSet(); // remove duplicates
 
-        selectedSajjanshaktiItems = data!.vastisarsajjanshakti!.where((item) => idSet.contains(item.pkid.toString())).toList();
+        selectedSajjanshaktiItems = getVijayaDashamiUtsavDataByGeounitData?.visititAtithiVastisarsajjanshakti ?? [];
       } else {
         selectedSajjanshaktiItems = [];
       }
       selectedAnyaprabhaviItemsIds = utsav.visititAtithiAnyaprabhaViLokamids;
       // Anya Prabhavi
       if (selectedAnyaprabhaviItemsIds != null && selectedAnyaprabhaviItemsIds!.isNotEmpty && data?.vastisanyaprabhavi != null) {
-        final idSet = selectedAnyaprabhaviItemsIds!.split(",").map((e) => e.trim()).where((e) => e.isNotEmpty).toSet();
+        // final idSet = selectedAnyaprabhaviItemsIds!.split(",").map((e) => e.trim()).where((e) => e.isNotEmpty).toSet();
 
-        selectedAnyaprabhaviItems = data!.vastisanyaprabhavi!.where((item) => idSet.contains(item.pkId.toString())).toList();
+        selectedAnyaprabhaviItems = getVijayaDashamiUtsavDataByGeounitData?.visititAtithiVastisarAnyaprabhavilokam ?? [];
       } else {
         selectedAnyaprabhaviItems = [];
       }
@@ -5676,14 +5677,16 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       selectedType = utsav.mukhyaAtithiIsSajjanShakti == 1 ? "sarsajjanshakti" : "anyaprabhavi";
 
       if (selectedType == "sarsajjanshakti") {
-        selectedPerson = (data?.vastisarsajjanshakti ?? []).firstWhere(
-          (e) => e.pkid == selectedMukhyaAtithi,
-        );
+        selectedPerson = getVijayaDashamiUtsavDataByGeounitData?.mukhyaAtithiVastisarsajjanshakti?.first;
+        // selectedPerson = (data?.vastisarsajjanshakti ?? []).firstWhere(
+        //   (e) => e.pkid == selectedMukhyaAtithi,
+        // );
         selectedPrabhavi = null;
       } else {
-        selectedPrabhavi = (data?.vastisanyaprabhavi ?? []).where((e) => e.pkId == selectedMukhyaAtithi).toList().isNotEmpty
-            ? (data?.vastisanyaprabhavi ?? []).firstWhere((e) => e.pkId == selectedMukhyaAtithi)
-            : null;
+        selectedPrabhavi = getVijayaDashamiUtsavDataByGeounitData?.mukhyaAtithiVastisarAnyaprabhavilokam?.first;
+        // selectedPrabhavi = (data?.vastisanyaprabhavi ?? []).where((e) => e.pkId == selectedMukhyaAtithi).toList().isNotEmpty
+        //     ? (data?.vastisanyaprabhavi ?? []).firstWhere((e) => e.pkId == selectedMukhyaAtithi)
+        //     : null;
 
         selectedPerson = null;
       }

@@ -1,3 +1,7 @@
+import 'package:niyojak_prod/models/response_model/vijayaDashamiInitModel.dart';
+
+// import 'get_vasti_data_by_id_model.dart';
+
 class GetVijayadashamiDataByGeoUnitModel {
   String? message;
   String? status;
@@ -6,7 +10,23 @@ class GetVijayadashamiDataByGeoUnitModel {
   List<TypeValueData>? urldata;
   VijayadashamiUtsav? vijayadashamiUtsav;
 
-  GetVijayadashamiDataByGeoUnitModel({this.message, this.status, this.adddata, this.eventdata, this.urldata, this.vijayadashamiUtsav});
+  List<Vastisanyaprabhavi>? mukhyaAtithiVastisarAnyaprabhavilokam;
+  List<Vastisarsajjanshakti>? mukhyaAtithiVastisarsajjanshakti;
+  List<Vastisanyaprabhavi>? visititAtithiVastisarAnyaprabhavilokam;
+  List<Vastisarsajjanshakti>? visititAtithiVastisarsajjanshakti;
+
+  GetVijayadashamiDataByGeoUnitModel({
+    this.message,
+    this.status,
+    this.adddata,
+    this.eventdata,
+    this.urldata,
+    this.vijayadashamiUtsav,
+    this.mukhyaAtithiVastisarAnyaprabhavilokam,
+    this.mukhyaAtithiVastisarsajjanshakti,
+    this.visititAtithiVastisarAnyaprabhavilokam,
+    this.visititAtithiVastisarsajjanshakti,
+  });
 
   GetVijayadashamiDataByGeoUnitModel.fromJson(Map<String, dynamic> json) {
     message = json['Message'];
@@ -30,6 +50,31 @@ class GetVijayadashamiDataByGeoUnitModel {
       });
     }
     vijayadashamiUtsav = json['VijayadashamiUtsav'] != null ? new VijayadashamiUtsav.fromJson(json['VijayadashamiUtsav']) : null;
+
+    if (json['mukhya_atithi_VastisarAnyaprabhavilokam'] != null) {
+      mukhyaAtithiVastisarAnyaprabhavilokam = <Vastisanyaprabhavi>[];
+      json['urldata'].forEach((v) {
+        mukhyaAtithiVastisarAnyaprabhavilokam!.add(new Vastisanyaprabhavi.fromJson(v));
+      });
+    }
+    if (json['mukhya_atithi_Vastisarsajjanshakti'] != null) {
+      mukhyaAtithiVastisarsajjanshakti = <Vastisarsajjanshakti>[];
+      json['mukhya_atithi_Vastisarsajjanshakti'].forEach((v) {
+        mukhyaAtithiVastisarsajjanshakti!.add(new Vastisarsajjanshakti.fromJson(v));
+      });
+    }
+    if (json['visitit_atithi_VastisarAnyaprabhavilokam'] != null) {
+      visititAtithiVastisarAnyaprabhavilokam = <Vastisanyaprabhavi>[];
+      json['visitit_atithi_VastisarAnyaprabhavilokam'].forEach((v) {
+        visititAtithiVastisarAnyaprabhavilokam!.add(new Vastisanyaprabhavi.fromJson(v));
+      });
+    }
+    if (json['visitit_atithi_Vastisarsajjanshakti'] != null) {
+      visititAtithiVastisarsajjanshakti = <Vastisarsajjanshakti>[];
+      json['visitit_atithi_Vastisarsajjanshakti'].forEach((v) {
+        visititAtithiVastisarsajjanshakti!.add(new Vastisarsajjanshakti.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -47,6 +92,18 @@ class GetVijayadashamiDataByGeoUnitModel {
     }
     if (this.vijayadashamiUtsav != null) {
       data['VijayadashamiUtsav'] = this.vijayadashamiUtsav!.toJson();
+    }
+    if (this.mukhyaAtithiVastisarAnyaprabhavilokam != null) {
+      data['mukhya_atithi_VastisarAnyaprabhavilokam'] = this.mukhyaAtithiVastisarAnyaprabhavilokam!.map((v) => v.toJson()).toList();
+    }
+    if (this.mukhyaAtithiVastisarsajjanshakti != null) {
+      data['mukhya_atithi_Vastisarsajjanshakti'] = this.mukhyaAtithiVastisarsajjanshakti!.map((v) => v.toJson()).toList();
+    }
+    if (this.visititAtithiVastisarAnyaprabhavilokam != null) {
+      data['visitit_atithi_VastisarAnyaprabhavilokam'] = this.visititAtithiVastisarAnyaprabhavilokam!.map((v) => v.toJson()).toList();
+    }
+    if (this.visititAtithiVastisarsajjanshakti != null) {
+      data['visitit_atithi_Vastisarsajjanshakti'] = this.visititAtithiVastisarsajjanshakti!.map((v) => v.toJson()).toList();
     }
     return data;
   }
