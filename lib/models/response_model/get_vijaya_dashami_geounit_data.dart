@@ -53,27 +53,35 @@ class GetVijayadashamiDataByGeoUnitModel {
 
     if (json['mukhya_atithi_VastisarAnyaprabhavilokam'] != null) {
       mukhyaAtithiVastisarAnyaprabhavilokam = <Vastisanyaprabhavi>[];
-      json['urldata'].forEach((v) {
-        mukhyaAtithiVastisarAnyaprabhavilokam!.add(new Vastisanyaprabhavi.fromJson(v));
-      });
+      if (json['mukhya_atithi_VastisarAnyaprabhavilokam'] != []) {
+        json['mukhya_atithi_VastisarAnyaprabhavilokam'].forEach((v) {
+          mukhyaAtithiVastisarAnyaprabhavilokam!.add(new Vastisanyaprabhavi.fromJson(v));
+        });
+      }
     }
     if (json['mukhya_atithi_Vastisarsajjanshakti'] != null) {
       mukhyaAtithiVastisarsajjanshakti = <Vastisarsajjanshakti>[];
-      json['mukhya_atithi_Vastisarsajjanshakti'].forEach((v) {
-        mukhyaAtithiVastisarsajjanshakti!.add(new Vastisarsajjanshakti.fromJson(v));
-      });
+      if (json['mukhya_atithi_Vastisarsajjanshakti'] != []) {
+        json['mukhya_atithi_Vastisarsajjanshakti'].forEach((v) {
+          mukhyaAtithiVastisarsajjanshakti!.add(new Vastisarsajjanshakti.fromJson(v));
+        });
+      }
     }
     if (json['visitit_atithi_VastisarAnyaprabhavilokam'] != null) {
       visititAtithiVastisarAnyaprabhavilokam = <Vastisanyaprabhavi>[];
-      json['visitit_atithi_VastisarAnyaprabhavilokam'].forEach((v) {
-        visititAtithiVastisarAnyaprabhavilokam!.add(new Vastisanyaprabhavi.fromJson(v));
-      });
+      if (json['visitit_atithi_VastisarAnyaprabhavilokam'] != []) {
+        json['visitit_atithi_VastisarAnyaprabhavilokam'].forEach((v) {
+          visititAtithiVastisarAnyaprabhavilokam!.add(new Vastisanyaprabhavi.fromJson(v));
+        });
+      }
     }
     if (json['visitit_atithi_Vastisarsajjanshakti'] != null) {
       visititAtithiVastisarsajjanshakti = <Vastisarsajjanshakti>[];
-      json['visitit_atithi_Vastisarsajjanshakti'].forEach((v) {
-        visititAtithiVastisarsajjanshakti!.add(new Vastisarsajjanshakti.fromJson(v));
-      });
+      if (json['visitit_atithi_Vastisarsajjanshakti'] != []) {
+        json['visitit_atithi_Vastisarsajjanshakti'].forEach((v) {
+          visititAtithiVastisarsajjanshakti!.add(new Vastisarsajjanshakti.fromJson(v));
+        });
+      }
     }
   }
 

@@ -389,12 +389,12 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
   String? selctedSanchalanLevelId = '';
   String? selctedSanchalanLevelName = '';
 
-  int? programNirdharitVed = 2;
-  int? vaiyaktikGitKantashtha = 2;
-  int? programHishobh24Hour = 2;
-  int? sanchalanZaleKa = 2;
-  int? sanchalanSadandaZalKa = 2;
-  int? sanchalanGhoshVadanZalKa = 2;
+  int? programNirdharitVed;
+  int? vaiyaktikGitKantashtha;
+  int? programHishobh24Hour;
+  int? sanchalanZaleKa;
+  int? sanchalanSadandaZalKa;
+  int? sanchalanGhoshVadanZalKa;
 
   final TextEditingController presentMaleController = TextEditingController();
   final TextEditingController presentMatrushaktiController = TextEditingController();
@@ -667,21 +667,23 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                     },
                   ),
                   SizedBox(height: 6),
-                  OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    ),
-                    onPressed: onAdd,
-                    child: Text(
-                      Statics.getLabel('fillNewRecord'),
-                      style: const TextStyle(color: Colors.purpleAccent),
-                    ),
-                  ),
+                  Align(
+                      alignment: Alignment.centerRight,
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        ),
+                        onPressed: onAdd,
+                        child: Text(
+                          Statics.getLabel('fillNewRecord'),
+                          style: const TextStyle(color: Colors.purpleAccent),
+                        ),
+                      )),
                 ],
               ),
               content: Container(
@@ -1117,6 +1119,23 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                       },
                     ),
                     SizedBox(height: 6),
+                    Align(
+                        alignment: Alignment.centerRight,
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                          ),
+                          onPressed: onAdd,
+                          child: Text(
+                            Statics.getLabel('fillNewRecord'),
+                            style: const TextStyle(color: Colors.purpleAccent),
+                          ),
+                        )),
+                    SizedBox(height: 6),
 
                     Expanded(
                       child: SingleChildScrollView(
@@ -1142,14 +1161,14 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                                     decoration: BoxDecoration(
                                       color: Colors.blue.shade50,
                                     ),
-                                    children: const [
+                                    children: [
                                       Padding(
                                         padding: EdgeInsets.all(8),
                                         child: Text("✔", style: TextStyle(fontWeight: FontWeight.bold)),
                                       ),
                                       Padding(
                                         padding: EdgeInsets.all(8),
-                                        child: Text("Naam", style: TextStyle(fontWeight: FontWeight.bold)),
+                                        child: Text(Statics.getLabel("Name"), style: TextStyle(fontWeight: FontWeight.bold)),
                                       ),
                                     ],
                                   ),
@@ -1220,14 +1239,14 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                                     decoration: BoxDecoration(
                                       color: Colors.blue.shade50,
                                     ),
-                                    children: const [
+                                    children: [
                                       Padding(
                                         padding: EdgeInsets.all(8),
                                         child: Text("✔", style: TextStyle(fontWeight: FontWeight.bold)),
                                       ),
                                       Padding(
                                         padding: EdgeInsets.all(8),
-                                        child: Text("Naam", style: TextStyle(fontWeight: FontWeight.bold)),
+                                        child: Text(Statics.getLabel("Name"), style: TextStyle(fontWeight: FontWeight.bold)),
                                       ),
                                     ],
                                   ),
@@ -1402,23 +1421,6 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                             ),
                           ),
                         ),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                          ),
-                          onPressed: onAdd,
-                          child: Text(
-                            Statics.getLabel('addVIshishthaAtithi'),
-                            style: const TextStyle(color: Colors.purpleAccent),
-                          ),
-                        ),
                       ],
                     )
                   ],
@@ -1471,7 +1473,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "${Statics.getLabel('addVasti')}",
+                          "${Statics.getLabel('addVastiGram')}",
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
@@ -1485,7 +1487,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                     ),
                     const Divider(),
                     Text(
-                      "${Statics.getLabel('totalVasti')}: ${vastiList.length}",
+                      "${Statics.getLabel('totalVastiGram')}: ${vastiList.length}",
                       style: const TextStyle(fontSize: 14, color: Colors.grey),
                     ),
                     Text(
@@ -1637,7 +1639,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        labelText: "Vayogat",
+                        labelText: Statics.getLabel("Vayogat"),
                       ),
                       value: selectedVayogat,
                       items: vayogatOptions.map((v) {
@@ -1696,14 +1698,14 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                                 decoration: BoxDecoration(
                                   color: Colors.blue.shade50,
                                 ),
-                                children: const [
+                                children: [
                                   Padding(
                                     padding: EdgeInsets.all(8),
                                     child: Text("✔", style: TextStyle(fontWeight: FontWeight.bold)),
                                   ),
                                   Padding(
                                     padding: EdgeInsets.all(8),
-                                    child: Text("Naam", style: TextStyle(fontWeight: FontWeight.bold)),
+                                    child: Text(Statics.getLabel("Name"), style: TextStyle(fontWeight: FontWeight.bold)),
                                   ),
                                 ],
                               ),
@@ -1852,7 +1854,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        labelText: "Vayogat",
+                        labelText: Statics.getLabel("Vayogat"),
                       ),
                       value: selectedVayogat,
                       items: vayogatOptions.map((v) {
@@ -1911,14 +1913,14 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                                 decoration: BoxDecoration(
                                   color: Colors.blue.shade50,
                                 ),
-                                children: const [
+                                children: [
                                   Padding(
                                     padding: EdgeInsets.all(8),
                                     child: Text("✔", style: TextStyle(fontWeight: FontWeight.bold)),
                                   ),
                                   Padding(
                                     padding: EdgeInsets.all(8),
-                                    child: Text("Naam", style: TextStyle(fontWeight: FontWeight.bold)),
+                                    child: Text(Statics.getLabel("Name"), style: TextStyle(fontWeight: FontWeight.bold)),
                                   ),
                                 ],
                               ),
@@ -2067,7 +2069,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        labelText: "Vayogat",
+                        labelText: Statics.getLabel("Vayogat"),
                       ),
                       value: selectedVayogat,
                       items: vayogatOptions.map((v) {
@@ -2126,14 +2128,14 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                                 decoration: BoxDecoration(
                                   color: Colors.blue.shade50,
                                 ),
-                                children: const [
+                                children: [
                                   Padding(
                                     padding: EdgeInsets.all(8),
                                     child: Text("✔", style: TextStyle(fontWeight: FontWeight.bold)),
                                   ),
                                   Padding(
                                     padding: EdgeInsets.all(8),
-                                    child: Text("Naam", style: TextStyle(fontWeight: FontWeight.bold)),
+                                    child: Text(Statics.getLabel("Name"), style: TextStyle(fontWeight: FontWeight.bold)),
                                   ),
                                 ],
                               ),
@@ -2465,6 +2467,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                   yesNoRadioButton(
                     question: "${Statics.getLabel('ProgramNirdharitTime')}",
                     selectedOption: programNirdharitVed ?? 2,
+                    imp: " *",
                     onChanged: (value) {
                       setState(() {
                         programNirdharitVed = value;
@@ -2474,6 +2477,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                   yesNoRadioButton(
                     question: "${Statics.getLabel('vaiyaktikGitKantashtha')}",
                     selectedOption: vaiyaktikGitKantashtha ?? 2,
+                    imp: " *",
                     onChanged: (value) {
                       setState(() {
                         vaiyaktikGitKantashtha = value;
@@ -2483,6 +2487,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                   yesNoRadioButton(
                     question: "${Statics.getLabel('programHishobh24Hour')}",
                     selectedOption: programHishobh24Hour ?? 2,
+                    imp: " *",
                     onChanged: (value) {
                       setState(() {
                         programHishobh24Hour = value;
@@ -3008,7 +3013,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                           decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), borderRadius: BorderRadius.circular(15)),
                           child: Center(
                             child: Text(
-                              "${Statics.getLabel('addVasti')}",
+                              "${Statics.getLabel('addVastiGram')}",
                               style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold),
                             ),
                           ),
@@ -3020,7 +3025,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                     height: 10,
                   ),
                   SingleColumnRow(
-                    txtString: "${Statics.getLabel('Total')} ${Statics.getLabel('Vasti')} / ${Statics.getLabel('Mandal')}",
+                    txtString: "${Statics.getLabel('Total')} ${Statics.getLabel('VastiGram')}",
                     value: (data?.vastimandallist ?? []).length.toString(),
                   ),
                   SingleColumnRow(
@@ -3408,6 +3413,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                   yesNoRadioButton(
                     question: "${Statics.getLabel('sanchalanZaleKa')}",
                     selectedOption: sanchalanZaleKa ?? 2,
+                    imp: " *",
                     onChanged: (value) {
                       setState(() {
                         sanchalanZaleKa = value;
@@ -3417,6 +3423,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                   yesNoRadioButton(
                     question: Statics.getLabel('sanchalanSadandaZalKa'),
                     selectedOption: sanchalanSadandaZalKa ?? 2,
+                    imp: " *",
                     onChanged: (value) {
                       setState(() {
                         sanchalanSadandaZalKa = value;
@@ -3426,6 +3433,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                   yesNoRadioButton(
                     question: Statics.getLabel('sanchalanGhoshVadanZalKa'),
                     selectedOption: sanchalanGhoshVadanZalKa ?? 2,
+                    imp: " *",
                     onChanged: (value) {
                       setState(() {
                         sanchalanGhoshVadanZalKa = value;
@@ -3482,6 +3490,15 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                 onPressed: () {
                   if (_isSearching == false) {
                     Fluttertoast.showToast(msg: "${Statics.getLabel('NagarSelectionImportant')}");
+                    return;
+                  }
+                  if ([null, 2].contains(programNirdharitVed) ||
+                      [null, 2].contains(vaiyaktikGitKantashtha) ||
+                      [null, 2].contains(programHishobh24Hour) ||
+                      [null, 2].contains(sanchalanZaleKa) ||
+                      [null, 2].contains(sanchalanSadandaZalKa) ||
+                      [null, 2].contains(sanchalanGhoshVadanZalKa)) {
+                    Fluttertoast.showToast(msg: "${Statics.getLabel('impInfoRequired')}");
                     return;
                   }
                   submitForm();
@@ -5677,13 +5694,17 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       selectedType = utsav.mukhyaAtithiIsSajjanShakti == 1 ? "sarsajjanshakti" : "anyaprabhavi";
 
       if (selectedType == "sarsajjanshakti") {
-        selectedPerson = getVijayaDashamiUtsavDataByGeounitData?.mukhyaAtithiVastisarsajjanshakti?.first;
+        if (getVijayaDashamiUtsavDataByGeounitData?.mukhyaAtithiVastisarsajjanshakti != []) {
+          selectedPerson = getVijayaDashamiUtsavDataByGeounitData?.mukhyaAtithiVastisarsajjanshakti?.first;
+        }
         // selectedPerson = (data?.vastisarsajjanshakti ?? []).firstWhere(
         //   (e) => e.pkid == selectedMukhyaAtithi,
         // );
         selectedPrabhavi = null;
       } else {
-        selectedPrabhavi = getVijayaDashamiUtsavDataByGeounitData?.mukhyaAtithiVastisarAnyaprabhavilokam?.first;
+        if (getVijayaDashamiUtsavDataByGeounitData?.mukhyaAtithiVastisarAnyaprabhavilokam != []) {
+          selectedPrabhavi = getVijayaDashamiUtsavDataByGeounitData?.mukhyaAtithiVastisarAnyaprabhavilokam?.first;
+        }
         // selectedPrabhavi = (data?.vastisanyaprabhavi ?? []).where((e) => e.pkId == selectedMukhyaAtithi).toList().isNotEmpty
         //     ? (data?.vastisanyaprabhavi ?? []).firstWhere((e) => e.pkId == selectedMukhyaAtithi)
         //     : null;

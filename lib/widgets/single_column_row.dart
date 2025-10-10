@@ -13,6 +13,7 @@ class SingleColumnRow extends StatelessWidget {
   VoidCallback? btnAction;
   Widget? subChild;
   bool showDivider;
+  EdgeInsetsGeometry? padding;
   EdgeInsetsGeometry? subChildPadding;
   EdgeInsetsGeometry? subChildMargin;
 
@@ -27,6 +28,7 @@ class SingleColumnRow extends StatelessWidget {
     this.btnAction,
     this.subChild,
     this.showDivider = true,
+    this.padding,
     this.subChildPadding,
     this.subChildMargin,
   }) : super(key: key);
@@ -37,7 +39,7 @@ class SingleColumnRow extends StatelessWidget {
       children: [
         Container(
           decoration: BoxDecoration(color: rowColor),
-          padding: EdgeInsets.symmetric(vertical: 8),
+          padding: padding ?? EdgeInsets.symmetric(vertical: 8),
           // color: Colors.red,
           child: Center(
             child: SizedBox(

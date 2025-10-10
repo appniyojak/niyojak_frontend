@@ -469,6 +469,10 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                           ),
                         ]),
                         SizedBox(height: 8),
+                        // SizedBox(width: MediaQuery
+                        //     .sizeOf(context)
+                        //     .width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+                        // SizedBox(height: 8),
                         Row(children: [
                           Expanded(child: Text(Statics.getLabel('presentGanveshatTotal'))),
                           Container(
@@ -490,6 +494,16 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                           Container(
                             margin: EdgeInsets.only(left: 8),
                             child: Text((data.ekunupastiti ?? 0).toString()),
+                          ),
+                        ]),
+                        SizedBox(height: 6),
+                        SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+                        SizedBox(height: 6),
+                        Row(children: [
+                          Expanded(child: Text(Statics.getLabel('presentTotal') + " " + Statics.getLabel('searchSwayamsevakScreenLabel'))),
+                          Container(
+                            margin: EdgeInsets.only(left: 8),
+                            child: Text(((data.ekungan ?? 0) + (data.ekunupastiti ?? 0)).toString()),
                           ),
                         ]),
                       ],
@@ -524,6 +538,16 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                           Container(
                             margin: EdgeInsets.only(left: 8),
                             child: Text((data.vartamansanghmandalipratinidhatva ?? 0).toString()),
+                          ),
+                        ]),
+                        SizedBox(height: 6),
+                        SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+                        SizedBox(height: 6),
+                        Row(children: [
+                          Expanded(child: Text(Statics.getLabel('Total') + " " + Statics.getLabel('pratinidhitva'))),
+                          Container(
+                            margin: EdgeInsets.only(left: 8),
+                            child: Text(((data.vartamansaakhapratinidhatva ?? 0) + (data.vartamansapthahikpratinidhatva ?? 0) + (data.vartamansanghmandalipratinidhatva ?? 0)).toString()),
                           ),
                         ]),
                       ],
@@ -917,104 +941,107 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
           surfaceTintColor: Colors.transparent,
           child: ExpansionTile(
-              tilePadding: EdgeInsets.only(right: 16),
+              tilePadding: EdgeInsets.only(right: 16, left: 16),
               childrenPadding: EdgeInsets.zero,
-              collapsedBackgroundColor: Colors.purple.shade50,
-              backgroundColor: Colors.purple.shade50,
+              collapsedBackgroundColor: Colors.yellow.shade100,
+              backgroundColor: Colors.yellow.shade100,
               initiallyExpanded: true,
               shape: RoundedRectangleBorder(side: BorderSide.none),
-              title: ListTile(
-                // tileColor: Colors.purple.shade50,
-                title: Text(
-                  Statics.getLabel("anyaUpstithSummary"),
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.purpleAccent.shade700,
-                  ),
+              title: Text(
+                Statics.getLabel("anyaUpstithSummary"),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueAccent.shade700,
                 ),
               ),
               children: [
                 Container(
                   color: Colors.white,
                   padding: const EdgeInsets.only(left: 18.0, right: 18.0, bottom: 8.0, top: 12),
-                  child: Column(
-                    children: [
-                      Row(children: [
-                        Expanded(child: Text(Statics.getLabel('Male'))),
-                        Container(
-                          margin: EdgeInsets.only(left: 8),
-                          child: Text((data.ekunmale ?? 0).toString()),
+                  child: Container(
+                    decoration: BoxDecoration(border: Border.all(color: Colors.grey.shade800)),
+                    padding: EdgeInsets.all(12),
+                    child: Column(
+                      children: [
+                        Row(children: [
+                          Expanded(child: Text(Statics.getLabel('Male'))),
+                          Container(
+                            margin: EdgeInsets.only(left: 8),
+                            child: Text((data.ekunmale ?? 0).toString()),
+                          ),
+                        ]),
+                        SizedBox(height: 8),
+                        Row(children: [
+                          Expanded(child: Text(Statics.getLabel('Female'))),
+                          Container(
+                            margin: EdgeInsets.only(left: 8),
+                            child: Text((data.ekunfemale ?? 0).toString()),
+                          ),
+                        ]),
+                        SizedBox(height: 6),
+                        SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+                        SizedBox(height: 6),
+                        Row(children: [
+                          Expanded(child: Text(Statics.getLabel('presentTotalMaleFemale2'))),
+                          Container(
+                            margin: EdgeInsets.only(left: 8),
+                            child: Text((data.ekumalenfemale ?? 0).toString()),
+                          ),
+                        ]),
+                        SizedBox(height: 6),
+                        SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+                        SizedBox(height: 6),
+                        //
+                        // SingleColumnRow(
+                        //   txtString: "${Statics.getLabel('presentTotalMaleFemale')} ",
+                        //   value: data.ekumalenfemale.toString(),
+                        // ),
+                        //
+                        Row(children: [
+                          Expanded(child: Text(Statics.getLabel('presentGanveshatTotal'))),
+                          Container(
+                            margin: EdgeInsets.only(left: 8),
+                            child: Text((data.ekunganvash ?? 0).toString()),
+                          ),
+                        ]),
+                        SizedBox(height: 8),
+                        // SingleColumnRow(
+                        //   txtString: "${Statics.getLabel('presentGanveshatTotal')} ",
+                        //   value: data.ekunganvash.toString(),
+                        // ),
+                        //
+                        Row(children: [
+                          Expanded(child: Text(Statics.getLabel('otherSwayamsewakPresentCount'))),
+                          Container(
+                            margin: EdgeInsets.only(left: 8),
+                            child: Text((data.ekunanya ?? 0).toString()),
+                          ),
+                        ]),
+                        SizedBox(height: 8),
+                        // SingleColumnRow(
+                        //   txtString: "${Statics.getLabel('otherSwayamsewakPresentCount')} ",
+                        //   value: data.ekunanya.toString(),
+                        // ),
+                        //
+                        // SingleColumnRow(
+                        //   txtString: "${Statics.getLabel('presentSamajik')} ",
+                        //   value: "${totalShakhaCount + totalMilanCount + totalSanghaMandaliCount}",
+                        // ),
+                        // ✅ Total
+                        SingleColumnRow(
+                          padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                          rowColor: Colors.purple.shade50,
+                          txtString: "${Statics.getLabel('presentAllTotal')} ",
+                          value: data.ekunupastitisummary.toString(),
+                          fontWeight: FontWeight.bold,
                         ),
-                      ]),
-                      SizedBox(height: 8),
-                      Row(children: [
-                        Expanded(child: Text(Statics.getLabel('Female'))),
-                        Container(
-                          margin: EdgeInsets.only(left: 8),
-                          child: Text((data.ekunfemale ?? 0).toString()),
-                        ),
-                      ]),
-                      SizedBox(height: 6),
-                      SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
-                      SizedBox(height: 6),
-                      Row(children: [
-                        Expanded(child: Text(Statics.getLabel('presentTotalMaleFemale2'))),
-                        Container(
-                          margin: EdgeInsets.only(left: 8),
-                          child: Text((data.ekumalenfemale ?? 0).toString()),
-                        ),
-                      ]),
-                      SizedBox(height: 6),
-                      SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
-                      SizedBox(height: 6),
-                      //
-                      // SingleColumnRow(
-                      //   txtString: "${Statics.getLabel('presentTotalMaleFemale')} ",
-                      //   value: data.ekumalenfemale.toString(),
-                      // ),
-                      //
-                      Row(children: [
-                        Expanded(child: Text(Statics.getLabel('presentGanveshatTotal'))),
-                        Container(
-                          margin: EdgeInsets.only(left: 8),
-                          child: Text((data.ekunganvash ?? 0).toString()),
-                        ),
-                      ]),
-                      SizedBox(height: 8),
-                      // SingleColumnRow(
-                      //   txtString: "${Statics.getLabel('presentGanveshatTotal')} ",
-                      //   value: data.ekunganvash.toString(),
-                      // ),
-                      //
-                      Row(children: [
-                        Expanded(child: Text(Statics.getLabel('otherSwayamsewakPresentCount'))),
-                        Container(
-                          margin: EdgeInsets.only(left: 8),
-                          child: Text((data.ekunanya ?? 0).toString()),
-                        ),
-                      ]),
-                      SizedBox(height: 8),
-                      // SingleColumnRow(
-                      //   txtString: "${Statics.getLabel('otherSwayamsewakPresentCount')} ",
-                      //   value: data.ekunanya.toString(),
-                      // ),
-                      //
-                      // SingleColumnRow(
-                      //   txtString: "${Statics.getLabel('presentSamajik')} ",
-                      //   value: "${totalShakhaCount + totalMilanCount + totalSanghaMandaliCount}",
-                      // ),
-                      // ✅ Total
-                      SingleColumnRow(
-                        rowColor: Colors.grey.shade300,
-                        txtString: "${Statics.getLabel('presentAllTotal')} ",
-                        value: data.ekunupastitisummary.toString(),
-                      ),
-                      // const SizedBox(height: 10),
-                      // Text(
-                      //   "${Statics.getLabel('Total')} : $total",
-                      //   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                      // ),
-                    ],
+                        // const SizedBox(height: 10),
+                        // Text(
+                        //   "${Statics.getLabel('Total')} : $total",
+                        //   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        // ),
+                      ],
+                    ),
                   ),
                 ),
               ]),
