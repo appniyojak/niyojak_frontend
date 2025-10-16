@@ -1,11 +1,17 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:excel/excel.dart' as exc;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:niyojak_prod/widgets/single_column_row.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path_provider/path_provider.dart';
 
+import '../../../assets/report_excel.dart';
 import '../../../helpers/static_data.dart' as Statics;
+import '../../../helpers/static_data.dart';
 import '../../../models/response_model/get_vijayadashmi_report_resp_model.dart';
 import '../../../providers/bals.dart';
 import '../../../utils/cust_painters.dart';
@@ -17,6 +23,22 @@ class VijayadashamiFormReport extends StatefulWidget {
 
   @override
   State<VijayadashamiFormReport> createState() => _VijayadashamiFormReportState();
+}
+
+/// Layout helpers
+class _Section {
+  final String jsonKey;
+  final String title;
+  final List<_Subcol> columns;
+
+  _Section({required this.jsonKey, required this.title, required this.columns});
+}
+
+class _Subcol {
+  final String header;
+  final String dataKey;
+
+  _Subcol({required this.header, required this.dataKey});
 }
 
 class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
@@ -60,6 +82,417 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
   void initState() {
     super.initState();
     populateDropdown();
+  }
+
+  // Future<void> exportToExcel() async {
+  //   var excel = Excel.createExcel();
+  //   final sheet = excel['Sheet1'];
+  //   sheet.appendRow(['Index', 'Title', 'Mahanagar', 'Vibhag', 'Bhaag', 'Nagar', 'Vasti', 'Gram', 'Mandal']);
+  //
+  //   int rowIndex = 1;
+  //   for (var entry in groupedData.entries) {
+  //     final items = entry.value;
+  //     for (var item in items) {
+  //       final row = [
+  //         rowIndex++,
+  //         item.title ?? '-',
+  //         item.mahanagar ?? '-',
+  //         item.vibhag ?? '-',
+  //         item.bhaag ?? '-',
+  //         item.nagar ?? '-',
+  //         item.vasti ?? '-',
+  //         item.gram ?? '-',
+  //         item.mandal ?? '-',
+  //       ];
+  //       // print("Adding Row: $row");
+  //       sheet.appendRow(row);
+  //     }
+  //   }
+  //
+  //   try {
+  //     final directory = await getApplicationDocumentsDirectory();
+  //     final path = '${directory.path}/VijayadashamiReport.xlsx';
+  //     final file = File(path)
+  //       ..createSync(recursive: true)
+  //       ..writeAsBytesSync(excel.encode()!);
+  //
+  //     await OpenFilex.open(path);
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('Excel file saved and opened successfully: $path')),
+  //     );
+  //   } catch (e) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('Failed to export file: $e')),
+  //     );
+  //   }
+  // }
+
+  void downloadExcel() async {
+    // setState(() {
+    //   _isLoading = true;
+    // });
+    showLoaderDialog(context);
+    final List<Map<String, int>> sectionRanges = [];
+
+    final List<dynamic> rows = (reportExcel['data'] as List?) ?? [];
+    if (rows.isEmpty) {
+      throw ArgumentError('No data found in apiJson["data"].');
+    }
+
+    const String nameKey = 'nagarupnagarName';
+    final first = rows.first as Map<String, dynamic>;
+
+    // ----- Build layout from first item (keeps JSON order)
+    final List<_Section> layout = [];
+    for (final entry in first.entries) {
+      final key = entry.key;
+      final value = entry.value;
+
+      if (key == nameKey) continue;
+      if (value is Map && value.containsKey('mainheader')) {
+        final String mainHeader = (value['mainheader'] ?? key).toString();
+        final List<_Subcol> subcols = [];
+        for (final subEntry in value.entries) {
+          final skey = subEntry.key;
+          if (skey == 'mainheader') continue;
+          if (skey.endsWith('header')) {
+            final display = subEntry.value?.toString() ?? skey;
+            final dataKey = skey.substring(0, skey.length - 'header'.length);
+            subcols.add(_Subcol(header: display, dataKey: dataKey));
+          }
+        }
+        layout.add(_Section(jsonKey: key, title: mainHeader, columns: subcols));
+      }
+    }
+
+    // ----- Create workbook + sheet
+    final excel = exc.Excel.createExcel(); // has default 'Sheet1'
+    // Use a named sheet
+    const sheetName = 'Report';
+    try {
+      if (!excel.sheets.containsKey(sheetName)) {
+        excel.rename('Report', sheetName);
+      }
+      final sheet = excel[sheetName];
+
+// Row/col are ZERO-based in `excel`
+      int col = 0;
+
+// ==== A) Sr No column (merged across 2 header rows)
+      _setText(sheet, row: 0, col: col, value: 'Sr No');
+      sheet.merge(
+        exc.CellIndex.indexByColumnRow(columnIndex: col, rowIndex: 0),
+        exc.CellIndex.indexByColumnRow(columnIndex: col, rowIndex: 1),
+      );
+// Bold + centered style for "Sr No"
+      final srNoCell = sheet.cell(exc.CellIndex.indexByColumnRow(columnIndex: col, rowIndex: 0));
+      srNoCell.cellStyle = exc.CellStyle(
+        bold: true,
+        horizontalAlign: exc.HorizontalAlign.Center,
+        verticalAlign: exc.VerticalAlign.Center,
+        leftBorder: exc.Border(borderStyle: exc.BorderStyle.Thick),
+        rightBorder: exc.Border(borderStyle: exc.BorderStyle.Thick),
+        // borderAround: BorderStyle.Thin,
+      );
+      final srNoCell1 = sheet.cell(exc.CellIndex.indexByColumnRow(columnIndex: col, rowIndex: 1));
+      srNoCell1.cellStyle = exc.CellStyle(
+        leftBorder: exc.Border(borderStyle: exc.BorderStyle.Thick),
+        rightBorder: exc.Border(borderStyle: exc.BorderStyle.Thick),
+        bottomBorder: exc.Border(borderStyle: exc.BorderStyle.Thick),
+        // borderAround: BorderStyle.Thin,
+      );
+      col++;
+
+// ==== B) Nagar/Upnagar column
+      _setText(sheet, row: 0, col: col, value: 'Nagar/Upnagar');
+      sheet.merge(
+        exc.CellIndex.indexByColumnRow(columnIndex: col, rowIndex: 0),
+        exc.CellIndex.indexByColumnRow(columnIndex: col, rowIndex: 1),
+      );
+// Bold + centered
+      final nagarUpNameCell = sheet.cell(exc.CellIndex.indexByColumnRow(columnIndex: col, rowIndex: 0));
+      nagarUpNameCell.cellStyle = exc.CellStyle(
+        bold: true,
+        horizontalAlign: exc.HorizontalAlign.Center,
+        verticalAlign: exc.VerticalAlign.Center,
+        leftBorder: exc.Border(borderStyle: exc.BorderStyle.Thick),
+        rightBorder: exc.Border(borderStyle: exc.BorderStyle.Thick),
+        // borderAround: BorderStyle.Thin,
+      );
+      final nagarUpNameCell1 = sheet.cell(exc.CellIndex.indexByColumnRow(columnIndex: col, rowIndex: 1));
+      nagarUpNameCell1.cellStyle = exc.CellStyle(
+        leftBorder: exc.Border(borderStyle: exc.BorderStyle.Thick),
+        rightBorder: exc.Border(borderStyle: exc.BorderStyle.Thick),
+        bottomBorder: exc.Border(borderStyle: exc.BorderStyle.Thick),
+        // borderAround: BorderStyle.Thin,
+      );
+      col++;
+
+      // C) Sections
+      for (final section in layout) {
+        final startCol = col;
+        final subCount = section.columns.length;
+        if (subCount == 0) continue;
+        final endCol = startCol + subCount - 1;
+
+        // Subheaders (row 1)
+        for (final sub in section.columns) {
+          // final sub = section.columns[i];
+          // final currentCol = startCol + i;
+          // final bool isLeftEdge = currentCol == startCol;
+          // final bool isRightEdge = currentCol == endCol;
+
+          _setText(sheet, row: 1, col: col, value: sub.header);
+          final subHeaderNameCell = sheet.cell(exc.CellIndex.indexByColumnRow(columnIndex: col, rowIndex: 1));
+          subHeaderNameCell.cellStyle = exc.CellStyle(
+            bold: true,
+            horizontalAlign: exc.HorizontalAlign.Center,
+            verticalAlign: exc.VerticalAlign.Center,
+            // textWrapping: exc.TextWrapping.Clip,
+            leftBorder: exc.Border(borderStyle: exc.BorderStyle.MediumDashed),
+            rightBorder: exc.Border(borderStyle: exc.BorderStyle.MediumDashed),
+            bottomBorder: exc.Border(borderStyle: exc.BorderStyle.Thick),
+            topBorder: exc.Border(borderStyle: exc.BorderStyle.MediumDashed),
+            // borderAround: BorderStyle.Thin,
+          );
+
+// After merging and styling the main header:
+          sectionRanges.add({'start': startCol, 'end': endCol});
+
+// Move pointer
+          col++;
+        }
+
+        // Group header (row 0), merged across all its subcolumns
+        sheet.merge(
+          exc.CellIndex.indexByColumnRow(columnIndex: startCol, rowIndex: 0),
+          exc.CellIndex.indexByColumnRow(columnIndex: startCol + subCount - 1, rowIndex: 0),
+        );
+        _setText(sheet, row: 0, col: startCol, value: section.title);
+        final mainHeaderNameCell = sheet.cell(exc.CellIndex.indexByColumnRow(columnIndex: startCol, rowIndex: 0));
+        mainHeaderNameCell.cellStyle = exc.CellStyle(
+          bold: true,
+          horizontalAlign: exc.HorizontalAlign.Center,
+          verticalAlign: exc.VerticalAlign.Center,
+          // textWrapping: exc.TextWrapping.Clip,
+          leftBorder: exc.Border(borderStyle: exc.BorderStyle.Thick),
+          rightBorder: exc.Border(borderStyle: exc.BorderStyle.Thick),
+          bottomBorder: exc.Border(borderStyle: exc.BorderStyle.MediumDashed),
+          // borderAround: BorderStyle.Thin,
+        );
+      }
+
+// === D) Adjust column widths based on header/subheader text length
+      for (int i = 0; i < col; i++) {
+        // Get header and subheader text (from row 0 and 1)
+        final String? mainHeader = sheet.cell(exc.CellIndex.indexByColumnRow(columnIndex: i, rowIndex: 0)).value?.toString();
+        final String? subHeader = sheet.cell(exc.CellIndex.indexByColumnRow(columnIndex: i, rowIndex: 1)).value?.toString();
+
+        // Pick whichever text is longer
+        final int headerLength = (mainHeader?.length ?? 0);
+        final int subLength = (subHeader?.length ?? 0);
+        final int maxLen = [headerLength, subLength].reduce((a, b) => a > b ? a : b);
+
+        // Excel width units are not the same as characters; multiply by a constant factor
+        double estimatedWidth = maxLen * 1.2;
+
+        // Apply a minimum width to avoid squished small columns
+        if (estimatedWidth < 12) estimatedWidth = 12;
+
+        sheet.setColWidth(i, estimatedWidth);
+      }
+
+      final int totalCols = col; // total number of columns after headers are built
+      final List<double?> columnTotals = List<double?>.filled(totalCols, null);
+
+      // ----- Write data rows starting at row 2
+      int outRow = 2;
+      int srNo = 1;
+
+      for (final item in rows.cast<Map<String, dynamic>>()) {
+        int writeCol = 0;
+
+        // Sr No
+        _setAny(sheet, row: outRow, col: writeCol, value: srNo);
+        final srNoValueCell = sheet.cell(exc.CellIndex.indexByColumnRow(columnIndex: writeCol, rowIndex: outRow));
+        srNoValueCell.cellStyle = exc.CellStyle(
+          // bold: true,
+          horizontalAlign: exc.HorizontalAlign.Center,
+          verticalAlign: exc.VerticalAlign.Center,
+          // textWrapping: exc.TextWrapping.Clip,
+          leftBorder: exc.Border(borderStyle: exc.BorderStyle.Thick),
+          rightBorder: exc.Border(borderStyle: exc.BorderStyle.Thick),
+          // topBorder: exc.Border(borderStyle: exc.BorderStyle.Thick),
+          // borderAround: BorderStyle.Thin,
+        );
+        writeCol++;
+
+        // Nagar/Upnagar
+        _setAny(sheet, row: outRow, col: writeCol, value: item[nameKey]);
+        final nagarValueCell = sheet.cell(exc.CellIndex.indexByColumnRow(columnIndex: writeCol, rowIndex: outRow));
+        nagarValueCell.cellStyle = exc.CellStyle(
+          // bold: true,
+          horizontalAlign: exc.HorizontalAlign.Center,
+          verticalAlign: exc.VerticalAlign.Center,
+          // textWrapping: exc.TextWrapping.Clip,
+          leftBorder: exc.Border(borderStyle: exc.BorderStyle.Thick),
+          rightBorder: exc.Border(borderStyle: exc.BorderStyle.Thick),
+          // topBorder: exc.Border(borderStyle: exc.BorderStyle.Thick),
+          // borderAround: BorderStyle.Thin,
+        );
+        writeCol++;
+
+        // Sections data
+        for (final section in layout) {
+          final secMap = (item[section.jsonKey] as Map?) ?? const {};
+          final subCount = section.columns.length;
+          if (subCount == 0) continue;
+          final endCol = writeCol + subCount - 1;
+          for (int i = 0; i < section.columns.length; i++) {
+            final sub = section.columns[i];
+            final currentCol = writeCol + i;
+            final dynamic v = secMap[sub.dataKey];
+            final bool isLeftEdge = currentCol == writeCol;
+            final bool isRightEdge = currentCol == endCol;
+            _setAny(sheet, row: outRow, col: writeCol, value: secMap[sub.dataKey]);
+            final subValueCell = sheet.cell(exc.CellIndex.indexByColumnRow(columnIndex: writeCol, rowIndex: outRow));
+            subValueCell.cellStyle = exc.CellStyle(
+              // bold: true,
+              horizontalAlign: exc.HorizontalAlign.Center,
+              verticalAlign: exc.VerticalAlign.Center,
+              // textWrapping: exc.TextWrapping.Clip,
+              leftBorder: exc.Border(borderStyle: isLeftEdge ? exc.BorderStyle.Thick : exc.BorderStyle.MediumDashed),
+              rightBorder: exc.Border(borderStyle: isRightEdge ? exc.BorderStyle.Thick : exc.BorderStyle.MediumDashed),
+              // borderAround: BorderStyle.Thin,
+            );
+
+            // accumulate totals if numeric
+            double? numVal;
+            if (v is num) {
+              numVal = v.toDouble();
+            } else if (v is String) {
+              numVal = double.tryParse(v);
+            }
+            if (numVal != null) {
+              columnTotals[writeCol] = (columnTotals[writeCol] ?? 0) + numVal;
+            }
+
+            writeCol++;
+          }
+        }
+
+        srNo++;
+        outRow++;
+      }
+
+      final int totalRow = outRow;
+
+// Merge first two columns (Sr No + Nagar/Upnagar) and write "Total"
+      sheet.merge(
+        exc.CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: totalRow),
+        exc.CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: totalRow),
+      );
+      _setText(sheet, row: totalRow, col: 0, value: 'Total');
+
+// Style merged "Total" cell (apply to both cells for safety)
+      final totalLeft = sheet.cell(exc.CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: totalRow));
+      final totalRight = sheet.cell(exc.CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: totalRow));
+      final totalLabelStyle = exc.CellStyle(
+        bold: true,
+        horizontalAlign: exc.HorizontalAlign.Center,
+        verticalAlign: exc.VerticalAlign.Center,
+        topBorder: exc.Border(borderStyle: exc.BorderStyle.Thick),
+        bottomBorder: exc.Border(borderStyle: exc.BorderStyle.Thick),
+        leftBorder: exc.Border(borderStyle: exc.BorderStyle.Thick),
+        rightBorder: exc.Border(borderStyle: exc.BorderStyle.Thick),
+      );
+      totalLeft.cellStyle = totalLabelStyle;
+      totalRight.cellStyle = totalLabelStyle;
+
+// Write totals for each subsequent column and style borders
+      for (int c = 2; c < totalCols; c++) {
+        final cell = sheet.cell(exc.CellIndex.indexByColumnRow(columnIndex: c, rowIndex: totalRow));
+        final sum = columnTotals[c];
+
+        if (sum != null) {
+          cell.value = sum; // numeric
+        } else {
+          cell.value = ''; // keep empty if no numbers encountered in that column
+        }
+
+        // Determine whether this column is at a section boundary
+        bool isStart = false;
+        bool isEnd = false;
+        for (final rng in sectionRanges) {
+          if (c == rng['start']) isStart = true;
+          if (c == rng['end']) isEnd = true;
+        }
+
+        cell.cellStyle = exc.CellStyle(
+          bold: true,
+          horizontalAlign: exc.HorizontalAlign.Center,
+          verticalAlign: exc.VerticalAlign.Center,
+          topBorder: exc.Border(borderStyle: exc.BorderStyle.Thick),
+          bottomBorder: exc.Border(borderStyle: exc.BorderStyle.Thick),
+          leftBorder: exc.Border(borderStyle: isStart ? exc.BorderStyle.Thick : exc.BorderStyle.MediumDashed),
+          rightBorder: exc.Border(borderStyle: isEnd ? exc.BorderStyle.Thick : exc.BorderStyle.MediumDashed),
+        );
+      }
+    } catch (e) {
+      log("printing the exception >>>>>>>>>>>>>>>> $e");
+      // setState(() {
+      //   _isLoading = false;
+      // });
+      Navigator.of(context, rootNavigator: true).pop();
+    }
+
+    // NOTE: The `excel` package has limited styling; auto-fit/freeze panes aren’t supported.
+
+    // ----- Save/Download
+
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final path = '${directory.path}/VijayadashamiReport14.xlsx';
+      final file = File(path)
+        ..createSync(recursive: true)
+        ..writeAsBytesSync(excel.encode()!);
+
+      print(path);
+
+      await OpenFilex.open(path);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Excel file saved and opened successfully: $path')),
+      );
+    } catch (e) {
+      // setState(() {
+      //   _isLoading = false;
+      // });
+      Navigator.of(context, rootNavigator: true).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to export file: $e')),
+      );
+    }
+
+    // setState(() {
+    //   _isLoading = false;
+    // });
+    Navigator.of(context, rootNavigator: true).pop();
+  }
+
+  void _setText(exc.Sheet sheet, {required int row, required int col, required String value}) {
+    final cell = sheet.cell(exc.CellIndex.indexByColumnRow(columnIndex: col, rowIndex: row));
+    cell.value = value; // `excel` will store as string
+  }
+
+  void _setAny(exc.Sheet sheet, {required int row, required int col, required dynamic value}) {
+    final cell = sheet.cell(exc.CellIndex.indexByColumnRow(columnIndex: col, rowIndex: row));
+    if (value == null) {
+      cell.value = '';
+    } else if (value is num) {
+      cell.value = value; // numbers are fine
+    } else {
+      cell.value = value.toString();
+    }
   }
 
   void populateDropdown() async {
@@ -189,6 +622,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
           Statics.getLabel('VijayadashmiReport'),
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
+        actions: [IconButton(onPressed: downloadExcel, icon: Icon(Icons.download))],
       ),
       body: Container(
         padding: EdgeInsets.all(10),
