@@ -4680,7 +4680,7 @@ Map<String, String> resHindi = {
   'average': 'सरासरी',
   'addMukhyaAtithi': 'मुख्य अतिथी जोडे.',
   'selectMukhyaAtithi': 'मुख्य अतिथी चयन करे ',
-  'addVIshishthaAtithi': 'विशेष अतिथि चयन जोडे',
+  'addVIshishthaAtithi': 'विशेष अतिथि चयन करे',
   'selectVIshishthaAtithi': 'विशेष अतिथि चयन करे ',
   'shakhaMilanPratinidhitwaReport': 'शाखा / मिलन प्रतिनिधित्व ',
   'addshakhaa': 'शाखा जोडे ',

@@ -175,7 +175,7 @@ class AbhiyanSwayamsevakList {
   int? parentMandalID;
   int? parentGraamID;
   int? parentVastiID;
-
+  bool isSelected = false;
 
   AbhiyanSwayamsevakList({
     this.abhiyaDaayitvaID,
@@ -218,6 +218,7 @@ class AbhiyanSwayamsevakList {
     this.parentShaharID,
     this.parentVastiID,
     this.parentVibhaagID,
+    this.isSelected = false,
   });
 
   AbhiyanSwayamsevakList.fromJson(Map<String, dynamic> json) {
@@ -259,6 +260,7 @@ class AbhiyanSwayamsevakList {
     parentMandalID = json['ParentMandalID'];
     parentGraamID = json['ParentGraamID'];
     parentVastiID = json['ParentVastiID'];
+    isSelected = json['isSelected'] = false;
   }
 
   Map<String, dynamic> toJson() {
@@ -295,14 +297,15 @@ class AbhiyanSwayamsevakList {
     data['mandal'] = this.mandal; // Added parameter
     data['mandal_id'] = this.mandalId;
     data['ParentPraantID'] = this.parentPraantID;
-    data['ParentMahaanagarID'] =this.parentMahaanagarID;
+    data['ParentMahaanagarID'] = this.parentMahaanagarID;
     data['ParentVibhaagID'] = this.parentVibhaagID;
     data['ParentBhaagID'] = this.parentBhaagID;
-    data['ParentNagarID'] =  this.parentNagarID;
-    data['ParentShaharID'] =  this.parentShaharID;
-    data['ParentMandalID'] =  this.parentMandalID;
+    data['ParentNagarID'] = this.parentNagarID;
+    data['ParentShaharID'] = this.parentShaharID;
+    data['ParentMandalID'] = this.parentMandalID;
     data['ParentGraamID'] = this.parentGraamID;
     data['ParentVastiID'] = this.parentVastiID;
+    data['isSelected'] = this.isSelected;
     return data;
   }
 }

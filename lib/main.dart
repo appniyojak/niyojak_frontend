@@ -1,8 +1,7 @@
 import 'dart:io';
 
 import 'package:background_fetch/background_fetch.dart';
-import 'package:firebase_core/firebase_core.dart'
-    show Firebase, FirebaseOptions;
+import 'package:firebase_core/firebase_core.dart' show Firebase, FirebaseOptions;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +30,6 @@ import 'package:niyojak_prod/screens/search_sankalp_screen.dart';
 import 'package:niyojak_prod/screens/shatabdi_vrutta_sankalan/vijayadashami/add_mukhya_atithi_form.dart';
 import 'package:niyojak_prod/screens/shatabdi_vrutta_sankalan/vijayadashami/add_vishesh_vyakti.dart';
 import 'package:niyojak_prod/screens/shatabdi_vrutta_sankalan/vijayadashami/vijaya_dashami_report.dart';
-// import 'package:niyojak_prod/screens/shatabdi_vrutta_sankalan/gruh_Sampark_abhiyan/gruh_sampark_abhiyan_view.dart';
 import 'package:niyojak_prod/screens/survey_screen/mandal_reports_tabs.dart';
 import 'package:niyojak_prod/screens/survey_screen/report_view/vasti_report_tab1.dart';
 import 'package:niyojak_prod/screens/survey_screen/report_view/vasti_report_tab2.dart';
@@ -81,19 +79,18 @@ import './screens/swayamsevak_search.dart';
 import './widgets/shaakhaa_pat.dart';
 import 'firebase_options.dart';
 import 'screens/forget_password.dart';
+import 'screens/shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/gruh_abhiyaan_main_tab_screen.dart';
 import 'screens/shatabdi_vrutta_sankalan/vijayadashami/vijayadashami_form_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-      name: "niyojak-cdd79", options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(name: "niyojak-cdd79", options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(NiyojakApp());
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp(
-      name: "niyojak-cdd79", options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(name: "niyojak-cdd79", options: DefaultFirebaseOptions.currentPlatform);
   print('Handling a background message: ${message.messageId}');
 }
 
@@ -115,8 +112,7 @@ class NiyojakAppState extends State<NiyojakApp> {
   Future<void> initPlatformState() async {
     try {
       WidgetsFlutterBinding.ensureInitialized();
-      await Firebase.initializeApp(
-          options: DefaultFirebaseOptions.currentPlatform);
+      await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
       print("Firebase initialized successfully");
     } catch (e) {
       print("Error initializing Firebase: $e");
@@ -176,10 +172,8 @@ class NiyojakAppState extends State<NiyojakApp> {
 
     // Initialize FlutterLocalNotificationsPlugin
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-    final InitializationSettings initializationSettings =
-        InitializationSettings(android: initializationSettingsAndroid);
+    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+    final InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -219,13 +213,8 @@ class NiyojakAppState extends State<NiyojakApp> {
 
   Future<void> _showNotification(RemoteNotification notification) async {
     const AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails('channel_id', 'channel_name',
-            channelDescription: 'channel_description',
-            importance: Importance.high,
-            priority: Priority.high,
-            showWhen: false);
-    const NotificationDetails notificationDetails =
-        NotificationDetails(android: androidNotificationDetails);
+        AndroidNotificationDetails('channel_id', 'channel_name', channelDescription: 'channel_description', importance: Importance.high, priority: Priority.high, showWhen: false);
+    const NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
     await flutterLocalNotificationsPlugin.show(
       notification.hashCode,
       notification.title,
@@ -250,10 +239,7 @@ class NiyojakAppState extends State<NiyojakApp> {
           labelColor: Colors.white, // Color for selected tab text
           unselectedLabelColor: Colors.white70, // Color for unselected tab text
         ),
-        appBarTheme: AppBarTheme(
-            color: Colors.purple,
-            titleTextStyle: TextStyle(color: Colors.white),
-            iconTheme: IconThemeData(color: Colors.white)),
+        appBarTheme: AppBarTheme(color: Colors.purple, titleTextStyle: TextStyle(color: Colors.white), iconTheme: IconThemeData(color: Colors.white)),
         primaryColor: Colors.purple,
         primarySwatch: Colors.purple,
         fontFamily: 'Lato',
@@ -270,16 +256,12 @@ class NiyojakAppState extends State<NiyojakApp> {
         ForgotPassword.routeName: (ctx) => ForgotPassword(),
         AbhiyaanSwayamsevak.routeName: (ctx) => AbhiyaanSwayamsevak(),
         VisheshVyaktiShodhScreen.routeName: (ctx) => VisheshVyaktiShodhScreen(),
-        AddEditVisheshVyaktiScreen.routeName: (ctx) =>
-            AddEditVisheshVyaktiScreen(),
+        AddEditVisheshVyaktiScreen.routeName: (ctx) => AddEditVisheshVyaktiScreen(),
         EditVisheshVyaktiScreen.routeName: (ctx) => EditVisheshVyaktiScreen(),
         ViewVisheshVyaktiScreen.routeName: (ctx) => ViewVisheshVyaktiScreen(),
-        AbhiyanAddSwayamsevakScreen.routeName: (ctx) =>
-            AbhiyanAddSwayamsevakScreen(),
-        AbhiyanEditSwayamsevakScreen.routeName: (ctx) =>
-            AbhiyanEditSwayamsevakScreen(),
-        AbhiyanViewSwayamsevakScreen.routeName: (ctx) =>
-            AbhiyanViewSwayamsevakScreen(),
+        AbhiyanAddSwayamsevakScreen.routeName: (ctx) => AbhiyanAddSwayamsevakScreen(),
+        AbhiyanEditSwayamsevakScreen.routeName: (ctx) => AbhiyanEditSwayamsevakScreen(),
+        AbhiyanViewSwayamsevakScreen.routeName: (ctx) => AbhiyanViewSwayamsevakScreen(),
         AddGruhaSamparkScreen.routeName: (ctx) => AddGruhaSamparkScreen(),
         SankalitDataNamesView.routeName: (ctx) => SankalitDataNamesView(),
         SearchShaakhaaScreen.routeName: (ctx) => SearchShaakhaaScreen(),
@@ -308,24 +290,17 @@ class NiyojakAppState extends State<NiyojakApp> {
         ShaakhaaSevaVastiLink.routeName: (ctx) => ShaakhaaSevaVastiLink(),
         SearchSewaVasti.routeName: (ctx) => SearchSewaVasti(),
         EditSewaVasti.routeName: (ctx) => EditSewaVasti(),
-        SearchSwayamsevakTransfer.routeName: (ctx) =>
-            SearchSwayamsevakTransfer(),
-        EditSwayamsevakTransferScreen.routeName: (ctx) =>
-            EditSwayamsevakTransferScreen(),
-        SearchRamJanmaBhoomiNidhiSankalan.routeName: (ctx) =>
-            SearchRamJanmaBhoomiNidhiSankalan(),
+        SearchSwayamsevakTransfer.routeName: (ctx) => SearchSwayamsevakTransfer(),
+        EditSwayamsevakTransferScreen.routeName: (ctx) => EditSwayamsevakTransferScreen(),
+        SearchRamJanmaBhoomiNidhiSankalan.routeName: (ctx) => SearchRamJanmaBhoomiNidhiSankalan(),
         ShaakhaaToli.routeName: (ctx) => ShaakhaaToli(),
         EditSwayamsevakBasicInfo.routeName: (ctx) => EditSwayamsevakBasicInfo(),
         EditSwayamsevakDaayitva.routeName: (ctx) => EditSwayamsevakDaayitva(),
         EditSwayamsevakOtherInfo.routeName: (ctx) => EditSwayamsevakOtherInfo(),
-        SearchAnnualBaithakVrutta.routeName: (ctx) =>
-            SearchAnnualBaithakVrutta(),
-        NirikshanAnnualBaithakVrutta.routeName: (ctx) =>
-            NirikshanAnnualBaithakVrutta(),
-        AnnualBaithakEkatritVrutta.routeName: (ctx) =>
-            AnnualBaithakEkatritVrutta(),
-        EditSwayamsevakSoochiInfo.routeName: (ctx) =>
-            EditSwayamsevakSoochiInfo(),
+        SearchAnnualBaithakVrutta.routeName: (ctx) => SearchAnnualBaithakVrutta(),
+        NirikshanAnnualBaithakVrutta.routeName: (ctx) => NirikshanAnnualBaithakVrutta(),
+        AnnualBaithakEkatritVrutta.routeName: (ctx) => AnnualBaithakEkatritVrutta(),
+        EditSwayamsevakSoochiInfo.routeName: (ctx) => EditSwayamsevakSoochiInfo(),
         CreateNotificationView.routeName: (ctx) => CreateNotificationView(),
         UpdateMasterDataScreen.routeName: (ctx) => UpdateMasterDataScreen(),
         TabScreen.routeName: (ctx) => TabScreen(),
@@ -339,14 +314,9 @@ class NiyojakAppState extends State<NiyojakApp> {
         VastiSurveyReportScreen.routeName: (ctx) => VastiSurveyReportScreen(),
         VijayadashamiFormView.routeName: (ctx) => VijayadashamiFormView(),
         VijayadashamiFormReport.routeName: (ctx) => VijayadashamiFormReport(),
-        SearchSankalpScreen.routeName: (ctx) =>
-            ChangeNotifierProvider<SankalpScreenProvider>(
-                create: (context) => SankalpScreenProvider(),
-                child: SearchSankalpScreen()),
-        SearchSankalpScreen.routeName: (ctx) =>
-            ChangeNotifierProvider<SankalpScreenProvider>(
-                create: (context) => SankalpScreenProvider(),
-                child: SearchSankalpScreen()),
+        GruhAbhiyaanMainTabScreen.routeName: (ctx) => GruhAbhiyaanMainTabScreen(),
+        SearchSankalpScreen.routeName: (ctx) => ChangeNotifierProvider<SankalpScreenProvider>(create: (context) => SankalpScreenProvider(), child: SearchSankalpScreen()),
+        SearchSankalpScreen.routeName: (ctx) => ChangeNotifierProvider<SankalpScreenProvider>(create: (context) => SankalpScreenProvider(), child: SearchSankalpScreen()),
       },
     );
   }

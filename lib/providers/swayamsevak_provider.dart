@@ -1,9 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:background_fetch/background_fetch.dart';
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:niyojak_prod/models/response_model/AbhiyaanListResponse.dart';
 import 'package:niyojak_prod/models/response_model/AbhiyaanSwayamsevakListResponse.dart';
@@ -11,9 +8,7 @@ import 'package:niyojak_prod/models/response_model/AbhiyanGruhasamparkResponse.d
 import 'package:niyojak_prod/models/response_model/VisheshVyaktiListResponse.dart';
 
 import '../helpers/static_data.dart' as Statics;
-
 import './bals.dart';
-import 'login.dart';
 
 class SwayamsevakProvider {
   String _searchCriteria = '';
@@ -23,6 +18,7 @@ class SwayamsevakProvider {
   }
 
   List<SwayamsevakBAL> swList = [];
+
   Future<dynamic> getSwayamSevakByID(String swayamsevakID, String tab) async {
     Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
     print('$tab =====> tab');
@@ -37,21 +33,21 @@ class SwayamsevakProvider {
 
       var body = json.decode(response.body);
       var data = body['SwayamsevakBasicInfo'];
-              log("datadatadata -=> $body");
+      log("datadatadata -=> $body");
       return SwayamsevakBAL(
-          data['SwayamsevakID'],
-          data['PraantID'],
-          data['FullName'],
-          data['MobileNumber'],
-          data['Email'],
-          data['LinkedGeoUnitID'],
-          data['LinkedGeoUnitName'],
-          data['LinkedShaakhaaID'],
-          data['LinkedShaakhaaName'],
-          data['PreferredLanguageID'],
-          data['PreferredLanguageCode'],
-          data['CanUseApp'] == true ? true : false,
-          data['can_edit'],
+        data['SwayamsevakID'],
+        data['PraantID'],
+        data['FullName'],
+        data['MobileNumber'],
+        data['Email'],
+        data['LinkedGeoUnitID'],
+        data['LinkedGeoUnitName'],
+        data['LinkedShaakhaaID'],
+        data['LinkedShaakhaaName'],
+        data['PreferredLanguageID'],
+        data['PreferredLanguageCode'],
+        data['CanUseApp'] == true ? true : false,
+        data['can_edit'],
       );
     } else if (tab == 'OtherInfo') {
       // var response = await http.post(
@@ -164,8 +160,8 @@ class SwayamsevakProvider {
       List<ShaaririkVishayBAL> sharirikVishayList = [];
       if (shaaririkVishay.length > 0) {
         for (var data in shaaririkVishay) {
-          sharirikVishayList.add(new ShaaririkVishayBAL(data['SwayamsevakShaaririkVishayID'], data['ShaaririkVishayID'], data['PraantID'],
-              data['ShaaririkVishayCode'], data['VishayFamiliarity'], data['SwayamsevakID']));
+          sharirikVishayList.add(
+              new ShaaririkVishayBAL(data['SwayamsevakShaaririkVishayID'], data['ShaaririkVishayID'], data['PraantID'], data['ShaaririkVishayCode'], data['VishayFamiliarity'], data['SwayamsevakID']));
         }
         print("shaaririkVishay :-- $shaaririkVishay");
       }
@@ -187,8 +183,8 @@ class SwayamsevakProvider {
       List<GhoshVishayBAL> ghoshVishayList = [];
       if (ghoshVishay.length > 0) {
         for (var data in ghoshVishay) {
-          ghoshVishayList.add(new GhoshVishayBAL(data['SwayamsevakGhoshVishayID'], data['VaadyaID'], data['PraantID'], data['VaadyaCode'],
-              data['VaadyaFamiliarity'], data['RachanaaCount'], data['SwayamsevakID'], data['IsUnderstandLipi'] == true ? true : false));
+          ghoshVishayList.add(new GhoshVishayBAL(data['SwayamsevakGhoshVishayID'], data['VaadyaID'], data['PraantID'], data['VaadyaCode'], data['VaadyaFamiliarity'], data['RachanaaCount'],
+              data['SwayamsevakID'], data['IsUnderstandLipi'] == true ? true : false));
         }
       }
 
@@ -203,8 +199,8 @@ class SwayamsevakProvider {
       var body = json.decode(response.body);
       var data = body['SwayamsevakBasicInfo'];
 
-      return SwayamsevakLinkedGeoUnitBAL(data['SwayamsevakID'], data['PraantID'], data['LinkedVastiID'], data['LinkedVastiName'],
-          data['LinkedGraamID'], data['LinkedGraamName'], data['LinkedShaakhaaID'], data['LinkedShaakhaaName']);
+      return SwayamsevakLinkedGeoUnitBAL(data['SwayamsevakID'], data['PraantID'], data['LinkedVastiID'], data['LinkedVastiName'], data['LinkedGraamID'], data['LinkedGraamName'],
+          data['LinkedShaakhaaID'], data['LinkedShaakhaaName']);
     } else if (tab == 'OccupationDetails') {
       var response = await http.post(Uri.parse(Statics.urlGetSwayamsevakOccupationForApp),
           headers: jHeaders,
@@ -277,25 +273,15 @@ class SwayamsevakProvider {
             "AppUserID": Statics.userDetails["userID"],
             "SwayamsevakID": swayamsevakID,
           }));
-      print("Statics.userDetails["'userID'"] -=-=-=->  ${Statics.userDetails["userID"]}");
+      print("Statics.userDetails[" 'userID' "] -=-=-=->  ${Statics.userDetails["userID"]}");
       print("swayamsevakID-=-=-=->  $swayamsevakID");
 
       var body = json.decode(response.body);
       var data = body['PageData'];
       print("data-=-=-=->  $data");
       if (tab == 'DaayitvaPage') {
-        return SwayamsevakDaayitvaPageBAL(
-            data["SwayamsevakID"],
-            data["MaxPastDaayitva"],
-            data["MaxPastDaayitvaFromYear"],
-            data["MaxPastDaayitvaToYear"],
-            data["HasBeenVistaarak"],
-            data["VistaarakWeekCount"],
-            data["VistaarakMonthCount"],
-            data["VistaarakYearCount"],
-            data["HasBeenPrachaarak"],
-            data["PrachaarakYearCount"],
-            data["MaxDaayitvaWhenPrachaarak"]);
+        return SwayamsevakDaayitvaPageBAL(data["SwayamsevakID"], data["MaxPastDaayitva"], data["MaxPastDaayitvaFromYear"], data["MaxPastDaayitvaToYear"], data["HasBeenVistaarak"],
+            data["VistaarakWeekCount"], data["VistaarakMonthCount"], data["VistaarakYearCount"], data["HasBeenPrachaarak"], data["PrachaarakYearCount"], data["MaxDaayitvaWhenPrachaarak"]);
       } else if (tab == "DaayitvaList") {
         return body['PageData']['DaayitvaDataList'];
       }
@@ -364,28 +350,8 @@ class SwayamsevakProvider {
       //     data["IsCurrent"],
       //     "");
       var data = body["SwayamsevakDaayitva"] ?? {};
-      return SwayamsevakDaayitvaBAL(
-          data["SwayamsevakID"] ?? 0,
-          data["PraantID"] ?? 0,
-          null,
-          data["DaayitvaID"] ?? 0,
-          data["DaayitvaName"] ?? "",
-          data["LevelID"] ?? 0,
-          data["DaayitvaGeoUnitID"] ?? 0,
-          data["GatividhiID"] ?? 0,
-          data["AayaamID"] ?? 0,
-          data["StartYear"] ?? 0,
-          data["EndYear"] ?? 0,
-          null,
-          "",
-          "",
-          "",
-          "",
-          "",
-          data["IsCurrent"] ?? false,
-          ""
-      );
-
+      return SwayamsevakDaayitvaBAL(data["SwayamsevakID"] ?? 0, data["PraantID"] ?? 0, null, data["DaayitvaID"] ?? 0, data["DaayitvaName"] ?? "", data["LevelID"] ?? 0, data["DaayitvaGeoUnitID"] ?? 0,
+          data["GatividhiID"] ?? 0, data["AayaamID"] ?? 0, data["StartYear"] ?? 0, data["EndYear"] ?? 0, null, "", "", "", "", "", data["IsCurrent"] ?? false, "");
     }
   }
 
@@ -449,6 +415,7 @@ class SwayamsevakProvider {
     print('saveAbhiyanGruhaSampark() Swayamsevaks - ' + res.toString());
     return res;
   }
+
   Future updateAbhiyanGruhaSampark(String jsonEncode) async {
     Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
@@ -472,7 +439,7 @@ class SwayamsevakProvider {
 
     var body = json.decode(response.body);
     AbhiyaanListResponse res = AbhiyaanListResponse.fromJson(body);
-    print('getAbhiyanList() Swayamsevaks - ' + res.toString());
+    print('getAbhiyanList() Swayamsevaks - ' + jsonEncode(body).toString());
     return res;
   }
 
@@ -532,10 +499,7 @@ class SwayamsevakProvider {
   //   return body['SwayamsevakList'];
   // }
   Future<List<dynamic>> getSwayamsevaksForExport(String inputJson) async {
-    Map<String, String> jHeaders = {
-      'Content-Type': 'application/json',
-      'Accept': '*/*'
-    };
+    Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
     List<dynamic> allSwayamsevaks = [];
     int currentPage = 1;
@@ -558,7 +522,7 @@ class SwayamsevakProvider {
       print("response body :-- $body");
 
       if (currentPage == 1) {
-        totalPages = int.parse(body["noofpage"]) ;
+        totalPages = int.parse(body["noofpage"]);
         print("response body noofpage:-- $totalPages");
       }
 
@@ -576,7 +540,7 @@ class SwayamsevakProvider {
   Future<String> saveSwayamsevakDetails(String inputJson) async {
     Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
     print("Save Swayamsevak - " + inputJson);
-      print(Uri.parse(Statics.urlSaveSwayamsevakBasicInfoForApp));
+    print(Uri.parse(Statics.urlSaveSwayamsevakBasicInfoForApp));
     //var client = http.Client();
     //var response;
     // try {
@@ -680,7 +644,6 @@ class SwayamsevakProvider {
 
     retValue = body['OutputSwayamsevakID'].toString();
     return retValue;
-
   }
 
   Future<AbhiyanGruhasamparkResponse> sendMailCall(String jsonEncode) async {
@@ -700,6 +663,7 @@ class SwayamsevakProvider {
     print('sendMailCall() Swayamsevaks - ' + response.body.toString());
     return res;
   }
+
   Future<void> changeSwayamsewakCanEditStatus(String inputJson) async {
     print(inputJson);
     Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -710,8 +674,6 @@ class SwayamsevakProvider {
       // Statics.showToast(message);
     } else {
       Statics.showToast("Failed to update status");
-
     }
   }
-
 }
