@@ -42,9 +42,10 @@ android {
 //    compileSdkVersion rootProject.ext.compileSdkVersion
     namespace "com.softiq.niyojak_prod"
     compileSdkVersion 34
-    ndkVersion flutter.ndkVersion
+    ndkVersion "25.1.8937393" //NO PUSH
 
     compileOptions {
+        coreLibraryDesugaringEnabled true //NO PUSH
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -95,4 +96,7 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+    // For AGP 7.4+
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3' //NO PUSH
+}

@@ -338,7 +338,7 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
                     //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Icon(
-                        FontAwesomeIcons.houseUser,
+                        FontAwesomeIcons.fileArrowUp,
                         size: 18,
                       ),
                       SizedBox(width: 10),
@@ -346,7 +346,7 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
                         width: size.width * 0.31,
                         alignment: Alignment.center,
                         child: Text(
-                          "${Statics.getLabel('GruhaSampark')}",
+                          "${Statics.getLabel('addGruhaSampark')}",
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 15),
                         ),
@@ -363,7 +363,7 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
                         child: Center(
                           // width: size.width*0.31,
                           child: Text(
-                            "${Statics.getLabel('searchAbhiyaanParticipantScreenLabel')}",
+                            "${Statics.getLabel('Reportonly')}",
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: 15),
                           ),
@@ -382,10 +382,10 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
               controller: _tabController,
               physics: NeverScrollableScrollPhysics(),
               children: <Widget>[
-                GruhSamparkaTab(
+                AbhiyaanSwayamsevakTab(
                   initialData: initialData,
                 ),
-                AbhiyaanSwayamsevakTab(
+                GruhSamparkaTab(
                   initialData: initialData,
                 ),
               ],
