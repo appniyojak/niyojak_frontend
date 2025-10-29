@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
@@ -16,9 +17,8 @@ import '../../../models/response_model/vasti_up_data_model.dart';
 import '../../../models/response_model/vijayaDashamiInitModel.dart';
 import '../../../providers/bals.dart';
 import '../../../providers/swayamsevak_provider.dart';
-import '../../AbhiyanAddSwayamsevak.dart';
-import '../../edit_swayamsevak_screen.dart';
 import '../vijayadashami/add_vishesh_vyakti.dart';
+import 'add_abhiyaan_karyakarta_screen.dart';
 
 class AbhiyaanSwayamsevakTab extends StatefulWidget {
   final AbhiyanSwayamsevakdata? initialData;
@@ -45,7 +45,7 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
   List<AbhiyaanList> abhiyaanDataList = [
     AbhiyaanList.fromJson({
       "AbhiyaanID": 1,
-      "AbhiyaanName": Statics.getLabel('gruhSamparkAbhiyan') + " (Static Data)",
+      "AbhiyaanName": Statics.getLabel('gruhSamparkAbhiyan') + " (${Statics.getLabel('shatabdiVarsha')})",
       "EndDate": null,
       "EndDateStr": null,
       "PraantID": 1,
@@ -61,6 +61,10 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
   List<GeoUnitMasterBAL>? _geoUnits;
 
   TextEditingController mobileNoCOntroller = TextEditingController();
+
+  String? _selctedLevel = 'praant';
+  String? _selctedLevelName = '';
+  String? _selectedGeoUnitId = '';
   String? _levelValue = "";
   String? _geoUnitsValue = "";
 
@@ -585,7 +589,11 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                       ),
                       onPressed: () {
-                        Navigator.of(context).pushNamed(AbhiyanAddSwayamsevakScreen.routeName);
+                        Fluttertoast.showToast(
+                          msg: Statics.getLabel("workInProgress"),
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                        );
                       },
                       child: Text(
                         Statics.getLabel('addSahabhagiKaryakarta'),
@@ -602,7 +610,8 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                       ),
                       onPressed: () {
-                        Navigator.of(context).pushNamed(EditSwayamsevakScreen.routeName, arguments: Statics.ScreenArgumentsNew(0, Statics.getLabel('EditMenu')));
+                        Navigator.of(context).pushNamed(AddAbhiyaanKaryakartaScreen.routeName);
+                        // Navigator.of(context).pushNamed(EditSwayamsevakScreen.routeName, arguments: Statics.ScreenArgumentsNew(0, Statics.getLabel('EditMenu')));
                       },
                       child: Text(
                         Statics.getLabel('AddSwayamsevak'),
@@ -747,23 +756,33 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                 ],
               ),
               // SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: _buildDropdown(
-                  value: selectedSwayamAbhiyanValue,
-                  items: abhiyaanDataList.map((value) {
-                    return DropdownMenuItem(
-                      value: value.abhiyaanID.toString(),
-                      child: Text(value.abhiyaanName!),
-                    );
-                  }).toList(),
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedSwayamAbhiyanValue = newValue;
-                    });
-                  },
+              Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.only(left: 10, right: 0, top: 5, bottom: 5),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(color: Colors.black38),
                 ),
+                child: Text(abhiyaanDataList.first.abhiyaanName.toString(), style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15)),
               ),
+              // Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: _buildDropdown(
+              //     value: selectedSwayamAbhiyanValue,
+              //     items: abhiyaanDataList.map((value) {
+              //       return DropdownMenuItem(
+              //         value: value.abhiyaanID.toString(),
+              //         child: Text(value.abhiyaanName!),
+              //       );
+              //     }).toList(),
+              //     onChanged: (newValue) {
+              //       setState(() {
+              //         selectedSwayamAbhiyanValue = newValue;
+              //       });
+              //     },
+              //   ),
+              // ),
               SizedBox(height: 13),
               _buildExpansionPanel(),
               SizedBox(height: 15),
@@ -784,12 +803,19 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                           _searched = true;
                           _isExpanded = false;
                         });
+
+                        data = await Statics.getVijayadashamiInitData(
+                            context,
+                            Statics.userDetails["userID"],
+                            _linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? _linkedvastiValue! : _linkedgraamValue!,
+                            _linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? "2" : "3");
+                        setState(() {});
                         // if(Statics.userDetails[])
                         // await getAbhiyaanGruhaSamparkListData();
                       },
                       child: Text(
                         "${Statics.getLabel('search')}",
-                        style: TextStyle(fontSize: 22),
+                        style: TextStyle(fontSize: 16),
                       ),
                     ),
                   MaterialButton(
@@ -804,9 +830,32 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                       child: Text(Statics.getLabel('clear'))),
                 ],
               ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.03,
-              ),
+              SizedBox(height: 24),
+
+              if (_selctedLevel != "" && _selctedLevelName != "")
+                Container(
+                    height: 40,
+                    width: double.infinity,
+                    margin: EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.purpleAccent, width: 1),
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "${Statics.getLabel(_selctedLevel ?? "Mahaanagar")}  ->  ",
+                          style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                        Text(
+                          " $_selctedLevelName",
+                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17),
+                        ),
+                      ],
+                    )),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
 
               if (_searched) ...[
                 Padding(
@@ -815,7 +864,7 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "${Statics.getLabel('date')} : ",
+                        "${Statics.getLabel('date2')} : ",
                         style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                       ),
                       Container(
@@ -825,7 +874,7 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                           readOnly: true,
                           onTap: () async {
                             DateTime? date = await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(2000), lastDate: DateTime.now());
-                            dateController.text = DateFormat("dd/MM/yyyy").format(date!);
+                            if (date != null) dateController.text = DateFormat("dd/MM/yyyy").format(date);
                             setState(() {});
                           },
                           controller: dateController,
@@ -886,7 +935,7 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "वितरित कारपत्रक : ",
+                        "वितरित करपत्रक : ",
                         style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                       ),
                       Container(
@@ -894,6 +943,39 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                         width: MediaQuery.of(context).size.width * 0.45,
                         child: TextField(
                           controller: vitritKarpatrakController,
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10)],
+                          style: TextStyle(
+                            fontSize: 14,
+                          ),
+                          autofocus: false,
+                          keyboardType: TextInputType.number,
+                          textInputAction: TextInputAction.done,
+                          decoration: InputDecoration(
+                              isDense: true,
+                              hintText: "0",
+                              contentPadding: EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 12),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5),
+                              )),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "पुस्तक विक्री संख्या : ",
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
+                      Container(
+                        // height: 30,
+                        width: MediaQuery.of(context).size.width * 0.45,
+                        child: TextField(
+                          controller: pustakVikriController,
                           inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10)],
                           style: TextStyle(
                             fontSize: 14,
@@ -958,12 +1040,10 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                                       // print(selectedAnyaprabhaviItems);
                                     }, onAdd: () {
                                       // submitForm(showLoader: false);
-                                      Navigator.of(context)
-                                          .pushReplacementNamed(
-                                            AddVishisthaAtithi.routeName,
-                                            arguments: _linkednagar,
-                                          )
-                                          .then((value) => print("searchVijayaDashami()"));
+                                      Navigator.of(context).pushReplacementNamed(
+                                        AddVishisthaAtithi.routeName,
+                                        arguments: {'geoUnitId': _selectedGeoUnitId},
+                                      ).then((value) => print("searchVijayaDashami()"));
                                     }, selectedMukhyaAtithi: null, selectedType: null);
                                   },
                                   child: Container(
@@ -1108,39 +1188,6 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "पुस्तक विक्री संख्या : ",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                      Container(
-                        // height: 30,
-                        width: MediaQuery.of(context).size.width * 0.45,
-                        child: TextField(
-                          controller: pustakVikriController,
-                          inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10)],
-                          style: TextStyle(
-                            fontSize: 14,
-                          ),
-                          autofocus: false,
-                          keyboardType: TextInputType.number,
-                          textInputAction: TextInputAction.done,
-                          decoration: InputDecoration(
-                              isDense: true,
-                              hintText: "0",
-                              contentPadding: EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 12),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                              )),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
                         "संपर्क हेतू सहभागी संख्या : ",
                         style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                       ),
@@ -1218,7 +1265,8 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                       textColor: Theme.of(context).primaryTextTheme.button!.color,
                       onPressed: showDummyList,
                       child: Text(
-                        "${Statics.getLabel('SwayamsevaksList')}",
+                        // "${Statics.getLabel('SwayamsevaksList')}",
+                        "अभियान कार्यकर्ता सुची",
                         style: TextStyle(fontSize: 13),
                       ),
                     ),
@@ -1304,21 +1352,21 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
       selectedAnyaprabhavi.toSet().toList();
     }
 
-    final _data = await Statics.getVijayadashamiInitData(context, Statics.userDetails["userID"], _linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? _linkedvastiValue! : _linkedgraamValue!,
-        _linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? "2" : "3");
+    // final _data = await Statics.getVijayadashamiInitData(context, Statics.userDetails["userID"], _linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? _linkedvastiValue! : _linkedgraamValue!,
+    //     _linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? "2" : "3");
 
     await showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) {
-        if (_data == null) {
+        if (data == null) {
           return Center(child: CircularProgressIndicator());
         }
         return StatefulBuilder(
           builder: (context, set) {
             set(() {
-              vastisarsajjanshaktiList = _data?.vastisarsajjanshakti ?? [];
-              vastisanyaprabhaviList = _data?.vastisanyaprabhavi ?? [];
+              vastisarsajjanshaktiList = data?.vastisarsajjanshakti ?? [];
+              vastisanyaprabhaviList = data?.vastisanyaprabhavi ?? [];
             });
             set(() {
               // if (vastisarsajjanshaktiList.isEmpty) return;
@@ -1881,8 +1929,8 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
             headerBuilder: (BuildContext context, bool isExpanded) {
               return ListTile(
                 title: Text(
-                  "${Statics.getLabel('SelectLevel')}",
-                  style: TextStyle(fontSize: 16),
+                  "${Statics.getLabel('vastiGramNivda')}",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               );
             },
@@ -1901,9 +1949,12 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                               ))
                           .toList(),
                       onChanged: (value) {
+                        final selectedItem = _linkedMahaanagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                         setState(() {
                           _linkedMahaanagarValue = value;
                           _linkedVibhaagValue = null;
+                          _selctedLevel = 'Mahanagar';
+                          _selctedLevelName = selectedItem.name ?? "";
                           // _resetLinkedValues();
                           populatelinkedVibhaagDropdown(value!);
                         });
@@ -1921,8 +1972,11 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                               ))
                           .toList(),
                       onChanged: (value) {
+                        final selectedItem = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                         setState(() {
                           _linkedVibhaagValue = value;
+                          _selctedLevel = 'Vibhaag';
+                          _selctedLevelName = selectedItem.name ?? "";
                           populatelinkedBhaagDropdown(value!);
                         });
                       },
@@ -1939,8 +1993,11 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                               ))
                           .toList(),
                       onChanged: (value) {
+                        final selectedItem = _linkedbhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                         setState(() {
                           _linkedbhaagValue = value;
+                          _selctedLevel = 'Bhaag';
+                          _selctedLevelName = selectedItem.name ?? "";
                           populatelinkedShaharDropdown(value!);
                           populatelinkedNagarDropdown(value, null);
                         });
@@ -1958,8 +2015,12 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                               ))
                           .toList(),
                       onChanged: (value) {
+                        final selectedItem = _linkedshahar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                         setState(() {
                           _linkedshaharValue = value;
+                          _selectedGeoUnitId = value.toString();
+                          _selctedLevel = 'Shahar';
+                          _selctedLevelName = selectedItem.name ?? "";
                           populatelinkedNagarDropdown(null, value);
                         });
                       },
@@ -1976,8 +2037,12 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                               ))
                           .toList(),
                       onChanged: (value) {
+                        final selectedItem = _linkednagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                         setState(() {
                           _linkednagarValue = value;
+                          _selectedGeoUnitId = value.toString();
+                          _selctedLevel = 'Nagar';
+                          _selctedLevelName = selectedItem.name ?? "";
                           populatelinkedMandalDropdown(value);
                           populatelinkedVastiDropdown(value);
                         });
@@ -1995,8 +2060,12 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                               ))
                           .toList(),
                       onChanged: (value) {
+                        final selectedItem = _linkedmandal!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                         setState(() {
                           _linkedmandalValue = value;
+                          _selectedGeoUnitId = value.toString();
+                          _selctedLevel = 'Mandal';
+                          _selctedLevelName = selectedItem.name ?? "";
                           populatelinkedGraamDropdown(value);
                         });
                       },
@@ -2013,8 +2082,12 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                               ))
                           .toList(),
                       onChanged: (value) {
+                        final selectedItem = _linkedgraam!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                         setState(() {
                           _linkedgraamValue = value;
+                          _selectedGeoUnitId = value.toString();
+                          _selctedLevel = 'Graam';
+                          _selctedLevelName = selectedItem.name ?? "";
                         });
                       },
                       isDisabled: false,
@@ -2030,8 +2103,12 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                               ))
                           .toList(),
                       onChanged: (value) {
+                        final selectedItem = _linkedvasti!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                         setState(() {
                           _linkedvastiValue = value;
+                          _selectedGeoUnitId = value.toString();
+                          _selctedLevel = 'Vasti';
+                          _selctedLevelName = selectedItem.name ?? "";
                         });
                       },
                       isDisabled: false,

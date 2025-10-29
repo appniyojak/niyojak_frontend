@@ -2658,12 +2658,10 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                             // print(selectedAnyaprabhaviItems);
                           }, onAdd: () {
                             submitForm(showLoader: false);
-                            Navigator.of(context)
-                                .pushReplacementNamed(
-                                  AddVishisthaAtithi.routeName,
-                                  arguments: _linkedNagar,
-                                )
-                                .then((value) => searchVijayaDashami());
+                            Navigator.of(context).pushReplacementNamed(
+                              AddVishisthaAtithi.routeName,
+                              arguments: {'linkedNagar': _linkedNagar, 'selectedLevelId': _linkedNagarValue},
+                            ).then((value) => searchVijayaDashami());
                           }, selectedMukhyaAtithi: selectedMukhyaAtithi, selectedType: selectedType);
                         },
                         child: Container(

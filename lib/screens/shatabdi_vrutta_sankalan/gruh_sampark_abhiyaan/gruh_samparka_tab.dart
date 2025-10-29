@@ -22,7 +22,7 @@ class _GruhSamparkaTabState extends State<GruhSamparkaTab> {
   List<AbhiyaanList> abhiyaanDataList = [
     AbhiyaanList.fromJson({
       "AbhiyaanID": 1,
-      "AbhiyaanName": Statics.getLabel('gruhSamparkAbhiyan') + " (Static Data)",
+      "AbhiyaanName": Statics.getLabel('gruhSamparkAbhiyan') + " (${Statics.getLabel('shatabdiVarsha')})",
       "EndDate": null,
       "EndDateStr": null,
       "PraantID": 1,

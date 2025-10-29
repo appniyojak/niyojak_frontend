@@ -79,6 +79,7 @@ import './screens/swayamsevak_search.dart';
 import './widgets/shaakhaa_pat.dart';
 import 'firebase_options.dart';
 import 'screens/forget_password.dart';
+import 'screens/shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/add_abhiyaan_karyakarta_screen.dart';
 import 'screens/shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/gruh_abhiyaan_main_tab_screen.dart';
 import 'screens/shatabdi_vrutta_sankalan/vijayadashami/vijayadashami_form_view.dart';
 
@@ -315,6 +316,7 @@ class NiyojakAppState extends State<NiyojakApp> {
         VijayadashamiFormView.routeName: (ctx) => VijayadashamiFormView(),
         VijayadashamiFormReport.routeName: (ctx) => VijayadashamiFormReport(),
         GruhAbhiyaanMainTabScreen.routeName: (ctx) => GruhAbhiyaanMainTabScreen(),
+        AddAbhiyaanKaryakartaScreen.routeName: (ctx) => AddAbhiyaanKaryakartaScreen(),
         SearchSankalpScreen.routeName: (ctx) => ChangeNotifierProvider<SankalpScreenProvider>(create: (context) => SankalpScreenProvider(), child: SearchSankalpScreen()),
         SearchSankalpScreen.routeName: (ctx) => ChangeNotifierProvider<SankalpScreenProvider>(create: (context) => SankalpScreenProvider(), child: SearchSankalpScreen()),
       },

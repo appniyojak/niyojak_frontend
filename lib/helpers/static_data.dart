@@ -1995,7 +1995,8 @@ Future<NotificationListModel?> getNotificationDataList(String? userID) async {
 }
 
 //====================================   Vasti Sarvekshan API CALLL ===============================================================================
-Future<VastisarvekshanDropDownDataModel?> getVastiSurveyDropDownList(String? userID) async {
+Future<VastisarvekshanDropDownDataModel?> getVastiSurveyDropDownList(String? userID, {BuildContext? context}) async {
+  if (context != null) showLoaderDialog(context);
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(
@@ -2012,9 +2013,11 @@ Future<VastisarvekshanDropDownDataModel?> getVastiSurveyDropDownList(String? use
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
     // log("getVastiSurveyDropDownList ==>>  ${responseBody}");
     return VastisarvekshanDropDownDataModel.fromJson(responseBody);
   } else {
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
     log("Error: ${response.statusCode}");
     return null;
   }

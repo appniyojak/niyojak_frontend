@@ -59,11 +59,15 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
   @override
   void initState() {
     super.initState();
-    fetchVastiSurveyDropdownData();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await fetchVastiSurveyDropdownData();
+    });
   }
 
   List<Upnagarmandallist> vastimandallist = [];
   Upnagarmandallist? vastimandalData;
+
+  String? geoUnitId;
 
   String? selctedLevel = 'Nagar';
   String? selctedLevelName = '';
@@ -109,19 +113,50 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    // 👇 Receive the arguments properly
-    final args = ModalRoute.of(context)!.settings.arguments as List<GeoUnitMasterBAL>?;
+    // // 👇 Receive the arguments properly
+    // final args = ModalRoute.of(context)!.settings.arguments as List<GeoUnitMasterBAL>?;
+    //
+    // if (args != null && args.isNotEmpty) {
+    //   setState(() {
+    //     _linkedNagar = args;
+    //   });
+    // }
 
-    if (args != null && args.isNotEmpty) {
-      setState(() {
-        _linkedNagar = args;
-      });
+    // 👇 Receive the arguments properly
+    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+
+    if (args.isNotEmpty) {
+      if (args["linkedNagar"] != null) {
+        setState(() {
+          _linkedNagar = args["linkedNagar"];
+        });
+      }
+      if (args["geoUnitId"] != null) {
+        setState(() {
+          geoUnitId = args["geoUnitId"];
+        });
+      }
+      if (args["selectedLevelId"] != null) {
+        setState(() {
+          final selectedItem = _linkedNagar?.firstWhere((bg) => bg.geoUnitID.toString() == args["selectedLevelId"]);
+          populatelinkedMandalDropdown(args["selectedLevelId"]);
+          populatelinkedVastiDropdown(args["selectedLevelId"]);
+          setState(() {
+            selctedLevelName = selectedItem?.name ?? "";
+            selctedLevel = 'Nagar';
+            selctedLevelId = args["selectedLevelId"];
+
+            _linkedNagarValue = args["selectedLevelId"];
+          });
+        });
+      }
     }
+    setState(() {});
   }
 
   Future<void> fetchVastiSurveyDropdownData() async {
     try {
-      vastisarvekshanDropDownDataModel = await Statics.getVastiSurveyDropDownList(Statics.userDetails["userID"]);
+      vastisarvekshanDropDownDataModel = await Statics.getVastiSurveyDropDownList(context: context, Statics.userDetails["userID"]);
       setState(() {});
     } catch (e) {
       print('Error fetching notification data: $e');
@@ -388,7 +423,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                   SizedBox(
                     height: 15,
                   ),
-                  if (selctedLevel == 'Vasti' || selctedLevel == 'Graam')
+                  if (geoUnitId != null || selctedLevel == 'Vasti' || selctedLevel == 'Graam')
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -1068,7 +1103,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                                 samparkasutranava: sajjanShaktiContactPersonNameController.text.trim(),
                                 samparkasutraMobileNumber: sajjanShaktiContactPersonDoorbhashController.text.trim(),
                                 isactive: 1,
-                                vastiid: int.parse(selctedLevelId ?? "0"),
+                                vastiid: int.parse(geoUnitId ?? selctedLevelId ?? "0"),
                                 pkid: 0,
                                 isfemale: isFemale,
                               );
