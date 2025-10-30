@@ -560,7 +560,7 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        Statics.getLabel('selectMukhyaAtithi') + " (Dummy Data)",
+                        Statics.getLabel('selectSwayamsevak') + " (Dummy Data)",
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,

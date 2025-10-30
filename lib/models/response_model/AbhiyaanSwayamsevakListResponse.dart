@@ -176,6 +176,9 @@ class AbhiyanSwayamsevakList {
   int? parentGraamID;
   int? parentVastiID;
   bool isSelected = false;
+  bool isPresentInAbhiyaan = false;
+  bool isPresentInAsSewak = false;
+  List<SaveAbhiyanSwayamsevakMappingforGruh>? mappingforGruhs;
 
   AbhiyanSwayamsevakList({
     this.abhiyaDaayitvaID,
@@ -219,6 +222,9 @@ class AbhiyanSwayamsevakList {
     this.parentVastiID,
     this.parentVibhaagID,
     this.isSelected = false,
+    this.isPresentInAbhiyaan = false,
+    this.isPresentInAsSewak = false,
+    this.mappingforGruhs,
   });
 
   AbhiyanSwayamsevakList.fromJson(Map<String, dynamic> json) {
@@ -228,7 +234,8 @@ class AbhiyanSwayamsevakList {
     appPassword = json['AppPassword']; // Added parameter
     daayityaName = json['DaayityaName'];
     email = json['Email'];
-    levelName = json['GeoUnitID']; // Updated parameter name
+    geoUnitID = json['GeoUnitID']; // Updated parameter name
+    levelName = json['GeoUnitID'].toString(); // Updated parameter name
     isActive = json['IsActive']; // Added parameter
     levelID = json['LevelID'];
     mahanagarId = json['ParentMahaanagarID']; // Added parameter
@@ -261,6 +268,14 @@ class AbhiyanSwayamsevakList {
     parentGraamID = json['ParentGraamID'];
     parentVastiID = json['ParentVastiID'];
     isSelected = json['isSelected'] = false;
+    isPresentInAbhiyaan = json['IsPresentInAbhiyaan'] ?? false;
+    isPresentInAsSewak = json['IsPresentInAsSewak'] ?? false;
+    if (json['mappingforGruhs'] != null) {
+      mappingforGruhs = <SaveAbhiyanSwayamsevakMappingforGruh>[];
+      json['mappingforGruhs'].forEach((v) {
+        mappingforGruhs!.add(new SaveAbhiyanSwayamsevakMappingforGruh.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -306,6 +321,53 @@ class AbhiyanSwayamsevakList {
     data['ParentGraamID'] = this.parentGraamID;
     data['ParentVastiID'] = this.parentVastiID;
     data['isSelected'] = this.isSelected;
+    data['IsPresentInAbhiyaan'] = this.isPresentInAbhiyaan;
+    data['IsPresentInAsSewak'] = this.isPresentInAsSewak;
+    if (this.mappingforGruhs != null) {
+      data['mappingforGruhs'] = this.mappingforGruhs!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class SaveAbhiyanSwayamsevakMappingforGruh {
+  int? mahanagarID;
+  int? vibhaagID;
+  int? bhaagID;
+  int? nagarID;
+  int? mandalID;
+  String? gramIDs;
+  String? vastiIDs;
+
+  SaveAbhiyanSwayamsevakMappingforGruh({
+    this.mahanagarID,
+    this.vibhaagID,
+    this.bhaagID,
+    this.nagarID,
+    this.mandalID,
+    this.gramIDs,
+    this.vastiIDs,
+  });
+
+  SaveAbhiyanSwayamsevakMappingforGruh.fromJson(Map<String, dynamic> json) {
+    mahanagarID = json['MahanagarID'];
+    vibhaagID = json['VibhaagID'];
+    bhaagID = json['BhaagID'];
+    nagarID = json['NagarID']; // Added parameter
+    mandalID = json['MandalID'];
+    gramIDs = json['GramIDs'];
+    vastiIDs = json['VastiIDs'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['MahanagarID'] = this.mahanagarID;
+    data['VibhaagID'] = this.vibhaagID;
+    data['BhaagID'] = this.bhaagID;
+    data['NagarID'] = this.nagarID;
+    data['MandalID'] = this.mandalID;
+    data['GramIDs'] = this.gramIDs;
+    data['VastiIDs'] = this.vastiIDs;
     return data;
   }
 }

@@ -877,9 +877,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                                 });
                               },
                             ),
-                          SizedBox(
-                            height: 10,
-                          ),
+                          SizedBox(height: 10),
                           if (_linkedVibhaag != null)
                             DropdownButtonFormField(
                               decoration: InputDecoration(labelText: Statics.getLabel('Vibhaag')),
@@ -901,9 +899,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                                 });
                               },
                             ),
-                          SizedBox(
-                            height: 10,
-                          ),
+                          SizedBox(height: 10),
                           if (_linkedBhaag != null)
                             DropdownButtonFormField(
                               decoration: InputDecoration(labelText: Statics.getLabel('Bhaag')),

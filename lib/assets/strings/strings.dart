@@ -1596,6 +1596,7 @@ Map<String, String> resEnglish = {
   'AddUtsavFilesSubtitle': 'Add maximum 3',
   'AddAdvUtsavFilesSubtitle': 'Add maximum 10',
   'loadingDialog': 'Please wait...',
+  'selectSwayamsevak': 'Select Swayamsevak',
 };
 
 ///1,584
@@ -3196,6 +3197,7 @@ Map<String, String> resMarathi = {
   'AddUtsavFilesSubtitle': 'जास्तीत जास्त ३ जोडा',
   'AddAdvUtsavFilesSubtitle': 'जास्तीत जास्त १० जोडा',
   'loadingDialog': 'कृपया वाट पहा...',
+  'selectSwayamsevak': 'स्वयंसेवक निवडा',
 };
 
 ///1,583
@@ -4795,4 +4797,5 @@ Map<String, String> resHindi = {
   'yuvaSangam': 'युवा संगम/ सम्मेलन',
   'shakhaVistaar': 'शाखा विस्तार सप्ताह',
   'loadingDialog': 'कृपया प्रतीक्षा करें...',
+  'selectSwayamsevak': 'स्वयंसेवक चयन करें',
 };
