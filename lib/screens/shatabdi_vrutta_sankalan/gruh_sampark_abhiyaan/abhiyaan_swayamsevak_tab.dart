@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
@@ -577,29 +576,29 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                 ),
                 SizedBox(height: 6),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                      ),
-                      onPressed: () {
-                        Fluttertoast.showToast(
-                          msg: Statics.getLabel("workInProgress"),
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.BOTTOM,
-                        );
-                      },
-                      child: Text(
-                        Statics.getLabel('addSahabhagiKaryakarta'),
-                        style: const TextStyle(color: Colors.purpleAccent),
-                      ),
-                    ),
+                    // OutlinedButton(
+                    //   style: OutlinedButton.styleFrom(
+                    //     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    //     side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
+                    //     shape: RoundedRectangleBorder(
+                    //       borderRadius: BorderRadius.circular(12),
+                    //     ),
+                    //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    //   ),
+                    //   onPressed: () {
+                    //     Fluttertoast.showToast(
+                    //       msg: Statics.getLabel("workInProgress"),
+                    //       toastLength: Toast.LENGTH_SHORT,
+                    //       gravity: ToastGravity.BOTTOM,
+                    //     );
+                    //   },
+                    //   child: Text(
+                    //     Statics.getLabel('addSahabhagiKaryakarta'),
+                    //     style: const TextStyle(color: Colors.purpleAccent),
+                    //   ),
+                    // ),
                     OutlinedButton(
                       style: OutlinedButton.styleFrom(
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,

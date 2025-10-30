@@ -304,228 +304,17 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
     });
   }
 
-  Future _getSwList(String strType) async {
+  Future<void> _getSwList(String strType) async {
     print("calling");
     bool isConnected = await Statics.isInternetConnected();
     if (isConnected) {
-      int? bhaagVal = _linkedbhaagValue == null || _linkedbhaagValue == "" ? null : int.parse(_linkedbhaagValue!);
-      int? shaharVal = _linkedshaharValue == null || _linkedshaharValue == "" ? null : int.parse(_linkedshaharValue!);
-      int? nagarVal = _linkednagarValue == null || _linkednagarValue == "" ? null : int.parse(_linkednagarValue!);
-      int? mandalVal = _linkedmandalValue == null || _linkedmandalValue == "" ? null : int.parse(_linkedmandalValue!);
-      int? graamVal = _linkedgraamValue == null || _linkedgraamValue == "" ? null : int.parse(_linkedgraamValue!);
-      int? vastiVal = _linkedvastiValue == null || _linkedvastiValue == "" ? null : int.parse(_linkedvastiValue!);
-
-      int? geoUnitID;
-      geoUnitID = vastiVal != null
-          ? vastiVal
-          : graamVal != null
-              ? graamVal
-              : mandalVal != null
-                  ? mandalVal
-                  : nagarVal != null
-                      ? nagarVal
-                      : shaharVal != null
-                          ? shaharVal
-                          : bhaagVal != null
-                              ? bhaagVal
-                              : null;
-
-      String? mukhyaVishay = "";
-      String? anyaVishay = "";
-
-      if (_isTrainedInMukhyaDanda == true) mukhyaVishay += "Danda,";
-      if (_isTrainedInMukhyaDandaYuddha == true) mukhyaVishay += "DandaYuddha,";
-      if (_isTrainedInMukhyaNiyuddha == true) mukhyaVishay += "Niyuddha,";
-      if (_isTrainedInMukhyaPadavinyas == true) mukhyaVishay += "PadaVinyaas,";
-      if (_isTrainedInMukhyaYogaasan == true) mukhyaVishay += "Yogaasan,";
-      if (_isTrainedInMukhyaYogachaap == true) mukhyaVishay += "YogaChaap,";
-
-      mukhyaVishay = mukhyaVishay == "" ? null : mukhyaVishay.substring(0, mukhyaVishay.length - 1);
-
-      if (_isTrainedInAnyaDanda == true) anyaVishay += "Danda,";
-      if (_isTrainedInAnyaDandaYuddha == true) anyaVishay += "DandaYuddha,";
-      if (_isTrainedInAnyaNiyuddha == true) anyaVishay += "Niyuddha,";
-      if (_isTrainedInAnyaPadavinyas == true) anyaVishay += "PadaVinyaas,";
-      if (_isTrainedInAnyaYogaasan == true) anyaVishay += "Yogaasan,";
-      if (_isTrainedInAnyaYogachaap == true) anyaVishay += "YogaChaap,";
-
-      anyaVishay = anyaVishay == "" ? null : anyaVishay.substring(0, anyaVishay.length - 1);
-
-      String? prathamVaadya = "";
-      if (_isTrainedInPrathamAanak == true) prathamVaadya += "Aanak,";
-      if (_isTrainedInPrathamGomukha == true) prathamVaadya += "Gomukha,";
-      if (_isTrainedInPrathamNaagaanga == true) prathamVaadya += "Naagaanga,";
-      if (_isTrainedInPrathamShankha == true) prathamVaadya += "Shankha,";
-      if (_isTrainedInPrathamSwarad == true) prathamVaadya += "Swarada,";
-      if (_isTrainedInPrathamTurya == true) prathamVaadya += "Turya,";
-      if (_isTrainedInPrathamVanshi == true) prathamVaadya += "Vanshi,";
-      if (_isTrainedInPrathamVenu == true) prathamVaadya += "Venu,";
-
-      prathamVaadya = prathamVaadya == "" ? null : prathamVaadya.substring(0, prathamVaadya.length - 1);
-
-      String? dwitiyaVaadya = "";
-      if (_isTrainedInDwitiyaAanak == true) dwitiyaVaadya += "Aanak,";
-      if (_isTrainedInDwitiyaGomukha == true) dwitiyaVaadya += "Gomukha,";
-      if (_isTrainedInDwitiyaNaagaanga == true) dwitiyaVaadya += "Naagaanga,";
-      if (_isTrainedInDwitiyaShankha == true) dwitiyaVaadya += "Shankha,";
-      if (_isTrainedInDwitiyaSwarad == true) dwitiyaVaadya += "Swarada,";
-      if (_isTrainedInDwitiyaTurya == true) dwitiyaVaadya += "Turya,";
-      if (_isTrainedInDwitiyaVanshi == true) dwitiyaVaadya += "Vanshi,";
-      if (_isTrainedInDwitiyaVenu == true) dwitiyaVaadya += "Venu,";
-
-      dwitiyaVaadya = dwitiyaVaadya == "" ? null : dwitiyaVaadya.substring(0, dwitiyaVaadya.length - 1);
-
-      String? trutiyaVaadya = "";
-      if (_isTrainedInTrutiyaAanak == true) trutiyaVaadya += "Aanak,";
-      if (_isTrainedInTrutiyaGomukha == true) trutiyaVaadya += "Gomukha,";
-      if (_isTrainedInTrutiyaNaagaanga == true) trutiyaVaadya += "Naagaanga,";
-      if (_isTrainedInTrutiyaShankha == true) trutiyaVaadya += "Shankha,";
-      if (_isTrainedInTrutiyaSwarad == true) trutiyaVaadya += "Swarada,";
-      if (_isTrainedInTrutiyaTurya == true) trutiyaVaadya += "Turya,";
-      if (_isTrainedInTrutiyaVanshi == true) trutiyaVaadya += "Vanshi,";
-      if (_isTrainedInTrutiyaVenu == true) trutiyaVaadya += "Venu,";
-
-      trutiyaVaadya = trutiyaVaadya == "" ? null : trutiyaVaadya.substring(0, trutiyaVaadya.length - 1);
-
-      String? anyaVaadya = "";
-      if (_isTrainedInAnyaAanak == true) anyaVaadya += "Aanak,";
-      if (_isTrainedInAnyaGomukha == true) anyaVaadya += "Gomukha,";
-      if (_isTrainedInAnyaNaagaanga == true) anyaVaadya += "Naagaanga,";
-      if (_isTrainedInAnyaShankha == true) anyaVaadya += "Shankha,";
-      if (_isTrainedInAnyaSwarad == true) anyaVaadya += "Swarada,";
-      if (_isTrainedInAnyaTurya == true) anyaVaadya += "Turya,";
-      if (_isTrainedInAnyaVanshi == true) anyaVaadya += "Vanshi,";
-      if (_isTrainedInAnyaVenu == true) anyaVaadya += "Venu,";
-
-      anyaVaadya = anyaVaadya == "" ? null : anyaVaadya.substring(0, anyaVaadya.length - 1);
-      String? educationOrgName = "";
-
-      if (_categoryValue != null) {
-        if (_categoryValue!.code == "School Student") {
-          educationOrgName = _schoolNameCntrl.text.isEmpty ? null : _schoolNameCntrl.text;
-          _collegeID == null;
-        } else if (_categoryValue!.code == 'Jr College') {
-          _collegeID == null;
-          educationOrgName = _collegeOthrNameCntrl.text.isEmpty ? null : _collegeOthrNameCntrl.text;
-        } else if (_categoryValue!.code == 'Senior College' ||
-            _categoryValue!.code == 'Post Graduate' ||
-            _categoryValue!.code == 'Professional Studies' ||
-            _categoryValue!.code == 'Correspondence Course') {
-          educationOrgName = "";
-        }
-      }
-
-      String? _weeklyOffDay = "";
-      if (_isSun == true) _weeklyOffDay = _weeklyOffDay + "0,";
-      if (_isMon == true) _weeklyOffDay = _weeklyOffDay + "1,";
-      if (_isTue == true) _weeklyOffDay = _weeklyOffDay + "2,";
-      if (_isWed == true) _weeklyOffDay = _weeklyOffDay + "3,";
-      if (_isThu == true) _weeklyOffDay = _weeklyOffDay + "4,";
-      if (_isFri == true) _weeklyOffDay = _weeklyOffDay + "5,";
-      if (_isSat == true) _weeklyOffDay = _weeklyOffDay + "6,";
-
-      _weeklyOffDay = _weeklyOffDay == "" ? null : _weeklyOffDay.substring(0, _weeklyOffDay.length - 1);
-
-      var inputData = json.encode({
+      var inputData = {
         "AppUserID": Statics.userDetails["userID"],
         // "AppUserID": "5693",
-        "SearchCriteria": _searchController.text,
-        "BloodGroupID": _bldGrpvalue == "" ? null : _bldGrpvalue,
-        "MotherTongueID": _mthrTngvalue == "" ? null : _mthrTngvalue,
-        "ShaakhaaExperienceYearID": _shaakhaSanchalanvalue == "" ? null : _shaakhaSanchalanvalue,
-        "GeoUnitID": geoUnitID,
-        "IsPratidnyit": _isPratidnyit,
-        "PratidnyaYear": _pratidnyaYearCtrl.text.isEmpty ? null : _pratidnyaYearCtrl.text,
-        "IsGanaveshComplete": _isGanveshComplete,
-        "NoCap": _noCap,
-        "NoShirt": _noShirt,
-        "NoPant": _noPant,
-        "NoBelt": _noBelt,
-        "NoShoes": _noShoes,
-        "NoSocks": _noSocks,
-        "NoDanda": _noDanda,
-        "VehicleType": _vehicleValue == "" ? null : _vehicleValue,
-        "HasDriver": _hasVehicleDriver,
-        "SanghaShikshanCode": _sanghaShikshaVarsha == "" ? null : _sanghaShikshaVarsha,
-        "SanghaShikshanYearFrom": _shikshaFromYearCntrl.text.isEmpty ? null : _shikshaFromYearCntrl.text,
-        "SanghaShikshanYearTo": _shikshaToYearCntrl.text.isEmpty ? null : _shikshaToYearCntrl.text,
-        "HasBeenOTCShikshak": _hasBeenShikshak,
-        "MukhyaShaaririkVishayCodes": mukhyaVishay == "" ? null : mukhyaVishay,
-        "AnyaShaaririkVishayCodes": anyaVishay == "" ? null : anyaVishay,
-        "PrathamVaadyaCodes": prathamVaadya == "" ? null : prathamVaadya,
-        "DwitiyaVaadyaCodes": dwitiyaVaadya == "" ? null : dwitiyaVaadya,
-        "TrutiyaVaadyaCodes": trutiyaVaadya == "" ? null : trutiyaVaadya,
-        "AnyaVaadyaCodes": anyaVaadya == "" ? null : anyaVaadya,
-        "IsUnderstandLipiPrathamVaadya": _isPrathamLipi,
-        "IsUnderstandLipiDwitiyaVaadya": _isDwitiyaLipi,
-        "IsUnderstandLipiTrutiyaVaadya": _isTrutiyaLipi,
-        "IsUnderstandLipiAnyaVaadya": _isAnyaLipi,
-        "RachanaaCountPrathamVaadya": _rachanaaCountPrathamCntrl.text.isEmpty ? null : _rachanaaCountPrathamCntrl.text,
-        "RachanaaCountDwitiyaVaadya": _rachanaaCountDwitiyaCntrl.text.isEmpty ? null : _rachanaaCountDwitiyaCntrl.text,
-        "RachanaaCountTrutiyaVaadya": _rachanaaCountTrutiyaCntrl.text.isEmpty ? null : _rachanaaCountTrutiyaCntrl.text,
-        "RachanaaCountAnyaVaadya": _rachanaaCountAnyaCntrl.text.isEmpty ? null : _rachanaaCountAnyaCntrl.text,
-        "OccupationCategoryID": _categoryValue == null ? null : _categoryValue!.staticID,
-        "EducationUniversityID": _educationUniversityID,
-        "EducationUniversityName": _educationUniversityNameCntrl.text.trim() != "Other"
-            ? null
-            : _educationOthrUniversityNameCntrl.text.trim() == ""
-                ? null
-                : _educationOthrUniversityNameCntrl.text,
-        "EducationInstitutionID": _collegeID,
-        "EducationInstitutionName": educationOrgName == "" ? null : educationOrgName,
-        "EducationProgramID": _educationProgramID,
-        "EducationProgramName": _educationProgramName.text.trim() != "Other"
-            ? null
-            : _educationOthrProgramName.text.trim() == ""
-                ? null
-                : _educationOthrProgramName.text,
-        "EducationCourseID": _educationCourseID,
-        "EducationCourseName": _educationCourseName.text.trim() != "Other"
-            ? null
-            : _educationOthrCourseName.text.trim() == ""
-                ? null
-                : _educationOthrCourseName.text,
-        "EducationStandardID": _standardValue == null ? null : _standardValue!.staticID,
-        "EducationStandardName": _standardValue != null && _standardValue!.code == "Other"
-            ? _educationOthrStandardNameCntrl.text.trim() == ""
-                ? null
-                : _educationStandardNameCntrl.text
-            : null,
-        "GovernmentDepartment": _govtDeptCtrl.text.isEmpty ? null : _govtDeptCtrl.text,
-        "Designation": null,
-        "OfficeLocation": _officeLocationCtrl.text.isEmpty ? null : _officeLocationCtrl.text,
-        "WeeklyOffDayIDs": _weeklyOffDay,
-        "OrganizationName": _organizationNameCtrl.text.isEmpty ? null : _organizationNameCtrl.text,
-        "IndustryVertical": _industrialVerticalCtrl.text.isEmpty ? null : _industrialVerticalCtrl.text,
-        "OrganizationAtRetirement": _organizationAtRetirementCtrl.text.isEmpty ? null : _organizationAtRetirementCtrl.text,
-        "DesignationAtRetirement": _desgAtRetirementCtrl.text.isEmpty ? null : _desgAtRetirementCtrl.text,
-        "DepartmentAtRetirement": _deptAtRetirementCtrl.text.isEmpty ? null : _deptAtRetirementCtrl.text,
-        "DaayitvaForID": _daayitvaForValue == null ? null : _daayitvaForValue!.staticID,
-        "DaayitvaID": _daayitvaValue == "" ? null : _daayitvaValue,
-        "DaayitvaLevelID": _levelValue == "" ? null : _levelValue,
-        "DaayitvaGeoUnitID": _geoUnitsValue == "" ? null : _geoUnitsValue,
-        "IsNoDaayitva": _noDaayitva,
-        "IsPravaasi": _pravaasi,
-        "SanghaPreritSansthaaID": _preritSansthaValue == "" ? null : _preritSansthaValue,
-        "SocialOrganizationName": _othOrgNameCtrl.text.isEmpty ? null : _othOrgNameCtrl.text,
-        "SortOrder": _sortingOnValue == "Name" ? "FullName" : "SwayamsevakID",
-      });
+        "SearchCriteria": _searchController.text.trim(),
+      };
       print(jsonEncode(inputData));
-      if (strType == "Search") {
-        newData = await SwayamsevakProvider().getAbhiyanSwayamsevaks(inputData);
-        if (newData.isEmpty) {
-          _mobileCntrl.text = _searchController.text;
-          showFields = true;
-          setState(() {});
-        }
-        return newData;
-      } else if (strType == "Export") {
-        SwayamsevakProvider().getSwayamsevaksForExport(inputData);
-        return null;
-      } else {
-        Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
-        return null;
-      }
+      await getSwayamsevakForGruhAbhiyaan(inputData);
     }
   }
 
@@ -708,48 +497,61 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      "${Statics.getLabel('Search')}              :",
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        "${Statics.getLabel('Search')} ",
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.6,
-                      // margin: EdgeInsets.only(right: 5),
-                      alignment: Alignment.center,
-                      child: TextField(
-                        controller: _searchController,
-                        style: TextStyle(fontSize: 16),
-                        autofocus: false,
-                        onChanged: (v) {
-                          if (v.isEmpty) {
-                            showFields = false;
-                          }
-                          setState(() {});
-                        },
-                        inputFormatters: [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.digitsOnly],
-                        keyboardType: TextInputType.phone,
-                        decoration: InputDecoration(
-                          isDense: true,
-                          contentPadding: EdgeInsets.symmetric(horizontal: 15),
-                          suffixIcon: InkWell(
-                            onTap: () async {
-                              FocusScope.of(context).unfocus();
-                              if (_searchController.text.length < 10) {
-                                Statics.showToast(Statics.getLabel('MobileValidationMessage'));
-                                return null;
-                              }
-                              await _search("Search");
-                              setState(() {});
-                            },
-                            borderRadius: BorderRadius.circular(30),
-                            child: Icon(
-                              Icons.search,
-                              size: 25,
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        ":",
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 4,
+                      child: Container(
+                        // width: MediaQuery.of(context).size.width * 0.6,
+                        // margin: EdgeInsets.only(right: 5),
+                        alignment: Alignment.center,
+                        child: TextField(
+                          controller: _searchController,
+                          style: TextStyle(fontSize: 16),
+                          autofocus: false,
+                          onChanged: (v) {
+                            if (v.isEmpty) {
+                              showFields = false;
+                            }
+                            setState(() {});
+                          },
+                          inputFormatters: [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.digitsOnly],
+                          keyboardType: TextInputType.phone,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                            suffixIcon: InkWell(
+                              onTap: () async {
+                                FocusScope.of(context).unfocus();
+                                if (_searchController.text.length < 10) {
+                                  Statics.showToast(Statics.getLabel('MobileValidationMessage'));
+                                  return null;
+                                }
+                                await _search("Search");
+                                setState(() {});
+                              },
+                              borderRadius: BorderRadius.circular(30),
+                              child: Icon(
+                                Icons.search,
+                                size: 25,
+                              ),
                             ),
+                            border: OutlineInputBorder(borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                            enabledBorder: OutlineInputBorder(borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                            focusedBorder: OutlineInputBorder(borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
                           ),
-                          border: OutlineInputBorder(borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
-                          enabledBorder: OutlineInputBorder(borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
-                          focusedBorder: OutlineInputBorder(borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
                         ),
                       ),
                     ),
@@ -1090,34 +892,48 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      "${Statics.getLabel('SelectLevel')}    :",
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        "${Statics.getLabel('SelectLevel')}",
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        ":",
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
                     ),
                     if (_level != null)
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.only(left: 10, right: 0, top: 5, bottom: 5),
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.black38)),
-                        child: DropdownButton<String>(
-                          isExpanded: true,
-                          isDense: true,
-                          iconSize: 30,
-                          underline: SizedBox(),
-                          value: _levelValue == "" ? null : _levelValue,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              selectedDayitvValue = "";
-                              _levelValue = newValue!;
-                              _geoUnitsValue = "";
-                              print(newValue);
-                            });
-                            populateGeoUnits(newValue);
-                          },
-                          items: _level!.map((bg) => DropdownMenuItem(value: bg.levelID.toString(), child: Text(Statics.getLabel(bg.levelName!)))).toList(),
+                      Expanded(
+                        flex: 4,
+                        child: Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.only(left: 10, right: 0, top: 5, bottom: 5),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.black38)),
+                          child: DropdownButton<String>(
+                            isExpanded: true,
+                            isDense: true,
+                            iconSize: 30,
+                            underline: SizedBox(),
+                            value: _levelValue == "" ? null : _levelValue,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedDayitvValue = "";
+                                _levelValue = newValue!;
+                                _geoUnitsValue = "";
+                                print(newValue);
+                              });
+                              populateGeoUnits(newValue);
+                            },
+                            items: _level!.map((bg) => DropdownMenuItem(value: bg.levelID.toString(), child: Text(Statics.getLabel(bg.levelName!)))).toList(),
+                          ),
                         ),
-                      ),
+                      )
+                    else
+                      Expanded(flex: 4, child: SizedBox()),
                   ],
                 ),
                 if (_levelValue != "")
@@ -1128,31 +944,45 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        "${Statics.getLabel('SelectLevelName')}     :",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          "${Statics.getLabel('SelectLevelName')}",
+                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          ":",
+                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
                       ),
                       if (_geoUnits != null)
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.6,
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.only(left: 10, right: 0, top: 5, bottom: 5),
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.black38)),
-                          child: DropdownButton<String>(
-                            isExpanded: true,
-                            isDense: true,
-                            iconSize: 30,
-                            underline: SizedBox(),
-                            value: _geoUnitsValue == "" ? null : _geoUnitsValue,
-                            onChanged: (String? newValue) {
-                              selectedDayitvValue = "";
-                              _geoUnitsValue = newValue!;
-                              print(newValue);
-                              setState(() {});
-                            },
-                            items: _geoUnits!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                        Expanded(
+                          flex: 4,
+                          child: Container(
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.only(left: 10, right: 0, top: 5, bottom: 5),
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.black38)),
+                            child: DropdownButton<String>(
+                              isExpanded: true,
+                              isDense: true,
+                              iconSize: 30,
+                              underline: SizedBox(),
+                              value: _geoUnitsValue == "" ? null : _geoUnitsValue,
+                              onChanged: (String? newValue) {
+                                selectedDayitvValue = "";
+                                _geoUnitsValue = newValue!;
+                                print(newValue);
+                                setState(() {});
+                              },
+                              items: _geoUnits!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                            ),
                           ),
-                        ),
+                        )
+                      else
+                        Expanded(flex: 4, child: SizedBox()),
                     ],
                   ),
                 SizedBox(
@@ -1163,35 +993,47 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        "दायित्व             :",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          "दायित्व",
+                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.only(left: 10, right: 0, top: 5, bottom: 5),
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.black38)),
-                        child: DropdownButton<String>(
-                          isExpanded: true,
-                          isDense: true,
-                          iconSize: 30,
-                          underline: SizedBox(),
-                          value: selectedDayitvValue == "" ? null : selectedDayitvValue,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              selectedDayitvValue = newValue!;
-                            });
-                          },
-                          items: <String>["अभियान प्रमुख", "अभियान कार्यकर्ता"].map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 3.0),
-                                child: Text(value),
-                              ),
-                            );
-                          }).toList(),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          ":",
+                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 4,
+                        child: Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.only(left: 10, right: 0, top: 5, bottom: 5),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.black38)),
+                          child: DropdownButton<String>(
+                            isExpanded: true,
+                            isDense: true,
+                            iconSize: 30,
+                            underline: SizedBox(),
+                            value: selectedDayitvValue == "" ? null : selectedDayitvValue,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedDayitvValue = newValue!;
+                              });
+                            },
+                            items: <String>["अभियान प्रमुख", "अभियान कार्यकर्ता"].map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 3.0),
+                                  child: Text(value),
+                                ),
+                              );
+                            }).toList(),
+                          ),
                         ),
                       ),
                     ],

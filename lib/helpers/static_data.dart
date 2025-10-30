@@ -194,6 +194,10 @@ const String vastiSarvekshanstep3Submit = baseUrlAPI + '/vastiSarvekshanstep3';
 const String mandalSarvekshanstep1Submit = baseUrlAPI + '/mandalSarvekshanstep1';
 const String mandalSarvekshanstep2Submit = baseUrlAPI + '/mandalSarvekshanstep2';
 const String mandalSarvekshanstep3Submit = baseUrlAPI + '/mandalSarvekshanstep3';
+
+const String getSwayamsevakForGruhApi = baseUrlAPI + '/GetSwayamsevaksForGruh';
+
+//////////////////////////////////////////////////////////////////////////////////////////
 const String patchSuffix = '';
 const String dbVersion = '4';
 const int shaakhaaFrequencyDaily = 34;
@@ -2571,6 +2575,37 @@ Future<GetVijayadashamiReportModel?> getVijayaDashamiUtsavReportData(BuildContex
     }
   } catch (e) {
     Navigator.of(context, rootNavigator: true).pop();
+    print("Exception: $e");
+    return null;
+  }
+}
+
+Future<dynamic?> getSwayamsevakForGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
+  if (context != null) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  try {
+    var response = await http.post(
+      Uri.parse(getSwayamsevakForGruhApi),
+      headers: jHeaders,
+      body: jsonEncode(inputJson),
+    );
+
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+
+      GetVijayadashamiReportModel model = GetVijayadashamiReportModel.fromJson(data);
+      log("getSwayamsevakForGruhAbhiyaan >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+
+      return model; // ✅ return karna zaroori hai
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null; // ✅ error case
+    }
+  } catch (e) {
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
     print("Exception: $e");
     return null;
   }
