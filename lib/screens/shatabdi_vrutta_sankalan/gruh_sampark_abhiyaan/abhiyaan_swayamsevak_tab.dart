@@ -1,12 +1,11 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 import '../../../helpers/static_data.dart' as Statics;
 import '../../../models/response_model/AbhiyaanListResponse.dart';
@@ -32,8 +31,12 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
   // List<MenuChoices> choices = [
   //   MenuChoices("EditMenu", Icons.add, "सहभागी कार्यकर्ता जोडा")
   // ];
+  late ScrollController _scrollController;
+
   GruhAbhiyaanVruttaDataModel? gruhAbhiyaanVruttaData;
   List<AbhiyanSwayamsevakList> abhiyaanSwayamsevakDataList = [];
+  List<AbhiyanSwayamsevakList> abhiyaanKaryakartaDataList = [];
+  List<AbhiyanSwayamsevakList> selectedKaryakartaList = [];
   // List<AbhiyanSwayamsevakList> selectedAbhiyaanSwayamsevakList = [];
   String? selectedSwayamAbhiyanValue = "";
   bool? _isSearching = false;
@@ -145,7 +148,10 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
   }
 
   getData() async {
-    populateDropdown();
+    _scrollController = ScrollController();
+
+    await populateDropdown();
+    setState(() {});
     // await _getSwList();
   }
 
@@ -170,6 +176,7 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
           samparkaToliController.text = (gruhAbhiyaanVruttaData?.abhiyaandata?.samparkhetutolisankhya ?? "").toString();
 
           abhiyaanSwayamsevakDataList = gruhAbhiyaanVruttaData?.abhiyaanmodels ?? [];
+          abhiyaanKaryakartaDataList = gruhAbhiyaanVruttaData?.abhiyaanmodels ?? [];
         });
       }
     }
@@ -549,200 +556,444 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
       useSafeArea: true,
       builder: (ct) => StatefulBuilder(
         builder: (ctx, set) => Dialog(
+          surfaceTintColor: Colors.transparent,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           // contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           insetPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 16),
           // titlePadding: const EdgeInsets.fromLTRB(20, 20, 12, 0),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 12),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        Statics.getLabel('selectSwayamsevak'),
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    IconButton(
-                      style: IconButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
-                      icon: const Icon(Icons.close, color: Colors.redAccent),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 6),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    // OutlinedButton(
-                    //   style: OutlinedButton.styleFrom(
-                    //     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    //     side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
-                    //     shape: RoundedRectangleBorder(
-                    //       borderRadius: BorderRadius.circular(12),
-                    //     ),
-                    //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    //   ),
-                    //   onPressed: () {
-                    //     Fluttertoast.showToast(
-                    //       msg: Statics.getLabel("workInProgress"),
-                    //       toastLength: Toast.LENGTH_SHORT,
-                    //       gravity: ToastGravity.BOTTOM,
-                    //     );
-                    //   },
-                    //   child: Text(
-                    //     Statics.getLabel('addSahabhagiKaryakarta'),
-                    //     style: const TextStyle(color: Colors.purpleAccent),
-                    //   ),
-                    // ),
-                    OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                      ),
-                      onPressed: () async {
-                        await saveGruhAbhiyaanDataFun();
-                        Navigator.pop(ct);
-                        Navigator.of(context).pushNamed(AddAbhiyaanKaryakartaScreen.routeName).then((value) async {
-                          data = await Statics.getVijayadashamiInitData(
-                              context,
-                              Statics.userDetails["userID"],
-                              _linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? _linkedvastiValue! : _linkedgraamValue!,
-                              _linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? "2" : "3");
-                          setState(() {});
-                          // if(Statics.userDetails[])
-                          await _getSwList();
-                        });
-                        // Navigator.of(context).pushNamed(EditSwayamsevakScreen.routeName, arguments: Statics.ScreenArgumentsNew(0, Statics.getLabel('EditMenu')));
-                      },
-                      child: Text(
-                        Statics.getLabel('AddSwayamsevak'),
-                        style: const TextStyle(color: Colors.purpleAccent),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16),
-                Flexible(
-                  child: Container(
-                    constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.58),
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-                      itemCount: abhiyaanSwayamsevakDataList.length,
-                      itemBuilder: (context, index) {
-                        final swItem = abhiyaanSwayamsevakDataList[index];
-                        return Card(
-                          margin: EdgeInsets.all(5),
-                          elevation: 5,
-                          child: CheckboxListTile(
-                            onChanged: (value) => set(() {
-                              swItem.isSelected = !swItem.isSelected;
-                            }),
-                            value: swItem.isSelected,
-                            contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                            title: Text(swItem.fullName.toString()),
-                            subtitle: Container(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(swItem.daayityaName.toString()),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Wrap(direction: Axis.vertical, spacing: 5, children: [
-                                    RichText(
-                                      text: TextSpan(
-                                        text: 'M: ${swItem.participantNumber.toString()}${swItem.email.toString().isNotEmpty ? ',' : ''}',
-                                        style: TextStyle(color: Colors.blue),
-                                        recognizer: TapGestureRecognizer()
-                                          ..onTap = () {
-                                            UrlLauncher.launch("tel://" + swItem.participantNumber.toString());
-                                          },
-                                      ),
-                                    ),
-                                    if (swItem.email != null && swItem.email!.isNotEmpty)
-                                      RichText(
-                                        text: TextSpan(
-                                          text: 'E: ${swItem.email.toString()}',
-                                          style: TextStyle(color: Colors.blue),
-                                          recognizer: TapGestureRecognizer()
-                                            ..onTap = () {
-                                              UrlLauncher.launch("mailto:" + swItem.email.toString());
-                                            },
-                                        ),
-                                      ),
-                                  ]),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                SizedBox(height: 8),
-                if (abhiyaanSwayamsevakDataList.isNotEmpty)
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      const SizedBox(width: 8),
                       Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.purpleAccent,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            Statics.getLabel('Submit'),
-                            style: const TextStyle(color: Colors.white),
+                        child: Text(
+                          Statics.getLabel('selectSwayamsevak'),
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                      // SizedBox(
-                      //   width: 15,
-                      // ),
-                      // OutlinedButton(
-                      //   style: OutlinedButton.styleFrom(
-                      //     side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
-                      //     shape: RoundedRectangleBorder(
-                      //       borderRadius: BorderRadius.circular(12),
-                      //     ),
-                      //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                      //   ),
-                      //   onPressed: onAdd,
-                      //   child: Text(
-                      //     Statics.getLabel('fillNewRecord'),
-                      //     style: const TextStyle(color: Colors.purpleAccent),
-                      //   ),
-                      // ),
+                      IconButton(
+                        icon: const Icon(Icons.close, color: Colors.redAccent),
+                        onPressed: () => Navigator.pop(context),
+                      ),
                     ],
                   ),
-              ],
+                  SizedBox(height: 6),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        ),
+                        onPressed: () async {
+                          await saveGruhAbhiyaanDataFun();
+                          Navigator.pop(ct);
+                          Navigator.of(context).pushNamed(AddAbhiyaanKaryakartaScreen.routeName, arguments: "abhiyaanKaryakarta").then((value) async {
+                            data = await Statics.getVijayadashamiInitData(
+                                context,
+                                Statics.userDetails["userID"],
+                                _linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? _linkedvastiValue! : _linkedgraamValue!,
+                                _linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? "2" : "3");
+                            setState(() {});
+                            // if(Statics.userDetails[])
+                            await _getSwList();
+                          });
+                          // Fluttertoast.showToast(
+                          //   msg: Statics.getLabel("workInProgress"),
+                          //   toastLength: Toast.LENGTH_SHORT,
+                          //   gravity: ToastGravity.BOTTOM,
+                          // );
+                        },
+                        child: Text(
+                          Statics.getLabel('addSahabhagiKaryakarta'),
+                          style: const TextStyle(color: Colors.purpleAccent),
+                        ),
+                      ),
+                      OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        ),
+                        onPressed: () async {
+                          await saveGruhAbhiyaanDataFun();
+                          Navigator.pop(ct);
+                          Navigator.of(context).pushNamed(AddAbhiyaanKaryakartaScreen.routeName, arguments: "swayamsevak").then((value) async {
+                            data = await Statics.getVijayadashamiInitData(
+                                context,
+                                Statics.userDetails["userID"],
+                                _linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? _linkedvastiValue! : _linkedgraamValue!,
+                                _linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? "2" : "3");
+                            setState(() {});
+                            // if(Statics.userDetails[])
+                            await _getSwList();
+                          });
+                          // Navigator.of(context).pushNamed(EditSwayamsevakScreen.routeName, arguments: Statics.ScreenArgumentsNew(0, Statics.getLabel('EditMenu')));
+                        },
+                        child: Text(
+                          Statics.getLabel('AddSwayamsevak'),
+                          style: const TextStyle(color: Colors.purpleAccent),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 16),
+                  selectedKaryakartaTable(set),
+                  SizedBox(height: 12),
+                  swayamsevakAndKaryakartaTable(set),
+                  // Flexible(
+                  //   child: Container(
+                  //     constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.58),
+                  //     child: ListView.builder(
+                  //       shrinkWrap: true,
+                  //       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                  //       itemCount: abhiyaanSwayamsevakDataList.length,
+                  //       itemBuilder: (context, index) {
+                  //         final swItem = abhiyaanSwayamsevakDataList[index];
+                  //         return Card(
+                  //           margin: EdgeInsets.all(5),
+                  //           elevation: 5,
+                  //           child: CheckboxListTile(
+                  //             onChanged: (value) => set(() {
+                  //               swItem.isSelected = !swItem.isSelected;
+                  //             }),
+                  //             value: swItem.isSelected,
+                  //             contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  //             title: Text(swItem.participantName.toString()),
+                  //             subtitle: Container(
+                  //               child: Column(
+                  //                 crossAxisAlignment: CrossAxisAlignment.start,
+                  //                 children: [
+                  //                   SizedBox(
+                  //                     height: 5,
+                  //                   ),
+                  //                   Text(swItem.daayityaName.toString()),
+                  //                   SizedBox(
+                  //                     height: 5,
+                  //                   ),
+                  //                   Wrap(direction: Axis.vertical, spacing: 5, children: [
+                  //                     RichText(
+                  //                       text: TextSpan(
+                  //                         text: 'M: ${swItem.participantNumber.toString()}${swItem.email.toString().isNotEmpty ? ',' : ''}',
+                  //                         style: TextStyle(color: Colors.blue),
+                  //                         recognizer: TapGestureRecognizer()
+                  //                           ..onTap = () {
+                  //                             UrlLauncher.launch("tel://" + swItem.participantNumber.toString());
+                  //                           },
+                  //                       ),
+                  //                     ),
+                  //                     if (swItem.email != null && swItem.email!.isNotEmpty)
+                  //                       RichText(
+                  //                         text: TextSpan(
+                  //                           text: 'E: ${swItem.email.toString()}',
+                  //                           style: TextStyle(color: Colors.blue),
+                  //                           recognizer: TapGestureRecognizer()
+                  //                             ..onTap = () {
+                  //                               UrlLauncher.launch("mailto:" + swItem.email.toString());
+                  //                             },
+                  //                         ),
+                  //                       ),
+                  //                   ]),
+                  //                 ],
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         );
+                  //       },
+                  //     ),
+                  //   ),
+                  // ),
+                  SizedBox(height: 8),
+                  if (abhiyaanSwayamsevakDataList.isNotEmpty)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.purpleAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              Statics.getLabel('Submit'),
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                        // SizedBox(
+                        //   width: 15,
+                        // ),
+                        // OutlinedButton(
+                        //   style: OutlinedButton.styleFrom(
+                        //     side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
+                        //     shape: RoundedRectangleBorder(
+                        //       borderRadius: BorderRadius.circular(12),
+                        //     ),
+                        //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        //   ),
+                        //   onPressed: onAdd,
+                        //   child: Text(
+                        //     Statics.getLabel('fillNewRecord'),
+                        //     style: const TextStyle(color: Colors.purpleAccent),
+                        //   ),
+                        // ),
+                      ],
+                    ),
+                ],
+              ),
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget selectedKaryakartaTable(void Function(void Function()) set) {
+    final List<String> headers = [
+      "",
+      Statics.getLabel('Name'),
+      Statics.getLabel('daayitvaName'),
+      Statics.getLabel('Mobile'),
+    ];
+
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black54),
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(Statics.getLabel("selectedList"), softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold)),
+          SizedBox(height: 12),
+          Scrollbar(
+            controller: _scrollController,
+            thumbVisibility: true,
+            interactive: true,
+            thickness: 5,
+            radius: Radius.circular(10),
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              scrollDirection: Axis.horizontal,
+              child: DataTable(
+                showCheckboxColumn: false,
+                headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+                columnSpacing: 30,
+                headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
+                columns: headers
+                    .map((header) => DataColumn(
+                          label: Container(
+                            constraints: BoxConstraints(minWidth: 30, maxWidth: header == headers.first ? 80 : 200),
+                            // constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.2),
+                            child: Text(header, softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold)),
+                          ),
+                        ))
+                    .toList(),
+                rows: selectedKaryakartaList.asMap().entries.map((entry) {
+                  int index = entry.key;
+                  var data = entry.value;
+                  // bool isSelected = selectedGramVastiListRowIndex == index;
+                  return DataRow(
+                      selected: data.isSelected,
+                      color: MaterialStateProperty.resolveWith<Color?>(
+                        (Set<MaterialState> states) {
+                          if (data.isSelected) return Colors.yellow.shade100;
+                          return null;
+                        },
+                      ),
+                      cells: [
+                        DataCell(
+                          InkWell(
+                            onTap: () {
+                              set(() {
+                                selectedKaryakartaList.remove(data);
+                              });
+                            },
+                            child: Icon(Icons.delete_forever_outlined, color: Colors.red, size: 21),
+                          ),
+                        ),
+                        DataCell(Text(data.participantName == "" ? "--" : (data.participantName ?? "--"))),
+                        DataCell(Text(data.daayityaName == "" ? "--" : (data.daayityaName ?? "--"))),
+                        DataCell(Text(data.participantNumber == "" ? "--" : (data.participantNumber ?? "--"))),
+                      ]);
+                }).toList(),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget swayamsevakAndKaryakartaTable(void Function(void Function()) set) {
+    final List<String> headers = [
+      "",
+      Statics.getLabel('Name'),
+      Statics.getLabel('daayitvaName'),
+      Statics.getLabel('Mobile'),
+    ];
+
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black54),
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(Statics.getLabel("SwayamsevaksList"), softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold)),
+          SizedBox(height: 12),
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(vertical: 10),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black54),
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+            ),
+            child: Scrollbar(
+              controller: _scrollController,
+              thumbVisibility: true,
+              interactive: true,
+              thickness: 5,
+              radius: Radius.circular(10),
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                scrollDirection: Axis.horizontal,
+                child: DataTable(
+                  showCheckboxColumn: false,
+                  headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+                  columnSpacing: 30,
+                  headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
+                  columns: headers
+                      .map((header) => DataColumn(
+                            label: Container(
+                              constraints: BoxConstraints(minWidth: 30, maxWidth: header == headers.first ? 80 : 200),
+                              // constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.2),
+                              child: Text(header, softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold)),
+                            ),
+                          ))
+                      .toList(),
+                  rows: abhiyaanSwayamsevakDataList.asMap().entries.map((entry) {
+                    int index = entry.key;
+                    var data = entry.value;
+                    bool isSelected = selectedKaryakartaList.contains(data);
+                    return DataRow(
+                        selected: isSelected,
+                        color: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (isSelected) return Colors.yellow.shade100;
+                            return null;
+                          },
+                        ),
+                        onSelectChanged: (bool? selected) {
+                          if (!isSelected) {
+                            set(() {
+                              selectedKaryakartaList.add(data);
+                            });
+                          }
+                        },
+                        cells: [
+                          DataCell(Icon(isSelected ? Icons.check_box_rounded : Icons.check_box_outline_blank_rounded, color: Colors.yellow.shade800, size: 18)),
+                          DataCell(Text(data.participantName == "" ? "--" : (data.participantName ?? "--"))),
+                          DataCell(Text(data.daayityaName == "" ? "--" : (data.daayityaName ?? "--"))),
+                          DataCell(Text(data.participantNumber == "" ? "--" : (data.participantNumber ?? "--"))),
+                        ]);
+                  }).toList(),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 18),
+          Text(Statics.getLabel("KaaryakartaaList"), softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold)),
+          SizedBox(height: 12),
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(vertical: 10),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black54),
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+            ),
+            child: Scrollbar(
+              controller: _scrollController,
+              thumbVisibility: true,
+              interactive: true,
+              thickness: 5,
+              radius: Radius.circular(10),
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                scrollDirection: Axis.horizontal,
+                child: DataTable(
+                  showCheckboxColumn: false,
+                  headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+                  columnSpacing: 30,
+                  headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
+                  columns: headers
+                      .map((header) => DataColumn(
+                            label: Container(
+                              constraints: BoxConstraints(minWidth: 30, maxWidth: header == headers.first ? 80 : 200),
+                              // constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.2),
+                              child: Text(header, softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold)),
+                            ),
+                          ))
+                      .toList(),
+                  rows: abhiyaanKaryakartaDataList.asMap().entries.map((entry) {
+                    int index = entry.key;
+                    var data = entry.value;
+                    bool isSelected = selectedKaryakartaList.contains(data);
+                    return DataRow(
+                        selected: isSelected,
+                        color: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (isSelected) return Colors.yellow.shade100;
+                            return null;
+                          },
+                        ),
+                        onSelectChanged: (bool? selected) {
+                          if (!isSelected) {
+                            set(() {
+                              selectedKaryakartaList.add(data);
+                            });
+                          }
+                        },
+                        cells: [
+                          DataCell(Icon(isSelected ? Icons.check_box_rounded : Icons.check_box_outline_blank_rounded, color: Colors.yellow.shade900, size: 18)),
+                          DataCell(Text(data.participantName == "" ? "--" : (data.participantName ?? "--"))),
+                          DataCell(Text(data.daayityaName == "" ? "--" : (data.daayityaName ?? "--"))),
+                          DataCell(Text(data.participantNumber == "" ? "--" : (data.participantNumber ?? "--"))),
+                        ]);
+                  }).toList(),
+                ),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -759,28 +1010,28 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
             // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 15),
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Text(
-                      "${Statics.getLabel('Abhiyaan')}",
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ],
-              ),
-              // SizedBox(height: 10),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(left: 10, right: 0, top: 5, bottom: 5),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(color: Colors.black38),
-                ),
-                child: Text(abhiyaanDataList.first.abhiyaanName.toString(), style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15)),
-              ),
+              // Row(
+              //   children: [
+              //     Padding(
+              //       padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              //       child: Text(
+              //         "${Statics.getLabel('Abhiyaan')}",
+              //         style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              // // SizedBox(height: 10),
+              // Container(
+              //   width: MediaQuery.of(context).size.width * 0.9,
+              //   alignment: Alignment.centerLeft,
+              //   padding: EdgeInsets.only(left: 10, right: 0, top: 5, bottom: 5),
+              //   decoration: BoxDecoration(
+              //     borderRadius: BorderRadius.circular(5),
+              //     border: Border.all(color: Colors.black38),
+              //   ),
+              //   child: Text(abhiyaanDataList.first.abhiyaanName.toString(), style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15)),
+              // ),
               // Padding(
               //   padding: const EdgeInsets.all(8.0),
               //   child: _buildDropdown(
@@ -798,7 +1049,7 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
               //     },
               //   ),
               // ),
-              SizedBox(height: 13),
+              // SizedBox(height: 13),
               // customTextFields(
               //   isRequired: true,
               //   title: "${Statics.getLabel('date2')} : ",
@@ -814,7 +1065,7 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Row(
                       children: [
@@ -993,7 +1244,13 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                                   onTap: () async {
                                     // if (_isSearching == false) {
                                     //   Fluttertoast.showToast(msg: "${Statics.getLabel('NagarSelectionImportant')}");
-                                    //   return;
+
+                                    Fluttertoast.showToast(
+                                      msg: Statics.getLabel("workInProgress"),
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.BOTTOM,
+                                    );
+                                    return;
                                     // }
                                     await showVisheshAtithiSelectionPopup(context,
                                         vastisarsajjanshaktiList: data?.vastisarsajjanshakti ?? [],

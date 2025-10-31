@@ -147,7 +147,7 @@ class AbhiyanSwayamsevakList {
   int? mahanagarId; // Added parameter
   int? praantID; // Added parameter
   int? preferredLanguageID; // Added parameter
-  String? fullName;
+  // String? fullName;
   String? participantName;
   String? participantNumber;
   String? sansthaName;
@@ -194,7 +194,7 @@ class AbhiyanSwayamsevakList {
     this.mahanagarId, // Initialized parameter
     this.praantID, // Initialized parameter
     this.preferredLanguageID, // Initialized parameter
-    this.fullName,
+    // this.fullName,
     this.participantName,
     this.participantNumber,
     this.sansthaName,
@@ -243,8 +243,8 @@ class AbhiyanSwayamsevakList {
     mahanagarId = json['ParentMahaanagarID']; // Added parameter
     praantID = json['ParentPraantID']; // Added parameter
     preferredLanguageID = json['PreferredLanguageID']; // Added parameter
-    fullName = json['full_name'];
-    participantName = json['ParticipantName'];
+    // fullName = json['full_name'];
+    participantName = json['full_name'] ?? json['ParticipantName'];
     participantNumber = json['MobileNo'] ?? json['ParticipantNumber'];
     sansthaName = json['SansthaName'];
     sansthaPadh = json['SansthaPadh'];
@@ -302,7 +302,7 @@ class AbhiyanSwayamsevakList {
     data['ParentMahaanagarID'] = this.mahanagarId; // Added parameter
     data['ParentPraantID'] = this.praantID; // Added parameter
     data['PreferredLanguageID'] = this.preferredLanguageID; // Added parameter
-    data['full_name'] = this.fullName;
+    // data['full_name'] = this.fullName;
     data['ParticipantName'] = this.participantName;
     data['ParticipantNumber'] = this.participantNumber;
     data['MobileNo'] = this.participantNumber;

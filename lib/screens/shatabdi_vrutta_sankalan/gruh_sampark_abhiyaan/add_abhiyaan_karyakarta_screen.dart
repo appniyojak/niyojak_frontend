@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
@@ -22,7 +23,7 @@ class AddAbhiyaanKaryakartaScreen extends StatefulWidget {
 }
 
 class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScreen> {
-  Statics.ScreenArguments? args;
+  String? from;
 
   AbhiyanSwayamsevakList? abhiyaanSwayamsevak;
   int? selectedGramVastiListRowIndex;
@@ -346,6 +347,7 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
   }
 
   getData() async {
+    // from = ModalRoute.of(context)!.settings.arguments as String;
     _scrollController = ScrollController();
     // await getAbhiyaanListData();
     Future.delayed(Duration.zero, () async {
@@ -486,14 +488,14 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // args = ModalRoute.of(context)!.settings.arguments as Statics.ScreenArguments;
+    from = ModalRoute.of(context)!.settings.arguments as String;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("अभियान कार्यकर्ता जोडा"),
+        title: Text(from == "swayamsevak" ? Statics.getLabel("AddSwayamsevak") : "अभियान कार्यकर्ता जोडा"),
       ),
       body: ModalProgressHUD(
         inAsyncCall: _isSearching,
@@ -695,404 +697,405 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                       SizedBox(
                         height: 15,
                       ),
-                      Container(
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(width: 0.7, color: Colors.grey.shade700)),
-                        child: Column(
-                          children: [
-                            ExpansionPanelList(
-                              elevation: 0,
-                              expandedHeaderPadding: EdgeInsets.zero,
-                              expansionCallback: (int index, bool isExpanded) {
-                                setState(() {
-                                  _isExpanded = isExpanded;
-                                  // if(_swSthaanList != null){
-                                  //   _search2("Search");
-                                  // }
-                                });
-                              },
-                              children: [
-                                ExpansionPanel(
-                                  backgroundColor: Colors.transparent,
-                                  headerBuilder: (BuildContext context, bool isExpanded) {
-                                    return ListTile(
-                                      title: Text(Statics.getLabel('SelectGeoUnit')),
-                                    );
-                                  },
-                                  body: Container(
-                                    margin: EdgeInsets.all(10),
-                                    child: Column(
-                                      children: [
-                                        if (_linkedMahaanagar != null)
-                                          DropdownButtonFormField(
-                                            decoration: InputDecoration(labelText: Statics.getLabel('Mahaanagar')),
-                                            isExpanded: true,
-                                            value: _linkedMahaanagarValue == "" ? null : _linkedMahaanagarValue,
-                                            items: _linkedMahaanagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                                            onChanged: (value) {
-                                              final selectedItem = _linkedMahaanagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
-                                              print(value);
-                                              setState(() {
-                                                _linkedMahaanagarValue = value;
-                                                _linkedVibhaagValue = null;
-                                                _linkedbhaagValue = null;
-
-                                                _linkednagarValue = null;
-                                                //
-                                                _linkedMahaanagarName = selectedItem.name ?? "";
-                                                _linkedVibhaagName = null;
-                                                _linkedbhaagName = null;
-
-                                                _linkednagarName = null;
-                                                //
-                                                populatelinkedVibhaagDropdown(value!);
-                                                // mahanagarId = value;
-                                                // selctedLevelName = selectedItem.name ?? "";
-                                                // selctedLevel = 'Mahanagar';
-                                                // selctedLevelId = value;
-                                              });
-                                            },
-                                          ),
-                                        SizedBox(height: 10),
-                                        if (_linkedVibhaag != null)
-                                          DropdownButtonFormField(
-                                            decoration: InputDecoration(labelText: Statics.getLabel('Vibhaag')),
-                                            isExpanded: true,
-                                            value: _linkedVibhaagValue == "" ? null : _linkedVibhaagValue,
-                                            items: _linkedVibhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                                            onChanged: (value) {
-                                              final selectedItem = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
-                                              print(value);
-                                              setState(() {
-                                                _selectedVasti = [];
-                                                _selectedGram = [];
-                                                _linkedVibhaagValue = value;
-                                                populatelinkedBhaagDropdown(value!);
-                                                // vibhagId = value;
-                                                _linkedbhaagValue = _linkednagarValue = null;
-                                                _linkedbhaag = _linkednagar = null;
-                                                _linkedVibhaagName = selectedItem.name ?? "";
-                                                _linkedbhaagName = _linkednagarName = null;
-                                                // _selctedlevel = 'Vibhaag';
-                                                // _selctedLevelId = value;
-                                              });
-                                            },
-                                          ),
-                                        SizedBox(height: 10),
-                                        if (_linkedbhaag != null)
-                                          DropdownButtonFormField(
-                                            decoration: InputDecoration(labelText: Statics.getLabel('Bhaag')),
-                                            isExpanded: true,
-                                            value: _linkedbhaagValue == "" ? null : _linkedbhaagValue,
-                                            items: _linkedbhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                                            onChanged: (value) {
-                                              final selectedItem = _linkedbhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
-                                              print(value);
-                                              setState(() {
-                                                _selectedVasti = [];
-                                                _selectedGram = [];
-                                                _linkedbhaagValue = value;
-                                                _linkedbhaagName = selectedItem.name ?? "";
-                                                _linkednagarName = null;
-                                                // populatelinkedShaharDropdown(value!);
-                                                populatelinkedNagarDropdown(value, null);
-                                              });
-                                            },
-                                          ),
-                                        SizedBox(height: 10),
-                                        // if (_linkedshahar != null && _linkedshahar!.length > 0)
-                                        //   DropdownButtonFormField(
-                                        //     decoration: InputDecoration(labelText: Statics.getLabel('Shahar')),
-                                        //     isExpanded: true,
-                                        //     value: _linkedshaharValue == "" ? null : _linkedshaharValue,
-                                        //     items: _linkedshahar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                                        //     onChanged: (value) {
-                                        //       setState(() {
-                                        //         _selectedVasti = [];
-                                        //         _selectedGram = [];
-                                        //         _linkedshaharValue = value;
-                                        //         populatelinkedNagarDropdown(null, value);
-                                        //       });
-                                        //     },
-                                        //   ),
-                                        // if (_linkedshahar != null && _linkedshahar!.length > 0)
-                                        //   SizedBox(
-                                        //     height: 10,
-                                        //   ),
-                                        if (_linkednagar != null && _linkednagar!.length > 0)
-                                          DropdownButtonFormField(
-                                            decoration: InputDecoration(labelText: Statics.getLabel('Nagar')),
-                                            isExpanded: true,
-                                            value: _linkednagarValue == "" ? null : _linkednagarValue,
-                                            items: _linkednagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                                            onChanged: (value) {
-                                              final selectedItem = _linkednagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
-                                              print(value);
-                                              setState(() {
-                                                _selectedVasti = [];
-                                                _selectedGram = [];
-                                                _linkednagarValue = value;
-                                                //
-                                                _linkednagarName = selectedItem.name ?? "";
-                                                _linkedmandalName = null;
-                                                _linkedmandalValue = null;
-                                                populatelinkedMandalDropdown(value!);
-                                                populatelinkedVastiDropdown(value);
-                                              });
-                                            },
-                                          ),
-                                        if (_linkednagar != null && _linkednagar!.length > 0) SizedBox(height: 10),
-                                        if (_linkedmandal != null && _linkedmandal!.length > 0)
-                                          DropdownButtonFormField(
-                                            decoration: InputDecoration(labelText: Statics.getLabel('Mandal')),
-                                            isExpanded: true,
-                                            value: _linkedmandalValue == "" ? null : _linkedmandalValue,
-                                            items: _linkedmandal!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                                            onChanged: (value) {
-                                              final selectedItem = _linkedmandal!.firstWhere((bg) => bg.geoUnitID.toString() == value);
-                                              print(value);
-                                              setState(() {
-                                                _selectedVasti = [];
-                                                _selectedGram = [];
-                                                _linkedmandalValue = value;
-                                                _linkedmandalName = selectedItem.name ?? "";
-                                                populatelinkedGraamDropdown(value!);
-                                              });
-                                            },
-                                          ),
-                                        if (_linkedmandal != null && _linkedmandal!.length > 0) SizedBox(height: 10),
-                                        if (_linkedgraam != null && _linkedgraam!.length > 0)
-                                          MultiSelectDialogField(
-                                            title: Text(Statics.getLabel('Graam')),
-                                            buttonText: Text(Statics.getLabel('Graam')),
-                                            buttonIcon: Icon(Icons.arrow_drop_down),
-                                            decoration: BoxDecoration(
-                                              // borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                                              border: Border(bottom: _selectedGram.isEmpty ? BorderSide(color: Colors.grey) : BorderSide.none),
-                                            ),
-                                            confirmText: Text(
-                                              Statics.getLabel('Submit'),
-                                              style: const TextStyle(color: Colors.purple),
-                                            ),
-                                            cancelText: Text(
-                                              Statics.getLabel('clear'),
-                                              style: const TextStyle(color: Colors.purple),
-                                            ),
-                                            searchable: false,
-                                            listType: MultiSelectListType.LIST,
-                                            items: _linkedgraam!.map((bg) => MultiSelectItem(bg, bg.name.toString())).toList(),
-                                            initialValue: _selectedGram,
-                                            chipDisplay: MultiSelectChipDisplay(
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(color: Colors.purple, width: 0.7),
-                                                  borderRadius: BorderRadius.circular(12),
-                                                ),
-                                                // icon: Icon(Icons.done, color: Colors.purple, size: 16),
-                                                chipColor: Colors.white,
-                                                textStyle: TextStyle(fontSize: 12, color: Colors.purple, fontWeight: FontWeight.w500)),
-                                            // onSaved: (newValue) {},
-                                            onConfirm: (values) {
-                                              _selectedVasti = [];
-                                              // _selectedVasti = values;
-                                              _selectedGram = values.map((e) {
-                                                if (e is GeoUnitMasterBAL) {
-                                                  return e;
-                                                }
-                                                return null;
-                                              }).toList();
-                                              setState(() {});
-                                              print("valueeeeeeeesssss >>>>>>>>>>>>>>> $values");
-                                              // // if (selectedUpnagarList.contains(values)) {
-                                              // selctedLevel = 'upnagarUpkhanda';
-                                              // selctedLevelName = _linkedUpnagar!.where((upnagar) => selectedUpnagarList.contains(upnagar.geoUnitID)).map((upnagar) => upnagar.preferedname).toList().join(",");
-                                              // //   selectedUpnagarList.add(bg);
-                                              // // } else {
-                                              // //   selectedUpnagarList.remove(bg);
-                                              // // }
-                                              // setState(() {});
-                                              //
-                                              // // print("selctedLevelId >>>>>>>>>>>>>>>>> $selctedLevelId");
-                                              // print("valueeeeeeeesssss >>>>>>>>>>>>>>> ${_selectedVasti.join(",")}");
-                                            },
-                                          ),
-                                        // DropdownButtonFormField(
-                                        //   decoration: InputDecoration(labelText: Statics.getLabel('Graam')),
-                                        //   isExpanded: true,
-                                        //   value: _linkedgraamValue == "" ? null : _linkedgraamValue,
-                                        //   items: _linkedgraam!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                                        //   onChanged: (value) {
-                                        //     setState(() {
-                                        //       _selectedVasti = [];
-                                        //       _linkedgraamValue = value;
-                                        //     });
-                                        //   },
-                                        // ),
-                                        if (_linkedvasti != null && _linkedvasti!.length > 0)
-                                          MultiSelectDialogField(
-                                            title: Text(Statics.getLabel('Vasti')),
-                                            buttonText: Text(Statics.getLabel('Vasti')),
-                                            buttonIcon: Icon(Icons.arrow_drop_down),
-                                            decoration: BoxDecoration(
-                                              // borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                                              border: Border(bottom: _selectedVasti.isEmpty ? BorderSide(color: Colors.grey) : BorderSide.none),
-                                            ),
-                                            confirmText: Text(
-                                              Statics.getLabel('Submit'),
-                                              style: const TextStyle(color: Colors.purple),
-                                            ),
-                                            cancelText: Text(
-                                              Statics.getLabel('clear'),
-                                              style: const TextStyle(color: Colors.purple),
-                                            ),
-                                            searchable: false,
-                                            listType: MultiSelectListType.LIST,
-                                            items: _linkedvasti!.map((bg) => MultiSelectItem(bg, bg.name!)).toList(),
-                                            initialValue: _selectedVasti,
-                                            chipDisplay: MultiSelectChipDisplay(
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(color: Colors.purple, width: 0.7),
-                                                  borderRadius: BorderRadius.circular(12),
-                                                ),
-                                                // icon: Icon(Icons.done, color: Colors.purple, size: 16),
-                                                chipColor: Colors.white,
-                                                textStyle: TextStyle(fontSize: 12, color: Colors.purple, fontWeight: FontWeight.w500)),
-                                            // onSaved: (newValue) {},
-                                            onConfirm: (values) {
-                                              // _selectedVasti = values;
-                                              _selectedGram = [];
-                                              _selectedVasti = values.map((e) {
-                                                if (e is GeoUnitMasterBAL) {
-                                                  return e;
-                                                }
-                                                return null;
-                                              }).toList();
-                                              setState(() {});
-                                              print("valueeeeeeeesssss >>>>>>>>>>>>>>> $values");
-                                              // // if (selectedUpnagarList.contains(values)) {
-                                              // selctedLevel = 'upnagarUpkhanda';
-                                              // selctedLevelName = _linkedUpnagar!.where((upnagar) => selectedUpnagarList.contains(upnagar.geoUnitID)).map((upnagar) => upnagar.preferedname).toList().join(",");
-                                              // //   selectedUpnagarList.add(bg);
-                                              // // } else {
-                                              // //   selectedUpnagarList.remove(bg);
-                                              // // }
-                                              // setState(() {});
-                                              //
-                                              // // print("selctedLevelId >>>>>>>>>>>>>>>>> $selctedLevelId");
-                                              // print("valueeeeeeeesssss >>>>>>>>>>>>>>> ${_selectedVasti.join(",")}");
-                                            },
-                                          )
-                                        // DropdownButtonFormField(
-                                        //   decoration: InputDecoration(labelText: Statics.getLabel('Vasti')),
-                                        //   isExpanded: true,
-                                        //   value: _linkedvastiValue == "" ? null : _linkedvastiValue,
-                                        //   items: _linkedvasti!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                                        //   onChanged: (value) {
-                                        //     setState(() {
-                                        //    _selectedGram = [];
-                                        //       _linkedvastiValue = value;
-                                        //     });
-                                        //   },
-                                        // ),
-                                      ],
-                                    ),
-                                  ),
-                                  isExpanded: _isExpanded,
-                                ),
-                              ],
-                            ),
-                            if (_selectedVasti.isNotEmpty || _selectedGram.isNotEmpty)
-                              Padding(
-                                padding: const EdgeInsets.only(right: 8.0, bottom: 8),
-                                child: Align(
-                                  alignment: Alignment.centerRight,
-                                  child: OutlinedButton(
-                                    style: OutlinedButton.styleFrom(
-                                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                      side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                      textStyle: const TextStyle(fontSize: 14, color: Colors.purple),
-                                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                                    ),
-                                    onPressed: () async {
-                                      final bool isPresent = selectedGramVastiList.any((unit) => unit.nagarID.toString() == _linkednagarValue.toString());
-
-                                      if (isPresent) {
-                                        showDialog(
-                                          barrierDismissible: false,
-                                          context: context,
-                                          builder: (ctx) => AlertDialog(
-                                            title: Text(Statics.getLabel('AskConfirmation')),
-                                            content: Text("नगर आधीच निवडले आहे, तुम्हाला त्यात बादल करायचे आहे का??"),
-                                            actions: <Widget>[
-                                              TextButton(
-                                                child: Text(Statics.getLabel('change')),
-                                                onPressed: () {},
-                                              ),
-                                              TextButton(
-                                                child: Text(Statics.getLabel('ConfirmationYes')),
-                                                onPressed: () async {
-                                                  Navigator.of(ctx).pop();
-                                                  setState(() {
-                                                    selectedGramVastiListRowIndex = null;
-                                                  });
-
-                                                  final _data = selectedGramVastiList.firstWhere((unit) => unit.nagarID.toString() == _linkednagarValue.toString());
-                                                  await editSelectedVastiGraamFun(_data);
-                                                  // Navigator.pushReplacementNamed(context, AbhiyanAddSwayamsevakScreen.routeName);
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                        return;
-                                      }
-                                      setState(() {
-                                        selectedGramVastiList.add(SaveAbhiyanSwayamsevakMappingforGruh(
-                                          mahanagarID: int.tryParse(_linkedMahaanagarValue ?? "0") ?? 0,
-                                          mahanagarName: _linkedMahaanagarName,
-                                          vibhaagID: int.tryParse(_linkedVibhaagValue ?? "0") ?? 0,
-                                          vibhaagName: _linkedVibhaagName,
-                                          bhaagID: int.tryParse(_linkedbhaagValue ?? "0") ?? 0,
-                                          bhaagName: _linkedbhaagName,
-                                          nagarID: int.tryParse(_linkednagarValue ?? "0") ?? 0,
-                                          nagarName: _linkednagarName,
-                                          mandalID: int.tryParse(_linkedmandalValue ?? "0") ?? 0,
-                                          mandalName: _linkedmandalName,
-                                          vastiIDs: _selectedVasti.map((item) => item?.geoUnitID.toString()).join(','),
-                                          vastiNames: _selectedVasti.map((item) => item?.name.toString()).join(', '),
-                                          gramIDs: _selectedGram.map((item) => item?.geoUnitID.toString()).join(','),
-                                          gramNames: _selectedGram.map((item) => item?.name.toString()).join(', '),
-                                        ));
-                                      });
-                                      Future.delayed(
-                                        Duration(milliseconds: 100),
-                                        () {
-                                          setState(() {
-                                            _linkedMahaanagarValue = null;
-                                            _linkedMahaanagarName = null;
-                                            _linkedVibhaagValue = null;
-                                            _linkedVibhaagName = null;
-                                            _linkedbhaagValue = null;
-                                            _linkedbhaagName = null;
-                                            _linkednagarValue = null;
-                                            _linkednagarName = null;
-                                            _linkedmandalValue = null;
-                                            _linkedmandalName = null;
-                                            _selectedVasti = [];
-                                            _selectedGram = [];
-                                          });
-                                        },
+                      if (selectedGramVastiList.isEmpty)
+                        Container(
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(width: 0.7, color: Colors.grey.shade700)),
+                          child: Column(
+                            children: [
+                              ExpansionPanelList(
+                                elevation: 0,
+                                expandedHeaderPadding: EdgeInsets.zero,
+                                expansionCallback: (int index, bool isExpanded) {
+                                  setState(() {
+                                    _isExpanded = isExpanded;
+                                    // if(_swSthaanList != null){
+                                    //   _search2("Search");
+                                    // }
+                                  });
+                                },
+                                children: [
+                                  ExpansionPanel(
+                                    backgroundColor: Colors.transparent,
+                                    headerBuilder: (BuildContext context, bool isExpanded) {
+                                      return ListTile(
+                                        title: Text(Statics.getLabel('SelectGeoUnit')),
                                       );
-                                      await populatelinkedMahaanagarDropdown();
-                                      await populatelinkedVibhaagDropdown('');
-                                      // populatelinkedBhaagDropdown('');
                                     },
-                                    child: Text("+ ${Statics.getLabel("Add")}"),
+                                    body: Container(
+                                      margin: EdgeInsets.all(10),
+                                      child: Column(
+                                        children: [
+                                          if (_linkedMahaanagar != null)
+                                            DropdownButtonFormField(
+                                              decoration: InputDecoration(labelText: Statics.getLabel('Mahaanagar')),
+                                              isExpanded: true,
+                                              value: _linkedMahaanagarValue == "" ? null : _linkedMahaanagarValue,
+                                              items: _linkedMahaanagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                              onChanged: (value) {
+                                                final selectedItem = _linkedMahaanagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                                                print(value);
+                                                setState(() {
+                                                  _linkedMahaanagarValue = value;
+                                                  _linkedVibhaagValue = null;
+                                                  _linkedbhaagValue = null;
+
+                                                  _linkednagarValue = null;
+                                                  //
+                                                  _linkedMahaanagarName = selectedItem.name ?? "";
+                                                  _linkedVibhaagName = null;
+                                                  _linkedbhaagName = null;
+
+                                                  _linkednagarName = null;
+                                                  //
+                                                  populatelinkedVibhaagDropdown(value!);
+                                                  // mahanagarId = value;
+                                                  // selctedLevelName = selectedItem.name ?? "";
+                                                  // selctedLevel = 'Mahanagar';
+                                                  // selctedLevelId = value;
+                                                });
+                                              },
+                                            ),
+                                          SizedBox(height: 10),
+                                          if (_linkedVibhaag != null)
+                                            DropdownButtonFormField(
+                                              decoration: InputDecoration(labelText: Statics.getLabel('Vibhaag')),
+                                              isExpanded: true,
+                                              value: _linkedVibhaagValue == "" ? null : _linkedVibhaagValue,
+                                              items: _linkedVibhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                              onChanged: (value) {
+                                                final selectedItem = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                                                print(value);
+                                                setState(() {
+                                                  _selectedVasti = [];
+                                                  _selectedGram = [];
+                                                  _linkedVibhaagValue = value;
+                                                  populatelinkedBhaagDropdown(value!);
+                                                  // vibhagId = value;
+                                                  _linkedbhaagValue = _linkednagarValue = null;
+                                                  _linkedbhaag = _linkednagar = null;
+                                                  _linkedVibhaagName = selectedItem.name ?? "";
+                                                  _linkedbhaagName = _linkednagarName = null;
+                                                  // _selctedlevel = 'Vibhaag';
+                                                  // _selctedLevelId = value;
+                                                });
+                                              },
+                                            ),
+                                          SizedBox(height: 10),
+                                          if (_linkedbhaag != null)
+                                            DropdownButtonFormField(
+                                              decoration: InputDecoration(labelText: Statics.getLabel('Bhaag')),
+                                              isExpanded: true,
+                                              value: _linkedbhaagValue == "" ? null : _linkedbhaagValue,
+                                              items: _linkedbhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                              onChanged: (value) {
+                                                final selectedItem = _linkedbhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                                                print(value);
+                                                setState(() {
+                                                  _selectedVasti = [];
+                                                  _selectedGram = [];
+                                                  _linkedbhaagValue = value;
+                                                  _linkedbhaagName = selectedItem.name ?? "";
+                                                  _linkednagarName = null;
+                                                  // populatelinkedShaharDropdown(value!);
+                                                  populatelinkedNagarDropdown(value, null);
+                                                });
+                                              },
+                                            ),
+                                          SizedBox(height: 10),
+                                          // if (_linkedshahar != null && _linkedshahar!.length > 0)
+                                          //   DropdownButtonFormField(
+                                          //     decoration: InputDecoration(labelText: Statics.getLabel('Shahar')),
+                                          //     isExpanded: true,
+                                          //     value: _linkedshaharValue == "" ? null : _linkedshaharValue,
+                                          //     items: _linkedshahar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                          //     onChanged: (value) {
+                                          //       setState(() {
+                                          //         _selectedVasti = [];
+                                          //         _selectedGram = [];
+                                          //         _linkedshaharValue = value;
+                                          //         populatelinkedNagarDropdown(null, value);
+                                          //       });
+                                          //     },
+                                          //   ),
+                                          // if (_linkedshahar != null && _linkedshahar!.length > 0)
+                                          //   SizedBox(
+                                          //     height: 10,
+                                          //   ),
+                                          if (_linkednagar != null && _linkednagar!.length > 0)
+                                            DropdownButtonFormField(
+                                              decoration: InputDecoration(labelText: Statics.getLabel('Nagar')),
+                                              isExpanded: true,
+                                              value: _linkednagarValue == "" ? null : _linkednagarValue,
+                                              items: _linkednagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                              onChanged: (value) {
+                                                final selectedItem = _linkednagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                                                print(value);
+                                                setState(() {
+                                                  _selectedVasti = [];
+                                                  _selectedGram = [];
+                                                  _linkednagarValue = value;
+                                                  //
+                                                  _linkednagarName = selectedItem.name ?? "";
+                                                  _linkedmandalName = null;
+                                                  _linkedmandalValue = null;
+                                                  populatelinkedMandalDropdown(value!);
+                                                  populatelinkedVastiDropdown(value);
+                                                });
+                                              },
+                                            ),
+                                          if (_linkednagar != null && _linkednagar!.length > 0) SizedBox(height: 10),
+                                          if (_linkedmandal != null && _linkedmandal!.length > 0)
+                                            DropdownButtonFormField(
+                                              decoration: InputDecoration(labelText: Statics.getLabel('Mandal')),
+                                              isExpanded: true,
+                                              value: _linkedmandalValue == "" ? null : _linkedmandalValue,
+                                              items: _linkedmandal!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                              onChanged: (value) {
+                                                final selectedItem = _linkedmandal!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                                                print(value);
+                                                setState(() {
+                                                  _selectedVasti = [];
+                                                  _selectedGram = [];
+                                                  _linkedmandalValue = value;
+                                                  _linkedmandalName = selectedItem.name ?? "";
+                                                  populatelinkedGraamDropdown(value!);
+                                                });
+                                              },
+                                            ),
+                                          if (_linkedmandal != null && _linkedmandal!.length > 0) SizedBox(height: 10),
+                                          if (_linkedgraam != null && _linkedgraam!.length > 0)
+                                            MultiSelectDialogField(
+                                              title: Text(Statics.getLabel('Graam')),
+                                              buttonText: Text(Statics.getLabel('Graam')),
+                                              buttonIcon: Icon(Icons.arrow_drop_down),
+                                              decoration: BoxDecoration(
+                                                // borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                                                border: Border(bottom: _selectedGram.isEmpty ? BorderSide(color: Colors.grey) : BorderSide.none),
+                                              ),
+                                              confirmText: Text(
+                                                Statics.getLabel('Submit'),
+                                                style: const TextStyle(color: Colors.purple),
+                                              ),
+                                              cancelText: Text(
+                                                Statics.getLabel('clear'),
+                                                style: const TextStyle(color: Colors.purple),
+                                              ),
+                                              searchable: false,
+                                              listType: MultiSelectListType.LIST,
+                                              items: _linkedgraam!.map((bg) => MultiSelectItem(bg, bg.name.toString())).toList(),
+                                              initialValue: _selectedGram,
+                                              chipDisplay: MultiSelectChipDisplay(
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(color: Colors.purple, width: 0.7),
+                                                    borderRadius: BorderRadius.circular(12),
+                                                  ),
+                                                  // icon: Icon(Icons.done, color: Colors.purple, size: 16),
+                                                  chipColor: Colors.white,
+                                                  textStyle: TextStyle(fontSize: 12, color: Colors.purple, fontWeight: FontWeight.w500)),
+                                              // onSaved: (newValue) {},
+                                              onConfirm: (values) {
+                                                _selectedVasti = [];
+                                                // _selectedVasti = values;
+                                                _selectedGram = values.map((e) {
+                                                  if (e is GeoUnitMasterBAL) {
+                                                    return e;
+                                                  }
+                                                  return null;
+                                                }).toList();
+                                                setState(() {});
+                                                print("valueeeeeeeesssss >>>>>>>>>>>>>>> $values");
+                                                // // if (selectedUpnagarList.contains(values)) {
+                                                // selctedLevel = 'upnagarUpkhanda';
+                                                // selctedLevelName = _linkedUpnagar!.where((upnagar) => selectedUpnagarList.contains(upnagar.geoUnitID)).map((upnagar) => upnagar.preferedname).toList().join(",");
+                                                // //   selectedUpnagarList.add(bg);
+                                                // // } else {
+                                                // //   selectedUpnagarList.remove(bg);
+                                                // // }
+                                                // setState(() {});
+                                                //
+                                                // // print("selctedLevelId >>>>>>>>>>>>>>>>> $selctedLevelId");
+                                                // print("valueeeeeeeesssss >>>>>>>>>>>>>>> ${_selectedVasti.join(",")}");
+                                              },
+                                            ),
+                                          // DropdownButtonFormField(
+                                          //   decoration: InputDecoration(labelText: Statics.getLabel('Graam')),
+                                          //   isExpanded: true,
+                                          //   value: _linkedgraamValue == "" ? null : _linkedgraamValue,
+                                          //   items: _linkedgraam!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                          //   onChanged: (value) {
+                                          //     setState(() {
+                                          //       _selectedVasti = [];
+                                          //       _linkedgraamValue = value;
+                                          //     });
+                                          //   },
+                                          // ),
+                                          if (_linkedvasti != null && _linkedvasti!.length > 0)
+                                            MultiSelectDialogField(
+                                              title: Text(Statics.getLabel('Vasti')),
+                                              buttonText: Text(Statics.getLabel('Vasti')),
+                                              buttonIcon: Icon(Icons.arrow_drop_down),
+                                              decoration: BoxDecoration(
+                                                // borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                                                border: Border(bottom: _selectedVasti.isEmpty ? BorderSide(color: Colors.grey) : BorderSide.none),
+                                              ),
+                                              confirmText: Text(
+                                                Statics.getLabel('Submit'),
+                                                style: const TextStyle(color: Colors.purple),
+                                              ),
+                                              cancelText: Text(
+                                                Statics.getLabel('clear'),
+                                                style: const TextStyle(color: Colors.purple),
+                                              ),
+                                              searchable: false,
+                                              listType: MultiSelectListType.LIST,
+                                              items: _linkedvasti!.map((bg) => MultiSelectItem(bg, bg.name!)).toList(),
+                                              initialValue: _selectedVasti,
+                                              chipDisplay: MultiSelectChipDisplay(
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(color: Colors.purple, width: 0.7),
+                                                    borderRadius: BorderRadius.circular(12),
+                                                  ),
+                                                  // icon: Icon(Icons.done, color: Colors.purple, size: 16),
+                                                  chipColor: Colors.white,
+                                                  textStyle: TextStyle(fontSize: 12, color: Colors.purple, fontWeight: FontWeight.w500)),
+                                              // onSaved: (newValue) {},
+                                              onConfirm: (values) {
+                                                // _selectedVasti = values;
+                                                _selectedGram = [];
+                                                _selectedVasti = values.map((e) {
+                                                  if (e is GeoUnitMasterBAL) {
+                                                    return e;
+                                                  }
+                                                  return null;
+                                                }).toList();
+                                                setState(() {});
+                                                print("valueeeeeeeesssss >>>>>>>>>>>>>>> $values");
+                                                // // if (selectedUpnagarList.contains(values)) {
+                                                // selctedLevel = 'upnagarUpkhanda';
+                                                // selctedLevelName = _linkedUpnagar!.where((upnagar) => selectedUpnagarList.contains(upnagar.geoUnitID)).map((upnagar) => upnagar.preferedname).toList().join(",");
+                                                // //   selectedUpnagarList.add(bg);
+                                                // // } else {
+                                                // //   selectedUpnagarList.remove(bg);
+                                                // // }
+                                                // setState(() {});
+                                                //
+                                                // // print("selctedLevelId >>>>>>>>>>>>>>>>> $selctedLevelId");
+                                                // print("valueeeeeeeesssss >>>>>>>>>>>>>>> ${_selectedVasti.join(",")}");
+                                              },
+                                            )
+                                          // DropdownButtonFormField(
+                                          //   decoration: InputDecoration(labelText: Statics.getLabel('Vasti')),
+                                          //   isExpanded: true,
+                                          //   value: _linkedvastiValue == "" ? null : _linkedvastiValue,
+                                          //   items: _linkedvasti!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                          //   onChanged: (value) {
+                                          //     setState(() {
+                                          //    _selectedGram = [];
+                                          //       _linkedvastiValue = value;
+                                          //     });
+                                          //   },
+                                          // ),
+                                        ],
+                                      ),
+                                    ),
+                                    isExpanded: _isExpanded,
+                                  ),
+                                ],
+                              ),
+                              if (_selectedVasti.isNotEmpty || _selectedGram.isNotEmpty)
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8.0, bottom: 8),
+                                  child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: OutlinedButton(
+                                      style: OutlinedButton.styleFrom(
+                                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                        side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                        textStyle: const TextStyle(fontSize: 14, color: Colors.purple),
+                                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                                      ),
+                                      onPressed: () async {
+                                        final bool isPresent = selectedGramVastiList.any((unit) => unit.nagarID.toString() == _linkednagarValue.toString());
+
+                                        if (isPresent) {
+                                          showDialog(
+                                            barrierDismissible: false,
+                                            context: context,
+                                            builder: (ctx) => AlertDialog(
+                                              title: Text(Statics.getLabel('AskConfirmation')),
+                                              content: Text("नगर आधीच निवडले आहे, तुम्हाला त्यात बादल करायचे आहे का??"),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  child: Text(Statics.getLabel('change')),
+                                                  onPressed: () {},
+                                                ),
+                                                TextButton(
+                                                  child: Text(Statics.getLabel('ConfirmationYes')),
+                                                  onPressed: () async {
+                                                    Navigator.of(ctx).pop();
+                                                    setState(() {
+                                                      selectedGramVastiListRowIndex = null;
+                                                    });
+
+                                                    final _data = selectedGramVastiList.firstWhere((unit) => unit.nagarID.toString() == _linkednagarValue.toString());
+                                                    await editSelectedVastiGraamFun(_data);
+                                                    // Navigator.pushReplacementNamed(context, AbhiyanAddSwayamsevakScreen.routeName);
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                          return;
+                                        }
+                                        setState(() {
+                                          selectedGramVastiList.add(SaveAbhiyanSwayamsevakMappingforGruh(
+                                            mahanagarID: int.tryParse(_linkedMahaanagarValue ?? "0") ?? 0,
+                                            mahanagarName: _linkedMahaanagarName,
+                                            vibhaagID: int.tryParse(_linkedVibhaagValue ?? "0") ?? 0,
+                                            vibhaagName: _linkedVibhaagName,
+                                            bhaagID: int.tryParse(_linkedbhaagValue ?? "0") ?? 0,
+                                            bhaagName: _linkedbhaagName,
+                                            nagarID: int.tryParse(_linkednagarValue ?? "0") ?? 0,
+                                            nagarName: _linkednagarName,
+                                            mandalID: int.tryParse(_linkedmandalValue ?? "0") ?? 0,
+                                            mandalName: _linkedmandalName,
+                                            vastiIDs: _selectedVasti.map((item) => item?.geoUnitID.toString()).join(','),
+                                            vastiNames: _selectedVasti.map((item) => item?.name.toString()).join(', '),
+                                            gramIDs: _selectedGram.map((item) => item?.geoUnitID.toString()).join(','),
+                                            gramNames: _selectedGram.map((item) => item?.name.toString()).join(', '),
+                                          ));
+                                        });
+                                        Future.delayed(
+                                          Duration(milliseconds: 100),
+                                          () {
+                                            setState(() {
+                                              _linkedMahaanagarValue = null;
+                                              _linkedMahaanagarName = null;
+                                              _linkedVibhaagValue = null;
+                                              _linkedVibhaagName = null;
+                                              _linkedbhaagValue = null;
+                                              _linkedbhaagName = null;
+                                              _linkednagarValue = null;
+                                              _linkednagarName = null;
+                                              _linkedmandalValue = null;
+                                              _linkedmandalName = null;
+                                              _selectedVasti = [];
+                                              _selectedGram = [];
+                                            });
+                                          },
+                                        );
+                                        await populatelinkedMahaanagarDropdown();
+                                        await populatelinkedVibhaagDropdown('');
+                                        // populatelinkedBhaagDropdown('');
+                                      },
+                                      child: Text("+ ${Statics.getLabel("Add")}"),
+                                    ),
                                   ),
                                 ),
-                              ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
 
                       // Align(
                       //   alignment: Alignment.center,
@@ -1465,6 +1468,15 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                     : ElevatedButton(
                         onPressed: () async {
                           FocusScope.of(context).unfocus();
+
+                          if (from == "swayamsevak") {
+                            Fluttertoast.showToast(
+                              msg: Statics.getLabel("workInProgress"),
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                            );
+                            return;
+                          }
                           if (_searchController.text.length < 10) {
                             Statics.showToast(Statics.getLabel('MobileValidationMessage'));
                             return null;

@@ -288,8 +288,8 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
         child: Scaffold(
           appBar: AppBar(
             title: Text(
-              "${Statics.getLabel('gruhSamparkAbhiyan')}",
-              style: TextStyle(fontSize: 24),
+              "${Statics.getLabel('gruhSamparkAbhiyan')} (${Statics.getLabel('shatabdiVarsha')})",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
             ),
             // actions: <Widget>[
             //   if (_tabController!.index == 1)

@@ -347,6 +347,7 @@ Map<String, String> resEnglish = {
   'SelectDaayitvaFor': 'Daayitva For',
   'SelectLevel': 'Level',
   'SelectDaayitva': 'Daayitva',
+  'daayitvaName': 'Daayitva Name',
   'SelectDaayitvaLable': 'Select Daayitva',
   'SelectGeoUnit': 'Niwas Sthaan',
   'SelectLevelName': 'Level Name',
@@ -519,6 +520,7 @@ Map<String, String> resEnglish = {
   'SamparkitHomes': 'Samparkit Homes',
   'Sankalan': 'Sankalan',
   'Kaaryakartaa': 'Kaaryakartaa',
+  'KaaryakartaaList': 'Kaaryakartaa List',
   'PravaasiKaaryakartaa': 'Pravaasi Kaaryakartaa',
   'AnyaKaaryakartaa': 'Vistaarksham Swayamsevak',
   'Filters': 'Filters',
@@ -1599,6 +1601,7 @@ Map<String, String> resEnglish = {
   'AddAdvUtsavFilesSubtitle': 'Add maximum 10',
   'loadingDialog': 'Please wait...',
   'selectSwayamsevak': 'Select Swayamsevak',
+  'selectedList': 'Selected List',
 };
 
 ///1,584
@@ -1950,6 +1953,7 @@ Map<String, String> resMarathi = {
   'SelectDaayitvaFor': 'दायित्व प्रकार',
   'SelectLevel': 'स्तर',
   'SelectDaayitva': 'दायित्व',
+  'daayitvaName': 'दायित्व नाव',
   'SelectDaayitvaLable': 'दायित्व निवडा',
   'SelectGeoUnit': 'निवास स्थान',
   'SelectLevelName': 'स्तराचे नाव',
@@ -2124,6 +2128,7 @@ Map<String, String> resMarathi = {
   'SamparkitHomes': 'संपर्कित घरे',
   'Sankalan': 'संकलन',
   'Kaaryakartaa': 'कार्यकर्ता',
+  'KaaryakartaaList': 'कार्यकर्ता यादी',
   'PravaasiKaaryakartaa': 'प्रवासी कार्यकर्ता',
   'AnyaKaaryakartaa': 'विस्तारक्षम स्वयंसेवक',
   'Filters': 'निवडा',
@@ -3202,6 +3207,7 @@ Map<String, String> resMarathi = {
   'AddAdvUtsavFilesSubtitle': 'जास्तीत जास्त १० जोडा',
   'loadingDialog': 'कृपया वाट पहा...',
   'selectSwayamsevak': 'स्वयंसेवक निवडा',
+  'selectedList': 'निवडलेली यादी',
 };
 
 ///1,583
@@ -3553,6 +3559,7 @@ Map<String, String> resHindi = {
   'SelectDaayitvaFor': 'दायित्व प्रकार',
   'SelectLevel': 'स्तर',
   'SelectDaayitva': 'दायित्व',
+  'daayitvaName': 'दायित्व नाम',
   'SelectDaayitvaLable': 'दायित्व चुने',
   'SelectGeoUnit': 'निवास स्थान',
   'SelectLevelName': 'स्तर का नाम',
@@ -3725,6 +3732,7 @@ Map<String, String> resHindi = {
   'SamparkitHomes': 'संपर्कित घर',
   'Sankalan': 'संकलन',
   'Kaaryakartaa': 'कार्यकर्ता',
+  'KaaryakartaaList': 'कार्यकर्ता सूची',
   'PravaasiKaaryakartaa': 'प्रवासी कार्यकर्ता',
   'AnyaKaaryakartaa': 'विस्तारक्षम स्वयंसेवक',
   'Filters': 'चुनें',
@@ -4804,4 +4812,5 @@ Map<String, String> resHindi = {
   'shakhaVistaar': 'शाखा विस्तार सप्ताह',
   'loadingDialog': 'कृपया प्रतीक्षा करें...',
   'selectSwayamsevak': 'स्वयंसेवक चयन करें',
+  'selectedList': 'चयनित सूची',
 };
