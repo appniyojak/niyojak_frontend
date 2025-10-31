@@ -284,6 +284,58 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
     }
   }
 
+  Future<void> editSelectedVastiGraamFun(SaveAbhiyanSwayamsevakMappingforGruh _data) async {
+    // final _data = selectedGramVastiList[selectedGramVastiListRowIndex!];
+    final List<int> _requiredVastiIds = _data.vastiIDs!.split(',').where((s) => s.isNotEmpty).map((s) => int.tryParse(s.trim())).where((id) => id != null).cast<int>().toList();
+    final List<int> _requiredGraamIds = _data.gramIDs!.split(',').where((s) => s.isNotEmpty).map((s) => int.tryParse(s.trim())).where((id) => id != null).cast<int>().toList();
+    setState(() {
+      _linkedMahaanagarValue = _data.mahanagarID == 0 ? "" : _data.mahanagarID.toString();
+      _linkedMahaanagarName = _data.mahanagarName;
+    });
+    await populatelinkedMahaanagarDropdown();
+    setState(() {
+      _linkedVibhaagValue = _data.vibhaagID.toString();
+      _linkedVibhaagName = _data.vibhaagName;
+    });
+    await populatelinkedVibhaagDropdown(_data.mahanagarID == 0 ? "" : _data.mahanagarID.toString());
+    await populatelinkedBhaagDropdown(_data.vibhaagID.toString());
+    setState(() {
+      _linkedbhaagValue = _data.bhaagID.toString();
+      _linkedbhaagName = _data.bhaagName;
+    });
+    await populatelinkedNagarDropdown(_data.bhaagID.toString(), null);
+    setState(() {
+      _linkednagarValue = _data.nagarID.toString();
+      _linkednagarName = _data.nagarName;
+    });
+    if (_data.mandalName != null && _data.mandalName != "") {
+      await populatelinkedMandalDropdown(_data.nagarID.toString());
+      setState(() {
+        _linkedmandalValue = _data.mandalID == 0 ? "" : _data.mandalID.toString();
+        _linkedmandalName = _data.mandalName;
+      });
+      await populatelinkedGraamDropdown(_data.mandalID.toString());
+      setState(() {
+        _selectedGram = _linkedgraam!.where((e) => _requiredGraamIds.contains(e.geoUnitID)).toList();
+      });
+    }
+    if (_data.vastiIDs != null && _data.vastiIDs != "") {
+      await populatelinkedVastiDropdown(_data.nagarID.toString());
+      setState(() {
+        _selectedVasti = _linkedvasti!.where((e) => _requiredVastiIds.contains(e.geoUnitID)).toList();
+      });
+    }
+
+    setState(() {
+      if (selectedGramVastiListRowIndex != null) {
+        selectedGramVastiList.removeAt(selectedGramVastiListRowIndex!);
+      } else {
+        selectedGramVastiList.remove(_data);
+      }
+      _isExpanded = true;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -945,6 +997,38 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                                     ),
                                     onPressed: () async {
+                                      final bool isPresent = selectedGramVastiList.any((unit) => unit.nagarID.toString() == _linkednagarValue.toString());
+
+                                      if (isPresent) {
+                                        showDialog(
+                                          barrierDismissible: false,
+                                          context: context,
+                                          builder: (ctx) => AlertDialog(
+                                            title: Text(Statics.getLabel('AskConfirmation')),
+                                            content: Text("नगर आधीच निवडले आहे, तुम्हाला त्यात बादल करायचे आहे का??"),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                child: Text(Statics.getLabel('change')),
+                                                onPressed: () {},
+                                              ),
+                                              TextButton(
+                                                child: Text(Statics.getLabel('ConfirmationYes')),
+                                                onPressed: () async {
+                                                  Navigator.of(ctx).pop();
+                                                  setState(() {
+                                                    selectedGramVastiListRowIndex = null;
+                                                  });
+
+                                                  final _data = selectedGramVastiList.firstWhere((unit) => unit.nagarID.toString() == _linkednagarValue.toString());
+                                                  await editSelectedVastiGraamFun(_data);
+                                                  // Navigator.pushReplacementNamed(context, AbhiyanAddSwayamsevakScreen.routeName);
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                        return;
+                                      }
                                       setState(() {
                                         selectedGramVastiList.add(SaveAbhiyanSwayamsevakMappingforGruh(
                                           mahanagarID: int.tryParse(_linkedMahaanagarValue ?? "0") ?? 0,
@@ -1487,76 +1571,7 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
               InkWell(
                 onTap: () async {
                   final _data = selectedGramVastiList[selectedGramVastiListRowIndex!];
-                  final List<int> _requiredVastiIds = _data.vastiIDs!.split(',').where((s) => s.isNotEmpty).map((s) => int.tryParse(s.trim())).where((id) => id != null).cast<int>().toList();
-                  final List<int> _requiredGraamIds = _data.gramIDs!.split(',').where((s) => s.isNotEmpty).map((s) => int.tryParse(s.trim())).where((id) => id != null).cast<int>().toList();
-                  setState(() {
-                    _linkedMahaanagarValue = _data.mahanagarID == 0 ? "" : _data.mahanagarID.toString();
-                    _linkedMahaanagarName = _data.mahanagarName;
-                  });
-                  await populatelinkedMahaanagarDropdown();
-                  setState(() {
-                    _linkedVibhaagValue = _data.vibhaagID.toString();
-                    _linkedVibhaagName = _data.vibhaagName;
-                  });
-                  await populatelinkedVibhaagDropdown(_data.mahanagarID == 0 ? "" : _data.mahanagarID.toString());
-                  await populatelinkedBhaagDropdown(_data.vibhaagID.toString());
-                  setState(() {
-                    _linkedbhaagValue = _data.bhaagID.toString();
-                    _linkedbhaagName = _data.bhaagName;
-                  });
-                  await populatelinkedNagarDropdown(_data.bhaagID.toString(), null);
-                  setState(() {
-                    _linkednagarValue = _data.nagarID.toString();
-                    _linkednagarName = _data.nagarName;
-                  });
-                  if (_data.mandalName != null && _data.mandalName != "") {
-                    await populatelinkedMandalDropdown(_data.nagarID.toString());
-                    setState(() {
-                      _linkedmandalValue = _data.mandalID == 0 ? "" : _data.mandalID.toString();
-                      _linkedmandalName = _data.mandalName;
-                    });
-                    await populatelinkedGraamDropdown(_data.mandalID.toString());
-                    setState(() {
-                      _selectedGram = _linkedgraam!.where((e) => _requiredGraamIds.contains(e.geoUnitID)).toList();
-                    });
-                  }
-                  if (_data.vastiIDs != null && _data.vastiIDs != "") {
-                    await populatelinkedVastiDropdown(_data.nagarID.toString());
-                    setState(() {
-                      _selectedVasti = _linkedvasti!.where((e) => _requiredVastiIds.contains(e.geoUnitID)).toList();
-                    });
-                  }
-
-                  // setState(() {
-                  //   _linkedMahaanagarValue = _data.mahanagarID.toString();
-                  //   _linkedMahaanagarName = _data.mahanagarName;
-                  //   _linkedVibhaagValue = _data.vibhaagID.toString();
-                  //   _linkedVibhaagName = _data.vibhaagName;
-                  //   _linkedbhaagValue = _data.bhaagID.toString();
-                  //   _linkedbhaagName = _data.bhaagName;
-                  //   _linkednagarValue = _data.nagarID.toString();
-                  //   _linkednagarName = _data.nagarName;
-                  //   _linkedmandalValue = _data.mandalID.toString();
-                  //   _linkedmandalName = _data.mandalName;
-                  // });
-                  setState(() {
-                    // _linkedMahaanagarValue = _data.mahanagarID.toString();
-                    // _linkedMahaanagarName = _data.mahanagarName;
-                    // _linkedVibhaagValue = _data.vibhaagID.toString();
-                    // _linkedVibhaagName = _data.vibhaagName;
-                    // _linkedbhaagValue = _data.bhaagID.toString();
-                    // _linkedbhaagName = _data.bhaagName;
-                    // _linkednagarValue = _data.nagarID.toString();
-                    // _linkednagarName = _data.nagarName;
-                    // _linkedmandalValue = _data.mandalID.toString();
-                    // _linkedmandalName = _data.mandalName;
-
-                    // _selectedVasti = _linkedvasti!.where((e) => _requiredVastiIds.contains(e.geoUnitID)).toList();
-                    // _selectedGram = _linkedgraam!.where((e) => _requiredGraamIds.contains(e.geoUnitID)).toList();
-
-                    selectedGramVastiList.removeAt(selectedGramVastiListRowIndex!);
-                    _isExpanded = true;
-                  });
+                  await editSelectedVastiGraamFun(_data);
                 },
                 child: Icon(Icons.edit, color: Colors.blue, size: 20),
               ),
