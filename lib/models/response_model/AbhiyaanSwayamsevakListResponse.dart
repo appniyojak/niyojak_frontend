@@ -276,6 +276,12 @@ class AbhiyanSwayamsevakList {
         mappingforGruhs!.add(new SaveAbhiyanSwayamsevakMappingforGruh.fromJson(v));
       });
     }
+    if (json['mapping'] != null) {
+      mappingforGruhs = <SaveAbhiyanSwayamsevakMappingforGruh>[];
+      json['mapping'].forEach((v) {
+        mappingforGruhs!.add(new SaveAbhiyanSwayamsevakMappingforGruh.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -331,43 +337,70 @@ class AbhiyanSwayamsevakList {
 }
 
 class SaveAbhiyanSwayamsevakMappingforGruh {
-  int? mahanagarID;
-  int? vibhaagID;
   int? bhaagID;
-  int? nagarID;
-  int? mandalID;
+  String? bhaagName;
   String? gramIDs;
+  String? gramNames;
+  int? mahanagarID;
+  String? mahanagarName;
+  int? mandalID;
+  String? mandalName;
+  int? nagarID;
+  String? nagarName;
   String? vastiIDs;
+  String? vastiNames;
+  int? vibhaagID;
+  String? vibhaagName;
 
-  SaveAbhiyanSwayamsevakMappingforGruh({
-    this.mahanagarID,
-    this.vibhaagID,
-    this.bhaagID,
-    this.nagarID,
-    this.mandalID,
-    this.gramIDs,
-    this.vastiIDs,
-  });
+  SaveAbhiyanSwayamsevakMappingforGruh(
+      {this.bhaagID,
+      this.bhaagName,
+      this.gramIDs,
+      this.gramNames,
+      this.mahanagarID,
+      this.mahanagarName,
+      this.mandalID,
+      this.mandalName,
+      this.nagarID,
+      this.nagarName,
+      this.vastiIDs,
+      this.vastiNames,
+      this.vibhaagID,
+      this.vibhaagName});
 
   SaveAbhiyanSwayamsevakMappingforGruh.fromJson(Map<String, dynamic> json) {
-    mahanagarID = json['MahanagarID'];
-    vibhaagID = json['VibhaagID'];
     bhaagID = json['BhaagID'];
-    nagarID = json['NagarID']; // Added parameter
-    mandalID = json['MandalID'];
+    bhaagName = json['BhaagName'];
     gramIDs = json['GramIDs'];
+    gramNames = json['GramNames'];
+    mahanagarID = json['MahanagarID'];
+    mahanagarName = json['MahanagarName'];
+    mandalID = json['MandalID'];
+    mandalName = json['MandalName'];
+    nagarID = json['NagarID'];
+    nagarName = json['NagarName'];
     vastiIDs = json['VastiIDs'];
+    vastiNames = json['VastiNames'];
+    vibhaagID = json['VibhaagID'];
+    vibhaagName = json['VibhaagName'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['MahanagarID'] = this.mahanagarID;
-    data['VibhaagID'] = this.vibhaagID;
     data['BhaagID'] = this.bhaagID;
-    data['NagarID'] = this.nagarID;
-    data['MandalID'] = this.mandalID;
+    data['BhaagName'] = this.bhaagName;
     data['GramIDs'] = this.gramIDs;
+    data['GramNames'] = this.gramNames;
+    data['MahanagarID'] = this.mahanagarID;
+    data['MahanagarName'] = this.mahanagarName;
+    data['MandalID'] = this.mandalID;
+    data['MandalName'] = this.mandalName;
+    data['NagarID'] = this.nagarID;
+    data['NagarName'] = this.nagarName;
     data['VastiIDs'] = this.vastiIDs;
+    data['VastiNames'] = this.vastiNames;
+    data['VibhaagID'] = this.vibhaagID;
+    data['VibhaagName'] = this.vibhaagName;
     return data;
   }
 }
