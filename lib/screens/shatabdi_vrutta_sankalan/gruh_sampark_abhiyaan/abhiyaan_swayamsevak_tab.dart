@@ -12,10 +12,10 @@ import '../../../helpers/static_data.dart' as Statics;
 import '../../../models/response_model/AbhiyaanListResponse.dart';
 import '../../../models/response_model/AbhiyaanLoginDataResponse.dart';
 import '../../../models/response_model/AbhiyaanSwayamsevakListResponse.dart';
+import '../../../models/response_model/gruh_abhiyaan_vrutta_data_model.dart';
 import '../../../models/response_model/vasti_up_data_model.dart';
 import '../../../models/response_model/vijayaDashamiInitModel.dart';
 import '../../../providers/bals.dart';
-import '../../../providers/swayamsevak_provider.dart';
 import '../vijayadashami/add_vishesh_vyakti.dart';
 import 'add_abhiyaan_karyakarta_screen.dart';
 
@@ -32,7 +32,9 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
   // List<MenuChoices> choices = [
   //   MenuChoices("EditMenu", Icons.add, "सहभागी कार्यकर्ता जोडा")
   // ];
+  GruhAbhiyaanVruttaDataModel? gruhAbhiyaanVruttaData;
   List<AbhiyanSwayamsevakList> abhiyaanSwayamsevakDataList = [];
+  // List<AbhiyanSwayamsevakList> selectedAbhiyaanSwayamsevakList = [];
   String? selectedSwayamAbhiyanValue = "";
   bool? _isSearching = false;
   String? selectedDayitvValue = "";
@@ -41,6 +43,8 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
   TextEditingController samparkitGhareController = TextEditingController();
   TextEditingController vitritKarpatrakController = TextEditingController();
   TextEditingController pustakVikriController = TextEditingController();
+  TextEditingController samparkaSahabhagiController = TextEditingController();
+  TextEditingController samparkaToliController = TextEditingController();
   List<AbhiyaanList> abhiyaanDataList = [
     AbhiyaanList.fromJson({
       "AbhiyaanID": 1,
@@ -58,8 +62,6 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
   List<String> strMobile = [];
   List<LevelMasterBAL>? _level;
   List<GeoUnitMasterBAL>? _geoUnits;
-
-  TextEditingController mobileNoCOntroller = TextEditingController();
 
   String? _selctedLevel = 'praant';
   String? _selctedLevelName = '';
@@ -139,68 +141,70 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
   @override
   void initState() {
     super.initState();
-    populateDropdown();
-    abhiyaanSwayamsevakDataList = [
-      AbhiyanSwayamsevakList(
-        abhiyanSwayamsevakID: 1,
-        daayityaName: "राम शर्मा",
-        participantName: "RS - Niyojak",
-        participantNumber: "9876543210",
-      ),
-      AbhiyanSwayamsevakList(
-        abhiyanSwayamsevakID: 2,
-        daayityaName: "राम शर्मा",
-        participantName: "Dev - Niyojak",
-        participantNumber: "9876543210",
-      ),
-      AbhiyanSwayamsevakList(
-        abhiyanSwayamsevakID: 3,
-        daayityaName: "राम शर्मा",
-        participantName: "Rao - Niyojak",
-        participantNumber: "9876543210",
-      ),
-      AbhiyanSwayamsevakList(
-        abhiyanSwayamsevakID: 4,
-        daayityaName: "राम शर्मा",
-        participantName: "Yash - Niyojak",
-        participantNumber: "9876543210",
-      ),
-    ];
-    Future.delayed(Duration.zero, () async {
-      // await getAbhiyaanListData();
-      selectedSwayamAbhiyanValue = abhiyaanDataList.first.abhiyaanID.toString();
-    });
+    getData();
   }
 
-  getAbhiyaanListData() async {
+  getData() async {
+    populateDropdown();
+    // await _getSwList();
+  }
+
+  Future<void> _getSwList() async {
+    print("calling");
+    bool isConnected = await Statics.isInternetConnected();
+    if (isConnected) {
+      var inputData = {
+        "AppUserID": Statics.userDetails["userID"],
+        "GeoUnitID": int.parse(_linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? _linkedvastiValue! : _linkedgraamValue!),
+        "AbhiyaanDate": DateFormat("dd-MM-yyyy").format(DateFormat("dd/MM/yyyy").parse(dateController.text)).toString(),
+      };
+      print(jsonEncode(inputData));
+      gruhAbhiyaanVruttaData = await Statics.getDataforGruhAbhiyaan(inputData, context: context);
+      setState(() {});
+      if (gruhAbhiyaanVruttaData?.abhiyaandata != null && gruhAbhiyaanVruttaData?.abhiyaanmodels != null) {
+        setState(() {
+          samparkitGhareController.text = (gruhAbhiyaanVruttaData?.abhiyaandata?.samparkitghar ?? "").toString();
+          vitritKarpatrakController.text = (gruhAbhiyaanVruttaData?.abhiyaandata?.vitaritkarpatra ?? "").toString();
+          pustakVikriController.text = (gruhAbhiyaanVruttaData?.abhiyaandata?.pustakvikrisankhya ?? "").toString();
+          samparkaSahabhagiController.text = (gruhAbhiyaanVruttaData?.abhiyaandata?.samparkhetusahbhagisankhya ?? "").toString();
+          samparkaToliController.text = (gruhAbhiyaanVruttaData?.abhiyaandata?.samparkhetutolisankhya ?? "").toString();
+
+          abhiyaanSwayamsevakDataList = gruhAbhiyaanVruttaData?.abhiyaanmodels ?? [];
+        });
+      }
+    }
+  }
+
+  saveGruhAbhiyaanDataFun() async {
     try {
       bool isConnected = await Statics.isInternetConnected();
       if (isConnected) {
-        setState(() {
-          _isSearching = true;
-        });
-        var result = await SwayamsevakProvider().getAbhiyanList();
-        if (result.status == "200") {
-          print("succeed");
-          abhiyaanDataList = result.abhiyaanList!;
-          selectedSwayamAbhiyanValue = abhiyaanDataList.first.abhiyaanID.toString();
+        var _data = {
+          "AbhiyaanDate": DateFormat("dd-MM-yyyy").format(DateFormat("dd/MM/yyyy").parse(dateController.text)).toString(), // e.g. "22-10-2025"
+          "GeoUnitID": int.parse(_linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? _linkedvastiValue! : _linkedgraamValue!),
+          "SamparkitGhar": int.tryParse(samparkitGhareController.text.isNotEmpty ? samparkitGhareController.text : "0"),
+          "VitaritKarpatra": int.tryParse(vitritKarpatrakController.text.isNotEmpty ? vitritKarpatrakController.text : "0"),
+          "PustakVikriSankhya": int.tryParse(pustakVikriController.text.isNotEmpty ? pustakVikriController.text : "0"),
+          "SamparkhetuSahbhagiSankhya": int.tryParse(samparkaSahabhagiController.text.isNotEmpty ? samparkaSahabhagiController.text : "0"),
+          "SamparkhetuToliSankhya": int.tryParse(samparkaToliController.text.isNotEmpty ? samparkaToliController.text : "0"),
+          "VisititAtithiSajjanShaktiIDs": "0", // comma-separated IDs
+          "VisititAtithiAnyaPrabhaviLokamIDs": "0", // comma-separated IDs
+          "AppUserID": Statics.userDetails["userID"],
+          "AbhiyanSwayamsevakIDs": abhiyaanSwayamsevakDataList.where((e) => e.isSelected).map((item) => item.abhiyanSwayamsevakID.toString()).join(','), // comma-separated IDs
+        };
 
-          setState(() {
-            _isSearching = false;
-          });
+        log(jsonEncode(_data));
+
+        var result = await Statics.saveDataforGruhAbhiyaan(_data, context: context);
+        if (result) {
+          print("succeed");
         } else {
-          setState(() {
-            _isSearching = false;
-          });
-          Statics.showToast(Statics.getLabel('noDataFoundTryAnotherSearch').split(",").first);
+          Statics.showToast(Statics.getLabel('unableToSaveData'));
         }
       }
     } catch (e) {
-      print(e);
-      setState(() {
-        _isSearching = false;
-      });
-      Statics.showToast(Statics.getLabel('noDataFoundTryAnotherSearch').split(",").first);
+      Statics.showToast(Statics.getLabel('unableToSaveData'));
+      log(e.toString());
     }
   }
 
@@ -543,8 +547,8 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
     showDialog(
       context: context,
       useSafeArea: true,
-      builder: (context) => StatefulBuilder(
-        builder: (context, set) => Dialog(
+      builder: (ct) => StatefulBuilder(
+        builder: (ctx, set) => Dialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           // contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           insetPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 16),
@@ -560,7 +564,7 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        Statics.getLabel('selectSwayamsevak') + " (Dummy Data)",
+                        Statics.getLabel('selectSwayamsevak'),
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -608,8 +612,19 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                         ),
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                       ),
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(AddAbhiyaanKaryakartaScreen.routeName);
+                      onPressed: () async {
+                        await saveGruhAbhiyaanDataFun();
+                        Navigator.pop(ct);
+                        Navigator.of(context).pushNamed(AddAbhiyaanKaryakartaScreen.routeName).then((value) async {
+                          data = await Statics.getVijayadashamiInitData(
+                              context,
+                              Statics.userDetails["userID"],
+                              _linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? _linkedvastiValue! : _linkedgraamValue!,
+                              _linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? "2" : "3");
+                          setState(() {});
+                          // if(Statics.userDetails[])
+                          await _getSwList();
+                        });
                         // Navigator.of(context).pushNamed(EditSwayamsevakScreen.routeName, arguments: Statics.ScreenArgumentsNew(0, Statics.getLabel('EditMenu')));
                       },
                       child: Text(
@@ -638,7 +653,7 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                             }),
                             value: swItem.isSelected,
                             contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                            title: Text(swItem.participantName!),
+                            title: Text(swItem.fullName.toString()),
                             subtitle: Container(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -646,7 +661,7 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                                   SizedBox(
                                     height: 5,
                                   ),
-                                  Text(swItem.daayityaName!),
+                                  Text(swItem.daayityaName.toString()),
                                   SizedBox(
                                     height: 5,
                                   ),
@@ -683,46 +698,47 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                   ),
                 ),
                 SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.purpleAccent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                if (abhiyaanSwayamsevakDataList.isNotEmpty)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.purpleAccent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                           ),
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          Statics.getLabel('Submit'),
-                          style: const TextStyle(color: Colors.white),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            Statics.getLabel('Submit'),
+                            style: const TextStyle(color: Colors.white),
+                          ),
                         ),
                       ),
-                    ),
-                    // SizedBox(
-                    //   width: 15,
-                    // ),
-                    // OutlinedButton(
-                    //   style: OutlinedButton.styleFrom(
-                    //     side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
-                    //     shape: RoundedRectangleBorder(
-                    //       borderRadius: BorderRadius.circular(12),
-                    //     ),
-                    //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    //   ),
-                    //   onPressed: onAdd,
-                    //   child: Text(
-                    //     Statics.getLabel('fillNewRecord'),
-                    //     style: const TextStyle(color: Colors.purpleAccent),
-                    //   ),
-                    // ),
-                  ],
-                ),
+                      // SizedBox(
+                      //   width: 15,
+                      // ),
+                      // OutlinedButton(
+                      //   style: OutlinedButton.styleFrom(
+                      //     side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
+                      //     shape: RoundedRectangleBorder(
+                      //       borderRadius: BorderRadius.circular(12),
+                      //     ),
+                      //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      //   ),
+                      //   onPressed: onAdd,
+                      //   child: Text(
+                      //     Statics.getLabel('fillNewRecord'),
+                      //     style: const TextStyle(color: Colors.purpleAccent),
+                      //   ),
+                      // ),
+                    ],
+                  ),
               ],
             ),
           ),
@@ -783,6 +799,72 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
               //   ),
               // ),
               SizedBox(height: 13),
+              // customTextFields(
+              //   isRequired: true,
+              //   title: "${Statics.getLabel('date2')} : ",
+              //   readOnly: true,
+              //   onTap: () async {
+              //     DateTime? date = await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(2000), lastDate: DateTime.now());
+              //     if (date != null) dateController.text = DateFormat("dd/MM/yyyy").format(date);
+              //     setState(() {});
+              //   },
+              //   controller: dateController,
+              //   hintText: "DD/MM/YYYY",
+              // ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          "${Statics.getLabel('date2')} : ",
+                          style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          " *",
+                          style: TextStyle(fontSize: 15, color: Colors.red, fontWeight: FontWeight.bold),
+                        ),
+                        // TextSpan(
+                        //  text: " : ",
+                        //   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                        // ),
+                      ],
+                    ),
+                    // Text(
+                    //   " : ",
+                    //   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    // ),
+                    SizedBox(width: 12),
+                    SizedBox(
+                      width: MediaQuery.sizeOf(context).width * 0.4,
+                      child: TextField(
+                        controller: dateController,
+                        inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10)],
+                        style: TextStyle(fontSize: 14),
+                        autofocus: false,
+                        onTap: () async {
+                          DateTime? date = await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(2000), lastDate: DateTime.now());
+                          if (date != null) dateController.text = DateFormat("dd/MM/yyyy").format(date);
+                          setState(() {});
+                        },
+                        readOnly: true,
+                        keyboardType: TextInputType.number,
+                        textInputAction: TextInputAction.done,
+                        decoration: InputDecoration(
+                            isDense: true,
+                            hintText: "DD/MM/YYYY",
+                            contentPadding: EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 12),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            )),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 13),
               _buildExpansionPanel(),
               SizedBox(height: 15),
               Row(
@@ -798,10 +880,10 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                       color: Theme.of(context).primaryColor,
                       textColor: Theme.of(context).primaryTextTheme.button!.color,
                       onPressed: () async {
-                        setState(() {
-                          _searched = true;
-                          _isExpanded = false;
-                        });
+                        if (dateController.text.isEmpty) {
+                          Statics.showToast(Statics.getLabel("selectDate"));
+                          return;
+                        }
 
                         data = await Statics.getVijayadashamiInitData(
                             context,
@@ -810,7 +892,12 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                             _linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? "2" : "3");
                         setState(() {});
                         // if(Statics.userDetails[])
-                        // await getAbhiyaanGruhaSamparkListData();
+                        await _getSwList();
+
+                        setState(() {
+                          _searched = true;
+                          _isExpanded = false;
+                        });
                       },
                       child: Text(
                         "${Statics.getLabel('search')}",
@@ -831,7 +918,31 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
               ),
               SizedBox(height: 24),
 
-              if (_selctedLevel != "" && _selctedLevelName != "")
+              // if (_selctedLevel != "" && _selctedLevelName != "")
+              //   Container(
+              //       height: 40,
+              //       width: double.infinity,
+              //       margin: EdgeInsets.symmetric(horizontal: 16),
+              //       decoration: BoxDecoration(
+              //         border: Border.all(color: Colors.purpleAccent, width: 1),
+              //         borderRadius: BorderRadius.all(Radius.circular(15)),
+              //       ),
+              //       child: Row(
+              //         mainAxisAlignment: MainAxisAlignment.center,
+              //         crossAxisAlignment: CrossAxisAlignment.center,
+              //         children: [
+              //           Text(
+              //             "${Statics.getLabel(_selctedLevel ?? "Mahaanagar")}  ->  ",
+              //             style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold, fontSize: 16),
+              //           ),
+              //           Text(
+              //             " $_selctedLevelName",
+              //             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17),
+              //           ),
+              //         ],
+              //       )),
+
+              if (_searched) ...[
                 Container(
                     height: 40,
                     width: double.infinity,
@@ -854,154 +965,21 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                         ),
                       ],
                     )),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                customTextFields(title: "संपर्कित घरे : ", controller: samparkitGhareController),
+                customTextFields(title: "वितरित करपत्रक : ", controller: vitritKarpatrakController),
+                customTextFields(title: "पुस्तक विक्री संख्या : ", controller: pustakVikriController),
 
-              if (_searched) ...[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "${Statics.getLabel('date2')} : ",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                      Container(
-                        // height: 30,
-                        width: MediaQuery.of(context).size.width * 0.45,
-                        child: TextField(
-                          readOnly: true,
-                          onTap: () async {
-                            DateTime? date = await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(2000), lastDate: DateTime.now());
-                            if (date != null) dateController.text = DateFormat("dd/MM/yyyy").format(date);
-                            setState(() {});
-                          },
-                          controller: dateController,
-                          style: TextStyle(
-                            fontSize: 14,
-                          ),
-                          autofocus: false,
-                          keyboardType: TextInputType.datetime,
-                          textInputAction: TextInputAction.done,
-                          decoration: InputDecoration(
-                              isDense: true,
-                              hintText: "DD/MM/YYYY",
-                              contentPadding: EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 12),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                              )),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "संपर्कित घरे : ",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                      Container(
-                        // height: 30,
-                        width: MediaQuery.of(context).size.width * 0.45,
-                        child: TextField(
-                          controller: samparkitGhareController,
-                          inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10)],
-                          style: TextStyle(
-                            fontSize: 14,
-                          ),
-                          autofocus: false,
-                          keyboardType: TextInputType.number,
-                          textInputAction: TextInputAction.done,
-                          decoration: InputDecoration(
-                              isDense: true,
-                              hintText: "0",
-                              contentPadding: EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 12),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                              )),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "वितरित करपत्रक : ",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                      Container(
-                        // height: 30,
-                        width: MediaQuery.of(context).size.width * 0.45,
-                        child: TextField(
-                          controller: vitritKarpatrakController,
-                          inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10)],
-                          style: TextStyle(
-                            fontSize: 14,
-                          ),
-                          autofocus: false,
-                          keyboardType: TextInputType.number,
-                          textInputAction: TextInputAction.done,
-                          decoration: InputDecoration(
-                              isDense: true,
-                              hintText: "0",
-                              contentPadding: EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 12),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                              )),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "पुस्तक विक्री संख्या : ",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                      Container(
-                        // height: 30,
-                        width: MediaQuery.of(context).size.width * 0.45,
-                        child: TextField(
-                          controller: pustakVikriController,
-                          inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10)],
-                          style: TextStyle(
-                            fontSize: 14,
-                          ),
-                          autofocus: false,
-                          keyboardType: TextInputType.number,
-                          textInputAction: TextInputAction.done,
-                          decoration: InputDecoration(
-                              isDense: true,
-                              hintText: "0",
-                              contentPadding: EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 12),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                              )),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                //
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         "विशेष व्यक्ती संपर्क : ",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                       mainContainer(
                         "${Statics.getLabel('specialAtithi')}",
@@ -1181,72 +1159,10 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "संपर्क हेतू सहभागी संख्या : ",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                      Container(
-                        // height: 30,
-                        width: MediaQuery.of(context).size.width * 0.45,
-                        child: TextField(
-                          controller: pustakVikriController,
-                          inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10)],
-                          style: TextStyle(
-                            fontSize: 14,
-                          ),
-                          autofocus: false,
-                          keyboardType: TextInputType.number,
-                          textInputAction: TextInputAction.done,
-                          decoration: InputDecoration(
-                              isDense: true,
-                              hintText: "0",
-                              contentPadding: EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 12),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                              )),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "संपर्क हेतू टोळी संख्या : ",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                      Container(
-                        // height: 30,
-                        width: MediaQuery.of(context).size.width * 0.45,
-                        child: TextField(
-                          controller: pustakVikriController,
-                          inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10)],
-                          style: TextStyle(
-                            fontSize: 14,
-                          ),
-                          autofocus: false,
-                          keyboardType: TextInputType.number,
-                          textInputAction: TextInputAction.done,
-                          decoration: InputDecoration(
-                              isDense: true,
-                              hintText: "0",
-                              contentPadding: EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 12),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                              )),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+//
+                customTextFields(title: "संपर्क हेतू सहभागी संख्या : ", controller: samparkaSahabhagiController),
+
+                customTextFields(title: "संपर्क हेतू टोळी संख्या : ", controller: samparkaToliController),
                 SizedBox(
                   height: 10,
                 ),
@@ -1266,18 +1182,97 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                       child: Text(
                         // "${Statics.getLabel('SwayamsevaksList')}",
                         "अभियान कार्यकर्ता सुची",
-                        style: TextStyle(fontSize: 13),
+                        style: TextStyle(fontSize: 14.5),
                       ),
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 20,
-                )
+                SizedBox(height: 30),
+                MaterialButton(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
+                  color: Theme.of(context).primaryColor,
+                  textColor: Theme.of(context).primaryTextTheme.button!.color,
+                  onPressed: () async {
+                    if (dateController.text.isEmpty || samparkitGhareController.text.isEmpty || vitritKarpatrakController.text.isEmpty || pustakVikriController.text.isEmpty) {
+                      Statics.showToast(Statics.getLabel("impInfoRequired"));
+                      return null;
+                    } else if (!(abhiyaanSwayamsevakDataList.any((e) => e.isSelected))) {
+                      print("स्तराचे नाव निवडा");
+                      Statics.showToast("किमान एक अभियान कार्यकर्ता जोडावे");
+                      return null;
+                    } else {
+                      print("saving data");
+                      await saveGruhAbhiyaanDataFun();
+                    }
+                    // _submit(context);
+                  },
+                  child: Text(
+                    Statics.getLabel('Submit'),
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+                SizedBox(height: 80),
               ],
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  customTextFields({required String title, bool isRequired = false, required TextEditingController controller, String? hintText, bool readOnly = false, void Function()? onTap}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Row(
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
+                ),
+                if (isRequired)
+                  Text(
+                    " *",
+                    style: TextStyle(fontSize: 15, color: Colors.red, fontWeight: FontWeight.bold),
+                  ),
+                // TextSpan(
+                //  text: " : ",
+                //   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                // ),
+              ],
+            ),
+          ),
+          // Text(
+          //   " : ",
+          //   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+          // ),
+          Expanded(
+            child: TextField(
+              controller: controller,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10)],
+              style: TextStyle(fontSize: 14),
+              autofocus: false,
+              onTap: onTap,
+              readOnly: readOnly,
+              keyboardType: TextInputType.number,
+              textInputAction: TextInputAction.done,
+              decoration: InputDecoration(
+                  isDense: true,
+                  hintText: hintText ?? "0",
+                  contentPadding: EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 12),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  )),
+            ),
+          ),
+        ],
       ),
     );
   }

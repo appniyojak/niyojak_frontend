@@ -239,7 +239,7 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
             context: context,
             builder: (ctx) => AlertDialog(
               title: Text(getLabel('AskConfirmation')),
-              content: Text("स्वयंसेवक उपस्थित नाहीत, या अभियानासाठी नवीन स्वयंसेवक जोडायचा आहे का ?"),
+              content: Text("स्वयंसेवक उपस्थित नाहीत, या अभियानासाठी नवीन अभियान स्वयंसेवक जोडायचा आहे का ?"),
               actions: <Widget>[
                 TextButton(
                   child: Text(getLabel('ConfirmationNo')),
@@ -253,6 +253,9 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                   child: Text(getLabel('ConfirmationYes')),
                   onPressed: () {
                     Navigator.of(ctx).pop();
+                    setState(() {
+                      _mobileCntrl.text = _searchController.text;
+                    });
                     // Navigator.pushReplacementNamed(context, AbhiyanAddSwayamsevakScreen.routeName);
                   },
                 ),
@@ -551,7 +554,20 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                         autofocus: false,
                         onChanged: (v) {
                           if (v.isEmpty) {
+                            _levelValue = "";
+                            _geoUnitsValue = "";
+                            selectedDayitvValue = "";
+
+                            abhiyaanSwayamsevak = null;
+                            _anyaSansthaCntrl.clear();
+                            _sansthaNameCntrl.clear();
+                            _sansthaPadhCntrl.clear();
+                            _fullNameCntrl.clear();
+                            _emailCntrl.clear();
+                            _mobileCntrl.clear();
                             showFields = false;
+
+                            selectedGramVastiList = [];
                           }
                           setState(() {});
                         },

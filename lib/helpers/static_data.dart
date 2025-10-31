@@ -22,6 +22,7 @@ import '../models/response_model/geounit_name_model.dart';
 import '../models/response_model/get_vasti_data_by_id_model.dart';
 import '../models/response_model/get_vijaya_dashami_geounit_data.dart';
 import '../models/response_model/get_vijayadashmi_report_resp_model.dart';
+import '../models/response_model/gruh_abhiyaan_vrutta_data_model.dart';
 import '../models/response_model/mandalVastisarvekshanReportModel.dart';
 import '../models/response_model/nagar_vasti_model.dart';
 import '../models/response_model/nirikshan_baithak_vrutta.dart';
@@ -198,6 +199,8 @@ const String mandalSarvekshanstep3Submit = baseUrlAPI + '/mandalSarvekshanstep3'
 
 const String getSwayamsevakForGruhApi = baseUrlAPI + '/GetSwayamsevaksForGruh';
 const String saveSwayamsevakForGruhApi = baseUrlAPI + '/SaveAbhiyanSwayamsevakForGruh';
+const String getDataforGruhAbhiyaanApi = baseUrlAPI + '/GetDataforGruhAbhiyaan';
+const String saveDataforGruhAbhiyaanApi = baseUrlAPI + '/SaveDataforGruhAbhiyaan';
 
 //////////////////////////////////////////////////////////////////////////////////////////
 const String patchSuffix = '';
@@ -2579,6 +2582,74 @@ Future<GetVijayadashamiReportModel?> getVijayaDashamiUtsavReportData(BuildContex
     Navigator.of(context, rootNavigator: true).pop();
     print("Exception: $e");
     return null;
+  }
+}
+
+Future<GruhAbhiyaanVruttaDataModel?> getDataforGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
+  if (context != null) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+  log(getDataforGruhAbhiyaanApi);
+
+  try {
+    var response = await http.post(
+      Uri.parse(getDataforGruhAbhiyaanApi),
+      headers: jHeaders,
+      body: jsonEncode(inputJson),
+    );
+
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+
+      if (data["Status"] == "200") {
+        GruhAbhiyaanVruttaDataModel model = GruhAbhiyaanVruttaDataModel.fromJson(data);
+        log("getDataforGruhAbhiyaan >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+
+        return model; // ✅ return karna zaroori hai
+      }
+      return null; // ✅ error case
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null; // ✅ error case
+    }
+  } catch (e) {
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+    print("Exception: $e");
+    return null;
+  }
+}
+
+Future<bool> saveDataforGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
+  if (context != null) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+  log(saveDataforGruhAbhiyaanApi);
+
+  try {
+    var response = await http.post(
+      Uri.parse(saveDataforGruhAbhiyaanApi),
+      headers: jHeaders,
+      body: jsonEncode(inputJson),
+    );
+
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      log("saveDataforGruhAbhiyaan >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+
+      if (data["Status"] == "200") {
+        return true; // ✅ return karna zaroori hai
+      }
+      return false; // ✅ error case
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return false; // ✅ error case
+    }
+  } catch (e) {
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+    print("Exception: $e");
+    return false;
   }
 }
 

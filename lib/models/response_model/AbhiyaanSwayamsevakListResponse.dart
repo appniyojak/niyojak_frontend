@@ -147,6 +147,7 @@ class AbhiyanSwayamsevakList {
   int? mahanagarId; // Added parameter
   int? praantID; // Added parameter
   int? preferredLanguageID; // Added parameter
+  String? fullName;
   String? participantName;
   String? participantNumber;
   String? sansthaName;
@@ -193,6 +194,7 @@ class AbhiyanSwayamsevakList {
     this.mahanagarId, // Initialized parameter
     this.praantID, // Initialized parameter
     this.preferredLanguageID, // Initialized parameter
+    this.fullName,
     this.participantName,
     this.participantNumber,
     this.sansthaName,
@@ -232,7 +234,7 @@ class AbhiyanSwayamsevakList {
     abhiyanID = json['AbhiyanID'];
     abhiyanSwayamsevakID = json['AbhiyanSwayamsevakID'];
     appPassword = json['AppPassword']; // Added parameter
-    daayityaName = json['DaayityaName'];
+    daayityaName = json['DaayitvaName'] ?? json['DaayityaName'];
     email = json['Email'];
     geoUnitID = json['GeoUnitID']; // Updated parameter name
     levelName = json['GeoUnitID'].toString(); // Updated parameter name
@@ -241,8 +243,9 @@ class AbhiyanSwayamsevakList {
     mahanagarId = json['ParentMahaanagarID']; // Added parameter
     praantID = json['ParentPraantID']; // Added parameter
     preferredLanguageID = json['PreferredLanguageID']; // Added parameter
+    fullName = json['full_name'];
     participantName = json['ParticipantName'];
-    participantNumber = json['ParticipantNumber'];
+    participantNumber = json['MobileNo'] ?? json['ParticipantNumber'];
     sansthaName = json['SansthaName'];
     sansthaPadh = json['SansthaPadh'];
     sansthaType = json['SansthaType'];
@@ -267,7 +270,7 @@ class AbhiyanSwayamsevakList {
     parentMandalID = json['ParentMandalID'];
     parentGraamID = json['ParentGraamID'];
     parentVastiID = json['ParentVastiID'];
-    isSelected = json['isSelected'] = false;
+    isSelected = json['isSelected'] == 1;
     isPresentInAbhiyaan = json['IsPresentInAbhiyaan'] ?? false;
     isPresentInAsSewak = json['IsPresentInAsSewak'] ?? false;
     if (json['mappingforGruhs'] != null) {
@@ -291,6 +294,7 @@ class AbhiyanSwayamsevakList {
     data['AbhiyanSwayamsevakID'] = this.abhiyanSwayamsevakID;
     data['AppPassword'] = this.appPassword; // Added parameter
     data['DaayityaName'] = this.daayityaName;
+    data['DaayitvaName'] = this.daayityaName;
     data['Email'] = this.email;
     data['GeoUnitID'] = this.levelName; // Updated parameter name
     data['IsActive'] = this.isActive; // Added parameter
@@ -298,8 +302,10 @@ class AbhiyanSwayamsevakList {
     data['ParentMahaanagarID'] = this.mahanagarId; // Added parameter
     data['ParentPraantID'] = this.praantID; // Added parameter
     data['PreferredLanguageID'] = this.preferredLanguageID; // Added parameter
+    data['full_name'] = this.fullName;
     data['ParticipantName'] = this.participantName;
     data['ParticipantNumber'] = this.participantNumber;
+    data['MobileNo'] = this.participantNumber;
     data['SansthaName'] = this.sansthaName;
     data['SansthaPadh'] = this.sansthaPadh;
     data['SansthaType'] = this.sansthaType;
