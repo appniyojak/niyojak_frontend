@@ -5692,16 +5692,23 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       selectedType = utsav.mukhyaAtithiIsSajjanShakti == 1 ? "sarsajjanshakti" : "anyaprabhavi";
 
       if (selectedType == "sarsajjanshakti") {
-        if (getVijayaDashamiUtsavDataByGeounitData?.mukhyaAtithiVastisarsajjanshakti != []) {
-          selectedPerson = getVijayaDashamiUtsavDataByGeounitData?.mukhyaAtithiVastisarsajjanshakti?.first;
+        // if (getVijayaDashamiUtsavDataByGeounitData?.mukhyaAtithiVastisarsajjanshakti != []) {
+        //   selectedPerson = getVijayaDashamiUtsavDataByGeounitData?.mukhyaAtithiVastisarsajjanshakti?.first;
+        // }
+        final listP = getVijayaDashamiUtsavDataByGeounitData?.mukhyaAtithiVastisarsajjanshakti;
+        if (listP != null && listP.isNotEmpty) {
+          selectedPerson = listP.first;
         }
         // selectedPerson = (data?.vastisarsajjanshakti ?? []).firstWhere(
         //   (e) => e.pkid == selectedMukhyaAtithi,
         // );
         selectedPrabhavi = null;
       } else {
-        if (getVijayaDashamiUtsavDataByGeounitData?.mukhyaAtithiVastisarAnyaprabhavilokam != []) {
-          selectedPrabhavi = getVijayaDashamiUtsavDataByGeounitData?.mukhyaAtithiVastisarAnyaprabhavilokam?.first;
+        print("====================");
+        print(getVijayaDashamiUtsavDataByGeounitData?.mukhyaAtithiVastisarAnyaprabhavilokam);
+        final list = getVijayaDashamiUtsavDataByGeounitData?.mukhyaAtithiVastisarAnyaprabhavilokam;
+        if (list != null && list.isNotEmpty) {
+          selectedPrabhavi = list.first;
         }
         // selectedPrabhavi = (data?.vastisanyaprabhavi ?? []).where((e) => e.pkId == selectedMukhyaAtithi).toList().isNotEmpty
         //     ? (data?.vastisanyaprabhavi ?? []).firstWhere((e) => e.pkId == selectedMukhyaAtithi)
@@ -5720,6 +5727,9 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
         checkboxGraamVastiSelectedItems = [];
       }
       selectedVastiCount = utsav.bhougolikPratinidhatvaCount ?? 0;
+      print("++++++++++++++++++++++++++");
+      print(selectedVastiCount);
+      print(utsav.bhougolikPratinidhatvaCount);
       selectedVastiCount = utsav.bhougolikPratinidhatvaCount ?? 0;
 
 //============================================   SHAKHAA pratinidhitwa =================================================================

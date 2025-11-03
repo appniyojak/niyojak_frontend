@@ -1,14 +1,22 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
+// import 'package:syncfusion_flutter_pdf/pdf.dart';
+// import 'package:excel/excel.dart' as exc;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:niyojak_prod/widgets/single_column_row.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:syncfusion_flutter_xlsio/xlsio.dart' as xls;
 
 import '../../../helpers/static_data.dart' as Statics;
 import '../../../models/response_model/get_vijayadashmi_report_resp_model.dart';
+import '../../../models/response_model/vijayadashmi_excel_resp_model.dart';
 import '../../../providers/bals.dart';
 import '../../../utils/cust_painters.dart';
+import '../../../utils/globals.dart';
 
 class VijayadashamiFormReport extends StatefulWidget {
   static const String routeName = '/vijayadashami-form-report';
@@ -20,20 +28,20 @@ class VijayadashamiFormReport extends StatefulWidget {
 }
 
 // /// Layout helpers
-// class _Section {
-//   final String jsonKey;
-//   final String title;
-//   final List<_Subcol> columns;
-//
-//   _Section({required this.jsonKey, required this.title, required this.columns});
-// }
-//
-// class _Subcol {
-//   final String header;
-//   final String dataKey;
-//
-//   _Subcol({required this.header, required this.dataKey});
-// }
+class _Section {
+  final String jsonKey;
+  final String title;
+  final List<_Subcol> columns;
+
+  _Section({required this.jsonKey, required this.title, required this.columns});
+}
+
+class _Subcol {
+  final String header;
+  final String dataKey;
+
+  _Subcol({required this.header, required this.dataKey});
+}
 
 /// Front-end supplied layout
 class SectionSpec {
@@ -52,6 +60,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
   late ScrollController _scrollController;
 
   GetVijayadashamiReportModel? vijayadashamiReport;
+  VijayadashamiExcelRespModel? vijayadashamiExcelReport;
 
   final List<bool> _expanded = List.generate(3, (_) => true);
 
@@ -90,6 +99,14 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
     super.initState();
     populateDropdown();
   }
+
+  final Map<String, dynamic> dataModel = {
+    "baal": {"pat": 0, "gan": 0, "anya": 0, "ekun": 0},
+    "mahavidya": {"pat": 0, "gan": 0, "anya": 0, "ekun": 0},
+    "tarunVyav": {"pat": 0, "gan": 0, "anya": 0, "ekun": 0},
+    "proudhVyav": {"pat": 0, "gan": 0, "anya": 0, "ekun": 0},
+    "totals": {"ekunPat": 0, "ekunGan": 0, "ekunAnya": 0, "ekunEkun": 0},
+  };
 
   // Future<void> exportToExcel() async {
   //   var excel = Excel.createExcel();
@@ -139,197 +156,234 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
   /// - [rows] is the API data list (maps) WITHOUT header info
   /// - [layout] is provided by the front end (sections + subheaders mapping)
   /// - [nameKey] is the key for the "Name" column (e.g., 'nagarupnagarName')
-  // void buildExcelAndPdfFromData({required List<Map<String, dynamic>> rows, required List<SectionSpec> layout,
-  //     // required String nameKey,
-  //     // String excelFileName = 'report.xlsx',
-  //     // String pdfFileName = 'report.pdf',
-  //     // bool openAfterSave = false,}) async {
-  //   if (rows.isEmpty) {
-  //     throw ArgumentError('No data rows provided.');
-  //   }
-  //
-  //   // 1) Workbook + sheet
-  //   final xls.Workbook wb = xls.Workbook();
-  //   final xls.Worksheet sheet = wb.worksheets[0];
-  //   sheet.name = 'Report';
-  //
-  //   // 2) Styles
-  //   final headerStyle = wb.styles.add('Header')
-  //     ..bold = true
-  //     ..hAlign = xls.HAlignType.center
-  //     ..vAlign = xls.VAlignType.center
-  //     ..borders.all.lineStyle = xls.LineStyle.thin;
-  //
-  //   final groupHeaderStyle = wb.styles.add('GroupHeader')
-  //     ..bold = true
-  //     ..hAlign = xls.HAlignType.center
-  //     ..vAlign = xls.VAlignType.center
-  //     ..borders.left.lineStyle = xls.LineStyle.medium
-  //     ..borders.right.lineStyle = xls.LineStyle.medium
-  //     ..borders.top.lineStyle = xls.LineStyle.medium
-  //     ..borders.bottom.lineStyle = xls.LineStyle.thin
-  //     ..backColor = '#D9D9D9';
-  //
-  //   final subHeaderStyle = wb.styles.add('SubHeader')
-  //     ..bold = true
-  //     ..hAlign = xls.HAlignType.center
-  //     ..vAlign = xls.VAlignType.center
-  //     ..borders.left.lineStyle = xls.LineStyle.thin
-  //     ..borders.right.lineStyle = xls.LineStyle.thin
-  //     ..borders.top.lineStyle = xls.LineStyle.thin
-  //     ..borders.bottom.lineStyle = xls.LineStyle.medium;
-  //
-  //   final cellStyle = wb.styles.add('Cell')..borders.all.lineStyle = xls.LineStyle.thin;
-  //
-  //   final boldCellStyle = wb.styles.add('BoldCell')
-  //     ..bold = true
-  //     ..hAlign = xls.HAlignType.center
-  //     ..vAlign = xls.VAlignType.center
-  //     ..borders.all.lineStyle = xls.LineStyle.medium;
-  //
-  //   // 3) Header rows (two-row header)
-  //   int col = 1; // XlsIO is 1-based
-  //   // Sr No (merged across two rows)
-  //   sheet.getRangeByIndex(1, col, 2, col).merge();
-  //   sheet.getRangeByIndex(1, col).setText('Sr No');
-  //   sheet.getRangeByIndex(1, col, 2, col).cellStyle = headerStyle;
-  //   col++;
-  //
-  //   // Name column (merged across two rows)
-  //   sheet.getRangeByIndex(1, col, 2, col).merge();
-  //   sheet.getRangeByIndex(1, col).setText('Nagar/Upnagar');
-  //   sheet.getRangeByIndex(1, col, 2, col).cellStyle = headerStyle;
-  //   col++;
-  //
-  //   // Track section ranges for border styling & totals
-  //   final List<Map<String, int>> sectionRanges = [];
-  //
-  //   for (final section in layout) {
-  //     final startCol = col;
-  //     // Subheaders in row 2
-  //     for (final sub in section.columns) {
-  //       sheet.getRangeByIndex(2, col).setText(sub.header);
-  //       sheet.getRangeByIndex(2, col).cellStyle = subHeaderStyle;
-  //       col++;
-  //     }
-  //     final endCol = col - 1;
-  //
-  //     if (endCol >= startCol) {
-  //       // Merge and place main header in row 1
-  //       sheet.getRangeByIndex(1, startCol, 1, endCol).merge();
-  //       sheet.getRangeByIndex(1, startCol).setText(section.title);
-  //       sheet.getRangeByIndex(1, startCol, 1, endCol).cellStyle = groupHeaderStyle;
-  //
-  //       // Make outer borders of the section bold on row 2 (subheaders)
-  //       sheet.getRangeByIndex(2, startCol).cellStyle.borders.left.lineStyle = xls.LineStyle.medium;
-  //       sheet.getRangeByIndex(2, endCol).cellStyle.borders.right.lineStyle = xls.LineStyle.medium;
-  //       sheet.getRangeByIndex(2, startCol, 2, endCol).cellStyle.borders.bottom.lineStyle = xls.LineStyle.medium;
-  //
-  //       sectionRanges.add({'start': startCol, 'end': endCol});
-  //     }
-  //   }
-  //
-  //   // Freeze top two header rows
-  //   // sheet.freezePanes(3, 1);
-  //
-  //   // 4) Data rows + collect totals
-  //   int rowIndex = 3;
-  //   int sr = 1;
-  //   final int totalCols = col - 1;
-  //   final List<double?> columnTotals = List<double?>.filled(totalCols + 1, null);
-  //
-  //   for (final item in rows) {
-  //     int writeCol = 1;
-  //
-  //     // Sr No
-  //     sheet.getRangeByIndex(rowIndex, writeCol).setNumber(sr.toDouble());
-  //     sheet.getRangeByIndex(rowIndex, writeCol).cellStyle = cellStyle;
-  //     writeCol++;
-  //
-  //     // Name
-  //     sheet.getRangeByIndex(rowIndex, writeCol).setText((item[nameKey] ?? '').toString());
-  //     sheet.getRangeByIndex(rowIndex, writeCol).cellStyle = cellStyle;
-  //     writeCol++;
-  //
-  //     // Sections data (sum numeric columns only)
-  //     for (final section in layout) {
-  //       for (final sub in section.columns) {
-  //         final dynamic v = item[sub.dataKey];
-  //         final cell = sheet.getRangeByIndex(rowIndex, writeCol);
-  //         if (v is num) {
-  //           cell.setNumber(v.toDouble());
-  //           columnTotals[writeCol] = (columnTotals[writeCol] ?? 0) + v.toDouble();
-  //         } else if (v is String) {
-  //           final parsed = double.tryParse(v);
-  //           if (parsed != null) {
-  //             cell.setNumber(parsed);
-  //             columnTotals[writeCol] = (columnTotals[writeCol] ?? 0) + parsed;
-  //           } else {
-  //             cell.setText(v);
-  //           }
-  //         } else if (v == null) {
-  //           cell.setText('');
-  //         } else {
-  //           cell.setText(v.toString());
-  //         }
-  //         cell.cellStyle = cellStyle;
-  //         writeCol++;
-  //       }
-  //     }
-  //
-  //     sr++;
-  //     rowIndex++;
-  //   }
-  //
-  //   // 5) Total row (merge first two columns and write totals)
-  //   final int totalRow = rowIndex;
-  //   // Merge Sr No + Name columns
-  //   sheet.getRangeByIndex(totalRow, 1, totalRow, 2).merge();
-  //   final totalLabelRange = sheet.getRangeByIndex(totalRow, 1);
-  //   totalLabelRange.setText('Total');
-  //   sheet.getRangeByIndex(totalRow, 1, totalRow, 2).cellStyle = boldCellStyle;
-  //
-  //   // Totals for each numeric column (from col 3 onwards)
-  //   for (int c = 3; c <= totalCols; c++) {
-  //     final cell = sheet.getRangeByIndex(totalRow, c);
-  //     final sum = columnTotals[c];
-  //     if (sum != null) {
-  //       cell.setNumber(sum);
-  //     } else {
-  //       cell.setText('');
-  //     }
-  //     cell.cellStyle = boldCellStyle;
-  //
-  //     // Bold outer borders at section boundaries
-  //     final bool isStart = sectionRanges.any((r) => r['start'] == c);
-  //     final bool isEnd = sectionRanges.any((r) => r['end'] == c);
-  //     if (isStart) cell.cellStyle.borders.left.lineStyle = xls.LineStyle.medium;
-  //     if (isEnd) cell.cellStyle.borders.right.lineStyle = xls.LineStyle.medium;
-  //   }
-  //
-  //   // 6) Auto-fit columns
-  //   for (int c = 1; c <= totalCols; c++) {
-  //     sheet.autoFitColumn(c);
-  //   }
-  //
-  //   // 7) Convert to PDF (Excel -> PDF)
-  //   final converter = xls.ExcelToPdfConverter(wb);
-  //   // Optional: fit to page width for readability
-  //   converter.settings = xls.ExcelToPdfConverterSettings()
-  //     ..fitSheetOnOnePage = false
-  //     ..layoutOptions = xls.LayoutOptions.fitAllColumnsOnOnePage;
-  //
-  //   final PdfDocument pdfDoc = converter.convert();
-  //   final List<int> pdfBytes = pdfDoc.saveSync();
-  //   pdfDoc.dispose();
-  //
-  //   // 8) Save Excel
-  //   final List<int> xlsxBytes = wb.saveAsStream();
-  //   wb.dispose();
-  //
-  //   // await _saveBytesCrossPlatform(Uint8List.fromList(xlsxBytes), excelFileName, openAfterSave: openAfterSave);
-  //   // await _saveBytesCrossPlatform(Uint8List.fromList(pdfBytes), pdfFileName, openAfterSave: openAfterSave);
-  // }
+  buildExcelAndPdfFromData({
+    required List<Map<String, dynamic>> rows,
+    required List<SectionSpec> layout,
+    // required String nameKey,
+    // String excelFileName = 'report.xlsx',
+    // String pdfFileName = 'report.pdf',
+    // bool openAfterSave = false,
+  }) async {
+    if (rows.isEmpty) {
+      throw ArgumentError('No data rows provided.');
+    }
+
+    // 1) Workbook + sheet
+    final xls.Workbook wb = xls.Workbook();
+    final xls.Worksheet sheet = wb.worksheets[0];
+    sheet.name = 'Report';
+
+    // 2) Styles
+    final headerStyle = wb.styles.add('Header')
+      ..bold = true
+      ..hAlign = xls.HAlignType.center
+      ..vAlign = xls.VAlignType.center
+      ..borders.all.lineStyle = xls.LineStyle.thin;
+
+    final groupHeaderStyle = wb.styles.add('GroupHeader')
+      ..bold = true
+      ..hAlign = xls.HAlignType.center
+      ..vAlign = xls.VAlignType.center
+      ..borders.left.lineStyle = xls.LineStyle.medium
+      ..borders.right.lineStyle = xls.LineStyle.medium
+      ..borders.top.lineStyle = xls.LineStyle.medium
+      ..borders.bottom.lineStyle = xls.LineStyle.thin
+      ..backColor = '#D9D9D9';
+
+    final subHeaderStyle = wb.styles.add('SubHeader')
+      ..bold = true
+      ..hAlign = xls.HAlignType.center
+      ..vAlign = xls.VAlignType.center
+      ..borders.left.lineStyle = xls.LineStyle.thin
+      ..borders.right.lineStyle = xls.LineStyle.thin
+      ..borders.top.lineStyle = xls.LineStyle.thin
+      ..borders.bottom.lineStyle = xls.LineStyle.medium;
+
+    final cellStyle = wb.styles.add('Cell')..borders.all.lineStyle = xls.LineStyle.thin;
+
+    final boldCellStyle = wb.styles.add('BoldCell')
+      ..bold = true
+      ..hAlign = xls.HAlignType.center
+      ..vAlign = xls.VAlignType.center
+      ..borders.all.lineStyle = xls.LineStyle.medium;
+
+    // 3) Header rows (two-row header)
+    int col = 1; // XlsIO is 1-based
+    // Sr No (merged across two rows)
+    sheet.getRangeByIndex(1, col, 2, col).merge();
+    sheet.getRangeByIndex(1, col).setText('Sr No');
+    sheet.getRangeByIndex(1, col, 2, col).cellStyle = headerStyle;
+    col++;
+
+    // Name column (merged across two rows)
+    sheet.getRangeByIndex(1, col, 2, col).merge();
+    sheet.getRangeByIndex(1, col).setText('Nagar/Upnagar');
+    sheet.getRangeByIndex(1, col, 2, col).cellStyle = headerStyle;
+    col++;
+
+    // Track section ranges for border styling & totals
+    final List<Map<String, int>> sectionRanges = [];
+
+    for (final section in layout) {
+      final startCol = col;
+      // Subheaders in row 2
+      for (final sub in section.columns) {
+        sheet.getRangeByIndex(2, col).setText(sub.header);
+        sheet.getRangeByIndex(2, col).cellStyle = subHeaderStyle;
+        col++;
+      }
+      final endCol = col - 1;
+
+      if (endCol >= startCol) {
+        // Merge and place main header in row 1
+        sheet.getRangeByIndex(1, startCol, 1, endCol).merge();
+        sheet.getRangeByIndex(1, startCol).setText(MyAppGlobals.beautifyHeader(section.title));
+        sheet.getRangeByIndex(1, startCol, 1, endCol).cellStyle = groupHeaderStyle;
+
+        // Make outer borders of the section bold on row 2 (subheaders)
+        sheet.getRangeByIndex(2, startCol).cellStyle.borders.left.lineStyle = xls.LineStyle.medium;
+        sheet.getRangeByIndex(2, endCol).cellStyle.borders.right.lineStyle = xls.LineStyle.medium;
+        sheet.getRangeByIndex(2, startCol, 2, endCol).cellStyle.borders.bottom.lineStyle = xls.LineStyle.medium;
+
+        sectionRanges.add({'start': startCol, 'end': endCol});
+      }
+    }
+
+    // Freeze top two header rows
+    // sheet.freezePanes(3, 1);
+
+    // 4) Data rows + collect totals
+    int rowIndex = 3;
+    int sr = 1;
+    final int totalCols = col - 1;
+    final List<double?> columnTotals = List<double?>.filled(totalCols + 1, null);
+
+    for (final item in rows) {
+      int writeCol = 1;
+
+      // Sr No
+      sheet.getRangeByIndex(rowIndex, writeCol).setNumber(sr.toDouble());
+      sheet.getRangeByIndex(rowIndex, writeCol).cellStyle = cellStyle;
+      writeCol++;
+
+      // Name
+      sheet.getRangeByIndex(rowIndex, writeCol).setText((item["nagarName"] ?? '').toString());
+      sheet.getRangeByIndex(rowIndex, writeCol).cellStyle = cellStyle;
+      writeCol++;
+
+      // Sections data (sum numeric columns only)
+      for (final section in layout) {
+        for (final sub in section.columns) {
+          final dynamic v = item[section.title][sub.dataKey];
+          final cell = sheet.getRangeByIndex(rowIndex, writeCol);
+          if (v is num) {
+            cell.setNumber(v.toDouble());
+            columnTotals[writeCol] = (columnTotals[writeCol] ?? 0) + v.toDouble();
+          } else if (v is String) {
+            final parsed = double.tryParse(v);
+            if (parsed != null) {
+              cell.setNumber(parsed);
+              columnTotals[writeCol] = (columnTotals[writeCol] ?? 0) + parsed;
+            } else {
+              cell.setText(v);
+            }
+          } else if (v == null) {
+            cell.setText('');
+          } else {
+            cell.setText(v.toString());
+          }
+          cell.cellStyle = cellStyle;
+          writeCol++;
+        }
+      }
+
+      sr++;
+      rowIndex++;
+    }
+
+    // 5) Total row (merge first two columns and write totals)
+    final int totalRow = rowIndex;
+    // Merge Sr No + Name columns
+    sheet.getRangeByIndex(totalRow, 1, totalRow, 2).merge();
+    final totalLabelRange = sheet.getRangeByIndex(totalRow, 1);
+    totalLabelRange.setText('Total');
+    sheet.getRangeByIndex(totalRow, 1, totalRow, 2).cellStyle = boldCellStyle;
+
+    // Totals for each numeric column (from col 3 onwards)
+    for (int c = 3; c <= totalCols; c++) {
+      final cell = sheet.getRangeByIndex(totalRow, c);
+      final sum = columnTotals[c];
+      if (sum != null) {
+        cell.setNumber(sum);
+      } else {
+        cell.setText('');
+      }
+      cell.cellStyle = boldCellStyle;
+
+      // Bold outer borders at section boundaries
+      final bool isStart = sectionRanges.any((r) => r['start'] == c);
+      final bool isEnd = sectionRanges.any((r) => r['end'] == c);
+      if (isStart) cell.cellStyle.borders.left.lineStyle = xls.LineStyle.medium;
+      if (isEnd) cell.cellStyle.borders.right.lineStyle = xls.LineStyle.medium;
+    }
+
+    // 6) Auto-fit columns
+    for (int c = 1; c <= totalCols; c++) {
+      sheet.autoFitColumn(c);
+    }
+
+    // 7) Convert to PDF (Excel -> PDF)
+    try {
+      final dir = await getApplicationDocumentsDirectory();
+      final path = '${dir.path}/${selctedLevelName ?? ""}VijayadashamiReport.xlsx';
+      final file = File(path);
+
+      // final exists = await file.exists();
+      //
+      // if (exists) {
+      //   // Just open the existing file
+      //   await OpenFilex.open(file.path);
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     SnackBar(content: Text('Opened existing file: $path')),
+      //   );
+      //   // You can still dispose; workbook isn't needed in this branch
+      //   wb.dispose();
+      //   return;
+      // }
+
+      // Write (create or overwrite)
+      final bytes = wb.saveAsStream();
+      wb.dispose();
+
+      await file.create(recursive: true);
+      await file.writeAsBytes(bytes, flush: true);
+
+      await OpenFilex.open(file.path);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Excel file saved and opened: $path')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to export file: $e')),
+      );
+    }
+    // final converter = xls.ExcelToPdfConverter(wb);
+    // // Optional: fit to page width for readability
+    // converter.settings = xls.ExcelToPdfConverterSettings()
+    //   ..fitSheetOnOnePage = false
+    //   ..layoutOptions = xls.LayoutOptions.fitAllColumnsOnOnePage;
+    //
+    // final PdfDocument pdfDoc = converter.convert();
+    // final List<int> pdfBytes = pdfDoc.saveSync();
+    // pdfDoc.dispose();
+    //
+    // // 8) Save Excel
+    // final List<int> xlsxBytes = wb.saveAsStream();
+    wb.dispose();
+
+    // await _saveBytesCrossPlatform(Uint8List.fromList(xlsxBytes), excelFileName, openAfterSave: openAfterSave);
+    // await _saveBytesCrossPlatform(Uint8List.fromList(pdfBytes), pdfFileName, openAfterSave: openAfterSave);
+  }
 
 //   void downloadExcel() async {
 //     // setState(() {
@@ -339,6 +393,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
 //     final List<Map<String, int>> sectionRanges = [];
 //
 //     final List<dynamic> rows = (reportExcel['data'] as List?) ?? [];
+//     // final List<dynamic> rows = [];
 //     if (rows.isEmpty) {
 //       throw ArgumentError('No data found in apiJson["data"].');
 //     }
@@ -731,6 +786,63 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
     });
   }
 
+  void getExcelReportDataFun() async {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(Statics.getLabel('AskConfirmation')),
+        content: Text("निवडलेला स्तर -> $selctedLevelName"),
+        actions: <Widget>[
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.purple, textStyle: TextStyle(color: Colors.white)),
+            child: Text("डाउनलोड करा", style: TextStyle(color: Colors.white)),
+            onPressed: () async {
+              Navigator.of(ctx).pop();
+              setState(() {
+                vijayadashamiExcelReport = null;
+                // _isLoading = true;
+              });
+              Map<String, dynamic> formData = {
+                "GeoUnitID": int.tryParse(selctedLevelId ?? "0") ?? "0",
+                "AppUserID": int.tryParse(Statics.userDetails['userID']) ?? null,
+              };
+
+              String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
+              log("Form Data (JSON):\n$formattedJson");
+              vijayadashamiExcelReport = await Statics.getVijayaDashamiUtsavExcelReportData(context, formData);
+              // log("vijayadashamiReport >>>>>>>>>>>>>>>>> ${jsonDecode(jsonEncode(vijayadashamiReport))}");
+              setState(() {
+                // _isLoading = false;
+                vijayadashamiExcelReport;
+              });
+              final _list = vijayadashamiExcelReport?.data;
+              if (_list != null && _list.isNotEmpty) {
+                final List<SectionSpec> specs = dataModel.entries.map((entry) {
+                  return SectionSpec(
+                    title: entry.key,
+                    columns: (entry.value as Map<String, dynamic>).keys.map((subKey) {
+                      return SubcolSpec(
+                        header: MyAppGlobals.beautifyHeader(subKey),
+                        dataKey: subKey,
+                      );
+                    }).toList(),
+                  );
+                }).toList();
+                await buildExcelAndPdfFromData(rows: vijayadashamiExcelReport!.toJson()["data"], layout: specs);
+              }
+            },
+          ),
+          TextButton(
+            child: Text(Statics.getLabel('clear')),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+          )
+        ],
+      ),
+    );
+  }
+
   Future<List<GeoUnitMasterBAL>> populatelinkedMahaanagarDropdown() async {
     var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MahaanagarLevelID'].toString(), '', '', '');
     setState(() {
@@ -826,7 +938,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
           Statics.getLabel('VijayadashmiReport'),
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        // actions: [IconButton(onPressed: buildExcelAndPdfFromData, icon: Icon(Icons.download))],
+        actions: [IconButton(onPressed: getExcelReportDataFun, icon: Icon(Icons.download))],
       ),
       body: Container(
         padding: EdgeInsets.all(10),

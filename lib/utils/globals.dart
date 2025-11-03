@@ -6,6 +6,12 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class MyAppGlobals {
+  static String beautifyHeader(String key) {
+    // Optional: turn ekunPat → "Ekun Pat", etc.
+    final regex = RegExp(r'(?<=[a-z])(?=[A-Z])');
+    return key.split(regex).map((w) => w[0].toUpperCase() + w.substring(1)).join(' ');
+  }
+
   static Future<void> downloadFile(String url, String fileName) async {
     try {
       // LoadingDialog.show(Get.context!);

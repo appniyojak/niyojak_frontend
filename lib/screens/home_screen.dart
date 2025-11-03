@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +12,10 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:niyojak_prod/models/response_model/AbhiyaanLoginDataResponse.dart';
 import 'package:niyojak_prod/screens/ContactUsScreen.dart';
 import 'package:niyojak_prod/widgets/legend.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:popup_menu/popup_menu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../helpers/static_data.dart' as Statics;
 import '../models/response_model/notification_list_model.dart';
@@ -3666,7 +3669,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         SizedBox(width: 8),
                         Expanded(
                           child: InkWell(
-                            onTap: () {
+                            onTap: () async {
+                              var dataDir = "";
+                              if (Platform.isIOS) {
+                                var p = await getLibraryDirectory();
+                                dataDir = p.path;
+                              } else {
+                                dataDir = await getDatabasesPath();
+                              }
+                              var dbPath = dataDir + '/' + "NiyojakProd.db";
+                              print(dbPath);
+                              final appDir = await getApplicationSupportDirectory();
+                              print(appDir.path);
                               Fluttertoast.showToast(
                                 msg: Statics.getLabel("workInProgress"),
                                 toastLength: Toast.LENGTH_SHORT,

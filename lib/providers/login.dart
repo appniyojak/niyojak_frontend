@@ -1,31 +1,32 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:niyojak_prod/helpers/database_helper.dart';
-import 'package:niyojak_prod/models/response_model/AbhiyaanLoginDataResponse.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
-import '../helpers/static_data.dart' as Statics;
+
 import '../helpers/database_helper.dart' as dbh;
+import '../helpers/static_data.dart' as Statics;
+import '../models/response_model/AbhiyaanLoginDataResponse.dart';
 import '../providers/bals.dart';
 import '../providers/swayamsevak_provider.dart';
 import '../screens/edit_swayamsevak_screen.dart';
 import '../utils/hard_loader.dart';
 
 class LogIn {
-
   Future<bool> isAutorized() async {
     List<UserDataBAL> user = await Statics.getUserDataLDB();
-    String otpUser='';
+    String otpUser = '';
     SharedPreferences pref = await SharedPreferences.getInstance();
-    otpUser =  pref.getString("otpuser")?? '';
+    otpUser = pref.getString("otpuser") ?? '';
     print("otpUser ==> $otpUser");
 
-    if (user.isNotEmpty && user.length > 0 && otpUser == "false" ) {
+    if (user.isNotEmpty && user.length > 0 && otpUser == "false") {
       SwayamsevakBAL userBasicInfo = await SwayamsevakProvider().getSwayamSevakByID(user[0].swayamsevakID.toString(), "BasicInfo");
 
       await Statics.populateUserDetailsMap();
@@ -45,8 +46,7 @@ class LogIn {
     return Statics.userDetails['isAuthorized'];
   }
 
-
- checkLoginDate() async {
+  checkLoginDate() async {
     try {
       Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
       // var response = await http.get(Uri.parse(Statics.urlCheckLoginDate),
@@ -57,18 +57,20 @@ class LogIn {
       var body = json.decode(response.body);
       DateTime? newDate = DateTime.tryParse(body['ForceLogout']) ?? null;
       print("newDate --> $newDate");
-      if(newDate != null){
+      if (newDate != null) {
         SharedPreferences pref = await SharedPreferences.getInstance();
         await pref.setString("loginDate", body['ForceLogout'].toString());
       }
       return body['ForceLogout'].toString();
-    } catch (e){
+    } catch (e) {
       print(e);
       return null;
     }
   }
 
-  Future<void> usrLogIn(BuildContext ctx,String mobileNumber, String? password,String otplogin) async {
+  Future<void> usrLogIn(BuildContext ctx, String mobileNumber, String? password, String otplogin) async {
+    await DatabaseHelper.dropCompleteDB();
+
     print(otplogin);
     print("usrLogIn 1");
     String lastLoginTimeStamp = Statics.userDetails['LastLoginTimeStamp'];
@@ -76,7 +78,7 @@ class LogIn {
       print("usrLogIn 2");
 
       lastLoginTimeStamp = '';
-      await clearData();
+      // await clearData();
     }
     if (lastLoginTimeStamp.isEmpty) {
       print("usrLogIn 3");
@@ -88,179 +90,159 @@ class LogIn {
 
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     print(Uri.parse(Statics.urlValidateUser));
-        String? token;
-      if (Platform.isAndroid) {
-        print("usrLogIn 4");
+    String? token;
+    if (Platform.isAndroid) {
+      print("usrLogIn 4");
 
-        token = await messaging.getToken();
-      } else if (Platform.isIOS) {
-        token = await messaging.getAPNSToken();
-      }
+      token = await messaging.getToken();
+    } else if (Platform.isIOS) {
+      token = await messaging.getAPNSToken();
+    }
 
-      if (token != null) {
-        print("usrLogIn 5 ");
+    if (token != null) {
+      print("usrLogIn 5 ");
 
-        SharedPreferences pref = await SharedPreferences.getInstance();
-        await pref.setString("deviceToken", token);
-        print("Device Token (${Platform.operatingSystem}): $token");
-      } else {
-        print("Failed to retrieve device token");
-      }
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      await pref.setString("deviceToken", token);
+      print("Device Token (${Platform.operatingSystem}): $token");
+    } else {
+      print("Failed to retrieve device token");
+    }
 
-
-    log( json.encode({
-      "MobileNumber": mobileNumber,
-      "Password": password,
-      "LastSyncTimeStamp": lastLoginTimeStamp,
-      "otplogin": otplogin,
-      "token": token
-    }));
+    log(json.encode({"MobileNumber": mobileNumber, "Password": password, "LastSyncTimeStamp": lastLoginTimeStamp, "otplogin": otplogin, "token": token}));
 
     var response = await http.post(Uri.parse(Statics.urlValidateUser),
-        headers: jHeaders,
-        body: json.encode({
-          "MobileNumber": mobileNumber,
-          "Password": password,
-          "LastSyncTimeStamp": lastLoginTimeStamp,
-          "otplogin": otplogin,
-          "token": token
-        }));
+        headers: jHeaders, body: json.encode({"MobileNumber": mobileNumber, "Password": password, "LastSyncTimeStamp": lastLoginTimeStamp, "otplogin": otplogin, "token": token}));
 
     log(response.body);
     print("usrLogIn 6");
 
     var body = json.decode(response.body);
 
-    if (body != null ) {
+    if (body != null) {
       // try {
       var abhiyaanDataList = body['LogInData']['AbhiyanSwayamsevakData'];
       print(jsonEncode(abhiyaanDataList));
       print(Statics.userDetails);
       print("usrLogIn 7");
 
+      print("redirection not Done");
 
-        print("redirection not Done");
+      // await checkLoginDate();
+      if (abhiyaanDataList != null && abhiyaanDataList.isNotEmpty) {
+        print("usrLogIn 8");
 
-
-        await checkLoginDate();
-        if (abhiyaanDataList != null && abhiyaanDataList.isNotEmpty) {
-          print("usrLogIn 8");
-
-          AbhiyanSwayamsevakResponse response =
-          AbhiyanSwayamsevakResponse(abhiyanSwayamsevakData: [AbhiyanSwayamsevakdata.fromJson(jsonDecode(jsonEncode(abhiyaanDataList[0])))]);
-          SharedPreferences pref = await SharedPreferences.getInstance();
-          await pref.setString("loggedIn", "true");
-          print("setString(loggedIn, true); Sucess");
-          await pref.setString("AbhiyanSwayamsevakData", jsonEncode(response.abhiyanSwayamsevakData!.first).toString());
-        }
+        AbhiyanSwayamsevakResponse response = AbhiyanSwayamsevakResponse(abhiyanSwayamsevakData: [AbhiyanSwayamsevakdata.fromJson(jsonDecode(jsonEncode(abhiyaanDataList[0])))]);
+        SharedPreferences pref = await SharedPreferences.getInstance();
+        await pref.setString("loggedIn", "true");
+        print("setString(loggedIn, true); Sucess");
+        await pref.setString("AbhiyanSwayamsevakData", jsonEncode(response.abhiyanSwayamsevakData!.first).toString());
+      }
       print("usrLogIn 9");
 
       SharedPreferences pref = await SharedPreferences.getInstance();
-        await pref.setString("loggedIn", "true");
-        var levelList = body['LogInData']['LevelMasterList'];
-        if (levelList.length > 0) {
-          print("usrLogIn 10");
+      await pref.setString("loggedIn", "true");
+      var levelList = body['LogInData']['LevelMasterList'];
+      if (levelList.length > 0) {
+        print("usrLogIn 10");
 
-          await dbh.DatabaseHelper.reCreate('LevelMaster', levelList);
-          // for (var data in levelList) {
-          //   await dbh.DatabaseHelper.insertOrUpdateRecord('LevelMaster', data);
-          // }
-        }
+        await dbh.DatabaseHelper.reCreate('LevelMaster', levelList);
+        // for (var data in levelList) {
+        //   await dbh.DatabaseHelper.insertOrUpdateRecord('LevelMaster', data);
+        // }
+      }
       print("usrLogIn 11");
 
-        var dataList = body['LogInData']['StaticMasterList'];
-        if (dataList.length > 0) {
-          print("usrLogIn 12");
+      var dataList = body['LogInData']['StaticMasterList'];
+      if (dataList.length > 0) {
+        print("usrLogIn 12");
 
-          await dbh.DatabaseHelper.reCreate('StaticMaster', dataList);
-          // for (var data in dataList) {
-          //   await dbh.DatabaseHelper.insertOrUpdateRecord('StaticMaster', data);
-          // }
+        await dbh.DatabaseHelper.reCreate('StaticMaster', dataList);
+        // for (var data in dataList) {
+        //   await dbh.DatabaseHelper.insertOrUpdateRecord('StaticMaster', data);
+        // }
+      }
+
+      var geoUnitData = body['LogInData']['GeoUnitList'];
+      if (geoUnitData.length > 0) {
+        print("usrLogIn 13");
+
+        //await dbh.DatabaseHelper.reCreate('GeoUnitMaster', geoUnitData);
+        for (var data in geoUnitData) {
+          await dbh.DatabaseHelper.insertOrUpdateRecord('GeoUnitMaster', data);
         }
+      }
 
-        var geoUnitData = body['LogInData']['GeoUnitList'];
-        if (geoUnitData.length > 0) {
-          print("usrLogIn 13");
+      dataList = body['LogInData']['StateMasterList'];
+      if (dataList.length > 0) {
+        print("usrLogIn 14");
 
-          //await dbh.DatabaseHelper.reCreate('GeoUnitMaster', geoUnitData);
-          for (var data in geoUnitData) {
-            await dbh.DatabaseHelper.insertOrUpdateRecord('GeoUnitMaster', data);
-          }
-        }
+        await dbh.DatabaseHelper.reCreate('StateMaster', dataList);
+        // for (var data in dataList) {
+        //   await dbh.DatabaseHelper.insertOrUpdateRecord('StateMaster', data);
+        // }
+      }
 
-        dataList = body['LogInData']['StateMasterList'];
-        if (dataList.length > 0) {
-          print("usrLogIn 14");
+      dataList = body['LogInData']['DaayitvaMasterList'];
+      if (dataList.length > 0) {
+        print("usrLogIn 15");
 
-          await dbh.DatabaseHelper.reCreate('StateMaster', dataList);
-          // for (var data in dataList) {
-          //   await dbh.DatabaseHelper.insertOrUpdateRecord('StateMaster', data);
-          // }
-        }
+        await dbh.DatabaseHelper.reCreate('DaayitvaMaster', dataList);
+        // for (var data in dataList) {
+        //   await dbh.DatabaseHelper.insertOrUpdateRecord('DaayitvaMaster', data);
+        // }
+      }
 
-        dataList = body['LogInData']['DaayitvaMasterList'];
-        if (dataList.length > 0) {
-          print("usrLogIn 15");
+      dataList = body['LogInData']['AayaamMasterList'];
+      if (dataList.length > 0) {
+        print("usrLogIn 16");
 
-          await dbh.DatabaseHelper.reCreate('DaayitvaMaster', dataList);
-          // for (var data in dataList) {
-          //   await dbh.DatabaseHelper.insertOrUpdateRecord('DaayitvaMaster', data);
-          // }
-        }
+        await dbh.DatabaseHelper.reCreate('AayaamMaster', dataList);
+        // for (var data in dataList) {
+        //   await dbh.DatabaseHelper.insertOrUpdateRecord('AayaamMaster', data);
+        // }
+      }
 
-        dataList = body['LogInData']['AayaamMasterList'];
-        if (dataList.length > 0) {
-          print("usrLogIn 16");
+      dataList = body['LogInData']['GatividhiMasterList'];
+      if (dataList.length > 0) {
+        print("usrLogIn 17");
 
-          await dbh.DatabaseHelper.reCreate('AayaamMaster', dataList);
-          // for (var data in dataList) {
-          //   await dbh.DatabaseHelper.insertOrUpdateRecord('AayaamMaster', data);
-          // }
-        }
-
-        dataList = body['LogInData']['GatividhiMasterList'];
-        if (dataList.length > 0) {
-          print("usrLogIn 17");
-
-          await dbh.DatabaseHelper.reCreate('GatividhiMaster', dataList);
-          // for (var data in dataList) {
-          //   await dbh.DatabaseHelper.insertOrUpdateRecord(
-          //       'GatividhiMaster', data);
-          // }
-        }
-        var userData = body['LogInData']['UserData'];
-        print("swayamsevak Id - " + userData['SwayamsevakID'].toString());
-         await pref.setString("DaayitvaNameforshow", "${body['LogInData']['UserData']['DaayitvaNameforshow']}");
-        if (userData['SwayamsevakID'].toString() != "0") {
-          print("usrLogIn 18");
-          print("Saving to Db");
-          //await dbh.DatabaseHelper.insertOrUpdateRecord('UserDataMaster', userData);
-          await dbh.DatabaseHelper.reCreate('UserDataMaster', userData);
-          await Statics.populateUserDetailsMap();
-          await Statics.refreshDashboardData(Statics.userDetails["userID"], null);
-          await Statics.getNotificationDataList(Statics.userDetails["userID"]);
-          await Statics.populateDashboardDetailsMap();
-        }
-        Statics.userDetails['isAuthorized'] = true;
-        print("API END");
-        print(Statics.userDetails);
+        await dbh.DatabaseHelper.reCreate('GatividhiMaster', dataList);
+        // for (var data in dataList) {
+        //   await dbh.DatabaseHelper.insertOrUpdateRecord(
+        //       'GatividhiMaster', data);
+        // }
+      }
+      var userData = body['LogInData']['UserData'];
+      print("swayamsevak Id - " + userData['SwayamsevakID'].toString());
+      await pref.setString("DaayitvaNameforshow", "${body['LogInData']['UserData']['DaayitvaNameforshow']}");
+      if (userData['SwayamsevakID'].toString() != "0") {
+        print("usrLogIn 18");
+        print("Saving to Db");
+        //await dbh.DatabaseHelper.insertOrUpdateRecord('UserDataMaster', userData);
+        await dbh.DatabaseHelper.reCreate('UserDataMaster', userData);
+        await Statics.populateUserDetailsMap();
+        await Statics.refreshDashboardData(Statics.userDetails["userID"], null);
+        await Statics.getNotificationDataList(Statics.userDetails["userID"]);
+        await Statics.populateDashboardDetailsMap();
+      }
+      Statics.userDetails['isAuthorized'] = true;
+      print("API END");
+      print(Statics.userDetails);
       if (body['LogInData']['UserData']['otpuser'] == true) {
         print("redirection Done");
         print("usrLogIn 19");
-        if(body['LogInData']['UserData']['can_edit'] == true){
+        if (body['LogInData']['UserData']['can_edit'] == true) {
           print("usrLogIn 20");
           print("usrLogIn ${userData['SwayamsevakID']} --  ${Statics.getLabel('EditMenu')}");
-          Navigator.of(ctx).pushReplacementNamed(
-              EditSwayamsevakScreen.routeName,
-              arguments: Statics.ScreenArgumentsNew(
-                  userData['SwayamsevakID'], Statics.getLabel('EditMenu'),email:"",mobile: "",name: "" ));
+          Navigator.of(ctx)
+              .pushReplacementNamed(EditSwayamsevakScreen.routeName, arguments: Statics.ScreenArgumentsNew(userData['SwayamsevakID'], Statics.getLabel('EditMenu'), email: "", mobile: "", name: ""));
           SharedPreferences pref = await SharedPreferences.getInstance();
           await pref.setString("otpuser", "true");
-          await pref.setString(
-              "can_edit", body['LogInData']['UserData']['can_edit'].toString());
-        }else{
+          await pref.setString("can_edit", body['LogInData']['UserData']['can_edit'].toString());
+        } else {
           print("usrLogIn 21");
-          LoaderUtils.toggleLoader(ctx,false);
+          LoaderUtils.toggleLoader(ctx, false);
           Statics.showErrorDialog(ctx, Statics.getLabel('connetKaryavah'));
         }
         print("usrLogIn 22");
@@ -270,9 +252,9 @@ class LogIn {
         await pref.setString("otpuser", "false");
       }
       print("usrLogIn 24");
-        // } catch (e){
-        //   print(e);
-        // }
+      // } catch (e){
+      //   print(e);
+      // }
     } else {
       print("usrLogIn 25");
       print("Failed");
@@ -308,9 +290,9 @@ class LogIn {
 
       // Update database
       Database db = await DatabaseHelper.database;
-      String sqlStr1 = 'UPDATE UserDataMaster SET PreferredLanguageCode=\'Marathi\';';
-      await db.execute(sqlStr1);
-      print("Database updated with PreferredLanguageCode");
+      // String sqlStr1 = 'UPDATE UserDataMaster SET PreferredLanguageCode=\'Marathi\';';
+      // await db.execute(sqlStr1);
+      // print("Database updated with PreferredLanguageCode");
 
       Statics.userDetails['languagePreference'] = 'Marathi';
 
@@ -322,32 +304,30 @@ class LogIn {
       print("SharedPreferences reloaded");
 
       // Call logoutUser function
-      await DatabaseHelper.logoutUser();
-      print("DatabaseHelper logoutUser called");
+      // await DatabaseHelper.logoutUser();
+      // print("DatabaseHelper logoutUser called");
 
       // Clear other data if necessary
-      await clearData();
-      print("clearData called");
+      // await clearData();
+      // print("clearData called");
+
+      await DatabaseHelper.dropCompleteDB();
 
       print("logOut Done");
       // Clear mobile cache
-        final cacheDir = await getTemporaryDirectory();
-        if (cacheDir.existsSync()) {
-          cacheDir.deleteSync(recursive: true);
-        }
+      final cacheDir = await getTemporaryDirectory();
+      if (cacheDir.existsSync()) {
+        cacheDir.deleteSync(recursive: true);
+      }
       // Clear mobile app storage
       final appDir = await getApplicationSupportDirectory();
-        if(appDir.existsSync()){
-          appDir.deleteSync(recursive: true);
-        }
-
-
+      if (appDir.existsSync()) {
+        appDir.deleteSync(recursive: true);
+      }
     } catch (e) {
       print("Error during logOut: $e");
     }
   }
-
-
 
   Future<void> clearData() async {
     if (await Statics.checkForTableExists("LevelMaster")) await dbh.DatabaseHelper.executeQuery('DELETE FROM LevelMaster');

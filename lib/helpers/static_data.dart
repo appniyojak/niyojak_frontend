@@ -34,6 +34,7 @@ import '../models/response_model/vasti_sarvekshan_dropdown_model.dart';
 import '../models/response_model/vasti_survey_report_model.dart';
 import '../models/response_model/vasti_up_data_model.dart';
 import '../models/response_model/vijayaDashamiInitModel.dart';
+import '../models/response_model/vijayadashmi_excel_resp_model.dart';
 import '../providers/bals.dart';
 import './database_helper.dart';
 
@@ -124,6 +125,7 @@ const String deletevijayadashamiutsavfiles = baseUrlAPI + '/Deletevijayadashamiu
 const String savesajjanskhatianyapravbhavilok = baseUrlAPI + '/savesajjanskhatianyapravbhavilok';
 const String getvijayadashamiutsavbyid = baseUrlAPI + '/getvijayadashamiutsavbyid';
 const String getvijayadashamiutsavreport = baseUrlAPI + '/vijayadashamiutsavreport';
+const String vijayadashamiReportApi = baseUrlAPI + '/vijayadashamiReport';
 const String urlGetJoinRSSDataForApp = baseUrlAPI + '/GetJoinRSSDataForApp';
 const String urlDeleteJoinRSSForApp = baseUrlAPI + '/DeleteJoinRSSForApp';
 const String urlRefreshHomeScreenForApp = baseUrlAPI + '/RefreshHomeScreenForApp';
@@ -2572,6 +2574,41 @@ Future<GetVijayadashamiReportModel?> getVijayaDashamiUtsavReportData(BuildContex
 
       GetVijayadashamiReportModel model = GetVijayadashamiReportModel.fromJson(data);
       log("vijayadashamiReport >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+
+      return model; // ✅ return karna zaroori hai
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null; // ✅ error case
+    }
+  } catch (e) {
+    Navigator.of(context, rootNavigator: true).pop();
+    print("Exception: $e");
+    return null;
+  }
+}
+
+Future<VijayadashamiExcelRespModel?> getVijayaDashamiUtsavExcelReportData(BuildContext context, Map<String, dynamic> inputJson) async {
+  showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  log(vijayadashamiReportApi);
+
+  try {
+    var response = await http.post(
+      Uri.parse(vijayadashamiReportApi),
+      headers: jHeaders,
+      body: jsonEncode(inputJson),
+    );
+
+    Navigator.of(context, rootNavigator: true).pop();
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      VijayadashamiExcelRespModel? model;
+      if (data["Status"] == "200") {
+        model = VijayadashamiExcelRespModel.fromJson(data);
+        log("vijayadashamiExcelReport >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+      }
 
       return model; // ✅ return karna zaroori hai
     } else {
