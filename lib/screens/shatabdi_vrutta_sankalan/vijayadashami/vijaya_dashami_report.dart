@@ -530,7 +530,8 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
       _rowIndexForSheet3++; // leave one blank row after each object
     }
 
-    // 5) Total row (merge first two columns and write totals) NOT NEEDED FOR data3
+    // 5) Total row (merge first two columns and write totals)
+    /// NOT NEEDED FOR data3
     final int _totalRowForSheet1 = _rowIndexForSheet1;
     // Merge Sr No + Name columns
     _sheet1.getRangeByIndex(_totalRowForSheet1, 1, _totalRowForSheet1, 2).merge();

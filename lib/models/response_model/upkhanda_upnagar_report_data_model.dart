@@ -86,23 +86,23 @@ class UpkhandaDataList {
 class UpkhandaExcelDataList {
   String? goUnitName;
   String? nagarNames;
-  String? upKhandNames;
-  String? upNagarNames;
   String? vastiNames;
   String? gramNames;
+  String? upNagarNames;
   String? mapUpNagarNames;
+  String? upKhandNames;
   String? mapUpKhandNames;
 
-  UpkhandaExcelDataList({this.goUnitName, this.nagarNames, this.upKhandNames, this.upNagarNames, this.vastiNames, this.gramNames, this.mapUpNagarNames, this.mapUpKhandNames});
+  UpkhandaExcelDataList({this.goUnitName, this.nagarNames, this.vastiNames, this.gramNames, this.upNagarNames, this.mapUpNagarNames, this.upKhandNames, this.mapUpKhandNames});
 
   UpkhandaExcelDataList.fromJson(Map<String, dynamic> json) {
     goUnitName = json['GoUnitName'];
     nagarNames = json['NagarNames'];
-    upKhandNames = json['UpKhandNames'];
-    upNagarNames = json['UpNagarNames'];
     vastiNames = json['VastiNames'];
     gramNames = json['GramNames'];
+    upNagarNames = json['UpNagarNames'];
     mapUpNagarNames = json['MapUpNagarNames'];
+    upKhandNames = json['UpKhandNames'];
     mapUpKhandNames = json['MapUpKhandNames'];
   }
 

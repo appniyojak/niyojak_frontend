@@ -1810,7 +1810,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 // _isLoading = true;
               });
               bhougolikReportForExcel = await Statics.upkhandUpnagarReportForExcelData(
-                  userID: Statics.userDetails["userID"], targetGeoUnitID: _selctedGeoUnitId.isEmpty ? "0" : _selctedGeoUnitId, type: _selctedLevelName.isEmpty ? "praant" : _selctedLevelName);
+                  userID: Statics.userDetails["userID"],
+                  targetGeoUnitID: _selctedGeoUnitId.isEmpty ? "0" : _selctedGeoUnitId,
+                  type: _selctedLevelName.isEmpty ? "praant" : _selctedLevelName,
+                  context: context);
               // log("vijayadashamiReport >>>>>>>>>>>>>>>>> ${jsonDecode(jsonEncode(vijayadashamiReport))}");
               setState(() {
                 // _isLoading = false;
@@ -1846,8 +1849,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // Workbook + sheet
     final xls.Workbook wb = xls.Workbook();
-    final xls.Worksheet sheet = wb.worksheets[0];
-    sheet.name = 'Report_data3';
+    final xls.Worksheet _sheet = wb.worksheets[0];
+    _sheet.name = 'Bhougolik_Report';
 
     // Styles (kept same as your original)
     final headerStyle = wb.styles.add('Header')
@@ -1856,7 +1859,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ..vAlign = xls.VAlignType.center
       ..borders.all.lineStyle = xls.LineStyle.thin;
 
-    final cellStyle = wb.styles.add('Cell')
+    final _cellStyle = wb.styles.add('Cell')
       ..borders.all.lineStyle = xls.LineStyle.thin
       ..hAlign = xls.HAlignType.center
       ..vAlign = xls.VAlignType.center;
@@ -1867,31 +1870,36 @@ class _HomeScreenState extends State<HomeScreen> {
       ..vAlign = xls.VAlignType.center
       ..borders.all.lineStyle = xls.LineStyle.medium;
 
+    final blankRowStyle = wb.styles.add('BlankRow')
+      ..borders.all.lineStyle = xls.LineStyle.medium
+      ..hAlign = xls.HAlignType.center
+      ..vAlign = xls.VAlignType.center;
+
     // Keys/order from the first row (keeps insertion order)
     final keys = rows.first.keys.toList();
+    int _colForSheet = 1; // XlsIO is 1-based
 
     // Header row (single row header like before)
-    int colIndex = 1;
-    sheet.getRangeByIndex(1, colIndex).setText('Sr No');
-    sheet.getRangeByIndex(1, colIndex).cellStyle = headerStyle;
-    colIndex++;
+    _sheet.getRangeByIndex(1, _colForSheet).setText('Sr No');
+    _sheet.getRangeByIndex(1, _colForSheet, 2, _colForSheet).cellStyle = headerStyle;
+    _colForSheet++;
 
     for (final key in keys) {
-      sheet.getRangeByIndex(1, colIndex).setText(key);
-      sheet.getRangeByIndex(1, colIndex).cellStyle = headerStyle;
-      colIndex++;
+      _sheet.getRangeByIndex(1, _colForSheet).setText((key));
+      _sheet.getRangeByIndex(1, _colForSheet).cellStyle = headerStyle;
+      _colForSheet++;
     }
 
     int rowIndex = 2;
     int srNo = 1;
 
-    for (final row in rows) {
+    for (final item in rows) {
       // Expand values that contain '-->' into lists, others into single-item lists
       final Map<String, List<String>> expanded = {};
       int maxLines = 1;
 
       for (final key in keys) {
-        final val = row[key];
+        final val = item[key];
         if (val is String && val.contains('-->')) {
           final parts = val.split('-->').map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
           expanded[key] = parts.isNotEmpty ? parts : ['--'];
@@ -1908,12 +1916,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
         // Sr No (only on the first sub-row)
         if (i == 0) {
-          sheet.getRangeByIndex(rowIndex, writeCol).setNumber(srNo.toDouble());
-          sheet.getRangeByIndex(rowIndex, writeCol).cellStyle = cellStyle;
+          _sheet.getRangeByIndex(rowIndex, writeCol).setNumber(srNo.toDouble());
+          _sheet.getRangeByIndex(rowIndex, writeCol).cellStyle = _cellStyle;
         } else {
           // ensure blank cell exists for alignment (will be merged later)
-          sheet.getRangeByIndex(rowIndex, writeCol).setText('');
-          sheet.getRangeByIndex(rowIndex, writeCol).cellStyle = cellStyle;
+          _sheet.getRangeByIndex(rowIndex, writeCol).setText('');
+          _sheet.getRangeByIndex(rowIndex, writeCol).cellStyle = _cellStyle;
         }
         writeCol++;
 
@@ -1921,8 +1929,8 @@ class _HomeScreenState extends State<HomeScreen> {
         for (final key in keys) {
           final values = expanded[key]!;
           final text = (i < values.length) ? values[i] : '--';
-          sheet.getRangeByIndex(rowIndex, writeCol).setText(text);
-          sheet.getRangeByIndex(rowIndex, writeCol).cellStyle = cellStyle;
+          _sheet.getRangeByIndex(rowIndex, writeCol).setText(text);
+          _sheet.getRangeByIndex(rowIndex, writeCol).cellStyle = _cellStyle;
           writeCol++;
         }
 
@@ -1932,8 +1940,8 @@ class _HomeScreenState extends State<HomeScreen> {
       final int endRow = rowIndex - 1;
 
       // Merge Sr No vertically for this object
-      sheet.getRangeByIndex(startRow, 1, endRow, 1).merge();
-      sheet.getRangeByIndex(startRow, 1).cellStyle = cellStyle..vAlign = xls.VAlignType.center;
+      _sheet.getRangeByIndex(startRow, 1, endRow, 1).merge();
+      _sheet.getRangeByIndex(startRow, 1).cellStyle = _cellStyle;
 
       // Helper to merge a named key if present
       void tryMergeKey(String keyName) {
@@ -1941,23 +1949,28 @@ class _HomeScreenState extends State<HomeScreen> {
         if (keyPos >= 0) {
           // +2 because column 1 = Sr No, columns start at 2 for first key
           final int colForKey = keyPos + 2;
-          sheet.getRangeByIndex(startRow, colForKey, endRow, colForKey).merge();
-          sheet.getRangeByIndex(startRow, colForKey).cellStyle = cellStyle..vAlign = xls.VAlignType.center;
+          _sheet.getRangeByIndex(startRow, colForKey, endRow, colForKey).merge();
+          _sheet.getRangeByIndex(startRow, colForKey).cellStyle = _cellStyle;
         }
       }
 
       // Merge bhagname, vibhagname and nagarname vertically if they exist
-      tryMergeKey('bhagname');
-      tryMergeKey('vibhagname');
-      tryMergeKey('nagarname');
+      tryMergeKey('GoUnitName');
 
       srNo++;
+
+      // Add a visually separated blank row
+      for (int c = 1; c <= keys.length + 1; c++) {
+        _sheet.getRangeByIndex(rowIndex, c).setText('');
+        _sheet.getRangeByIndex(rowIndex, c).cellStyle = blankRowStyle;
+      }
+
       rowIndex++; // leave one blank row after each object
     }
 
     // Auto-fit columns
     for (int c = 1; c <= keys.length + 1; c++) {
-      sheet.autoFitColumn(c);
+      _sheet.autoFitColumn(c);
     }
 
     // Save + open (same as your existing approach)
@@ -2291,17 +2304,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Column(
                                   children: [
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        ElevatedButton.icon(
-                                          style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.purpleAccent)),
-                                          onPressed: getExcelReportDataFun,
-                                          // onPressed: () {},
-                                          icon: Icon(Icons.download, color: Colors.white),
-                                          label: Text("${Statics.getLabel('downloadReport')}", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                                        ),
+                                        // ElevatedButton.icon(
+                                        //   style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.purpleAccent)),
+                                        //   onPressed: getExcelReportDataFun,
+                                        //   // onPressed: () {},
+                                        //   icon: Icon(Icons.download, color: Colors.white),
+                                        //   label: Text("${Statics.getLabel('downloadReport')}", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                                        // ),
                                         SizedBox(
-                                          // height: 20,
+                                          height: 21,
                                           width: 80,
                                           child: MaterialButton(
                                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
@@ -3710,6 +3723,7 @@ class _HomeScreenState extends State<HomeScreen> {
       Statics.getLabel('hoomeScreenUpnagarTable5'),
       Statics.getLabel('hoomeScreenUpnagarTable6'),
       Statics.getLabel('hoomeScreenUpnagarTable7'),
+      "",
     ];
 
     if (data.isEmpty) {
@@ -3726,6 +3740,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         DataTable(
           headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
@@ -3795,6 +3810,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         DataCell(Center(child: Text(level.mapUpNagarCount.toString()))),
                         DataCell(Center(child: Text(level.upKhandCount.toString()))),
                         DataCell(Center(child: Text(level.mapUpKhandCount.toString()))),
+                        DataCell(Center(child: Icon(Icons.download, color: Colors.purple, size: 16)), onTap: () => getExcelReportDataFun(level.geoUnitId)),
                       ]);
                     }).toList() +
                     [
@@ -3834,12 +3850,41 @@ class _HomeScreenState extends State<HomeScreen> {
                           data.fold(0, (sum, item) => sum + (item.mapUpKhandCount ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
+                        DataCell(SizedBox()),
                       ])
                     ],
               ),
             ),
           ),
         ),
+        // DataTable(
+        //   headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
+        //   columnSpacing: 0,
+        //   horizontalMargin: 6,
+        //   border: TableBorder.all(color: Colors.black26),
+        //   columns: [
+        //     DataColumn(
+        //       label: Center(
+        //         child: SizedBox(
+        //           width: 30,
+        //           child: Text(
+        //             "",
+        //             // Statics.getLabel("downloadReport"),
+        //             softWrap: true,
+        //             maxLines: 2,
+        //             overflow: TextOverflow.ellipsis,
+        //             style: TextStyle(fontWeight: FontWeight.bold),
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        //   rows: data.map((level) {
+        //     return DataRow(color: MaterialStatePropertyAll(Colors.white), cells: [
+        //       DataCell(Center(child: Icon(Icons.download, color: Colors.purple, size: 16)), onTap: getExcelReportDataFun),
+        //     ]);
+        //   }).toList(),
+        // ),
       ],
     );
   }

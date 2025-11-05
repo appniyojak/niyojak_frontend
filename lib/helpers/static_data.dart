@@ -1810,7 +1810,8 @@ Future<UpnagarUpkhandaReportModel?> upkhandUpnagarReportData({required String us
   return null;
 }
 
-Future<UpnagarUpkhandaReportModel?> upkhandUpnagarReportForExcelData({required String userID, required String? targetGeoUnitID, required String? type}) async {
+Future<UpnagarUpkhandaReportModel?> upkhandUpnagarReportForExcelData({required String userID, required String? targetGeoUnitID, required String? type, BuildContext? context}) async {
+  if (context != null) showLoaderDialog(context);
   print("${userID}  --- $targetGeoUnitID  ");
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
@@ -1827,13 +1828,13 @@ Future<UpnagarUpkhandaReportModel?> upkhandUpnagarReportForExcelData({required S
       body: json.encode({
         "iAppUserID": userID,
         "iGeoUnitID": targetGeoUnitID,
-        "type": type,
+        "type": "",
       }));
-
+  if (context != null) Navigator.of(context, rootNavigator: true).pop();
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
     final respData = UpnagarUpkhandaReportModel.fromJson(responseBody);
-    log("Print the body for urlUpkhandupnagarreport >>>>>>>>>>>>>>>>> $responseBody");
+    log("Print the body for upkhandUpnagarReportForExcelData >>>>>>>>>>>>>>>>> $responseBody");
     if (respData.status == "Success") {
       return respData;
     }
