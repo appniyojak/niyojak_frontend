@@ -1810,7 +1810,7 @@ Future<UpnagarUpkhandaReportModel?> upkhandUpnagarReportData({required String us
   return null;
 }
 
-Future<UpnagarUpkhandaReportModel?> upkhandUpnagarReportForExcelData({required String userID, required String? targetGeoUnitID, required String? type, BuildContext? context}) async {
+Future<UpnagarUpkhandaReportModel?> upkhandUpnagarReportForExcelData({required String userID, required String? targetGeoUnitID, BuildContext? context}) async {
   if (context != null) showLoaderDialog(context);
   print("${userID}  --- $targetGeoUnitID  ");
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -1820,7 +1820,7 @@ Future<UpnagarUpkhandaReportModel?> upkhandUpnagarReportForExcelData({required S
   print(json.encode({
     "iAppUserID": userID,
     "iGeoUnitID": targetGeoUnitID,
-    "type": type,
+    "type": "",
   }));
 
   var response = await http.post(Uri.parse(urlUpkhandupnagarreportforexcel),

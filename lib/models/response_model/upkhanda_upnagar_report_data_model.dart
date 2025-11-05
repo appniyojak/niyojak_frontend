@@ -38,6 +38,7 @@ class UpnagarUpkhandaReportModel {
 }
 
 class UpkhandaDataList {
+  String? geoUnitId;
   String? goUnitName;
   int? nagarCount;
   int? upKhandCount;
@@ -48,6 +49,7 @@ class UpkhandaDataList {
   int? mapUpNagarCount;
 
   UpkhandaDataList({
+    this.geoUnitId,
     this.goUnitName,
     this.nagarCount,
     this.upKhandCount,
@@ -59,6 +61,7 @@ class UpkhandaDataList {
   });
 
   UpkhandaDataList.fromJson(Map<String, dynamic> json) {
+    geoUnitId = json['GeoUnitID'].toString();
     goUnitName = json['GoUnitName'];
     nagarCount = json['NagarCount'];
     upKhandCount = json['UpKhandCount'];
@@ -71,6 +74,7 @@ class UpkhandaDataList {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['GeoUnitID'] = this.geoUnitId;
     data['GoUnitName'] = this.goUnitName;
     data['NagarCount'] = this.nagarCount;
     data['UpKhandCount'] = this.upKhandCount;
@@ -110,11 +114,11 @@ class UpkhandaExcelDataList {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['GoUnitName'] = this.goUnitName;
     data['NagarNames'] = this.nagarNames;
-    data['UpKhandNames'] = this.upKhandNames;
-    data['UpNagarNames'] = this.upNagarNames;
     data['VastiNames'] = this.vastiNames;
     data['GramNames'] = this.gramNames;
+    data['UpNagarNames'] = this.upNagarNames;
     data['MapUpNagarNames'] = this.mapUpNagarNames;
+    data['UpKhandNames'] = this.upKhandNames;
     data['MapUpKhandNames'] = this.mapUpKhandNames;
     return data;
   }

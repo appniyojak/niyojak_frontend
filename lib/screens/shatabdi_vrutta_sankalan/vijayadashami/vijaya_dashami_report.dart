@@ -101,7 +101,17 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
   }
 
   final Map<String, dynamic> dataModelForSheet1 = {
-    "bhougolik": {"totvastigram": 0, "pratinidhatvavastigram": 0, "totshaakhaa": 0, "pratinidhatvashaakhaa": 0, "totmilan": 0, "pratinidhatvamilan": 0, "totmanasik": 0, "pratinidhatvamanasik": 0},
+    "bhougolik": {
+      "totvastigram": 0,
+      "DistinctParentMandalCount": 0,
+      "pratinidhatvavastigram": 0,
+      "totshaakhaa": 0,
+      "pratinidhatvashaakhaa": 0,
+      "totmilan": 0,
+      "pratinidhatvamilan": 0,
+      "totmanasik": 0,
+      "pratinidhatvamanasik": 0
+    },
     "anyadetail": {"anya_upastiti_matrushakti": 0, "anya_upastiti_male": 0, "ekunupastiti": 0, "totalgan": 0, "totalanya": 0, "totalanya_upastiti": 0}
   };
 
@@ -179,13 +189,13 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
     // 1) Workbook + sheet (Declaration)
     final xls.Workbook wb = xls.Workbook();
     final xls.Worksheet _sheet1 = wb.worksheets[0];
-    _sheet1.name = 'Report_1';
+    _sheet1.name = Statics.getLabel('pratinidhitva');
 
     final xls.Worksheet _sheet2 = wb.worksheets.add(); // adds a new sheet
-    _sheet2.name = 'Report_2';
+    _sheet2.name = Statics.getLabel('VayogatCode');
 
     final xls.Worksheet _sheet3 = wb.worksheets.add(); // adds a new sheet
-    _sheet3.name = 'Report_3';
+    _sheet3.name = Statics.getLabel('bhou_prat_tapshil');
 
     // 2) Styles
     final headerStyle = wb.styles.add('Header')
@@ -236,9 +246,11 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
       ..borders.all.lineStyle = xls.LineStyle.medium;
 
     final blankRowStyle = wb.styles.add('BlankRow')
+      ..bold = true
       ..borders.all.lineStyle = xls.LineStyle.medium
       ..hAlign = xls.HAlignType.center
-      ..vAlign = xls.VAlignType.center;
+      ..vAlign = xls.VAlignType.center
+      ..backColor = '#D6E3BC';
 
     // 3) Header rows (two-row header)
     int _colForSheet1 = 1; // XlsIO is 1-based
@@ -252,8 +264,32 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
 
     // Name column (merged across two rows)
     _sheet1.getRangeByIndex(1, _colForSheet1, 2, _colForSheet1).merge();
-    _sheet1.getRangeByIndex(1, _colForSheet1).setText('Nagar/Upnagar');
-    _sheet1.getRangeByIndex(1, _colForSheet1, 2, _colForSheet1).cellStyle = headerStyle;
+    _sheet1.getRangeByIndex(1, _colForSheet1).setText(Statics.getLabel('Vibhaag'));
+    _sheet1.getRangeByIndex(1, _colForSheet1, 2, _colForSheet1).cellStyle = headerStyle..backColor = "#FFEB3B";
+    _colForSheet1++;
+
+    // Name column (merged across two rows)
+    _sheet1.getRangeByIndex(1, _colForSheet1, 2, _colForSheet1).merge();
+    _sheet1.getRangeByIndex(1, _colForSheet1).setText(Statics.getLabel('Bhaag'));
+    _sheet1.getRangeByIndex(1, _colForSheet1, 2, _colForSheet1).cellStyle = headerStyle..backColor = "#FFEB3B";
+    _colForSheet1++;
+
+    // Name column (merged across two rows)
+    _sheet1.getRangeByIndex(1, _colForSheet1, 2, _colForSheet1).merge();
+    _sheet1.getRangeByIndex(1, _colForSheet1).setText(Statics.getLabel('utsav_star'));
+    _sheet1.getRangeByIndex(1, _colForSheet1, 2, _colForSheet1).cellStyle = headerStyle..backColor = "#FFEB3B";
+    _colForSheet1++;
+
+    // Name column (merged across two rows)
+    _sheet1.getRangeByIndex(1, _colForSheet1, 2, _colForSheet1).merge();
+    _sheet1.getRangeByIndex(1, _colForSheet1).setText(Statics.getLabel('Nagar/Upnagar'));
+    _sheet1.getRangeByIndex(1, _colForSheet1, 2, _colForSheet1).cellStyle = headerStyle..backColor = "#FDE9D9";
+    _colForSheet1++;
+
+    // Name column (merged across two rows)
+    _sheet1.getRangeByIndex(1, _colForSheet1, 2, _colForSheet1).merge();
+    _sheet1.getRangeByIndex(1, _colForSheet1).setText(Statics.getLabel('datafillname'));
+    _sheet1.getRangeByIndex(1, _colForSheet1, 2, _colForSheet1).cellStyle = headerStyle..backColor = "#FDE9D9";
     _colForSheet1++;
 
     // Sr No (merged across two rows)
@@ -264,8 +300,32 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
 
     // Name column (merged across two rows)
     _sheet2.getRangeByIndex(1, _colForSheet2, 2, _colForSheet2).merge();
-    _sheet2.getRangeByIndex(1, _colForSheet2).setText('Nagar/Upnagar');
-    _sheet2.getRangeByIndex(1, _colForSheet2, 2, _colForSheet2).cellStyle = headerStyle;
+    _sheet2.getRangeByIndex(1, _colForSheet2).setText(Statics.getLabel('Vibhaag'));
+    _sheet2.getRangeByIndex(1, _colForSheet2, 2, _colForSheet2).cellStyle = headerStyle..backColor = "#FFEB3B";
+    _colForSheet2++;
+
+    // Name column (merged across two rows)
+    _sheet2.getRangeByIndex(1, _colForSheet2, 2, _colForSheet2).merge();
+    _sheet2.getRangeByIndex(1, _colForSheet2).setText(Statics.getLabel('Bhaag'));
+    _sheet2.getRangeByIndex(1, _colForSheet2, 2, _colForSheet2).cellStyle = headerStyle..backColor = "#FFEB3B";
+    _colForSheet2++;
+
+    // Name column (merged across two rows)
+    _sheet2.getRangeByIndex(1, _colForSheet2, 2, _colForSheet2).merge();
+    _sheet2.getRangeByIndex(1, _colForSheet2).setText(Statics.getLabel('utsav_star'));
+    _sheet2.getRangeByIndex(1, _colForSheet2, 2, _colForSheet2).cellStyle = headerStyle..backColor = "#FFEB3B";
+    _colForSheet2++;
+
+    // Name column (merged across two rows)
+    _sheet2.getRangeByIndex(1, _colForSheet2, 2, _colForSheet2).merge();
+    _sheet2.getRangeByIndex(1, _colForSheet2).setText(Statics.getLabel('Nagar/Upnagar'));
+    _sheet2.getRangeByIndex(1, _colForSheet2, 2, _colForSheet2).cellStyle = headerStyle..backColor = "#FDE9D9";
+    _colForSheet2++;
+
+    // Name column (merged across two rows)
+    _sheet2.getRangeByIndex(1, _colForSheet2, 2, _colForSheet2).merge();
+    _sheet2.getRangeByIndex(1, _colForSheet2).setText(Statics.getLabel('datafillname'));
+    _sheet2.getRangeByIndex(1, _colForSheet2, 2, _colForSheet2).cellStyle = headerStyle..backColor = "#FDE9D9";
     _colForSheet2++;
 
     // Sr No
@@ -362,7 +422,35 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
       writeCol++;
 
       // Name
+      _sheet1.getRangeByIndex(_rowIndexForSheet1, writeCol).setText((item["vibhagname"] ?? '').toString());
+      _sheet1.getRangeByIndex(_rowIndexForSheet1, writeCol).cellStyle = _cellStyle
+        ..borders.left.lineStyle = xls.LineStyle.medium
+        ..borders.right.lineStyle = xls.LineStyle.medium;
+      writeCol++;
+
+      // Name
+      _sheet1.getRangeByIndex(_rowIndexForSheet1, writeCol).setText((item["bhagname"] ?? '').toString());
+      _sheet1.getRangeByIndex(_rowIndexForSheet1, writeCol).cellStyle = _cellStyle
+        ..borders.left.lineStyle = xls.LineStyle.medium
+        ..borders.right.lineStyle = xls.LineStyle.medium;
+      writeCol++;
+
+      // Name
+      _sheet1.getRangeByIndex(_rowIndexForSheet1, writeCol).setText(Statics.getLabel(item["stharname"]));
+      _sheet1.getRangeByIndex(_rowIndexForSheet1, writeCol).cellStyle = _cellStyle
+        ..borders.left.lineStyle = xls.LineStyle.medium
+        ..borders.right.lineStyle = xls.LineStyle.medium;
+      writeCol++;
+
+      // Name
       _sheet1.getRangeByIndex(_rowIndexForSheet1, writeCol).setText((item["GeoUnitName"] ?? '').toString());
+      _sheet1.getRangeByIndex(_rowIndexForSheet1, writeCol).cellStyle = _cellStyle
+        ..borders.left.lineStyle = xls.LineStyle.medium
+        ..borders.right.lineStyle = xls.LineStyle.medium;
+      writeCol++;
+
+      // Name
+      _sheet1.getRangeByIndex(_rowIndexForSheet1, writeCol).setText((item["datafillname"] ?? '').toString());
       _sheet1.getRangeByIndex(_rowIndexForSheet1, writeCol).cellStyle = _cellStyle
         ..borders.left.lineStyle = xls.LineStyle.medium
         ..borders.right.lineStyle = xls.LineStyle.medium;
@@ -413,7 +501,35 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
       writeCol++;
 
       // Name
+      _sheet2.getRangeByIndex(_rowIndexForSheet2, writeCol).setText((item["vibhagname"] ?? '').toString());
+      _sheet2.getRangeByIndex(_rowIndexForSheet2, writeCol).cellStyle = _cellStyle
+        ..borders.left.lineStyle = xls.LineStyle.medium
+        ..borders.right.lineStyle = xls.LineStyle.medium;
+      writeCol++;
+
+      // Name
+      _sheet2.getRangeByIndex(_rowIndexForSheet2, writeCol).setText((item["bhagname"] ?? '').toString());
+      _sheet2.getRangeByIndex(_rowIndexForSheet2, writeCol).cellStyle = _cellStyle
+        ..borders.left.lineStyle = xls.LineStyle.medium
+        ..borders.right.lineStyle = xls.LineStyle.medium;
+      writeCol++;
+
+      // Name
+      _sheet2.getRangeByIndex(_rowIndexForSheet2, writeCol).setText(Statics.getLabel(item["stharname"]));
+      _sheet2.getRangeByIndex(_rowIndexForSheet2, writeCol).cellStyle = _cellStyle
+        ..borders.left.lineStyle = xls.LineStyle.medium
+        ..borders.right.lineStyle = xls.LineStyle.medium;
+      writeCol++;
+
+      // Name
       _sheet2.getRangeByIndex(_rowIndexForSheet2, writeCol).setText((item["nagarName"] ?? '').toString());
+      _sheet2.getRangeByIndex(_rowIndexForSheet2, writeCol).cellStyle = _cellStyle
+        ..borders.left.lineStyle = xls.LineStyle.medium
+        ..borders.right.lineStyle = xls.LineStyle.medium;
+      writeCol++;
+
+      // Name
+      _sheet2.getRangeByIndex(_rowIndexForSheet2, writeCol).setText((item["datafillname"] ?? '').toString());
       _sheet2.getRangeByIndex(_rowIndexForSheet2, writeCol).cellStyle = _cellStyle
         ..borders.left.lineStyle = xls.LineStyle.medium
         ..borders.right.lineStyle = xls.LineStyle.medium;
@@ -455,6 +571,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
 
     for (final item in sheet3) {
       // Expand values that contain '-->' into lists, others into single-item lists
+      final Map<int, int> countsByCol = {}; // key: column index (1-based), value: count
       final Map<String, List<String>> expanded = {};
       int maxLines = 1;
 
@@ -489,8 +606,16 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
         for (final key in keys) {
           final values = expanded[key]!;
           final text = (i < values.length) ? values[i] : '--';
+
+          final col = writeCol; // capture current column
           _sheet3.getRangeByIndex(_rowIndexForSheet3, writeCol).setText(text);
           _sheet3.getRangeByIndex(_rowIndexForSheet3, writeCol).cellStyle = _cellStyle;
+          if (col >= 6) {
+            final t = text.trim();
+            if (t.isNotEmpty && t != '--') {
+              countsByCol[col] = (countsByCol[col] ?? 0) + 1;
+            }
+          }
           writeCol++;
         }
 
@@ -518,13 +643,20 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
       tryMergeKey('bhagname');
       tryMergeKey('vibhagname');
       tryMergeKey('nagarname');
+      tryMergeKey('datafillname');
 
       _srForSheet3++;
 
-      // Add a visually separated blank row
-      for (int c = 1; c <= keys.length + 1; c++) {
-        _sheet3.getRangeByIndex(_rowIndexForSheet3, c).setText('');
-        _sheet3.getRangeByIndex(_rowIndexForSheet3, c).cellStyle = blankRowStyle;
+      _sheet3.getRangeByIndex(_rowIndexForSheet3, 1, _rowIndexForSheet3, 5).merge();
+      final _totalLabelRangeForSheet1 = _sheet3.getRangeByIndex(_rowIndexForSheet3, 1);
+      _totalLabelRangeForSheet1.setText('Total');
+      _sheet3.getRangeByIndex(_rowIndexForSheet3, 1, _rowIndexForSheet3, 5).cellStyle = boldCellStyle..backColor = '#D6E3BC';
+
+      // Add a separated Total row
+      for (int col = 6; col <= (keys.length + 1); col++) {
+        final count = countsByCol[col] ?? 0;
+        _sheet3.getRangeByIndex(_rowIndexForSheet3, col).setNumber(count.toDouble());
+        _sheet3.getRangeByIndex(_rowIndexForSheet3, col).cellStyle = blankRowStyle;
       }
 
       _rowIndexForSheet3++; // leave one blank row after each object
@@ -534,20 +666,20 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
     /// NOT NEEDED FOR data3
     final int _totalRowForSheet1 = _rowIndexForSheet1;
     // Merge Sr No + Name columns
-    _sheet1.getRangeByIndex(_totalRowForSheet1, 1, _totalRowForSheet1, 2).merge();
+    _sheet1.getRangeByIndex(_totalRowForSheet1, 1, _totalRowForSheet1, 6).merge();
     final _totalLabelRangeForSheet1 = _sheet1.getRangeByIndex(_totalRowForSheet1, 1);
     _totalLabelRangeForSheet1.setText('Total');
-    _sheet1.getRangeByIndex(_totalRowForSheet1, 1, _totalRowForSheet1, 2).cellStyle = boldCellStyle;
+    _sheet1.getRangeByIndex(_totalRowForSheet1, 1, _totalRowForSheet1, 6).cellStyle = boldCellStyle;
 
     final int _totalRowForSheet2 = _rowIndexForSheet2;
     // Merge Sr No + Name columns
-    _sheet2.getRangeByIndex(_totalRowForSheet2, 1, _totalRowForSheet2, 2).merge();
+    _sheet2.getRangeByIndex(_totalRowForSheet2, 1, _totalRowForSheet2, 6).merge();
     final _totalLabelRangeForSheet2 = _sheet2.getRangeByIndex(_totalRowForSheet2, 1);
     _totalLabelRangeForSheet2.setText('Total');
-    _sheet2.getRangeByIndex(_totalRowForSheet2, 1, _totalRowForSheet2, 2).cellStyle = boldCellStyle;
+    _sheet2.getRangeByIndex(_totalRowForSheet2, 1, _totalRowForSheet2, 6).cellStyle = boldCellStyle;
 
     // Totals for each numeric column (from col 3 onwards)
-    for (int c = 3; c <= _totalColsForSheet1; c++) {
+    for (int c = 6; c <= _totalColsForSheet1; c++) {
       final cell = _sheet1.getRangeByIndex(_totalRowForSheet1, c);
       final sum = _columnTotalsForSheet1[c];
       if (sum != null) {
@@ -564,7 +696,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
       if (isEnd) cell.cellStyle.borders.right.lineStyle = xls.LineStyle.medium;
     }
 
-    for (int c = 3; c <= _totalColsForSheet2; c++) {
+    for (int c = 6; c <= _totalColsForSheet2; c++) {
       final cell = _sheet2.getRangeByIndex(_totalRowForSheet2, c);
       final sum = _columnTotalsForSheet2[c];
       if (sum != null) {

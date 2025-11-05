@@ -49,18 +49,26 @@ class VijayadashamiExcelRespModel {
 
 class NagarReportData {
   int? nagarId;
+  String? vibhagname;
+  String? bhagname;
+  String? stharname;
   String? nagarName;
+  String? datafillname;
   ReportCategory? baal;
   ReportCategory? mahavidya;
   ReportCategory? tarunVyav;
   ReportCategory? proudhVyav;
   Totals? totals;
 
-  NagarReportData({this.nagarId, this.nagarName, this.baal, this.mahavidya, this.tarunVyav, this.proudhVyav, this.totals});
+  NagarReportData({this.nagarId, this.vibhagname, this.bhagname, this.stharname, this.nagarName, this.datafillname, this.baal, this.mahavidya, this.tarunVyav, this.proudhVyav, this.totals});
 
   NagarReportData.fromJson(Map<String, dynamic> json) {
     nagarId = json['nagarId'];
+    vibhagname = json['vibhagname'];
+    bhagname = json['bhagname'];
+    stharname = json['stharname'];
     nagarName = json['nagarName'];
+    datafillname = json['datafillname'];
     baal = json['baal'] != null ? new ReportCategory.fromJson(json['baal']) : null;
     mahavidya = json['mahavidya'] != null ? new ReportCategory.fromJson(json['mahavidya']) : null;
     tarunVyav = json['tarunVyav'] != null ? new ReportCategory.fromJson(json['tarunVyav']) : null;
@@ -71,7 +79,11 @@ class NagarReportData {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['nagarId'] = this.nagarId;
+    data['vibhagname'] = this.vibhagname;
+    data['bhagname'] = this.bhagname;
+    data['stharname'] = this.stharname;
     data['nagarName'] = this.nagarName;
+    data['datafillname'] = this.datafillname;
     if (this.baal != null) {
       data['baal'] = this.baal!.toJson();
     }
@@ -143,15 +155,23 @@ class Totals {
 
 class PratinidhitvaReport {
   int? geoUnitID;
+  String? vibhagname;
+  String? bhagname;
+  String? stharname;
   String? geoUnitName;
+  String? datafillname;
   Bhougolik? bhougolik;
   Anya? anya;
 
-  PratinidhitvaReport({this.geoUnitID, this.geoUnitName, this.bhougolik, this.anya});
+  PratinidhitvaReport({this.geoUnitID, this.vibhagname, this.bhagname, this.stharname, this.geoUnitName, this.datafillname, this.bhougolik, this.anya});
 
   PratinidhitvaReport.fromJson(Map<String, dynamic> json) {
     geoUnitID = json['GeoUnitID'];
+    vibhagname = json['vibhagname'];
+    bhagname = json['bhagname'];
+    stharname = json['stharname'];
     geoUnitName = json['GeoUnitName'];
+    datafillname = json['datafillname'];
     bhougolik = json['bhougolik'] != null ? new Bhougolik.fromJson(json['bhougolik']) : null;
     anya = json['anyadetail'] != null ? new Anya.fromJson(json['anyadetail']) : null;
   }
@@ -159,7 +179,11 @@ class PratinidhitvaReport {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['GeoUnitID'] = this.geoUnitID;
+    data['vibhagname'] = this.vibhagname;
+    data['bhagname'] = this.bhagname;
+    data['stharname'] = this.stharname;
     data['GeoUnitName'] = this.geoUnitName;
+    data['datafillname'] = this.datafillname;
     if (this.bhougolik != null) {
       data['bhougolik'] = this.bhougolik!.toJson();
     }
@@ -202,6 +226,7 @@ class Anya {
 }
 
 class Bhougolik {
+  int? distinctParentMandalCount;
   int? pratinidhatvavastigram;
   int? totvastigram;
   int? pratinidhatvashaakhaa;
@@ -211,9 +236,19 @@ class Bhougolik {
   int? pratinidhatvamanasik;
   int? totmanasik;
 
-  Bhougolik({this.pratinidhatvavastigram, this.totvastigram, this.pratinidhatvashaakhaa, this.totshaakhaa, this.pratinidhatvamilan, this.totmilan, this.pratinidhatvamanasik, this.totmanasik});
+  Bhougolik(
+      {this.distinctParentMandalCount,
+      this.pratinidhatvavastigram,
+      this.totvastigram,
+      this.pratinidhatvashaakhaa,
+      this.totshaakhaa,
+      this.pratinidhatvamilan,
+      this.totmilan,
+      this.pratinidhatvamanasik,
+      this.totmanasik});
 
   Bhougolik.fromJson(Map<String, dynamic> json) {
+    distinctParentMandalCount = json['DistinctParentMandalCount'];
     pratinidhatvavastigram = json['pratinidhatvavastigram'];
     totvastigram = json['totvastigram'];
     pratinidhatvashaakhaa = json['pratinidhatvashaakhaa'];
@@ -226,6 +261,7 @@ class Bhougolik {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['DistinctParentMandalCount'] = this.distinctParentMandalCount;
     data['pratinidhatvavastigram'] = this.pratinidhatvavastigram;
     data['totvastigram'] = this.totvastigram;
     data['pratinidhatvashaakhaa'] = this.pratinidhatvashaakhaa;
@@ -242,6 +278,7 @@ class VastiShakhaNamesReport {
   String? vibhagname;
   String? bhagname;
   String? nagarname;
+  String? datafillname;
   String? bhougolikPratinidhatvaNames;
   String? shakhaPratinidhatvaNames;
   String? milanPratinidhatvaNames;
@@ -251,6 +288,7 @@ class VastiShakhaNamesReport {
     this.vibhagname,
     this.bhagname,
     this.nagarname,
+    this.datafillname,
     this.bhougolikPratinidhatvaNames,
     this.shakhaPratinidhatvaNames,
     this.milanPratinidhatvaNames,
@@ -261,6 +299,7 @@ class VastiShakhaNamesReport {
     vibhagname = json['vibhagname'];
     bhagname = json['bhagname'];
     nagarname = json['nagarname'];
+    datafillname = json['datafillname'];
     bhougolikPratinidhatvaNames = json['bhougolik_pratinidhatva_names'];
     shakhaPratinidhatvaNames = json['shakha_pratinidhatva_names'];
     milanPratinidhatvaNames = json['milan_pratinidhatva_names'];
@@ -272,6 +311,7 @@ class VastiShakhaNamesReport {
     data['vibhagname'] = this.vibhagname;
     data['bhagname'] = this.bhagname;
     data['nagarname'] = this.nagarname;
+    data['datafillname'] = this.datafillname;
     data['bhougolik_pratinidhatva_names'] = this.bhougolikPratinidhatvaNames;
     data['shakha_pratinidhatva_names'] = this.shakhaPratinidhatvaNames;
     data['milan_pratinidhatva_names'] = this.milanPratinidhatvaNames;
