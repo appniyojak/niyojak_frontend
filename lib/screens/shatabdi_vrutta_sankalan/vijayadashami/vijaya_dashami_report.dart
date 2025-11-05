@@ -164,6 +164,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
   buildExcelAndPdfFromData({
     required List<Map<String, dynamic>> sheet1,
     required List<Map<String, dynamic>> sheet2,
+    required List<Map<String, dynamic>> sheet3,
     required List<SectionSpec> layout1,
     required List<SectionSpec> layout2,
     // required String nameKey,
@@ -171,7 +172,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
     // String pdfFileName = 'report.pdf',
     // bool openAfterSave = false,
   }) async {
-    if (sheet2.isEmpty) {
+    if (sheet1.isEmpty || sheet2.isEmpty || sheet3.isEmpty) {
       throw ArgumentError('No data rows provided.');
     }
 
@@ -183,12 +184,16 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
     final xls.Worksheet _sheet2 = wb.worksheets.add(); // adds a new sheet
     _sheet2.name = 'Report_2';
 
+    final xls.Worksheet _sheet3 = wb.worksheets.add(); // adds a new sheet
+    _sheet3.name = 'Report_3';
+
     // 2) Styles
     final headerStyle = wb.styles.add('Header')
       ..bold = true
       ..hAlign = xls.HAlignType.center
       ..vAlign = xls.VAlignType.center
-      ..borders.all.lineStyle = xls.LineStyle.thin;
+      ..borders.all.lineStyle = xls.LineStyle.medium
+      ..backColor = '#E8E8E8';
 
     final groupHeaderStyle = wb.styles.add('GroupHeader')
       ..bold = true
@@ -210,7 +215,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
       ..borders.bottom.lineStyle = xls.LineStyle.medium;
 
     final _cellStyle = wb.styles.add('Cell')
-      ..borders.all.lineStyle = xls.LineStyle.thin
+      ..borders.all.lineStyle = xls.LineStyle.hair
       ..hAlign = xls.HAlignType.center
       ..vAlign = xls.VAlignType.center;
 
@@ -230,9 +235,15 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
       ..vAlign = xls.VAlignType.center
       ..borders.all.lineStyle = xls.LineStyle.medium;
 
+    final blankRowStyle = wb.styles.add('BlankRow')
+      ..borders.all.lineStyle = xls.LineStyle.medium
+      ..hAlign = xls.HAlignType.center
+      ..vAlign = xls.VAlignType.center;
+
     // 3) Header rows (two-row header)
     int _colForSheet1 = 1; // XlsIO is 1-based
     int _colForSheet2 = 1; // XlsIO is 1-based
+    int _colForSheet3 = 1; // XlsIO is 1-based
     // Sr No (merged across two rows)
     _sheet1.getRangeByIndex(1, _colForSheet1, 2, _colForSheet1).merge();
     _sheet1.getRangeByIndex(1, _colForSheet1).setText('Sr No');
@@ -257,9 +268,15 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
     _sheet2.getRangeByIndex(1, _colForSheet2, 2, _colForSheet2).cellStyle = headerStyle;
     _colForSheet2++;
 
+    // Sr No
+    _sheet3.getRangeByIndex(1, _colForSheet3).setText('Sr No');
+    _sheet3.getRangeByIndex(1, _colForSheet3, 2, _colForSheet3).cellStyle = headerStyle;
+    _colForSheet3++;
+
     // Track section ranges for border styling & totals
     final List<Map<String, int>> _sectionRangesForSheet1 = [];
     final List<Map<String, int>> _sectionRangesForSheet2 = [];
+    final keys = sheet3.first.keys.toList();
 
     for (final section in layout1) {
       final startCol = _colForSheet1;
@@ -311,6 +328,12 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
       }
     }
 
+    for (final key in keys) {
+      _sheet3.getRangeByIndex(1, _colForSheet3).setText(Statics.getLabel(key));
+      _sheet3.getRangeByIndex(1, _colForSheet3).cellStyle = headerStyle;
+      _colForSheet3++;
+    }
+
     // Freeze top two header rows
     // sheet.freezePanes(3, 1);
 
@@ -324,6 +347,9 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
     int _srForSheet2 = 1;
     final int _totalColsForSheet2 = _colForSheet2 - 1;
     final List<double?> _columnTotalsForSheet2 = List<double?>.filled(_totalColsForSheet2 + 1, null);
+
+    int _rowIndexForSheet3 = 2;
+    int _srForSheet3 = 1;
 
     for (final item in sheet1) {
       int writeCol = 1;
@@ -427,7 +453,84 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
       _rowIndexForSheet2++;
     }
 
-    // 5) Total row (merge first two columns and write totals)
+    for (final item in sheet3) {
+      // Expand values that contain '-->' into lists, others into single-item lists
+      final Map<String, List<String>> expanded = {};
+      int maxLines = 1;
+
+      for (final key in keys) {
+        final val = item[key];
+        if (val is String && val.contains('-->')) {
+          final parts = val.split('-->').map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
+          expanded[key] = parts.isNotEmpty ? parts : ['--'];
+          if (parts.length > maxLines) maxLines = parts.length;
+        } else {
+          expanded[key] = [val?.toString().trim().isEmpty == true ? '--' : (val?.toString() ?? '--')];
+        }
+      }
+
+      // Write expanded lines for this object
+      final int startRow = _rowIndexForSheet3;
+      for (int i = 0; i < maxLines; i++) {
+        int writeCol = 1;
+
+        // Sr No (only on the first sub-row)
+        if (i == 0) {
+          _sheet3.getRangeByIndex(_rowIndexForSheet3, writeCol).setNumber(_srForSheet3.toDouble());
+          _sheet3.getRangeByIndex(_rowIndexForSheet3, writeCol).cellStyle = _cellStyle;
+        } else {
+          // ensure blank cell exists for alignment (will be merged later)
+          _sheet3.getRangeByIndex(_rowIndexForSheet3, writeCol).setText('');
+          _sheet3.getRangeByIndex(_rowIndexForSheet3, writeCol).cellStyle = _cellStyle;
+        }
+        writeCol++;
+
+        // Fill each key column for this sub-row
+        for (final key in keys) {
+          final values = expanded[key]!;
+          final text = (i < values.length) ? values[i] : '--';
+          _sheet3.getRangeByIndex(_rowIndexForSheet3, writeCol).setText(text);
+          _sheet3.getRangeByIndex(_rowIndexForSheet3, writeCol).cellStyle = _cellStyle;
+          writeCol++;
+        }
+
+        _rowIndexForSheet3++;
+      }
+
+      final int endRow = _rowIndexForSheet3 - 1;
+
+      // Merge Sr No vertically for this object
+      _sheet3.getRangeByIndex(startRow, 1, endRow, 1).merge();
+      _sheet3.getRangeByIndex(startRow, 1).cellStyle = _cellStyle;
+
+      // Helper to merge a named key if present
+      void tryMergeKey(String keyName) {
+        final int keyPos = keys.indexOf(keyName);
+        if (keyPos >= 0) {
+          // +2 because column 1 = Sr No, columns start at 2 for first key
+          final int colForKey = keyPos + 2;
+          _sheet3.getRangeByIndex(startRow, colForKey, endRow, colForKey).merge();
+          _sheet3.getRangeByIndex(startRow, colForKey).cellStyle = _cellStyle;
+        }
+      }
+
+      // Merge bhagname, vibhagname and nagarname vertically if they exist
+      tryMergeKey('bhagname');
+      tryMergeKey('vibhagname');
+      tryMergeKey('nagarname');
+
+      _srForSheet3++;
+
+      // Add a visually separated blank row
+      for (int c = 1; c <= keys.length + 1; c++) {
+        _sheet3.getRangeByIndex(_rowIndexForSheet3, c).setText('');
+        _sheet3.getRangeByIndex(_rowIndexForSheet3, c).cellStyle = blankRowStyle;
+      }
+
+      _rowIndexForSheet3++; // leave one blank row after each object
+    }
+
+    // 5) Total row (merge first two columns and write totals) NOT NEEDED FOR data3
     final int _totalRowForSheet1 = _rowIndexForSheet1;
     // Merge Sr No + Name columns
     _sheet1.getRangeByIndex(_totalRowForSheet1, 1, _totalRowForSheet1, 2).merge();
@@ -486,9 +589,13 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
       _sheet2.autoFitColumn(c);
     }
 
+    for (int c = 1; c <= keys.length + 1; c++) {
+      _sheet3.autoFitColumn(c);
+    }
+
     // 7) Convert to PDF (Excel -> PDF)
     try {
-      final _path = await getDirectoryPathFun();
+      final _path = await _getDirectoryPathFun();
       final file = File(_path);
 
       // Write (create or overwrite)
@@ -520,12 +627,154 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
     // // 8) Save Excel
     // final List<int> xlsxBytes = wb.saveAsStream();
     wb.dispose();
-
-    // await _saveBytesCrossPlatform(Uint8List.fromList(xlsxBytes), excelFileName, openAfterSave: openAfterSave);
-    // await _saveBytesCrossPlatform(Uint8List.fromList(pdfBytes), pdfFileName, openAfterSave: openAfterSave);
   }
 
-  Future<String> getDirectoryPathFun() async {
+  // Future<void> buildExcelFromData3({required List<Map<String, dynamic>> rows}) async {
+  //   if (rows.isEmpty) {
+  //     throw ArgumentError('No data rows provided.');
+  //   }
+  //
+  //   // Workbook + sheet
+  //   final xls.Workbook wb = xls.Workbook();
+  //   final xls.Worksheet sheet = wb.worksheets[0];
+  //   sheet.name = 'Report_data3';
+  //
+  //   // Styles (kept same as your original)
+  //   final headerStyle = wb.styles.add('Header')
+  //     ..bold = true
+  //     ..hAlign = xls.HAlignType.center
+  //     ..vAlign = xls.VAlignType.center
+  //     ..borders.all.lineStyle = xls.LineStyle.thin;
+  //
+  //   final cellStyle = wb.styles.add('Cell')
+  //     ..borders.all.lineStyle = xls.LineStyle.thin
+  //     ..hAlign = xls.HAlignType.center
+  //     ..vAlign = xls.VAlignType.center;
+  //
+  //   final boldCellStyle = wb.styles.add('BoldCell')
+  //     ..bold = true
+  //     ..hAlign = xls.HAlignType.center
+  //     ..vAlign = xls.VAlignType.center
+  //     ..borders.all.lineStyle = xls.LineStyle.medium;
+  //
+  //   // Keys/order from the first row (keeps insertion order)
+  //   final keys = rows.first.keys.toList();
+  //
+  //   // Header row (single row header like before)
+  //   int colIndex = 1;
+  //   sheet.getRangeByIndex(1, colIndex).setText('Sr No');
+  //   sheet.getRangeByIndex(1, colIndex).cellStyle = headerStyle;
+  //   colIndex++;
+  //
+  //   for (final key in keys) {
+  //     sheet.getRangeByIndex(1, colIndex).setText(key);
+  //     sheet.getRangeByIndex(1, colIndex).cellStyle = headerStyle;
+  //     colIndex++;
+  //   }
+  //
+  //   int rowIndex = 2;
+  //   int srNo = 1;
+  //
+  //   for (final row in rows) {
+  //     // Expand values that contain '-->' into lists, others into single-item lists
+  //     final Map<String, List<String>> expanded = {};
+  //     int maxLines = 1;
+  //
+  //     for (final key in keys) {
+  //       final val = row[key];
+  //       if (val is String && val.contains('-->')) {
+  //         final parts = val.split('-->').map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
+  //         expanded[key] = parts.isNotEmpty ? parts : ['--'];
+  //         if (parts.length > maxLines) maxLines = parts.length;
+  //       } else {
+  //         expanded[key] = [val?.toString().trim().isEmpty == true ? '--' : (val?.toString() ?? '--')];
+  //       }
+  //     }
+  //
+  //     // Write expanded lines for this object
+  //     final int startRow = rowIndex;
+  //     for (int i = 0; i < maxLines; i++) {
+  //       int writeCol = 1;
+  //
+  //       // Sr No (only on the first sub-row)
+  //       if (i == 0) {
+  //         sheet.getRangeByIndex(rowIndex, writeCol).setNumber(srNo.toDouble());
+  //         sheet.getRangeByIndex(rowIndex, writeCol).cellStyle = cellStyle;
+  //       } else {
+  //         // ensure blank cell exists for alignment (will be merged later)
+  //         sheet.getRangeByIndex(rowIndex, writeCol).setText('');
+  //         sheet.getRangeByIndex(rowIndex, writeCol).cellStyle = cellStyle;
+  //       }
+  //       writeCol++;
+  //
+  //       // Fill each key column for this sub-row
+  //       for (final key in keys) {
+  //         final values = expanded[key]!;
+  //         final text = (i < values.length) ? values[i] : '--';
+  //         sheet.getRangeByIndex(rowIndex, writeCol).setText(text);
+  //         sheet.getRangeByIndex(rowIndex, writeCol).cellStyle = cellStyle;
+  //         writeCol++;
+  //       }
+  //
+  //       rowIndex++;
+  //     }
+  //
+  //     final int endRow = rowIndex - 1;
+  //
+  //     // Merge Sr No vertically for this object
+  //     sheet.getRangeByIndex(startRow, 1, endRow, 1).merge();
+  //     sheet.getRangeByIndex(startRow, 1).cellStyle = cellStyle..vAlign = xls.VAlignType.center;
+  //
+  //     // Helper to merge a named key if present
+  //     void tryMergeKey(String keyName) {
+  //       final int keyPos = keys.indexOf(keyName);
+  //       if (keyPos >= 0) {
+  //         // +2 because column 1 = Sr No, columns start at 2 for first key
+  //         final int colForKey = keyPos + 2;
+  //         sheet.getRangeByIndex(startRow, colForKey, endRow, colForKey).merge();
+  //         sheet.getRangeByIndex(startRow, colForKey).cellStyle = cellStyle..vAlign = xls.VAlignType.center;
+  //       }
+  //     }
+  //
+  //     // Merge bhagname, vibhagname and nagarname vertically if they exist
+  //     tryMergeKey('bhagname');
+  //     tryMergeKey('vibhagname');
+  //     tryMergeKey('nagarname');
+  //
+  //     srNo++;
+  //     rowIndex++; // leave one blank row after each object
+  //   }
+  //
+  //   // Auto-fit columns
+  //   for (int c = 1; c <= keys.length + 1; c++) {
+  //     sheet.autoFitColumn(c);
+  //   }
+  //
+  //   // Save + open (same as your existing approach)
+  //   try {
+  //     final _path = await getDirectoryPathFun();
+  //     final file = File(_path);
+  //
+  //     final bytes = wb.saveAsStream();
+  //     wb.dispose();
+  //
+  //     await file.create(recursive: true);
+  //     await file.writeAsBytes(bytes, flush: true);
+  //
+  //     await OpenFilex.open(file.path);
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('Excel file saved and opened: $_path')),
+  //     );
+  //   } catch (e) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('Failed to export file: $e')),
+  //     );
+  //   }
+  //
+  //   wb.dispose();
+  // }
+
+  Future<String> _getDirectoryPathFun() async {
     Directory? dir;
     if (Platform.isAndroid) {
       dir = Directory('/storage/emulated/0/Download');
@@ -538,6 +787,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
     }
     final ts = DateTime.now().toIso8601String().replaceAll(':', '-');
     final path = '${dir!.path}/${selctedLevelName ?? "prant"}_VijayadashamiReport_$ts.xlsx';
+    log(path);
     return path;
   }
 
@@ -1010,7 +1260,8 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
               });
               final _list = vijayadashamiExcelReport?.data;
               final _list2 = vijayadashamiExcelReport?.data2;
-              if (_list != null && _list.isNotEmpty && _list2 != null && _list2.isNotEmpty) {
+              final _list3 = vijayadashamiExcelReport?.data3;
+              if (_list != null && _list.isNotEmpty && _list2 != null && _list2.isNotEmpty && _list3 != null && _list3.isNotEmpty) {
                 final List<SectionSpec> specs1 = dataModelForSheet1.entries.map((entry) {
                   return SectionSpec(
                     title: entry.key,
@@ -1033,7 +1284,14 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                     }).toList(),
                   );
                 }).toList();
-                await buildExcelAndPdfFromData(sheet1: vijayadashamiExcelReport!.toJson()["data2"], sheet2: vijayadashamiExcelReport!.toJson()["data"], layout1: specs1, layout2: specs2);
+                // await buildExcelFromData3(rows: vijayadashamiExcelReport!.toJson()["data3"]);
+                await buildExcelAndPdfFromData(
+                  sheet1: vijayadashamiExcelReport!.toJson()["data2"],
+                  sheet2: vijayadashamiExcelReport!.toJson()["data"],
+                  sheet3: vijayadashamiExcelReport!.toJson()["data3"],
+                  layout1: specs1,
+                  layout2: specs2,
+                );
               } else {
                 Fluttertoast.showToast(
                   msg: Statics.getLabel("workInProgress"),

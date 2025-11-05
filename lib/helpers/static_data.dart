@@ -130,6 +130,7 @@ const String urlGetJoinRSSDataForApp = baseUrlAPI + '/GetJoinRSSDataForApp';
 const String urlDeleteJoinRSSForApp = baseUrlAPI + '/DeleteJoinRSSForApp';
 const String urlRefreshHomeScreenForApp = baseUrlAPI + '/RefreshHomeScreenForApp';
 const String urlUpkhandupnagarreport = baseUrlAPI + '/upkhandupnagarreport';
+const String urlUpkhandupnagarreportforexcel = baseUrlAPI + '/upkhandupnagarreportforexcel';
 const String urlVastisarvekshanReport = baseUrlAPI + '/VastisarvekshanReport';
 const String urlNagarVastisarvekshanReport = baseUrlAPI + '/NagarVastisarvekshanReport';
 const String getDataWhileAddUpdateUPLevel = baseUrlAPI + '/GetDataWhileAddUpdateUPLevel';
@@ -1790,6 +1791,38 @@ Future<UpnagarUpkhandaReportModel?> upkhandUpnagarReportData({required String us
   }));
 
   var response = await http.post(Uri.parse(urlUpkhandupnagarreport),
+      headers: jHeaders,
+      body: json.encode({
+        "iAppUserID": userID,
+        "iGeoUnitID": targetGeoUnitID,
+        "type": type,
+      }));
+
+  if (response.statusCode == 200) {
+    var responseBody = json.decode(response.body);
+    final respData = UpnagarUpkhandaReportModel.fromJson(responseBody);
+    log("Print the body for urlUpkhandupnagarreport >>>>>>>>>>>>>>>>> $responseBody");
+    if (respData.status == "Success") {
+      return respData;
+    }
+    return null;
+  }
+  return null;
+}
+
+Future<UpnagarUpkhandaReportModel?> upkhandUpnagarReportForExcelData({required String userID, required String? targetGeoUnitID, required String? type}) async {
+  print("${userID}  --- $targetGeoUnitID  ");
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  log("API >>>>>>>>>>>>>> $urlUpkhandupnagarreportforexcel");
+
+  print(json.encode({
+    "iAppUserID": userID,
+    "iGeoUnitID": targetGeoUnitID,
+    "type": type,
+  }));
+
+  var response = await http.post(Uri.parse(urlUpkhandupnagarreportforexcel),
       headers: jHeaders,
       body: json.encode({
         "iAppUserID": userID,

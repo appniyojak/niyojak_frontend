@@ -12,10 +12,12 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:niyojak_prod/models/response_model/AbhiyaanLoginDataResponse.dart';
 import 'package:niyojak_prod/screens/ContactUsScreen.dart';
 import 'package:niyojak_prod/widgets/legend.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:popup_menu/popup_menu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:syncfusion_flutter_xlsio/xlsio.dart' as xls;
 
 import '../helpers/static_data.dart' as Statics;
 import '../models/response_model/notification_list_model.dart';
@@ -119,6 +121,9 @@ class _HomeScreenState extends State<HomeScreen> {
   String? _linkedgraamValue = "";
   String? _linkedvastiValue = "";
 
+  String _selctedLevelName = "praant";
+  String _selctedGeoUnitId = "0";
+
   String? _linkedMahaanagarValue2 = "";
   String? _linkedVibhaagValue2 = "";
   String? _linkedbhaagValue2 = "";
@@ -195,6 +200,8 @@ class _HomeScreenState extends State<HomeScreen> {
   AbhiyanSwayamsevakdata? initialData;
   NotificationListModel? notificationListdata;
   List<UpkhandaDataList> upkhandaDataList = [];
+
+  UpnagarUpkhandaReportModel? bhougolikReportForExcel;
 
   @override
   void initState() {
@@ -1749,6 +1756,251 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {});
   }
 
+  void getExcelReportDataFun() async {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(Statics.getLabel('AskConfirmation')),
+        content: Text("निवडलेला स्तर -> ${_selctedLevelName == "" ? Statics.getLabel("Praant") : _selctedLevelName}"),
+        actions: <Widget>[
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.purple, textStyle: TextStyle(color: Colors.white)),
+            child: Text("डाउनलोड करा", style: TextStyle(color: Colors.white)),
+            onPressed: () async {
+              Navigator.of(ctx).pop();
+              // final _path = await getDirectoryPathFun();
+              // final file = File(_path);
+
+              // final exists = await file.exists();
+              //
+              // if (exists) {
+              //   final _result = await showDialog(
+              //     context: context,
+              //     builder: (ctx) => AlertDialog(
+              //       title: Text(Statics.getLabel('AskConfirmation')),
+              //       content: Text("निवडलेल्या स्तरसाठी एक्सेल रिपोर्ट आधीच अस्तित्वात आहे, तुम्हाला नवीन डाउनलोड करायचा आहे का?"),
+              //       actions: <Widget>[
+              //         ElevatedButton(
+              //           style: ElevatedButton.styleFrom(backgroundColor: Colors.purple, textStyle: TextStyle(color: Colors.white)),
+              //           child: Text("डाउनलोड करा", style: TextStyle(color: Colors.white)),
+              //           onPressed: () async {
+              //             Navigator.of(ctx).pop(true);
+              //           },
+              //         ),
+              //         TextButton(
+              //           child: Text("जुनी फाईल उघडा"),
+              //           onPressed: () async {
+              //             Navigator.of(ctx).pop(false);
+              //           },
+              //         )
+              //       ],
+              //     ),
+              //   );
+              //
+              //   if (!_result) {
+              //     await OpenFilex.open(file.path);
+              //     ScaffoldMessenger.of(context).showSnackBar(
+              //       SnackBar(content: Text('Opened existing file: $_path')),
+              //     );
+              //     return;
+              //   }
+              // }
+              setState(() {
+                bhougolikReportForExcel = null;
+                // _isLoading = true;
+              });
+              bhougolikReportForExcel = await Statics.upkhandUpnagarReportForExcelData(
+                  userID: Statics.userDetails["userID"], targetGeoUnitID: _selctedGeoUnitId.isEmpty ? "0" : _selctedGeoUnitId, type: _selctedLevelName.isEmpty ? "praant" : _selctedLevelName);
+              // log("vijayadashamiReport >>>>>>>>>>>>>>>>> ${jsonDecode(jsonEncode(vijayadashamiReport))}");
+              setState(() {
+                // _isLoading = false;
+                bhougolikReportForExcel;
+              });
+              final _list = bhougolikReportForExcel?.datanameList;
+              if (_list != null && _list.isNotEmpty) {
+                await buildExcelFromData3(rows: bhougolikReportForExcel!.toJson()["dataname"]);
+              } else {
+                Fluttertoast.showToast(
+                  msg: Statics.getLabel("errorOccurred"),
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                );
+              }
+            },
+          ),
+          TextButton(
+            child: Text(Statics.getLabel('clear')),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  Future<void> buildExcelFromData3({required List<Map<String, dynamic>> rows}) async {
+    if (rows.isEmpty) {
+      throw ArgumentError('No data rows provided.');
+    }
+
+    // Workbook + sheet
+    final xls.Workbook wb = xls.Workbook();
+    final xls.Worksheet sheet = wb.worksheets[0];
+    sheet.name = 'Report_data3';
+
+    // Styles (kept same as your original)
+    final headerStyle = wb.styles.add('Header')
+      ..bold = true
+      ..hAlign = xls.HAlignType.center
+      ..vAlign = xls.VAlignType.center
+      ..borders.all.lineStyle = xls.LineStyle.thin;
+
+    final cellStyle = wb.styles.add('Cell')
+      ..borders.all.lineStyle = xls.LineStyle.thin
+      ..hAlign = xls.HAlignType.center
+      ..vAlign = xls.VAlignType.center;
+
+    final boldCellStyle = wb.styles.add('BoldCell')
+      ..bold = true
+      ..hAlign = xls.HAlignType.center
+      ..vAlign = xls.VAlignType.center
+      ..borders.all.lineStyle = xls.LineStyle.medium;
+
+    // Keys/order from the first row (keeps insertion order)
+    final keys = rows.first.keys.toList();
+
+    // Header row (single row header like before)
+    int colIndex = 1;
+    sheet.getRangeByIndex(1, colIndex).setText('Sr No');
+    sheet.getRangeByIndex(1, colIndex).cellStyle = headerStyle;
+    colIndex++;
+
+    for (final key in keys) {
+      sheet.getRangeByIndex(1, colIndex).setText(key);
+      sheet.getRangeByIndex(1, colIndex).cellStyle = headerStyle;
+      colIndex++;
+    }
+
+    int rowIndex = 2;
+    int srNo = 1;
+
+    for (final row in rows) {
+      // Expand values that contain '-->' into lists, others into single-item lists
+      final Map<String, List<String>> expanded = {};
+      int maxLines = 1;
+
+      for (final key in keys) {
+        final val = row[key];
+        if (val is String && val.contains('-->')) {
+          final parts = val.split('-->').map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
+          expanded[key] = parts.isNotEmpty ? parts : ['--'];
+          if (parts.length > maxLines) maxLines = parts.length;
+        } else {
+          expanded[key] = [val?.toString().trim().isEmpty == true ? '--' : (val?.toString() ?? '--')];
+        }
+      }
+
+      // Write expanded lines for this object
+      final int startRow = rowIndex;
+      for (int i = 0; i < maxLines; i++) {
+        int writeCol = 1;
+
+        // Sr No (only on the first sub-row)
+        if (i == 0) {
+          sheet.getRangeByIndex(rowIndex, writeCol).setNumber(srNo.toDouble());
+          sheet.getRangeByIndex(rowIndex, writeCol).cellStyle = cellStyle;
+        } else {
+          // ensure blank cell exists for alignment (will be merged later)
+          sheet.getRangeByIndex(rowIndex, writeCol).setText('');
+          sheet.getRangeByIndex(rowIndex, writeCol).cellStyle = cellStyle;
+        }
+        writeCol++;
+
+        // Fill each key column for this sub-row
+        for (final key in keys) {
+          final values = expanded[key]!;
+          final text = (i < values.length) ? values[i] : '--';
+          sheet.getRangeByIndex(rowIndex, writeCol).setText(text);
+          sheet.getRangeByIndex(rowIndex, writeCol).cellStyle = cellStyle;
+          writeCol++;
+        }
+
+        rowIndex++;
+      }
+
+      final int endRow = rowIndex - 1;
+
+      // Merge Sr No vertically for this object
+      sheet.getRangeByIndex(startRow, 1, endRow, 1).merge();
+      sheet.getRangeByIndex(startRow, 1).cellStyle = cellStyle..vAlign = xls.VAlignType.center;
+
+      // Helper to merge a named key if present
+      void tryMergeKey(String keyName) {
+        final int keyPos = keys.indexOf(keyName);
+        if (keyPos >= 0) {
+          // +2 because column 1 = Sr No, columns start at 2 for first key
+          final int colForKey = keyPos + 2;
+          sheet.getRangeByIndex(startRow, colForKey, endRow, colForKey).merge();
+          sheet.getRangeByIndex(startRow, colForKey).cellStyle = cellStyle..vAlign = xls.VAlignType.center;
+        }
+      }
+
+      // Merge bhagname, vibhagname and nagarname vertically if they exist
+      tryMergeKey('bhagname');
+      tryMergeKey('vibhagname');
+      tryMergeKey('nagarname');
+
+      srNo++;
+      rowIndex++; // leave one blank row after each object
+    }
+
+    // Auto-fit columns
+    for (int c = 1; c <= keys.length + 1; c++) {
+      sheet.autoFitColumn(c);
+    }
+
+    // Save + open (same as your existing approach)
+    try {
+      final _path = await _getDirectoryPathFun();
+      final file = File(_path);
+
+      final bytes = wb.saveAsStream();
+      wb.dispose();
+
+      await file.create(recursive: true);
+      await file.writeAsBytes(bytes, flush: true);
+
+      await OpenFilex.open(file.path);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Excel file saved and opened: $_path')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to export file: $e')),
+      );
+    }
+
+    wb.dispose();
+  }
+
+  Future<String> _getDirectoryPathFun() async {
+    Directory? dir;
+    if (Platform.isAndroid) {
+      dir = Directory('/storage/emulated/0/Download');
+
+      if (!await dir.exists()) {
+        dir = await getExternalStorageDirectory();
+      }
+    } else {
+      dir = await getApplicationDocumentsDirectory();
+    }
+    final ts = DateTime.now().toIso8601String().replaceAll(':', '-');
+    final path = '${dir!.path}/${_selctedLevelName ?? "prant"}_BhougolikCountExcel_$ts.xlsx';
+    log(path);
+    return path;
+  }
+
   Future<String?> checkLoginDate(DateTime? oldDate) async {
     try {
       Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -2039,10 +2291,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Column(
                                   children: [
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
+                                        ElevatedButton.icon(
+                                          style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.purpleAccent)),
+                                          onPressed: getExcelReportDataFun,
+                                          // onPressed: () {},
+                                          icon: Icon(Icons.download, color: Colors.white),
+                                          label: Text("${Statics.getLabel('downloadReport')}", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                                        ),
                                         SizedBox(
-                                          height: 20,
+                                          // height: 20,
                                           width: 80,
                                           child: MaterialButton(
                                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
@@ -2053,6 +2312,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 _linkedMahaanagarValue2 = _linkedVibhaagValue2 =
                                                     _linkedbhaagValue2 = _linkedshaharValue2 = _linkednagarValue2 = _linkedmandalValue2 = _linkedgraamValue2 = _linkedvastiValue2 = null;
                                                 _linkedMahaanagar2 = _linkedVibhaag2 = _linkedbhaag2 = _linkedshahar2 = _linkednagar2 = _linkedmandal2 = _linkedgraam2 = _linkedvasti2 = null;
+                                                _selctedLevelName = Statics.getLabel("praant");
                                               });
 
                                               populatelinkedMahanagarDropdown2();
@@ -2073,7 +2333,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         onChanged: (value) {
                                           setState(() {
                                             _linkedMahaanagarValue2 = value!;
+                                            _selctedGeoUnitId = value;
                                             _linkedVibhaagValue2 = null;
+                                            _selctedLevelName = Statics.getLabel("Mahaanagar");
                                             populatelinkedVibhaagDropdown2();
                                             getUpkhandUpnagarReportFun(value, "mahanagar");
                                           });
@@ -2088,6 +2350,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         onChanged: (value) {
                                           setState(() {
                                             _linkedVibhaagValue2 = value!;
+                                            _selctedGeoUnitId = value;
+                                            _selctedLevelName = Statics.getLabel("Vibhaag");
                                             getUpkhandUpnagarReportFun(value, "vibhaag");
                                           });
                                         },

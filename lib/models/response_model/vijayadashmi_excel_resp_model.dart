@@ -3,8 +3,9 @@ class VijayadashamiExcelRespModel {
   String? message;
   List<NagarReportData>? data;
   List<PratinidhitvaReport>? data2;
+  List<VastiShakhaNamesReport>? data3;
 
-  VijayadashamiExcelRespModel({this.status, this.message, this.data});
+  VijayadashamiExcelRespModel({this.status, this.message, this.data, this.data2, this.data3});
 
   VijayadashamiExcelRespModel.fromJson(Map<String, dynamic> json) {
     status = json['Status'];
@@ -21,6 +22,12 @@ class VijayadashamiExcelRespModel {
         data2!.add(new PratinidhitvaReport.fromJson(v));
       });
     }
+    if (json['data3'] != null) {
+      data3 = <VastiShakhaNamesReport>[];
+      json['data3'].forEach((v) {
+        data3!.add(new VastiShakhaNamesReport.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -32,6 +39,9 @@ class VijayadashamiExcelRespModel {
     }
     if (this.data2 != null) {
       data['data2'] = this.data2!.map((v) => v.toJson()).toList();
+    }
+    if (this.data3 != null) {
+      data['data3'] = this.data3!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -224,6 +234,48 @@ class Bhougolik {
     data['totmilan'] = this.totmilan;
     data['pratinidhatvamanasik'] = this.pratinidhatvamanasik;
     data['totmanasik'] = this.totmanasik;
+    return data;
+  }
+}
+
+class VastiShakhaNamesReport {
+  String? vibhagname;
+  String? bhagname;
+  String? nagarname;
+  String? bhougolikPratinidhatvaNames;
+  String? shakhaPratinidhatvaNames;
+  String? milanPratinidhatvaNames;
+  String? manasikSanghMandaliPratinidhatvaNames;
+
+  VastiShakhaNamesReport({
+    this.vibhagname,
+    this.bhagname,
+    this.nagarname,
+    this.bhougolikPratinidhatvaNames,
+    this.shakhaPratinidhatvaNames,
+    this.milanPratinidhatvaNames,
+    this.manasikSanghMandaliPratinidhatvaNames,
+  });
+
+  VastiShakhaNamesReport.fromJson(Map<String, dynamic> json) {
+    vibhagname = json['vibhagname'];
+    bhagname = json['bhagname'];
+    nagarname = json['nagarname'];
+    bhougolikPratinidhatvaNames = json['bhougolik_pratinidhatva_names'];
+    shakhaPratinidhatvaNames = json['shakha_pratinidhatva_names'];
+    milanPratinidhatvaNames = json['milan_pratinidhatva_names'];
+    manasikSanghMandaliPratinidhatvaNames = json['manasik_sangh_mandali_pratinidhatva_names'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['vibhagname'] = this.vibhagname;
+    data['bhagname'] = this.bhagname;
+    data['nagarname'] = this.nagarname;
+    data['bhougolik_pratinidhatva_names'] = this.bhougolikPratinidhatvaNames;
+    data['shakha_pratinidhatva_names'] = this.shakhaPratinidhatvaNames;
+    data['milan_pratinidhatva_names'] = this.milanPratinidhatvaNames;
+    data['manasik_sangh_mandali_pratinidhatva_names'] = this.manasikSanghMandaliPratinidhatvaNames;
     return data;
   }
 }

@@ -1632,6 +1632,13 @@ Map<String, String> resEnglish = {
   "ekunAnya": "Other Swayamsevak",
   "ekunEkun": "Total Swayamsevak",
   "downloadReport": "Download Report",
+  "vibhagname": "Vibhaag",
+  "bhagname": "Bhaag",
+  "nagarname": "Nagar",
+  "bhougolik_pratinidhatva_names": "Vasti/Graam Representation",
+  "shakha_pratinidhatva_names": "Shaakha Representation",
+  "milan_pratinidhatva_names": "Milan Representation",
+  "manasik_sangh_mandali_pratinidhatva_names": "Masik Milan Representation",
 };
 
 ///1,584
@@ -3268,6 +3275,13 @@ Map<String, String> resMarathi = {
   "ekunAnya": "अन्य उपस्थित",
   "ekunEkun": "एकूण उपस्थित",
   "downloadReport": "अहवाल डाउनलोड करा",
+  "vibhagname": "विभाग",
+  "bhagname": "भाग",
+  "nagarname": "नगर",
+  "bhougolik_pratinidhatva_names": "वस्ती/ग्राम प्रतिनिधित्व",
+  "shakha_pratinidhatva_names": "शाखा प्रतिनिधित्व",
+  "milan_pratinidhatva_names": "मिलान प्रतिनिधित्व",
+  "manasik_sangh_mandali_pratinidhatva_names": "मासिक मिलान प्रतिनिधित्व",
 };
 
 ///1,583
@@ -4903,4 +4917,11 @@ Map<String, String> resHindi = {
   "ekunAnya": "अन्य उपस्थित",
   "ekunEkun": "एकूण उपस्थित",
   "downloadReport": "अहवाल डाउनलोड करें",
+  "vibhagname": "विभाग",
+  "bhagname": "भाग",
+  "nagarname": "नगर",
+  "bhougolik_pratinidhatva_names": "वस्ती/ग्राम प्रतिनिधित्व",
+  "shakha_pratinidhatva_names": "शाखा प्रतिनिधित्व",
+  "milan_pratinidhatva_names": "मिलान प्रतिनिधित्व",
+  "manasik_sangh_mandali_pratinidhatva_names": "मासिक मिलान प्रतिनिधित्व",
 };
