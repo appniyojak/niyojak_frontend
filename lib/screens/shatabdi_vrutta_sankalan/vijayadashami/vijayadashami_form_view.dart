@@ -3027,7 +3027,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                     value: (data?.vastimandallist ?? []).length.toString(),
                   ),
                   SingleColumnRow(
-                    txtString: "${Statics.getLabel('Vasti')} ${Statics.getLabel('pratinidhitva')}  ",
+                    txtString: "${Statics.getLabel('VastiGram')} ${Statics.getLabel('pratinidhitva')}  ",
                     value: selectedVastiCount.toString(),
                   ),
                   SingleColumnRow(

@@ -2023,8 +2023,8 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       dir = await getApplicationDocumentsDirectory();
     }
-    final ts = DateTime.now().toIso8601String().replaceAll(':', '-');
-    final path = '${dir!.path}/${_selctedLevelName ?? "prant"}_BhougolikCountExcel_$ts.xlsx';
+    final ts = DateTime.now().toIso8601String().replaceAll(':', '-').split(".").first;
+    final path = '${dir!.path}/${_selctedLevelName ?? "prant"}_${Statics.getLabel("bhougolikExcelReport")}_$ts.xlsx';
     log(path);
     return path;
   }
