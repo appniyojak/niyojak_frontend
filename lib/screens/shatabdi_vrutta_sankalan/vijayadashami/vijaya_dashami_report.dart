@@ -630,13 +630,13 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
 
       _srForSheet3++;
 
-      _sheet3.getRangeByIndex(_rowIndexForSheet3, 1, _rowIndexForSheet3, 5).merge();
+      _sheet3.getRangeByIndex(_rowIndexForSheet3, 1, _rowIndexForSheet3, 6).merge();
       final _totalLabelRangeForSheet1 = _sheet3.getRangeByIndex(_rowIndexForSheet3, 1);
       _totalLabelRangeForSheet1.setText('Total');
-      _sheet3.getRangeByIndex(_rowIndexForSheet3, 1, _rowIndexForSheet3, 5).cellStyle = boldCellStyle..backColor = '#D6E3BC';
+      _sheet3.getRangeByIndex(_rowIndexForSheet3, 1, _rowIndexForSheet3, 6).cellStyle = boldCellStyle..backColor = '#D6E3BC';
 
       // Add a separated Total row
-      for (int col = 6; col <= (keys.length + 1); col++) {
+      for (int col = 7; col <= (keys.length + 1); col++) {
         final count = countsByCol[col] ?? 0;
         _sheet3.getRangeByIndex(_rowIndexForSheet3, col).setNumber(count.toDouble());
         _sheet3.getRangeByIndex(_rowIndexForSheet3, col).cellStyle = blankRowStyle;
@@ -1348,7 +1348,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
         actions: <Widget>[
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.purple, textStyle: TextStyle(color: Colors.white)),
-            child: Text("डाउनलोड करा", style: TextStyle(color: Colors.white)),
+            child: Text(Statics.getLabel("downloadBtn"), style: TextStyle(color: Colors.white)),
             onPressed: () async {
               Navigator.of(ctx).pop();
               // final _path = await getDirectoryPathFun();
@@ -1694,12 +1694,6 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              ElevatedButton.icon(
-                                style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.blue.shade100)),
-                                onPressed: getExcelReportDataFun,
-                                icon: Icon(Icons.download, color: Colors.black),
-                                label: Text("${Statics.getLabel('downloadReport')}", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-                              ),
                               ElevatedButton(
                                 style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.purpleAccent)),
                                 onPressed: () async {
@@ -1710,6 +1704,12 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                                   });
                                 },
                                 child: Text("${Statics.getLabel('Filters')}", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                              ),
+                              ElevatedButton.icon(
+                                style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Color(0xFFD6E3BC))),
+                                onPressed: getExcelReportDataFun,
+                                icon: Icon(Icons.download, color: Colors.black),
+                                label: Text("${Statics.getLabel('downloadReport')}", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
                               ),
                             ],
                           ),

@@ -1660,6 +1660,7 @@ Map<String, String> resEnglish = {
   "vijayadashmiExcelReport": "Vijayadashmi Utsav Vrutta",
   "bhougolikExcelReport": "Bhougolik Level Report",
   "selectedLevel": "Selected Level",
+  "downloadBtn": "Download",
 };
 
 ///1,584
@@ -3324,6 +3325,7 @@ Map<String, String> resMarathi = {
   "vijayadashmiExcelReport": "विजयादशमी उत्सव वृत्त",
   "bhougolikExcelReport": "भौगोलिक रचना अहवाल",
   "selectedLevel": "निवडलेला स्तर",
+  "downloadBtn": "डाउनलोड करा",
 };
 
 ///1,583
@@ -4987,4 +4989,5 @@ Map<String, String> resHindi = {
   "vijayadashmiExcelReport": "विजयादशमी उत्सव वृत्त",
   "bhougolikExcelReport": "भौगोलिक रचना अहवाल",
   "selectedLevel": "चयनित स्तर",
+  "downloadBtn": "डाउनलोड करें",
 };

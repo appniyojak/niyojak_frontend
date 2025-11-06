@@ -16,7 +16,6 @@ import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:popup_menu/popup_menu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' as xls;
 
 import '../helpers/static_data.dart' as Statics;
@@ -39,7 +38,6 @@ import 'search_event.dart';
 import 'search_join_rss.dart';
 import 'search_rjb_nidhi_sankalan.dart';
 import 'search_soochi_screen.dart';
-import 'shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/gruh_abhiyaan_main_tab_screen.dart';
 import 'shatabdi_vrutta_sankalan/vijayadashami/vijaya_dashami_report.dart';
 import 'shatabdi_vrutta_sankalan/vijayadashami/vijayadashami_form_view.dart';
 import 'survey_screen/mandal_reports_tabs.dart';
@@ -1761,11 +1759,11 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(Statics.getLabel('AskConfirmation')),
-        content: Text("निवडलेला स्तर -> ${data.goUnitName}"),
+        content: Text("${Statics.getLabel("selectedLevel")} -> ${data.goUnitName}"),
         actions: <Widget>[
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.purple, textStyle: TextStyle(color: Colors.white)),
-            child: Text("डाउनलोड करा", style: TextStyle(color: Colors.white)),
+            child: Text(Statics.getLabel("downloadBtn"), style: TextStyle(color: Colors.white)),
             onPressed: () async {
               Navigator.of(ctx).pop();
               // final _path = await getDirectoryPathFun();
@@ -1846,7 +1844,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // Workbook + sheet
     final xls.Workbook wb = xls.Workbook();
     final xls.Worksheet _sheet = wb.worksheets[0];
-    _sheet.name = 'Bhougolik_Report';
+    _sheet.name = Statics.getLabel('bhougolikExcelReport');
 
     // Styles (kept same as your original)
     final headerStyle = wb.styles.add('Header')
@@ -1999,7 +1997,32 @@ class _HomeScreenState extends State<HomeScreen> {
       await file.create(recursive: true);
       await file.writeAsBytes(bytes, flush: true);
 
-      await OpenFilex.open(file.path);
+      final result = await OpenFilex.open(file.path);
+
+      // Check result type
+      if (result.type != ResultType.done) {
+        // Handle known failure types
+        String message;
+        switch (result.type) {
+          case ResultType.noAppToOpen:
+            message = Statics.getLabel("noExcelAppFoundError");
+            break;
+          case ResultType.error:
+            message = Statics.getLabel("errorOccurred");
+            break;
+          case ResultType.permissionDenied:
+            message = Statics.getLabel("noPermissionGiven");
+            break;
+          default:
+            message = Statics.getLabel("unableToOpenFile");
+        }
+
+        Fluttertoast.showToast(
+          msg: message,
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+        );
+      }
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Excel file saved and opened: $_path')),
       );
@@ -3967,14 +3990,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Expanded(
                           child: InkWell(
-                            onTap: () => Navigator.of(context).pushNamed(GruhAbhiyaanMainTabScreen.routeName),
-                            // onTap: () {
-                            //   Fluttertoast.showToast(
-                            //     msg: Statics.getLabel("workInProgress"),
-                            //     toastLength: Toast.LENGTH_SHORT,
-                            //     gravity: ToastGravity.BOTTOM,
-                            //   );
-                            // },
+                            // onTap: () => Navigator.of(context).pushNamed(GruhAbhiyaanMainTabScreen.routeName),
+                            onTap: () {
+                              Fluttertoast.showToast(
+                                msg: Statics.getLabel("workInProgress"),
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                              );
+                            },
                             child: Container(
                               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                               decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
@@ -3994,17 +4017,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         Expanded(
                           child: InkWell(
                             onTap: () async {
-                              var dataDir = "";
-                              if (Platform.isIOS) {
-                                var p = await getLibraryDirectory();
-                                dataDir = p.path;
-                              } else {
-                                dataDir = await getDatabasesPath();
-                              }
-                              var dbPath = dataDir + '/' + "NiyojakProd.db";
-                              print(dbPath);
-                              final appDir = await getApplicationSupportDirectory();
-                              print(appDir.path);
+                              // var dataDir = "";
+                              // if (Platform.isIOS) {
+                              //   var p = await getLibraryDirectory();
+                              //   dataDir = p.path;
+                              // } else {
+                              //   dataDir = await getDatabasesPath();
+                              // }
+                              // var dbPath = dataDir + '/' + "NiyojakProd.db";
+                              // print(dbPath);
+                              // final appDir = await getApplicationSupportDirectory();
+                              // print(appDir.path);
                               Fluttertoast.showToast(
                                 msg: Statics.getLabel("workInProgress"),
                                 toastLength: Toast.LENGTH_SHORT,
