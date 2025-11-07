@@ -12,7 +12,9 @@ class SwayamsevakTransferDetails extends StatefulWidget {
   var swayamsevakID;
   var onSaveDetails;
   var viewType;
+
   SwayamsevakTransferDetails({Key? key, this.swayamsevakTransferID, this.swayamsevakID, this.onSaveDetails, this.viewType}) : super(key: key);
+
   State<StatefulWidget> createState() {
     return new SwayamsevakTransferDetailState();
   }
@@ -170,7 +172,6 @@ class SwayamsevakTransferDetailState extends State<SwayamsevakTransferDetails> {
       widget.onSaveDetails(outputTransferID);
       Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
       Navigator.of(context).pushReplacementNamed(SearchSwayamsevakTransfer.routeName);
-
     });
   }
 
@@ -202,8 +203,7 @@ class SwayamsevakTransferDetailState extends State<SwayamsevakTransferDetails> {
   }
 
   Future<dynamic> _getTransferRecord(var theId, var swId) async {
-    var data = await Statics.getSwayamsevakTransferByID(
-        theId == null || theId == 0 ? '0' : theId.toString(), swId == null || swId == 0 ? '0' : swId.toString());
+    var data = await Statics.getSwayamsevakTransferByID(theId == null || theId == 0 ? '0' : theId.toString(), swId == null || swId == 0 ? '0' : swId.toString());
 
     _swayamsevakTransfer = data;
     if (_swayamsevakTransfer != null) {
@@ -265,7 +265,7 @@ class SwayamsevakTransferDetailState extends State<SwayamsevakTransferDetails> {
                               Center(
                                   child: Text(
                                 'Server Error, Please Try Again Later',
-                                style: TextStyle(color: Theme.of(context).errorColor),
+                                style: TextStyle(color: Colors.red),
                               ))
                             ];
                           } else if (dataSnapshot.hasData) {
@@ -273,59 +273,54 @@ class SwayamsevakTransferDetailState extends State<SwayamsevakTransferDetails> {
                               Column(children: <Widget>[
                                 Align(
                                   alignment: Alignment.centerLeft,
-                                  child: Text(dataSnapshot.data.swayamsevakName + ' ' + ', ' + dataSnapshot.data.mobileNumber,
-                                      style: TextStyle(fontSize: 16)),
+                                  child: Text(dataSnapshot.data.swayamsevakName + ' ' + ', ' + dataSnapshot.data.mobileNumber, style: TextStyle(fontSize: 16)),
                                 ),
                                 Align(
                                   alignment: Alignment.centerLeft,
-                                  child: Text(Statics.getLabel('sourceBhaagLabel') + ': ' + dataSnapshot.data.sourceBhaagName,
-                                      style: TextStyle(fontSize: 16)),
+                                  child: Text(Statics.getLabel('sourceBhaagLabel') + ': ' + dataSnapshot.data.sourceBhaagName, style: TextStyle(fontSize: 16)),
                                 ),
                                 Align(
                                     alignment: Alignment.centerLeft,
-                                    child: Text(Statics.getLabel('destinationBhaagLabel') + ': ' + dataSnapshot.data.destinationBhaagName,
-                                        style: TextStyle(fontSize: 16))),
+                                    child: Text(Statics.getLabel('destinationBhaagLabel') + ': ' + dataSnapshot.data.destinationBhaagName, style: TextStyle(fontSize: 16))),
                                 Align(
                                   alignment: Alignment.centerLeft,
-                                  child: Text(Statics.getLabel('initiatedDate') + ': ' + dataSnapshot.data.initiatedDate,
-                                      style: TextStyle(fontSize: 16)),
+                                  child: Text(Statics.getLabel('initiatedDate') + ': ' + dataSnapshot.data.initiatedDate, style: TextStyle(fontSize: 16)),
                                 ),
                                 if (dataSnapshot.data.completeDate != '')
                                   Align(
                                     alignment: Alignment.centerLeft,
-                                    child: Text(Statics.getLabel('completeDate') + ': ' + dataSnapshot.data.completeDate,
-                                        style: TextStyle(fontSize: 16)),
+                                    child: Text(Statics.getLabel('completeDate') + ': ' + dataSnapshot.data.completeDate, style: TextStyle(fontSize: 16)),
                                   ),
                                 SizedBox(
                                   height: 10,
                                 ),
-                                if(_bhaagList != null)
-                                DropdownButtonFormField(
-                                  decoration: InputDecoration(labelText: Statics.getLabel('Bhaag')),
-                                  isExpanded: true,
-                                  value: _bhaagValue == "" ? null : _bhaagValue,
-                                  items: _bhaagList!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                                  onSaved: (value) {
-                                    if (value != null && value.isNotEmpty) {
-                                      _swayamsevakTransfer!.destinationBhaagID = int.parse(value);
-                                    } else {
-                                      _swayamsevakTransfer!.destinationBhaagID = null;
-                                    }
-                                  },
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _bhaagValue = value;
-                                      populateShaharDropdown(value!);
-                                      populateNagarDropdown(value, null);
-                                    });
-                                  },
-                                  validator: (value) {
-                                    if ((value == null || value.isEmpty)) {
-                                      return Statics.getLabel('SelectBhaagValidationMessage');
-                                    }
-                                    return null;
-                                  },
-                                ),
+                                if (_bhaagList != null)
+                                  DropdownButtonFormField(
+                                    decoration: InputDecoration(labelText: Statics.getLabel('Bhaag')),
+                                    isExpanded: true,
+                                    value: _bhaagValue == "" ? null : _bhaagValue,
+                                    items: _bhaagList!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                    onSaved: (value) {
+                                      if (value != null && value.isNotEmpty) {
+                                        _swayamsevakTransfer!.destinationBhaagID = int.parse(value);
+                                      } else {
+                                        _swayamsevakTransfer!.destinationBhaagID = null;
+                                      }
+                                    },
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _bhaagValue = value;
+                                        populateShaharDropdown(value!);
+                                        populateNagarDropdown(value, null);
+                                      });
+                                    },
+                                    validator: (value) {
+                                      if ((value == null || value.isEmpty)) {
+                                        return Statics.getLabel('SelectBhaagValidationMessage');
+                                      }
+                                      return null;
+                                    },
+                                  ),
                                 SizedBox(
                                   height: 10,
                                 ),
@@ -467,30 +462,28 @@ class SwayamsevakTransferDetailState extends State<SwayamsevakTransferDetails> {
                                   SizedBox(
                                     height: 10,
                                   ),
-                                if(_statusList != null)
-                                DropdownButtonFormField(
-                                  decoration: InputDecoration(labelText: Statics.getLabel('Status')),
-                                  isExpanded: true,
-                                  value: _statusValue == "" ? null : _statusValue,
-                                  items: _statusList!
-                                      .map((bg) => DropdownMenuItem(value: bg.staticID.toString(), child: Text(bg.codeForDisplay!)))
-                                      .toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _statusValue = value;
-                                    });
-                                  },
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) return (Statics.getLabel('StatusValidationMessage'));
-                                    return null;
-                                  },
-                                  onSaved: (value) {
-                                    if (value != null && value.isNotEmpty)
-                                      _swayamsevakTransfer!.statusID = int.parse(value);
-                                    else
-                                      _swayamsevakTransfer!.statusID = null;
-                                  },
-                                ),
+                                if (_statusList != null)
+                                  DropdownButtonFormField(
+                                    decoration: InputDecoration(labelText: Statics.getLabel('Status')),
+                                    isExpanded: true,
+                                    value: _statusValue == "" ? null : _statusValue,
+                                    items: _statusList!.map((bg) => DropdownMenuItem(value: bg.staticID.toString(), child: Text(bg.codeForDisplay!))).toList(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _statusValue = value;
+                                      });
+                                    },
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) return (Statics.getLabel('StatusValidationMessage'));
+                                      return null;
+                                    },
+                                    onSaved: (value) {
+                                      if (value != null && value.isNotEmpty)
+                                        _swayamsevakTransfer!.statusID = int.parse(value);
+                                      else
+                                        _swayamsevakTransfer!.statusID = null;
+                                    },
+                                  ),
                                 SizedBox(
                                   height: 10,
                                 ),
@@ -518,7 +511,7 @@ class SwayamsevakTransferDetailState extends State<SwayamsevakTransferDetails> {
                                       vertical: 8,
                                     ),
                                     color: Theme.of(context).primaryColor,
-                                    textColor: Theme.of(context).primaryTextTheme.button!.color,
+                                    textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                                     onPressed: _submit,
                                     child: Text(
                                       Statics.getLabel('Submit'),

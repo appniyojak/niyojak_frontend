@@ -1,30 +1,29 @@
-
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
+
 import 'package:background_fetch/background_fetch.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 import 'package:niyojak_prod/helpers/database_helper.dart';
 import 'package:niyojak_prod/models/response_model/AbhiyaanLoginDataResponse.dart';
 import 'package:niyojak_prod/screens/AbhiyanScreen.dart';
 import 'package:niyojak_prod/screens/edit_swayamsevak_screen.dart';
 import 'package:niyojak_prod/screens/forget_password.dart';
+import 'package:pin_input_text_field/pin_input_text_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../helpers/static_data.dart' as Statics;
 import '../helpers/static_data.dart';
 import '../models/response_model/get_otp_model.dart';
+import '../providers/login.dart';
 import '../screens/change_password.dart';
 import '../screens/home_screen.dart';
 import '../screens/update_version.dart';
-import '../providers/login.dart';
-import '../helpers/static_data.dart' as Statics;
-import 'package:url_launcher/url_launcher.dart';
-import 'package:pin_input_text_field/pin_input_text_field.dart';
 import '../utils/hard_loader.dart';
-import 'package:http/http.dart' as http;
 
 class LogInScreen extends StatefulWidget {
   static const String routeName = '/login-screen';
@@ -36,6 +35,7 @@ class LogInScreen extends StatefulWidget {
 class _LogInScreenState extends State<LogInScreen> {
   bool showOTPCard = false;
   bool hardLoader = false;
+
   void switchCard() {
     setState(() {
       showOTPCard = !showOTPCard;
@@ -58,7 +58,7 @@ class _LogInScreenState extends State<LogInScreen> {
   Widget build(BuildContext context) {
     final deviceSize = Statics.getDeviceSize(context);
     return WillPopScope(
-        onWillPop: () => LoaderUtils.onWillPop(context), // Use the loader's onWillPop logic
+      onWillPop: () => LoaderUtils.onWillPop(context), // Use the loader's onWillPop logic
       child: Scaffold(
         body: Stack(
           children: <Widget>[
@@ -129,19 +129,17 @@ class _LogInScreenState extends State<LogInScreen> {
 }
 
 class AuthService {
-
-  static Future<void> loginWithPassword(BuildContext context, GlobalKey<FormState> formKey, Map<String, String> logInMap,
-      ValueNotifier<bool> isLoadingNotifier, VoidCallback switchScreens) async {
+  static Future<void> loginWithPassword(BuildContext context, GlobalKey<FormState> formKey, Map<String, String> logInMap, ValueNotifier<bool> isLoadingNotifier, VoidCallback switchScreens) async {
     print("loginWithPassword 1");
     isLoadingNotifier.value = true;
-    LoaderUtils.toggleLoader(context,true);
+    LoaderUtils.toggleLoader(context, true);
     print("Mobile :- ${logInMap['mobileNumber']} ..... password :- ${logInMap['password']} .......... otplogin:-  ${logInMap['otplogin']} ");
     FocusScope.of(context).unfocus();
     if (!formKey.currentState!.validate()) {
       print("loginWithPassword 2");
 
       // Invalid!
-      LoaderUtils.toggleLoader(context,false);
+      LoaderUtils.toggleLoader(context, false);
       isLoadingNotifier.value = false;
       return;
     }
@@ -152,9 +150,10 @@ class AuthService {
       bool isConnected = await Statics.isInternetConnected();
       TextInput.finishAutofillContext();
       print("loginWithPassword 5");
-      if (!isConnected) {    print("loginWithPassword 6");
-      Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
-        LoaderUtils.toggleLoader(context,false);
+      if (!isConnected) {
+        print("loginWithPassword 6");
+        Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
+        LoaderUtils.toggleLoader(context, false);
         isLoadingNotifier.value = false;
       } else {
         print("loginWithPassword 7");
@@ -165,17 +164,17 @@ class AuthService {
         }).catchError((e) {
           print("loginWithPassword 9");
           print('[BackgroundFetch] start FAILURE: $e');
-          LoaderUtils.toggleLoader(context,false);
+          LoaderUtils.toggleLoader(context, false);
           isLoadingNotifier.value = false;
         });
-        LoaderUtils.toggleLoader(context,false);
+        LoaderUtils.toggleLoader(context, false);
         isLoadingNotifier.value = false;
         print("loginWithPassword 10");
         switchScreens();
       }
     } on Exception catch (ex) {
       print("loginWithPassword 11");
-      LoaderUtils.toggleLoader(context,false);
+      LoaderUtils.toggleLoader(context, false);
       Statics.showErrorDialog(context, Statics.getLabel('unableToCompleteProcess'));
       isLoadingNotifier.value = false;
       print("Eroorrrrrrrrrrr  $ex");
@@ -183,57 +182,56 @@ class AuthService {
       print("loginWithPassword 12");
       print(error);
       String errorMessage = Statics.getLabel('autheticationFailed');
-      LoaderUtils.toggleLoader(context,false);
+      LoaderUtils.toggleLoader(context, false);
       Statics.showErrorDialog(context, errorMessage);
       isLoadingNotifier.value = false;
     }
     print("loginWithPassword 13");
   }
 
-  // static Future<void> loginWithOTP(BuildContext context, GlobalKey<FormState> formKey, String verificationId, TextEditingController otpController,
-  //     ValueNotifier<bool> isLoadingNotifier, logInmap, VoidCallback switchScreens) async {
-  //   print("loginWithOTP 1");
-  //   FocusScope.of(context).unfocus();
-  //   if (!formKey.currentState!.validate()) {
-  //     print("loginWithOTP 2");
-  //
-  //     // Invalid!
-  //     return;
-  //   }
-  //   print("loginWithOTP 3");
-  //
-  //   isLoadingNotifier.value = true;
-  //   try {
-  //     print("loginWithOTP 4");
-  //
-  //     // PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
-  //     //   verificationId: verificationId,
-  //     //   smsCode: otpController.text,
-  //     // );
-  //     // await FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
-  //     print('Login OTP successful');
-  //     loginWithPassword(
-  //       context,
-  //       formKey,
-  //       logInmap,
-  //       isLoadingNotifier,
-  //       switchScreens,
-  //     );
-  //   } catch (e) {
-  //     print("loginWithOTP 5");
-  //
-  //     LoaderUtils.toggleLoader(context,false);
-  //     Statics.showErrorDialog(context, "Please check and enter the correct verification code again");
-  //     print('Error login with OTP: $e');
-  //     LoaderUtils.toggleLoader(context,false);
-  //     isLoadingNotifier.value = false;
-  //     LoaderUtils.toggleLoader(context,false);
-  //
-  //   }
-  //   print("loginWithOTP 6");
-  //
-  // }
-
+// static Future<void> loginWithOTP(BuildContext context, GlobalKey<FormState> formKey, String verificationId, TextEditingController otpController,
+//     ValueNotifier<bool> isLoadingNotifier, logInmap, VoidCallback switchScreens) async {
+//   print("loginWithOTP 1");
+//   FocusScope.of(context).unfocus();
+//   if (!formKey.currentState!.validate()) {
+//     print("loginWithOTP 2");
+//
+//     // Invalid!
+//     return;
+//   }
+//   print("loginWithOTP 3");
+//
+//   isLoadingNotifier.value = true;
+//   try {
+//     print("loginWithOTP 4");
+//
+//     // PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
+//     //   verificationId: verificationId,
+//     //   smsCode: otpController.text,
+//     // );
+//     // await FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
+//     print('Login OTP successful');
+//     loginWithPassword(
+//       context,
+//       formKey,
+//       logInmap,
+//       isLoadingNotifier,
+//       switchScreens,
+//     );
+//   } catch (e) {
+//     print("loginWithOTP 5");
+//
+//     LoaderUtils.toggleLoader(context,false);
+//     Statics.showErrorDialog(context, "Please check and enter the correct verification code again");
+//     print('Error login with OTP: $e');
+//     LoaderUtils.toggleLoader(context,false);
+//     isLoadingNotifier.value = false;
+//     LoaderUtils.toggleLoader(context,false);
+//
+//   }
+//   print("loginWithOTP 6");
+//
+// }
 }
 
 class LogInOTPCard extends StatefulWidget {
@@ -284,7 +282,6 @@ class _LogInOTPCardState extends State<LogInOTPCard> {
     timer!.cancel();
     super.dispose();
   }
-
 
   // Future<void> sendOTP() async {
   //   // setState(() {
@@ -418,13 +415,13 @@ class _LogInOTPCardState extends State<LogInOTPCard> {
         setState(() {
           _isSendingOtp = false;
         });
-                            isLoadingNotifier.value = true;
-        await  AuthService.loginWithPassword(
+        isLoadingNotifier.value = true;
+        await AuthService.loginWithPassword(
           context,
           _formKey,
           logInMap,
           isLoadingNotifier,
-              () => switchScreens2(context),
+          () => switchScreens2(context),
         );
         _showSuccess(Statics.getLabel('OTPSucess'));
       } else {
@@ -439,8 +436,6 @@ class _LogInOTPCardState extends State<LogInOTPCard> {
     }
   }
 
-
-
   void _showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message, style: TextStyle(color: Colors.red))),
@@ -452,11 +447,6 @@ class _LogInOTPCardState extends State<LogInOTPCard> {
       SnackBar(content: Text(message, style: TextStyle(color: Colors.green))),
     );
   }
-
-
-
-
-
 
   String formatTime(int seconds) {
     // Calculate minutes and seconds
@@ -496,7 +486,9 @@ class _LogInOTPCardState extends State<LogInOTPCard> {
                       TextFormField(
                         controller: _phoneNumberController,
                         keyboardType: TextInputType.phone,
-                        decoration: InputDecoration(labelText: Statics.getLabel('mobileNumberLabel'),),
+                        decoration: InputDecoration(
+                          labelText: Statics.getLabel('mobileNumberLabel'),
+                        ),
                         validator: (value) {
                           if (value == null || value.length != 10) {
                             return Statics.getLabel('mobileValidation');
@@ -541,13 +533,11 @@ class _LogInOTPCardState extends State<LogInOTPCard> {
                           onPressed: _isSendingOtp
                               ? null
                               : _showEnterOtp && _secondsRemaining > 0
-                              ? null
-                              : _sendOtp,
+                                  ? null
+                                  : _sendOtp,
                           child: _isSendingOtp
                               ? CircularProgressIndicator()
-                              : Text(_showEnterOtp && _secondsRemaining > 0
-                              ? '${Statics.getLabel('ReSendOtp')} $_secondsRemaining'
-                              : Statics.getLabel('SendOtp')),
+                              : Text(_showEnterOtp && _secondsRemaining > 0 ? '${Statics.getLabel('ReSendOtp')} $_secondsRemaining' : Statics.getLabel('SendOtp')),
                         ),
                       if (_showEnterOtp && !showPasswordFields)
                         Column(
@@ -565,9 +555,7 @@ class _LogInOTPCardState extends State<LogInOTPCard> {
                       if (!showPasswordFields && _showEnterOtp)
                         ElevatedButton(
                           onPressed: _isVerifyingOtp ? null : _verifyOtp,
-                          child: _isVerifyingOtp
-                              ? CircularProgressIndicator()
-                              : Text(Statics.getLabel('VerifyOTP')),
+                          child: _isVerifyingOtp ? CircularProgressIndicator() : Text(Statics.getLabel('VerifyOTP')),
                         ),
                       // if (showEnterOtp)
                       //   Column(
@@ -617,7 +605,8 @@ class _LogInOTPCardState extends State<LogInOTPCard> {
                       SizedBox(height: 10),
                       InkWell(
                         onTap: widget.switchCard,
-                        child: Text(  Statics.getLabel('logInBtnOTP'),
+                        child: Text(
+                          Statics.getLabel('logInBtnOTP'),
                           style: TextStyle(fontSize: 15, color: Colors.blue, decoration: TextDecoration.underline),
                         ),
                       ),
@@ -632,7 +621,6 @@ class _LogInOTPCardState extends State<LogInOTPCard> {
     );
   }
 
-
   void switchScreens2(BuildContext ctx) async {
     print("Switching EditSwayamsevakScreen()");
     // Navigator.of(ctx).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => EditSwayamsevakScreen()));
@@ -643,15 +631,9 @@ class _LogInOTPCardState extends State<LogInOTPCard> {
     //     ),
     //   ),
     // );
-    Navigator.of(ctx).pushReplacementNamed(EditSwayamsevakScreen.routeName,
-        arguments: Statics.ScreenArgumentsNew(
-            int.parse(Statics.userDetails['userID']), Statics.getLabel('EditMenu')));
-
+    Navigator.of(ctx).pushReplacementNamed(EditSwayamsevakScreen.routeName, arguments: Statics.ScreenArgumentsNew(int.parse(Statics.userDetails['userID']), Statics.getLabel('EditMenu')));
   }
 }
-
-
-
 
 class LogInCard extends StatefulWidget {
   final VoidCallback switchCard;
@@ -683,7 +665,7 @@ class _LogInCardState extends State<LogInCard> {
       child: Container(
         height: deviceSize.height * 0.75,
         width: deviceSize.width * 0.75,
-        padding: EdgeInsets.only(left: 16.0,top: 16.0,bottom: 0,right: 16.0),
+        padding: EdgeInsets.only(left: 16.0, top: 16.0, bottom: 0, right: 16.0),
         child: Form(
           key: _formKey,
           child: AutofillGroup(
@@ -720,7 +702,7 @@ class _LogInCardState extends State<LogInCard> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: InkWell(
-                    onTap: (){
+                    onTap: () {
                       Navigator.of(context).pushNamed(ForgotPassword.routeName);
                     },
                     child: Text(
@@ -740,14 +722,12 @@ class _LogInCardState extends State<LogInCard> {
                       children: [
                         if (Statics.getLabel("IAgreeToBefore") != '') Text(Statics.getLabel("IAgreeToBefore"), style: TextStyle(fontSize: 13)),
                         InkWell(
-                          child: Text(Statics.getLabel("TermsofUse"),
-                              style: TextStyle(fontSize: 13, color: Colors.blue, decoration: TextDecoration.underline)),
+                          child: Text(Statics.getLabel("TermsofUse"), style: TextStyle(fontSize: 13, color: Colors.blue, decoration: TextDecoration.underline)),
                           onTap: () => launch(Statics.baseUrl + '/TermsOfUse.aspx'),
                         ),
                         Text(Statics.getLabel("And"), style: TextStyle(fontSize: 13)),
                         InkWell(
-                          child: Text(Statics.getLabel("PrivacyPolicy"),
-                              style: TextStyle(fontSize: 13, color: Colors.blue, decoration: TextDecoration.underline)),
+                          child: Text(Statics.getLabel("PrivacyPolicy"), style: TextStyle(fontSize: 13, color: Colors.blue, decoration: TextDecoration.underline)),
                           onTap: () => launch(Statics.baseUrl + '/PrivacyPolicy.aspx'),
                         ),
                         if (Statics.getLabel("IAgreeToAfter") != '') Text(Statics.getLabel("IAgreeToAfter"), style: TextStyle(fontSize: 13)),
@@ -775,7 +755,7 @@ class _LogInCardState extends State<LogInCard> {
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                               padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                               color: _isAgreed ? Theme.of(context).primaryColor : Colors.grey,
-                              textColor: Theme.of(context).primaryTextTheme.button!.color,
+                              textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                               onPressed: () => _login(context),
                               child: Text(Statics.getLabel('logInButton')),
                             ),
@@ -837,12 +817,11 @@ class _LogInCardState extends State<LogInCard> {
   // }
 
   Future<void> _login(BuildContext context) async {
-
     if (!_formKey.currentState!.validate()) {
       // Invalid form
       return;
     }
-    LoaderUtils.toggleLoader(context,true);
+    LoaderUtils.toggleLoader(context, true);
     _formKey.currentState!.save();
     isLoadingNotifier.value = true;
     try {
@@ -851,12 +830,12 @@ class _LogInCardState extends State<LogInCard> {
         _formKey,
         _logInMap,
         isLoadingNotifier,
-            () => switchScreens(context),
+        () => switchScreens(context),
       );
     } catch (error) {
       // Handle error
     } finally {
-      LoaderUtils.toggleLoader(context,false);
+      LoaderUtils.toggleLoader(context, false);
       isLoadingNotifier.value = false;
     }
   }
@@ -866,7 +845,7 @@ class _LogInCardState extends State<LogInCard> {
     print("switchScreens 1");
     SharedPreferences pref = await SharedPreferences.getInstance();
     var data = pref.getString("AbhiyanSwayamsevakData");
-    var otpUser =  pref.getString("otpuser") ?? '';
+    var otpUser = pref.getString("otpuser") ?? '';
     if (data != null) {
       print("switchScreens 2");
       initialData = AbhiyanSwayamsevakdata.fromJson(jsonDecode(data));
@@ -905,5 +884,3 @@ class _LogInCardState extends State<LogInCard> {
     Navigator.of(ctx).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => landingPage));
   }
 }
-
-

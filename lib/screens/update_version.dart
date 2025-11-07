@@ -5,9 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../helpers/static_data.dart' as Statics;
 
 downloadVersion() async {
-
-    await launch(Platform.isIOS ? Statics.urlIOSUpdatedVersion : Statics.urlUpdatedVersion);
-
+  await launch(Platform.isIOS ? Statics.urlIOSUpdatedVersion : Statics.urlUpdatedVersion);
 }
 
 class UpdateVersion extends StatelessWidget {
@@ -40,7 +38,7 @@ class UpdateVersion extends StatelessWidget {
                   vertical: 8,
                 ),
                 color: Theme.of(context).primaryColor,
-                textColor: Theme.of(context).primaryTextTheme.button!.color,
+                textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                 onPressed: downloadVersion,
                 child: Text(
                   Statics.getLabel('upgradeButton'),

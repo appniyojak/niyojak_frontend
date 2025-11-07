@@ -14,7 +14,9 @@ class EditShaakhaaVrutta extends StatefulWidget {
   var vruttaID;
   var onSaveDetails;
   var viewType;
+
   EditShaakhaaVrutta({Key? key, this.shaakhaaID, this.vruttaID, this.onSaveDetails, this.viewType}) : super(key: key);
+
   @override
   _EditShaakhaaVruttaState createState() => _EditShaakhaaVruttaState();
 }
@@ -62,8 +64,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
     } else {
       if (!mounted) return;
       setState(() {
-        vrutta = new ShaakhaaVruttaBAL(vruttaID, 1, shaakhaaID, "", null, null, null, null, null, null, "", false, false, false, false, false, false,
-            false, false, false, false, false);
+        vrutta = new ShaakhaaVruttaBAL(vruttaID, 1, shaakhaaID, "", null, null, null, null, null, null, "", false, false, false, false, false, false, false, false, false, false, false);
       });
     }
   }
@@ -584,7 +585,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                           vertical: 8,
                         ),
                         color: Theme.of(context).primaryColor,
-                        textColor: Theme.of(context).primaryTextTheme.button!.color,
+                        textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                         onPressed: () {
                           _submit(context);
                         },

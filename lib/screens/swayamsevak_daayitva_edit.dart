@@ -18,8 +18,9 @@ class SwayamSevakDaayitvaEdit extends StatefulWidget {
   var daayitvaForID;
   var daayitvaForCode;
   var dataID;
-  SwayamSevakDaayitvaEdit({Key? key, this.swId, this.onSaveSwDetails, this.viewType, this.daayitvaForID, this.daayitvaForCode, this.dataID})
-      : super(key: key);
+
+  SwayamSevakDaayitvaEdit({Key? key, this.swId, this.onSaveSwDetails, this.viewType, this.daayitvaForID, this.daayitvaForCode, this.dataID}) : super(key: key);
+
   @override
   _SwayamSevakDaayitvaEditState createState() => _SwayamSevakDaayitvaEditState();
 }
@@ -74,8 +75,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
     } else {
       if (!mounted) return;
       setState(() {
-        swDaayitva = new SwayamsevakDaayitvaBAL(
-            int.parse(widget.swId), 1, null, null, "", null, null, null, null, null, null, null, "", "", "", "", "", false, "");
+        swDaayitva = new SwayamsevakDaayitvaBAL(int.parse(widget.swId), 1, null, null, "", null, null, null, null, null, null, null, "", "", "", "", "", false, "");
       });
       populateAreaDetails();
     }
@@ -204,8 +204,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
     _areaOfOperations = [];
     var aooArr = swDaayitva == null ? [] : swDaayitva!.areaOfOperationIDs!.split(',');
     for (var data in aoo) {
-      _areaOfOperations
-          .add(new AreaOfOperationsBAL(data.staticID, data.code, data.codeForDisplay, (aooArr.contains(data.staticID.toString()) ? true : false)));
+      _areaOfOperations.add(new AreaOfOperationsBAL(data.staticID, data.code, data.codeForDisplay, (aooArr.contains(data.staticID.toString()) ? true : false)));
     }
   }
 
@@ -224,12 +223,9 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
       "LevelID": swDaayitva!.levelID,
       "GeoUnitID": swDaayitva!.daayitvaGeoUnitID,
       "DaayitvaID":
-    //       _daayitvaForValue != null && _daayitvaForValue!.code != "SanghaPreritSansthaa" && _daayitvaForValue!.code != "OtherSocialOrganization"
-    //           ?
-      _selectedDaayitvaID == ""?
-    swDaayitva!.daayitvaID
-              :
-          _selectedDaayitvaID,
+          //       _daayitvaForValue != null && _daayitvaForValue!.code != "SanghaPreritSansthaa" && _daayitvaForValue!.code != "OtherSocialOrganization"
+          //           ?
+          _selectedDaayitvaID == "" ? swDaayitva!.daayitvaID : _selectedDaayitvaID,
       "StartYear": swDaayitva!.startYear,
       "EndYear": swDaayitva!.endYear,
       "GatividhiID": _daayitvaForValue!.code == "Gatividhi" ? swDaayitva!.gatividhiID : null,
@@ -250,7 +246,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
       "AreaOfOperationIDs": areaOfOperationIDs,
       "ModifiedBy": Statics.userDetails["userID"].toString()
     });
-print(inputData);
+    print(inputData);
 // print("swDaayitva?.levelID :--- ${swDaayitva?.levelID}");
 // print("swDaayitva?.aayaamID :--- ${swDaayitva?.aayaamID}");
 // print("swDaayitva?.areaOfOperationIDs :--- ${swDaayitva?.areaOfOperationIDs}");
@@ -314,28 +310,27 @@ print(inputData);
                         children: [
                           Column(
                             children: [
-                              if(_daayitvaFor != null)
-                              DropdownButtonFormField<StaticMasterBAL>(
-                                decoration: InputDecoration(labelText: Statics.getLabel('SelectDaayitvaFor')),
-                                isExpanded: true,
-                                value: _daayitvaForValue == null ? null : _daayitvaForValue,
-                                items: _daayitvaFor!.map((bg) => DropdownMenuItem(value: bg, child: Text(bg.codeForDisplay!))).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-
-                                    _daayitvaForValue = value;
-                                  });
-                                  print(_daayitvaForValue!.ViewOnly);
-                                },
-                                validator: (value) {
-                                  if (value == null) return (Statics.getLabel('DaayitvaForValidationMessage'));
-                                  return null;
-                                },
-                                onSaved: (value) {
-                                  swDaayitva!.daayitvaFor = value!.staticID;
-                                  print("field SelectDaayitvaFor :--${value.staticID}");
-                                },
-                              ),
+                              if (_daayitvaFor != null)
+                                DropdownButtonFormField<StaticMasterBAL>(
+                                  decoration: InputDecoration(labelText: Statics.getLabel('SelectDaayitvaFor')),
+                                  isExpanded: true,
+                                  value: _daayitvaForValue == null ? null : _daayitvaForValue,
+                                  items: _daayitvaFor!.map((bg) => DropdownMenuItem(value: bg, child: Text(bg.codeForDisplay!))).toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _daayitvaForValue = value;
+                                    });
+                                    print(_daayitvaForValue!.ViewOnly);
+                                  },
+                                  validator: (value) {
+                                    if (value == null) return (Statics.getLabel('DaayitvaForValidationMessage'));
+                                    return null;
+                                  },
+                                  onSaved: (value) {
+                                    swDaayitva!.daayitvaFor = value!.staticID;
+                                    print("field SelectDaayitvaFor :--${value.staticID}");
+                                  },
+                                ),
                               if (_daayitvaForValue != null)
                                 if (_daayitvaForValue!.code == "Aayaam")
                                   Column(
@@ -345,9 +340,7 @@ print(inputData);
                                         decoration: InputDecoration(labelText: Statics.getLabel('SelectAayaam')),
                                         isExpanded: true,
                                         value: _aayaamValue == "" ? null : _aayaamValue,
-                                        items: _aayam!
-                                            .map((bg) => DropdownMenuItem(value: bg.aayaamID.toString(), child: Text(bg.aayaamName!)))
-                                            .toList(),
+                                        items: _aayam!.map((bg) => DropdownMenuItem(value: bg.aayaamID.toString(), child: Text(bg.aayaamName!))).toList(),
                                         onChanged: (value) {
                                           setState(() {
                                             _aayaamValue = value;
@@ -359,11 +352,9 @@ print(inputData);
                                         },
                                         onSaved: (value) {
                                           if (value != null && value.isNotEmpty) {
-                                            swDaayitva!.aayaamID =
-                                                int.parse(value);
+                                            swDaayitva!.aayaamID = int.parse(value);
                                             print("field SelectAayaam :--${value}");
-                                          }
-                                          else {
+                                          } else {
                                             swDaayitva!.aayaamID = null;
                                           }
                                         },
@@ -378,9 +369,7 @@ print(inputData);
                                         decoration: InputDecoration(labelText: Statics.getLabel('SelectGatividhi')),
                                         isExpanded: true,
                                         value: _gatividhiValue == "" ? null : _gatividhiValue,
-                                        items: _gatividhi!
-                                            .map((bg) => DropdownMenuItem(value: bg.gatividhiID.toString(), child: Text(bg.gatividhiName!)))
-                                            .toList(),
+                                        items: _gatividhi!.map((bg) => DropdownMenuItem(value: bg.gatividhiID.toString(), child: Text(bg.gatividhiName!))).toList(),
                                         onChanged: (value) {
                                           setState(() {
                                             _gatividhiValue = value;
@@ -392,12 +381,9 @@ print(inputData);
                                         },
                                         onSaved: (value) {
                                           if (value != null && value.isNotEmpty) {
-                                            swDaayitva!.gatividhiID =
-                                                int.parse(value);
+                                            swDaayitva!.gatividhiID = int.parse(value);
                                             print("field SelectGatividhi :--${value}");
-
-                                          }
-                                          else {
+                                          } else {
                                             swDaayitva!.gatividhiID = null;
                                           }
                                         },
@@ -435,49 +421,43 @@ print(inputData);
                                         },
                                         onSaved: (value) {
                                           if (value != null && value.isNotEmpty) {
-                                            swDaayitva!.levelID =
-                                                int.parse(value);
+                                            swDaayitva!.levelID = int.parse(value);
                                             print("field SelectLevel :--${value}");
-                                          }
-                                          else {
+                                          } else {
                                             swDaayitva!.levelID = null;
                                           }
-                                            },
+                                        },
                                       ),
                                       SizedBox(height: 10),
-                                      if(_geoUnits != null)
-                                      DropdownButtonFormField(
-                                        decoration: InputDecoration(labelText: Statics.getLabel(_lblValue == "" ? 'SelectLevelName' : _lblValue!)),
-                                        isExpanded: true,
-                                        value: _geoUnitsValue == ""
-                                            ? null
-                                            : _geoUnits != null
-                                                ? _geoUnits!.indexWhere((p) => p.geoUnitID.toString() == _geoUnitsValue) > -1
-                                                    ? _geoUnitsValue
-                                                    : null
-                                                : null,
-                                        items:
-                                            _geoUnits!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _geoUnitsValue = value;
-                                          });
-                                        },
-                                        validator: (value) {
-                                          if (value == null || value.isEmpty) return (Statics.getLabel('GeoUnitValidationMessage'));
-                                          return null;
-                                        },
-                                        onSaved: (value) {
-                                          if (value != null && value.isNotEmpty) {
-                                            swDaayitva!.daayitvaGeoUnitID =
-                                                int.parse(value);
-                                            print("field SelectLevelName :--${value}");
-
-                                          }
-                                          else
-                                            swDaayitva!.daayitvaGeoUnitID = null;
-                                        },
-                                      ),
+                                      if (_geoUnits != null)
+                                        DropdownButtonFormField(
+                                          decoration: InputDecoration(labelText: Statics.getLabel(_lblValue == "" ? 'SelectLevelName' : _lblValue!)),
+                                          isExpanded: true,
+                                          value: _geoUnitsValue == ""
+                                              ? null
+                                              : _geoUnits != null
+                                                  ? _geoUnits!.indexWhere((p) => p.geoUnitID.toString() == _geoUnitsValue) > -1
+                                                      ? _geoUnitsValue
+                                                      : null
+                                                  : null,
+                                          items: _geoUnits!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                          onChanged: (value) {
+                                            setState(() {
+                                              _geoUnitsValue = value;
+                                            });
+                                          },
+                                          validator: (value) {
+                                            if (value == null || value.isEmpty) return (Statics.getLabel('GeoUnitValidationMessage'));
+                                            return null;
+                                          },
+                                          onSaved: (value) {
+                                            if (value != null && value.isNotEmpty) {
+                                              swDaayitva!.daayitvaGeoUnitID = int.parse(value);
+                                              print("field SelectLevelName :--${value}");
+                                            } else
+                                              swDaayitva!.daayitvaGeoUnitID = null;
+                                          },
+                                        ),
                                       SizedBox(
                                         height: 10,
                                       ),
@@ -640,9 +620,7 @@ print(inputData);
                                           suggestionsCallback: (pattern) {
                                             _daayitvaValue = "";
                                             return populateDaayitva(
-                                              _daayitvaForValue == null ||
-                                                  _daayitvaForValue!.code == "SanghaPreritSansthaa" ||
-                                                  _daayitvaForValue!.code == "OtherSocialOrganization"
+                                              _daayitvaForValue == null || _daayitvaForValue!.code == "SanghaPreritSansthaa" || _daayitvaForValue!.code == "OtherSocialOrganization"
                                                   ? ""
                                                   : _daayitvaForValue!.staticID.toString(),
                                               pattern,
@@ -688,10 +666,7 @@ print(inputData);
                                         decoration: InputDecoration(labelText: Statics.getLabel('SansthaaName')),
                                         isExpanded: true,
                                         value: _preritSansthaValue == "" ? null : _preritSansthaValue,
-                                        items: _sanghaPreritSanstha!
-                                            .map((bg) =>
-                                                DropdownMenuItem(value: bg["SanghaPreritSansthaaID"].toString(), child: Text(bg["SansthaaName"])))
-                                            .toList(),
+                                        items: _sanghaPreritSanstha!.map((bg) => DropdownMenuItem(value: bg["SanghaPreritSansthaaID"].toString(), child: Text(bg["SansthaaName"]))).toList(),
                                         onChanged: (value) {
                                           setState(() {
                                             _preritSansthaValue = value;
@@ -703,12 +678,9 @@ print(inputData);
                                         },
                                         onSaved: (value) {
                                           if (value != null && value.isNotEmpty) {
-                                            swDaayitva!.sanghaPreritSansthaaID =
-                                                int.parse(value);
+                                            swDaayitva!.sanghaPreritSansthaaID = int.parse(value);
                                             print("field SansthaaName sanghaPreritSansthaaID :--${swDaayitva!.sanghaPreritSansthaaID}");
-
-                                          }
-                                          else
+                                          } else
                                             swDaayitva!.sanghaPreritSansthaaID = null;
                                         },
                                       ),
@@ -726,13 +698,9 @@ print(inputData);
                                         },
                                         onSaved: (value) {
                                           if (value != null && value.isNotEmpty) {
-                                            swDaayitva!
-                                                .sanghaPreritSansthaaDesignation =
-                                                value;
+                                            swDaayitva!.sanghaPreritSansthaaDesignation = value;
                                             print("field SansthaaName sanghaPreritSansthaaDesignation :--${swDaayitva!.sanghaPreritSansthaaID}");
-
-                                          }
-                                          else
+                                          } else
                                             swDaayitva!.sanghaPreritSansthaaDesignation = null;
                                         },
                                       ),
@@ -771,11 +739,10 @@ print(inputData);
                                           return null;
                                         },
                                         onSaved: (value) {
-                                          if (value != null && value.isNotEmpty){
+                                          if (value != null && value.isNotEmpty) {
                                             swDaayitva!.otherSocialOrganizationName = value;
-                                          print("field SansthaaName otherSocialOrganizationName :--${swDaayitva!.sanghaPreritSansthaaID}");
-                                          }
-                                          else
+                                            print("field SansthaaName otherSocialOrganizationName :--${swDaayitva!.sanghaPreritSansthaaID}");
+                                          } else
                                             swDaayitva!.otherSocialOrganizationName = null;
                                         },
                                       ),
@@ -914,7 +881,7 @@ print(inputData);
                                 vertical: 8,
                               ),
                               color: Theme.of(context).primaryColor,
-                              textColor: Theme.of(context).primaryTextTheme.button!.color,
+                              textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                               onPressed: _submit,
                               child: Text(
                                 Statics.getLabel('Submit'),

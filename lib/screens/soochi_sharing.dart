@@ -14,6 +14,7 @@ import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 class SoochiSharing extends StatefulWidget {
   static const String routeName = '/soochi-sharing-screen';
+
   @override
   _SoochiSharingState createState() => _SoochiSharingState();
 }
@@ -67,7 +68,6 @@ class _SoochiSharingState extends State<SoochiSharing> {
     super.dispose();
     _swController.dispose();
     _soochiController.dispose();
-
   }
 
   void onSaveDetails() {
@@ -79,10 +79,7 @@ class _SoochiSharingState extends State<SoochiSharing> {
 
   void populateChoice() {
     setState(() {
-      choices = [
-        new MenuChoices("SendMail", Icons.mail, Statics.getLabel('SendMail')),
-        new MenuChoices("SendSMS", Icons.sms, Statics.getLabel('SendSMS'))
-      ];
+      choices = [new MenuChoices("SendMail", Icons.mail, Statics.getLabel('SendMail')), new MenuChoices("SendSMS", Icons.sms, Statics.getLabel('SendSMS'))];
     });
   }
 
@@ -196,7 +193,7 @@ class _SoochiSharingState extends State<SoochiSharing> {
       rows.add(row);
     }
     if (rows.length > 1) {
-      Statics.convertToCsv(rows, "SoochiMembersList" + "_" + DateFormat('ddmmyyyyHHmmss').format(DateTime.now()),context);
+      Statics.convertToCsv(rows, "SoochiMembersList" + "_" + DateFormat('ddmmyyyyHHmmss').format(DateTime.now()), context);
     }
     setState(() {
       _isfetingData = false;
@@ -297,7 +294,6 @@ class _SoochiSharingState extends State<SoochiSharing> {
     } catch (error) {
       Statics.showErrorDialog(context, Statics.getLabel('unableToCompleteProcess'));
       print("error1 == > $error");
-
     }
 
     setState(() {
@@ -306,13 +302,12 @@ class _SoochiSharingState extends State<SoochiSharing> {
   }
 
   saveSoochiSharing() async {
-
     var inputData = json.encode({
       "SoochiSharingID": 0,
       "PraantID": 1,
       "SoochiID": soochiId,
       "SwayamsevakID": (_swValue == "" || _swValue == null) ? null : _swValue,
-      "SourceSoochiID":(_soochiValue == "" || _soochiValue == null) ? null : _soochiValue,
+      "SourceSoochiID": (_soochiValue == "" || _soochiValue == null) ? null : _soochiValue,
       "CanEdit": _canEdit,
       "ModifiedBy": Statics.userDetails["userID"]
     });
@@ -394,8 +389,7 @@ class _SoochiSharingState extends State<SoochiSharing> {
                                         isDense: true,
                                         border: UnderlineInputBorder(),
                                         labelText: Statics.getLabel('searchSwayamsevakLabel'),
-                                      )
-                                  );
+                                      ));
                                 },
                                 // textFieldConfiguration: TextFieldConfiguration(
                                 //     controller: this._swController,
@@ -476,8 +470,7 @@ class _SoochiSharingState extends State<SoochiSharing> {
                                         isDense: true,
                                         border: UnderlineInputBorder(),
                                         labelText: Statics.getLabel('searchSoochiScreenLabel'),
-                                      )
-                                  );
+                                      ));
                                 },
                                 // textFieldConfiguration: TextFieldConfiguration(
                                 //     controller: this._soochiController,
@@ -490,8 +483,7 @@ class _SoochiSharingState extends State<SoochiSharing> {
                                 },
                                 itemBuilder: (context, suggestion) {
                                   return ListTile(
-                                    title: Text(suggestion["SoochiName"] +
-                                        (suggestion["SoochiMemberCount"] == null ? '' : (' (' + suggestion["SoochiMemberCount"].toString() + ')'))),
+                                    title: Text(suggestion["SoochiName"] + (suggestion["SoochiMemberCount"] == null ? '' : (' (' + suggestion["SoochiMemberCount"].toString() + ')'))),
                                     subtitle: Wrap(
                                       children: [
                                         SizedBox(
@@ -574,7 +566,7 @@ class _SoochiSharingState extends State<SoochiSharing> {
                               vertical: 8,
                             ),
                             color: Theme.of(context).primaryColor,
-                            textColor: Theme.of(context).primaryTextTheme.button!.color,
+                            textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                             onPressed: _submit,
                             child: Text(
                               Statics.getLabel('Submit'),
@@ -592,7 +584,7 @@ class _SoochiSharingState extends State<SoochiSharing> {
                     title: Text(Statics.getLabel('SelectAll'), style: TextStyle(fontSize: 15)),
                     checkColor: Colors.white,
                     activeColor: Colors.purple,
-                    value:  _isSelectAll,
+                    value: _isSelectAll,
                     controlAffinity: ListTileControlAffinity.leading,
                     onChanged: (value) {
                       setState(() {
@@ -614,19 +606,17 @@ class _SoochiSharingState extends State<SoochiSharing> {
                         return Center(
                             child: Text(
                           'Server Error, Please Try Again Later',
-                          style: TextStyle(color: Theme.of(context).errorColor),
+                          style: TextStyle(color: Colors.red),
                         ));
                       }
                       return
-                        // dataSnapshot.hasData && dataSnapshot.data!.length > 0
-                        //   ?
-                      // Text("${dataSnapshot.data}");
-                      Column(
-                              children: dataSnapshot.data!
-                                  .map((sharing) => SoochiSharingCard(sharing, onSaveDetails, onCheckCard, onUnCheckCard, viewType, _isSelectAll))
-                                  .toList(),
-                            );
-                          // : Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch')));
+                          // dataSnapshot.hasData && dataSnapshot.data!.length > 0
+                          //   ?
+                          // Text("${dataSnapshot.data}");
+                          Column(
+                        children: dataSnapshot.data!.map((sharing) => SoochiSharingCard(sharing, onSaveDetails, onCheckCard, onUnCheckCard, viewType, _isSelectAll)).toList(),
+                      );
+                      // : Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch')));
                     },
                   ),
                 ]),

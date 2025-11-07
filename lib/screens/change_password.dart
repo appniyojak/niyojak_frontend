@@ -6,6 +6,7 @@ import '../screens/home_screen.dart';
 
 class ChangePassword extends StatefulWidget {
   static const String routeName = '/change-password-screen';
+
   @override
   _ChangePasswordState createState() => _ChangePasswordState();
 }
@@ -147,7 +148,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                         vertical: 8,
                       ),
                       color: Theme.of(context).primaryColor,
-                      textColor: Theme.of(context).primaryTextTheme.button!.color,
+                      textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                       onPressed: _submit,
                       child: Text(
                         Statics.getLabel('Submit'),

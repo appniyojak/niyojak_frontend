@@ -22,12 +22,12 @@ import 'home_screen.dart';
 
 class AbhiyanScreen extends StatefulWidget {
   static const routeName = '/abhiyan-screen';
+
   @override
   State<AbhiyanScreen> createState() => _AbhiyanScreenState();
 }
 
-class _AbhiyanScreenState extends State<AbhiyanScreen>
-    with SingleTickerProviderStateMixin {
+class _AbhiyanScreenState extends State<AbhiyanScreen> with SingleTickerProviderStateMixin {
   String? selectedGruhaAbhiyanValue = "";
   TabController? _tabController;
   TextEditingController searchPhoneController = TextEditingController();
@@ -118,31 +118,26 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
           _linkedmandalValue = initialData!.parentMandalID.toString();
           populatelinkedGraamDropdown(_linkedmandalValue);
         }
-        if (initialData!.levelName == "Vasti" &&
-            initialData!.geoUnitID != null) {
+        if (initialData!.levelName == "Vasti" && initialData!.geoUnitID != null) {
           _isExpanded = true;
           _linkedvastiDisable = true;
           _linkedvastiValue = initialData!.geoUnitID.toString();
-        } else if (initialData!.levelName == "Graam" &&
-            initialData!.geoUnitID != null) {
+        } else if (initialData!.levelName == "Graam" && initialData!.geoUnitID != null) {
           _isExpanded = true;
           _linkedgraamDisable = true;
           _linkedgraamValue = initialData!.geoUnitID.toString();
-        } else if (initialData!.levelName == "Mandal" &&
-            initialData!.geoUnitID != null) {
+        } else if (initialData!.levelName == "Mandal" && initialData!.geoUnitID != null) {
           _isExpanded = true;
           _linkedmandalDisable = true;
           _linkedmandalValue = initialData!.geoUnitID.toString();
           populatelinkedGraamDropdown(_linkedmandalValue);
-        } else if (initialData!.levelName == "Nagar" &&
-            initialData!.geoUnitID != null) {
+        } else if (initialData!.levelName == "Nagar" && initialData!.geoUnitID != null) {
           _isExpanded = true;
           _linkednagarDisable = true;
           _linkednagarValue = initialData!.geoUnitID.toString();
           populatelinkedMandalDropdown(_linkednagarValue);
           populatelinkedVastiDropdown(_linkednagarValue);
-        } else if (initialData!.levelName == "Bhaag" &&
-            initialData!.geoUnitID != null) {
+        } else if (initialData!.levelName == "Bhaag" && initialData!.geoUnitID != null) {
           _isExpanded = true;
           _linkedbhaagDisable = true;
           _linkedbhaagValue = initialData!.geoUnitID.toString();
@@ -162,38 +157,25 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
   }
 
   populatelinkedMahaanagarDropdown() async {
-    _linkedVibhaagValue = _linkedbhaagValue = _linkednagarValue =
-        _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-    var data = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['MahaanagarLevelID'].toString(), '', '', '');
+    _linkedVibhaagValue = _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MahaanagarLevelID'].toString(), '', '', '');
     setState(() {
       _linkedMahaanagar = data;
     });
   }
 
   populatelinkedVibhaagDropdown(String? mahaanagarIDStr) async {
-    _linkedbhaagValue = _linkednagarValue =
-        _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-    var data = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['VibhaagLevelID'].toString(),
-        mahaanagarIDStr!,
-        (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'),
-        '');
+    _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr!, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '');
     setState(() {
       _linkedVibhaag = data;
     });
   }
 
   void populatelinkedBhaagDropdown(String? vibhaagIDStr) async {
-    _linkedbhaagValue = _linkednagarValue =
-        _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-    _linkedbhaag =
-        _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = [];
-    var data = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['BhaagLevelID'].toString(),
-        vibhaagIDStr!,
-        'Vibhaag',
-        '');
+    _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = [];
+    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr!, 'Vibhaag', '');
     setState(() {
       _linkedbhaag = data;
     });
@@ -201,27 +183,22 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
 
   void populatelinkedShaharDropdown(String? bhaagIDStr) async {
     _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-    var shDD = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['ShaharLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
+    var shDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
     setState(() {
       _linkedshahar = (shDD.length > 0 ? shDD : null);
     });
   }
 
-  void populatelinkedNagarDropdown(
-      String? bhaagIDStr, String? shaharIDStr) async {
-    _linkednagarValue =
-        _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+  void populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
+    _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
     if (shaharIDStr != null) {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParent(
-          Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
+      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
       setState(() {
         _linkednagar = (ngDD.length > 0 ? ngDD : null);
       });
     } else {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParent(
-          Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
+      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
       setState(() {
         _linkednagar = (ngDD.length > 0 ? ngDD : null);
       });
@@ -231,8 +208,7 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
   void populatelinkedMandalDropdown(String? nagarIDStr) async {
     _linkedmandalValue = _linkedgraamValue = null;
     _linkedmandal = _linkedgraam = null;
-    var mnDD = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['MandalLevelID'].toString(), nagarIDStr!, 'Nagar', '');
+    var mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, 'Nagar', '');
     setState(() {
       _linkedmandal = (mnDD.length > 0 ? mnDD : null);
     });
@@ -240,8 +216,7 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
 
   void populatelinkedGraamDropdown(String? mandalIDStr) async {
     _linkedgraamValue = null;
-    var gmDD = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['GraamLevelID'].toString(), mandalIDStr!, 'Mandal', '');
+    var gmDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['GraamLevelID'].toString(), mandalIDStr!, 'Mandal', '');
     setState(() {
       _linkedgraam = (gmDD.length > 0 ? gmDD : null);
     });
@@ -249,8 +224,7 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
 
   void populatelinkedVastiDropdown(String? nagarIDStr) async {
     _linkedvastiValue = null;
-    var vsDD = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['VastiLevelID'].toString(), nagarIDStr!, 'Nagar', '');
+    var vsDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, 'Nagar', '');
     setState(() {
       _linkedvasti = (vsDD.length > 0 ? vsDD : null);
     });
@@ -292,8 +266,7 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
         if (result.status == "200") {
           print("succeed");
           abhiyaanDataList = result.abhiyaanList!;
-          selectedGruhaAbhiyanValue =
-              abhiyaanDataList.first.abhiyaanID.toString();
+          selectedGruhaAbhiyanValue = abhiyaanDataList.first.abhiyaanID.toString();
 
           setState(() {
             _isSearching = false;
@@ -302,8 +275,7 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
           setState(() {
             _isSearching = false;
           });
-          Statics.showToast(
-              Statics.getLabel('noDataFoundTryAnotherSearch').split(",").first);
+          Statics.showToast(Statics.getLabel('noDataFoundTryAnotherSearch').split(",").first);
         }
       }
     } catch (e) {
@@ -311,8 +283,7 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
       setState(() {
         _isSearching = false;
       });
-      Statics.showToast(
-          Statics.getLabel('noDataFoundTryAnotherSearch').split(",").first);
+      Statics.showToast(Statics.getLabel('noDataFoundTryAnotherSearch').split(",").first);
     }
   }
 
@@ -393,35 +364,19 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
         var data = {
           "CreatedByID": initialData!.abhiyanSwayamsevakID!,
           "AbhiyaanID": int.parse(selectedGruhaAbhiyanValue!),
-          "Mahanagar":
-              _linkedMahaanagarValue == null || _linkedMahaanagarValue == ""
-                  ? 0
-                  : int.parse(_linkedMahaanagarValue!),
-          "Vibhag": _linkedVibhaagValue == null || _linkedVibhaagValue == ""
-              ? 0
-              : int.parse(_linkedVibhaagValue!),
-          "BhaagID": _linkedbhaagValue == null || _linkedbhaagValue == ""
-              ? 0
-              : int.parse(_linkedbhaagValue!),
-          "NagarID": _linkednagarValue == null || _linkednagarValue == ""
-              ? 0
-              : int.parse(_linkednagarValue!),
-          "MandalID": _linkedmandalValue == null || _linkedmandalValue == ""
-              ? 0
-              : int.parse(_linkedmandalValue!),
-          "VastiID": _linkedvastiValue == null || _linkedvastiValue == ""
-              ? 0
-              : int.parse(_linkedvastiValue!),
-          "GramID": _linkedgraamValue == null || _linkedgraamValue == ""
-              ? 0
-              : int.parse(_linkedgraamValue!),
+          "Mahanagar": _linkedMahaanagarValue == null || _linkedMahaanagarValue == "" ? 0 : int.parse(_linkedMahaanagarValue!),
+          "Vibhag": _linkedVibhaagValue == null || _linkedVibhaagValue == "" ? 0 : int.parse(_linkedVibhaagValue!),
+          "BhaagID": _linkedbhaagValue == null || _linkedbhaagValue == "" ? 0 : int.parse(_linkedbhaagValue!),
+          "NagarID": _linkednagarValue == null || _linkednagarValue == "" ? 0 : int.parse(_linkednagarValue!),
+          "MandalID": _linkedmandalValue == null || _linkedmandalValue == "" ? 0 : int.parse(_linkedmandalValue!),
+          "VastiID": _linkedvastiValue == null || _linkedvastiValue == "" ? 0 : int.parse(_linkedvastiValue!),
+          "GramID": _linkedgraamValue == null || _linkedgraamValue == "" ? 0 : int.parse(_linkedgraamValue!),
           "type": type
         };
 
         print(data);
 
-        var result = await SwayamsevakProvider()
-            .getAbhiyaGruhaSamparkList(jsonEncode(data));
+        var result = await SwayamsevakProvider().getAbhiyaGruhaSamparkList(jsonEncode(data));
         if (result.status == "200") {
           print("succeed");
           abhiyaanGruhaSamparkDataList = result.abhiyanGruhasamparkData;
@@ -433,8 +388,7 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
           setState(() {
             _isSearching = false;
           });
-          Statics.showToast(
-              Statics.getLabel('noDataFoundTryAnotherSearch').split(",").first);
+          Statics.showToast(Statics.getLabel('noDataFoundTryAnotherSearch').split(",").first);
         }
       }
     } catch (e) {
@@ -442,8 +396,7 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
         _isSearching = false;
       });
       print(e);
-      Statics.showToast(
-          Statics.getLabel('noDataFoundTryAnotherSearch').split(",").first);
+      Statics.showToast(Statics.getLabel('noDataFoundTryAnotherSearch').split(",").first);
     }
   }
 
@@ -451,14 +404,11 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
     setState(() {
       choices = _tabController!.index != 1
           ? [
-              new MenuChoices("AddGruha", Icons.add,
-                  "${Statics.getLabel('addGruhaSampark')}"),
-              new MenuChoices("visheshVyakti", Icons.perm_contact_cal_outlined,
-                  "${Statics.getLabel('searchVisheshVyaktiScreenBanner')}"),
+              new MenuChoices("AddGruha", Icons.add, "${Statics.getLabel('addGruhaSampark')}"),
+              new MenuChoices("visheshVyakti", Icons.perm_contact_cal_outlined, "${Statics.getLabel('searchVisheshVyaktiScreenBanner')}"),
             ]
           : [
-              new MenuChoices("EditMenu", Icons.add,
-                  "${Statics.getLabel('addSahabhagiKaryakarta')}"),
+              new MenuChoices("EditMenu", Icons.add, "${Statics.getLabel('addSahabhagiKaryakarta')}"),
               // new MenuChoices("AbhiyaanSwayam", Icons.perm_contact_cal_outlined,
               //     "सहभागी कार्यकर्ता"),
             ];
@@ -511,9 +461,7 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                     return choices.map((MenuChoices choice) {
                       return PopupMenuItem<MenuChoices>(
                         value: choice,
-                        child: ListTile(
-                            leading: Icon(choice.icon),
-                            title: Text(choice.menuText!)),
+                        child: ListTile(leading: Icon(choice.icon), title: Text(choice.menuText!)),
                       );
                     }).toList();
                   },
@@ -526,9 +474,7 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                     return choices.map((MenuChoices choice) {
                       return PopupMenuItem<MenuChoices>(
                         value: choice,
-                        child: ListTile(
-                            leading: Icon(choice.icon),
-                            title: Text(choice.menuText!)),
+                        child: ListTile(leading: Icon(choice.icon), title: Text(choice.menuText!)),
                       );
                     }).toList();
                   },
@@ -590,10 +536,7 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
               ],
             ),
           ),
-          drawer: (Statics.userDetails['userID'].toString().isEmpty ||
-                  Statics.userDetails['userID'] == "0")
-              ? AppAbhiyanDrawer()
-              : AppDrawer(),
+          drawer: (Statics.userDetails['userID'].toString().isEmpty || Statics.userDetails['userID'] == "0") ? AppAbhiyanDrawer() : AppDrawer(),
           body: ModalProgressHUD(
             inAsyncCall: _isSearching,
             child: TabBarView(
@@ -609,12 +552,10 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                       Row(
                         children: [
                           Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 20.0),
+                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
                             child: Text(
                               "${Statics.getLabel('Abhiyaan')}",
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
+                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ],
@@ -627,19 +568,14 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                             Container(
                               width: MediaQuery.of(context).size.width * 0.9,
                               alignment: Alignment.center,
-                              padding: EdgeInsets.only(
-                                  left: 5, right: 0, top: 5, bottom: 5),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  border: Border.all(color: Colors.black38)),
+                              padding: EdgeInsets.only(left: 5, right: 0, top: 5, bottom: 5),
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.black38)),
                               child: DropdownButton(
                                 isExpanded: true,
                                 isDense: true,
                                 iconSize: 30,
                                 underline: SizedBox(),
-                                value: selectedGruhaAbhiyanValue == ""
-                                    ? null
-                                    : selectedGruhaAbhiyanValue,
+                                value: selectedGruhaAbhiyanValue == "" ? null : selectedGruhaAbhiyanValue,
                                 onChanged: (newValue) {
                                   print(newValue);
                                   setState(() {
@@ -664,10 +600,7 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                       Container(
                         width: MediaQuery.of(context).size.width * 0.9,
                         // margin: EdgeInsets.symmetric(horizontal: 20),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            border: Border.all(
-                                width: 0.7, color: Colors.grey.shade700)),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(width: 0.7, color: Colors.grey.shade700)),
                         child: ExpansionPanelList(
                           elevation: 0,
                           expandedHeaderPadding: EdgeInsets.zero,
@@ -682,8 +615,7 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                           children: [
                             ExpansionPanel(
                               backgroundColor: Colors.transparent,
-                              headerBuilder:
-                                  (BuildContext context, bool isExpanded) {
+                              headerBuilder: (BuildContext context, bool isExpanded) {
                                 return ListTile(
                                   title: Text(
                                     "${Statics.getLabel('SelectLevel')}",
@@ -699,19 +631,10 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                       IgnorePointer(
                                         ignoring: _linkedMahaanagarDisable!,
                                         child: DropdownButtonFormField(
-                                          decoration: InputDecoration(
-                                              labelText: Statics.getLabel(
-                                                  'Mahaanagar')),
+                                          decoration: InputDecoration(labelText: Statics.getLabel('Mahaanagar')),
                                           isExpanded: true,
-                                          value: _linkedMahaanagarValue == ""
-                                              ? null
-                                              : _linkedMahaanagarValue,
-                                          items: _linkedMahaanagar!
-                                              .map((bg) => DropdownMenuItem(
-                                                  value:
-                                                      bg.geoUnitID.toString(),
-                                                  child: Text(bg.name!)))
-                                              .toList(),
+                                          value: _linkedMahaanagarValue == "" ? null : _linkedMahaanagarValue,
+                                          items: _linkedMahaanagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                           onChanged: (value) {
                                             print(value);
                                             setState(() {
@@ -727,13 +650,9 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                               _linkedgraamDisable = false;
                                               _linkedvastiDisable = false;
 
-                                              _linkedVibhaag = _linkedbhaag =
-                                                  _linkednagar = _linkedmandal =
-                                                      _linkedgraam =
-                                                          _linkedvasti = null;
+                                              _linkedVibhaag = _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
                                               type = "mahanagar";
-                                              populatelinkedVibhaagDropdown(
-                                                  value);
+                                              populatelinkedVibhaagDropdown(value);
                                             });
                                           },
                                         ),
@@ -741,193 +660,121 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                     SizedBox(
                                       height: 10,
                                     ),
-                                    if (_linkedVibhaag != null &&
-                                        _linkedVibhaag!.length > 0)
+                                    if (_linkedVibhaag != null && _linkedVibhaag!.length > 0)
                                       IgnorePointer(
                                         ignoring: false,
                                         child: DropdownButtonFormField(
-                                          decoration: InputDecoration(
-                                              labelText:
-                                                  Statics.getLabel('Vibhaag')),
+                                          decoration: InputDecoration(labelText: Statics.getLabel('Vibhaag')),
                                           isExpanded: true,
-                                          value: _linkedVibhaagValue == ""
-                                              ? null
-                                              : _linkedVibhaagValue,
-                                          items: _linkedVibhaag!
-                                              .map((bg) => DropdownMenuItem(
-                                                  value:
-                                                      bg.geoUnitID.toString(),
-                                                  child: Text(bg.name!)))
-                                              .toList(),
+                                          value: _linkedVibhaagValue == "" ? null : _linkedVibhaagValue,
+                                          items: _linkedVibhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                           onChanged: (value) {
                                             setState(() {
                                               _linkedVibhaagValue = value;
-                                              populatelinkedBhaagDropdown(
-                                                  value);
+                                              populatelinkedBhaagDropdown(value);
                                               type = "vibhag";
                                             });
                                           },
                                         ),
                                       ),
-                                    if (_linkedVibhaag != null &&
-                                        _linkedVibhaag!.length > 0)
+                                    if (_linkedVibhaag != null && _linkedVibhaag!.length > 0)
                                       SizedBox(
                                         height: 10,
                                       ),
-                                    if (_linkedbhaag != null &&
-                                        _linkedbhaag!.length > 0)
+                                    if (_linkedbhaag != null && _linkedbhaag!.length > 0)
                                       IgnorePointer(
                                         ignoring: _linkedbhaagDisable!,
                                         child: DropdownButtonFormField(
-                                          decoration: InputDecoration(
-                                              labelText:
-                                                  Statics.getLabel('Bhaag')),
+                                          decoration: InputDecoration(labelText: Statics.getLabel('Bhaag')),
                                           isExpanded: true,
-                                          value: _linkedbhaagValue == ""
-                                              ? null
-                                              : _linkedbhaagValue,
-                                          items: _linkedbhaag!
-                                              .map((bg) => DropdownMenuItem(
-                                                  value:
-                                                      bg.geoUnitID.toString(),
-                                                  child: Text(bg.name!)))
-                                              .toList(),
+                                          value: _linkedbhaagValue == "" ? null : _linkedbhaagValue,
+                                          items: _linkedbhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                           onChanged: (value) {
                                             setState(() {
                                               _linkedbhaagValue = value;
-                                              populatelinkedShaharDropdown(
-                                                  value);
-                                              populatelinkedNagarDropdown(
-                                                  value, null);
+                                              populatelinkedShaharDropdown(value);
+                                              populatelinkedNagarDropdown(value, null);
                                               type = "bhag";
                                             });
                                           },
                                         ),
                                       ),
-                                    if (_linkedbhaag != null &&
-                                        _linkedbhaag!.length > 0)
+                                    if (_linkedbhaag != null && _linkedbhaag!.length > 0)
                                       SizedBox(
                                         height: 10,
                                       ),
-                                    if (_linkedshahar != null &&
-                                        _linkedshahar!.length > 0)
+                                    if (_linkedshahar != null && _linkedshahar!.length > 0)
                                       IgnorePointer(
                                         ignoring: _linkedshaharDisable!,
                                         child: DropdownButtonFormField(
-                                          decoration: InputDecoration(
-                                              labelText:
-                                                  Statics.getLabel('Shahar')),
+                                          decoration: InputDecoration(labelText: Statics.getLabel('Shahar')),
                                           isExpanded: true,
-                                          value: _linkedshaharValue == ""
-                                              ? null
-                                              : _linkedshaharValue,
-                                          items: _linkedshahar!
-                                              .map((bg) => DropdownMenuItem(
-                                                  value:
-                                                      bg.geoUnitID.toString(),
-                                                  child: Text(bg.name!)))
-                                              .toList(),
+                                          value: _linkedshaharValue == "" ? null : _linkedshaharValue,
+                                          items: _linkedshahar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                           onChanged: (value) {
                                             setState(() {
                                               _linkedshaharValue = value;
-                                              populatelinkedNagarDropdown(
-                                                  null, value);
+                                              populatelinkedNagarDropdown(null, value);
                                               type = "shahar";
                                             });
                                           },
                                         ),
                                       ),
-                                    if (_linkedshahar != null &&
-                                        _linkedshahar!.length > 0)
+                                    if (_linkedshahar != null && _linkedshahar!.length > 0)
                                       SizedBox(
                                         height: 10,
                                       ),
-                                    if (_linkednagar != null &&
-                                        _linkednagar!.length > 0)
+                                    if (_linkednagar != null && _linkednagar!.length > 0)
                                       IgnorePointer(
                                         ignoring: _linkednagarDisable!,
                                         child: DropdownButtonFormField(
-                                          decoration: InputDecoration(
-                                              labelText:
-                                                  Statics.getLabel('Nagar')),
+                                          decoration: InputDecoration(labelText: Statics.getLabel('Nagar')),
                                           isExpanded: true,
-                                          value: _linkednagarValue == ""
-                                              ? null
-                                              : _linkednagarValue,
-                                          items: _linkednagar!
-                                              .map((bg) => DropdownMenuItem(
-                                                  value:
-                                                      bg.geoUnitID.toString(),
-                                                  child: Text(bg.name!)))
-                                              .toList(),
+                                          value: _linkednagarValue == "" ? null : _linkednagarValue,
+                                          items: _linkednagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                           onChanged: (value) {
                                             setState(() {
                                               _linkednagarValue = value;
-                                              populatelinkedMandalDropdown(
-                                                  value);
-                                              populatelinkedVastiDropdown(
-                                                  value);
+                                              populatelinkedMandalDropdown(value);
+                                              populatelinkedVastiDropdown(value);
                                               type = "nagar";
                                             });
                                           },
                                         ),
                                       ),
-                                    if (_linkednagar != null &&
-                                        _linkednagar!.length > 0)
+                                    if (_linkednagar != null && _linkednagar!.length > 0)
                                       SizedBox(
                                         height: 10,
                                       ),
-                                    if (_linkedmandal != null &&
-                                        _linkedmandal!.length > 0)
+                                    if (_linkedmandal != null && _linkedmandal!.length > 0)
                                       IgnorePointer(
                                         ignoring: _linkedmandalDisable!,
                                         child: DropdownButtonFormField(
-                                          decoration: InputDecoration(
-                                              labelText:
-                                                  Statics.getLabel('Mandal')),
+                                          decoration: InputDecoration(labelText: Statics.getLabel('Mandal')),
                                           isExpanded: true,
-                                          value: _linkedmandalValue == ""
-                                              ? null
-                                              : _linkedmandalValue,
-                                          items: _linkedmandal!
-                                              .map((bg) => DropdownMenuItem(
-                                                  value:
-                                                      bg.geoUnitID.toString(),
-                                                  child: Text(bg.name!)))
-                                              .toList(),
+                                          value: _linkedmandalValue == "" ? null : _linkedmandalValue,
+                                          items: _linkedmandal!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                           onChanged: (value) {
                                             setState(() {
                                               _linkedmandalValue = value;
-                                              populatelinkedGraamDropdown(
-                                                  value);
+                                              populatelinkedGraamDropdown(value);
                                               type = "mandal";
                                             });
                                           },
                                         ),
                                       ),
-                                    if (_linkedmandal != null &&
-                                        _linkedmandal!.length > 0)
+                                    if (_linkedmandal != null && _linkedmandal!.length > 0)
                                       SizedBox(
                                         height: 10,
                                       ),
-                                    if (_linkedgraam != null &&
-                                        _linkedgraam!.length > 0)
+                                    if (_linkedgraam != null && _linkedgraam!.length > 0)
                                       IgnorePointer(
                                         ignoring: _linkedgraamDisable!,
                                         child: DropdownButtonFormField(
-                                          decoration: InputDecoration(
-                                              labelText:
-                                                  Statics.getLabel('Graam')),
+                                          decoration: InputDecoration(labelText: Statics.getLabel('Graam')),
                                           isExpanded: true,
-                                          value: _linkedgraamValue == ""
-                                              ? null
-                                              : _linkedgraamValue,
-                                          items: _linkedgraam!
-                                              .map((bg) => DropdownMenuItem(
-                                                  value:
-                                                      bg.geoUnitID.toString(),
-                                                  child: Text(bg.name!)))
-                                              .toList(),
+                                          value: _linkedgraamValue == "" ? null : _linkedgraamValue,
+                                          items: _linkedgraam!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                           onChanged: (value) {
                                             setState(() {
                                               _linkedgraamValue = value;
@@ -936,24 +783,14 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                           },
                                         ),
                                       ),
-                                    if (_linkedvasti != null &&
-                                        _linkedvasti!.length > 0)
+                                    if (_linkedvasti != null && _linkedvasti!.length > 0)
                                       IgnorePointer(
                                         ignoring: _linkedvastiDisable!,
                                         child: DropdownButtonFormField(
-                                          decoration: InputDecoration(
-                                              labelText:
-                                                  Statics.getLabel('Vasti')),
+                                          decoration: InputDecoration(labelText: Statics.getLabel('Vasti')),
                                           isExpanded: true,
-                                          value: _linkedvastiValue == ""
-                                              ? null
-                                              : _linkedvastiValue,
-                                          items: _linkedvasti!
-                                              .map((bg) => DropdownMenuItem(
-                                                  value:
-                                                      bg.geoUnitID.toString(),
-                                                  child: Text(bg.name!)))
-                                              .toList(),
+                                          value: _linkedvastiValue == "" ? null : _linkedvastiValue,
+                                          items: _linkedvasti!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                           onChanged: (value) {
                                             setState(() {
                                               _linkedvastiValue = value;
@@ -977,17 +814,13 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           MaterialButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                             padding: EdgeInsets.symmetric(
                               horizontal: 35,
                               vertical: 5,
                             ),
                             color: Theme.of(context).primaryColor,
-                            textColor: Theme.of(context)
-                                .primaryTextTheme
-                                .button!
-                                .color,
+                            textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                             onPressed: () async {
                               // if(Statics.userDetails[])
                               await getAbhiyaanGruhaSamparkListData();
@@ -1000,15 +833,8 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                           MaterialButton(
                               onPressed: () {
                                 setState(() {
-                                  _linkedMahaanagarValue = _linkedbhaagValue =
-                                      _linkedshaharValue = _linkednagarValue =
-                                          _linkedmandalValue =
-                                              _linkedvastiValue =
-                                                  _linkedgraamValue = null;
-                                  _linkedVibhaagValue = _linkedbhaag =
-                                      _linkedshahar = _linkedgraam =
-                                          _linkedmandal = _linkedvasti =
-                                              _linkednagar = null;
+                                  _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedvastiValue = _linkedgraamValue = null;
+                                  _linkedVibhaagValue = _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
                                   type = "praant";
                                 });
                               },
@@ -1029,8 +855,7 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                   child: Text(
                                 '${Statics.getLabel('praant')}',
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 16),
+                                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                               )),
                             ),
                             // Column for Counts
@@ -1038,34 +863,21 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                               child: SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                                   children: [
                                     // Today's Count
                                     SizedBox(
-                                      width: MediaQuery.of(context).size.width /
-                                          3.2,
+                                      width: MediaQuery.of(context).size.width / 3.2,
                                       child: Center(
                                         child: Column(
                                           children: [
                                             Text(
                                               Statics.getLabel('todayVrutta'),
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w200,
-                                                  fontSize: 16),
+                                              style: TextStyle(fontWeight: FontWeight.w200, fontSize: 16),
                                             ),
                                             Text(
-                                              abhiyaanGruhaSamparkDataList
-                                                          ?.pMyAajCount
-                                                          .toString() ==
-                                                      'null'
-                                                  ? '0'
-                                                  : abhiyaanGruhaSamparkDataList!
-                                                      .sMyAajCount
-                                                      .toString(),
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.normal,
-                                                  fontSize: 16),
+                                              abhiyaanGruhaSamparkDataList?.pMyAajCount.toString() == 'null' ? '0' : abhiyaanGruhaSamparkDataList!.sMyAajCount.toString(),
+                                              style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                                             ),
                                           ],
                                         ),
@@ -1073,26 +885,17 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                     ),
                                     // Yesterday's Count
                                     SizedBox(
-                                      width: MediaQuery.of(context).size.width /
-                                          3.2,
+                                      width: MediaQuery.of(context).size.width / 3.2,
                                       child: Center(
                                         child: Column(
                                           children: [
                                             Text(
-                                              Statics.getLabel(
-                                                  'YesterdayVrutta'),
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w200,
-                                                  fontSize: 16),
+                                              Statics.getLabel('YesterdayVrutta'),
+                                              style: TextStyle(fontWeight: FontWeight.w200, fontSize: 16),
                                             ),
                                             Text(
-                                              abhiyaanGruhaSamparkDataList
-                                                      ?.pKalchaCount
-                                                      .toString() ??
-                                                  "0",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.normal,
-                                                  fontSize: 16),
+                                              abhiyaanGruhaSamparkDataList?.pKalchaCount.toString() ?? "0",
+                                              style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                                             ),
                                           ],
                                         ),
@@ -1100,26 +903,17 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                     ),
                                     // Total Count
                                     SizedBox(
-                                      width: MediaQuery.of(context).size.width /
-                                          3.2,
+                                      width: MediaQuery.of(context).size.width / 3.2,
                                       child: Center(
                                         child: Column(
                                           children: [
                                             Text(
-                                              Statics.getLabel(
-                                                  'TotalGruhaSampark'),
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w200,
-                                                  fontSize: 16),
+                                              Statics.getLabel('TotalGruhaSampark'),
+                                              style: TextStyle(fontWeight: FontWeight.w200, fontSize: 16),
                                             ),
                                             Text(
-                                              abhiyaanGruhaSamparkDataList
-                                                      ?.pEkunCount
-                                                      .toString() ??
-                                                  "0",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.normal,
-                                                  fontSize: 16),
+                                              abhiyaanGruhaSamparkDataList?.pEkunCount.toString() ?? "0",
+                                              style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                                             ),
                                           ],
                                         ),
@@ -1158,27 +952,20 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                               child: SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                                   children: [
                                     // Today's Count
                                     SizedBox(
-                                      width: MediaQuery.of(context).size.width /
-                                          3.2,
+                                      width: MediaQuery.of(context).size.width / 3.2,
                                       child: Center(
                                         child: Column(
                                           children: [
                                             Text(
                                               Statics.getLabel('todayVrutta'),
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w200,
-                                                  fontSize: 16),
+                                              style: TextStyle(fontWeight: FontWeight.w200, fontSize: 16),
                                             ),
                                             Text(
-                                              abhiyaanGruhaSamparkDataList
-                                                      ?.sMyAajCount
-                                                      .toString() ??
-                                                  "0",
+                                              abhiyaanGruhaSamparkDataList?.sMyAajCount.toString() ?? "0",
                                               style: TextStyle(
                                                 fontWeight: FontWeight.normal,
                                                 fontSize: 16,
@@ -1190,23 +977,16 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                     ),
                                     // Yesterday's Count
                                     SizedBox(
-                                      width: MediaQuery.of(context).size.width /
-                                          3.2,
+                                      width: MediaQuery.of(context).size.width / 3.2,
                                       child: Center(
                                         child: Column(
                                           children: [
                                             Text(
-                                              Statics.getLabel(
-                                                  'YesterdayVrutta'),
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w200,
-                                                  fontSize: 16),
+                                              Statics.getLabel('YesterdayVrutta'),
+                                              style: TextStyle(fontWeight: FontWeight.w200, fontSize: 16),
                                             ),
                                             Text(
-                                              abhiyaanGruhaSamparkDataList
-                                                      ?.sMyKalchaCount
-                                                      .toString() ??
-                                                  "0",
+                                              abhiyaanGruhaSamparkDataList?.sMyKalchaCount.toString() ?? "0",
                                               style: TextStyle(
                                                 fontWeight: FontWeight.normal,
                                                 fontSize: 16,
@@ -1218,23 +998,16 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                     ),
                                     // Total Count
                                     SizedBox(
-                                      width: MediaQuery.of(context).size.width /
-                                          3.2,
+                                      width: MediaQuery.of(context).size.width / 3.2,
                                       child: Center(
                                         child: Column(
                                           children: [
                                             Text(
-                                              Statics.getLabel(
-                                                  'TotalGruhaSampark'),
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w200,
-                                                  fontSize: 16),
+                                              Statics.getLabel('TotalGruhaSampark'),
+                                              style: TextStyle(fontWeight: FontWeight.w200, fontSize: 16),
                                             ),
                                             Text(
-                                              abhiyaanGruhaSamparkDataList
-                                                      ?.sTotalCount
-                                                      .toString() ??
-                                                  "0",
+                                              abhiyaanGruhaSamparkDataList?.sTotalCount.toString() ?? "0",
                                               style: TextStyle(
                                                 fontWeight: FontWeight.normal,
                                                 fontSize: 16,
@@ -1260,48 +1033,35 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                         Center(
                             child: Text(
                           '${Statics.getLabel("anotherLevelNews")}',
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 19),
+                          style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w600, fontSize: 19),
                         )),
                       if (abhiyaanGruhaSamparkDataList != null)
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: Column(
                             children: [
-                              abhiyaanGruhaSamparkDataList!
-                                      .abhiyaancount!.isEmpty
-                                  ? Text(Statics.getLabel('NoDataFound'),
-                                      style: TextStyle(fontSize: 16))
+                              abhiyaanGruhaSamparkDataList!.abhiyaancount!.isEmpty
+                                  ? Text(Statics.getLabel('NoDataFound'), style: TextStyle(fontSize: 16))
                                   : Row(
                                       children: [
                                         DataTable(
                                           columnSpacing: 5.0,
-                                          border: TableBorder.all(
-                                              color: Colors.black26),
+                                          border: TableBorder.all(color: Colors.black26),
                                           columns: [
                                             DataColumn(
                                               label: Center(
                                                 child: Text(
                                                   Statics.getLabel('Location'),
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      fontSize: 16),
+                                                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                                                 ),
                                               ),
                                             ),
                                           ],
-                                          rows: abhiyaanGruhaSamparkDataList!
-                                              .abhiyaancount!
-                                              .map((data) {
+                                          rows: abhiyaanGruhaSamparkDataList!.abhiyaancount!.map((data) {
                                             return DataRow(
                                               cells: [
                                                 DataCell(
-                                                  Center(
-                                                      child: Text(
-                                                          data.naav ?? 'N/A')),
+                                                  Center(child: Text(data.naav ?? 'N/A')),
                                                 ),
                                               ],
                                             );
@@ -1312,66 +1072,39 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                             scrollDirection: Axis.horizontal,
                                             child: DataTable(
                                               // columnSpacing: 5.0,
-                                              border: TableBorder.all(
-                                                  color: Colors.black26),
+                                              border: TableBorder.all(color: Colors.black26),
                                               columns: [
                                                 DataColumn(
                                                   label: Center(
                                                     child: Text(
-                                                      Statics.getLabel(
-                                                          'todayVrutta'),
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          fontSize: 16),
+                                                      Statics.getLabel('todayVrutta'),
+                                                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                                                     ),
                                                   ),
                                                 ),
                                                 DataColumn(
                                                   label: Center(
                                                     child: Text(
-                                                      Statics.getLabel(
-                                                          'YesterdayVrutta'),
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          fontSize: 16),
+                                                      Statics.getLabel('YesterdayVrutta'),
+                                                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                                                     ),
                                                   ),
                                                 ),
                                                 DataColumn(
                                                   label: Center(
                                                     child: Text(
-                                                      Statics.getLabel(
-                                                          'TotalGruhaSampark'),
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          fontSize: 16),
+                                                      Statics.getLabel('TotalGruhaSampark'),
+                                                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                                                     ),
                                                   ),
                                                 ),
                                               ],
-                                              rows:
-                                                  abhiyaanGruhaSamparkDataList!
-                                                      .abhiyaancount!
-                                                      .map((data) {
+                                              rows: abhiyaanGruhaSamparkDataList!.abhiyaancount!.map((data) {
                                                 return DataRow(
                                                   cells: [
-                                                    DataCell(Center(
-                                                        child: Text(data
-                                                                .aajchacount
-                                                                ?.toString() ??
-                                                            '0'))),
-                                                    DataCell(Center(
-                                                        child: Text(data
-                                                                .kalchacount
-                                                                ?.toString() ??
-                                                            '0'))),
-                                                    DataCell(Center(
-                                                        child: Text(data.total
-                                                                ?.toString() ??
-                                                            '0'))),
+                                                    DataCell(Center(child: Text(data.aajchacount?.toString() ?? '0'))),
+                                                    DataCell(Center(child: Text(data.kalchacount?.toString() ?? '0'))),
+                                                    DataCell(Center(child: Text(data.total?.toString() ?? '0'))),
                                                   ],
                                                 );
                                               }).toList(),
@@ -1386,10 +1119,7 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                               Center(
                                   child: Text(
                                 '${Statics.getLabel("chotaBaithaktable")}',
-                                style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 19),
+                                style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w600, fontSize: 19),
                               )),
                               SizedBox(
                                 height: 5,
@@ -1398,29 +1128,22 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                 children: [
                                   DataTable(
                                     columnSpacing: 5.0,
-                                    border:
-                                        TableBorder.all(color: Colors.black26),
+                                    border: TableBorder.all(color: Colors.black26),
                                     columns: [
                                       DataColumn(
                                         label: Center(
                                           child: Text(
                                             Statics.getLabel('Location'),
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 16),
+                                            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                                           ),
                                         ),
                                       ),
                                     ],
-                                    rows: abhiyaanGruhaSamparkDataList!
-                                        .abhiyaancount!
-                                        .map((data) {
+                                    rows: abhiyaanGruhaSamparkDataList!.abhiyaancount!.map((data) {
                                       return DataRow(
                                         cells: [
                                           DataCell(
-                                            Center(
-                                                child:
-                                                    Text(data.naav ?? 'N/A')),
+                                            Center(child: Text(data.naav ?? 'N/A')),
                                           ),
                                         ],
                                       );
@@ -1431,196 +1154,120 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                       scrollDirection: Axis.horizontal,
                                       child: DataTable(
                                         // columnSpacing: 5.0,
-                                        border: TableBorder.all(
-                                            color: Colors.black26),
+                                        border: TableBorder.all(color: Colors.black26),
                                         columns: [
                                           DataColumn(
                                             label: Center(
                                               child: Text(
-                                                Statics.getLabel(
-                                                    'todayChotaBaithak'),
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 16),
+                                                Statics.getLabel('todayChotaBaithak'),
+                                                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                                               ),
                                             ),
                                           ),
                                           DataColumn(
                                             label: Center(
                                               child: Text(
-                                                Statics.getLabel(
-                                                    'todayChotaBaithakMaleCount'),
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 16),
+                                                Statics.getLabel('todayChotaBaithakMaleCount'),
+                                                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                                               ),
                                             ),
                                           ),
                                           DataColumn(
                                             label: Center(
                                               child: Text(
-                                                Statics.getLabel(
-                                                    'todayChotaBaithakFemaleCount'),
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 16),
+                                                Statics.getLabel('todayChotaBaithakFemaleCount'),
+                                                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                                               ),
                                             ),
                                           ),
                                           DataColumn(
                                             label: Center(
                                               child: Text(
-                                                Statics.getLabel(
-                                                    'todayChotaBaithakTotalCount'),
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 16),
+                                                Statics.getLabel('todayChotaBaithakTotalCount'),
+                                                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                                               ),
                                             ),
                                           ),
                                           DataColumn(
                                             label: Center(
                                               child: Text(
-                                                Statics.getLabel(
-                                                    'yesterdayChotaBaithak'),
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 16),
+                                                Statics.getLabel('yesterdayChotaBaithak'),
+                                                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                                               ),
                                             ),
                                           ),
                                           DataColumn(
                                             label: Center(
                                               child: Text(
-                                                Statics.getLabel(
-                                                    'yesterdayChotaBaithakMaleCount'),
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 16),
+                                                Statics.getLabel('yesterdayChotaBaithakMaleCount'),
+                                                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                                               ),
                                             ),
                                           ),
                                           DataColumn(
                                             label: Center(
                                               child: Text(
-                                                Statics.getLabel(
-                                                    'yesterdayChotaBaithakFemaleCount'),
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 16),
+                                                Statics.getLabel('yesterdayChotaBaithakFemaleCount'),
+                                                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                                               ),
                                             ),
                                           ),
                                           DataColumn(
                                             label: Center(
                                               child: Text(
-                                                Statics.getLabel(
-                                                    'yesterdayChotaBaithakTotalCount'),
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 16),
+                                                Statics.getLabel('yesterdayChotaBaithakTotalCount'),
+                                                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                                               ),
                                             ),
                                           ),
                                           DataColumn(
                                             label: Center(
                                               child: Text(
-                                                Statics.getLabel(
-                                                    'TotalChotaBaithak'),
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 16),
+                                                Statics.getLabel('TotalChotaBaithak'),
+                                                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                                               ),
                                             ),
                                           ),
                                           DataColumn(
                                             label: Center(
                                               child: Text(
-                                                Statics.getLabel(
-                                                    'TotalChotaBaithakMale'),
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 16),
+                                                Statics.getLabel('TotalChotaBaithakMale'),
+                                                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                                               ),
                                             ),
                                           ),
                                           DataColumn(
                                             label: Center(
                                               child: Text(
-                                                Statics.getLabel(
-                                                    'TotalChotaBaithakFemale'),
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 16),
+                                                Statics.getLabel('TotalChotaBaithakFemale'),
+                                                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                                               ),
                                             ),
                                           ),
                                           DataColumn(
                                             label: Center(
                                               child: Text(
-                                                Statics.getLabel(
-                                                    'TotalChotaBaithakCount'),
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 16),
+                                                Statics.getLabel('TotalChotaBaithakCount'),
+                                                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                                               ),
                                             ),
                                           ),
                                         ],
-                                        rows: abhiyaanGruhaSamparkDataList!
-                                            .abhiyaancount!
-                                            .map((data) {
+                                        rows: abhiyaanGruhaSamparkDataList!.abhiyaancount!.map((data) {
                                           return DataRow(
                                             cells: [
-                                              DataCell(Center(
-                                                  child: Text(data
-                                                      .isaajchaChotaBaithak
-                                                      .toString()))),
-                                              DataCell(Center(
-                                                  child: Text(data
-                                                          .aajchaChotaBaithakcountMale
-                                                          ?.toString() ??
-                                                      '0'))),
-                                              DataCell(Center(
-                                                  child: Text(data
-                                                          .aajchaChotaBaithakcountFemale
-                                                          ?.toString() ??
-                                                      '0'))),
-                                              DataCell(Center(
-                                                  child: Text(
-                                                      "${data.totalaajchaChotaBaithakcount}"))),
-                                              DataCell(Center(
-                                                  child: Text(data
-                                                          .isKalchaChotaBaithak
-                                                          ?.toString() ??
-                                                      '0'))),
-                                              DataCell(Center(
-                                                  child: Text(data
-                                                          .kalchaChotaBaithakcountMale
-                                                          ?.toString() ??
-                                                      '0'))),
-                                              DataCell(Center(
-                                                  child: Text(data
-                                                          .kalchaChotaBaithakcountFemale
-                                                          ?.toString() ??
-                                                      '0'))),
-                                              DataCell(Center(
-                                                  child: Text(data
-                                                          .totalkalchaChotaBaithakcount
-                                                          ?.toString() ??
-                                                      '0'))),
-                                              DataCell(Center(
-                                                  child: Text(
-                                                      "${data.isTotalChotaBaithak?.toString()}"))),
-                                              DataCell(Center(
-                                                  child: Text(
-                                                      "${data.totalChotaBaithakMale?.toString()}"))),
-                                              DataCell(Center(
-                                                  child: Text(
-                                                      "${data.totalChotaBaithakFemale?.toString()}"))),
-                                              DataCell(Center(
-                                                  child: Text(
-                                                      "${data.totalChotaBaithak?.toString()}"))),
+                                              DataCell(Center(child: Text(data.isaajchaChotaBaithak.toString()))),
+                                              DataCell(Center(child: Text(data.aajchaChotaBaithakcountMale?.toString() ?? '0'))),
+                                              DataCell(Center(child: Text(data.aajchaChotaBaithakcountFemale?.toString() ?? '0'))),
+                                              DataCell(Center(child: Text("${data.totalaajchaChotaBaithakcount}"))),
+                                              DataCell(Center(child: Text(data.isKalchaChotaBaithak?.toString() ?? '0'))),
+                                              DataCell(Center(child: Text(data.kalchaChotaBaithakcountMale?.toString() ?? '0'))),
+                                              DataCell(Center(child: Text(data.kalchaChotaBaithakcountFemale?.toString() ?? '0'))),
+                                              DataCell(Center(child: Text(data.totalkalchaChotaBaithakcount?.toString() ?? '0'))),
+                                              DataCell(Center(child: Text("${data.isTotalChotaBaithak?.toString()}"))),
+                                              DataCell(Center(child: Text("${data.totalChotaBaithakMale?.toString()}"))),
+                                              DataCell(Center(child: Text("${data.totalChotaBaithakFemale?.toString()}"))),
+                                              DataCell(Center(child: Text("${data.totalChotaBaithak?.toString()}"))),
                                             ],
                                           );
                                         }).toList(),
@@ -1717,10 +1364,7 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                               Center(
                                   child: Text(
                                 '${Statics.getLabel('geographicalNews')}',
-                                style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 19),
+                                style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w600, fontSize: 19),
                               )),
                               SizedBox(
                                 height: 10,
@@ -1729,37 +1373,28 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 4.8,
+                                    width: MediaQuery.of(context).size.width / 4.8,
                                     child: Center(
                                         child: Text(
                                       "",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 17),
+                                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
                                     )),
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 4.5,
+                                    width: MediaQuery.of(context).size.width / 4.5,
                                     child: Center(
                                         child: Text(
                                       "${Statics.getLabel('Total')}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 17),
+                                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
                                     )),
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
                                       // "संपर्क अभियान झाले",
                                       "${Statics.getLabel('samparkaAbhiyan')}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 17),
+                                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
                                     )),
                                   ),
                                 ],
@@ -1771,41 +1406,27 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 4.8,
+                                    width: MediaQuery.of(context).size.width / 4.8,
                                     child: Center(
                                         child: Text(
                                       "${Statics.getLabel('NagarShahari')}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17),
+                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
                                     )),
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 4.5,
+                                    width: MediaQuery.of(context).size.width / 4.5,
                                     child: Center(
                                         child: Text(
-                                      abhiyaanGruhaSamparkDataList!.ekunNagar
-                                              .toString() ??
-                                          "0",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 17),
+                                      abhiyaanGruhaSamparkDataList!.ekunNagar.toString() ?? "0",
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 17),
                                     )),
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
-                                      abhiyaanGruhaSamparkDataList!
-                                              .abhiyanNagarCount
-                                              .toString() ??
-                                          "0",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 16),
+                                      abhiyaanGruhaSamparkDataList!.abhiyanNagarCount.toString() ?? "0",
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                                     )),
                                   ),
                                 ],
@@ -1817,49 +1438,27 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 4.8,
+                                    width: MediaQuery.of(context).size.width / 4.8,
                                     child: Center(
                                         child: Text(
                                       "${Statics.getLabel('graaminTaaluka')}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17),
+                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
                                     )),
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 4.5,
+                                    width: MediaQuery.of(context).size.width / 4.5,
                                     child: Center(
                                         child: Text(
-                                      abhiyaanGruhaSamparkDataList!.ekunTaluka
-                                                  .toString() ==
-                                              "null"
-                                          ? "0"
-                                          : abhiyaanGruhaSamparkDataList!
-                                              .ekunTaluka
-                                              .toString(),
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 17),
+                                      abhiyaanGruhaSamparkDataList!.ekunTaluka.toString() == "null" ? "0" : abhiyaanGruhaSamparkDataList!.ekunTaluka.toString(),
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 17),
                                     )),
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
-                                      abhiyaanGruhaSamparkDataList!
-                                                  .abhiyanTalukaCount
-                                                  .toString() ==
-                                              'null'
-                                          ? "0"
-                                          : abhiyaanGruhaSamparkDataList!
-                                              .abhiyanTalukaCount
-                                              .toString(),
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 16),
+                                      abhiyaanGruhaSamparkDataList!.abhiyanTalukaCount.toString() == 'null' ? "0" : abhiyaanGruhaSamparkDataList!.abhiyanTalukaCount.toString(),
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                                     )),
                                   ),
                                 ],
@@ -1871,41 +1470,27 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 4.8,
+                                    width: MediaQuery.of(context).size.width / 4.8,
                                     child: Center(
                                         child: Text(
                                       "${Statics.getLabel('VastiKaaryakartaaCount')}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17),
+                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
                                     )),
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 4.5,
+                                    width: MediaQuery.of(context).size.width / 4.5,
                                     child: Center(
                                         child: Text(
-                                      abhiyaanGruhaSamparkDataList!.ekunVasti
-                                              .toString() ??
-                                          "0",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 17),
+                                      abhiyaanGruhaSamparkDataList!.ekunVasti.toString() ?? "0",
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 17),
                                     )),
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
-                                      abhiyaanGruhaSamparkDataList!
-                                              .abhiyanVastiCount
-                                              .toString() ??
-                                          "0",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 16),
+                                      abhiyaanGruhaSamparkDataList!.abhiyanVastiCount.toString() ?? "0",
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                                     )),
                                   ),
                                 ],
@@ -1918,41 +1503,27 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 4.8,
+                                    width: MediaQuery.of(context).size.width / 4.8,
                                     child: Center(
                                         child: Text(
                                       "${Statics.getLabel('mandal')}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17),
+                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
                                     )),
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 4.5,
+                                    width: MediaQuery.of(context).size.width / 4.5,
                                     child: Center(
                                         child: Text(
-                                      abhiyaanGruhaSamparkDataList!.ekunMandal
-                                              .toString() ??
-                                          "0",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 17),
+                                      abhiyaanGruhaSamparkDataList!.ekunMandal.toString() ?? "0",
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 17),
                                     )),
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
-                                      abhiyaanGruhaSamparkDataList!
-                                              .abhiyanMandalCount
-                                              .toString() ??
-                                          "0",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 16),
+                                      abhiyaanGruhaSamparkDataList!.abhiyanMandalCount.toString() ?? "0",
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                                     )),
                                   ),
                                 ],
@@ -1964,41 +1535,27 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 4.8,
+                                    width: MediaQuery.of(context).size.width / 4.8,
                                     child: Center(
                                         child: Text(
                                       "${Statics.getLabel('GraamKaaryakartaaCount')}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17),
+                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
                                     )),
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 4.5,
+                                    width: MediaQuery.of(context).size.width / 4.5,
                                     child: Center(
                                         child: Text(
-                                      abhiyaanGruhaSamparkDataList!.ekunGram
-                                              .toString() ??
-                                          "0",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 17),
+                                      abhiyaanGruhaSamparkDataList!.ekunGram.toString() ?? "0",
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 17),
                                     )),
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
-                                      abhiyaanGruhaSamparkDataList!
-                                              .abhiyanGramCount
-                                              .toString() ??
-                                          "0",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 16),
+                                      abhiyaanGruhaSamparkDataList!.abhiyanGramCount.toString() ?? "0",
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                                     )),
                                   ),
                                 ],
@@ -2016,10 +1573,7 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                               Center(
                                   child: Text(
                                 "${Statics.getLabel('visheshVyaktiCount')}",
-                                style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 19),
+                                style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w600, fontSize: 19),
                               )),
                               SizedBox(
                                 height: 10,
@@ -2028,28 +1582,20 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                       child: Text(
                                         "${Statics.getLabel('shreni')}",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 17,
-                                            color: Colors.purpleAccent),
+                                        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17, color: Colors.purpleAccent),
                                       ),
                                     ),
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                       child: Text(
                                         "${Statics.getLabel('count')}",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 17,
-                                            color: Colors.purpleAccent),
+                                        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17, color: Colors.purpleAccent),
                                       ),
                                     ),
                                   ),
@@ -2060,27 +1606,19 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
                                       "${Statics.getLabel('dhaarmik')}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 17),
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 17),
                                     )),
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
-                                      abhiyaanGruhaSamparkDataList!.dharmik
-                                              .toString() ??
-                                          "0",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 16),
+                                      abhiyaanGruhaSamparkDataList!.dharmik.toString() ?? "0",
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                                     )),
                                   ),
                                 ],
@@ -2090,27 +1628,19 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
                                       "${Statics.getLabel('saamaajik')}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 17),
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 17),
                                     )),
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
-                                      abhiyaanGruhaSamparkDataList!.samajik
-                                              .toString() ??
-                                          "0",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 16),
+                                      abhiyaanGruhaSamparkDataList!.samajik.toString() ?? "0",
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                                     )),
                                   ),
                                 ],
@@ -2120,27 +1650,19 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
                                       "${Statics.getLabel('saiksanik')}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 17),
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 17),
                                     )),
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
-                                      abhiyaanGruhaSamparkDataList!.shaishanik
-                                              .toString() ??
-                                          "0",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 16),
+                                      abhiyaanGruhaSamparkDataList!.shaishanik.toString() ?? "0",
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                                     )),
                                   ),
                                 ],
@@ -2150,27 +1672,19 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
                                       "${Statics.getLabel('seva')}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 17),
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 17),
                                     )),
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
-                                      abhiyaanGruhaSamparkDataList!.sewa
-                                              .toString() ??
-                                          "0",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 16),
+                                      abhiyaanGruhaSamparkDataList!.sewa.toString() ?? "0",
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                                     )),
                                   ),
                                 ],
@@ -2180,27 +1694,19 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
                                       "${Statics.getLabel('saanskrtik')}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 17),
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 17),
                                     )),
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
-                                      abhiyaanGruhaSamparkDataList!.sanskrutik
-                                              .toString() ??
-                                          "0",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 16),
+                                      abhiyaanGruhaSamparkDataList!.sanskrutik.toString() ?? "0",
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                                     )),
                                   ),
                                 ],
@@ -2210,27 +1716,19 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
                                       "${Statics.getLabel('other')}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 17),
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 17),
                                     )),
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
-                                      abhiyaanGruhaSamparkDataList!.anya
-                                              .toString() ??
-                                          "0",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 16),
+                                      abhiyaanGruhaSamparkDataList!.anya.toString() ?? "0",
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                                     )),
                                   ),
                                 ],
@@ -2243,41 +1741,25 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
                                       "${Statics.getLabel('Total')}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 17),
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 17),
                                     )),
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                       child: Text(
                                         ((abhiyaanGruhaSamparkDataList!.dharmik ?? 0) +
-                                                (abhiyaanGruhaSamparkDataList!
-                                                        .samajik ??
-                                                    0) +
-                                                (abhiyaanGruhaSamparkDataList!
-                                                        .shaishanik ??
-                                                    0) +
-                                                (abhiyaanGruhaSamparkDataList!
-                                                        .sewa ??
-                                                    0) +
-                                                (abhiyaanGruhaSamparkDataList!
-                                                        .sanskrutik ??
-                                                    0) +
-                                                (abhiyaanGruhaSamparkDataList!
-                                                        .anya ??
-                                                    0))
+                                                (abhiyaanGruhaSamparkDataList!.samajik ?? 0) +
+                                                (abhiyaanGruhaSamparkDataList!.shaishanik ?? 0) +
+                                                (abhiyaanGruhaSamparkDataList!.sewa ?? 0) +
+                                                (abhiyaanGruhaSamparkDataList!.sanskrutik ?? 0) +
+                                                (abhiyaanGruhaSamparkDataList!.anya ?? 0))
                                             .toString(),
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: 16),
+                                        style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                                       ),
                                     ),
                                   ),
@@ -2298,10 +1780,7 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                               Center(
                                   child: Text(
                                 "${Statics.getLabel('special')}",
-                                style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 19),
+                                style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w600, fontSize: 19),
                               )),
                               SizedBox(
                                 height: 10,
@@ -2310,28 +1789,19 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
                                       "${Statics.getLabel('anukool')}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 17),
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 17),
                                     )),
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
-                                      abhiyaanGruhaSamparkDataList!
-                                              .anukulDharmik
-                                              .toString() ??
-                                          "0",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 16),
+                                      abhiyaanGruhaSamparkDataList!.anukulDharmik.toString() ?? "0",
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                                     )),
                                   ),
                                 ],
@@ -2343,28 +1813,19 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
                                       "${Statics.getLabel('pratikool')}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 17),
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 17),
                                     )),
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
-                                      abhiyaanGruhaSamparkDataList!
-                                              .pratikulSamajik
-                                              .toString() ??
-                                          "0",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 16),
+                                      abhiyaanGruhaSamparkDataList!.pratikulSamajik.toString() ?? "0",
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                                     )),
                                   ),
                                 ],
@@ -2376,27 +1837,19 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
                                       "${Statics.getLabel('tatasth')}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 17),
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 17),
                                     )),
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
-                                      abhiyaanGruhaSamparkDataList!.tShaishanik
-                                              .toString() ??
-                                          "0",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 16),
+                                      abhiyaanGruhaSamparkDataList!.tShaishanik.toString() ?? "0",
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                                     )),
                                   ),
                                 ],
@@ -2408,27 +1861,19 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
                                       "${Statics.getLabel('wantToJoin')}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 17),
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 17),
                                     )),
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
-                                      abhiyaanGruhaSamparkDataList!.jSewa
-                                              .toString() ??
-                                          "0",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 16),
+                                      abhiyaanGruhaSamparkDataList!.jSewa.toString() ?? "0",
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                                     )),
                                   ),
                                 ],
@@ -2440,27 +1885,19 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
                                       "${Statics.getLabel('oldSvayansevak')}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 17),
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 17),
                                     )),
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
-                                      abhiyaanGruhaSamparkDataList!.jSSanskrutik
-                                              .toString() ??
-                                          "0",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 16),
+                                      abhiyaanGruhaSamparkDataList!.jSSanskrutik.toString() ?? "0",
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                                     )),
                                   ),
                                 ],
@@ -2474,40 +1911,24 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                         child: Text(
                                       "${Statics.getLabel('Total')}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 17),
+                                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 17),
                                     )),
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.5,
+                                    width: MediaQuery.of(context).size.width / 2.5,
                                     child: Center(
                                       child: Text(
-                                        ((abhiyaanGruhaSamparkDataList!
-                                                        .anukulDharmik ??
-                                                    0) +
-                                                (abhiyaanGruhaSamparkDataList!
-                                                        .pratikulSamajik ??
-                                                    0) +
-                                                (abhiyaanGruhaSamparkDataList!
-                                                        .tShaishanik ??
-                                                    0) +
-                                                (abhiyaanGruhaSamparkDataList!
-                                                        .jSewa ??
-                                                    0) +
-                                                (abhiyaanGruhaSamparkDataList!
-                                                        .jSSanskrutik ??
-                                                    0))
+                                        ((abhiyaanGruhaSamparkDataList!.anukulDharmik ?? 0) +
+                                                (abhiyaanGruhaSamparkDataList!.pratikulSamajik ?? 0) +
+                                                (abhiyaanGruhaSamparkDataList!.tShaishanik ?? 0) +
+                                                (abhiyaanGruhaSamparkDataList!.jSewa ?? 0) +
+                                                (abhiyaanGruhaSamparkDataList!.jSSanskrutik ?? 0))
                                             .toString(),
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: 16),
+                                        style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                                       ),
                                     ),
                                   ),
@@ -2614,17 +2035,13 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
                     fontSize: 15,
                   ),
                   autofocus: false,
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(10),
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
+                  inputFormatters: [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.digitsOnly],
                   keyboardType: TextInputType.phone,
                   textInputAction: TextInputAction.done,
                   decoration: InputDecoration(
                       isDense: true,
                       labelText: "फोन द्वारे शोधा",
-                      contentPadding: EdgeInsets.only(
-                          left: 12, right: 12, top: 15, bottom: 10),
+                      contentPadding: EdgeInsets.only(left: 12, right: 12, top: 15, bottom: 10),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
                       )),
@@ -2641,15 +2058,11 @@ class _AbhiyanScreenState extends State<AbhiyanScreen>
           ),
           MaterialButton(
             color: Theme.of(context).primaryColor,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             onPressed: () {},
             child: Text(
               "जोडा",
-              style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
             ),
           )
         ],

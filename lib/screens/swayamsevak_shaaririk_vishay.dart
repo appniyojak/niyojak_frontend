@@ -11,7 +11,9 @@ class SwayamsevakShaaririkVishay extends StatefulWidget {
   var swId;
   var onSaveSwDetails;
   var viewType;
+
   SwayamsevakShaaririkVishay({Key? key, this.swId, this.onSaveSwDetails, this.viewType}) : super(key: key);
+
   State<StatefulWidget> createState() {
     return new SwayamsevakShaaririkVishayState();
   }
@@ -210,7 +212,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
 
           if (ghoshVishayLst.length > 0) {
             for (var data in ghoshVishayLst) {
-              if (data.vaadyaCode == "Venu" ||data.vaadyaCode == "वेणु") {
+              if (data.vaadyaCode == "Venu" || data.vaadyaCode == "वेणु") {
                 if (data.vaadyaFamiliarity == 1) {
                   _isTrainedInPrathamVenu = true;
                   _venuRachanaaCountPrathamCntrl.text = data.rachanaaCount == null ? "" : data.rachanaaCount.toString();
@@ -230,11 +232,10 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                 } else {
                   _isTrainedInAnyaVenu = _isTrainedInPrathamVenu = _isTrainedInDwitiyaVenu = _isTrainedInTrutiyaVenu = false;
                   _isAnyaVenuLipi = _isPrathamVenuLipi = _isDwitiyaVenuLipi = _isTrutiyaVenuLipi = false;
-                  _venuRachanaaCountAnyaCntrl.text =
-                      _venuRachanaaCountDwitiyaCntrl.text = _venuRachanaaCountPrathamCntrl.text = _venuRachanaaCountTrutiyaCntrl.text = "";
+                  _venuRachanaaCountAnyaCntrl.text = _venuRachanaaCountDwitiyaCntrl.text = _venuRachanaaCountPrathamCntrl.text = _venuRachanaaCountTrutiyaCntrl.text = "";
                 }
               }
-                print("data.vaadyaCode=====>  ${data.vaadyaCode}");
+              print("data.vaadyaCode=====>  ${data.vaadyaCode}");
               if (data.vaadyaCode == "वंशी" || data.vaadyaCode == "Vanshi") {
                 if (data.vaadyaFamiliarity == 1) {
                   _isTrainedInPrathamVanshi = true;
@@ -255,8 +256,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                 } else {
                   _isTrainedInAnyaVanshi = _isTrainedInPrathamVanshi = _isTrainedInDwitiyaVanshi = _isTrainedInTrutiyaVanshi = false;
                   _isAnyaVanshiLipi = _isPrathamVanshiLipi = _isDwitiyaVanshiLipi = _isTrutiyaVanshiLipi = false;
-                  _vanshiRachanaaCountAnyaCntrl.text =
-                      _vanshiRachanaaCountDwitiyaCntrl.text = _vanshiRachanaaCountPrathamCntrl.text = _vanshiRachanaaCountTrutiyaCntrl.text = "";
+                  _vanshiRachanaaCountAnyaCntrl.text = _vanshiRachanaaCountDwitiyaCntrl.text = _vanshiRachanaaCountPrathamCntrl.text = _vanshiRachanaaCountTrutiyaCntrl.text = "";
                 }
               }
 
@@ -280,12 +280,11 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                 } else {
                   _isTrainedInAnyaAanak = _isTrainedInPrathamAanak = _isTrainedInDwitiyaAanak = _isTrainedInTrutiyaAanak = false;
                   _isAnyaAanakLipi = _isPrathamAanakLipi = _isDwitiyaAanakLipi = _isTrutiyaAanakLipi = false;
-                  _aanakRachanaaCountAnyaCntrl.text =
-                      _aanakRachanaaCountDwitiyaCntrl.text = _aanakRachanaaCountPrathamCntrl.text = _aanakRachanaaCountTrutiyaCntrl.text = "";
+                  _aanakRachanaaCountAnyaCntrl.text = _aanakRachanaaCountDwitiyaCntrl.text = _aanakRachanaaCountPrathamCntrl.text = _aanakRachanaaCountTrutiyaCntrl.text = "";
                 }
               }
 
-              if (data.vaadyaCode == "शंख"|| data.vaadyaCode == "Shankha") {
+              if (data.vaadyaCode == "शंख" || data.vaadyaCode == "Shankha") {
                 if (data.vaadyaFamiliarity == 1) {
                   _isTrainedInPrathamShankha = true;
                   _shankhaRachanaaCountPrathamCntrl.text = data.rachanaaCount == null ? "" : data.rachanaaCount.toString();
@@ -305,12 +304,11 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                 } else {
                   _isTrainedInAnyaShankha = _isTrainedInPrathamShankha = _isTrainedInDwitiyaShankha = _isTrainedInTrutiyaShankha = false;
                   _isAnyaShankhaLipi = _isPrathamShankhaLipi = _isDwitiyaShankhaLipi = _isTrutiyaShankhaLipi = false;
-                  _shankhaRachanaaCountAnyaCntrl.text =
-                      _shankhaRachanaaCountDwitiyaCntrl.text = _shankhaRachanaaCountPrathamCntrl.text = _shankhaRachanaaCountTrutiyaCntrl.text = "";
+                  _shankhaRachanaaCountAnyaCntrl.text = _shankhaRachanaaCountDwitiyaCntrl.text = _shankhaRachanaaCountPrathamCntrl.text = _shankhaRachanaaCountTrutiyaCntrl.text = "";
                 }
               }
 
-              if (data.vaadyaCode == "नागांग"||data.vaadyaCode == "Naagaanga") {
+              if (data.vaadyaCode == "नागांग" || data.vaadyaCode == "Naagaanga") {
                 if (data.vaadyaFamiliarity == 1) {
                   _isTrainedInPrathamNaagaanga = true;
                   _naagaangRachanaaCountPrathamCntrl.text = data.rachanaaCount == null ? "" : data.rachanaaCount.toString();
@@ -330,12 +328,11 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                 } else {
                   _isTrainedInAnyaNaagaanga = _isTrainedInPrathamNaagaanga = _isTrainedInDwitiyaNaagaanga = _isTrainedInTrutiyaNaagaanga = false;
                   _isAnyaNaagaangaLipi = _isPrathamNaagaangaLipi = _isDwitiyaNaagaangaLipi = _isTrutiyaNaagaangaLipi = false;
-                  _naagaangRachanaaCountAnyaCntrl.text = _naagaangRachanaaCountDwitiyaCntrl.text =
-                      _naagaangRachanaaCountPrathamCntrl.text = _naagaangRachanaaCountTrutiyaCntrl.text = "";
+                  _naagaangRachanaaCountAnyaCntrl.text = _naagaangRachanaaCountDwitiyaCntrl.text = _naagaangRachanaaCountPrathamCntrl.text = _naagaangRachanaaCountTrutiyaCntrl.text = "";
                 }
               }
 
-              if (data.vaadyaCode == "तूर्य"||data.vaadyaCode == "Turya") {
+              if (data.vaadyaCode == "तूर्य" || data.vaadyaCode == "Turya") {
                 if (data.vaadyaFamiliarity == 1) {
                   _isTrainedInPrathamTurya = true;
                   _turyaRachanaaCountPrathamCtrl.text = data.rachanaaCount == null ? "" : data.rachanaaCount.toString();
@@ -355,12 +352,11 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                 } else {
                   _isTrainedInAnyaTurya = _isTrainedInPrathamTurya = _isTrainedInDwitiyaTurya = _isTrainedInTrutiyaTurya = false;
                   _isAnyaTuryaLipi = _isPrathamTuryaLipi = _isDwitiyaTuryaLipi = _isTrutiyaTuryaLipi = false;
-                  _turyaRachanaaCountAnyaCtrl.text =
-                      _turyaRachanaaCountDwitiyaCtrl.text = _turyaRachanaaCountPrathamCtrl.text = _turyaRachanaaCountTrutiyaCtrl.text = "";
+                  _turyaRachanaaCountAnyaCtrl.text = _turyaRachanaaCountDwitiyaCtrl.text = _turyaRachanaaCountPrathamCtrl.text = _turyaRachanaaCountTrutiyaCtrl.text = "";
                 }
               }
 
-              if (data.vaadyaCode == "स्वरद"||data.vaadyaCode == "Swarada") {
+              if (data.vaadyaCode == "स्वरद" || data.vaadyaCode == "Swarada") {
                 if (data.vaadyaFamiliarity == 1) {
                   _isTrainedInPrathamSwarad = true;
                   _swaradaRachanaaCountPrathamCtrl.text = data.rachanaaCount == null ? "" : data.rachanaaCount.toString();
@@ -380,12 +376,11 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                 } else {
                   _isTrainedInAnyaSwarad = _isTrainedInPrathamSwarad = _isTrainedInDwitiyaSwarad = _isTrainedInTrutiyaSwarad = false;
                   _isAnyaSwaradLipi = _isPrathamSwaradLipi = _isDwitiyaSwaradLipi = _isTrutiyaSwaradLipi = false;
-                  _swaradaRachanaaCountAnyaCtrl.text =
-                      _swaradaRachanaaCountDwitiyaCtrl.text = _swaradaRachanaaCountPrathamCtrl.text = _swaradaRachanaaCountTrutiyaCtrl.text = "";
+                  _swaradaRachanaaCountAnyaCtrl.text = _swaradaRachanaaCountDwitiyaCtrl.text = _swaradaRachanaaCountPrathamCtrl.text = _swaradaRachanaaCountTrutiyaCtrl.text = "";
                 }
               }
 
-              if (data.vaadyaCode == "गोमुख"||data.vaadyaCode == "Gomukha") {
+              if (data.vaadyaCode == "गोमुख" || data.vaadyaCode == "Gomukha") {
                 if (data.vaadyaFamiliarity == 1) {
                   _isTrainedInPrathamGomukha = true;
                   _gomukhaRachanaaCountPrathamCtrl.text = data.rachanaaCount == null ? "" : data.rachanaaCount.toString();
@@ -405,8 +400,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                 } else {
                   _isTrainedInAnyaGomukha = _isTrainedInPrathamGomukha = _isTrainedInDwitiyaGomukha = _isTrainedInTrutiyaGomukha = false;
                   _isAnyaGomukhaLipi = _isPrathamGomukhaLipi = _isDwitiyaGomukhaLipi = _isTrutiyaGomukhaLipi = false;
-                  _gomukhaRachanaaCountAnyaCtrl.text =
-                      _gomukhaRachanaaCountDwitiyaCtrl.text = _gomukhaRachanaaCountPrathamCtrl.text = _gomukhaRachanaaCountTrutiyaCtrl.text = "";
+                  _gomukhaRachanaaCountAnyaCtrl.text = _gomukhaRachanaaCountDwitiyaCtrl.text = _gomukhaRachanaaCountPrathamCtrl.text = _gomukhaRachanaaCountTrutiyaCtrl.text = "";
                 }
               }
             }
@@ -450,43 +444,35 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
   void clearFields() {
     _isTrainedInAnyaVenu = _isTrainedInPrathamVenu = _isTrainedInDwitiyaVenu = _isTrainedInTrutiyaVenu = false;
     _isAnyaVenuLipi = _isPrathamVenuLipi = _isDwitiyaVenuLipi = _isTrutiyaVenuLipi = false;
-    _venuRachanaaCountAnyaCntrl.text =
-        _venuRachanaaCountDwitiyaCntrl.text = _venuRachanaaCountPrathamCntrl.text = _venuRachanaaCountTrutiyaCntrl.text = "";
+    _venuRachanaaCountAnyaCntrl.text = _venuRachanaaCountDwitiyaCntrl.text = _venuRachanaaCountPrathamCntrl.text = _venuRachanaaCountTrutiyaCntrl.text = "";
 
     _isTrainedInAnyaVanshi = _isTrainedInPrathamVanshi = _isTrainedInDwitiyaVanshi = _isTrainedInTrutiyaVanshi = false;
     _isAnyaVanshiLipi = _isPrathamVanshiLipi = _isDwitiyaVanshiLipi = _isTrutiyaVanshiLipi = false;
-    _vanshiRachanaaCountAnyaCntrl.text =
-        _vanshiRachanaaCountDwitiyaCntrl.text = _vanshiRachanaaCountPrathamCntrl.text = _vanshiRachanaaCountTrutiyaCntrl.text = "";
+    _vanshiRachanaaCountAnyaCntrl.text = _vanshiRachanaaCountDwitiyaCntrl.text = _vanshiRachanaaCountPrathamCntrl.text = _vanshiRachanaaCountTrutiyaCntrl.text = "";
 
     _isTrainedInAnyaAanak = _isTrainedInPrathamAanak = _isTrainedInDwitiyaAanak = _isTrainedInTrutiyaAanak = false;
     _isAnyaAanakLipi = _isPrathamAanakLipi = _isDwitiyaAanakLipi = _isTrutiyaAanakLipi = false;
-    _aanakRachanaaCountAnyaCntrl.text =
-        _aanakRachanaaCountDwitiyaCntrl.text = _aanakRachanaaCountPrathamCntrl.text = _aanakRachanaaCountTrutiyaCntrl.text = "";
+    _aanakRachanaaCountAnyaCntrl.text = _aanakRachanaaCountDwitiyaCntrl.text = _aanakRachanaaCountPrathamCntrl.text = _aanakRachanaaCountTrutiyaCntrl.text = "";
 
     _isTrainedInAnyaShankha = _isTrainedInPrathamShankha = _isTrainedInDwitiyaShankha = _isTrainedInTrutiyaShankha = false;
     _isAnyaShankhaLipi = _isPrathamShankhaLipi = _isDwitiyaShankhaLipi = _isTrutiyaShankhaLipi = false;
-    _shankhaRachanaaCountAnyaCntrl.text =
-        _shankhaRachanaaCountDwitiyaCntrl.text = _shankhaRachanaaCountPrathamCntrl.text = _shankhaRachanaaCountTrutiyaCntrl.text = "";
+    _shankhaRachanaaCountAnyaCntrl.text = _shankhaRachanaaCountDwitiyaCntrl.text = _shankhaRachanaaCountPrathamCntrl.text = _shankhaRachanaaCountTrutiyaCntrl.text = "";
 
     _isTrainedInAnyaNaagaanga = _isTrainedInPrathamNaagaanga = _isTrainedInDwitiyaNaagaanga = _isTrainedInTrutiyaNaagaanga = false;
     _isAnyaNaagaangaLipi = _isPrathamNaagaangaLipi = _isDwitiyaNaagaangaLipi = _isTrutiyaNaagaangaLipi = false;
-    _naagaangRachanaaCountAnyaCntrl.text =
-        _naagaangRachanaaCountDwitiyaCntrl.text = _naagaangRachanaaCountPrathamCntrl.text = _naagaangRachanaaCountTrutiyaCntrl.text = "";
+    _naagaangRachanaaCountAnyaCntrl.text = _naagaangRachanaaCountDwitiyaCntrl.text = _naagaangRachanaaCountPrathamCntrl.text = _naagaangRachanaaCountTrutiyaCntrl.text = "";
 
     _isTrainedInAnyaTurya = _isTrainedInPrathamTurya = _isTrainedInDwitiyaTurya = _isTrainedInTrutiyaTurya = false;
     _isAnyaTuryaLipi = _isPrathamTuryaLipi = _isDwitiyaTuryaLipi = _isTrutiyaTuryaLipi = false;
-    _turyaRachanaaCountAnyaCtrl.text =
-        _turyaRachanaaCountDwitiyaCtrl.text = _turyaRachanaaCountPrathamCtrl.text = _turyaRachanaaCountTrutiyaCtrl.text = "";
+    _turyaRachanaaCountAnyaCtrl.text = _turyaRachanaaCountDwitiyaCtrl.text = _turyaRachanaaCountPrathamCtrl.text = _turyaRachanaaCountTrutiyaCtrl.text = "";
 
     _isTrainedInAnyaSwarad = _isTrainedInPrathamSwarad = _isTrainedInDwitiyaSwarad = _isTrainedInTrutiyaSwarad = false;
     _isAnyaSwaradLipi = _isPrathamSwaradLipi = _isDwitiyaSwaradLipi = _isTrutiyaSwaradLipi = false;
-    _swaradaRachanaaCountAnyaCtrl.text =
-        _swaradaRachanaaCountDwitiyaCtrl.text = _swaradaRachanaaCountPrathamCtrl.text = _swaradaRachanaaCountTrutiyaCtrl.text = "";
+    _swaradaRachanaaCountAnyaCtrl.text = _swaradaRachanaaCountDwitiyaCtrl.text = _swaradaRachanaaCountPrathamCtrl.text = _swaradaRachanaaCountTrutiyaCtrl.text = "";
 
     _isTrainedInAnyaGomukha = _isTrainedInPrathamGomukha = _isTrainedInDwitiyaGomukha = _isTrainedInTrutiyaGomukha = false;
     _isAnyaGomukhaLipi = _isPrathamGomukhaLipi = _isDwitiyaVenuLipi = _isTrutiyaGomukhaLipi = false;
-    _gomukhaRachanaaCountAnyaCtrl.text =
-        _gomukhaRachanaaCountDwitiyaCtrl.text = _gomukhaRachanaaCountPrathamCtrl.text = _gomukhaRachanaaCountTrutiyaCtrl.text = "";
+    _gomukhaRachanaaCountAnyaCtrl.text = _gomukhaRachanaaCountDwitiyaCtrl.text = _gomukhaRachanaaCountPrathamCtrl.text = _gomukhaRachanaaCountTrutiyaCtrl.text = "";
   }
 
   saveSwDetails() async {
@@ -542,9 +528,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
           (_isAnyaVanshiLipi == true ? "true" : "false") +
           ' },';
     else
-      strData += '{"SwayamsevakID": ' +
-          widget.swId +
-          ', "PraantID": 1, "VaadyaCode": "Vanshi", "VaadyaFamiliarity": null, "RachanaaCount": null, "IsUnderstandLipi": null },';
+      strData += '{"SwayamsevakID": ' + widget.swId + ', "PraantID": 1, "VaadyaCode": "Vanshi", "VaadyaFamiliarity": null, "RachanaaCount": null, "IsUnderstandLipi": null },';
 
     if (_isTrainedInPrathamVenu == true)
       strData += '{"SwayamsevakID": ' +
@@ -579,9 +563,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
           (_isAnyaVenuLipi == true ? "true" : "false") +
           ' },';
     else
-      strData += '{"SwayamsevakID": ' +
-          widget.swId +
-          ', "PraantID": 1, "VaadyaCode": "Venu", "VaadyaFamiliarity": null, "RachanaaCount": null, "IsUnderstandLipi": null },';
+      strData += '{"SwayamsevakID": ' + widget.swId + ', "PraantID": 1, "VaadyaCode": "Venu", "VaadyaFamiliarity": null, "RachanaaCount": null, "IsUnderstandLipi": null },';
 
     if (_isTrainedInPrathamAanak == true)
       strData += '{"SwayamsevakID": ' +
@@ -616,9 +598,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
           (_isAnyaAanakLipi == true ? "true" : "false") +
           ' },';
     else
-      strData += '{"SwayamsevakID": ' +
-          widget.swId +
-          ', "PraantID": 1, "VaadyaCode": "Aanak", "VaadyaFamiliarity": null, "RachanaaCount": null, "IsUnderstandLipi": null },';
+      strData += '{"SwayamsevakID": ' + widget.swId + ', "PraantID": 1, "VaadyaCode": "Aanak", "VaadyaFamiliarity": null, "RachanaaCount": null, "IsUnderstandLipi": null },';
 
     if (_isTrainedInPrathamShankha == true)
       strData += '{"SwayamsevakID": ' +
@@ -653,9 +633,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
           (_isAnyaShankhaLipi == true ? "true" : "false") +
           ' },';
     else
-      strData += '{"SwayamsevakID": ' +
-          widget.swId +
-          ', "PraantID": 1, "VaadyaCode": "Shankha", "VaadyaFamiliarity": null, "RachanaaCount": null, "IsUnderstandLipi": null },';
+      strData += '{"SwayamsevakID": ' + widget.swId + ', "PraantID": 1, "VaadyaCode": "Shankha", "VaadyaFamiliarity": null, "RachanaaCount": null, "IsUnderstandLipi": null },';
 
     if (_isTrainedInPrathamNaagaanga == true)
       strData += '{"SwayamsevakID": ' +
@@ -690,9 +668,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
           (_isAnyaNaagaangaLipi == true ? "true" : "false") +
           ' },';
     else
-      strData += '{"SwayamsevakID": ' +
-          widget.swId +
-          ', "PraantID": 1, "VaadyaCode": "Naagaanga", "VaadyaFamiliarity": null, "RachanaaCount": null, "IsUnderstandLipi": null },';
+      strData += '{"SwayamsevakID": ' + widget.swId + ', "PraantID": 1, "VaadyaCode": "Naagaanga", "VaadyaFamiliarity": null, "RachanaaCount": null, "IsUnderstandLipi": null },';
 
     if (_isTrainedInPrathamTurya == true)
       strData += '{"SwayamsevakID": ' +
@@ -727,9 +703,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
           (_isAnyaTuryaLipi == true ? "true" : "false") +
           ' },';
     else
-      strData += '{"SwayamsevakID": ' +
-          widget.swId +
-          ', "PraantID": 1, "VaadyaCode": "Turya", "VaadyaFamiliarity": null, "RachanaaCount": null, "IsUnderstandLipi": null },';
+      strData += '{"SwayamsevakID": ' + widget.swId + ', "PraantID": 1, "VaadyaCode": "Turya", "VaadyaFamiliarity": null, "RachanaaCount": null, "IsUnderstandLipi": null },';
 
     if (_isTrainedInPrathamSwarad == true)
       strData += '{"SwayamsevakID": ' +
@@ -764,9 +738,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
           (_isAnyaSwaradLipi == true ? "true" : "false") +
           ' },';
     else
-      strData += '{"SwayamsevakID": ' +
-          widget.swId +
-          ', "PraantID": 1, "VaadyaCode": "Swarada", "VaadyaFamiliarity": null, "RachanaaCount": null, "IsUnderstandLipi": null },';
+      strData += '{"SwayamsevakID": ' + widget.swId + ', "PraantID": 1, "VaadyaCode": "Swarada", "VaadyaFamiliarity": null, "RachanaaCount": null, "IsUnderstandLipi": null },';
 
     if (_isTrainedInPrathamGomukha == true)
       strData += '{"SwayamsevakID": ' +
@@ -801,9 +773,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
           (_isAnyaGomukhaLipi == true ? "true" : "false") +
           ' },';
     else
-      strData += '{"SwayamsevakID": ' +
-          widget.swId +
-          ', "PraantID": 1, "VaadyaCode": "Gomukha", "VaadyaFamiliarity": null, "RachanaaCount": null, "IsUnderstandLipi": null },';
+      strData += '{"SwayamsevakID": ' + widget.swId + ', "PraantID": 1, "VaadyaCode": "Gomukha", "VaadyaFamiliarity": null, "RachanaaCount": null, "IsUnderstandLipi": null },';
 
     strData = strData.substring(0, strData.length - 1);
     return strData;
@@ -959,10 +929,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing:
-                                            (_isTrainedInDwitiyaVanshi == true || _isTrainedInTrutiyaVanshi == true || _isTrainedInAnyaVanshi == true)
-                                                ? true
-                                                : false,
+                                        absorbing: (_isTrainedInDwitiyaVanshi == true || _isTrainedInTrutiyaVanshi == true || _isTrainedInAnyaVanshi == true) ? true : false,
                                         child: CheckboxListTile(
                                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                           title: Text(Statics.getLabel('Vanshi'), style: TextStyle(fontSize: 15)),
@@ -989,8 +956,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInPrathamVanshi == null ? false : _isTrainedInPrathamVanshi,
                                         validator: (value) {
-                                          if (_isTrainedInPrathamVanshi != null && (_isTrainedInPrathamVanshi! && value!.isEmpty))
-                                            return (Statics.getLabel('VanshiValidationMessage'));
+                                          if (_isTrainedInPrathamVanshi != null && (_isTrainedInPrathamVanshi! && value!.isEmpty)) return (Statics.getLabel('VanshiValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -1023,10 +989,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing:
-                                            (_isTrainedInDwitiyaVenu == true || _isTrainedInTrutiyaVenu == true || _isTrainedInAnyaVenu == true)
-                                                ? true
-                                                : false,
+                                        absorbing: (_isTrainedInDwitiyaVenu == true || _isTrainedInTrutiyaVenu == true || _isTrainedInAnyaVenu == true) ? true : false,
                                         child: CheckboxListTile(
                                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                           title: Text(Statics.getLabel('Venu') + '               ', style: TextStyle(fontSize: 15)),
@@ -1053,8 +1016,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInPrathamVenu == null ? false : _isTrainedInPrathamVenu,
                                         validator: (value) {
-                                          if (_isTrainedInPrathamVenu != null && (_isTrainedInPrathamVenu! && value!.isEmpty))
-                                            return (Statics.getLabel('VenuValidationMessage'));
+                                          if (_isTrainedInPrathamVenu != null && (_isTrainedInPrathamVenu! && value!.isEmpty)) return (Statics.getLabel('VenuValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -1087,10 +1049,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing:
-                                            (_isTrainedInDwitiyaAanak == true || _isTrainedInTrutiyaAanak == true || _isTrainedInAnyaAanak == true)
-                                                ? true
-                                                : false,
+                                        absorbing: (_isTrainedInDwitiyaAanak == true || _isTrainedInTrutiyaAanak == true || _isTrainedInAnyaAanak == true) ? true : false,
                                         child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Aanak'), style: TextStyle(fontSize: 15)),
@@ -1116,8 +1075,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInPrathamAanak == null ? false : _isTrainedInPrathamAanak,
                                         validator: (value) {
-                                          if (_isTrainedInPrathamAanak != null && (_isTrainedInPrathamAanak! && value!.isEmpty))
-                                            return (Statics.getLabel('AanakValidationMessage'));
+                                          if (_isTrainedInPrathamAanak != null && (_isTrainedInPrathamAanak! && value!.isEmpty)) return (Statics.getLabel('AanakValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -1150,11 +1108,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing: (_isTrainedInDwitiyaShankha == true ||
-                                                _isTrainedInTrutiyaShankha == true ||
-                                                _isTrainedInAnyaShankha == true)
-                                            ? true
-                                            : false,
+                                        absorbing: (_isTrainedInDwitiyaShankha == true || _isTrainedInTrutiyaShankha == true || _isTrainedInAnyaShankha == true) ? true : false,
                                         child: CheckboxListTile(
                                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                           title: Text(Statics.getLabel('Shankha'), style: TextStyle(fontSize: 15)),
@@ -1181,8 +1135,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInPrathamShankha == null ? false : _isTrainedInPrathamShankha,
                                         validator: (value) {
-                                          if (_isTrainedInPrathamShankha != null && (_isTrainedInPrathamShankha! && value!.isEmpty))
-                                            return (Statics.getLabel('ShankhaValidationMessage'));
+                                          if (_isTrainedInPrathamShankha != null && (_isTrainedInPrathamShankha! && value!.isEmpty)) return (Statics.getLabel('ShankhaValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -1215,11 +1168,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing: (_isTrainedInDwitiyaNaagaanga == true ||
-                                                _isTrainedInTrutiyaNaagaanga == true ||
-                                                _isTrainedInAnyaNaagaanga == true)
-                                            ? true
-                                            : false,
+                                        absorbing: (_isTrainedInDwitiyaNaagaanga == true || _isTrainedInTrutiyaNaagaanga == true || _isTrainedInAnyaNaagaanga == true) ? true : false,
                                         child: CheckboxListTile(
                                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                           title: Text(Statics.getLabel('Naagaanga'), style: TextStyle(fontSize: 15)),
@@ -1246,8 +1195,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInPrathamNaagaanga == null ? false : _isTrainedInPrathamNaagaanga,
                                         validator: (value) {
-                                          if (_isTrainedInPrathamNaagaanga != null && (_isTrainedInPrathamNaagaanga! && value!.isEmpty))
-                                            return (Statics.getLabel('NaagaangaValidationMessage'));
+                                          if (_isTrainedInPrathamNaagaanga != null && (_isTrainedInPrathamNaagaanga! && value!.isEmpty)) return (Statics.getLabel('NaagaangaValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -1280,10 +1228,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing:
-                                            (_isTrainedInDwitiyaTurya == true || _isTrainedInTrutiyaTurya == true || _isTrainedInAnyaTurya == true)
-                                                ? true
-                                                : false,
+                                        absorbing: (_isTrainedInDwitiyaTurya == true || _isTrainedInTrutiyaTurya == true || _isTrainedInAnyaTurya == true) ? true : false,
                                         child: CheckboxListTile(
                                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                           title: Text(Statics.getLabel('Turya'), style: TextStyle(fontSize: 15)),
@@ -1310,8 +1255,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInPrathamTurya == null ? false : _isTrainedInPrathamTurya,
                                         validator: (value) {
-                                          if (_isTrainedInPrathamTurya != null && (_isTrainedInPrathamTurya! && value!.isEmpty))
-                                            return (Statics.getLabel('TuryaValidationMessage'));
+                                          if (_isTrainedInPrathamTurya != null && (_isTrainedInPrathamTurya! && value!.isEmpty)) return (Statics.getLabel('TuryaValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -1344,10 +1288,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing:
-                                            (_isTrainedInDwitiyaSwarad == true || _isTrainedInTrutiyaSwarad == true || _isTrainedInAnyaSwarad == true)
-                                                ? true
-                                                : false,
+                                        absorbing: (_isTrainedInDwitiyaSwarad == true || _isTrainedInTrutiyaSwarad == true || _isTrainedInAnyaSwarad == true) ? true : false,
                                         child: CheckboxListTile(
                                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                           title: Text(Statics.getLabel('Swarad'), style: TextStyle(fontSize: 15)),
@@ -1374,8 +1315,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInPrathamSwarad == null ? false : _isTrainedInPrathamSwarad,
                                         validator: (value) {
-                                          if (_isTrainedInPrathamSwarad != null && (_isTrainedInPrathamSwarad! && value!.isEmpty))
-                                            return (Statics.getLabel('SwaradValidationMessage'));
+                                          if (_isTrainedInPrathamSwarad != null && (_isTrainedInPrathamSwarad! && value!.isEmpty)) return (Statics.getLabel('SwaradValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -1408,11 +1348,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing: (_isTrainedInDwitiyaGomukha == true ||
-                                                _isTrainedInTrutiyaGomukha == true ||
-                                                _isTrainedInAnyaGomukha == true)
-                                            ? true
-                                            : false,
+                                        absorbing: (_isTrainedInDwitiyaGomukha == true || _isTrainedInTrutiyaGomukha == true || _isTrainedInAnyaGomukha == true) ? true : false,
                                         child: CheckboxListTile(
                                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                           title: Text(Statics.getLabel('Gomukha') + '      ', style: TextStyle(fontSize: 15)),
@@ -1439,8 +1375,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInPrathamGomukha == null ? false : _isTrainedInPrathamGomukha,
                                         validator: (value) {
-                                          if (_isTrainedInPrathamGomukha != null && (_isTrainedInPrathamGomukha! && value!.isEmpty))
-                                            return (Statics.getLabel('GomukhaValidationMessage'));
+                                          if (_isTrainedInPrathamGomukha != null && (_isTrainedInPrathamGomukha! && value!.isEmpty)) return (Statics.getLabel('GomukhaValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -1506,10 +1441,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing:
-                                            (_isTrainedInPrathamVanshi == true || _isTrainedInTrutiyaVanshi == true || _isTrainedInAnyaVanshi == true)
-                                                ? true
-                                                : false,
+                                        absorbing: (_isTrainedInPrathamVanshi == true || _isTrainedInTrutiyaVanshi == true || _isTrainedInAnyaVanshi == true) ? true : false,
                                         child: CheckboxListTile(
                                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                           title: Text(Statics.getLabel('Vanshi'), style: TextStyle(fontSize: 15)),
@@ -1536,8 +1468,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInDwitiyaVanshi == null ? false : _isTrainedInDwitiyaVanshi,
                                         validator: (value) {
-                                          if (_isTrainedInDwitiyaVanshi != null && (_isTrainedInDwitiyaVanshi! && value!.isEmpty))
-                                            return (Statics.getLabel('VanshiValidationMessage'));
+                                          if (_isTrainedInDwitiyaVanshi != null && (_isTrainedInDwitiyaVanshi! && value!.isEmpty)) return (Statics.getLabel('VanshiValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -1570,10 +1501,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing:
-                                            (_isTrainedInPrathamVenu == true || _isTrainedInTrutiyaVenu == true || _isTrainedInAnyaVenu == true)
-                                                ? true
-                                                : false,
+                                        absorbing: (_isTrainedInPrathamVenu == true || _isTrainedInTrutiyaVenu == true || _isTrainedInAnyaVenu == true) ? true : false,
                                         child: CheckboxListTile(
                                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                           title: Text(Statics.getLabel('Venu') + '               ', style: TextStyle(fontSize: 15)),
@@ -1600,8 +1528,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInDwitiyaVenu == null ? false : _isTrainedInDwitiyaVenu,
                                         validator: (value) {
-                                          if (_isTrainedInDwitiyaVenu != null && (_isTrainedInDwitiyaVenu! && value!.isEmpty))
-                                            return (Statics.getLabel('VenuValidationMessage'));
+                                          if (_isTrainedInDwitiyaVenu != null && (_isTrainedInDwitiyaVenu! && value!.isEmpty)) return (Statics.getLabel('VenuValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -1634,10 +1561,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing:
-                                            (_isTrainedInPrathamAanak == true || _isTrainedInTrutiyaAanak == true || _isTrainedInAnyaAanak == true)
-                                                ? true
-                                                : false,
+                                        absorbing: (_isTrainedInPrathamAanak == true || _isTrainedInTrutiyaAanak == true || _isTrainedInAnyaAanak == true) ? true : false,
                                         child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Aanak'), style: TextStyle(fontSize: 15)),
@@ -1663,8 +1587,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInDwitiyaAanak == null ? false : _isTrainedInDwitiyaAanak,
                                         validator: (value) {
-                                          if (_isTrainedInDwitiyaAanak != null && (_isTrainedInDwitiyaAanak! && value!.isEmpty))
-                                            return (Statics.getLabel('AanakValidationMessage'));
+                                          if (_isTrainedInDwitiyaAanak != null && (_isTrainedInDwitiyaAanak! && value!.isEmpty)) return (Statics.getLabel('AanakValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -1697,11 +1620,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing: (_isTrainedInPrathamShankha == true ||
-                                                _isTrainedInTrutiyaShankha == true ||
-                                                _isTrainedInAnyaShankha == true)
-                                            ? true
-                                            : false,
+                                        absorbing: (_isTrainedInPrathamShankha == true || _isTrainedInTrutiyaShankha == true || _isTrainedInAnyaShankha == true) ? true : false,
                                         child: CheckboxListTile(
                                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                           title: Text(Statics.getLabel('Shankha'), style: TextStyle(fontSize: 15)),
@@ -1728,8 +1647,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInDwitiyaShankha == null ? false : _isTrainedInDwitiyaShankha,
                                         validator: (value) {
-                                          if (_isTrainedInDwitiyaShankha != null && (_isTrainedInDwitiyaShankha! && value!.isEmpty))
-                                            return (Statics.getLabel('ShankhaValidationMessage'));
+                                          if (_isTrainedInDwitiyaShankha != null && (_isTrainedInDwitiyaShankha! && value!.isEmpty)) return (Statics.getLabel('ShankhaValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -1762,11 +1680,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing: (_isTrainedInPrathamNaagaanga == true ||
-                                                _isTrainedInTrutiyaNaagaanga == true ||
-                                                _isTrainedInAnyaNaagaanga == true)
-                                            ? true
-                                            : false,
+                                        absorbing: (_isTrainedInPrathamNaagaanga == true || _isTrainedInTrutiyaNaagaanga == true || _isTrainedInAnyaNaagaanga == true) ? true : false,
                                         child: CheckboxListTile(
                                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                           title: Text(Statics.getLabel('Naagaanga'), style: TextStyle(fontSize: 15)),
@@ -1793,8 +1707,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInDwitiyaNaagaanga == null ? false : _isTrainedInDwitiyaNaagaanga,
                                         validator: (value) {
-                                          if (_isTrainedInDwitiyaNaagaanga != null && (_isTrainedInDwitiyaNaagaanga! && value!.isEmpty))
-                                            return (Statics.getLabel('NaagaangaValidationMessage'));
+                                          if (_isTrainedInDwitiyaNaagaanga != null && (_isTrainedInDwitiyaNaagaanga! && value!.isEmpty)) return (Statics.getLabel('NaagaangaValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -1827,10 +1740,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing:
-                                            (_isTrainedInPrathamTurya == true || _isTrainedInTrutiyaTurya == true || _isTrainedInAnyaTurya == true)
-                                                ? true
-                                                : false,
+                                        absorbing: (_isTrainedInPrathamTurya == true || _isTrainedInTrutiyaTurya == true || _isTrainedInAnyaTurya == true) ? true : false,
                                         child: CheckboxListTile(
                                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                           title: Text(Statics.getLabel('Turya'), style: TextStyle(fontSize: 15)),
@@ -1857,8 +1767,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInDwitiyaTurya == null ? false : _isTrainedInDwitiyaTurya,
                                         validator: (value) {
-                                          if (_isTrainedInDwitiyaTurya != null && (_isTrainedInDwitiyaTurya! && value!.isEmpty))
-                                            return (Statics.getLabel('TuryaValidationMessage'));
+                                          if (_isTrainedInDwitiyaTurya != null && (_isTrainedInDwitiyaTurya! && value!.isEmpty)) return (Statics.getLabel('TuryaValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -1891,10 +1800,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing:
-                                            (_isTrainedInPrathamSwarad == true || _isTrainedInTrutiyaSwarad == true || _isTrainedInAnyaSwarad == true)
-                                                ? true
-                                                : false,
+                                        absorbing: (_isTrainedInPrathamSwarad == true || _isTrainedInTrutiyaSwarad == true || _isTrainedInAnyaSwarad == true) ? true : false,
                                         child: CheckboxListTile(
                                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                           title: Text(Statics.getLabel('Swarad'), style: TextStyle(fontSize: 15)),
@@ -1921,8 +1827,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInDwitiyaSwarad == null ? false : _isTrainedInDwitiyaSwarad,
                                         validator: (value) {
-                                          if (_isTrainedInDwitiyaSwarad != null && (_isTrainedInDwitiyaSwarad! && value!.isEmpty))
-                                            return (Statics.getLabel('SwaradValidationMessage'));
+                                          if (_isTrainedInDwitiyaSwarad != null && (_isTrainedInDwitiyaSwarad! && value!.isEmpty)) return (Statics.getLabel('SwaradValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -1955,11 +1860,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing: (_isTrainedInPrathamGomukha == true ||
-                                                _isTrainedInTrutiyaGomukha == true ||
-                                                _isTrainedInAnyaGomukha == true)
-                                            ? true
-                                            : false,
+                                        absorbing: (_isTrainedInPrathamGomukha == true || _isTrainedInTrutiyaGomukha == true || _isTrainedInAnyaGomukha == true) ? true : false,
                                         child: CheckboxListTile(
                                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                           title: Text(Statics.getLabel('Gomukha') + '      ', style: TextStyle(fontSize: 15)),
@@ -1986,8 +1887,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInDwitiyaGomukha == null ? false : _isTrainedInDwitiyaGomukha,
                                         validator: (value) {
-                                          if (_isTrainedInDwitiyaGomukha != null && (_isTrainedInDwitiyaGomukha! && value!.isEmpty))
-                                            return (Statics.getLabel('GomukhaValidationMessage'));
+                                          if (_isTrainedInDwitiyaGomukha != null && (_isTrainedInDwitiyaGomukha! && value!.isEmpty)) return (Statics.getLabel('GomukhaValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -2053,10 +1953,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing:
-                                            (_isTrainedInPrathamVanshi == true || _isTrainedInDwitiyaVanshi == true || _isTrainedInAnyaVanshi == true)
-                                                ? true
-                                                : false,
+                                        absorbing: (_isTrainedInPrathamVanshi == true || _isTrainedInDwitiyaVanshi == true || _isTrainedInAnyaVanshi == true) ? true : false,
                                         child: CheckboxListTile(
                                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                           title: Text(Statics.getLabel('Vanshi'), style: TextStyle(fontSize: 15)),
@@ -2083,8 +1980,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInTrutiyaVanshi == null ? false : _isTrainedInTrutiyaVanshi,
                                         validator: (value) {
-                                          if (_isTrainedInTrutiyaVanshi != null && (_isTrainedInTrutiyaVanshi! && value!.isEmpty))
-                                            return (Statics.getLabel('VanshiValidationMessage'));
+                                          if (_isTrainedInTrutiyaVanshi != null && (_isTrainedInTrutiyaVanshi! && value!.isEmpty)) return (Statics.getLabel('VanshiValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -2117,10 +2013,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing:
-                                            (_isTrainedInPrathamVenu == true || _isTrainedInDwitiyaVenu == true || _isTrainedInAnyaVenu == true)
-                                                ? true
-                                                : false,
+                                        absorbing: (_isTrainedInPrathamVenu == true || _isTrainedInDwitiyaVenu == true || _isTrainedInAnyaVenu == true) ? true : false,
                                         child: CheckboxListTile(
                                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                           title: Text(Statics.getLabel('Venu') + '               ', style: TextStyle(fontSize: 15)),
@@ -2147,8 +2040,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInTrutiyaVenu == null ? false : _isTrainedInTrutiyaVenu,
                                         validator: (value) {
-                                          if (_isTrainedInTrutiyaVenu != null && (_isTrainedInTrutiyaVenu! && value!.isEmpty))
-                                            return (Statics.getLabel('VenuValidationMessage'));
+                                          if (_isTrainedInTrutiyaVenu != null && (_isTrainedInTrutiyaVenu! && value!.isEmpty)) return (Statics.getLabel('VenuValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -2181,10 +2073,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing:
-                                            (_isTrainedInPrathamAanak == true || _isTrainedInDwitiyaAanak == true || _isTrainedInAnyaAanak == true)
-                                                ? true
-                                                : false,
+                                        absorbing: (_isTrainedInPrathamAanak == true || _isTrainedInDwitiyaAanak == true || _isTrainedInAnyaAanak == true) ? true : false,
                                         child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Aanak'), style: TextStyle(fontSize: 15)),
@@ -2210,8 +2099,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInTrutiyaAanak == null ? false : _isTrainedInTrutiyaAanak,
                                         validator: (value) {
-                                          if (_isTrainedInTrutiyaAanak != null && (_isTrainedInTrutiyaAanak! && value!.isEmpty))
-                                            return (Statics.getLabel('AanakValidationMessage'));
+                                          if (_isTrainedInTrutiyaAanak != null && (_isTrainedInTrutiyaAanak! && value!.isEmpty)) return (Statics.getLabel('AanakValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -2244,11 +2132,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing: (_isTrainedInPrathamShankha == true ||
-                                                _isTrainedInDwitiyaShankha == true ||
-                                                _isTrainedInAnyaShankha == true)
-                                            ? true
-                                            : false,
+                                        absorbing: (_isTrainedInPrathamShankha == true || _isTrainedInDwitiyaShankha == true || _isTrainedInAnyaShankha == true) ? true : false,
                                         child: CheckboxListTile(
                                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                           title: Text(Statics.getLabel('Shankha'), style: TextStyle(fontSize: 15)),
@@ -2275,8 +2159,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInTrutiyaShankha == null ? false : _isTrainedInTrutiyaShankha,
                                         validator: (value) {
-                                          if (_isTrainedInTrutiyaShankha != null && (_isTrainedInTrutiyaShankha! && value!.isEmpty))
-                                            return (Statics.getLabel('ShankhaValidationMessage'));
+                                          if (_isTrainedInTrutiyaShankha != null && (_isTrainedInTrutiyaShankha! && value!.isEmpty)) return (Statics.getLabel('ShankhaValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -2309,11 +2192,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing: (_isTrainedInPrathamNaagaanga == true ||
-                                                _isTrainedInDwitiyaNaagaanga == true ||
-                                                _isTrainedInAnyaNaagaanga == true)
-                                            ? true
-                                            : false,
+                                        absorbing: (_isTrainedInPrathamNaagaanga == true || _isTrainedInDwitiyaNaagaanga == true || _isTrainedInAnyaNaagaanga == true) ? true : false,
                                         child: CheckboxListTile(
                                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                           title: Text(Statics.getLabel('Naagaanga'), style: TextStyle(fontSize: 15)),
@@ -2340,8 +2219,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInTrutiyaNaagaanga == null ? false : _isTrainedInTrutiyaNaagaanga,
                                         validator: (value) {
-                                          if (_isTrainedInTrutiyaNaagaanga != null && (_isTrainedInTrutiyaNaagaanga! && value!.isEmpty))
-                                            return (Statics.getLabel('NaagaangaValidationMessage'));
+                                          if (_isTrainedInTrutiyaNaagaanga != null && (_isTrainedInTrutiyaNaagaanga! && value!.isEmpty)) return (Statics.getLabel('NaagaangaValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -2374,10 +2252,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing:
-                                            (_isTrainedInPrathamTurya == true || _isTrainedInDwitiyaTurya == true || _isTrainedInAnyaTurya == true)
-                                                ? true
-                                                : false,
+                                        absorbing: (_isTrainedInPrathamTurya == true || _isTrainedInDwitiyaTurya == true || _isTrainedInAnyaTurya == true) ? true : false,
                                         child: CheckboxListTile(
                                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                           title: Text(Statics.getLabel('Turya'), style: TextStyle(fontSize: 15)),
@@ -2404,8 +2279,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInTrutiyaTurya == null ? false : _isTrainedInTrutiyaTurya,
                                         validator: (value) {
-                                          if (_isTrainedInTrutiyaTurya != null && (_isTrainedInTrutiyaTurya! && value!.isEmpty))
-                                            return (Statics.getLabel('TuryaValidationMessage'));
+                                          if (_isTrainedInTrutiyaTurya != null && (_isTrainedInTrutiyaTurya! && value!.isEmpty)) return (Statics.getLabel('TuryaValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -2438,10 +2312,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing:
-                                            (_isTrainedInPrathamSwarad == true || _isTrainedInDwitiyaSwarad == true || _isTrainedInAnyaSwarad == true)
-                                                ? true
-                                                : false,
+                                        absorbing: (_isTrainedInPrathamSwarad == true || _isTrainedInDwitiyaSwarad == true || _isTrainedInAnyaSwarad == true) ? true : false,
                                         child: CheckboxListTile(
                                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                           title: Text(Statics.getLabel('Swarad'), style: TextStyle(fontSize: 15)),
@@ -2468,8 +2339,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInTrutiyaSwarad == null ? false : _isTrainedInTrutiyaSwarad,
                                         validator: (value) {
-                                          if (_isTrainedInTrutiyaSwarad != null && (_isTrainedInTrutiyaSwarad! && value!.isEmpty))
-                                            return (Statics.getLabel('SwaradValidationMessage'));
+                                          if (_isTrainedInTrutiyaSwarad != null && (_isTrainedInTrutiyaSwarad! && value!.isEmpty)) return (Statics.getLabel('SwaradValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -2502,11 +2372,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing: (_isTrainedInPrathamGomukha == true ||
-                                                _isTrainedInDwitiyaGomukha == true ||
-                                                _isTrainedInAnyaGomukha == true)
-                                            ? true
-                                            : false,
+                                        absorbing: (_isTrainedInPrathamGomukha == true || _isTrainedInDwitiyaGomukha == true || _isTrainedInAnyaGomukha == true) ? true : false,
                                         child: CheckboxListTile(
                                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                           title: Text(Statics.getLabel('Gomukha') + '      ', style: TextStyle(fontSize: 15)),
@@ -2533,8 +2399,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInTrutiyaGomukha == null ? false : _isTrainedInTrutiyaGomukha,
                                         validator: (value) {
-                                          if (_isTrainedInTrutiyaGomukha != null && (_isTrainedInTrutiyaGomukha! && value!.isEmpty))
-                                            return (Statics.getLabel('GomukhaValidationMessage'));
+                                          if (_isTrainedInTrutiyaGomukha != null && (_isTrainedInTrutiyaGomukha! && value!.isEmpty)) return (Statics.getLabel('GomukhaValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -2600,11 +2465,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing: (_isTrainedInPrathamVanshi == true ||
-                                                _isTrainedInDwitiyaVanshi == true ||
-                                                _isTrainedInTrutiyaVanshi == true)
-                                            ? true
-                                            : false,
+                                        absorbing: (_isTrainedInPrathamVanshi == true || _isTrainedInDwitiyaVanshi == true || _isTrainedInTrutiyaVanshi == true) ? true : false,
                                         child: CheckboxListTile(
                                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                           title: Text(Statics.getLabel('Vanshi'), style: TextStyle(fontSize: 15)),
@@ -2630,8 +2491,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInAnyaVanshi == null ? false : _isTrainedInAnyaVanshi,
                                         validator: (value) {
-                                          if (_isTrainedInAnyaVanshi != null && (_isTrainedInAnyaVanshi! && value!.isEmpty))
-                                            return (Statics.getLabel('VanshiValidationMessage'));
+                                          if (_isTrainedInAnyaVanshi != null && (_isTrainedInAnyaVanshi! && value!.isEmpty)) return (Statics.getLabel('VanshiValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -2664,10 +2524,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing:
-                                            (_isTrainedInPrathamVenu == true || _isTrainedInDwitiyaVenu == true || _isTrainedInTrutiyaVenu == true)
-                                                ? true
-                                                : false,
+                                        absorbing: (_isTrainedInPrathamVenu == true || _isTrainedInDwitiyaVenu == true || _isTrainedInTrutiyaVenu == true) ? true : false,
                                         child: CheckboxListTile(
                                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                           title: Text(Statics.getLabel('Venu') + '               ', style: TextStyle(fontSize: 15)),
@@ -2693,8 +2550,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInAnyaVenu == null ? false : _isTrainedInAnyaVenu,
                                         validator: (value) {
-                                          if (_isTrainedInAnyaVenu != null && (_isTrainedInAnyaVenu! && value!.isEmpty))
-                                            return (Statics.getLabel('VenuValidationMessage'));
+                                          if (_isTrainedInAnyaVenu != null && (_isTrainedInAnyaVenu! && value!.isEmpty)) return (Statics.getLabel('VenuValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -2727,10 +2583,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing:
-                                            (_isTrainedInPrathamAanak == true || _isTrainedInDwitiyaAanak == true || _isTrainedInTrutiyaAanak == true)
-                                                ? true
-                                                : false,
+                                        absorbing: (_isTrainedInPrathamAanak == true || _isTrainedInDwitiyaAanak == true || _isTrainedInTrutiyaAanak == true) ? true : false,
                                         child: CheckboxListTile(
                                             contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                             title: Text(Statics.getLabel('Aanak'), style: TextStyle(fontSize: 15)),
@@ -2755,8 +2608,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInAnyaAanak == null ? false : _isTrainedInAnyaAanak,
                                         validator: (value) {
-                                          if (_isTrainedInAnyaAanak != null && (_isTrainedInAnyaAanak! && value!.isEmpty))
-                                            return (Statics.getLabel('AanakValidationMessage'));
+                                          if (_isTrainedInAnyaAanak != null && (_isTrainedInAnyaAanak! && value!.isEmpty)) return (Statics.getLabel('AanakValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -2789,11 +2641,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing: (_isTrainedInPrathamShankha == true ||
-                                                _isTrainedInDwitiyaShankha == true ||
-                                                _isTrainedInTrutiyaShankha == true)
-                                            ? true
-                                            : false,
+                                        absorbing: (_isTrainedInPrathamShankha == true || _isTrainedInDwitiyaShankha == true || _isTrainedInTrutiyaShankha == true) ? true : false,
                                         child: CheckboxListTile(
                                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                           title: Text(Statics.getLabel('Shankha'), style: TextStyle(fontSize: 15)),
@@ -2819,8 +2667,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInAnyaShankha == null ? false : _isTrainedInAnyaShankha,
                                         validator: (value) {
-                                          if (_isTrainedInAnyaShankha != null && (_isTrainedInAnyaShankha! && value!.isEmpty))
-                                            return (Statics.getLabel('ShankhaValidationMessage'));
+                                          if (_isTrainedInAnyaShankha != null && (_isTrainedInAnyaShankha! && value!.isEmpty)) return (Statics.getLabel('ShankhaValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -2853,11 +2700,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing: (_isTrainedInPrathamNaagaanga == true ||
-                                                _isTrainedInDwitiyaNaagaanga == true ||
-                                                _isTrainedInTrutiyaNaagaanga == true)
-                                            ? true
-                                            : false,
+                                        absorbing: (_isTrainedInPrathamNaagaanga == true || _isTrainedInDwitiyaNaagaanga == true || _isTrainedInTrutiyaNaagaanga == true) ? true : false,
                                         child: CheckboxListTile(
                                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                           title: Text(Statics.getLabel('Naagaanga'), style: TextStyle(fontSize: 15)),
@@ -2883,8 +2726,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInAnyaNaagaanga == null ? false : _isTrainedInAnyaNaagaanga,
                                         validator: (value) {
-                                          if (_isTrainedInAnyaNaagaanga != null && (_isTrainedInAnyaNaagaanga! && value!.isEmpty))
-                                            return (Statics.getLabel('NaagaangaValidationMessage'));
+                                          if (_isTrainedInAnyaNaagaanga != null && (_isTrainedInAnyaNaagaanga! && value!.isEmpty)) return (Statics.getLabel('NaagaangaValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -2917,10 +2759,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing:
-                                            (_isTrainedInPrathamTurya == true || _isTrainedInDwitiyaTurya == true || _isTrainedInTrutiyaTurya == true)
-                                                ? true
-                                                : false,
+                                        absorbing: (_isTrainedInPrathamTurya == true || _isTrainedInDwitiyaTurya == true || _isTrainedInTrutiyaTurya == true) ? true : false,
                                         child: CheckboxListTile(
                                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                           title: Text(Statics.getLabel('Turya'), style: TextStyle(fontSize: 15)),
@@ -2946,8 +2785,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInAnyaTurya == null ? false : _isTrainedInAnyaTurya,
                                         validator: (value) {
-                                          if (_isTrainedInAnyaTurya != null && (_isTrainedInAnyaTurya! && value!.isEmpty))
-                                            return (Statics.getLabel('TuryaValidationMessage'));
+                                          if (_isTrainedInAnyaTurya != null && (_isTrainedInAnyaTurya! && value!.isEmpty)) return (Statics.getLabel('TuryaValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -2980,11 +2818,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing: (_isTrainedInPrathamSwarad == true ||
-                                                _isTrainedInDwitiyaSwarad == true ||
-                                                _isTrainedInTrutiyaSwarad == true)
-                                            ? true
-                                            : false,
+                                        absorbing: (_isTrainedInPrathamSwarad == true || _isTrainedInDwitiyaSwarad == true || _isTrainedInTrutiyaSwarad == true) ? true : false,
                                         child: CheckboxListTile(
                                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                           title: Text(Statics.getLabel('Swarad'), style: TextStyle(fontSize: 15)),
@@ -3010,8 +2844,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInAnyaSwarad == null ? false : _isTrainedInAnyaSwarad,
                                         validator: (value) {
-                                          if (_isTrainedInAnyaSwarad != null && (_isTrainedInAnyaSwarad! && value!.isEmpty))
-                                            return (Statics.getLabel('SwaradValidationMessage'));
+                                          if (_isTrainedInAnyaSwarad != null && (_isTrainedInAnyaSwarad! && value!.isEmpty)) return (Statics.getLabel('SwaradValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -3044,11 +2877,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                     SizedBox(
                                       width: Statics.getDeviceSize(context).width * 0.35,
                                       child: AbsorbPointer(
-                                        absorbing: (_isTrainedInPrathamGomukha == true ||
-                                                _isTrainedInDwitiyaGomukha == true ||
-                                                _isTrainedInTrutiyaGomukha == true)
-                                            ? true
-                                            : false,
+                                        absorbing: (_isTrainedInPrathamGomukha == true || _isTrainedInDwitiyaGomukha == true || _isTrainedInTrutiyaGomukha == true) ? true : false,
                                         child: CheckboxListTile(
                                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                                           title: Text(Statics.getLabel('Gomukha') + '      ', style: TextStyle(fontSize: 15)),
@@ -3074,8 +2903,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                                         maxLength: 4,
                                         enabled: _isTrainedInAnyaGomukha == null ? false : _isTrainedInAnyaGomukha,
                                         validator: (value) {
-                                          if (_isTrainedInAnyaGomukha != null && (_isTrainedInAnyaGomukha! && value!.isEmpty))
-                                            return (Statics.getLabel('GomukhaValidationMessage'));
+                                          if (_isTrainedInAnyaGomukha != null && (_isTrainedInAnyaGomukha! && value!.isEmpty)) return (Statics.getLabel('GomukhaValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
@@ -3131,7 +2959,7 @@ class SwayamsevakShaaririkVishayState extends State<SwayamsevakShaaririkVishay> 
                           vertical: 8,
                         ),
                         color: Theme.of(context).primaryColor,
-                        textColor: Theme.of(context).primaryTextTheme.button!.color,
+                        textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                         onPressed: _submit,
                         child: Text(
                           Statics.getLabel('Submit'),

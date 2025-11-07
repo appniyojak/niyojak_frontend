@@ -14,16 +14,10 @@ class EditAnnualBaithakNagarVrutta extends StatefulWidget {
   var annualBaithakTypeCode;
   var onSaveDetails;
   var viewType;
-  EditAnnualBaithakNagarVrutta(
-      {Key? key,
-      this.annualBaithakNagarVruttaID,
-      this.geoUnitID,
-      this.geoUnitName,
-      this.annualBaithakTypeID,
-      this.annualBaithakTypeCode,
-      this.onSaveDetails,
-      this.viewType})
+
+  EditAnnualBaithakNagarVrutta({Key? key, this.annualBaithakNagarVruttaID, this.geoUnitID, this.geoUnitName, this.annualBaithakTypeID, this.annualBaithakTypeCode, this.onSaveDetails, this.viewType})
       : super(key: key);
+
   @override
   _EditAnnualBaithakNagarVruttaState createState() => _EditAnnualBaithakNagarVruttaState();
 }
@@ -81,10 +75,8 @@ class _EditAnnualBaithakNagarVruttaState extends State<EditAnnualBaithakNagarVru
         nagarVrutta = AnnualBaithakNagarVruttaBAL.fromMap(retVal);
         _baithakTypeID = btID;
         _sewaVastiCountCtrl.text = (nagarVrutta!.sewaVastiCount == null ? '' : nagarVrutta!.sewaVastiCount.toString());
-        _shaakhaaYuktaSewaVastiCountCntrl.text =
-            (nagarVrutta!.shaakhaaYuktaSewaVastiCount == null ? '' : nagarVrutta!.shaakhaaYuktaSewaVastiCount.toString());
-        _sewaKaaryaYuktaSewaVastiCountCtrl.text =
-            (nagarVrutta!.sewaKaaryaYuktaSewaVastiCount == null ? '' : nagarVrutta!.sewaKaaryaYuktaSewaVastiCount.toString());
+        _shaakhaaYuktaSewaVastiCountCntrl.text = (nagarVrutta!.shaakhaaYuktaSewaVastiCount == null ? '' : nagarVrutta!.shaakhaaYuktaSewaVastiCount.toString());
+        _sewaKaaryaYuktaSewaVastiCountCtrl.text = (nagarVrutta!.sewaKaaryaYuktaSewaVastiCount == null ? '' : nagarVrutta!.sewaKaaryaYuktaSewaVastiCount.toString());
 
         _isSankalpaPoorna = nagarVrutta!.isSankalpaPoorna == true ? true : false;
         _isNiyojanDone = nagarVrutta!.isNiyojanDone == true ? true : false;
@@ -131,8 +123,7 @@ class _EditAnnualBaithakNagarVruttaState extends State<EditAnnualBaithakNagarVru
       "AnnualBaithakTypeID": (widget.annualBaithakTypeID == null ? 0 : int.parse(widget.annualBaithakTypeID.toString())),
       "SewaVastiCount": _sewaVastiCountCtrl.text.trim() == '' ? null : int.parse(_sewaVastiCountCtrl.text),
       "ShaakhaaYuktaSewaVastiCount": _shaakhaaYuktaSewaVastiCountCntrl.text.trim() == '' ? null : int.parse(_shaakhaaYuktaSewaVastiCountCntrl.text),
-      "SewaKaaryaYuktaSewaVastiCount":
-          _sewaKaaryaYuktaSewaVastiCountCtrl.text.trim() == '' ? null : int.parse(_sewaKaaryaYuktaSewaVastiCountCtrl.text),
+      "SewaKaaryaYuktaSewaVastiCount": _sewaKaaryaYuktaSewaVastiCountCtrl.text.trim() == '' ? null : int.parse(_sewaKaaryaYuktaSewaVastiCountCtrl.text),
       "IsSankalpaPoorna": _isSankalpaPoorna,
       "IsNiyojanDone": _isNiyojanDone,
       "ModifiedBy": Statics.userDetails["userID"]
@@ -268,7 +259,7 @@ class _EditAnnualBaithakNagarVruttaState extends State<EditAnnualBaithakNagarVru
                         vertical: 8,
                       ),
                       color: Theme.of(context).primaryColor,
-                      textColor: Theme.of(context).primaryTextTheme.button!.color,
+                      textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                       onPressed: () {
                         _submit(context);
                       },

@@ -14,16 +14,11 @@ class EditAnnualBaithakShaakhaaViheenVrutta extends StatefulWidget {
   var annualBaithakTypeCode;
   var onSaveDetails;
   var viewType;
+
   EditAnnualBaithakShaakhaaViheenVrutta(
-      {Key? key,
-      this.annualBaithakShaakhaaViheenVruttaID,
-      this.geoUnitID,
-      this.geoUnitName,
-      this.annualBaithakTypeID,
-      this.annualBaithakTypeCode,
-      this.onSaveDetails,
-      this.viewType})
+      {Key? key, this.annualBaithakShaakhaaViheenVruttaID, this.geoUnitID, this.geoUnitName, this.annualBaithakTypeID, this.annualBaithakTypeCode, this.onSaveDetails, this.viewType})
       : super(key: key);
+
   @override
   _EditAnnualBaithakShaakhaaViheenVruttaState createState() => _EditAnnualBaithakShaakhaaViheenVruttaState();
 }
@@ -117,23 +112,17 @@ class _EditAnnualBaithakShaakhaaViheenVruttaState extends State<EditAnnualBaitha
       _praathamikCountCtrl.text = (shaakhaaViheen!.praathamikCount == null ? '' : shaakhaaViheen!.praathamikCount.toString());
       _praathamikSakriyaCountCtrl.text = (shaakhaaViheen!.praathamikSakriyaCount == null ? '' : shaakhaaViheen!.praathamikSakriyaCount.toString());
       _prathamGeneralCountCtrl.text = (shaakhaaViheen!.prathamGeneralCount == null ? '' : shaakhaaViheen!.prathamGeneralCount.toString());
-      _prathamGeneralSakriyaCountCtrl.text =
-          (shaakhaaViheen!.prathamGeneralSakriyaCount == null ? '' : shaakhaaViheen!.prathamGeneralSakriyaCount.toString());
+      _prathamGeneralSakriyaCountCtrl.text = (shaakhaaViheen!.prathamGeneralSakriyaCount == null ? '' : shaakhaaViheen!.prathamGeneralSakriyaCount.toString());
       _prathamSpecialCountCtrl.text = (shaakhaaViheen!.prathamSpecialCount == null ? '' : shaakhaaViheen!.prathamSpecialCount.toString());
-      _prathamSpecialSakriyaCountCtrl.text =
-          (shaakhaaViheen!.prathamSpecialSakriyaCount == null ? '' : shaakhaaViheen!.prathamSpecialSakriyaCount.toString());
+      _prathamSpecialSakriyaCountCtrl.text = (shaakhaaViheen!.prathamSpecialSakriyaCount == null ? '' : shaakhaaViheen!.prathamSpecialSakriyaCount.toString());
       _dwitiyaGeneralCountCtrl.text = (shaakhaaViheen!.dwitiyaGeneralCount == null ? '' : shaakhaaViheen!.dwitiyaGeneralCount.toString());
-      _dwitiyaGeneralSakriyaCountCtrl.text =
-          (shaakhaaViheen!.dwitiyaGeneralSakriyaCount == null ? '' : shaakhaaViheen!.dwitiyaGeneralSakriyaCount.toString());
+      _dwitiyaGeneralSakriyaCountCtrl.text = (shaakhaaViheen!.dwitiyaGeneralSakriyaCount == null ? '' : shaakhaaViheen!.dwitiyaGeneralSakriyaCount.toString());
       _dwitiyaSpecialCountCtrl.text = (shaakhaaViheen!.dwitiyaSpecialCount == null ? '' : shaakhaaViheen!.dwitiyaSpecialCount.toString());
-      _dwitiyaSpecialSakriyaCountCtrl.text =
-          (shaakhaaViheen!.dwitiyaSpecialSakriyaCount == null ? '' : shaakhaaViheen!.dwitiyaSpecialSakriyaCount.toString());
+      _dwitiyaSpecialSakriyaCountCtrl.text = (shaakhaaViheen!.dwitiyaSpecialSakriyaCount == null ? '' : shaakhaaViheen!.dwitiyaSpecialSakriyaCount.toString());
       _trutiyaGeneralCountCtrl.text = (shaakhaaViheen!.trutiyaGeneralCount == null ? '' : shaakhaaViheen!.trutiyaGeneralCount.toString());
-      _trutiyaGeneralSakriyaCountCtrl.text =
-          (shaakhaaViheen!.trutiyaGeneralSakriyaCount == null ? '' : shaakhaaViheen!.trutiyaGeneralSakriyaCount.toString());
+      _trutiyaGeneralSakriyaCountCtrl.text = (shaakhaaViheen!.trutiyaGeneralSakriyaCount == null ? '' : shaakhaaViheen!.trutiyaGeneralSakriyaCount.toString());
       _trutiyaSpecialCountCtrl.text = (shaakhaaViheen!.trutiyaSpecialCount == null ? '' : shaakhaaViheen!.trutiyaSpecialCount.toString());
-      _trutiyaSpecialSakriyaCountCtrl.text =
-          (shaakhaaViheen!.trutiyaSpecialSakriyaCount == null ? '' : shaakhaaViheen!.trutiyaSpecialSakriyaCount.toString());
+      _trutiyaSpecialSakriyaCountCtrl.text = (shaakhaaViheen!.trutiyaSpecialSakriyaCount == null ? '' : shaakhaaViheen!.trutiyaSpecialSakriyaCount.toString());
       _vaartaapatraCountCtrl.text = (shaakhaaViheen!.vaartaapatraCount == null ? '' : shaakhaaViheen!.vaartaapatraCount.toString());
 
       if (shaakhaaViheen!.isShaakhaaInPast != null && shaakhaaViheen!.isShaakhaaInPast == true)
@@ -179,8 +168,7 @@ class _EditAnnualBaithakShaakhaaViheenVruttaState extends State<EditAnnualBaitha
   saveAnnualBaithakShaakhaaViheen(BuildContext context) async {
     var inputData = json.encode({
       "AppUserID": Statics.userDetails["userID"],
-      "AnnualBaithakShaakhaaViheenVruttaID":
-          (widget.annualBaithakShaakhaaViheenVruttaID == null ? 0 : int.parse(widget.annualBaithakShaakhaaViheenVruttaID.toString())),
+      "AnnualBaithakShaakhaaViheenVruttaID": (widget.annualBaithakShaakhaaViheenVruttaID == null ? 0 : int.parse(widget.annualBaithakShaakhaaViheenVruttaID.toString())),
       "GeoUnitID": (widget.geoUnitID == null ? 0 : int.parse(widget.geoUnitID.toString())),
       "AnnualBaithakTypeID": (widget.annualBaithakTypeID == null ? 0 : int.parse(widget.annualBaithakTypeID.toString())),
       "IsShaakhaaInPast": _isShaakhaaInPast,
@@ -500,7 +488,7 @@ class _EditAnnualBaithakShaakhaaViheenVruttaState extends State<EditAnnualBaitha
                         vertical: 8,
                       ),
                       color: Theme.of(context).primaryColor,
-                      textColor: Theme.of(context).primaryTextTheme.button!.color,
+                      textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                       onPressed: () {
                         _submit(context);
                       },

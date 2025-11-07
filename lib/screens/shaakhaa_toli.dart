@@ -7,6 +7,7 @@ import '../helpers/static_data.dart' as Statics;
 
 class ShaakhaaToli extends StatefulWidget {
   static const routeName = '/shaakhaa-toli-screen';
+
   @override
   _ShaakhaaToliState createState() => _ShaakhaaToliState();
 }
@@ -19,6 +20,7 @@ class _ShaakhaaToliState extends State<ShaakhaaToli> {
   Statics.ScreenArguments? args;
   var theId;
   var viewType;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -92,7 +94,7 @@ class _ShaakhaaToliState extends State<ShaakhaaToli> {
                     return Center(
                         child: Text(
                       'Server Error, Please Try Again Later',
-                      style: TextStyle(color: Theme.of(context).errorColor),
+                      style: TextStyle(color: Colors.red),
                     ));
                   }
                   return dataSnapshot.hasData && dataSnapshot.data!.length > 0

@@ -15,7 +15,9 @@ class SwayamsevakDaayitva extends StatefulWidget {
   var swId;
   var onSaveSwDetails;
   var viewType;
+
   SwayamsevakDaayitva({Key? key, this.swId, this.onSaveSwDetails, this.viewType}) : super(key: key);
+
   State<StatefulWidget> createState() {
     return new SwayamsevakDaayitvaState();
   }
@@ -323,7 +325,7 @@ class SwayamsevakDaayitvaState extends State<SwayamsevakDaayitva> {
                                       child: MaterialButton(
                                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                                           color: Theme.of(context).primaryColor,
-                                          textColor: Theme.of(context).primaryTextTheme.button!.color,
+                                          textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                                           onPressed: clearScreen,
                                           child: Text(
                                             Statics.getLabel('clear'),
@@ -376,9 +378,7 @@ class SwayamsevakDaayitvaState extends State<SwayamsevakDaayitva> {
                                                   decoration: InputDecoration(labelText: Statics.getLabel('SelectAayaam')),
                                                   isExpanded: true,
                                                   value: _aayaamValue == "" ? null : _aayaamValue,
-                                                  items: _aayam!
-                                                      .map((bg) => DropdownMenuItem(value: bg.aayaamID.toString(), child: Text(bg.aayaamName!)))
-                                                      .toList(),
+                                                  items: _aayam!.map((bg) => DropdownMenuItem(value: bg.aayaamID.toString(), child: Text(bg.aayaamName!))).toList(),
                                                   onChanged: (value) {
                                                     setState(() {
                                                       _aayaamValue = value;
@@ -401,9 +401,7 @@ class SwayamsevakDaayitvaState extends State<SwayamsevakDaayitva> {
                                                   decoration: InputDecoration(labelText: Statics.getLabel('SelectGatividhi')),
                                                   isExpanded: true,
                                                   value: _gatividhiValue == "" ? null : _gatividhiValue,
-                                                  items: _gatividhi!
-                                                      .map((bg) => DropdownMenuItem(value: bg.gatividhiID.toString(), child: Text(bg.gatividhiName!)))
-                                                      .toList(),
+                                                  items: _gatividhi!.map((bg) => DropdownMenuItem(value: bg.gatividhiID.toString(), child: Text(bg.gatividhiName!))).toList(),
                                                   onChanged: (value) {
                                                     setState(() {
                                                       _gatividhiValue = value;
@@ -460,9 +458,7 @@ class SwayamsevakDaayitvaState extends State<SwayamsevakDaayitva> {
                                                       ? _geoUnitsValue
                                                       : null
                                                   : null,
-                                          items: _geoUnits!
-                                              .map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!)))
-                                              .toList(),
+                                          items: _geoUnits!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                           onChanged: (value) {
                                             setState(() {
                                               _geoUnitsValue = value;
@@ -496,8 +492,7 @@ class SwayamsevakDaayitvaState extends State<SwayamsevakDaayitva> {
                                                         isDense: true,
                                                         border: UnderlineInputBorder(),
                                                         labelText: Statics.getLabel('SelectDaayitva'),
-                                                      )
-                                                  );
+                                                      ));
                                                 },
                                                 // textFieldConfiguration:
                                                 //     TextFieldConfiguration(
@@ -509,8 +504,7 @@ class SwayamsevakDaayitvaState extends State<SwayamsevakDaayitva> {
                                                 //                     'SelectDaayitva'))),
                                                 suggestionsCallback: (pattern) {
                                                   this._daayitvaValue = "";
-                                                  return populateDaayitva(
-                                                      _daayitvaForValue == null ? "" : _daayitvaForValue!.staticID.toString(), pattern);
+                                                  return populateDaayitva(_daayitvaForValue == null ? "" : _daayitvaForValue!.staticID.toString(), pattern);
                                                 },
                                                 itemBuilder: (context, suggestion) {
                                                   return ListTile(
@@ -567,8 +561,7 @@ class SwayamsevakDaayitvaState extends State<SwayamsevakDaayitva> {
                                           validator: (value) {
                                             if (value!.isNotEmpty && value!.length < 4)
                                               return (Statics.getLabel('ValidStartYearValidationMessage'));
-                                            else if (value.isNotEmpty) if ((int.parse(value) >
-                                                int.parse(DateFormat('yyyy').format(DateTime.now())))) {
+                                            else if (value.isNotEmpty) if ((int.parse(value) > int.parse(DateFormat('yyyy').format(DateTime.now())))) {
                                               return (Statics.getLabel('ValidStartYearValidationMessage'));
                                             }
                                             return null;
@@ -600,7 +593,7 @@ class SwayamsevakDaayitvaState extends State<SwayamsevakDaayitva> {
                                       vertical: 8,
                                     ),
                                     color: Theme.of(context).primaryColor,
-                                    textColor: Theme.of(context).primaryTextTheme.button!.color,
+                                    textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                                     onPressed: _submit,
                                     child: Text(
                                       Statics.getLabel('Submit'),

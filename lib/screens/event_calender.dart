@@ -12,6 +12,7 @@ import '../helpers/static_data.dart' as Statics;
 
 class EventCalender extends StatefulWidget {
   static const routeName = '/event-calender';
+
   @override
   _EventCalenderState createState() => _EventCalenderState();
 }
@@ -146,7 +147,7 @@ class _EventCalenderState extends State<EventCalender> {
                         return Center(
                             child: Text(
                           'Server Error, Please Try Again Later',
-                          style: TextStyle(color: Theme.of(context).errorColor),
+                          style: TextStyle(color: Colors.red),
                         ));
                       }
                       return dataSnapshot.hasData && dataSnapshot.data!.length > 0

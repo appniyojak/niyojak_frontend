@@ -14,16 +14,11 @@ class EditAnnualBaithakGraamVikasVrutta extends StatefulWidget {
   var annualBaithakTypeCode;
   var onSaveDetails;
   var viewType;
+
   EditAnnualBaithakGraamVikasVrutta(
-      {Key? key,
-      this.annualBaithakGraamVikasVruttaID,
-      this.geoUnitID,
-      this.geoUnitName,
-      this.annualBaithakTypeID,
-      this.annualBaithakTypeCode,
-      this.onSaveDetails,
-      this.viewType})
+      {Key? key, this.annualBaithakGraamVikasVruttaID, this.geoUnitID, this.geoUnitName, this.annualBaithakTypeID, this.annualBaithakTypeCode, this.onSaveDetails, this.viewType})
       : super(key: key);
+
   @override
   _EditAnnualBaithakGraamVikasVruttaState createState() => _EditAnnualBaithakGraamVikasVruttaState();
 }
@@ -75,9 +70,8 @@ class _EditAnnualBaithakGraamVikasVruttaState extends State<EditAnnualBaithakGra
       graamVikas = AnnualBaithakGraamVikasBAL.fromMap(retVal);
       _isUdayGraam = graamVikas!.isUdayGraam == true ? true : false;
       _isPrabhaatGraam = graamVikas!.isPrabhaatGraam == true ? true : false;
-      _radioSelection = graamVikas!.isUdayGraam == null || graamVikas!.isUdayGraam == false
-          ? (graamVikas!.isPrabhaatGraam == null || graamVikas!.isPrabhaatGraam == false ? '' : 'prabhaatGraam')
-          : 'udayGraam';
+      _radioSelection =
+          graamVikas!.isUdayGraam == null || graamVikas!.isUdayGraam == false ? (graamVikas!.isPrabhaatGraam == null || graamVikas!.isPrabhaatGraam == false ? '' : 'prabhaatGraam') : 'udayGraam';
 
       _isFetchingData = false;
     });
@@ -113,8 +107,7 @@ class _EditAnnualBaithakGraamVikasVruttaState extends State<EditAnnualBaithakGra
   saveAnnualBaithakGraamVikas(BuildContext context) async {
     var inputData = json.encode({
       "AppUserID": Statics.userDetails["userID"],
-      "AnnualBaithakGraamVikasVruttaID":
-          (widget.annualBaithakGraamVikasVruttaID == null ? 0 : int.parse(widget.annualBaithakGraamVikasVruttaID.toString())),
+      "AnnualBaithakGraamVikasVruttaID": (widget.annualBaithakGraamVikasVruttaID == null ? 0 : int.parse(widget.annualBaithakGraamVikasVruttaID.toString())),
       "GeoUnitID": (widget.geoUnitID == null ? 0 : int.parse(widget.geoUnitID.toString())),
       "AnnualBaithakTypeID": (widget.annualBaithakTypeID == null ? 0 : int.parse(widget.annualBaithakTypeID.toString())),
       "IsUdayGraam": _isUdayGraam,
@@ -210,7 +203,7 @@ class _EditAnnualBaithakGraamVikasVruttaState extends State<EditAnnualBaithakGra
                         vertical: 8,
                       ),
                       color: Theme.of(context).primaryColor,
-                      textColor: Theme.of(context).primaryTextTheme.button!.color,
+                      textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                       onPressed: () {
                         _submit(context);
                       },

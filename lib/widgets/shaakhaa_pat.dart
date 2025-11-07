@@ -11,6 +11,7 @@ import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 class ShaakhaaPat extends StatefulWidget {
   static const routeName = '/shaakhaa-pat-screen';
+
   @override
   _ShaakhaaPatState createState() => _ShaakhaaPatState();
 }
@@ -116,7 +117,7 @@ class _ShaakhaaPatState extends State<ShaakhaaPat> {
     return Scaffold(
         appBar: AppBar(
           title: InkWell(
-            onTap: (){
+            onTap: () {
               print("theId--->   ${theId} ==== viewType--->   ${viewType} ");
             },
             child: Text(
@@ -150,7 +151,7 @@ class _ShaakhaaPatState extends State<ShaakhaaPat> {
                 title: Text(Statics.getLabel('SelectAll'), style: TextStyle(fontSize: 15)),
                 checkColor: Colors.white,
                 activeColor: Colors.purple,
-                value:  _isSelectAll,
+                value: _isSelectAll,
                 controlAffinity: ListTileControlAffinity.leading,
                 onChanged: (value) {
                   setState(() {
@@ -174,13 +175,12 @@ class _ShaakhaaPatState extends State<ShaakhaaPat> {
                     return Center(
                         child: Text(
                       'Server Error, Please Try Again Later',
-                      style: TextStyle(color: Theme.of(context).errorColor),
+                      style: TextStyle(color: Colors.red),
                     ));
                   }
                   return dataSnapshot.hasData && dataSnapshot.data!.length > 0
                       ? Column(
-                          children:
-                              dataSnapshot.data!.map((swItem) => ShaakhaaSwayamSevakCard(swItem, onCheckCard, onUnCheckCard, _isSelectAll)).toList(),
+                          children: dataSnapshot.data!.map((swItem) => ShaakhaaSwayamSevakCard(swItem, onCheckCard, onUnCheckCard, _isSelectAll)).toList(),
                         )
                       : _isSearching
                           ? Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch')))
@@ -190,20 +190,20 @@ class _ShaakhaaPatState extends State<ShaakhaaPat> {
             ],
           ),
         ),
-      floatingActionButton:
-      // tulnatmakBaithakResponse != null ?
-      FloatingActionButton(
-      mini: true,
-      tooltip: Statics.getLabel("ExportToExcel"),
-      onPressed: () async {
-        _getCsv();
-        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('CSV file saved successfully')));
-      },
-      child: Icon(Icons.download_sharp),
-      backgroundColor: Colors.green,
-    )
-    // :Container(),
-    );
+        floatingActionButton:
+            // tulnatmakBaithakResponse != null ?
+            FloatingActionButton(
+          mini: true,
+          tooltip: Statics.getLabel("ExportToExcel"),
+          onPressed: () async {
+            _getCsv();
+            // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('CSV file saved successfully')));
+          },
+          child: Icon(Icons.download_sharp),
+          backgroundColor: Colors.green,
+        )
+        // :Container(),
+        );
   }
 
   void _getCsv() async {
@@ -485,7 +485,6 @@ class _ShaakhaaPatState extends State<ShaakhaaPat> {
     if (rows.length > 1) {
       Statics.convertToCsv(rows, "SoochiMembersList" + "_" + DateFormat('ddMMyyyyHHmmss').format(DateTime.now()), context);
     }
-    setState(() {
-    });
+    setState(() {});
   }
 }

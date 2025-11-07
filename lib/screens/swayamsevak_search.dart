@@ -22,6 +22,7 @@ import 'edit_swayamsevak_soochi.dart';
 
 class SwayamSevakSearch extends StatefulWidget {
   static const routeName = '/swayamsevak-search';
+
   @override
   _SwayamSevakSearchState createState() => _SwayamSevakSearchState();
 }
@@ -272,7 +273,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
   void initState() {
     super.initState();
     _tabController = new TabController(length: 2, vsync: this);
-    Future.delayed(Duration.zero,(){
+    Future.delayed(Duration.zero, () {
       populateChoice();
       populateDropdown();
     });
@@ -289,39 +290,71 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
         new MenuChoices("AddinSoochi", Icons.list, Statics.getLabel('addinSoochi')),
         new MenuChoices("SendMail", Icons.mail, Statics.getLabel('SendMail')),
         new MenuChoices("SendSMS", Icons.sms, Statics.getLabel('SendSMS')),
-        if (Statics.userDetails['MobileNumber'] == '9322406725-1234')
-          new MenuChoices("EditMenuNew", Icons.add, Statics.getLabel('AddSwayamsevak') + '-New'),
+        if (Statics.userDetails['MobileNumber'] == '9322406725-1234') new MenuChoices("EditMenuNew", Icons.add, Statics.getLabel('AddSwayamsevak') + '-New'),
         if ((int.parse(Statics.userDetails['LevelID']) >= 4 &&
-                (Statics.userDetails["DaayitvaName"] == "Join RSS Sanyojak" || Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. संयोजक" ||
-                    Statics.userDetails["DaayitvaName"] == "Join RSS Pramukh" || Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. प्रमुख" ||
-                    Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' ||Statics.userDetails['DaayitvaName'] == 'कार्यवाह' ||
-                    Statics.userDetails["DaayitvaName"] == "karyalay sachiv" ||Statics.userDetails["DaayitvaName"] == "कार्यालय सचिव" ||
-                    Statics.userDetails['DaayitvaName'] == 'Saha-Kaaryavaah' ||Statics.userDetails['DaayitvaName'] == 'सह कार्यवाह' ||
-                    Statics.userDetails['DaayitvaName'] == 'Prachaarak' ||Statics.userDetails['DaayitvaName'] == 'प्रचारक' ||
-                    Statics.userDetails['DaayitvaName'] == 'Saha-Prachaarak' ||Statics.userDetails['DaayitvaName'] == 'सह प्रचारक' ||
-                    Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख'  ||
-                    Statics.userDetails['DaayitvaName'] == 'Baal Vidyaarthi Pramukh'   ||  Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख'   ||
-                    Statics.userDetails['DaayitvaName'] == 'Milan Pramukh'||
-                    Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Pramukh'   ||  Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख'   ||  Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख'  ||
-                    Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Saha-Pramukh'   ||  Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख'   ||  Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख'  ||
-                    Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Pramukh' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' ||
-                    Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Pramukh' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' ||
-                    Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' ||
-                    Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' ||
-                    Statics.userDetails['DaayitvaName'] == 'Bal Vidyarthi Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' ||
-                    Statics.userDetails['DaayitvaName'] == 'Mahavidyaleen Vidyarthi Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' ||
-                    Statics.userDetails['DaayitvaName'] == 'App Sanyojak'  ||Statics.userDetails['DaayitvaName'] == 'एप संयोजक' ||
-                    Statics.userDetails['DaayitvaName'] == 'Kaaryaalay Pramukh' || Statics.userDetails['DaayitvaName'] == 'कार्यालय प्रमुख')) ||
-                      (Statics.userDetails['LevelName'] == 'Vasti' || Statics.userDetails['LevelName'] == 'वस्ती' &&
-                          (Statics.userDetails['DaayitvaName'] == 'Vasti Pramukh' ||Statics.userDetails['DaayitvaName'] == 'वस्ती प्रमुख' || Statics.userDetails['DaayitvaName'] == 'Vasti Saha-Pramukh'|| Statics.userDetails['DaayitvaName'] == 'वस्ती सह प्रमुख')) ||
-                            (Statics.userDetails['LevelName'] == 'Shaakhaa'||Statics.userDetails['LevelName'] == 'शाखा' &&
-                                (Statics.userDetails['DaayitvaName'] == 'Mukhya Shikshak' ||
-                                    Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' ||
-                                    Statics.userDetails['DaayitvaName'] == 'Sangha Mandali Pramukh' ||
-                                    Statics.userDetails['DaayitvaName'] == 'Sangha Mandali Saha-Pramukh' ||
-                                    Statics.userDetails['DaayitvaName'] == 'Milan Pramukh' ||Statics.userDetails['DaayitvaName'] == 'शाखा मिलन प्रमुख' ||
-                                    Statics.userDetails['DaayitvaName'] == 'Shaakhaa Milan Pramukh' ||Statics.userDetails['DaayitvaName'] == 'शाखा मिलन प्रमुख' ||
-                                    Statics.userDetails['DaayitvaName'] == 'Milan Saha-Pramukh')) )
+                (Statics.userDetails["DaayitvaName"] == "Join RSS Sanyojak" ||
+                    Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. संयोजक" ||
+                    Statics.userDetails["DaayitvaName"] == "Join RSS Pramukh" ||
+                    Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. प्रमुख" ||
+                    Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' ||
+                    Statics.userDetails['DaayitvaName'] == 'कार्यवाह' ||
+                    Statics.userDetails["DaayitvaName"] == "karyalay sachiv" ||
+                    Statics.userDetails["DaayitvaName"] == "कार्यालय सचिव" ||
+                    Statics.userDetails['DaayitvaName'] == 'Saha-Kaaryavaah' ||
+                    Statics.userDetails['DaayitvaName'] == 'सह कार्यवाह' ||
+                    Statics.userDetails['DaayitvaName'] == 'Prachaarak' ||
+                    Statics.userDetails['DaayitvaName'] == 'प्रचारक' ||
+                    Statics.userDetails['DaayitvaName'] == 'Saha-Prachaarak' ||
+                    Statics.userDetails['DaayitvaName'] == 'सह प्रचारक' ||
+                    Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख' ||
+                    Statics.userDetails['DaayitvaName'] == 'Baal Vidyaarthi Pramukh' ||
+                    Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख' ||
+                    Statics.userDetails['DaayitvaName'] == 'Milan Pramukh' ||
+                    Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Pramukh' ||
+                    Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख' ||
+                    Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख' ||
+                    Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Saha-Pramukh' ||
+                    Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख' ||
+                    Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख' ||
+                    Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Pramukh' ||
+                    Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' ||
+                    Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' ||
+                    Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Pramukh' ||
+                    Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' ||
+                    Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' ||
+                    Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Sah Pramukh' ||
+                    Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' ||
+                    Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' ||
+                    Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Sah Pramukh' ||
+                    Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' ||
+                    Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' ||
+                    Statics.userDetails['DaayitvaName'] == 'Bal Vidyarthi Sah Pramukh' ||
+                    Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' ||
+                    Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' ||
+                    Statics.userDetails['DaayitvaName'] == 'Mahavidyaleen Vidyarthi Sah Pramukh' ||
+                    Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' ||
+                    Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' ||
+                    Statics.userDetails['DaayitvaName'] == 'App Sanyojak' ||
+                    Statics.userDetails['DaayitvaName'] == 'एप संयोजक' ||
+                    Statics.userDetails['DaayitvaName'] == 'Kaaryaalay Pramukh' ||
+                    Statics.userDetails['DaayitvaName'] == 'कार्यालय प्रमुख')) ||
+            (Statics.userDetails['LevelName'] == 'Vasti' ||
+                Statics.userDetails['LevelName'] == 'वस्ती' &&
+                    (Statics.userDetails['DaayitvaName'] == 'Vasti Pramukh' ||
+                        Statics.userDetails['DaayitvaName'] == 'वस्ती प्रमुख' ||
+                        Statics.userDetails['DaayitvaName'] == 'Vasti Saha-Pramukh' ||
+                        Statics.userDetails['DaayitvaName'] == 'वस्ती सह प्रमुख')) ||
+            (Statics.userDetails['LevelName'] == 'Shaakhaa' ||
+                Statics.userDetails['LevelName'] == 'शाखा' &&
+                    (Statics.userDetails['DaayitvaName'] == 'Mukhya Shikshak' ||
+                        Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' ||
+                        Statics.userDetails['DaayitvaName'] == 'Sangha Mandali Pramukh' ||
+                        Statics.userDetails['DaayitvaName'] == 'Sangha Mandali Saha-Pramukh' ||
+                        Statics.userDetails['DaayitvaName'] == 'Milan Pramukh' ||
+                        Statics.userDetails['DaayitvaName'] == 'शाखा मिलन प्रमुख' ||
+                        Statics.userDetails['DaayitvaName'] == 'Shaakhaa Milan Pramukh' ||
+                        Statics.userDetails['DaayitvaName'] == 'शाखा मिलन प्रमुख' ||
+                        Statics.userDetails['DaayitvaName'] == 'Milan Saha-Pramukh')))
           new MenuChoices("EditMenu", Icons.add, Statics.getLabel('AddSwayamsevak')),
       ];
     });
@@ -336,7 +369,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
     var data3 = await Statics.getStaticLDB("ShaakhaaExperienceYear");
     var data6 = await Statics.getSanghaPreritSanstha("1", null, null);
     var data7 = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), "", "", "");
-setState(() {
+    setState(() {
       _category = data;
       _daayitvaFor = data4;
       _level = data5;
@@ -581,15 +614,15 @@ setState(() {
       if (_isSat == true) _weeklyOffDay = _weeklyOffDay + "6,";
 
       _weeklyOffDay = _weeklyOffDay == "" ? null : _weeklyOffDay.substring(0, _weeklyOffDay.length - 1);
-          print("_geoUnitsValue  $_geoUnitsValue");
-          print("geoUnitID  $geoUnitID");
+      print("_geoUnitsValue  $_geoUnitsValue");
+      print("geoUnitID  $geoUnitID");
       var inputData = json.encode({
         "AppUserID": Statics.userDetails["userID"],
         "SearchCriteria": _searchController.text.isEmpty ? null : _searchController.text,
         "BloodGroupID": _bldGrpvalue == "" ? null : _bldGrpvalue,
         "MotherTongueID": _mthrTngvalue == "" ? null : _mthrTngvalue,
         "ShaakhaaExperienceYearID": _shaakhaSanchalanvalue == "" ? null : _shaakhaSanchalanvalue,
-        "GeoUnitID": geoUnitIDnew == ""?null:geoUnitIDnew,
+        "GeoUnitID": geoUnitIDnew == "" ? null : geoUnitIDnew,
         "IsPratidnyit": _isPratidnyit,
         "PratidnyaYear": _pratidnyaYearCtrl.text.isEmpty ? null : _pratidnyaYearCtrl.text,
         "IsGanaveshComplete": _isGanveshComplete,
@@ -669,9 +702,8 @@ setState(() {
       });
       if (strType == "Search")
         return SwayamsevakProvider().getSwayamsevaks(inputData);
-      else if (strType == "Export")
-      log('getSwayamsevaksForExport() Swayamsevaks - ' + inputData);
-        return SwayamsevakProvider().getSwayamsevaksForExport(inputData);
+      else if (strType == "Export") log('getSwayamsevaksForExport() Swayamsevaks - ' + inputData);
+      return SwayamsevakProvider().getSwayamsevaksForExport(inputData);
     } else {
       Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
       return [];
@@ -679,12 +711,11 @@ setState(() {
   }
 
   void _getCsv() async {
-
     setState(() {
       _isSearching = true;
     });
     List<dynamic> dataList = await _getSwList("Export");
-      print("datalist :--   $dataList");
+    print("datalist :--   $dataList");
     if (dataList == null || dataList.length == 0) {
       Statics.showMessageDialog(context, Statics.getLabel('noDataFoundTryAnotherSearch'));
       setState(() {
@@ -981,12 +1012,9 @@ setState(() {
       row.add(data["SanghaShikshan"]["DwitiyaVarshaYear"] == null ? "" : data["SanghaShikshan"]["DwitiyaVarshaYear"].toString());
       row.add(data["SanghaShikshan"]["TrutiyaVarshaYear"] == null ? "" : data["SanghaShikshan"]["TrutiyaVarshaYear"].toString());
       row.add(data["SanghaShikshan"]["YearsAsPraathamikShikshak"] == null ? "" : data["SanghaShikshan"]["YearsAsPraathamikShikshak"].toString());
-      row.add(
-          data["SanghaShikshan"]["YearsAsPrathamVarshaShikshak"] == null ? "" : data["SanghaShikshan"]["YearsAsPrathamVarshaShikshak"].toString());
-      row.add(
-          data["SanghaShikshan"]["YearsAsDwitiyaVarshaShikshak"] == null ? "" : data["SanghaShikshan"]["YearsAsDwitiyaVarshaShikshak"].toString());
-      row.add(
-          data["SanghaShikshan"]["YearsAsTrutiyaVarshaShikshak"] == null ? "" : data["SanghaShikshan"]["YearsAsTrutiyaVarshaShikshak"].toString());
+      row.add(data["SanghaShikshan"]["YearsAsPrathamVarshaShikshak"] == null ? "" : data["SanghaShikshan"]["YearsAsPrathamVarshaShikshak"].toString());
+      row.add(data["SanghaShikshan"]["YearsAsDwitiyaVarshaShikshak"] == null ? "" : data["SanghaShikshan"]["YearsAsDwitiyaVarshaShikshak"].toString());
+      row.add(data["SanghaShikshan"]["YearsAsTrutiyaVarshaShikshak"] == null ? "" : data["SanghaShikshan"]["YearsAsTrutiyaVarshaShikshak"].toString());
 
       row.add(data["AllShaaririkVishay"]["DandaFamiliarity"].toString());
       row.add(data["AllShaaririkVishay"]["NiyuddhaFamiliarity"].toString());
@@ -1237,12 +1265,9 @@ setState(() {
       row.add(data["SanghaShikshan"]["DwitiyaVarshaYear"] == null ? "" : data["SanghaShikshan"]["DwitiyaVarshaYear"].toString());
       row.add(data["SanghaShikshan"]["TrutiyaVarshaYear"] == null ? "" : data["SanghaShikshan"]["TrutiyaVarshaYear"].toString());
       row.add(data["SanghaShikshan"]["YearsAsPraathamikShikshak"] == null ? "" : data["SanghaShikshan"]["YearsAsPraathamikShikshak"].toString());
-      row.add(
-          data["SanghaShikshan"]["YearsAsPrathamVarshaShikshak"] == null ? "" : data["SanghaShikshan"]["YearsAsPrathamVarshaShikshak"].toString());
-      row.add(
-          data["SanghaShikshan"]["YearsAsDwitiyaVarshaShikshak"] == null ? "" : data["SanghaShikshan"]["YearsAsDwitiyaVarshaShikshak"].toString());
-      row.add(
-          data["SanghaShikshan"]["YearsAsTrutiyaVarshaShikshak"] == null ? "" : data["SanghaShikshan"]["YearsAsTrutiyaVarshaShikshak"].toString());
+      row.add(data["SanghaShikshan"]["YearsAsPrathamVarshaShikshak"] == null ? "" : data["SanghaShikshan"]["YearsAsPrathamVarshaShikshak"].toString());
+      row.add(data["SanghaShikshan"]["YearsAsDwitiyaVarshaShikshak"] == null ? "" : data["SanghaShikshan"]["YearsAsDwitiyaVarshaShikshak"].toString());
+      row.add(data["SanghaShikshan"]["YearsAsTrutiyaVarshaShikshak"] == null ? "" : data["SanghaShikshan"]["YearsAsTrutiyaVarshaShikshak"].toString());
 
       row.add(data["AllShaaririkVishay"]["DandaFamiliarity"].toString());
       row.add(data["AllShaaririkVishay"]["NiyuddhaFamiliarity"].toString());
@@ -1350,14 +1375,14 @@ setState(() {
     }
 
     if (rows.length > 1) {
-      Statics.convertToCsv(rows, "SwayamSevaksList" + "_" + DateFormat('ddmmyyyyHHmmss').format(DateTime.now()),context);
+      Statics.convertToCsv(rows, "SwayamSevaksList" + "_" + DateFormat('ddmmyyyyHHmmss').format(DateTime.now()), context);
     }
     setState(() {
       _isSearching = false;
     });
   }
 
-  void onCheckCard(var emailID, var mobileNum,var swId) {
+  void onCheckCard(var emailID, var mobileNum, var swId) {
     if (!strEmail!.contains(emailID)) {
       strEmail!.add(emailID);
     }
@@ -1370,7 +1395,7 @@ setState(() {
     print(strSwId);
   }
 
-  void onUnCheckCard(var emailID, var mobileNum,var swId) {
+  void onUnCheckCard(var emailID, var mobileNum, var swId) {
     if (strEmail!.contains(emailID)) {
       strEmail!.remove(emailID);
     }
@@ -1412,25 +1437,19 @@ setState(() {
       }
       print(strMobile?.length);
       UrlLauncher.launch("sms:" + strMobile!.join(','));
-    }
-
-    else if (choice.menuType == "EditMenu") {
+    } else if (choice.menuType == "EditMenu") {
       print("EditMenu");
       Navigator.of(context).pushNamed(EditSwayamsevakScreen.routeName, arguments: Statics.ScreenArgumentsNew(0, Statics.getLabel('EditMenu')));
-    }
-
-    else if (choice.menuType == 'EditMenuNew') {
+    } else if (choice.menuType == 'EditMenuNew') {
       print('EditMenuNew');
 
       Navigator.of(context).pushNamed(EditSwayamsevakBasicInfo.routeName, arguments: Statics.ScreenArguments(0, Statics.getLabel('EditMenu')));
-    }
-    else
-    if (choice.menuType == 'AddinSoochi') {
+    } else if (choice.menuType == 'AddinSoochi') {
       if (strMobile!.length == 0) {
         Statics.showToast("Please select atleast one Member");
         return;
       }
-      Navigator.of(context).pushNamed(EditSwayamsevakSoochiInfo.routeName,arguments: Statics.ScreenArgumentsForSoochi(strSwId!.join(',').toString(), Statics.getLabel('addinSoochi')));
+      Navigator.of(context).pushNamed(EditSwayamsevakSoochiInfo.routeName, arguments: Statics.ScreenArgumentsForSoochi(strSwId!.join(',').toString(), Statics.getLabel('addinSoochi')));
       // Navigator.of(context).pushNamed(EditSwayamsevakSoochiInfo.routeName, arguments: Statics.ScreenArguments(0, Statics.getLabel('EditMenu')));
     }
   }
@@ -1464,14 +1483,13 @@ setState(() {
       _isSearching = false;
     });
   }
-  final Map<String, String> vehicleTypeMap = {
-    Statics.getLabel('VehicleType2W'): '2-Wheeler',
-    Statics.getLabel('VehicleType3W'): '3-Wheeler',
-    Statics.getLabel('VehicleType4W'): '4-Wheeler'
-  };
+
+  final Map<String, String> vehicleTypeMap = {Statics.getLabel('VehicleType2W'): '2-Wheeler', Statics.getLabel('VehicleType3W'): '3-Wheeler', Statics.getLabel('VehicleType4W'): '4-Wheeler'};
+
   void navigateBack() {
     _tabController!.animateTo(0);
   }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -1758,34 +1776,33 @@ setState(() {
                             decoration: InputDecoration(labelText: Statics.getLabel('searchSwayamsevakLabel')),
                           ),
                         ),
-                        if(_bloodGroup != null)
-                        DropdownButtonFormField(
-                          decoration: InputDecoration(labelText: Statics.getLabel('SelectBloodGroup')),
-                          isExpanded: true,
-                          value: _bldGrpvalue == "" ? null : _bldGrpvalue,
-                          items: _bloodGroup!.map((bg) => DropdownMenuItem(value: bg.staticID.toString(), child: Text(bg.codeForDisplay!))).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              _bldGrpvalue = value!;
-                            });
-                          },
-                        ),
+                        if (_bloodGroup != null)
+                          DropdownButtonFormField(
+                            decoration: InputDecoration(labelText: Statics.getLabel('SelectBloodGroup')),
+                            isExpanded: true,
+                            value: _bldGrpvalue == "" ? null : _bldGrpvalue,
+                            items: _bloodGroup!.map((bg) => DropdownMenuItem(value: bg.staticID.toString(), child: Text(bg.codeForDisplay!))).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                _bldGrpvalue = value!;
+                              });
+                            },
+                          ),
                         SizedBox(
                           height: 10,
                         ),
-                        if(_motherTongue != null)
-                        DropdownButtonFormField(
-                          decoration: InputDecoration(labelText: Statics.getLabel('SelectMotherTongue')),
-                          isExpanded: true,
-                          value: _mthrTngvalue == "" ? null : _mthrTngvalue,
-                          items:
-                              _motherTongue!.map((bg) => DropdownMenuItem(value: bg.staticID.toString(), child: Text(bg.codeForDisplay!))).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              _mthrTngvalue = value!;
-                            });
-                          },
-                        ),
+                        if (_motherTongue != null)
+                          DropdownButtonFormField(
+                            decoration: InputDecoration(labelText: Statics.getLabel('SelectMotherTongue')),
+                            isExpanded: true,
+                            value: _mthrTngvalue == "" ? null : _mthrTngvalue,
+                            items: _motherTongue!.map((bg) => DropdownMenuItem(value: bg.staticID.toString(), child: Text(bg.codeForDisplay!))).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                _mthrTngvalue = value!;
+                              });
+                            },
+                          ),
                         SizedBox(height: 10),
                         // CheckboxListTile(
                         //   contentPadding: EdgeInsets.symmetric(horizontal: 0),
@@ -1803,20 +1820,18 @@ setState(() {
                         //     });
                         //   },
                         // ),
-                        if(_shaakhaSanchalan != null)
-                        DropdownButtonFormField(
-                          decoration: InputDecoration(labelText: Statics.getLabel('ShaakhaaSanchaalan')),
-                          isExpanded: true,
-                          value: _shaakhaSanchalanvalue == "" ? null : _shaakhaSanchalanvalue,
-                          items: _shaakhaSanchalan!
-                              .map((bg) => DropdownMenuItem(value: bg.staticID.toString(), child: Text(bg.codeForDisplay!)))
-                              .toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              _shaakhaSanchalanvalue = value;
-                            });
-                          },
-                        ),
+                        if (_shaakhaSanchalan != null)
+                          DropdownButtonFormField(
+                            decoration: InputDecoration(labelText: Statics.getLabel('ShaakhaaSanchaalan')),
+                            isExpanded: true,
+                            value: _shaakhaSanchalanvalue == "" ? null : _shaakhaSanchalanvalue,
+                            items: _shaakhaSanchalan!.map((bg) => DropdownMenuItem(value: bg.staticID.toString(), child: Text(bg.codeForDisplay!))).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                _shaakhaSanchalanvalue = value;
+                              });
+                            },
+                          ),
                         SizedBox(height: 30),
                         Legend(legendString: "LinkedGeoUnit", fontsize: 18),
                         SizedBox(height: 10),
@@ -1837,12 +1852,16 @@ setState(() {
                                 margin: EdgeInsets.all(20),
                                 child: Column(
                                   children: [
-                                    LevelWiseDropdown(onFinalSelection: (String level,String? geoUnitID) { print("geoUnitID :- $geoUnitID");
-                                      setState(() {
-                                        geoUnitIDnew = geoUnitID;
-                                        populatelinkedMandalDropdown(geoUnitID!);
-                                        populatelinkedVastiDropdown(geoUnitID);
-                                      });},),
+                                    LevelWiseDropdown(
+                                      onFinalSelection: (String level, String? geoUnitID) {
+                                        print("geoUnitID :- $geoUnitID");
+                                        setState(() {
+                                          geoUnitIDnew = geoUnitID;
+                                          populatelinkedMandalDropdown(geoUnitID!);
+                                          populatelinkedVastiDropdown(geoUnitID);
+                                        });
+                                      },
+                                    ),
                                     // if(_linkedbhaag != null)
                                     // DropdownButtonFormField(
                                     //   decoration: InputDecoration(labelText: Statics.getLabel('Bhaag')),
@@ -1905,9 +1924,7 @@ setState(() {
                                         decoration: InputDecoration(labelText: Statics.getLabel('Mandal')),
                                         isExpanded: true,
                                         value: _linkedmandalValue == "" ? null : _linkedmandalValue,
-                                        items: _linkedmandal!
-                                            .map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!)))
-                                            .toList(),
+                                        items: _linkedmandal!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                         onChanged: (value) {
                                           setState(() {
                                             _linkedmandalValue = value;
@@ -1924,9 +1941,7 @@ setState(() {
                                         decoration: InputDecoration(labelText: Statics.getLabel('Graam')),
                                         isExpanded: true,
                                         value: _linkedgraamValue == "" ? null : _linkedgraamValue,
-                                        items: _linkedgraam!
-                                            .map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!)))
-                                            .toList(),
+                                        items: _linkedgraam!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                         onChanged: (value) {
                                           setState(() {
                                             _linkedgraamValue = value;
@@ -1938,9 +1953,7 @@ setState(() {
                                         decoration: InputDecoration(labelText: Statics.getLabel('Vasti')),
                                         isExpanded: true,
                                         value: _linkedvastiValue == "" ? null : _linkedvastiValue,
-                                        items: _linkedvasti!
-                                            .map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!)))
-                                            .toList(),
+                                        items: _linkedvasti!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                         onChanged: (value) {
                                           setState(() {
                                             _linkedvastiValue = value;
@@ -2977,18 +2990,18 @@ setState(() {
                             });
                           },
                         ),
-                        if(_daayitvaFor != null)
-                        DropdownButtonFormField<StaticMasterBAL>(
-                          decoration: InputDecoration(labelText: Statics.getLabel('SelectDaayitvaFor')),
-                          isExpanded: true,
-                          value: _daayitvaForValue == null || _daayitvaFor == null || _daayitvaFor!.length == 0 ? null : _daayitvaForValue,
-                          items: _daayitvaFor!.map((bg) => DropdownMenuItem(value: bg, child: Text(bg.codeForDisplay!))).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              _daayitvaForValue = value;
-                            });
-                          },
-                        ),
+                        if (_daayitvaFor != null)
+                          DropdownButtonFormField<StaticMasterBAL>(
+                            decoration: InputDecoration(labelText: Statics.getLabel('SelectDaayitvaFor')),
+                            isExpanded: true,
+                            value: _daayitvaForValue == null || _daayitvaFor == null || _daayitvaFor!.length == 0 ? null : _daayitvaForValue,
+                            items: _daayitvaFor!.map((bg) => DropdownMenuItem(value: bg, child: Text(bg.codeForDisplay!))).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                _daayitvaForValue = value;
+                              });
+                            },
+                          ),
                         SizedBox(height: 10),
                         if (_daayitvaForValue != null)
                           if (_daayitvaForValue!.code == "OtherSocialOrganization")
@@ -3007,20 +3020,18 @@ setState(() {
                           if (_daayitvaForValue!.code == "SanghaPreritSansthaa")
                             Column(
                               children: [
-                                if(_sanghaPreritSanstha != null)
-                                DropdownButtonFormField<dynamic>(
-                                  decoration: InputDecoration(labelText: Statics.getLabel('SansthaaName')),
-                                  isExpanded: true,
-                                  value: _preritSansthaValue == "" ? null : _preritSansthaValue,
-                                  items: _sanghaPreritSanstha!
-                                      .map((bg) => DropdownMenuItem(value: bg["SanghaPreritSansthaaID"].toString(), child: Text(bg["SansthaaName"])))
-                                      .toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _preritSansthaValue = value;
-                                    });
-                                  },
-                                ),
+                                if (_sanghaPreritSanstha != null)
+                                  DropdownButtonFormField<dynamic>(
+                                    decoration: InputDecoration(labelText: Statics.getLabel('SansthaaName')),
+                                    isExpanded: true,
+                                    value: _preritSansthaValue == "" ? null : _preritSansthaValue,
+                                    items: _sanghaPreritSanstha!.map((bg) => DropdownMenuItem(value: bg["SanghaPreritSansthaaID"].toString(), child: Text(bg["SansthaaName"]))).toList(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _preritSansthaValue = value;
+                                      });
+                                    },
+                                  ),
                                 SizedBox(height: 10),
                               ],
                             ),
@@ -3028,46 +3039,49 @@ setState(() {
                           if (_daayitvaForValue!.code != "SanghaPreritSansthaa" && _daayitvaForValue!.code != "OtherSocialOrganization")
                             Column(
                               children: [
-                                if(_level != null)
-                                DropdownButtonFormField(
-                                  decoration: InputDecoration(labelText: Statics.getLabel('SelectLevel')),
-                                  isExpanded: true,
-                                  value: _levelValue == "" ? null : _levelValue,
-                                  items: _level!
-                                      .map((bg) => DropdownMenuItem(
-                                          value: bg.levelID.toString(),
-                                          child: Text(bg.levelName == "Bhaag"
-                                              ? "Bhaag / Jilha"
-                                              : bg.levelName == "Nagar"
-                                                  ? "Nagar / Taluka"
-                                                  : bg.levelName!),),)
-                                      .toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _levelValue = value;
-                                      populateGeoUnitforDaayitva(value!);
-                                    });
-                                  },
-                                ),
+                                if (_level != null)
+                                  DropdownButtonFormField(
+                                    decoration: InputDecoration(labelText: Statics.getLabel('SelectLevel')),
+                                    isExpanded: true,
+                                    value: _levelValue == "" ? null : _levelValue,
+                                    items: _level!
+                                        .map(
+                                          (bg) => DropdownMenuItem(
+                                            value: bg.levelID.toString(),
+                                            child: Text(bg.levelName == "Bhaag"
+                                                ? "Bhaag / Jilha"
+                                                : bg.levelName == "Nagar"
+                                                    ? "Nagar / Taluka"
+                                                    : bg.levelName!),
+                                          ),
+                                        )
+                                        .toList(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _levelValue = value;
+                                        populateGeoUnitforDaayitva(value!);
+                                      });
+                                    },
+                                  ),
                                 SizedBox(height: 10),
-                                if(_geoUnits != null)
-                                DropdownButtonFormField(
-                                  decoration: InputDecoration(labelText: Statics.getLabel('SelectGeoUnit')),
-                                  isExpanded: true,
-                                  value: _geoUnitsValue == ""
-                                      ? null
-                                      : _geoUnits != null
-                                          ? _geoUnits!.indexWhere((p) => p.geoUnitID.toString() == _geoUnitsValue) > -1
-                                              ? _geoUnitsValue
-                                              : null
-                                          : null,
-                                  items: _geoUnits!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _geoUnitsValue = value;
-                                    });
-                                  },
-                                ),
+                                if (_geoUnits != null)
+                                  DropdownButtonFormField(
+                                    decoration: InputDecoration(labelText: Statics.getLabel('SelectGeoUnit')),
+                                    isExpanded: true,
+                                    value: _geoUnitsValue == ""
+                                        ? null
+                                        : _geoUnits != null
+                                            ? _geoUnits!.indexWhere((p) => p.geoUnitID.toString() == _geoUnitsValue) > -1
+                                                ? _geoUnitsValue
+                                                : null
+                                            : null,
+                                    items: _geoUnits!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _geoUnitsValue = value;
+                                      });
+                                    },
+                                  ),
                                 SizedBox(height: 10),
                                 Row(
                                   children: [
@@ -3083,8 +3097,7 @@ setState(() {
                                                 isDense: true,
                                                 border: UnderlineInputBorder(),
                                                 labelText: Statics.getLabel('SelectDaayitva'),
-                                              )
-                                          );
+                                              ));
                                         },
                                         // textFieldConfiguration: TextFieldConfiguration(
                                         //     controller: this._daayitvaController,
@@ -3123,21 +3136,21 @@ setState(() {
                         SizedBox(height: 30),
                         Legend(legendString: "Occupation", fontsize: 18),
                         SizedBox(height: 5),
-                        if(_category != null)
-                        DropdownButtonFormField(
-                          decoration: InputDecoration(labelText: Statics.getLabel('SelectCategory')),
-                          isExpanded: true,
-                          value: _categoryValue,
-                          items: _category!.map((bg) => DropdownMenuItem(value: bg, child: Text(bg.codeForDisplay!))).toList(),
-                          onChanged: (value) {
-                            print(value!.code);
-                            setState(() {
-                              _categoryValue = value;
-                              //populateProgram(value.code);
-                              populateStandard(value.code!);
-                            });
-                          },
-                        ),
+                        if (_category != null)
+                          DropdownButtonFormField(
+                            decoration: InputDecoration(labelText: Statics.getLabel('SelectCategory')),
+                            isExpanded: true,
+                            value: _categoryValue,
+                            items: _category!.map((bg) => DropdownMenuItem(value: bg, child: Text(bg.codeForDisplay!))).toList(),
+                            onChanged: (value) {
+                              print(value!.code);
+                              setState(() {
+                                _categoryValue = value;
+                                //populateProgram(value.code);
+                                populateStandard(value.code!);
+                              });
+                            },
+                          ),
                         if (_categoryValue != null)
                           if (_categoryValue!.code == 'School Student')
                             Column(
@@ -3188,8 +3201,7 @@ setState(() {
                                                 isDense: true,
                                                 border: UnderlineInputBorder(),
                                                 labelText: Statics.getLabel('University'),
-                                              )
-                                          );
+                                              ));
                                         },
                                         // textFieldConfiguration: TextFieldConfiguration(
                                         //     controller: this._educationUniversityNameCntrl,
@@ -3207,21 +3219,20 @@ setState(() {
                                         //   return suggestionsBox;
                                         // },
                                         onSelected: (suggestion) {
-
-                                            _educationUniversityNameCntrl.text = suggestion["UniversityName"];
-                                            _educationUniversityID = suggestion["EducationUniversityID"];
-                                            _educationOthrUniversityNameCntrl.text = "";
-                                            _collegeNameCntrl.text = "";
-                                            _collegeOthrNameCntrl.text = "";
-                                            _educationStandardNameCntrl.text = "";
-                                            _educationOthrStandardNameCntrl.text = "";
-                                            _educationProgramName.text = "";
-                                            _educationOthrProgramName.text = "";
-                                            _educationCourseName.text = "";
-                                            _educationOthrCourseName.text = "";
-                                            _educationCourseID = _collegeID = _educationStandardID = _educationProgramID = null;
-                                            _progValue = null;
-                                            setState(() {});
+                                          _educationUniversityNameCntrl.text = suggestion["UniversityName"];
+                                          _educationUniversityID = suggestion["EducationUniversityID"];
+                                          _educationOthrUniversityNameCntrl.text = "";
+                                          _collegeNameCntrl.text = "";
+                                          _collegeOthrNameCntrl.text = "";
+                                          _educationStandardNameCntrl.text = "";
+                                          _educationOthrStandardNameCntrl.text = "";
+                                          _educationProgramName.text = "";
+                                          _educationOthrProgramName.text = "";
+                                          _educationCourseName.text = "";
+                                          _educationOthrCourseName.text = "";
+                                          _educationCourseID = _collegeID = _educationStandardID = _educationProgramID = null;
+                                          _progValue = null;
+                                          setState(() {});
                                         },
                                       ),
                                     ),
@@ -3271,8 +3282,7 @@ setState(() {
                                                   isDense: true,
                                                   border: UnderlineInputBorder(),
                                                   labelText: Statics.getLabel('College'),
-                                                )
-                                            );
+                                                ));
                                           },
                                           // textFieldConfiguration: TextFieldConfiguration(
                                           //     controller: this._collegeNameCntrl,
@@ -3322,29 +3332,27 @@ setState(() {
                               ],
                             ),
                         if (_categoryValue != null)
-                          if (_categoryValue!.code == 'School Student' ||
-                              _categoryValue!.code == 'Jr College' ||
-                              _categoryValue!.code == 'Senior College')
+                          if (_categoryValue!.code == 'School Student' || _categoryValue!.code == 'Jr College' || _categoryValue!.code == 'Senior College')
                             Column(
                               children: [
-                                if(_standard != null)
-                                DropdownButtonFormField<StaticMasterBAL>(
-                                  decoration: InputDecoration(labelText: Statics.getLabel('Standard')),
-                                  isExpanded: true,
-                                  value: _standardValue == null
-                                      ? null
-                                      : _standard != null
-                                          ? _standard!.indexWhere((p) => p.staticID == _standardValue!.staticID) > -1
-                                              ? _standard![_standard!.indexWhere((p) => p.staticID == _standardValue!.staticID)]
-                                              : null
-                                          : null,
-                                  items: _standard!.map((bg) => DropdownMenuItem(value: bg, child: Text(bg.codeForDisplay!))).toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _standardValue = value;
-                                    });
-                                  },
-                                ),
+                                if (_standard != null)
+                                  DropdownButtonFormField<StaticMasterBAL>(
+                                    decoration: InputDecoration(labelText: Statics.getLabel('Standard')),
+                                    isExpanded: true,
+                                    value: _standardValue == null
+                                        ? null
+                                        : _standard != null
+                                            ? _standard!.indexWhere((p) => p.staticID == _standardValue!.staticID) > -1
+                                                ? _standard![_standard!.indexWhere((p) => p.staticID == _standardValue!.staticID)]
+                                                : null
+                                            : null,
+                                    items: _standard!.map((bg) => DropdownMenuItem(value: bg, child: Text(bg.codeForDisplay!))).toList(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _standardValue = value;
+                                      });
+                                    },
+                                  ),
                                 if (_standardValue != null && _standardValue!.code == "Other")
                                   TextFormField(
                                     textInputAction: TextInputAction.next,
@@ -3388,7 +3396,7 @@ setState(() {
                                       Container(
                                         width: Statics.getDeviceSize(context).width * 0.75,
                                         child: TypeAheadField<dynamic>(
-                                            controller: _educationProgramName,
+                                          controller: _educationProgramName,
                                           builder: (context, controller, focusNode) {
                                             return TextField(
                                                 controller: controller,
@@ -3397,8 +3405,7 @@ setState(() {
                                                   isDense: true,
                                                   border: UnderlineInputBorder(),
                                                   labelText: Statics.getLabel('Program'),
-                                                )
-                                            );
+                                                ));
                                           },
                                           // textFieldConfiguration: TextFieldConfiguration(
                                           //     controller: this._educationProgramName,
@@ -3463,8 +3470,7 @@ setState(() {
                                                   isDense: true,
                                                   border: UnderlineInputBorder(),
                                                   labelText: Statics.getLabel('Course'),
-                                                )
-                                            );
+                                                ));
                                           },
                                           // textFieldConfiguration: TextFieldConfiguration(
                                           //     controller: this._educationCourseName,
@@ -3553,9 +3559,7 @@ setState(() {
                               ],
                             ),
                         if (_categoryValue != null)
-                          if (_categoryValue!.code == 'Government Employee' ||
-                              _categoryValue!.code == 'Private Company' ||
-                              _categoryValue!.code == 'Business')
+                          if (_categoryValue!.code == 'Government Employee' || _categoryValue!.code == 'Private Company' || _categoryValue!.code == 'Business')
                             Column(
                               children: <Widget>[
                                 TextFormField(
@@ -3791,7 +3795,7 @@ setState(() {
                             });
                           },
                         ),
-                      SizedBox(height: 10),
+                        SizedBox(height: 10),
                         Wrap(
                           children: [
                             SizedBox(
@@ -4062,7 +4066,7 @@ setState(() {
                               return Center(
                                   child: Text(
                                 'Server Error, Please Try Again Later',
-                                style: TextStyle(color: Theme.of(context).errorColor),
+                                style: TextStyle(color: Colors.red),
                               ));
                             }
                             return dataSnapshot.hasData && dataSnapshot.data!.length > 0

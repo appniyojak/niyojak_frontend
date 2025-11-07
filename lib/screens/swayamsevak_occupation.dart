@@ -18,7 +18,9 @@ class SwayamsevakOcuupation extends StatefulWidget {
   var swId;
   var onSaveSwDetails;
   var viewType;
+
   SwayamsevakOcuupation({Key? key, this.swId, this.onSaveSwDetails, this.viewType}) : super(key: key);
+
   State<StatefulWidget> createState() {
     return new SwayamsevakOcuupationState();
   }
@@ -52,13 +54,14 @@ class SwayamsevakOcuupationState extends State<SwayamsevakOcuupation> {
   int? _educationCourseID = null;
   var _educationCourseName = TextEditingController();
   var _educationOthrCourseName = TextEditingController();
-  String _otpUser='';
+  String _otpUser = '';
 
   int? _othrcollegeID = null;
   int? _educationOthrProgramID = null;
   int? _educationOthrCourseID = null;
 
   var _educationCtrl = TextEditingController();
+
   // List<DropdownMenuItem> _weeklyOff = [
   //   new DropdownMenuItem(
   //     child: Text("Sunday"),
@@ -126,8 +129,7 @@ class SwayamsevakOcuupationState extends State<SwayamsevakOcuupation> {
     new DropdownMenuItem(child: Text(Statics.getLabel('Commerce')), value: "Commerce"),
     new DropdownMenuItem(child: Text(Statics.getLabel('Arts')), value: "Arts"),
   ];
-  String otpUser='';
-
+  String otpUser = '';
 
   @override
   void initState() {
@@ -139,8 +141,7 @@ class SwayamsevakOcuupationState extends State<SwayamsevakOcuupation> {
     } else {
       if (!mounted) return;
       setState(() {
-        swOccupation = new SwayamsevakOccupationBAL(swID, null, 1, null, null, "", null, "", null, "", null, "", null, "", null, "", "", "", "", "",
-            "", "", "", "", "", "", "", null, false, "", "");
+        swOccupation = new SwayamsevakOccupationBAL(swID, null, 1, null, null, "", null, "", null, "", null, "", null, "", null, "", "", "", "", "", "", "", "", "", "", "", "", null, false, "", "");
       });
     }
   }
@@ -399,10 +400,9 @@ class SwayamsevakOcuupationState extends State<SwayamsevakOcuupation> {
   }
 
   saveSwDetails() async {
-
-    String otpUser='';
+    String otpUser = '';
     SharedPreferences pref = await SharedPreferences.getInstance();
-    otpUser =  pref.getString("otpuser")?? '';
+    otpUser = pref.getString("otpuser") ?? '';
     var _weeklyOffDay = "";
     if (_isSun == true) _weeklyOffDay = _weeklyOffDay + "0,";
     if (_isMon == true) _weeklyOffDay = _weeklyOffDay + "1,";
@@ -424,48 +424,34 @@ class SwayamsevakOcuupationState extends State<SwayamsevakOcuupation> {
         "SwayamsevakID": int.parse(widget.swId),
         "PraantID": 1,
         "OccupationCategoryID": swOccupation!.occupationCategoryID,
-        "EducationUniversityID": (_categoryValue!.code == 'Senior College' ||
-                _categoryValue!.code == 'Post Graduate' ||
-                _categoryValue!.code == 'Professional Studies' ||
-                _categoryValue!.code == 'Correspondence Course')
-            ? swOccupation!.educationUniversityID
-            : null,
-        "EducationUniversityName": (_categoryValue!.code == 'Senior College' ||
-                _categoryValue!.code == 'Post Graduate' ||
-                _categoryValue!.code == 'Professional Studies' ||
-                _categoryValue!.code == 'Correspondence Course')
-            ? swOccupation!.educationUniversityName
-            : null,
-        "EducationInstitutionID": (_categoryValue!.code == 'Senior College' ||
-                _categoryValue!.code == 'Post Graduate' ||
-                _categoryValue!.code == 'Professional Studies' ||
-                _categoryValue!.code == 'Correspondence Course')
-            ? _educationUniversityNameCntrl.text == "Other"
-                ? _othrcollegeID
-                : swOccupation!.educationInstitutionID
-            : null,
-        "EducationInstitutionName": (_categoryValue!.code == 'Senior College' ||
-                _categoryValue!.code == 'Post Graduate' ||
-                _categoryValue!.code == 'Professional Studies' ||
-                _categoryValue!.code == 'Correspondence Course')
-            ? swOccupation!.educationInstitutionName
-            : null,
+        "EducationUniversityID":
+            (_categoryValue!.code == 'Senior College' || _categoryValue!.code == 'Post Graduate' || _categoryValue!.code == 'Professional Studies' || _categoryValue!.code == 'Correspondence Course')
+                ? swOccupation!.educationUniversityID
+                : null,
+        "EducationUniversityName":
+            (_categoryValue!.code == 'Senior College' || _categoryValue!.code == 'Post Graduate' || _categoryValue!.code == 'Professional Studies' || _categoryValue!.code == 'Correspondence Course')
+                ? swOccupation!.educationUniversityName
+                : null,
+        "EducationInstitutionID":
+            (_categoryValue!.code == 'Senior College' || _categoryValue!.code == 'Post Graduate' || _categoryValue!.code == 'Professional Studies' || _categoryValue!.code == 'Correspondence Course')
+                ? _educationUniversityNameCntrl.text == "Other"
+                    ? _othrcollegeID
+                    : swOccupation!.educationInstitutionID
+                : null,
+        "EducationInstitutionName":
+            (_categoryValue!.code == 'Senior College' || _categoryValue!.code == 'Post Graduate' || _categoryValue!.code == 'Professional Studies' || _categoryValue!.code == 'Correspondence Course')
+                ? swOccupation!.educationInstitutionName
+                : null,
         "EducationStandardID":
-            (_categoryValue!.code == 'School Student' || _categoryValue!.code == 'Jr College' || _categoryValue!.code == 'Senior College')
-                ? swOccupation!.educationStandardID
-                : null,
+            (_categoryValue!.code == 'School Student' || _categoryValue!.code == 'Jr College' || _categoryValue!.code == 'Senior College') ? swOccupation!.educationStandardID : null,
         "EducationStandardName":
-            (_categoryValue!.code == 'School Student' || _categoryValue!.code == 'Jr College' || _categoryValue!.code == 'Senior College')
-                ? swOccupation!.educationStandardName
+            (_categoryValue!.code == 'School Student' || _categoryValue!.code == 'Jr College' || _categoryValue!.code == 'Senior College') ? swOccupation!.educationStandardName : null,
+        "EducationProgramID":
+            (_categoryValue!.code == 'Professional Studies' || _categoryValue!.code == 'Senior College' || _categoryValue!.code == 'Post Graduate' || _categoryValue!.code == 'Correspondence Course')
+                ? _educationUniversityNameCntrl.text == "Other"
+                    ? _educationOthrProgramID
+                    : swOccupation!.educationProgramID
                 : null,
-        "EducationProgramID": (_categoryValue!.code == 'Professional Studies' ||
-                _categoryValue!.code == 'Senior College' ||
-                _categoryValue!.code == 'Post Graduate' ||
-                _categoryValue!.code == 'Correspondence Course')
-            ? _educationUniversityNameCntrl.text == "Other"
-                ? _educationOthrProgramID
-                : swOccupation!.educationProgramID
-            : null,
         "EducationProgramName": (_categoryValue!.code == 'Senior College' ||
                 _categoryValue!.code == 'Post Graduate' ||
                 _categoryValue!.code == 'Professional Studies' ||
@@ -473,71 +459,44 @@ class SwayamsevakOcuupationState extends State<SwayamsevakOcuupation> {
                 _categoryValue!.code == 'Jr College')
             ? swOccupation!.educationProgramName
             : null,
-        "EducationCourseID": (_categoryValue!.code == 'Professional Studies' ||
-                _categoryValue!.code == 'Senior College' ||
-                _categoryValue!.code == 'Post Graduate' ||
-                _categoryValue!.code == 'Correspondence Course')
-            ? (_educationUniversityNameCntrl.text == "Other" || _categoryValue!.code == 'Correspondence Course')
-                ? _educationOthrCourseID
-                : swOccupation!.educationCourseID
-            : null,
-        "EducationCourseName": (_categoryValue!.code == 'Professional Studies' ||
-                _categoryValue!.code == 'Senior College' ||
-                _categoryValue!.code == 'Post Graduate' ||
-                _categoryValue!.code == 'Correspondence Course')
-            ? swOccupation!.educationCourseName
-            : null,
-        "EducationExpectedCompletionYear": (_categoryValue!.code == 'Professional Studies' ||
-                _categoryValue!.code == 'Senior College' ||
-                _categoryValue!.code == 'Post Graduate' ||
-                _categoryValue!.code == 'Correspondence Course')
-            ? swOccupation!.expectedCompletionYear
-            : null,
-        "SchoolJuniorCollegeName":
-            (_categoryValue!.code == 'School Student' || _categoryValue!.code == 'Jr College') ? swOccupation!.schoolJuniorCollegeName : null,
+        "EducationCourseID":
+            (_categoryValue!.code == 'Professional Studies' || _categoryValue!.code == 'Senior College' || _categoryValue!.code == 'Post Graduate' || _categoryValue!.code == 'Correspondence Course')
+                ? (_educationUniversityNameCntrl.text == "Other" || _categoryValue!.code == 'Correspondence Course')
+                    ? _educationOthrCourseID
+                    : swOccupation!.educationCourseID
+                : null,
+        "EducationCourseName":
+            (_categoryValue!.code == 'Professional Studies' || _categoryValue!.code == 'Senior College' || _categoryValue!.code == 'Post Graduate' || _categoryValue!.code == 'Correspondence Course')
+                ? swOccupation!.educationCourseName
+                : null,
+        "EducationExpectedCompletionYear":
+            (_categoryValue!.code == 'Professional Studies' || _categoryValue!.code == 'Senior College' || _categoryValue!.code == 'Post Graduate' || _categoryValue!.code == 'Correspondence Course')
+                ? swOccupation!.expectedCompletionYear
+                : null,
+        "SchoolJuniorCollegeName": (_categoryValue!.code == 'School Student' || _categoryValue!.code == 'Jr College') ? swOccupation!.schoolJuniorCollegeName : null,
         "JuniorCollegeProgramName": (_categoryValue!.code == 'Jr College') ? swOccupation!.juniorCollegeProgramName : null,
         "GovernmentDepartment": (_categoryValue!.code == 'Government Employee') ? swOccupation!.governmentDepartment : null,
-        "Designation":
-            (_categoryValue!.code == 'Government Employee' || _categoryValue!.code == 'Private Company' || _categoryValue!.code == 'Business')
-                ? swOccupation!.designation
-                : null,
-        "OfficeLocation":
-            (_categoryValue!.code == 'Government Employee' || _categoryValue!.code == 'Private Company' || _categoryValue!.code == 'Business')
-                ? swOccupation!.officeLocation
-                : null,
-        "WeeklyOffDayIDs":
-            (_categoryValue!.code == 'Government Employee' || _categoryValue!.code == 'Private Company' || _categoryValue!.code == 'Business')
-                ? swOccupation!.weeklyOffDay
-                : null,
-        "WeeklyOffCycleID":
-            (_categoryValue!.code == 'Government Employee' || _categoryValue!.code == 'Private Company' || _categoryValue!.code == 'Business')
-                ? swOccupation!.weeklyOffCycle
-                : null,
-        "IsShiftDuty":
-            (_categoryValue!.code == 'Government Employee' || _categoryValue!.code == 'Private Company' || _categoryValue!.code == 'Business')
-                ? _isShiftDuty
-                : null,
-        "OfficeTimingFrom":
-            (_categoryValue!.code == 'Government Employee' || _categoryValue!.code == 'Private Company' || _categoryValue!.code == 'Business')
-                ? _isShiftDuty == false
-                    ? swOccupation!.officeTimingFrom
-                    : null
-                : null,
-        "OfficeTimingTo":
-            (_categoryValue!.code == 'Government Employee' || _categoryValue!.code == 'Private Company' || _categoryValue!.code == 'Business')
-                ? _isShiftDuty == false
-                    ? swOccupation!.officeTimingTo
-                    : null
-                : null,
+        "Designation": (_categoryValue!.code == 'Government Employee' || _categoryValue!.code == 'Private Company' || _categoryValue!.code == 'Business') ? swOccupation!.designation : null,
+        "OfficeLocation": (_categoryValue!.code == 'Government Employee' || _categoryValue!.code == 'Private Company' || _categoryValue!.code == 'Business') ? swOccupation!.officeLocation : null,
+        "WeeklyOffDayIDs": (_categoryValue!.code == 'Government Employee' || _categoryValue!.code == 'Private Company' || _categoryValue!.code == 'Business') ? swOccupation!.weeklyOffDay : null,
+        "WeeklyOffCycleID": (_categoryValue!.code == 'Government Employee' || _categoryValue!.code == 'Private Company' || _categoryValue!.code == 'Business') ? swOccupation!.weeklyOffCycle : null,
+        "IsShiftDuty": (_categoryValue!.code == 'Government Employee' || _categoryValue!.code == 'Private Company' || _categoryValue!.code == 'Business') ? _isShiftDuty : null,
+        "OfficeTimingFrom": (_categoryValue!.code == 'Government Employee' || _categoryValue!.code == 'Private Company' || _categoryValue!.code == 'Business')
+            ? _isShiftDuty == false
+                ? swOccupation!.officeTimingFrom
+                : null
+            : null,
+        "OfficeTimingTo": (_categoryValue!.code == 'Government Employee' || _categoryValue!.code == 'Private Company' || _categoryValue!.code == 'Business')
+            ? _isShiftDuty == false
+                ? swOccupation!.officeTimingTo
+                : null
+            : null,
         "OrganizationName": (_categoryValue!.code == 'Private Company' || _categoryValue!.code == 'Business') ? swOccupation!.organizationName : null,
         "IndustryVertical": (_categoryValue!.code == 'Private Company' || _categoryValue!.code == 'Business') ? swOccupation!.industryVertical : null,
         "OrganizationAtRetirement": _categoryValue!.code == 'Retired' ? swOccupation!.organizationAtRetirement : null,
         "DesignationAtRetirement": _categoryValue!.code == 'Retired' ? swOccupation!.designationAtRetirement : null,
         "DepartmentAtRetirement": _categoryValue!.code == 'Retired' ? swOccupation!.departmentAtRetirement : null,
-        "Education": (_categoryValue!.code == 'Government Employee' ||
-                _categoryValue!.code == 'Private Company' ||
-                _categoryValue!.code == 'Business' ||
-                _categoryValue!.code == 'Retired')
+        "Education": (_categoryValue!.code == 'Government Employee' || _categoryValue!.code == 'Private Company' || _categoryValue!.code == 'Business' || _categoryValue!.code == 'Retired')
             ? swOccupation!.education
             : null
       },
@@ -549,14 +508,14 @@ class SwayamsevakOcuupationState extends State<SwayamsevakOcuupation> {
       widget.swId = data;
       widget.onSaveSwDetails(widget.swId);
     });
-  if(otpUser != null && otpUser == "true"){
-    Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
-    await LogIn().logOut();
-  BackgroundFetch.stop().then((int status) {
-    print('[BackgroundFetch] stop success: $status');
-  });
-  Navigator.of(context).pushReplacementNamed('/');
-  }
+    if (otpUser != null && otpUser == "true") {
+      Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+      await LogIn().logOut();
+      BackgroundFetch.stop().then((int status) {
+        print('[BackgroundFetch] stop success: $status');
+      });
+      Navigator.of(context).pushReplacementNamed('/');
+    }
     Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
     // BackgroundFetch.stop().then((int status) {
     //   print('[BackgroundFetch] stop success: $status');
@@ -653,29 +612,29 @@ class SwayamsevakOcuupationState extends State<SwayamsevakOcuupation> {
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
-                    if(_category != null)
-                    DropdownButtonFormField<StaticMasterBAL>(
-                      decoration: InputDecoration(labelText: Statics.getLabel('SelectCategory')),
-                      isExpanded: true,
-                      value: _categoryValue == null ? null : _categoryValue,
-                      validator: (value) {
-                        if (value == null) return (Statics.getLabel('CategoryValidationMessage'));
-                        return null;
-                      },
-                      items: _category!.map((bg) => DropdownMenuItem(value: bg, child: Text(bg.codeForDisplay!))).toList(),
-                      onChanged: (value) {
-                        setState(() {
+                    if (_category != null)
+                      DropdownButtonFormField<StaticMasterBAL>(
+                        decoration: InputDecoration(labelText: Statics.getLabel('SelectCategory')),
+                        isExpanded: true,
+                        value: _categoryValue == null ? null : _categoryValue,
+                        validator: (value) {
+                          if (value == null) return (Statics.getLabel('CategoryValidationMessage'));
+                          return null;
+                        },
+                        items: _category!.map((bg) => DropdownMenuItem(value: bg, child: Text(bg.codeForDisplay!))).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _categoryValue = value;
+                            // populateProgram(value.code);
+                            repopulateFields();
+                            populateStandard(value!.code);
+                          });
+                        },
+                        onSaved: (value) {
                           _categoryValue = value;
-                          // populateProgram(value.code);
-                          repopulateFields();
-                          populateStandard(value!.code);
-                        });
-                      },
-                      onSaved: (value) {
-                        _categoryValue = value;
-                        swOccupation!.occupationCategoryID = value!.staticID;
-                      },
-                    ),
+                          swOccupation!.occupationCategoryID = value!.staticID;
+                        },
+                      ),
                     SizedBox(
                       height: 10,
                     ),
@@ -749,8 +708,7 @@ class SwayamsevakOcuupationState extends State<SwayamsevakOcuupation> {
                                             isDense: true,
                                             border: UnderlineInputBorder(),
                                             labelText: Statics.getLabel('University'),
-                                          )
-                                      );
+                                          ));
                                     },
                                     // textFieldConfiguration:
                                     //     TextFieldConfiguration(
@@ -850,8 +808,7 @@ class SwayamsevakOcuupationState extends State<SwayamsevakOcuupation> {
                                     swOccupation!.educationUniversityName = null;
                                 },
                               ),
-                            if (_educationUniversityNameCntrl.text != "Other" && _categoryValue!.code != 'Correspondence Course')
-                              SizedBox(height: 10),
+                            if (_educationUniversityNameCntrl.text != "Other" && _categoryValue!.code != 'Correspondence Course') SizedBox(height: 10),
                             if (_educationUniversityNameCntrl.text != "Other" && _categoryValue!.code != 'Correspondence Course')
                               Row(
                                 children: [
@@ -867,8 +824,7 @@ class SwayamsevakOcuupationState extends State<SwayamsevakOcuupation> {
                                               isDense: true,
                                               border: UnderlineInputBorder(),
                                               labelText: Statics.getLabel('College'),
-                                            )
-                                        );
+                                            ));
                                       },
                                       // textFieldConfiguration:
                                       //     TextFieldConfiguration(
@@ -927,11 +883,8 @@ class SwayamsevakOcuupationState extends State<SwayamsevakOcuupation> {
                                       icon: Icon(Icons.cancel)),
                                 ],
                               ),
-                            if ((_educationUniversityNameCntrl.text == "Other" || _collegeNameCntrl.text == "Other") &&
-                                _categoryValue!.code != 'Correspondence Course')
-                              SizedBox(height: 10),
-                            if ((_educationUniversityNameCntrl.text == "Other" || _collegeNameCntrl.text == "Other") &&
-                                _categoryValue!.code != 'Correspondence Course')
+                            if ((_educationUniversityNameCntrl.text == "Other" || _collegeNameCntrl.text == "Other") && _categoryValue!.code != 'Correspondence Course') SizedBox(height: 10),
+                            if ((_educationUniversityNameCntrl.text == "Other" || _collegeNameCntrl.text == "Other") && _categoryValue!.code != 'Correspondence Course')
                               TextFormField(
                                 textInputAction: TextInputAction.next,
                                 controller: _collegeOthrNameCntrl,
@@ -954,9 +907,7 @@ class SwayamsevakOcuupationState extends State<SwayamsevakOcuupation> {
                           ],
                         ),
                     if (_categoryValue != null)
-                      if (_categoryValue!.code == 'School Student' ||
-                          _categoryValue!.code == 'Jr College' ||
-                          _categoryValue!.code == 'Senior College')
+                      if (_categoryValue!.code == 'School Student' || _categoryValue!.code == 'Jr College' || _categoryValue!.code == 'Senior College')
                         Column(
                           children: [
                             DropdownButtonFormField<StaticMasterBAL>(
@@ -1041,8 +992,7 @@ class SwayamsevakOcuupationState extends State<SwayamsevakOcuupation> {
                           _categoryValue!.code == 'Correspondence Course')
                         Column(
                           children: [
-                            if (_educationUniversityNameCntrl.text != "Other" && _categoryValue!.code != 'Correspondence Course')
-                              SizedBox(height: 10),
+                            if (_educationUniversityNameCntrl.text != "Other" && _categoryValue!.code != 'Correspondence Course') SizedBox(height: 10),
                             if (_educationUniversityNameCntrl.text != "Other" && _categoryValue!.code != 'Correspondence Course')
                               Row(
                                 children: [
@@ -1058,8 +1008,7 @@ class SwayamsevakOcuupationState extends State<SwayamsevakOcuupation> {
                                               isDense: true,
                                               border: UnderlineInputBorder(),
                                               labelText: Statics.getLabel('Program'),
-                                            )
-                                        );
+                                            ));
                                       },
                                       // textFieldConfiguration:
                                       //     TextFieldConfiguration(
@@ -1120,11 +1069,8 @@ class SwayamsevakOcuupationState extends State<SwayamsevakOcuupation> {
                                       icon: Icon(Icons.cancel)),
                                 ],
                               ),
-                            if ((_educationUniversityNameCntrl.text == "Other" || _educationProgramName.text == "Other") &&
-                                _categoryValue!.code != 'Correspondence Course')
-                              SizedBox(height: 10),
-                            if ((_educationUniversityNameCntrl.text == "Other" || _educationProgramName.text == "Other") &&
-                                _categoryValue!.code != 'Correspondence Course')
+                            if ((_educationUniversityNameCntrl.text == "Other" || _educationProgramName.text == "Other") && _categoryValue!.code != 'Correspondence Course') SizedBox(height: 10),
+                            if ((_educationUniversityNameCntrl.text == "Other" || _educationProgramName.text == "Other") && _categoryValue!.code != 'Correspondence Course')
                               TextFormField(
                                 textInputAction: TextInputAction.next,
                                 controller: _educationOthrProgramName,
@@ -1145,8 +1091,7 @@ class SwayamsevakOcuupationState extends State<SwayamsevakOcuupation> {
                               height: 10,
                             ),
                             if (_categoryValue != null)
-                              if (_educationUniversityNameCntrl.text != "Other" && _categoryValue!.code != 'Correspondence Course')
-                                SizedBox(height: 10),
+                              if (_educationUniversityNameCntrl.text != "Other" && _categoryValue!.code != 'Correspondence Course') SizedBox(height: 10),
                             if (_categoryValue != null)
                               if (_educationUniversityNameCntrl.text != "Other" && _categoryValue!.code != 'Correspondence Course')
                                 Row(
@@ -1163,8 +1108,7 @@ class SwayamsevakOcuupationState extends State<SwayamsevakOcuupation> {
                                                 isDense: true,
                                                 border: UnderlineInputBorder(),
                                                 labelText: Statics.getLabel('Course'),
-                                              )
-                                          );
+                                              ));
                                         },
                                         // textFieldConfiguration:
                                         //     TextFieldConfiguration(
@@ -1224,14 +1168,9 @@ class SwayamsevakOcuupationState extends State<SwayamsevakOcuupation> {
                                   ],
                                 ),
                             if (_categoryValue != null)
-                              if (_educationUniversityNameCntrl.text == "Other" ||
-                                  _educationCourseName.text == "Other" ||
-                                  _categoryValue!.code == 'Correspondence Course')
-                                SizedBox(height: 10),
+                              if (_educationUniversityNameCntrl.text == "Other" || _educationCourseName.text == "Other" || _categoryValue!.code == 'Correspondence Course') SizedBox(height: 10),
                             if (_categoryValue != null)
-                              if (_educationUniversityNameCntrl.text == "Other" ||
-                                  _educationCourseName.text == "Other" ||
-                                  _categoryValue!.code == 'Correspondence Course')
+                              if (_educationUniversityNameCntrl.text == "Other" || _educationCourseName.text == "Other" || _categoryValue!.code == 'Correspondence Course')
                                 TextFormField(
                                   textInputAction: TextInputAction.next,
                                   controller: _educationOthrCourseName,
@@ -1352,9 +1291,7 @@ class SwayamsevakOcuupationState extends State<SwayamsevakOcuupation> {
                           ],
                         ),
                     if (_categoryValue != null)
-                      if (_categoryValue!.code == 'Government Employee' ||
-                          _categoryValue!.code == 'Private Company' ||
-                          _categoryValue!.code == 'Business')
+                      if (_categoryValue!.code == 'Government Employee' || _categoryValue!.code == 'Private Company' || _categoryValue!.code == 'Business')
                         Column(
                           children: <Widget>[
                             TextFormField(
@@ -1700,10 +1637,7 @@ class SwayamsevakOcuupationState extends State<SwayamsevakOcuupation> {
                           ],
                         ),
                     if (_categoryValue != null)
-                      if (_categoryValue!.code == 'Government Employee' ||
-                          _categoryValue!.code == 'Private Company' ||
-                          _categoryValue!.code == 'Business' ||
-                          _categoryValue!.code == 'Retired')
+                      if (_categoryValue!.code == 'Government Employee' || _categoryValue!.code == 'Private Company' || _categoryValue!.code == 'Business' || _categoryValue!.code == 'Retired')
                         TextFormField(
                           textInputAction: TextInputAction.next,
                           controller: _educationCtrl,
@@ -1734,7 +1668,7 @@ class SwayamsevakOcuupationState extends State<SwayamsevakOcuupation> {
                           vertical: 8,
                         ),
                         color: Theme.of(context).primaryColor,
-                        textColor: Theme.of(context).primaryTextTheme.button!.color,
+                        textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                         onPressed: _submit,
                         child: Text(
                           Statics.getLabel('Submit'),

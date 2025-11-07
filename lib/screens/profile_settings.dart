@@ -10,6 +10,7 @@ import '../providers/bals.dart';
 
 class ProfileSettings extends StatefulWidget {
   static const String routeName = '/profile-settings';
+
   @override
   _ProfileSettingsState createState() => _ProfileSettingsState();
 }
@@ -24,7 +25,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
 
   List<StaticMasterBAL>? _prfrdLang;
 
-  String _otpUser='';
+  String _otpUser = '';
 
   @override
   void initState() {
@@ -34,7 +35,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
 
   void populateDropdown() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    _otpUser =  pref.getString("otpuser")?? '';
+    _otpUser = pref.getString("otpuser") ?? '';
     print("_otpUser $_otpUser");
     var data = await Statics.getStaticLDB("PreferredLanguage");
     setState(() {
@@ -93,15 +94,15 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-        onWillPop: () async {
-      if (Navigator.of(context).canPop()) {
-        print("sdjhs:--- ${Navigator.of(context).canPop()}");
-        Navigator.of(context).pop();
-      } else {
-        Navigator.popAndPushNamed(context, HomeScreen.routeName);
-      }
-      return false;
-    },
+      onWillPop: () async {
+        if (Navigator.of(context).canPop()) {
+          print("sdjhs:--- ${Navigator.of(context).canPop()}");
+          Navigator.of(context).pop();
+        } else {
+          Navigator.popAndPushNamed(context, HomeScreen.routeName);
+        }
+        return false;
+      },
       child: Scaffold(
         appBar: AppBar(
           title: Text(
@@ -109,7 +110,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             style: TextStyle(fontSize: 24),
           ),
         ),
-        drawer: _otpUser =="true" ? Container():AppDrawer(),
+        drawer: _otpUser == "true" ? Container() : AppDrawer(),
         body: SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.all(20),
@@ -147,30 +148,30 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                   ),
                   SizedBox(height: 10),
                   Legend(legendString: 'ChangeLanguage'),
-                  if(_prfrdLang != null)
-                  DropdownButtonFormField<StaticMasterBAL>(
-                    decoration: InputDecoration(labelText: Statics.getLabel('SelectPreferredLanguage')),
-                    isExpanded: true,
-                    value: _prfrdLangvalue == null ? null : _prfrdLangvalue,
-                    items: _prfrdLang!.map((bg) => DropdownMenuItem(value: bg, child: Text(bg.codeForDisplay!))).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        _prfrdLangvalue = value;
-                      });
-                    },
-                    validator: (value) {
-                      if (value == null) return Statics.getLabel('PreferredLanguageValidationMessage');
+                  if (_prfrdLang != null)
+                    DropdownButtonFormField<StaticMasterBAL>(
+                      decoration: InputDecoration(labelText: Statics.getLabel('SelectPreferredLanguage')),
+                      isExpanded: true,
+                      value: _prfrdLangvalue == null ? null : _prfrdLangvalue,
+                      items: _prfrdLang!.map((bg) => DropdownMenuItem(value: bg, child: Text(bg.codeForDisplay!))).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _prfrdLangvalue = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null) return Statics.getLabel('PreferredLanguageValidationMessage');
 
-                      return null;
-                    },
-                    onSaved: (value) {
-                      if (value != null) {
-                        _selprfrdLangvalue = value.staticID;
-                        _selprfrdLangCode = value.code!;
-                      } else
-                        _selprfrdLangvalue = _selprfrdLangCode = null;
-                    },
-                  ),
+                        return null;
+                      },
+                      onSaved: (value) {
+                        if (value != null) {
+                          _selprfrdLangvalue = value.staticID;
+                          _selprfrdLangCode = value.code!;
+                        } else
+                          _selprfrdLangvalue = _selprfrdLangCode = null;
+                      },
+                    ),
                   SizedBox(
                     height: 10,
                   ),
@@ -184,7 +185,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                         vertical: 8,
                       ),
                       color: Theme.of(context).primaryColor,
-                      textColor: Theme.of(context).primaryTextTheme.button!.color,
+                      textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                       onPressed: _submit,
                       child: Text(
                         Statics.getLabel('Submit'),

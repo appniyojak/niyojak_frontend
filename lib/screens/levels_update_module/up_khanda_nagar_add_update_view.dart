@@ -1002,7 +1002,7 @@ class _UpNagarkhandaAddUpdateViewState extends State<UpNagarkhandaAddUpdateView>
                                       vertical: 8,
                                     ),
                                     color: Theme.of(context).primaryColor,
-                                    textColor: Theme.of(context).primaryTextTheme.button!.color,
+                                    textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                                     onPressed: () async {
                                       // setState(() {
                                       // showupnagarUpkhandaNewAdd = true;

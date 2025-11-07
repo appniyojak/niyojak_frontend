@@ -1,102 +1,50 @@
 plugins {
     id "com.android.application"
+    id 'com.google.gms.google-services'
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
 }
 
-def localProperties = new Properties()
-def localPropertiesFile = rootProject.file('local.properties')
-if (localPropertiesFile.exists()) {
-    localPropertiesFile.withReader('UTF-8') { reader ->
-        localProperties.load(reader)
-    }
-}
-
-def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file('key.properties')
-if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-}
-
-//def flutterRoot = localProperties.getProperty('flutter.sdk')
-//if (flutterRoot == null) {
-//    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
-//}
-
-def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
-if (flutterVersionCode == null) {
-    flutterVersionCode = '94'
-}
-
-def flutterVersionName = localProperties.getProperty('flutter.versionName')
-if (flutterVersionName == null) {
-    flutterVersionName = '3.6.4'
-}
-
-//apply plugin: 'com.android.application'
-//apply plugin: 'kotlin-android'
-//apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
-apply plugin: 'com.google.gms.google-services'
-
 android {
-//    compileSdkVersion rootProject.ext.compileSdkVersion
-    namespace "com.softiq.niyojak_prod"
-    compileSdkVersion 34
-    ndkVersion "25.1.8937393" //NO PUSH
+    namespace = "com.softiq.niyojak_prod"
+    compileSdk = 36
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
-        coreLibraryDesugaringEnabled true //NO PUSH
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_1_8
     }
-
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-    }
-
-//    lintOptions {
-//        disable 'InvalidPackage'
-//    }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.softiq.niyojak_prod"
-        minSdkVersion 24
-        targetSdkVersion 34
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
-    }
-
-    signingConfigs {
-//       release {
-//           keyAlias keystoreProperties['keyAlias']
-//           keyPassword keystoreProperties['keyPassword']
-//           storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-//           storePassword keystoreProperties['storePassword']
-//       }
+        applicationId = "com.softiq.niyojak_prod"
+        minSdk = 27
+        targetSdk = flutter.targetSdkVersion
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+        multiDexEnabled true
     }
 
     buildTypes {
         release {
-            shrinkResources false
-            minifyEnabled false
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
-//            signingConfig signingConfigs.release
+            signingConfig = signingConfigs.debug
+            minifyEnabled true
+            shrinkResources true
         }
     }
 }
 
 flutter {
-    source '../..'
+    source = "../.."
 }
 
 dependencies {
-    // For AGP 7.4+
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3' //NO PUSH
+    // ... your other dependencies
+
+    // add core library desugaring implementation
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
 }

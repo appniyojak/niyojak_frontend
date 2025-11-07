@@ -545,7 +545,7 @@ class _GruhSamparkaTabState extends State<GruhSamparkaTab> {
                   vertical: 5,
                 ),
                 color: Theme.of(context).primaryColor,
-                textColor: Theme.of(context).primaryTextTheme.button!.color,
+                textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                 onPressed: () async {
                   // if(Statics.userDetails[])
                   // await getAbhiyaanGruhaSamparkListData();

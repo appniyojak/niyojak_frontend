@@ -13,7 +13,9 @@ class EventDetails extends StatefulWidget {
   int? eventId;
   var onSaveDetails;
   var viewType;
+
   EventDetails({Key? key, this.eventId, this.onSaveDetails, this.viewType}) : super(key: key);
+
   @override
   _EventDetailsState createState() => _EventDetailsState();
 }
@@ -72,8 +74,7 @@ class _EventDetailsState extends State<EventDetails> {
     } else {
       if (!mounted) return;
       setState(() {
-        event = new EventMasterBAL(
-            null, 1, null, "", "", "", "", "", "", null, Statics.userDetails["UserID"], Statics.userDetails["FullName"], "", "", "");
+        event = new EventMasterBAL(null, 1, null, "", "", "", "", "", "", null, Statics.userDetails["UserID"], Statics.userDetails["FullName"], "", "", "");
 
         _ownerCtrl.text = Statics.userDetails["FullName"];
         _ownerID = Statics.userDetails["userID"];
@@ -232,9 +233,8 @@ class _EventDetailsState extends State<EventDetails> {
     if (time != null) {
       setState(() {
         _fromTime = time;
-        _fromTimeCntrl.text = DateFormat("hh:mm")
-                .format(new DateFormat("yyyy-MM-dd hh:mm").parse("2021-02-01 " + time.hour.toString() + ":" + time.minute.toString())) +
-            (time.period == DayPeriod.am ? " AM" : " PM");
+        _fromTimeCntrl.text =
+            DateFormat("hh:mm").format(new DateFormat("yyyy-MM-dd hh:mm").parse("2021-02-01 " + time.hour.toString() + ":" + time.minute.toString())) + (time.period == DayPeriod.am ? " AM" : " PM");
       });
     }
   }
@@ -248,9 +248,8 @@ class _EventDetailsState extends State<EventDetails> {
     if (time != null) {
       setState(() {
         _toTime = time;
-        _toTimeCntrl.text = DateFormat("hh:mm")
-                .format(new DateFormat("yyyy-MM-dd hh:mm").parse("2021-02-01 " + time.hour.toString() + ":" + time.minute.toString())) +
-            (time.period == DayPeriod.am ? " AM" : " PM");
+        _toTimeCntrl.text =
+            DateFormat("hh:mm").format(new DateFormat("yyyy-MM-dd hh:mm").parse("2021-02-01 " + time.hour.toString() + ":" + time.minute.toString())) + (time.period == DayPeriod.am ? " AM" : " PM");
       });
     }
   }
@@ -385,7 +384,6 @@ class _EventDetailsState extends State<EventDetails> {
   }
 
   Future<void> _submit() async {
-
     if (!_formKey.currentState!.validate()) {
       // Invalid!
       return;
@@ -460,13 +458,11 @@ class _EventDetailsState extends State<EventDetails> {
       "FromDateStr": (_fromDate != null ? DateFormat('dd-MM-yyyy').format(_fromDate!) : null),
       "ToDateStr": (_toDate != null ? DateFormat('dd-MM-yyyy').format(_toDate!) : null),
       "FromTimeStr": (_fromTime != null
-          ? DateFormat("hh:mm")
-                  .format(new DateFormat("yyyy-MM-dd hh:mm").parse("2021-02-01 " + _fromTime!.hour.toString() + ":" + _fromTime!.minute.toString())) +
+          ? DateFormat("hh:mm").format(new DateFormat("yyyy-MM-dd hh:mm").parse("2021-02-01 " + _fromTime!.hour.toString() + ":" + _fromTime!.minute.toString())) +
               (_fromTime!.period == DayPeriod.am ? " AM" : " PM")
           : null),
       "ToTimeStr": (_toTime != null
-          ? DateFormat("hh:mm")
-                  .format(new DateFormat("yyyy-MM-dd hh:mm").parse("2021-02-01 " + _toTime!.hour.toString() + ":" + _toTime!.minute.toString())) +
+          ? DateFormat("hh:mm").format(new DateFormat("yyyy-MM-dd hh:mm").parse("2021-02-01 " + _toTime!.hour.toString() + ":" + _toTime!.minute.toString())) +
               (_toTime!.period == DayPeriod.am ? " AM" : " PM")
           : null),
       "Venue": event!.venue,
@@ -636,28 +632,28 @@ class _EventDetailsState extends State<EventDetails> {
                       SizedBox(
                         height: 10,
                       ),
-                      if(_eventType != null)
-                      DropdownButtonFormField(
-                        decoration: InputDecoration(labelText: Statics.getLabel('EventType')),
-                        isExpanded: true,
-                        value: _eventTypeValue == "" ? null : _eventTypeValue,
-                        items: _eventType!.map((bg) => DropdownMenuItem(value: bg.staticID.toString(), child: Text(bg.codeForDisplay!))).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            _eventTypeValue = value;
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) return (Statics.getLabel('EventTypeValidationMessage'));
-                          return null;
-                        },
-                        onSaved: (value) {
-                          if (value != null && value.isNotEmpty)
-                            event!.eventTypeID = int.parse(value);
-                          else
-                            event!.eventTypeID = null;
-                        },
-                      ),
+                      if (_eventType != null)
+                        DropdownButtonFormField(
+                          decoration: InputDecoration(labelText: Statics.getLabel('EventType')),
+                          isExpanded: true,
+                          value: _eventTypeValue == "" ? null : _eventTypeValue,
+                          items: _eventType!.map((bg) => DropdownMenuItem(value: bg.staticID.toString(), child: Text(bg.codeForDisplay!))).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              _eventTypeValue = value;
+                            });
+                          },
+                          validator: (value) {
+                            if (value == null || value.isEmpty) return (Statics.getLabel('EventTypeValidationMessage'));
+                            return null;
+                          },
+                          onSaved: (value) {
+                            if (value != null && value.isNotEmpty)
+                              event!.eventTypeID = int.parse(value);
+                            else
+                              event!.eventTypeID = null;
+                          },
+                        ),
                       SizedBox(
                         height: 10,
                       ),
@@ -699,7 +695,7 @@ class _EventDetailsState extends State<EventDetails> {
                                   child: MaterialButton(
                                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                                       color: Theme.of(context).primaryColor,
-                                      textColor: Theme.of(context).primaryTextTheme.button!.color,
+                                      textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                                       onPressed: () {
                                         setState(() {
                                           _bhaagValue = _shaharValue = _nagarValue = _mandalValue = _graamValue = _vastiValue = _shaakhaaValue = null;
@@ -714,20 +710,20 @@ class _EventDetailsState extends State<EventDetails> {
                                 ),
                               ],
                             ),
-                            if(_bhaag != null)
-                            DropdownButtonFormField(
-                              decoration: InputDecoration(labelText: Statics.getLabel('Bhaag')),
-                              isExpanded: true,
-                              value: _bhaagValue == "" ? null : _bhaagValue,
-                              items: _bhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  _bhaagValue = value;
-                                  populateShaharDropdown(value!);
-                                  populateNagarDropdown(value, null);
-                                });
-                              },
-                            ),
+                            if (_bhaag != null)
+                              DropdownButtonFormField(
+                                decoration: InputDecoration(labelText: Statics.getLabel('Bhaag')),
+                                isExpanded: true,
+                                value: _bhaagValue == "" ? null : _bhaagValue,
+                                items: _bhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    _bhaagValue = value;
+                                    populateShaharDropdown(value!);
+                                    populateNagarDropdown(value, null);
+                                  });
+                                },
+                              ),
                             SizedBox(
                               height: 10,
                             ),
@@ -864,7 +860,7 @@ class _EventDetailsState extends State<EventDetails> {
                             vertical: 8,
                           ),
                           color: Theme.of(context).primaryColor,
-                          textColor: Theme.of(context).primaryTextTheme.button!.color,
+                          textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                           onPressed: _submit,
                           child: Text(
                             Statics.getLabel('Submit'),

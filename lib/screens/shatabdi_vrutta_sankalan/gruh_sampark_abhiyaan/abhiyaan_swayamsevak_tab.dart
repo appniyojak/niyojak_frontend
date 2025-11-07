@@ -37,6 +37,7 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
   List<AbhiyanSwayamsevakList> abhiyaanSwayamsevakDataList = [];
   List<AbhiyanSwayamsevakList> abhiyaanKaryakartaDataList = [];
   List<AbhiyanSwayamsevakList> selectedKaryakartaList = [];
+
   // List<AbhiyanSwayamsevakList> selectedAbhiyaanSwayamsevakList = [];
   String? selectedSwayamAbhiyanValue = "";
   bool? _isSearching = false;
@@ -1129,7 +1130,7 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                         vertical: 5,
                       ),
                       color: Theme.of(context).primaryColor,
-                      textColor: Theme.of(context).primaryTextTheme.button!.color,
+                      textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                       onPressed: () async {
                         if (dateController.text.isEmpty) {
                           Statics.showToast(Statics.getLabel("selectDate"));
@@ -1434,7 +1435,7 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                         vertical: 5,
                       ),
                       color: Theme.of(context).primaryColor,
-                      textColor: Theme.of(context).primaryTextTheme.button!.color,
+                      textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                       onPressed: showDummyList,
                       child: Text(
                         // "${Statics.getLabel('SwayamsevaksList')}",
@@ -1452,7 +1453,7 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                     vertical: 12,
                   ),
                   color: Theme.of(context).primaryColor,
-                  textColor: Theme.of(context).primaryTextTheme.button!.color,
+                  textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                   onPressed: () async {
                     if (dateController.text.isEmpty || samparkitGhareController.text.isEmpty || vitritKarpatrakController.text.isEmpty || pustakVikriController.text.isEmpty) {
                       Statics.showToast(Statics.getLabel("impInfoRequired"));

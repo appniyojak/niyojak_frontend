@@ -215,7 +215,7 @@
 //                 //                 vertical: 8,
 //                 //               ),
 //                 //               color: Theme.of(context).primaryColor,
-//                 //               textColor: Theme.of(context).primaryTextTheme.button!.color,
+//                 //               textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
 //                 //               onPressed: _search,
 //                 //               child: Text(
 //                 //                 Statics.getLabel('Search'),
@@ -250,7 +250,7 @@
 //                       return Center(
 //                           child: Text(
 //                             'Server Error, Please Try Again Later',
-//                             style: TextStyle(color: Theme.of(context).errorColor),
+//                             style: TextStyle(color: Colors.red),
 //                           ));
 //                     }
 //                     return dataSnapshot.hasData && dataSnapshot.data!.length > 0
@@ -540,14 +540,20 @@ class _SearchSwayamsewakSoochiScreenState extends State<SearchSwayamsewakSoochiS
                     if (dataSnapshot.hasError) {
                       return Center(
                           child: Text(
-                            'Server Error, Please Try Again Later',
-                            style: TextStyle(color: Theme.of(context).errorColor),
-                          ));
+                        'Server Error, Please Try Again Later',
+                        style: TextStyle(color: Colors.red),
+                      ));
                     }
                     return dataSnapshot.hasData && dataSnapshot.data!.length > 0
                         ? Column(
-                      children: dataSnapshot.data!.map((soochi) => SwayamsewakSocchiCard(soochi, _search,swID,)).toList(),
-                    )
+                            children: dataSnapshot.data!
+                                .map((soochi) => SwayamsewakSocchiCard(
+                                      soochi,
+                                      _search,
+                                      swID,
+                                    ))
+                                .toList(),
+                          )
                         : Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch')));
                   },
                 ),
@@ -576,18 +582,19 @@ class _SwayamsewakSocchiCardState extends State<SwayamsewakSocchiCard> {
   var _soochiController = TextEditingController();
   var _swValue;
   var _soochiValue;
+
   // int? _selectedRadio;
   Future<void> addtoSoochi() async {
     setState(() {
       _isLoading = true;
     });
     // try {
-      bool isConnected = await Statics.isInternetConnected();
-      if (!isConnected) {
-        Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
-      } else {
-        await saveSoochiMembers();
-      }
+    bool isConnected = await Statics.isInternetConnected();
+    if (!isConnected) {
+      Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
+    } else {
+      await saveSoochiMembers();
+    }
     // } on Exception catch (error) {
     //   Statics.showErrorDialog(context, Statics.getLabel('unableToCompleteProcess'));
     //   print("errorerror :--- $error");
@@ -609,10 +616,10 @@ class _SwayamsewakSocchiCardState extends State<SwayamsewakSocchiCard> {
       "SoochiID": widget.soochiItem["SoochiID"],
       "SwayamsevakID": (widget.swId == "" || widget.swId == null) ? null : widget.swId,
       // "SourceSoochiID":  widget.soochiItem["SoochiID"],
-      "SourceSoochiID":  (_soochiValue == "" || _soochiValue == null) ? null : _soochiValue,
+      "SourceSoochiID": (_soochiValue == "" || _soochiValue == null) ? null : _soochiValue,
       "ModifiedBy": Statics.userDetails["userID"]
     });
-  print("inputDatainputDatainputData :-- $inputData");
+    print("inputDatainputDatainputData :-- $inputData");
     var data = await Statics.saveSoochiMembers(inputData);
     print("datadatadata :-- $data");
     if (data == "-1") {
@@ -626,8 +633,6 @@ class _SwayamsewakSocchiCardState extends State<SwayamsewakSocchiCard> {
     _swValue = null;
     _soochiValue = null;
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -662,7 +667,6 @@ class _SwayamsewakSocchiCardState extends State<SwayamsewakSocchiCard> {
             },
           );
           // addtoSoochi();
-
         },
         // leading: Radio<int>(
         //   value: widget.soochiItem["SoochiID"],
@@ -673,14 +677,12 @@ class _SwayamsewakSocchiCardState extends State<SwayamsewakSocchiCard> {
         //     });
         //   },
         // ),
-        trailing:   IconButton(onPressed: (){
-          Navigator.of(context)
-              .pushNamed(SoochiMembers.routeName, arguments: Statics.ScreenArguments(widget.soochiItem["SoochiID"], "ViewMembers"));
-        }, icon: Icon(Icons.remove_red_eye)),
-        title: Text(widget.soochiItem["SoochiName"] +
-            (widget.soochiItem["SoochiMemberCount"] == null
-                ? ''
-                : (' (' + widget.soochiItem["SoochiMemberCount"].toString() + ')'))),
+        trailing: IconButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(SoochiMembers.routeName, arguments: Statics.ScreenArguments(widget.soochiItem["SoochiID"], "ViewMembers"));
+            },
+            icon: Icon(Icons.remove_red_eye)),
+        title: Text(widget.soochiItem["SoochiName"] + (widget.soochiItem["SoochiMemberCount"] == null ? '' : (' (' + widget.soochiItem["SoochiMemberCount"].toString() + ')'))),
         subtitle: Container(
           width: double.infinity,
           child: Column(
@@ -701,4 +703,3 @@ class _SwayamsewakSocchiCardState extends State<SwayamsewakSocchiCard> {
     );
   }
 }
-

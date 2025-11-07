@@ -170,7 +170,7 @@ class _SearchSoochiScreenState extends State<SearchSoochiScreen> {
                               vertical: 8,
                             ),
                             color: Theme.of(context).primaryColor,
-                            textColor: Theme.of(context).primaryTextTheme.button!.color,
+                            textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                             onPressed: _search,
                             child: Text(
                               Statics.getLabel('Search'),
@@ -202,12 +202,11 @@ class _SearchSoochiScreenState extends State<SearchSoochiScreen> {
                     return Center(
                         child: Text(
                       'Server Error, Please Try Again Later',
-                      style: TextStyle(color: Theme.of(context).errorColor),
+                      style: TextStyle(color: Colors.red),
                     ));
                   }
                   return dataSnapshot.hasData && dataSnapshot.data!.length > 0
-                      ?
-                  Column(
+                      ? Column(
                           children: dataSnapshot.data!.map((soochi) => SocchiCard(soochi, _search)).toList(),
                         )
                       : Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch')));

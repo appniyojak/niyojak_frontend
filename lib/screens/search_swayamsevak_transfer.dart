@@ -323,7 +323,7 @@
 //                               vertical: 8,
 //                             ),
 //                             color: Theme.of(context).primaryColor,
-//                             textColor: Theme.of(context).primaryTextTheme.button!.color,
+//                             textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
 //                             onPressed: () {
 //                               _search();
 //                             },
@@ -366,7 +366,7 @@
 //                     return Center(
 //                         child: Text(
 //                       'Server Error, Please Try Again Later',
-//                       style: TextStyle(color: Theme.of(context).errorColor),
+//                       style: TextStyle(color: Colors.red),
 //                     ));
 //                   }
 //                   return dataSnapshot.hasData && dataSnapshot.data!.length > 0
@@ -399,8 +399,7 @@ class SearchSwayamsevakTransfer extends StatefulWidget {
   static const routeName = '/search-swayamsevak-transfer';
 
   @override
-  _SearchSwayamsevakTransferState createState() =>
-      _SearchSwayamsevakTransferState();
+  _SearchSwayamsevakTransferState createState() => _SearchSwayamsevakTransferState();
 }
 
 class _SearchSwayamsevakTransferState extends State<SearchSwayamsevakTransfer> {
@@ -430,16 +429,12 @@ class _SearchSwayamsevakTransferState extends State<SearchSwayamsevakTransfer> {
     DateTime? date = await showDatePicker(
         context: context,
         initialDate: _fromDate == null ? DateTime.now() : _fromDate!,
-        firstDate: DateTime(
-            (_fromDate == null ? DateTime.now().year : _fromDate!.year) - 80),
-        lastDate: DateTime(
-            (_fromDate == null ? DateTime.now().year : _fromDate!.year) + 80));
+        firstDate: DateTime((_fromDate == null ? DateTime.now().year : _fromDate!.year) - 80),
+        lastDate: DateTime((_fromDate == null ? DateTime.now().year : _fromDate!.year) + 80));
 
     if (date != null) {
       if (_toDate != null) {
-        if (_toDate!.year < date.year ||
-            _toDate!.month < date.month ||
-            _toDate!.day < date.day) {
+        if (_toDate!.year < date.year || _toDate!.month < date.month || _toDate!.day < date.day) {
           Statics.showToast("From date should be less than To Date");
           return;
         }
@@ -455,16 +450,12 @@ class _SearchSwayamsevakTransferState extends State<SearchSwayamsevakTransfer> {
     DateTime? date = await showDatePicker(
         context: context,
         initialDate: _toDate == null ? DateTime.now() : _toDate!,
-        firstDate: DateTime(
-            (_toDate == null ? DateTime.now().year : _toDate!.year) - 80),
-        lastDate: DateTime(
-            (_toDate == null ? DateTime.now().year : _toDate!.year) + 80));
+        firstDate: DateTime((_toDate == null ? DateTime.now().year : _toDate!.year) - 80),
+        lastDate: DateTime((_toDate == null ? DateTime.now().year : _toDate!.year) + 80));
 
     if (date != null) {
       if (_fromDate != null) {
-        if (date.year < _fromDate!.year ||
-            date.month < _fromDate!.month ||
-            date.day < _fromDate!.day) {
+        if (date.year < _fromDate!.year || date.month < _fromDate!.month || date.day < _fromDate!.day) {
           Statics.showToast("From date should be less than To Date");
           return;
         }
@@ -480,8 +471,7 @@ class _SearchSwayamsevakTransferState extends State<SearchSwayamsevakTransfer> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    _swayamsevakTransferList =
-        _getSwayamsevakTransferList(null, null, "", null, null);
+    _swayamsevakTransferList = _getSwayamsevakTransferList(null, null, "", null, null);
   }
 
   @override
@@ -533,8 +523,7 @@ class _SearchSwayamsevakTransferState extends State<SearchSwayamsevakTransfer> {
   }
 
   void populateLinkedBhaagDropdown() async {
-    List<GeoUnitMasterBAL?> data = await Statics.getGeoUnitMasterForApp('', '1',
-        '', Statics.levels['BhaagLevelID']!, '', '', '', '', '', '', '', '');
+    List<GeoUnitMasterBAL?> data = await Statics.getGeoUnitMasterForApp('', '1', '', Statics.levels['BhaagLevelID']!, '', '', '', '', '', '', '', '');
     // var data = await Statics.getGeoUnitsByLevelAndParent(
     //     Statics.levels['BhaagLevelID'].toString(), "", "", "");
     setState(() {
@@ -549,38 +538,23 @@ class _SearchSwayamsevakTransferState extends State<SearchSwayamsevakTransfer> {
     });
 
     var searchString = _nameController.text;
-    var frmDate =
-        _fromDate == null ? null : DateFormat('dd-MM-yyyy').format(_fromDate!);
-    var toDate =
-        _toDate == null ? null : DateFormat('dd-MM-yyyy').format(_toDate!);
+    var frmDate = _fromDate == null ? null : DateFormat('dd-MM-yyyy').format(_fromDate!);
+    var toDate = _toDate == null ? null : DateFormat('dd-MM-yyyy').format(_toDate!);
 
-    int sourceBhaagVal =
-        _linkedSourceBhaagValue == "" || _linkedSourceBhaagValue == null
-            ? 0
-            : int.parse(_linkedSourceBhaagValue.toString());
-    int destinationBhaagVal = _linkedDestinationBhaagValue == "" ||
-            _linkedDestinationBhaagValue == null
-        ? 0
-        : int.parse(_linkedDestinationBhaagValue.toString());
+    int sourceBhaagVal = _linkedSourceBhaagValue == "" || _linkedSourceBhaagValue == null ? 0 : int.parse(_linkedSourceBhaagValue.toString());
+    int destinationBhaagVal = _linkedDestinationBhaagValue == "" || _linkedDestinationBhaagValue == null ? 0 : int.parse(_linkedDestinationBhaagValue.toString());
 
     setState(() {
-      _swayamsevakTransferList = _getSwayamsevakTransferList(
-          sourceBhaagVal, destinationBhaagVal, searchString, frmDate, toDate);
+      _swayamsevakTransferList = _getSwayamsevakTransferList(sourceBhaagVal, destinationBhaagVal, searchString, frmDate, toDate);
       _isSearching = false;
       _isExpanded = false;
     });
   }
 
-  Future<List<dynamic>> _getSwayamsevakTransferList(
-      int? sourceBhaagID,
-      int? destinationBhaagID,
-      String? searchString,
-      String? fromDateStr,
-      String? toDateStr) async {
+  Future<List<dynamic>> _getSwayamsevakTransferList(int? sourceBhaagID, int? destinationBhaagID, String? searchString, String? fromDateStr, String? toDateStr) async {
     bool isConnected = await Statics.isInternetConnected();
     if (isConnected == false) {
-      Statics.showMessageDialog(
-          context, Statics.getLabel('internetNotConnected'));
+      Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
       return [];
     }
     String strInput = json.encode({
@@ -634,27 +608,16 @@ class _SearchSwayamsevakTransferState extends State<SearchSwayamsevakTransfer> {
                             controller: _nameController,
                             textInputAction: TextInputAction.done,
                             keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                                labelText: Statics.getLabel('Name') +
-                                    "/" +
-                                    Statics.getLabel('mobileNumberLabel')),
+                            decoration: InputDecoration(labelText: Statics.getLabel('Name') + "/" + Statics.getLabel('mobileNumberLabel')),
                           ),
                           SizedBox(
                             height: 10,
                           ),
                           DropdownButtonFormField(
-                            decoration: InputDecoration(
-                                labelText:
-                                    Statics.getLabel('sourceBhaagLabel')),
+                            decoration: InputDecoration(labelText: Statics.getLabel('sourceBhaagLabel')),
                             isExpanded: true,
-                            value: _linkedSourceBhaagValue == ""
-                                ? null
-                                : _linkedSourceBhaagValue,
-                            items: _linkedSourceBhaagList
-                                .map((bg) => DropdownMenuItem(
-                                    value: bg!.geoUnitID.toString(),
-                                    child: Text(bg.name!)))
-                                .toList(),
+                            value: _linkedSourceBhaagValue == "" ? null : _linkedSourceBhaagValue,
+                            items: _linkedSourceBhaagList.map((bg) => DropdownMenuItem(value: bg!.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                             onChanged: (value) {
                               setState(() {
                                 _linkedSourceBhaagValue = value!;
@@ -665,18 +628,10 @@ class _SearchSwayamsevakTransferState extends State<SearchSwayamsevakTransfer> {
                             height: 10,
                           ),
                           DropdownButtonFormField(
-                            decoration: InputDecoration(
-                                labelText:
-                                    Statics.getLabel('destinationBhaagLabel')),
+                            decoration: InputDecoration(labelText: Statics.getLabel('destinationBhaagLabel')),
                             isExpanded: true,
-                            value: _linkedDestinationBhaagValue == ""
-                                ? null
-                                : _linkedDestinationBhaagValue,
-                            items: _linkedDestinationBhaagList
-                                .map((bg) => DropdownMenuItem(
-                                    value: bg!.geoUnitID.toString(),
-                                    child: Text(bg.name!)))
-                                .toList(),
+                            value: _linkedDestinationBhaagValue == "" ? null : _linkedDestinationBhaagValue,
+                            items: _linkedDestinationBhaagList.map((bg) => DropdownMenuItem(value: bg!.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                             onChanged: (value) {
                               setState(() {
                                 _linkedDestinationBhaagValue = value!;
@@ -689,13 +644,11 @@ class _SearchSwayamsevakTransferState extends State<SearchSwayamsevakTransfer> {
                           Row(
                             children: [
                               SizedBox(
-                                width:
-                                    Statics.getDeviceSize(context).width * 0.7,
+                                width: Statics.getDeviceSize(context).width * 0.7,
                                 child: TextField(
                                   enabled: false,
                                   controller: _fromDateCntrl,
-                                  decoration: InputDecoration(
-                                      labelText: Statics.getLabel('FromDate')),
+                                  decoration: InputDecoration(labelText: Statics.getLabel('FromDate')),
                                   textInputAction: TextInputAction.done,
                                 ),
                               ),
@@ -712,13 +665,11 @@ class _SearchSwayamsevakTransferState extends State<SearchSwayamsevakTransfer> {
                           Row(
                             children: [
                               SizedBox(
-                                width:
-                                    Statics.getDeviceSize(context).width * 0.7,
+                                width: Statics.getDeviceSize(context).width * 0.7,
                                 child: TextField(
                                   enabled: false,
                                   controller: _toDateCntrl,
-                                  decoration: InputDecoration(
-                                      labelText: Statics.getLabel('ToDate')),
+                                  decoration: InputDecoration(labelText: Statics.getLabel('ToDate')),
                                   textInputAction: TextInputAction.done,
                                 ),
                               ),
@@ -749,17 +700,13 @@ class _SearchSwayamsevakTransferState extends State<SearchSwayamsevakTransfer> {
                       Wrap(
                         children: [
                           MaterialButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                             padding: EdgeInsets.symmetric(
                               horizontal: 15,
                               vertical: 8,
                             ),
                             color: Theme.of(context).primaryColor,
-                            textColor: Theme.of(context)
-                                .primaryTextTheme
-                                .button!
-                                .color,
+                            textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                             onPressed: () {
                               _search();
                             },
@@ -774,8 +721,7 @@ class _SearchSwayamsevakTransferState extends State<SearchSwayamsevakTransfer> {
                           MaterialButton(
                               onPressed: () {
                                 setState(() {
-                                  _linkedSourceBhaagValue =
-                                      _linkedDestinationBhaagValue = null;
+                                  _linkedSourceBhaagValue = _linkedDestinationBhaagValue = null;
                                   //_linkedSourceBhaagList = _linkedDestinationBhaagList = null;
                                   _nameController.clear();
                                   _fromDateCntrl.clear();
@@ -800,23 +746,14 @@ class _SearchSwayamsevakTransferState extends State<SearchSwayamsevakTransfer> {
                     return Center(
                         child: Text(
                       'Server Error, Please Try Again Later',
-                      style: TextStyle(color: Theme.of(context).errorColor),
+                      style: TextStyle(color: Colors.red),
                     ));
                   }
                   return dataSnapshot.hasData && dataSnapshot.data!.length > 0
                       ? Column(
-                          children: dataSnapshot.data!
-                              .map((swTransferItem) => SwayamsevakTransferCard(
-                                  swTransferItem,
-                                  onCheckCard,
-                                  onUnCheckCard,
-                                  _isSelectAll,
-                                  _search))
-                              .toList(),
+                          children: dataSnapshot.data!.map((swTransferItem) => SwayamsevakTransferCard(swTransferItem, onCheckCard, onUnCheckCard, _isSelectAll, _search)).toList(),
                         )
-                      : Center(
-                          child: Text(
-                              Statics.getLabel('noDataFoundTryAnotherSearch')));
+                      : Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch')));
                 },
               ),
             ],

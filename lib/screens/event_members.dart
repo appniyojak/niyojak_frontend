@@ -12,6 +12,7 @@ import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 class EventMembers extends StatefulWidget {
   static const String routeName = '/event-members-screen';
+
   @override
   _EventMembersState createState() => _EventMembersState();
 }
@@ -69,10 +70,7 @@ class _EventMembersState extends State<EventMembers> {
 
   void populateChoice() {
     setState(() {
-      choices = [
-        new MenuChoices("SendMail", Icons.mail, Statics.getLabel('SendMail')),
-        new MenuChoices("SendSMS", Icons.sms, Statics.getLabel('SendSMS'))
-      ];
+      choices = [new MenuChoices("SendMail", Icons.mail, Statics.getLabel('SendMail')), new MenuChoices("SendSMS", Icons.sms, Statics.getLabel('SendSMS'))];
     });
   }
 
@@ -314,8 +312,7 @@ class _EventMembersState extends State<EventMembers> {
                                     isDense: true,
                                     border: UnderlineInputBorder(),
                                     labelText: Statics.getLabel('SoochiName'),
-                                  )
-                              );
+                                  ));
                             },
                             suggestionsCallback: (pattern) {
                               this._swValue = "";
@@ -391,8 +388,7 @@ class _EventMembersState extends State<EventMembers> {
                                     isDense: true,
                                     border: UnderlineInputBorder(),
                                     labelText: Statics.getLabel('searchSoochiScreenLabel'),
-                                  )
-                              );
+                                  ));
                             },
                             // textFieldConfiguration: TextFieldConfiguration(
                             //     controller: this._soochiController,
@@ -405,8 +401,7 @@ class _EventMembersState extends State<EventMembers> {
                             },
                             itemBuilder: (context, suggestion) {
                               return ListTile(
-                                title: Text(suggestion["SoochiName"] +
-                                    (suggestion["SoochiMemberCount"] == null ? '' : (' (' + suggestion["SoochiMemberCount"].toString() + ')'))),
+                                title: Text(suggestion["SoochiName"] + (suggestion["SoochiMemberCount"] == null ? '' : (' (' + suggestion["SoochiMemberCount"].toString() + ')'))),
                                 subtitle: Wrap(
                                   children: [
                                     SizedBox(
@@ -465,7 +460,7 @@ class _EventMembersState extends State<EventMembers> {
                           vertical: 8,
                         ),
                         color: Theme.of(context).primaryColor,
-                        textColor: Theme.of(context).primaryTextTheme.button!.color,
+                        textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                         onPressed: _submit,
                         child: Text(
                           Statics.getLabel('Submit'),
@@ -505,15 +500,12 @@ class _EventMembersState extends State<EventMembers> {
                     return Center(
                         child: Text(
                       'Server Error, Please Try Again Later',
-                      style: TextStyle(color: Theme.of(context).errorColor),
+                      style: TextStyle(color: Colors.red),
                     ));
                   }
                   return dataSnapshot.hasData && dataSnapshot.data!.length > 0
                       ? Column(
-                          children: dataSnapshot.data!
-                              .map((members) =>
-                                  EventMembersCard(members, onSaveDetails, onCheckCard, onUnCheckCard, viewType, isSharing, _isSelectAll))
-                              .toList(),
+                          children: dataSnapshot.data!.map((members) => EventMembersCard(members, onSaveDetails, onCheckCard, onUnCheckCard, viewType, isSharing, _isSelectAll)).toList(),
                         )
                       : Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch')));
                 },

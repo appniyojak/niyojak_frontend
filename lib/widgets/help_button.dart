@@ -3,7 +3,9 @@ import '../helpers/static_data.dart' as Statics;
 
 class HelpButton extends StatelessWidget {
   final hookupLink;
+
   HelpButton(this.hookupLink);
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -15,7 +17,7 @@ class HelpButton extends StatelessWidget {
             child: MaterialButton(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
               color: Theme.of(context).primaryColor,
-              textColor: Theme.of(context).primaryTextTheme.button!.color,
+              textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
               onPressed: () {
                 Statics.openUserManual(hookupLink);
               },

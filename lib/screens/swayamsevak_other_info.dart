@@ -14,7 +14,9 @@ class SwayamsevakOtherInfo extends StatefulWidget {
   var swId;
   var onSaveSwDetails;
   var viewType;
+
   SwayamsevakOtherInfo({Key? key, this.swId, this.onSaveSwDetails, this.viewType}) : super(key: key);
+
   State<StatefulWidget> createState() {
     return new SwayamsevakOtherInfoState();
   }
@@ -29,6 +31,7 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
 
   String? _curStateValue = "";
   bool _isPratidnyit = false;
+
   // bool _isGanaveshComplete = true;
   bool _has2Wheeler = false;
   bool _has3Wheeler = false;
@@ -66,6 +69,7 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
   var _curAddressLine2Cntrl = TextEditingController();
   var _curGraamCityCntrl = TextEditingController();
   var _curPostOfficeCntrl = TextEditingController();
+
   //var _curCityCntrl = TextEditingController();
   //var _curDistrictCtrl = TextEditingController();
   var _curPinCodeCtrl = TextEditingController();
@@ -74,6 +78,7 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
   var _permanantAddressLine2Cntrl = TextEditingController();
   var _permanantGraamCityCntrl = TextEditingController();
   var _permanantPostOfficeCntrl = TextEditingController();
+
   //var _permanantCityCntrl = TextEditingController();
   //var _permanantDistrictCtrl = TextEditingController();
   var _permanantPinCodeCtrl = TextEditingController();
@@ -90,6 +95,7 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
   bool? _sameAsCurrentAddress = false;
 
   var _pratidnyaYearCtrl = TextEditingController();
+
   //var _shaakhaaExperienceCtrl = TextEditingController();
   List<StaticMasterBAL>? _shaakhaSanchalan;
   List<dynamic>? _sanghaPreritSanstha;
@@ -170,7 +176,7 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
   void initState() {
     super.initState();
 
-    Future.delayed(Duration.zero,(){
+    Future.delayed(Duration.zero, () {
       populateDropdown();
     });
     int swID = int.parse(widget.swId);
@@ -357,8 +363,7 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
           _faceBookPageCntrl.text = swOtherInfo!.facebookUsage == null ? "" : swOtherInfo!.facebookUsage.toString();
 
           _birthDate = ((swOtherInfo!.birthDate != null && swOtherInfo!.birthDate != "") ? DateTime.parse(swOtherInfo!.birthDate!) : null);
-          _birthDateCntrl.text =
-              ((swOtherInfo!.birthDate != null && swOtherInfo!.birthDate != "") ? DateFormat('dd-MMM-yyyy').format(_birthDate!) : '');
+          _birthDateCntrl.text = ((swOtherInfo!.birthDate != null && swOtherInfo!.birthDate != "") ? DateFormat('dd-MMM-yyyy').format(_birthDate!) : '');
 
           _sanghaPraveshYearCtrl.text = swOtherInfo!.sanghaPraveshYear == null ? "" : swOtherInfo!.sanghaPraveshYear.toString();
 
@@ -474,14 +479,14 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
   populateDistrictDetails() async {
     await populateDistrict(_curStateValue, "Current");
     setState(() {
-      if(swOtherInfo!.currentDistrictID != null) {
+      if (swOtherInfo!.currentDistrictID != null) {
         _curDistrictValue = swOtherInfo!.currentDistrictID.toString();
       }
     });
 
     await populateDistrict(_permanantStateValue, "Permanent");
     setState(() {
-      if(swOtherInfo!.permanentDistrictID != null) {
+      if (swOtherInfo!.permanentDistrictID != null) {
         _permanantDistrictValue = swOtherInfo!.permanentDistrictID.toString();
       }
     });
@@ -495,13 +500,11 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
     var aoiArr = (swOtherInfo == null || swOtherInfo!.areasOfInterestIDs == null) ? [] : swOtherInfo!.areasOfInterestIDs!.split(',');
     var aoeArr = (swOtherInfo == null || swOtherInfo!.areasOfInterestIDs == null) ? [] : swOtherInfo!.areasOfExpertiseIDs!.split(',');
     for (var data in aoi) {
-      _areaOfInterest
-          .add(new AreaOfInterestBAL(data.staticID, data.code, data.codeForDisplay, (aoiArr.contains(data.staticID.toString()) ? true : false)));
+      _areaOfInterest.add(new AreaOfInterestBAL(data.staticID, data.code, data.codeForDisplay, (aoiArr.contains(data.staticID.toString()) ? true : false)));
     }
 
     for (var data in aoe) {
-      _areaOfExpertise
-          .add(new AreaOfExpertiseBAL(data.staticID, data.code, data.codeForDisplay, (aoeArr.contains(data.staticID.toString()) ? true : false)));
+      _areaOfExpertise.add(new AreaOfExpertiseBAL(data.staticID, data.code, data.codeForDisplay, (aoeArr.contains(data.staticID.toString()) ? true : false)));
     }
   }
 
@@ -623,7 +626,7 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
       _shaakhaSanchalan = data3;
       _sanghaPreritSanstha = data4;
     });
-     // return;
+    // return;
   }
 
   _pickDate() async {
@@ -784,52 +787,51 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
                     // SizedBox(
                     //   height: 10,
                     // ),
-                    if(_curStateValue != "null")
+                    if (_curStateValue != "null")
                       // Text("_curState::--- ${_curState![0].stateName}--${_curStateValue}--"),
-                    DropdownButtonFormField(
-                      decoration: InputDecoration(labelText: Statics.getLabel('SelectState')),
-                      isExpanded: true,
-                      value: _curStateValue == "" ? null : _curStateValue,
-                      items: _curState?.map((bg) => DropdownMenuItem(value: bg.stateID.toString(), child: Text(bg.stateName!))).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _curStateValue = value!;
-                          populateDistrict(value, "Current");
-                        });
-                      },
-                      onSaved: (value) {
-                        if (value != null && value.isNotEmpty)
-                          swOtherInfo!.currentStateID = int.parse(value);
-                        else
-                          swOtherInfo!.currentStateID = null;
-                      },
-                    ),
+                      DropdownButtonFormField(
+                        decoration: InputDecoration(labelText: Statics.getLabel('SelectState')),
+                        isExpanded: true,
+                        value: _curStateValue == "" ? null : _curStateValue,
+                        items: _curState?.map((bg) => DropdownMenuItem(value: bg.stateID.toString(), child: Text(bg.stateName!))).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _curStateValue = value!;
+                            populateDistrict(value, "Current");
+                          });
+                        },
+                        onSaved: (value) {
+                          if (value != null && value.isNotEmpty)
+                            swOtherInfo!.currentStateID = int.parse(value);
+                          else
+                            swOtherInfo!.currentStateID = null;
+                        },
+                      ),
                     SizedBox(height: 10),
-                    if(_curDistrict != null)
-                    DropdownButtonFormField(
-                      decoration: InputDecoration(labelText: Statics.getLabel('District')),
-                      isExpanded: true,
-                      value: _curDistrictValue == null
-                          ? null
-                          : _curDistrict != null
-                              ? _curDistrict!.indexWhere((p) => p["DistrictID"].toString() == _curDistrictValue) > -1
-                                  ? _curDistrictValue
-                                  : null
-                              : null,
-                      items:
-                          _curDistrict!.map((bg) => DropdownMenuItem(value: bg["DistrictID"].toString(), child: Text(bg["DistrictName"]))).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _curDistrictValue = value;
-                        });
-                      },
-                      onSaved: (value) {
-                        if (value != null && value.isNotEmpty)
-                          swOtherInfo!.currentDistrictID = int.parse(value);
-                        else
-                          swOtherInfo!.currentDistrictID = null;
-                      },
-                    ),
+                    if (_curDistrict != null)
+                      DropdownButtonFormField(
+                        decoration: InputDecoration(labelText: Statics.getLabel('District')),
+                        isExpanded: true,
+                        value: _curDistrictValue == null
+                            ? null
+                            : _curDistrict != null
+                                ? _curDistrict!.indexWhere((p) => p["DistrictID"].toString() == _curDistrictValue) > -1
+                                    ? _curDistrictValue
+                                    : null
+                                : null,
+                        items: _curDistrict!.map((bg) => DropdownMenuItem(value: bg["DistrictID"].toString(), child: Text(bg["DistrictName"]))).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _curDistrictValue = value;
+                          });
+                        },
+                        onSaved: (value) {
+                          if (value != null && value.isNotEmpty)
+                            swOtherInfo!.currentDistrictID = int.parse(value);
+                          else
+                            swOtherInfo!.currentDistrictID = null;
+                        },
+                      ),
                     SizedBox(
                       height: 10,
                     ),
@@ -986,54 +988,52 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
                     //       swOtherInfo!.permanentDistrict = null;
                     //   },
                     // ),
-                    if(_permanantState != null)
-                    DropdownButtonFormField(
-                      decoration: InputDecoration(labelText: Statics.getLabel('SelectState')),
-                      isExpanded: true,
-                      value: _permanantStateValue == "" ? null : _permanantStateValue,
-                      items: _permanantState!.map((bg) => DropdownMenuItem(value: bg.stateID.toString(), child: Text(bg.stateName!))).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _permanantStateValue = value;
-                          populateDistrict(value!, "Permanent");
-                        });
-                      },
-                      onSaved: (value) {
-                        if (value != null && value.isNotEmpty)
-                          swOtherInfo!.permanentStateID = int.parse(value);
-                        else
-                          swOtherInfo!.permanentStateID = null;
-                      },
-                    ),
+                    if (_permanantState != null)
+                      DropdownButtonFormField(
+                        decoration: InputDecoration(labelText: Statics.getLabel('SelectState')),
+                        isExpanded: true,
+                        value: _permanantStateValue == "" ? null : _permanantStateValue,
+                        items: _permanantState!.map((bg) => DropdownMenuItem(value: bg.stateID.toString(), child: Text(bg.stateName!))).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _permanantStateValue = value;
+                            populateDistrict(value!, "Permanent");
+                          });
+                        },
+                        onSaved: (value) {
+                          if (value != null && value.isNotEmpty)
+                            swOtherInfo!.permanentStateID = int.parse(value);
+                          else
+                            swOtherInfo!.permanentStateID = null;
+                        },
+                      ),
                     SizedBox(
                       height: 10,
                     ),
-                    if(_permanantDistrict != null)
-                    DropdownButtonFormField(
-                      decoration: InputDecoration(labelText: Statics.getLabel('District')),
-                      isExpanded: true,
-                      value: _permanantDistrictValue == ""
-                          ? null
-                          : _permanantDistrict != null
-                              ? _permanantDistrict!.indexWhere((p) => p["DistrictID"].toString() == _permanantDistrictValue) > -1
-                                  ? _permanantDistrictValue
-                                  : null
-                              : null,
-                      items: _permanantDistrict!
-                          .map((bg) => DropdownMenuItem(value: bg["DistrictID"].toString(), child: Text(bg["DistrictName"])))
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _permanantDistrictValue = value;
-                        });
-                      },
-                      onSaved: (value) {
-                        if (value != null && value.isNotEmpty)
-                          swOtherInfo!.permanentDistrictID = int.parse(value);
-                        else
-                          swOtherInfo!.permanentDistrictID = null;
-                      },
-                    ),
+                    if (_permanantDistrict != null)
+                      DropdownButtonFormField(
+                        decoration: InputDecoration(labelText: Statics.getLabel('District')),
+                        isExpanded: true,
+                        value: _permanantDistrictValue == ""
+                            ? null
+                            : _permanantDistrict != null
+                                ? _permanantDistrict!.indexWhere((p) => p["DistrictID"].toString() == _permanantDistrictValue) > -1
+                                    ? _permanantDistrictValue
+                                    : null
+                                : null,
+                        items: _permanantDistrict!.map((bg) => DropdownMenuItem(value: bg["DistrictID"].toString(), child: Text(bg["DistrictName"]))).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _permanantDistrictValue = value;
+                          });
+                        },
+                        onSaved: (value) {
+                          if (value != null && value.isNotEmpty)
+                            swOtherInfo!.permanentDistrictID = int.parse(value);
+                          else
+                            swOtherInfo!.permanentDistrictID = null;
+                        },
+                      ),
                     SizedBox(
                       height: 10,
                     ),
@@ -1108,8 +1108,7 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
                               value: _firstFieldValue == "" ? null : _firstFieldValue,
                               items: _fieldType,
                               validator: (value) {
-                                if (value!.isNotEmpty) if (value == _secondFieldValue || value == _thirdFieldValue || value == _fourthFieldValue)
-                                  return (Statics.getLabel('TypeValidationMessage'));
+                                if (value!.isNotEmpty) if (value == _secondFieldValue || value == _thirdFieldValue || value == _fourthFieldValue) return (Statics.getLabel('TypeValidationMessage'));
                                 return null;
                               },
                               onChanged: (value) {
@@ -1176,8 +1175,7 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
                               value: _secondFieldValue == "" ? null : _secondFieldValue,
                               items: _fieldType,
                               validator: (value) {
-                                if (value!.isNotEmpty) if (value == _firstFieldValue || value == _thirdFieldValue || value == _fourthFieldValue)
-                                  return (Statics.getLabel('TypeValidationMessage'));
+                                if (value!.isNotEmpty) if (value == _firstFieldValue || value == _thirdFieldValue || value == _fourthFieldValue) return (Statics.getLabel('TypeValidationMessage'));
                                 return null;
                               },
                               onChanged: (value) {
@@ -1244,8 +1242,7 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
                               value: _thirdFieldValue == "" ? null : _thirdFieldValue,
                               items: _fieldType,
                               validator: (value) {
-                                if (value!.isNotEmpty) if (value == _secondFieldValue || value == _firstFieldValue || value == _fourthFieldValue)
-                                  return (Statics.getLabel('TypeValidationMessage'));
+                                if (value!.isNotEmpty) if (value == _secondFieldValue || value == _firstFieldValue || value == _fourthFieldValue) return (Statics.getLabel('TypeValidationMessage'));
                                 return null;
                               },
                               onChanged: (value) {
@@ -1312,8 +1309,7 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
                               value: _fourthFieldValue == "" ? null : _fourthFieldValue,
                               items: _fieldType,
                               validator: (value) {
-                                if (value!.isNotEmpty) if (value == _secondFieldValue || value == _thirdFieldValue || value == _firstFieldValue)
-                                  return (Statics.getLabel('TypeValidationMessage'));
+                                if (value!.isNotEmpty) if (value == _secondFieldValue || value == _thirdFieldValue || value == _firstFieldValue) return (Statics.getLabel('TypeValidationMessage'));
                                 return null;
                               },
                               onChanged: (value) {
@@ -1682,46 +1678,46 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
                       height: 40,
                     ),
                     Legend(legendString: 'OtherInfo', fontsize: 18),
-                    if(_bldGroupList != null)
-                    // Text(_bldGroupList.toString()),
-                    DropdownButtonFormField(
-                      decoration: InputDecoration(labelText: Statics.getLabel('SelectBloodGroup')),
-                      isExpanded: true,
-                      value: _bldGrpvalue == "" ? null : _bldGrpvalue,
-                      items: _bldGroupList!.map((bg) => DropdownMenuItem(value: bg.staticID.toString(), child: Text(bg.codeForDisplay!))).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _bldGrpvalue = value!;
-                        });
-                      },
-                      onSaved: (value) {
-                        if (value != null && value.isNotEmpty)
-                          swOtherInfo!.bloodGroupID = int.parse(value);
-                        else
-                          swOtherInfo!.bloodGroupID = null;
-                      },
-                    ),
+                    if (_bldGroupList != null)
+                      // Text(_bldGroupList.toString()),
+                      DropdownButtonFormField(
+                        decoration: InputDecoration(labelText: Statics.getLabel('SelectBloodGroup')),
+                        isExpanded: true,
+                        value: _bldGrpvalue == "" ? null : _bldGrpvalue,
+                        items: _bldGroupList!.map((bg) => DropdownMenuItem(value: bg.staticID.toString(), child: Text(bg.codeForDisplay!))).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _bldGrpvalue = value!;
+                          });
+                        },
+                        onSaved: (value) {
+                          if (value != null && value.isNotEmpty)
+                            swOtherInfo!.bloodGroupID = int.parse(value);
+                          else
+                            swOtherInfo!.bloodGroupID = null;
+                        },
+                      ),
                     SizedBox(
                       height: 10,
                     ),
-                    if(_motherTongue != null)
-                    DropdownButtonFormField(
-                      decoration: InputDecoration(labelText: Statics.getLabel('SelectMotherTongue')),
-                      isExpanded: true,
-                      value: _mthrTngvalue == "" ? null : _mthrTngvalue,
-                      items: _motherTongue!.map((bg) => DropdownMenuItem(value: bg.staticID.toString(), child: Text(bg.codeForDisplay!))).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _mthrTngvalue = value!;
-                        });
-                      },
-                      onSaved: (value) {
-                        if (value != null && value.isNotEmpty)
-                          swOtherInfo!.motherTongueID = int.parse(value);
-                        else
-                          swOtherInfo!.motherTongueID = null;
-                      },
-                    ),
+                    if (_motherTongue != null)
+                      DropdownButtonFormField(
+                        decoration: InputDecoration(labelText: Statics.getLabel('SelectMotherTongue')),
+                        isExpanded: true,
+                        value: _mthrTngvalue == "" ? null : _mthrTngvalue,
+                        items: _motherTongue!.map((bg) => DropdownMenuItem(value: bg.staticID.toString(), child: Text(bg.codeForDisplay!))).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _mthrTngvalue = value!;
+                          });
+                        },
+                        onSaved: (value) {
+                          if (value != null && value.isNotEmpty)
+                            swOtherInfo!.motherTongueID = int.parse(value);
+                          else
+                            swOtherInfo!.motherTongueID = null;
+                        },
+                      ),
                     SizedBox(
                       height: 10,
                     ),
@@ -1890,25 +1886,24 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
                         ],
                       ),
                     SizedBox(height: 10),
-                    if(_shaakhaSanchalan != null)
-                    DropdownButtonFormField(
-                      decoration: InputDecoration(labelText: Statics.getLabel('ShaakhaaSanchaalan')),
-                      isExpanded: true,
-                      value: _shaakhaSanchalanvalue == "" ? null : _shaakhaSanchalanvalue,
-                      items:
-                          _shaakhaSanchalan!.map((bg) => DropdownMenuItem(value: bg.staticID.toString(), child: Text(bg.codeForDisplay!))).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _shaakhaSanchalanvalue = value!;
-                        });
-                      },
-                      onSaved: (value) {
-                        if (value != null && value.isNotEmpty)
-                          swOtherInfo!.shaakhaaExperienceYearID = int.parse(value);
-                        else
-                          swOtherInfo!.shaakhaaExperienceYearID = null;
-                      },
-                    ),
+                    if (_shaakhaSanchalan != null)
+                      DropdownButtonFormField(
+                        decoration: InputDecoration(labelText: Statics.getLabel('ShaakhaaSanchaalan')),
+                        isExpanded: true,
+                        value: _shaakhaSanchalanvalue == "" ? null : _shaakhaSanchalanvalue,
+                        items: _shaakhaSanchalan!.map((bg) => DropdownMenuItem(value: bg.staticID.toString(), child: Text(bg.codeForDisplay!))).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _shaakhaSanchalanvalue = value!;
+                          });
+                        },
+                        onSaved: (value) {
+                          if (value != null && value.isNotEmpty)
+                            swOtherInfo!.shaakhaaExperienceYearID = int.parse(value);
+                          else
+                            swOtherInfo!.shaakhaaExperienceYearID = null;
+                        },
+                      ),
                     SizedBox(
                       height: 10,
                     ),
@@ -2203,45 +2198,45 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
                       },
                     ),
                     SizedBox(height: 10),
-                    if(_usage != null)
-                    DropdownButtonFormField(
-                      decoration: InputDecoration(labelText: Statics.getLabel('SelectFacebookUsage')),
-                      isExpanded: true,
-                      value: _fbUsage == "" ? null : _fbUsage,
-                      items: _usage,
-                      onChanged: (value) {
-                        setState(() {
-                          _fbUsage = value;
-                        });
-                      },
-                      onSaved: (value) {
-                        if (value != null && value.isNotEmpty)
-                          swOtherInfo!.facebookUsage = value;
-                        else
-                          swOtherInfo!.facebookUsage = null;
-                      },
-                    ),
+                    if (_usage != null)
+                      DropdownButtonFormField(
+                        decoration: InputDecoration(labelText: Statics.getLabel('SelectFacebookUsage')),
+                        isExpanded: true,
+                        value: _fbUsage == "" ? null : _fbUsage,
+                        items: _usage,
+                        onChanged: (value) {
+                          setState(() {
+                            _fbUsage = value;
+                          });
+                        },
+                        onSaved: (value) {
+                          if (value != null && value.isNotEmpty)
+                            swOtherInfo!.facebookUsage = value;
+                          else
+                            swOtherInfo!.facebookUsage = null;
+                        },
+                      ),
                     SizedBox(
                       height: 10,
                     ),
-                    if(_usage != null)
-                    DropdownButtonFormField(
-                      decoration: InputDecoration(labelText: Statics.getLabel('SelectTwitterUsage')),
-                      isExpanded: true,
-                      value: _twtUsage == "" ? null : _twtUsage,
-                      items: _usage,
-                      onChanged: (value) {
-                        setState(() {
-                          _twtUsage = value;
-                        });
-                      },
-                      onSaved: (value) {
-                        if (value != null && value.isNotEmpty)
-                          swOtherInfo!.twitterUsage = value;
-                        else
-                          swOtherInfo!.twitterUsage = null;
-                      },
-                    ),
+                    if (_usage != null)
+                      DropdownButtonFormField(
+                        decoration: InputDecoration(labelText: Statics.getLabel('SelectTwitterUsage')),
+                        isExpanded: true,
+                        value: _twtUsage == "" ? null : _twtUsage,
+                        items: _usage,
+                        onChanged: (value) {
+                          setState(() {
+                            _twtUsage = value;
+                          });
+                        },
+                        onSaved: (value) {
+                          if (value != null && value.isNotEmpty)
+                            swOtherInfo!.twitterUsage = value;
+                          else
+                            swOtherInfo!.twitterUsage = null;
+                        },
+                      ),
                     SizedBox(
                       height: 10,
                     ),
@@ -2448,7 +2443,7 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
                           vertical: 8,
                         ),
                         color: Theme.of(context).primaryColor,
-                        textColor: Theme.of(context).primaryTextTheme.button!.color,
+                        textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                         onPressed: _submit,
                         child: Text(
                           Statics.getLabel('Submit'),

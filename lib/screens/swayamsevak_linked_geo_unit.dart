@@ -13,7 +13,9 @@ class SwayamsevakLinkedGeoUnit extends StatefulWidget {
   var swId;
   var onSaveSwDetails;
   var viewType;
+
   SwayamsevakLinkedGeoUnit({Key? key, this.swId, this.onSaveSwDetails, this.viewType}) : super(key: key);
+
   State<StatefulWidget> createState() {
     return new SwayamsevakLinkedGeoUnitState();
   }
@@ -63,7 +65,7 @@ class SwayamsevakLinkedGeoUnitState extends State<SwayamsevakLinkedGeoUnit> {
     if (!isConnected) {
       Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
     } else {
-      var data = await SwayamsevakProvider().getSwayamSevakByID(theId, "LinkedGeoUnits" );
+      var data = await SwayamsevakProvider().getSwayamSevakByID(theId, "LinkedGeoUnits");
       if (!mounted) return;
       setState(() {
         swLinkedGeoUnit = data;
@@ -185,8 +187,7 @@ class SwayamsevakLinkedGeoUnitState extends State<SwayamsevakLinkedGeoUnit> {
                                 isDense: true,
                                 border: UnderlineInputBorder(),
                                 labelText: Statics.getLabel('SelectVasti'),
-                              )
-                          );
+                              ));
                         },
                         // textFieldConfiguration: TextFieldConfiguration(
                         //     controller: this._vastiController,
@@ -258,8 +259,7 @@ class SwayamsevakLinkedGeoUnitState extends State<SwayamsevakLinkedGeoUnit> {
                                 isDense: true,
                                 border: UnderlineInputBorder(),
                                 labelText: Statics.getLabel('SelectGraam'),
-                              )
-                          );
+                              ));
                         },
                         // textFieldConfiguration: TextFieldConfiguration(
                         //     controller: this._graamController,
@@ -332,8 +332,7 @@ class SwayamsevakLinkedGeoUnitState extends State<SwayamsevakLinkedGeoUnit> {
                                 isDense: true,
                                 border: UnderlineInputBorder(),
                                 labelText: Statics.getLabel('SelectShaakhaa'),
-                              )
-                          );
+                              ));
                         },
                         // textFieldConfiguration: TextFieldConfiguration(
                         //     controller: this._shaakhaaController,
@@ -395,7 +394,7 @@ class SwayamsevakLinkedGeoUnitState extends State<SwayamsevakLinkedGeoUnit> {
                       vertical: 8,
                     ),
                     color: Theme.of(context).primaryColor,
-                    textColor: Theme.of(context).primaryTextTheme.button!.color,
+                    textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                     onPressed: _submit,
                     child: Text(
                       Statics.getLabel('Submit'),

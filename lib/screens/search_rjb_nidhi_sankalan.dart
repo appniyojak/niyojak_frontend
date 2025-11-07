@@ -10,6 +10,7 @@ import '../helpers/static_data.dart' as Statics;
 
 class SearchRamJanmaBhoomiNidhiSankalan extends StatefulWidget {
   static const routeName = '/search-ramjanmabhoomisankalan-screen';
+
   @override
   _SearchRamJanmaBhoomiNidhiSankalanState createState() => _SearchRamJanmaBhoomiNidhiSankalanState();
 }
@@ -127,13 +128,13 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
     setState(() {
       _isSearching = true;
     });
-    int? vibhaagVal = (_linkedVibhaagValue!= null && _linkedVibhaagValue != "") ? int.parse(_linkedVibhaagValue!) : null;
-    int? bhaagVal = (_linkedbhaagValue!= null && _linkedbhaagValue != "") ? int.parse(_linkedbhaagValue!) : null;
-    int? shaharVal = (_linkedshaharValue!= null && _linkedshaharValue != "") ? int.parse(_linkedshaharValue!) : null;
-    int? nagarVal = (_linkednagarValue!= null && _linkednagarValue != "") ? int.parse(_linkednagarValue!) : null;
-    int? mandalVal = (_linkedmandalValue!= null && _linkedmandalValue != "") ? int.parse(_linkedmandalValue!) : null;
-    int? graamVal = (_linkedgraamValue!= null && _linkedgraamValue != "") ? int.parse(_linkedgraamValue!) : null;
-    int? vastiVal = (_linkedvastiValue!= null && _linkedvastiValue != "") ? int.parse(_linkedvastiValue!) : null;
+    int? vibhaagVal = (_linkedVibhaagValue != null && _linkedVibhaagValue != "") ? int.parse(_linkedVibhaagValue!) : null;
+    int? bhaagVal = (_linkedbhaagValue != null && _linkedbhaagValue != "") ? int.parse(_linkedbhaagValue!) : null;
+    int? shaharVal = (_linkedshaharValue != null && _linkedshaharValue != "") ? int.parse(_linkedshaharValue!) : null;
+    int? nagarVal = (_linkednagarValue != null && _linkednagarValue != "") ? int.parse(_linkednagarValue!) : null;
+    int? mandalVal = (_linkedmandalValue != null && _linkedmandalValue != "") ? int.parse(_linkedmandalValue!) : null;
+    int? graamVal = (_linkedgraamValue != null && _linkedgraamValue != "") ? int.parse(_linkedgraamValue!) : null;
+    int? vastiVal = (_linkedvastiValue != null && _linkedvastiValue != "") ? int.parse(_linkedvastiValue!) : null;
 
     int? geoUnitID;
     geoUnitID = vibhaagVal != null
@@ -159,8 +160,7 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
         _isExpanded = false;
       });
     } else {
-      var datalist =
-          await _getSankalanVruttaList(geoUnitID!, _isSahabhaagiOrVishesh == true ? "VisheshVyakti" : "Participant", _searchController.text);
+      var datalist = await _getSankalanVruttaList(geoUnitID!, _isSahabhaagiOrVishesh == true ? "VisheshVyakti" : "Participant", _searchController.text);
       _getCsv(datalist);
       setState(() {
         _isSearching = false;
@@ -227,8 +227,7 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
     }
 
     if (rows.length > 1) {
-      Statics.convertToCsv(rows,
-          (_isSahabhaagiOrVishesh == true ? "VisheshVyakti" : "SahabhaagiKaaryakartaa") + "_" + DateFormat('ddmmyyyyHHmmss').format(DateTime.now()),context);
+      Statics.convertToCsv(rows, (_isSahabhaagiOrVishesh == true ? "VisheshVyakti" : "SahabhaagiKaaryakartaa") + "_" + DateFormat('ddmmyyyyHHmmss').format(DateTime.now()), context);
     }
     setState(() {
       _isSearching = false;
@@ -271,19 +270,19 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
                       margin: EdgeInsets.all(20),
                       child: Column(
                         children: [
-                          if(_linkedVibhaag != null)
-                          DropdownButtonFormField(
-                            decoration: InputDecoration(labelText: Statics.getLabel('Vibhaag')),
-                            isExpanded: true,
-                            value: _linkedVibhaagValue == "" ? null : _linkedVibhaagValue,
-                            items: _linkedVibhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                _linkedVibhaagValue = value;
-                                populatelinkedBhaagDropdown(value!);
-                              });
-                            },
-                          ),
+                          if (_linkedVibhaag != null)
+                            DropdownButtonFormField(
+                              decoration: InputDecoration(labelText: Statics.getLabel('Vibhaag')),
+                              isExpanded: true,
+                              value: _linkedVibhaagValue == "" ? null : _linkedVibhaagValue,
+                              items: _linkedVibhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  _linkedVibhaagValue = value;
+                                  populatelinkedBhaagDropdown(value!);
+                                });
+                              },
+                            ),
                           SizedBox(
                             height: 10,
                           ),
@@ -453,7 +452,7 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
                               vertical: 8,
                             ),
                             color: Theme.of(context).primaryColor,
-                            textColor: Theme.of(context).primaryTextTheme.button!.color,
+                            textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                             onPressed: () {
                               _search("Search", context);
                             },
@@ -472,7 +471,7 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
                               vertical: 8,
                             ),
                             color: Theme.of(context).primaryColor,
-                            textColor: Theme.of(context).primaryTextTheme.button!.color,
+                            textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                             onPressed: () {
                               _search("ExportToExcel", context);
                             },
@@ -491,8 +490,7 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
                           MaterialButton(
                               onPressed: () {
                                 setState(() {
-                                  _linkedbhaagValue =
-                                      _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedvastiValue = _linkedgraamValue = null;
+                                  _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedvastiValue = _linkedgraamValue = null;
                                   _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
                                   _searchController.text = "";
                                 });
@@ -518,15 +516,12 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
                     return Center(
                         child: Text(
                       'Server Error, Please Try Again Later',
-                      style: TextStyle(color: Theme.of(context).errorColor),
+                      style: TextStyle(color: Colors.red),
                     ));
                   }
                   return dataSnapshot.hasData && dataSnapshot.data!.length > 0
                       ? Column(
-                          children: dataSnapshot.data!
-                              .map((sankalan) => NidhiSankalanCard(
-                                  sankalan, (_isSahabhaagiOrVishesh == false ? 'SahabhaagiKaaryakartaa' : 'VisheshVyakti'), _search))
-                              .toList(),
+                          children: dataSnapshot.data!.map((sankalan) => NidhiSankalanCard(sankalan, (_isSahabhaagiOrVishesh == false ? 'SahabhaagiKaaryakartaa' : 'VisheshVyakti'), _search)).toList(),
                         )
                       : Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch')));
                 },

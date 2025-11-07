@@ -64,7 +64,8 @@ const String urlSendMail = baseUrlAPI + '/sendmail';
 //========================================================================================
 
 const String urlUpdatedVersion = 'https://play.google.com/store/apps/details?id=com.softiq.niyojak_prod';
-const String urlIOSUpdatedVersion = 'https://apps'
+const String urlIOSUpdatedVersion =
+    'https://apps'
     '.apple.com/us/app/niyojak/id6451251464';
 const String urlUserCanUseApp = baseUrlAPI + '/UserCanUseApp';
 const String urlGetSwayamsevakBasicInfoForApp = baseUrlAPI + '/GetSwayamsevakBasicInfoForApp';
@@ -240,7 +241,7 @@ Map<String, String> vaarshikotsavMonths = {
   '9': 'Sept',
   '10': 'Oct',
   '11': 'Nov',
-  '12': 'Dec'
+  '12': 'Dec',
 };
 
 Map<String, dynamic> userDetails = {
@@ -380,10 +381,12 @@ String getLabel(String key) {
 }
 
 Size getDeviceSize(BuildContext context) {
-  return MediaQuery.of(
+  return MediaQuery
+      .of(
     context,
     //nullOk: true,
-  ).size;
+  )
+      .size;
 }
 
 Future<bool> isInternetConnected() async {
@@ -410,112 +413,120 @@ Future<bool> isInternetConnected() async {
 void showErrorDialog(BuildContext context, String message) {
   showDialog(
     context: context,
-    builder: (ctx) => AlertDialog(
-      title: Text(getLabel('errorOccurred')),
-      content: Text(message),
-      actions: <Widget>[
-        TextButton(
-          child: Text(getLabel('okay')),
-          onPressed: () {
-            Navigator.of(ctx).pop();
-          },
-        )
-      ],
-    ),
+    builder:
+        (ctx) =>
+        AlertDialog(
+          title: Text(getLabel('errorOccurred')),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text(getLabel('okay')),
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+            ),
+          ],
+        ),
   );
 }
 
 void showConfirmationBox(BuildContext context, String message, String action, String val) {
   showDialog(
     context: context,
-    builder: (ctx) => AlertDialog(
-      title: Text(Statics.getLabel('AskConfirmation')),
-      content: Text(message),
-      actions: <Widget>[
-        TextButton(
-          child: Text(Statics.getLabel('ConfirmationYes')),
-          onPressed: () async {
-            if (action == "ResetPassword") {
-              var data = await resetPassword(val);
-              if (data == "Password Reset Successfully")
-                showToast(getLabel('PasswordResetSuccessfully'));
-              else
-                showToast(getLabel('CouldNotResetPassword'));
-            } else if (action == "DeleteMember") {
-              var data = await deleteSoochiMembers(val);
-              if (data == "Soochi Member Deleted Successfully ")
-                showToast(getLabel('SoochiMemberDeletedSuccessfully'));
-              else
-                showToast(getLabel('CouldnotDeleteSoochiMember'));
-            }
-            Navigator.of(ctx).pop();
-          },
+    builder:
+        (ctx) =>
+        AlertDialog(
+          title: Text(Statics.getLabel('AskConfirmation')),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text(Statics.getLabel('ConfirmationYes')),
+              onPressed: () async {
+                if (action == "ResetPassword") {
+                  var data = await resetPassword(val);
+                  if (data == "Password Reset Successfully")
+                    showToast(getLabel('PasswordResetSuccessfully'));
+                  else
+                    showToast(getLabel('CouldNotResetPassword'));
+                } else if (action == "DeleteMember") {
+                  var data = await deleteSoochiMembers(val);
+                  if (data == "Soochi Member Deleted Successfully ")
+                    showToast(getLabel('SoochiMemberDeletedSuccessfully'));
+                  else
+                    showToast(getLabel('CouldnotDeleteSoochiMember'));
+                }
+                Navigator.of(ctx).pop();
+              },
+            ),
+            TextButton(
+              child: Text(Statics.getLabel('ConfirmationNo')),
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+            ),
+          ],
         ),
-        TextButton(
-          child: Text(Statics.getLabel('ConfirmationNo')),
-          onPressed: () {
-            Navigator.of(ctx).pop();
-          },
-        )
-      ],
-    ),
   );
 }
 
 void showMessageDialog(BuildContext context, String message, {String title = ""}) {
   showDialog(
     context: context,
-    builder: (ctx) => AlertDialog(
-      title: Text(title == "" ? getLabel('alert') : title),
-      content: Text(message),
-      actions: <Widget>[
-        TextButton(
-          child: Text(getLabel('okay')),
-          onPressed: () {
-            Navigator.of(ctx).pop();
-          },
-        )
-      ],
-    ),
+    builder:
+        (ctx) =>
+        AlertDialog(
+          title: Text(title == "" ? getLabel('alert') : title),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text(getLabel('okay')),
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+            ),
+          ],
+        ),
   );
 }
 
 void showHelpDialog(BuildContext context, String message, String title, String videoLabel, String videoLink) {
   showDialog(
     context: context,
-    builder: (ctx) => AlertDialog(
-      title: Text(getLabel(title)),
-      content: SingleChildScrollView(
-          child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Html(data: message),
-        ],
-      )),
-      actions: <Widget>[
-        if (videoLabel != '')
-          TextButton(
-            child: Text(videoLabel),
-            onPressed: () {
-              //launch('https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4');
-              //launch('https://drive.google.com/file/d/16bQa5O280mnBxT3w1PXXIpwIrdsWIx62/view?ts=633ea5fd');
-              launch(videoLink);
-              //launch(baseUrl + '/Images/1Hindi.mp4');
-            },
-          ),
-        TextButton(
-          child: Text(getLabel('okay')),
-          onPressed: () {
-            Navigator.of(ctx).pop();
-          },
-        )
-      ],
-    ),
+    builder:
+        (ctx) =>
+        AlertDialog(
+          title: Text(getLabel(title)),
+          content: SingleChildScrollView(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Html(data: message)])),
+          actions: <Widget>[
+            if (videoLabel != '')
+              TextButton(
+                child: Text(videoLabel),
+                onPressed: () {
+                  //launch('https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4');
+                  //launch('https://drive.google.com/file/d/16bQa5O280mnBxT3w1PXXIpwIrdsWIx62/view?ts=633ea5fd');
+                  launch(videoLink);
+                  //launch(baseUrl + '/Images/1Hindi.mp4');
+                },
+              ),
+            TextButton(
+              child: Text(getLabel('okay')),
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+            ),
+          ],
+        ),
   );
 }
 
 void showToast(var message) {
-  Fluttertoast.showToast(msg: message, toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIosWeb: 1, backgroundColor: Colors.black, textColor: Colors.white, fontSize: 16.0);
+  Fluttertoast.showToast(msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.black,
+      textColor: Colors.white,
+      fontSize: 16.0);
 }
 
 Future<void> populateUserDetailsMap() async {
@@ -630,7 +641,7 @@ Future<List<StaticMasterBAL>> getStaticLDB(String entityType) async {
   print("getStaticLDB == $entityType");
   List<StaticMasterBAL> _staticMaster = [];
   var result = await DatabaseHelper.getData("Select * from StaticMaster Where EntityType='" + entityType + "' ORDER BY DisplaySequence;");
-// log("resultresult =-=->  ${result}");
+  // log("resultresult =-=->  ${result}");
   result.forEach((element) {
     var info = StaticMasterBAL.fromMap(element);
     _staticMaster.add(info);
@@ -642,7 +653,8 @@ Future<List<StateMasterBAL>> getStateLDB(String type) async {
   List<StateMasterBAL> _stateMaster = [];
   try {
     var result = await DatabaseHelper.getData(
-        "Select * from StateMaster" + (type == "Current" ? " Where StateName = 'MAHARASHTRA' OR  StateName = 'GOA' OR StateName = 'महाराष्ट्र' OR StateName = 'गोवा';" : ";"));
+      "Select * from StateMaster" + (type == "Current" ? " Where StateName = 'MAHARASHTRA' OR  StateName = 'GOA' OR StateName = 'महाराष्ट्र' OR StateName = 'गोवा';" : ";"),
+    );
 
     result.forEach((element) {
       var info = StateMasterBAL.fromMap(element);
@@ -658,38 +670,40 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsLDB(String levelID, String unitName) a
   List<GeoUnitMasterBAL> _geoUnitMasterBAL = [];
   var result;
 
-  result = await DatabaseHelper.getData("Select GeoUnitMaster.* , " +
-      " CASE GeoUnitMaster.LevelID WHEN 9 THEN GeoUnitMaster.GeoUnitName  " +
-      " WHEN 8 THEN GeoUnitMaster.GeoUnitName || '-' ||Mahaanagar.GeoUnitName  " +
-      " WHEN 7 THEN GeoUnitMaster.GeoUnitName || '-' || Vibhaag.GeoUnitName || '-' ||Mahaanagar.GeoUnitName " +
-      " WHEN 6 THEN GeoUnitMaster.GeoUnitName || '-' || Bhaag.GeoUnitName " +
-      " || '-' || Vibhaag.GeoUnitName || '-' ||Mahaanagar.GeoUnitName " +
-      " WHEN 5 THEN GeoUnitMaster.GeoUnitName || '-' || IFNULL(Nagar.GeoUnitName,'') || '-' || Bhaag.GeoUnitName " +
-      " || '-' || Vibhaag.GeoUnitName || '-' ||Mahaanagar.GeoUnitName  " +
-      " WHEN 4 THEN GeoUnitMaster.GeoUnitName || '-' || IFNULL(Shahar.GeoUnitName,'') || '-' || IFNULL(Nagar.GeoUnitName,'') || '-' || Bhaag.GeoUnitName " +
-      " || '-' || Vibhaag.GeoUnitName || '-' ||Mahaanagar.GeoUnitName " +
-      " WHEN 3 THEN GeoUnitMaster.GeoUnitName || '-' || IFNULL(Mandal.GeoUnitName,'') || '-' || IFNULL(Shahar.GeoUnitName,'') || '-' || IFNULL(Nagar.GeoUnitName,'') || '-' || Bhaag.GeoUnitName " +
-      " || '-' || Vibhaag.GeoUnitName || '-' ||Mahaanagar.GeoUnitName  " +
-      " WHEN 2 THEN GeoUnitMaster.GeoUnitName || (CASE WHEN GeoUnitMaster.HasGraaminKshetra THEN '-' || IFNULL(Mandal.GeoUnitName,'') || '-' || IFNULL(Shahar.GeoUnitName,'')  ELSE '' END) || '-' || IFNULL(Nagar.GeoUnitName,'') || '-' || Bhaag.GeoUnitName " +
-      " || '-' || Vibhaag.GeoUnitName || '-' ||Mahaanagar.GeoUnitName  " +
-      " WHEN 1 THEN GeoUnitMaster.GeoUnitName || '-' || IFNULL(Vasti.GeoUnitName,'') || (CASE WHEN GeoUnitMaster.HasGraaminKshetra THEN '-' || IFNULL(Graam.GeoUnitName,'') || '-' || IFNULL(Mandal.GeoUnitName,'') || '-' || IFNULL(Shahar.GeoUnitName,'') ELSE '' END) || '-' || IFNULL(Nagar.GeoUnitName,'') || '-' || Bhaag.GeoUnitName " +
-      " || '-' || Vibhaag.GeoUnitName || '-' ||Mahaanagar.GeoUnitName  " +
-      " ELSE  GeoUnitMaster.GeoUnitName END as FullName from GeoUnitMaster " +
-      " LEFT JOIN LevelMaster ON LevelMaster.LevelID = GeoUnitMaster.LevelID " +
-      " LEFT JOIN GeoUnitMaster AS Kshetra ON Kshetra.GeoUnitID = GeoUnitMaster.ParentKshetraID " +
-      " LEFT JOIN GeoUnitMaster AS Praant ON Praant.GeoUnitID = GeoUnitMaster.ParentPraantID " +
-      " LEFT JOIN GeoUnitMaster AS Mahaanagar ON Mahaanagar.GeoUnitID = GeoUnitMaster.ParentMahaanagarID " +
-      " LEFT JOIN GeoUnitMaster AS Vibhaag ON Vibhaag.GeoUnitID = GeoUnitMaster.ParentVibhaagID " +
-      " LEFT JOIN GeoUnitMaster AS Bhaag ON Bhaag.GeoUnitID = GeoUnitMaster.ParentBhaagID " +
-      " LEFT JOIN GeoUnitMaster AS Nagar ON Nagar.GeoUnitID = GeoUnitMaster.ParentNagarID " +
-      " LEFT JOIN GeoUnitMaster AS Shahar ON Shahar.GeoUnitID = GeoUnitMaster.ParentShaharID " +
-      " LEFT JOIN GeoUnitMaster AS Mandal ON Mandal.GeoUnitID = GeoUnitMaster.ParentMandalID " +
-      " LEFT JOIN GeoUnitMaster AS Graam ON Graam.GeoUnitID = GeoUnitMaster.ParentGraamID " +
-      " LEFT JOIN GeoUnitMaster AS Vasti ON Vasti.GeoUnitID = GeoUnitMaster.ParentVastiID " +
-      " where GeoUnitMaster.LevelID = " +
-      levelID +
-      (unitName == "" ? "" : " AND GeoUnitMaster.GeoUnitName LIKE \'$unitName%\'") +
-      ";");
+  result = await DatabaseHelper.getData(
+    "Select GeoUnitMaster.* , " +
+        " CASE GeoUnitMaster.LevelID WHEN 9 THEN GeoUnitMaster.GeoUnitName  " +
+        " WHEN 8 THEN GeoUnitMaster.GeoUnitName || '-' ||Mahaanagar.GeoUnitName  " +
+        " WHEN 7 THEN GeoUnitMaster.GeoUnitName || '-' || Vibhaag.GeoUnitName || '-' ||Mahaanagar.GeoUnitName " +
+        " WHEN 6 THEN GeoUnitMaster.GeoUnitName || '-' || Bhaag.GeoUnitName " +
+        " || '-' || Vibhaag.GeoUnitName || '-' ||Mahaanagar.GeoUnitName " +
+        " WHEN 5 THEN GeoUnitMaster.GeoUnitName || '-' || IFNULL(Nagar.GeoUnitName,'') || '-' || Bhaag.GeoUnitName " +
+        " || '-' || Vibhaag.GeoUnitName || '-' ||Mahaanagar.GeoUnitName  " +
+        " WHEN 4 THEN GeoUnitMaster.GeoUnitName || '-' || IFNULL(Shahar.GeoUnitName,'') || '-' || IFNULL(Nagar.GeoUnitName,'') || '-' || Bhaag.GeoUnitName " +
+        " || '-' || Vibhaag.GeoUnitName || '-' ||Mahaanagar.GeoUnitName " +
+        " WHEN 3 THEN GeoUnitMaster.GeoUnitName || '-' || IFNULL(Mandal.GeoUnitName,'') || '-' || IFNULL(Shahar.GeoUnitName,'') || '-' || IFNULL(Nagar.GeoUnitName,'') || '-' || Bhaag.GeoUnitName " +
+        " || '-' || Vibhaag.GeoUnitName || '-' ||Mahaanagar.GeoUnitName  " +
+        " WHEN 2 THEN GeoUnitMaster.GeoUnitName || (CASE WHEN GeoUnitMaster.HasGraaminKshetra THEN '-' || IFNULL(Mandal.GeoUnitName,'') || '-' || IFNULL(Shahar.GeoUnitName,'')  ELSE '' END) || '-' || IFNULL(Nagar.GeoUnitName,'') || '-' || Bhaag.GeoUnitName " +
+        " || '-' || Vibhaag.GeoUnitName || '-' ||Mahaanagar.GeoUnitName  " +
+        " WHEN 1 THEN GeoUnitMaster.GeoUnitName || '-' || IFNULL(Vasti.GeoUnitName,'') || (CASE WHEN GeoUnitMaster.HasGraaminKshetra THEN '-' || IFNULL(Graam.GeoUnitName,'') || '-' || IFNULL(Mandal.GeoUnitName,'') || '-' || IFNULL(Shahar.GeoUnitName,'') ELSE '' END) || '-' || IFNULL(Nagar.GeoUnitName,'') || '-' || Bhaag.GeoUnitName " +
+        " || '-' || Vibhaag.GeoUnitName || '-' ||Mahaanagar.GeoUnitName  " +
+        " ELSE  GeoUnitMaster.GeoUnitName END as FullName from GeoUnitMaster " +
+        " LEFT JOIN LevelMaster ON LevelMaster.LevelID = GeoUnitMaster.LevelID " +
+        " LEFT JOIN GeoUnitMaster AS Kshetra ON Kshetra.GeoUnitID = GeoUnitMaster.ParentKshetraID " +
+        " LEFT JOIN GeoUnitMaster AS Praant ON Praant.GeoUnitID = GeoUnitMaster.ParentPraantID " +
+        " LEFT JOIN GeoUnitMaster AS Mahaanagar ON Mahaanagar.GeoUnitID = GeoUnitMaster.ParentMahaanagarID " +
+        " LEFT JOIN GeoUnitMaster AS Vibhaag ON Vibhaag.GeoUnitID = GeoUnitMaster.ParentVibhaagID " +
+        " LEFT JOIN GeoUnitMaster AS Bhaag ON Bhaag.GeoUnitID = GeoUnitMaster.ParentBhaagID " +
+        " LEFT JOIN GeoUnitMaster AS Nagar ON Nagar.GeoUnitID = GeoUnitMaster.ParentNagarID " +
+        " LEFT JOIN GeoUnitMaster AS Shahar ON Shahar.GeoUnitID = GeoUnitMaster.ParentShaharID " +
+        " LEFT JOIN GeoUnitMaster AS Mandal ON Mandal.GeoUnitID = GeoUnitMaster.ParentMandalID " +
+        " LEFT JOIN GeoUnitMaster AS Graam ON Graam.GeoUnitID = GeoUnitMaster.ParentGraamID " +
+        " LEFT JOIN GeoUnitMaster AS Vasti ON Vasti.GeoUnitID = GeoUnitMaster.ParentVastiID " +
+        " where GeoUnitMaster.LevelID = " +
+        levelID +
+        (unitName == "" ? "" : " AND GeoUnitMaster.GeoUnitName LIKE \'$unitName%\'") +
+        ";",
+  );
 
   result.forEach((element) {
     var info = GeoUnitMasterBAL.fromMap(element);
@@ -740,24 +754,25 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevel(String levelID) async {
   List<GeoUnitMasterBAL> _geounitList = <GeoUnitMasterBAL>[];
   result.forEach((data) {
     var info = GeoUnitMasterBAL(
-        data['GeoUnitID'],
-        data['PraantID'],
-        data['LevelID'],
-        data['GeoUnitName'],
-        "",
-        "",
-        data['DisplaySequence'],
-        null,
-        data['ParentKshetraID'],
-        data['ParentPraantID'],
-        data['ParentMahaanagarID'],
-        data['ParentVibhaagID'],
-        data['ParentBhaagID'],
-        data['ParentNagarID'],
-        data['ParentShaharID'],
-        data['ParentMandalID'],
-        data['ParentVastiID'],
-        data['ParentGraamID']);
+      data['GeoUnitID'],
+      data['PraantID'],
+      data['LevelID'],
+      data['GeoUnitName'],
+      "",
+      "",
+      data['DisplaySequence'],
+      null,
+      data['ParentKshetraID'],
+      data['ParentPraantID'],
+      data['ParentMahaanagarID'],
+      data['ParentVibhaagID'],
+      data['ParentBhaagID'],
+      data['ParentNagarID'],
+      data['ParentShaharID'],
+      data['ParentMandalID'],
+      data['ParentVastiID'],
+      data['ParentGraamID'],
+    );
     _geounitList.add(info);
   });
   return _geounitList;
@@ -777,56 +792,58 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForVasti(String levelI
   }
 
   if (parentID == '') parentID = '0';
-  String strSql = "Select * from GeoUnitMaster WHERE LevelID=" +
-      levelID +
-      add +
-      (parentType != ""
-          ? parentType == "Praant"
+  String strSql =
+      "Select * from GeoUnitMaster WHERE LevelID=" +
+          levelID +
+          add +
+          (parentType != ""
+              ? parentType == "Praant"
               ? " AND ParentPraantID=" + parentID
               : parentType == "Mahaanagar"
-                  ? " AND ParentMahaanagarID=" + parentID
-                  : parentType == "Vibhaag"
-                      ? " AND COALESCE(ParentVibhaagID,0)=" + parentID
-                      : parentType == "Bhaag"
-                          ? " AND ParentBhaagID=" + parentID
-                          : parentType == "Shahar"
-                              ? " AND ParentShaharID=" + parentID
-                              : parentType == "Nagar"
-                                  ? " AND ParentNagarID=" + parentID
-                                  : parentType == "Mandal"
-                                      ? " AND ParentMandalID=" + parentID
-                                      : parentType == "Graam"
-                                          ? " AND ParentGraamID=" + parentID
-                                          : parentType == "Vasti"
-                                              ? " AND ParentVastiID=" + parentID
-                                              : ""
-          : "") +
-      (pattern == "" ? "" : " AND GeoUnitMaster.GeoUnitName LIKE \'$pattern%\'") +
-      " ORDER BY GeoUnitMaster.DisplaySequence;";
+              ? " AND ParentMahaanagarID=" + parentID
+              : parentType == "Vibhaag"
+              ? " AND COALESCE(ParentVibhaagID,0)=" + parentID
+              : parentType == "Bhaag"
+              ? " AND ParentBhaagID=" + parentID
+              : parentType == "Shahar"
+              ? " AND ParentShaharID=" + parentID
+              : parentType == "Nagar"
+              ? " AND ParentNagarID=" + parentID
+              : parentType == "Mandal"
+              ? " AND ParentMandalID=" + parentID
+              : parentType == "Graam"
+              ? " AND ParentGraamID=" + parentID
+              : parentType == "Vasti"
+              ? " AND ParentVastiID=" + parentID
+              : ""
+              : "") +
+          (pattern == "" ? "" : " AND GeoUnitMaster.GeoUnitName LIKE \'$pattern%\'") +
+          " ORDER BY GeoUnitMaster.DisplaySequence;";
   print("strSql ==> $strSql");
   var result = await DatabaseHelper.getData(strSql);
 
   List<GeoUnitMasterBAL> _geounitList = <GeoUnitMasterBAL>[];
   result.forEach((data) {
     var info = GeoUnitMasterBAL(
-        data['GeoUnitID'],
-        data['PraantID'],
-        data['LevelID'],
-        data['GeoUnitName'],
-        "",
-        "",
-        data['DisplaySequence'],
-        null,
-        data['ParentKshetraID'],
-        data['ParentPraantID'],
-        data['ParentMahaanagarID'],
-        data['ParentVibhaagID'],
-        data['ParentBhaagID'],
-        data['ParentNagarID'],
-        data['ParentShaharID'],
-        data['ParentMandalID'],
-        data['ParentVastiID'],
-        data['ParentGraamID']);
+      data['GeoUnitID'],
+      data['PraantID'],
+      data['LevelID'],
+      data['GeoUnitName'],
+      "",
+      "",
+      data['DisplaySequence'],
+      null,
+      data['ParentKshetraID'],
+      data['ParentPraantID'],
+      data['ParentMahaanagarID'],
+      data['ParentVibhaagID'],
+      data['ParentBhaagID'],
+      data['ParentNagarID'],
+      data['ParentShaharID'],
+      data['ParentMandalID'],
+      data['ParentVastiID'],
+      data['ParentGraamID'],
+    );
     _geounitList.add(info);
   });
   return _geounitList;
@@ -845,56 +862,58 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForMandal(String level
   }
 
   if (parentID == '') parentID = '0';
-  String strSql = "Select * from GeoUnitMaster WHERE LevelID=" +
-      levelID +
-      add +
-      (parentType != ""
-          ? parentType == "Praant"
+  String strSql =
+      "Select * from GeoUnitMaster WHERE LevelID=" +
+          levelID +
+          add +
+          (parentType != ""
+              ? parentType == "Praant"
               ? " AND ParentPraantID=" + parentID
               : parentType == "Mahaanagar"
-                  ? " AND ParentMahaanagarID=" + parentID
-                  : parentType == "Vibhaag"
-                      ? " AND COALESCE(ParentVibhaagID,0)=" + parentID
-                      : parentType == "Bhaag"
-                          ? " AND ParentBhaagID=" + parentID
-                          : parentType == "Shahar"
-                              ? " AND ParentShaharID=" + parentID
-                              : parentType == "Nagar"
-                                  ? " AND ParentNagarID=" + parentID
-                                  : parentType == "Mandal"
-                                      ? " AND ParentMandalID=" + parentID
-                                      : parentType == "Graam"
-                                          ? " AND ParentGraamID=" + parentID
-                                          : parentType == "Vasti"
-                                              ? " AND ParentVastiID=" + parentID
-                                              : ""
-          : "") +
-      (pattern == "" ? "" : " AND GeoUnitMaster.GeoUnitName LIKE \'$pattern%\'") +
-      " ORDER BY GeoUnitMaster.DisplaySequence;";
+              ? " AND ParentMahaanagarID=" + parentID
+              : parentType == "Vibhaag"
+              ? " AND COALESCE(ParentVibhaagID,0)=" + parentID
+              : parentType == "Bhaag"
+              ? " AND ParentBhaagID=" + parentID
+              : parentType == "Shahar"
+              ? " AND ParentShaharID=" + parentID
+              : parentType == "Nagar"
+              ? " AND ParentNagarID=" + parentID
+              : parentType == "Mandal"
+              ? " AND ParentMandalID=" + parentID
+              : parentType == "Graam"
+              ? " AND ParentGraamID=" + parentID
+              : parentType == "Vasti"
+              ? " AND ParentVastiID=" + parentID
+              : ""
+              : "") +
+          (pattern == "" ? "" : " AND GeoUnitMaster.GeoUnitName LIKE \'$pattern%\'") +
+          " ORDER BY GeoUnitMaster.DisplaySequence;";
   // print("strSql ==> $strSql");
   var result = await DatabaseHelper.getData(strSql);
 
   List<GeoUnitMasterBAL> _geounitList = <GeoUnitMasterBAL>[];
   result.forEach((data) {
     var info = GeoUnitMasterBAL(
-        data['GeoUnitID'],
-        data['PraantID'],
-        data['LevelID'],
-        data['GeoUnitName'],
-        "",
-        "",
-        data['DisplaySequence'],
-        null,
-        data['ParentKshetraID'],
-        data['ParentPraantID'],
-        data['ParentMahaanagarID'],
-        data['ParentVibhaagID'],
-        data['ParentBhaagID'],
-        data['ParentNagarID'],
-        data['ParentShaharID'],
-        data['ParentMandalID'],
-        data['ParentVastiID'],
-        data['ParentGraamID']);
+      data['GeoUnitID'],
+      data['PraantID'],
+      data['LevelID'],
+      data['GeoUnitName'],
+      "",
+      "",
+      data['DisplaySequence'],
+      null,
+      data['ParentKshetraID'],
+      data['ParentPraantID'],
+      data['ParentMahaanagarID'],
+      data['ParentVibhaagID'],
+      data['ParentBhaagID'],
+      data['ParentNagarID'],
+      data['ParentShaharID'],
+      data['ParentMandalID'],
+      data['ParentVastiID'],
+      data['ParentGraamID'],
+    );
     _geounitList.add(info);
   });
   return _geounitList;
@@ -904,90 +923,95 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForMandal(String level
 
 Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParent(String levelID, String parentID, String parentType, String pattern) async {
   if (parentID == '') parentID = '0';
-  String strSql = "Select * from GeoUnitMaster WHERE LevelID=" +
-      levelID +
-      (parentType != ""
-          ? parentType == "Praant"
+  String strSql =
+      "Select * from GeoUnitMaster WHERE LevelID=" +
+          levelID +
+          (parentType != ""
+              ? parentType == "Praant"
               ? " AND ParentPraantID=" + parentID
               : parentType == "Mahaanagar"
-                  ? " AND ParentMahaanagarID=" + parentID
-                  : parentType == "Vibhaag"
-                      ? " AND ParentVibhaagID=" + parentID
-                      : parentType == "Bhaag"
-                          ? " AND ParentBhaagID=" + parentID
-                          : parentType == "Shahar"
-                              ? " AND ParentShaharID=" + parentID
-                              : parentType == "Nagar"
-                                  ? " AND ParentNagarID=" + parentID
-                                  : parentType == "Mandal"
-                                      ? " AND ParentMandalID=" + parentID
-                                      : parentType == "Graam"
-                                          ? " AND ParentGraamID=" + parentID
-                                          : parentType == "Vasti"
-                                              ? " AND ParentVastiID=" + parentID
-                                              : ""
-          : "") +
-      (pattern == "" ? "" : " AND GeoUnitMaster.GeoUnitName LIKE \'$pattern%\'") +
-      " ORDER BY GeoUnitMaster.DisplaySequence;";
+              ? " AND ParentMahaanagarID=" + parentID
+              : parentType == "Vibhaag"
+              ? " AND ParentVibhaagID=" + parentID
+              : parentType == "Bhaag"
+              ? " AND ParentBhaagID=" + parentID
+              : parentType == "Shahar"
+              ? " AND ParentShaharID=" + parentID
+              : parentType == "Nagar"
+              ? " AND ParentNagarID=" + parentID
+              : parentType == "Mandal"
+              ? " AND ParentMandalID=" + parentID
+              : parentType == "Graam"
+              ? " AND ParentGraamID=" + parentID
+              : parentType == "Vasti"
+              ? " AND ParentVastiID=" + parentID
+              : ""
+              : "") +
+          (pattern == "" ? "" : " AND GeoUnitMaster.GeoUnitName LIKE \'$pattern%\'") +
+          " ORDER BY GeoUnitMaster.DisplaySequence;";
   // print("strSql ==> $strSql");
   var result = await DatabaseHelper.getData(strSql);
 
   List<GeoUnitMasterBAL> _geounitList = <GeoUnitMasterBAL>[];
   result.forEach((data) {
     var info = GeoUnitMasterBAL(
-        data['GeoUnitID'],
-        data['PraantID'],
-        data['LevelID'],
-        data['GeoUnitName'],
-        "",
-        "",
-        data['DisplaySequence'],
-        null,
-        data['ParentKshetraID'],
-        data['ParentPraantID'],
-        data['ParentMahaanagarID'],
-        data['ParentVibhaagID'],
-        data['ParentBhaagID'],
-        data['ParentNagarID'],
-        data['ParentShaharID'],
-        data['ParentMandalID'],
-        data['ParentVastiID'],
-        data['ParentGraamID']);
+      data['GeoUnitID'],
+      data['PraantID'],
+      data['LevelID'],
+      data['GeoUnitName'],
+      "",
+      "",
+      data['DisplaySequence'],
+      null,
+      data['ParentKshetraID'],
+      data['ParentPraantID'],
+      data['ParentMahaanagarID'],
+      data['ParentVibhaagID'],
+      data['ParentBhaagID'],
+      data['ParentNagarID'],
+      data['ParentShaharID'],
+      data['ParentMandalID'],
+      data['ParentVastiID'],
+      data['ParentGraamID'],
+    );
     _geounitList.add(info);
   });
   return _geounitList;
 }
 
 Future<GeoUnitMasterBAL?> getGeoUnitsByID(String geoUnitID) async {
-  var result = await DatabaseHelper.getData(" Select GeoUnitMaster.*,GeoUnitMaster.GeoUnitName || '-' || LevelMaster.LevelName AS FullName, LevelMaster.LevelName " +
-      "  from GeoUnitMaster Left JOIN LevelMaster ON LevelMaster.LevelID = GeoUnitMaster.LevelID " +
-      " WHERE GeoUnitID=" +
-      geoUnitID +
-      ";");
+  var result = await DatabaseHelper.getData(
+    " Select GeoUnitMaster.*,GeoUnitMaster.GeoUnitName || '-' || LevelMaster.LevelName AS FullName, LevelMaster.LevelName " +
+        "  from GeoUnitMaster Left JOIN LevelMaster ON LevelMaster.LevelID = GeoUnitMaster.LevelID " +
+        " WHERE GeoUnitID=" +
+        geoUnitID +
+        ";",
+  );
 
   GeoUnitMasterBAL _geounit;
 
   if (result.isNotEmpty) {
     _geounit = GeoUnitMasterBAL(
-        result[0]['GeoUnitID'],
-        result[0]['PraantID'],
-        result[0]['LevelID'],
-        result[0]['GeoUnitName'],
-        result[0]['FullName'],
-        result[0]['LevelName'],
-        //result[0]['LevelNameForDisplay'],
-        result[0]['DisplaySequence'],
-        null,
-        result[0]['ParentKshetraID'],
-        result[0]['ParentPraantID'],
-        result[0]['ParentMahaanagarID'],
-        result[0]['ParentVibhaagID'],
-        result[0]['ParentBhaagID'],
-        result[0]['ParentNagarID'],
-        result[0]['ParentShaharID'],
-        result[0]['ParentMandalID'],
-        result[0]['ParentVastiID'],
-        result[0]['ParentGraamID']);
+      result[0]['GeoUnitID'],
+      result[0]['PraantID'],
+      result[0]['LevelID'],
+      result[0]['GeoUnitName'],
+      result[0]['FullName'],
+      result[0]['LevelName'],
+      //result[0]['LevelNameForDisplay'],
+      result[0]['DisplaySequence'],
+      null,
+      result[0]['ParentKshetraID'],
+      result[0]['ParentPraantID'],
+      result[0]['ParentMahaanagarID'],
+      result[0]['ParentVibhaagID'],
+      result[0]['ParentBhaagID'],
+      result[0]['ParentNagarID'],
+      result[0]['ParentShaharID'],
+      result[0]['ParentMandalID'],
+      result[0]['ParentVastiID'],
+      result[0]['ParentGraamID'],
+    );
     return _geounit;
   } else {
     return null;
@@ -1052,72 +1076,69 @@ Future<dynamic> getShaakhaaByID(String shaakhaaID) async {
   print("Shakha IDD :-  {$shaakhaaID}");
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlGetShaakhaaDetailsForApp),
-      headers: jHeaders,
-      body: json.encode({
-        "ShaakhaaID": shaakhaaID,
-      }));
+  var response = await http.post(Uri.parse(urlGetShaakhaaDetailsForApp), headers: jHeaders, body: json.encode({"ShaakhaaID": shaakhaaID}));
 
   var responseBody = json.decode(response.body);
   var data = responseBody['ShaakhaaItem'];
   print("Search:- $data");
 
   return ShaakhaaMasterBAL(
-      data['ShaakhaaID'],
-      data['PraantID'],
-      data['GeoUnitID'],
-      data['GeoUnitName'],
-      data['FrequencyID'],
-      data['DaysOfWeek'],
-      // dayOfWeek
-      data['DayOfMonth'],
-      data['VayogatID'],
-      data['Location'],
-      data['Timing'],
-      data['Remark'],
-      data['StatusID'],
-      data['ParentBhaagID'],
-      data['ParentNagarID'],
-      data['ParentShaharID'],
-      data['ParentMandalID'],
-      data['ParentGraamID'],
-      data['ParentVastiID'],
-      data['IsSankalpit'],
-      data['SankalpAadhaar'],
-      data['SankalpAadhaar1'],
-      data['SankalpAadhaar2'],
-      data['SankalpAadhaar3'],
-      data['SankalpAadhaarSwayamsevakID'],
-      data['SankalpAadhaarSwayamsevakID1'],
-      data['SankalpAadhaarSwayamsevakID2'],
-      data['SankalpAadhaarSwayamsevakID3'],
-      data['SankalpAadhaarSwayamsevakName'],
-      data['SankalpAadhaarSwayamsevakName1'],
-      data['SankalpAadhaarSwayamsevakName2'],
-      data['SankalpAadhaarSwayamsevakName3'],
-      data['SankalpAadhaarShaakhaaID'],
-      data['SankalpAadhaarShaakhaaID1'],
-      data['SankalpAadhaarShaakhaaID2'],
-      data['SankalpAadhaarShaakhaaID3'],
-      data['SankalpAadhaarShaakhaaName'],
-      data['SankalpAadhaarShaakhaaName1'],
-      data['SankalpAadhaarShaakhaaName2'],
-      data['SankalpAadhaarShaakhaaName3'],
-      data['SankalpCompletionMonth'],
-      data['SankalpCompletionMonth1'],
-      data['SankalpCompletionMonth2'],
-      data['SankalpCompletionMonth3'],
-      data['SankalpCompletionYear'],
-      data['SankalpCompletionYear1'],
-      data['SankalpCompletionYear2'],
-      data['SankalpCompletionYear3'],
-      data['HasToli'],
-      data['HasPaalak'],
-      data['OptionalShaaririkVishayID'],
-      data['OtherOptionalVishay'],
-      data['StartTimeStr'],
-      // fromTime
-      data['EndTimeStr']); // toTime
+    data['ShaakhaaID'],
+    data['PraantID'],
+    data['GeoUnitID'],
+    data['GeoUnitName'],
+    data['FrequencyID'],
+    data['DaysOfWeek'],
+    // dayOfWeek
+    data['DayOfMonth'],
+    data['VayogatID'],
+    data['Location'],
+    data['Timing'],
+    data['Remark'],
+    data['StatusID'],
+    data['ParentBhaagID'],
+    data['ParentNagarID'],
+    data['ParentShaharID'],
+    data['ParentMandalID'],
+    data['ParentGraamID'],
+    data['ParentVastiID'],
+    data['IsSankalpit'],
+    data['SankalpAadhaar'],
+    data['SankalpAadhaar1'],
+    data['SankalpAadhaar2'],
+    data['SankalpAadhaar3'],
+    data['SankalpAadhaarSwayamsevakID'],
+    data['SankalpAadhaarSwayamsevakID1'],
+    data['SankalpAadhaarSwayamsevakID2'],
+    data['SankalpAadhaarSwayamsevakID3'],
+    data['SankalpAadhaarSwayamsevakName'],
+    data['SankalpAadhaarSwayamsevakName1'],
+    data['SankalpAadhaarSwayamsevakName2'],
+    data['SankalpAadhaarSwayamsevakName3'],
+    data['SankalpAadhaarShaakhaaID'],
+    data['SankalpAadhaarShaakhaaID1'],
+    data['SankalpAadhaarShaakhaaID2'],
+    data['SankalpAadhaarShaakhaaID3'],
+    data['SankalpAadhaarShaakhaaName'],
+    data['SankalpAadhaarShaakhaaName1'],
+    data['SankalpAadhaarShaakhaaName2'],
+    data['SankalpAadhaarShaakhaaName3'],
+    data['SankalpCompletionMonth'],
+    data['SankalpCompletionMonth1'],
+    data['SankalpCompletionMonth2'],
+    data['SankalpCompletionMonth3'],
+    data['SankalpCompletionYear'],
+    data['SankalpCompletionYear1'],
+    data['SankalpCompletionYear2'],
+    data['SankalpCompletionYear3'],
+    data['HasToli'],
+    data['HasPaalak'],
+    data['OptionalShaaririkVishayID'],
+    data['OtherOptionalVishay'],
+    data['StartTimeStr'],
+    // fromTime
+    data['EndTimeStr'],
+  ); // toTime
 }
 
 Future<String> saveShaakhaaDetails(String inputJson) async {
@@ -1133,8 +1154,11 @@ Future<String> saveShaakhaaDetails(String inputJson) async {
 Future<List<dynamic>> getSoochiList(String searchPattern, bool includeOwnedSoochi, bool includeSharedSoochi) async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlGetSoochisForAppGrid),
-      headers: jHeaders, body: json.encode({"AppUserID": userDetails['userID'], "SearchCriteria": searchPattern, "IncludeOwned": includeOwnedSoochi, "IncludeShared": includeSharedSoochi}));
+  var response = await http.post(
+    Uri.parse(urlGetSoochisForAppGrid),
+    headers: jHeaders,
+    body: json.encode({"AppUserID": userDetails['userID'], "SearchCriteria": searchPattern, "IncludeOwned": includeOwnedSoochi, "IncludeShared": includeSharedSoochi}),
+  );
 
   print("Request ==>  ${{"AppUserID": userDetails['userID'], "SearchCriteria": searchPattern, "IncludeOwned": includeOwnedSoochi, "IncludeShared": includeSharedSoochi}}");
   var responseBody = json.decode(response.body);
@@ -1151,7 +1175,15 @@ Future<dynamic> getSoochiDetails(var soochiID) async {
 
   var data = responseBody['SoochiItem'];
 
-  return SoochiMasterBAL(data["SoochiID"], data["PraantID"], data["SoochiName"], data["OwnerSwayamsevakID"], data["OwnerSwayamsevakFullName"], data["StatusID"], data["StatusCode"], data["Remark"]);
+  return SoochiMasterBAL(
+      data["SoochiID"],
+      data["PraantID"],
+      data["SoochiName"],
+      data["OwnerSwayamsevakID"],
+      data["OwnerSwayamsevakFullName"],
+      data["StatusID"],
+      data["StatusCode"],
+      data["Remark"]);
 }
 
 Future<List<dynamic>> getSoochiMembers(var soochiID) async {
@@ -1293,11 +1325,12 @@ Future<String> updatePassword(String oldPass, String newpass) async {
   if (message == "Operation failed - Incorrect Data; Please try again" || message == "Operation failed - Incorrect Old Password") {
     message = "Incorrect Old Password";
   } else {
-    String strSql = "UPDATE UserDataMaster SET " +
-        " IsFirstLogin = 0 "
-            " WHERE SwayamsevakID = " +
-        userDetails["userID"] +
-        ";";
+    String strSql =
+        "UPDATE UserDataMaster SET " +
+            " IsFirstLogin = 0 "
+                " WHERE SwayamsevakID = " +
+            userDetails["userID"] +
+            ";";
     await DatabaseHelper.executeQuery(strSql);
     message = "Password Changed sucessfully";
   }
@@ -1317,11 +1350,7 @@ Future<bool> checkForTableExists(String table) async {
 Future<String> updateProfileData(String strFieldName, String strFieldValue, String strFieldValueCode) async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  String strInput = json.encode({
-    "SwayamsevakID": int.parse(userDetails["userID"]),
-    "FieldName": strFieldName,
-    "FieldValue": strFieldValue,
-  });
+  String strInput = json.encode({"SwayamsevakID": int.parse(userDetails["userID"]), "FieldName": strFieldName, "FieldValue": strFieldValue});
 
   var response = await http.post(Uri.parse(urlSaveMyProfileAppData), headers: jHeaders, body: strInput);
 
@@ -1331,14 +1360,15 @@ Future<String> updateProfileData(String strFieldName, String strFieldValue, Stri
   if (message.toString().startsWith("Operation failed")) {
     message = "Cannot Update Settings";
   } else {
-    String strSql = "UPDATE UserDataMaster SET " +
-        strFieldName +
-        " = " +
-        strFieldValue +
-        (strFieldValueCode == "" ? "" : ", PreferredLanguageCode  = '" + strFieldValueCode + "' ") +
-        " WHERE SwayamsevakID = " +
-        userDetails["userID"] +
-        ";";
+    String strSql =
+        "UPDATE UserDataMaster SET " +
+            strFieldName +
+            " = " +
+            strFieldValue +
+            (strFieldValueCode == "" ? "" : ", PreferredLanguageCode  = '" + strFieldValueCode + "' ") +
+            " WHERE SwayamsevakID = " +
+            userDetails["userID"] +
+            ";";
     await DatabaseHelper.executeQuery(strSql);
     populateUserDetailsMap();
     message = "Data Saved sucessfully";
@@ -1349,11 +1379,7 @@ Future<String> updateProfileData(String strFieldName, String strFieldValue, Stri
 Future<String> resetPassword(String swayamSevakID) async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlResetAppPassword),
-      headers: jHeaders,
-      body: json.encode({
-        "SwayamsevakID": swayamSevakID,
-      }));
+  var response = await http.post(Uri.parse(urlResetAppPassword), headers: jHeaders, body: json.encode({"SwayamsevakID": swayamSevakID}));
 
   var responseBody = json.decode(response.body);
 
@@ -1365,11 +1391,7 @@ Future<String> refreshData() async {
   try {
     Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-    var response = await http.post(Uri.parse(urlResetDataForApp),
-        headers: jHeaders,
-        body: json.encode({
-          "AppUserID": userDetails["userID"],
-        }));
+    var response = await http.post(Uri.parse(urlResetDataForApp), headers: jHeaders, body: json.encode({"AppUserID": userDetails["userID"]}));
 
     print(response.request!.url);
 
@@ -1397,17 +1419,9 @@ Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) as
   print("${userID}  --- $targetGeoUnitID  ");
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlRefreshHomeScreenForApp),
-      headers: jHeaders,
-      body: json.encode({
-        "AppUserID": userID,
-        "TargetGeoUnitID": targetGeoUnitID,
-      }));
+  var response = await http.post(Uri.parse(urlRefreshHomeScreenForApp), headers: jHeaders, body: json.encode({"AppUserID": userID, "TargetGeoUnitID": targetGeoUnitID}));
 
-  print(json.encode({
-    "AppUserID": userID,
-    "TargetGeoUnitID": targetGeoUnitID,
-  }));
+  print(json.encode({"AppUserID": userID, "TargetGeoUnitID": targetGeoUnitID}));
 
   var responseBody = json.decode(response.body);
 
@@ -1431,11 +1445,25 @@ Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) as
   if (message == "Home Screen Data Returned") {
     lstdashboardSadyaSthitiData = [];
     if (listShaakhaaCountByVayogat.length > 0) {
-      int shaakhaa = 0, mandali = 0, maasik = 0, saaptaa = 0, sankalpitShaakhaa = 0, sankalpitSaaptaa = 0;
-      int sankalpitMaasikMilanCount = 0, sankalpitSanghaMandaliCount = 0, registersanghMandali = 0, registermasikMilan = 0;
+      int shaakhaa = 0,
+          mandali = 0,
+          maasik = 0,
+          saaptaa = 0,
+          sankalpitShaakhaa = 0,
+          sankalpitSaaptaa = 0;
+      int sankalpitMaasikMilanCount = 0,
+          sankalpitSanghaMandaliCount = 0,
+          registersanghMandali = 0,
+          registermasikMilan = 0;
 
-      int shaakhaaTotal = 0, mandaliTotal = 0, maasikTotal = 0, saaptaaTotal = 0, sankalpitMaasikMilanCountTotal = 0, sankalpitSanghaMandaliCountTotal = 0;
-      int sankalpitShaakhaaTotal = 0, sankalpitSaaptaaTotal = 0;
+      int shaakhaaTotal = 0,
+          mandaliTotal = 0,
+          maasikTotal = 0,
+          saaptaaTotal = 0,
+          sankalpitMaasikMilanCountTotal = 0,
+          sankalpitSanghaMandaliCountTotal = 0;
+      int sankalpitShaakhaaTotal = 0,
+          sankalpitSaaptaaTotal = 0;
       for (var data in listShaakhaaCountByVayogat) {
         shaakhaa = data['ShaakhaaCount'] == null ? 0 : data['ShaakhaaCount'];
         shaakhaaTotal = shaakhaaTotal + shaakhaa;
@@ -1461,17 +1489,42 @@ Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) as
         sankalpitSanghaMandaliCount = data['SankalpitSanghaMandaliCount'] == null ? 0 : data['SankalpitSanghaMandaliCount'];
         sankalpitSanghaMandaliCountTotal = sankalpitSanghaMandaliCountTotal + sankalpitSanghaMandaliCount;
 
-        lstdashboardSadyaSthitiData.add(new DashboardSadyaSthitiDataBAL(
-            data['VayogatID'], data['VayogatCode'], shaakhaa, mandali, saaptaa, maasik, sankalpitShaakhaa, sankalpitSaaptaa, sankalpitMaasikMilanCount, sankalpitSanghaMandaliCount));
+        lstdashboardSadyaSthitiData.add(
+          new DashboardSadyaSthitiDataBAL(
+            data['VayogatID'],
+            data['VayogatCode'],
+            shaakhaa,
+            mandali,
+            saaptaa,
+            maasik,
+            sankalpitShaakhaa,
+            sankalpitSaaptaa,
+            sankalpitMaasikMilanCount,
+            sankalpitSanghaMandaliCount,
+          ),
+        );
       }
       // Totals row
-      lstdashboardSadyaSthitiData.add(new DashboardSadyaSthitiDataBAL(-1, getLabel('Total'), shaakhaaTotal, mandaliTotal, saaptaaTotal, maasikTotal, sankalpitShaakhaaTotal, sankalpitSaaptaaTotal,
-          sankalpitMaasikMilanCountTotal, sankalpitSanghaMandaliCountTotal));
+      lstdashboardSadyaSthitiData.add(
+        new DashboardSadyaSthitiDataBAL(
+          -1,
+          getLabel('Total'),
+          shaakhaaTotal,
+          mandaliTotal,
+          saaptaaTotal,
+          maasikTotal,
+          sankalpitShaakhaaTotal,
+          sankalpitSaaptaaTotal,
+          sankalpitMaasikMilanCountTotal,
+          sankalpitSanghaMandaliCountTotal,
+        ),
+      );
     }
 
     lstGatividhiKaaryakartaa = [];
     if (listKaaryakartaaCountByGatividhi.length > 0) {
-      int kartaaCount = 0, totalCount = 0;
+      int kartaaCount = 0,
+          totalCount = 0;
       for (var data in listKaaryakartaaCountByGatividhi) {
         kartaaCount = (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
         totalCount = totalCount + kartaaCount;
@@ -1483,7 +1536,8 @@ Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) as
 
     lstAayaamKaaryakartaa = [];
     if (listKaaryakartaaCountByAayaam.length > 0) {
-      int kartaaCount = 0, totalCount = 0;
+      int kartaaCount = 0,
+          totalCount = 0;
       for (var data in listKaaryakartaaCountByAayaam) {
         kartaaCount = (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
         totalCount = totalCount + kartaaCount;
@@ -1495,51 +1549,66 @@ Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) as
 
     lstPreritKaaryakartaa = [];
     if (listKaaryakartaaCountByPreritSansthaa.length > 0) {
-      int kartaaCount = 0, totalCount = 0;
+      int kartaaCount = 0,
+          totalCount = 0;
       for (var data in listKaaryakartaaCountByPreritSansthaa) {
         kartaaCount = (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
         totalCount = totalCount + kartaaCount;
-        lstPreritKaaryakartaa.add(new PreritKaaryakartaaCountBAL(
+        lstPreritKaaryakartaa.add(
+          new PreritKaaryakartaaCountBAL(
             // data['PreritAOOID'],
             // data['PreritAOOName'],
             data['AreaOfOperationID'],
             data['AreaOfOperation'],
-            kartaaCount));
+            kartaaCount,
+          ),
+        );
       }
       // Totals row
-      lstPreritKaaryakartaa.add(new PreritKaaryakartaaCountBAL(
+      lstPreritKaaryakartaa.add(
+        new PreritKaaryakartaaCountBAL(
           // data['PreritAOOID'],
           // data['PreritAOOName'],
           0,
           getLabel('Total'),
-          totalCount));
+          totalCount,
+        ),
+      );
     }
 
     lstSocialOrgKaaryakartaa = [];
     if (listKaaryakartaaCountBySocialOrg.length > 0) {
-      int kartaaCount = 0, totalCount = 0;
+      int kartaaCount = 0,
+          totalCount = 0;
       for (var data in listKaaryakartaaCountBySocialOrg) {
         kartaaCount = (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
         totalCount = totalCount + kartaaCount;
-        lstSocialOrgKaaryakartaa.add(new SocialOrgKaaryakartaaCountBAL(
+        lstSocialOrgKaaryakartaa.add(
+          new SocialOrgKaaryakartaaCountBAL(
             // data['MainAOOID'],
             // data['MainAOOName'],
             data['MainAreaOfOperationID'],
             data['AreaOfOperation'],
-            kartaaCount));
+            kartaaCount,
+          ),
+        );
       }
       // Totals row
-      lstSocialOrgKaaryakartaa.add(new SocialOrgKaaryakartaaCountBAL(
+      lstSocialOrgKaaryakartaa.add(
+        new SocialOrgKaaryakartaaCountBAL(
           // data['MainAOOID'],
           // data['MainAOOName'],
           0,
           getLabel('Total'),
-          totalCount));
+          totalCount,
+        ),
+      );
     }
 
     lstStudentCategory = [];
     if (listStudentCountByCategory.length > 0) {
-      int studentCount = 0, totalStudent = 0;
+      int studentCount = 0,
+          totalStudent = 0;
       for (var data in listStudentCountByCategory) {
         studentCount = (data['CountByStudentCategory'] == null ? 0 : data['CountByStudentCategory']);
         totalStudent = totalStudent + studentCount;
@@ -1551,7 +1620,8 @@ Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) as
 
     lstVyavasaayeeCategory = [];
     if (listVyavasaayeeCountByCategory.length > 0) {
-      int vyavasaayeeCount = 0, totalVyavasaayee = 0;
+      int vyavasaayeeCount = 0,
+          totalVyavasaayee = 0;
       for (var data in listVyavasaayeeCountByCategory) {
         vyavasaayeeCount = (data['CountByVyavasaayeeCategory'] == null ? 0 : data['CountByVyavasaayeeCategory']);
         totalVyavasaayee = totalVyavasaayee + vyavasaayeeCount;
@@ -1563,9 +1633,18 @@ Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) as
 
     lstYesterdayVruttaDetail = [];
     if (listYesterdayVruttaDetail.length > 0) {
-      int baalCnt = 0, totalBaal = 0, tarunVidyaarthiCnt = 0, totalTarunVidyaarthi = 0;
-      int tarunVyavasaayeeCnt = 0, totalTarunVyavasaayee = 0, proudhCnt = 0, totalProudh = 0;
-      int shishuCnt = 0, totalShishu = 0, abhyaagatCnt = 0, totalAbhyaagat = 0;
+      int baalCnt = 0,
+          totalBaal = 0,
+          tarunVidyaarthiCnt = 0,
+          totalTarunVidyaarthi = 0;
+      int tarunVyavasaayeeCnt = 0,
+          totalTarunVyavasaayee = 0,
+          proudhCnt = 0,
+          totalProudh = 0;
+      int shishuCnt = 0,
+          totalShishu = 0,
+          abhyaagatCnt = 0,
+          totalAbhyaagat = 0;
       for (var data in listYesterdayVruttaDetail) {
         baalCnt = (data['BaalVidyaarthiCount'] == null ? 0 : data['BaalVidyaarthiCount']);
         totalBaal = totalBaal + baalCnt;
@@ -1579,17 +1658,51 @@ Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) as
         totalShishu = totalShishu + shishuCnt;
         abhyaagatCnt = (data['AbhyaagatCount'] == null ? 0 : data['AbhyaagatCount']);
         totalAbhyaagat = totalAbhyaagat + abhyaagatCnt;
-        lstYesterdayVruttaDetail.add(new YesterdayVruttaDetailBAL(data['GeoUnitID'], data['ShaakhaaID'], data['GeoUnitName'], data['FrequencyID'], data['FrequencyCode'], data['VayogatID'],
-            data['VayogatCode'], shishuCnt, baalCnt, tarunVidyaarthiCnt, tarunVyavasaayeeCnt, proudhCnt, abhyaagatCnt));
+        lstYesterdayVruttaDetail.add(
+          new YesterdayVruttaDetailBAL(
+            data['GeoUnitID'],
+            data['ShaakhaaID'],
+            data['GeoUnitName'],
+            data['FrequencyID'],
+            data['FrequencyCode'],
+            data['VayogatID'],
+            data['VayogatCode'],
+            shishuCnt,
+            baalCnt,
+            tarunVidyaarthiCnt,
+            tarunVyavasaayeeCnt,
+            proudhCnt,
+            abhyaagatCnt,
+          ),
+        );
       }
       // Totals row
-      lstYesterdayVruttaDetail
-          .add(new YesterdayVruttaDetailBAL(0, 0, getLabel('Total'), 0, '', 0, '', totalShishu, totalBaal, totalTarunVidyaarthi, totalTarunVyavasaayee, totalProudh, totalAbhyaagat));
+      lstYesterdayVruttaDetail.add(
+        new YesterdayVruttaDetailBAL(
+            0,
+            0,
+            getLabel('Total'),
+            0,
+            '',
+            0,
+            '',
+            totalShishu,
+            totalBaal,
+            totalTarunVidyaarthi,
+            totalTarunVyavasaayee,
+            totalProudh,
+            totalAbhyaagat),
+      );
     }
 
     lstYesterdayVruttaSummary = [];
     if (listYesterdayVruttaSummary.length > 0) {
-      int shCnt = 0, totalShaakhaa = 0, spCnt = 0, totalSaaptaa = 0, mdCnt = 0, totalMandali = 0;
+      int shCnt = 0,
+          totalShaakhaa = 0,
+          spCnt = 0,
+          totalSaaptaa = 0,
+          mdCnt = 0,
+          totalMandali = 0;
       for (var data in listYesterdayVruttaSummary) {
         shCnt = (data['ShaakhaaCount'] == null ? 0 : data['ShaakhaaCount']);
         totalShaakhaa = totalShaakhaa + shCnt;
@@ -1597,25 +1710,61 @@ Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) as
         totalSaaptaa = totalSaaptaa + spCnt;
         mdCnt = (data['MilanMandaliCount'] == null ? 0 : data['MilanMandaliCount']);
         totalMandali = totalMandali + mdCnt;
-        lstYesterdayVruttaSummary.add(new YesterdayVruttaSummaryBAL(data['GeoUnitID'], data['GeoUnitName'], data['VayogatID'], data['VayogatCode'], shCnt, spCnt, mdCnt));
+        lstYesterdayVruttaSummary.add(new YesterdayVruttaSummaryBAL(
+            data['GeoUnitID'],
+            data['GeoUnitName'],
+            data['VayogatID'],
+            data['VayogatCode'],
+            shCnt,
+            spCnt,
+            mdCnt));
       }
       // Totals row
-      lstYesterdayVruttaSummary.add(new YesterdayVruttaSummaryBAL(0, getLabel('Total'), 0, '', totalShaakhaa, totalSaaptaa, totalMandali));
+      lstYesterdayVruttaSummary.add(new YesterdayVruttaSummaryBAL(
+          0,
+          getLabel('Total'),
+          0,
+          '',
+          totalShaakhaa,
+          totalSaaptaa,
+          totalMandali));
     }
 
     lstYesterdayPraantData = [];
     if (listYesterdayPraantShaakhaaCountByVayogat.length > 0) {
-      int shaakhaa = 0, saaptaa = 0;
-      int shaakhaaTotal = 0, saaptaaTotal = 0;
+      int shaakhaa = 0,
+          saaptaa = 0;
+      int shaakhaaTotal = 0,
+          saaptaaTotal = 0;
       for (var data in listYesterdayPraantShaakhaaCountByVayogat) {
         shaakhaa = data['ShaakhaaCount'] == null ? 0 : data['ShaakhaaCount'];
         shaakhaaTotal = shaakhaaTotal + shaakhaa;
         saaptaa = data['SaaptaahikCount'] == null ? 0 : data['SaaptaahikCount'];
         saaptaaTotal = saaptaaTotal + saaptaa;
-        lstYesterdayPraantData.add(new DashboardSadyaSthitiDataBAL(data['VayogatID'], data['VayogatCode'], shaakhaa, null, saaptaa, null, null, null, null, null));
+        lstYesterdayPraantData.add(new DashboardSadyaSthitiDataBAL(
+            data['VayogatID'],
+            data['VayogatCode'],
+            shaakhaa,
+            null,
+            saaptaa,
+            null,
+            null,
+            null,
+            null,
+            null));
       }
       // Totals row
-      lstYesterdayPraantData.add(new DashboardSadyaSthitiDataBAL(0, getLabel('Total'), shaakhaaTotal, null, saaptaaTotal, null, null, null, null, null));
+      lstYesterdayPraantData.add(new DashboardSadyaSthitiDataBAL(
+          0,
+          getLabel('Total'),
+          shaakhaaTotal,
+          null,
+          saaptaaTotal,
+          null,
+          null,
+          null,
+          null,
+          null));
     }
 
     lstSankalpByAadhaarData = [];
@@ -1646,26 +1795,65 @@ Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) as
         totalsankalpitSanghaMandalikCount = totalsankalpitSanghaMandalikCount + sankalpitSanghaMandalikCount;
 
         if (shaakhaa == 0 && saaptaa == 0) continue;
-        lstSankalpByAadhaarData
-            .add(new SankalpByAadhaarBAL(data['VayogatID'], data['VayogatCode'], data['SankalpAadhaar'], shaakhaa, saaptaa, sankalpitMasikMilankCount, sankalpitSanghaMandalikCount));
+        lstSankalpByAadhaarData.add(
+          new SankalpByAadhaarBAL(
+              data['VayogatID'],
+              data['VayogatCode'],
+              data['SankalpAadhaar'],
+              shaakhaa,
+              saaptaa,
+              sankalpitMasikMilankCount,
+              sankalpitSanghaMandalikCount),
+        );
       }
       // Totals row
-      lstSankalpByAadhaarData.add(new SankalpByAadhaarBAL(0, getLabel('Total'), '', totalShaakhaa, totalSaaptaa, totalsankalpitMasikMilankCount, totalsankalpitSanghaMandalikCount));
+      lstSankalpByAadhaarData.add(new SankalpByAadhaarBAL(
+          0,
+          getLabel('Total'),
+          '',
+          totalShaakhaa,
+          totalSaaptaa,
+          totalsankalpitMasikMilankCount,
+          totalsankalpitSanghaMandalikCount));
     }
 
     lstBhaugolikVistaar = [];
     if (listBhaugolikVistaar.length > 0) {
       if (listBhaugolikVistaar['TotalNagarCount'] != null && listBhaugolikVistaar['TotalNagarCount'] > 0) {
-        lstBhaugolikVistaar.add(new BhaugolikVistaarBAL('Nagar', listBhaugolikVistaar['TotalNagarCount'], listBhaugolikVistaar['ShaakhaaYuktaNagarCount'],
-            listBhaugolikVistaar['SaaptaahikYuktaNagarCount'], listBhaugolikVistaar['MandaliYuktaNagarCount'], listBhaugolikVistaar['GatividhiYuktaNagarCount']));
+        lstBhaugolikVistaar.add(
+          new BhaugolikVistaarBAL(
+            'Nagar',
+            listBhaugolikVistaar['TotalNagarCount'],
+            listBhaugolikVistaar['ShaakhaaYuktaNagarCount'],
+            listBhaugolikVistaar['SaaptaahikYuktaNagarCount'],
+            listBhaugolikVistaar['MandaliYuktaNagarCount'],
+            listBhaugolikVistaar['GatividhiYuktaNagarCount'],
+          ),
+        );
       }
       if (listBhaugolikVistaar['TotalNagarCountGraamin'] != null && listBhaugolikVistaar['TotalNagarCountGraamin'] > 0) {
-        lstBhaugolikVistaar.add(new BhaugolikVistaarBAL('NagarGraamin', listBhaugolikVistaar['TotalNagarCountGraamin'], listBhaugolikVistaar['ShaakhaaYuktaNagarCountGraamin'],
-            listBhaugolikVistaar['SaaptaahikYuktaNagarCountGraamin'], listBhaugolikVistaar['MandaliYuktaNagarCountGraamin'], listBhaugolikVistaar['GatividhiYuktaNagarCountGraamin']));
+        lstBhaugolikVistaar.add(
+          new BhaugolikVistaarBAL(
+            'NagarGraamin',
+            listBhaugolikVistaar['TotalNagarCountGraamin'],
+            listBhaugolikVistaar['ShaakhaaYuktaNagarCountGraamin'],
+            listBhaugolikVistaar['SaaptaahikYuktaNagarCountGraamin'],
+            listBhaugolikVistaar['MandaliYuktaNagarCountGraamin'],
+            listBhaugolikVistaar['GatividhiYuktaNagarCountGraamin'],
+          ),
+        );
       }
       if (listBhaugolikVistaar['TotalNagarCountShahari'] != null && listBhaugolikVistaar['TotalNagarCountShahari'] > 0) {
-        lstBhaugolikVistaar.add(new BhaugolikVistaarBAL('NagarShahari', listBhaugolikVistaar['TotalNagarCountShahari'], listBhaugolikVistaar['ShaakhaaYuktaNagarCountShahari'],
-            listBhaugolikVistaar['SaaptaahikYuktaNagarCountShahari'], listBhaugolikVistaar['MandaliYuktaNagarCountShahari'], listBhaugolikVistaar['GatividhiYuktaNagarCountShahari']));
+        lstBhaugolikVistaar.add(
+          new BhaugolikVistaarBAL(
+            'NagarShahari',
+            listBhaugolikVistaar['TotalNagarCountShahari'],
+            listBhaugolikVistaar['ShaakhaaYuktaNagarCountShahari'],
+            listBhaugolikVistaar['SaaptaahikYuktaNagarCountShahari'],
+            listBhaugolikVistaar['MandaliYuktaNagarCountShahari'],
+            listBhaugolikVistaar['GatividhiYuktaNagarCountShahari'],
+          ),
+        );
       }
       // if (listBhaugolikVistaar['TotalShaharCount'] != null && listBhaugolikVistaar['TotalShaharCount'] > 0){
       //   lstBhaugolikVistaar.add(new BhaugolikVistaarBAL(
@@ -1678,16 +1866,40 @@ Future<dynamic> refreshDashboardData(String? userID, String? targetGeoUnitID) as
       //   ));
       // }
       if (listBhaugolikVistaar['TotalMandalCount'] != null && listBhaugolikVistaar['TotalMandalCount'] > 0) {
-        lstBhaugolikVistaar.add(new BhaugolikVistaarBAL('Mandal', listBhaugolikVistaar['TotalMandalCount'], listBhaugolikVistaar['ShaakhaaYuktaMandalCount'],
-            listBhaugolikVistaar['SaaptaahikYuktaMandalCount'], listBhaugolikVistaar['MandaliYuktaMandalCount'], listBhaugolikVistaar['GatividhiYuktaMandalCount']));
+        lstBhaugolikVistaar.add(
+          new BhaugolikVistaarBAL(
+            'Mandal',
+            listBhaugolikVistaar['TotalMandalCount'],
+            listBhaugolikVistaar['ShaakhaaYuktaMandalCount'],
+            listBhaugolikVistaar['SaaptaahikYuktaMandalCount'],
+            listBhaugolikVistaar['MandaliYuktaMandalCount'],
+            listBhaugolikVistaar['GatividhiYuktaMandalCount'],
+          ),
+        );
       }
       if (listBhaugolikVistaar['TotalGraamCount'] != null && listBhaugolikVistaar['TotalGraamCount'] > 0) {
-        lstBhaugolikVistaar.add(new BhaugolikVistaarBAL('Graam', listBhaugolikVistaar['TotalGraamCount'], listBhaugolikVistaar['ShaakhaaYuktaGraamCount'],
-            listBhaugolikVistaar['SaaptaahikYuktaGraamCount'], listBhaugolikVistaar['MandaliYuktaGraamCount'], listBhaugolikVistaar['GatividhiYuktaGraamCount']));
+        lstBhaugolikVistaar.add(
+          new BhaugolikVistaarBAL(
+            'Graam',
+            listBhaugolikVistaar['TotalGraamCount'],
+            listBhaugolikVistaar['ShaakhaaYuktaGraamCount'],
+            listBhaugolikVistaar['SaaptaahikYuktaGraamCount'],
+            listBhaugolikVistaar['MandaliYuktaGraamCount'],
+            listBhaugolikVistaar['GatividhiYuktaGraamCount'],
+          ),
+        );
       }
       if (listBhaugolikVistaar['TotalVastiCount'] != null && listBhaugolikVistaar['TotalVastiCount'] > 0) {
-        lstBhaugolikVistaar.add(new BhaugolikVistaarBAL('Vasti', listBhaugolikVistaar['TotalVastiCount'], listBhaugolikVistaar['ShaakhaaYuktaVastiCount'],
-            listBhaugolikVistaar['SaaptaahikYuktaVastiCount'], listBhaugolikVistaar['MandaliYuktaVastiCount'], listBhaugolikVistaar['GatividhiYuktaVastiCount']));
+        lstBhaugolikVistaar.add(
+          new BhaugolikVistaarBAL(
+            'Vasti',
+            listBhaugolikVistaar['TotalVastiCount'],
+            listBhaugolikVistaar['ShaakhaaYuktaVastiCount'],
+            listBhaugolikVistaar['SaaptaahikYuktaVastiCount'],
+            listBhaugolikVistaar['MandaliYuktaVastiCount'],
+            listBhaugolikVistaar['GatividhiYuktaVastiCount'],
+          ),
+        );
       }
     }
 
@@ -1784,19 +1996,9 @@ Future<UpnagarUpkhandaReportModel?> upkhandUpnagarReportData({required String us
 
   log("API >>>>>>>>>>>>>> $urlUpkhandupnagarreport");
 
-  print(json.encode({
-    "iAppUserID": userID,
-    "iGeoUnitID": targetGeoUnitID,
-    "type": type,
-  }));
+  print(json.encode({"iAppUserID": userID, "iGeoUnitID": targetGeoUnitID, "type": type}));
 
-  var response = await http.post(Uri.parse(urlUpkhandupnagarreport),
-      headers: jHeaders,
-      body: json.encode({
-        "iAppUserID": userID,
-        "iGeoUnitID": targetGeoUnitID,
-        "type": type,
-      }));
+  var response = await http.post(Uri.parse(urlUpkhandupnagarreport), headers: jHeaders, body: json.encode({"iAppUserID": userID, "iGeoUnitID": targetGeoUnitID, "type": type}));
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
@@ -1817,19 +2019,9 @@ Future<UpnagarUpkhandaReportModel?> upkhandUpnagarReportForExcelData({required S
 
   log("API >>>>>>>>>>>>>> $urlUpkhandupnagarreportforexcel");
 
-  print(json.encode({
-    "iAppUserID": userID,
-    "iGeoUnitID": targetGeoUnitID,
-    "type": "",
-  }));
+  print(json.encode({"iAppUserID": userID, "iGeoUnitID": targetGeoUnitID, "type": ""}));
 
-  var response = await http.post(Uri.parse(urlUpkhandupnagarreportforexcel),
-      headers: jHeaders,
-      body: json.encode({
-        "iAppUserID": userID,
-        "iGeoUnitID": targetGeoUnitID,
-        "type": "",
-      }));
+  var response = await http.post(Uri.parse(urlUpkhandupnagarreportforexcel), headers: jHeaders, body: json.encode({"iAppUserID": userID, "iGeoUnitID": targetGeoUnitID, "type": ""}));
   if (context != null) Navigator.of(context, rootNavigator: true).pop();
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
@@ -1850,26 +2042,14 @@ Future<VastiSurveyReportModel?> vastisarvekshanReportData(context, String? userI
   print("${userID}  --- $targetGeoUnitID  ");
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlVastisarvekshanReport),
-      headers: jHeaders,
-      body: json.encode({
-        "AppUserID": userID,
-        "TargetGeoUnitID": targetGeoUnitID,
-      }));
+  var response = await http.post(Uri.parse(urlVastisarvekshanReport), headers: jHeaders, body: json.encode({"AppUserID": userID, "TargetGeoUnitID": targetGeoUnitID}));
 
-  print(json.encode({
-    "AppUserID": userID,
-    "TargetGeoUnitID": targetGeoUnitID,
-  }));
+  print(json.encode({"AppUserID": userID, "TargetGeoUnitID": targetGeoUnitID}));
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
 
-    Fluttertoast.showToast(
-      msg: "माहिती प्राप्त झाली.",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-    );
+    Fluttertoast.showToast(msg: "माहिती प्राप्त झाली.", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
     Navigator.of(context, rootNavigator: true).pop();
 
     return VastiSurveyReportModel.fromJson(responseBody);
@@ -1895,11 +2075,7 @@ Future<NagarVastiSampurnaModel?> vastisarvekshanAllReportData(context, String? u
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
-    Fluttertoast.showToast(
-      msg: "माहिती प्राप्त झाली.",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-    );
+    Fluttertoast.showToast(msg: "माहिती प्राप्त झाली.", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
     Navigator.of(context, rootNavigator: true).pop();
 
     return NagarVastiSampurnaModel.fromJson(responseBody);
@@ -1918,29 +2094,19 @@ Future<GetVijayadashamiInitModel?> getVijayadashamiInitData(context, String? use
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   log(getDataWhileAddUpdateUPLevel);
-  print(json.encode({
-    "AppUserID": userID,
-    "GeoUnitID": targetGeoUnitID ?? "0",
-    "isnagar": int.parse(levelID ?? "6"),
-  }));
+  print(json.encode({"AppUserID": userID, "GeoUnitID": targetGeoUnitID ?? "0", "isnagar": int.parse(levelID ?? "6")}));
 
-  var response = await http.post(Uri.parse(getDataWhileAddUpdateUPLevel),
-      headers: jHeaders,
-      body: json.encode({
-        "AppUserID": userID,
-        "GeoUnitID": targetGeoUnitID ?? "0",
-        "isnagar": int.parse(levelID ?? "6"),
-      }));
+  var response = await http.post(
+    Uri.parse(getDataWhileAddUpdateUPLevel),
+    headers: jHeaders,
+    body: json.encode({"AppUserID": userID, "GeoUnitID": targetGeoUnitID ?? "0", "isnagar": int.parse(levelID ?? "6")}),
+  );
   log("response ==>  $response");
   // log("response ==>  ${jsonEncode(response.body)}");
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
-    Fluttertoast.showToast(
-      msg: "माहिती प्राप्त झाली.",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-    );
+    Fluttertoast.showToast(msg: "माहिती प्राप्त झाली.", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
     Navigator.of(context, rootNavigator: true).pop();
 
     return GetVijayadashamiInitModel.fromJson(responseBody);
@@ -1966,11 +2132,7 @@ Future<MandalVastisarvekshanReportModel?> vastisarvekshanOnlyMandalReportData(co
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
-    Fluttertoast.showToast(
-      msg: "माहिती प्राप्त झाली.",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-    );
+    Fluttertoast.showToast(msg: "माहिती प्राप्त झाली.", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
     Navigator.of(context, rootNavigator: true).pop();
 
     return MandalVastisarvekshanReportModel.fromJson(responseBody);
@@ -1988,8 +2150,11 @@ Future<TalukaMandalSampurnaModel?> vastisarvekshanAllReportDataForMandal(context
   print("${userID}  --- $targetGeoUnitID  ");
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response =
-      await http.post(Uri.parse(urlNagarVastisarvekshanReportForMandal), headers: jHeaders, body: json.encode({"AppUserID": userID, "GeoUnitID": int.parse(targetGeoUnitID!), "type": levelType}));
+  var response = await http.post(
+    Uri.parse(urlNagarVastisarvekshanReportForMandal),
+    headers: jHeaders,
+    body: json.encode({"AppUserID": userID, "GeoUnitID": int.parse(targetGeoUnitID!), "type": levelType}),
+  );
 
   print(json.encode({"AppUserID": userID, "GeoUnitID": int.parse(targetGeoUnitID), "type": levelType}));
   log("response ==>  $response");
@@ -1997,11 +2162,7 @@ Future<TalukaMandalSampurnaModel?> vastisarvekshanAllReportDataForMandal(context
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
-    Fluttertoast.showToast(
-      msg: "माहिती प्राप्त झाली.",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-    );
+    Fluttertoast.showToast(msg: "माहिती प्राप्त झाली.", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
     Navigator.of(context, rootNavigator: true).pop();
 
     return TalukaMandalSampurnaModel.fromJson(responseBody);
@@ -2017,17 +2178,9 @@ Future<TalukaMandalSampurnaModel?> vastisarvekshanAllReportDataForMandal(context
 Future<NotificationListModel?> getNotificationDataList(String? userID) async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(
-    Uri.parse(getofflinenotificationlist),
-    headers: jHeaders,
-    body: json.encode({
-      "SwayamsevakID": userID,
-    }),
-  );
+  var response = await http.post(Uri.parse(getofflinenotificationlist), headers: jHeaders, body: json.encode({"SwayamsevakID": userID}));
 
-  print(json.encode({
-    "SwayamsevakID": userID,
-  }));
+  print(json.encode({"SwayamsevakID": userID}));
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
@@ -2044,17 +2197,9 @@ Future<VastisarvekshanDropDownDataModel?> getVastiSurveyDropDownList(String? use
   if (context != null) showLoaderDialog(context);
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(
-    Uri.parse(getVastisarvekshanmasterdata),
-    headers: jHeaders,
-    body: json.encode({
-      "SwayamsevakID": userID,
-    }),
-  );
+  var response = await http.post(Uri.parse(getVastisarvekshanmasterdata), headers: jHeaders, body: json.encode({"SwayamsevakID": userID}));
 
-  print(json.encode({
-    "SwayamsevakID": userID,
-  }));
+  print(json.encode({"SwayamsevakID": userID}));
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
@@ -2071,18 +2216,10 @@ Future<VastisarvekshanDropDownDataModel?> getVastiSurveyDropDownList(String? use
 Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID) async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlRefreshHomeScreenForApp),
-      headers: jHeaders,
-      body: json.encode({
-        "AppUserID": userID,
-        "TargetGeoUnitID": targetGeoUnitID,
-      }));
+  var response = await http.post(Uri.parse(urlRefreshHomeScreenForApp), headers: jHeaders, body: json.encode({"AppUserID": userID, "TargetGeoUnitID": targetGeoUnitID}));
   var responseBody = json.decode(response.body);
 
-  print("request :- ${{
-    "AppUserID": userID,
-    "TargetGeoUnitID": targetGeoUnitID,
-  }}");
+  print("request :- ${{"AppUserID": userID, "TargetGeoUnitID": targetGeoUnitID}}");
   log("response body getDashboardDataByGeoUnit:--  ${responseBody}");
 
   var dataList = responseBody['HomeScreenData'];
@@ -2103,9 +2240,22 @@ Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID)
   if (message == "Home Screen Data Returned") {
     tgLstdashboardSadyaSthitiData = [];
     if (listShaakhaaCountByVayogat.length > 0) {
-      int shaakhaa = 0, mandali = 0, maasik = 0, saaptaa = 0, sankalpitShaakhaa = 0, sankalpitSaaptaa = 0;
-      int shaakhaaTotal = 0, mandaliTotal = 0, maasikTotal = 0, saaptaaTotal = 0, sankalpitMaasikMilanCount = 0, sankalpitSanghaMandaliCount = 0;
-      int sankalpitShaakhaaTotal = 0, sankalpitSaaptaaTotal = 0, sankalpitMaasikMilanTotal = 0, sankalpitSanghaMandaliTotal = 0;
+      int shaakhaa = 0,
+          mandali = 0,
+          maasik = 0,
+          saaptaa = 0,
+          sankalpitShaakhaa = 0,
+          sankalpitSaaptaa = 0;
+      int shaakhaaTotal = 0,
+          mandaliTotal = 0,
+          maasikTotal = 0,
+          saaptaaTotal = 0,
+          sankalpitMaasikMilanCount = 0,
+          sankalpitSanghaMandaliCount = 0;
+      int sankalpitShaakhaaTotal = 0,
+          sankalpitSaaptaaTotal = 0,
+          sankalpitMaasikMilanTotal = 0,
+          sankalpitSanghaMandaliTotal = 0;
       for (var data in listShaakhaaCountByVayogat) {
         shaakhaa = data['ShaakhaaCount'] == null ? 0 : data['ShaakhaaCount'];
         shaakhaaTotal = shaakhaaTotal + shaakhaa;
@@ -2123,17 +2273,42 @@ Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID)
         sankalpitMaasikMilanTotal = sankalpitMaasikMilanTotal + sankalpitMaasikMilanCount;
         sankalpitSanghaMandaliCount = data['SankalpitSanghaMandaliCount'] == null ? 0 : data['SankalpitSanghaMandaliCount'];
         sankalpitSanghaMandaliTotal = sankalpitSanghaMandaliTotal + sankalpitSanghaMandaliCount;
-        tgLstdashboardSadyaSthitiData.add(new DashboardSadyaSthitiDataBAL(
-            data['VayogatID'], data['VayogatCode'], shaakhaa, mandali, saaptaa, maasik, sankalpitShaakhaa, sankalpitSaaptaa, sankalpitMaasikMilanCount, sankalpitSanghaMandaliCount));
+        tgLstdashboardSadyaSthitiData.add(
+          new DashboardSadyaSthitiDataBAL(
+            data['VayogatID'],
+            data['VayogatCode'],
+            shaakhaa,
+            mandali,
+            saaptaa,
+            maasik,
+            sankalpitShaakhaa,
+            sankalpitSaaptaa,
+            sankalpitMaasikMilanCount,
+            sankalpitSanghaMandaliCount,
+          ),
+        );
       }
       // Totals row
-      tgLstdashboardSadyaSthitiData.add(new DashboardSadyaSthitiDataBAL(
-          -1, getLabel('Total'), shaakhaaTotal, mandaliTotal, saaptaaTotal, maasikTotal, sankalpitShaakhaaTotal, sankalpitSaaptaaTotal, sankalpitMaasikMilanTotal, sankalpitSanghaMandaliTotal));
+      tgLstdashboardSadyaSthitiData.add(
+        new DashboardSadyaSthitiDataBAL(
+          -1,
+          getLabel('Total'),
+          shaakhaaTotal,
+          mandaliTotal,
+          saaptaaTotal,
+          maasikTotal,
+          sankalpitShaakhaaTotal,
+          sankalpitSaaptaaTotal,
+          sankalpitMaasikMilanTotal,
+          sankalpitSanghaMandaliTotal,
+        ),
+      );
     }
 
     tgLstGatividhiKaaryakartaa = [];
     if (listKaaryakartaaCountByGatividhi.length > 0) {
-      int kartaaCount = 0, totalCount = 0;
+      int kartaaCount = 0,
+          totalCount = 0;
       for (var data in listKaaryakartaaCountByGatividhi) {
         kartaaCount = (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
         totalCount = totalCount + kartaaCount;
@@ -2145,7 +2320,8 @@ Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID)
 
     tgLstAayaamKaaryakartaa = [];
     if (listKaaryakartaaCountByAayaam.length > 0) {
-      int kartaaCount = 0, totalCount = 0;
+      int kartaaCount = 0,
+          totalCount = 0;
       for (var data in listKaaryakartaaCountByAayaam) {
         kartaaCount = (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
         totalCount = totalCount + kartaaCount;
@@ -2157,51 +2333,66 @@ Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID)
 
     tgLstPreritKaaryakartaa = [];
     if (listKaaryakartaaCountByPreritSansthaa.length > 0) {
-      int kartaaCount = 0, totalCount = 0;
+      int kartaaCount = 0,
+          totalCount = 0;
       for (var data in listKaaryakartaaCountByPreritSansthaa) {
         kartaaCount = (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
         totalCount = totalCount + kartaaCount;
-        tgLstPreritKaaryakartaa.add(new PreritKaaryakartaaCountBAL(
+        tgLstPreritKaaryakartaa.add(
+          new PreritKaaryakartaaCountBAL(
             // data['PreritAOOID'],
             // data['PreritAOOName'],
             data['AreaOfOperationID'],
             data['AreaOfOperation'],
-            kartaaCount));
+            kartaaCount,
+          ),
+        );
       }
       // Totals row
-      tgLstPreritKaaryakartaa.add(new PreritKaaryakartaaCountBAL(
+      tgLstPreritKaaryakartaa.add(
+        new PreritKaaryakartaaCountBAL(
           // data['PreritAOOID'],
           // data['PreritAOOName'],
           0,
           getLabel('Total'),
-          totalCount));
+          totalCount,
+        ),
+      );
     }
 
     tgLstSocialOrgKaaryakartaa = [];
     if (listKaaryakartaaCountBySocialOrg.length > 0) {
-      int kartaaCount = 0, totalCount = 0;
+      int kartaaCount = 0,
+          totalCount = 0;
       for (var data in listKaaryakartaaCountBySocialOrg) {
         kartaaCount = (data['KaaryakartaaCount'] == null ? 0 : data['KaaryakartaaCount']);
         totalCount = totalCount + kartaaCount;
-        tgLstSocialOrgKaaryakartaa.add(new SocialOrgKaaryakartaaCountBAL(
+        tgLstSocialOrgKaaryakartaa.add(
+          new SocialOrgKaaryakartaaCountBAL(
             // data['MainAOOID'],
             // data['MainAOOName'],
             data['MainAreaOfOperationID'],
             data['AreaOfOperation'],
-            kartaaCount));
+            kartaaCount,
+          ),
+        );
       }
       // Totals row
-      tgLstSocialOrgKaaryakartaa.add(new SocialOrgKaaryakartaaCountBAL(
+      tgLstSocialOrgKaaryakartaa.add(
+        new SocialOrgKaaryakartaaCountBAL(
           // data['MainAOOID'],
           // data['MainAOOName'],
           0,
           getLabel('Total'),
-          totalCount));
+          totalCount,
+        ),
+      );
     }
 
     tgLstStudentCategory = [];
     if (listStudentCountByCategory.length > 0) {
-      int studentCount = 0, totalStudent = 0;
+      int studentCount = 0,
+          totalStudent = 0;
       for (var data in listStudentCountByCategory) {
         studentCount = (data['CountByStudentCategory'] == null ? 0 : data['CountByStudentCategory']);
         totalStudent = totalStudent + studentCount;
@@ -2213,7 +2404,8 @@ Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID)
 
     tgLstVyavasaayeeCategory = [];
     if (listVyavasaayeeCountByCategory.length > 0) {
-      int vyavasaayeeCount = 0, totalVyavasaayee = 0;
+      int vyavasaayeeCount = 0,
+          totalVyavasaayee = 0;
       for (var data in listVyavasaayeeCountByCategory) {
         vyavasaayeeCount = (data['CountByVyavasaayeeCategory'] == null ? 0 : data['CountByVyavasaayeeCategory']);
         totalVyavasaayee = totalVyavasaayee + vyavasaayeeCount;
@@ -2225,7 +2417,12 @@ Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID)
 
     tgLstYesterdayVruttaSummary = [];
     if (listYesterdayVruttaSummary.length > 0) {
-      int shCnt = 0, totalShaakhaa = 0, spCnt = 0, totalSaaptaa = 0, mdCnt = 0, totalMandali = 0;
+      int shCnt = 0,
+          totalShaakhaa = 0,
+          spCnt = 0,
+          totalSaaptaa = 0,
+          mdCnt = 0,
+          totalMandali = 0;
       for (var data in listYesterdayVruttaSummary) {
         shCnt = (data['ShaakhaaCount'] == null ? 0 : data['ShaakhaaCount']);
         totalShaakhaa = totalShaakhaa + shCnt;
@@ -2233,17 +2430,40 @@ Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID)
         totalSaaptaa = totalSaaptaa + spCnt;
         mdCnt = (data['MilanMandaliCount'] == null ? 0 : data['MilanMandaliCount']);
         totalMandali = totalMandali + mdCnt;
-        tgLstYesterdayVruttaSummary.add(new YesterdayVruttaSummaryBAL(data['GeoUnitID'], data['GeoUnitName'], data['VayogatID'], data['VayogatCode'], shCnt, spCnt, mdCnt));
+        tgLstYesterdayVruttaSummary.add(new YesterdayVruttaSummaryBAL(
+            data['GeoUnitID'],
+            data['GeoUnitName'],
+            data['VayogatID'],
+            data['VayogatCode'],
+            shCnt,
+            spCnt,
+            mdCnt));
       }
       // Totals row
-      tgLstYesterdayVruttaSummary.add(new YesterdayVruttaSummaryBAL(0, getLabel('Total'), 0, '', totalShaakhaa, totalSaaptaa, totalMandali));
+      tgLstYesterdayVruttaSummary.add(new YesterdayVruttaSummaryBAL(
+          0,
+          getLabel('Total'),
+          0,
+          '',
+          totalShaakhaa,
+          totalSaaptaa,
+          totalMandali));
     }
 
     tgLstYesterdayVruttaDetail = [];
     if (listYesterdayVruttaDetail.length > 0) {
-      int baalCnt = 0, totalBaal = 0, tarunVidyaarthiCnt = 0, totalTarunVidyaarthi = 0;
-      int tarunVyavasaayeeCnt = 0, totalTarunVyavasaayee = 0, proudhCnt = 0, totalProudh = 0;
-      int shishuCnt = 0, totalShishu = 0, abhyaagatCnt = 0, totalAbhyaagat = 0;
+      int baalCnt = 0,
+          totalBaal = 0,
+          tarunVidyaarthiCnt = 0,
+          totalTarunVidyaarthi = 0;
+      int tarunVyavasaayeeCnt = 0,
+          totalTarunVyavasaayee = 0,
+          proudhCnt = 0,
+          totalProudh = 0;
+      int shishuCnt = 0,
+          totalShishu = 0,
+          abhyaagatCnt = 0,
+          totalAbhyaagat = 0;
       for (var data in listYesterdayVruttaDetail) {
         baalCnt = (data['BaalVidyaarthiCount'] == null ? 0 : data['BaalVidyaarthiCount']);
         totalBaal = totalBaal + baalCnt;
@@ -2257,12 +2477,41 @@ Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID)
         totalShishu = totalShishu + shishuCnt;
         abhyaagatCnt = (data['AbhyaagatCount'] == null ? 0 : data['AbhyaagatCount']);
         totalAbhyaagat = totalAbhyaagat + abhyaagatCnt;
-        tgLstYesterdayVruttaDetail.add(new YesterdayVruttaDetailBAL(data['GeoUnitID'], data['ShaakhaaID'], data['GeoUnitName'], data['FrequencyID'], data['FrequencyCode'], data['VayogatID'],
-            data['VayogatCode'], shishuCnt, baalCnt, tarunVidyaarthiCnt, tarunVyavasaayeeCnt, proudhCnt, abhyaagatCnt));
+        tgLstYesterdayVruttaDetail.add(
+          new YesterdayVruttaDetailBAL(
+            data['GeoUnitID'],
+            data['ShaakhaaID'],
+            data['GeoUnitName'],
+            data['FrequencyID'],
+            data['FrequencyCode'],
+            data['VayogatID'],
+            data['VayogatCode'],
+            shishuCnt,
+            baalCnt,
+            tarunVidyaarthiCnt,
+            tarunVyavasaayeeCnt,
+            proudhCnt,
+            abhyaagatCnt,
+          ),
+        );
       }
       // Totals row
-      tgLstYesterdayVruttaDetail
-          .add(new YesterdayVruttaDetailBAL(0, 0, getLabel('Total'), 0, '', 0, '', totalShishu, totalBaal, totalTarunVidyaarthi, totalTarunVyavasaayee, totalProudh, totalAbhyaagat));
+      tgLstYesterdayVruttaDetail.add(
+        new YesterdayVruttaDetailBAL(
+            0,
+            0,
+            getLabel('Total'),
+            0,
+            '',
+            0,
+            '',
+            totalShishu,
+            totalBaal,
+            totalTarunVidyaarthi,
+            totalTarunVyavasaayee,
+            totalProudh,
+            totalAbhyaagat),
+      );
     }
 
     tgLstSankalpByAadhaarData = [];
@@ -2298,26 +2547,65 @@ Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID)
         maasikMilanCount = (data['MaasikMilanCount'] == null ? 0 : data['MaasikMilanCount']);
         totalmaasikMilanCount = totalmaasikMilanCount + maasikMilanCount;
 
-        tgLstSankalpByAadhaarData
-            .add(new SankalpByAadhaarBAL(data['VayogatID'], data['VayogatCode'], data['SankalpAadhaar'], shaakhaa, saaptaa, sankalpitMasikMilankCount, sankalpitSanghaMandalikCount));
+        tgLstSankalpByAadhaarData.add(
+          new SankalpByAadhaarBAL(
+              data['VayogatID'],
+              data['VayogatCode'],
+              data['SankalpAadhaar'],
+              shaakhaa,
+              saaptaa,
+              sankalpitMasikMilankCount,
+              sankalpitSanghaMandalikCount),
+        );
       }
       // Totals row
-      tgLstSankalpByAadhaarData.add(new SankalpByAadhaarBAL(0, getLabel('Total'), '', totalShaakhaa, totalSaaptaa, totalsankalpitMasikMilankCount, totalsankalpitSanghaMandalikCount));
+      tgLstSankalpByAadhaarData.add(new SankalpByAadhaarBAL(
+          0,
+          getLabel('Total'),
+          '',
+          totalShaakhaa,
+          totalSaaptaa,
+          totalsankalpitMasikMilankCount,
+          totalsankalpitSanghaMandalikCount));
     }
 
     tgLstBhaugolikVistaar = [];
     if (listBhaugolikVistaar.length > 0) {
       if (listBhaugolikVistaar['TotalNagarCount'] != null && listBhaugolikVistaar['TotalNagarCount'] > 0) {
-        tgLstBhaugolikVistaar.add(new BhaugolikVistaarBAL('Nagar', listBhaugolikVistaar['TotalNagarCount'], listBhaugolikVistaar['ShaakhaaYuktaNagarCount'],
-            listBhaugolikVistaar['SaaptaahikYuktaNagarCount'], listBhaugolikVistaar['MandaliYuktaNagarCount'], listBhaugolikVistaar['GatividhiYuktaNagarCount']));
+        tgLstBhaugolikVistaar.add(
+          new BhaugolikVistaarBAL(
+            'Nagar',
+            listBhaugolikVistaar['TotalNagarCount'],
+            listBhaugolikVistaar['ShaakhaaYuktaNagarCount'],
+            listBhaugolikVistaar['SaaptaahikYuktaNagarCount'],
+            listBhaugolikVistaar['MandaliYuktaNagarCount'],
+            listBhaugolikVistaar['GatividhiYuktaNagarCount'],
+          ),
+        );
       }
       if (listBhaugolikVistaar['TotalNagarCountGraamin'] != null && listBhaugolikVistaar['TotalNagarCountGraamin'] > 0) {
-        tgLstBhaugolikVistaar.add(new BhaugolikVistaarBAL('NagarGraamin', listBhaugolikVistaar['TotalNagarCountGraamin'], listBhaugolikVistaar['ShaakhaaYuktaNagarCountGraamin'],
-            listBhaugolikVistaar['SaaptaahikYuktaNagarCountGraamin'], listBhaugolikVistaar['MandaliYuktaNagarCountGraamin'], listBhaugolikVistaar['GatividhiYuktaNagarCountGraamin']));
+        tgLstBhaugolikVistaar.add(
+          new BhaugolikVistaarBAL(
+            'NagarGraamin',
+            listBhaugolikVistaar['TotalNagarCountGraamin'],
+            listBhaugolikVistaar['ShaakhaaYuktaNagarCountGraamin'],
+            listBhaugolikVistaar['SaaptaahikYuktaNagarCountGraamin'],
+            listBhaugolikVistaar['MandaliYuktaNagarCountGraamin'],
+            listBhaugolikVistaar['GatividhiYuktaNagarCountGraamin'],
+          ),
+        );
       }
       if (listBhaugolikVistaar['TotalNagarCountShahari'] != null && listBhaugolikVistaar['TotalNagarCountShahari'] > 0) {
-        tgLstBhaugolikVistaar.add(new BhaugolikVistaarBAL('NagarShahari', listBhaugolikVistaar['TotalNagarCountShahari'], listBhaugolikVistaar['ShaakhaaYuktaNagarCountShahari'],
-            listBhaugolikVistaar['SaaptaahikYuktaNagarCountShahari'], listBhaugolikVistaar['MandaliYuktaNagarCountShahari'], listBhaugolikVistaar['GatividhiYuktaNagarCountShahari']));
+        tgLstBhaugolikVistaar.add(
+          new BhaugolikVistaarBAL(
+            'NagarShahari',
+            listBhaugolikVistaar['TotalNagarCountShahari'],
+            listBhaugolikVistaar['ShaakhaaYuktaNagarCountShahari'],
+            listBhaugolikVistaar['SaaptaahikYuktaNagarCountShahari'],
+            listBhaugolikVistaar['MandaliYuktaNagarCountShahari'],
+            listBhaugolikVistaar['GatividhiYuktaNagarCountShahari'],
+          ),
+        );
       }
       // if (listBhaugolikVistaar['TotalShaharCount'] != null && listBhaugolikVistaar['TotalShaharCount'] > 0){
       //   tgLstBhaugolikVistaar.add(new BhaugolikVistaarBAL(
@@ -2330,16 +2618,40 @@ Future<dynamic> getDashboardDataByGeoUnit(String userID, String targetGeoUnitID)
       //   ));
       // }
       if (listBhaugolikVistaar['TotalMandalCount'] != null && listBhaugolikVistaar['TotalMandalCount'] > 0) {
-        tgLstBhaugolikVistaar.add(new BhaugolikVistaarBAL('Mandal', listBhaugolikVistaar['TotalMandalCount'], listBhaugolikVistaar['ShaakhaaYuktaMandalCount'],
-            listBhaugolikVistaar['SaaptaahikYuktaMandalCount'], listBhaugolikVistaar['MandaliYuktaMandalCount'], listBhaugolikVistaar['GatividhiYuktaMandalCount']));
+        tgLstBhaugolikVistaar.add(
+          new BhaugolikVistaarBAL(
+            'Mandal',
+            listBhaugolikVistaar['TotalMandalCount'],
+            listBhaugolikVistaar['ShaakhaaYuktaMandalCount'],
+            listBhaugolikVistaar['SaaptaahikYuktaMandalCount'],
+            listBhaugolikVistaar['MandaliYuktaMandalCount'],
+            listBhaugolikVistaar['GatividhiYuktaMandalCount'],
+          ),
+        );
       }
       if (listBhaugolikVistaar['TotalGraamCount'] != null && listBhaugolikVistaar['TotalGraamCount'] > 0) {
-        tgLstBhaugolikVistaar.add(new BhaugolikVistaarBAL('Graam', listBhaugolikVistaar['TotalGraamCount'], listBhaugolikVistaar['ShaakhaaYuktaGraamCount'],
-            listBhaugolikVistaar['SaaptaahikYuktaGraamCount'], listBhaugolikVistaar['MandaliYuktaGraamCount'], listBhaugolikVistaar['GatividhiYuktaGraamCount']));
+        tgLstBhaugolikVistaar.add(
+          new BhaugolikVistaarBAL(
+            'Graam',
+            listBhaugolikVistaar['TotalGraamCount'],
+            listBhaugolikVistaar['ShaakhaaYuktaGraamCount'],
+            listBhaugolikVistaar['SaaptaahikYuktaGraamCount'],
+            listBhaugolikVistaar['MandaliYuktaGraamCount'],
+            listBhaugolikVistaar['GatividhiYuktaGraamCount'],
+          ),
+        );
       }
       if (listBhaugolikVistaar['TotalVastiCount'] != null && listBhaugolikVistaar['TotalVastiCount'] > 0) {
-        tgLstBhaugolikVistaar.add(new BhaugolikVistaarBAL('Vasti', listBhaugolikVistaar['TotalVastiCount'], listBhaugolikVistaar['ShaakhaaYuktaVastiCount'],
-            listBhaugolikVistaar['SaaptaahikYuktaVastiCount'], listBhaugolikVistaar['MandaliYuktaVastiCount'], listBhaugolikVistaar['GatividhiYuktaVastiCount']));
+        tgLstBhaugolikVistaar.add(
+          new BhaugolikVistaarBAL(
+            'Vasti',
+            listBhaugolikVistaar['TotalVastiCount'],
+            listBhaugolikVistaar['ShaakhaaYuktaVastiCount'],
+            listBhaugolikVistaar['SaaptaahikYuktaVastiCount'],
+            listBhaugolikVistaar['MandaliYuktaVastiCount'],
+            listBhaugolikVistaar['GatividhiYuktaVastiCount'],
+          ),
+        );
       }
     }
 
@@ -2537,11 +2849,7 @@ Future<bool> saveVishishthaAtithiData(BuildContext context, Map<String, dynamic>
   showLoaderDialog(context);
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(
-    Uri.parse(savesajjanskhatianyapravbhavilok),
-    headers: jHeaders,
-    body: jsonEncode(inputJson),
-  );
+  var response = await http.post(Uri.parse(savesajjanskhatianyapravbhavilok), headers: jHeaders, body: jsonEncode(inputJson));
 
   print("Response: ${response.body}");
   print("response.statusCode: ${response.statusCode}");
@@ -2562,11 +2870,7 @@ Future<GetVijayadashamiDataByGeoUnitModel?> getVijayaDashamiUtsavDataByGeounit(B
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   try {
-    var response = await http.post(
-      Uri.parse(getvijayadashamiutsavbyid),
-      headers: jHeaders,
-      body: jsonEncode(inputJson),
-    );
+    var response = await http.post(Uri.parse(getvijayadashamiutsavbyid), headers: jHeaders, body: jsonEncode(inputJson));
 
     Navigator.of(context, rootNavigator: true).pop();
 
@@ -2595,11 +2899,7 @@ Future<GetVijayadashamiReportModel?> getVijayaDashamiUtsavReportData(BuildContex
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   try {
-    var response = await http.post(
-      Uri.parse(getvijayadashamiutsavreport),
-      headers: jHeaders,
-      body: jsonEncode(inputJson),
-    );
+    var response = await http.post(Uri.parse(getvijayadashamiutsavreport), headers: jHeaders, body: jsonEncode(inputJson));
 
     Navigator.of(context, rootNavigator: true).pop();
 
@@ -2628,11 +2928,7 @@ Future<VijayadashamiExcelRespModel?> getVijayaDashamiUtsavExcelReportData(BuildC
   log(vijayadashamiReportApi);
 
   try {
-    var response = await http.post(
-      Uri.parse(vijayadashamiReportApi),
-      headers: jHeaders,
-      body: jsonEncode(inputJson),
-    );
+    var response = await http.post(Uri.parse(vijayadashamiReportApi), headers: jHeaders, body: jsonEncode(inputJson));
 
     Navigator.of(context, rootNavigator: true).pop();
 
@@ -2662,11 +2958,7 @@ Future<GruhAbhiyaanVruttaDataModel?> getDataforGruhAbhiyaan(Map<String, dynamic>
   log(getDataforGruhAbhiyaanApi);
 
   try {
-    var response = await http.post(
-      Uri.parse(getDataforGruhAbhiyaanApi),
-      headers: jHeaders,
-      body: jsonEncode(inputJson),
-    );
+    var response = await http.post(Uri.parse(getDataforGruhAbhiyaanApi), headers: jHeaders, body: jsonEncode(inputJson));
 
     if (context != null) Navigator.of(context, rootNavigator: true).pop();
 
@@ -2697,11 +2989,7 @@ Future<bool> saveDataforGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildConte
   log(saveDataforGruhAbhiyaanApi);
 
   try {
-    var response = await http.post(
-      Uri.parse(saveDataforGruhAbhiyaanApi),
-      headers: jHeaders,
-      body: jsonEncode(inputJson),
-    );
+    var response = await http.post(Uri.parse(saveDataforGruhAbhiyaanApi), headers: jHeaders, body: jsonEncode(inputJson));
 
     if (context != null) Navigator.of(context, rootNavigator: true).pop();
 
@@ -2730,11 +3018,7 @@ Future<AbhiyanSwayamsevakList?> getSwayamsevakForGruhAbhiyaan(Map<String, dynami
   log(getSwayamsevakForGruhApi);
 
   try {
-    var response = await http.post(
-      Uri.parse(getSwayamsevakForGruhApi),
-      headers: jHeaders,
-      body: jsonEncode(inputJson),
-    );
+    var response = await http.post(Uri.parse(getSwayamsevakForGruhApi), headers: jHeaders, body: jsonEncode(inputJson));
 
     if (context != null) Navigator.of(context, rootNavigator: true).pop();
 
@@ -2765,11 +3049,7 @@ Future<bool> saveSwayamsevakForGruhAbhiyaan(Map<String, dynamic> inputJson, {Bui
   log(saveSwayamsevakForGruhApi);
 
   try {
-    var response = await http.post(
-      Uri.parse(saveSwayamsevakForGruhApi),
-      headers: jHeaders,
-      body: jsonEncode(inputJson),
-    );
+    var response = await http.post(Uri.parse(saveSwayamsevakForGruhApi), headers: jHeaders, body: jsonEncode(inputJson));
 
     if (context != null) Navigator.of(context, rootNavigator: true).pop();
 
@@ -2810,11 +3090,7 @@ Future<dynamic> getJoinRSSDataByID(String joinRSSID, String type) async {
 Future<Map<String, dynamic>> getSwayamSevakMembersInSoochi(String swayamSevakID) async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlGetSwayamsevakSoochisForApp),
-      headers: jHeaders,
-      body: json.encode({
-        "SwayamsevakID": swayamSevakID,
-      }));
+  var response = await http.post(Uri.parse(urlGetSwayamsevakSoochisForApp), headers: jHeaders, body: json.encode({"SwayamsevakID": swayamSevakID}));
 
   var responseBody = json.decode(response.body);
 
@@ -2824,11 +3100,7 @@ Future<Map<String, dynamic>> getSwayamSevakMembersInSoochi(String swayamSevakID)
 Future<List<dynamic>> getShaakhaaPatForApp(String shaakhaaID) async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlGetShaakhaaPatForApp),
-      headers: jHeaders,
-      body: json.encode({
-        "ShaakhaaID": shaakhaaID,
-      }));
+  var response = await http.post(Uri.parse(urlGetShaakhaaPatForApp), headers: jHeaders, body: json.encode({"ShaakhaaID": shaakhaaID}));
   var responseBody = json.decode(response.body);
   log("{ ShaakhaaID: $shaakhaaID }");
   log("{ responseBody: $responseBody }");
@@ -2838,9 +3110,11 @@ Future<List<dynamic>> getShaakhaaPatForApp(String shaakhaaID) async {
 Future<List<dynamic>> getSanghaPreritSanstha(String praantID, String? sanghaPreritSansthaaID, String? sanghaPreritSansthaaName) async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlGetSanghaPreritSansthaaForApp),
-      headers: jHeaders,
-      body: json.encode({"AppUserID": userDetails["userID"], "PraantID": praantID, "SanghaPreritSansthaaID": sanghaPreritSansthaaID, "SanghaPreritSansthaaName": sanghaPreritSansthaaName}));
+  var response = await http.post(
+    Uri.parse(urlGetSanghaPreritSansthaaForApp),
+    headers: jHeaders,
+    body: json.encode({"AppUserID": userDetails["userID"], "PraantID": praantID, "SanghaPreritSansthaaID": sanghaPreritSansthaaID, "SanghaPreritSansthaaName": sanghaPreritSansthaaName}),
+  );
 
   var responseBody = json.decode(response.body);
 
@@ -2850,8 +3124,11 @@ Future<List<dynamic>> getSanghaPreritSanstha(String praantID, String? sanghaPrer
 Future<List<dynamic>> getEventList(int? eventID, String? searchPattern, String? fromDate, String? toDate) async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlGetEventListForApp),
-      headers: jHeaders, body: json.encode({"EventID": eventID, "AppUserID": userDetails['userID'], "EventName": searchPattern, "FromDateStr": fromDate, "ToDateStr": toDate}));
+  var response = await http.post(
+    Uri.parse(urlGetEventListForApp),
+    headers: jHeaders,
+    body: json.encode({"EventID": eventID, "AppUserID": userDetails['userID'], "EventName": searchPattern, "FromDateStr": fromDate, "ToDateStr": toDate}),
+  );
   print({"EventID": eventID, "AppUserID": userDetails['userID'], "EventName": searchPattern, "FromDateStr": fromDate, "ToDateStr": toDate});
   log(response.body);
   print(Uri.parse(urlGetEventListForApp));
@@ -2874,14 +3151,11 @@ Future<String> saveEventDetails(String inputJson) async {
 Future<List<dynamic>> getCalenderEventsList(String? swayamsevakCalendarID, String month, String year) async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlGetSwayamsevakCalendarForApp),
-      headers: jHeaders,
-      body: json.encode({
-        "SwayamsevakCalendarID": swayamsevakCalendarID,
-        "SwayamsevakID": userDetails['userID'],
-        "CalendarMonth": month,
-        "CalendarYear": year,
-      }));
+  var response = await http.post(
+    Uri.parse(urlGetSwayamsevakCalendarForApp),
+    headers: jHeaders,
+    body: json.encode({"SwayamsevakCalendarID": swayamsevakCalendarID, "SwayamsevakID": userDetails['userID'], "CalendarMonth": month, "CalendarYear": year}),
+  );
 
   var responseBody = json.decode(response.body);
 
@@ -2891,8 +3165,11 @@ Future<List<dynamic>> getCalenderEventsList(String? swayamsevakCalendarID, Strin
 Future<List<dynamic>> getEventMembers(var eventID, var swayamSevakID, var apekshitOrSharing) async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response =
-      await http.post(Uri.parse(urlGetEventApekshitListForApp), headers: jHeaders, body: json.encode({"EventID": eventID, "SwayamsevakID": swayamSevakID, "ApekshitOrSharing": apekshitOrSharing}));
+  var response = await http.post(
+    Uri.parse(urlGetEventApekshitListForApp),
+    headers: jHeaders,
+    body: json.encode({"EventID": eventID, "SwayamsevakID": swayamSevakID, "ApekshitOrSharing": apekshitOrSharing}),
+  );
 
   var responseBody = json.decode(response.body);
 
@@ -2904,11 +3181,7 @@ Future<void> deleteUserToken() async {
   try {
     Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-    var response = await http.post(Uri.parse(deleteUserDeviceToken),
-        headers: jHeaders,
-        body: json.encode({
-          "swayamsevakid": userDetails["userID"],
-        }));
+    var response = await http.post(Uri.parse(deleteUserDeviceToken), headers: jHeaders, body: json.encode({"swayamsevakid": userDetails["userID"]}));
 
     print(response.request!.url);
 
@@ -2996,11 +3269,7 @@ Future<SankalitBaithakVruttaDataNamesModel?> getSankalitBaithakVruttaDataNames(S
   try {
     print(strInput);
     print(Uri.parse(getSankalitBaithakVruttaDeatilsNames));
-    var response = await http.post(
-      Uri.parse(getSankalitBaithakVruttaDeatilsNames),
-      headers: jHeaders,
-      body: strInput,
-    );
+    var response = await http.post(Uri.parse(getSankalitBaithakVruttaDeatilsNames), headers: jHeaders, body: strInput);
     if (response.statusCode == 200) {
       var responseBody = json.decode(response.body);
       log(responseBody.toString());
@@ -3028,19 +3297,12 @@ Future<SankalitBaithakVruttaDataNamesModel?> getSankalitBaithakVruttaDataNames(S
 // }
 
 Future<TulnatmakBaithakResponse?> getTulnatmakBaithakEkatritVruttaForApp(String strInput) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*',
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   print(strInput);
   print(Uri.parse(tulnatmakEkatritVruttaForApp));
 
-  var response = await http.post(
-    Uri.parse(tulnatmakEkatritVruttaForApp),
-    headers: jHeaders,
-    body: strInput,
-  );
+  var response = await http.post(Uri.parse(tulnatmakEkatritVruttaForApp), headers: jHeaders, body: strInput);
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
@@ -3060,19 +3322,12 @@ Future<TulnatmakBaithakResponse?> getTulnatmakBaithakEkatritVruttaForApp(String 
 Future<GetVastiDataByIdModel?> getVastidataByIDForApp(context, String strInput) async {
   showLoaderDialog(context);
 
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*',
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   print(strInput);
   print(Uri.parse(getvastiSarvekshan));
 
-  var response = await http.post(
-    Uri.parse(getvastiSarvekshan),
-    headers: jHeaders,
-    body: strInput,
-  );
+  var response = await http.post(Uri.parse(getvastiSarvekshan), headers: jHeaders, body: strInput);
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
@@ -3104,10 +3359,7 @@ Future<dynamic> getAnnualBaithakNagarVruttaForApp(String strInput) async {
 }
 
 Future<NIrikshanBiathakVruttaModel?> getNirikshanAnnualBaithakNagarVruttaForApp(String strInput) async {
-  Map<String, String> jHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*',
-  };
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.post(Uri.parse(getnirikshanbhaithakvruttaforapp), headers: jHeaders, body: strInput);
   print("getNirikshanAnnualBaithakNagarVruttaForApp => $strInput");
@@ -3263,11 +3515,7 @@ Future<String> saveShaakhaaVruttaForApp(String inputJson) async {
 Future<GetgeounitNameModel?> getlevelUpdatedata(String inputJson) async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(
-    Uri.parse(urlGetgeounitNamebyid),
-    headers: jHeaders,
-    body: inputJson,
-  );
+  var response = await http.post(Uri.parse(urlGetgeounitNamebyid), headers: jHeaders, body: inputJson);
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
@@ -3284,11 +3532,7 @@ Future<GetgeounitNameModel?> getlevelUpdatedata(String inputJson) async {
 Future<VastiUpDataListModel?> getVastiUpdata(String inputJson) async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(
-    Uri.parse(getupnagarmandaldataagainstnagar),
-    headers: jHeaders,
-    body: inputJson,
-  );
+  var response = await http.post(Uri.parse(getupnagarmandaldataagainstnagar), headers: jHeaders, body: inputJson);
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
@@ -3307,11 +3551,7 @@ Future<void> savelevelUpdatedata(context, String inputJson) async {
 
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(
-    Uri.parse(urlUpdategeounitNamebyid),
-    headers: jHeaders,
-    body: inputJson,
-  );
+  var response = await http.post(Uri.parse(urlUpdategeounitNamebyid), headers: jHeaders, body: inputJson);
 
   print("Response: ${response.body}");
   print("response.statusCode: ${response.statusCode}");
@@ -3330,11 +3570,7 @@ Future<VastiUpDataListModel?> saveUpNagarUpkhandadata(context, String inputJson)
 
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(
-    Uri.parse(updatevastimasndalparent),
-    headers: jHeaders,
-    body: inputJson,
-  );
+  var response = await http.post(Uri.parse(updatevastimasndalparent), headers: jHeaders, body: inputJson);
 
   print("Response: ${response.body}");
   print("response.statusCode: ${response.statusCode}");
@@ -3360,7 +3596,9 @@ Future<String> deleteShaakhaaVrutta(String inputJson) async {
 
 void convertToCsv(List<List<dynamic>> rows, String fileName, BuildContext context) async {
   if (Platform.isIOS) {
-    if (await Permission.storage.request().isGranted) {
+    if (await Permission.storage
+        .request()
+        .isGranted) {
       try {
         Directory documents = await getApplicationDocumentsDirectory();
         String dir = documents.path;
@@ -3387,14 +3625,17 @@ void convertToCsv(List<List<dynamic>> rows, String fileName, BuildContext contex
     if (!await Permission.photos.isGranted) {
       await Permission.photos.request();
     }
-    if (await Permission.photos.request().isGranted) {
+    if (await Permission.photos
+        .request()
+        .isGranted) {
       try {
         Directory documents = await getApplicationDocumentsDirectory();
-        String dir = Platform.isAndroid
+        String dir =
+        Platform.isAndroid
             ? '/storage/emulated/0/Download/'
             : Platform.isIOS
-                ? documents.path
-                : "";
+            ? documents.path
+            : "";
         var file = "$dir";
         File f = new File(file + fileName + ".csv");
 
@@ -3414,14 +3655,17 @@ void convertToCsv(List<List<dynamic>> rows, String fileName, BuildContext contex
     if (!await Permission.storage.isGranted) {
       await Permission.photos.request();
     }
-    if (await Permission.storage.request().isGranted) {
+    if (await Permission.storage
+        .request()
+        .isGranted) {
       try {
         Directory documents = await getApplicationDocumentsDirectory();
-        String dir = Platform.isAndroid
+        String dir =
+        Platform.isAndroid
             ? '/storage/emulated/0/Download/'
             : Platform.isIOS
-                ? documents.path
-                : "";
+            ? documents.path
+            : "";
         var file = "$dir";
         File f = new File(file + fileName + ".csv");
 
@@ -3454,8 +3698,11 @@ Future<String> saveShaakhaaCoordinatesForApp(String inputJson) async {
 Future<List<dynamic>> getUniversity(var universityID, String? strInput, bool isForDistanceLearning) async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlGetEducationUniversitysForApp),
-      headers: jHeaders, body: json.encode({"PraantID": 1, "EducationUniversityID": universityID, "UniversityName": strInput, "IsForDistanceLearning": isForDistanceLearning}));
+  var response = await http.post(
+    Uri.parse(urlGetEducationUniversitysForApp),
+    headers: jHeaders,
+    body: json.encode({"PraantID": 1, "EducationUniversityID": universityID, "UniversityName": strInput, "IsForDistanceLearning": isForDistanceLearning}),
+  );
 
   var responseBody = json.decode(response.body);
 
@@ -3465,8 +3712,11 @@ Future<List<dynamic>> getUniversity(var universityID, String? strInput, bool isF
 Future<List<dynamic>> getCollege(var educationInstitutionID, var universityID, String? strInput) async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlGetEducationInstitutionsForApp),
-      headers: jHeaders, body: json.encode({"PraantID": 1, "EducationUniversityID": universityID, "EducationInstitutionID": educationInstitutionID, "InstitutionName": strInput}));
+  var response = await http.post(
+    Uri.parse(urlGetEducationInstitutionsForApp),
+    headers: jHeaders,
+    body: json.encode({"PraantID": 1, "EducationUniversityID": universityID, "EducationInstitutionID": educationInstitutionID, "InstitutionName": strInput}),
+  );
 
   var responseBody = json.decode(response.body);
 
@@ -3475,8 +3725,11 @@ Future<List<dynamic>> getCollege(var educationInstitutionID, var universityID, S
 
 Future<List<dynamic>> getGetEducationProgramsForApp(var educationProgramID, var universityID, String? strInput) async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
-  var response = await http.post(Uri.parse(urlGetEducationProgramsForApp),
-      headers: jHeaders, body: json.encode({"PraantID": 1, "EducationUniversityID": universityID, "EducationProgramID": educationProgramID, "ProgramName": strInput}));
+  var response = await http.post(
+    Uri.parse(urlGetEducationProgramsForApp),
+    headers: jHeaders,
+    body: json.encode({"PraantID": 1, "EducationUniversityID": universityID, "EducationProgramID": educationProgramID, "ProgramName": strInput}),
+  );
   var responseBody = json.decode(response.body);
   return responseBody['EducationProgramList'];
 }
@@ -3484,8 +3737,11 @@ Future<List<dynamic>> getGetEducationProgramsForApp(var educationProgramID, var 
 Future<List<dynamic>> getEducationCoursesForApp(var educationCourseID, var universityID, String? strInput) async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlGetEducationCoursesForApp),
-      headers: jHeaders, body: json.encode({"PraantID": 1, "EducationUniversityID": universityID, "EducationCourseID": educationCourseID, "CourseName": strInput}));
+  var response = await http.post(
+    Uri.parse(urlGetEducationCoursesForApp),
+    headers: jHeaders,
+    body: json.encode({"PraantID": 1, "EducationUniversityID": universityID, "EducationCourseID": educationCourseID, "CourseName": strInput}),
+  );
 
   var responseBody = json.decode(response.body);
   return responseBody['EducationCourseList'];
@@ -3494,12 +3750,7 @@ Future<List<dynamic>> getEducationCoursesForApp(var educationCourseID, var unive
 Future<List<dynamic>> getDistrictForApp(String praantID, String? stateID, String? districtID) async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var request = json.encode({
-    "PraantID": 1,
-    "AppUserID": userDetails['userID'],
-    "StateID": stateID == "" || stateID == "null" ? null : stateID,
-    "DistrictID": districtID == "" ? null : districtID,
-  });
+  var request = json.encode({"PraantID": 1, "AppUserID": userDetails['userID'], "StateID": stateID == "" || stateID == "null" ? null : stateID, "DistrictID": districtID == "" ? null : districtID});
   try {
     print(Uri.parse(urlGetDistrictsForApp));
     print(request);
@@ -3517,68 +3768,73 @@ Future<dynamic> getSwayamsevakOtherInfoForApp(String swayamsevakID) async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   print(Uri.parse(Statics.urlGetSwayamsevakOtherInfoForApp));
-  print({
-    "AppUserID": userDetails['userID'],
-    "SwayamsevakID": swayamsevakID,
-  });
-  var response = await http.post(Uri.parse(Statics.urlGetSwayamsevakOtherInfoForApp),
-      headers: jHeaders,
-      body: json.encode({
-        "AppUserID": userDetails['userID'],
-        "SwayamsevakID": swayamsevakID,
-      }));
+  print({"AppUserID": userDetails['userID'], "SwayamsevakID": swayamsevakID});
+  var response = await http.post(Uri.parse(Statics.urlGetSwayamsevakOtherInfoForApp), headers: jHeaders, body: json.encode({"AppUserID": userDetails['userID'], "SwayamsevakID": swayamsevakID}));
   log(response.body);
   var responseBody = json.decode(response.body);
   var data = responseBody['SwayamsevakOtherInfo'];
   return data;
 }
 
-Future<List<GeoUnitMasterBAL>> getGeoUnitMasterForApp(String geoUnitID, String praantID, String geoUnitName, String levelID, String parentMahaanagarID, String parentVibhaagID, String parentBhaagID,
-    String parentShaharID, String parentNagarID, String parentMandalID, String parentGraamID, String parentVastiID) async {
+Future<List<GeoUnitMasterBAL>> getGeoUnitMasterForApp(String geoUnitID,
+    String praantID,
+    String geoUnitName,
+    String levelID,
+    String parentMahaanagarID,
+    String parentVibhaagID,
+    String parentBhaagID,
+    String parentShaharID,
+    String parentNagarID,
+    String parentMandalID,
+    String parentGraamID,
+    String parentVastiID,) async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlGetGeoUnitMasterForApp),
-      headers: jHeaders,
-      body: json.encode({
-        "AppUserID": userDetails['userID'],
-        "GeoUnitID": geoUnitID == '' ? null : geoUnitID,
-        "PraantID": praantID,
-        "GeoUnitName": geoUnitName == '' ? null : geoUnitName,
-        "LevelID": levelID == '' ? null : levelID,
-        "ParentMahaanagarID": parentMahaanagarID == '' ? null : parentMahaanagarID,
-        "ParentVibhaagID": parentVibhaagID == '' ? null : parentVibhaagID,
-        "ParentBhaagID": parentBhaagID == '' ? null : parentBhaagID,
-        "ParentShaharID": parentShaharID == '' ? null : parentShaharID,
-        "ParentNagarID": parentNagarID == '' ? null : parentNagarID,
-        "ParentMandalID": parentMandalID == '' ? null : parentMandalID,
-        "ParentGraamID": parentGraamID == '' ? null : parentGraamID,
-        "ParentVastiID": parentVastiID == '' ? null : parentVastiID
-      }));
+  var response = await http.post(
+    Uri.parse(urlGetGeoUnitMasterForApp),
+    headers: jHeaders,
+    body: json.encode({
+      "AppUserID": userDetails['userID'],
+      "GeoUnitID": geoUnitID == '' ? null : geoUnitID,
+      "PraantID": praantID,
+      "GeoUnitName": geoUnitName == '' ? null : geoUnitName,
+      "LevelID": levelID == '' ? null : levelID,
+      "ParentMahaanagarID": parentMahaanagarID == '' ? null : parentMahaanagarID,
+      "ParentVibhaagID": parentVibhaagID == '' ? null : parentVibhaagID,
+      "ParentBhaagID": parentBhaagID == '' ? null : parentBhaagID,
+      "ParentShaharID": parentShaharID == '' ? null : parentShaharID,
+      "ParentNagarID": parentNagarID == '' ? null : parentNagarID,
+      "ParentMandalID": parentMandalID == '' ? null : parentMandalID,
+      "ParentGraamID": parentGraamID == '' ? null : parentGraamID,
+      "ParentVastiID": parentVastiID == '' ? null : parentVastiID,
+    }),
+  );
 
   var responseBody = json.decode(response.body);
   List<GeoUnitMasterBAL>? geoUnitList = [];
 
   responseBody["GeoUnitMasterList"].forEach((data) {
     var info = GeoUnitMasterBAL(
-        data['GeoUnitID'],
-        data['PraantID'],
-        data['LevelID'],
-        data['GeoUnitName'],
-        "",
-        data['LevelName'],
-        //data['LevelNameForDisplay'],
-        data['DisplaySequence'],
-        null,
-        data['ParentKshetraID'],
-        data['ParentPraantID'],
-        data['ParentMahaanagarID'],
-        data['ParentVibhaagID'],
-        data['ParentBhaagID'],
-        data['ParentNagarID'],
-        data['ParentShaharID'],
-        data['ParentMandalID'],
-        data['ParentVastiID'],
-        data['ParentGraamID']);
+      data['GeoUnitID'],
+      data['PraantID'],
+      data['LevelID'],
+      data['GeoUnitName'],
+      "",
+      data['LevelName'],
+      //data['LevelNameForDisplay'],
+      data['DisplaySequence'],
+      null,
+      data['ParentKshetraID'],
+      data['ParentPraantID'],
+      data['ParentMahaanagarID'],
+      data['ParentVibhaagID'],
+      data['ParentBhaagID'],
+      data['ParentNagarID'],
+      data['ParentShaharID'],
+      data['ParentMandalID'],
+      data['ParentVastiID'],
+      data['ParentGraamID'],
+    );
     geoUnitList.add(info);
   });
   return geoUnitList;
@@ -3588,11 +3844,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitMasterForApp(String geoUnitID, String p
 Future<List<dynamic>> getShaakhaaSewaVastiLinksForApp(var shaakhaaID) async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlGetShaakhaaSewaVastiLinksForApp),
-      headers: jHeaders,
-      body: json.encode({
-        "ShaakhaaID": shaakhaaID,
-      }));
+  var response = await http.post(Uri.parse(urlGetShaakhaaSewaVastiLinksForApp), headers: jHeaders, body: json.encode({"ShaakhaaID": shaakhaaID}));
 
   var responseBody = json.decode(response.body);
 
@@ -3624,16 +3876,7 @@ void showLoaderDialog(BuildContext context) {
             padding: const EdgeInsets.all(16.0),
             child: Row(
               mainAxisSize: MainAxisSize.min,
-              children: [
-                CircularProgressIndicator(),
-                SizedBox(width: 20),
-                Flexible(
-                  child: Text(
-                    Statics.getLabel("loadingDialog"),
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-              ],
+              children: [CircularProgressIndicator(), SizedBox(width: 20), Flexible(child: Text(Statics.getLabel("loadingDialog"), style: TextStyle(fontSize: 16)))],
             ),
           ),
         ),
@@ -3647,38 +3890,22 @@ Future<String> vastiSarvekshanStep1FormSubmit(context, String inputJson) async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   try {
-    var response = await http.post(
-      Uri.parse(vastiSarvekshanstep1Submit),
-      headers: jHeaders,
-      body: inputJson,
-    );
+    var response = await http.post(Uri.parse(vastiSarvekshanstep1Submit), headers: jHeaders, body: inputJson);
     var responseBody = json.decode(response.body);
     print("responseBody  --=> $responseBody");
     print("responseBody  Status --=> ${responseBody["Status"]}");
     if (responseBody["Status"] == "200") {
       log("response --> $response");
-      Fluttertoast.showToast(
-        msg: "माहिती संग्रहित झाली.",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-      );
+      Fluttertoast.showToast(msg: "माहिती संग्रहित झाली.", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
       Navigator.of(context, rootNavigator: true).pop();
       return "success";
     } else {
-      Fluttertoast.showToast(
-        msg: responseBody['msg'] ?? "काहीतरी गडबड आहे.",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-      );
+      Fluttertoast.showToast(msg: responseBody['msg'] ?? "काहीतरी गडबड आहे.", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
       Navigator.of(context, rootNavigator: true).pop();
       return "failed";
     }
   } catch (e) {
-    Fluttertoast.showToast(
-      msg: "Error: ${e.toString()}",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-    );
+    Fluttertoast.showToast(msg: "Error: ${e.toString()}", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
     Navigator.of(context, rootNavigator: true).pop();
     return "error";
   }
@@ -3690,39 +3917,23 @@ Future<String> vastiSarvekshanStep2FormSubmit(context, String inputJson) async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   try {
-    var response = await http.post(
-      Uri.parse(vastiSarvekshanstep2Submit),
-      headers: jHeaders,
-      body: inputJson,
-    );
+    var response = await http.post(Uri.parse(vastiSarvekshanstep2Submit), headers: jHeaders, body: inputJson);
     var responseBody = json.decode(response.body);
     print("responseBody  --=> $responseBody");
     print("responseBody  Status --=> ${responseBody["Status"]}");
     if (responseBody["Status"] == "200") {
       log("response --> $response");
-      Fluttertoast.showToast(
-        msg: "माहिती संग्रहित झाली.",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-      );
+      Fluttertoast.showToast(msg: "माहिती संग्रहित झाली.", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
       Navigator.of(context, rootNavigator: true).pop();
 
       return "success";
     } else {
-      Fluttertoast.showToast(
-        msg: responseBody['msg'] ?? "काहीतरी गडबड आहे.",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-      );
+      Fluttertoast.showToast(msg: responseBody['msg'] ?? "काहीतरी गडबड आहे.", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
       Navigator.of(context, rootNavigator: true).pop();
       return "failed";
     }
   } catch (e) {
-    Fluttertoast.showToast(
-      msg: "Error: ${e.toString()}",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-    );
+    Fluttertoast.showToast(msg: "Error: ${e.toString()}", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
     Navigator.of(context, rootNavigator: true).pop();
     return "error";
   }
@@ -3734,41 +3945,25 @@ Future<String> vastiSarvekshanStep3FormSubmit(context, String inputJson) async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   try {
-    var response = await http.post(
-      Uri.parse(vastiSarvekshanstep3Submit),
-      headers: jHeaders,
-      body: inputJson,
-    );
+    var response = await http.post(Uri.parse(vastiSarvekshanstep3Submit), headers: jHeaders, body: inputJson);
 
     var responseBody = json.decode(response.body);
     print("responseBody  --=> $responseBody");
     print("responseBody  Status --=> ${responseBody["Status"]}");
     if (responseBody["Status"] == "200") {
       log("response --> $response");
-      Fluttertoast.showToast(
-        msg: "माहिती संग्रहित झाली.",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-      );
+      Fluttertoast.showToast(msg: "माहिती संग्रहित झाली.", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
       Navigator.of(context, rootNavigator: true).pop();
 
       return "success";
     } else {
-      Fluttertoast.showToast(
-        msg: responseBody['msg'] ?? "काहीतरी गडबड आहे.",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-      );
+      Fluttertoast.showToast(msg: responseBody['msg'] ?? "काहीतरी गडबड आहे.", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
       Navigator.of(context, rootNavigator: true).pop();
 
       return "failed";
     }
   } catch (e) {
-    Fluttertoast.showToast(
-      msg: "Error: ${e.toString()}",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-    );
+    Fluttertoast.showToast(msg: "Error: ${e.toString()}", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
     Navigator.of(context, rootNavigator: true).pop();
 
     return "error";
@@ -3779,35 +3974,19 @@ Future<String> mandalSarvekshanStep1FormSubmit(String inputJson) async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   try {
-    var response = await http.post(
-      Uri.parse(mandalSarvekshanstep1Submit),
-      headers: jHeaders,
-      body: inputJson,
-    );
+    var response = await http.post(Uri.parse(mandalSarvekshanstep1Submit), headers: jHeaders, body: inputJson);
 
     var responseBody = json.decode(response.body);
 
     if (response.statusCode == 200) {
-      Fluttertoast.showToast(
-        msg: "Form submitted successfully",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-      );
+      Fluttertoast.showToast(msg: "Form submitted successfully", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
       return "success";
     } else {
-      Fluttertoast.showToast(
-        msg: responseBody['msg'] ?? "Submission failed",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-      );
+      Fluttertoast.showToast(msg: responseBody['msg'] ?? "Submission failed", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
       return "failed";
     }
   } catch (e) {
-    Fluttertoast.showToast(
-      msg: "Error: ${e.toString()}",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-    );
+    Fluttertoast.showToast(msg: "Error: ${e.toString()}", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
     return "error";
   }
 }
@@ -3816,35 +3995,19 @@ Future<String> mandalSarvekshanStep3FormSubmit(String inputJson) async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   try {
-    var response = await http.post(
-      Uri.parse(mandalSarvekshanstep3Submit),
-      headers: jHeaders,
-      body: inputJson,
-    );
+    var response = await http.post(Uri.parse(mandalSarvekshanstep3Submit), headers: jHeaders, body: inputJson);
 
     var responseBody = json.decode(response.body);
 
     if (response.statusCode == 200) {
-      Fluttertoast.showToast(
-        msg: "Form submitted successfully",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-      );
+      Fluttertoast.showToast(msg: "Form submitted successfully", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
       return "success";
     } else {
-      Fluttertoast.showToast(
-        msg: responseBody['msg'] ?? "Submission failed",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-      );
+      Fluttertoast.showToast(msg: responseBody['msg'] ?? "Submission failed", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
       return "failed";
     }
   } catch (e) {
-    Fluttertoast.showToast(
-      msg: "Error: ${e.toString()}",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-    );
+    Fluttertoast.showToast(msg: "Error: ${e.toString()}", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
     return "error";
   }
 }
@@ -3852,9 +4015,11 @@ Future<String> mandalSarvekshanStep3FormSubmit(String inputJson) async {
 Future<List<dynamic>> getJoinRSSGridByStatus(int geoUnitID, int statusID, String searchString, String fromDate, String toDate) async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
-  var response = await http.post(Uri.parse(urlGetJoinRSSGridForApp),
-      headers: jHeaders,
-      body: json.encode({"AppUserID": userDetails["userID"], "SearchCriteria": searchString, "GeoUnitID": geoUnitID, "StatusID": statusID, "JoiningDateFrom": fromDate, "JoiningDateTo": toDate}));
+  var response = await http.post(
+    Uri.parse(urlGetJoinRSSGridForApp),
+    headers: jHeaders,
+    body: json.encode({"AppUserID": userDetails["userID"], "SearchCriteria": searchString, "GeoUnitID": geoUnitID, "StatusID": statusID, "JoiningDateFrom": fromDate, "JoiningDateTo": toDate}),
+  );
 
   var responseBody = json.decode(response.body);
 
@@ -3919,8 +4084,11 @@ Future<dynamic> getSwayamsevakTransferByID(String swayamsevakTransferID, String 
 
   print(Uri.parse(urlGetSwayamsevakTransferDetailsForApp));
   print({"AppUserID": userDetails['userID'], "SwayamsevakTransferID": swayamsevakTransferID, "SwayamsevakID": swayamsevakID});
-  var response = await http.post(Uri.parse(urlGetSwayamsevakTransferDetailsForApp),
-      headers: jHeaders, body: json.encode({"AppUserID": userDetails['userID'], "SwayamsevakTransferID": swayamsevakTransferID, "SwayamsevakID": swayamsevakID}));
+  var response = await http.post(
+    Uri.parse(urlGetSwayamsevakTransferDetailsForApp),
+    headers: jHeaders,
+    body: json.encode({"AppUserID": userDetails['userID'], "SwayamsevakTransferID": swayamsevakTransferID, "SwayamsevakID": swayamsevakID}),
+  );
 
   log(response.body);
   var responseBody = json.decode(response.body);
@@ -4000,7 +4168,11 @@ Widget createWidgetFromString(BuildContext context, String label, double width, 
     height: 90,
     padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
     alignment: alignment,
-    color: (isTotalRow ? Theme.of(context).colorScheme.secondary.withOpacity(0.1) : Colors.white),
+    color: (isTotalRow ? Theme
+        .of(context)
+        .colorScheme
+        .secondary
+        .withOpacity(0.1) : Colors.white),
   );
 }
 
@@ -4011,7 +4183,11 @@ Widget createWidgetFromIcon(BuildContext context, IconData? iconData, double wid
     height: height,
     padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
     alignment: alignment,
-    color: (isTotalRow ? Theme.of(context).colorScheme.secondary.withOpacity(0.1) : Colors.white),
+    color: (isTotalRow ? Theme
+        .of(context)
+        .colorScheme
+        .secondary
+        .withOpacity(0.1) : Colors.white),
   );
 }
 

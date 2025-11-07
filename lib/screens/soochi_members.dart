@@ -14,6 +14,7 @@ import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 class SoochiMembers extends StatefulWidget {
   static const String routeName = '/soochi-members-screen';
+
   @override
   _SoochiMembersState createState() => _SoochiMembersState();
 }
@@ -65,10 +66,7 @@ class _SoochiMembersState extends State<SoochiMembers> {
 
   void populateChoice() {
     setState(() {
-      choices = [
-        new MenuChoices("SendMail", Icons.mail, Statics.getLabel('SendMail')),
-        new MenuChoices("SendSMS", Icons.sms, Statics.getLabel('SendSMS'))
-      ];
+      choices = [new MenuChoices("SendMail", Icons.mail, Statics.getLabel('SendMail')), new MenuChoices("SendSMS", Icons.sms, Statics.getLabel('SendSMS'))];
     });
   }
 
@@ -189,7 +187,7 @@ class _SoochiMembersState extends State<SoochiMembers> {
       rows.add(row);
     }
     if (rows.length > 1) {
-      Statics.convertToCsv(rows, "SoochiMembersList" + "_" + DateFormat('ddmmyyyyHHmmss').format(DateTime.now()),context);
+      Statics.convertToCsv(rows, "SoochiMembersList" + "_" + DateFormat('ddmmyyyyHHmmss').format(DateTime.now()), context);
     }
     setState(() {
       _isfetingData = false;
@@ -300,12 +298,12 @@ class _SoochiMembersState extends State<SoochiMembers> {
     var inputData = json.encode({
       "SoochiMemberID": 0,
       "PraantID": 1,
-      "SoochiID":soochiId,
+      "SoochiID": soochiId,
       "SwayamsevakID": (_swValue == "" || _swValue == null) ? null : _swValue,
       "SourceSoochiID": (_soochiValue == "" || _soochiValue == null) ? null : _soochiValue,
       "ModifiedBy": Statics.userDetails["userID"]
     });
-      print("inputData ==> $inputData");
+    print("inputData ==> $inputData");
     var data = await Statics.saveSoochiMembers(inputData);
     if (data == "-1") {
       Statics.showToast(Statics.getLabel('MemberExits'));
@@ -379,8 +377,7 @@ class _SoochiMembersState extends State<SoochiMembers> {
                                         isDense: true,
                                         border: UnderlineInputBorder(),
                                         labelText: Statics.getLabel('searchSwayamsevakLabel'),
-                                      )
-                                  );
+                                      ));
                                 },
                                 // textFieldConfiguration: TextFieldConfiguration(
                                 //     controller: this._swController,
@@ -461,8 +458,7 @@ class _SoochiMembersState extends State<SoochiMembers> {
                                         isDense: true,
                                         border: UnderlineInputBorder(),
                                         labelText: Statics.getLabel('searchSoochiScreenLabel'),
-                                      )
-                                  );
+                                      ));
                                 },
                                 // textFieldConfiguration: TextFieldConfiguration(
                                 //     controller: this._soochiController,
@@ -475,8 +471,7 @@ class _SoochiMembersState extends State<SoochiMembers> {
                                 },
                                 itemBuilder: (context, suggestion) {
                                   return ListTile(
-                                    title: Text(suggestion["SoochiName"] +
-                                        (suggestion["SoochiMemberCount"] == null ? '' : (' (' + suggestion["SoochiMemberCount"].toString() + ')'))),
+                                    title: Text(suggestion["SoochiName"] + (suggestion["SoochiMemberCount"] == null ? '' : (' (' + suggestion["SoochiMemberCount"].toString() + ')'))),
                                     subtitle: Wrap(
                                       children: [
                                         SizedBox(
@@ -514,7 +509,6 @@ class _SoochiMembersState extends State<SoochiMembers> {
                                     this._soochiController.text = "";
                                     _soochiValue = null;
                                     print("suggestion == > $suggestion");
-
                                   } else {
                                     this._soochiController.text = suggestion["SoochiName"];
                                     _soochiValue = suggestion["SoochiID"].toString();
@@ -547,7 +541,7 @@ class _SoochiMembersState extends State<SoochiMembers> {
                               vertical: 8,
                             ),
                             color: Theme.of(context).primaryColor,
-                            textColor: Theme.of(context).primaryTextTheme.button!.color,
+                            textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                             onPressed: _submit,
                             child: Text(
                               Statics.getLabel('Submit'),
@@ -565,7 +559,7 @@ class _SoochiMembersState extends State<SoochiMembers> {
                     title: Text(Statics.getLabel('SelectAll'), style: TextStyle(fontSize: 15)),
                     checkColor: Colors.white,
                     activeColor: Colors.purple,
-                    value:  _isSelectAll,
+                    value: _isSelectAll,
                     controlAffinity: ListTileControlAffinity.leading,
                     onChanged: (value) {
                       setState(() {
@@ -587,19 +581,14 @@ class _SoochiMembersState extends State<SoochiMembers> {
                         return Center(
                             child: Text(
                           'Server Error, Please Try Again Later',
-                          style: TextStyle(color: Theme.of(context).errorColor),
+                          style: TextStyle(color: Colors.red),
                         ));
                       }
-                      return
-                        dataSnapshot.hasData && dataSnapshot.data!.length > 0
-                          ?
-                        Column(
-                              children: dataSnapshot.data!
-                                  .map((members) => SoochiMembersCard(members, onSaveDetails, onCheckCard, onUnCheckCard, viewType, _isSelectAll))
-                                  .toList(),
+                      return dataSnapshot.hasData && dataSnapshot.data!.length > 0
+                          ? Column(
+                              children: dataSnapshot.data!.map((members) => SoochiMembersCard(members, onSaveDetails, onCheckCard, onUnCheckCard, viewType, _isSelectAll)).toList(),
                             )
-                          :
-                      Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch')));
+                          : Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch')));
                     },
                   ),
                 ]),

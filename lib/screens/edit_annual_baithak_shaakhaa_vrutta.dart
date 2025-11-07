@@ -716,7 +716,7 @@
 //                         vertical: 8,
 //                       ),
 //                       color: Theme.of(context).primaryColor,
-//                       textColor: Theme.of(context).primaryTextTheme.button!.color,
+//                       textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
 //                       onPressed: () {
 //                         _submit(context);
 //                       },
@@ -1081,10 +1081,7 @@
 //
 //
 
-
-
 ///////      NEW PAGE  ////////
-
 
 import 'dart:convert';
 import 'dart:developer';
@@ -1105,19 +1102,20 @@ class EditAnnualBaithakShaakhaaVrutta extends StatefulWidget {
   var viewType;
   var locId;
   var loctype;
-  EditAnnualBaithakShaakhaaVrutta(
-      {Key? key,
-        this.annualBaithakShaakhaaVruttaID,
-        this.geoUnitID,
-        this.geoUnitName,
-        this.annualBaithakTypeID,
-        this.annualBaithakTypeCode,
-        this.onSaveDetails,
-        this.viewType,
-        this.locId,
-        this.loctype,
-      })
-      : super(key: key);
+
+  EditAnnualBaithakShaakhaaVrutta({
+    Key? key,
+    this.annualBaithakShaakhaaVruttaID,
+    this.geoUnitID,
+    this.geoUnitName,
+    this.annualBaithakTypeID,
+    this.annualBaithakTypeCode,
+    this.onSaveDetails,
+    this.viewType,
+    this.locId,
+    this.loctype,
+  }) : super(key: key);
+
   @override
   _EditAnnualBaithakShaakhaaVruttaState createState() => _EditAnnualBaithakShaakhaaVruttaState();
 }
@@ -1167,17 +1165,19 @@ class _EditAnnualBaithakShaakhaaVruttaState extends State<EditAnnualBaithakShaak
   var _vaartaapatraCountCtrl = TextEditingController();
   int? _baithakTypeID;
   String? _vaarshikotsavMonthValue;
-  int? _isActive ;
+  int? _isActive;
+
   bool _isSewaVastiDefined = false;
   bool _isSewaKaaryakartaaDefined = false;
   bool _isShaakhaaToli = false;
   bool _isShaakhaaPaalak = false;
   bool _isVaarshikNiyojanDone = false;
   int? abShaakhaaVruttaID;
+
   @override
   void initState() {
     super.initState();
-     abShaakhaaVruttaID = (widget.annualBaithakShaakhaaVruttaID == null ? 0 : (widget.annualBaithakShaakhaaVruttaID as int));
+    abShaakhaaVruttaID = (widget.annualBaithakShaakhaaVruttaID == null ? 0 : (widget.annualBaithakShaakhaaVruttaID as int));
     int geoUnitID = (widget.geoUnitID as int);
     String geoUnitName = widget.geoUnitName.toString();
     int baithakTypeID = (widget.annualBaithakTypeID as int);
@@ -1232,12 +1232,7 @@ class _EditAnnualBaithakShaakhaaVruttaState extends State<EditAnnualBaithakShaak
     dynamic retVal;
     bool isConnected = await Statics.isInternetConnected();
     if (isConnected) {
-      String strInput = json.encode({
-        "AppUserID": Statics.userDetails['userID'],
-        "AnnualBaithakTypeID": btID,
-        "GeoUnitID": guID,
-        "AnnualBaithakShaakhaaVruttaID": abShaakhaaVruttaID
-      });
+      String strInput = json.encode({"AppUserID": Statics.userDetails['userID'], "AnnualBaithakTypeID": btID, "GeoUnitID": guID, "AnnualBaithakShaakhaaVruttaID": abShaakhaaVruttaID});
       print("strInput --> $strInput   ");
       // retVal = (await Statics.getAnnualBaithakShaakhaaVruttaForApp(strInput)).firstWhere(  (item) => item["AnnualBaithakShaakhaaVruttaID"] == widget.annualBaithakShaakhaaVruttaID &&
       //     item["GeoUnitID"] == widget.geoUnitID,orElse: () => null, );
@@ -1266,38 +1261,27 @@ class _EditAnnualBaithakShaakhaaVruttaState extends State<EditAnnualBaithakShaak
         _praathamikCountCtrl.text = (shaakhaaVrutta!.praathamikCount == null ? '' : shaakhaaVrutta!.praathamikCount.toString());
         _praathamikSakriyaCountCtrl.text = (shaakhaaVrutta!.praathamikSakriyaCount == null ? '' : shaakhaaVrutta!.praathamikSakriyaCount.toString());
         _prathamGeneralCountCtrl.text = (shaakhaaVrutta!.prathamGeneralCount == null ? '' : shaakhaaVrutta!.prathamGeneralCount.toString());
-        _prathamGeneralSakriyaCountCtrl.text =
-        (shaakhaaVrutta!.prathamGeneralSakriyaCount == null ? '' : shaakhaaVrutta!.prathamGeneralSakriyaCount.toString());
+        _prathamGeneralSakriyaCountCtrl.text = (shaakhaaVrutta!.prathamGeneralSakriyaCount == null ? '' : shaakhaaVrutta!.prathamGeneralSakriyaCount.toString());
         _prathamSpecialCountCtrl.text = (shaakhaaVrutta!.prathamSpecialCount == null ? '' : shaakhaaVrutta!.prathamSpecialCount.toString());
-        _prathamSpecialSakriyaCountCtrl.text =
-        (shaakhaaVrutta!.prathamSpecialSakriyaCount == null ? '' : shaakhaaVrutta!.prathamSpecialSakriyaCount.toString());
+        _prathamSpecialSakriyaCountCtrl.text = (shaakhaaVrutta!.prathamSpecialSakriyaCount == null ? '' : shaakhaaVrutta!.prathamSpecialSakriyaCount.toString());
         _dwitiyaGeneralCountCtrl.text = (shaakhaaVrutta!.dwitiyaGeneralCount == null ? '' : shaakhaaVrutta!.dwitiyaGeneralCount.toString());
-        _dwitiyaGeneralSakriyaCountCtrl.text =
-        (shaakhaaVrutta!.dwitiyaGeneralSakriyaCount == null ? '' : shaakhaaVrutta!.dwitiyaGeneralSakriyaCount.toString());
+        _dwitiyaGeneralSakriyaCountCtrl.text = (shaakhaaVrutta!.dwitiyaGeneralSakriyaCount == null ? '' : shaakhaaVrutta!.dwitiyaGeneralSakriyaCount.toString());
         _dwitiyaSpecialCountCtrl.text = (shaakhaaVrutta!.dwitiyaSpecialCount == null ? '' : shaakhaaVrutta!.dwitiyaSpecialCount.toString());
-        _dwitiyaSpecialSakriyaCountCtrl.text =
-        (shaakhaaVrutta!.dwitiyaSpecialSakriyaCount == null ? '' : shaakhaaVrutta!.dwitiyaSpecialSakriyaCount.toString());
+        _dwitiyaSpecialSakriyaCountCtrl.text = (shaakhaaVrutta!.dwitiyaSpecialSakriyaCount == null ? '' : shaakhaaVrutta!.dwitiyaSpecialSakriyaCount.toString());
         _trutiyaGeneralCountCtrl.text = (shaakhaaVrutta!.trutiyaGeneralCount == null ? '' : shaakhaaVrutta!.trutiyaGeneralCount.toString());
-        _trutiyaGeneralSakriyaCountCtrl.text =
-        (shaakhaaVrutta!.trutiyaGeneralSakriyaCount == null ? '' : shaakhaaVrutta!.trutiyaGeneralSakriyaCount.toString());
+        _trutiyaGeneralSakriyaCountCtrl.text = (shaakhaaVrutta!.trutiyaGeneralSakriyaCount == null ? '' : shaakhaaVrutta!.trutiyaGeneralSakriyaCount.toString());
         _trutiyaSpecialCountCtrl.text = (shaakhaaVrutta!.trutiyaSpecialCount == null ? '' : shaakhaaVrutta!.trutiyaSpecialCount.toString());
-        _trutiyaSpecialSakriyaCountCtrl.text =
-        (shaakhaaVrutta!.trutiyaSpecialSakriyaCount == null ? '' : shaakhaaVrutta!.trutiyaSpecialSakriyaCount.toString());
+        _trutiyaSpecialSakriyaCountCtrl.text = (shaakhaaVrutta!.trutiyaSpecialSakriyaCount == null ? '' : shaakhaaVrutta!.trutiyaSpecialSakriyaCount.toString());
 
         _patSankhyaaCtrl.text = (shaakhaaVrutta!.patSankhyaa == null ? '' : shaakhaaVrutta!.patSankhyaa.toString());
-        _sanghaDaayitvawaanSwCountCtrl.text =
-        (shaakhaaVrutta!.sanghaDaayitvawaanSwCount == null ? '' : shaakhaaVrutta!.sanghaDaayitvawaanSwCount.toString());
-        _preritSansthaaSangathanDaayitvawaanSwCountCtrl.text = (shaakhaaVrutta!.preritSansthaaSangathanDaayitvawaanSwCount == null
-            ? ''
-            : shaakhaaVrutta!.preritSansthaaSangathanDaayitvawaanSwCount.toString());
-        _gatividhiDaayitvawaanSwCountCtrl.text =
-        (shaakhaaVrutta!.gatividhiDaayitvawaanSwCount == null ? '' : shaakhaaVrutta!.gatividhiDaayitvawaanSwCount.toString());
-        _aayaamDaayitvawaanSwCountCtrl.text =
-        (shaakhaaVrutta!.aayaamDaayitvawaanSwCount == null ? '' : shaakhaaVrutta!.aayaamDaayitvawaanSwCount.toString());
+        _sanghaDaayitvawaanSwCountCtrl.text = (shaakhaaVrutta!.sanghaDaayitvawaanSwCount == null ? '' : shaakhaaVrutta!.sanghaDaayitvawaanSwCount.toString());
+        _preritSansthaaSangathanDaayitvawaanSwCountCtrl.text =
+            (shaakhaaVrutta!.preritSansthaaSangathanDaayitvawaanSwCount == null ? '' : shaakhaaVrutta!.preritSansthaaSangathanDaayitvawaanSwCount.toString());
+        _gatividhiDaayitvawaanSwCountCtrl.text = (shaakhaaVrutta!.gatividhiDaayitvawaanSwCount == null ? '' : shaakhaaVrutta!.gatividhiDaayitvawaanSwCount.toString());
+        _aayaamDaayitvawaanSwCountCtrl.text = (shaakhaaVrutta!.aayaamDaayitvawaanSwCount == null ? '' : shaakhaaVrutta!.aayaamDaayitvawaanSwCount.toString());
         _sociallyActiveSwCountCtrl.text = (shaakhaaVrutta!.sociallyActiveSwCount == null ? '' : shaakhaaVrutta!.sociallyActiveSwCount.toString());
         _shishuAverageCtrl.text = (shaakhaaVrutta!.shishuAverage == null ? '' : shaakhaaVrutta!.shishuAverage.toString());
-        _shaakhaaToliBaithakCountCtrl.text =
-        (shaakhaaVrutta!.shaakhaaToliBaithakCount == null ? '' : shaakhaaVrutta!.shaakhaaToliBaithakCount.toString());
+        _shaakhaaToliBaithakCountCtrl.text = (shaakhaaVrutta!.shaakhaaToliBaithakCount == null ? '' : shaakhaaVrutta!.shaakhaaToliBaithakCount.toString());
         _vaartaapatraCountCtrl.text = (shaakhaaVrutta!.vaartaapatraCount == null ? '' : shaakhaaVrutta!.vaartaapatraCount.toString());
 
         _isShaakhaaToli = shaakhaaVrutta!.isShaakhaaToli == true ? true : false;
@@ -1343,8 +1327,7 @@ class _EditAnnualBaithakShaakhaaVruttaState extends State<EditAnnualBaithakShaak
     var inputData = json.encode({
       "AppUserID": Statics.userDetails["userID"],
       "IsSadhyaSuruAahe": _isActive,
-      "AnnualBaithakShaakhaaVruttaID":
-      (widget.annualBaithakShaakhaaVruttaID == null ? 0 : int.parse(widget.annualBaithakShaakhaaVruttaID.toString())),
+      "AnnualBaithakShaakhaaVruttaID": (widget.annualBaithakShaakhaaVruttaID == null ? 0 : int.parse(widget.annualBaithakShaakhaaVruttaID.toString())),
       "GeoUnitID": (widget.geoUnitID == null ? 0 : int.parse(widget.geoUnitID.toString())),
       "AnnualBaithakTypeID": (widget.annualBaithakTypeID == null ? 0 : int.parse(widget.annualBaithakTypeID.toString())),
       "ConductingDayCount": _conductingDaysCtrl.text.trim() == '' ? null : int.parse(_conductingDaysCtrl.text),
@@ -1375,8 +1358,7 @@ class _EditAnnualBaithakShaakhaaVruttaState extends State<EditAnnualBaithakShaak
       "TrutiyaSpecialSakriyaCount": _trutiyaSpecialSakriyaCountCtrl.text.trim() == '' ? null : int.parse(_trutiyaSpecialSakriyaCountCtrl.text),
       "PatSankhyaa": _patSankhyaaCtrl.text.trim() == '' ? null : int.parse(_patSankhyaaCtrl.text),
       "SanghaDaayitvawaanSwCount": _sanghaDaayitvawaanSwCountCtrl.text.trim() == '' ? null : int.parse(_sanghaDaayitvawaanSwCountCtrl.text),
-      "PreritSansthaaSangathanDaayitvawaanSwCount":
-      _preritSansthaaSangathanDaayitvawaanSwCountCtrl.text.trim() == '' ? null : int.parse(_preritSansthaaSangathanDaayitvawaanSwCountCtrl.text),
+      "PreritSansthaaSangathanDaayitvawaanSwCount": _preritSansthaaSangathanDaayitvawaanSwCountCtrl.text.trim() == '' ? null : int.parse(_preritSansthaaSangathanDaayitvawaanSwCountCtrl.text),
       "GatividhiDaayitvawaanSwCount": _gatividhiDaayitvawaanSwCountCtrl.text.trim() == '' ? null : int.parse(_gatividhiDaayitvawaanSwCountCtrl.text),
       "AayaamDaayitvawaanSwCount": _aayaamDaayitvawaanSwCountCtrl.text.trim() == '' ? null : int.parse(_aayaamDaayitvawaanSwCountCtrl.text),
       "SociallyActiveSwCount": _sociallyActiveSwCountCtrl.text.trim() == '' ? null : int.parse(_sociallyActiveSwCountCtrl.text),
@@ -1417,9 +1399,7 @@ class _EditAnnualBaithakShaakhaaVruttaState extends State<EditAnnualBaithakShaak
               key: _formKey,
               child: Column(
                 children: <Widget>[
-                  Text(shaakhaaVrutta == null
-                      ? ''
-                      : (shaakhaaVrutta!.geoUnitName! + ', (' + shaakhaaVrutta!.vayogatCode! + ', ' + shaakhaaVrutta!.frequencyCode! + ')')),
+                  Text(shaakhaaVrutta == null ? '' : (shaakhaaVrutta!.geoUnitName! + ', (' + shaakhaaVrutta!.vayogatCode! + ', ' + shaakhaaVrutta!.frequencyCode! + ')')),
                   Text(shaakhaaVrutta == null ? '' : shaakhaaVrutta!.annualBaithakTypeCode!),
                   // SizedBox(
                   //   width: Statics.getDeviceSize(context).width * 0.8,
@@ -1437,7 +1417,9 @@ class _EditAnnualBaithakShaakhaaVruttaState extends State<EditAnnualBaithakShaak
                   //     },
                   //   ),
                   // ),
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                   // DropdownButtonFormField<bool>(
                   //     decoration: InputDecoration(
                   //       labelText: Statics.getLabel('Currentlyrunning'),
@@ -1486,7 +1468,9 @@ class _EditAnnualBaithakShaakhaaVruttaState extends State<EditAnnualBaithakShaak
                       return null;
                     },
                   ),
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                   TextFormField(
                     textInputAction: TextInputAction.next,
                     controller: _conductingDaysCtrl,
@@ -1615,14 +1599,10 @@ class _EditAnnualBaithakShaakhaaVruttaState extends State<EditAnnualBaithakShaak
                     decoration: InputDecoration(
                         labelText: (_baithakTypeID == Statics.abPratinidhiSabhaa
                             ? Statics.getLabel('vaarshikotsavMonth')
-                            : (_baithakTypeID == Statics.praantikBaithak1
-                            ? Statics.getLabel('vaarshikotsavMonthFebMar')
-                            : Statics.getLabel('vaarshikotsavMonthMarJun')))),
+                            : (_baithakTypeID == Statics.praantikBaithak1 ? Statics.getLabel('vaarshikotsavMonthFebMar') : Statics.getLabel('vaarshikotsavMonthMarJun')))),
                     isExpanded: true,
                     value: _vaarshikotsavMonthValue == '' ? null : _vaarshikotsavMonthValue,
-                    items: Statics.vaarshikotsavMonths.entries
-                        .map((entry) => DropdownMenuItem(value: entry.key, child: Text(Statics.getLabel(entry.value))))
-                        .toList(),
+                    items: Statics.vaarshikotsavMonths.entries.map((entry) => DropdownMenuItem(value: entry.key, child: Text(Statics.getLabel(entry.value)))).toList(),
                     onChanged: (value) {
                       print(value);
                       setState(() {
@@ -1641,10 +1621,12 @@ class _EditAnnualBaithakShaakhaaVruttaState extends State<EditAnnualBaithakShaak
                     },
                   ),
 
-                  SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
                   // if(_isSewaVastiDefined == true )
-                  if( shaakhaaVrutta?.frequencyID.toString() == '35'|| shaakhaaVrutta?.frequencyID.toString() == '34')
-                    if(shaakhaaVrutta?.vayogatID.toString() == '39'||shaakhaaVrutta?.vayogatID.toString() == '40' )
+                  if (shaakhaaVrutta?.frequencyID.toString() == '35' || shaakhaaVrutta?.frequencyID.toString() == '34')
+                    if (shaakhaaVrutta?.vayogatID.toString() == '39' || shaakhaaVrutta?.vayogatID.toString() == '40')
                       SizedBox(
                         width: Statics.getDeviceSize(context).width * 0.8,
                         child: CheckboxListTile(
@@ -1669,17 +1651,15 @@ class _EditAnnualBaithakShaakhaaVruttaState extends State<EditAnnualBaithakShaak
                   // Text("shaakhaaVrutta?.frequencyID ==> ${shaakhaaVrutta?.frequencyID}\n shaakhaaVrutta?.vayogatID ${shaakhaaVrutta?.vayogatID} "),
 
                   // if(_isSewaVastiDefined == true )
-                  if( shaakhaaVrutta?.frequencyID.toString() == '35'|| shaakhaaVrutta?.frequencyID.toString() == '34')
-                    if(shaakhaaVrutta?.vayogatID.toString() == '39'||shaakhaaVrutta?.vayogatID.toString() == '40' )
+                  if (shaakhaaVrutta?.frequencyID.toString() == '35' || shaakhaaVrutta?.frequencyID.toString() == '34')
+                    if (shaakhaaVrutta?.vayogatID.toString() == '39' || shaakhaaVrutta?.vayogatID.toString() == '40')
                       TextFormField(
                         textInputAction: TextInputAction.next,
                         controller: _sewaVastiSamparkCountCtrl,
                         decoration: InputDecoration(
                             labelText: (_baithakTypeID == Statics.abPratinidhiSabhaa
                                 ? Statics.getLabel('sewaVastiSamparkCount')
-                                : (_baithakTypeID == Statics.praantikBaithak1
-                                ? Statics.getLabel('sewaVastiSamparkCountFebMar')
-                                : Statics.getLabel('sewaVastiSamparkCount')))),
+                                : (_baithakTypeID == Statics.praantikBaithak1 ? Statics.getLabel('sewaVastiSamparkCountFebMar') : Statics.getLabel('sewaVastiSamparkCount')))),
                         keyboardType: TextInputType.number,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -1695,10 +1675,12 @@ class _EditAnnualBaithakShaakhaaVruttaState extends State<EditAnnualBaithakShaak
                           shaakhaaVrutta!.sewaVastiSamparkCount = value == "" ? null : int.parse(value!);
                         },
                       ),
-                  SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
                   // if(shaakhaaVrutta != null)
-                  if( shaakhaaVrutta?.frequencyID.toString() == '35'|| shaakhaaVrutta?.frequencyID.toString() == '34')
-                    if(shaakhaaVrutta?.vayogatID.toString() == '39'||shaakhaaVrutta?.vayogatID.toString() == '40' )
+                  if (shaakhaaVrutta?.frequencyID.toString() == '35' || shaakhaaVrutta?.frequencyID.toString() == '34')
+                    if (shaakhaaVrutta?.vayogatID.toString() == '39' || shaakhaaVrutta?.vayogatID.toString() == '40')
                       SizedBox(
                         width: Statics.getDeviceSize(context).width * 0.8,
                         child: CheckboxListTile(
@@ -1725,9 +1707,7 @@ class _EditAnnualBaithakShaakhaaVruttaState extends State<EditAnnualBaithakShaak
                     decoration: InputDecoration(
                         labelText: (_baithakTypeID == Statics.abPratinidhiSabhaa
                             ? Statics.getLabel('sewaUpakramCount')
-                            : (_baithakTypeID == Statics.praantikBaithak1
-                            ? Statics.getLabel('sewaUpakramCountFebMar')
-                            : Statics.getLabel('sewaUpakramCountMarJun')))),
+                            : (_baithakTypeID == Statics.praantikBaithak1 ? Statics.getLabel('sewaUpakramCountFebMar') : Statics.getLabel('sewaUpakramCountMarJun')))),
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value == '') return (Statics.getLabel('mandatoryInformation'));
@@ -1746,9 +1726,7 @@ class _EditAnnualBaithakShaakhaaVruttaState extends State<EditAnnualBaithakShaak
                     decoration: InputDecoration(
                         labelText: (_baithakTypeID == Statics.abPratinidhiSabhaa
                             ? Statics.getLabel('anyaUpakramCount')
-                            : (_baithakTypeID == Statics.praantikBaithak1
-                            ? Statics.getLabel('anyaUpakramCountFebMar')
-                            : Statics.getLabel('anyaUpakramCountMarJun')))),
+                            : (_baithakTypeID == Statics.praantikBaithak1 ? Statics.getLabel('anyaUpakramCountFebMar') : Statics.getLabel('anyaUpakramCountMarJun')))),
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value == '') return (Statics.getLabel('mandatoryInformation'));
@@ -1833,7 +1811,7 @@ class _EditAnnualBaithakShaakhaaVruttaState extends State<EditAnnualBaithakShaak
                         vertical: 8,
                       ),
                       color: Theme.of(context).primaryColor,
-                      textColor: Theme.of(context).primaryTextTheme.button!.color,
+                      textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                       onPressed: () {
                         _submit(context);
                       },
@@ -1851,4 +1829,3 @@ class _EditAnnualBaithakShaakhaaVruttaState extends State<EditAnnualBaithakShaak
     );
   }
 }
-

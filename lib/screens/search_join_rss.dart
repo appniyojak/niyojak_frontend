@@ -1200,7 +1200,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                                 vertical: 8,
                               ),
                               color: Theme.of(context).primaryColor,
-                              textColor: Theme.of(context).primaryTextTheme.button!.color,
+                              textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                               onPressed: () {
                                 _searchNew("Search");
                               },
@@ -1219,7 +1219,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                                 vertical: 8,
                               ),
                               color: Theme.of(context).primaryColor,
-                              textColor: Theme.of(context).primaryTextTheme.button!.color,
+                              textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                               onPressed: () {
                                 _searchNew("Export");
                               },
@@ -1266,7 +1266,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                           return Center(
                               child: Text(
                             'Server Error, Please Try Again Later',
-                            style: TextStyle(color: Theme.of(context).errorColor),
+                            style: TextStyle(color: Colors.red),
                           ));
                         }
                         _isSearching = false;

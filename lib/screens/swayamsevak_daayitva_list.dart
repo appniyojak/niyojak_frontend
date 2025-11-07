@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import '../screens/edit_daayitva.dart';
+
 //import '../screens/swayamsevak_daayitva_edit.dart';
 import '../widgets/daayitva_card.dart';
 import '../widgets/legend.dart';
@@ -15,7 +16,9 @@ class DaayitvaList extends StatefulWidget {
   var swId;
   var onSaveSwDetails;
   var viewType;
+
   DaayitvaList({Key? key, this.swId, this.onSaveSwDetails, this.viewType}) : super(key: key);
+
   @override
   _DaayitvaListState createState() => _DaayitvaListState();
 }
@@ -102,8 +105,7 @@ class _DaayitvaListState extends State<DaayitvaList> {
 
             _pracharakYearCountCntrl.text = swDaayitvaPage!.prachaarakYearCount == null ? "" : swDaayitvaPage!.prachaarakYearCount.toString();
 
-            _maxDaayitvaWhenPracharakCntrl.text =
-                swDaayitvaPage!.maxDaayitvaWhenPrachaarak == null ? "" : swDaayitvaPage!.maxDaayitvaWhenPrachaarak.toString();
+            _maxDaayitvaWhenPracharakCntrl.text = swDaayitvaPage!.maxDaayitvaWhenPrachaarak == null ? "" : swDaayitvaPage!.maxDaayitvaWhenPrachaarak.toString();
           }
         });
       }
@@ -190,11 +192,10 @@ class _DaayitvaListState extends State<DaayitvaList> {
                                 child: MaterialButton(
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                                   color: Theme.of(context).primaryColor,
-                                  textColor: Theme.of(context).primaryTextTheme.button!.color,
+                                  textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                                   onPressed: () {
-                                    Navigator.of(context).pushNamed(EditDaayitva.routeName,
-                                        arguments:
-                                            Statics.ScreenArguments2(widget.swId, Statics.getLabel('EditMenu'), widget.onSaveSwDetails, null, null, "0"));
+                                    Navigator.of(context)
+                                        .pushNamed(EditDaayitva.routeName, arguments: Statics.ScreenArguments2(widget.swId, Statics.getLabel('EditMenu'), widget.onSaveSwDetails, null, null, "0"));
                                   },
                                   child: Text(Statics.getLabel('AddButton'), style: TextStyle(fontSize: 12)),
                                 ),
@@ -207,8 +208,7 @@ class _DaayitvaListState extends State<DaayitvaList> {
                           decoration: InputDecoration(labelText: Statics.getLabel('MaxDaayitva')),
                           keyboardType: TextInputType.text,
                           validator: (value) {
-                            if (value!.isEmpty && _wasPrachaarak == false && _wasVistaarak == false)
-                              return (Statics.getLabel('MaxDaayitvaValidationMessage'));
+                            if (value!.isEmpty && _wasPrachaarak == false && _wasVistaarak == false) return (Statics.getLabel('MaxDaayitvaValidationMessage'));
                             return null;
                           },
                           onSaved: (value) {
@@ -226,8 +226,7 @@ class _DaayitvaListState extends State<DaayitvaList> {
                           keyboardType: TextInputType.number,
                           maxLength: 4,
                           validator: (value) {
-                            if (value!.isEmpty && _wasPrachaarak == false && _wasVistaarak == false)
-                              return (Statics.getLabel('FromYearValidationMessage'));
+                            if (value!.isEmpty && _wasPrachaarak == false && _wasVistaarak == false) return (Statics.getLabel('FromYearValidationMessage'));
                             if (value.isNotEmpty && value.length < 4)
                               return (Statics.getLabel('ValidFromYearValidationMessage'));
                             else if (value.isNotEmpty) if ((int.parse(value) > int.parse(DateFormat('yyyy').format(DateTime.now())))) {
@@ -299,10 +298,8 @@ class _DaayitvaListState extends State<DaayitvaList> {
                                     swDaayitvaPage!.vistaarakWeekCount = null;
                                 },
                                 validator: (value) {
-                                  if (_wasVistaarak == true &&
-                                      value!.isEmpty &&
-                                      _vistarakMonthCountCntrl.text.trim().isEmpty &&
-                                      _vistarakYearCountCntrl.text.trim().isEmpty) return (Statics.getLabel('PleaseEnterAtleastOneOfThree'));
+                                  if (_wasVistaarak == true && value!.isEmpty && _vistarakMonthCountCntrl.text.trim().isEmpty && _vistarakYearCountCntrl.text.trim().isEmpty)
+                                    return (Statics.getLabel('PleaseEnterAtleastOneOfThree'));
 
                                   return null;
                                 },
@@ -321,10 +318,8 @@ class _DaayitvaListState extends State<DaayitvaList> {
                                     swDaayitvaPage!.vistaarakMonthCount = null;
                                 },
                                 validator: (value) {
-                                  if (_wasVistaarak == true &&
-                                      value!.isEmpty &&
-                                      _vistarakWeekCountCntrl.text.trim().isEmpty &&
-                                      _vistarakYearCountCntrl.text.trim().isEmpty) return (Statics.getLabel('PleaseEnterAtleastOneOfThree'));
+                                  if (_wasVistaarak == true && value!.isEmpty && _vistarakWeekCountCntrl.text.trim().isEmpty && _vistarakYearCountCntrl.text.trim().isEmpty)
+                                    return (Statics.getLabel('PleaseEnterAtleastOneOfThree'));
 
                                   return null;
                                 },
@@ -343,10 +338,8 @@ class _DaayitvaListState extends State<DaayitvaList> {
                                     swDaayitvaPage!.vistaarakYearCount = null;
                                 },
                                 validator: (value) {
-                                  if (_wasVistaarak == true &&
-                                      value!.isEmpty &&
-                                      _vistarakWeekCountCntrl.text.trim().isEmpty &&
-                                      _vistarakMonthCountCntrl.text.trim().isEmpty) return (Statics.getLabel('PleaseEnterAtleastOneOfThree'));
+                                  if (_wasVistaarak == true && value!.isEmpty && _vistarakWeekCountCntrl.text.trim().isEmpty && _vistarakMonthCountCntrl.text.trim().isEmpty)
+                                    return (Statics.getLabel('PleaseEnterAtleastOneOfThree'));
 
                                   return null;
                                 },
@@ -426,7 +419,7 @@ class _DaayitvaListState extends State<DaayitvaList> {
                               vertical: 8,
                             ),
                             color: Theme.of(context).primaryColor,
-                            textColor: Theme.of(context).primaryTextTheme.button!.color,
+                            textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                             onPressed: _submit,
                             child: Text(
                               Statics.getLabel('Submit'),

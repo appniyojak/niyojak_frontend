@@ -3,81 +3,82 @@ description: Niyojak Prod project.
 
 publish_to: 'none'
 
-version: 3.6.4+94
+version: 3.6.4+95
 
 environment:
-  sdk: '>=3.1.0 <4.0.0'
+  sdk: "^2.19.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  package_info_plus: ^4.1.0
-  flutter_launcher_icons: ^0.13.1
-  http: ^1.1.0
-  cupertino_icons: ^1.0.2
-  #  dropdownfield: ^1.0.3
-  font_awesome_flutter: 10.6.0 #NO PUSH
-  #  http: ^1.1.0
-  intl: ^0.19.0
-  path: any
-  provider: ^6.1.2
-  sqflite: ^2.3.1
+  # core / infra
+  package_info_plus: ^8.3.1
+  http: ^1.4.0
+  cupertino_icons: ^1.0.5
+  intl: ^0.18.0
+  path: ^1.9.0
+  provider: ^6.1.4
+  sqflite: ^2.4.2
+  url_launcher: ^6.3.2
+  connectivity_plus: ^6.1.0
+  image_picker: ^1.2.0
+  fluttertoast: ^8.2.12
+  background_fetch: ^1.3.8
+  shared_preferences: ^2.5.3
+  path_provider: ^2.1.5
+  open_filex: ^4.4.1
+  csv: ^6.0.0
+  permission_handler: ^12.0.1
+
+  # UI/UX
+  flutter_launcher_icons: ^0.14.0
+  font_awesome_flutter: ^10.9.1
   autocomplete_textfield: ^2.0.1
   flutter_typeahead: ^5.2.0
-  url_launcher: ^6.2.5
-  connectivity_plus: ^4.0.2
-  image_picker: ^1.0.4
-  #  data_connection_checker: ^0.3.4
-  #  splashscreen: ^1.3.5
-  #  package_info: ^2.0.2
-  #  package_info_plus: ^4.2.0
-  fluttertoast: 8.2.4
-  background_fetch: ^1.3.1
-  shared_preferences: ^2.2.2
-  #  pull_to_refresh: ^2.0.0
-  #  flutter_launcher_icons: ^0.11.0
-  #  charts_flutter: ^0.11.0
-  popup_menu: ^2.0.0
-  modal_progress_hud_nsn: ^0.5.1
-  #  modal_progress_hud: ^0.1.3
-  path_provider: ^2.1.2
-  open_filex: ^4.4.0
-  csv: ^6.0.0
-  permission_handler: any
-  #  month_picker_dialog: any
-  google_maps_flutter: ^2.5.3
-  geolocator: ^11.0.0
   flutter_switch: ^0.3.2
-  rxdart: ^0.27.7
+  flutter_screenutil: ^5.6.0
+  flutter_html: ^3.0.0
+  flutter_local_notifications: ^18.0.1
+  cached_network_image: ^3.3.1
+  dio: ^5.5.0
+  data_table_2: ^2.0.5
+  excel: ^2.1.0
+  popup_menu: ^2.0.2
+  modal_progress_hud_nsn: ^0.5.1
   horizontal_data_table: ^4.3.1
-  flutter_html: any
-  device_info_plus: ^9.1.0
-  firebase_crashlytics: ^3.4.3
-  firebase_core: ^2.17.0
-  firebase_auth: ^4.16.0
-  pin_input_text_field: ^4.5.1
-  dropdown_search: ^5.0.3
-  flutter_screenutil: ^5.5.3
-  firebase_messaging: ^14.1.0
-  pdf: ^3.0.0
-  printing: ^5.0.0
-  fl_chart: ^0.40.0
-  flutter_local_notifications: ^18.0.0
-  data_table_2: ^2.0.3
-  excel: ^2.0.4
-  flutter_cache_manager: ^3.0.0
+  pin_input_text_field: ^4.5.2
+  dropdown_search: ^6.0.0
+  flutter_cache_manager: ^3.4.0
   multi_select_flutter: ^4.1.3
-  file_picker: ^8.0.0
-  cached_network_image: 3.3.0
-  dio: ^5.4.0
-  #  flutter_keyboard_visibility: 5.3.0 #NO PUSH
-  syncfusion_flutter_xlsio: 25.2.7
-  syncfusion_flutter_pdf: 25.2.7
+  file_picker: ^8.2.0
+
+  # maps / geolocation / device info
+  google_maps_flutter: ^2.6.0
+  geolocator: ^11.1.0
+  device_info_plus: ^11.2.0
+
+  # firebase (make sure these match each other)
+  #  firebase_core: ^2.24.0
+  firebase_auth: any
+  firebase_crashlytics: any
+  firebase_messaging: ^15.2.10
+
+  # docs / export / printing
+  pdf: ^3.2.0
+  printing: ^5.2.0
+  syncfusion_flutter_xlsio: ^27.0.0
+  syncfusion_flutter_pdf: ^27.0.0
+
+  # charts / reports
+  fl_chart: ^1.1.0
 
 dependency_overrides:
   #  flutter_keyboard_visibility: 5.3.0 #NO PUSH
-  url_launcher_ios: 6.2.4
+  #  url_launcher_ios: 6.2.4
+  #  url_launcher_android: 6.3.18
+  vector_math: 2.2.0
+  flutter_plugin_android_lifecycle: ^2.0.22
 
 
 

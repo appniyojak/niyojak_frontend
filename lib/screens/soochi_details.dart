@@ -11,7 +11,9 @@ class SoochiDetails extends StatefulWidget {
   var soochiId;
   var onSaveDetails;
   var viewType;
+
   SoochiDetails({Key? key, this.soochiId, this.onSaveDetails, this.viewType}) : super(key: key);
+
   State<StatefulWidget> createState() {
     return new SoochiDetailsState();
   }
@@ -167,28 +169,28 @@ class SoochiDetailsState extends State<SoochiDetails> {
                       SizedBox(
                         height: 10,
                       ),
-                      if(_status != null)
-                      DropdownButtonFormField(
-                        decoration: InputDecoration(labelText: Statics.getLabel('Status')),
-                        isExpanded: true,
-                        value: _statusValue == "" ? null : _statusValue,
-                        items: _status!.map((bg) => DropdownMenuItem(value: bg.staticID.toString(), child: Text(bg.codeForDisplay!))).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            _statusValue = value!;
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) return (Statics.getLabel('StatusValidationMessage'));
-                          return null;
-                        },
-                        onSaved: (value) {
-                          if (value != null && value.isNotEmpty)
-                            soochi!.statusID = int.parse(value);
-                          else
-                            soochi!.statusID = null;
-                        },
-                      ),
+                      if (_status != null)
+                        DropdownButtonFormField(
+                          decoration: InputDecoration(labelText: Statics.getLabel('Status')),
+                          isExpanded: true,
+                          value: _statusValue == "" ? null : _statusValue,
+                          items: _status!.map((bg) => DropdownMenuItem(value: bg.staticID.toString(), child: Text(bg.codeForDisplay!))).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              _statusValue = value!;
+                            });
+                          },
+                          validator: (value) {
+                            if (value == null || value.isEmpty) return (Statics.getLabel('StatusValidationMessage'));
+                            return null;
+                          },
+                          onSaved: (value) {
+                            if (value != null && value.isNotEmpty)
+                              soochi!.statusID = int.parse(value);
+                            else
+                              soochi!.statusID = null;
+                          },
+                        ),
                       SizedBox(
                         height: 10,
                       ),
@@ -226,7 +228,7 @@ class SoochiDetailsState extends State<SoochiDetails> {
                             vertical: 8,
                           ),
                           color: Theme.of(context).primaryColor,
-                          textColor: Theme.of(context).primaryTextTheme.button!.color,
+                          textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                           onPressed: _submit,
                           child: Text(
                             Statics.getLabel('Submit'),

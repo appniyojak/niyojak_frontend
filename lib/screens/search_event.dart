@@ -244,7 +244,7 @@ class _SearchEventState extends State<SearchEvent> with SingleTickerProviderStat
                                     vertical: 8,
                                   ),
                                   color: Theme.of(context).primaryColor,
-                                  textColor: Theme.of(context).primaryTextTheme.button!.color,
+                                  textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                                   onPressed: _search,
                                   child: Text(
                                     Statics.getLabel('Search'),
@@ -282,13 +282,11 @@ class _SearchEventState extends State<SearchEvent> with SingleTickerProviderStat
                         FutureBuilder<List<dynamic>>(
                           future: _eventList,
                           builder: (ctx, dataSnapshot) {
-
-
                             if (dataSnapshot.hasError) {
                               return Center(
                                   child: Text(
                                 'Server Error, Please Try Again Later',
-                                style: TextStyle(color: Theme.of(context).errorColor),
+                                style: TextStyle(color: Colors.red),
                               ));
                             }
                             return dataSnapshot.hasData && dataSnapshot.data!.length > 0

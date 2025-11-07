@@ -2357,7 +2357,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           child: MaterialButton(
                                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                                             color: Theme.of(context).primaryColor,
-                                            textColor: Theme.of(context).primaryTextTheme.button!.color,
+                                            textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                                             onPressed: () {
                                               setState(() {
                                                 _linkedMahaanagarValue2 = _linkedVibhaagValue2 =
@@ -2996,7 +2996,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           child: MaterialButton(
                                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                                             color: Theme.of(context).primaryColor,
-                                            textColor: Theme.of(context).primaryTextTheme.button!.color,
+                                            textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                                             onPressed: () {
                                               setState(() {
                                                 _linkedMahaanagarValue = _linkedVibhaagValue =

@@ -14,16 +14,11 @@ class EditAnnualBaithakMukhyaMaargVrutta extends StatefulWidget {
   var annualBaithakTypeCode;
   var onSaveDetails;
   var viewType;
+
   EditAnnualBaithakMukhyaMaargVrutta(
-      {Key? key,
-      this.annualBaithakMukhyaMaargVruttaID,
-      this.geoUnitID,
-      this.geoUnitName,
-      this.annualBaithakTypeID,
-      this.annualBaithakTypeCode,
-      this.onSaveDetails,
-      this.viewType})
+      {Key? key, this.annualBaithakMukhyaMaargVruttaID, this.geoUnitID, this.geoUnitName, this.annualBaithakTypeID, this.annualBaithakTypeCode, this.onSaveDetails, this.viewType})
       : super(key: key);
+
   @override
   _EditAnnualBaithakMukhyaMaargVruttaState createState() => _EditAnnualBaithakMukhyaMaargVruttaState();
 }
@@ -122,8 +117,7 @@ class _EditAnnualBaithakMukhyaMaargVruttaState extends State<EditAnnualBaithakMu
   saveAnnualBaithakMukhyaMaarg(BuildContext context) async {
     var inputData = json.encode({
       "AppUserID": Statics.userDetails["userID"],
-      "AnnualBaithakMukhyaMaargVruttaID":
-          (widget.annualBaithakMukhyaMaargVruttaID == null ? 0 : int.parse(widget.annualBaithakMukhyaMaargVruttaID.toString())),
+      "AnnualBaithakMukhyaMaargVruttaID": (widget.annualBaithakMukhyaMaargVruttaID == null ? 0 : int.parse(widget.annualBaithakMukhyaMaargVruttaID.toString())),
       "GeoUnitID": (widget.geoUnitID == null ? 0 : int.parse(widget.geoUnitID.toString())),
       "AnnualBaithakTypeID": (widget.annualBaithakTypeID == null ? 0 : int.parse(widget.annualBaithakTypeID.toString())),
       "ShaakhaaCount": _shaakhaaCountCtrl.text.trim() == '' ? null : int.parse(_shaakhaaCountCtrl.text),
@@ -237,7 +231,7 @@ class _EditAnnualBaithakMukhyaMaargVruttaState extends State<EditAnnualBaithakMu
                         vertical: 8,
                       ),
                       color: Theme.of(context).primaryColor,
-                      textColor: Theme.of(context).primaryTextTheme.button!.color,
+                      textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                       onPressed: () {
                         _submit(context);
                       },

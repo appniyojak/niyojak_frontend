@@ -10,7 +10,9 @@ class SwayamsevakSanghaShikshan extends StatefulWidget {
   var swId;
   var onSaveSwDetails;
   var viewType;
+
   SwayamsevakSanghaShikshan({Key? key, this.swId, this.onSaveSwDetails, this.viewType}) : super(key: key);
+
   State<StatefulWidget> createState() {
     return new SwayamsevakSanghaShikshanState();
   }
@@ -65,7 +67,7 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
     } else {
       if (!mounted) return;
       setState(() {
-        swSansghaShikshan = new SwayamsevakSanghaShikshanBAL(swID, 0, 1, null, null, null, null, null, null, null, null,null);
+        swSansghaShikshan = new SwayamsevakSanghaShikshanBAL(swID, 0, 1, null, null, null, null, null, null, null, null, null);
       });
     }
   }
@@ -83,7 +85,6 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
     _yearsAsDwityaVarshaShikshakCtrl.dispose();
     _yearsAsTrutiyaVarshaShikshakCtrl.dispose();
   }
-
 
   void getSwDetails(var theId) async {
     setState(() {
@@ -106,19 +107,11 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
             _prathamVarshaYearCntrl.text = swSansghaShikshan!.prathamVarshaYear == null ? "" : swSansghaShikshan!.prathamVarshaYear.toString();
             _dwitiyaVarshaYearCntrl.text = swSansghaShikshan!.dwitiyaVarshaYear == null ? "" : swSansghaShikshan!.dwitiyaVarshaYear.toString();
             _trutiyaVarshaYearCntrl.text = swSansghaShikshan!.trutiyaVarshaYear == null ? "" : swSansghaShikshan!.trutiyaVarshaYear.toString();
-            _yearsAsPraathamikShikshakCntrl.text =
-                swSansghaShikshan!.yearsAsPraathamikShikshak == null ? "" : swSansghaShikshan!.yearsAsPraathamikShikshak.toString();
-            _yearsAsPrathamVarshaShikshakCtrl.text =
-                swSansghaShikshan!.yearsAsPrathamVarshaShikshak == null ? "" : swSansghaShikshan!.yearsAsPrathamVarshaShikshak.toString();
-            _yearsAsDwityaVarshaShikshakCtrl.text =
-                swSansghaShikshan!.yearsAsDwityaVarshaShikshak == null ? "" : swSansghaShikshan!.yearsAsDwityaVarshaShikshak.toString();
-            _yearsAsTrutiyaVarshaShikshakCtrl.text =
-                swSansghaShikshan!.yearsAsTrutiyaVarshaShikshak == null ? "" : swSansghaShikshan!.yearsAsTrutiyaVarshaShikshak.toString();
-            if (_dwitiyaVarshaYearCntrl.text == "" &&
-                _trutiyaVarshaYearCntrl.text == "" &&
-                _prarambhikYearCntrl.text == "" &&
-                _praathamikYearCntrl.text == "" &&
-                _prathamVarshaYearCntrl.text == "") {
+            _yearsAsPraathamikShikshakCntrl.text = swSansghaShikshan!.yearsAsPraathamikShikshak == null ? "" : swSansghaShikshan!.yearsAsPraathamikShikshak.toString();
+            _yearsAsPrathamVarshaShikshakCtrl.text = swSansghaShikshan!.yearsAsPrathamVarshaShikshak == null ? "" : swSansghaShikshan!.yearsAsPrathamVarshaShikshak.toString();
+            _yearsAsDwityaVarshaShikshakCtrl.text = swSansghaShikshan!.yearsAsDwityaVarshaShikshak == null ? "" : swSansghaShikshan!.yearsAsDwityaVarshaShikshak.toString();
+            _yearsAsTrutiyaVarshaShikshakCtrl.text = swSansghaShikshan!.yearsAsTrutiyaVarshaShikshak == null ? "" : swSansghaShikshan!.yearsAsTrutiyaVarshaShikshak.toString();
+            if (_dwitiyaVarshaYearCntrl.text == "" && _trutiyaVarshaYearCntrl.text == "" && _prarambhikYearCntrl.text == "" && _praathamikYearCntrl.text == "" && _prathamVarshaYearCntrl.text == "") {
               _wrkAsShikshak = false;
             } else {
               _wrkAsShikshak = true;
@@ -128,7 +121,6 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
           }
 
           clearFields();
-
 
           if (shaaririkLst.length > 0)
             for (var data in shaaririkLst) {
@@ -141,7 +133,7 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
                   _isTrainedInMukhyaDanda = _isTrainedInAnyaDanda = false;
               }
 
-              if (data.shaaririkVishayCode == "Niyuddha"|| data.shaaririkVishayCode == "नियुद्ध") {
+              if (data.shaaririkVishayCode == "Niyuddha" || data.shaaririkVishayCode == "नियुद्ध") {
                 if (data.vishayFamiliarity == 1)
                   _isTrainedInMukhyaNiyuddha = true;
                 else if (data.vishayFamiliarity == 9)
@@ -150,7 +142,7 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
                   _isTrainedInMukhyaNiyuddha = _isTrainedInAnyaNiyuddha = false;
               }
 
-              if (data.shaaririkVishayCode == "Yogaasan"|| data.shaaririkVishayCode == "योगासन") {
+              if (data.shaaririkVishayCode == "Yogaasan" || data.shaaririkVishayCode == "योगासन") {
                 if (data.vishayFamiliarity == 1)
                   _isTrainedInMukhyaYogaasan = true;
                 else if (data.vishayFamiliarity == 9)
@@ -159,7 +151,7 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
                   _isTrainedInMukhyaYogaasan = _isTrainedInAnyaYogaasan = false;
               }
 
-              if (data.shaaririkVishayCode == "Yoga-Chaap"|| data.shaaririkVishayCode == "योगचाप") {
+              if (data.shaaririkVishayCode == "Yoga-Chaap" || data.shaaririkVishayCode == "योगचाप") {
                 if (data.vishayFamiliarity == 1)
                   _isTrainedInMukhyaYogachaap = true;
                 else if (data.vishayFamiliarity == 9)
@@ -168,7 +160,7 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
                   _isTrainedInMukhyaYogachaap = _isTrainedInAnyaYogachaap = false;
               }
 
-              if (data.shaaririkVishayCode == "Pada-Vinyaas"|| data.shaaririkVishayCode == "पदविन्यास") {
+              if (data.shaaririkVishayCode == "Pada-Vinyaas" || data.shaaririkVishayCode == "पदविन्यास") {
                 if (data.vishayFamiliarity == 1)
                   _isTrainedInMukhyaPadavinyas = true;
                 else if (data.vishayFamiliarity == 9)
@@ -177,7 +169,7 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
                   _isTrainedInMukhyaPadavinyas = _isTrainedInAnyaPadavinyas = false;
               }
 
-              if (data.shaaririkVishayCode == "Danda-Yuddha"|| data.shaaririkVishayCode == "दंड युद्ध") {
+              if (data.shaaririkVishayCode == "Danda-Yuddha" || data.shaaririkVishayCode == "दंड युद्ध") {
                 if (data.vishayFamiliarity == 1)
                   _isTrainedInMukhyaDandaYuddha = true;
                 else if (data.vishayFamiliarity == 9)
@@ -186,7 +178,7 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
                   _isTrainedInMukhyaDandaYuddha = _isTrainedInAnyaDandaYuddha = false;
               }
 
-              if (data.shaaririkVishayCode == "Yog"|| data.shaaririkVishayCode == "योग") {
+              if (data.shaaririkVishayCode == "Yog" || data.shaaririkVishayCode == "योग") {
                 if (data.vishayFamiliarity == 1)
                   _isTrainedInMukhyaYog = true;
                 else if (data.vishayFamiliarity == 9)
@@ -274,24 +266,16 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
         (swSansghaShikshan!.trutiyaVarshaYear == null ? "null" : swSansghaShikshan!.trutiyaVarshaYear.toString()) +
         ',' +
         ' "YearsAsPraathamikShikshak":' +
-        ((swSansghaShikshan!.yearsAsPraathamikShikshak == null || _isDwitiyaEligible == false || _wrkAsShikshak == false)
-            ? "null"
-            : swSansghaShikshan!.yearsAsPraathamikShikshak.toString()) +
+        ((swSansghaShikshan!.yearsAsPraathamikShikshak == null || _isDwitiyaEligible == false || _wrkAsShikshak == false) ? "null" : swSansghaShikshan!.yearsAsPraathamikShikshak.toString()) +
         ',' +
         ' "YearsAsPrathamVarshaShikshak":' +
-        ((swSansghaShikshan!.yearsAsPrathamVarshaShikshak == null || _isTrutiyaEligible == false || _wrkAsShikshak == false)
-            ? "null"
-            : swSansghaShikshan!.yearsAsPrathamVarshaShikshak.toString()) +
+        ((swSansghaShikshan!.yearsAsPrathamVarshaShikshak == null || _isTrutiyaEligible == false || _wrkAsShikshak == false) ? "null" : swSansghaShikshan!.yearsAsPrathamVarshaShikshak.toString()) +
         ',' +
         ' "YearsAsDwitiyaVarshaShikshak":' +
-        ((swSansghaShikshan!.yearsAsDwityaVarshaShikshak == null || _isTrutiyaEligible == false || _wrkAsShikshak == false)
-            ? "null"
-            : swSansghaShikshan!.yearsAsDwityaVarshaShikshak.toString()) +
+        ((swSansghaShikshan!.yearsAsDwityaVarshaShikshak == null || _isTrutiyaEligible == false || _wrkAsShikshak == false) ? "null" : swSansghaShikshan!.yearsAsDwityaVarshaShikshak.toString()) +
         ',' +
         ' "YearsAsTrutiyaVarshaShikshak":' +
-        ((swSansghaShikshan!.yearsAsTrutiyaVarshaShikshak == null || _isTrutiyaEligible == false || _wrkAsShikshak == false)
-            ? "null"
-            : swSansghaShikshan!.yearsAsTrutiyaVarshaShikshak.toString()) +
+        ((swSansghaShikshan!.yearsAsTrutiyaVarshaShikshak == null || _isTrutiyaEligible == false || _wrkAsShikshak == false) ? "null" : swSansghaShikshan!.yearsAsTrutiyaVarshaShikshak.toString()) +
         '},' +
         '"ListShaaririkVishay": [' +
         strShaaririkVishay +
@@ -669,9 +653,8 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
                                                   onChanged: (value) {
                                                     setState(() {
                                                       _isTrainedInMukhyaDanda = value;
-                                                      _isTrainedInMukhyaNiyuddha = _isTrainedInMukhyaYogaasan = _isTrainedInMukhyaYogachaap =
-                                                          _isTrainedInMukhyaPadavinyas =
-                                                              _isTrainedInMukhyaDandaYuddha = _isTrainedInMukhyaYog = false;
+                                                      _isTrainedInMukhyaNiyuddha = _isTrainedInMukhyaYogaasan =
+                                                          _isTrainedInMukhyaYogachaap = _isTrainedInMukhyaPadavinyas = _isTrainedInMukhyaDandaYuddha = _isTrainedInMukhyaYog = false;
                                                     });
                                                   }),
                                             ),
@@ -691,9 +674,8 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
                                                     setState(() {
                                                       _isTrainedInMukhyaNiyuddha = value;
 
-                                                      _isTrainedInMukhyaDanda = _isTrainedInMukhyaYogaasan = _isTrainedInMukhyaYogachaap =
-                                                          _isTrainedInMukhyaPadavinyas =
-                                                              _isTrainedInMukhyaDandaYuddha = _isTrainedInMukhyaYog = false;
+                                                      _isTrainedInMukhyaDanda = _isTrainedInMukhyaYogaasan =
+                                                          _isTrainedInMukhyaYogachaap = _isTrainedInMukhyaPadavinyas = _isTrainedInMukhyaDandaYuddha = _isTrainedInMukhyaYog = false;
                                                     });
                                                   }),
                                             ),
@@ -713,9 +695,8 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
                                                     setState(() {
                                                       _isTrainedInMukhyaYogaasan = value;
 
-                                                      _isTrainedInMukhyaDanda = _isTrainedInMukhyaNiyuddha = _isTrainedInMukhyaYogachaap =
-                                                          _isTrainedInMukhyaPadavinyas =
-                                                              _isTrainedInMukhyaDandaYuddha = _isTrainedInMukhyaYog = false;
+                                                      _isTrainedInMukhyaDanda = _isTrainedInMukhyaNiyuddha =
+                                                          _isTrainedInMukhyaYogachaap = _isTrainedInMukhyaPadavinyas = _isTrainedInMukhyaDandaYuddha = _isTrainedInMukhyaYog = false;
                                                     });
                                                   }),
                                             ),
@@ -735,8 +716,8 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
                                                   setState(() {
                                                     _isTrainedInMukhyaYogachaap = value;
 
-                                                    _isTrainedInMukhyaDanda = _isTrainedInMukhyaNiyuddha = _isTrainedInMukhyaYogaasan =
-                                                        _isTrainedInMukhyaPadavinyas = _isTrainedInMukhyaDandaYuddha = _isTrainedInMukhyaYog = false;
+                                                    _isTrainedInMukhyaDanda = _isTrainedInMukhyaNiyuddha =
+                                                        _isTrainedInMukhyaYogaasan = _isTrainedInMukhyaPadavinyas = _isTrainedInMukhyaDandaYuddha = _isTrainedInMukhyaYog = false;
                                                   });
                                                 },
                                               ),
@@ -757,8 +738,8 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
                                                   setState(() {
                                                     _isTrainedInMukhyaPadavinyas = value;
 
-                                                    _isTrainedInMukhyaDanda = _isTrainedInMukhyaNiyuddha = _isTrainedInMukhyaYogaasan =
-                                                        _isTrainedInMukhyaYogachaap = _isTrainedInMukhyaDandaYuddha = _isTrainedInMukhyaYog = false;
+                                                    _isTrainedInMukhyaDanda = _isTrainedInMukhyaNiyuddha =
+                                                        _isTrainedInMukhyaYogaasan = _isTrainedInMukhyaYogachaap = _isTrainedInMukhyaDandaYuddha = _isTrainedInMukhyaYog = false;
                                                   });
                                                 },
                                               ),
@@ -779,8 +760,8 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
                                                   setState(() {
                                                     _isTrainedInMukhyaDandaYuddha = value;
 
-                                                    _isTrainedInMukhyaDanda = _isTrainedInMukhyaNiyuddha = _isTrainedInMukhyaYogaasan =
-                                                        _isTrainedInMukhyaYogachaap = _isTrainedInMukhyaPadavinyas = _isTrainedInMukhyaYog = false;
+                                                    _isTrainedInMukhyaDanda = _isTrainedInMukhyaNiyuddha =
+                                                        _isTrainedInMukhyaYogaasan = _isTrainedInMukhyaYogachaap = _isTrainedInMukhyaPadavinyas = _isTrainedInMukhyaYog = false;
                                                   });
                                                 },
                                               ),
@@ -801,9 +782,8 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
                                                   setState(() {
                                                     _isTrainedInMukhyaYog = value;
 
-                                                    _isTrainedInMukhyaDanda = _isTrainedInMukhyaNiyuddha = _isTrainedInMukhyaYogaasan =
-                                                        _isTrainedInMukhyaYogachaap =
-                                                            _isTrainedInMukhyaPadavinyas = _isTrainedInMukhyaDandaYuddha = false;
+                                                    _isTrainedInMukhyaDanda = _isTrainedInMukhyaNiyuddha =
+                                                        _isTrainedInMukhyaYogaasan = _isTrainedInMukhyaYogachaap = _isTrainedInMukhyaPadavinyas = _isTrainedInMukhyaDandaYuddha = false;
                                                   });
                                                 },
                                               ),
@@ -996,7 +976,7 @@ class SwayamsevakSanghaShikshanState extends State<SwayamsevakSanghaShikshan> {
                           vertical: 8,
                         ),
                         color: Theme.of(context).primaryColor,
-                        textColor: Theme.of(context).primaryTextTheme.button!.color,
+                        textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                         onPressed: _submit,
                         child: Text(
                           Statics.getLabel('Submit'),

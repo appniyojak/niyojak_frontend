@@ -8,6 +8,7 @@ import '../helpers/static_data.dart' as Statics;
 
 class HelpScreen extends StatefulWidget {
   static const String routeName = '/help-screen';
+
   @override
   _HelpScreenState createState() => _HelpScreenState();
 }
@@ -96,14 +97,12 @@ class _HelpScreenState extends State<HelpScreen> {
                         return Center(
                             child: Text(
                           'Server Error, Please Try Again Later',
-                          style: TextStyle(color: Theme.of(context).errorColor),
+                          style: TextStyle(color: Colors.red),
                         ));
                       }
                       return dataSnapshot.hasData && dataSnapshot.data!.length > 0
                           ? Column(
-                              children: dataSnapshot.data!
-                                  .map((videoObj) => _createCard(videoObj['ResourceLabel'], videoObj['ButtonLabel'], videoObj['ResourceLink']))
-                                  .toList(),
+                              children: dataSnapshot.data!.map((videoObj) => _createCard(videoObj['ResourceLabel'], videoObj['ButtonLabel'], videoObj['ResourceLink'])).toList(),
                             )
                           : Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch')));
                     },

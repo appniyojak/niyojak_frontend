@@ -429,7 +429,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
                           vertical: 8,
                         ),
                         color: Theme.of(context).primaryColor,
-                        textColor: Theme.of(context).primaryTextTheme.button!.color,
+                        textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                         onPressed: () {
                           getData(context);
                         },
