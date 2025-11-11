@@ -52,6 +52,8 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
   bool? _linkedgraamDisable = false;
   bool? _linkedvastiDisable = false;
 
+  bool _isDaiytva = false;
+
   String? _linkedMahaanagarValue = '';
   String? _linkedVibhaagValue = '';
   String? _linkedbhaagValue = "";
@@ -80,6 +82,12 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
     // populateDropdown();
     populateChoice();
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _isDaiytva = ModalRoute.of(context)?.settings.arguments as bool;
   }
 
   getInitialData() async {
@@ -384,6 +392,7 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
               children: <Widget>[
                 AbhiyaanSwayamsevakTab(
                   initialData: initialData,
+                  isDaayitva: _isDaiytva,
                 ),
                 GruhSamparkaTab(
                   initialData: initialData,

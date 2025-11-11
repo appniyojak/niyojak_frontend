@@ -12,6 +12,7 @@ import '../../../../helpers/static_data.dart' as Statics;
 import '../../../../models/response_model/get_vasti_data_by_id_model.dart';
 import '../../../../models/response_model/vasti_sarvekshan_dropdown_model.dart';
 import '../../../../providers/bals.dart';
+import '../../../models/response_model/AbhiyaanSwayamsevakListResponse.dart';
 
 class VastiSurveyFormScreen extends StatefulWidget {
   static const String routeName = '/vasti-survey';
@@ -310,6 +311,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
   String? selectedValueFemale;
   String? ekunLoksankhya;
 
+  List<LevelMasterBAL>? _level;
+
+  // String _selectedLevel = "";
+
   final Map<String, String> options = {
     '{Statics.getLabel(moreThan40000)}': '44444',
     '{Statics.getLabel(20000to40000)}': '22222',
@@ -395,6 +400,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
     populateDropdown();
     fetchVastiSurveyDropdownData();
     _tabController.addListener(_handleTabSelection);
+    getLevelData();
     if ((int.parse(Statics.userDetails['LevelID']) <= 2)) {
       setState(() {
         isVastiSearch = true;
@@ -409,6 +415,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
     } else {
       print("NOOOOOOOOOOOOOOOOOOOTTTTTTTTTT   DOOOOOOOOOOOOOOOOOOOOONE");
     }
+  }
+
+  getLevelData() async {
+    _level = await Statics.getLevelLDB();
+    setState(() {
+      _level = _level!.where((element) => element.levelName == "Vasti" || element.levelName == "Graam").toList();
+      // _search("Search");
+    });
   }
 
   void _handleTabSelection() {
@@ -12244,6 +12258,442 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
     );
   }
 
+//========================================   ABHIYAAN KARYAKARTA POPUP =====================================================
+
+  String selectedAbhiyanValue = "";
+  String selectedSansthaValue = "";
+  String selectedDayitvValue = "";
+
+  int? selectedAbhiyaanKaryakartaIdIndex;
+
+  TextEditingController _anyaSansthaCntrl = TextEditingController();
+  TextEditingController _sansthaNameCntrl = TextEditingController();
+  TextEditingController _sansthaPadhCntrl = TextEditingController();
+  TextEditingController _fullNameCntrl = TextEditingController();
+  TextEditingController _emailCntrl = TextEditingController();
+  TextEditingController _mobileCntrl = TextEditingController();
+
+  List<AbhiyanSwayamsevakList> abhiyaanKaryakartaList = [];
+
+  void showAbhiyaanKaryakartaPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          // titlePadding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+          // contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 6),
+          insetPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "अभियान कार्यकर्ता जोडा",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: Colors.purpleAccent,
+                ),
+              ),
+              IconButton(
+                icon: Icon(Icons.close, color: Colors.grey),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  // clearShalaPrakarDataListFields();
+                },
+              )
+            ],
+          ),
+          content: StatefulBuilder(
+            builder: (context, setState) {
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    TextFormField(
+                      textInputAction: TextInputAction.next,
+                      controller: _fullNameCntrl,
+                      decoration: InputDecoration(
+                        labelText: Statics.getLabel('FullName'),
+                        isDense: true,
+                        border: OutlineInputBorder(borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                        enabledBorder: OutlineInputBorder(borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                        focusedBorder: OutlineInputBorder(borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                      ),
+                      keyboardType: TextInputType.text,
+                      validator: (value) {
+                        if (value!.isEmpty) return (Statics.getLabel('FullNameValidationMessage'));
+                        return null;
+                      },
+                      onSaved: (value) {
+                        // swDetails.fullName = value.trim();
+                      },
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      textInputAction: TextInputAction.next,
+                      controller: _mobileCntrl,
+                      decoration: InputDecoration(
+                        labelText: Statics.getLabel('Mobile'),
+                        isDense: true,
+                        border: OutlineInputBorder(borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                        enabledBorder: OutlineInputBorder(borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                        focusedBorder: OutlineInputBorder(borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                      ),
+                      keyboardType: TextInputType.phone,
+                      inputFormatters: [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.digitsOnly],
+                      validator: (value) {
+                        if (value!.isEmpty || value!.trim().length < 10) return (Statics.getLabel('MobileValidationMessage'));
+                        return null;
+                      },
+                      onSaved: (value) {
+                        // swDetails.mobileNumber = value.trim();
+                      },
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    TextFormField(
+                      textInputAction: TextInputAction.next,
+                      controller: _emailCntrl,
+                      decoration: InputDecoration(
+                        labelText: Statics.getLabel('Email'),
+                        isDense: true,
+                        border: OutlineInputBorder(borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                        enabledBorder: OutlineInputBorder(borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                        focusedBorder: OutlineInputBorder(borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                      ),
+                      keyboardType: TextInputType.text,
+                      validator: (value) {
+                        if (value!.isEmpty) return (Statics.getLabel('ValidEmailBodyValidationMessage'));
+                        return null;
+                      },
+                      onSaved: (value) {
+                        // swDetails.fullName = value.trim();
+                      },
+                    ),
+                    SizedBox(height: 15),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: RadioListTile<int>(
+                            contentPadding: EdgeInsets.zero,
+                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            title: Text("${Statics.getLabel('Male')}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                            value: 0,
+                            groupValue: isFemale,
+                            onChanged: (value) => setState(() {
+                              isFemale = value;
+                            }),
+                          ),
+                        ),
+                        Expanded(
+                          child: RadioListTile<int>(
+                            contentPadding: EdgeInsets.zero,
+                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            title: Text("${Statics.getLabel('Female')}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                            value: 1,
+                            groupValue: isFemale,
+                            onChanged: (value) => setState(() {
+                              isFemale = value;
+                            }),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 15),
+
+                    ///
+                    Row(
+                      spacing: 8,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 9.0),
+                          child: Text(
+                            "${Statics.getLabel('sanstha')} :",
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            // width: MediaQuery.of(context).size.width * 0.58,
+                            // margin: EdgeInsets.only(right: 5),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.black38)),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(left: 10, right: 0, top: 5, bottom: 5),
+                                  child: DropdownButton<String>(
+                                    isExpanded: true,
+                                    isDense: true,
+                                    iconSize: 30,
+                                    underline: SizedBox(),
+                                    value: selectedSansthaValue == "" ? null : selectedSansthaValue,
+                                    onChanged: (String? newValue) {
+                                      setState(() {
+                                        selectedSansthaValue = newValue!;
+                                      });
+                                    },
+                                    items: <String>["धार्मिक", "सामाजिक", "शैक्षणिक", "सेवा", "सांस्कृतिक", "अन्य"].map<DropdownMenuItem<String>>((String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 3.0),
+                                          child: Text(value),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                                if (selectedSansthaValue == "अन्य")
+                                  Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: TextFormField(
+                                      autofocus: true,
+                                      textInputAction: TextInputAction.done,
+                                      controller: _anyaSansthaCntrl,
+                                      decoration: InputDecoration(
+                                        hintText: "संस्था कुठल्या विषयात काम करते",
+                                      ),
+                                      keyboardType: TextInputType.text,
+                                      onSaved: (value) {
+                                        // swDetails.fullName = value.trim();
+                                      },
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 15),
+                    TextFormField(
+                      textInputAction: TextInputAction.next,
+                      controller: _sansthaNameCntrl,
+                      decoration: InputDecoration(
+                        labelText: "${Statics.getLabel('OrganizationName')}",
+                        isDense: true,
+                        border: OutlineInputBorder(borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                        enabledBorder: OutlineInputBorder(borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                        focusedBorder: OutlineInputBorder(borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                      ),
+                      keyboardType: TextInputType.text,
+                      onSaved: (value) {
+                        // swDetails.fullName = value.trim();
+                      },
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    TextFormField(
+                      textInputAction: TextInputAction.next,
+                      controller: _sansthaPadhCntrl,
+                      decoration: InputDecoration(
+                        labelText: "${Statics.getLabel('sansthetKuthalaPadavar')}",
+                        isDense: true,
+                        border: OutlineInputBorder(borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                        enabledBorder: OutlineInputBorder(borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                        focusedBorder: OutlineInputBorder(borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                      ),
+                      keyboardType: TextInputType.text,
+                      onSaved: (value) {
+                        // swDetails.fullName = value.trim();
+                      },
+                    ),
+                    SizedBox(height: 15),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            "${Statics.getLabel('SelectLevel')}",
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            ":",
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        if (_level != null)
+                          Expanded(
+                            flex: 4,
+                            child: Container(
+                              // alignment: Alignment.center,
+                              padding: EdgeInsets.only(left: 10, right: 0, top: 5, bottom: 5),
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.black38)),
+                              child: Text(
+                                Statics.getLabel(selctedLevel.toString()),
+                                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
+                              ),
+                            ),
+                          )
+                        else
+                          Expanded(flex: 4, child: SizedBox()),
+                      ],
+                    ),
+                    SizedBox(height: 15),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            "${Statics.getLabel('SelectLevelName')}",
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            ":",
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        // if (_geoUnits != null)
+                        Expanded(
+                          flex: 4,
+                          child: Container(
+                            // alignment: Alignment.center,
+                            padding: EdgeInsets.only(left: 10, right: 0, top: 5, bottom: 5),
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.black38)),
+                            child: Text(
+                              selctedLevelName.toString(),
+                              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
+                            ),
+                          ),
+                        )
+                        // else
+                        //   Expanded(flex: 4, child: SizedBox()),
+                      ],
+                    ),
+                    SizedBox(height: 15),
+                    // if (_levelValue != "" && _geoUnitsValue != "")
+                    // _levelValue == "2" || _levelValue == "3" ?
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            Statics.getLabel("SelectDaayitva"),
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            ":",
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: Container(
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.only(left: 10, right: 0, top: 5, bottom: 5),
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.black38)),
+                            child: DropdownButton<String>(
+                              isExpanded: true,
+                              isDense: true,
+                              iconSize: 30,
+                              underline: SizedBox(),
+                              value: selectedDayitvValue == "" ? null : selectedDayitvValue,
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  selectedDayitvValue = newValue!;
+                                });
+                              },
+                              items: <String>["अभियान प्रमुख", "अभियान कार्यकर्ता"].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 3.0),
+                                    child: Text(value),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          actions: [
+            Align(
+              alignment: Alignment.center,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.purple,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                onPressed: () {
+                  if (_fullNameCntrl.text.isEmpty) {
+                    print("पूर्ण नाव प्रविष्ट करा");
+                    Statics.showToast("पूर्ण नाव प्रविष्ट करा");
+                    return null;
+                  } else if (_mobileCntrl.text.isEmpty) {
+                    print("मोबाइल क्रमांक प्रविष्ट करा");
+                    Statics.showToast("मोबाइल क्रमांक प्रविष्ट करा");
+                    return null;
+                    // } else if (showFields && _linkedvastiValue == null && _linkedgraamValue == null) {
+                    //   print("निवास स्थान निवडा");
+                    //   Statics.showToast("निवास स्थान निवडा");
+                    //   return null;
+                  } else if (selectedSansthaValue == "अन्य" && _anyaSansthaCntrl.text.isEmpty) {
+                    print("अन्य संस्था प्रविष्ट करा");
+                    Statics.showToast("अन्य संस्था प्रविष्ट करा");
+                    return null;
+                  } else if (selectedSansthaValue != "" && _sansthaNameCntrl.text.isEmpty) {
+                    print("संस्थेचे नाव प्रविष्ट करा");
+                    Statics.showToast("संस्थेचे नाव प्रविष्ट करा");
+                    return null;
+                  } else if (selectedSansthaValue != "" && _sansthaPadhCntrl.text.isEmpty) {
+                    print("संस्थेमध्ये पद प्रविष्ट करा");
+                    Statics.showToast("संस्थेमध्ये पद प्रविष्ट करा");
+                    return null;
+                  } else if (selectedDayitvValue.isEmpty) {
+                    print("दायित्व निवडा");
+                    Statics.showToast("दायित्व निवडा");
+                    return null;
+                  } else {
+                    print("saving data");
+                    // await saveAbhiyaanSwayamsevakCall();
+                    abhiyaanKaryakartaList.add(AbhiyanSwayamsevakList(
+                      participantName: _fullNameCntrl.text.trim(),
+                      participantNumber: _mobileCntrl.text,
+                      sansthaName: _sansthaNameCntrl.text,
+                      sansthaPadh: _sansthaPadhCntrl.text,
+                      sansthaType: selectedDayitvValue,
+                    ));
+                    setState(() {});
+                  }
+                  Navigator.of(ctx).pop();
+                },
+                child: Text("${Statics.getLabel('Submit')}", style: TextStyle(color: Colors.white)),
+              ),
+            )
+          ],
+        );
+      },
+    );
+  }
+
   Widget _buildStep3() {
     return SingleChildScrollView(
       controller: _scrollController,
@@ -13375,6 +13825,282 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                   setState(() {
                                     hinduVeerYadiDataList[selectedHinduVeerYadiIdIndex!].isactive = 0;
                                     selectedHinduVeerYadiIdIndex = null;
+                                  });
+                                }
+                              },
+                              child: Icon(Icons.delete, color: Colors.red, size: 20),
+                            ),
+                          ],
+                        ),
+                      ),
+//============================================================================================================================================================
+//                       Divider(thickness: 2),
+//                       InkWell(
+//                         onTap: () {
+//                           submitStep3Form();
+//                         },
+//                         child: Container(
+//                           width: double.infinity,
+//                           height: 40,
+//                           padding: const EdgeInsets.symmetric(horizontal: 20),
+//                           margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+//                           decoration: BoxDecoration(
+//                             color: Colors.purpleAccent,
+//                             borderRadius: BorderRadius.circular(15),
+//                             boxShadow: [
+//                               BoxShadow(
+//                                 color: Colors.purpleAccent.withOpacity(0.5),
+//                                 offset: const Offset(0, 4),
+//                                 blurRadius: 6,
+//                               ),
+//                             ],
+//                           ),
+//                           child: Center(
+//                             child: Text(
+//                               "${Statics.getLabel('visrutMahitiSubmit')}",
+//                               style: const TextStyle(
+//                                 fontSize: 16,
+//                                 fontWeight: FontWeight.bold,
+//                                 color: Colors.white,
+//                               ),
+//                             ),
+//                           ),
+//                         ),
+//                       )
+                    ],
+                  ),
+                ],
+              )),
+//================================== ABHIYAAN KARYAKARTA FORM =================================================================================================================================================
+          mainContainer(
+              "${Statics.getLabel('abhiyaanKaryakartaFormTitle')}",
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          showAbhiyaanKaryakartaPopup(context);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          width: 100,
+                          decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), color: Colors.purpleAccent.withOpacity(0.7), borderRadius: BorderRadius.circular(15)),
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.add, color: Colors.white, size: 15),
+                                SizedBox(width: 5),
+                                Text(
+                                  "${Statics.getLabel('AddButton')}",
+                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Column(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black54),
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                        ),
+                        child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: DataTable(
+                                columnSpacing: 20,
+                                showCheckboxColumn: false,
+                                headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+                                headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
+                                columns: [
+                                  DataColumn(
+                                      label: Text(
+                                    "${Statics.getLabel('serialNo')}",
+                                  )),
+                                  DataColumn(
+                                      label: Text(
+                                    "${Statics.getLabel('Name')}",
+                                  )),
+                                ],
+                                rows: abhiyaanKaryakartaList.asMap().entries.map((entry) {
+                                  int index = entry.key;
+                                  var data = entry.value;
+                                  bool isSelected = selectedAbhiyaanKaryakartaIdIndex == index;
+                                  return DataRow(
+                                      selected: isSelected,
+                                      color: MaterialStateProperty.resolveWith<Color?>(
+                                        (Set<MaterialState> states) {
+                                          if (isSelected) return Colors.yellow.shade100;
+                                          return null;
+                                        },
+                                      ),
+                                      onSelectChanged: (bool? selected) {
+                                        if (selected != null && selected) {
+                                          setState(() {
+                                            selectedHinduVeerYadiIdIndex = index;
+                                          });
+                                        }
+                                      },
+                                      cells: [
+                                        DataCell(Text("${index + 1}")),
+                                        DataCell(Text(data.participantName ?? '')),
+                                      ]);
+                                }).toList(),
+                              ),
+                            )),
+                      ),
+                      SizedBox(height: 10),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 6,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            // InkWell(
+                            //   onTap: () {
+                            //     if (selectedHinduVeerYadiIdIndex != null) {
+                            //       var selectedData = abhiyaanKaryakartaList[selectedHinduVeerYadiIdIndex!];
+                            //       showDialog(
+                            //         context: context,
+                            //         builder: (context) {
+                            //           return AlertDialog(
+                            //             shape: RoundedRectangleBorder(
+                            //               borderRadius: BorderRadius.circular(20),
+                            //             ),
+                            //             backgroundColor: Colors.white,
+                            //             title: Center(
+                            //               child: Text(
+                            //                 "${Statics.getLabel('HinduVeer')}",
+                            //                 style: TextStyle(
+                            //                   fontWeight: FontWeight.bold,
+                            //                   fontSize: 20,
+                            //                   color: Colors.purpleAccent,
+                            //                 ),
+                            //               ),
+                            //             ),
+                            //             content: SingleChildScrollView(
+                            //               child: Column(
+                            //                 mainAxisSize: MainAxisSize.min,
+                            //                 crossAxisAlignment: CrossAxisAlignment.start,
+                            //                 children: [
+                            //                   Divider(thickness: 1, color: Colors.deepPurple.shade100),
+                            //                   SizedBox(height: 12),
+                            //                   _buildInfoRow("${Statics.getLabel('Name')}", selectedData.name),
+                            //                 ],
+                            //               ),
+                            //             ),
+                            //             actionsAlignment: MainAxisAlignment.center,
+                            //             actions: [
+                            //               ElevatedButton(
+                            //                 onPressed: () => Navigator.pop(context),
+                            //                 child: Text("${Statics.getLabel('bandKara')}", style: TextStyle(color: Colors.white)),
+                            //                 style: ElevatedButton.styleFrom(
+                            //                   backgroundColor: Colors.purpleAccent,
+                            //                   padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                            //                   shape: RoundedRectangleBorder(
+                            //                     borderRadius: BorderRadius.circular(12),
+                            //                   ),
+                            //                 ),
+                            //               ),
+                            //             ],
+                            //           );
+                            //         },
+                            //       );
+                            //     }
+                            //   },
+                            //   child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
+                            // ),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                // showHinduVeerYadiPopup(context, editIndex: selectedAbhiyaanKaryakartaIdIndex, onDataChanged: () {
+                                //   setState(() {});
+                                // });
+                              },
+                              child: Icon(Icons.edit, color: Colors.blue, size: 20),
+                            ),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            InkWell(
+                              onTap: () async {
+                                final shouldDelete = await showDialog<bool>(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    backgroundColor: Colors.white,
+                                    title: Center(
+                                      child: Text(
+                                        "${Statics.getLabel('pusthikarn')}",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                          color: Colors.redAccent,
+                                        ),
+                                      ),
+                                    ),
+                                    content: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                      child: Text(
+                                        "${Statics.getLabel('deleteconfirmText')}",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black87,
+                                        ),
+                                      ),
+                                    ),
+                                    actionsAlignment: MainAxisAlignment.spaceEvenly,
+                                    actions: [
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.grey.shade300,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                        ),
+                                        onPressed: () => Navigator.pop(context, false),
+                                        child: Text(
+                                          "${Statics.getLabel('ConfirmationNo')}",
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.redAccent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                        ),
+                                        onPressed: () => Navigator.pop(context, true),
+                                        child: Text(
+                                          "${Statics.getLabel('ConfirmationYes')}",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                                if (shouldDelete == true && selectedHinduVeerYadiIdIndex != null) {
+                                  setState(() {
+                                    abhiyaanKaryakartaList.removeAt(selectedAbhiyaanKaryakartaIdIndex!);
+                                    selectedAbhiyaanKaryakartaIdIndex = null;
                                   });
                                 }
                               },

@@ -1661,6 +1661,7 @@ Map<String, String> resEnglish = {
   "bhougolikExcelReport": "Bhougolik Level Report",
   "selectedLevel": "Selected Level",
   "downloadBtn": "Download",
+  "abhiyaanKaryakartaFormTitle": "Abhiyaan Karyakarta",
 };
 
 ///1,584
@@ -3326,6 +3327,7 @@ Map<String, String> resMarathi = {
   "bhougolikExcelReport": "भौगोलिक रचना अहवाल",
   "selectedLevel": "निवडलेला स्तर",
   "downloadBtn": "डाउनलोड करा",
+  "abhiyaanKaryakartaFormTitle": "अभियान कार्यकर्ता",
 };
 
 ///1,583
@@ -4990,4 +4992,5 @@ Map<String, String> resHindi = {
   "bhougolikExcelReport": "भौगोलिक रचना अहवाल",
   "selectedLevel": "चयनित स्तर",
   "downloadBtn": "डाउनलोड करें",
+  "abhiyaanKaryakartaFormTitle": "अभियान कार्यकर्ता",
 };

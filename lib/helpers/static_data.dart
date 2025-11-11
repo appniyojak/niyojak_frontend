@@ -39,12 +39,12 @@ import '../providers/bals.dart';
 import './database_helper.dart';
 
 ///Production
-const String baseUrl = 'http://114.79.135.131:8014';
-const String baseUrlAPI = 'http://114.79.135.131:8014/WCFServices/NiyojakProdMobileApp.svc';
+// const String baseUrl = 'http://114.79.135.131:8014';
+// const String baseUrlAPI = 'http://114.79.135.131:8014/WCFServices/NiyojakProdMobileApp.svc';
 
 /// Development
-// const String baseUrl = 'http://108.181.165.29:8027';
-// const String baseUrlAPI = 'http://108.181.165.29:8027/WCFServices/NiyojakProdMobileApp.svc';
+const String baseUrl = 'http://108.181.165.29:8027';
+const String baseUrlAPI = 'http://108.181.165.29:8027/WCFServices/NiyojakProdMobileApp.svc';
 // ========================================================================================
 
 const String urlCheckLoginDate = baseUrlAPI + '/checklogoutdate';
@@ -204,6 +204,7 @@ const String getSwayamsevakForGruhApi = baseUrlAPI + '/GetSwayamsevaksForGruh';
 const String saveSwayamsevakForGruhApi = baseUrlAPI + '/SaveAbhiyanSwayamsevakForGruh';
 const String getDataforGruhAbhiyaanApi = baseUrlAPI + '/GetDataforGruhAbhiyaan';
 const String saveDataforGruhAbhiyaanApi = baseUrlAPI + '/SaveDataforGruhAbhiyaan';
+const String getDataWhileAddUpdateUPLevelForGruh = baseUrlAPI + '/GetDataWhileAddUpdateUPLevelForGruh';
 
 //////////////////////////////////////////////////////////////////////////////////////////
 const String patchSuffix = '';
@@ -1960,6 +1961,37 @@ Future<NagarVastiSampurnaModel?> vastisarvekshanAllReportData(context, String? u
   }
 }
 
+Future<GetVijayadashamiInitModel?> getSajjanAndAnyaGuestData(context, String? userID, String? targetGeoUnitID, String? levelID) async {
+  showLoaderDialog(context);
+
+  print("${userID}  --- $targetGeoUnitID  ");
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  log(getDataWhileAddUpdateUPLevelForGruh);
+  print(json.encode({"AppUserID": userID, "GeoUnitID": targetGeoUnitID ?? "0", "isnagar": int.parse(levelID ?? "6")}));
+
+  var response = await http.post(
+    Uri.parse(getDataWhileAddUpdateUPLevelForGruh),
+    headers: jHeaders,
+    body: json.encode({"AppUserID": userID, "GeoUnitID": targetGeoUnitID ?? "0", "isnagar": int.parse(levelID ?? "6")}),
+  );
+  // log("response ==>  $response");
+  log("response ==>  ${jsonDecode(response.body)}");
+
+  if (response.statusCode == 200) {
+    var responseBody = json.decode(response.body);
+    Fluttertoast.showToast(msg: "माहिती प्राप्त झाली.", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
+    Navigator.of(context, rootNavigator: true).pop();
+
+    return GetVijayadashamiInitModel.fromJson(responseBody);
+  } else {
+    log("Error: ${response.statusCode}");
+    Navigator.of(context, rootNavigator: true).pop();
+
+    return null;
+  }
+}
+
 Future<GetVijayadashamiInitModel?> getVijayadashamiInitData(context, String? userID, String? targetGeoUnitID, String? levelID) async {
   showLoaderDialog(context);
 
@@ -1974,8 +2006,8 @@ Future<GetVijayadashamiInitModel?> getVijayadashamiInitData(context, String? use
     headers: jHeaders,
     body: json.encode({"AppUserID": userID, "GeoUnitID": targetGeoUnitID ?? "0", "isnagar": int.parse(levelID ?? "6")}),
   );
-  log("response ==>  $response");
-  // log("response ==>  ${jsonEncode(response.body)}");
+  // log("response ==>  $response");
+  log("response ==>  ${jsonDecode(response.body)}");
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);

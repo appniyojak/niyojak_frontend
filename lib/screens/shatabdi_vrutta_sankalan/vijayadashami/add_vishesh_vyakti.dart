@@ -296,7 +296,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
 
   Future<void> submitForm() async {
     Map<String, dynamic> formData = {
-      "GeoUnitID": int.parse(selctedLevelId!),
+      "GeoUnitID": int.parse(geoUnitId ?? selctedLevelId ?? "0"),
       "AppUserID": int.parse(Statics.userDetails['userID']),
       "isnagar": isVastiOrGraam,
       "Vastisarsajjanshakti": sajjanShaktiDataList,
@@ -1518,7 +1518,7 @@ class _AddVishisthaAtithiState extends State<AddVishisthaAtithi> {
                                 otherupshrenee2: anyaPrabhaviLokAnyaUppshreni1Controller.text.trim(),
                                 isactive: 1,
                                 isfemale: isFemale,
-                                vastiid: int.parse(selctedLevelId ?? "0"),
+                                vastiid: int.parse(geoUnitId ?? selctedLevelId ?? "0"),
                               );
 
                               _clearAnyaPrabhaviLokForm(); // clear after submit
