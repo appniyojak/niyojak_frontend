@@ -205,6 +205,7 @@ const String saveSwayamsevakForGruhApi = baseUrlAPI + '/SaveAbhiyanSwayamsevakFo
 const String getDataforGruhAbhiyaanApi = baseUrlAPI + '/GetDataforGruhAbhiyaan';
 const String saveDataforGruhAbhiyaanApi = baseUrlAPI + '/SaveDataforGruhAbhiyaan';
 const String getDataWhileAddUpdateUPLevelForGruh = baseUrlAPI + '/GetDataWhileAddUpdateUPLevelForGruh';
+const String urlCheckExistsAbhiyaanKaryakarta = baseUrlAPI + '/checkexistsabhiyaankaryakarta';
 
 //////////////////////////////////////////////////////////////////////////////////////////
 const String patchSuffix = '';
@@ -1987,6 +1988,35 @@ Future<GetVijayadashamiInitModel?> getSajjanAndAnyaGuestData(context, String? us
   } else {
     log("Error: ${response.statusCode}");
     Navigator.of(context, rootNavigator: true).pop();
+
+    return null;
+  }
+}
+
+Future<int?> checkExistAbhiyanKaryakartaData(int? userID, String searchCriteria, {BuildContext? context}) async {
+  if (context != null) showLoaderDialog(context);
+
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  log(urlCheckExistsAbhiyaanKaryakarta);
+  print(json.encode({"AppUserID": userID ?? 0, "SearchCriteria": searchCriteria}));
+
+  var response = await http.post(
+    Uri.parse(urlCheckExistsAbhiyaanKaryakarta),
+    headers: jHeaders,
+    body: json.encode({"AppUserID": userID, "SearchCriteria": searchCriteria}),
+  );
+  // log("response ==>  $response");
+  log("response ==>  ${jsonDecode(response.body)}");
+  if (context != null) Navigator.of(context, rootNavigator: true).pop();
+
+  if (response.statusCode == 200) {
+    var responseBody = json.decode(response.body);
+    Fluttertoast.showToast(msg: "माहिती प्राप्त झाली.", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
+
+    return responseBody["alreadyexists"]; //1 means exists
+  } else {
+    log("Error: ${response.statusCode}");
 
     return null;
   }

@@ -1,3 +1,5 @@
+import 'abhiyaan_karyakarta_model.dart';
+
 class GetVastiDataByIdModel {
   String? message;
   String? status;
@@ -58,6 +60,7 @@ class Vastisarvekshan {
   List<Vastisarsajjanshakti>? vastisarsajjanshakti;
   List<Vastisarschooltapasila>? vastisarschooltapasila;
   List<Vastisarupaasana>? vastisarupaasana;
+  List<AbhiyaanKaryakartaModel>? abhiyaanKaryakartaList;
   String? vastitasajaraanyakaryakaram;
   String? vastitilasamajikaque;
   int? agnishamandal;
@@ -117,6 +120,7 @@ class Vastisarvekshan {
     this.vastisarsajjanshakti,
     this.vastisarschooltapasila,
     this.vastisarupaasana,
+    this.abhiyaanKaryakartaList,
     this.vastitasajaraanyakaryakaram,
     this.vastitilasamajikaque,
     this.agnishamandal,
@@ -323,6 +327,12 @@ class Vastisarvekshan {
         vastisarupaasana!.add(new Vastisarupaasana.fromJson(v));
       });
     }
+    if (json['abhiyaanKaryakartaList'] != null) {
+      abhiyaanKaryakartaList = <AbhiyaanKaryakartaModel>[];
+      json['abhiyaanKaryakartaList'].forEach((v) {
+        abhiyaanKaryakartaList!.add(new AbhiyaanKaryakartaModel.fromJson(v));
+      });
+    }
     vastitasajaraanyakaryakaram = json['Vastitasajaraanyakaryakaram'];
     vastitilasamajikaque = json['Vastitilasamajikaque'];
     agnishamandal = json['agnishamandal'];
@@ -444,6 +454,9 @@ class Vastisarvekshan {
     }
     if (this.vastisarupaasana != null) {
       data['Vastisarupaasana'] = this.vastisarupaasana!.map((v) => v.toJson()).toList();
+    }
+    if (this.abhiyaanKaryakartaList != null) {
+      data['abhiyaanKaryakartaList'] = this.abhiyaanKaryakartaList!.map((v) => v.toJson()).toList();
     }
     data['Vastitasajaraanyakaryakaram'] = this.vastitasajaraanyakaryakaram;
     data['Vastitilasamajikaque'] = this.vastitilasamajikaque;

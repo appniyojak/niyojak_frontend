@@ -1662,6 +1662,9 @@ Map<String, String> resEnglish = {
   "selectedLevel": "Selected Level",
   "downloadBtn": "Download",
   "abhiyaanKaryakartaFormTitle": "Abhiyaan Karyakarta",
+  "abhiyaanPramukhKey": "Abhiyaan Pramukh",
+  "karyakartaAlreadyExists": "Abhiyaan Karyakarta Already Exists.",
+  "cannotDeleteTheData": "You cannot delete this data as its already in use!",
 };
 
 ///1,584
@@ -3328,6 +3331,9 @@ Map<String, String> resMarathi = {
   "selectedLevel": "निवडलेला स्तर",
   "downloadBtn": "डाउनलोड करा",
   "abhiyaanKaryakartaFormTitle": "अभियान कार्यकर्ता",
+  "abhiyaanPramukhKey": "अभियान प्रमुख",
+  "karyakartaAlreadyExists": "अभियान कार्यकर्ता आधीच नोंदलेले आहे.",
+  "cannotDeleteTheData": "हा डेटा आधीच वापरात असल्याने तुम्ही तो हटवू शकत नाही!",
 };
 
 ///1,583
@@ -4993,4 +4999,7 @@ Map<String, String> resHindi = {
   "selectedLevel": "चयनित स्तर",
   "downloadBtn": "डाउनलोड करें",
   "abhiyaanKaryakartaFormTitle": "अभियान कार्यकर्ता",
+  "abhiyaanPramukhKey": "अभियान प्रमुख",
+  "karyakartaAlreadyExists": "अभियान कार्यकर्ता पहले से चिन्हित है।",
+  "cannotDeleteTheData": "आप इस डेटा को हटा नहीं सकते क्योंकि यह पहले से ही उपयोग में है!",
 };
