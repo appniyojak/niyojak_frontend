@@ -1,35 +1,84 @@
-import 'AbhiyaanSwayamsevakListResponse.dart';
-
 class GruhAbhiyaanVruttaDataModel {
+  List<AbhiyaanPeopleModel>? abhiyaanList;
   Abhiyaandata? abhiyaandata;
-  List<AbhiyanSwayamsevakList>? abhiyaanmodels;
+  List<AbhiyaanPeopleModel>? abhiyanGruhToliList;
   String? message;
   String? status;
+  List<AbhiyaanPeopleModel>? swayamsevakList;
 
-  GruhAbhiyaanVruttaDataModel({this.abhiyaandata, this.abhiyaanmodels, this.message, this.status});
+  GruhAbhiyaanVruttaDataModel({this.abhiyaanList, this.abhiyaandata, this.abhiyanGruhToliList, this.message, this.status, this.swayamsevakList});
 
   GruhAbhiyaanVruttaDataModel.fromJson(Map<String, dynamic> json) {
+    if (json['AbhiyaanList'] != null) {
+      abhiyaanList = <AbhiyaanPeopleModel>[];
+      json['AbhiyaanList'].forEach((v) {
+        abhiyaanList!.add(new AbhiyaanPeopleModel.fromJson(v));
+      });
+    }
     abhiyaandata = json['Abhiyaandata'] != null ? new Abhiyaandata.fromJson(json['Abhiyaandata']) : null;
-    if (json['Abhiyaanmodels'] != null) {
-      abhiyaanmodels = <AbhiyanSwayamsevakList>[];
-      json['Abhiyaanmodels'].forEach((v) {
-        abhiyaanmodels!.add(new AbhiyanSwayamsevakList.fromJson(v));
+    if (json['AbhiyanGruhToliList'] != null) {
+      abhiyanGruhToliList = <AbhiyaanPeopleModel>[];
+      json['AbhiyanGruhToliList'].forEach((v) {
+        abhiyanGruhToliList!.add(new AbhiyaanPeopleModel.fromJson(v));
       });
     }
     message = json['Message'];
     status = json['Status'];
+    if (json['SwayamsevakList'] != null) {
+      swayamsevakList = <AbhiyaanPeopleModel>[];
+      json['SwayamsevakList'].forEach((v) {
+        swayamsevakList!.add(new AbhiyaanPeopleModel.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.abhiyaanList != null) {
+      data['AbhiyaanList'] = this.abhiyaanList!.map((v) => v.toJson()).toList();
+    }
     if (this.abhiyaandata != null) {
       data['Abhiyaandata'] = this.abhiyaandata!.toJson();
     }
-    if (this.abhiyaanmodels != null) {
-      data['Abhiyaanmodels'] = this.abhiyaanmodels!.map((v) => v.toJson()).toList();
+    if (this.abhiyanGruhToliList != null) {
+      data['AbhiyanGruhToliList'] = this.abhiyanGruhToliList!.map((v) => v.toJson()).toList();
     }
     data['Message'] = this.message;
     data['Status'] = this.status;
+    if (this.swayamsevakList != null) {
+      data['SwayamsevakList'] = this.swayamsevakList!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class AbhiyaanPeopleModel {
+  String? fullName;
+  int? swayamsevakID;
+  String? daayitva;
+  int? isdefault;
+  String? mobileno;
+  bool isSelected = false;
+
+  AbhiyaanPeopleModel({this.fullName, this.swayamsevakID, this.daayitva, this.isdefault, this.mobileno, this.isSelected = false});
+
+  AbhiyaanPeopleModel.fromJson(Map<String, dynamic> json) {
+    fullName = json['FullName'];
+    swayamsevakID = json['SwayamsevakID'];
+    daayitva = json['daayitva'];
+    isdefault = json['isdefault'];
+    mobileno = json['mobileno'];
+    isSelected = json['isSelected'] ?? false;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['FullName'] = this.fullName;
+    data['SwayamsevakID'] = this.swayamsevakID;
+    data['daayitva'] = this.daayitva;
+    data['isdefault'] = this.isdefault;
+    data['mobileno'] = this.mobileno;
+    data['isSelected'] = this.isSelected;
     return data;
   }
 }

@@ -1661,10 +1661,14 @@ Map<String, String> resEnglish = {
   "bhougolikExcelReport": "Bhougolik Level Report",
   "selectedLevel": "Selected Level",
   "downloadBtn": "Download",
+  "abhiyaanKaryakartaList": "Abhiyaan Karyakarta List",
   "abhiyaanKaryakartaFormTitle": "Abhiyaan Karyakarta",
   "abhiyaanPramukhKey": "Abhiyaan Pramukh",
   "karyakartaAlreadyExists": "Abhiyaan Karyakarta Already Exists.",
   "cannotDeleteTheData": "You cannot delete this data as its already in use!",
+  'specialPerson': "Special Person",
+  'addSpecialPerson': "Add Special Person",
+  'selectSpecialPerson': "Select Special Person",
 };
 
 ///1,584
@@ -3330,10 +3334,14 @@ Map<String, String> resMarathi = {
   "bhougolikExcelReport": "भौगोलिक रचना अहवाल",
   "selectedLevel": "निवडलेला स्तर",
   "downloadBtn": "डाउनलोड करा",
+  "abhiyaanKaryakartaList": "अभियान कार्यकर्ता यादी",
   "abhiyaanKaryakartaFormTitle": "अभियान कार्यकर्ता",
   "abhiyaanPramukhKey": "अभियान प्रमुख",
   "karyakartaAlreadyExists": "अभियान कार्यकर्ता आधीच नोंदलेले आहे.",
   "cannotDeleteTheData": "हा डेटा आधीच वापरात असल्याने तुम्ही तो हटवू शकत नाही!",
+  'specialPerson': "विशेष व्यक्ती",
+  'addSpecialPerson': "विशेष व्यक्ती जोडा",
+  'selectSpecialPerson': "विशेष व्यक्ती निवडा",
 };
 
 ///1,583
@@ -4998,8 +5006,12 @@ Map<String, String> resHindi = {
   "bhougolikExcelReport": "भौगोलिक रचना अहवाल",
   "selectedLevel": "चयनित स्तर",
   "downloadBtn": "डाउनलोड करें",
+  "abhiyaanKaryakartaList": "अभियान कार्यकर्ता सूची",
   "abhiyaanKaryakartaFormTitle": "अभियान कार्यकर्ता",
   "abhiyaanPramukhKey": "अभियान प्रमुख",
   "karyakartaAlreadyExists": "अभियान कार्यकर्ता पहले से चिन्हित है।",
   "cannotDeleteTheData": "आप इस डेटा को हटा नहीं सकते क्योंकि यह पहले से ही उपयोग में है!",
+  'specialPerson': "विशेष व्यक्ति",
+  'addSpecialPerson': "विशेष व्यक्ती चयन करें",
+  'selectSpecialPerson': "विशेष व्यक्ती चयन करें",
 };

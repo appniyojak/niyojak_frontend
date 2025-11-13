@@ -16,7 +16,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../assets/strings/strings.dart';
 import '../helpers/static_data.dart' as Statics;
-import '../models/response_model/AbhiyaanSwayamsevakListResponse.dart';
 import '../models/response_model/TulnatmakResponseModel.dart';
 import '../models/response_model/geounit_name_model.dart';
 import '../models/response_model/get_vasti_data_by_id_model.dart';
@@ -28,6 +27,7 @@ import '../models/response_model/nagar_vasti_model.dart';
 import '../models/response_model/nirikshan_baithak_vrutta.dart';
 import '../models/response_model/notification_list_model.dart';
 import '../models/response_model/sankalit_data_names_model.dart';
+import '../models/response_model/search_abhiyaan_karyakarta_model.dart';
 import '../models/response_model/taluka_mandal_model.dart';
 import '../models/response_model/upkhanda_upnagar_report_data_model.dart';
 import '../models/response_model/vasti_sarvekshan_dropdown_model.dart';
@@ -201,8 +201,10 @@ const String mandalSarvekshanstep2Submit = baseUrlAPI + '/mandalSarvekshanstep2'
 const String mandalSarvekshanstep3Submit = baseUrlAPI + '/mandalSarvekshanstep3';
 
 const String getSwayamsevakForGruhApi = baseUrlAPI + '/GetSwayamsevaksForGruh';
-const String saveSwayamsevakForGruhApi = baseUrlAPI + '/SaveAbhiyanSwayamsevakForGruh';
+const String saveSwayamsevakForGruhApi = baseUrlAPI + '/saveabhiyaanKaryakarta'; //'/SaveAbhiyanSwayamsevakForGruh';
+const String addSwayamsevakInListForGruhApi = baseUrlAPI + '/SaveAbhiyanSwayamsevakForGruh';
 const String getDataforGruhAbhiyaanApi = baseUrlAPI + '/GetDataforGruhAbhiyaan';
+const String addToToliListApi = baseUrlAPI + '/addtotoli';
 const String saveDataforGruhAbhiyaanApi = baseUrlAPI + '/SaveDataforGruhAbhiyaan';
 const String getDataWhileAddUpdateUPLevelForGruh = baseUrlAPI + '/GetDataWhileAddUpdateUPLevelForGruh';
 const String urlCheckExistsAbhiyaanKaryakarta = baseUrlAPI + '/checkexistsabhiyaankaryakarta';
@@ -2796,7 +2798,8 @@ Future<VijayadashamiExcelRespModel?> getVijayaDashamiUtsavExcelReportData(BuildC
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
       VijayadashamiExcelRespModel? model;
-      if (data["Status"] == "200") {
+
+      if (data["Status"] == "200" || data["Status"] == "Success") {
         model = VijayadashamiExcelRespModel.fromJson(data);
         log("vijayadashamiExcelReport >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
       }
@@ -2826,7 +2829,7 @@ Future<GruhAbhiyaanVruttaDataModel?> getDataforGruhAbhiyaan(Map<String, dynamic>
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
 
-      if (data["Status"] == "200") {
+      if (data["Status"] == "200" || data["Status"] == "Success") {
         GruhAbhiyaanVruttaDataModel model = GruhAbhiyaanVruttaDataModel.fromJson(data);
         log("getDataforGruhAbhiyaan >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
 
@@ -2858,7 +2861,7 @@ Future<bool> saveDataforGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildConte
       final Map<String, dynamic> data = jsonDecode(response.body);
       log("saveDataforGruhAbhiyaan >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
 
-      if (data["Status"] == "200") {
+      if (data["Status"] == "200" || data["Status"] == "Success") {
         return true; // ✅ return karna zaroori hai
       }
       return false; // ✅ error case
@@ -2873,7 +2876,38 @@ Future<bool> saveDataforGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildConte
   }
 }
 
-Future<AbhiyanSwayamsevakList?> getSwayamsevakForGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
+Future<List<AbhiyaanPeopleModel>> addToToliListData(Map<String, dynamic> inputJson, {BuildContext? context}) async {
+  if (context != null) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+  log(addToToliListApi);
+
+  try {
+    var response = await http.post(Uri.parse(addToToliListApi), headers: jHeaders, body: jsonEncode(inputJson));
+
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+
+      if (data["Status"] == "200" || data["Status"] == "Success") {
+        GruhAbhiyaanVruttaDataModel model = GruhAbhiyaanVruttaDataModel.fromJson(data);
+        log("getDataforGruhAbhiyaan >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+
+        return model.abhiyanGruhToliList ?? []; // ✅ return karna zaroori hai
+      }
+      return []; // ✅ error case
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return []; // ✅ error case
+    }
+  } catch (e) {
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+    print("Exception: $e");
+    return [];
+  }
+}
+
+Future<SearchAbhiyaanKaryakartaRespModel?> getSwayamsevakForGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   if (context != null) showLoaderDialog(context);
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
   log(getSwayamsevakForGruhApi);
@@ -2887,7 +2921,7 @@ Future<AbhiyanSwayamsevakList?> getSwayamsevakForGruhAbhiyaan(Map<String, dynami
       final Map<String, dynamic> data = jsonDecode(response.body);
 
       if (data["Status"] == "Success") {
-        AbhiyanSwayamsevakList model = AbhiyanSwayamsevakList.fromJson(data["SwayamsevakList"]);
+        SearchAbhiyaanKaryakartaRespModel model = SearchAbhiyaanKaryakartaRespModel.fromJson(data);
         log("getSwayamsevakForGruhAbhiyaan >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
 
         return model; // ✅ return karna zaroori hai
@@ -2919,6 +2953,35 @@ Future<bool> saveSwayamsevakForGruhAbhiyaan(Map<String, dynamic> inputJson, {Bui
       log("saveSwayamsevakForGruhAbhiyaan >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
 
       if (data["Status"] == "200") {
+        return true; // ✅ return karna zaroori hai
+      }
+      return false; // ✅ error case
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return false; // ✅ error case
+    }
+  } catch (e) {
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+    print("Exception: $e");
+    return false;
+  }
+}
+
+Future<bool> addSwayamsevakInListForGruhData(Map<String, dynamic> inputJson, {BuildContext? context}) async {
+  if (context != null) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+  log(addSwayamsevakInListForGruhApi);
+
+  try {
+    var response = await http.post(Uri.parse(addSwayamsevakInListForGruhApi), headers: jHeaders, body: jsonEncode(inputJson));
+
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      log("addSwayamsevakInListForGruhData >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+
+      if (data["Status"] == "200" || data["Status"] == "Success") {
         return true; // ✅ return karna zaroori hai
       }
       return false; // ✅ error case
