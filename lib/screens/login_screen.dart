@@ -8,7 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:niyojak_prod/helpers/database_helper.dart';
 import 'package:niyojak_prod/models/response_model/AbhiyaanLoginDataResponse.dart';
-import 'package:niyojak_prod/screens/AbhiyanScreen.dart';
 import 'package:niyojak_prod/screens/edit_swayamsevak_screen.dart';
 import 'package:niyojak_prod/screens/forget_password.dart';
 import 'package:pin_input_text_field/pin_input_text_field.dart';
@@ -24,6 +23,7 @@ import '../screens/change_password.dart';
 import '../screens/home_screen.dart';
 import '../screens/update_version.dart';
 import '../utils/hard_loader.dart';
+import 'shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/gruh_abhiyaan_main_tab_screen.dart';
 
 class LogInScreen extends StatefulWidget {
   static const String routeName = '/login-screen';
@@ -868,7 +868,8 @@ class _LogInCardState extends State<LogInCard> {
           await db.execute('UPDATE UserDataMaster SET PreferredLanguageID=6;');
           await db.execute('UPDATE UserDataMaster SET PreferredLanguageCode=\'Marathi\';');
           Statics.userDetails['languagePreference'] = 'Marathi';
-          landingPage = AbhiyanScreen();
+          // landingPage = AbhiyanScreen();
+          landingPage = GruhAbhiyaanMainTabScreen();
         } else {
           print("switchScreens 8");
           landingPage = HomeScreen();

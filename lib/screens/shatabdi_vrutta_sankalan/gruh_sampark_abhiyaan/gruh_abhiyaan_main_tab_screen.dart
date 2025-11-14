@@ -87,7 +87,7 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _isDaiytva = ModalRoute.of(context)?.settings.arguments as bool;
+    _isDaiytva = (ModalRoute.of(context)?.settings.arguments as bool?) ?? false;
   }
 
   getInitialData() async {

@@ -366,21 +366,21 @@ List<BhaugolikVistaarBAL> tgLstBhaugolikVistaar = [];
 //   return resMarathi[key].toString();
 // }
 
-String getLabel(String key) {
+String getLabel(String key, {bool returnKey = false}) {
   String language = userDetails['languagePreference'];
 
   if (language == 'English') {
-    return resEnglish[key]?.toString() ?? '';
+    return resEnglish[key] ?? (returnKey ? key : "");
   }
   if (language == 'Marathi') {
-    return resMarathi[key]?.toString() ?? '';
+    return resMarathi[key] ?? (returnKey ? key : "");
   }
   if (language == 'Hindi') {
-    return resHindi[key]?.toString() ?? '';
+    return resHindi[key] ?? (returnKey ? key : "");
   }
 
   // Default to Marathi if language not matched
-  return resMarathi[key]?.toString() ?? '';
+  return resMarathi[key] ?? (returnKey ? key : "");
 }
 
 Size getDeviceSize(BuildContext context) {
@@ -2876,7 +2876,7 @@ Future<bool> saveDataforGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildConte
   }
 }
 
-Future<List<AbhiyaanPeopleModel>> addToToliListData(Map<String, dynamic> inputJson, {BuildContext? context}) async {
+Future<GruhAbhiyaanVruttaDataModel?> addToToliListData(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   if (context != null) showLoaderDialog(context);
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
   log(addToToliListApi);
@@ -2893,17 +2893,17 @@ Future<List<AbhiyaanPeopleModel>> addToToliListData(Map<String, dynamic> inputJs
         GruhAbhiyaanVruttaDataModel model = GruhAbhiyaanVruttaDataModel.fromJson(data);
         log("getDataforGruhAbhiyaan >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
 
-        return model.abhiyanGruhToliList ?? []; // ✅ return karna zaroori hai
+        return model; // ✅ return karna zaroori hai
       }
-      return []; // ✅ error case
+      return null; // ✅ error case
     } else {
       print("Error: ${response.statusCode} - ${response.body}");
-      return []; // ✅ error case
+      return null; // ✅ error case
     }
   } catch (e) {
     if (context != null) Navigator.of(context, rootNavigator: true).pop();
     print("Exception: $e");
-    return [];
+    return null;
   }
 }
 
