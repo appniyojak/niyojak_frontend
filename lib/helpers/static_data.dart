@@ -906,9 +906,9 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForMandal(String level
 
 //===================================================================================================================================================================
 
-Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParent(String levelID, String parentID, String parentType, String pattern) async {
+Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParent(String levelID, String parentID, String parentType, String pattern, {bool isAbhiyaan = false}) async {
   if (parentID == '') parentID = '0';
-  String strSql = "Select * from GeoUnitMaster WHERE LevelID=" +
+  String strSql = "Select * from ${isAbhiyaan ? "AbhiyaanGeoUnitMaster" : "GeoUnitMaster"} WHERE LevelID=" +
       levelID +
       (parentType != ""
           ? parentType == "Praant"
@@ -931,8 +931,8 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParent(String levelID, Strin
                                               ? " AND ParentVastiID=" + parentID
                                               : ""
           : "") +
-      (pattern == "" ? "" : " AND GeoUnitMaster.GeoUnitName LIKE \'$pattern%\'") +
-      " ORDER BY GeoUnitMaster.DisplaySequence;";
+      (pattern == "" ? "" : " AND ${isAbhiyaan ? "AbhiyaanGeoUnitMaster" : "GeoUnitMaster"}.GeoUnitName LIKE \'$pattern%\'") +
+      " ORDER BY ${isAbhiyaan ? "AbhiyaanGeoUnitMaster" : "GeoUnitMaster"}.DisplaySequence;";
   // print("strSql ==> $strSql");
   var result = await DatabaseHelper.getData(strSql);
 

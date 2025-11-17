@@ -85,6 +85,7 @@ class AbhiyaanPeopleModel {
 
 class Abhiyaandata {
   String? abhiyaanDate;
+  bool ishide = false;
   int? pustakvikrisankhya;
   int? samparkhetusahbhagisankhya;
   int? samparkhetutolisankhya;
@@ -95,6 +96,7 @@ class Abhiyaandata {
 
   Abhiyaandata(
       {this.abhiyaanDate,
+      this.ishide = false,
       this.pustakvikrisankhya,
       this.samparkhetusahbhagisankhya,
       this.samparkhetutolisankhya,
@@ -105,6 +107,7 @@ class Abhiyaandata {
 
   Abhiyaandata.fromJson(Map<String, dynamic> json) {
     abhiyaanDate = json['AbhiyaanDate'];
+    ishide = json['ishide'] == 1;
     pustakvikrisankhya = json['pustakvikrisankhya'];
     samparkhetusahbhagisankhya = json['samparkhetusahbhagisankhya'];
     samparkhetutolisankhya = json['samparkhetutolisankhya'];
@@ -117,6 +120,7 @@ class Abhiyaandata {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['AbhiyaanDate'] = this.abhiyaanDate;
+    data['ishide'] = this.ishide ? 1 : 0;
     data['pustakvikrisankhya'] = this.pustakvikrisankhya;
     data['samparkhetusahbhagisankhya'] = this.samparkhetusahbhagisankhya;
     data['samparkhetutolisankhya'] = this.samparkhetutolisankhya;
