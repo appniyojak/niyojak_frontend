@@ -77,6 +77,7 @@ class DatabaseHelper {
           '   HasGraaminKshetra BOOL, ParentKshetraID INT, ParentPraantID INT, ParentMahaanagarID INT, ' +
           '   ParentVibhaagID INT, ParentBhaagID INT, ParentNagarID INT, ParentShaharID INT, ' +
           '   ParentMandalID INT, ParentVastiID INT, ParentGraamID INT)');
+
       db.execute(' CREATE TABLE SwayamsevakMaster(SwayamsevakID INT, FullName VARCHAR(50), ' + '   MobileNumber VARCHAR(10), LinkedGeoUnitID INT, AppPassword VARCHAR(20), PreferredLanguageID INT)');
       db.execute(' CREATE TABLE DaayitvaMaster(DaayitvaID INT, PraantID INT, DaayitvaName VARCHAR(50), DaayitvaForID INT, ' + '   IsPravaasiDaayitva BIT)');
       db.execute(' CREATE TABLE StateMaster(StateID INT, GSTStateCode VARCHAR(5), Code VARCHAR(10), StateName VARCHAR(50))');
@@ -92,6 +93,12 @@ class DatabaseHelper {
           ' LinkedGeoUnitHierarchy VARCHAR(100), IsFirstLogin BOOL, LastLoginTimeStamp VARCHAR(30), ' +
           ' IsLoggedIn VARCHAR(10), IsPravaasiKaaryakartaa BOOL)');
 
+      db.execute(''' CREATE TABLE AbhiyanSwayamsevakData (
+          AbhiyaDaayitvaID INT, AbhiyanSwayamsevakID INT, DaayityaName VARCHAR(256), Email VARCHAR(256), FullName VARCHAR(256),
+      GeoUnitID INT, GeoUnitName VARCHAR(256), LevelName VARCHAR(256), MobileNumber VARCHAR(256), ParentBhaagID INT,
+      ParentMahaanagarID INT, ParentMandalID INT, ParentNagarID INT, ParentVibhaagID INT, PreferredLanguageCode VARCHAR(256),
+      PreferredLanguageID INT)''');
+
       db.execute('CREATE TABLE IF NOT EXISTS HomeScreenData(ShishuCount INT, BaalCount INT, TarunVidyaarthiCount INT,' +
           ' TarunVyavasayeeCount INT, ProudhaVyavasayeeCount INT, UnknownAgeCount INT, TrutiyaVarshaShikshitCount INT,' +
           ' DwitiyaVarshaShikshitCount INT, PrathamVarshaShikshitCount INT, PraathamikShikshitCount INT, NoShikshanCount INT, ' +
@@ -101,6 +108,12 @@ class DatabaseHelper {
           ' PravaseeKaaryakartaaCount INT, GatividhiKaaryakartaaCount INT, AayaamKaaryakartaaCount INT,' +
           ' SanghaPreritSansthaaKaaryakartaaCount INT, TotalKaaryakartaaCount INT,' +
           ' SocialOrganizationKaaryakartaaCount INT, PratidnyitCount INT, Notificationcount INT)');
+
+      db.execute(' CREATE TABLE AbhiyaanGeoUnitMaster(GeoUnitID INT, PraantID INT, GeoUnitName VARCHAR(200),NameForDisplay VARCHAR(200),' +
+          ' LevelID INT, DisplaySequence INT, ' +
+          '   HasGraaminKshetra BOOL, ParentKshetraID INT, ParentPraantID INT, ParentMahaanagarID INT, ' +
+          '   ParentVibhaagID INT, ParentBhaagID INT, ParentNagarID INT, ParentShaharID INT, ' +
+          '   ParentMandalID INT, ParentVastiID INT, ParentGraamID INT)');
     });
     return database;
   }
@@ -313,6 +326,50 @@ class DatabaseHelper {
               ')';
         }
         cnt = cnt + 1;
+      } else if (tableName == 'AbhiyaanGeoUnitMaster') {
+        for (var data in dataList) {
+          cnt = cnt + 1;
+          sqlStr = sqlStr +
+              (cnt == 1
+                  ? 'INSERT INTO AbhiyaanGeoUnitMaster(GeoUnitID, PraantID, GeoUnitName, LevelID, DisplaySequence, ' +
+                      ' ParentKshetraID, ParentPraantID, ParentMahaanagarID, ParentVibhaagID, ParentBhaagID, ParentNagarID, ' +
+                      ' ParentShaharID, ParentMandalID, ParentGraamID, ParentVastiID, HasGraaminKshetra) VALUES '
+                  : ',') +
+              '(' +
+              data['GeoUnitID'].toString() +
+              ',' +
+              data['PraantID'].toString() +
+              ',\'' +
+              data['GeoUnitName'].toString().replaceAll("'", "''") +
+              '\',' +
+              data['LevelID'].toString() +
+              ',' +
+              data['DisplaySequence'].toString() +
+              ',' +
+              data['ParentKshetraID'].toString() +
+              ',' +
+              data['ParentPraantID'].toString() +
+              ',' +
+              data['ParentMahaanagarID'].toString() +
+              ',' +
+              data['ParentVibhaagID'].toString() +
+              ',' +
+              data['ParentBhaagID'].toString() +
+              ',' +
+              data['ParentNagarID'].toString() +
+              ',' +
+              data['ParentShaharID'].toString() +
+              ',' +
+              data['ParentMandalID'].toString() +
+              ',' +
+              data['ParentGraamID'].toString() +
+              ',' +
+              data['ParentVastiID'].toString() +
+              ',' +
+              (data['HasGraaminKshetra'].toString() == 'true' ? '1' : '0') +
+              ')';
+        }
+        cnt = cnt + 1;
       } else if (tableName == 'UserDataMaster') {
         //for (var data in dataList) {
         try {
@@ -383,6 +440,52 @@ class DatabaseHelper {
               '\',\'true\', ' +
               ((dataList[' IsLoggedIn'] == null || dataList[' IsLoggedIn'] == false) ? '0' : '1') +
               ((dataList['IsPravaasiKaaryakartaa'] == null || dataList['IsPravaasiKaaryakartaa'] == false) ? '0' : '1') +
+              ')';
+        } catch (e) {
+          print(" -- DB Exception -- ${e.toString()}");
+        }
+      } else if (tableName == 'AbhiyanSwayamsevakData') {
+        //for (var data in dataList) {
+        try {
+          cnt = cnt + 1;
+          sqlStr = sqlStr +
+              (cnt == 1
+                  ? 'INSERT INTO AbhiyanSwayamsevakData (AbhiyaDaayitvaID, AbhiyanSwayamsevakID, DaayityaName, Email, FullName,' +
+                      'GeoUnitID, GeoUnitName, LevelName, MobileNumber, ParentBhaagID, ParentMahaanagarID, ParentMandalID,' +
+                      'ParentNagarID, ParentVibhaagID, PreferredLanguageCode, PreferredLanguageID)  VALUES '
+                  : ',') +
+              '(' +
+              dataList['AbhiyaDaayitvaID'] +
+              ',' +
+              dataList['AbhiyanSwayamsevakID'] +
+              ',' +
+              dataList['DaayityaName'].toString() +
+              ',\'' +
+              dataList['Email'].toString() +
+              '\'' +
+              ',' +
+              dataList['FullName'].toString() +
+              ',\'' +
+              dataList['GeoUnitName'].toString() +
+              '\'' +
+              ',\'' +
+              dataList['LevelName'].toString() +
+              '\',' +
+              dataList['MobileNumber'].toString() +
+              ',\'' +
+              dataList['ParentBhaagID'].toString() +
+              '\',' +
+              dataList['ParentMahaanagarID'].toString() +
+              ',\'' +
+              dataList['ParentMandalID'].toString() +
+              '\',' +
+              dataList['ParentNagarID'].toString() +
+              ',\'' +
+              dataList['ParentVibhaagID'].toString() +
+              '\',' +
+              dataList['PreferredLanguageCode'].toString() +
+              ',\'' +
+              dataList['PreferredLanguageID'].toString() +
               ')';
         } catch (e) {
           print(" -- DB Exception -- ${e.toString()}");
@@ -700,6 +803,42 @@ class DatabaseHelper {
           (data['HasGraaminKshetra'].toString() == 'true' ? '1' : '0') +
           ');';
       // }
+    } else if (tableName == 'AbhiyaanGeoUnitMaster') {
+      sqlStr = 'INSERT INTO AbhiyaanGeoUnitMaster(GeoUnitID, PraantID, GeoUnitName, LevelID, DisplaySequence, ' +
+          ' ParentKshetraID, ParentPraantID, ParentMahaanagarID, ParentVibhaagID, ParentBhaagID, ParentNagarID, ' +
+          ' ParentShaharID, ParentMandalID, ParentGraamID, ParentVastiID, HasGraaminKshetra) VALUES (' +
+          data['GeoUnitID'].toString() +
+          ',' +
+          data['PraantID'].toString() +
+          ',\'' +
+          data['GeoUnitName'].toString().replaceAll("'", "''") +
+          '\',' +
+          data['LevelID'].toString() +
+          ',' +
+          data['DisplaySequence'].toString() +
+          ',' +
+          data['ParentKshetraID'].toString() +
+          ',' +
+          data['ParentPraantID'].toString() +
+          ',' +
+          data['ParentMahaanagarID'].toString() +
+          ',' +
+          data['ParentVibhaagID'].toString() +
+          ',' +
+          data['ParentBhaagID'].toString() +
+          ',' +
+          data['ParentNagarID'].toString() +
+          ',' +
+          data['ParentShaharID'].toString() +
+          ',' +
+          data['ParentMandalID'].toString() +
+          ',' +
+          data['ParentGraamID'].toString() +
+          ',' +
+          data['ParentVastiID'].toString() +
+          ',' +
+          (data['HasGraaminKshetra'].toString() == 'true' ? '1' : '0') +
+          ');';
     } else if (tableName == 'UserDataMaster') {
       sqlStr = 'SELECT 1 FROM UserDataMaster WHERE SwayamsevakID=' + data['SwayamsevakID'].toString() + ';';
       var result = await db.rawQuery(sqlStr);
@@ -837,6 +976,47 @@ class DatabaseHelper {
             ((data['IsPravaasiKaaryakartaa'] == null || data['IsPravaasiKaaryakartaa'] == false) ? '0' : '1') +
             ' );';
       }
+    } else if (tableName == 'AbhiyanSwayamsevakData') {
+      // Record not found, then insert
+      sqlStr = 'INSERT INTO AbhiyanSwayamsevakData (AbhiyaDaayitvaID, AbhiyanSwayamsevakID, DaayityaName, Email, FullName,' +
+          'GeoUnitID, GeoUnitName, LevelName, MobileNumber, ParentBhaagID, ParentMahaanagarID, ParentMandalID,' +
+          'ParentNagarID, ParentVibhaagID, PreferredLanguageCode, PreferredLanguageID)  VALUES (' +
+          data['AbhiyaDaayitvaID'].toString() +
+          ',' +
+          data['AbhiyanSwayamsevakID'].toString() +
+          ',\'' +
+          data['DaayityaName'].toString() +
+          '\'' +
+          ',\'' +
+          data['Email'].toString() +
+          '\'' +
+          ',\'' +
+          data['FullName'].toString() +
+          '\'' +
+          ',' +
+          data['GeoUnitID'].toString() +
+          ',\'' +
+          data['GeoUnitName'].toString() +
+          '\',\'' +
+          data['LevelName'].toString() +
+          '\',\'' +
+          data['MobileNumber'].toString() +
+          '\',' +
+          data['ParentBhaagID'].toString() +
+          ',' +
+          data['ParentMahaanagarID'].toString() +
+          ',' +
+          data['ParentMandalID'].toString() +
+          ',' +
+          data['ParentNagarID'].toString() +
+          ',' +
+          data['ParentVibhaagID'].toString() +
+          ',\'' +
+          data['PreferredLanguageCode'].toString() +
+          '\'' +
+          ',' +
+          data['PreferredLanguageID'].toString() +
+          ' );';
     } else if (tableName == 'HomeScreenData') {
       // Record not found, then insert
       sqlStr = 'INSERT INTO HomeScreenData( ShishuCount, BaalCount,	TarunVidyaarthiCount,	TarunVyavasayeeCount,	' +

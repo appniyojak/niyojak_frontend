@@ -276,7 +276,41 @@ Map<String, dynamic> userDetails = {
   'DaayitvaId': '',
 };
 
+Map<String, dynamic> abhiyaanUserDetails = {
+  "isEmpty": false,
+  "AbhiyaDaayitvaID": 0,
+  "AbhiyanSwayamsevakID": 0,
+  "DaayityaName": "",
+  "Email": "",
+  "FullName": "",
+  "GeoUnitID": 0,
+  "GeoUnitName": "",
+  "LevelName": "",
+  "MobileNumber": "",
+  "ParentBhaagID": 0,
+  "ParentMahaanagarID": 0,
+  "ParentMandalID": 0,
+  "ParentNagarID": 0,
+  "ParentVibhaagID": 0,
+  "PreferredLanguageCode": "",
+  "PreferredLanguageID": 0
+};
+
 Map<String, dynamic> levels = {
+  'KshetraLevelID': '',
+  'PraantLevelID': '',
+  'MahaanagarLevelID': '',
+  'VibhaagLevelID': '',
+  'BhaagLevelID': '',
+  'ShaharLevelID': '',
+  'NagarLevelID': '',
+  'MandalLevelID': '',
+  'GraamLevelID': '',
+  'VastiLevelID': '',
+  'ShaakhaaLevelID': '',
+};
+
+Map<String, dynamic> abhiyaanGeoLevels = {
   'KshetraLevelID': '',
   'PraantLevelID': '',
   'MahaanagarLevelID': '',
@@ -579,6 +613,37 @@ Future<void> populateUserDetailsMap() async {
       levels['ShaakhaaLevelID'] = lvlItem.levelID.toString();
     }
   });
+}
+
+Future<void> populateUserAbhiyaanDetailsMap() async {
+  var result = await DatabaseHelper.getData('Select * from AbhiyanSwayamsevakData;');
+
+  if (result.isEmpty) {
+    abhiyaanUserDetails["isEmpty"] = true;
+  } else {
+    result.forEach((element) {
+      var uData = AbhiyaanUserDataBAL.fromJson(element);
+      abhiyaanUserDetails['AbhiyaDaayitvaID'] = uData.abhiyaDaayitvaID;
+      abhiyaanUserDetails['AbhiyanSwayamsevakID'] = uData.abhiyanSwayamsevakID;
+      abhiyaanUserDetails['DaayityaName'] = uData.daayityaName;
+      abhiyaanUserDetails['Email'] = uData.email;
+      abhiyaanUserDetails['FullName'] = uData.fullName;
+      abhiyaanUserDetails['GeoUnitID'] = uData.geoUnitID;
+
+      abhiyaanUserDetails['GeoUnitName'] = uData.geoUnitName;
+      abhiyaanUserDetails['LevelName'] = uData.levelName;
+      abhiyaanUserDetails['MobileNumber'] = uData.mobileNumber;
+      abhiyaanUserDetails['ParentBhaagID'] = uData.parentBhaagID;
+      abhiyaanUserDetails['ParentMahaanagarID'] = uData.parentMahaanagarID;
+
+      abhiyaanUserDetails['ParentMandalID'] = uData.parentMandalID;
+      abhiyaanUserDetails['ParentNagarID'] = uData.parentNagarID;
+      abhiyaanUserDetails['ParentVibhaagID'] = uData.parentVibhaagID;
+      abhiyaanUserDetails['PreferredLanguageCode'] = uData.preferredLanguageCode;
+
+      abhiyaanUserDetails['PreferredLanguageID'] = uData.preferredLanguageID;
+    });
+  }
 }
 
 Future<void> populateDashboardDetailsMap() async {
@@ -1344,7 +1409,8 @@ Future<String> updateProfileData(String strFieldName, String strFieldValue, Stri
         userDetails["userID"] +
         ";";
     await DatabaseHelper.executeQuery(strSql);
-    populateUserDetailsMap();
+    await populateUserDetailsMap();
+    await populateUserAbhiyaanDetailsMap();
     message = "Data Saved sucessfully";
   }
   return message;

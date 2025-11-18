@@ -16,20 +16,8 @@ class SwayamsevakBAL {
   bool? canUseApp;
   bool? canEdit;
 
-  SwayamsevakBAL(
-      this.swayamsevakID,
-      this.praantID,
-      this.fullName,
-      this.mobileNumber,
-      this.email,
-      this.linkedGeoUnitID,
-      this.linkedGeoUnitName,
-      this.linkedShaakhaaID,
-      this.linkedShaakhaaName,
-      this.preferredLanguageID,
-      this.preferredLanguageCode,
-      this.canUseApp,
-      this.canEdit);
+  SwayamsevakBAL(this.swayamsevakID, this.praantID, this.fullName, this.mobileNumber, this.email, this.linkedGeoUnitID, this.linkedGeoUnitName, this.linkedShaakhaaID, this.linkedShaakhaaName,
+      this.preferredLanguageID, this.preferredLanguageCode, this.canUseApp, this.canEdit);
 }
 
 class SwayamsevakOtherInfoBAL {
@@ -194,19 +182,8 @@ class SwayamsevakSanghaShikshanBAL {
   int? yearsAsDwityaVarshaShikshak;
   int? yearsAsTrutiyaVarshaShikshak;
 
-  SwayamsevakSanghaShikshanBAL(
-      this.swayamsevakID,
-      this.swayamsevakSanghaShikshanID,
-      this.praantID,
-      this.prarambhikYear,
-      this.praathamikYear,
-      this.prathamVarshaYear,
-      this.dwitiyaVarshaYear,
-      this.trutiyaVarshaYear,
-      this.yearsAsPraathamikShikshak,
-      this.yearsAsPrathamVarshaShikshak,
-      this.yearsAsDwityaVarshaShikshak,
-      this.yearsAsTrutiyaVarshaShikshak);
+  SwayamsevakSanghaShikshanBAL(this.swayamsevakID, this.swayamsevakSanghaShikshanID, this.praantID, this.prarambhikYear, this.praathamikYear, this.prathamVarshaYear, this.dwitiyaVarshaYear,
+      this.trutiyaVarshaYear, this.yearsAsPraathamikShikshak, this.yearsAsPrathamVarshaShikshak, this.yearsAsDwityaVarshaShikshak, this.yearsAsTrutiyaVarshaShikshak);
 }
 
 class SwayamsevakOccupationBAL {
@@ -286,15 +263,7 @@ class SwayamsevakLinkedGeoUnitBAL {
   int? linkedShaakhaaID;
   String? linkedShaakhaaName;
 
-  SwayamsevakLinkedGeoUnitBAL(
-      this.swayamsevakID,
-      this.praantID,
-      this.linkedVastiID,
-      this.linkedVastiName,
-      this.linkedGraamID,
-      this.linkedGraamName,
-      this.linkedShaakhaaID,
-      this.linkedShaakhaaName);
+  SwayamsevakLinkedGeoUnitBAL(this.swayamsevakID, this.praantID, this.linkedVastiID, this.linkedVastiName, this.linkedGraamID, this.linkedGraamName, this.linkedShaakhaaID, this.linkedShaakhaaName);
 }
 
 class SwayamsevakSharirikGhoshVishayBAL {
@@ -308,8 +277,7 @@ class SwayamsevakSanghaShikshanSharirikVishayBAL {
   SwayamsevakSanghaShikshanBAL sanghaShikshan;
   List<ShaaririkVishayBAL> sharirikVishay;
 
-  SwayamsevakSanghaShikshanSharirikVishayBAL(
-      this.sanghaShikshan, this.sharirikVishay);
+  SwayamsevakSanghaShikshanSharirikVishayBAL(this.sanghaShikshan, this.sharirikVishay);
 }
 
 class GhoshVishayBAL {
@@ -322,15 +290,7 @@ class GhoshVishayBAL {
   int? swayamsevakID;
   bool? isUnderstandLipi;
 
-  GhoshVishayBAL(
-      this.swayamsevakGhoshVishayID,
-      this.vaadyaID,
-      this.praantID,
-      this.vaadyaCode,
-      this.vaadyaFamiliarity,
-      this.rachanaaCount,
-      this.swayamsevakID,
-      this.isUnderstandLipi);
+  GhoshVishayBAL(this.swayamsevakGhoshVishayID, this.vaadyaID, this.praantID, this.vaadyaCode, this.vaadyaFamiliarity, this.rachanaaCount, this.swayamsevakID, this.isUnderstandLipi);
 }
 
 class ShaaririkVishayBAL {
@@ -341,13 +301,7 @@ class ShaaririkVishayBAL {
   int? vishayFamiliarity;
   int? swayamsevakID;
 
-  ShaaririkVishayBAL(
-      this.swayamsevakShaaririkVishayID,
-      this.shaaririkVishayID,
-      this.praantID,
-      this.shaaririkVishayCode,
-      this.vishayFamiliarity,
-      this.swayamsevakID);
+  ShaaririkVishayBAL(this.swayamsevakShaaririkVishayID, this.shaaririkVishayID, this.praantID, this.shaaririkVishayCode, this.vishayFamiliarity, this.swayamsevakID);
 }
 
 class SwayamsevakDaayitvaBAL {
@@ -405,16 +359,7 @@ class StaticMasterBAL {
   String? showAnnualBaithakkey;
   String? monthYear;
 
-  StaticMasterBAL(
-      this.staticID,
-      this.praantID,
-      this.entityType,
-      this.code,
-      this.codeForDisplay,
-      this.displaySequence,
-      this.ViewOnly,
-      this.showAnnualBaithakkey,
-      this.monthYear);
+  StaticMasterBAL(this.staticID, this.praantID, this.entityType, this.code, this.codeForDisplay, this.displaySequence, this.ViewOnly, this.showAnnualBaithakkey, this.monthYear);
 
   StaticMasterBAL.fromMap(Map<String, dynamic> map) {
     staticID = map["StaticID"];
@@ -563,8 +508,7 @@ class DaayitvaMasterBAL {
   String? daayitvaName;
   int? isPravaasiDaayitva;
 
-  DaayitvaMasterBAL(this.daayitvaID, this.praantID, this.daayitvaForID,
-      this.daayitvaName, this.isPravaasiDaayitva);
+  DaayitvaMasterBAL(this.daayitvaID, this.praantID, this.daayitvaForID, this.daayitvaName, this.isPravaasiDaayitva);
 
   DaayitvaMasterBAL.fromMap(Map<String, dynamic> map) {
     daayitvaID = map["DaayitvaID"];
@@ -673,6 +617,83 @@ class UserDataBAL {
     isLoggedIn = map['IsLoggedIn'];
     isPravaasiKaaryakartaa = map['IsPravaasiKaaryakartaa'] == 1 ? true : false;
     canEdit = map['can_edit'] == 1 ? true : false;
+  }
+}
+
+class AbhiyaanUserDataBAL {
+  int? abhiyaDaayitvaID;
+  int? abhiyanSwayamsevakID;
+  String? daayityaName;
+  String? email;
+  String? fullName;
+  int? geoUnitID;
+  String? geoUnitName;
+  String? levelName;
+  String? mobileNumber;
+  int? parentBhaagID;
+  int? parentMahaanagarID;
+  int? parentMandalID;
+  int? parentNagarID;
+  int? parentVibhaagID;
+  String? preferredLanguageCode;
+  int? preferredLanguageID;
+
+  AbhiyaanUserDataBAL(
+      {this.abhiyaDaayitvaID,
+      this.abhiyanSwayamsevakID,
+      this.daayityaName,
+      this.email,
+      this.fullName,
+      this.geoUnitID,
+      this.geoUnitName,
+      this.levelName,
+      this.mobileNumber,
+      this.parentBhaagID,
+      this.parentMahaanagarID,
+      this.parentMandalID,
+      this.parentNagarID,
+      this.parentVibhaagID,
+      this.preferredLanguageCode,
+      this.preferredLanguageID});
+
+  AbhiyaanUserDataBAL.fromJson(Map<String, dynamic> json) {
+    abhiyaDaayitvaID = json['AbhiyaDaayitvaID'];
+    abhiyanSwayamsevakID = json['AbhiyanSwayamsevakID'];
+    daayityaName = json['DaayityaName'];
+    email = json['Email'];
+    fullName = json['FullName'];
+    geoUnitID = json['GeoUnitID'];
+    geoUnitName = json['GeoUnitName'];
+    levelName = json['LevelName'];
+    mobileNumber = json['MobileNumber'];
+    parentBhaagID = json['ParentBhaagID'];
+    parentMahaanagarID = json['ParentMahaanagarID'];
+    parentMandalID = json['ParentMandalID'];
+    parentNagarID = json['ParentNagarID'];
+    parentVibhaagID = json['ParentVibhaagID'];
+    preferredLanguageCode = json['PreferredLanguageCode'];
+    preferredLanguageID = json['PreferredLanguageID'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['AbhiyaDaayitvaID'] = this.abhiyaDaayitvaID;
+    data['AbhiyanSwayamsevakID'] = this.abhiyanSwayamsevakID;
+    data['DaayityaName'] = this.daayityaName;
+    data['Email'] = this.email;
+    data['FullName'] = this.fullName;
+    data['GeoUnitID'] = this.geoUnitID;
+    data['GeoUnitName'] = this.geoUnitName;
+    data['LevelName'] = this.levelName;
+    data['MobileNumber'] = this.mobileNumber;
+    data['ParentBhaagID'] = this.parentBhaagID;
+    data['ParentMahaanagarID'] = this.parentMahaanagarID;
+    data['ParentMandalID'] = this.parentMandalID;
+    data['ParentNagarID'] = this.parentNagarID;
+    data['ParentVibhaagID'] = this.parentVibhaagID;
+    data['PreferredLanguageCode'] = this.preferredLanguageCode;
+    data['PreferredLanguageID'] = this.preferredLanguageID;
+    return data;
   }
 }
 
@@ -865,15 +886,7 @@ class SoochiMasterBAL {
   String? statusCode;
   String? remark;
 
-  SoochiMasterBAL(
-      this.soochiID,
-      this.praantID,
-      this.soochiName,
-      this.ownerSwayamsevakID,
-      this.ownerSwayamsevakFullName,
-      this.statusID,
-      this.statusCode,
-      this.remark);
+  SoochiMasterBAL(this.soochiID, this.praantID, this.soochiName, this.ownerSwayamsevakID, this.ownerSwayamsevakFullName, this.statusID, this.statusCode, this.remark);
 }
 
 class AbhiyaanVruttaBAL {
@@ -902,29 +915,8 @@ class AbhiyaanVruttaBAL {
   String? levelName;
   int? kaaryakartaaCount;
 
-  AbhiyaanVruttaBAL(
-      this.abhiyaanVruttaID,
-      this.praantID,
-      this.levelID,
-      this.abhiyaanID,
-      this.vruttaDate,
-      this.geoUnitID,
-      this.geoUnitname,
-      this.menCount,
-      this.womenCount,
-      this.houseCount,
-      this.c1,
-      this.c2,
-      this.c3,
-      this.cashOnCoupon,
-      this.cashOnRcpt,
-      this.cashRcptCount,
-      this.chqRcptCount,
-      this.chqCount,
-      this.chqAmount,
-      this.isInSync,
-      this.totalAmt,
-      this.levelName);
+  AbhiyaanVruttaBAL(this.abhiyaanVruttaID, this.praantID, this.levelID, this.abhiyaanID, this.vruttaDate, this.geoUnitID, this.geoUnitname, this.menCount, this.womenCount, this.houseCount, this.c1,
+      this.c2, this.c3, this.cashOnCoupon, this.cashOnRcpt, this.cashRcptCount, this.chqRcptCount, this.chqCount, this.chqAmount, this.isInSync, this.totalAmt, this.levelName);
 
   /*AbhiyaanVruttaBAL.fromMapRecursive(Map<String, dynamic> map) {
     geoUnitID = map["GeoUnitID"];
@@ -1031,20 +1023,8 @@ class VisheshVyaktiBAL {
   String? createdByName;
   String? createdByMobileNumber;
 
-  VisheshVyaktiBAL(
-      this.visheshVyaktiID,
-      this.praantID,
-      this.visheshVyaktiName,
-      this.visheshVyaktiCategoryID,
-      this.visheshVyaktiCategoryCode,
-      this.mobileNumber,
-      this.otherCategoryCode,
-      this.remark,
-      this.geoUnitName,
-      this.geoUnitID,
-      this.createdBy,
-      this.createdByName,
-      this.createdByMobileNumber);
+  VisheshVyaktiBAL(this.visheshVyaktiID, this.praantID, this.visheshVyaktiName, this.visheshVyaktiCategoryID, this.visheshVyaktiCategoryCode, this.mobileNumber, this.otherCategoryCode, this.remark,
+      this.geoUnitName, this.geoUnitID, this.createdBy, this.createdByName, this.createdByMobileNumber);
 
   VisheshVyaktiBAL.fromMap(Map<String, dynamic> map) {
     visheshVyaktiID = map["VisheshVyaktiID"];
@@ -1070,15 +1050,7 @@ class AbhiyaanParticipantBAL {
   String? genderCode;
   String? geoUnitName;
 
-  AbhiyaanParticipantBAL(
-      this.abhiyaanParticipantID,
-      this.praantID,
-      this.geoUnitID,
-      this.abhiyaanID,
-      this.participantName,
-      this.mobileNumber,
-      this.genderID,
-      this.genderCode);
+  AbhiyaanParticipantBAL(this.abhiyaanParticipantID, this.praantID, this.geoUnitID, this.abhiyaanID, this.participantName, this.mobileNumber, this.genderID, this.genderCode);
 
   AbhiyaanParticipantBAL.fromMap(Map<String, dynamic> map) {
     abhiyaanParticipantID = map["AbhiyaanParticipantID"];
@@ -1118,30 +1090,8 @@ class JoinRSSBAL {
   String? joiningDate;
   String? statusDate;
 
-  JoinRSSBAL(
-      this.joinRSSID,
-      this.praantID,
-      this.bhaagID,
-      this.shaharID,
-      this.nagarID,
-      this.statusID,
-      this.name,
-      this.mobileNumber,
-      this.email,
-      this.address,
-      this.genderID,
-      this.genderCode,
-      this.districtName,
-      this.cityName,
-      this.stateName,
-      this.country,
-      this.age,
-      this.occupation,
-      this.remark,
-      this.statusRemark,
-      this.jRSRemark,
-      this.joiningDate,
-      this.statusDate);
+  JoinRSSBAL(this.joinRSSID, this.praantID, this.bhaagID, this.shaharID, this.nagarID, this.statusID, this.name, this.mobileNumber, this.email, this.address, this.genderID, this.genderCode,
+      this.districtName, this.cityName, this.stateName, this.country, this.age, this.occupation, this.remark, this.statusRemark, this.jRSRemark, this.joiningDate, this.statusDate);
 
   JoinRSSBAL.fromMap(Map<String, dynamic> map) {
     joinRSSID = map["JoinRSSID"];
@@ -1234,14 +1184,7 @@ class AbhiyaanAttendanceBAL {
   String? workDate;
   bool? isPresent;
 
-  AbhiyaanAttendanceBAL(
-      this.abhiyaanAttendanceID,
-      this.praantID,
-      this.geoUnitID,
-      this.abhiyaanID,
-      this.abhiyaanParticipantID,
-      this.workDate,
-      this.isPresent);
+  AbhiyaanAttendanceBAL(this.abhiyaanAttendanceID, this.praantID, this.geoUnitID, this.abhiyaanID, this.abhiyaanParticipantID, this.workDate, this.isPresent);
 
   AbhiyaanAttendanceBAL.fromMap(Map<String, dynamic> map) {
     abhiyaanAttendanceID = map["AbhiyaanAttendanceID"];
@@ -1274,12 +1217,10 @@ class ChartData {
   String? geoUnitName;
   int? geoUnitID;
 
-  ChartData(this.abhiyaanDate, this.dblabhiyaanDate, this.samparkitHomes,
-      this.sankalan, this.karyakarta, this.geoUnitName, this.geoUnitID);
+  ChartData(this.abhiyaanDate, this.dblabhiyaanDate, this.samparkitHomes, this.sankalan, this.karyakarta, this.geoUnitName, this.geoUnitID);
 
   ChartData.fromMap(Map<String, dynamic> map) {
-    abhiyaanDate = DateFormat("dd-MMM")
-        .format(DateTime.parse(map["VruttaDateStr"].toString()));
+    abhiyaanDate = DateFormat("dd-MMM").format(DateTime.parse(map["VruttaDateStr"].toString()));
     dblabhiyaanDate = DateTime.parse(map["VruttaDateStr"].toString());
     samparkitHomes = map["HouseCount"] == null ? 0 : map["HouseCount"];
     sankalan = map["TotalAmount"] == null ? 0 : map["TotalAmount"];
@@ -1364,111 +1305,41 @@ class DashboardDataBAL {
       this.totalSwayamsevakCount);
 
   DashboardDataBAL.fromMap(Map<String, dynamic> map) {
-    shishuCount =
-        map["ShishuCount"] == null ? "0" : map["ShishuCount"].toString();
+    shishuCount = map["ShishuCount"] == null ? "0" : map["ShishuCount"].toString();
     baalCount = map["BaalCount"] == null ? "0" : map["BaalCount"].toString();
-    tarunVidyaarthiCount = map["TarunVidyaarthiCount"] == null
-        ? "0"
-        : map["TarunVidyaarthiCount"].toString();
-    tarunVyavasaayeeCount = map["TarunVyavasaayeeCount"] == null
-        ? "0"
-        : map["TarunVyavasaayeeCount"].toString();
-    proudhaVyavasaayeeCount = map["ProudhaVyavasaayeeCount"] == null
-        ? "0"
-        : map["ProudhaVyavasaayeeCount"].toString();
-    unknownAgeCount = map["UnknownAgeCount"] == null
-        ? "0"
-        : map["UnknownAgeCount"].toString();
-    trutiyaVarshaShikshitCount = map["TrutiyaVarshaShikshitCount"] == null
-        ? "0"
-        : map["TrutiyaVarshaShikshitCount"].toString();
-    dwitiyaVarshaShikshitCount = map["DwitiyaVarshaShikshitCount"] == null
-        ? "0"
-        : map["DwitiyaVarshaShikshitCount"].toString();
-    prathamVarshaShikshitCount = map["PrathamVarshaShikshitCount"] == null
-        ? "0"
-        : map["PrathamVarshaShikshitCount"].toString();
-    praathamikShikshitCount = map["PraathamikShikshitCount"] == null
-        ? "0"
-        : map["PraathamikShikshitCount"].toString();
-    noShikshanCount = map["NoShikshanCount"] == null
-        ? "0"
-        : map["NoShikshanCount"].toString();
-    shaakhaaKaaryakartaaCount = map["ShaakhaaKaaryakartaaCount"] == null
-        ? "0"
-        : map["ShaakhaaKaaryakartaaCount"].toString();
-    vastiKaaryakartaaCount = map["VastiKaaryakartaaCount"] == null
-        ? "0"
-        : map["VastiKaaryakartaaCount"].toString();
-    graamKaaryakartaaCount = map["GraamKaaryakartaaCount"] == null
-        ? "0"
-        : map["GraamKaaryakartaaCount"].toString();
-    mandalKaaryakartaaCount = map["MandalKaaryakartaaCount"] == null
-        ? "0"
-        : map["MandalKaaryakartaaCount"].toString();
-    nagarKaaryakartaaCount = map["NagarKaaryakartaaCount"] == null
-        ? "0"
-        : map["NagarKaaryakartaaCount"].toString();
-    shaharKaaryakartaaCount = map["ShaharKaaryakartaaCount"] == null
-        ? "0"
-        : map["ShaharKaaryakartaaCount"].toString();
-    bhaagKaaryakartaaCount = map["BhaagKaaryakartaaCount"] == null
-        ? "0"
-        : map["BhaagKaaryakartaaCount"].toString();
-    vibhaagKaaryakartaaCount = map["VibhaagKaaryakartaaCount"] == null
-        ? "0"
-        : map["VibhaagKaaryakartaaCount"].toString();
-    mahaanagarKaaryakartaaCount = map["MahaanagarKaaryakartaaCount"] == null
-        ? "0"
-        : map["MahaanagarKaaryakartaaCount"].toString();
-    praantKaaryakartaaCount = map["PraantKaaryakartaaCount"] == null
-        ? "0"
-        : map["PraantKaaryakartaaCount"].toString();
-    notificationCount = map["Notificationcount"] == null
-        ? "0"
-        : map["Notificationcount"].toString();
-    kshetraKaaryakartaaCount = map["KshetraKaaryakartaaCount"] == null
-        ? "0"
-        : map["KshetraKaaryakartaaCount"].toString();
-    pravaseeKaaryakartaaCount = map["PravaseeKaaryakartaaCount"] == null
-        ? "0"
-        : map["PravaseeKaaryakartaaCount"].toString();
-    gatividhiKaaryakartaaCount = map["GatividhiKaaryakartaaCount"] == null
-        ? "0"
-        : map["GatividhiKaaryakartaaCount"].toString();
-    aayaamKaaryakartaaCount = map["AayaamKaaryakartaaCount"] == null
-        ? "0"
-        : map["AayaamKaaryakartaaCount"].toString();
-    sanghaPreritSansthaaKaaryakartaaCount =
-        map["SanghaPreritSansthaaKaaryakartaaCount"] == null
-            ? "0"
-            : map["SanghaPreritSansthaaKaaryakartaaCount"].toString();
-    totalKaaryakartaaCount = map["TotalKaaryakartaaCount"] == null
-        ? "0"
-        : map["TotalKaaryakartaaCount"].toString();
-    socialOrganizationKaaryakartaaCount =
-        map["SocialOrganizationKaaryakartaaCount"] == null
-            ? "0"
-            : map["SocialOrganizationKaaryakartaaCount"].toString();
-    pratidnyitCount = map["PratidnyitCount"] == null
-        ? "0"
-        : map["PratidnyitCount"].toString();
+    tarunVidyaarthiCount = map["TarunVidyaarthiCount"] == null ? "0" : map["TarunVidyaarthiCount"].toString();
+    tarunVyavasaayeeCount = map["TarunVyavasaayeeCount"] == null ? "0" : map["TarunVyavasaayeeCount"].toString();
+    proudhaVyavasaayeeCount = map["ProudhaVyavasaayeeCount"] == null ? "0" : map["ProudhaVyavasaayeeCount"].toString();
+    unknownAgeCount = map["UnknownAgeCount"] == null ? "0" : map["UnknownAgeCount"].toString();
+    trutiyaVarshaShikshitCount = map["TrutiyaVarshaShikshitCount"] == null ? "0" : map["TrutiyaVarshaShikshitCount"].toString();
+    dwitiyaVarshaShikshitCount = map["DwitiyaVarshaShikshitCount"] == null ? "0" : map["DwitiyaVarshaShikshitCount"].toString();
+    prathamVarshaShikshitCount = map["PrathamVarshaShikshitCount"] == null ? "0" : map["PrathamVarshaShikshitCount"].toString();
+    praathamikShikshitCount = map["PraathamikShikshitCount"] == null ? "0" : map["PraathamikShikshitCount"].toString();
+    noShikshanCount = map["NoShikshanCount"] == null ? "0" : map["NoShikshanCount"].toString();
+    shaakhaaKaaryakartaaCount = map["ShaakhaaKaaryakartaaCount"] == null ? "0" : map["ShaakhaaKaaryakartaaCount"].toString();
+    vastiKaaryakartaaCount = map["VastiKaaryakartaaCount"] == null ? "0" : map["VastiKaaryakartaaCount"].toString();
+    graamKaaryakartaaCount = map["GraamKaaryakartaaCount"] == null ? "0" : map["GraamKaaryakartaaCount"].toString();
+    mandalKaaryakartaaCount = map["MandalKaaryakartaaCount"] == null ? "0" : map["MandalKaaryakartaaCount"].toString();
+    nagarKaaryakartaaCount = map["NagarKaaryakartaaCount"] == null ? "0" : map["NagarKaaryakartaaCount"].toString();
+    shaharKaaryakartaaCount = map["ShaharKaaryakartaaCount"] == null ? "0" : map["ShaharKaaryakartaaCount"].toString();
+    bhaagKaaryakartaaCount = map["BhaagKaaryakartaaCount"] == null ? "0" : map["BhaagKaaryakartaaCount"].toString();
+    vibhaagKaaryakartaaCount = map["VibhaagKaaryakartaaCount"] == null ? "0" : map["VibhaagKaaryakartaaCount"].toString();
+    mahaanagarKaaryakartaaCount = map["MahaanagarKaaryakartaaCount"] == null ? "0" : map["MahaanagarKaaryakartaaCount"].toString();
+    praantKaaryakartaaCount = map["PraantKaaryakartaaCount"] == null ? "0" : map["PraantKaaryakartaaCount"].toString();
+    notificationCount = map["Notificationcount"] == null ? "0" : map["Notificationcount"].toString();
+    kshetraKaaryakartaaCount = map["KshetraKaaryakartaaCount"] == null ? "0" : map["KshetraKaaryakartaaCount"].toString();
+    pravaseeKaaryakartaaCount = map["PravaseeKaaryakartaaCount"] == null ? "0" : map["PravaseeKaaryakartaaCount"].toString();
+    gatividhiKaaryakartaaCount = map["GatividhiKaaryakartaaCount"] == null ? "0" : map["GatividhiKaaryakartaaCount"].toString();
+    aayaamKaaryakartaaCount = map["AayaamKaaryakartaaCount"] == null ? "0" : map["AayaamKaaryakartaaCount"].toString();
+    sanghaPreritSansthaaKaaryakartaaCount = map["SanghaPreritSansthaaKaaryakartaaCount"] == null ? "0" : map["SanghaPreritSansthaaKaaryakartaaCount"].toString();
+    totalKaaryakartaaCount = map["TotalKaaryakartaaCount"] == null ? "0" : map["TotalKaaryakartaaCount"].toString();
+    socialOrganizationKaaryakartaaCount = map["SocialOrganizationKaaryakartaaCount"] == null ? "0" : map["SocialOrganizationKaaryakartaaCount"].toString();
+    pratidnyitCount = map["PratidnyitCount"] == null ? "0" : map["PratidnyitCount"].toString();
 
-    dailyShaakhaaKaaryakartaaCount =
-        map["DailyShaakhaaKaaryakartaaCount"] == null
-            ? "0"
-            : map["DailyShaakhaaKaaryakartaaCount"].toString();
-    saaptaahikMilanKaaryakartaaCount =
-        map["SaaptaahikMilanKaaryakartaaCount"] == null
-            ? "0"
-            : map["SaaptaahikMilanKaaryakartaaCount"].toString();
-    maasikMilanKaaryakartaaCount = map["MaasikMilanKaaryakartaaCount"] == null
-        ? "0"
-        : map["MaasikMilanKaaryakartaaCount"].toString();
-    akhilBhaaratiyaKaaryakartaaCount =
-        map["AkhilBhaaratiyaKaaryakartaaCount"] == null
-            ? "0"
-            : map["AkhilBhaaratiyaKaaryakartaaCount"].toString();
+    dailyShaakhaaKaaryakartaaCount = map["DailyShaakhaaKaaryakartaaCount"] == null ? "0" : map["DailyShaakhaaKaaryakartaaCount"].toString();
+    saaptaahikMilanKaaryakartaaCount = map["SaaptaahikMilanKaaryakartaaCount"] == null ? "0" : map["SaaptaahikMilanKaaryakartaaCount"].toString();
+    maasikMilanKaaryakartaaCount = map["MaasikMilanKaaryakartaaCount"] == null ? "0" : map["MaasikMilanKaaryakartaaCount"].toString();
+    akhilBhaaratiyaKaaryakartaaCount = map["AkhilBhaaratiyaKaaryakartaaCount"] == null ? "0" : map["AkhilBhaaratiyaKaaryakartaaCount"].toString();
   }
 }
 
@@ -1649,11 +1520,9 @@ class AnnualBaithakEkatritVruttaBAL {
     graaminMandalCount = map['GraaminMandalCount'];
     graaminNagarCount = map['GraaminNagarCount'];
     graaminVastiCount = map['GraaminVastiCount'];
-    mahaanagarShaakhaaYuktaNagarCount =
-        map['MahaanagarShaakhaaYuktaNagarCount'];
+    mahaanagarShaakhaaYuktaNagarCount = map['MahaanagarShaakhaaYuktaNagarCount'];
     mahaanagarSamparkYuktaNagarCount = map['MahaanagarSamparkYuktaNagarCount'];
-    mahaanagarShaakhaaYuktaVastiCount =
-        map['MahaanagarShaakhaaYuktaVastiCount'];
+    mahaanagarShaakhaaYuktaVastiCount = map['MahaanagarShaakhaaYuktaVastiCount'];
     mahaanagarSamparkYuktaVastiCount = map['MahaanagarSamparkYuktaVastiCount'];
     anyaNagarShaakhaaYuktaNagarCount = map['AnyaNagarShaakhaaYuktaNagarCount'];
     anyaNagarSamparkYuktaNagarCount = map['AnyaNagarSamparkYuktaNagarCount'];
@@ -1674,40 +1543,30 @@ class AnnualBaithakEkatritVruttaBAL {
     sewaUpakramCount = map['SewaUpakramCount'];
     anyaUpakramCount = map['AnyaUpakramCount'];
     totalUpakramCount = map['TotalUpakramCount'];
-    praathamikPratinidhitShaakhaaCount =
-        map['PraathamikPratinidhitShaakhaaCount'];
-    praathamikPratinidhitAnyaSthaanCount =
-        map['PraathamikPratinidhitAnyaSthaanCount'];
+    praathamikPratinidhitShaakhaaCount = map['PraathamikPratinidhitShaakhaaCount'];
+    praathamikPratinidhitAnyaSthaanCount = map['PraathamikPratinidhitAnyaSthaanCount'];
     praathamikPratinidhitTotalCount = map['PraathamikPratinidhitTotalCount'];
     poornaJilhaKendraCount = map['PoornaJilhaKendraCount'];
     poornaJilhaCount = map['PoornaJilhaCount'];
     poornaTaalukaaCount = map['PoornaTaalukaaCount'];
     jilhaWithPoornaTaalukaaCount = map['JilhaWithPoornaTaalukaaCount'];
-    totalTaalukaaCountOfJilhaWithPoornaTaalukaa =
-        map['TotalTaalukaaCountOfJilhaWithPoornaTaalukaa'];
+    totalTaalukaaCountOfJilhaWithPoornaTaalukaa = map['TotalTaalukaaCountOfJilhaWithPoornaTaalukaa'];
     poornaMandalCount = map['PoornaMandalCount'];
     taalukaaWithPoornaMandalCount = map['TaalukaaWithPoornaMandalCount'];
     samparkPoornaJilhaKendraCount = map['SamparkPoornaJilhaKendraCount'];
     samparkPoornaJilhaCount = map['SamparkPoornaJilhaCount'];
     samparkPoornaTaalukaaCount = map['SamparkPoornaTaalukaaCount'];
-    samparkJilhaWithPoornaTaalukaaCount =
-        map['SamparkJilhaWithPoornaTaalukaaCount'];
-    samparkTotalTaalukaaCountOfJilhaWithPoornaTaalukaa =
-        map['SamparkTotalTaalukaaCountOfJilhaWithPoornaTaalukaa'];
+    samparkJilhaWithPoornaTaalukaaCount = map['SamparkJilhaWithPoornaTaalukaaCount'];
+    samparkTotalTaalukaaCountOfJilhaWithPoornaTaalukaa = map['SamparkTotalTaalukaaCountOfJilhaWithPoornaTaalukaa'];
     samparkPoornaMandalCount = map['SamparkPoornaMandalCount'];
-    samparkTaalukaaWithPoornaMandalCount =
-        map['SamparkTaalukaaWithPoornaMandalCount'];
+    samparkTaalukaaWithPoornaMandalCount = map['SamparkTaalukaaWithPoornaMandalCount'];
     mukhyaMaargCount = map['MukhyaMaargCount'];
     mukhyaMaargGraamPramukhCount = map['MukhyaMaargGraamPramukhCount'];
     mukhyaMaargGraamCount = map['MukhyaMaargGraamCount'];
-    mukhyaMaargShaakhaaYuktaGraamCount =
-        map['MukhyaMaargShaakhaaYuktaGraamCount'];
-    mukhyaMaargSaaptaahikYuktaGraamCount =
-        map['MukhyaMaargSaaptaahikYuktaGraamCount'];
-    mukhyaMaargKaaryaViheenGraamWithGraamPramukhCount =
-        map['MukhyaMaargKaaryaViheenGraamWithGraamPramukhCount'];
-    mukhyaMaargKaaryaViheenGraamCount =
-        map['MukhyaMaargKaaryaViheenGraamCount'];
+    mukhyaMaargShaakhaaYuktaGraamCount = map['MukhyaMaargShaakhaaYuktaGraamCount'];
+    mukhyaMaargSaaptaahikYuktaGraamCount = map['MukhyaMaargSaaptaahikYuktaGraamCount'];
+    mukhyaMaargKaaryaViheenGraamWithGraamPramukhCount = map['MukhyaMaargKaaryaViheenGraamWithGraamPramukhCount'];
+    mukhyaMaargKaaryaViheenGraamCount = map['MukhyaMaargKaaryaViheenGraamCount'];
     mukhyaMaargPastShaakhaaCount = map['MukhyaMaargPastShaakhaaCount'];
   }
 }
@@ -1896,8 +1755,7 @@ class AnnualBaithakShaakhaaVruttaBAL {
     isShaakhaaPaalak = map['IsShaakhaaPaalak'];
     patSankhyaa = map['PatSankhyaa'];
     sanghaDaayitvawaanSwCount = map['SanghaDaayitvawaanSwCount'];
-    preritSansthaaSangathanDaayitvawaanSwCount =
-        map['PreritSansthaaSangathanDaayitvawaanSwCount'];
+    preritSansthaaSangathanDaayitvawaanSwCount = map['PreritSansthaaSangathanDaayitvawaanSwCount'];
     gatividhiDaayitvawaanSwCount = map['GatividhiDaayitvawaanSwCount'];
     aayaamDaayitvawaanSwCount = map['AayaamDaayitvawaanSwCount'];
     sociallyActiveSwCount = map['SociallyActiveSwCount'];
@@ -1979,8 +1837,7 @@ class AnnualBaithakShaakhaaViheenBAL {
   );
 
   AnnualBaithakShaakhaaViheenBAL.fromMap(Map<String, dynamic> map) {
-    annualBaithakShaakhaaViheenVruttaID =
-        map['AnnualBaithakShaakhaaViheenVruttaID'];
+    annualBaithakShaakhaaViheenVruttaID = map['AnnualBaithakShaakhaaViheenVruttaID'];
     geoUnitID = map['GeoUnitID'];
     geoUnitName = map['GeoUnitName'];
     annualBaithakTypeID = map['AnnualBaithakTypeID'];
@@ -2167,18 +2024,8 @@ class SwayamsevakDaayitvaPageBAL {
   int? prachaarakYearCount;
   String? maxDaayitvaWhenPrachaarak;
 
-  SwayamsevakDaayitvaPageBAL(
-      this.swayamsevakID,
-      this.maxPastDaayitva,
-      this.maxPastDaayitvaFromYear,
-      this.maxPastDaayitvaToYear,
-      this.hasBeenVistaarak,
-      this.vistaarakWeekCount,
-      this.vistaarakMonthCount,
-      this.vistaarakYearCount,
-      this.hasBeenPrachaarak,
-      this.prachaarakYearCount,
-      this.maxDaayitvaWhenPrachaarak);
+  SwayamsevakDaayitvaPageBAL(this.swayamsevakID, this.maxPastDaayitva, this.maxPastDaayitvaFromYear, this.maxPastDaayitvaToYear, this.hasBeenVistaarak, this.vistaarakWeekCount,
+      this.vistaarakMonthCount, this.vistaarakYearCount, this.hasBeenPrachaarak, this.prachaarakYearCount, this.maxDaayitvaWhenPrachaarak);
 }
 
 class DashboardSadyaSthitiDataBAL {
@@ -2196,17 +2043,8 @@ class DashboardSadyaSthitiDataBAL {
   int? saaptaahikCount;
   int? sankalpitSaaptaahikCount;
 
-  DashboardSadyaSthitiDataBAL(
-      this.vayogatID,
-      this.vayogatCode,
-      this.shaakhaaCount,
-      this.sanghaMandaliCount,
-      this.saaptaahikCount,
-      this.maasikMilanCount,
-      this.sankalpitShaakhaaCount,
-      this.sankalpitSaaptaahikCount,
-      this.sankalpitMaasikMilanCount,
-      this.sankalpitSanghaMandaliCount);
+  DashboardSadyaSthitiDataBAL(this.vayogatID, this.vayogatCode, this.shaakhaaCount, this.sanghaMandaliCount, this.saaptaahikCount, this.maasikMilanCount, this.sankalpitShaakhaaCount,
+      this.sankalpitSaaptaahikCount, this.sankalpitMaasikMilanCount, this.sankalpitSanghaMandaliCount);
 }
 
 class SankalpByAadhaarBAL {
@@ -2219,13 +2057,7 @@ class SankalpByAadhaarBAL {
   int? sankalpitSanghaMandalikCount;
 
   SankalpByAadhaarBAL(
-      this.vayogatID,
-      this.vayogatCode,
-      this.sankalpAadhaar,
-      this.sankalpitShaakhaaCount,
-      this.sankalpitSaaptaahikCount,
-      this.sankalpitMasikMilankCount,
-      this.sankalpitSanghaMandalikCount);
+      this.vayogatID, this.vayogatCode, this.sankalpAadhaar, this.sankalpitShaakhaaCount, this.sankalpitSaaptaahikCount, this.sankalpitMasikMilankCount, this.sankalpitSanghaMandalikCount);
 }
 
 class BhaugolikVistaarBAL {
@@ -2261,8 +2093,7 @@ class GatividhiKaaryakartaaCountBAL {
   String? gatividhiName;
   int? kaaryakartaaCount;
 
-  GatividhiKaaryakartaaCountBAL(
-      this.gatividhiID, this.gatividhiName, this.kaaryakartaaCount);
+  GatividhiKaaryakartaaCountBAL(this.gatividhiID, this.gatividhiName, this.kaaryakartaaCount);
 }
 
 class AayaamKaaryakartaaCountBAL {
@@ -2270,8 +2101,7 @@ class AayaamKaaryakartaaCountBAL {
   String? aayaamName;
   int? kaaryakartaaCount;
 
-  AayaamKaaryakartaaCountBAL(
-      this.aayaamID, this.aayaamName, this.kaaryakartaaCount);
+  AayaamKaaryakartaaCountBAL(this.aayaamID, this.aayaamName, this.kaaryakartaaCount);
 }
 
 class PreritKaaryakartaaCountBAL {
@@ -2279,8 +2109,7 @@ class PreritKaaryakartaaCountBAL {
   String? preritAOOName;
   int? kaaryakartaaCount;
 
-  PreritKaaryakartaaCountBAL(
-      this.preritAOOID, this.preritAOOName, this.kaaryakartaaCount);
+  PreritKaaryakartaaCountBAL(this.preritAOOID, this.preritAOOName, this.kaaryakartaaCount);
 }
 
 class SocialOrgKaaryakartaaCountBAL {
@@ -2288,8 +2117,7 @@ class SocialOrgKaaryakartaaCountBAL {
   String? mainAOOName;
   int? kaaryakartaaCount;
 
-  SocialOrgKaaryakartaaCountBAL(
-      this.mainAOOID, this.mainAOOName, this.kaaryakartaaCount);
+  SocialOrgKaaryakartaaCountBAL(this.mainAOOID, this.mainAOOName, this.kaaryakartaaCount);
 }
 
 class StudentCategoryCountBAL {
@@ -2297,8 +2125,7 @@ class StudentCategoryCountBAL {
   String? studentCategoryName;
   int? countByStudentCategory;
 
-  StudentCategoryCountBAL(this.studentCategoryID, this.studentCategoryName,
-      this.countByStudentCategory);
+  StudentCategoryCountBAL(this.studentCategoryID, this.studentCategoryName, this.countByStudentCategory);
 }
 
 class VyavasaayeeCategoryCountBAL {
@@ -2306,8 +2133,7 @@ class VyavasaayeeCategoryCountBAL {
   String? vyavasaayeeCategoryName;
   int? countByVyavasaayeeCategory;
 
-  VyavasaayeeCategoryCountBAL(this.vyavasaayeeCategoryID,
-      this.vyavasaayeeCategoryName, this.countByVyavasaayeeCategory);
+  VyavasaayeeCategoryCountBAL(this.vyavasaayeeCategoryID, this.vyavasaayeeCategoryName, this.countByVyavasaayeeCategory);
 }
 
 class YesterdayVruttaSummaryBAL {
@@ -2319,14 +2145,7 @@ class YesterdayVruttaSummaryBAL {
   int? saaptaahikCount;
   int? milanMandaliCount;
 
-  YesterdayVruttaSummaryBAL(
-      this.geoUnitID,
-      this.geoUnitName,
-      this.vayogatID,
-      this.vayogatCode,
-      this.shaakhaaCount,
-      this.saaptaahikCount,
-      this.milanMandaliCount);
+  YesterdayVruttaSummaryBAL(this.geoUnitID, this.geoUnitName, this.vayogatID, this.vayogatCode, this.shaakhaaCount, this.saaptaahikCount, this.milanMandaliCount);
 }
 
 class YesterdayVruttaDetailBAL {
@@ -2344,20 +2163,8 @@ class YesterdayVruttaDetailBAL {
   int? proudhaVyavasaayeeCount;
   int? abhyaagatCount;
 
-  YesterdayVruttaDetailBAL(
-      this.geoUnitID,
-      this.shaakhaaID,
-      this.geoUnitName,
-      this.frequencyID,
-      this.frequencyCode,
-      this.vayogatID,
-      this.vayogatCode,
-      this.shishuCount,
-      this.baalVidyaarthiCount,
-      this.tarunVidyaarthiCount,
-      this.tarunVyavasaayeeCount,
-      this.proudhaVyavasaayeeCount,
-      this.abhyaagatCount);
+  YesterdayVruttaDetailBAL(this.geoUnitID, this.shaakhaaID, this.geoUnitName, this.frequencyID, this.frequencyCode, this.vayogatID, this.vayogatCode, this.shishuCount, this.baalVidyaarthiCount,
+      this.tarunVidyaarthiCount, this.tarunVyavasaayeeCount, this.proudhaVyavasaayeeCount, this.abhyaagatCount);
 }
 
 class YesterdayVruttaByGeoUnit {
@@ -2369,14 +2176,7 @@ class YesterdayVruttaByGeoUnit {
   int? saaptaahikCount;
   int? maasikCount;
 
-  YesterdayVruttaByGeoUnit(
-      this.geoUnitName,
-      this.displaySequence,
-      this.vayogatName,
-      this.vayogatID,
-      this.shaakhaaCount,
-      this.saaptaahikCount,
-      this.maasikCount);
+  YesterdayVruttaByGeoUnit(this.geoUnitName, this.displaySequence, this.vayogatName, this.vayogatID, this.shaakhaaCount, this.saaptaahikCount, this.maasikCount);
 }
 
 class MenuChoices {
@@ -2393,8 +2193,7 @@ class AreaOfInterestBAL {
   String? codeForDisplay;
   bool? isSelected;
 
-  AreaOfInterestBAL(
-      this.staticID, this.code, this.codeForDisplay, this.isSelected);
+  AreaOfInterestBAL(this.staticID, this.code, this.codeForDisplay, this.isSelected);
 
   AreaOfInterestBAL.fromMap(Map<String, dynamic> map) {
     staticID = map["StaticID"];
@@ -2409,8 +2208,7 @@ class AreaOfExpertiseBAL {
   String? codeForDisplay;
   bool? isSelected;
 
-  AreaOfExpertiseBAL(
-      this.staticID, this.code, this.codeForDisplay, this.isSelected);
+  AreaOfExpertiseBAL(this.staticID, this.code, this.codeForDisplay, this.isSelected);
 
   AreaOfExpertiseBAL.fromMap(Map<String, dynamic> map) {
     staticID = map["StaticID"];
@@ -2425,8 +2223,7 @@ class AreaOfOperationsBAL {
   String? codeForDisplay;
   bool? isSelected;
 
-  AreaOfOperationsBAL(
-      this.staticID, this.code, this.codeForDisplay, this.isSelected);
+  AreaOfOperationsBAL(this.staticID, this.code, this.codeForDisplay, this.isSelected);
 
   AreaOfOperationsBAL.fromMap(Map<String, dynamic> map) {
     staticID = map["StaticID"];
@@ -2441,8 +2238,7 @@ class NecessitiesBAL {
   String? codeForDisplay;
   bool? isSelected;
 
-  NecessitiesBAL(
-      this.staticID, this.code, this.codeForDisplay, this.isSelected);
+  NecessitiesBAL(this.staticID, this.code, this.codeForDisplay, this.isSelected);
 
   NecessitiesBAL.fromMap(Map<String, dynamic> map) {
     staticID = map["StaticID"];
@@ -2499,8 +2295,7 @@ class SewaVastiBAL {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['Message'] = this.message;
     if (this.sewaVastiList != null) {
-      data['SewaVastiList'] =
-          this.sewaVastiList!.map((v) => v.toJson()).toList();
+      data['SewaVastiList'] = this.sewaVastiList!.map((v) => v.toJson()).toList();
     }
     data['Status'] = this.status;
     return data;

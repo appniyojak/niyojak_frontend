@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:background_fetch/background_fetch.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -177,7 +178,7 @@ class AuthService {
       LoaderUtils.toggleLoader(context, false);
       Statics.showErrorDialog(context, Statics.getLabel('unableToCompleteProcess'));
       isLoadingNotifier.value = false;
-      print("Eroorrrrrrrrrrr  $ex");
+      log("Eroorrrrrrrrrrr  $ex");
     } catch (error) {
       print("loginWithPassword 12");
       print(error);
@@ -858,6 +859,7 @@ class _LogInCardState extends State<LogInCard> {
       if (Statics.userDetails['isAuthorized']) {
         print("switchScreens 5");
         await Statics.populateUserDetailsMap();
+        await Statics.populateUserAbhiyaanDetailsMap();
         if (Statics.userDetails['isFirstLogin']) {
           print("switchScreens 6");
           landingPage = ChangePassword();

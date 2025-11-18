@@ -30,6 +30,7 @@ class LogIn {
       SwayamsevakBAL userBasicInfo = await SwayamsevakProvider().getSwayamSevakByID(user[0].swayamsevakID.toString(), "BasicInfo");
 
       await Statics.populateUserDetailsMap();
+      await Statics.populateUserAbhiyaanDetailsMap();
       await Statics.populateDashboardDetailsMap();
       print("================");
       print(user[0].isLoggedIn);
@@ -163,6 +164,19 @@ class LogIn {
         // }
       }
 
+      var abhiyanSwayamsevakData = body['LogInData']['AbhiyanSwayamsevakData'];
+      if (abhiyanSwayamsevakData.length > 0) {
+        print("usrLogIn 12.5");
+
+        Statics.abhiyaanUserDetails['AbhiyanSwayamsevakID'] = abhiyanSwayamsevakData.first["AbhiyanSwayamsevakID"];
+        Statics.abhiyaanUserDetails['DaayityaName'] = abhiyanSwayamsevakData.first["DaayityaName"];
+
+        await dbh.DatabaseHelper.insertOrUpdateRecord('AbhiyanSwayamsevakData', abhiyanSwayamsevakData.first);
+        // for (var data in abhiyanSwayamsevakData) {
+        //   await dbh.DatabaseHelper.insertOrUpdateRecord('AbhiyanSwayamsevakData', data);
+        // }
+      }
+
       var geoUnitData = body['LogInData']['GeoUnitList'];
       if (geoUnitData.length > 0) {
         print("usrLogIn 13");
@@ -170,6 +184,16 @@ class LogIn {
         //await dbh.DatabaseHelper.reCreate('GeoUnitMaster', geoUnitData);
         for (var data in geoUnitData) {
           await dbh.DatabaseHelper.insertOrUpdateRecord('GeoUnitMaster', data);
+        }
+      }
+
+      var abhiyaanGeoUnitMaster = body['LogInData']['GeoUnitListforAbhiyaan'];
+      if (abhiyaanGeoUnitMaster.length > 0) {
+        print("usrLogIn 13.5");
+
+        //await dbh.DatabaseHelper.reCreate('GeoUnitMaster', geoUnitData);
+        for (var data in abhiyaanGeoUnitMaster) {
+          await dbh.DatabaseHelper.insertOrUpdateRecord('AbhiyaanGeoUnitMaster', data);
         }
       }
 
@@ -222,6 +246,7 @@ class LogIn {
         //await dbh.DatabaseHelper.insertOrUpdateRecord('UserDataMaster', userData);
         await dbh.DatabaseHelper.reCreate('UserDataMaster', userData);
         await Statics.populateUserDetailsMap();
+        await Statics.populateUserAbhiyaanDetailsMap();
         await Statics.refreshDashboardData(Statics.userDetails["userID"], null);
         await Statics.getNotificationDataList(Statics.userDetails["userID"]);
         await Statics.populateDashboardDetailsMap();

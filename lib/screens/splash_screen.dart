@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:horizontal_data_table/refresh/pull_to_refresh/src/indicator/waterdrop_header.dart';
 import 'package:horizontal_data_table/refresh/pull_to_refresh/src/smart_refresher.dart';
@@ -14,13 +13,12 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../helpers/static_data.dart' as Statics;
 import '../providers/login.dart';
 import '../screens/change_password.dart';
 import '../screens/home_screen.dart';
 import '../screens/login_screen.dart';
 import '../screens/update_version.dart';
-
-import '../helpers/static_data.dart' as Statics;
 import 'AbhiyanScreen.dart';
 
 class SplashScreenCheck extends StatefulWidget {
@@ -43,6 +41,7 @@ class _SplashScreenCheckState extends State<SplashScreenCheck> {
     super.initState();
     _setDefaultLanguage();
   }
+
   void _setDefaultLanguage() async {
     print("_setDefaultLanguage");
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -53,6 +52,7 @@ class _SplashScreenCheckState extends State<SplashScreenCheck> {
       await _updateDatabaseLanguagePreference();
     }
   }
+
   Future<void> _updateDatabaseLanguagePreference() async {
     Database db = await DatabaseHelper.database;
     String sqlStr = 'UPDATE UserDataMaster SET PreferredLanguageID=6;';
@@ -60,11 +60,12 @@ class _SplashScreenCheckState extends State<SplashScreenCheck> {
     await db.execute(sqlStr);
     await db.execute(sqlStr1);
   }
+
   void switchScreens(contx) async {
     await Future.delayed(Duration(seconds: 2));
     PackageInfo info = await PackageInfo.fromPlatform();
     Statics.packageInfo['versionNumber'] = info.version;
-    print("App version >> "+info.version);
+    print("App version >> " + info.version);
     SharedPreferences pref = await SharedPreferences.getInstance();
     var data = pref.getString("AbhiyanSwayamsevakData");
     var loggedIn = pref.getString("loggedIn");
@@ -83,9 +84,9 @@ class _SplashScreenCheckState extends State<SplashScreenCheck> {
       return;
     }
     await isAuthorizedUser();
-    print("user id >> "+Statics.userDetails['userID']);
+    print("user id >> " + Statics.userDetails['userID']);
     // if (Statics.userDetails['userID'].toString().isNotEmpty) {
-      await checkVersion();
+    await checkVersion();
     // }
     var landingPage;
     if (isCompatible == false) {
@@ -94,6 +95,7 @@ class _SplashScreenCheckState extends State<SplashScreenCheck> {
       // if (Statics.userDetails['isAuthorized']) {
       if (loggedIn != null) {
         await Statics.populateUserDetailsMap();
+        await Statics.populateUserAbhiyaanDetailsMap();
         // check if data is in sync
         if (isDataSyncRequired == true) {
           landingPage = LogInScreen();
@@ -106,7 +108,7 @@ class _SplashScreenCheckState extends State<SplashScreenCheck> {
           await db.execute(sqlStr);
           await db.execute(sqlStr1);
           Statics.userDetails['languagePreference'] = 'Marathi';
-          if(otpuser != null && otpuser == "true"){
+          if (otpuser != null && otpuser == "true") {
             landingPage = EditSwayamsevakScreen();
           } else {
             landingPage = AbhiyanScreen();
@@ -124,15 +126,12 @@ class _SplashScreenCheckState extends State<SplashScreenCheck> {
       }
     }
     _refreshController.refreshCompleted();
-    if (landingPage.toString() == "EditSwayamsevakScreen"){
-      if( Statics.userDetails['userID'] != null){
-      Navigator.of(contx).pushReplacementNamed(EditSwayamsevakScreen.routeName,
-          arguments: Statics.ScreenArgumentsNew(
-          int.parse(Statics.userDetails['userID']), Statics.getLabel('EditMenu')));
+    if (landingPage.toString() == "EditSwayamsevakScreen") {
+      if (Statics.userDetails['userID'] != null) {
+        Navigator.of(contx).pushReplacementNamed(EditSwayamsevakScreen.routeName, arguments: Statics.ScreenArgumentsNew(int.parse(Statics.userDetails['userID']), Statics.getLabel('EditMenu')));
       }
     } else {
-      Navigator.of(contx).pushReplacement(
-          MaterialPageRoute(builder: (BuildContext context) => landingPage));
+      Navigator.of(contx).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => landingPage));
     }
   }
 
@@ -151,7 +150,7 @@ class _SplashScreenCheckState extends State<SplashScreenCheck> {
     var inputData = json.encode({
       "AppUserID": (Statics.userDetails['userID'] == '' ? null : Statics.userDetails['userID']),
       "ClientAppVersionNumber": Statics.packageInfo['versionNumber'],
-      "devicetype": Platform.isAndroid ? 1 :0,
+      "devicetype": Platform.isAndroid ? 1 : 0,
     });
     print({
       "AppUserID": (Statics.userDetails['userID'] == '' ? null : Statics.userDetails['userID']),
@@ -227,14 +226,17 @@ class _SplashScreenCheckState extends State<SplashScreenCheck> {
                     style: TextStyle(fontSize: 24),
                   ),
                   if (isInternetAvl != null)
-                  if (!isInternetAvl)
-                  Text(
+                    if (!isInternetAvl)
+                      Text(
                         'Pull down to Refresh',
                         style: TextStyle(fontSize: 18),
                       ),
-                  SizedBox(height: 50,),
-                  if(Statics.baseUrl == "http://108.181.165.29:8027")
-                  Text("Development Pointed APK",
+                  SizedBox(
+                    height: 50,
+                  ),
+                  if (Statics.baseUrl == "http://108.181.165.29:8027")
+                    Text(
+                      "Development Pointed APK",
                       style: TextStyle(fontSize: 18, color: Colors.grey),
                     ),
                 ],
@@ -242,7 +244,6 @@ class _SplashScreenCheckState extends State<SplashScreenCheck> {
             ),
           ),
         ),
-
       ),
     );
   }

@@ -6,16 +6,16 @@ import '../../../models/response_model/AbhiyaanLoginDataResponse.dart';
 import '../../../providers/bals.dart';
 import '../../../providers/swayamsevak_provider.dart';
 
-class GruhSamparkaTab extends StatefulWidget {
+class GruhSamparkaReportTab extends StatefulWidget {
   final AbhiyanSwayamsevakdata? initialData;
 
-  const GruhSamparkaTab({super.key, this.initialData});
+  const GruhSamparkaReportTab({super.key, this.initialData});
 
   @override
-  State<GruhSamparkaTab> createState() => _GruhSamparkaTabState();
+  State<GruhSamparkaReportTab> createState() => _GruhSamparkaReportTabState();
 }
 
-class _GruhSamparkaTabState extends State<GruhSamparkaTab> {
+class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> {
   bool _isSearching = false;
 
   String? selectedGruhaAbhiyanValue = "";
@@ -282,7 +282,7 @@ class _GruhSamparkaTabState extends State<GruhSamparkaTab> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Text(
-                  "${Statics.getLabel('Abhiyaan')}",
+                  "${Statics.getLabel('Abhiyaan')} ${Statics.getLabel('Reportonly')}",
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
               ),

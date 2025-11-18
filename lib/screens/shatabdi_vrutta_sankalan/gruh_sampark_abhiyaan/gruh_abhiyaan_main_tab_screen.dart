@@ -87,7 +87,6 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _isDaiytva = (ModalRoute.of(context)?.settings.arguments as bool?) ?? false;
   }
 
   getInitialData() async {
@@ -327,78 +326,84 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
             //       },
             //     ),
             // ],
-            bottom: new TabBar(
-              controller: _tabController,
-              indicatorColor: Colors.white,
-              onTap: (v) {
-                _levelValue = "";
-                _geoUnitsValue = "";
-                setState(() {});
-                populateChoice();
-                Future.delayed(Duration(milliseconds: 800), () {
-                  setState(() {});
-                });
-              },
-              physics: NeverScrollableScrollPhysics(),
-              tabs: <Widget>[
-                Tab(
-                  child: Row(
-                    //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Icon(
-                        FontAwesomeIcons.fileArrowUp,
-                        size: 18,
+            bottom: (Statics.abhiyaanUserDetails["isEmpty"] && int.parse(Statics.userDetails["LevelID"].toString()) < 6)
+                ? null
+                : new TabBar(
+                    controller: _tabController,
+                    indicatorColor: Colors.white,
+                    onTap: (v) {
+                      _levelValue = "";
+                      _geoUnitsValue = "";
+                      setState(() {});
+                      populateChoice();
+                      Future.delayed(Duration(milliseconds: 800), () {
+                        setState(() {});
+                      });
+                    },
+                    physics: NeverScrollableScrollPhysics(),
+                    tabs: <Widget>[
+                      Tab(
+                        child: Row(
+                          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Icon(
+                              FontAwesomeIcons.fileArrowUp,
+                              size: 18,
+                            ),
+                            SizedBox(width: 10),
+                            Container(
+                              width: size.width * 0.31,
+                              alignment: Alignment.center,
+                              child: Text(
+                                "${Statics.getLabel('addGruhaSampark')}",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      SizedBox(width: 10),
-                      Container(
-                        width: size.width * 0.31,
-                        alignment: Alignment.center,
-                        child: Text(
-                          "${Statics.getLabel('addGruhaSampark')}",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 15),
+                      Tab(
+                        child: Row(
+                          children: [
+                            Icon(Icons.people),
+                            SizedBox(width: 5),
+                            Expanded(
+                              child: Center(
+                                // width: size.width*0.31,
+                                child: Text(
+                                  "${Statics.getLabel('Reportonly')}",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
-                ),
-                Tab(
-                  child: Row(
-                    children: [
-                      Icon(Icons.people),
-                      SizedBox(width: 5),
-                      Expanded(
-                        child: Center(
-                          // width: size.width*0.31,
-                          child: Text(
-                            "${Statics.getLabel('Reportonly')}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 15),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
           ),
           drawer: (Statics.userDetails['userID'].toString().isEmpty || Statics.userDetails['userID'] == "0") ? AppAbhiyanDrawer() : AppDrawer(),
           body: ModalProgressHUD(
             inAsyncCall: _isSearching,
-            child: TabBarView(
-              controller: _tabController,
-              physics: NeverScrollableScrollPhysics(),
-              children: <Widget>[
-                AbhiyaanSwayamsevakTab(
-                  initialData: initialData,
-                  isDaayitva: _isDaiytva,
-                ),
-                GruhSamparkaTab(
-                  initialData: initialData,
-                ),
-              ],
-            ),
+            child: (Statics.abhiyaanUserDetails["isEmpty"] && int.parse(Statics.userDetails["LevelID"].toString()) < 6)
+                ? GruhSamparkaReportTab(
+                    initialData: initialData,
+                  )
+                : TabBarView(
+                    controller: _tabController,
+                    physics: NeverScrollableScrollPhysics(),
+                    children: <Widget>[
+                      AbhiyaanSwayamsevakTab(
+                        initialData: initialData,
+                        isDaayitva: _isDaiytva,
+                      ),
+                      GruhSamparkaReportTab(
+                        initialData: initialData,
+                      ),
+                    ],
+                  ),
           ),
         ),
       ),

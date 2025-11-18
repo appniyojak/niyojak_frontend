@@ -200,8 +200,6 @@ class _HomeScreenState extends State<HomeScreen> {
   NotificationListModel? notificationListdata;
   List<UpkhandaDataList> upkhandaDataList = [];
 
-  bool _isDaiytva = false;
-
   UpnagarUpkhandaReportModel? bhougolikReportForExcel;
 
   @override
@@ -2228,18 +2226,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 20),
-                        Row(
-                          children: [
-                            Text("Daiytva"),
-                            Switch(
-                              value: _isDaiytva,
-                              onChanged: (value) => setState(() {
-                                _isDaiytva = !_isDaiytva;
-                              }),
-                            ),
-                          ],
-                        ),
                         SizedBox(height: 30),
 
                         /// 1st CARD
@@ -4004,7 +3990,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Expanded(
                           child: InkWell(
-                            onTap: () => Navigator.of(context).pushNamed(GruhAbhiyaanMainTabScreen.routeName, arguments: _isDaiytva),
+                            onTap: () => Navigator.of(context).pushNamed(GruhAbhiyaanMainTabScreen.routeName),
                             // onTap: () {
                             //   Fluttertoast.showToast(
                             //     msg: Statics.getLabel("workInProgress"),
