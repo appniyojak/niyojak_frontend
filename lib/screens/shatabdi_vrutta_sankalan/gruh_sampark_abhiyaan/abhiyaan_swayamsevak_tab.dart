@@ -28,6 +28,7 @@ class AbhiyaanSwayamsevakTab extends StatefulWidget {
 }
 
 class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
+  late ScrollController _scrollController;
   // List<MenuChoices> choices = [
   //   MenuChoices("EditMenu", Icons.add, "सहभागी कार्यकर्ता जोडा")
   // ];
@@ -171,6 +172,7 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
   }
 
   getData() async {
+    _scrollController = ScrollController();
     dateController.text = DateFormat("dd/MM/yyyy").format(DateTime.now());
     _scrollController1 = ScrollController();
     _scrollController11 = ScrollController();
@@ -194,6 +196,7 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
         "GeoUnitID": int.parse(_linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? _linkedvastiValue! : _linkedgraamValue!),
         "AbhiyaanDate": DateFormat("dd-MM-yyyy").format(DateFormat("dd/MM/yyyy").parse(dateController.text)).toString(),
         "ispramukh": 0,
+        "isswayamsevak": 0,
       };
       print(jsonEncode(inputData));
       gruhAbhiyaanVruttaData = await Statics.getDataforGruhAbhiyaan(inputData, context: context);
@@ -282,12 +285,12 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
           "SamparkitGhar": int.tryParse(samparkitGhareController.text.isNotEmpty ? samparkitGhareController.text : "0"),
           "VitaritKarpatra": int.tryParse(vitritKarpatrakController.text.isNotEmpty ? vitritKarpatrakController.text : "0"),
           "PustakVikriSankhya": int.tryParse(pustakVikriController.text.isNotEmpty ? pustakVikriController.text : "0"),
-          "SamparkhetuSahbhagiSankhya": int.tryParse(samparkaSahabhagiController.text.isNotEmpty ? samparkaSahabhagiController.text : "0"),
-          "SamparkhetuToliSankhya": int.tryParse(samparkaToliController.text.isNotEmpty ? samparkaToliController.text : "0"),
+          // "SamparkhetuSahbhagiSankhya": int.tryParse(samparkaSahabhagiController.text.isNotEmpty ? samparkaSahabhagiController.text : "0"),
+          // "SamparkhetuToliSankhya": int.tryParse(samparkaToliController.text.isNotEmpty ? samparkaToliController.text : "0"),
           "VisititAtithiSajjanShaktiIDs": selectedSajjanshaktiItems.map((e) => e.pkid).join(","), // comma-separated IDs
           "VisititAtithiAnyaPrabhaviLokamIDs": selectedAnyaprabhaviItems.map((e) => e.pkId).join(","), // comma-separated IDs
           "AppUserID": Statics.userDetails["userID"],
-          "AbhiyanSwayamsevakIDs": _selectedTolisIds.map((item) => item.swayamsevakID.toString()).join(','), // comma-separated IDs
+          // "AbhiyanSwayamsevakIDs": _selectedTolisIds.map((item) => item.swayamsevakID.toString()).join(','), // comma-separated IDs
         };
 
         log(jsonEncode(_data));
@@ -1366,7 +1369,7 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
               //       )),
 
               if (_searched) ...[
-                if (gruhAbhiyaanVruttaData!.abhiyaandata!.ishide) ...[
+                if (!gruhAbhiyaanVruttaData!.abhiyaandata!.ishide) ...[
                   Container(
                       height: 40,
                       width: double.infinity,
@@ -1594,8 +1597,8 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                 ],
 //
                 if (widget.isDaayitva) ...[
-                  if (gruhAbhiyaanVruttaData!.abhiyaandata!.ishide) customTextFields(title: "संपर्क हेतू सहभागी संख्या : ", controller: samparkaSahabhagiController),
-                  if (gruhAbhiyaanVruttaData!.abhiyaandata!.ishide) customTextFields(title: "संपर्क हेतू टोळी संख्या : ", controller: samparkaToliController),
+                  if (!gruhAbhiyaanVruttaData!.abhiyaandata!.ishide) customTextFields(title: "संपर्क हेतू सहभागी संख्या : ", controller: samparkaSahabhagiController),
+                  if (!gruhAbhiyaanVruttaData!.abhiyaandata!.ishide) customTextFields(title: "संपर्क हेतू टोळी संख्या : ", controller: samparkaToliController),
                   SizedBox(height: 10),
                   Align(
                     alignment: Alignment.centerRight,
@@ -1621,7 +1624,7 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                   SizedBox(height: 16),
                   isSelectedKaryakartaListWidget(),
                 ],
-                SizedBox(height: 42),
+                SizedBox(height: 32),
                 MaterialButton(
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                   padding: EdgeInsets.symmetric(
@@ -1649,11 +1652,136 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
-                SizedBox(height: 80),
+                SizedBox(height: 40),
+                showPreviousDayDataTable(),
+                SizedBox(height: 40),
               ],
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget showPreviousDayDataTable() {
+    final _tableData = gruhAbhiyaanVruttaData?.previousDay;
+    final List<String> headers = [
+      // 'कार्यक्रम स्तर',
+      "संपर्कित घरे", //Statics.getLabel('vijayadashmiReportTable1'),
+      "वितरित करपत्रक", //Statics.getLabel('vijayadashmiReportTable3'),
+      "पुस्तक विक्री संख्या", //Statics.getLabel('vijayadashmiReportTable4'),
+    ];
+
+    if (_tableData == null || _tableData.isEmpty) return SizedBox();
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.purple.shade400,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Text(
+              _tableData.first.participantName.toString(),
+              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+            ),
+          ),
+          Row(
+            children: [
+              DataTable(
+                headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
+                columnSpacing: 0,
+                horizontalMargin: 16,
+                border: TableBorder.all(color: Colors.black26),
+                columns: [
+                  DataColumn(
+                    label: Center(
+                      child: Text(
+                        "अभियान तारखा",
+                        softWrap: true,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ],
+                rows: _tableData.map((level) {
+                      return DataRow(cells: [
+                        DataCell(Text(level.abhiyaanDate.toString())),
+                      ]);
+                    }).toList() +
+                    [
+                      DataRow(color: MaterialStatePropertyAll(Colors.yellow.shade100), cells: [
+                        DataCell(Text(
+                          Statics.getLabel("Total"),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        )),
+                      ])
+                    ],
+              ),
+              Expanded(
+                child: Scrollbar(
+                  controller: _scrollController,
+                  thumbVisibility: true,
+                  interactive: true,
+                  thickness: 5,
+                  radius: Radius.circular(10),
+                  child: SingleChildScrollView(
+                    controller: _scrollController,
+                    scrollDirection: Axis.horizontal,
+                    child: DataTable(
+                      columnSpacing: 14,
+                      horizontalMargin: 12,
+                      headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
+                      border: TableBorder(verticalInside: BorderSide(width: 0.7, color: Colors.grey.shade200)),
+                      columns: headers
+                          .map((header) => DataColumn(
+                                label: Container(
+                                  constraints: BoxConstraints(minWidth: 40, maxWidth: 200),
+                                  // constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.2),
+                                  child: Text(header, softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold)),
+                                ),
+                              ))
+                          .toList(),
+                      rows: _tableData.map((level) {
+                            return DataRow(cells: [
+                              DataCell(Center(child: Text(level.samparkitghar.toString()))),
+                              DataCell(Center(child: Text(level.vitaritkarpatra.toString()))),
+                              DataCell(Center(child: Text(level.pustakvikrisankhya.toString()))),
+                            ]);
+                          }).toList() +
+                          [
+                            DataRow(color: MaterialStatePropertyAll(Colors.yellow.shade100), cells: [
+                              //sanchalan
+                              DataCell(Center(
+                                  child: Text(
+                                _tableData.fold(0, (sum, item) => sum + (item.samparkitghar ?? 0)).toString(),
+                                style: TextStyle(fontWeight: FontWeight.w700),
+                              ))),
+                              DataCell(Center(
+                                  child: Text(
+                                _tableData.fold(0, (sum, item) => sum + (item.vitaritkarpatra ?? 0)).toString(),
+                                style: TextStyle(fontWeight: FontWeight.w700),
+                              ))),
+                              DataCell(Center(
+                                  child: Text(
+                                _tableData.fold(0, (sum, item) => sum + (item.pustakvikrisankhya ?? 0)).toString(),
+                                style: TextStyle(fontWeight: FontWeight.w700),
+                              ))),
+                            ])
+                          ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -1970,10 +2098,7 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
     );
   }
 
-  Future<void> showVisheshAtithiSelectionPopup(
-    BuildContext context, {
-    required VoidCallback onAdd,
-  }) async {
+  Future<void> showVisheshAtithiSelectionPopup(BuildContext context, {required VoidCallback onAdd}) async {
     print("showVisheshAtithiSelectionPopup onTap >>>>>>>>>>>>>>> ");
     final _sarsajjanshaktiList = data?.vastisarsajjanshakti ?? [];
     final _sanyaprabhaviList = data?.vastisanyaprabhavi ?? [];
@@ -2372,11 +2497,7 @@ class _AbhiyaanSwayamsevakTabState extends State<AbhiyaanSwayamsevakTab> {
     );
   }
 
-  Widget _buildDropdown({
-    required String? value,
-    required List<DropdownMenuItem<String>> items,
-    required ValueChanged<String?> onChanged,
-  }) {
+  Widget _buildDropdown({required String? value, required List<DropdownMenuItem<String>> items, required ValueChanged<String?> onChanged}) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.9,
       alignment: Alignment.center,

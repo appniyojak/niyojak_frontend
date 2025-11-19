@@ -115,7 +115,7 @@ class LogIn {
     var response = await http.post(Uri.parse(Statics.urlValidateUser),
         headers: jHeaders, body: json.encode({"MobileNumber": mobileNumber, "Password": password, "LastSyncTimeStamp": lastLoginTimeStamp, "otplogin": otplogin, "token": token}));
 
-    log(response.body);
+    // log(response.body);
     print("usrLogIn 6");
 
     var body = json.decode(response.body);

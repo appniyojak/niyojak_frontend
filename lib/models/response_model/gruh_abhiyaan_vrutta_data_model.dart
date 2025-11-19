@@ -5,8 +5,17 @@ class GruhAbhiyaanVruttaDataModel {
   String? message;
   String? status;
   List<AbhiyaanPeopleModel>? swayamsevakList;
+  List<PreviousDay>? previousDay;
 
-  GruhAbhiyaanVruttaDataModel({this.abhiyaanList, this.abhiyaandata, this.abhiyanGruhToliList, this.message, this.status, this.swayamsevakList});
+  GruhAbhiyaanVruttaDataModel({
+    this.abhiyaanList,
+    this.abhiyaandata,
+    this.abhiyanGruhToliList,
+    this.message,
+    this.status,
+    this.swayamsevakList,
+    this.previousDay,
+  });
 
   GruhAbhiyaanVruttaDataModel.fromJson(Map<String, dynamic> json) {
     if (json['AbhiyaanList'] != null) {
@@ -30,6 +39,12 @@ class GruhAbhiyaanVruttaDataModel {
         swayamsevakList!.add(new AbhiyaanPeopleModel.fromJson(v));
       });
     }
+    if (json['PreviousDay'] != null) {
+      previousDay = <PreviousDay>[];
+      json['PreviousDay'].forEach((v) {
+        previousDay!.add(new PreviousDay.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -47,6 +62,9 @@ class GruhAbhiyaanVruttaDataModel {
     data['Status'] = this.status;
     if (this.swayamsevakList != null) {
       data['SwayamsevakList'] = this.swayamsevakList!.map((v) => v.toJson()).toList();
+    }
+    if (this.previousDay != null) {
+      data['PreviousDay'] = this.previousDay!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -127,6 +145,75 @@ class Abhiyaandata {
     data['samparkitghar'] = this.samparkitghar;
     data['visitit_atithi_anyaprabha_vi_lokamids'] = this.visititAtithiAnyaprabhaViLokamids;
     data['visitit_atithi_sajjan_shaktiids'] = this.visititAtithiSajjanShaktiids;
+    data['vitaritkarpatra'] = this.vitaritkarpatra;
+    return data;
+  }
+}
+
+class PreviousDay {
+  String? abhiyaanDate;
+  int? createdUserID;
+  int? geoUnitID;
+  int? levelID;
+  int? parentBhaagID;
+  int? parentMahaanagarID;
+  int? parentMandalID;
+  int? parentNagarID;
+  int? parentVibhaagID;
+  String? participantName;
+  int? totalAtithiCount;
+  int? pustakvikrisankhya;
+  int? samparkitghar;
+  int? vitaritkarpatra;
+
+  PreviousDay(
+      {this.abhiyaanDate,
+      this.createdUserID,
+      this.geoUnitID,
+      this.levelID,
+      this.parentBhaagID,
+      this.parentMahaanagarID,
+      this.parentMandalID,
+      this.parentNagarID,
+      this.parentVibhaagID,
+      this.participantName,
+      this.totalAtithiCount,
+      this.pustakvikrisankhya,
+      this.samparkitghar,
+      this.vitaritkarpatra});
+
+  PreviousDay.fromJson(Map<String, dynamic> json) {
+    abhiyaanDate = json['AbhiyaanDate'];
+    createdUserID = json['CreatedUserID'];
+    geoUnitID = json['GeoUnitID'];
+    levelID = json['LevelID'];
+    parentBhaagID = json['ParentBhaagID'];
+    parentMahaanagarID = json['ParentMahaanagarID'];
+    parentMandalID = json['ParentMandalID'];
+    parentNagarID = json['ParentNagarID'];
+    parentVibhaagID = json['ParentVibhaagID'];
+    participantName = json['ParticipantName'];
+    totalAtithiCount = json['TotalAtithiCount'];
+    pustakvikrisankhya = json['pustakvikrisankhya'];
+    samparkitghar = json['samparkitghar'];
+    vitaritkarpatra = json['vitaritkarpatra'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['AbhiyaanDate'] = this.abhiyaanDate;
+    data['CreatedUserID'] = this.createdUserID;
+    data['GeoUnitID'] = this.geoUnitID;
+    data['LevelID'] = this.levelID;
+    data['ParentBhaagID'] = this.parentBhaagID;
+    data['ParentMahaanagarID'] = this.parentMahaanagarID;
+    data['ParentMandalID'] = this.parentMandalID;
+    data['ParentNagarID'] = this.parentNagarID;
+    data['ParentVibhaagID'] = this.parentVibhaagID;
+    data['ParticipantName'] = this.participantName;
+    data['TotalAtithiCount'] = this.totalAtithiCount;
+    data['pustakvikrisankhya'] = this.pustakvikrisankhya;
+    data['samparkitghar'] = this.samparkitghar;
     data['vitaritkarpatra'] = this.vitaritkarpatra;
     return data;
   }
