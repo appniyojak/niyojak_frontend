@@ -17,6 +17,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../assets/strings/strings.dart';
 import '../helpers/static_data.dart' as Statics;
 import '../models/response_model/TulnatmakResponseModel.dart';
+import '../models/response_model/abiyaan_geo_unit_model.dart';
 import '../models/response_model/geounit_name_model.dart';
 import '../models/response_model/get_vasti_data_by_id_model.dart';
 import '../models/response_model/get_vijaya_dashami_geounit_data.dart';
@@ -204,6 +205,7 @@ const String getSwayamsevakForGruhApi = baseUrlAPI + '/GetSwayamsevaksForGruh';
 const String saveSwayamsevakForGruhApi = baseUrlAPI + '/saveabhiyaanKaryakarta'; //'/SaveAbhiyanSwayamsevakForGruh';
 const String addSwayamsevakInListForGruhApi = baseUrlAPI + '/SaveAbhiyanSwayamsevakForGruh';
 const String getDataforGruhAbhiyaanApi = baseUrlAPI + '/GetDataforGruhAbhiyaan';
+const String getAbhiyaanGeoUnitListApi = baseUrlAPI + '/getgeounitdataforabhiyaangruh';
 const String addToToliListApi = baseUrlAPI + '/addtotoli';
 const String saveDataforGruhAbhiyaanApi = baseUrlAPI + '/SaveDataforGruhAbhiyaan';
 const String getDataWhileAddUpdateUPLevelForGruh = baseUrlAPI + '/GetDataWhileAddUpdateUPLevelForGruh';
@@ -758,7 +760,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsLDB(String levelID, String unitName) a
   );
 
   result.forEach((element) {
-    var info = GeoUnitMasterBAL.fromMap(element);
+    var info = GeoUnitMasterBAL.fromJson(element);
     _geoUnitMasterBAL.add(info);
   });
   return _geoUnitMasterBAL;
@@ -812,6 +814,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevel(String levelID) async {
       data['GeoUnitName'],
       "",
       "",
+      data['GeoUnitName'],
       data['DisplaySequence'],
       null,
       data['ParentKshetraID'],
@@ -824,6 +827,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevel(String levelID) async {
       data['ParentMandalID'],
       data['ParentVastiID'],
       data['ParentGraamID'],
+      data['canEdit'],
     );
     _geounitList.add(info);
   });
@@ -882,6 +886,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForVasti(String levelI
       data['GeoUnitName'],
       "",
       "",
+      data['geoUnitName'],
       data['DisplaySequence'],
       null,
       data['ParentKshetraID'],
@@ -894,6 +899,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForVasti(String levelI
       data['ParentMandalID'],
       data['ParentVastiID'],
       data['ParentGraamID'],
+      data['canEdit'],
     );
     _geounitList.add(info);
   });
@@ -951,6 +957,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForMandal(String level
       data['GeoUnitName'],
       "",
       "",
+      data['GeoUnitName'],
       data['DisplaySequence'],
       null,
       data['ParentKshetraID'],
@@ -963,6 +970,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForMandal(String level
       data['ParentMandalID'],
       data['ParentVastiID'],
       data['ParentGraamID'],
+      data['canEdit'],
     );
     _geounitList.add(info);
   });
@@ -1010,6 +1018,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParent(String levelID, Strin
       data['GeoUnitName'],
       "",
       "",
+      data['GeoUnitName'],
       data['DisplaySequence'],
       null,
       data['ParentKshetraID'],
@@ -1022,6 +1031,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParent(String levelID, Strin
       data['ParentMandalID'],
       data['ParentVastiID'],
       data['ParentGraamID'],
+      data['canEdit'],
     );
     _geounitList.add(info);
   });
@@ -1047,7 +1057,7 @@ Future<GeoUnitMasterBAL?> getGeoUnitsByID(String geoUnitID) async {
       result[0]['GeoUnitName'],
       result[0]['FullName'],
       result[0]['LevelName'],
-      //result[0]['LevelNameForDisplay'],
+      result[0]['GeoUnitName'],
       result[0]['DisplaySequence'],
       null,
       result[0]['ParentKshetraID'],
@@ -1060,6 +1070,7 @@ Future<GeoUnitMasterBAL?> getGeoUnitsByID(String geoUnitID) async {
       result[0]['ParentMandalID'],
       result[0]['ParentVastiID'],
       result[0]['ParentGraamID'],
+      result[0]['canEdit'],
     );
     return _geounit;
   } else {
@@ -2913,6 +2924,52 @@ Future<GruhAbhiyaanVruttaDataModel?> getDataforGruhAbhiyaan(Map<String, dynamic>
   }
 }
 
+Future<List<GeoUnitMasterBAL>?> getAbhiyaanGeoUnitMasterData(Map<String, dynamic> inputJson, {BuildContext? context}) async {
+  if (context != null) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+  log(getAbhiyaanGeoUnitListApi);
+
+  try {
+    var response = await http.post(Uri.parse(getAbhiyaanGeoUnitListApi), headers: jHeaders, body: jsonEncode(inputJson));
+
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+
+      if (data["Status"] == "200" || data["Status"] == "Success") {
+        log("getAbhiyaanGeoUnitMasterData >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+        var abhiyaanGeoUnitMaster = data['GeoUnitListforAbhiyaan'];
+
+        if (abhiyaanGeoUnitMaster.length > 0) {
+          log("deleting from AbhiyaanGeoUnitMaster db >>>>>>>>>>>>>> ");
+          await DatabaseHelper.executeQuery('DELETE FROM AbhiyaanGeoUnitMaster');
+
+          log("inserting in AbhiyaanGeoUnitMaster db >>>>>>>>>>>>>> ");
+
+          //await dbh.DatabaseHelper.reCreate('GeoUnitMaster', geoUnitData);
+          for (var data in abhiyaanGeoUnitMaster) {
+            await DatabaseHelper.insertOrUpdateRecord('AbhiyaanGeoUnitMaster', data);
+          }
+        }
+
+        AbhiyaanGeoUnitListModel model = AbhiyaanGeoUnitListModel.fromJson(data);
+        log("getAbhiyaanGeoUnitMasterData >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+
+        return model.geoUnitListforAbhiyaan; // ✅ return karna zaroori hai
+      }
+      return null; // ✅ error case
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null; // ✅ error case
+    }
+  } catch (e) {
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+    print("Exception: $e");
+    return null;
+  }
+}
+
 Future<bool> saveDataforGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   if (context != null) showLoaderDialog(context);
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -3805,7 +3862,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitMasterForApp(
       data['GeoUnitName'],
       "",
       data['LevelName'],
-      //data['LevelNameForDisplay'],
+      data['GeoUnitName'],
       data['DisplaySequence'],
       null,
       data['ParentKshetraID'],
@@ -3818,6 +3875,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitMasterForApp(
       data['ParentMandalID'],
       data['ParentVastiID'],
       data['ParentGraamID'],
+      data['canEdit'],
     );
     geoUnitList.add(info);
   });

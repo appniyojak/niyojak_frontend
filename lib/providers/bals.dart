@@ -425,6 +425,8 @@ class GeoUnitMasterBAL {
   String? name;
   String? fullName;
   String? levelName;
+  String? geoUnitName;
+
   //String? levelNameForDisplay;
   int? displaySequence;
   int? hasGraaminKshetra;
@@ -438,35 +440,40 @@ class GeoUnitMasterBAL {
   int? parentMandalID;
   int? parentVastiID;
   int? parentGraamID;
+  bool? canEdit;
 
   GeoUnitMasterBAL(
-      this.geoUnitID,
-      this.praantID,
-      this.levelID,
-      this.name,
-      this.fullName,
-      this.levelName,
-      //this.levelNameForDisplay,
-      this.displaySequence,
-      this.hasGraaminKshetra,
-      this.parentKshetraID,
-      this.parentPraantID,
-      this.parentMahaanagarID,
-      this.parentVibhaagID,
-      this.parentBhaagID,
-      this.parentNagarID,
-      this.parentShaharID,
-      this.parentMandalID,
-      this.parentVastiID,
-      this.parentGraamID);
+    this.geoUnitID,
+    this.praantID,
+    this.levelID,
+    this.name,
+    this.fullName,
+    this.levelName,
+    this.geoUnitName,
+    //this.levelNameForDisplay,
+    this.displaySequence,
+    this.hasGraaminKshetra,
+    this.parentKshetraID,
+    this.parentPraantID,
+    this.parentMahaanagarID,
+    this.parentVibhaagID,
+    this.parentBhaagID,
+    this.parentNagarID,
+    this.parentShaharID,
+    this.parentMandalID,
+    this.parentVastiID,
+    this.parentGraamID,
+    this.canEdit,
+  );
 
-  GeoUnitMasterBAL.fromMap(Map<String, dynamic> map) {
+  GeoUnitMasterBAL.fromJson(Map<String, dynamic> map) {
     geoUnitID = map["GeoUnitID"];
     praantID = map["PraantID"];
     levelID = map["LevelID"];
     name = map["Name"];
     fullName = map["FullName"];
     levelName = map["LevelName"];
+    geoUnitName = map["GeoUnitName"];
     //levelNameForDisplay = map["LevelNameForDisplay"];
     displaySequence = map["DisplaySequence"];
     hasGraaminKshetra = map["HasGraaminKshetra"];
@@ -480,6 +487,30 @@ class GeoUnitMasterBAL {
     parentMandalID = map["ParentMandalID"];
     parentVastiID = map["ParentVastiID"];
     parentGraamID = map["ParentGraamID"];
+    canEdit = map["canEdit"];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['DisplaySequence'] = this.displaySequence;
+    data['GeoUnitID'] = this.geoUnitID;
+    data['GeoUnitName'] = this.geoUnitName;
+    data['HasGraaminKshetra'] = this.hasGraaminKshetra;
+    data['LevelID'] = this.levelID;
+    data['LevelName'] = this.levelName;
+    data['ParentBhaagID'] = this.parentBhaagID;
+    data['ParentGraamID'] = this.parentGraamID;
+    data['ParentKshetraID'] = this.parentKshetraID;
+    data['ParentMahaanagarID'] = this.parentMahaanagarID;
+    data['ParentMandalID'] = this.parentMandalID;
+    data['ParentNagarID'] = this.parentNagarID;
+    data['ParentPraantID'] = this.parentPraantID;
+    data['ParentShaharID'] = this.parentShaharID;
+    data['ParentVastiID'] = this.parentVastiID;
+    data['ParentVibhaagID'] = this.parentVibhaagID;
+    data['PraantID'] = this.praantID;
+    data['canEdit'] = this.canEdit;
+    return data;
   }
 }
 
@@ -487,6 +518,7 @@ class LevelMasterBAL {
   int? levelID;
   int? praantID;
   String? levelName;
+
   //String? levelNameForDisplay;
   int? hierarchy;
 
@@ -533,6 +565,7 @@ class UserDataBAL {
   String? linkedGraamName;
   int? linkedGraamID;
   String? levelName;
+
   //String? levelNameForDisplay;
   int? levelID;
   String? fullName;
@@ -1907,6 +1940,7 @@ class AnnualBaithakGraamVikasBAL {
   int? annualBaithakGraamVikasVruttaID;
   int? geoUnitID;
   String? geoUnitName;
+
   //String? mandalGraamName;
   int? annualBaithakTypeID;
   String? annualBaithakTypeCode;

@@ -488,6 +488,10 @@ class _HomeScreenState extends State<HomeScreen> {
     "कार्यालय प्रमुख",
     "Saha-kaaryaalay Pramukh",
     "सह कार्यालय प्रमुख",
+    "Abhiyaan Karyakarta",
+    "अभियान कार्यकर्ता",
+    "Abhiyaan Pramukh",
+    "अभियान प्रमुख"
   ];
 
   bool shouldShowListTileforGeounitCHange(String userLevel, String userDayitva) {

@@ -76,11 +76,6 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
     print("initState");
     getInitialData();
     _tabController = new TabController(length: 2, vsync: this);
-    // Future.delayed(Duration.zero, () async {
-    //   await getAbhiyaanListData();
-    // });
-    // populateDropdown();
-    populateChoice();
     super.initState();
   }
 
@@ -102,183 +97,10 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
     }
   }
 
-  // getAbhiyaanListData() async {
-  //   try {
-  //     bool isConnected = await Statics.isInternetConnected();
-  //     if (isConnected) {
-  //       setState(() {
-  //         _isSearching = true;
-  //       });
-  //       var result = await SwayamsevakProvider().getAbhiyanList();
-  //       if (result.status == "200") {
-  //         print("succeed");
-  //         abhiyaanDataList = result.abhiyaanList!;
-  //         selectedGruhaAbhiyanValue = abhiyaanDataList.first.abhiyaanID.toString();
-  //
-  //         setState(() {
-  //           _isSearching = false;
-  //         });
-  //       } else {
-  //         setState(() {
-  //           _isSearching = false;
-  //         });
-  //         Statics.showToast(Statics.getLabel('noDataFoundTryAnotherSearch').split(",").first);
-  //       }
-  //     }
-  //   } catch (e) {
-  //     print(e);
-  //     setState(() {
-  //       _isSearching = false;
-  //     });
-  //     Statics.showToast(Statics.getLabel('noDataFoundTryAnotherSearch').split(",").first);
-  //   }
-  // }
-
-  // getAbhiyaanGruhaSamparkListData() async {
-  //   try {
-  //     bool isConnected = await Statics.isInternetConnected();
-  //     if (isConnected) {
-  //       setState(() {
-  //         _isSearching = true;
-  //       });
-  //
-  //       // if(_linkedMahaanagarValue == null || _linkedMahaanagarValue == "" &&
-  //       //     _linkedVibhaagValue == null || _linkedVibhaagValue == "" &&
-  //       //     _linkedbhaagValue == null || _linkedbhaagValue == "" &&
-  //       //     _linkednagarValue == null || _linkednagarValue == "" &&
-  //       //     _linkedmandalValue == null || _linkedmandalValue == "" &&
-  //       //     _linkedvastiValue == null || _linkedvastiValue == "" &&
-  //       //     _linkedgraamValue == null || _linkedgraamValue == "" ){
-  //       //   type = "prant";
-  //       // }else if(_linkedMahaanagarValue != null || _linkedMahaanagarValue != "" &&
-  //       //     _linkedVibhaagValue == null || _linkedVibhaagValue == "" &&
-  //       //     _linkedbhaagValue == null || _linkedbhaagValue == "" &&
-  //       //     _linkednagarValue == null || _linkednagarValue == "" &&
-  //       //     _linkedmandalValue == null || _linkedmandalValue == "" &&
-  //       //     _linkedvastiValue == null || _linkedvastiValue == "" &&
-  //       //     _linkedgraamValue == null || _linkedgraamValue == "" ){
-  //       //   type = "mahanagar";
-  //       // }else if(_linkedMahaanagarValue != null || _linkedMahaanagarValue != "" &&
-  //       //     _linkedVibhaagValue != null || _linkedVibhaagValue != "" &&
-  //       //     _linkedbhaagValue == null || _linkedbhaagValue == "" &&
-  //       //     _linkednagarValue == null || _linkednagarValue == "" &&
-  //       //     _linkedmandalValue == null || _linkedmandalValue == "" &&
-  //       //     _linkedvastiValue == null || _linkedvastiValue == "" &&
-  //       //     _linkedgraamValue == null || _linkedgraamValue == "" ){
-  //       //   type = "vibhag";
-  //       // }else if(_linkedMahaanagarValue != null || _linkedMahaanagarValue != "" &&
-  //       //     _linkedVibhaagValue != null || _linkedVibhaagValue != "" &&
-  //       //     _linkedbhaagValue != null || _linkedbhaagValue != "" &&
-  //       //     _linkednagarValue == null || _linkednagarValue == "" &&
-  //       //     _linkedmandalValue == null || _linkedmandalValue == "" &&
-  //       //     _linkedvastiValue == null || _linkedvastiValue == "" &&
-  //       //     _linkedgraamValue == null || _linkedgraamValue == "" ){
-  //       //   type = "bhag";
-  //       // }else if(_linkedMahaanagarValue != null || _linkedMahaanagarValue != "" &&
-  //       //     _linkedVibhaagValue != null || _linkedVibhaagValue != "" &&
-  //       //     _linkedbhaagValue != null || _linkedbhaagValue != "" &&
-  //       //     _linkednagarValue != null || _linkednagarValue != "" &&
-  //       //     _linkedmandalValue == null || _linkedmandalValue == ""&&
-  //       //     _linkedvastiValue == null || _linkedvastiValue == "" &&
-  //       //     _linkedgraamValue == null || _linkedgraamValue == "" ){
-  //       //   type = "nagar";
-  //       // }else if(_linkedMahaanagarValue != null || _linkedMahaanagarValue != "" &&
-  //       //     _linkedVibhaagValue != null || _linkedVibhaagValue != "" &&
-  //       //     _linkedbhaagValue != null || _linkedbhaagValue != "" &&
-  //       //     _linkednagarValue != null || _linkednagarValue != "" &&
-  //       //     _linkedvastiValue != null || _linkedvastiValue != "" &&
-  //       //     _linkedmandalValue == null || _linkedmandalValue == ""&&
-  //       //     _linkedgraamValue == null || _linkedgraamValue == "" ){
-  //       //   type = "vasti";
-  //       // }else if(_linkedMahaanagarValue != null || _linkedMahaanagarValue != "" &&
-  //       //     _linkedVibhaagValue != null || _linkedVibhaagValue != "" &&
-  //       //     _linkedbhaagValue != null || _linkedbhaagValue != "" &&
-  //       //     _linkednagarValue != null || _linkednagarValue != "" &&
-  //       //     _linkedvastiValue == null || _linkedvastiValue == "" &&
-  //       //     _linkedmandalValue != null || _linkedmandalValue != ""&&
-  //       //     _linkedgraamValue == null || _linkedgraamValue == "" ){
-  //       //   type = "mandal";
-  //       // }else if(_linkedMahaanagarValue != null || _linkedMahaanagarValue != "" &&
-  //       //     _linkedVibhaagValue != null || _linkedVibhaagValue != "" &&
-  //       //     _linkedbhaagValue != null || _linkedbhaagValue != "" &&
-  //       //     _linkednagarValue != null || _linkednagarValue != "" &&
-  //       //     _linkedvastiValue == null || _linkedvastiValue == "" &&
-  //       //     _linkedmandalValue != null || _linkedmandalValue != ""&&
-  //       //     _linkedgraamValue != null || _linkedgraamValue != "" ){
-  //       //   type = "gram";
-  //       // }
-  //
-  //       var data = {
-  //         "CreatedByID": initialData!.abhiyanSwayamsevakID!,
-  //         "AbhiyaanID": int.parse(selectedGruhaAbhiyanValue!),
-  //         "Mahanagar": _linkedMahaanagarValue == null || _linkedMahaanagarValue == "" ? 0 : int.parse(_linkedMahaanagarValue!),
-  //         "Vibhag": _linkedVibhaagValue == null || _linkedVibhaagValue == "" ? 0 : int.parse(_linkedVibhaagValue!),
-  //         "BhaagID": _linkedbhaagValue == null || _linkedbhaagValue == "" ? 0 : int.parse(_linkedbhaagValue!),
-  //         "NagarID": _linkednagarValue == null || _linkednagarValue == "" ? 0 : int.parse(_linkednagarValue!),
-  //         "MandalID": _linkedmandalValue == null || _linkedmandalValue == "" ? 0 : int.parse(_linkedmandalValue!),
-  //         "VastiID": _linkedvastiValue == null || _linkedvastiValue == "" ? 0 : int.parse(_linkedvastiValue!),
-  //         "GramID": _linkedgraamValue == null || _linkedgraamValue == "" ? 0 : int.parse(_linkedgraamValue!),
-  //         "type": type
-  //       };
-  //
-  //       print(data);
-  //
-  //       var result = await SwayamsevakProvider().getAbhiyaGruhaSamparkList(jsonEncode(data));
-  //       if (result.status == "200") {
-  //         print("succeed");
-  //         abhiyaanGruhaSamparkDataList = result.abhiyanGruhasamparkData;
-  //
-  //         setState(() {
-  //           _isSearching = false;
-  //         });
-  //       } else {
-  //         setState(() {
-  //           _isSearching = false;
-  //         });
-  //         Statics.showToast(Statics.getLabel('noDataFoundTryAnotherSearch').split(",").first);
-  //       }
-  //     }
-  //   } catch (e) {
-  //     setState(() {
-  //       _isSearching = false;
-  //     });
-  //     print(e);
-  //     Statics.showToast(Statics.getLabel('noDataFoundTryAnotherSearch').split(",").first);
-  //   }
-  // }
-
-  void populateChoice() {
-    setState(() {
-      choices = _tabController!.index != 1
-          ? [
-              new MenuChoices("AddGruha", Icons.add, "${Statics.getLabel('addGruhaSampark')}"),
-              new MenuChoices("visheshVyakti", Icons.perm_contact_cal_outlined, "${Statics.getLabel('searchVisheshVyaktiScreenBanner')}"),
-            ]
-          : [
-              new MenuChoices("EditMenu", Icons.add, "${Statics.getLabel('addSahabhagiKaryakarta')}"),
-              // new MenuChoices("AbhiyaanSwayam", Icons.perm_contact_cal_outlined,
-              //     "सहभागी कार्यकर्ता"),
-            ];
-    });
-  }
-
   @override
   void dispose() {
     super.dispose();
   }
-
-  // void onMenuSelected(MenuChoices choice) async {
-  //   print(choice.menuType);
-  //   if (choice.menuType == "AddGruha") {
-  //     Navigator.of(context).pushNamed(AddGruhaSamparkScreen.routeName);
-  //   } else if (choice.menuType == "AbhiyaanSwayam") {
-  //     Navigator.of(context).pushNamed(AbhiyaanSwayamsevak.routeName);
-  //   } else if (choice.menuType == "visheshVyakti") {
-  //     Navigator.of(context).pushNamed(VisheshVyaktiShodhScreen.routeName);
-  //   } else if (choice.menuType == "EditMenu") {
-  //     Navigator.of(context).pushNamed(AbhiyanAddSwayamsevakScreen.routeName);
-  //   }
-  // }
 
   late Size size = MediaQuery.of(context).size;
 
@@ -335,7 +157,6 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
                       _levelValue = "";
                       _geoUnitsValue = "";
                       setState(() {});
-                      populateChoice();
                       Future.delayed(Duration(milliseconds: 800), () {
                         setState(() {});
                       });

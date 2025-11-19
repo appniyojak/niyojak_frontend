@@ -187,15 +187,15 @@ class LogIn {
         }
       }
 
-      var abhiyaanGeoUnitMaster = body['LogInData']['GeoUnitListforAbhiyaan'];
-      if (abhiyaanGeoUnitMaster.length > 0) {
-        print("usrLogIn 13.5");
-
-        //await dbh.DatabaseHelper.reCreate('GeoUnitMaster', geoUnitData);
-        for (var data in abhiyaanGeoUnitMaster) {
-          await dbh.DatabaseHelper.insertOrUpdateRecord('AbhiyaanGeoUnitMaster', data);
-        }
-      }
+      // var abhiyaanGeoUnitMaster = body['LogInData']['GeoUnitListforAbhiyaan'];
+      // if (abhiyaanGeoUnitMaster.length > 0) {
+      //   print("usrLogIn 13.5");
+      //
+      //   //await dbh.DatabaseHelper.reCreate('GeoUnitMaster', geoUnitData);
+      //   for (var data in abhiyaanGeoUnitMaster) {
+      //     await dbh.DatabaseHelper.insertOrUpdateRecord('AbhiyaanGeoUnitMaster', data);
+      //   }
+      // }
 
       dataList = body['LogInData']['StateMasterList'];
       if (dataList.length > 0) {
