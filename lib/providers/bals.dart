@@ -429,7 +429,7 @@ class GeoUnitMasterBAL {
 
   //String? levelNameForDisplay;
   int? displaySequence;
-  int? hasGraaminKshetra;
+  bool? hasGraaminKshetra;
   int? parentKshetraID;
   int? parentPraantID;
   int? parentMahaanagarID;
@@ -440,7 +440,7 @@ class GeoUnitMasterBAL {
   int? parentMandalID;
   int? parentVastiID;
   int? parentGraamID;
-  bool? canEdit;
+  // bool? canEdit;
 
   GeoUnitMasterBAL(
     this.geoUnitID,
@@ -463,7 +463,7 @@ class GeoUnitMasterBAL {
     this.parentMandalID,
     this.parentVastiID,
     this.parentGraamID,
-    this.canEdit,
+    // this.canEdit,
   );
 
   GeoUnitMasterBAL.fromJson(Map<String, dynamic> map) {
@@ -487,7 +487,7 @@ class GeoUnitMasterBAL {
     parentMandalID = map["ParentMandalID"];
     parentVastiID = map["ParentVastiID"];
     parentGraamID = map["ParentGraamID"];
-    canEdit = map["canEdit"];
+    // canEdit = map["canEdit"];
   }
 
   Map<String, dynamic> toJson() {
@@ -509,7 +509,7 @@ class GeoUnitMasterBAL {
     data['ParentVastiID'] = this.parentVastiID;
     data['ParentVibhaagID'] = this.parentVibhaagID;
     data['PraantID'] = this.praantID;
-    data['canEdit'] = this.canEdit;
+    // data['canEdit'] = this.canEdit;
     return data;
   }
 }

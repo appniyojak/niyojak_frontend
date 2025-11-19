@@ -234,7 +234,7 @@ class AbhiyanSwayamsevakList {
     abhiyanID = json['AbhiyanID'];
     abhiyanSwayamsevakID = json['AbhiyanSwayamsevakID'];
     appPassword = json['AppPassword']; // Added parameter
-    daayityaName = json['DaayitvaName'] ?? json['DaayityaName'];
+    daayityaName = json['daayitva'] ?? json['DaayitvaName'] ?? json['DaayityaName'];
     email = json['Email'];
     geoUnitID = json['GeoUnitID']; // Updated parameter name
     levelName = json['GeoUnitID'].toString(); // Updated parameter name
@@ -244,8 +244,8 @@ class AbhiyanSwayamsevakList {
     praantID = json['ParentPraantID']; // Added parameter
     preferredLanguageID = json['PreferredLanguageID']; // Added parameter
     // fullName = json['full_name'];
-    participantName = json['full_name'] ?? json['ParticipantName'];
-    participantNumber = json['MobileNo'] ?? json['ParticipantNumber'];
+    participantName = json['full_name'] ?? json['FullName'] ?? json['ParticipantName'];
+    participantNumber = json['MobileNo'] ?? json['mobileno'] ?? json['ParticipantNumber'];
     sansthaName = json['SansthaName'];
     sansthaPadh = json['SansthaPadh'];
     sansthaType = json['SansthaType'];

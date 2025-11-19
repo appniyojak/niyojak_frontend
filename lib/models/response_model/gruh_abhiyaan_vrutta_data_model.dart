@@ -5,6 +5,7 @@ class GruhAbhiyaanVruttaDataModel {
   String? message;
   String? status;
   List<AbhiyaanPeopleModel>? swayamsevakList;
+  List<AbhiyaanPeopleModel>? pramukhList;
   List<PreviousDay>? previousDay;
 
   GruhAbhiyaanVruttaDataModel({
@@ -15,6 +16,7 @@ class GruhAbhiyaanVruttaDataModel {
     this.status,
     this.swayamsevakList,
     this.previousDay,
+    this.pramukhList,
   });
 
   GruhAbhiyaanVruttaDataModel.fromJson(Map<String, dynamic> json) {
@@ -45,6 +47,12 @@ class GruhAbhiyaanVruttaDataModel {
         previousDay!.add(new PreviousDay.fromJson(v));
       });
     }
+    if (json['pramukh'] != null) {
+      pramukhList = <AbhiyaanPeopleModel>[];
+      json['pramukh'].forEach((v) {
+        pramukhList!.add(new AbhiyaanPeopleModel.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -65,6 +73,9 @@ class GruhAbhiyaanVruttaDataModel {
     }
     if (this.previousDay != null) {
       data['PreviousDay'] = this.previousDay!.map((v) => v.toJson()).toList();
+    }
+    if (this.pramukhList != null) {
+      data['pramukh'] = this.pramukhList!.map((v) => v.toJson()).toList();
     }
     return data;
   }

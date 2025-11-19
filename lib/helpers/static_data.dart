@@ -16,6 +16,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../assets/strings/strings.dart';
 import '../helpers/static_data.dart' as Statics;
+import '../models/response_model/AbhiyaanSwayamsevakListResponse.dart';
 import '../models/response_model/TulnatmakResponseModel.dart';
 import '../models/response_model/abiyaan_geo_unit_model.dart';
 import '../models/response_model/geounit_name_model.dart';
@@ -202,7 +203,9 @@ const String mandalSarvekshanstep2Submit = baseUrlAPI + '/mandalSarvekshanstep2'
 const String mandalSarvekshanstep3Submit = baseUrlAPI + '/mandalSarvekshanstep3';
 
 const String getSwayamsevakForGruhApi = baseUrlAPI + '/GetSwayamsevaksForGruh';
+const String searchPramukhForGruhApi = baseUrlAPI + '/searchSwayamsevakforpramukh';
 const String saveSwayamsevakForGruhApi = baseUrlAPI + '/saveabhiyaanKaryakarta'; //'/SaveAbhiyanSwayamsevakForGruh';
+const String saveAsPramukhForGruhApi = baseUrlAPI + '/addpramukhtogruh'; //'/SaveAbhiyanSwayamsevakForGruh';
 const String addSwayamsevakInListForGruhApi = baseUrlAPI + '/SaveAbhiyanSwayamsevakForGruh';
 const String getDataforGruhAbhiyaanApi = baseUrlAPI + '/GetDataforGruhAbhiyaan';
 const String getAbhiyaanGeoUnitListApi = baseUrlAPI + '/getgeounitdataforabhiyaangruh';
@@ -644,6 +647,7 @@ Future<void> populateUserAbhiyaanDetailsMap() async {
       abhiyaanUserDetails['PreferredLanguageCode'] = uData.preferredLanguageCode;
 
       abhiyaanUserDetails['PreferredLanguageID'] = uData.preferredLanguageID;
+      abhiyaanUserDetails["isEmpty"] = false;
     });
   }
 }
@@ -827,7 +831,6 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevel(String levelID) async {
       data['ParentMandalID'],
       data['ParentVastiID'],
       data['ParentGraamID'],
-      data['canEdit'],
     );
     _geounitList.add(info);
   });
@@ -886,7 +889,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForVasti(String levelI
       data['GeoUnitName'],
       "",
       "",
-      data['geoUnitName'],
+      data['GeoUnitName'],
       data['DisplaySequence'],
       null,
       data['ParentKshetraID'],
@@ -899,7 +902,6 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForVasti(String levelI
       data['ParentMandalID'],
       data['ParentVastiID'],
       data['ParentGraamID'],
-      data['canEdit'],
     );
     _geounitList.add(info);
   });
@@ -970,7 +972,6 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForMandal(String level
       data['ParentMandalID'],
       data['ParentVastiID'],
       data['ParentGraamID'],
-      data['canEdit'],
     );
     _geounitList.add(info);
   });
@@ -1031,7 +1032,6 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParent(String levelID, Strin
       data['ParentMandalID'],
       data['ParentVastiID'],
       data['ParentGraamID'],
-      data['canEdit'],
     );
     _geounitList.add(info);
   });
@@ -1070,7 +1070,6 @@ Future<GeoUnitMasterBAL?> getGeoUnitsByID(String geoUnitID) async {
       result[0]['ParentMandalID'],
       result[0]['ParentVastiID'],
       result[0]['ParentGraamID'],
-      result[0]['canEdit'],
     );
     return _geounit;
   } else {
@@ -2938,7 +2937,6 @@ Future<List<GeoUnitMasterBAL>?> getAbhiyaanGeoUnitMasterData(Map<String, dynamic
       final Map<String, dynamic> data = jsonDecode(response.body);
 
       if (data["Status"] == "200" || data["Status"] == "Success") {
-        log("getAbhiyaanGeoUnitMasterData >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
         var abhiyaanGeoUnitMaster = data['GeoUnitListforAbhiyaan'];
 
         if (abhiyaanGeoUnitMaster.length > 0) {
@@ -2954,7 +2952,7 @@ Future<List<GeoUnitMasterBAL>?> getAbhiyaanGeoUnitMasterData(Map<String, dynamic
         }
 
         AbhiyaanGeoUnitListModel model = AbhiyaanGeoUnitListModel.fromJson(data);
-        log("getAbhiyaanGeoUnitMasterData >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+        // log("getAbhiyaanGeoUnitMasterData >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
 
         return model.geoUnitListforAbhiyaan; // ✅ return karna zaroori hai
       }
@@ -2965,7 +2963,7 @@ Future<List<GeoUnitMasterBAL>?> getAbhiyaanGeoUnitMasterData(Map<String, dynamic
     }
   } catch (e) {
     if (context != null) Navigator.of(context, rootNavigator: true).pop();
-    print("Exception: $e");
+    print("printing the Exception: $e");
     return null;
   }
 }
@@ -3061,6 +3059,37 @@ Future<SearchAbhiyaanKaryakartaRespModel?> getSwayamsevakForGruhAbhiyaan(Map<Str
   }
 }
 
+Future<List<AbhiyanSwayamsevakList>?> searchPramukhGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
+  if (context != null) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+  log(searchPramukhForGruhApi);
+
+  try {
+    var response = await http.post(Uri.parse(searchPramukhForGruhApi), headers: jHeaders, body: jsonEncode(inputJson));
+
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+
+      if (data["Status"] == "Success" || data["Status"] == "200") {
+        SearchAbhiyaanKaryakartaRespModel model = SearchAbhiyaanKaryakartaRespModel.fromJson(data);
+        log("searchPramukhGruhAbhiyaan >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+
+        return model.swayamsevakList; // ✅ return karna zaroori hai
+      }
+      return null; // ✅ error case
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null; // ✅ error case
+    }
+  } catch (e) {
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+    print("Exception: $e");
+    return null;
+  }
+}
+
 Future<bool> saveSwayamsevakForGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   if (context != null) showLoaderDialog(context);
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -3068,6 +3097,35 @@ Future<bool> saveSwayamsevakForGruhAbhiyaan(Map<String, dynamic> inputJson, {Bui
 
   try {
     var response = await http.post(Uri.parse(saveSwayamsevakForGruhApi), headers: jHeaders, body: jsonEncode(inputJson));
+
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      log("saveSwayamsevakForGruhAbhiyaan >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+
+      if (data["Status"] == "200") {
+        return true; // ✅ return karna zaroori hai
+      }
+      return false; // ✅ error case
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return false; // ✅ error case
+    }
+  } catch (e) {
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+    print("Exception: $e");
+    return false;
+  }
+}
+
+Future<bool> saveAsPramukhForGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
+  if (context != null) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+  log(saveAsPramukhForGruhApi);
+
+  try {
+    var response = await http.post(Uri.parse(saveAsPramukhForGruhApi), headers: jHeaders, body: jsonEncode(inputJson));
 
     if (context != null) Navigator.of(context, rootNavigator: true).pop();
 
@@ -3875,7 +3933,6 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitMasterForApp(
       data['ParentMandalID'],
       data['ParentVastiID'],
       data['ParentGraamID'],
-      data['canEdit'],
     );
     geoUnitList.add(info);
   });
