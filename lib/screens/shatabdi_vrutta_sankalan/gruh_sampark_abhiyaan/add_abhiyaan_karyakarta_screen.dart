@@ -253,7 +253,7 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                   child: Text(getLabel('ConfirmationNo')),
                   onPressed: () {
                     Navigator.of(ctnx).pop();
-                    Navigator.of(context).pop();
+                    // Navigator.of(context).pop();
                   },
                 ),
                 MaterialButton(
@@ -422,7 +422,7 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
           "sanstha": selectedSansthaValue,
           "sansthaname": _sansthaNameCntrl.text.trim(),
           "padh": _sansthaPadhCntrl.text.trim(),
-          "daayitva": selectedDayitvValue,
+          "daayitva": "",
         };
 
         log(jsonEncode(data));
@@ -1026,54 +1026,54 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                       // SizedBox(height: 15),
                       // if (_levelValue != "" && _geoUnitsValue != "")
                       // _levelValue == "2" || _levelValue == "3" ?
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: Text(
-                              Statics.getLabel("SelectDaayitva"),
-                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Text(
-                              ":",
-                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 4,
-                            child: Container(
-                              alignment: Alignment.center,
-                              padding: EdgeInsets.only(left: 10, right: 0, top: 5, bottom: 5),
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.black38)),
-                              child: DropdownButton<String>(
-                                isExpanded: true,
-                                isDense: true,
-                                iconSize: 30,
-                                underline: SizedBox(),
-                                value: selectedDayitvValue == "" ? null : selectedDayitvValue,
-                                onChanged: (String? newValue) {
-                                  setState(() {
-                                    selectedDayitvValue = newValue!;
-                                  });
-                                },
-                                items: <String>["abhiyaanKaryakartaFormTitle", "abhiyaanPramukhKey"].map<DropdownMenuItem<String>>((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(top: 3.0),
-                                      child: Text(Statics.getLabel(value)),
-                                    ),
-                                  );
-                                }).toList(),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     Expanded(
+                      //       flex: 1,
+                      //       child: Text(
+                      //         Statics.getLabel("SelectDaayitva"),
+                      //         style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      //       ),
+                      //     ),
+                      //     Expanded(
+                      //       flex: 1,
+                      //       child: Text(
+                      //         ":",
+                      //         style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      //       ),
+                      //     ),
+                      //     Expanded(
+                      //       flex: 4,
+                      //       child: Container(
+                      //         alignment: Alignment.center,
+                      //         padding: EdgeInsets.only(left: 10, right: 0, top: 5, bottom: 5),
+                      //         decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.black38)),
+                      //         child: DropdownButton<String>(
+                      //           isExpanded: true,
+                      //           isDense: true,
+                      //           iconSize: 30,
+                      //           underline: SizedBox(),
+                      //           value: selectedDayitvValue == "" ? null : selectedDayitvValue,
+                      //           onChanged: (String? newValue) {
+                      //             setState(() {
+                      //               selectedDayitvValue = newValue!;
+                      //             });
+                      //           },
+                      //           items: <String>["abhiyaanKaryakartaFormTitle", "abhiyaanPramukhKey"].map<DropdownMenuItem<String>>((String value) {
+                      //             return DropdownMenuItem<String>(
+                      //               value: value,
+                      //               child: Padding(
+                      //                 padding: const EdgeInsets.only(top: 3.0),
+                      //                 child: Text(Statics.getLabel(value)),
+                      //               ),
+                      //             );
+                      //           }).toList(),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                     ],
                   ),
                 // : Row(

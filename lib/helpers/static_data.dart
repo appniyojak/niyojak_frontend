@@ -211,6 +211,7 @@ const String getDataforGruhAbhiyaanApi = baseUrlAPI + '/GetDataforGruhAbhiyaan';
 const String getAbhiyaanGeoUnitListApi = baseUrlAPI + '/getgeounitdataforabhiyaangruh';
 const String addToToliListApi = baseUrlAPI + '/addtotoli';
 const String saveDataforGruhAbhiyaanApi = baseUrlAPI + '/SaveDataforGruhAbhiyaan';
+const String saveDataforPramukhGruhAbhiyaanApi = baseUrlAPI + '/updatedataforgruhabhiyaanaspramukh';
 const String getDataWhileAddUpdateUPLevelForGruh = baseUrlAPI + '/GetDataWhileAddUpdateUPLevelForGruh';
 const String urlCheckExistsAbhiyaanKaryakarta = baseUrlAPI + '/checkexistsabhiyaankaryakarta';
 
@@ -2981,6 +2982,35 @@ Future<bool> saveDataforGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildConte
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
       log("saveDataforGruhAbhiyaan >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+
+      if (data["Status"] == "200" || data["Status"] == "Success") {
+        return true; // ✅ return karna zaroori hai
+      }
+      return false; // ✅ error case
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return false; // ✅ error case
+    }
+  } catch (e) {
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+    print("Exception: $e");
+    return false;
+  }
+}
+
+Future<bool> saveDataforPramukhGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
+  if (context != null) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+  log(saveDataforPramukhGruhAbhiyaanApi);
+
+  try {
+    var response = await http.post(Uri.parse(saveDataforPramukhGruhAbhiyaanApi), headers: jHeaders, body: jsonEncode(inputJson));
+
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      log("saveDataforPramukhGruhAbhiyaan >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
 
       if (data["Status"] == "200" || data["Status"] == "Success") {
         return true; // ✅ return karna zaroori hai
