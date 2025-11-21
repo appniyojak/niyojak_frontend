@@ -175,6 +175,8 @@ class PreviousDay {
   int? totalAtithiCount;
   int? pustakvikrisankhya;
   int? samparkitghar;
+  String? visititAtithiAnyaprabhaViLokamids;
+  String? visititAtithiSajjanShaktiids;
   int? vitaritkarpatra;
 
   PreviousDay(
@@ -191,6 +193,8 @@ class PreviousDay {
       this.totalAtithiCount,
       this.pustakvikrisankhya,
       this.samparkitghar,
+      this.visititAtithiAnyaprabhaViLokamids,
+      this.visititAtithiSajjanShaktiids,
       this.vitaritkarpatra});
 
   PreviousDay.fromJson(Map<String, dynamic> json) {
@@ -207,6 +211,8 @@ class PreviousDay {
     totalAtithiCount = json['TotalAtithiCount'];
     pustakvikrisankhya = json['pustakvikrisankhya'];
     samparkitghar = json['samparkitghar'];
+    visititAtithiAnyaprabhaViLokamids = json['visitit_atithi_anyaprabha_vi_lokamids'];
+    visititAtithiSajjanShaktiids = json['visitit_atithi_sajjan_shaktiids'];
     vitaritkarpatra = json['vitaritkarpatra'];
   }
 
@@ -225,6 +231,8 @@ class PreviousDay {
     data['TotalAtithiCount'] = this.totalAtithiCount;
     data['pustakvikrisankhya'] = this.pustakvikrisankhya;
     data['samparkitghar'] = this.samparkitghar;
+    data['visitit_atithi_anyaprabha_vi_lokamids'] = this.visititAtithiAnyaprabhaViLokamids;
+    data['visitit_atithi_sajjan_shaktiids'] = this.visititAtithiSajjanShaktiids;
     data['vitaritkarpatra'] = this.vitaritkarpatra;
     return data;
   }

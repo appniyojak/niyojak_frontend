@@ -52,8 +52,6 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
   bool? _linkedgraamDisable = false;
   bool? _linkedvastiDisable = false;
 
-  bool _isDaiytva = false;
-
   String? _linkedMahaanagarValue = '';
   String? _linkedVibhaagValue = '';
   String? _linkedbhaagValue = "";
@@ -76,10 +74,12 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
     print("initState");
     getInitialData();
     _tabController = new TabController(length: 2, vsync: this);
+    // WidgetsBinding.instance.addPostFrameCallback((t) => getInitialData());
     super.initState();
   }
 
   getInitialData() async {
+    await setDropDownData();
     SharedPreferences pref = await SharedPreferences.getInstance();
     var data = pref.getString("AbhiyanSwayamsevakData");
     log(data.toString());
@@ -88,6 +88,26 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
       type = initialData!.levelName!.toLowerCase();
       log("initialData!  ---> ${json.encode(initialData)}");
       log("initialData!.levelName  ---> ${type}");
+      setState(() {});
+    }
+  }
+
+  setDropDownData() async {
+    log("Print >>>> ${Statics.abhiyaanUserDetails["isEmpty"]}");
+    if (!Statics.abhiyaanUserDetails["isEmpty"]) {
+      await getAbhiyaanGeoUnitsFun();
+    }
+  }
+
+  getAbhiyaanGeoUnitsFun() async {
+    print("calling");
+    bool isConnected = await Statics.isInternetConnected();
+    if (isConnected) {
+      var inputData = {
+        "SwayamsevakID": Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"],
+      };
+      print(jsonEncode(inputData));
+      await Statics.getAbhiyaanGeoUnitMasterData(inputData, context: context);
       setState(() {});
     }
   }
@@ -105,34 +125,6 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
             "${Statics.getLabel('gruhSamparkAbhiyan')} (${Statics.getLabel('shatabdiVarsha')})",
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
           ),
-          // actions: <Widget>[
-          //   if (_tabController!.index == 1)
-          //     PopupMenuButton<MenuChoices>(
-          //       onSelected: onMenuSelected,
-          //       icon: Icon(FontAwesomeIcons.ellipsisV),
-          //       itemBuilder: (BuildContext context) {
-          //         return choices.map((MenuChoices choice) {
-          //           return PopupMenuItem<MenuChoices>(
-          //             value: choice,
-          //             child: ListTile(leading: Icon(choice.icon), title: Text(choice.menuText!)),
-          //           );
-          //         }).toList();
-          //       },
-          //     )
-          //   else
-          //     PopupMenuButton<MenuChoices>(
-          //       onSelected: onMenuSelected,
-          //       icon: Icon(FontAwesomeIcons.ellipsisV),
-          //       itemBuilder: (BuildContext context) {
-          //         return choices.map((MenuChoices choice) {
-          //           return PopupMenuItem<MenuChoices>(
-          //             value: choice,
-          //             child: ListTile(leading: Icon(choice.icon), title: Text(choice.menuText!)),
-          //           );
-          //         }).toList();
-          //       },
-          //     ),
-          // ],
           bottom: (Statics.abhiyaanUserDetails["isEmpty"] && int.parse(Statics.userDetails["LevelID"].toString()) < 6)
               ? null
               : new TabBar(
@@ -150,39 +142,31 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
                   tabs: <Widget>[
                     Tab(
                       child: Row(
-                        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        spacing: 16,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
                             FontAwesomeIcons.fileArrowUp,
                             size: 18,
                           ),
-                          SizedBox(width: 10),
-                          Container(
-                            width: size.width * 0.31,
-                            alignment: Alignment.center,
-                            child: Text(
-                              "${Statics.getLabel('addGruhaSampark')}",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 15),
-                            ),
+                          Text(
+                            "${Statics.getLabel('addGruhaSampark')}",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 15),
                           ),
                         ],
                       ),
                     ),
                     Tab(
                       child: Row(
+                        spacing: 16,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Icons.people),
-                          SizedBox(width: 5),
-                          Expanded(
-                            child: Center(
-                              // width: size.width*0.31,
-                              child: Text(
-                                "${Statics.getLabel('Reportonly')}",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 15),
-                              ),
-                            ),
+                          Text(
+                            "${Statics.getLabel('Reportonly')}",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 15),
                           ),
                         ],
                       ),
@@ -201,13 +185,8 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
                   controller: _tabController,
                   physics: NeverScrollableScrollPhysics(),
                   children: <Widget>[
-                    GruhVruttaTab(
-                      initialData: initialData,
-                      isDaayitva: _isDaiytva,
-                    ),
-                    GruhSamparkaReportTab(
-                      initialData: initialData,
-                    ),
+                    GruhVruttaTab(initialData: initialData),
+                    GruhSamparkaReportTab(initialData: initialData),
                   ],
                 ),
         ),
@@ -215,3 +194,29 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
     );
   }
 }
+
+/*
+// --- 1. THE SOLUTION: KeepAliveWrapper ---
+// Wrap any widget in this to keep its state alive in a TabBarView or ListView.
+class KeepAliveWrapper extends StatefulWidget {
+  final Widget child;
+
+  const KeepAliveWrapper({required this.child, super.key});
+
+  @override
+  State<KeepAliveWrapper> createState() => _KeepAliveWrapperState();
+}
+
+class _KeepAliveWrapperState extends State<KeepAliveWrapper> with AutomaticKeepAliveClientMixin {
+  // This override is what tells Flutter to keep the state alive.
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    // You must call super.build(context) when using AutomaticKeepAliveClientMixin
+    super.build(context);
+    return widget.child;
+  }
+}
+*/

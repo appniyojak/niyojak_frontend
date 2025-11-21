@@ -23,6 +23,7 @@ import '../models/response_model/geounit_name_model.dart';
 import '../models/response_model/get_vasti_data_by_id_model.dart';
 import '../models/response_model/get_vijaya_dashami_geounit_data.dart';
 import '../models/response_model/get_vijayadashmi_report_resp_model.dart';
+import '../models/response_model/gruh_abhiyaan_report_model.dart';
 import '../models/response_model/gruh_abhiyaan_vrutta_data_model.dart';
 import '../models/response_model/mandalVastisarvekshanReportModel.dart';
 import '../models/response_model/nagar_vasti_model.dart';
@@ -208,6 +209,7 @@ const String saveSwayamsevakForGruhApi = baseUrlAPI + '/saveabhiyaanKaryakarta';
 const String saveAsPramukhForGruhApi = baseUrlAPI + '/addpramukhtogruh'; //'/SaveAbhiyanSwayamsevakForGruh';
 const String addSwayamsevakInListForGruhApi = baseUrlAPI + '/SaveAbhiyanSwayamsevakForGruh';
 const String getDataforGruhAbhiyaanApi = baseUrlAPI + '/GetDataforGruhAbhiyaan';
+const String getReportforGruhAbhiyaanApi = baseUrlAPI + '/gruhsamparkareport';
 const String getAbhiyaanGeoUnitListApi = baseUrlAPI + '/getgeounitdataforabhiyaangruh';
 const String addToToliListApi = baseUrlAPI + '/addtotoli';
 const String saveDataforGruhAbhiyaanApi = baseUrlAPI + '/SaveDataforGruhAbhiyaan';
@@ -2909,6 +2911,37 @@ Future<GruhAbhiyaanVruttaDataModel?> getDataforGruhAbhiyaan(Map<String, dynamic>
       if (data["Status"] == "200" || data["Status"] == "Success") {
         GruhAbhiyaanVruttaDataModel model = GruhAbhiyaanVruttaDataModel.fromJson(data);
         log("getDataforGruhAbhiyaan >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+
+        return model; // ✅ return karna zaroori hai
+      }
+      return null; // ✅ error case
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null; // ✅ error case
+    }
+  } catch (e) {
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+    print("Exception: $e");
+    return null;
+  }
+}
+
+Future<GruhAbhiyaanReportModel?> getReportforGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
+  if (context != null) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+  log(getReportforGruhAbhiyaanApi);
+
+  try {
+    var response = await http.post(Uri.parse(getReportforGruhAbhiyaanApi), headers: jHeaders, body: jsonEncode(inputJson));
+
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+
+      if (data["Status"] == "200" || data["Status"] == "Success") {
+        GruhAbhiyaanReportModel model = GruhAbhiyaanReportModel.fromJson(data);
+        log("getReportforGruhAbhiyaan >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
 
         return model; // ✅ return karna zaroori hai
       }
