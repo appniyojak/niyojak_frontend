@@ -79,7 +79,7 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
   }
 
   getInitialData() async {
-    await setDropDownData();
+    // await setDropDownData();
     SharedPreferences pref = await SharedPreferences.getInstance();
     var data = pref.getString("AbhiyanSwayamsevakData");
     log(data.toString());

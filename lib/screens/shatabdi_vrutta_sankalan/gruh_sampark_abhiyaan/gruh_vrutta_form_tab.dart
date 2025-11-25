@@ -376,134 +376,142 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
     await populatelinkedMahaanagarDropdown();
     await populatelinkedVibhaagDropdown('');
     if (isClear) return;
-    if (widget.initialData != null && !Statics.abhiyaanUserDetails["isEmpty"]) {
-      if (widget.initialData!.parentMahaanagarID != null) {
-        setState(() {
-          _isExpanded = true;
-          _linkedMahaanagarDisable = true;
-          _linkedMahaanagarValue = widget.initialData!.parentMahaanagarID.toString();
-          _selectedGeoUnitId = widget.initialData!.parentMahaanagarID.toString();
-        });
-      }
-      await populatelinkedVibhaagDropdown('');
-
-      if (widget.initialData!.parentVibhaagID != null) {
-        await populatelinkedBhaagDropdown(widget.initialData!.parentVibhaagID.toString());
-        setState(() {
-          _isExpanded = true;
-          _linkedVibhaagDisable = true;
-          _linkedVibhaagValue = widget.initialData!.parentVibhaagID.toString();
-          _selectedGeoUnitId = widget.initialData!.parentVibhaagID.toString();
-        });
-      }
-      if (widget.initialData!.parentBhaagID != null) {
-        await populatelinkedNagarDropdown(widget.initialData!.parentBhaagID.toString(), null);
-
-        final selectedItem = _linkedbhaag!.firstWhere((bg) => bg.geoUnitID.toString() == widget.initialData!.parentBhaagID.toString());
-
-        setState(() {
-          _isExpanded = true;
-          _linkedbhaagDisable = true;
-          _linkedbhaagValue = widget.initialData!.parentBhaagID.toString();
-          _selectedGeoUnitId = widget.initialData!.parentBhaagID.toString();
-          _linkedbhaagName = selectedItem.name ?? "";
-        });
-      }
-      if (widget.initialData!.parentNagarID != null) {
-        await populatelinkedMandalDropdown(widget.initialData!.parentNagarID.toString());
-        await populatelinkedVastiDropdown(widget.initialData!.parentNagarID.toString());
-
-        final selectedItem = _linkednagar!.firstWhere((bg) => bg.geoUnitID.toString() == widget.initialData!.parentNagarID.toString());
-
-        setState(() {
-          _isExpanded = true;
-          _linkednagarDisable = true;
-          _linkednagarValue = widget.initialData!.parentNagarID.toString();
-          _selectedGeoUnitId = widget.initialData!.parentNagarID.toString();
-          _linkednagarName = selectedItem.name ?? "";
-        });
-      }
-      setState(() {
-        if (widget.initialData!.parentMandalID != null) {
-          _isExpanded = true;
-          _linkedmandalDisable = true;
-          _linkedmandalValue = widget.initialData!.parentMandalID.toString();
-          _selectedGeoUnitId = widget.initialData!.parentMandalID.toString();
-
-          final selectedItem = _linkedmandal!.firstWhere((bg) => bg.geoUnitID.toString() == widget.initialData!.parentMandalID.toString());
-
-          _linkedmandalName = selectedItem.name ?? "";
-          populatelinkedGraamDropdown(_linkedmandalValue);
-        }
-        if (widget.initialData!.levelName == "Vasti" && widget.initialData!.geoUnitID != null) {
-          _isExpanded = true;
-          _linkedvastiDisable = true;
-          _linkedvastiValue = widget.initialData!.geoUnitID.toString();
-          _selectedGeoUnitId = widget.initialData!.geoUnitID.toString();
-
-          final selectedItem = _linkedvasti!.firstWhere((bg) => bg.geoUnitID.toString() == widget.initialData!.geoUnitID.toString());
-
-          _linkedvastiName = selectedItem.name ?? "";
-        } else if (widget.initialData!.levelName == "Graam" && widget.initialData!.geoUnitID != null) {
-          _isExpanded = true;
-          _linkedgraamDisable = true;
-          _linkedgraamValue = widget.initialData!.geoUnitID.toString();
-          _selectedGeoUnitId = widget.initialData!.geoUnitID.toString();
-
-          final selectedItem = _linkedgraam!.firstWhere((bg) => bg.geoUnitID.toString() == widget.initialData!.geoUnitID.toString());
-
-          _linkedgraamName = selectedItem.name ?? "";
-        } else if (widget.initialData!.levelName == "Mandal" && widget.initialData!.geoUnitID != null) {
-          _isExpanded = true;
-          _linkedmandalDisable = true;
-          _linkedmandalValue = widget.initialData!.geoUnitID.toString();
-          _selectedGeoUnitId = widget.initialData!.geoUnitID.toString();
-          populatelinkedGraamDropdown(_linkedmandalValue);
-
-          final selectedItem = _linkedmandal!.firstWhere((bg) => bg.geoUnitID.toString() == widget.initialData!.geoUnitID.toString());
-
-          _linkedmandalName = selectedItem.name ?? "";
-        } else if (widget.initialData!.levelName == "Nagar" && widget.initialData!.geoUnitID != null) {
-          _isExpanded = true;
-          _linkednagarDisable = true;
-          _linkednagarValue = widget.initialData!.geoUnitID.toString();
-          _selectedGeoUnitId = widget.initialData!.geoUnitID.toString();
-          populatelinkedMandalDropdown(_linkednagarValue);
-          populatelinkedVastiDropdown(_linkednagarValue);
-
-          final selectedItem = _linkednagar!.firstWhere((bg) => bg.geoUnitID.toString() == widget.initialData!.geoUnitID.toString());
-
-          _linkednagarName = selectedItem.name ?? "";
-        } else if (widget.initialData!.levelName == "Bhaag" && widget.initialData!.geoUnitID != null) {
-          _isExpanded = true;
-          _linkedbhaagDisable = true;
-          _linkedbhaagValue = widget.initialData!.geoUnitID.toString();
-          _selectedGeoUnitId = widget.initialData!.geoUnitID.toString();
-          populatelinkedNagarDropdown(_linkedbhaagValue, null);
-
-          final selectedItem = _linkedbhaag!.firstWhere((bg) => bg.geoUnitID.toString() == widget.initialData!.geoUnitID.toString());
-
-          _linkedbhaagName = selectedItem.name ?? "";
-        } else {
-          _isExpanded = true;
-          // _linkedgraamDisable = true;
-          _linkedbhaagValue = null;
-          _linkedshaharValue = null;
-          _linkednagarValue = null;
-          _linkedmandalValue = null;
-          _linkedgraamValue = null;
-          _linkedvastiValue = null;
-        }
-      });
-    } else {
-      _isExpanded = true;
-      _linkedMahaanagarValue = _linkedbhaagValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-    }
+    // if (widget.initialData != null && !Statics.abhiyaanUserDetails["isEmpty"]) {
+    //   if (widget.initialData!.parentMahaanagarID != null) {
+    //     setState(() {
+    //       _isExpanded = true;
+    //       _linkedMahaanagarDisable = true;
+    //       _linkedMahaanagarValue = widget.initialData!.parentMahaanagarID.toString();
+    //       _selectedGeoUnitId = widget.initialData!.parentMahaanagarID.toString();
+    //     });
+    //   }
+    //   await populatelinkedVibhaagDropdown('');
+    //
+    //   if (widget.initialData!.parentVibhaagID != null) {
+    //     await populatelinkedBhaagDropdown(widget.initialData!.parentVibhaagID.toString());
+    //     setState(() {
+    //       _isExpanded = true;
+    //       _linkedVibhaagDisable = true;
+    //       _linkedVibhaagValue = widget.initialData!.parentVibhaagID.toString();
+    //       _selectedGeoUnitId = widget.initialData!.parentVibhaagID.toString();
+    //     });
+    //   }
+    //   if (widget.initialData!.parentBhaagID != null) {
+    //     await populatelinkedNagarDropdown(widget.initialData!.parentBhaagID.toString(), null);
+    //
+    //     GeoUnitMasterBAL? selectedItem;
+    //     if (_linkedbhaag != null && _linkedbhaag!.isNotEmpty) selectedItem = _linkedbhaag!.firstWhere((bg) => bg.geoUnitID.toString() == widget.initialData!.parentBhaagID.toString());
+    //
+    //     setState(() {
+    //       _isExpanded = true;
+    //       _linkedbhaagDisable = true;
+    //       _linkedbhaagValue = widget.initialData!.parentBhaagID.toString();
+    //       _selectedGeoUnitId = widget.initialData!.parentBhaagID.toString();
+    //       _linkedbhaagName = selectedItem?.name ?? "";
+    //     });
+    //   }
+    //   if (widget.initialData!.parentNagarID != null) {
+    //     await populatelinkedMandalDropdown(widget.initialData!.parentNagarID.toString());
+    //     await populatelinkedVastiDropdown(widget.initialData!.parentNagarID.toString());
+    //
+    //     GeoUnitMasterBAL? selectedItem;
+    //     if (_linkednagar != null && _linkednagar!.isNotEmpty) selectedItem = _linkednagar!.firstWhere((bg) => bg.geoUnitID.toString() == widget.initialData!.parentNagarID.toString());
+    //
+    //     setState(() {
+    //       _isExpanded = true;
+    //       _linkednagarDisable = true;
+    //       _linkednagarValue = widget.initialData!.parentNagarID.toString();
+    //       _selectedGeoUnitId = widget.initialData!.parentNagarID.toString();
+    //       _linkednagarName = selectedItem?.name ?? "";
+    //     });
+    //   }
+    //   setState(() {
+    //     if (widget.initialData!.parentMandalID != null) {
+    //       _isExpanded = true;
+    //       _linkedmandalDisable = true;
+    //       _linkedmandalValue = widget.initialData!.parentMandalID.toString();
+    //       _selectedGeoUnitId = widget.initialData!.parentMandalID.toString();
+    //
+    //       GeoUnitMasterBAL? selectedItem;
+    //       if (_linkedmandal != null && _linkedmandal!.isNotEmpty) selectedItem = _linkedmandal!.firstWhere((bg) => bg.geoUnitID.toString() == widget.initialData!.parentMandalID.toString());
+    //
+    //       _linkedmandalName = selectedItem?.name ?? "";
+    //       populatelinkedGraamDropdown(_linkedmandalValue);
+    //     }
+    //     if (widget.initialData!.levelName == "Vasti" && widget.initialData!.geoUnitID != null) {
+    //       _isExpanded = true;
+    //       _linkedvastiDisable = true;
+    //       _linkedvastiValue = widget.initialData!.geoUnitID.toString();
+    //       _selectedGeoUnitId = widget.initialData!.geoUnitID.toString();
+    //
+    //       GeoUnitMasterBAL? selectedItem;
+    //       if (_linkedvasti != null && _linkedvasti!.isNotEmpty) selectedItem = _linkedvasti!.firstWhere((bg) => bg.geoUnitID.toString() == widget.initialData!.geoUnitID.toString());
+    //
+    //       _linkedvastiName = selectedItem?.name ?? "";
+    //     } else if (widget.initialData!.levelName == "Graam" && widget.initialData!.geoUnitID != null) {
+    //       _isExpanded = true;
+    //       _linkedgraamDisable = true;
+    //       _linkedgraamValue = widget.initialData!.geoUnitID.toString();
+    //       _selectedGeoUnitId = widget.initialData!.geoUnitID.toString();
+    //
+    //       GeoUnitMasterBAL? selectedItem;
+    //       if (_linkedgraam != null && _linkedgraam!.isNotEmpty) selectedItem = _linkedgraam!.firstWhere((bg) => bg.geoUnitID.toString() == widget.initialData!.geoUnitID.toString());
+    //
+    //       _linkedgraamName = selectedItem?.name ?? "";
+    //     } else if (widget.initialData!.levelName == "Mandal" && widget.initialData!.geoUnitID != null) {
+    //       _isExpanded = true;
+    //       _linkedmandalDisable = true;
+    //       _linkedmandalValue = widget.initialData!.geoUnitID.toString();
+    //       _selectedGeoUnitId = widget.initialData!.geoUnitID.toString();
+    //       populatelinkedGraamDropdown(_linkedmandalValue);
+    //
+    //       GeoUnitMasterBAL? selectedItem;
+    //       if (_linkedmandal != null && _linkedmandal!.isNotEmpty) selectedItem = _linkedmandal!.firstWhere((bg) => bg.geoUnitID.toString() == widget.initialData!.geoUnitID.toString());
+    //
+    //       _linkedmandalName = selectedItem?.name ?? "";
+    //     } else if (widget.initialData!.levelName == "Nagar" && widget.initialData!.geoUnitID != null) {
+    //       _isExpanded = true;
+    //       _linkednagarDisable = true;
+    //       _linkednagarValue = widget.initialData!.geoUnitID.toString();
+    //       _selectedGeoUnitId = widget.initialData!.geoUnitID.toString();
+    //       populatelinkedMandalDropdown(_linkednagarValue);
+    //       populatelinkedVastiDropdown(_linkednagarValue);
+    //
+    //       GeoUnitMasterBAL? selectedItem;
+    //       if (_linkednagar != null && _linkednagar!.isNotEmpty) selectedItem = _linkednagar!.firstWhere((bg) => bg.geoUnitID.toString() == widget.initialData!.geoUnitID.toString());
+    //
+    //       _linkednagarName = selectedItem?.name ?? "";
+    //     } else if (widget.initialData!.levelName == "Bhaag" && widget.initialData!.geoUnitID != null) {
+    //       _isExpanded = true;
+    //       _linkedbhaagDisable = true;
+    //       _linkedbhaagValue = widget.initialData!.geoUnitID.toString();
+    //       _selectedGeoUnitId = widget.initialData!.geoUnitID.toString();
+    //       populatelinkedNagarDropdown(_linkedbhaagValue, null);
+    //
+    //       GeoUnitMasterBAL? selectedItem;
+    //       if (_linkedbhaag != null && _linkedbhaag!.isNotEmpty) selectedItem = _linkedbhaag!.firstWhere((bg) => bg.geoUnitID.toString() == widget.initialData!.geoUnitID.toString());
+    //
+    //       _linkedbhaagName = selectedItem?.name ?? "";
+    //     } else {
+    //       _isExpanded = true;
+    //       // _linkedgraamDisable = true;
+    //       _linkedbhaagValue = null;
+    //       _linkedshaharValue = null;
+    //       _linkednagarValue = null;
+    //       _linkedmandalValue = null;
+    //       _linkedgraamValue = null;
+    //       _linkedvastiValue = null;
+    //     }
+    //   });
+    // } else {
+    _isExpanded = true;
+    _linkedMahaanagarValue = _linkedbhaagValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    // }
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedMahaanagarDropdown() async {
     _linkedVibhaagValue = _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-    List<GeoUnitMasterBAL> data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MahaanagarLevelID'].toString(), '', '', '', isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
+    List<GeoUnitMasterBAL> data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MahaanagarLevelID'].toString(), '', '', ''); //, isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
     setState(() {
       _linkedMahaanagar = data;
     });
@@ -514,8 +522,12 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
     _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedbhaagName = _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
     print("populatelinkedVibhaagDropdown $mahaanagarIDStr");
-    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '',
-        isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
+    var data = await Statics.getGeoUnitsByLevelAndParent(
+      Statics.levels['VibhaagLevelID'].toString(),
+      mahaanagarIDStr,
+      (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'),
+      '',
+    ); //isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
     setState(() {
       _linkedVibhaag = data;
     });
@@ -526,7 +538,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
     _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedbhaagName = _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
     _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = [];
-    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '', isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
+    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', ''); //, isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
     setState(() {
       _linkedbhaag = data;
     });
@@ -536,7 +548,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
   Future<List<GeoUnitMasterBAL>> populatelinkedShaharDropdown(String bhaagIDStr) async {
     _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
-    var shDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', '', isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
+    var shDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', ''); //, isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
     setState(() {
       _linkedshahar = (shDD.length > 0 ? shDD : null);
     });
@@ -551,13 +563,13 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
     print("print LevelID > ${Statics.userDetails["LevelID"]}");
     print("shaharIDStr shaharIDStr $shaharIDStr");
     if (shaharIDStr != null) {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), shaharIDStr!, 'Shahar', '', isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
+      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), shaharIDStr!, 'Shahar', ''); //, isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
       setState(() {
         _linkednagar = (ngDD.length > 0 ? ngDD : null);
       });
       return ngDD;
     } else {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '', isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
+      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', ''); //, isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
       setState(() {
         _linkednagar = (ngDD.length > 0 ? ngDD : null);
       });
@@ -569,7 +581,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
     _linkedmandalValue = _linkedgraamValue = null;
     _linkedmandalName = _linkedgraamName = null;
     _linkedmandal = _linkedgraam = null;
-    var mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, 'Nagar', '', isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
+    var mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, 'Nagar', ''); //, isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
     setState(() {
       _linkedmandal = (mnDD.length > 0 ? mnDD : null);
     });
@@ -579,7 +591,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
   Future<List<GeoUnitMasterBAL>> populatelinkedGraamDropdown(String? mandalIDStr) async {
     _linkedgraamValue = null;
     _linkedgraamName = null;
-    var gmDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['GraamLevelID'].toString(), mandalIDStr!, 'Mandal', '', isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
+    var gmDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['GraamLevelID'].toString(), mandalIDStr!, 'Mandal', ''); //, isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
     setState(() {
       _linkedgraam = (gmDD.length > 0 ? gmDD : null);
     });
@@ -589,7 +601,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
   Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(String? nagarIDStr) async {
     _linkedvastiValue = null;
     _linkedvastiName = null;
-    var vsDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, 'Nagar', '', isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
+    var vsDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, 'Nagar', ''); //, isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
     setState(() {
       _linkedvasti = (vsDD.length > 0 ? vsDD : null);
     });
@@ -723,8 +735,9 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                             ),
                             onPressed: () async {
-                              Navigator.pop(ctx);
-                              await addToToliListFun();
+                              Statics.showToast(Statics.getLabel("workInProgress"));
+                              // Navigator.pop(ctx);
+                              // await addToToliListFun();
                             },
                             child: Text(
                               Statics.getLabel('Submit'),
@@ -1193,7 +1206,8 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
               _buildExpansionPanel(),
               SizedBox(height: 24),
               if (_searched) ...[
-                if (!isSwayamsevakWithoutAbhiyaan) ...[
+                // if (!isSwayamsevakWithoutAbhiyaan)
+                ...[
                   Container(
                       // height: 40,
                       constraints: BoxConstraints(minHeight: 40),
@@ -1228,9 +1242,9 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                         ],
                       )),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-                  customTextFields(title: "संपर्कित घरे : ", controller: samparkitGhareController, readOnly: isAbhiyaanButPramukh && !_isEditing),
-                  customTextFields(title: "वितरित करपत्रक : ", controller: vitritKarpatrakController, readOnly: isAbhiyaanButPramukh && !_isEditing),
-                  customTextFields(title: "पुस्तक विक्री संख्या : ", controller: pustakVikriController, readOnly: isAbhiyaanButPramukh && !_isEditing),
+                  customTextFields(title: "संपर्कित घरे : ", controller: samparkitGhareController), //, readOnly: isAbhiyaanButPramukh && !_isEditing),
+                  customTextFields(title: "वितरित करपत्रक : ", controller: vitritKarpatrakController), //, readOnly: isAbhiyaanButPramukh && !_isEditing),
+                  customTextFields(title: "पुस्तक विक्री संख्या : ", controller: pustakVikriController), //, readOnly: isAbhiyaanButPramukh && !_isEditing),
 
                   //
                   Padding(
@@ -1427,8 +1441,8 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                 ],
 //
                 if (isAbhiyaanButPramukh && !_isEditing) ...[
-                  customTextFields(title: "संपर्क हेतू सहभागी संख्या : ", controller: samparkaSahabhagiController, readOnly: gruhAbhiyaanVruttaData!.abhiyaandata!.ishide),
-                  customTextFields(title: "संपर्क हेतू टोळी संख्या : ", controller: samparkaToliController, readOnly: gruhAbhiyaanVruttaData!.abhiyaandata!.ishide),
+                  customTextFields(title: "संपर्क हेतू सहभागी संख्या : ", controller: samparkaSahabhagiController), //, readOnly: gruhAbhiyaanVruttaData!.abhiyaandata!.ishide),
+                  customTextFields(title: "संपर्क हेतू टोळी संख्या : ", controller: samparkaToliController), //, readOnly: gruhAbhiyaanVruttaData!.abhiyaandata!.ishide),
                   SizedBox(height: 10),
                   Align(
                     alignment: Alignment.centerRight,
@@ -1455,63 +1469,66 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                   isSelectedKaryakartaListWidget(),
                 ],
                 SizedBox(height: 32),
-                if (!isSwayamsevakWithoutAbhiyaan)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                // if (!isSwayamsevakWithoutAbhiyaan)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    MaterialButton(
+                      minWidth: MediaQuery.sizeOf(context).width * 0.4,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 12,
+                      ),
+                      color: Theme.of(context).primaryColor,
+                      textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                      onPressed: () {
+                        Statics.showToast(Statics.getLabel("workInProgress"));
+                      },
+                      // onPressed: () async {
+                      //   if (isAbhiyaanButPramukh && !_isEditing) {
+                      //     await saveGruhForPramukhFun();
+                      //     return;
+                      //   }
+                      //   if (dateController.text.isEmpty || samparkitGhareController.text.isEmpty || vitritKarpatrakController.text.isEmpty || pustakVikriController.text.isEmpty) {
+                      //     Statics.showToast(Statics.getLabel("impInfoRequired"));
+                      //     return null;
+                      //     // } else if (!(abhiyaanSwayamsevakDataList.any((e) => e.isSelected))) {
+                      //     //   print("स्तराचे नाव निवडा");
+                      //     //   Statics.showToast("किमान एक अभियान कार्यकर्ता जोडावे");
+                      //     //   return null;
+                      //   } else {
+                      //     print("saving data");
+                      //     await saveGruhAbhiyaanDataFun();
+                      //   }
+                      //   // _submit(context);
+                      // },
+                      child: Text(
+                        Statics.getLabel('Submit'),
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                    if (_isEditing)
                       MaterialButton(
-                        minWidth: MediaQuery.sizeOf(context).width * 0.4,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 12,
-                        ),
-                        color: Theme.of(context).primaryColor,
-                        textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                        minWidth: MediaQuery.sizeOf(context).width * 0.35,
                         onPressed: () async {
-                          if (isAbhiyaanButPramukh && !_isEditing) {
-                            await saveGruhForPramukhFun();
-                            return;
-                          }
-                          if (dateController.text.isEmpty || samparkitGhareController.text.isEmpty || vitritKarpatrakController.text.isEmpty || pustakVikriController.text.isEmpty) {
-                            Statics.showToast(Statics.getLabel("impInfoRequired"));
-                            return null;
-                            // } else if (!(abhiyaanSwayamsevakDataList.any((e) => e.isSelected))) {
-                            //   print("स्तराचे नाव निवडा");
-                            //   Statics.showToast("किमान एक अभियान कार्यकर्ता जोडावे");
-                            //   return null;
-                          } else {
-                            print("saving data");
-                            await saveGruhAbhiyaanDataFun();
-                          }
-                          // _submit(context);
+                          setState(() {
+                            _isEditing = false;
+                            dateController.text = DateFormat("dd/MM/yyyy").format(DateTime.now());
+                            samparkitGhareController.clear();
+                            vitritKarpatrakController.clear();
+                            pustakVikriController.clear();
+                            createdUserId = null;
+                            selectedSajjanshaktiItems = [];
+                          });
+                          // await populateDropdown(isClear: true);
                         },
                         child: Text(
-                          Statics.getLabel('Submit'),
-                          style: TextStyle(fontSize: 16),
+                          Statics.getLabel('clear'),
                         ),
                       ),
-                      if (_isEditing)
-                        MaterialButton(
-                          minWidth: MediaQuery.sizeOf(context).width * 0.35,
-                          onPressed: () async {
-                            setState(() {
-                              _isEditing = false;
-                              dateController.text = DateFormat("dd/MM/yyyy").format(DateTime.now());
-                              samparkitGhareController.clear();
-                              vitritKarpatrakController.clear();
-                              pustakVikriController.clear();
-                              createdUserId = null;
-                              selectedSajjanshaktiItems = [];
-                            });
-                            // await populateDropdown(isClear: true);
-                          },
-                          child: Text(
-                            Statics.getLabel('clear'),
-                          ),
-                        ),
-                    ],
-                  ),
+                  ],
+                ),
                 if (!isSwayamsevakWithoutAbhiyaan) SizedBox(height: 40),
                 if (isSwayamsevakWithoutAbhiyaan) showAbhiyaanPramukhListWidget(),
                 SizedBox(height: 18),
@@ -1814,34 +1831,37 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                                               ),
                                               child: InkWell(
                                                   onTap: () {
-                                                    log(jsonEncode(item));
-                                                    setState(() {
-                                                      _isEditing = true;
-                                                    });
-                                                    Future.delayed(
-                                                      Duration(milliseconds: 100),
-                                                      () => setState(() {
-                                                        dateController.text = DateFormat("dd/MM/yyyy").format(DateFormat("dd-MM-yyyy").parse(item.abhiyaanDate.toString()));
-                                                        samparkitGhareController.text = item.samparkitghar.toString();
-                                                        vitritKarpatrakController.text = item.vitaritkarpatra.toString();
-                                                        pustakVikriController.text = item.pustakvikrisankhya.toString();
-                                                        createdUserId = item.createdUserID;
-                                                        if (data != null) {
-                                                          // setState(() {
-                                                          selectedSajjanshaktiItems =
-                                                              data!.vastisarsajjanshakti!.where((e) => item.visititAtithiSajjanShaktiids!.split(",").contains(e.pkid.toString())).toList();
-                                                          selectedAnyaprabhaviItems =
-                                                              data!.vastisanyaprabhavi!.where((e) => item.visititAtithiAnyaprabhaViLokamids!.split(",").contains(e.pkId.toString())).toList();
-                                                          // });
-                                                        }
-                                                        _scrollController.animateTo(
-                                                          0,
-                                                          duration: const Duration(milliseconds: 600),
-                                                          curve: Curves.easeInOutSine,
-                                                        );
-                                                      }),
-                                                    );
+                                                    Statics.showToast(Statics.getLabel("workInProgres"));
                                                   },
+                                                  // onTap: () {
+                                                  //   log(jsonEncode(item));
+                                                  //   setState(() {
+                                                  //     _isEditing = true;
+                                                  //   });
+                                                  //   Future.delayed(
+                                                  //     Duration(milliseconds: 100),
+                                                  //     () => setState(() {
+                                                  //       dateController.text = DateFormat("dd/MM/yyyy").format(DateFormat("dd-MM-yyyy").parse(item.abhiyaanDate.toString()));
+                                                  //       samparkitGhareController.text = item.samparkitghar.toString();
+                                                  //       vitritKarpatrakController.text = item.vitaritkarpatra.toString();
+                                                  //       pustakVikriController.text = item.pustakvikrisankhya.toString();
+                                                  //       createdUserId = item.createdUserID;
+                                                  //       if (data != null) {
+                                                  //         // setState(() {
+                                                  //         selectedSajjanshaktiItems =
+                                                  //             data!.vastisarsajjanshakti!.where((e) => item.visititAtithiSajjanShaktiids!.split(",").contains(e.pkid.toString())).toList();
+                                                  //         selectedAnyaprabhaviItems =
+                                                  //             data!.vastisanyaprabhavi!.where((e) => item.visititAtithiAnyaprabhaViLokamids!.split(",").contains(e.pkId.toString())).toList();
+                                                  //         // });
+                                                  //       }
+                                                  //       _scrollController.animateTo(
+                                                  //         0,
+                                                  //         duration: const Duration(milliseconds: 600),
+                                                  //         curve: Curves.easeInOutSine,
+                                                  //       );
+                                                  //     }),
+                                                  //   );
+                                                  // },
                                                   child: Icon(
                                                     Icons.edit,
                                                     color: Colors.green.shade700,
@@ -2816,7 +2836,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      if ((_linkedgraamValue != "" && _linkedgraamValue != null) || (_linkedvastiValue != "" && _linkedvastiValue != null))
+                      if ((_linkedgraamValue != null && _linkedgraamValue!.isNotEmpty) || (_linkedvastiValue != null && _linkedvastiValue!.isNotEmpty))
                         MaterialButton(
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                           padding: EdgeInsets.symmetric(
