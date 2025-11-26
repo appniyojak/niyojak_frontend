@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/widgets.dart';
@@ -487,6 +488,7 @@ class DatabaseHelper {
               ',\'' +
               dataList['PreferredLanguageID'].toString() +
               ')';
+          log(sqlStr);
         } catch (e) {
           print(" -- DB Exception -- ${e.toString()}");
         }
@@ -1017,6 +1019,8 @@ class DatabaseHelper {
           ',' +
           data['PreferredLanguageID'].toString() +
           ' );';
+
+      log(sqlStr);
     } else if (tableName == 'HomeScreenData') {
       // Record not found, then insert
       sqlStr = 'INSERT INTO HomeScreenData( ShishuCount, BaalCount,	TarunVidyaarthiCount,	TarunVyavasayeeCount,	' +

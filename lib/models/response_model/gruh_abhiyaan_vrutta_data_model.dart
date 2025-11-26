@@ -178,24 +178,29 @@ class PreviousDay {
   String? visititAtithiAnyaprabhaViLokamids;
   String? visititAtithiSajjanShaktiids;
   int? vitaritkarpatra;
+  int? samparkhetusahbhagisankhya;
+  int? samparkhetutolisankhya;
 
-  PreviousDay(
-      {this.abhiyaanDate,
-      this.createdUserID,
-      this.geoUnitID,
-      this.levelID,
-      this.parentBhaagID,
-      this.parentMahaanagarID,
-      this.parentMandalID,
-      this.parentNagarID,
-      this.parentVibhaagID,
-      this.participantName,
-      this.totalAtithiCount,
-      this.pustakvikrisankhya,
-      this.samparkitghar,
-      this.visititAtithiAnyaprabhaViLokamids,
-      this.visititAtithiSajjanShaktiids,
-      this.vitaritkarpatra});
+  PreviousDay({
+    this.abhiyaanDate,
+    this.createdUserID,
+    this.geoUnitID,
+    this.levelID,
+    this.parentBhaagID,
+    this.parentMahaanagarID,
+    this.parentMandalID,
+    this.parentNagarID,
+    this.parentVibhaagID,
+    this.participantName,
+    this.totalAtithiCount,
+    this.pustakvikrisankhya,
+    this.samparkitghar,
+    this.visititAtithiAnyaprabhaViLokamids,
+    this.visititAtithiSajjanShaktiids,
+    this.vitaritkarpatra,
+    this.samparkhetusahbhagisankhya,
+    this.samparkhetutolisankhya,
+  });
 
   PreviousDay.fromJson(Map<String, dynamic> json) {
     abhiyaanDate = json['AbhiyaanDate'];
@@ -214,6 +219,8 @@ class PreviousDay {
     visititAtithiAnyaprabhaViLokamids = json['visitit_atithi_anyaprabha_vi_lokamids'];
     visititAtithiSajjanShaktiids = json['visitit_atithi_sajjan_shaktiids'];
     vitaritkarpatra = json['vitaritkarpatra'];
+    samparkhetusahbhagisankhya = json['samparkhetusahbhagisankhya'];
+    samparkhetutolisankhya = json['samparkhetutolisankhya'];
   }
 
   Map<String, dynamic> toJson() {
@@ -234,6 +241,8 @@ class PreviousDay {
     data['visitit_atithi_anyaprabha_vi_lokamids'] = this.visititAtithiAnyaprabhaViLokamids;
     data['visitit_atithi_sajjan_shaktiids'] = this.visititAtithiSajjanShaktiids;
     data['vitaritkarpatra'] = this.vitaritkarpatra;
+    data['samparkhetusahbhagisankhya'] = this.samparkhetusahbhagisankhya;
+    data['samparkhetutolisankhya'] = this.samparkhetutolisankhya;
     return data;
   }
 }

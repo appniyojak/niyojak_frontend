@@ -16,6 +16,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../assets/strings/strings.dart';
 import '../helpers/static_data.dart' as Statics;
+import '../models/response_model/AbhiyaanLoginDataResponse.dart';
 import '../models/response_model/AbhiyaanSwayamsevakListResponse.dart';
 import '../models/response_model/TulnatmakResponseModel.dart';
 import '../models/response_model/abiyaan_geo_unit_model.dart';
@@ -3002,7 +3003,7 @@ Future<List<GeoUnitMasterBAL>?> getAbhiyaanGeoUnitMasterData(Map<String, dynamic
   }
 }
 
-Future<bool> saveDataforGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
+Future<AbhiyanSwayamsevakdata?> saveDataforGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   if (context != null) showLoaderDialog(context);
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
   log(saveDataforGruhAbhiyaanApi);
@@ -3014,20 +3015,21 @@ Future<bool> saveDataforGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildConte
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
-      log("saveDataforGruhAbhiyaan >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
-
       if (data["Status"] == "200" || data["Status"] == "Success") {
-        return true; // ✅ return karna zaroori hai
+        AbhiyanSwayamsevakResponse model = AbhiyanSwayamsevakResponse.fromJson(data);
+        log("saveDataforGruhAbhiyaan >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+
+        return model.abhiyanSwayamsevakData?.first; // ✅ return karna zaroori hai
       }
-      return false; // ✅ error case
+      return null; // ✅ error case
     } else {
-      print("Error: ${response.statusCode} - ${response.body}");
-      return false; // ✅ error case
+      log("Error: ${response.statusCode} - ${response.body}");
+      return null; // ✅ error case
     }
   } catch (e) {
     if (context != null) Navigator.of(context, rootNavigator: true).pop();
-    print("Exception: $e");
-    return false;
+    log("Exception: $e");
+    return null;
   }
 }
 
