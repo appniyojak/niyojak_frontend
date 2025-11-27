@@ -37,7 +37,8 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
 
   String selectedAbhiyanValue = "";
   String selectedSansthaValue = "";
-  String selectedDayitvValue = "";
+
+  // String selectedDayitvValue = "";
 
   int? isFemale = 0;
 
@@ -461,7 +462,7 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
 
                       _levelValue = "";
                       _geoUnitsValue = "";
-                      selectedDayitvValue = "";
+                      // selectedDayitvValue = "";
 
                       abhiyaanSwayamsevak = null;
                       _anyaSansthaCntrl.clear();
@@ -536,7 +537,7 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
 
                       _levelValue = "";
                       _geoUnitsValue = "";
-                      selectedDayitvValue = "";
+                      // selectedDayitvValue = "";
 
                       abhiyaanSwayamsevak = null;
                       _anyaSansthaCntrl.clear();
@@ -649,7 +650,7 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                           if (v.isEmpty) {
                             _levelValue = "";
                             _geoUnitsValue = "";
-                            selectedDayitvValue = "";
+                            // selectedDayitvValue = "";
 
                             abhiyaanSwayamsevak = null;
                             _anyaSansthaCntrl.clear();
@@ -665,8 +666,8 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                           }
                           setState(() {});
                         },
-                        inputFormatters: [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.digitsOnly],
-                        keyboardType: TextInputType.phone,
+                        // inputFormatters: [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.digitsOnly],
+                        // keyboardType: TextInputType.phone,
                         decoration: InputDecoration(
                           isDense: true,
                           contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
@@ -1201,10 +1202,10 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                                 print("संस्थेमध्ये पद प्रविष्ट करा");
                                 Statics.showToast("संस्थेमध्ये पद प्रविष्ट करा");
                                 return null;
-                              } else if (selectedDayitvValue.isEmpty) {
-                                print("दायित्व निवडा");
-                                Statics.showToast("दायित्व निवडा");
-                                return null;
+                                // } else if (selectedDayitvValue.isEmpty) {
+                                //   print("दायित्व निवडा");
+                                //   Statics.showToast("दायित्व निवडा");
+                                //   return null;
                               } else {
                                 if (!showFields) {
                                   Statics.showToast("मोबाइल क्रमांक प्रविष्ट करा");
@@ -1220,7 +1221,9 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                               style: TextStyle(fontSize: 16),
                             ),
                           )
-                        : ElevatedButton(
+                        : IconButton(
+                            style: IconButton.styleFrom(
+                                foregroundColor: Colors.white, backgroundColor: Colors.green, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)), padding: EdgeInsets.all(16)),
                             onPressed: () async {
                               FocusScope.of(context).unfocus();
 
@@ -1232,16 +1235,25 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                               //   );
                               //   return;
                               // }
-                              if (_searchController.text.length < 10) {
-                                Statics.showToast(Statics.getLabel('MobileValidationMessage'));
+                              if (_searchController.text.length < 3) {
+                                Statics.showToast(Statics.getLabel('minimumWordsRequired'));
                                 return null;
                               }
                               await _search("Search");
                               setState(() {});
                             },
-                            child: Row(
+                            icon:
+                                // Icon(Icons.search, size: 30, color: Colors.white),
+                                Row(
                               mainAxisSize: MainAxisSize.min,
-                              children: [Icon(Icons.search), SizedBox(width: 6), Text(Statics.getLabel("search"))],
+                              children: [
+                                Icon(Icons.search, size: 27, color: Colors.white),
+                                SizedBox(width: 6),
+                                Text(
+                                  Statics.getLabel("search"),
+                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                )
+                              ],
                             ),
                           ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.015),

@@ -1676,8 +1676,11 @@ Map<String, String> resEnglish = {
   "gruhPustakVikti": "Book Sales Numbers",
   "gruhSpecialContact": "Special Contact",
   "gruhKaryakartaName": "Karyakarta Name",
-  'AbhiyaanStartedCount': 'Abhiyaan Started Count',
+  'AbhiyaanStartedCountVasti': 'Abhiyaan Started Vasti',
+  'AbhiyaanStartedCountGraam': 'Abhiyaan Started Graam',
   'gruhAttendance': 'Attendance',
+  'otherDaysData': "Other day's data",
+  'minimumWordsRequired': "Minimum 3 characters required",
 };
 
 ///1,584
@@ -3358,8 +3361,11 @@ Map<String, String> resMarathi = {
   "gruhPustakVikti": "पुस्तक विक्री संख्या",
   "gruhSpecialContact": "विशेष संपर्क",
   "gruhKaryakartaName": "कार्यकर्ता नाव",
-  'AbhiyaanStartedCount': 'अभियान सुरु संख्या',
+  'AbhiyaanStartedCountVasti': 'अभियान सुरू असलेले वस्ती',
+  'AbhiyaanStartedCountGraam': 'अभियान सुरू असलेले ग्राम',
   'gruhAttendance': 'उपस्थिती',
+  'otherDaysData': "इतर दिवसाचा डेटा",
+  'minimumWordsRequired': "कमीत कमी ३ अक्षर आवश्यक",
 };
 
 ///1,583
@@ -5040,6 +5046,9 @@ Map<String, String> resHindi = {
   "gruhPustakVikti": "पुस्तक विक्री संख्या",
   "gruhSpecialContact": "विशेष संपर्क",
   "gruhKaryakartaName": "कार्यकर्ता नाव",
-  'AbhiyaanStartedCount': 'अभियान प्रारंभ संख्या',
+  'AbhiyaanStartedCountVasti': 'अभियान चयनित वस्ती',
+  'AbhiyaanStartedCountGraam': 'अभियान चयनित ग्राम',
   'gruhAttendance': 'उपस्थिती',
+  'otherDaysData': "अन्य दिन का डेटा",
+  'minimumWordsRequired': "कम से कम 3 अक्षर आवश्यक",
 };

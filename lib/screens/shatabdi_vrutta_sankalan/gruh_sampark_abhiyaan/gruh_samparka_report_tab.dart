@@ -621,22 +621,7 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                     horizontalMargin: 0,
                     headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
                     border: TableBorder(verticalInside: BorderSide(width: 0.7, color: Colors.grey.shade200)),
-                    columns: dateWiseList
-                            .map((header) => DataColumn(
-                                  label: Container(
-                                    margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                    constraints: const BoxConstraints(minWidth: 30, maxWidth: 200),
-                                    child: Text(
-                                      header.abhiyaanDate.toString().split(" ").first,
-                                      softWrap: true,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                ))
-                            .toList() +
-                        [
+                    columns: [
                           DataColumn(
                             label: Container(
                               alignment: Alignment.center,
@@ -652,42 +637,57 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                               ),
                             ),
                           )
-                        ],
+                        ] +
+                        dateWiseList
+                            .map((header) => DataColumn(
+                                  label: Container(
+                                    margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                    constraints: const BoxConstraints(minWidth: 30, maxWidth: 200),
+                                    child: Text(
+                                      header.abhiyaanDate.toString().split(" ").first,
+                                      softWrap: true,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ))
+                            .toList(),
                     rows: [
                       DataRow(cells: [
+                        DataCell(Container(
+                            decoration: BoxDecoration(color: Colors.yellow.shade50),
+                            alignment: Alignment.center,
+                            child: Text(dateWiseList.fold(0, (sum, item) => sum + (item.samparkitghar ?? 0)).toString()))),
                         ...dateWiseList.map((item) => DataCell(Center(child: Text((item.samparkitghar ?? 0).toString())))).toList(),
+                      ]),
+                      DataRow(cells: [
                         DataCell(Container(
                             decoration: BoxDecoration(color: Colors.yellow.shade50),
                             alignment: Alignment.center,
-                            child: Text(dateWiseList.fold(0, (sum, item) => sum + (item.samparkitghar ?? 0)).toString())))
-                      ]),
-                      DataRow(cells: [
+                            child: Text(dateWiseList.fold(0, (sum, item) => sum + (item.vitaritkarpatra ?? 0)).toString()))),
                         ...dateWiseList.map((item) => DataCell(Center(child: Text((item.vitaritkarpatra ?? 0).toString())))).toList(),
+                      ]),
+                      DataRow(cells: [
                         DataCell(Container(
                             decoration: BoxDecoration(color: Colors.yellow.shade50),
                             alignment: Alignment.center,
-                            child: Text(dateWiseList.fold(0, (sum, item) => sum + (item.vitaritkarpatra ?? 0)).toString())))
-                      ]),
-                      DataRow(cells: [
+                            child: Text(dateWiseList.fold(0, (sum, item) => sum + (item.pustakvikrisankhya ?? 0)).toString()))),
                         ...dateWiseList.map((item) => DataCell(Center(child: Text((item.pustakvikrisankhya ?? 0).toString())))).toList(),
+                      ]),
+                      DataRow(cells: [
                         DataCell(Container(
                             decoration: BoxDecoration(color: Colors.yellow.shade50),
                             alignment: Alignment.center,
-                            child: Text(dateWiseList.fold(0, (sum, item) => sum + (item.pustakvikrisankhya ?? 0)).toString())))
-                      ]),
-                      DataRow(cells: [
+                            child: Text(dateWiseList.fold(0, (sum, item) => sum + (item.totalAtithiCount ?? 0)).toString()))),
                         ...dateWiseList.map((item) => DataCell(Center(child: Text((item.totalAtithiCount ?? 0).toString())))).toList(),
-                        DataCell(Container(
-                            decoration: BoxDecoration(color: Colors.yellow.shade50),
-                            alignment: Alignment.center,
-                            child: Text(dateWiseList.fold(0, (sum, item) => sum + (item.totalAtithiCount ?? 0)).toString())))
                       ]),
                       DataRow(cells: [
-                        ...dateWiseList.map((item) => DataCell(Center(child: Text((item.attcount ?? 0).toString())))).toList(),
                         DataCell(Container(
                             decoration: BoxDecoration(color: Colors.yellow.shade50),
                             alignment: Alignment.center,
-                            child: Text(dateWiseList.fold(0, (sum, item) => sum + (item.attcount ?? 0)).toString())))
+                            child: Text(dateWiseList.fold(0, (sum, item) => sum + (item.attcount ?? 0)).toString()))),
+                        ...dateWiseList.map((item) => DataCell(Center(child: Text((item.attcount ?? 0).toString())))).toList(),
                       ]),
                     ],
                   ),
@@ -803,149 +803,292 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
     final _vastiData = summaryList.firstWhere((e) => e.typeName == "Vasti");
     final _gramData = summaryList.firstWhere((e) => e.typeName == "Gram");
 
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 18, vertical: 6),
-        child: DataTable(
-          columnSpacing: 0,
-          horizontalMargin: 16,
-          headingRowColor: MaterialStateProperty.all(Colors.orangeAccent.shade200),
-          headingTextStyle: TextStyle(
-            fontSize: 15,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-          columns: [
-            DataColumn(label: Text('')),
-            DataColumn(
-                label: Container(
+    final vastiTitleList = [
+      {"AbhiyaanStartedCountVasti": _vastiData.startedcount},
+      {"nagarCount": _vastiData.nagarcount},
+      {"vastiCount": _vastiData.vasticount},
+    ];
+
+    final graamTitleList = [
+      {"AbhiyaanStartedCountGraam": _gramData.startedcount},
+      {"jilhaCount": _gramData.nagarcount},
+      {"mandalCount": _gramData.mandalcount},
+      {"GraamCount": _gramData.gramcount},
+    ];
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 18, vertical: 6),
+            child: DataTable(
+              columnSpacing: 0,
+              horizontalMargin: 16,
+              headingRowColor: MaterialStateProperty.all(Colors.orangeAccent.shade200),
+              headingTextStyle: TextStyle(
+                fontSize: 15,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+              columns: [
+                DataColumn(
+                  label: Container(
                     alignment: Alignment.center,
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Text("${Statics.getLabel('LevelName')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)))),
-            DataColumn(
-                label: Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Text("${Statics.getLabel('AbhiyaanStartedCount')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)))),
-            DataColumn(
-                label: Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Text(Statics.getLabel('nagarCount'), style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)))),
-            DataColumn(
-                label: Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Text("${Statics.getLabel('vastiCount')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)))),
-            DataColumn(label: Text('')),
-          ],
-          rows: [
-            DataRow(
-              color: MaterialStateProperty.all(Colors.orange.shade50),
-              cells: [
-                DataCell(IconButton(
+                    child: Text(
+                      Statics.getLabel('Vasti'),
+                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16),
+                    ),
+                  ),
+                ),
+                DataColumn(
+                    label: IconButton(
                   icon: Icon(Icons.remove_red_eye, color: Colors.teal),
                   onPressed: () => showPopupList(_vastiData.vastiname.toString()),
                 )),
-                DataCell(Align(alignment: Alignment.center, child: Text("${Statics.getLabel('Vasti')}"))),
-                DataCell(Align(
-                  alignment: Alignment.center,
-                  child: Text("${_vastiData.startedcount ?? "0"}"),
-                )),
-                DataCell(Align(
-                  alignment: Alignment.center,
-                  child: Text("${_vastiData.nagarcount ?? "0"}"),
-                )),
-                DataCell(Align(
-                  alignment: Alignment.center,
-                  child: Text("${_vastiData.vasticount ?? "0"}"),
-                )),
-                DataCell.empty,
+              ],
+              rows: [
+                ...vastiTitleList.asMap().entries.map((e) => DataRow(color: MaterialStateProperty.all(Colors.orange.shade50), cells: [
+                      DataCell(Container(margin: EdgeInsets.symmetric(horizontal: 8), alignment: Alignment.center, child: Text(Statics.getLabel(e.value.keys.first.toString())))),
+                      DataCell(Align(alignment: Alignment.center, child: Text(e.value.values.first.toString(), style: TextStyle(fontWeight: FontWeight.w600)))),
+                    ])),
+                // DataRow(
+                //   color: MaterialStateProperty.all(Colors.white),
+                //   cells: [
+                //     DataCell(Text("")),
+                //     DataCell(Text("")),
+                //   ],
+                // ),
+                // DataRow(
+                //   color: MaterialStateProperty.all(Colors.teal.shade100),
+                //   cells: [
+                //     DataCell(Container(
+                //         alignment: Alignment.center,
+                //         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                //         child: Text(Statics.getLabel('Vasti'), style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)))),
+                //     DataCell(IconButton(
+                //       icon: Icon(Icons.remove_red_eye, color: Colors.teal),
+                //       onPressed: () => showPopupList(_vastiData.vastiname.toString()),
+                //     )),
+                //   ],
+                // ),
+                // ...graamTitleList.asMap().entries.map((e) => DataRow(color: MaterialStateProperty.all(Colors.green.shade50), cells: [
+                //       DataCell(Align(alignment: Alignment.center, child: Text(Statics.getLabel(e.value.keys.first.toString())))),
+                //       DataCell(Align(alignment: Alignment.center, child: Text(e.value.values.first.toString()))),
+                //     ])),
               ],
             ),
-            DataRow(
-              color: MaterialStateProperty.all(Colors.white),
-              cells: [
-                DataCell(Text("")),
-                DataCell(Text("")),
-                DataCell(Text("")),
-                DataCell(Text("")),
-                DataCell(Text("")),
-                DataCell(Text("")),
-              ],
-            ),
-            DataRow(
-              color: MaterialStateProperty.all(Colors.teal.shade100),
-              cells: [
-                DataCell.empty,
-                DataCell(
-                  Container(
-                    alignment: Alignment.center,
-                    width: double.infinity, // makes it span available width
-                    child: Text("${Statics.getLabel('LevelName')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)),
-                  ),
-                ),
-                DataCell(
-                  Container(
+          ),
+        ),
+        Expanded(
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 18, vertical: 6),
+            child: DataTable(
+              columnSpacing: 0,
+              horizontalMargin: 16,
+              headingRowColor: MaterialStateProperty.all(Colors.teal.shade100),
+              headingTextStyle: TextStyle(
+                fontSize: 15,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+              columns: [
+                DataColumn(
+                  label: Container(
                     alignment: Alignment.center,
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Text("${Statics.getLabel('AbhiyaanStartedCount')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)),
+                    child: Text(
+                      Statics.getLabel('Graam'),
+                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16),
+                    ),
                   ),
                 ),
-                DataCell(
-                  Container(
-                    alignment: Alignment.center,
-                    width: double.infinity, // makes it span available width
-                    child: Text("${Statics.getLabel('jilhaCount')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)),
-                  ),
-                ),
-                DataCell(
-                  Container(
-                    alignment: Alignment.center,
-                    width: double.infinity, // makes it span available width
-                    child: Text("${Statics.getLabel('mandalCount')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)),
-                  ),
-                ),
-                DataCell(
-                  Container(
-                    alignment: Alignment.center,
-                    width: double.infinity, // makes it span available width
-                    child: Text("${Statics.getLabel('GraamCount')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)),
-                  ),
-                ),
-              ],
-            ),
-            DataRow(
-              color: MaterialStateProperty.all(Colors.green.shade50),
-              cells: [
-                DataCell(IconButton(
+                DataColumn(
+                    label: IconButton(
                   icon: Icon(Icons.remove_red_eye, color: Colors.teal),
-                  onPressed: () => showPopupList(_gramData.gramname.toString(), isGram: true),
-                )),
-                DataCell(Align(alignment: Alignment.center, child: Text("${Statics.getLabel('Graam')}"))),
-                DataCell(Align(
-                  alignment: Alignment.center,
-                  child: Text("${_gramData.startedcount ?? "0"}"),
-                )),
-                DataCell(Align(
-                  alignment: Alignment.center,
-                  child: Text("${_gramData.nagarcount ?? "0"}"),
-                )),
-                DataCell(Align(
-                  alignment: Alignment.center,
-                  child: Text("${_gramData.mandalcount ?? "0"}"),
-                )),
-                DataCell(Align(
-                  alignment: Alignment.center,
-                  child: Text("${_gramData.gramcount ?? "0"}"),
+                  onPressed: () => showPopupList(_gramData.gramname.toString()),
                 )),
               ],
+              rows: [
+                // ...vastiTitleList.asMap().entries.map((e) => DataRow(color: MaterialStateProperty.all(Colors.orange.shade50), cells: [
+                //       DataCell(Align(alignment: Alignment.center, child: Text(Statics.getLabel(e.value.keys.first.toString())))),
+                //       DataCell(Align(alignment: Alignment.center, child: Text(e.value.values.first.toString()))),
+                //     ])),
+                // DataRow(
+                //   color: MaterialStateProperty.all(Colors.white),
+                //   cells: [
+                //     DataCell(Text("")),
+                //     DataCell(Text("")),
+                //   ],
+                // ),
+                // DataRow(
+                //   color: MaterialStateProperty.all(Colors.teal.shade100),
+                //   cells: [
+                //     DataCell(Container(
+                //         alignment: Alignment.center,
+                //         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                //         child: Text(Statics.getLabel('Vasti'), style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)))),
+                //     DataCell(IconButton(
+                //       icon: Icon(Icons.remove_red_eye, color: Colors.teal),
+                //       onPressed: () => showPopupList(_vastiData.vastiname.toString()),
+                //     )),
+                //   ],
+                // ),
+                ...graamTitleList.asMap().entries.map((e) => DataRow(color: MaterialStateProperty.all(Colors.green.shade50), cells: [
+                      DataCell(Container(margin: EdgeInsets.symmetric(horizontal: 8), alignment: Alignment.center, child: Text(Statics.getLabel(e.value.keys.first.toString())))),
+                      DataCell(Align(alignment: Alignment.center, child: Text(e.value.values.first.toString(), style: TextStyle(fontWeight: FontWeight.w600)))),
+                    ])),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
+
+    // return SingleChildScrollView(
+    //   scrollDirection: Axis.horizontal,
+    //   child: Container(
+    //     margin: EdgeInsets.symmetric(horizontal: 18, vertical: 6),
+    //     child: DataTable(
+    //       columnSpacing: 0,
+    //       horizontalMargin: 16,
+    //       headingRowColor: MaterialStateProperty.all(Colors.orangeAccent.shade200),
+    //       headingTextStyle: TextStyle(
+    //         fontSize: 15,
+    //         color: Colors.white,
+    //         fontWeight: FontWeight.bold,
+    //       ),
+    //       columns: [
+    //         DataColumn(label: Text('')),
+    //         DataColumn(
+    //             label: Container(
+    //                 alignment: Alignment.center,
+    //                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    //                 child: Text("${Statics.getLabel('LevelName')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)))),
+    //         DataColumn(
+    //             label: Container(
+    //                 alignment: Alignment.center,
+    //                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    //                 child: Text("${Statics.getLabel('AbhiyaanStartedCount')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)))),
+    //         DataColumn(
+    //             label: Container(
+    //                 alignment: Alignment.center,
+    //                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    //                 child: Text(Statics.getLabel('nagarCount'), style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)))),
+    //         DataColumn(
+    //             label: Container(
+    //                 alignment: Alignment.center,
+    //                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    //                 child: Text("${Statics.getLabel('vastiCount')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)))),
+    //         DataColumn(label: Text('')),
+    //       ],
+    //       rows: [
+    //         DataRow(
+    //           color: MaterialStateProperty.all(Colors.orange.shade50),
+    //           cells: [
+    //             DataCell(IconButton(
+    //               icon: Icon(Icons.remove_red_eye, color: Colors.teal),
+    //               onPressed: () => showPopupList(_vastiData.vastiname.toString()),
+    //             )),
+    //             DataCell(Align(alignment: Alignment.center, child: Text("${Statics.getLabel('Vasti')}"))),
+    //             DataCell(Align(
+    //               alignment: Alignment.center,
+    //               child: Text("${_vastiData.startedcount ?? "0"}"),
+    //             )),
+    //             DataCell(Align(
+    //               alignment: Alignment.center,
+    //               child: Text("${_vastiData.nagarcount ?? "0"}"),
+    //             )),
+    //             DataCell(Align(
+    //               alignment: Alignment.center,
+    //               child: Text("${_vastiData.vasticount ?? "0"}"),
+    //             )),
+    //             DataCell.empty,
+    //           ],
+    //         ),
+    //         DataRow(
+    //           color: MaterialStateProperty.all(Colors.white),
+    //           cells: [
+    //             DataCell(Text("")),
+    //             DataCell(Text("")),
+    //             DataCell(Text("")),
+    //             DataCell(Text("")),
+    //             DataCell(Text("")),
+    //             DataCell(Text("")),
+    //           ],
+    //         ),
+    //         DataRow(
+    //           color: MaterialStateProperty.all(Colors.teal.shade100),
+    //           cells: [
+    //             DataCell.empty,
+    //             DataCell(
+    //               Container(
+    //                 alignment: Alignment.center,
+    //                 width: double.infinity, // makes it span available width
+    //                 child: Text("${Statics.getLabel('LevelName')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)),
+    //               ),
+    //             ),
+    //             DataCell(
+    //               Container(
+    //                 alignment: Alignment.center,
+    //                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    //                 child: Text("${Statics.getLabel('AbhiyaanStartedCount')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)),
+    //               ),
+    //             ),
+    //             DataCell(
+    //               Container(
+    //                 alignment: Alignment.center,
+    //                 width: double.infinity, // makes it span available width
+    //                 child: Text("${Statics.getLabel('jilhaCount')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)),
+    //               ),
+    //             ),
+    //             DataCell(
+    //               Container(
+    //                 alignment: Alignment.center,
+    //                 width: double.infinity, // makes it span available width
+    //                 child: Text("${Statics.getLabel('mandalCount')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)),
+    //               ),
+    //             ),
+    //             DataCell(
+    //               Container(
+    //                 alignment: Alignment.center,
+    //                 width: double.infinity, // makes it span available width
+    //                 child: Text("${Statics.getLabel('GraamCount')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)),
+    //               ),
+    //             ),
+    //           ],
+    //         ),
+    //         DataRow(
+    //           color: MaterialStateProperty.all(Colors.green.shade50),
+    //           cells: [
+    //             DataCell(IconButton(
+    //               icon: Icon(Icons.remove_red_eye, color: Colors.teal),
+    //               onPressed: () => showPopupList(_gramData.gramname.toString(), isGram: true),
+    //             )),
+    //             DataCell(Align(alignment: Alignment.center, child: Text("${Statics.getLabel('Graam')}"))),
+    //             DataCell(Align(
+    //               alignment: Alignment.center,
+    //               child: Text("${_gramData.startedcount ?? "0"}"),
+    //             )),
+    //             DataCell(Align(
+    //               alignment: Alignment.center,
+    //               child: Text("${_gramData.nagarcount ?? "0"}"),
+    //             )),
+    //             DataCell(Align(
+    //               alignment: Alignment.center,
+    //               child: Text("${_gramData.mandalcount ?? "0"}"),
+    //             )),
+    //             DataCell(Align(
+    //               alignment: Alignment.center,
+    //               child: Text("${_gramData.gramcount ?? "0"}"),
+    //             )),
+    //           ],
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+    // );
   }
 
   Widget _buildExpansionPanel() {

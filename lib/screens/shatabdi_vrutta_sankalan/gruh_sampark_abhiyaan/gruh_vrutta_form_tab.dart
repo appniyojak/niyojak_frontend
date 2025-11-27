@@ -142,6 +142,15 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
     return levelId >= 6 && levelId <= 12 && isEmptyFlag;
   }
 
+  bool get isSwayamsevak {
+    final levelIdStr = Statics.userDetails["LevelID"]?.toString() ?? "0";
+    final levelId = int.tryParse(levelIdStr) ?? 0;
+
+    final isEmptyFlag = Statics.abhiyaanUserDetails["isEmpty"] == true;
+
+    return levelId >= 6 && levelId <= 12;
+  }
+
   // bool get isSwayamsevakWithAbhiyaan {
   //   final levelIdStr = Statics.userDetails["LevelID"]?.toString() ?? "0";
   //   final levelId = int.tryParse(levelIdStr) ?? 0;
@@ -221,6 +230,8 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
         "isswayamsevak": Statics.abhiyaanUserDetails["isEmpty"] ? 1 : 0,
       };
       print(jsonEncode(inputData));
+      print(Statics.userDetails["userID"]);
+      print(Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"]);
       gruhAbhiyaanVruttaData = await Statics.getDataforGruhAbhiyaan(inputData, context: context);
       setState(() {});
       if (gruhAbhiyaanVruttaData?.abhiyaandata != null) {
@@ -280,6 +291,8 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
           }
           if (_gruhAbhiyaanToliList != null) {
             gruhAbhiyaanToliList = _gruhAbhiyaanToliList;
+            samparkaSahabhagiController.text = gruhAbhiyaanToliList.where((e) => e.isdefault == 1).length.toString();
+            samparkaToliController.text = gruhAbhiyaanToliList.length.toString();
           }
         } else {
           Statics.showToast(Statics.getLabel('unableToSaveData'));
@@ -331,6 +344,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
             //await dbh.DatabaseHelper.reCreate('GeoUnitMaster', geoUnitData);
             // for (var data in result) {
             await DatabaseHelper.insertOrUpdateRecord('AbhiyanSwayamsevakData', result.toJson());
+            await Statics.populateUserAbhiyaanDetailsMap();
             // }
           }
 
@@ -674,7 +688,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                   SizedBox(height: 16),
                   swayamsevakAndKaryakartaTable(ct, set),
                   SizedBox(height: 12),
-                  selectedKaryakartaTable(ct, set),
+                  // selectedKaryakartaTable(ct, set),
                   SizedBox(height: 12),
                   // Flexible(
                   //   child: Container(
@@ -753,9 +767,9 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                             ),
                             onPressed: () async {
-                              Statics.showToast(Statics.getLabel("workInProgress"));
-                              // Navigator.pop(ctx);
-                              // await addToToliListFun();
+                              // Statics.showToast(Statics.getLabel("workInProgress"));
+                              Navigator.pop(ctx);
+                              await addToToliListFun();
                             },
                             child: Text(
                               Statics.getLabel('Submit'),
@@ -1011,6 +1025,11 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                                   // selectedKaryakartaList.add(data);
                                   _selectedSwayamsevakIds.add(data);
                                 });
+                              } else {
+                                set(() {
+                                  // selectedKaryakartaList.add(data);
+                                  _selectedSwayamsevakIds.remove(data);
+                                });
                               }
                               log(_selectedSwayamsevakIds
                                   .map(
@@ -1129,6 +1148,11 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                                   // selectedKaryakartaList.add(data);
                                   _selectedKaryakartaIds.add(data);
                                 });
+                              } else {
+                                set(() {
+                                  // selectedKaryakartaList.add(data);
+                                  _selectedKaryakartaIds.remove(data);
+                                });
                               }
                               log(_selectedKaryakartaIds.map((e) => e.swayamsevakID.toString()).join(','));
                             },
@@ -1166,227 +1190,314 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
             // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 15),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Row(
+              SizedBox(height: 13),
+              _buildExpansionPanel(),
+              // if (!isSwayamsevakWithoutAbhiyaan)
+              ...[
+                SizedBox(height: 32),
+
+                if (_searched)
+                  Container(
+                    // height: 40,
+                    constraints: BoxConstraints(minHeight: 40),
+                    width: double.infinity,
+                    margin: EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.purpleAccent, width: 1),
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          "${Statics.getLabel('date2')} : ",
-                          style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          " *",
-                          style: TextStyle(fontSize: 15, color: Colors.red, fontWeight: FontWeight.bold),
+                        // Text(
+                        //   "${Statics.getLabel(_selctedLevel ?? "Mahaanagar")}  ->  ",
+                        //   style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold, fontSize: 16),
+                        // ),
+                        // Text(
+                        //   " $_selctedLevelName",
+                        //   style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17),
+                        // ),
+                        Expanded(
+                          child: Text(
+                            _selctedLevelNameList
+                                .where((e) => e != null && e.isNotEmpty) // remove null or empty strings
+                                .cast<String>() // convert from String? to String
+                                .join(' -> '),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17),
+                          ),
                         ),
                       ],
                     ),
-                    SizedBox(width: 12),
-                    SizedBox(
-                      width: MediaQuery.sizeOf(context).width * 0.4,
-                      child: TextField(
-                        controller: dateController,
-                        inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10)],
-                        style: TextStyle(fontSize: 14),
-                        autofocus: false,
-                        onTap: () async {
-                          DateTime? date =
-                              await showDatePicker(context: context, initialDate: DateFormat("dd/MM/yyyy").parse(dateController.text), firstDate: DateTime(2000), lastDate: DateTime.now());
-                          if (date != null) {
-                            if (dateController.text != DateFormat("dd/MM/yyyy").format(date)) {
-                              _searched = false;
-                              _isExpanded = true;
-                              _isEditing = false;
-                              createdUserId = null;
-                            }
-                            dateController.text = DateFormat("dd/MM/yyyy").format(date);
-                          }
-                          setState(() {});
-                        },
-                        readOnly: true,
-                        keyboardType: TextInputType.number,
-                        textInputAction: TextInputAction.done,
-                        decoration: InputDecoration(
-                            isDense: true,
-                            hintText: "DD/MM/YYYY",
-                            contentPadding: EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 12),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                            )),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 13),
-              _buildExpansionPanel(),
-              if (_searched) ...[
-                // if (!isSwayamsevakWithoutAbhiyaan)
-                ...[
-                  SizedBox(height: 32),
-                  if (isSwayamsevakWithoutAbhiyaan)
-                    Container(
-                        margin: EdgeInsets.symmetric(horizontal: 16),
-                        alignment: Alignment.centerLeft,
-                        child: Text("${Statics.getLabel('vastiPramukhName')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 15))),
-                  if (isSwayamsevakWithoutAbhiyaan)
-                    Container(
-                      margin: EdgeInsets.only(left: 21, right: 16, bottom: 27),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              "- ${pramukhList.isNotEmpty ? pramukhList.first.fullName : "नियुक्त नाही"}",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: pramukhList.isEmpty ? Colors.red : Colors.purple,
-                              ),
-                            ),
-                          ),
-                          if (pramukhList.isEmpty)
-                            InkWell(
-                              onTap: () async {
-                                Navigator.of(context).pushNamed(AddAbhiyaanPramukhScreen.routeName, arguments: _selectedGeoUnitId)!.then((value) => _getSwList());
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                                // width: 150,
-                                // height: 35,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.purpleAccent.shade100),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                child: Text(
-                                  Statics.getLabel("add"),
-                                  style: TextStyle(
-                                    color: Colors.purpleAccent,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
+                  ),
+                if (_searched) SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                if (_searched && isSwayamsevak)
                   Container(
-                      // height: 40,
-                      constraints: BoxConstraints(minHeight: 40),
-                      width: double.infinity,
-                      margin: EdgeInsets.symmetric(horizontal: 16),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.purpleAccent, width: 1),
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          // Text(
-                          //   "${Statics.getLabel(_selctedLevel ?? "Mahaanagar")}  ->  ",
-                          //   style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold, fontSize: 16),
-                          // ),
-                          // Text(
-                          //   " $_selctedLevelName",
-                          //   style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17),
-                          // ),
-                          Expanded(
-                            child: Text(
-                              _selctedLevelNameList
-                                  .where((e) => e != null && e.isNotEmpty) // remove null or empty strings
-                                  .cast<String>() // convert from String? to String
-                                  .join(' -> '),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17),
+                    margin: EdgeInsets.symmetric(horizontal: 16),
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "${Statics.getLabel('vastiPramukhName')}",
+                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 15),
+                    ),
+                  ),
+                if (_searched && isSwayamsevak)
+                  Container(
+                    margin: EdgeInsets.only(left: 21, right: 16, bottom: 27),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            "- ${pramukhList.isNotEmpty ? "${pramukhList.first.fullName} (${pramukhList.first.mobileno})" : "नियुक्त नाही"}",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: pramukhList.isEmpty ? Colors.red : Colors.purple,
                             ),
                           ),
-                        ],
-                      )),
+                        ),
+                        if (pramukhList.isEmpty)
+                          InkWell(
+                            onTap: () async {
+                              Navigator.of(context).pushNamed(AddAbhiyaanPramukhScreen.routeName, arguments: _selectedGeoUnitId)!.then((value) => _getSwList());
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                              // width: 150,
+                              // height: 35,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.purpleAccent.shade100),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Text(
+                                Statics.getLabel("add"),
+                                style: TextStyle(
+                                  color: Colors.purpleAccent,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Text(
+                              "${Statics.getLabel('date2')} : ",
+                              style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              " *",
+                              style: TextStyle(fontSize: 15, color: Colors.red, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // SizedBox(width: 12),
+                      Expanded(
+                        child: SizedBox(
+                          // width: MediaQuery.sizeOf(context).width * 0.4,
+                          child: TextField(
+                            controller: dateController,
+                            inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10)],
+                            style: TextStyle(fontSize: 14),
+                            autofocus: false,
+                            onTap: () async {
+                              DateTime? date =
+                                  await showDatePicker(context: context, initialDate: DateFormat("dd/MM/yyyy").parse(dateController.text), firstDate: DateTime(2000), lastDate: DateTime.now());
+                              if (date != null) {
+                                if (dateController.text != DateFormat("dd/MM/yyyy").format(date)) {
+                                  _searched = false;
+                                  _isExpanded = true;
+                                  _isEditing = false;
+                                  createdUserId = null;
+                                }
+                                dateController.text = DateFormat("dd/MM/yyyy").format(date);
+
+                                setState(() {});
+                                await _getSwList();
+
+                                setState(() {
+                                  _selectedTolisIds = [];
+                                  _searched = true;
+                                  _isExpanded = false;
+                                });
+                              }
+                            },
+                            readOnly: true,
+                            keyboardType: TextInputType.number,
+                            textInputAction: TextInputAction.done,
+                            decoration: InputDecoration(
+                                isDense: true,
+                                hintText: "DD/MM/YYYY",
+                                contentPadding: EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 12),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                )),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (_searched) ...[
                   SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-                  customTextFields(title: "संपर्कित घरे : ", controller: samparkitGhareController), //, readOnly: isAbhiyaanButPramukh && !_isEditing),
-                  customTextFields(title: "वितरित करपत्रक : ", controller: vitritKarpatrakController), //, readOnly: isAbhiyaanButPramukh && !_isEditing),
-                  customTextFields(title: "पुस्तक विक्री संख्या : ", controller: pustakVikriController), //, readOnly: isAbhiyaanButPramukh && !_isEditing),
+                  customTextFields(title: "संपर्कित घरे : ", controller: samparkitGhareController, readOnly: isAbhiyaanButPramukh && !_isEditing),
+                  customTextFields(title: "वितरित करपत्रक : ", controller: vitritKarpatrakController, readOnly: isAbhiyaanButPramukh && !_isEditing),
+                  customTextFields(title: "पुस्तक विक्री संख्या : ", controller: pustakVikriController, readOnly: isAbhiyaanButPramukh && !_isEditing),
 
                   //
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      spacing: 8,
                       children: [
-                        Text(
-                          "विशेष व्यक्ती संपर्क : ",
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "विशेष व्यक्ती संपर्क : ",
+                                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            if (!(isAbhiyaanButPramukh && !_isEditing))
+                              Expanded(
+                                child: InkWell(
+                                  onTap: isAbhiyaanButPramukh && !_isEditing
+                                      ? null
+                                      : () async {
+                                          // if (_isSearching == false) {
+                                          //   Fluttertoast.showToast(msg: "${Statics.getLabel('NagarSelectionImportant')}");
+
+                                          // Fluttertoast.showToast(
+                                          //   msg: Statics.getLabel("workInProgress"),
+                                          //   toastLength: Toast.LENGTH_SHORT,
+                                          //   gravity: ToastGravity.BOTTOM,
+                                          // );
+                                          // return;
+                                          // }
+                                          await showVisheshAtithiSelectionPopup(
+                                            context,
+                                            onAdd: () async {
+                                              await saveGruhAbhiyaanDataFun();
+                                              Navigator.of(context).pushReplacementNamed(
+                                                AddVishisthaAtithi.routeName,
+                                                arguments: {'geoUnitId': _selectedGeoUnitId},
+                                              ).then(
+                                                (value) async {
+                                                  data = await Statics.getSajjanAndAnyaGuestData(
+                                                      context,
+                                                      Statics.userDetails["userID"],
+                                                      _linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? _linkedvastiValue! : _linkedgraamValue!,
+                                                      _linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? "2" : "3");
+                                                  setState(() {});
+                                                  // if(Statics.userDetails[])
+                                                  await _getSwList();
+                                                  setState(() {});
+                                                },
+                                              );
+                                            },
+                                          );
+                                        },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(vertical: 5),
+                                    width: 150,
+                                    height: 35,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.purpleAccent.shade100),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "${Statics.getLabel('addSpecialPerson')}",
+                                        style: TextStyle(
+                                          color: Colors.purpleAccent,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
+                        // if (selectedSajjanshaktiItems.isNotEmpty || selectedAnyaprabhaviItems.isNotEmpty)
                         mainContainer(
                           "${Statics.getLabel('specialPerson')}",
                           Column(
                             children: [
                               // Button for popup
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  InkWell(
-                                    onTap: isAbhiyaanButPramukh && !_isEditing
-                                        ? null
-                                        : () async {
-                                            // if (_isSearching == false) {
-                                            //   Fluttertoast.showToast(msg: "${Statics.getLabel('NagarSelectionImportant')}");
+                              // Row(
+                              //   mainAxisAlignment: MainAxisAlignment.end,
+                              //   children: [
+                              //     InkWell(
+                              //       onTap: isAbhiyaanButPramukh && !_isEditing
+                              //           ? null
+                              //           : () async {
+                              //               // if (_isSearching == false) {
+                              //               //   Fluttertoast.showToast(msg: "${Statics.getLabel('NagarSelectionImportant')}");
+                              //
+                              //               // Fluttertoast.showToast(
+                              //               //   msg: Statics.getLabel("workInProgress"),
+                              //               //   toastLength: Toast.LENGTH_SHORT,
+                              //               //   gravity: ToastGravity.BOTTOM,
+                              //               // );
+                              //               // return;
+                              //               // }
+                              //               await showVisheshAtithiSelectionPopup(
+                              //                 context,
+                              //                 onAdd: () async {
+                              //                   await saveGruhAbhiyaanDataFun();
+                              //                   Navigator.of(context).pushReplacementNamed(
+                              //                     AddVishisthaAtithi.routeName,
+                              //                     arguments: {'geoUnitId': _selectedGeoUnitId},
+                              //                   ).then(
+                              //                     (value) async {
+                              //                       data = await Statics.getSajjanAndAnyaGuestData(
+                              //                           context,
+                              //                           Statics.userDetails["userID"],
+                              //                           _linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? _linkedvastiValue! : _linkedgraamValue!,
+                              //                           _linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? "2" : "3");
+                              //                       setState(() {});
+                              //                       // if(Statics.userDetails[])
+                              //                       await _getSwList();
+                              //                       setState(() {});
+                              //                     },
+                              //                   );
+                              //                 },
+                              //               );
+                              //             },
+                              //       child: Container(
+                              //         padding: const EdgeInsets.symmetric(vertical: 5),
+                              //         width: 150,
+                              //         height: 35,
+                              //         decoration: BoxDecoration(
+                              //           border: Border.all(color: Colors.purpleAccent.shade100),
+                              //           borderRadius: BorderRadius.circular(15),
+                              //         ),
+                              //         child: Center(
+                              //           child: Text(
+                              //             "${Statics.getLabel('addSpecialPerson')}",
+                              //             style: TextStyle(
+                              //               color: Colors.purpleAccent,
+                              //               fontWeight: FontWeight.bold,
+                              //             ),
+                              //           ),
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
 
-                                            // Fluttertoast.showToast(
-                                            //   msg: Statics.getLabel("workInProgress"),
-                                            //   toastLength: Toast.LENGTH_SHORT,
-                                            //   gravity: ToastGravity.BOTTOM,
-                                            // );
-                                            // return;
-                                            // }
-                                            await showVisheshAtithiSelectionPopup(
-                                              context,
-                                              onAdd: () async {
-                                                await saveGruhAbhiyaanDataFun();
-                                                Navigator.of(context).pushReplacementNamed(
-                                                  AddVishisthaAtithi.routeName,
-                                                  arguments: {'geoUnitId': _selectedGeoUnitId},
-                                                ).then(
-                                                  (value) async {
-                                                    data = await Statics.getSajjanAndAnyaGuestData(
-                                                        context,
-                                                        Statics.userDetails["userID"],
-                                                        _linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? _linkedvastiValue! : _linkedgraamValue!,
-                                                        _linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? "2" : "3");
-                                                    setState(() {});
-                                                    // if(Statics.userDetails[])
-                                                    await _getSwList();
-                                                    setState(() {});
-                                                  },
-                                                );
-                                              },
-                                            );
-                                          },
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(vertical: 5),
-                                      width: 150,
-                                      height: 35,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.purpleAccent.shade100),
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          "${Statics.getLabel('addSpecialPerson')}",
-                                          style: TextStyle(
-                                            color: Colors.purpleAccent,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-
-                              const SizedBox(height: 20),
+                              // const SizedBox(height: 20),
 
                               // Table for Sajjanshakti
                               if (selectedSajjanshaktiItems.isNotEmpty) ...[
@@ -1502,45 +1613,46 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                   ),
 
                   //
-                  SizedBox(height: 16),
+                  SizedBox(height: 24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      MaterialButton(
-                        minWidth: MediaQuery.sizeOf(context).width * 0.4,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 12,
+                      if (!isAbhiyaanButPramukh || _isEditing)
+                        MaterialButton(
+                          minWidth: MediaQuery.sizeOf(context).width * 0.4,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 12,
+                          ),
+                          color: Theme.of(context).primaryColor,
+                          textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                          // onPressed: () {
+                          //   Statics.showToast(Statics.getLabel("workInProgress"));
+                          // },
+                          onPressed: () async {
+                            // if (isAbhiyaanButPramukh && !_isEditing) {
+                            //   await saveGruhForPramukhFun();
+                            //   return;
+                            // }
+                            if (dateController.text.isEmpty || samparkitGhareController.text.isEmpty || vitritKarpatrakController.text.isEmpty || pustakVikriController.text.isEmpty) {
+                              Statics.showToast(Statics.getLabel("impInfoRequired"));
+                              return null;
+                              // } else if (!(abhiyaanSwayamsevakDataList.any((e) => e.isSelected))) {
+                              //   print("स्तराचे नाव निवडा");
+                              //   Statics.showToast("किमान एक अभियान कार्यकर्ता जोडावे");
+                              //   return null;
+                            } else {
+                              print("saving data");
+                              await saveGruhAbhiyaanDataFun();
+                            }
+                            // _submit(context);
+                          },
+                          child: Text(
+                            Statics.getLabel('Submit'),
+                            style: TextStyle(fontSize: 16),
+                          ),
                         ),
-                        color: Theme.of(context).primaryColor,
-                        textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                        // onPressed: () {
-                        //   Statics.showToast(Statics.getLabel("workInProgress"));
-                        // },
-                        onPressed: () async {
-                          // if (isAbhiyaanButPramukh && !_isEditing) {
-                          //   await saveGruhForPramukhFun();
-                          //   return;
-                          // }
-                          if (dateController.text.isEmpty || samparkitGhareController.text.isEmpty || vitritKarpatrakController.text.isEmpty || pustakVikriController.text.isEmpty) {
-                            Statics.showToast(Statics.getLabel("impInfoRequired"));
-                            return null;
-                            // } else if (!(abhiyaanSwayamsevakDataList.any((e) => e.isSelected))) {
-                            //   print("स्तराचे नाव निवडा");
-                            //   Statics.showToast("किमान एक अभियान कार्यकर्ता जोडावे");
-                            //   return null;
-                          } else {
-                            print("saving data");
-                            await saveGruhAbhiyaanDataFun();
-                          }
-                          // _submit(context);
-                        },
-                        child: Text(
-                          Statics.getLabel('Submit'),
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ),
                       if (_isEditing)
                         MaterialButton(
                           minWidth: MediaQuery.sizeOf(context).width * 0.35,
@@ -1553,7 +1665,9 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                               pustakVikriController.clear();
                               createdUserId = null;
                               selectedSajjanshaktiItems = [];
+                              selectedAnyaprabhaviItems = [];
                             });
+                            await _getSwList();
                             // await populateDropdown(isClear: true);
                           },
                           child: Text(
@@ -1564,10 +1678,10 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                   ),
                 ],
 //
-                if (isAbhiyaanButPramukh && !_isEditingForPramukh) ...[
+                if (_searched && isAbhiyaanButPramukh && !_isEditingForPramukh) ...[
                   Divider(height: 70, thickness: 2, color: Colors.grey.shade700),
-                  customTextFields(title: "संपर्क हेतू सहभागी संख्या : ", controller: samparkaSahabhagiController), //, readOnly: gruhAbhiyaanVruttaData!.abhiyaandata!.ishide),
-                  customTextFields(title: "संपर्क हेतू टोळी संख्या : ", controller: samparkaToliController), //, readOnly: gruhAbhiyaanVruttaData!.abhiyaandata!.ishide),
+                  customTextFields(title: "संपर्क हेतू सहभागी संख्या : ", controller: samparkaSahabhagiController, readOnly: true), //,gruhAbhiyaanVruttaData!.abhiyaandata!.ishide),
+                  customTextFields(title: "संपर्क हेतू टोळी संख्या : ", controller: samparkaToliController, readOnly: true), //,gruhAbhiyaanVruttaData!.abhiyaandata!.ishide),
                   SizedBox(height: 10),
                   Align(
                     alignment: Alignment.centerRight,
@@ -1693,12 +1807,12 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                 //       ),
                 //   ],
                 // ),
-                if (!isSwayamsevakWithoutAbhiyaan) SizedBox(height: 40),
+                if (_searched && !isSwayamsevakWithoutAbhiyaan) SizedBox(height: 40),
                 // if (isSwayamsevakWithoutAbhiyaan) showAbhiyaanPramukhListWidget(),
-                // SizedBox(height: 18),
+                SizedBox(height: 18),
                 // Align(alignment: Alignment.centerLeft, child: Text("मागील दिवसाचा डेटा :")),
                 // SizedBox(height: 8),
-                showPreviousDayDataTable(),
+                if (_searched) (isAbhiyaanButPramukh) ? showPreviousDayDataTableForPramukh() : showPreviousDayDataTable(),
                 SizedBox(height: 40),
               ],
             ],
@@ -1860,6 +1974,187 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
       Statics.getLabel('gruhVitaritKarpatra'),
       Statics.getLabel('gruhPustakVikti'),
       Statics.getLabel('gruhSpecialContact'),
+      "",
+    ];
+
+    if (_tableData == null || _tableData.isEmpty) return SizedBox();
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("${Statics.getLabel("otherDaysData")} :", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+          SizedBox(height: 12),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.purple.shade400,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Text(
+              _tableData.first.participantName.toString(),
+              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+            ),
+          ),
+          Row(
+            children: [
+              DataTable(
+                headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
+                columnSpacing: 0,
+                horizontalMargin: 16,
+                border: TableBorder.all(color: Colors.black26),
+                columns: [
+                  DataColumn(
+                    label: Center(
+                      child: Text(
+                        "अभियान तारखा",
+                        softWrap: true,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ],
+                rows: _tableData.map((level) {
+                      return DataRow(cells: [
+                        DataCell(Text(level.abhiyaanDate.toString())),
+                      ]);
+                    }).toList() +
+                    [
+                      DataRow(color: MaterialStatePropertyAll(Colors.yellow.shade100), cells: [
+                        DataCell(Text(
+                          Statics.getLabel("Total"),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        )),
+                      ])
+                    ],
+              ),
+              Expanded(
+                child: Scrollbar(
+                  controller: _scrollController,
+                  thumbVisibility: true,
+                  interactive: true,
+                  thickness: 5,
+                  radius: Radius.circular(10),
+                  child: SingleChildScrollView(
+                    controller: _scrollController,
+                    scrollDirection: Axis.horizontal,
+                    child: DataTable(
+                      columnSpacing: 14,
+                      horizontalMargin: 12,
+                      headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
+                      border: TableBorder(verticalInside: BorderSide(width: 0.7, color: Colors.grey.shade200)),
+                      columns: headers
+                          .map((header) => DataColumn(
+                                label: Container(
+                                  constraints: BoxConstraints(minWidth: 40, maxWidth: 200),
+                                  // constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.2),
+                                  child: Text(header, softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold)),
+                                ),
+                              ))
+                          .toList(),
+                      rows: _tableData.map((item) {
+                            return DataRow(cells: [
+                              DataCell(Center(child: Text(item.samparkitghar.toString()))),
+                              DataCell(Center(child: Text(item.vitaritkarpatra.toString()))),
+                              DataCell(Center(child: Text(item.pustakvikrisankhya.toString()))),
+                              DataCell(Center(child: Text(item.totalAtithiCount.toString()))),
+                              DataCell(Container(
+                                constraints: BoxConstraints(
+                                  minWidth: 30,
+                                ),
+                                child: InkWell(
+                                    // onTap: () {
+                                    //   Statics.showToast(Statics.getLabel("workInProgress"));
+                                    // },
+                                    onTap: () {
+                                      log(jsonEncode(item));
+                                      setState(() {
+                                        _isEditing = true;
+                                        if (item.createdUserID == Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"] && isAbhiyaanButPramukh) _isEditingForPramukh = true;
+                                      });
+                                      Future.delayed(
+                                        Duration(milliseconds: 100),
+                                        () => setState(() {
+                                          dateController.text = DateFormat("dd/MM/yyyy").format(DateFormat("dd-MM-yyyy").parse(item.abhiyaanDate.toString()));
+                                          samparkitGhareController.text = item.samparkitghar.toString();
+                                          vitritKarpatrakController.text = item.vitaritkarpatra.toString();
+                                          pustakVikriController.text = item.pustakvikrisankhya.toString();
+                                          createdUserId = item.createdUserID;
+
+                                          if (item.createdUserID == Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"] && isAbhiyaanButPramukh)
+                                            samparkaSahabhagiController.text = item.samparkhetusahbhagisankhya.toString();
+                                          if (item.createdUserID == Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"] && isAbhiyaanButPramukh)
+                                            samparkaToliController.text = item.samparkhetutolisankhya.toString();
+
+                                          if (data != null) {
+                                            // setState(() {
+                                            selectedSajjanshaktiItems = data!.vastisarsajjanshakti!.where((e) => item.visititAtithiSajjanShaktiids!.split(",").contains(e.pkid.toString())).toList();
+                                            selectedAnyaprabhaviItems = data!.vastisanyaprabhavi!.where((e) => item.visititAtithiAnyaprabhaViLokamids!.split(",").contains(e.pkId.toString())).toList();
+                                            // });
+                                          }
+                                          _scrollController.animateTo(
+                                            0,
+                                            duration: const Duration(milliseconds: 600),
+                                            curve: Curves.easeInOutSine,
+                                          );
+                                        }),
+                                      );
+                                    },
+                                    child: Icon(
+                                      Icons.edit,
+                                      color: Colors.green.shade700,
+                                    )),
+                              ))
+                            ]);
+                          }).toList() +
+                          [
+                            DataRow(color: MaterialStatePropertyAll(Colors.yellow.shade100), cells: [
+                              //sanchalan
+                              DataCell(Center(
+                                  child: Text(
+                                _tableData.fold(0, (sum, item) => sum + (item.samparkitghar ?? 0)).toString(),
+                                style: TextStyle(fontWeight: FontWeight.w700),
+                              ))),
+                              DataCell(Center(
+                                  child: Text(
+                                _tableData.fold(0, (sum, item) => sum + (item.vitaritkarpatra ?? 0)).toString(),
+                                style: TextStyle(fontWeight: FontWeight.w700),
+                              ))),
+                              DataCell(Center(
+                                  child: Text(
+                                _tableData.fold(0, (sum, item) => sum + (item.pustakvikrisankhya ?? 0)).toString(),
+                                style: TextStyle(fontWeight: FontWeight.w700),
+                              ))),
+                              DataCell(Center(
+                                  child: Text(
+                                _tableData.fold(0, (sum, item) => sum + (item.totalAtithiCount ?? 0)).toString(),
+                                style: TextStyle(fontWeight: FontWeight.w700),
+                              ))),
+                              DataCell.empty,
+                            ])
+                          ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget showPreviousDayDataTableForPramukh() {
+    final _tableData = gruhAbhiyaanVruttaData?.previousDay;
+    final List<String> headers = [
+      // 'कार्यक्रम स्तर',
+      Statics.getLabel('gruhSamarkitGhar'),
+      Statics.getLabel('gruhVitaritKarpatra'),
+      Statics.getLabel('gruhPustakVikti'),
+      Statics.getLabel('gruhSpecialContact'),
       if (!isSwayamsevakWithoutAbhiyaan) "",
     ];
 
@@ -1892,8 +2187,8 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                 child: ExpansionTile(
                   tilePadding: EdgeInsets.only(right: 16, left: 16),
                   childrenPadding: EdgeInsets.zero,
-                  collapsedBackgroundColor: Colors.yellow.shade100,
-                  backgroundColor: Colors.yellow.shade100,
+                  collapsedBackgroundColor: Colors.teal.shade100,
+                  backgroundColor: Colors.teal.shade100,
                   initiallyExpanded: true,
                   shape: RoundedRectangleBorder(side: BorderSide.none, borderRadius: BorderRadius.circular(12)),
                   collapsedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -1909,170 +2204,178 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                       color: Colors.white,
                       padding: const EdgeInsets.only(left: 18.0, right: 18.0, bottom: 8.0, top: 12),
                       child: Container(
+                        constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.4),
                         decoration: BoxDecoration(border: Border.all(color: Colors.grey.shade800)),
                         padding: EdgeInsets.all(4),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            DataTable(
-                              headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
-                              columnSpacing: 0,
-                              horizontalMargin: 16,
-                              border: TableBorder.all(color: Colors.black26),
-                              columns: [
-                                DataColumn(
-                                  label: Center(
-                                    child: Text(
-                                      "${Statics.getLabel('gruhKaryakartaName')}",
-                                      softWrap: true,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(fontWeight: FontWeight.bold),
+                        child: Scrollbar(
+                          thumbVisibility: true,
+                          radius: Radius.circular(8),
+                          thickness: 5,
+                          child: SingleChildScrollView(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                DataTable(
+                                  headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
+                                  columnSpacing: 0,
+                                  horizontalMargin: 16,
+                                  border: TableBorder.all(color: Colors.black26),
+                                  columns: [
+                                    DataColumn(
+                                      label: Center(
+                                        child: Text(
+                                          "${Statics.getLabel('gruhKaryakartaName')}",
+                                          softWrap: true,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              ],
-                              // dataRowMinHeight: 40,
-                              // dataRowMaxHeight: 120,
-                              rows: [
-                                ...group.map((item) {
-                                  return DataRow(cells: [
-                                    DataCell(Text(item.participantName.toString())),
-                                  ]);
-                                }),
-                                DataRow(
-                                  color: MaterialStatePropertyAll(Colors.yellow.shade100),
-                                  cells: [
-                                    DataCell(Text(
-                                      'Total',
-                                      style: const TextStyle(fontWeight: FontWeight.w700),
-                                    )),
+                                  ],
+                                  // dataRowMinHeight: 40,
+                                  // dataRowMaxHeight: 120,
+                                  rows: [
+                                    ...group.map((item) {
+                                      return DataRow(cells: [
+                                        DataCell(Text(item.participantName.toString())),
+                                      ]);
+                                    }),
+                                    DataRow(
+                                      color: MaterialStatePropertyAll(Colors.yellow.shade100),
+                                      cells: [
+                                        DataCell(Text(
+                                          'Total',
+                                          style: const TextStyle(fontWeight: FontWeight.w700),
+                                        )),
+                                      ],
+                                    ),
                                   ],
                                 ),
-                              ],
-                            ),
 
-                            //
-                            Expanded(
-                              child: Scrollbar(
-                                thumbVisibility: true,
-                                controller: horizontalController,
-                                child: SingleChildScrollView(
-                                  controller: horizontalController,
-                                  scrollDirection: Axis.horizontal,
-                                  child: DataTable(
-                                    columnSpacing: 14,
-                                    horizontalMargin: 12,
-                                    headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
-                                    border: TableBorder(
-                                      verticalInside: BorderSide(width: 0.7, color: Colors.grey.shade200),
-                                    ),
-                                    columns: headers
-                                        .map((header) => DataColumn(
-                                              label: Container(
-                                                constraints: const BoxConstraints(minWidth: 30, maxWidth: 200),
-                                                child: Text(
-                                                  header,
-                                                  softWrap: true,
-                                                  maxLines: 2,
-                                                  overflow: TextOverflow.ellipsis,
-                                                  style: const TextStyle(fontWeight: FontWeight.bold),
-                                                ),
-                                              ),
-                                            ))
-                                        .toList(),
-                                    rows: [
-                                      ...group.map((item) {
-                                        return DataRow(cells: [
-                                          DataCell(Center(child: Text((item.samparkitghar ?? 0).toString()))),
-                                          DataCell(Center(child: Text((item.vitaritkarpatra ?? 0).toString()))),
-                                          DataCell(Center(child: Text((item.pustakvikrisankhya ?? 0).toString()))),
-                                          DataCell(Center(child: Text((item.totalAtithiCount ?? 0).toString()))),
-                                          if (!isSwayamsevakWithoutAbhiyaan)
-                                            DataCell(Container(
-                                              constraints: BoxConstraints(
-                                                minWidth: 30,
-                                              ),
-                                              child: InkWell(
-                                                  // onTap: () {
-                                                  //   Statics.showToast(Statics.getLabel("workInProgress"));
-                                                  // },
-                                                  onTap: () {
-                                                    log(jsonEncode(item));
-                                                    setState(() {
-                                                      _isEditing = true;
-                                                      if (item.createdUserID == Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"] && isAbhiyaanButPramukh) _isEditingForPramukh = true;
-                                                    });
-                                                    Future.delayed(
-                                                      Duration(milliseconds: 100),
-                                                      () => setState(() {
-                                                        dateController.text = DateFormat("dd/MM/yyyy").format(DateFormat("dd-MM-yyyy").parse(item.abhiyaanDate.toString()));
-                                                        samparkitGhareController.text = item.samparkitghar.toString();
-                                                        vitritKarpatrakController.text = item.vitaritkarpatra.toString();
-                                                        pustakVikriController.text = item.pustakvikrisankhya.toString();
-                                                        createdUserId = item.createdUserID;
+                                //
+                                Expanded(
+                                  child: Scrollbar(
+                                    thumbVisibility: true,
+                                    controller: horizontalController,
+                                    child: SingleChildScrollView(
+                                      controller: horizontalController,
+                                      scrollDirection: Axis.horizontal,
+                                      child: DataTable(
+                                        columnSpacing: 14,
+                                        horizontalMargin: 12,
+                                        headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
+                                        border: TableBorder(
+                                          verticalInside: BorderSide(width: 0.7, color: Colors.grey.shade200),
+                                        ),
+                                        columns: headers
+                                            .map((header) => DataColumn(
+                                                  label: Container(
+                                                    constraints: const BoxConstraints(minWidth: 30, maxWidth: 200),
+                                                    child: Text(
+                                                      header,
+                                                      softWrap: true,
+                                                      maxLines: 2,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                                    ),
+                                                  ),
+                                                ))
+                                            .toList(),
+                                        rows: [
+                                          ...group.map((item) {
+                                            return DataRow(cells: [
+                                              DataCell(Center(child: Text((item.samparkitghar ?? 0).toString()))),
+                                              DataCell(Center(child: Text((item.vitaritkarpatra ?? 0).toString()))),
+                                              DataCell(Center(child: Text((item.pustakvikrisankhya ?? 0).toString()))),
+                                              DataCell(Center(child: Text((item.totalAtithiCount ?? 0).toString()))),
+                                              if (!isSwayamsevakWithoutAbhiyaan)
+                                                DataCell(Container(
+                                                  constraints: BoxConstraints(
+                                                    minWidth: 30,
+                                                  ),
+                                                  child: InkWell(
+                                                      // onTap: () {
+                                                      //   Statics.showToast(Statics.getLabel("workInProgress"));
+                                                      // },
+                                                      onTap: () {
+                                                        log(jsonEncode(item));
+                                                        setState(() {
+                                                          _isEditing = true;
+                                                          if (item.createdUserID == Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"] && isAbhiyaanButPramukh) _isEditingForPramukh = true;
+                                                        });
+                                                        Future.delayed(
+                                                          Duration(milliseconds: 100),
+                                                          () => setState(() {
+                                                            dateController.text = DateFormat("dd/MM/yyyy").format(DateFormat("dd-MM-yyyy").parse(item.abhiyaanDate.toString()));
+                                                            samparkitGhareController.text = item.samparkitghar.toString();
+                                                            vitritKarpatrakController.text = item.vitaritkarpatra.toString();
+                                                            pustakVikriController.text = item.pustakvikrisankhya.toString();
+                                                            createdUserId = item.createdUserID;
 
-                                                        if (item.createdUserID == Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"] && isAbhiyaanButPramukh)
-                                                          samparkaSahabhagiController.text = item.samparkhetusahbhagisankhya.toString();
-                                                        if (item.createdUserID == Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"] && isAbhiyaanButPramukh)
-                                                          samparkaToliController.text = item.samparkhetutolisankhya.toString();
+                                                            if (item.createdUserID == Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"] && isAbhiyaanButPramukh)
+                                                              samparkaSahabhagiController.text = item.samparkhetusahbhagisankhya.toString();
+                                                            if (item.createdUserID == Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"] && isAbhiyaanButPramukh)
+                                                              samparkaToliController.text = item.samparkhetutolisankhya.toString();
 
-                                                        if (data != null) {
-                                                          // setState(() {
-                                                          selectedSajjanshaktiItems =
-                                                              data!.vastisarsajjanshakti!.where((e) => item.visititAtithiSajjanShaktiids!.split(",").contains(e.pkid.toString())).toList();
-                                                          selectedAnyaprabhaviItems =
-                                                              data!.vastisanyaprabhavi!.where((e) => item.visititAtithiAnyaprabhaViLokamids!.split(",").contains(e.pkId.toString())).toList();
-                                                          // });
-                                                        }
-                                                        _scrollController.animateTo(
-                                                          0,
-                                                          duration: const Duration(milliseconds: 600),
-                                                          curve: Curves.easeInOutSine,
+                                                            if (data != null) {
+                                                              // setState(() {
+                                                              selectedSajjanshaktiItems =
+                                                                  data!.vastisarsajjanshakti!.where((e) => item.visititAtithiSajjanShaktiids!.split(",").contains(e.pkid.toString())).toList();
+                                                              selectedAnyaprabhaviItems =
+                                                                  data!.vastisanyaprabhavi!.where((e) => item.visititAtithiAnyaprabhaViLokamids!.split(",").contains(e.pkId.toString())).toList();
+                                                              // });
+                                                            }
+                                                            _scrollController.animateTo(
+                                                              0,
+                                                              duration: const Duration(milliseconds: 600),
+                                                              curve: Curves.easeInOutSine,
+                                                            );
+                                                          }),
                                                         );
-                                                      }),
-                                                    );
-                                                  },
-                                                  child: Icon(
-                                                    Icons.edit,
-                                                    color: Colors.green.shade700,
-                                                  )),
-                                            )),
-                                        ]);
-                                      }).toList(),
-                                      // totals row
-                                      DataRow(
-                                        color: MaterialStatePropertyAll(Colors.yellow.shade100),
-                                        cells: [
-                                          DataCell(Center(
-                                              child: Text(
-                                            totalSampark.toString(),
-                                            style: const TextStyle(fontWeight: FontWeight.w700),
-                                          ))),
-                                          DataCell(Center(
-                                              child: Text(
-                                            totalVitarit.toString(),
-                                            style: const TextStyle(fontWeight: FontWeight.w700),
-                                          ))),
-                                          DataCell(Center(
-                                              child: Text(
-                                            totalPustak.toString(),
-                                            style: const TextStyle(fontWeight: FontWeight.w700),
-                                          ))),
-                                          DataCell(Center(
-                                              child: Text(
-                                            totalSpecial.toString(),
-                                            style: const TextStyle(fontWeight: FontWeight.w700),
-                                          ))),
-                                          if (!isSwayamsevakWithoutAbhiyaan) DataCell(SizedBox()),
+                                                      },
+                                                      child: Icon(
+                                                        Icons.edit,
+                                                        color: Colors.green.shade700,
+                                                      )),
+                                                )),
+                                            ]);
+                                          }).toList(),
+                                          // totals row
+                                          DataRow(
+                                            color: MaterialStatePropertyAll(Colors.yellow.shade100),
+                                            cells: [
+                                              DataCell(Center(
+                                                  child: Text(
+                                                totalSampark.toString(),
+                                                style: const TextStyle(fontWeight: FontWeight.w700),
+                                              ))),
+                                              DataCell(Center(
+                                                  child: Text(
+                                                totalVitarit.toString(),
+                                                style: const TextStyle(fontWeight: FontWeight.w700),
+                                              ))),
+                                              DataCell(Center(
+                                                  child: Text(
+                                                totalPustak.toString(),
+                                                style: const TextStyle(fontWeight: FontWeight.w700),
+                                              ))),
+                                              DataCell(Center(
+                                                  child: Text(
+                                                totalSpecial.toString(),
+                                                style: const TextStyle(fontWeight: FontWeight.w700),
+                                              ))),
+                                              if (!isSwayamsevakWithoutAbhiyaan) DataCell(SizedBox()),
+                                            ],
+                                          ),
                                         ],
                                       ),
-                                    ],
+                                    ),
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
                       ),
                     ),
@@ -2089,77 +2392,88 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Container(
         width: double.infinity,
+        constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.4),
         padding: EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black54),
           borderRadius: BorderRadius.all(Radius.circular(15)),
         ),
         // width: MediaQuery.of(context).size.width,
-        child: DataTable(
-          columnSpacing: 12,
-          // dataRowMinHeight: 30,
-          // dataRowMaxHeight: 70,
-          showCheckboxColumn: false,
-          headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
-          headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
-          columns: [
-            if (!isSwayamsevakWithoutAbhiyaan)
-              DataColumn(
-                  label: Text(
-                "",
-              )),
-            DataColumn(
-                label: Text(
-              "${Statics.getLabel('Name')}",
-            )),
-            DataColumn(
-                label: Text(
-              "${Statics.getLabel('mobileNumberLabel')}",
-            )),
-            // DataColumn(
-            //     label: Text(
-            //   "${Statics.getLabel('daayitvaName')}",
-            // )),
-          ],
-          rows: gruhAbhiyaanToliList.asMap().entries.map((entry) {
-            int index = entry.key;
-            var data = entry.value;
-            bool isSelected = (data.isdefault == 1) || _selectedTolisIds.contains(data);
-            return DataRow(
-                selected: isSelected,
-                color: MaterialStateProperty.resolveWith<Color?>(
-                  (Set<MaterialState> states) {
-                    if (isSelected) return Colors.yellow.shade100;
-                    return null;
-                  },
-                ),
-                onSelectChanged: (bool? selected) {
-                  if (isSwayamsevakWithoutAbhiyaan) {
-                    return;
-                  }
-                  if ((data.isdefault == 1)) {
-                    return;
-                  }
-                  if (!isSelected) {
-                    setState(() {
-                      // selectedKaryakartaList.add(data);
-                      _selectedTolisIds.add(data);
-                    });
-                  } else {
-                    setState(() {
-                      // selectedKaryakartaList.add(data);
-                      _selectedTolisIds.remove(data);
-                    });
-                  }
-                  log(_selectedTolisIds.map((e) => e.swayamsevakID.toString()).join(','));
-                },
-                cells: [
-                  if (!isSwayamsevakWithoutAbhiyaan) DataCell(Icon(isSelected ? Icons.check_box_rounded : Icons.check_box_outline_blank_rounded, color: Colors.yellow.shade900, size: 21)),
-                  DataCell(Container(constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.4), child: Text(data.fullName ?? ''))),
-                  DataCell(Text(data.mobileno ?? '')),
-                  // DataCell(Text(Statics.getLabel(data.daayitva.toString(), returnKey: true))),
-                ]);
-          }).toList(),
+        child: Scrollbar(
+          thumbVisibility: true,
+          radius: Radius.circular(8),
+          thickness: 5,
+          child: SingleChildScrollView(
+            child: DataTable(
+              columnSpacing: 12,
+              // dataRowMinHeight: 30,
+              // dataRowMaxHeight: 70,
+              showCheckboxColumn: false,
+              headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+              headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
+              columns: [
+                if (!isSwayamsevakWithoutAbhiyaan)
+                  DataColumn(
+                      label: Text(
+                    "",
+                  )),
+                DataColumn(
+                    label: Text(
+                  "${Statics.getLabel('Name')}",
+                )),
+                DataColumn(
+                    label: Text(
+                  "${Statics.getLabel('mobileNumberLabel')}",
+                )),
+                // DataColumn(
+                //     label: Text(
+                //   "${Statics.getLabel('daayitvaName')}",
+                // )),
+              ],
+              rows: gruhAbhiyaanToliList.asMap().entries.map((entry) {
+                int index = entry.key;
+                var data = entry.value;
+                bool isSelected = (data.isdefault == 1) || _selectedTolisIds.contains(data);
+                return DataRow(
+                    selected: isSelected,
+                    color: MaterialStateProperty.resolveWith<Color?>(
+                      (Set<MaterialState> states) {
+                        if (isSelected) return Colors.yellow.shade100;
+                        return null;
+                      },
+                    ),
+                    onSelectChanged: (bool? selected) {
+                      if (isSwayamsevakWithoutAbhiyaan) {
+                        return;
+                      }
+                      if (gruhAbhiyaanVruttaData!.abhiyaandata!.ishide) {
+                        return;
+                      }
+                      if ((data.isdefault == 1)) {
+                        return;
+                      }
+                      if (!isSelected) {
+                        setState(() {
+                          // selectedKaryakartaList.add(data);
+                          _selectedTolisIds.add(data);
+                        });
+                      } else {
+                        setState(() {
+                          // selectedKaryakartaList.add(data);
+                          _selectedTolisIds.remove(data);
+                        });
+                      }
+                      log(_selectedTolisIds.map((e) => e.swayamsevakID.toString()).join(','));
+                    },
+                    cells: [
+                      if (!isSwayamsevakWithoutAbhiyaan) DataCell(Icon(isSelected ? Icons.check_box_rounded : Icons.check_box_outline_blank_rounded, color: Colors.yellow.shade900, size: 21)),
+                      DataCell(Container(constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.4), child: Text(data.fullName ?? ''))),
+                      DataCell(Text(data.mobileno ?? '')),
+                      // DataCell(Text(Statics.getLabel(data.daayitva.toString(), returnKey: true))),
+                    ]);
+              }).toList(),
+            ),
+          ),
         ),
       ),
     );
