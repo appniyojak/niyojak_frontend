@@ -165,6 +165,7 @@ class PreviousDay {
   String? abhiyaanDate;
   int? createdUserID;
   int? geoUnitID;
+  String? geoUnitName;
   int? levelID;
   int? parentBhaagID;
   int? parentMahaanagarID;
@@ -185,6 +186,7 @@ class PreviousDay {
     this.abhiyaanDate,
     this.createdUserID,
     this.geoUnitID,
+    this.geoUnitName,
     this.levelID,
     this.parentBhaagID,
     this.parentMahaanagarID,
@@ -206,6 +208,7 @@ class PreviousDay {
     abhiyaanDate = json['AbhiyaanDate'];
     createdUserID = json['CreatedUserID'];
     geoUnitID = json['GeoUnitID'];
+    geoUnitName = json['GeoUnitName'];
     levelID = json['LevelID'];
     parentBhaagID = json['ParentBhaagID'];
     parentMahaanagarID = json['ParentMahaanagarID'];
@@ -228,6 +231,7 @@ class PreviousDay {
     data['AbhiyaanDate'] = this.abhiyaanDate;
     data['CreatedUserID'] = this.createdUserID;
     data['GeoUnitID'] = this.geoUnitID;
+    data['GeoUnitName'] = this.geoUnitName;
     data['LevelID'] = this.levelID;
     data['ParentBhaagID'] = this.parentBhaagID;
     data['ParentMahaanagarID'] = this.parentMahaanagarID;

@@ -52,6 +52,7 @@ dependencies:
   flutter_cache_manager: ^3.4.0
   multi_select_flutter: ^4.1.3
   file_picker: ^8.2.0
+  flutter_expandable_table: ^2.1.0
 
   # maps / geolocation / device info
   google_maps_flutter: ^2.6.0

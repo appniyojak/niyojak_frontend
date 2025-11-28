@@ -217,6 +217,7 @@ const String saveDataforGruhAbhiyaanApi = baseUrlAPI + '/SaveDataforGruhAbhiyaan
 const String saveDataforPramukhGruhAbhiyaanApi = baseUrlAPI + '/updatedataforgruhabhiyaanaspramukh';
 const String getDataWhileAddUpdateUPLevelForGruh = baseUrlAPI + '/GetDataWhileAddUpdateUPLevelForGruh';
 const String urlCheckExistsAbhiyaanKaryakarta = baseUrlAPI + '/checkexistsabhiyaankaryakarta';
+const String urlGetAllAbhiyaanVruttaData = baseUrlAPI + '/GetAllAbhiyaanVruttaData';
 
 //////////////////////////////////////////////////////////////////////////////////////////
 const String patchSuffix = '';
@@ -2914,6 +2915,37 @@ Future<GruhAbhiyaanVruttaDataModel?> getDataforGruhAbhiyaan(Map<String, dynamic>
         log("getDataforGruhAbhiyaan >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
 
         return model; // ✅ return karna zaroori hai
+      }
+      return null; // ✅ error case
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null; // ✅ error case
+    }
+  } catch (e) {
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+    print("Exception: $e");
+    return null;
+  }
+}
+
+Future<List<PreviousDay>?> getPreviousDataforGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
+  if (context != null) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+  log(urlGetAllAbhiyaanVruttaData);
+
+  try {
+    var response = await http.post(Uri.parse(urlGetAllAbhiyaanVruttaData), headers: jHeaders, body: jsonEncode(inputJson));
+
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+
+      if (data["Status"] == "200" || data["Status"] == "Success") {
+        GruhAbhiyaanVruttaDataModel model = GruhAbhiyaanVruttaDataModel.fromJson(data);
+        log("getDataforGruhAbhiyaan >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+
+        return model.previousDay; // ✅ return karna zaroori hai
       }
       return null; // ✅ error case
     } else {
