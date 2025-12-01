@@ -1681,6 +1681,14 @@ Map<String, String> resEnglish = {
   'gruhAttendance': 'Attendance',
   'otherDaysData': "Other day's data",
   'minimumWordsRequired': "Minimum 3 characters required",
+  "totalNagar": "Total Nagar",
+  "totalMandal": "Total Mandal",
+  "totalTaluka": "Total Taluka",
+  "totalGraam": "Total Graam",
+  "abhiyaanStatus": "Abhiyaan Status",
+  "dayWiseAbhiyaan": "Abhiyaan Vrutta (Datewise)",
+  "levelWiseAbhiyaan": "Abhiyaan Vrutta (Bhaag/Jilha/Nagar)",
+  "previousDaysData": "Previous Dates Data",
 };
 
 ///1,584
@@ -3366,6 +3374,14 @@ Map<String, String> resMarathi = {
   'gruhAttendance': 'उपस्थिती',
   'otherDaysData': "इतर दिवसाचा डेटा",
   'minimumWordsRequired': "कमीत कमी ३ अक्षर आवश्यक",
+  "totalNagar": "एकूण नगर",
+  "totalMandal": "एकूण मंडळ",
+  "totalTaluka": "एकूण तालुका",
+  "totalGraam": "एकूण ग्राम",
+  "abhiyaanStatus": "अभियान स्थिती",
+  "dayWiseAbhiyaan": "अभियान वृत्त (दिनश:)",
+  "levelWiseAbhiyaan": "अभियान वृत्त (भाग/जिल्हा/नगर)",
+  "previousDaysData": "इतर तारखांचा डेटा",
 };
 
 ///1,583
@@ -5036,7 +5052,6 @@ Map<String, String> resHindi = {
   "abhiyaanKaryakartaFormTitle": "अभियान कार्यकर्ता",
   "abhiyaanPramukhKey": "अभियान प्रमुख",
   "karyakartaAlreadyExists": "अभियान कार्यकर्ता पहले से चिन्हित है।",
-  "karyakartaAlreadyExists": "अभियान कार्यकर्ता पहले से चिन्हित है।",
   "cannotDeleteTheData": "आप इस डेटा को हटा नहीं सकते क्योंकि यह पहले से ही उपयोग में है!",
   'specialPerson': "विशेष व्यक्ति",
   'addSpecialPerson': "विशेष व्यक्ती चयन करें",
@@ -5051,4 +5066,12 @@ Map<String, String> resHindi = {
   'gruhAttendance': 'उपस्थिती',
   'otherDaysData': "अन्य दिन का डेटा",
   'minimumWordsRequired': "कम से कम 3 अक्षर आवश्यक",
+  "totalNagar": "कुल नगर",
+  "totalMandal": "कुल मंडळ",
+  "totalTaluka": "कुल तालुका",
+  "totalGraam": "कुल ग्राम",
+  "abhiyaanStatus": "अभियान स्थिती",
+  "dayWiseAbhiyaan": "अभियान वृत्त (दिनश:)",
+  "levelWiseAbhiyaan": "अभियान वृत्त (भाग/जिला/नगर)",
+  "previousDaysData": "अन्य तिथियों का डेटा",
 };

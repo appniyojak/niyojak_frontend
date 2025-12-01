@@ -3125,7 +3125,7 @@ Future<GruhAbhiyaanVruttaDataModel?> addToToliListData(Map<String, dynamic> inpu
   }
 }
 
-Future<SearchAbhiyaanKaryakartaRespModel?> getSwayamsevakForGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
+Future<List<AbhiyanSwayamsevakList>?> getSwayamsevakForGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   if (context != null) showLoaderDialog(context);
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
   log(getSwayamsevakForGruhApi);
@@ -3139,10 +3139,10 @@ Future<SearchAbhiyaanKaryakartaRespModel?> getSwayamsevakForGruhAbhiyaan(Map<Str
       final Map<String, dynamic> data = jsonDecode(response.body);
 
       if (data["Status"] == "Success") {
-        SearchAbhiyaanKaryakartaRespModel model = SearchAbhiyaanKaryakartaRespModel.fromJson(data);
         log("getSwayamsevakForGruhAbhiyaan >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+        SearchAbhiyaanKaryakartaRespModel model = SearchAbhiyaanKaryakartaRespModel.fromJson(data);
 
-        return model; // ✅ return karna zaroori hai
+        return model.karyakartList; // ✅ return karna zaroori hai
       }
       return null; // ✅ error case
     } else {

@@ -272,7 +272,7 @@ class AbhiyanSwayamsevakList {
     parentVastiID = json['ParentVastiID'];
     isSelected = json['isSelected'] == 1;
     isPresentInAbhiyaan = json['IsPresentInAbhiyaan'] ?? false;
-    isPresentInAsSewak = json['IsPresentInAsSewak'] ?? false;
+    isPresentInAsSewak = json['IsPresentInAsSewak'] == 1;
     if (json['mappingforGruhs'] != null) {
       mappingforGruhs = <SaveAbhiyanSwayamsevakMappingforGruh>[];
       json['mappingforGruhs'].forEach((v) {
@@ -334,7 +334,7 @@ class AbhiyanSwayamsevakList {
     data['ParentVastiID'] = this.parentVastiID;
     data['isSelected'] = this.isSelected;
     data['IsPresentInAbhiyaan'] = this.isPresentInAbhiyaan;
-    data['IsPresentInAsSewak'] = this.isPresentInAsSewak;
+    data['IsPresentInAsSewak'] = this.isPresentInAsSewak ? 1 : 0;
     if (this.mappingforGruhs != null) {
       data['mappingforGruhs'] = this.mappingforGruhs!.map((v) => v.toJson()).toList();
     }

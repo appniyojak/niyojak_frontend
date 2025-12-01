@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
@@ -13,6 +12,7 @@ import '../../edit_swayamsevak_screen.dart';
 
 class AddAbhiyaanPramukhScreen extends StatefulWidget {
   static const String routeName = '/add-abhiyaan-pramukh-screen';
+
   const AddAbhiyaanPramukhScreen({super.key});
 
   @override
@@ -65,7 +65,7 @@ class _AddAbhiyaanPramukhScreenState extends State<AddAbhiyaanPramukhScreen> {
                   child: Text(Statics.getLabel('ConfirmationNo')),
                   onPressed: () {
                     Navigator.of(ctnx).pop();
-                    Navigator.of(context).pop();
+                    // Navigator.of(context).pop();
                   },
                 ),
                 MaterialButton(
@@ -231,8 +231,8 @@ class _AddAbhiyaanPramukhScreenState extends State<AddAbhiyaanPramukhScreen> {
                           }
                           setState(() {});
                         },
-                        inputFormatters: [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.digitsOnly],
-                        keyboardType: TextInputType.phone,
+                        // inputFormatters: [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.digitsOnly],
+                        // keyboardType: TextInputType.phone,
                         decoration: InputDecoration(
                           isDense: true,
                           contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
@@ -381,7 +381,7 @@ class _AddAbhiyaanPramukhScreenState extends State<AddAbhiyaanPramukhScreen> {
                       )
                     : ElevatedButton(
                         onPressed: () async {
-                          FocusScope.of(context).unfocus();
+                          FocusManager.instance.primaryFocus?.unfocus();
 
                           // if (from == "swayamsevak") {
                           //   Fluttertoast.showToast(
@@ -391,8 +391,8 @@ class _AddAbhiyaanPramukhScreenState extends State<AddAbhiyaanPramukhScreen> {
                           //   );
                           //   return;
                           // }
-                          if (_searchController.text.length < 10) {
-                            Statics.showToast(Statics.getLabel('MobileValidationMessage'));
+                          if (_searchController.text.length < 3) {
+                            Statics.showToast(Statics.getLabel('minimumWordsRequired'));
                             return null;
                           }
                           await _search("Search");

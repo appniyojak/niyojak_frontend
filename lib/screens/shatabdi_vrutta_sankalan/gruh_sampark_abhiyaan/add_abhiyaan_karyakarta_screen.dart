@@ -11,7 +11,6 @@ import '../../../helpers/static_data.dart' as Statics;
 import '../../../helpers/static_data.dart';
 import '../../../models/response_model/AbhiyaanListResponse.dart';
 import '../../../models/response_model/AbhiyaanSwayamsevakListResponse.dart';
-import '../../../models/response_model/search_abhiyaan_karyakarta_model.dart';
 import '../../../providers/bals.dart';
 
 class AddAbhiyaanKaryakartaScreen extends StatefulWidget {
@@ -27,9 +26,8 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
   String? _selectedGeoUnitId;
   bool _isVasti = true;
 
-  bool _isSelected = false;
-
-  SearchAbhiyaanKaryakartaRespModel? abhiyaanSwayamsevak;
+  AbhiyanSwayamsevakList? _selectedKaryakarta;
+  List<AbhiyanSwayamsevakList>? abhiyaanKaryakartaList;
   int? selectedGramVastiListRowIndex;
   List<SaveAbhiyanSwayamsevakMappingforGruh> selectedGramVastiList = [];
 
@@ -130,7 +128,6 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
     });
     await _getSwList(strType);
     setState(() {
-      _isSelected = false;
       _isSearching = false;
     });
   }
@@ -230,6 +227,10 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
 
   Future<void> _getSwList(String strType) async {
     log("calling");
+    setState(() {
+      _selectedKaryakarta = null;
+      abhiyaanKaryakartaList = [];
+    });
     bool isConnected = await Statics.isInternetConnected();
     if (isConnected) {
       var inputData = {
@@ -239,47 +240,48 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
         "Geounitid": _selectedGeoUnitId,
       };
       log(jsonEncode(inputData));
-      abhiyaanSwayamsevak = await Statics.getSwayamsevakForGruhAbhiyaan(inputData);
+      final _result = await Statics.getSwayamsevakForGruhAbhiyaan(inputData);
       setState(() {});
-      if (abhiyaanSwayamsevak != null) {
-        if (!abhiyaanSwayamsevak!.ispresentinassewak && (abhiyaanSwayamsevak?.swayamsevak == null || abhiyaanSwayamsevak!.swayamsevak!.abhiyanSwayamsevakID! < 0)) {
-          await showDialog(
-            barrierDismissible: false,
-            context: context,
-            builder: (ctnx) => AlertDialog(
-              title: Text(getLabel('AskConfirmation')),
-              content: Text("स्वयंसेवक उपस्थित नाहीत, या अभियानासाठी नवीन अभियान स्वयंसेवक जोडायचा आहे का ?"),
-              actions: <Widget>[
-                TextButton(
-                  child: Text(getLabel('ConfirmationNo')),
-                  onPressed: () {
-                    Navigator.of(ctnx).pop();
-                    // Navigator.of(context).pop();
-                  },
-                ),
-                MaterialButton(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 15,
-                    vertical: 8,
-                  ),
-                  color: Theme.of(context).primaryColor,
-                  textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                  child: Text(getLabel('ConfirmationYes')),
-                  onPressed: () {
-                    Navigator.of(ctnx).pop();
-                    setState(() {
-                      showFields = true;
-                      _mobileCntrl.text = _searchController.text;
-                    });
-                    // Navigator.pushReplacementNamed(context, AbhiyanAddSwayamsevakScreen.routeName);
-                  },
-                ),
-              ],
-            ),
-          );
-          return;
-        }
+      if (_result != null && _result.isNotEmpty) {
+        abhiyaanKaryakartaList?.addAll(_result);
+        // if (!abhiyaanSwayamsevak!.ispresentinassewak && (abhiyaanSwayamsevak?.swayamsevak == null || abhiyaanSwayamsevak!.swayamsevak!.abhiyanSwayamsevakID! < 0)) {
+        //   await showDialog(
+        //     barrierDismissible: false,
+        //     context: context,
+        //     builder: (ctnx) => AlertDialog(
+        //       title: Text(getLabel('AskConfirmation')),
+        //       content: Text("स्वयंसेवक उपस्थित नाहीत, या अभियानासाठी नवीन अभियान स्वयंसेवक जोडायचा आहे का ?"),
+        //       actions: <Widget>[
+        //         TextButton(
+        //           child: Text(getLabel('ConfirmationNo')),
+        //           onPressed: () {
+        //             Navigator.of(ctnx).pop();
+        //             // Navigator.of(context).pop();
+        //           },
+        //         ),
+        //         MaterialButton(
+        //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        //           padding: EdgeInsets.symmetric(
+        //             horizontal: 15,
+        //             vertical: 8,
+        //           ),
+        //           color: Theme.of(context).primaryColor,
+        //           textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+        //           child: Text(getLabel('ConfirmationYes')),
+        //           onPressed: () {
+        //             Navigator.of(ctnx).pop();
+        //             setState(() {
+        //               showFields = true;
+        //               _mobileCntrl.text = _searchController.text;
+        //             });
+        //             // Navigator.pushReplacementNamed(context, AbhiyanAddSwayamsevakScreen.routeName);
+        //           },
+        //         ),
+        //       ],
+        //     ),
+        //   );
+        //   return;
+        // }
 
         // setState(() {
         //   _fullNameCntrl.text = abhiyaanSwayamsevak?.swayamsevak?.participantName ?? "";
@@ -464,7 +466,8 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                       _geoUnitsValue = "";
                       // selectedDayitvValue = "";
 
-                      abhiyaanSwayamsevak = null;
+                      _selectedKaryakarta = null;
+                      abhiyaanKaryakartaList = [];
                       _anyaSansthaCntrl.clear();
                       _sansthaNameCntrl.clear();
                       _sansthaPadhCntrl.clear();
@@ -498,7 +501,7 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
         var data = {
           "AppUserID": Statics.userDetails["userID"],
           "Geounitid": _selectedGeoUnitId,
-          "AbhiyanSwayamsevakID": abhiyaanSwayamsevak?.swayamsevak?.abhiyanSwayamsevakID ?? 0,
+          "AbhiyanSwayamsevakID": _selectedKaryakarta?.abhiyanSwayamsevakID ?? 0,
         };
 
         log(jsonEncode(data));
@@ -539,7 +542,8 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                       _geoUnitsValue = "";
                       // selectedDayitvValue = "";
 
-                      abhiyaanSwayamsevak = null;
+                      _selectedKaryakarta = null;
+                      abhiyaanKaryakartaList = [];
                       _anyaSansthaCntrl.clear();
                       _sansthaNameCntrl.clear();
                       _sansthaPadhCntrl.clear();
@@ -549,7 +553,6 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                       showFields = false;
 
                       selectedGramVastiList = [];
-                      _isSelected = false;
                     });
                     // Navigator.pushReplacementNamed(context, AbhiyanAddSwayamsevakScreen.routeName);
                   },
@@ -652,7 +655,8 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                             _geoUnitsValue = "";
                             // selectedDayitvValue = "";
 
-                            abhiyaanSwayamsevak = null;
+                            _selectedKaryakarta = null;
+                            abhiyaanKaryakartaList = [];
                             _anyaSansthaCntrl.clear();
                             _sansthaNameCntrl.clear();
                             _sansthaPadhCntrl.clear();
@@ -662,7 +666,6 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                             showFields = false;
 
                             selectedGramVastiList = [];
-                            _isSelected = false;
                           }
                           setState(() {});
                         },
@@ -698,52 +701,60 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                 SizedBox(
                   height: 15,
                 ),
-                if ((abhiyaanSwayamsevak?.swayamsevak != null && abhiyaanSwayamsevak!.swayamsevak!.abhiyanSwayamsevakID! > 0) && _searchController.text.isNotEmpty)
-                  InkWell(
-                    borderRadius: BorderRadius.circular(12),
-                    onTap: () => setState(() {
-                      _isSelected = !_isSelected;
-                    }),
-                    child: Card(
-                      clipBehavior: Clip.antiAlias,
-                      margin: EdgeInsets.all(5),
-                      surfaceTintColor: Colors.transparent,
-                      elevation: 5,
-                      child: Container(
-                          decoration: BoxDecoration(color: _isSelected ? Colors.purple.shade50 : Colors.white),
-                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      abhiyaanSwayamsevak?.swayamsevak?.participantName ?? "",
-                                      style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600),
+                if ((abhiyaanKaryakartaList != null && abhiyaanKaryakartaList!.isNotEmpty) && _searchController.text.isNotEmpty)
+                  ...abhiyaanKaryakartaList!
+                      .map(
+                        (e) => InkWell(
+                          borderRadius: BorderRadius.circular(12),
+                          onTap: () => setState(() {
+                            if (e.isPresentInAsSewak) {
+                              Statics.showToast(Statics.getLabel("workInProgress"));
+                              return;
+                            }
+                            _selectedKaryakarta = e;
+                          }),
+                          child: Card(
+                            clipBehavior: Clip.antiAlias,
+                            margin: EdgeInsets.all(5),
+                            surfaceTintColor: Colors.transparent,
+                            elevation: 5,
+                            child: Container(
+                                decoration: BoxDecoration(color: _selectedKaryakarta == e ? Colors.purple.shade50 : Colors.white),
+                                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            e.participantName ?? "",
+                                            style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600),
+                                          ),
+                                        ),
+                                        if (_selectedKaryakarta == e)
+                                          Icon(
+                                            Icons.check_box_rounded,
+                                            color: Colors.purple,
+                                          )
+                                      ],
                                     ),
-                                  ),
-                                  if (_isSelected)
-                                    Icon(
-                                      Icons.check_box_rounded,
-                                      color: Colors.purple,
-                                    )
-                                ],
-                              ),
-                              SizedBox(height: 12),
-                              RichText(
-                                  text: TextSpan(
-                                text: 'M: ${abhiyaanSwayamsevak?.swayamsevak?.participantNumber}',
-                                style: TextStyle(color: Colors.blue),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    UrlLauncher.launch("tel://" + (abhiyaanSwayamsevak?.swayamsevak?.participantNumber ?? ''));
-                                  },
-                              ))
-                            ],
-                          )),
-                    ),
-                  ),
+                                    SizedBox(height: 12),
+                                    RichText(
+                                        text: TextSpan(
+                                      text: 'M: ${e.participantNumber}',
+                                      style: TextStyle(color: Colors.blue),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          UrlLauncher.launch("tel://" + (e.participantNumber ?? ''));
+                                        },
+                                    ))
+                                  ],
+                                )),
+                          ),
+                        ),
+                      )
+                      .toList(),
                 // if (_isSearching)
                 // Container(
                 //     height: MediaQuery.of(context).size.height * 0.2,
@@ -1115,7 +1126,7 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                 //   ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.03),
                 // if (selectedDayitvValue.isNotEmpty)
-                _isSelected
+                _selectedKaryakarta != null
                     ? MaterialButton(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                         padding: EdgeInsets.symmetric(
