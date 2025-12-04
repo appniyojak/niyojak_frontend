@@ -1,3 +1,5 @@
+import 'gruh_abhiyaan_vrutta_data_model.dart';
+
 class GetVijayadashamiInitModel {
   String? message;
   String? status;
@@ -6,6 +8,7 @@ class GetVijayadashamiInitModel {
   List<UpnagarmandallistVijayaDashami>? upnagarmandallist;
   List<UpnagarmandallistVijayaDashami>? vastimandallist;
   List<Vastisanyaprabhavi>? vastisanyaprabhavi;
+  List<AbhiyaanPeopleModel>? swayamsevaklistforgruh;
 
   GetVijayadashamiInitModel({
     this.message,
@@ -15,6 +18,7 @@ class GetVijayadashamiInitModel {
     this.upnagarmandallist,
     this.vastimandallist,
     this.vastisanyaprabhavi,
+    this.swayamsevaklistforgruh,
   });
 
   GetVijayadashamiInitModel.fromJson(Map<String, dynamic> json) {
@@ -50,6 +54,12 @@ class GetVijayadashamiInitModel {
         vastisanyaprabhavi!.add(new Vastisanyaprabhavi.fromJson(v));
       });
     }
+    if (json['swayamsevaklistforgruh'] != null) {
+      swayamsevaklistforgruh = <AbhiyaanPeopleModel>[];
+      json['swayamsevaklistforgruh'].forEach((v) {
+        swayamsevaklistforgruh!.add(new AbhiyaanPeopleModel.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -70,6 +80,9 @@ class GetVijayadashamiInitModel {
     }
     if (this.vastisanyaprabhavi != null) {
       data['Vastisanyaprabhavi'] = this.vastisanyaprabhavi!.map((v) => v.toJson()).toList();
+    }
+    if (this.swayamsevaklistforgruh != null) {
+      data['swayamsevaklistforgruh'] = this.swayamsevaklistforgruh!.map((v) => v.toJson()).toList();
     }
     return data;
   }
