@@ -301,6 +301,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
             selectedSajjanshaktiItems = data!.vastisarsajjanshakti!.where((e) => gruhAbhiyaanVruttaData!.abhiyaandata!.visititAtithiSajjanShaktiids!.split(",").contains(e.pkid.toString())).toList();
             selectedAnyaprabhaviItems =
                 data!.vastisanyaprabhavi!.where((e) => gruhAbhiyaanVruttaData!.abhiyaandata!.visititAtithiAnyaprabhaViLokamids!.split(",").contains(e.pkId.toString())).toList();
+            selectedVisitedSwayamsevak = data!.swayamsevaklistforgruh!.where((e) => gruhAbhiyaanVruttaData!.abhiyaandata!.swayamsevakIds!.split(",").contains(e.swayamsevakID.toString())).toList();
           });
         }
       }
@@ -364,6 +365,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
           // "SamparkhetuToliSankhya": int.tryParse(samparkaToliController.text.isNotEmpty ? samparkaToliController.text : "0"),
           "VisititAtithiSajjanShaktiIDs": selectedSajjanshaktiItems.map((e) => e.pkid).join(","), // comma-separated IDs
           "VisititAtithiAnyaPrabhaviLokamIDs": selectedAnyaprabhaviItems.map((e) => e.pkId).join(","), // comma-separated IDs
+          "swayamsevakIds": selectedVisitedSwayamsevak.map((e) => e.swayamsevakID).join(","), // comma-separated IDs
           "AppUserID": _isEditing
               ? createdUserId.toString()
               : Statics.abhiyaanUserDetails["isEmpty"]
@@ -1489,6 +1491,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
 
   /////////////////////////////////////////// Form 2 /////////////////////////////////////////////
   showGruhAbhiyaanForm2() {
+    final _swayamsevakListGruh = data?.swayamsevaklistforgruh ?? [];
     return showDialog(
       context: context,
       useSafeArea: true,
@@ -1562,39 +1565,38 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                           ),
                         ],
                       ),
-                      if (data!.swayamsevaklistforgruh != null)
-                        ...data!.swayamsevaklistforgruh!.map((item) {
-                          return TableRow(
-                            children: [
-                              Center(
-                                  child: Checkbox(
-                                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                value: selectedVisitedSwayamsevak.any((x) => x.swayamsevakID == item.swayamsevakID),
-                                onChanged: (val) {
-                                  set(() {
-                                    if (val == true) {
-                                      selectedVisitedSwayamsevak.add(item);
-                                    } else {
-                                      selectedVisitedSwayamsevak.removeWhere((x) => x.swayamsevakID == item.swayamsevakID);
-                                    }
-                                  });
-                                  final _selectedswayamsevakIds = selectedVisitedSwayamsevak.map((e) => e.swayamsevakID.toString()).join(",");
-                                  // String anyaIds = selectedAnyaprabhavi.map((e) => e.pkId.toString()).join(",");
-                                  log(_selectedswayamsevakIds.toString());
-                                  log("-----------------------------");
-                                  // log(anyaIds);
+                      ..._swayamsevakListGruh.map((item) {
+                        return TableRow(
+                          children: [
+                            Center(
+                                child: Checkbox(
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              value: selectedVisitedSwayamsevak.any((x) => x.swayamsevakID == item.swayamsevakID),
+                              onChanged: (val) {
+                                set(() {
+                                  if (val == true) {
+                                    selectedVisitedSwayamsevak.add(item);
+                                  } else {
+                                    selectedVisitedSwayamsevak.removeWhere((x) => x.swayamsevakID == item.swayamsevakID);
+                                  }
+                                });
+                                final _selectedswayamsevakIds = selectedVisitedSwayamsevak.map((e) => e.swayamsevakID.toString()).join(",");
+                                // String anyaIds = selectedAnyaprabhavi.map((e) => e.pkId.toString()).join(",");
+                                log(_selectedswayamsevakIds.toString());
+                                log("-----------------------------");
+                                // log(anyaIds);
 
-                                  // onSubmit(sajIds, anyaIds, selectedSajjanshakti, selectedAnyaprabhavi);
-                                  set(() {});
-                                },
-                              )),
-                              Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Text(item.fullName ?? "Unknown"),
-                              ),
-                            ],
-                          );
-                        }),
+                                // onSubmit(sajIds, anyaIds, selectedSajjanshakti, selectedAnyaprabhavi);
+                                set(() {});
+                              },
+                            )),
+                            Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Text(item.fullName ?? "Unknown"),
+                            ),
+                          ],
+                        );
+                      }),
                     ],
                   ),
                 ),
@@ -1620,11 +1622,11 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                           //   await saveGruhForPramukhFun();
                           //   return;
                           // }
-                          // if (dateController.text.isEmpty || samparkitGhareController.text.isEmpty || vitritKarpatrakController.text.isEmpty || pustakVikriController.text.isEmpty) {
-                          //   Statics.showToast(Statics.getLabel("impInfoRequired"));
-                          //   return null;
-                          // } else
-                          if (selectedVisitedSwayamsevak.isEmpty) {
+                          if (dateController.text.isEmpty || samparkitGhareController.text.isEmpty || vitritKarpatrakController.text.isEmpty || pustakVikriController.text.isEmpty) {
+                            Statics.showToast("अधि वृत्त जोडावे");
+                            // Statics.showToast(Statics.getLabel("impInfoRequired"));
+                            return null;
+                          } else if (selectedVisitedSwayamsevak.isEmpty) {
                             print("स्तराचे नाव निवडा");
                             Statics.showToast("किमान एक स्वयंसेवक जोडावे");
                             return null;
@@ -1675,7 +1677,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
     );
   }
 
-  /////////////////////////////////////////// Form 2 /////////////////////////////////////////////
+  /////////////////////////////////////////// Form 3 /////////////////////////////////////////////
   showEditableGruhAbhiyaanForm() {
     print("showEditableGruhAbhiyaanForm onTap >>>>>>>>>>>>>>> ");
     final _sarsajjanshaktiList = data?.vastisarsajjanshakti ?? [];
@@ -1918,10 +1920,10 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                                 if (dateController.text.isEmpty || samparkitGhareController.text.isEmpty || vitritKarpatrakController.text.isEmpty || pustakVikriController.text.isEmpty) {
                                   Statics.showToast(Statics.getLabel("impInfoRequired"));
                                   return null;
-                                } else if (selectedSajjanshaktiItems.isEmpty || selectedAnyaprabhaviItems.isEmpty) {
-                                  print("किमान एक विशेष व्यक्ती जोडावे");
-                                  Statics.showToast("किमान एक विशेष व्यक्ती जोडावे");
-                                  return null;
+                                  // } else if (selectedSajjanshaktiItems.isEmpty || selectedAnyaprabhaviItems.isEmpty) {
+                                  //   print("किमान एक विशेष व्यक्ती जोडावे");
+                                  //   Statics.showToast("किमान एक विशेष व्यक्ती जोडावे");
+                                  //   return null;
                                 } else {
                                   print("saving data");
                                   await saveGruhAbhiyaanDataFun();
@@ -2954,6 +2956,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                                             // setState(() {
                                             selectedSajjanshaktiItems = data!.vastisarsajjanshakti!.where((e) => item.visititAtithiSajjanShaktiids!.split(",").contains(e.pkid.toString())).toList();
                                             selectedAnyaprabhaviItems = data!.vastisanyaprabhavi!.where((e) => item.visititAtithiAnyaprabhaViLokamids!.split(",").contains(e.pkId.toString())).toList();
+                                            selectedVisitedSwayamsevak = data!.swayamsevaklistforgruh!.where((e) => item.swayamsevakIds!.split(",").contains(e.swayamsevakID.toString())).toList();
                                             // });
                                           }
                                           // _scrollController.animateTo(
@@ -3112,6 +3115,9 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                                                                 data!.vastisarsajjanshakti!.where((e) => item.visititAtithiSajjanShaktiids!.split(",").contains(e.pkid.toString())).toList();
                                                             selectedAnyaprabhaviItems =
                                                                 data!.vastisanyaprabhavi!.where((e) => item.visititAtithiAnyaprabhaViLokamids!.split(",").contains(e.pkId.toString())).toList();
+                                                            selectedVisitedSwayamsevak =
+                                                                data!.swayamsevaklistforgruh!.where((e) => item.swayamsevakIds!.split(",").contains(e.swayamsevakID.toString())).toList();
+
                                                             // });
                                                           }
                                                         }));
@@ -3443,6 +3449,8 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                                                                 data!.vastisarsajjanshakti!.where((e) => item.visititAtithiSajjanShaktiids!.split(",").contains(e.pkid.toString())).toList();
                                                             selectedAnyaprabhaviItems =
                                                                 data!.vastisanyaprabhavi!.where((e) => item.visititAtithiAnyaprabhaViLokamids!.split(",").contains(e.pkId.toString())).toList();
+                                                            selectedVisitedSwayamsevak =
+                                                                data!.swayamsevaklistforgruh!.where((e) => item.swayamsevakIds!.split(",").contains(e.swayamsevakID.toString())).toList();
                                                             // });
                                                           }
                                                         });
@@ -3716,14 +3724,14 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                                                     item.parentMandalID,
                                                   );
                                                 }
-                                                if ((item.visititAtithiSajjanShaktiids != null && item.visititAtithiSajjanShaktiids!.isNotEmpty) ||
-                                                    (item.visititAtithiAnyaprabhaViLokamids != null && item.visititAtithiAnyaprabhaViLokamids!.isNotEmpty)) {
-                                                  data = await Statics.getSajjanAndAnyaGuestData(
-                                                      context,
-                                                      Statics.userDetails["userID"],
-                                                      _linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? _linkedvastiValue! : _linkedgraamValue!,
-                                                      _linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? "2" : "3");
-                                                }
+                                                // if ((item.visititAtithiSajjanShaktiids != null && item.visititAtithiSajjanShaktiids!.isNotEmpty) ||
+                                                //     (item.visititAtithiAnyaprabhaViLokamids != null && item.visititAtithiAnyaprabhaViLokamids!.isNotEmpty)) {
+                                                data = await Statics.getSajjanAndAnyaGuestData(
+                                                    context,
+                                                    Statics.userDetails["userID"],
+                                                    _linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? _linkedvastiValue! : _linkedgraamValue!,
+                                                    _linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? "2" : "3");
+                                                // }
                                                 setState(() {
                                                   _isExpanded = false;
                                                   _selctedLevelNameList.add(_linkedbhaagName);
@@ -3740,6 +3748,8 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                                                         data!.vastisarsajjanshakti!.where((e) => item.visititAtithiSajjanShaktiids!.split(",").contains(e.pkid.toString())).toList();
                                                     selectedAnyaprabhaviItems =
                                                         data!.vastisanyaprabhavi!.where((e) => item.visititAtithiAnyaprabhaViLokamids!.split(",").contains(e.pkId.toString())).toList();
+                                                    selectedVisitedSwayamsevak =
+                                                        data!.swayamsevaklistforgruh!.where((e) => item.swayamsevakIds!.split(",").contains(e.swayamsevakID.toString())).toList();
                                                     // });
                                                   }
                                                 });
@@ -4417,7 +4427,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                             ),
                             onPressed: () async {
                               set(() {});
-                              if (selectedSajjanshaktiItems.isEmpty || selectedAnyaprabhaviItems.isEmpty) {
+                              if (selectedSajjanshaktiItems.isEmpty && selectedAnyaprabhaviItems.isEmpty) {
                                 print("किमान एक विशेष व्यक्ती जोडावे");
                                 Statics.showToast("किमान एक विशेष व्यक्ती जोडावे");
                                 return null;

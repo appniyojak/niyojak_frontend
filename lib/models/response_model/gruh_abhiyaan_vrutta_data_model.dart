@@ -121,6 +121,7 @@ class Abhiyaandata {
   int? samparkitghar;
   String? visititAtithiAnyaprabhaViLokamids;
   String? visititAtithiSajjanShaktiids;
+  String? swayamsevakIds;
   int? vitaritkarpatra;
 
   Abhiyaandata(
@@ -132,6 +133,7 @@ class Abhiyaandata {
       this.samparkitghar,
       this.visititAtithiAnyaprabhaViLokamids,
       this.visititAtithiSajjanShaktiids,
+      this.swayamsevakIds,
       this.vitaritkarpatra});
 
   Abhiyaandata.fromJson(Map<String, dynamic> json) {
@@ -143,6 +145,7 @@ class Abhiyaandata {
     samparkitghar = json['samparkitghar'];
     visititAtithiAnyaprabhaViLokamids = json['visitit_atithi_anyaprabha_vi_lokamids'];
     visititAtithiSajjanShaktiids = json['visitit_atithi_sajjan_shaktiids'];
+    swayamsevakIds = json['swayamsevakIds'];
     vitaritkarpatra = json['vitaritkarpatra'];
   }
 
@@ -156,6 +159,7 @@ class Abhiyaandata {
     data['samparkitghar'] = this.samparkitghar;
     data['visitit_atithi_anyaprabha_vi_lokamids'] = this.visititAtithiAnyaprabhaViLokamids;
     data['visitit_atithi_sajjan_shaktiids'] = this.visititAtithiSajjanShaktiids;
+    data['swayamsevakIds'] = this.swayamsevakIds;
     data['vitaritkarpatra'] = this.vitaritkarpatra;
     return data;
   }
@@ -178,6 +182,7 @@ class PreviousDay {
   int? samparkitghar;
   String? visititAtithiAnyaprabhaViLokamids;
   String? visititAtithiSajjanShaktiids;
+  String? swayamsevakIds;
   int? vitaritkarpatra;
   int? samparkhetusahbhagisankhya;
   int? samparkhetutolisankhya;
@@ -199,6 +204,7 @@ class PreviousDay {
     this.samparkitghar,
     this.visititAtithiAnyaprabhaViLokamids,
     this.visititAtithiSajjanShaktiids,
+    this.swayamsevakIds,
     this.vitaritkarpatra,
     this.samparkhetusahbhagisankhya,
     this.samparkhetutolisankhya,
@@ -221,6 +227,7 @@ class PreviousDay {
     samparkitghar = json['samparkitghar'];
     visititAtithiAnyaprabhaViLokamids = json['visitit_atithi_anyaprabha_vi_lokamids'];
     visititAtithiSajjanShaktiids = json['visitit_atithi_sajjan_shaktiids'];
+    swayamsevakIds = json['swayamsevakIds'];
     vitaritkarpatra = json['vitaritkarpatra'];
     samparkhetusahbhagisankhya = json['samparkhetusahbhagisankhya'];
     samparkhetutolisankhya = json['samparkhetutolisankhya'];
@@ -244,6 +251,7 @@ class PreviousDay {
     data['samparkitghar'] = this.samparkitghar;
     data['visitit_atithi_anyaprabha_vi_lokamids'] = this.visititAtithiAnyaprabhaViLokamids;
     data['visitit_atithi_sajjan_shaktiids'] = this.visititAtithiSajjanShaktiids;
+    data['swayamsevakIds'] = this.swayamsevakIds;
     data['vitaritkarpatra'] = this.vitaritkarpatra;
     data['samparkhetusahbhagisankhya'] = this.samparkhetusahbhagisankhya;
     data['samparkhetutolisankhya'] = this.samparkhetutolisankhya;
