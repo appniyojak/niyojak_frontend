@@ -125,70 +125,74 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
             "${Statics.getLabel('gruhSamparkAbhiyan')} (${Statics.getLabel('shatabdiVarsha')})",
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
           ),
-          bottom: (Statics.abhiyaanUserDetails["isEmpty"] && int.parse(Statics.userDetails["LevelID"].toString()) < 6)
-              ? null
-              : new TabBar(
-                  controller: _tabController,
-                  indicatorColor: Colors.white,
-                  onTap: (v) {
-                    _levelValue = "";
-                    _geoUnitsValue = "";
-                    setState(() {});
-                    Future.delayed(Duration(milliseconds: 800), () {
-                      setState(() {});
-                    });
-                  },
-                  physics: NeverScrollableScrollPhysics(),
-                  tabs: <Widget>[
-                    Tab(
-                      child: Row(
-                        spacing: 16,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            FontAwesomeIcons.fileArrowUp,
-                            size: 18,
-                          ),
-                          Text(
-                            "${Statics.getLabel('addGruhaSampark')}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 15),
-                          ),
-                        ],
-                      ),
+          bottom:
+              // (Statics.abhiyaanUserDetails["isEmpty"] && int.parse(Statics.userDetails["LevelID"].toString()) < 6)
+              //     ? null
+              //     : new
+              TabBar(
+            controller: _tabController,
+            indicatorColor: Colors.white,
+            onTap: (v) {
+              _levelValue = "";
+              _geoUnitsValue = "";
+              setState(() {});
+              Future.delayed(Duration(milliseconds: 800), () {
+                setState(() {});
+              });
+            },
+            physics: NeverScrollableScrollPhysics(),
+            tabs: <Widget>[
+              Tab(
+                child: Row(
+                  spacing: 16,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      FontAwesomeIcons.fileArrowUp,
+                      size: 18,
                     ),
-                    Tab(
-                      child: Row(
-                        spacing: 16,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.people),
-                          Text(
-                            "${Statics.getLabel('Reportonly')}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 15),
-                          ),
-                        ],
-                      ),
+                    Text(
+                      "${Statics.getLabel('addGruhaSampark')}",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 15),
                     ),
                   ],
                 ),
+              ),
+              Tab(
+                child: Row(
+                  spacing: 16,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.people),
+                    Text(
+                      "${Statics.getLabel('Reportonly')}",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
         drawer: (Statics.userDetails['userID'].toString().isEmpty || Statics.userDetails['userID'] == "0") ? AppAbhiyanDrawer() : AppDrawer(),
         body: ModalProgressHUD(
           inAsyncCall: _isSearching,
-          child: (Statics.abhiyaanUserDetails["isEmpty"] && int.parse(Statics.userDetails["LevelID"].toString()) < 6)
-              ? GruhSamparkaReportTab(
-                  initialData: initialData,
-                )
-              : TabBarView(
-                  controller: _tabController,
-                  physics: NeverScrollableScrollPhysics(),
-                  children: <Widget>[
-                    GruhVruttaTab(initialData: initialData),
-                    GruhSamparkaReportTab(initialData: initialData),
-                  ],
-                ),
+          child:
+              // (Statics.abhiyaanUserDetails["isEmpty"] && int.parse(Statics.userDetails["LevelID"].toString()) < 6)
+              //     ? GruhSamparkaReportTab(
+              //         initialData: initialData,
+              //       )
+              //     :
+              TabBarView(
+            controller: _tabController,
+            physics: NeverScrollableScrollPhysics(),
+            children: <Widget>[
+              GruhVruttaTab(initialData: initialData),
+              GruhSamparkaReportTab(initialData: initialData),
+            ],
+          ),
         ),
       ),
     );

@@ -1688,7 +1688,9 @@ Map<String, String> resEnglish = {
   "abhiyaanStatus": "Abhiyaan Status",
   "dayWiseAbhiyaan": "Abhiyaan Vrutta (Datewise)",
   "levelWiseAbhiyaan": "Abhiyaan Vrutta (Bhaag/Jilha/Nagar)",
-  "previousDaysData": "Previous Dates Data",
+  "previousDaysData": "Other Dates Data",
+  'AddNewSwayamsevak': 'Add New Swayamsevak',
+  'fillVrutta': 'Fill Vrutta',
 };
 
 ///1,584
@@ -3381,7 +3383,9 @@ Map<String, String> resMarathi = {
   "abhiyaanStatus": "अभियान स्थिती",
   "dayWiseAbhiyaan": "अभियान वृत्त (दिनश:)",
   "levelWiseAbhiyaan": "अभियान वृत्त (भाग/जिल्हा/नगर)",
-  "previousDaysData": "इतर तारखांचा डेटा",
+  "previousDaysData": "अन्य दिवसांचा डेटा",
+  'AddNewSwayamsevak': 'नवीन स्वयंसेवक जोडा',
+  'fillVrutta': 'वृत्त भरा',
 };
 
 ///1,583
@@ -5074,4 +5078,6 @@ Map<String, String> resHindi = {
   "dayWiseAbhiyaan": "अभियान वृत्त (दिनश:)",
   "levelWiseAbhiyaan": "अभियान वृत्त (भाग/जिला/नगर)",
   "previousDaysData": "अन्य तिथियों का डेटा",
+  'AddNewSwayamsevak': 'नया स्वयंसेवक जोड़ें',
+  'fillVrutta': 'वृत्त भरें',
 };

@@ -2928,7 +2928,7 @@ Future<GruhAbhiyaanVruttaDataModel?> getDataforGruhAbhiyaan(Map<String, dynamic>
   }
 }
 
-Future<List<PreviousDay>?> getPreviousDataforGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
+Future<GruhAbhiyaanVruttaDataModel?> getPreviousDataforGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   if (context != null) showLoaderDialog(context);
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
   log(urlGetAllAbhiyaanVruttaData);
@@ -2943,9 +2943,9 @@ Future<List<PreviousDay>?> getPreviousDataforGruhAbhiyaan(Map<String, dynamic> i
 
       if (data["Status"] == "200" || data["Status"] == "Success") {
         GruhAbhiyaanVruttaDataModel model = GruhAbhiyaanVruttaDataModel.fromJson(data);
-        log("getDataforGruhAbhiyaan >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+        log("getPreviousDataforGruhAbhiyaan >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
 
-        return model.previousDay; // ✅ return karna zaroori hai
+        return model; // ✅ return karna zaroori hai
       }
       return null; // ✅ error case
     } else {
@@ -3047,9 +3047,9 @@ Future<AbhiyanSwayamsevakdata?> saveDataforGruhAbhiyaan(Map<String, dynamic> inp
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
+      log("saveDataforGruhAbhiyaan >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
       if (data["Status"] == "200" || data["Status"] == "Success") {
         AbhiyanSwayamsevakResponse model = AbhiyanSwayamsevakResponse.fromJson(data);
-        log("saveDataforGruhAbhiyaan >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
 
         return model.abhiyanSwayamsevakData?.first; // ✅ return karna zaroori hai
       }
