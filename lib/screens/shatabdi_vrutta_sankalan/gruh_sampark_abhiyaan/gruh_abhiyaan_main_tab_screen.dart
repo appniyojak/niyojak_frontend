@@ -74,7 +74,7 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
     print("initState");
     getInitialData();
     _tabController = new TabController(length: 2, vsync: this);
-    // WidgetsBinding.instance.addPostFrameCallback((t) => getInitialData());
+    WidgetsBinding.instance.addPostFrameCallback((t) => setDropDownData());
     super.initState();
   }
 
@@ -96,17 +96,19 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
     log("Print >>>> ${Statics.abhiyaanUserDetails["isEmpty"]}");
     if (!Statics.abhiyaanUserDetails["isEmpty"]) {
       await getAbhiyaanGeoUnitsFun();
+      // await getInitialData();
     }
   }
 
   getAbhiyaanGeoUnitsFun() async {
-    print("calling");
+    print("calling getAbhiyaanGeoUnitsFun");
     bool isConnected = await Statics.isInternetConnected();
     if (isConnected) {
       var inputData = {
-        "SwayamsevakID": Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"],
+        "SwayamsevakID": Statics.userDetails["SwayamsevakID"],
+        "isswayamsevak": 1,
       };
-      print(jsonEncode(inputData));
+      log(jsonEncode(inputData));
       await Statics.getAbhiyaanGeoUnitMasterData(inputData, context: context);
       setState(() {});
     }

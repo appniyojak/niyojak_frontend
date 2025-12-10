@@ -53,11 +53,23 @@ class Table1List {
   int? levelid;
   int? totalAtithiCount;
   int? attcount;
+  int? samparkhetusahbhagisankhya;
+  int? samparkhetutolisankhya;
   int? pustakvikrisankhya;
   int? samparkitghar;
   int? vitaritkarpatra;
 
-  Table1List({this.abhiyaanDate, this.levelName, this.levelid, this.totalAtithiCount, this.attcount, this.pustakvikrisankhya, this.samparkitghar, this.vitaritkarpatra});
+  Table1List(
+      {this.abhiyaanDate,
+      this.levelName,
+      this.levelid,
+      this.totalAtithiCount,
+      this.attcount,
+      this.samparkhetusahbhagisankhya,
+      this.samparkhetutolisankhya,
+      this.pustakvikrisankhya,
+      this.samparkitghar,
+      this.vitaritkarpatra});
 
   Table1List.fromJson(Map<String, dynamic> json) {
     abhiyaanDate = json['AbhiyaanDate'];
@@ -65,6 +77,8 @@ class Table1List {
     levelid = json['Levelid'];
     totalAtithiCount = json['TotalAtithiCount'];
     attcount = json['attcount'];
+    samparkhetusahbhagisankhya = json['samparkhetusahbhagisankhya'];
+    samparkhetutolisankhya = json['samparkhetutolisankhya'];
     pustakvikrisankhya = json['pustakvikrisankhya'];
     samparkitghar = json['samparkitghar'];
     vitaritkarpatra = json['vitaritkarpatra'];
@@ -77,6 +91,8 @@ class Table1List {
     data['Levelid'] = this.levelid;
     data['TotalAtithiCount'] = this.totalAtithiCount;
     data['attcount'] = this.attcount;
+    data['samparkhetusahbhagisankhya'] = this.samparkhetusahbhagisankhya;
+    data['samparkhetutolisankhya'] = this.samparkhetutolisankhya;
     data['pustakvikrisankhya'] = this.pustakvikrisankhya;
     data['samparkitghar'] = this.samparkitghar;
     data['vitaritkarpatra'] = this.vitaritkarpatra;
