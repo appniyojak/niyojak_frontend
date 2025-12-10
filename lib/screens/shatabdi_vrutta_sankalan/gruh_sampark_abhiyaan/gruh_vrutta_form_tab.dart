@@ -44,6 +44,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
 
   GruhAbhiyaanVruttaDataModel? gruhAbhiyaanVruttaData;
   List<AbhiyaanPeopleModel> abhiyaanSwayamsevakDataList = [];
+  List<AbhiyaanPeopleModel> filteredAbhiyaanSwayamsevakDataList = [];
   List<AbhiyaanPeopleModel> abhiyaanKaryakartaDataList = [];
 
   // List<AbhiyaanPeopleModel> selectedKaryakartaList = [];
@@ -65,6 +66,8 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
   TextEditingController pustakVikriController = TextEditingController();
   TextEditingController samparkaSahabhagiController = TextEditingController();
   TextEditingController samparkaToliController = TextEditingController();
+
+  TextEditingController _searchController = TextEditingController();
 
   List<String> strEmail = [];
   List<String> strMobile = [];
@@ -176,6 +179,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
   void didUpdateWidget(covariant GruhVruttaTab oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.initialData != oldWidget.initialData && widget.initialData != null) {
+      log("didUpdateWidget runnn >>>>>>>>>>>>>> ");
       setDropDowns();
     }
   }
@@ -249,6 +253,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
           samparkaToliController.text = (gruhAbhiyaanVruttaData?.abhiyaandata?.samparkhetutolisankhya ?? "").toString();
         });
         abhiyaanSwayamsevakDataList = gruhAbhiyaanVruttaData?.swayamsevakList ?? [];
+        filteredAbhiyaanSwayamsevakDataList = gruhAbhiyaanVruttaData?.swayamsevakList ?? [];
         abhiyaanKaryakartaDataList = gruhAbhiyaanVruttaData?.abhiyaanList ?? [];
         gruhAbhiyaanToliList = gruhAbhiyaanVruttaData?.abhiyanGruhToliList ?? [];
         pramukhList = gruhAbhiyaanVruttaData?.pramukhList ?? [];
@@ -288,6 +293,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
           final _gruhAbhiyaanToliList = _updatedToliList.abhiyanGruhToliList;
           if (_swayamsevakList != null && _swayamsevakList.isNotEmpty) {
             abhiyaanSwayamsevakDataList = _swayamsevakList;
+            filteredAbhiyaanSwayamsevakDataList = _swayamsevakList;
           }
           if (_abhiyaanList != null && _abhiyaanList.isNotEmpty) {
             abhiyaanKaryakartaDataList = _abhiyaanList;
@@ -322,8 +328,6 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
           "PustakVikriSankhya": int.tryParse(pustakVikriController.text.isNotEmpty ? pustakVikriController.text : "0"),
           "SamparkhetuSahbhagiSankhya": int.tryParse(samparkaSahabhagiController.text.isNotEmpty ? samparkaSahabhagiController.text : "0"),
           "SamparkhetuToliSankhya": int.tryParse(samparkaToliController.text.isNotEmpty ? samparkaToliController.text : "0"),
-          "VisititAtithiSajjanShaktiIDs": selectedSajjanshaktiItems.map((e) => e.pkid).join(","), // comma-separated IDs
-          "VisititAtithiAnyaPrabhaviLokamIDs": selectedAnyaprabhaviItems.map((e) => e.pkId).join(","), // comma-separated IDs
           "swayamsevakIds": selectedVisitedSwayamsevak.map((e) => e.swayamsevakID).join(","), // comma-separated IDs
           "AppUserID": _isEditing
               ? createdUserId.toString()
@@ -332,7 +336,6 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                   : Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"],
           "ispramukh": 0, // ? 1 : 0,
           "isswayamsevak": Statics.abhiyaanUserDetails["isEmpty"] ? 1 : 0,
-          // "AbhiyanSwayamsevakIDs": _selectedTolisIds.map((item) => item.swayamsevakID.toString()).join(','), // comma-separated IDs
         };
 
         log(jsonEncode(_data));
@@ -352,6 +355,51 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
             // }
           }
 
+          setState(() {
+            _isEditing = false;
+            _isEditingForPramukh = false;
+            // dateController.text = DateFormat("dd/MM/yyyy").format(DateTime.now());
+            samparkitGhareController.clear();
+            vitritKarpatrakController.clear();
+            pustakVikriController.clear();
+            createdUserId = null;
+            selectedSajjanshaktiItems = [];
+          });
+          await _getSwList();
+          // await Future.wait(<Future>[_getSwList(), _getPreviousDayDataList()]);
+          print("succeed");
+        } else {
+          Statics.showToast(Statics.getLabel('unableToSaveData'));
+        }
+      }
+    } catch (e) {
+      Statics.showToast(Statics.getLabel('unableToSaveData'));
+      log(e.toString());
+    }
+  }
+
+  saveVisheshVyaktiFun() async {
+    try {
+      bool isConnected = await Statics.isInternetConnected();
+      if (isConnected) {
+        var _data = {
+          "AbhiyaanDate": DateFormat("dd-MM-yyyy").format(DateFormat("dd/MM/yyyy").parse(dateController.text)).toString(), // e.g. "22-10-2025"
+          "GeoUnitID": int.parse(_selectedGeoUnitId!),
+          "VisititAtithiSajjanShaktiIDs": selectedSajjanshaktiItems.map((e) => e.pkid).join(","), // comma-separated IDs
+          "VisititAtithiAnyaPrabhaviLokamIDs": selectedAnyaprabhaviItems.map((e) => e.pkId).join(","), // comma-separated IDs
+          "AppUserID": _isEditing
+              ? createdUserId.toString()
+              : Statics.abhiyaanUserDetails["isEmpty"]
+                  ? Statics.userDetails["userID"]
+                  : Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"],
+          "ispramukh": 0, // ? 1 : 0,
+          "isswayamsevak": Statics.abhiyaanUserDetails["isEmpty"] ? 1 : 0,
+        };
+
+        log(jsonEncode(_data));
+
+        var result = await Statics.saveVisheshVyaktiDataforGruhAbhiyaan(_data, context: context);
+        if (result != null && result) {
           setState(() {
             _isEditing = false;
             _isEditingForPramukh = false;
@@ -843,82 +891,135 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
               border: Border.all(color: Colors.black54),
               borderRadius: const BorderRadius.all(Radius.circular(15)),
             ),
-            child: Scrollbar(
-              controller: _scrollController22,
-              thumbVisibility: true,
-              interactive: true,
-              thickness: 5,
-              radius: const Radius.circular(10),
-              child: SingleChildScrollView(
-                controller: _scrollController22,
-                scrollDirection: Axis.vertical,
-                child: Scrollbar(
-                  controller: _scrollController2,
-                  thumbVisibility: true,
-                  interactive: true,
-                  thickness: 5,
-                  radius: const Radius.circular(10),
-                  child: SingleChildScrollView(
-                    controller: _scrollController2, // Horizontal controller for horizontal scrolling
-                    scrollDirection: Axis.horizontal,
-                    child: DataTable(
-                      showCheckboxColumn: false,
-                      headingRowColor: MaterialStatePropertyAll(Colors.purple.shade100),
-                      columnSpacing: 30,
-                      headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
-                      columns: headers
-                          .map((header) => DataColumn(
-                                label: Container(
-                                  constraints: BoxConstraints(minWidth: 30, maxWidth: header == headers.first ? 80 : 200),
-                                  // constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.2),
-                                  child: Text(header, softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold)),
-                                ),
-                              ))
-                          .toList(),
-                      rows: abhiyaanSwayamsevakDataList.asMap().entries.map((entry) {
-                        int index = entry.key;
-                        var data = entry.value;
-                        bool isSelected = ((data.isdefault == 1) || _selectedSwayamsevakIds.contains(data));
-                        return DataRow(
-                            selected: isSelected,
-                            color: MaterialStateProperty.resolveWith<Color?>(
-                              (Set<MaterialState> states) {
-                                if (isSelected) return Colors.yellow.shade100;
-                                return null;
-                              },
-                            ),
-                            onSelectChanged: (bool? selected) {
-                              if ((data.isdefault == 1)) {
-                                return;
-                              }
-                              if (!isSelected) {
-                                set(() {
-                                  // selectedKaryakartaList.add(data);
-                                  _selectedSwayamsevakIds.add(data);
-                                });
-                              } else {
-                                set(() {
-                                  // selectedKaryakartaList.add(data);
-                                  _selectedSwayamsevakIds.remove(data);
-                                });
-                              }
-                              log(_selectedSwayamsevakIds
-                                  .map(
-                                    (e) => e.swayamsevakID.toString(),
-                                  )
-                                  .join(','));
-                            },
-                            cells: [
-                              DataCell(Icon(isSelected ? Icons.check_box_rounded : Icons.check_box_outline_blank_rounded, color: Colors.yellow.shade800, size: 18)),
-                              DataCell(Text(data.fullName == "" ? "--" : (data.fullName ?? "--"))),
-                              DataCell(Text(data.daayitva == "" ? "--" : (data.daayitva ?? "--"))),
-                              DataCell(Text(data.mobileno == "" ? "--" : (data.mobileno ?? "--"))),
-                            ]);
-                      }).toList(),
+            child: Column(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(right: 8, left: 8, bottom: 8),
+                  child: TextField(
+                    controller: _searchController,
+                    style: TextStyle(fontSize: 16),
+                    autofocus: false,
+                    onChanged: (v) {
+                      if (v.isEmpty) {
+                        filteredAbhiyaanSwayamsevakDataList = abhiyaanSwayamsevakDataList;
+                      } else {
+                        filteredAbhiyaanSwayamsevakDataList = abhiyaanSwayamsevakDataList
+                            .where(
+                              (e) => e.fullName.toString().toLowerCase().contains(v.toLowerCase()) || e.mobileno.toString().contains(v),
+                            )
+                            .toList();
+                      }
+                      set(() {});
+                    },
+                    // inputFormatters: [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.digitsOnly],
+                    // keyboardType: TextInputType.phone,
+                    decoration: InputDecoration(
+                      isDense: true,
+                      prefixIcon: Icon(Icons.search),
+                      hintText: "नाव किंवा नंबरने शोधा",
+                      contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                      // suffixIcon: InkWell(
+                      //   onTap: () async {
+                      //     FocusScope.of(context).unfocus();
+                      //     if (_searchController.text.length < 10) {
+                      //       Statics.showToast(Statics.getLabel('MobileValidationMessage'));
+                      //       return null;
+                      //     }
+                      //     await _search("Search");
+                      //     setState(() {});
+                      //   },
+                      //   borderRadius: BorderRadius.circular(30),
+                      //   child: Icon(
+                      //     Icons.search,
+                      //     size: 25,
+                      //   ),
+                      // ),
+                      border: OutlineInputBorder(borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                      enabledBorder: OutlineInputBorder(borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
+                      focusedBorder: OutlineInputBorder(borderSide: BorderSide(width: 0.7, color: Colors.grey.shade700), borderRadius: BorderRadius.circular(5)),
                     ),
                   ),
                 ),
-              ),
+                Flexible(
+                  child: Scrollbar(
+                    controller: _scrollController22,
+                    thumbVisibility: true,
+                    interactive: true,
+                    thickness: 5,
+                    radius: const Radius.circular(10),
+                    child: SingleChildScrollView(
+                      controller: _scrollController22,
+                      scrollDirection: Axis.vertical,
+                      child: Scrollbar(
+                        controller: _scrollController2,
+                        thumbVisibility: true,
+                        interactive: true,
+                        thickness: 5,
+                        radius: const Radius.circular(10),
+                        child: SingleChildScrollView(
+                          controller: _scrollController2, // Horizontal controller for horizontal scrolling
+                          scrollDirection: Axis.horizontal,
+                          child: DataTable(
+                            showCheckboxColumn: false,
+                            headingRowColor: MaterialStatePropertyAll(Colors.purple.shade100),
+                            columnSpacing: 30,
+                            headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
+                            columns: headers
+                                .map((header) => DataColumn(
+                                      label: Container(
+                                        constraints: BoxConstraints(minWidth: 30, maxWidth: header == headers.first ? 80 : 200),
+                                        // constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.2),
+                                        child: Text(header, softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold)),
+                                      ),
+                                    ))
+                                .toList(),
+                            rows: filteredAbhiyaanSwayamsevakDataList.asMap().entries.map((entry) {
+                              int index = entry.key;
+                              var data = entry.value;
+                              bool isSelected = ((data.isdefault == 1) || _selectedSwayamsevakIds.contains(data));
+                              return DataRow(
+                                  selected: isSelected,
+                                  color: MaterialStateProperty.resolveWith<Color?>(
+                                    (Set<MaterialState> states) {
+                                      if (isSelected) return Colors.yellow.shade100;
+                                      return null;
+                                    },
+                                  ),
+                                  onSelectChanged: (bool? selected) {
+                                    if ((data.isdefault == 1)) {
+                                      return;
+                                    }
+                                    if (!isSelected) {
+                                      set(() {
+                                        // selectedKaryakartaList.add(data);
+                                        _selectedSwayamsevakIds.add(data);
+                                      });
+                                    } else {
+                                      set(() {
+                                        // selectedKaryakartaList.add(data);
+                                        _selectedSwayamsevakIds.remove(data);
+                                      });
+                                    }
+                                    log(_selectedSwayamsevakIds
+                                        .map(
+                                          (e) => e.swayamsevakID.toString(),
+                                        )
+                                        .join(','));
+                                  },
+                                  cells: [
+                                    DataCell(Icon(isSelected ? Icons.check_box_rounded : Icons.check_box_outline_blank_rounded, color: Colors.yellow.shade800, size: 18)),
+                                    DataCell(Text(data.fullName == "" ? "--" : (data.fullName ?? "--"))),
+                                    DataCell(Text(data.daayitva == "" ? "--" : (data.daayitva ?? "--"))),
+                                    DataCell(Text(data.mobileno == "" ? "--" : (data.mobileno ?? "--"))),
+                                  ]);
+                            }).toList(),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           SizedBox(height: 18),
@@ -1831,11 +1932,13 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                             border: Border.all(color: Colors.purpleAccent.shade100),
                             borderRadius: BorderRadius.circular(15),
                           ),
-                          child: Text(
-                            "${Statics.getLabel('fillVrutta')}",
-                            style: TextStyle(
-                              color: Colors.purpleAccent,
-                              fontWeight: FontWeight.bold,
+                          child: Center(
+                            child: Text(
+                              "${Statics.getLabel('fillVrutta')}",
+                              style: TextStyle(
+                                color: Colors.purpleAccent,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
@@ -1860,11 +1963,13 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                             border: Border.all(color: Colors.purpleAccent.shade100),
                             borderRadius: BorderRadius.circular(15),
                           ),
-                          child: Text(
-                            "${Statics.getLabel('AddNewSwayamsevak')}",
-                            style: TextStyle(
-                              color: Colors.purpleAccent,
-                              fontWeight: FontWeight.bold,
+                          child: Center(
+                            child: Text(
+                              "${Statics.getLabel('AddNewSwayamsevak')}",
+                              style: TextStyle(
+                                color: Colors.purpleAccent,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
@@ -1883,7 +1988,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                           await showVisheshAtithiSelectionPopup(
                             context,
                             onAdd: () async {
-                              await saveGruhAbhiyaanDataFun();
+                              await saveVisheshVyaktiFun();
                               Navigator.of(context).pushReplacementNamed(
                                 AddVishisthaAtithi.routeName,
                                 arguments: {'geoUnitId': _selectedGeoUnitId},
@@ -1911,11 +2016,13 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                             border: Border.all(color: Colors.purpleAccent.shade100),
                             borderRadius: BorderRadius.circular(15),
                           ),
-                          child: Text(
-                            "${Statics.getLabel('addSpecialPerson')}",
-                            style: TextStyle(
-                              color: Colors.purpleAccent,
-                              fontWeight: FontWeight.bold,
+                          child: Center(
+                            child: Text(
+                              "${Statics.getLabel('addSpecialPerson')}",
+                              style: TextStyle(
+                                color: Colors.purpleAccent,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
@@ -2907,7 +3014,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                                         Statics.showToast("किमान एक विशेष व्यक्ती जोडावे");
                                         return null;
                                       }
-                                      await saveGruhAbhiyaanDataFun();
+                                      await saveVisheshVyaktiFun();
                                       Navigator.pop(ctx);
                                       setState(() {});
                                     },

@@ -214,6 +214,7 @@ const String getReportforGruhAbhiyaanApi = baseUrlAPI + '/gruhsamparkareport';
 const String getAbhiyaanGeoUnitListApi = baseUrlAPI + '/getgeounitdataforabhiyaangruh';
 const String addToToliListApi = baseUrlAPI + '/addtotoli';
 const String saveDataforGruhAbhiyaanApi = baseUrlAPI + '/SaveDataforGruhAbhiyaan';
+const String addvisheshgruhApi = baseUrlAPI + '/addvisheshgruh';
 const String saveDataforPramukhGruhAbhiyaanApi = baseUrlAPI + '/updatedataforgruhabhiyaanaspramukh';
 const String getDataWhileAddUpdateUPLevelForGruh = baseUrlAPI + '/GetDataWhileAddUpdateUPLevelForGruh';
 const String urlCheckExistsAbhiyaanKaryakarta = baseUrlAPI + '/checkexistsabhiyaankaryakarta';
@@ -3054,6 +3055,34 @@ Future<AbhiyanSwayamsevakdata?> saveDataforGruhAbhiyaan(Map<String, dynamic> inp
         return model.abhiyanSwayamsevakData?.first; // ✅ return karna zaroori hai
       }
       return null; // ✅ error case
+    } else {
+      log("Error: ${response.statusCode} - ${response.body}");
+      return null; // ✅ error case
+    }
+  } catch (e) {
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+    log("Exception: $e");
+    return null;
+  }
+}
+
+Future<bool?> saveVisheshVyaktiDataforGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
+  if (context != null) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+  log(addvisheshgruhApi);
+
+  try {
+    var response = await http.post(Uri.parse(addvisheshgruhApi), headers: jHeaders, body: jsonEncode(inputJson));
+
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      log("saveVisheshVyaktiDataforGruhAbhiyaan >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+      if (data["Status"] == "200" || data["Status"] == "Success") {
+        return true; // ✅ return karna zaroori hai
+      }
+      return false; // ✅ error case
     } else {
       log("Error: ${response.statusCode} - ${response.body}");
       return null; // ✅ error case

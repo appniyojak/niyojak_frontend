@@ -72,14 +72,14 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
   @override
   void initState() {
     print("initState");
-    getInitialData();
+    // getInitialData();
     _tabController = new TabController(length: 2, vsync: this);
-    WidgetsBinding.instance.addPostFrameCallback((t) => setDropDownData());
+    WidgetsBinding.instance.addPostFrameCallback((t) => getInitialData());
     super.initState();
   }
 
   getInitialData() async {
-    // await setDropDownData();
+    await setDropDownData();
     SharedPreferences pref = await SharedPreferences.getInstance();
     var data = pref.getString("AbhiyanSwayamsevakData");
     log(data.toString());
@@ -105,8 +105,8 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
     bool isConnected = await Statics.isInternetConnected();
     if (isConnected) {
       var inputData = {
-        "SwayamsevakID": Statics.userDetails["SwayamsevakID"],
-        "isswayamsevak": 1,
+        "SwayamsevakID": Statics.abhiyaanUserDetails["isEmpty"] ? Statics.userDetails["userID"] : Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"],
+        "isswayamsevak": Statics.abhiyaanUserDetails["isEmpty"] ? 1 : 0,
       };
       log(jsonEncode(inputData));
       await Statics.getAbhiyaanGeoUnitMasterData(inputData, context: context);

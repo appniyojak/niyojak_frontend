@@ -302,6 +302,10 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
         // _geoUnitsValue = abhiyaanSwayamsevak?.swayamsevak?.geoUnitID.toString() ?? "";
         // selectedDayitvValue = abhiyaanSwayamsevak?.swayamsevak?.daayityaName ?? "";
         setState(() {});
+      } else {
+        setState(() {
+          showFields = true;
+        });
       }
     }
   }
@@ -673,6 +677,8 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                         // keyboardType: TextInputType.phone,
                         decoration: InputDecoration(
                           isDense: true,
+                          prefixIcon: Icon(Icons.search),
+                          hintText: "नाव किंवा नंबरने शोधा",
                           contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                           // suffixIcon: InkWell(
                           //   onTap: () async {
