@@ -19,7 +19,6 @@ import '../helpers/static_data.dart' as Statics;
 import '../models/response_model/AbhiyaanLoginDataResponse.dart';
 import '../models/response_model/AbhiyaanSwayamsevakListResponse.dart';
 import '../models/response_model/TulnatmakResponseModel.dart';
-import '../models/response_model/abiyaan_geo_unit_model.dart';
 import '../models/response_model/geounit_name_model.dart';
 import '../models/response_model/get_vasti_data_by_id_model.dart';
 import '../models/response_model/get_vijaya_dashami_geounit_data.dart';
@@ -2999,8 +2998,6 @@ Future<List<GeoUnitMasterBAL>?> getAbhiyaanGeoUnitMasterData(Map<String, dynamic
   try {
     var response = await http.post(Uri.parse(getAbhiyaanGeoUnitListApi), headers: jHeaders, body: jsonEncode(inputJson));
 
-    if (context != null) Navigator.of(context, rootNavigator: true).pop();
-
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
 
@@ -3019,10 +3016,11 @@ Future<List<GeoUnitMasterBAL>?> getAbhiyaanGeoUnitMasterData(Map<String, dynamic
           }
         }
 
-        AbhiyaanGeoUnitListModel model = AbhiyaanGeoUnitListModel.fromJson(data);
+        // AbhiyaanGeoUnitListModel model = AbhiyaanGeoUnitListModel.fromJson(data);
         // log("getAbhiyaanGeoUnitMasterData >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+        if (context != null) Navigator.of(context, rootNavigator: true).pop();
 
-        return model.geoUnitListforAbhiyaan; // ✅ return karna zaroori hai
+        return null; // ✅ return karna zaroori hai
       }
       return null; // ✅ error case
     } else {

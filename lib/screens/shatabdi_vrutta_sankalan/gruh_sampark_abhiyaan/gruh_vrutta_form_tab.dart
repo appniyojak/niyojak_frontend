@@ -61,11 +61,13 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
   String? selectedDayitvValue = "";
   bool _searched = false;
   TextEditingController dateController = TextEditingController();
-  TextEditingController samparkitGhareController = TextEditingController();
+
+  // TextEditingController samparkitGhareController = TextEditingController();
   TextEditingController vitritKarpatrakController = TextEditingController();
   TextEditingController pustakVikriController = TextEditingController();
   TextEditingController samparkaSahabhagiController = TextEditingController();
-  TextEditingController samparkaToliController = TextEditingController();
+
+  // TextEditingController samparkaToliController = TextEditingController();
 
   TextEditingController _searchController = TextEditingController();
 
@@ -115,6 +117,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
   bool _isExpanded = false;
   bool _isEditing = false;
   bool _isEditingForPramukh = false;
+  bool _markAtt = false;
   int? createdUserId;
   String? type;
 
@@ -246,11 +249,11 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
         // if (!isAbhiyaanButPramukh)
         setState(() {
           _isEditing = false;
-          samparkitGhareController.text = (gruhAbhiyaanVruttaData?.abhiyaandata?.samparkitghar ?? "").toString();
+          // samparkitGhareController.text = (gruhAbhiyaanVruttaData?.abhiyaandata?.samparkitghar ?? "").toString();
           vitritKarpatrakController.text = (gruhAbhiyaanVruttaData?.abhiyaandata?.vitaritkarpatra ?? "").toString();
           pustakVikriController.text = (gruhAbhiyaanVruttaData?.abhiyaandata?.pustakvikrisankhya ?? "").toString();
           samparkaSahabhagiController.text = (gruhAbhiyaanVruttaData?.abhiyaandata?.samparkhetusahbhagisankhya ?? "").toString();
-          samparkaToliController.text = (gruhAbhiyaanVruttaData?.abhiyaandata?.samparkhetutolisankhya ?? "").toString();
+          // samparkaToliController.text = (gruhAbhiyaanVruttaData?.abhiyaandata?.samparkhetutolisankhya ?? "").toString();
         });
         abhiyaanSwayamsevakDataList = gruhAbhiyaanVruttaData?.swayamsevakList ?? [];
         filteredAbhiyaanSwayamsevakDataList = gruhAbhiyaanVruttaData?.swayamsevakList ?? [];
@@ -301,7 +304,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
           if (_gruhAbhiyaanToliList != null) {
             gruhAbhiyaanToliList = _gruhAbhiyaanToliList;
             samparkaSahabhagiController.text = gruhAbhiyaanToliList.where((e) => e.isdefault == 1).length.toString();
-            samparkaToliController.text = gruhAbhiyaanToliList.length.toString();
+            // samparkaToliController.text = gruhAbhiyaanToliList.length.toString();
           }
         } else {
           Statics.showToast(Statics.getLabel('unableToSaveData'));
@@ -323,11 +326,11 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
         var _data = {
           "AbhiyaanDate": DateFormat("dd-MM-yyyy").format(DateFormat("dd/MM/yyyy").parse(dateController.text)).toString(), // e.g. "22-10-2025"
           "GeoUnitID": int.parse(_selectedGeoUnitId!),
-          "SamparkitGhar": int.tryParse(samparkitGhareController.text.isNotEmpty ? samparkitGhareController.text : "0"),
+          "SamparkitGhar": 0, // int.tryParse(samparkitGhareController.text.isNotEmpty ? samparkitGhareController.text : "0"),
           "VitaritKarpatra": int.tryParse(vitritKarpatrakController.text.isNotEmpty ? vitritKarpatrakController.text : "0"),
           "PustakVikriSankhya": int.tryParse(pustakVikriController.text.isNotEmpty ? pustakVikriController.text : "0"),
           "SamparkhetuSahbhagiSankhya": int.tryParse(samparkaSahabhagiController.text.isNotEmpty ? samparkaSahabhagiController.text : "0"),
-          "SamparkhetuToliSankhya": int.tryParse(samparkaToliController.text.isNotEmpty ? samparkaToliController.text : "0"),
+          "SamparkhetuToliSankhya": 0, //int.tryParse(samparkaToliController.text.isNotEmpty ? samparkaToliController.text : "0"),
           "swayamsevakIds": selectedVisitedSwayamsevak.map((e) => e.swayamsevakID).join(","), // comma-separated IDs
           "AppUserID": _isEditing
               ? createdUserId.toString()
@@ -359,7 +362,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
             _isEditing = false;
             _isEditingForPramukh = false;
             // dateController.text = DateFormat("dd/MM/yyyy").format(DateTime.now());
-            samparkitGhareController.clear();
+            // samparkitGhareController.clear();
             vitritKarpatrakController.clear();
             pustakVikriController.clear();
             createdUserId = null;
@@ -404,7 +407,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
             _isEditing = false;
             _isEditingForPramukh = false;
             // dateController.text = DateFormat("dd/MM/yyyy").format(DateTime.now());
-            samparkitGhareController.clear();
+            // samparkitGhareController.clear();
             vitritKarpatrakController.clear();
             pustakVikriController.clear();
             createdUserId = null;
@@ -677,6 +680,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                             _selectedSwayamsevakIds = [];
                             _selectedKaryakartaIds = [];
                           });
+                          _searchController.clear();
                           Navigator.pop(ctx);
                         },
                       ),
@@ -1263,11 +1267,11 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                           ],
                         ),
                       ),
-                      customTextFields(title: "संपर्कित घरे : ", controller: samparkitGhareController),
-                      customTextFields(title: "वितरित करपत्रक : ", controller: vitritKarpatrakController),
-                      customTextFields(title: "पुस्तक विक्री संख्या : ", controller: pustakVikriController),
-                      customTextFields(title: "संपर्क हेतू सहभागी संख्या : ", controller: samparkaSahabhagiController), //,gruhAbhiyaanVruttaData!.abhiyaandata!.ishide),
-                      customTextFields(title: "संपर्क हेतू टोळी संख्या : ", controller: samparkaToliController), //,gruhAbhiyaanVruttaData!.abhiyaandata!.ishide),
+                      // customTextFields(title: "संपर्कित घरे : ", controller: samparkitGhareController),
+                      customTextFields(title: Statics.getLabel("gruhVitaritKarpatra") + ": ", controller: vitritKarpatrakController),
+                      customTextFields(title: Statics.getLabel("gruhPustakVikti") + ": ", controller: pustakVikriController),
+                      customTextFields(title: "सहभागी कार्यकर्ते संख्या" + ": ", controller: samparkaSahabhagiController), //,gruhAbhiyaanVruttaData!.abhiyaandata!.ishide),
+                      // customTextFields(title: "संपर्क हेतू टोळी संख्या : ", controller: samparkaToliController), //,gruhAbhiyaanVruttaData!.abhiyaandata!.ishide),
                       // SizedBox(height: 10),
                       SizedBox(height: 21),
                       Row(
@@ -1291,7 +1295,8 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                               //   await saveGruhForPramukhFun();
                               //   return;
                               // }
-                              if (dateController.text.isEmpty || samparkitGhareController.text.isEmpty || vitritKarpatrakController.text.isEmpty || pustakVikriController.text.isEmpty) {
+                              // if (dateController.text.isEmpty || samparkitGhareController.text.isEmpty || vitritKarpatrakController.text.isEmpty || pustakVikriController.text.isEmpty) {
+                              if (dateController.text.isEmpty || vitritKarpatrakController.text.isEmpty || pustakVikriController.text.isEmpty) {
                                 Statics.showToast(Statics.getLabel("impInfoRequired"));
                                 return null;
                                 // } else if (!(abhiyaanSwayamsevakDataList.any((e) => e.isSelected))) {
@@ -1318,7 +1323,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                                   _isEditing = false;
                                   _isEditingForPramukh = false;
                                   dateController.text = DateFormat("dd/MM/yyyy").format(DateTime.now());
-                                  samparkitGhareController.clear();
+                                  // samparkitGhareController.clear();
                                   vitritKarpatrakController.clear();
                                   pustakVikriController.clear();
                                   createdUserId = null;
@@ -1484,7 +1489,8 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                       //   await saveGruhForPramukhFun();
                       //   return;
                       // }
-                      if (dateController.text.isEmpty || samparkitGhareController.text.isEmpty || vitritKarpatrakController.text.isEmpty || pustakVikriController.text.isEmpty) {
+                      // if (dateController.text.isEmpty || samparkitGhareController.text.isEmpty || vitritKarpatrakController.text.isEmpty || pustakVikriController.text.isEmpty) {
+                      if (dateController.text.isEmpty || vitritKarpatrakController.text.isEmpty || pustakVikriController.text.isEmpty) {
                         Statics.showToast("अधि वृत्त जोडावे");
                         // Statics.showToast(Statics.getLabel("impInfoRequired"));
                         return null;
@@ -1512,7 +1518,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                           _isEditing = false;
                           _isEditingForPramukh = false;
                           dateController.text = DateFormat("dd/MM/yyyy").format(DateTime.now());
-                          samparkitGhareController.clear();
+                          // samparkitGhareController.clear();
                           vitritKarpatrakController.clear();
                           pustakVikriController.clear();
                           createdUserId = null;
@@ -1594,11 +1600,11 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      customTextFields(title: "संपर्कित घरे : ", controller: samparkitGhareController, readOnly: isAbhiyaanButPramukh && !_isEditing),
-                      customTextFields(title: "वितरित करपत्रक : ", controller: vitritKarpatrakController, readOnly: isAbhiyaanButPramukh && !_isEditing),
-                      customTextFields(title: "पुस्तक विक्री संख्या : ", controller: pustakVikriController, readOnly: isAbhiyaanButPramukh && !_isEditing),
-                      customTextFields(title: "संपर्क हेतू सहभागी संख्या : ", controller: samparkaSahabhagiController), //,gruhAbhiyaanVruttaData!.abhiyaandata!.ishide),
-                      customTextFields(title: "संपर्क हेतू टोळी संख्या : ", controller: samparkaToliController), //,gruhAbhiyaanVruttaData!.abhiyaandata!.ishide),
+                      // customTextFields(title: "संपर्कित घरे : ", controller: samparkitGhareController, readOnly: isAbhiyaanButPramukh && !_isEditing),
+                      customTextFields(title: Statics.getLabel("gruhVitaritKarpatra") + ": ", controller: vitritKarpatrakController, readOnly: isAbhiyaanButPramukh && !_isEditing),
+                      customTextFields(title: Statics.getLabel("gruhPustakVikti") + ": ", controller: pustakVikriController, readOnly: isAbhiyaanButPramukh && !_isEditing),
+                      customTextFields(title: "सहभागी कार्यकर्ते संख्या" + ": ", controller: samparkaSahabhagiController), //,gruhAbhiyaanVruttaData!.abhiyaandata!.ishide),
+                      // customTextFields(title: "संपर्क हेतू टोळी संख्या : ", controller: samparkaToliController), //,gruhAbhiyaanVruttaData!.abhiyaandata!.ishide),
                       const SizedBox(height: 12),
                       Text(
                         Statics.getLabel('SajjanShakti'),
@@ -1779,7 +1785,8 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                                 //   await saveGruhForPramukhFun();
                                 //   return;
                                 // }
-                                if (dateController.text.isEmpty || samparkitGhareController.text.isEmpty || vitritKarpatrakController.text.isEmpty || pustakVikriController.text.isEmpty) {
+                                // if (dateController.text.isEmpty || samparkitGhareController.text.isEmpty || vitritKarpatrakController.text.isEmpty || pustakVikriController.text.isEmpty) {
+                                if (dateController.text.isEmpty || vitritKarpatrakController.text.isEmpty || pustakVikriController.text.isEmpty) {
                                   Statics.showToast(Statics.getLabel("impInfoRequired"));
                                   return null;
                                   // } else if (selectedSajjanshaktiItems.isEmpty || selectedAnyaprabhaviItems.isEmpty) {
@@ -1806,7 +1813,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                                   _isEditing = false;
                                   _isEditingForPramukh = false;
                                   dateController.text = DateFormat("dd/MM/yyyy").format(DateTime.now());
-                                  samparkitGhareController.clear();
+                                  // samparkitGhareController.clear();
                                   vitritKarpatrakController.clear();
                                   pustakVikriController.clear();
                                   createdUserId = null;
@@ -2123,7 +2130,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
   Widget otherDaysExpandableTable() {
     final List<String> _headers = [
       // 'कार्यक्रम स्तर',
-      Statics.getLabel('gruhSamarkitGhar'),
+      // Statics.getLabel('gruhSamarkitGhar'),
       Statics.getLabel('gruhVitaritKarpatra'),
       Statics.getLabel('gruhPustakVikti'),
       Statics.getLabel('gruhSpecialContact'),
@@ -2131,7 +2138,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
     ];
     final List<String> _headersOthers = [
       // 'कार्यक्रम स्तर',
-      Statics.getLabel('gruhSamarkitGhar'),
+      // Statics.getLabel('gruhSamarkitGhar'),
       Statics.getLabel('gruhVitaritKarpatra'),
       Statics.getLabel('gruhPustakVikti'),
       Statics.getLabel('gruhSpecialContact'),
@@ -2139,12 +2146,12 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
     ];
     // if (separatedPreviousLists.isEmpty) return SizedBox();
 
-    final _totalSampark = separatedPreviousLists.expand((inner) => inner).fold(0.0, (prev, item) => prev + (item.samparkitghar ?? 0)).toInt();
+    // final _totalSampark = separatedPreviousLists.expand((inner) => inner).fold(0.0, (prev, item) => prev + (item.samparkitghar ?? 0)).toInt();
     final _totalVitarit = separatedPreviousLists.expand((inner) => inner).fold(0.0, (prev, item) => prev + (item.vitaritkarpatra ?? 0)).toInt();
     final _totalPustak = separatedPreviousLists.expand((inner) => inner).fold(0.0, (prev, item) => prev + (item.pustakvikrisankhya ?? 0)).toInt();
     final _totalSpecial = separatedPreviousLists.expand((inner) => inner).fold(0.0, (prev, item) => prev + (item.totalAtithiCount ?? 0)).toInt();
 
-    final _totalOthersSampark = separatedLists.expand((inner) => inner).fold(0.0, (prev, item) => prev + (item.samparkitghar ?? 0)).toInt();
+    // final _totalOthersSampark = separatedLists.expand((inner) => inner).fold(0.0, (prev, item) => prev + (item.samparkitghar ?? 0)).toInt();
     final _totalOthersVitarit = separatedLists.expand((inner) => inner).fold(0.0, (prev, item) => prev + (item.vitaritkarpatra ?? 0)).toInt();
     final _totalOthersPustak = separatedLists.expand((inner) => inner).fold(0.0, (prev, item) => prev + (item.pustakvikrisankhya ?? 0)).toInt();
     final _totalOthersSpecial = separatedLists.expand((inner) => inner).fold(0.0, (prev, item) => prev + (item.totalAtithiCount ?? 0)).toInt();
@@ -2207,7 +2214,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                                     height: 50,
                                     firstCell: _buildCell(item.abhiyaanDate.toString()),
                                     cells: [
-                                      _buildCell(item.samparkitghar.toString()),
+                                      // _buildCell(item.samparkitghar.toString()),
                                       _buildCell(item.vitaritkarpatra.toString()),
                                       _buildCell(item.pustakvikrisankhya.toString()),
                                       _buildCell(item.totalAtithiCount.toString()),
@@ -2225,15 +2232,15 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                                                       Duration(milliseconds: 100),
                                                       () => setState(() {
                                                             dateController.text = DateFormat("dd/MM/yyyy").format(DateFormat("dd-MM-yyyy").parse(item.abhiyaanDate.toString()));
-                                                            samparkitGhareController.text = item.samparkitghar.toString();
+                                                            // samparkitGhareController.text = item.samparkitghar.toString();
                                                             vitritKarpatrakController.text = item.vitaritkarpatra.toString();
                                                             pustakVikriController.text = item.pustakvikrisankhya.toString();
                                                             createdUserId = item.createdUserID;
 
                                                             if (item.createdUserID == Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"] && isAbhiyaanButPramukh)
                                                               samparkaSahabhagiController.text = item.samparkhetusahbhagisankhya.toString();
-                                                            if (item.createdUserID == Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"] && isAbhiyaanButPramukh)
-                                                              samparkaToliController.text = item.samparkhetutolisankhya.toString();
+                                                            // if (item.createdUserID == Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"] && isAbhiyaanButPramukh)
+                                                            //   samparkaToliController.text = item.samparkhetutolisankhya.toString();
                                                           }));
                                                   if (!isAbhiyaanButPramukh) {
                                                     await populateDropdownForEdit(
@@ -2307,7 +2314,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                         height: 50,
                         firstCell: _buildCell(Statics.getLabel("Total"), color: Colors.yellow.shade100),
                         cells: [
-                          _buildCell(_totalSampark.toString(), fontWeight: FontWeight.bold, color: Colors.yellow.shade50),
+                          // _buildCell(_totalSampark.toString(), fontWeight: FontWeight.bold, color: Colors.yellow.shade50),
                           _buildCell(_totalVitarit.toString(), fontWeight: FontWeight.bold, color: Colors.yellow.shade50),
                           _buildCell(_totalPustak.toString(), fontWeight: FontWeight.bold, color: Colors.yellow.shade50),
                           _buildCell(_totalSpecial.toString(), fontWeight: FontWeight.bold, color: Colors.yellow.shade50),
@@ -2351,11 +2358,11 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                         final _first = group.first;
                         final _participantName = _first.participantName ?? '--';
 
-                        // compute totals for this group
-                        final totalSampark = group.fold<int>(0, (s, e) => s + (e.samparkitghar ?? 0));
-                        final totalVitarit = group.fold<int>(0, (s, e) => s + (e.vitaritkarpatra ?? 0));
-                        final totalPustak = group.fold<int>(0, (s, e) => s + (e.pustakvikrisankhya ?? 0));
-                        final totalSpecial = group.fold<int>(0, (s, e) => s + (e.totalAtithiCount ?? 0));
+                        // // compute totals for this group
+                        // final totalSampark = group.fold<int>(0, (s, e) => s + (e.samparkitghar ?? 0));
+                        // final totalVitarit = group.fold<int>(0, (s, e) => s + (e.vitaritkarpatra ?? 0));
+                        // final totalPustak = group.fold<int>(0, (s, e) => s + (e.pustakvikrisankhya ?? 0));
+                        // final totalSpecial = group.fold<int>(0, (s, e) => s + (e.totalAtithiCount ?? 0));
 
                         // return group.length > 1
                         //     ?
@@ -2378,7 +2385,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                                     height: 50,
                                     firstCell: _buildCell(item.abhiyaanDate.toString()),
                                     cells: [
-                                      _buildCell(item.samparkitghar.toString()),
+                                      // _buildCell(item.samparkitghar.toString()),
                                       _buildCell(item.vitaritkarpatra.toString()),
                                       _buildCell(item.pustakvikrisankhya.toString()),
                                       _buildCell(item.totalAtithiCount.toString()),
@@ -2397,15 +2404,15 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                                                         Duration(milliseconds: 100),
                                                         () => setState(() {
                                                               dateController.text = DateFormat("dd/MM/yyyy").format(DateFormat("dd-MM-yyyy").parse(item.abhiyaanDate.toString()));
-                                                              samparkitGhareController.text = item.samparkitghar.toString();
+                                                              // samparkitGhareController.text = item.samparkitghar.toString();
                                                               vitritKarpatrakController.text = item.vitaritkarpatra.toString();
                                                               pustakVikriController.text = item.pustakvikrisankhya.toString();
                                                               createdUserId = item.createdUserID;
 
                                                               if (item.createdUserID == Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"] && isAbhiyaanButPramukh)
                                                                 samparkaSahabhagiController.text = item.samparkhetusahbhagisankhya.toString();
-                                                              if (item.createdUserID == Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"] && isAbhiyaanButPramukh)
-                                                                samparkaToliController.text = item.samparkhetutolisankhya.toString();
+                                                              // if (item.createdUserID == Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"] && isAbhiyaanButPramukh)
+                                                              //   samparkaToliController.text = item.samparkhetutolisankhya.toString();
                                                               _selectedGeoUnitId = item.geoUnitID.toString();
                                                             }));
                                                     // if ((item.visititAtithiSajjanShaktiids != null && item.visititAtithiSajjanShaktiids!.isNotEmpty) ||
@@ -2465,7 +2472,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                         height: 50,
                         firstCell: _buildCell(Statics.getLabel("Total"), color: Colors.yellow.shade100),
                         cells: [
-                          _buildCell(_totalOthersSampark.toString(), fontWeight: FontWeight.bold, color: Colors.yellow.shade50),
+                          // _buildCell(_totalOthersSampark.toString(), fontWeight: FontWeight.bold, color: Colors.yellow.shade50),
                           _buildCell(_totalOthersVitarit.toString(), fontWeight: FontWeight.bold, color: Colors.yellow.shade50),
                           _buildCell(_totalOthersPustak.toString(), fontWeight: FontWeight.bold, color: Colors.yellow.shade50),
                           _buildCell(_totalOthersSpecial.toString(), fontWeight: FontWeight.bold, color: Colors.yellow.shade50),
@@ -2484,50 +2491,119 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
   Widget isSelectedKaryakartaListWidget() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Container(
-        width: double.infinity,
-        constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.4),
-        padding: EdgeInsets.symmetric(vertical: 10),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black54),
-          borderRadius: BorderRadius.all(Radius.circular(15)),
-        ),
-        // width: MediaQuery.of(context).size.width,
-        child: Scrollbar(
-          thumbVisibility: true,
-          radius: Radius.circular(8),
-          thickness: 5,
-          child: SingleChildScrollView(
-            child: DataTable(
-              columnSpacing: 12,
-              // dataRowMinHeight: 30,
-              // dataRowMaxHeight: 70,
-              showCheckboxColumn: false,
-              headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
-              headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
-              columns: [
-                DataColumn(
-                    label: Text(
-                  "${Statics.getLabel('Name')}",
-                )),
-                DataColumn(
-                    label: Text(
-                  "${Statics.getLabel('mobileNumberLabel')}",
-                )),
-              ],
-              rows: gruhAbhiyaanToliList.asMap().entries.map((entry) {
-                int index = entry.key;
-                var data = entry.value;
-                bool isSelected = (data.isdefault == 1) || _selectedTolisIds.contains(data);
-                return DataRow(cells: [
-                  DataCell(Container(constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.4), child: Text(data.fullName ?? ''))),
-                  DataCell(Text(data.mobileno ?? '')),
-                  // DataCell(Text(Statics.getLabel(data.daayitva.toString(), returnKey: true))),
-                ]);
-              }).toList(),
+      child: Column(
+        spacing: 12,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          // if (isAbhiyaanButPramukh)
+          //   _markAtt
+          //       ? MaterialButton(
+          //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          //           padding: EdgeInsets.symmetric(
+          //             horizontal: 12,
+          //             vertical: 5,
+          //           ),
+          //           color: Theme.of(context).primaryColor,
+          //           textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+          //           onPressed: () => setState(() => _markAtt = false),
+          //           child: Text(
+          //             "${Statics.getLabel('Submit')}",
+          //             // "अभियान कार्यकर्ता सुची",
+          //             style: TextStyle(fontSize: 14.5),
+          //           ),
+          //         )
+          //       : OutlinedButton(
+          //           onPressed: () => setState(() => _markAtt = true),
+          //           style: OutlinedButton.styleFrom(
+          //               side: BorderSide(color: Colors.purple, width: 2), foregroundColor: Colors.purple, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14))),
+          //           child: Text("उपस्थिती लावा")),
+          Container(
+            width: double.infinity,
+            constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.4),
+            padding: EdgeInsets.symmetric(vertical: 10),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black54),
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+            ),
+            // width: MediaQuery.of(context).size.width,
+            child: Scrollbar(
+              thumbVisibility: true,
+              radius: Radius.circular(8),
+              thickness: 5,
+              child: SingleChildScrollView(
+                child: DataTable(
+                  columnSpacing: 12,
+                  // dataRowMinHeight: 30,
+                  // dataRowMaxHeight: 70,
+                  showCheckboxColumn: _markAtt,
+                  headingRowColor: MaterialStatePropertyAll(Colors.purple.shade50),
+                  headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
+                  columns: [
+                    // if (!isAbhiyaanButPramukh) DataColumn(label: SizedBox()),
+                    DataColumn(
+                        label: Text(
+                      "${Statics.getLabel('Name')}",
+                    )),
+                    DataColumn(
+                        label: Text(
+                      "${Statics.getLabel('mobileNumberLabel')}",
+                    )),
+                  ],
+                  rows: gruhAbhiyaanToliList.asMap().entries.map((entry) {
+                    int index = entry.key;
+                    var data = entry.value;
+                    bool isSelected = (data.isdefault == 1) || _selectedTolisIds.contains(data);
+                    return DataRow(
+                        // selected: isSelected,
+                        // color: MaterialStateProperty.resolveWith<Color?>(
+                        //   (Set<MaterialState> states) {
+                        //     if (isSelected) return Colors.yellow.shade100;
+                        //     return null;
+                        //   },
+                        // ),
+                        // onSelectChanged: (value) {
+                        //   if (!_markAtt) {
+                        //     return;
+                        //   }
+                        //   if (!isAbhiyaanButPramukh) {
+                        //     return;
+                        //   }
+                        //   // if (gruhAbhiyaanVruttaData!.abhiyaandata!.ishide) {
+                        //   //   return;
+                        //   // }
+                        //   if ((data.isdefault == 1)) {
+                        //     return;
+                        //   }
+                        //   if (!isSelected) {
+                        //     setState(() {
+                        //       // selectedKaryakartaList.add(data);
+                        //       data.isSelected = true;
+                        //       _selectedTolisIds.add(data);
+                        //     });
+                        //   } else {
+                        //     setState(() {
+                        //       data.isSelected = false;
+                        //       // selectedKaryakartaList.add(data);
+                        //       _selectedTolisIds.remove(data);
+                        //     });
+                        //   }
+                        //   setState(() {
+                        //     samparkaSahabhagiController.text = gruhAbhiyaanToliList.where((e) => e.isdefault == 1 || e.isSelected).length.toString();
+                        //   });
+                        //   log(_selectedTolisIds.map((e) => e.swayamsevakID.toString()).join(','));
+                        // },
+                        cells: [
+                          // if (!isAbhiyaanButPramukh) DataCell(Icon(isSelected ? Icons.check_box_rounded : Icons.check_box_outline_blank_rounded, color: Colors.yellow.shade900, size: 21)),
+                          DataCell(Container(constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.4), child: Text(data.fullName ?? ''))),
+                          DataCell(Text(data.mobileno ?? '')),
+                          // DataCell(Text(Statics.getLabel(data.daayitva.toString(), returnKey: true))),
+                        ]);
+                  }).toList(),
+                ),
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

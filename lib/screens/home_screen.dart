@@ -3949,6 +3949,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     SizedBox(height: 19),
                     Row(
+                      spacing: 8,
                       children: [
                         Expanded(
                           child: InkWell(
@@ -3968,7 +3969,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(width: 8),
                         Expanded(
                           child: InkWell(
                             onTap: () => Navigator.of(context).pushNamed(VijayadashamiFormReport.routeName),
@@ -3991,6 +3991,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     SizedBox(height: 8),
                     Row(
+                      spacing: 8,
                       children: [
                         Expanded(
                           child: InkWell(
@@ -4017,7 +4018,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(width: 8),
                         Expanded(
                           child: InkWell(
                             onTap: () async {
@@ -4057,6 +4057,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     SizedBox(height: 8),
                     Row(
+                      spacing: 8,
                       children: [
                         Expanded(
                           child: InkWell(
@@ -4082,7 +4083,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(width: 8),
                         Expanded(
                           child: InkWell(
                             onTap: () {
@@ -4111,6 +4111,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     SizedBox(height: 8),
                     Row(
+                      spacing: 8,
                       children: [
                         Expanded(
                           child: InkWell(
@@ -4136,7 +4137,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(width: 8),
                         Expanded(
                           child: InkWell(
                             onTap: () {

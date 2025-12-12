@@ -102,6 +102,8 @@ class Table1List {
 
 class Table3List {
   int? startedcount;
+  int? startednagarcount;
+  int? startedmandalcount;
   String? typeName;
   String? vastiname;
   int? gramcount;
@@ -110,10 +112,12 @@ class Table3List {
   int? nagarcount;
   int? vasticount;
 
-  Table3List({this.startedcount, this.typeName, this.vastiname, this.gramcount, this.gramname, this.mandalcount, this.nagarcount, this.vasticount});
+  Table3List({this.startedcount, this.startednagarcount, this.startedmandalcount, this.typeName, this.vastiname, this.gramcount, this.gramname, this.mandalcount, this.nagarcount, this.vasticount});
 
   Table3List.fromJson(Map<String, dynamic> json) {
     startedcount = json['Startedcount'];
+    startednagarcount = json['StartedNagarCount'];
+    startedmandalcount = json['StartedMandalCount'];
     typeName = json['TypeName'];
     vastiname = json['Vastiname'];
     gramcount = json['gramcount'];
@@ -126,6 +130,8 @@ class Table3List {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['Startedcount'] = this.startedcount;
+    data['StartedNagarCount'] = this.startednagarcount;
+    data['StartedMandalCount'] = this.startedmandalcount;
     data['TypeName'] = this.typeName;
     data['Vastiname'] = this.vastiname;
     data['gramcount'] = this.gramcount;

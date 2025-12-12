@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../helpers/static_data.dart' as Statics;
 import '../../../models/response_model/AbhiyaanLoginDataResponse.dart';
@@ -80,16 +79,16 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
 
   getInitialData() async {
     await setDropDownData();
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    var data = pref.getString("AbhiyanSwayamsevakData");
-    log(data.toString());
-    if (data != null) {
-      initialData = AbhiyanSwayamsevakdata.fromJson(jsonDecode(data));
-      type = initialData!.levelName!.toLowerCase();
-      log("initialData!  ---> ${json.encode(initialData)}");
-      log("initialData!.levelName  ---> ${type}");
-      setState(() {});
-    }
+    // SharedPreferences pref = await SharedPreferences.getInstance();
+    // var data = pref.getString("AbhiyanSwayamsevakData");
+    // log(data.toString());
+    // if (data != null) {
+    //   initialData = AbhiyanSwayamsevakdata.fromJson(jsonDecode(data));
+    //   type = initialData!.levelName!.toLowerCase();
+    //   log("initialData!  ---> ${json.encode(initialData)}");
+    //   log("initialData!.levelName  ---> ${type}");
+    //   if(mounted)setState(() {});
+    // }
   }
 
   setDropDownData() async {
@@ -110,7 +109,7 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
       };
       log(jsonEncode(inputData));
       await Statics.getAbhiyaanGeoUnitMasterData(inputData, context: context);
-      setState(() {});
+      if (mounted) setState(() {});
     }
   }
 
@@ -124,7 +123,7 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            "${Statics.getLabel('gruhSamparkAbhiyan')} (${Statics.getLabel('shatabdiVarsha')})",
+            "${Statics.getLabel('gruhSamparkAbhiyan')} ${Statics.getLabel('Vrutta')} (${Statics.getLabel('shatabdiVarsha')})",
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
           ),
           bottom:

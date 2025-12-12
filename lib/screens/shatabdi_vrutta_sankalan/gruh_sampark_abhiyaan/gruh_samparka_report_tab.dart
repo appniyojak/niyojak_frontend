@@ -405,12 +405,12 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
   Widget levelWiseTable() {
     // final level = [Statics.getLabel("Graam"), Statics.getLabel("Vasti")];
     final headers = [
-      Statics.getLabel('gruhSamarkitGhar'),
+      // Statics.getLabel('gruhSamarkitGhar'),
       Statics.getLabel('gruhVitaritKarpatra'),
       Statics.getLabel('gruhPustakVikti'),
       Statics.getLabel('gruhSpecialContact'),
       "सहभागी कार्यकर्ते \nसंख्या", //Statics.getLabel('gruhAttendance'),
-      "सहभागी टोळी \nसंख्या", //Statics.getLabel('gruhAttendance'),
+      // "सहभागी टोळी \nसंख्या", //Statics.getLabel('gruhAttendance'),
       // Statics.getLabel('gruhAttendance'),
     ];
     return Container(
@@ -497,24 +497,24 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                       // per-item rows
                       ...levelWiseList.map((item) {
                         return DataRow(cells: [
-                          DataCell(Center(child: Text((item.samparkitghar ?? 0).toString()))),
+                          // DataCell(Center(child: Text((item.samparkitghar ?? 0).toString()))),
                           DataCell(Center(child: Text((item.vitaritkarpatra ?? 0).toString()))),
                           DataCell(Center(child: Text((item.pustakvikrisankhya ?? 0).toString()))),
                           DataCell(Center(child: Text((item.totalAtithiCount ?? 0).toString()))),
                           DataCell(Center(child: Text((item.samparkhetusahbhagisankhya ?? 0).toString()))),
-                          DataCell(Center(child: Text((item.samparkhetutolisankhya ?? 0).toString()))),
+                          // DataCell(Center(child: Text((item.samparkhetutolisankhya ?? 0).toString()))),
                           // DataCell(Center(child: Text((item.attcount ?? 0).toString()))),
                         ]);
                       }),
 
                       // totals row
                       DataRow(color: MaterialStatePropertyAll(Colors.yellow.shade100), cells: [
-                        DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.samparkitghar ?? 0)).toString()))),
+                        // DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.samparkitghar ?? 0)).toString()))),
                         DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.vitaritkarpatra ?? 0)).toString()))),
                         DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.pustakvikrisankhya ?? 0)).toString()))),
                         DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.totalAtithiCount ?? 0)).toString()))),
                         DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.samparkhetusahbhagisankhya ?? 0)).toString()))),
-                        DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.samparkhetutolisankhya ?? 0)).toString()))),
+                        // DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.samparkhetutolisankhya ?? 0)).toString()))),
                         // DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.attcount ?? 0)).toString()))),
                       ])
                     ],
@@ -537,7 +537,7 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
     final List<Map<String, dynamic>> rows = table.map((e) => Map<String, dynamic>.from(e as Map)).toList();
 
     // keys we want to plot in order
-    final List<String> keys = ['pustakvikrisankhya', 'samparkitghar', 'vitaritkarpatra'];
+    final List<String> keys = ['pustakvikrisankhya', 'vitaritkarpatra'];
 
     // Extract counts per level per key
     // values[i][j] => i = group index (0..2), j = series index (0..rows.length-1)
@@ -634,7 +634,7 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                           // friendly label for bottom
                           final labelMap = {
                             'pustakvikrisankhya': Statics.getLabel('gruhPustakVikti'),
-                            'samparkitghar': Statics.getLabel('gruhSamarkitGhar'),
+                            // 'samparkitghar': Statics.getLabel('gruhSamarkitGhar'),
                             'vitaritkarpatra': Statics.getLabel('gruhVitaritKarpatra')
                           };
                           final label = labelMap[keys[index]] ?? keys[index];
@@ -719,12 +719,12 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
 
   Widget dateWiseTable() {
     final level = [
-      Statics.getLabel('gruhSamarkitGhar'),
+      // Statics.getLabel('gruhSamarkitGhar'),
       Statics.getLabel('gruhVitaritKarpatra'),
       Statics.getLabel('gruhPustakVikti'),
       Statics.getLabel('gruhSpecialContact'),
       "सहभागी कार्यकर्ते संख्या", //Statics.getLabel('gruhAttendance'),
-      "सहभागी टोळी संख्या", //Statics.getLabel('gruhAttendance'),
+      // "सहभागी टोळी संख्या", //Statics.getLabel('gruhAttendance'),
       // Statics.getLabel('gruhAttendance'),
     ];
 
@@ -836,16 +836,16 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                                       ))
                                   .toList(),
                           rows: [
-                            DataRow(cells: [
-                              DataCell(Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.yellow.shade50,
-                                    border: Border.all(color: Colors.black26, width: 0.7),
-                                  ),
-                                  alignment: Alignment.center,
-                                  child: Text(dateWiseList.fold(0, (sum, item) => sum + (item.samparkitghar ?? 0)).toString()))),
-                              ...dateWiseList.map((item) => DataCell(Center(child: Text((item.samparkitghar ?? 0).toString())))).toList(),
-                            ]),
+                            // DataRow(cells: [
+                            //   DataCell(Container(
+                            //       decoration: BoxDecoration(
+                            //         color: Colors.yellow.shade50,
+                            //         border: Border.all(color: Colors.black26, width: 0.7),
+                            //       ),
+                            //       alignment: Alignment.center,
+                            //       child: Text(dateWiseList.fold(0, (sum, item) => sum + (item.samparkitghar ?? 0)).toString()))),
+                            //   ...dateWiseList.map((item) => DataCell(Center(child: Text((item.samparkitghar ?? 0).toString())))).toList(),
+                            // ]),
                             DataRow(cells: [
                               DataCell(Container(
                                   decoration: BoxDecoration(
@@ -886,16 +886,16 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                                   child: Text(dateWiseList.fold(0, (sum, item) => sum + (item.samparkhetusahbhagisankhya ?? 0)).toString()))),
                               ...dateWiseList.map((item) => DataCell(Center(child: Text((item.samparkhetusahbhagisankhya ?? 0).toString())))).toList(),
                             ]),
-                            DataRow(cells: [
-                              DataCell(Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.yellow.shade50,
-                                    border: Border.all(color: Colors.black26, width: 0.7),
-                                  ),
-                                  alignment: Alignment.center,
-                                  child: Text(dateWiseList.fold(0, (sum, item) => sum + (item.samparkhetutolisankhya ?? 0)).toString()))),
-                              ...dateWiseList.map((item) => DataCell(Center(child: Text((item.samparkhetutolisankhya ?? 0).toString())))).toList(),
-                            ]),
+                            // DataRow(cells: [
+                            //   DataCell(Container(
+                            //       decoration: BoxDecoration(
+                            //         color: Colors.yellow.shade50,
+                            //         border: Border.all(color: Colors.black26, width: 0.7),
+                            //       ),
+                            //       alignment: Alignment.center,
+                            //       child: Text(dateWiseList.fold(0, (sum, item) => sum + (item.samparkhetutolisankhya ?? 0)).toString()))),
+                            //   ...dateWiseList.map((item) => DataCell(Center(child: Text((item.samparkhetutolisankhya ?? 0).toString())))).toList(),
+                            // ]),
                             // DataRow(cells: [
                             //   DataCell(Container(
                             //       decoration: BoxDecoration(
@@ -1025,12 +1025,14 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
 
     final vastiTitleList = [
       {"AbhiyaanStartedCountVasti": _vastiData.startedcount},
+      {"AbhiyaanStartedCountNagar": _vastiData.startednagarcount},
       {"totalNagar": _vastiData.nagarcount},
       {"totalVasti": _vastiData.vasticount},
     ];
 
     final graamTitleList = [
       {"AbhiyaanStartedCountGraam": _gramData.startedcount},
+      {"AbhiyaanStartedCountMandal": _gramData.startedmandalcount},
       {"totalTaluka": _gramData.nagarcount},
       {"totalMandal": _gramData.mandalcount},
       {"totalGraam": _gramData.gramcount},

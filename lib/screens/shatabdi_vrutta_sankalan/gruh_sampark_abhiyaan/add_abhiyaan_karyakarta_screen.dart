@@ -9,7 +9,6 @@ import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 import '../../../helpers/static_data.dart' as Statics;
 import '../../../helpers/static_data.dart';
-import '../../../models/response_model/AbhiyaanListResponse.dart';
 import '../../../models/response_model/AbhiyaanSwayamsevakListResponse.dart';
 import '../../../providers/bals.dart';
 
@@ -90,19 +89,6 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
 
   // List newData = [];
   bool showFields = false;
-
-  List<AbhiyaanList> abhiyaanDataList = [
-    AbhiyaanList.fromJson({
-      "AbhiyaanID": 2,
-      "AbhiyaanName": Statics.getLabel('gruhSamparkAbhiyan') + " (${Statics.getLabel('shatabdiVarsha')})",
-      "EndDate": null,
-      "EndDateStr": null,
-      "PraantID": 1,
-      "Remark": "C1-10 Rs, C2-100 Rs, C3-1000 Rs",
-      "StartDate": null,
-      "StartDateStr": null
-    })
-  ];
 
   void onCheckCard(var emailID, var mobileNum) {
     if (!strEmail.contains(emailID)) {
@@ -372,9 +358,6 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
     // from = ModalRoute.of(context)!.settings.arguments as String;
     _scrollController = ScrollController();
     // await getAbhiyaanListData();
-    Future.delayed(Duration.zero, () async {
-      selectedAbhiyanValue = abhiyaanDataList.first.abhiyaanID.toString();
-    });
     populatelinkedMahaanagarDropdown();
     populatelinkedVibhaagDropdown('');
     _level = await Statics.getLevelLDB();
