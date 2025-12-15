@@ -1174,11 +1174,12 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                             color: Theme.of(context).primaryColor,
                             textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                             onPressed: () async {
-                              if (selectedAbhiyanValue.isEmpty) {
-                                print("अभियान निवडा");
-                                Statics.showToast("अभियान निवडा");
-                                return null;
-                              } else if (showFields && _fullNameCntrl.text.isEmpty) {
+                              // if (selectedAbhiyanValue.isEmpty) {
+                              //   print("अभियान निवडा");
+                              //   Statics.showToast("अभियान निवडा");
+                              //   return null;
+                              // } else
+                              if (showFields && _fullNameCntrl.text.isEmpty) {
                                 print("पूर्ण नाव प्रविष्ट करा");
                                 Statics.showToast("पूर्ण नाव प्रविष्ट करा");
                                 return null;

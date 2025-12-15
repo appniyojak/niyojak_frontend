@@ -986,6 +986,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForMandal(String level
 //===================================================================================================================================================================
 
 Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParent(String levelID, String parentID, String parentType, String pattern, {bool isAbhiyaan = false}) async {
+  print("isabhiyaan >>>>>>>>>>>>>>>>>>>>>> $isAbhiyaan");
   if (parentID == '') parentID = '0';
   String strSql = "Select * from ${isAbhiyaan ? "AbhiyaanGeoUnitMaster" : "GeoUnitMaster"} WHERE LevelID=" +
       levelID +
@@ -3006,7 +3007,7 @@ Future<List<GeoUnitMasterBAL>?> getAbhiyaanGeoUnitMasterData(Map<String, dynamic
 
         if (abhiyaanGeoUnitMaster.length > 0) {
           log("deleting from AbhiyaanGeoUnitMaster db >>>>>>>>>>>>>> ");
-          await DatabaseHelper.executeQuery('DELETE FROM AbhiyaanGeoUnitMaster');
+          await DatabaseHelper.executeQuery('DELETE FROM AbhiyaanGeoUnitMaster WHERE isAbhiyaan = 1');
 
           log("inserting in AbhiyaanGeoUnitMaster db >>>>>>>>>>>>>> ");
 

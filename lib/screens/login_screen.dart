@@ -884,6 +884,6 @@ class _LogInCardState extends State<LogInCard> {
       print("switchScreens 11");
     }
     print("switchScreens 13");
-    Navigator.of(ctx).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => landingPage));
+    Navigator.of(ctx).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => landingPage), (route) => false);
   }
 }

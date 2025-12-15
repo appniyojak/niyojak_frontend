@@ -73,7 +73,8 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
     print("initState");
     // getInitialData();
     _tabController = new TabController(length: 2, vsync: this);
-    WidgetsBinding.instance.addPostFrameCallback((t) => getInitialData());
+    log("initState GruhAbhiyaanMainTabScreen runnn >>>>>>>>>>>>>> ");
+    WidgetsBinding.instance.addPostFrameCallback((t) => getAbhiyaanGeoUnitsFun());
     super.initState();
   }
 
@@ -95,6 +96,7 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
     log("Print >>>> ${Statics.abhiyaanUserDetails["isEmpty"]}");
     if (!Statics.abhiyaanUserDetails["isEmpty"]) {
       await getAbhiyaanGeoUnitsFun();
+      setState(() {});
       // await getInitialData();
     }
   }

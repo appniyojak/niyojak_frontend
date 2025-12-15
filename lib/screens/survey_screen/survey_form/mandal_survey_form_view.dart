@@ -6699,7 +6699,8 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
 
   String selectedAbhiyanValue = "";
   String selectedSansthaValue = "";
-  String selectedDayitvValue = "";
+
+  // String selectedDayitvValue = "";
 
   int? selectedAbhiyaanKaryakartaIdIndex;
 
@@ -6722,7 +6723,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
       _sansthaNameCntrl.text = data.sansthaname ?? "";
       _sansthaPadhCntrl.text = data.padh ?? "";
       selectedSansthaValue = data.sanstha ?? "";
-      selectedDayitvValue = data.daayitva ?? "";
+      // selectedDayitvValue = data.daayitva ?? "";
     }
     showDialog(
       context: context,
@@ -7027,54 +7028,54 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                     // SizedBox(height: 15),
                     // if (_levelValue != "" && _geoUnitsValue != "")
                     // _levelValue == "2" || _levelValue == "3" ?
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                            Statics.getLabel("SelectDaayitva"),
-                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                            ":",
-                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 4,
-                          child: Container(
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.only(left: 10, right: 0, top: 5, bottom: 5),
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.black38)),
-                            child: DropdownButton<String>(
-                              isExpanded: true,
-                              isDense: true,
-                              iconSize: 30,
-                              underline: SizedBox(),
-                              value: selectedDayitvValue == "" ? null : selectedDayitvValue,
-                              onChanged: (String? newValue) {
-                                set(() {
-                                  selectedDayitvValue = newValue!;
-                                });
-                              },
-                              items: <String>["abhiyaanKaryakartaFormTitle", "abhiyaanPramukhKey"].map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 3.0),
-                                    child: Text(Statics.getLabel(value)),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: [
+                    //     Expanded(
+                    //       flex: 1,
+                    //       child: Text(
+                    //         Statics.getLabel("SelectDaayitva"),
+                    //         style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    //       ),
+                    //     ),
+                    //     Expanded(
+                    //       flex: 1,
+                    //       child: Text(
+                    //         ":",
+                    //         style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    //       ),
+                    //     ),
+                    //     Expanded(
+                    //       flex: 4,
+                    //       child: Container(
+                    //         alignment: Alignment.center,
+                    //         padding: EdgeInsets.only(left: 10, right: 0, top: 5, bottom: 5),
+                    //         decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.black38)),
+                    //         child: DropdownButton<String>(
+                    //           isExpanded: true,
+                    //           isDense: true,
+                    //           iconSize: 30,
+                    //           underline: SizedBox(),
+                    //           value: selectedDayitvValue == "" ? null : selectedDayitvValue,
+                    //           onChanged: (String? newValue) {
+                    //             set(() {
+                    //               selectedDayitvValue = newValue!;
+                    //             });
+                    //           },
+                    //           items: <String>["abhiyaanKaryakartaFormTitle", "abhiyaanPramukhKey"].map<DropdownMenuItem<String>>((String value) {
+                    //             return DropdownMenuItem<String>(
+                    //               value: value,
+                    //               child: Padding(
+                    //                 padding: const EdgeInsets.only(top: 3.0),
+                    //                 child: Text(Statics.getLabel(value)),
+                    //               ),
+                    //             );
+                    //           }).toList(),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                   ],
                 ),
               );
@@ -7115,10 +7116,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                     print("संस्थेमध्ये पद प्रविष्ट करा");
                     Statics.showToast("संस्थेमध्ये पद प्रविष्ट करा");
                     return null;
-                  } else if (selectedDayitvValue.isEmpty) {
-                    print("दायित्व निवडा");
-                    Statics.showToast("दायित्व निवडा");
-                    return null;
+                    // } else if (selectedDayitvValue.isEmpty) {
+                    //   print("दायित्व निवडा");
+                    //   Statics.showToast("दायित्व निवडा");
+                    //   return null;
                   } else {
                     print("saving data");
                     final _alreadyThere = abhiyaanKaryakartaList.any((e) => e.mobileno == _mobileCntrl.text.trim());
@@ -7139,7 +7140,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                         sanstha: selectedSansthaValue,
                         sansthaname: _sansthaNameCntrl.text.trim(),
                         padh: _sansthaPadhCntrl.text.trim(),
-                        daayitva: selectedDayitvValue,
+                        daayitva: "",
                         isactive: 1,
                         isdefault: 0,
                       );
@@ -7185,7 +7186,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
   clearAbhiyaanKaryakartaFormFields() {
     selectedAbhiyanValue = "";
     selectedSansthaValue = "";
-    selectedDayitvValue = "";
+    // selectedDayitvValue = "";
     selectedAbhiyaanKaryakartaIdIndex = null;
     _anyaSansthaCntrl.clear();
     _sansthaNameCntrl.clear();

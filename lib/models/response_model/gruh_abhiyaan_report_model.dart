@@ -4,8 +4,10 @@ class GruhAbhiyaanReportModel {
   List<Table1List>? table1List;
   List<Table1List>? table2List;
   List<Table3List>? table3List;
+  List<Table4List>? table4List;
+  List<Table5List>? table5List;
 
-  GruhAbhiyaanReportModel({this.message, this.status, this.table1List, this.table2List, this.table3List});
+  GruhAbhiyaanReportModel({this.message, this.status, this.table1List, this.table2List, this.table3List, this.table4List, this.table5List});
 
   GruhAbhiyaanReportModel.fromJson(Map<String, dynamic> json) {
     message = json['Message'];
@@ -28,6 +30,18 @@ class GruhAbhiyaanReportModel {
         table3List!.add(new Table3List.fromJson(v));
       });
     }
+    if (json['table4List'] != null) {
+      table4List = <Table4List>[];
+      json['table4List'].forEach((v) {
+        table4List!.add(new Table4List.fromJson(v));
+      });
+    }
+    if (json['table5List'] != null) {
+      table5List = <Table5List>[];
+      json['table5List'].forEach((v) {
+        table5List!.add(new Table5List.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -42,6 +56,12 @@ class GruhAbhiyaanReportModel {
     }
     if (this.table3List != null) {
       data['table3List'] = this.table3List!.map((v) => v.toJson()).toList();
+    }
+    if (this.table4List != null) {
+      data['table4List'] = this.table4List!.map((v) => v.toJson()).toList();
+    }
+    if (this.table5List != null) {
+      data['table5List'] = this.table5List!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -58,18 +78,25 @@ class Table1List {
   int? pustakvikrisankhya;
   int? samparkitghar;
   int? vitaritkarpatra;
+  int? ekunsamparkhetukaryakarta;
+  int? femalecount;
+  int? malecount;
 
-  Table1List(
-      {this.abhiyaanDate,
-      this.levelName,
-      this.levelid,
-      this.totalAtithiCount,
-      this.attcount,
-      this.samparkhetusahbhagisankhya,
-      this.samparkhetutolisankhya,
-      this.pustakvikrisankhya,
-      this.samparkitghar,
-      this.vitaritkarpatra});
+  Table1List({
+    this.abhiyaanDate,
+    this.levelName,
+    this.levelid,
+    this.totalAtithiCount,
+    this.attcount,
+    this.samparkhetusahbhagisankhya,
+    this.samparkhetutolisankhya,
+    this.pustakvikrisankhya,
+    this.samparkitghar,
+    this.vitaritkarpatra,
+    this.ekunsamparkhetukaryakarta,
+    this.femalecount,
+    this.malecount,
+  });
 
   Table1List.fromJson(Map<String, dynamic> json) {
     abhiyaanDate = json['AbhiyaanDate'];
@@ -82,6 +109,9 @@ class Table1List {
     pustakvikrisankhya = json['pustakvikrisankhya'];
     samparkitghar = json['samparkitghar'];
     vitaritkarpatra = json['vitaritkarpatra'];
+    ekunsamparkhetukaryakarta = json['ekunsamparkhetukaryakarta'];
+    femalecount = json['femalecount'];
+    malecount = json['malecount'];
   }
 
   Map<String, dynamic> toJson() {
@@ -96,6 +126,9 @@ class Table1List {
     data['pustakvikrisankhya'] = this.pustakvikrisankhya;
     data['samparkitghar'] = this.samparkitghar;
     data['vitaritkarpatra'] = this.vitaritkarpatra;
+    data['ekunsamparkhetukaryakarta'] = this.ekunsamparkhetukaryakarta;
+    data['femalecount'] = this.femalecount;
+    data['malecount'] = this.malecount;
     return data;
   }
 }
@@ -139,6 +172,56 @@ class Table3List {
     data['mandalcount'] = this.mandalcount;
     data['nagarcount'] = this.nagarcount;
     data['vasticount'] = this.vasticount;
+    return data;
+  }
+}
+
+class Table4List {
+  int? order;
+  String? type;
+  int? totalcount;
+  int? startedcount;
+  String? namelist;
+
+  Table4List({this.order, this.type, this.totalcount, this.startedcount, this.namelist});
+
+  Table4List.fromJson(Map<String, dynamic> json) {
+    order = json['order'];
+    type = json['type'];
+    totalcount = json['totalcount'];
+    startedcount = json['startedcount'];
+    namelist = json['namelist'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['order'] = this.order;
+    data['type'] = this.type;
+    data['totalcount'] = this.totalcount;
+    data['startedcount'] = this.startedcount;
+    data['namelist'] = this.namelist;
+    return data;
+  }
+}
+
+class Table5List {
+  int? cnt;
+  String? shreneename;
+  String? typename;
+
+  Table5List({this.cnt, this.shreneename, this.typename});
+
+  Table5List.fromJson(Map<String, dynamic> json) {
+    cnt = json['cnt'];
+    shreneename = json['shreneename'];
+    typename = json['typename'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['cnt'] = this.cnt;
+    data['shreneename'] = this.shreneename;
+    data['typename'] = this.typename;
     return data;
   }
 }

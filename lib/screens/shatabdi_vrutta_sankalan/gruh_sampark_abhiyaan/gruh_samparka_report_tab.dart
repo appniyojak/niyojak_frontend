@@ -27,6 +27,8 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
   List<Table1List> levelWiseList = [];
   List<Table1List> dateWiseList = [];
   List<Table3List> summaryList = [];
+  List<Table4List> levelWiseCountsList = [];
+  List<Table5List> sajjanAnyaCountsList = [];
 
   final horizontalController = ScrollController();
   final horizontalController2 = ScrollController();
@@ -101,6 +103,11 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
   }
 
   Future<void> _getSwList() async {
+    levelWiseList = [];
+    dateWiseList = [];
+    // summaryList = [];
+    levelWiseCountsList = [];
+    // sajjanAnyaCountsList = [];
     print("calling");
     bool isConnected = await Statics.isInternetConnected();
     if (isConnected) {
@@ -116,6 +123,8 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
           levelWiseList = _report.table1List ?? [];
           dateWiseList = _report.table2List ?? [];
           summaryList = _report.table3List ?? [];
+          levelWiseCountsList = _report.table4List ?? [];
+          sajjanAnyaCountsList = _report.table5List ?? [];
         });
       }
     }
@@ -257,7 +266,7 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
 
   Future<List<GeoUnitMasterBAL>> populatelinkedMahaanagarDropdown() async {
     _linkedVibhaagValue = _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-    List<GeoUnitMasterBAL> data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MahaanagarLevelID'].toString(), '', '', ''); //, isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
+    List<GeoUnitMasterBAL> data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MahaanagarLevelID'].toString(), '', '', '', isAbhiyaan: true);
     setState(() {
       _linkedMahaanagar = data;
     });
@@ -268,12 +277,7 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
     _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedbhaagName = _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
     print("populatelinkedVibhaagDropdown $mahaanagarIDStr");
-    var data = await Statics.getGeoUnitsByLevelAndParent(
-      Statics.levels['VibhaagLevelID'].toString(),
-      mahaanagarIDStr,
-      (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'),
-      '',
-    ); //isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
+    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '', isAbhiyaan: true);
     setState(() {
       _linkedVibhaag = data;
     });
@@ -284,7 +288,7 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
     _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedbhaagName = _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
     _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = [];
-    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', ''); //, isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
+    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '', isAbhiyaan: true);
     setState(() {
       _linkedbhaag = data;
     });
@@ -294,7 +298,7 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
   Future<List<GeoUnitMasterBAL>> populatelinkedShaharDropdown(String bhaagIDStr) async {
     _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
-    var shDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', ''); //, isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
+    var shDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', '', isAbhiyaan: true);
     setState(() {
       _linkedshahar = (shDD.length > 0 ? shDD : null);
     });
@@ -309,13 +313,13 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
     print("print LevelID > ${Statics.userDetails["LevelID"]}");
     print("shaharIDStr shaharIDStr $shaharIDStr");
     if (shaharIDStr != null) {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), shaharIDStr!, 'Shahar', ''); //, isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
+      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), shaharIDStr!, 'Shahar', '', isAbhiyaan: true);
       setState(() {
         _linkednagar = (ngDD.length > 0 ? ngDD : null);
       });
       return ngDD;
     } else {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', ''); //, isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
+      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '', isAbhiyaan: true);
       setState(() {
         _linkednagar = (ngDD.length > 0 ? ngDD : null);
       });
@@ -327,7 +331,7 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
     _linkedmandalValue = _linkedgraamValue = null;
     _linkedmandalName = _linkedgraamName = null;
     _linkedmandal = _linkedgraam = null;
-    var mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, 'Nagar', ''); //, isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
+    var mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, 'Nagar', '', isAbhiyaan: true);
     setState(() {
       _linkedmandal = (mnDD.length > 0 ? mnDD : null);
     });
@@ -337,7 +341,7 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
   Future<List<GeoUnitMasterBAL>> populatelinkedGraamDropdown(String? mandalIDStr) async {
     _linkedgraamValue = null;
     _linkedgraamName = null;
-    var gmDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['GraamLevelID'].toString(), mandalIDStr!, 'Mandal', ''); //, isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
+    var gmDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['GraamLevelID'].toString(), mandalIDStr!, 'Mandal', '', isAbhiyaan: true);
     setState(() {
       _linkedgraam = (gmDD.length > 0 ? gmDD : null);
     });
@@ -347,7 +351,7 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
   Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(String? nagarIDStr) async {
     _linkedvastiValue = null;
     _linkedvastiName = null;
-    var vsDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, 'Nagar', ''); //, isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
+    var vsDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, 'Nagar', '', isAbhiyaan: true);
     setState(() {
       _linkedvasti = (vsDD.length > 0 ? vsDD : null);
     });
@@ -379,6 +383,8 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
             SizedBox(height: MediaQuery.of(context).size.height * 0.03),
             if (_searched) ...[
               SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+              nagarMandalCountsTable(),
+              SizedBox(height: 21),
               vastiGramNamesTable(),
               SizedBox(height: 21),
               Padding(
@@ -394,6 +400,8 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
               levelWiseTable(),
               SizedBox(height: 21),
               dateWiseTable(),
+              SizedBox(height: 21),
+              specialVyaktiTable(),
               SizedBox(height: MediaQuery.of(context).size.height * 0.1),
             ],
           ],
@@ -409,7 +417,9 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
       Statics.getLabel('gruhVitaritKarpatra'),
       Statics.getLabel('gruhPustakVikti'),
       Statics.getLabel('gruhSpecialContact'),
-      "सहभागी कार्यकर्ते \nसंख्या", //Statics.getLabel('gruhAttendance'),
+      "एकुण सहभागी \nकार्यकर्ते संख्या", //Statics.getLabel('gruhAttendance'),
+      "पुरुष सहभागी \nकार्यकर्ते संख्या", //Statics.getLabel('gruhAttendance'),
+      "महिला सहभागी \nकार्यकर्ते संख्या", //Statics.getLabel('gruhAttendance'),
       // "सहभागी टोळी \nसंख्या", //Statics.getLabel('gruhAttendance'),
       // Statics.getLabel('gruhAttendance'),
     ];
@@ -501,7 +511,9 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                           DataCell(Center(child: Text((item.vitaritkarpatra ?? 0).toString()))),
                           DataCell(Center(child: Text((item.pustakvikrisankhya ?? 0).toString()))),
                           DataCell(Center(child: Text((item.totalAtithiCount ?? 0).toString()))),
-                          DataCell(Center(child: Text((item.samparkhetusahbhagisankhya ?? 0).toString()))),
+                          DataCell(Center(child: Text((item.ekunsamparkhetukaryakarta ?? 0).toString()))),
+                          DataCell(Center(child: Text((item.malecount ?? 0).toString()))),
+                          DataCell(Center(child: Text((item.femalecount ?? 0).toString()))),
                           // DataCell(Center(child: Text((item.samparkhetutolisankhya ?? 0).toString()))),
                           // DataCell(Center(child: Text((item.attcount ?? 0).toString()))),
                         ]);
@@ -513,7 +525,9 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                         DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.vitaritkarpatra ?? 0)).toString()))),
                         DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.pustakvikrisankhya ?? 0)).toString()))),
                         DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.totalAtithiCount ?? 0)).toString()))),
-                        DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.samparkhetusahbhagisankhya ?? 0)).toString()))),
+                        DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.ekunsamparkhetukaryakarta ?? 0)).toString()))),
+                        DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.malecount ?? 0)).toString()))),
+                        DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.femalecount ?? 0)).toString()))),
                         // DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.samparkhetutolisankhya ?? 0)).toString()))),
                         // DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.attcount ?? 0)).toString()))),
                       ])
@@ -713,6 +727,188 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget specialVyaktiTable() {
+    // final level = [
+    //   // Statics.getLabel('gruhSamarkitGhar'),
+    //   Statics.getLabel('gruhVitaritKarpatra'),
+    //   Statics.getLabel('gruhPustakVikti'),
+    //   Statics.getLabel('gruhSpecialContact'),
+    //   "सहभागी कार्यकर्ते संख्या", //Statics.getLabel('gruhAttendance'),
+    //   // "सहभागी टोळी संख्या", //Statics.getLabel('gruhAttendance'),
+    //   // Statics.getLabel('gruhAttendance'),
+    // ];
+
+    // if (sajjanAnyaCountsList.isEmpty)
+    //   return SizedBox(
+    //     height: 120,
+    //     width: double.infinity,
+    //     child: Center(
+    //       child: Text(
+    //         "तारखेनुसार डेटा उपलब्ध नाही.",
+    //         style: TextStyle(fontWeight: FontWeight.bold),
+    //       ),
+    //     ),
+    //   );
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 18.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Text(
+          //   Statics.getLabel("SajjanShakti"),
+          //   style: TextStyle(fontWeight: FontWeight.bold),
+          // ),
+          // SizedBox(height: 8),
+          ExpansionTile(
+            tilePadding: EdgeInsets.only(right: 16, left: 16),
+            childrenPadding: EdgeInsets.zero,
+            collapsedBackgroundColor: Colors.teal.shade100,
+            backgroundColor: Colors.teal.shade100,
+            initiallyExpanded: true,
+            shape: RoundedRectangleBorder(side: BorderSide.none, borderRadius: BorderRadius.circular(12)),
+            collapsedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            title: Text(
+              Statics.getLabel("SajjanShakti"),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.blueAccent.shade700,
+              ),
+            ),
+            children: [
+              Container(
+                width: double.infinity,
+                color: Colors.white,
+                padding: const EdgeInsets.only(left: 18.0, right: 18.0, bottom: 8.0, top: 12),
+                child: Container(
+                  decoration: BoxDecoration(border: Border.all(color: Colors.grey.shade800)),
+                  padding: EdgeInsets.all(4),
+                  child: DataTable(
+                    headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
+                    columnSpacing: 24,
+                    horizontalMargin: 16,
+                    border: TableBorder.all(color: Colors.black26),
+                    columns: [
+                      DataColumn(
+                        label: Center(
+                          child: Text(
+                            "${Statics.getLabel("shreni")}",
+                            softWrap: true,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Center(
+                          child: Text(
+                            "${Statics.getLabel("Total")}",
+                            softWrap: true,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ],
+                    // dataRowMinHeight: 40,
+                    // dataRowMaxHeight: 120,
+                    rows: [
+                      // rows from data
+                      ...sajjanAnyaCountsList.where((e) => e.typename == "sajjanshakti").map((item) {
+                        return DataRow(cells: [
+                          DataCell(Text(item.shreneename ?? "")),
+                          DataCell(Text(item.cnt.toString())),
+                        ]);
+                      }),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+
+          //
+          SizedBox(height: 16),
+          // Text(
+          //   Statics.getLabel("anyaPrabhaviLok"),
+          //   style: TextStyle(fontWeight: FontWeight.bold),
+          // ),
+          // SizedBox(height: 8),
+          ExpansionTile(
+            tilePadding: EdgeInsets.only(right: 16, left: 16),
+            childrenPadding: EdgeInsets.zero,
+            collapsedBackgroundColor: Colors.teal.shade100,
+            backgroundColor: Colors.teal.shade100,
+            initiallyExpanded: true,
+            shape: RoundedRectangleBorder(side: BorderSide.none, borderRadius: BorderRadius.circular(12)),
+            collapsedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            title: Text(
+              Statics.getLabel("anyaPrabhaviLok"),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.blueAccent.shade700,
+              ),
+            ),
+            children: [
+              Container(
+                width: double.infinity,
+                color: Colors.white,
+                padding: const EdgeInsets.only(left: 18.0, right: 18.0, bottom: 8.0, top: 12),
+                child: Container(
+                  decoration: BoxDecoration(border: Border.all(color: Colors.grey.shade800)),
+                  padding: EdgeInsets.all(4),
+                  child: DataTable(
+                    headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
+                    columnSpacing: 24,
+                    horizontalMargin: 16,
+                    border: TableBorder.all(color: Colors.black26),
+                    columns: [
+                      DataColumn(
+                        label: Center(
+                          child: Text(
+                            "${Statics.getLabel("shreni")}",
+                            softWrap: true,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Center(
+                          child: Text(
+                            "${Statics.getLabel("Total")}",
+                            softWrap: true,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ],
+                    // dataRowMinHeight: 40,
+                    // dataRowMaxHeight: 120,
+                    rows: [
+                      // rows from data
+                      ...sajjanAnyaCountsList.where((e) => e.typename == "Anyaprabhavilokam").map((item) {
+                        return DataRow(cells: [
+                          DataCell(Text(item.shreneename ?? "")),
+                          DataCell(Text(item.cnt.toString())),
+                        ]);
+                      }),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -920,16 +1116,32 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
     );
   }
 
-  void showPopupList(String vastiStepStartedNames, {bool isGram = false}) {
+  void showPopupList(String vastiStepStartedNames, {String type = "graam"}) {
     if (vastiStepStartedNames.trim().isEmpty) {
-      Statics.showToast(Statics.getLabel(isGram ? 'graamNotAvailable' : 'vastiNotAvailable'));
+      Statics.showToast(Statics.getLabel(type == "graam"
+          ? 'graamNotAvailable'
+          : type == "vasti"
+              ? 'vastiNotAvailable'
+              : type == "nagar"
+                  ? 'nagarNotAvailable'
+                  : type == "taluka"
+                      ? 'taalukaNotAvailable'
+                      : 'mandalNotAvailable'));
       return;
     }
 
     final List<String> namesList = vastiStepStartedNames.split('::').map((e) => e.trim()).toList();
 
     if (namesList.isEmpty || namesList.first.isEmpty) {
-      Statics.showToast(Statics.getLabel(isGram ? 'graamNotAvailable' : 'vastiNotAvailable'));
+      Statics.showToast(Statics.getLabel(type == "graam"
+          ? 'graamNotAvailable'
+          : type == "vasti"
+              ? 'vastiNotAvailable'
+              : type == "nagar"
+                  ? 'nagarNotAvailable'
+                  : type == "taluka"
+                      ? 'taalukaNotAvailable'
+                      : 'mandalNotAvailable'));
       return;
     }
 
@@ -952,7 +1164,15 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                   Icon(Icons.list_alt, color: Colors.purpleAccent),
                   SizedBox(width: 10),
                   Text(
-                    Statics.getLabel(isGram ? 'graamYaadi' : 'vastiYaadi'),
+                    Statics.getLabel(type == "graam"
+                        ? 'graamYaadi'
+                        : type == "vasti"
+                            ? 'vastiYaadi'
+                            : type == "nagar"
+                                ? 'nagarYaadi'
+                                : type == "taluka"
+                                    ? 'taalukaYaadi'
+                                    : 'mandalYaadi'),
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -1077,7 +1297,7 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                       DataColumn(
                           label: IconButton(
                         icon: Icon(Icons.remove_red_eye, color: Colors.teal),
-                        onPressed: () => showPopupList(_vastiData.vastiname.toString()),
+                        onPressed: () => showPopupList(_vastiData.vastiname.toString(), type: "vasti"),
                       )),
                     ],
                     rows: vastiTitleList
@@ -1117,7 +1337,7 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                       DataColumn(
                           label: IconButton(
                         icon: Icon(Icons.remove_red_eye, color: Colors.teal),
-                        onPressed: () => showPopupList(_gramData.gramname.toString(), isGram: true),
+                        onPressed: () => showPopupList(_gramData.gramname.toString(), type: "graam"),
                       )),
                     ],
                     rows: graamTitleList
@@ -1280,6 +1500,69 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
     //     ),
     //   ),
     // );
+  }
+
+  Widget nagarMandalCountsTable() {
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.symmetric(horizontal: 18, vertical: 6),
+      child: DataTable(
+        columnSpacing: 0,
+        horizontalMargin: 16,
+        headingRowColor: MaterialStateProperty.all(Colors.purple.shade300),
+        headingTextStyle: TextStyle(
+          fontSize: 15,
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+        columns: [
+          DataColumn(
+              label: Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Text("${Statics.getLabel('LevelName')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)))),
+          DataColumn(
+              label: Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Text(Statics.getLabel('Total'), style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)))),
+          DataColumn(
+              label: Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Text("${Statics.getLabel('started')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)))),
+          DataColumn(label: Text('')),
+        ],
+        rows: levelWiseCountsList
+            .map((e) => DataRow(
+                  color: MaterialStateProperty.all(Colors.purple.shade50),
+                  cells: [
+                    // DataCell(Align(alignment: Alignment.center, child: Text("${Statics.getLabel('Vasti')}"))),
+                    DataCell(Align(
+                      alignment: Alignment.center,
+                      child: Text(Statics.getLabel(e.type == "nagar"
+                          ? "NagarShahari"
+                          : e.type == "taluka"
+                              ? "taalukaa"
+                              : e.type.toString())),
+                    )),
+                    DataCell(Align(
+                      alignment: Alignment.center,
+                      child: Text("${e.totalcount ?? "0"}"),
+                    )),
+                    DataCell(Align(
+                      alignment: Alignment.center,
+                      child: Text("${e.startedcount ?? "0"}"),
+                    )),
+                    DataCell(IconButton(
+                      icon: Icon(Icons.remove_red_eye, color: Colors.teal),
+                      onPressed: () => showPopupList(e.namelist.toString(), type: e.type.toString()),
+                    )),
+                  ],
+                ))
+            .toList(),
+      ),
+    );
   }
 
   Widget _buildExpansionPanel() {

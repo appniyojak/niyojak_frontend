@@ -65,8 +65,8 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
   // TextEditingController samparkitGhareController = TextEditingController();
   TextEditingController vitritKarpatrakController = TextEditingController();
   TextEditingController pustakVikriController = TextEditingController();
-  TextEditingController samparkaSahabhagiController = TextEditingController();
 
+  // TextEditingController samparkaSahabhagiController = TextEditingController();
   // TextEditingController samparkaToliController = TextEditingController();
 
   TextEditingController _searchController = TextEditingController();
@@ -174,6 +174,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    log("initState runnn >>>>>>>>>>>>>> ");
     setDropDowns();
     // if (!isAbhiyaanButPramukh) WidgetsBinding.instance.addPostFrameCallback((_) => _getPreviousDayDataList());
   }
@@ -181,10 +182,10 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
   @override
   void didUpdateWidget(covariant GruhVruttaTab oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.initialData != oldWidget.initialData && widget.initialData != null) {
-      log("didUpdateWidget runnn >>>>>>>>>>>>>> ");
-      setDropDowns();
-    }
+    // if (widget.initialData != oldWidget.initialData && widget.initialData != null) {
+    log("didUpdateWidget runnn >>>>>>>>>>>>>> ");
+    setDropDowns();
+    // }
   }
 
   setDropDowns() async {
@@ -252,7 +253,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
           // samparkitGhareController.text = (gruhAbhiyaanVruttaData?.abhiyaandata?.samparkitghar ?? "").toString();
           vitritKarpatrakController.text = (gruhAbhiyaanVruttaData?.abhiyaandata?.vitaritkarpatra ?? "").toString();
           pustakVikriController.text = (gruhAbhiyaanVruttaData?.abhiyaandata?.pustakvikrisankhya ?? "").toString();
-          samparkaSahabhagiController.text = (gruhAbhiyaanVruttaData?.abhiyaandata?.samparkhetusahbhagisankhya ?? "").toString();
+          // samparkaSahabhagiController.text = (gruhAbhiyaanVruttaData?.abhiyaandata?.samparkhetusahbhagisankhya ?? "").toString();
           // samparkaToliController.text = (gruhAbhiyaanVruttaData?.abhiyaandata?.samparkhetutolisankhya ?? "").toString();
         });
         abhiyaanSwayamsevakDataList = gruhAbhiyaanVruttaData?.swayamsevakList ?? [];
@@ -303,7 +304,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
           }
           if (_gruhAbhiyaanToliList != null) {
             gruhAbhiyaanToliList = _gruhAbhiyaanToliList;
-            samparkaSahabhagiController.text = gruhAbhiyaanToliList.where((e) => e.isdefault == 1).length.toString();
+            // samparkaSahabhagiController.text = gruhAbhiyaanToliList.where((e) => e.isdefault == 1).length.toString();
             // samparkaToliController.text = gruhAbhiyaanToliList.length.toString();
           }
         } else {
@@ -329,7 +330,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
           "SamparkitGhar": 0, // int.tryParse(samparkitGhareController.text.isNotEmpty ? samparkitGhareController.text : "0"),
           "VitaritKarpatra": int.tryParse(vitritKarpatrakController.text.isNotEmpty ? vitritKarpatrakController.text : "0"),
           "PustakVikriSankhya": int.tryParse(pustakVikriController.text.isNotEmpty ? pustakVikriController.text : "0"),
-          "SamparkhetuSahbhagiSankhya": int.tryParse(samparkaSahabhagiController.text.isNotEmpty ? samparkaSahabhagiController.text : "0"),
+          "SamparkhetuSahbhagiSankhya": 0, //int.tryParse(samparkaSahabhagiController.text.isNotEmpty ? samparkaSahabhagiController.text : "0"),
           "SamparkhetuToliSankhya": 0, //int.tryParse(samparkaToliController.text.isNotEmpty ? samparkaToliController.text : "0"),
           "swayamsevakIds": selectedVisitedSwayamsevak.map((e) => e.swayamsevakID).join(","), // comma-separated IDs
           "AppUserID": _isEditing
@@ -381,7 +382,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
     }
   }
 
-  saveVisheshVyaktiFun() async {
+  saveVisheshVyaktiFun({bool refresh = false}) async {
     try {
       bool isConnected = await Statics.isInternetConnected();
       if (isConnected) {
@@ -413,7 +414,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
             createdUserId = null;
             selectedSajjanshaktiItems = [];
           });
-          await _getSwList();
+          if (refresh) await _getSwList();
           // await Future.wait(<Future>[_getSwList(), _getPreviousDayDataList()]);
           print("succeed");
         } else {
@@ -548,7 +549,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
 
   Future<List<GeoUnitMasterBAL>> populatelinkedMahaanagarDropdown() async {
     _linkedVibhaagValue = _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-    List<GeoUnitMasterBAL> data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MahaanagarLevelID'].toString(), '', '', '', isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
+    List<GeoUnitMasterBAL> data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MahaanagarLevelID'].toString(), '', '', '', isAbhiyaan: true);
     setState(() {
       _linkedMahaanagar = data;
     });
@@ -559,8 +560,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
     _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedbhaagName = _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
     print("populatelinkedVibhaagDropdown $mahaanagarIDStr");
-    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '',
-        isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
+    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '', isAbhiyaan: true);
     setState(() {
       _linkedVibhaag = data;
     });
@@ -571,7 +571,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
     _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedbhaagName = _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
     _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = [];
-    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '', isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
+    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '', isAbhiyaan: true);
     setState(() {
       _linkedbhaag = data;
     });
@@ -581,7 +581,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
   Future<List<GeoUnitMasterBAL>> populatelinkedShaharDropdown(String bhaagIDStr) async {
     _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
-    var shDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', '', isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
+    var shDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', '', isAbhiyaan: true);
     setState(() {
       _linkedshahar = (shDD.length > 0 ? shDD : null);
     });
@@ -596,13 +596,13 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
     print("print LevelID > ${Statics.userDetails["LevelID"]}");
     print("shaharIDStr shaharIDStr $shaharIDStr");
     if (shaharIDStr != null) {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), shaharIDStr!, 'Shahar', '', isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
+      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), shaharIDStr!, 'Shahar', '', isAbhiyaan: true);
       setState(() {
         _linkednagar = (ngDD.length > 0 ? ngDD : null);
       });
       return ngDD;
     } else {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '', isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
+      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '', isAbhiyaan: true);
       setState(() {
         _linkednagar = (ngDD.length > 0 ? ngDD : null);
       });
@@ -614,7 +614,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
     _linkedmandalValue = _linkedgraamValue = null;
     _linkedmandalName = _linkedgraamName = null;
     _linkedmandal = _linkedgraam = null;
-    var mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, 'Nagar', '', isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
+    var mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, 'Nagar', '', isAbhiyaan: true);
     setState(() {
       _linkedmandal = (mnDD.length > 0 ? mnDD : null);
     });
@@ -624,7 +624,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
   Future<List<GeoUnitMasterBAL>> populatelinkedGraamDropdown(String? mandalIDStr) async {
     _linkedgraamValue = null;
     _linkedgraamName = null;
-    var gmDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['GraamLevelID'].toString(), mandalIDStr!, 'Mandal', '', isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
+    var gmDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['GraamLevelID'].toString(), mandalIDStr!, 'Mandal', '', isAbhiyaan: true);
     setState(() {
       _linkedgraam = (gmDD.length > 0 ? gmDD : null);
     });
@@ -634,7 +634,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
   Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(String? nagarIDStr) async {
     _linkedvastiValue = null;
     _linkedvastiName = null;
-    var vsDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, 'Nagar', '', isAbhiyaan: !Statics.abhiyaanUserDetails["isEmpty"]);
+    var vsDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, 'Nagar', '', isAbhiyaan: true);
     setState(() {
       _linkedvasti = (vsDD.length > 0 ? vsDD : null);
     });
@@ -1270,7 +1270,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                       // customTextFields(title: "संपर्कित घरे : ", controller: samparkitGhareController),
                       customTextFields(title: Statics.getLabel("gruhVitaritKarpatra") + ": ", controller: vitritKarpatrakController),
                       customTextFields(title: Statics.getLabel("gruhPustakVikti") + ": ", controller: pustakVikriController),
-                      customTextFields(title: "सहभागी कार्यकर्ते संख्या" + ": ", controller: samparkaSahabhagiController), //,gruhAbhiyaanVruttaData!.abhiyaandata!.ishide),
+                      // customTextFields(title: "सहभागी कार्यकर्ते संख्या" + ": ", controller: samparkaSahabhagiController), //,gruhAbhiyaanVruttaData!.abhiyaandata!.ishide),
                       // customTextFields(title: "संपर्क हेतू टोळी संख्या : ", controller: samparkaToliController), //,gruhAbhiyaanVruttaData!.abhiyaandata!.ishide),
                       // SizedBox(height: 10),
                       SizedBox(height: 21),
@@ -1603,7 +1603,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                       // customTextFields(title: "संपर्कित घरे : ", controller: samparkitGhareController, readOnly: isAbhiyaanButPramukh && !_isEditing),
                       customTextFields(title: Statics.getLabel("gruhVitaritKarpatra") + ": ", controller: vitritKarpatrakController, readOnly: isAbhiyaanButPramukh && !_isEditing),
                       customTextFields(title: Statics.getLabel("gruhPustakVikti") + ": ", controller: pustakVikriController, readOnly: isAbhiyaanButPramukh && !_isEditing),
-                      customTextFields(title: "सहभागी कार्यकर्ते संख्या" + ": ", controller: samparkaSahabhagiController), //,gruhAbhiyaanVruttaData!.abhiyaandata!.ishide),
+                      // customTextFields(title: "सहभागी कार्यकर्ते संख्या" + ": ", controller: samparkaSahabhagiController), //,gruhAbhiyaanVruttaData!.abhiyaandata!.ishide),
                       // customTextFields(title: "संपर्क हेतू टोळी संख्या : ", controller: samparkaToliController), //,gruhAbhiyaanVruttaData!.abhiyaandata!.ishide),
                       const SizedBox(height: 12),
                       Text(
@@ -1795,6 +1795,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                                   //   return null;
                                 } else {
                                   print("saving data");
+                                  await saveVisheshVyaktiFun();
                                   await saveGruhAbhiyaanDataFun();
                                   Navigator.pop(ct);
                                 }
@@ -2237,8 +2238,8 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                                                             pustakVikriController.text = item.pustakvikrisankhya.toString();
                                                             createdUserId = item.createdUserID;
 
-                                                            if (item.createdUserID == Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"] && isAbhiyaanButPramukh)
-                                                              samparkaSahabhagiController.text = item.samparkhetusahbhagisankhya.toString();
+                                                            // if (item.createdUserID == Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"] && isAbhiyaanButPramukh)
+                                                            //   samparkaSahabhagiController.text = item.samparkhetusahbhagisankhya.toString();
                                                             // if (item.createdUserID == Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"] && isAbhiyaanButPramukh)
                                                             //   samparkaToliController.text = item.samparkhetutolisankhya.toString();
                                                           }));
@@ -2409,8 +2410,8 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                                                               pustakVikriController.text = item.pustakvikrisankhya.toString();
                                                               createdUserId = item.createdUserID;
 
-                                                              if (item.createdUserID == Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"] && isAbhiyaanButPramukh)
-                                                                samparkaSahabhagiController.text = item.samparkhetusahbhagisankhya.toString();
+                                                              // if (item.createdUserID == Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"] && isAbhiyaanButPramukh)
+                                                              //   samparkaSahabhagiController.text = item.samparkhetusahbhagisankhya.toString();
                                                               // if (item.createdUserID == Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"] && isAbhiyaanButPramukh)
                                                               //   samparkaToliController.text = item.samparkhetutolisankhya.toString();
                                                               _selectedGeoUnitId = item.geoUnitID.toString();
@@ -3090,7 +3091,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                                         Statics.showToast("किमान एक विशेष व्यक्ती जोडावे");
                                         return null;
                                       }
-                                      await saveVisheshVyaktiFun();
+                                      await saveVisheshVyaktiFun(refresh: true);
                                       Navigator.pop(ctx);
                                       setState(() {});
                                     },

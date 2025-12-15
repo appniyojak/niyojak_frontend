@@ -1223,8 +1223,14 @@ Map<String, String> resEnglish = {
   'addSahabhagiKaryakarta': 'Add sahabhagi karyakarta',
   'vastiNotAvailable': 'Vasti Not Available',
   'graamNotAvailable': 'Graam Not Available',
+  'nagarNotAvailable': 'Nagar Not Available',
+  'taalukaNotAvailable': 'Taaluka Not Available',
+  'mandalNotAvailable': 'Mandal Not Available',
   'vastiYaadi': 'Vasti List',
   'graamYaadi': 'Graam List',
+  'nagarYaadi': 'Nagar List',
+  'taalukaYaadi': 'Taaluka List',
+  'mandalYaadi': 'Mandal List',
   'bandKara': 'Close it',
   'sharaansh': 'Summary',
   'sarvekshanSthiti': 'Survey Status',
@@ -1694,6 +1700,7 @@ Map<String, String> resEnglish = {
   "othersPreviousDaysData": "Others Other Dates Data",
   'AddNewSwayamsevak': 'Add New Swayamsevak',
   'fillVrutta': 'Fill Vrutta',
+  'started': 'Started',
 };
 
 ///1,584
@@ -2924,8 +2931,14 @@ Map<String, String> resMarathi = {
   'addSahabhagiKaryakarta': 'सहभागी कार्यकर्ता जोडा',
   'vastiNotAvailable': 'वस्ती उपलब्ध नाहीयेत',
   'graamNotAvailable': 'ग्राम उपलब्ध नाहीयेत',
+  'nagarNotAvailable': 'नगर उपलब्ध नाहीयेत',
+  'taalukaNotAvailable': 'तालुका उपलब्ध नाहीयेत',
+  'mandalNotAvailable': 'मंडल उपलब्ध नाहीयेत',
   'vastiYaadi': 'वस्ती यादी',
   'graamYaadi': 'ग्राम यादी',
+  'nagarYaadi': 'नगर यादी',
+  'taalukaYaadi': 'तालुका यादी',
+  'mandalYaadi': 'मंडल यादी',
   'bandKara': 'बंद करा',
   'sharaansh': 'सारांश',
   'sarvekshanSthiti': 'सर्वेक्षण स्थिती',
@@ -3392,6 +3405,7 @@ Map<String, String> resMarathi = {
   "othersPreviousDaysData": "इतर लोकांचे अन्य दिवसाचे तपशिल",
   'AddNewSwayamsevak': 'नवीन स्वयंसेवक जोडा',
   'fillVrutta': 'वृत्त भरा',
+  'started': 'सुरु झालेले',
 };
 
 ///1,583
@@ -4622,8 +4636,14 @@ Map<String, String> resHindi = {
   'addSahabhagiKaryakarta': 'सहभागी कार्यकर्ता जोड़ें',
   'vastiNotAvailable': 'बस्तियाँ उपलब्ध नहीं हैं।',
   'graamNotAvailable': 'ग्राम उपलब्ध नहीं हैं।',
+  'nagarNotAvailable': 'नगर उपलब्ध नहीं हैं।',
+  'taalukaNotAvailable': 'तालुका उपलब्ध नहीं हैं।',
+  'mandalNotAvailable': 'मंडल उपलब्ध नहीं हैं।',
   'vastiYaadi': 'बस्ती यादी',
   'graamYaadi': 'ग्राम यादी',
+  'nagarYaadi': 'नगर यादी',
+  'taalukaYaadi': 'तालुका यादी',
+  'mandalYaadi': 'मंडल यादी',
   'bandKara': 'बंद किजिए ',
   'sharaansh': 'सारांश ',
   'sarvekshanSthiti': 'सर्वेक्षण स्थिती',
@@ -5089,4 +5109,5 @@ Map<String, String> resHindi = {
   "othersPreviousDaysData": "अन्य लोग का अन्य तिथियों का तपशिल",
   'AddNewSwayamsevak': 'नया स्वयंसेवक जोड़ें',
   'fillVrutta': 'वृत्त भरें',
+  'started': 'चयनित',
 };

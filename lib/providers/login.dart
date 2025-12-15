@@ -71,6 +71,7 @@ class LogIn {
 
   Future<void> usrLogIn(BuildContext ctx, String mobileNumber, String? password, String otplogin) async {
     await DatabaseHelper.dropCompleteDB();
+    Database _db = await DatabaseHelper.database;
 
     print(otplogin);
     print("usrLogIn 1");
@@ -185,6 +186,21 @@ class LogIn {
         for (var data in geoUnitData) {
           await dbh.DatabaseHelper.insertOrUpdateRecord('GeoUnitMaster', data);
         }
+
+        print("usrLogIn 13.5");
+        await _db.transaction((txn) async {
+          await txn.execute('''
+          INSERT INTO AbhiyaanGeoUnitMaster (GeoUnitID , PraantID , GeoUnitName ,NameForDisplay ,LevelID , DisplaySequence , 
+                              HasGraaminKshetra , ParentKshetraID , ParentPraantID , ParentMahaanagarID , 
+                              ParentVibhaagID , ParentBhaagID , ParentNagarID , ParentShaharID , 
+                              ParentMandalID , ParentVastiID , ParentGraamID, isAbhiyaan)
+        Select GeoUnitID , PraantID , GeoUnitName ,NameForDisplay , LevelID , DisplaySequence , 
+                    HasGraaminKshetra , ParentKshetraID , ParentPraantID , ParentMahaanagarID , 
+                    ParentVibhaagID , ParentBhaagID , ParentNagarID , ParentShaharID , 
+                    ParentMandalID , ParentVastiID , ParentGraamID, 0
+        from GeoUnitMaster
+        ''');
+        });
       }
 
       // var abhiyaanGeoUnitMaster = body['LogInData']['GeoUnitListforAbhiyaan'];

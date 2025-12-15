@@ -114,7 +114,7 @@ class DatabaseHelper {
           ' LevelID INT, DisplaySequence INT, ' +
           '   HasGraaminKshetra BOOL, ParentKshetraID INT, ParentPraantID INT, ParentMahaanagarID INT, ' +
           '   ParentVibhaagID INT, ParentBhaagID INT, ParentNagarID INT, ParentShaharID INT, ' +
-          '   ParentMandalID INT, ParentVastiID INT, ParentGraamID INT)');
+          '   ParentMandalID INT, ParentVastiID INT, ParentGraamID INT, isAbhiyaan BOOL)');
     });
     return database;
   }
@@ -334,7 +334,7 @@ class DatabaseHelper {
               (cnt == 1
                   ? 'INSERT INTO AbhiyaanGeoUnitMaster(GeoUnitID, PraantID, GeoUnitName, LevelID, DisplaySequence, ' +
                       ' ParentKshetraID, ParentPraantID, ParentMahaanagarID, ParentVibhaagID, ParentBhaagID, ParentNagarID, ' +
-                      ' ParentShaharID, ParentMandalID, ParentGraamID, ParentVastiID, HasGraaminKshetra) VALUES '
+                      ' ParentShaharID, ParentMandalID, ParentGraamID, ParentVastiID, HasGraaminKshetra, isAbhiyaan) VALUES '
                   : ',') +
               '(' +
               data['GeoUnitID'].toString() +
@@ -368,6 +368,8 @@ class DatabaseHelper {
               data['ParentVastiID'].toString() +
               ',' +
               (data['HasGraaminKshetra'].toString() == 'true' ? '1' : '0') +
+              ',' +
+              '1' +
               ')';
         }
         cnt = cnt + 1;
@@ -808,7 +810,7 @@ class DatabaseHelper {
     } else if (tableName == 'AbhiyaanGeoUnitMaster') {
       sqlStr = 'INSERT INTO AbhiyaanGeoUnitMaster(GeoUnitID, PraantID, GeoUnitName, LevelID, DisplaySequence, ' +
           ' ParentKshetraID, ParentPraantID, ParentMahaanagarID, ParentVibhaagID, ParentBhaagID, ParentNagarID, ' +
-          ' ParentShaharID, ParentMandalID, ParentGraamID, ParentVastiID, HasGraaminKshetra) VALUES (' +
+          ' ParentShaharID, ParentMandalID, ParentGraamID, ParentVastiID, HasGraaminKshetra, isAbhiyaan) VALUES (' +
           data['GeoUnitID'].toString() +
           ',' +
           data['PraantID'].toString() +
@@ -840,6 +842,8 @@ class DatabaseHelper {
           data['ParentVastiID'].toString() +
           ',' +
           (data['HasGraaminKshetra'].toString() == 'true' ? '1' : '0') +
+          ',' +
+          '1' +
           ');';
     } else if (tableName == 'UserDataMaster') {
       sqlStr = 'SELECT 1 FROM UserDataMaster WHERE SwayamsevakID=' + data['SwayamsevakID'].toString() + ';';
