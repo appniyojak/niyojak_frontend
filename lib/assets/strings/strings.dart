@@ -2971,7 +2971,7 @@ Map<String, String> resMarathi = {
   'fireBrigateCenterCount': 'अग्निशमन दल केंद्र संख्या',
   'policeStationCount': 'पोलीस ठाणे / चौकी संख्या',
   'selectStar': 'स्तर  निवडा',
-  'vastiPramukhName': 'वस्ती/ग्राम प्रमुखांचे नाव',
+  'vastiPramukhName': 'वस्ती/ग्राम प्रमुखाचे नाव',
   'vastiSamitiSadasyaCount': 'वस्ती समितीत किती सदस्य आहेत',
   'vastitSewaVastiCount': 'वस्तीत सेवा वस्त्यां (किती ?)',
   'vastichhaNakashaa': 'वस्ती चा नकाशा',

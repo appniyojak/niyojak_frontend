@@ -103,30 +103,34 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
   }
 
   Future<void> _getSwList() async {
-    levelWiseList = [];
-    dateWiseList = [];
-    // summaryList = [];
-    levelWiseCountsList = [];
-    // sajjanAnyaCountsList = [];
-    print("calling");
-    bool isConnected = await Statics.isInternetConnected();
-    if (isConnected) {
-      var inputData = {
-        "AppUserID": Statics.abhiyaanUserDetails["isEmpty"] ? Statics.userDetails["userID"] : Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"],
-        "GeoUnitID": _selectedGeoUnitId ?? 0, //(_linkedvastiValue != null && _linkedvastiValue!.isNotEmpty) ? _linkedvastiValue : _linkedgraamValue,
-      };
-      print(jsonEncode(inputData));
-      final _report = await Statics.getReportforGruhAbhiyaan(inputData, context: context);
-      setState(() {});
-      if (_report != null) {
-        setState(() {
-          levelWiseList = _report.table1List ?? [];
-          dateWiseList = _report.table2List ?? [];
-          summaryList = _report.table3List ?? [];
-          levelWiseCountsList = _report.table4List ?? [];
-          sajjanAnyaCountsList = _report.table5List ?? [];
-        });
+    try {
+      levelWiseList = [];
+      dateWiseList = [];
+      // summaryList = [];
+      levelWiseCountsList = [];
+      // sajjanAnyaCountsList = [];
+      print("calling");
+      bool isConnected = await Statics.isInternetConnected();
+      if (isConnected) {
+        var inputData = {
+          "AppUserID": Statics.abhiyaanUserDetails["isEmpty"] ? Statics.userDetails["userID"] : Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"],
+          "GeoUnitID": _selectedGeoUnitId ?? 0, //(_linkedvastiValue != null && _linkedvastiValue!.isNotEmpty) ? _linkedvastiValue : _linkedgraamValue,
+        };
+        print(jsonEncode(inputData));
+        final _report = await Statics.getReportforGruhAbhiyaan(inputData, context: context);
+        setState(() {});
+        if (_report != null) {
+          setState(() {
+            levelWiseList = _report.table1List ?? [];
+            dateWiseList = _report.table2List ?? [];
+            summaryList = _report.table3List ?? [];
+            levelWiseCountsList = _report.table4List ?? [];
+            sajjanAnyaCountsList = _report.table5List ?? [];
+          });
+        }
       }
+    } catch (e) {
+      print("exception >>>>>>>>>>> $e");
     }
   }
 
@@ -596,6 +600,8 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
     // colors for the two bars (series)
     final List<Color> seriesColors = [const Color(0xFF6C3DF4), const Color(0xFF39B54A)];
 
+    final dataMax = values.expand((e) => e).reduce((a, b) => a > b ? a : b);
+
     // final level = [Statics.getLabel("Graam"), Statics.getLabel("Vasti")];
     final headers = [
       Statics.getLabel('gruhSamarkitGhar'),
@@ -614,11 +620,11 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
           children: [
             const SizedBox(height: 6),
             SizedBox(
-              height: 320,
+              height: 400,
               child: BarChart(
                 BarChartData(
                   alignment: BarChartAlignment.spaceAround,
-                  maxY: maxY,
+                  maxY: dataMax == 0 ? 10 : dataMax * 1.15,
                   minY: minY,
                   groupsSpace: 24,
                   barTouchData: BarTouchData(enabled: true, touchTooltipData: BarTouchTooltipData(getTooltipColor: (group) => Colors.white)),
@@ -627,7 +633,7 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                       sideTitles: SideTitles(
                         showTitles: false,
                         reservedSize: 42,
-                        interval: gap,
+                        // interval: gap,
                         getTitlesWidget: (value, meta) {
                           // show integer ticks
                           return Text(
@@ -664,7 +670,7 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                   gridData: FlGridData(
                     show: true,
                     drawVerticalLine: false,
-                    horizontalInterval: gap,
+                    // horizontalInterval: gap,
                     getDrawingHorizontalLine: (value) => FlLine(color: Colors.grey.withOpacity(0.12), strokeWidth: 1),
                   ),
                   borderData: FlBorderData(show: false),

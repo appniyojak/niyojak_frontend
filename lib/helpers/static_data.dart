@@ -2968,7 +2968,7 @@ Future<GruhAbhiyaanReportModel?> getReportforGruhAbhiyaan(Map<String, dynamic> i
   try {
     var response = await http.post(Uri.parse(getReportforGruhAbhiyaanApi), headers: jHeaders, body: jsonEncode(inputJson));
 
-    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+    // if (context != null) Navigator.of(context, rootNavigator: true).pop();
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
@@ -2985,9 +2985,11 @@ Future<GruhAbhiyaanReportModel?> getReportforGruhAbhiyaan(Map<String, dynamic> i
       return null; // ✅ error case
     }
   } catch (e) {
-    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+    // if (context != null) Navigator.of(context, rootNavigator: true).pop();
     print("Exception: $e");
     return null;
+  } finally {
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
   }
 }
 

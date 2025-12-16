@@ -20,8 +20,9 @@ import 'add_abhiyaan_karyakarta_screen.dart';
 
 class GruhVruttaTab extends StatefulWidget {
   final AbhiyanSwayamsevakdata? initialData;
+  final bool isUpdated;
 
-  const GruhVruttaTab({super.key, this.initialData});
+  const GruhVruttaTab({super.key, this.initialData, this.isUpdated = false});
 
   @override
   State<GruhVruttaTab> createState() => _GruhVruttaTabState();
@@ -182,10 +183,10 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
   @override
   void didUpdateWidget(covariant GruhVruttaTab oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // if (widget.initialData != oldWidget.initialData && widget.initialData != null) {
-    log("didUpdateWidget runnn >>>>>>>>>>>>>> ");
-    setDropDowns();
-    // }
+    if (widget.isUpdated != oldWidget.isUpdated && widget.isUpdated) {
+      log("didUpdateWidget runnn >>>>>>>>>>>>>> ");
+      setDropDowns();
+    }
   }
 
   setDropDowns() async {
@@ -404,17 +405,17 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
 
         var result = await Statics.saveVisheshVyaktiDataforGruhAbhiyaan(_data, context: context);
         if (result != null && result) {
+          if (refresh) await _getSwList();
           setState(() {
             _isEditing = false;
             _isEditingForPramukh = false;
             // dateController.text = DateFormat("dd/MM/yyyy").format(DateTime.now());
             // samparkitGhareController.clear();
-            vitritKarpatrakController.clear();
-            pustakVikriController.clear();
+            // vitritKarpatrakController.clear();
+            // pustakVikriController.clear();
             createdUserId = null;
             selectedSajjanshaktiItems = [];
           });
-          if (refresh) await _getSwList();
           // await Future.wait(<Future>[_getSwList(), _getPreviousDayDataList()]);
           print("succeed");
         } else {
@@ -434,7 +435,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
     //   _isExpanded = false;
     //   _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     // });
-    _selctedLevelNameList = [];
+    // _selctedLevelNameList = [];
     await populatelinkedMahaanagarDropdown();
     await populatelinkedVibhaagDropdown('');
     if (isClear) return;
@@ -1330,7 +1331,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                                   selectedSajjanshaktiItems = [];
                                   selectedAnyaprabhaviItems = [];
                                   selectedVisitedSwayamsevak = [];
-                                  _selctedLevelNameList = [];
+                                  // _selctedLevelNameList = [];
                                 });
                                 Navigator.pop(ct);
                                 await _getSwList();
@@ -1821,7 +1822,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                                   selectedSajjanshaktiItems = [];
                                   selectedAnyaprabhaviItems = [];
                                   selectedVisitedSwayamsevak = [];
-                                  _selctedLevelNameList = [];
+                                  // _selctedLevelNameList = [];
                                 });
                                 Navigator.pop(ct);
                                 await _getSwList();
@@ -2228,7 +2229,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                                                 // },
                                                 onTap: () async {
                                                   log(jsonEncode(item));
-                                                  _selctedLevelNameList = [];
+                                                  // _selctedLevelNameList = [];
                                                   await Future.delayed(
                                                       Duration(milliseconds: 100),
                                                       () => setState(() {
@@ -2266,12 +2267,12 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                                                   // }
                                                   setState(() {
                                                     _isExpanded = false;
-                                                    _selctedLevelNameList.add(_linkedbhaagName);
-                                                    _selctedLevelNameList.add(_linkedshaharName);
-                                                    _selctedLevelNameList.add(_linkednagarName);
-                                                    _selctedLevelNameList.add(_linkedmandalName);
-                                                    _selctedLevelNameList.add(_linkedgraamName);
-                                                    _selctedLevelNameList.add(_linkedvastiName);
+                                                    // _selctedLevelNameList.add(_linkedbhaagName);
+                                                    // _selctedLevelNameList.add(_linkedshaharName);
+                                                    // _selctedLevelNameList.add(_linkednagarName);
+                                                    // _selctedLevelNameList.add(_linkedmandalName);
+                                                    // _selctedLevelNameList.add(_linkedgraamName);
+                                                    // _selctedLevelNameList.add(_linkedvastiName);
                                                   });
                                                   setState(() {
                                                     if (data != null) {
@@ -2400,7 +2401,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                                                   // },
                                                   onTap: () async {
                                                     log(jsonEncode(item));
-                                                    _selctedLevelNameList = [];
+                                                    // _selctedLevelNameList = [];
                                                     await Future.delayed(
                                                         Duration(milliseconds: 100),
                                                         () => setState(() {
@@ -2643,7 +2644,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
             flex: 3,
             child: TextFormField(
               controller: controller,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10)],
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(4)],
               style: TextStyle(fontSize: 14),
               autofocus: false,
               onTap: onTap,

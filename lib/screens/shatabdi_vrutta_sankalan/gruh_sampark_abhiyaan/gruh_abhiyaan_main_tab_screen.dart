@@ -64,6 +64,7 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
   String? selectedDayitvValue = "";
 
   bool _isExpanded = false;
+  bool _isUpdated = false;
   AbhiyanSwayamsevakdata? initialData;
 
   // AbhiyanGruhasamparkData? abhiyaanGruhaSamparkDataList;
@@ -111,8 +112,17 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
       };
       log(jsonEncode(inputData));
       await Statics.getAbhiyaanGeoUnitMasterData(inputData, context: context);
-      if (mounted) setState(() {});
+      if (mounted)
+        setState(() {
+          _isUpdated = true;
+        });
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _isUpdated = false;
   }
 
   late Size size = MediaQuery.of(context).size;
@@ -192,7 +202,7 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
             controller: _tabController,
             physics: NeverScrollableScrollPhysics(),
             children: <Widget>[
-              GruhVruttaTab(initialData: initialData),
+              GruhVruttaTab(initialData: initialData, isUpdated: _isUpdated),
               GruhSamparkaReportTab(initialData: initialData),
             ],
           ),
