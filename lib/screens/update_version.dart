@@ -1,10 +1,18 @@
 import 'dart:io';
 
+import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../helpers/static_data.dart' as Statics;
+import '../providers/login.dart';
 
 downloadVersion() async {
+  await LogIn().logOut();
+  BackgroundFetch.stop().then((int status) {
+    print('[BackgroundFetch] stop success: $status');
+  });
+
   await launch(Platform.isIOS ? Statics.urlIOSUpdatedVersion : Statics.urlUpdatedVersion);
 }
 

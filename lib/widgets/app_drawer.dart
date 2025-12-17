@@ -11,7 +11,6 @@ import '../helpers/static_data.dart' as Statics;
 import '../screens/annual_baithak_ekatrit_vrutta.dart';
 import '../screens/help_screen.dart';
 import '../screens/home_screen.dart';
-import '../screens/levels_update_module/levels_manage_tabs.dart';
 import '../screens/search_annual_baithak_vrutta.dart';
 import '../screens/search_shaakhaa.dart';
 import '../screens/search_swayamsevak_transfer.dart';
