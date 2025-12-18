@@ -1925,10 +1925,10 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                     borderRadius: BorderRadius.circular(14),
                     border: Border.all(color: Colors.purpleAccent, width: 1),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12),
                   margin: const EdgeInsets.symmetric(horizontal: 18.0),
                   child: Column(
-                    spacing: 12,
+                    spacing: 14,
                     children: [
                       InkWell(
                         borderRadius: BorderRadius.circular(15),

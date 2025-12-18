@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../helpers/static_data.dart' as Statics;
 import '../../../models/response_model/AbhiyaanLoginDataResponse.dart';
@@ -399,7 +400,7 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                 ),
               ),
               SizedBox(height: 8),
-              levelWiseDataInChart(),
+              dateWiseDataInChart(),
               SizedBox(height: 12),
               levelWiseTable(),
               SizedBox(height: 21),
@@ -421,9 +422,9 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
       Statics.getLabel('gruhVitaritKarpatra'),
       Statics.getLabel('gruhPustakVikti'),
       Statics.getLabel('gruhSpecialContact'),
-      Statics.getLabel('gruhSahabhaagiKaaryakartaaTotalCount'),
       Statics.getLabel('gruhSahabhaagiKaaryakartaaMaleCount'),
       Statics.getLabel('gruhSahabhaagiKaaryakartaaFemaleCount'),
+      Statics.getLabel('gruhSahabhaagiKaaryakartaaTotalCount'),
       // "सहभागी टोळी \nसंख्या", //Statics.getLabel('gruhAttendance'),
       // Statics.getLabel('gruhAttendance'),
     ];
@@ -495,7 +496,7 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                     columns: headers
                         .map((header) => DataColumn(
                               label: Container(
-                                constraints: const BoxConstraints(minWidth: 30, maxWidth: 200),
+                                constraints: const BoxConstraints(minWidth: 30, maxWidth: 100),
                                 child: Text(
                                   header,
                                   softWrap: true,
@@ -515,9 +516,9 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                           DataCell(Center(child: Text((item.vitaritkarpatra ?? 0).toString()))),
                           DataCell(Center(child: Text((item.pustakvikrisankhya ?? 0).toString()))),
                           DataCell(Center(child: Text((item.totalAtithiCount ?? 0).toString()))),
-                          DataCell(Center(child: Text((item.ekunsamparkhetukaryakarta ?? 0).toString()))),
                           DataCell(Center(child: Text((item.malecount ?? 0).toString()))),
                           DataCell(Center(child: Text((item.femalecount ?? 0).toString()))),
+                          DataCell(Center(child: Text((item.ekunsamparkhetukaryakarta ?? 0).toString()))),
                           // DataCell(Center(child: Text((item.samparkhetutolisankhya ?? 0).toString()))),
                           // DataCell(Center(child: Text((item.attcount ?? 0).toString()))),
                         ]);
@@ -529,9 +530,9 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                         DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.vitaritkarpatra ?? 0)).toString()))),
                         DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.pustakvikrisankhya ?? 0)).toString()))),
                         DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.totalAtithiCount ?? 0)).toString()))),
-                        DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.ekunsamparkhetukaryakarta ?? 0)).toString()))),
                         DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.malecount ?? 0)).toString()))),
                         DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.femalecount ?? 0)).toString()))),
+                        DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.ekunsamparkhetukaryakarta ?? 0)).toString()))),
                         // DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.samparkhetutolisankhya ?? 0)).toString()))),
                         // DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.attcount ?? 0)).toString()))),
                       ])
@@ -555,7 +556,10 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
     final List<Map<String, dynamic>> rows = table.map((e) => Map<String, dynamic>.from(e as Map)).toList();
 
     // keys we want to plot in order
-    final List<String> keys = ['pustakvikrisankhya', 'vitaritkarpatra'];
+    final List<String> keys = [
+      'vitaritkarpatra',
+      'pustakvikrisankhya',
+    ];
 
     // Extract counts per level per key
     // values[i][j] => i = group index (0..2), j = series index (0..rows.length-1)
@@ -654,9 +658,9 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                           if (index < 0 || index >= keys.length) return const SizedBox.shrink();
                           // friendly label for bottom
                           final labelMap = {
+                            'vitaritkarpatra': Statics.getLabel('gruhVitaritKarpatra'),
                             'pustakvikrisankhya': Statics.getLabel('gruhPustakVikti'),
                             // 'samparkitghar': Statics.getLabel('gruhSamarkitGhar'),
-                            'vitaritkarpatra': Statics.getLabel('gruhVitaritKarpatra')
                           };
                           final label = labelMap[keys[index]] ?? keys[index];
                           return Title(
@@ -735,6 +739,188 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
           ],
         ),
       ),
+    );
+  }
+
+  Widget dateWiseDataInChart() {
+    // parse json
+
+    final List<Map<String, dynamic>> table = dateWiseList.map((e) => Map<String, dynamic>.from(e.toJson())).toList();
+
+    table.sort((a, b) => DateFormat('dd/MM/yyyy HH:mm:ss').parse(b['AbhiyaanDate']).compareTo(DateFormat('dd/MM/yyyy HH:mm:ss').parse(a['AbhiyaanDate'])));
+
+// take latest 4
+    final List<Map<String, dynamic>> rows = table.take(4).toList();
+
+    // keys we want to plot in order
+    final List<String> keys = [
+      'vitaritkarpatra',
+      'pustakvikrisankhya',
+    ];
+
+    // Extract counts per level per key
+    // values[i][j] => i = group index (0..2), j = series index (0..rows.length-1)
+    final List<List<double>> values = List.generate(rows.length, (dateIndex) {
+      return List.generate(keys.length, (seriesIndex) {
+        final raw = rows[dateIndex][keys[seriesIndex]];
+        if (raw == null) return 0.0;
+        if (raw is num) return raw.toDouble();
+        return double.tryParse(raw.toString()) ?? 0.0;
+      });
+    });
+
+    // compute min/max across all values
+    double minVal = double.infinity;
+    double maxVal = double.negativeInfinity;
+    for (final group in values) {
+      for (final v in group) {
+        if (v.isFinite) {
+          if (v < minVal) minVal = v;
+          if (v > maxVal) maxVal = v;
+        }
+      }
+    }
+    if (minVal == double.infinity) minVal = 0;
+    if (maxVal == double.negativeInfinity) maxVal = 0;
+
+    // define gap (tick interval)
+    const double gap = 50;
+
+    // compute nice minY and maxY
+    // ensure minY is floored to nearest gap, maxY is ceiled to nearest gap
+    double minY = (minVal / gap).floor() * gap;
+    print("$minY>>>>>>>>>>>>>>>>>>>>>>>");
+    double maxY = (maxVal / gap).ceil() * gap;
+    // if minY == maxY (all values equal), expand a little
+    if (minY == maxY) {
+      minY = (minY - gap).clamp(0, double.infinity);
+      maxY = maxY + gap;
+    }
+    // Ensure minY non-negative
+    if (minY < 0) minY = 0;
+
+    // colors for the two bars (series)
+    final List<Color> seriesColors = [const Color(0xFF6C3DF4), const Color(0xFF39B54A)];
+
+    final dataMax = values.expand((e) => e).reduce((a, b) => a > b ? a : b);
+
+    // final level = [Statics.getLabel("Graam"), Statics.getLabel("Vasti")];
+    final headers = [
+      Statics.getLabel('gruhSamarkitGhar'),
+      Statics.getLabel('gruhVitaritKarpatra'),
+      Statics.getLabel('gruhPustakVikti'),
+      Statics.getLabel('gruhSpecialContact'),
+      Statics.getLabel('gruhAttendance'),
+    ];
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.only(left: 18.0, right: 18.0, bottom: 8.0, top: 12),
+      child: Container(
+        decoration: BoxDecoration(border: Border.all(color: Colors.grey.shade800)),
+        padding: EdgeInsets.all(4),
+        child: Column(
+          children: [
+            const SizedBox(height: 6),
+            SizedBox(
+              height: 400,
+              child: BarChart(
+                BarChartData(
+                  alignment: BarChartAlignment.spaceAround,
+                  maxY: dataMax == 0 ? 10 : dataMax * 1.15,
+                  minY: minY,
+                  groupsSpace: 24,
+                  barTouchData: BarTouchData(enabled: true, touchTooltipData: BarTouchTooltipData(getTooltipColor: (group) => Colors.white)),
+                  titlesData: FlTitlesData(
+                    leftTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: false,
+                        reservedSize: 42,
+                        // interval: gap,
+                        getTitlesWidget: (value, meta) {
+                          // show integer ticks
+                          return Text(
+                            value.toInt().toString(),
+                            style: const TextStyle(color: Colors.black54, fontSize: 12),
+                          );
+                        },
+                      ),
+                    ),
+                    rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    bottomTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        getTitlesWidget: (double value, TitleMeta meta) {
+                          final index = value.toInt();
+                          if (index < 0 || index >= rows.length) {
+                            return const SizedBox.shrink();
+                          }
+
+                          // final date = DateFormat('dd/MM/yyyy HH:mm:ss').parse(rows[index]['AbhiyaanDate']);
+                          final label = rows[index]['AbhiyaanDate'].split(" ").first;
+
+                          return Text(
+                            label,
+                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  gridData: FlGridData(
+                    show: true,
+                    drawVerticalLine: false,
+                    // horizontalInterval: gap,
+                    getDrawingHorizontalLine: (value) => FlLine(color: Colors.grey.withOpacity(0.12), strokeWidth: 1),
+                  ),
+                  borderData: FlBorderData(show: false),
+                  barGroups: List.generate(rows.length, (groupIndex) {
+                    final rods = List.generate(keys.length, (seriesIndex) {
+                      final v = values[groupIndex][seriesIndex];
+                      return BarChartRodData(
+                        toY: v,
+                        width: 20,
+                        borderRadius: BorderRadius.circular(4),
+                        color: seriesColors[seriesIndex],
+                      );
+                    });
+
+                    // position bars inside group: use rods with showingTooltips? fl_chart will display them stacked by x position if you place them as BarChartGroupData with multiple rods
+                    return BarChartGroupData(
+                      x: groupIndex,
+                      barRods: rods,
+                      // spacing between bars inside group
+                      barsSpace: 6,
+                    );
+                  }),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 12),
+
+            // Legend
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _legendItem(seriesColors[0], Statics.getLabel('gruhVitaritKarpatra')),
+                const SizedBox(width: 16),
+                _legendItem(seriesColors[1], Statics.getLabel('gruhPustakVikti')),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _legendItem(Color color, String text) {
+    return Row(
+      children: [
+        Container(width: 14, height: 14, decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(4))),
+        const SizedBox(width: 6),
+        Text(text, style: const TextStyle(fontSize: 13)),
+      ],
     );
   }
 
@@ -926,9 +1112,9 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
       Statics.getLabel('gruhVitaritKarpatra'),
       Statics.getLabel('gruhPustakVikti'),
       Statics.getLabel('gruhSpecialContact'),
-      if (dateWiseList.any((e) => e.ekunsamparkhetukaryakarta != null)) Statics.getLabel('gruhSahabhaagiKaaryakartaaTotalCount'),
       if (dateWiseList.any((e) => e.malecount != null)) Statics.getLabel('gruhSahabhaagiKaaryakartaaMaleCount'),
       if (dateWiseList.any((e) => e.femalecount != null)) Statics.getLabel('gruhSahabhaagiKaaryakartaaFemaleCount'),
+      if (dateWiseList.any((e) => e.ekunsamparkhetukaryakarta != null)) Statics.getLabel('gruhKaaryakartaaTotalCount'),
     ];
 
     if (dateWiseList.isEmpty)
@@ -1089,18 +1275,6 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                             //       child: Text(dateWiseList.fold(0, (sum, item) => sum + (item.samparkhetusahbhagisankhya ?? 0)).toString()))),
                             //   ...dateWiseList.map((item) => DataCell(Center(child: Text((item.samparkhetusahbhagisankhya ?? 0).toString())))).toList(),
                             // ]),
-                            if (dateWiseList.any((e) => e.ekunsamparkhetukaryakarta != null))
-                              DataRow(cells: [
-                                DataCell(Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.yellow.shade50,
-                                      border: Border.all(color: Colors.black26, width: 0.7),
-                                    ),
-                                    alignment: Alignment.center,
-                                    child: Text(dateWiseList.fold(0, (sum, item) => sum + (item.ekunsamparkhetukaryakarta ?? 0)).toString()))),
-                                if (dateWiseList.any((e) => e.ekunsamparkhetukaryakarta != null))
-                                  ...dateWiseList.map((item) => DataCell(Center(child: Text((item.ekunsamparkhetukaryakarta ?? 0).toString())))).toList(),
-                              ]),
                             if (dateWiseList.any((e) => e.malecount != null))
                               DataRow(cells: [
                                 DataCell(Container(
@@ -1122,6 +1296,18 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                                     alignment: Alignment.center,
                                     child: Text(dateWiseList.fold(0, (sum, item) => sum + (item.femalecount ?? 0)).toString()))),
                                 if (dateWiseList.any((e) => e.femalecount != null)) ...dateWiseList.map((item) => DataCell(Center(child: Text((item.femalecount ?? 0).toString())))).toList(),
+                              ]),
+                            if (dateWiseList.any((e) => e.ekunsamparkhetukaryakarta != null))
+                              DataRow(cells: [
+                                DataCell(Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.yellow.shade50,
+                                      border: Border.all(color: Colors.black26, width: 0.7),
+                                    ),
+                                    alignment: Alignment.center,
+                                    child: Text(dateWiseList.fold(0, (sum, item) => sum + (item.ekunsamparkhetukaryakarta ?? 0)).toString()))),
+                                if (dateWiseList.any((e) => e.ekunsamparkhetukaryakarta != null))
+                                  ...dateWiseList.map((item) => DataCell(Center(child: Text((item.ekunsamparkhetukaryakarta ?? 0).toString())))).toList(),
                               ]),
                           ],
                         ),
@@ -1524,76 +1710,77 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
   }
 
   Widget nagarMandalCountsTable() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          Statics.getLabel("abhiyaanStatusNagar"),
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 8),
-        Container(
-          width: double.infinity,
-          margin: EdgeInsets.symmetric(horizontal: 18, vertical: 6),
-          child: DataTable(
-            columnSpacing: 0,
-            horizontalMargin: 16,
-            headingRowColor: MaterialStateProperty.all(Colors.purple.shade300),
-            headingTextStyle: TextStyle(
-              fontSize: 15,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
+    return Padding(
+        padding: EdgeInsets.symmetric(horizontal: 18, vertical: 6),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              Statics.getLabel("abhiyaanStatusNagar"),
+              style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            columns: [
-              DataColumn(
-                  label: Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: Text("${Statics.getLabel('LevelName')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)))),
-              DataColumn(
-                  label: Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: Text(Statics.getLabel('Total'), style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)))),
-              DataColumn(
-                  label: Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: Text("${Statics.getLabel('started')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)))),
-              DataColumn(label: Text('')),
-            ],
-            rows: levelWiseCountsList
-                .map((e) => DataRow(
-                      color: MaterialStateProperty.all(Colors.purple.shade50),
-                      cells: [
-                        // DataCell(Align(alignment: Alignment.center, child: Text("${Statics.getLabel('Vasti')}"))),
-                        DataCell(Align(
+            SizedBox(height: 8),
+            Container(
+              width: double.infinity,
+              child: DataTable(
+                columnSpacing: 0,
+                horizontalMargin: 16,
+                headingRowColor: MaterialStateProperty.all(Colors.purple.shade300),
+                headingTextStyle: TextStyle(
+                  fontSize: 15,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+                columns: [
+                  DataColumn(
+                      label: Container(
                           alignment: Alignment.center,
-                          child: Text(Statics.getLabel(e.type == "nagar"
-                              ? "NagarShahari"
-                              : e.type == "taluka"
-                                  ? "taalukaa"
-                                  : e.type.toString())),
-                        )),
-                        DataCell(Align(
+                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          child: Text("${Statics.getLabel('LevelName')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)))),
+                  DataColumn(
+                      label: Container(
                           alignment: Alignment.center,
-                          child: Text("${e.totalcount ?? "0"}"),
-                        )),
-                        DataCell(Align(
+                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          child: Text(Statics.getLabel('Total'), style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)))),
+                  DataColumn(
+                      label: Container(
                           alignment: Alignment.center,
-                          child: Text("${e.startedcount ?? "0"}"),
-                        )),
-                        DataCell(IconButton(
-                          icon: Icon(Icons.remove_red_eye, color: Colors.teal),
-                          onPressed: () => showPopupList(e.namelist.toString(), type: e.type.toString()),
-                        )),
-                      ],
-                    ))
-                .toList(),
-          ),
-        ),
-      ],
-    );
+                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          child: Text("${Statics.getLabel('started')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)))),
+                  DataColumn(label: Text('')),
+                ],
+                rows: levelWiseCountsList
+                    .map((e) => DataRow(
+                          color: MaterialStateProperty.all(Colors.purple.shade50),
+                          cells: [
+                            // DataCell(Align(alignment: Alignment.center, child: Text("${Statics.getLabel('Vasti')}"))),
+                            DataCell(Align(
+                              alignment: Alignment.center,
+                              child: Text(Statics.getLabel(e.type == "nagar"
+                                  ? "NagarShahari"
+                                  : e.type == "taluka"
+                                      ? "taalukaa"
+                                      : e.type.toString())),
+                            )),
+                            DataCell(Align(
+                              alignment: Alignment.center,
+                              child: Text("${e.totalcount ?? "0"}"),
+                            )),
+                            DataCell(Align(
+                              alignment: Alignment.center,
+                              child: Text("${e.startedcount ?? "0"}"),
+                            )),
+                            DataCell(IconButton(
+                              icon: Icon(Icons.remove_red_eye, color: Colors.teal),
+                              onPressed: () => showPopupList(e.namelist.toString(), type: e.type.toString()),
+                            )),
+                          ],
+                        ))
+                    .toList(),
+              ),
+            ),
+          ],
+        ));
   }
 
   Widget _buildExpansionPanel() {

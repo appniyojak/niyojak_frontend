@@ -1705,9 +1705,10 @@ Map<String, String> resEnglish = {
   'selectAtLeastOneSpecial': 'At least one special person should be added.',
   'dateWiseDataNotAvailable': 'Datewise data is not available',
   'specialContactDataNotAvailable': 'Special Contact data is not available',
-  'gruhSahabhaagiKaaryakartaaTotalCount': 'Total Sahabhaagi \nKaaryakarte Count',
-  'gruhSahabhaagiKaaryakartaaMaleCount': 'Male Sahabhaagi \nKaaryakarte Count',
-  'gruhSahabhaagiKaaryakartaaFemaleCount': 'Female Sahabhaagi \nKaaryakarte Count',
+  'gruhKaaryakartaaTotalCount': 'Total Kaaryakarte',
+  'gruhSahabhaagiKaaryakartaaTotalCount': 'Total Abhiyaan Kaaryakarte',
+  'gruhSahabhaagiKaaryakartaaMaleCount': 'Abhiyaan Kaaryakarte (M)',
+  'gruhSahabhaagiKaaryakartaaFemaleCount': 'Abhiyaan Kaaryakarte (F)',
 };
 
 ///1,584
@@ -3417,9 +3418,10 @@ Map<String, String> resMarathi = {
   'selectAtLeastOneSpecial': 'किमान एक विशेष व्यक्ती जोडावे',
   'dateWiseDataNotAvailable': 'तारखेनुसार तपशील उपलब्ध नाही.',
   'specialContactDataNotAvailable': 'विशेष संपर्क तपशील उपलब्ध नाही.',
-  'gruhSahabhaagiKaaryakartaaTotalCount': 'एकुण सहभागी \nकार्यकर्ते संख्या',
-  'gruhSahabhaagiKaaryakartaaMaleCount': 'पुरुष सहभागी \nकार्यकर्ते संख्या',
-  'gruhSahabhaagiKaaryakartaaFemaleCount': 'महिला सहभागी \nकार्यकर्ते संख्या',
+  'gruhKaaryakartaaTotalCount': 'एकुण कार्यकर्ते',
+  'gruhSahabhaagiKaaryakartaaTotalCount': 'एकुण अभियान कार्यकर्ते',
+  'gruhSahabhaagiKaaryakartaaMaleCount': 'सहभागी कार्यकर्ते (पु)',
+  'gruhSahabhaagiKaaryakartaaFemaleCount': 'सहभागी कार्यकर्ते (म)',
 };
 
 ///1,583
@@ -5128,7 +5130,8 @@ Map<String, String> resHindi = {
   'selectAtLeastOneSpecial': 'कम से कम एक विशेष व्यक्ति चयन करें।',
   'dateWiseDataNotAvailable': 'तिथि के अनुसार माहिती उपलब्ध नहीं है।',
   'specialContactDataNotAvailable': 'विशेष संपर्क के अनुसार माहिती उपलब्ध नहीं है।',
-  'gruhSahabhaagiKaaryakartaaTotalCount': 'एकुण सहभागी \nकार्यकर्ते संख्या',
-  'gruhSahabhaagiKaaryakartaaMaleCount': 'पुरुष सहभागी \nकार्यकर्ते संख्या',
-  'gruhSahabhaagiKaaryakartaaFemaleCount': 'महिला सहभागी \nकार्यकर्ते संख्या',
+  'gruhKaaryakartaaTotalCount': 'एकुण कार्यकर्ते',
+  'gruhSahabhaagiKaaryakartaaTotalCount': 'एकुण अभियान कार्यकर्ते',
+  'gruhSahabhaagiKaaryakartaaMaleCount': 'सहभागी कार्यकर्ते (पु)',
+  'gruhSahabhaagiKaaryakartaaFemaleCount': 'सहभागी कार्यकर्ते (म)',
 };
