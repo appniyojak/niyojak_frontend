@@ -425,6 +425,7 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
       Statics.getLabel('gruhSahabhaagiKaaryakartaaMaleCount'),
       Statics.getLabel('gruhSahabhaagiKaaryakartaaFemaleCount'),
       Statics.getLabel('gruhSahabhaagiKaaryakartaaTotalCount'),
+      if (levelWiseList.any((e) => e.ekunswayamsevak != null)) Statics.getLabel('gruhAbhiyaanSwayamsevakCount'),
       // "सहभागी टोळी \nसंख्या", //Statics.getLabel('gruhAttendance'),
       // Statics.getLabel('gruhAttendance'),
     ];
@@ -519,6 +520,7 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                           DataCell(Center(child: Text((item.malecount ?? 0).toString()))),
                           DataCell(Center(child: Text((item.femalecount ?? 0).toString()))),
                           DataCell(Center(child: Text((item.ekunsamparkhetukaryakarta ?? 0).toString()))),
+                          if (levelWiseList.any((e) => e.ekunswayamsevak != null)) DataCell(Center(child: Text((item.ekunswayamsevak ?? 0).toString()))),
                           // DataCell(Center(child: Text((item.samparkhetutolisankhya ?? 0).toString()))),
                           // DataCell(Center(child: Text((item.attcount ?? 0).toString()))),
                         ]);
@@ -533,6 +535,7 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                         DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.malecount ?? 0)).toString()))),
                         DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.femalecount ?? 0)).toString()))),
                         DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.ekunsamparkhetukaryakarta ?? 0)).toString()))),
+                        if (levelWiseList.any((e) => e.ekunswayamsevak != null)) DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.ekunswayamsevak ?? 0)).toString()))),
                         // DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.samparkhetutolisankhya ?? 0)).toString()))),
                         // DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.attcount ?? 0)).toString()))),
                       ])
@@ -880,6 +883,7 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                       return BarChartRodData(
                         toY: v,
                         width: 20,
+                        rodStackItems: [BarChartRodStackItem(v, (v) + 40, Colors.red, label: v.toInt().toString(), labelStyle: TextStyle(color: seriesColors[seriesIndex]))],
                         borderRadius: BorderRadius.circular(4),
                         color: seriesColors[seriesIndex],
                       );
@@ -1115,6 +1119,7 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
       if (dateWiseList.any((e) => e.malecount != null)) Statics.getLabel('gruhSahabhaagiKaaryakartaaMaleCount'),
       if (dateWiseList.any((e) => e.femalecount != null)) Statics.getLabel('gruhSahabhaagiKaaryakartaaFemaleCount'),
       if (dateWiseList.any((e) => e.ekunsamparkhetukaryakarta != null)) Statics.getLabel('gruhKaaryakartaaTotalCount'),
+      if (dateWiseList.any((e) => e.ekunswayamsevak != null)) Statics.getLabel('gruhAbhiyaanSwayamsevakCount'),
     ];
 
     if (dateWiseList.isEmpty)
@@ -1309,6 +1314,17 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                                 if (dateWiseList.any((e) => e.ekunsamparkhetukaryakarta != null))
                                   ...dateWiseList.map((item) => DataCell(Center(child: Text((item.ekunsamparkhetukaryakarta ?? 0).toString())))).toList(),
                               ]),
+                            if (dateWiseList.any((e) => e.ekunswayamsevak != null))
+                              DataRow(cells: [
+                                DataCell(Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.yellow.shade50,
+                                      border: Border.all(color: Colors.black26, width: 0.7),
+                                    ),
+                                    alignment: Alignment.center,
+                                    child: Text(dateWiseList.fold(0, (sum, item) => sum + (item.ekunswayamsevak ?? 0)).toString()))),
+                                if (dateWiseList.any((e) => e.ekunswayamsevak != null)) ...dateWiseList.map((item) => DataCell(Center(child: Text((item.ekunswayamsevak ?? 0).toString())))).toList(),
+                              ]),
                           ],
                         ),
                       ),
@@ -1453,14 +1469,14 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
     final vastiTitleList = [
       {"AbhiyaanStartedCountVasti": _vastiData.startedcount},
       {"AbhiyaanStartedCountNagar": _vastiData.startednagarcount},
-      {"totalNagar": _vastiData.nagarcount},
+      // {"totalNagar": _vastiData.nagarcount},
       {"totalVasti": _vastiData.vasticount},
     ];
 
     final graamTitleList = [
       {"AbhiyaanStartedCountGraam": _gramData.startedcount},
       {"AbhiyaanStartedCountMandal": _gramData.startedmandalcount},
-      {"totalTaluka": _gramData.nagarcount},
+      // {"totalTaluka": _gramData.nagarcount},
       {"totalMandal": _gramData.mandalcount},
       {"totalGraam": _gramData.gramcount},
     ];
@@ -1490,6 +1506,8 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
+                    dataRowMinHeight: 60,
+                    dataRowMaxHeight: 70,
                     columns: [
                       DataColumn(
                         label: Container(
@@ -1530,6 +1548,8 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
+                    dataRowMinHeight: 60,
+                    dataRowMaxHeight: 70,
                     columns: [
                       DataColumn(
                         label: Container(

@@ -78,6 +78,7 @@ class Table1List {
   int? pustakvikrisankhya;
   int? samparkitghar;
   int? vitaritkarpatra;
+  int? ekunswayamsevak;
   int? ekunsamparkhetukaryakarta;
   int? femalecount;
   int? malecount;
@@ -93,6 +94,7 @@ class Table1List {
     this.pustakvikrisankhya,
     this.samparkitghar,
     this.vitaritkarpatra,
+    this.ekunswayamsevak,
     this.ekunsamparkhetukaryakarta,
     this.femalecount,
     this.malecount,
@@ -109,6 +111,7 @@ class Table1List {
     pustakvikrisankhya = json['pustakvikrisankhya'];
     samparkitghar = json['samparkitghar'];
     vitaritkarpatra = json['vitaritkarpatra'];
+    ekunswayamsevak = json['ekunswayamsevak'];
     ekunsamparkhetukaryakarta = json['ekunsamparkhetukaryakarta'];
     femalecount = json['femalecount'];
     malecount = json['malecount'];
@@ -126,6 +129,7 @@ class Table1List {
     data['pustakvikrisankhya'] = this.pustakvikrisankhya;
     data['samparkitghar'] = this.samparkitghar;
     data['vitaritkarpatra'] = this.vitaritkarpatra;
+    data['ekunswayamsevak'] = this.ekunswayamsevak;
     data['ekunsamparkhetukaryakarta'] = this.ekunsamparkhetukaryakarta;
     data['femalecount'] = this.femalecount;
     data['malecount'] = this.malecount;
