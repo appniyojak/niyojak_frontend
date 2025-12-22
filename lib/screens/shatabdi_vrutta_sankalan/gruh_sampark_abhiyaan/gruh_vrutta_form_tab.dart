@@ -145,6 +145,35 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
     return _isPramukh;
   }
 
+  bool get isAbhiyaanButKaryavah {
+    final level = Statics.userDetails["LevelID"];
+
+    final _isKaaryavaah = [
+      "Kaaryavaah",
+      "कार्यवाह",
+      "Saha-Kaaryavaah",
+      "सह कार्यवाह",
+      "Prachaarak",
+      "प्रचारक",
+      "karyalay sachiv",
+      "कार्यालय सचिव",
+      "App Sanyojak",
+      "एप संयोजक",
+      "Saha-Prachaarak",
+      "सह प्रचारक",
+      "SanghaChaalak",
+      "संघचालक",
+      "Saha-SanghaChaalak",
+      "सह संघचालक"
+          "Prachaarak",
+      "प्रचारक"
+          "Saha-Prachaarak",
+      "सह प्रचारक"
+    ].contains(Statics.userDetails["DaayitvaName"]);
+
+    return _isKaaryavaah && (level >= 6);
+  }
+
   List<List<PreviousDay>> separatedLists = [];
 
   List<List<PreviousDay>> groupByUserID(List<PreviousDay> items) {
@@ -273,6 +302,28 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
               selectedVisitedSwayamsevak = data!.swayamsevaklistforgruh!.where((e) => gruhAbhiyaanVruttaData!.abhiyaandata!.swayamsevakIds!.split(",").contains(e.swayamsevakID.toString())).toList();
           });
         }
+      }
+    }
+  }
+
+  Future<void> _removeFromToli() async {
+    print("calling");
+    _isEditing = false;
+    bool isConnected = await Statics.isInternetConnected();
+    if (isConnected) {
+      var inputData = {
+        "AppUserID": Statics.abhiyaanUserDetails["isEmpty"] ? Statics.userDetails["userID"] : Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"],
+        "GeoUnitID": int.parse(_linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? _linkedvastiValue! : _linkedgraamValue!),
+        "ids": _selectedTolisIds.map((e) => e.swayamsevakID.toString()).join(','),
+      };
+      log(jsonEncode(inputData));
+      log(Statics.userDetails["userID"]);
+      // log(Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"]);
+      final _result = await Statics.removeSwayamsevakFromToliFun(inputData, context: context);
+      setState(() {});
+      if (_result != null && _result) {
+        setState(() => _markAtt = false);
+        await _getSwList();
       }
     }
   }
@@ -2497,28 +2548,6 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
         spacing: 12,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          // if (isAbhiyaanButPramukh)
-          //   _markAtt
-          //       ? MaterialButton(
-          //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          //           padding: EdgeInsets.symmetric(
-          //             horizontal: 12,
-          //             vertical: 5,
-          //           ),
-          //           color: Theme.of(context).primaryColor,
-          //           textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-          //           onPressed: () => setState(() => _markAtt = false),
-          //           child: Text(
-          //             "${Statics.getLabel('Submit')}",
-          //             // "अभियान कार्यकर्ता सुची",
-          //             style: TextStyle(fontSize: 14.5),
-          //           ),
-          //         )
-          //       : OutlinedButton(
-          //           onPressed: () => setState(() => _markAtt = true),
-          //           style: OutlinedButton.styleFrom(
-          //               side: BorderSide(color: Colors.purple, width: 2), foregroundColor: Colors.purple, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14))),
-          //           child: Text("उपस्थिती लावा")),
           Container(
             width: double.infinity,
             constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.4),
@@ -2554,46 +2583,46 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                   rows: gruhAbhiyaanToliList.asMap().entries.map((entry) {
                     int index = entry.key;
                     var data = entry.value;
-                    bool isSelected = (data.isdefault == 1) || _selectedTolisIds.contains(data);
+                    bool isSelected = _selectedTolisIds.contains(data);
                     return DataRow(
-                        // selected: isSelected,
-                        // color: MaterialStateProperty.resolveWith<Color?>(
-                        //   (Set<MaterialState> states) {
-                        //     if (isSelected) return Colors.yellow.shade100;
-                        //     return null;
-                        //   },
-                        // ),
-                        // onSelectChanged: (value) {
-                        //   if (!_markAtt) {
-                        //     return;
-                        //   }
-                        //   if (!isAbhiyaanButPramukh) {
-                        //     return;
-                        //   }
-                        //   // if (gruhAbhiyaanVruttaData!.abhiyaandata!.ishide) {
-                        //   //   return;
-                        //   // }
-                        //   if ((data.isdefault == 1)) {
-                        //     return;
-                        //   }
-                        //   if (!isSelected) {
-                        //     setState(() {
-                        //       // selectedKaryakartaList.add(data);
-                        //       data.isSelected = true;
-                        //       _selectedTolisIds.add(data);
-                        //     });
-                        //   } else {
-                        //     setState(() {
-                        //       data.isSelected = false;
-                        //       // selectedKaryakartaList.add(data);
-                        //       _selectedTolisIds.remove(data);
-                        //     });
-                        //   }
-                        //   setState(() {
-                        //     samparkaSahabhagiController.text = gruhAbhiyaanToliList.where((e) => e.isdefault == 1 || e.isSelected).length.toString();
-                        //   });
-                        //   log(_selectedTolisIds.map((e) => e.swayamsevakID.toString()).join(','));
-                        // },
+                        selected: isSelected,
+                        color: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (isSelected) return Colors.red.shade100;
+                            return null;
+                          },
+                        ),
+                        onSelectChanged: (value) {
+                          if (!_markAtt) {
+                            return;
+                          }
+                          // if (!isAbhiyaanButPramukh) {
+                          //   return;
+                          // }
+                          // if (gruhAbhiyaanVruttaData!.abhiyaandata!.ishide) {
+                          //   return;
+                          // }
+                          if ((data.isdefault == 1)) {
+                            return;
+                          }
+                          if (!isSelected) {
+                            setState(() {
+                              // selectedKaryakartaList.add(data);
+                              data.isSelected = true;
+                              _selectedTolisIds.add(data);
+                            });
+                          } else {
+                            setState(() {
+                              data.isSelected = false;
+                              // selectedKaryakartaList.add(data);
+                              _selectedTolisIds.remove(data);
+                            });
+                          }
+                          setState(() {
+                            // samparkaSahabhagiController.text = gruhAbhiyaanToliList.where((e) => e.isdefault == 1 || e.isSelected).length.toString();
+                          });
+                          log(_selectedTolisIds.map((e) => e.swayamsevakID.toString()).join(','));
+                        },
                         cells: [
                           // if (!isAbhiyaanButPramukh) DataCell(Icon(isSelected ? Icons.check_box_rounded : Icons.check_box_outline_blank_rounded, color: Colors.yellow.shade900, size: 21)),
                           DataCell(Container(constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.4), child: Text(data.fullName ?? ''))),
@@ -2605,6 +2634,55 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
               ),
             ),
           ),
+          if (isAbhiyaanButKaryavah)
+            _markAtt
+                ? Row(
+                    spacing: 6,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      MaterialButton(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 5,
+                        ),
+                        color: Theme.of(context).primaryColor,
+                        textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                        onPressed: _removeFromToli,
+                        child: Text(
+                          "${Statics.getLabel('Submit')}",
+                          // "अभियान कार्यकर्ता सुची",
+                          style: TextStyle(fontSize: 14.5),
+                        ),
+                      ),
+                      OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                            side: BorderSide(color: Colors.red, width: 2), foregroundColor: Colors.red, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14))),
+                        onPressed: () => setState(() {
+                          _markAtt = false;
+                          _selectedTolisIds = [];
+                        }),
+                        child: Text(
+                          "${Statics.getLabel('Cancel')}",
+                          // "अभियान कार्यकर्ता सुची",
+                          style: TextStyle(fontSize: 14.5),
+                        ),
+                      ),
+                    ],
+                  )
+                : OutlinedButton(
+                    onPressed: () => setState(() => _markAtt = true),
+                    style: OutlinedButton.styleFrom(side: BorderSide(color: Colors.red, width: 2), foregroundColor: Colors.red, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14))),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      spacing: 4,
+                      children: [
+                        Icon(Icons.delete_forever_outlined, color: Colors.red),
+                        Text(
+                          "${Statics.getLabel('DeleteMenu')}",
+                        ),
+                      ],
+                    )),
         ],
       ),
     );

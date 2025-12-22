@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -595,8 +596,9 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
     // compute nice minY and maxY
     // ensure minY is floored to nearest gap, maxY is ceiled to nearest gap
     double minY = (minVal / gap).floor() * gap;
-    print("$minY>>>>>>>>>>>>>>>>>>>>>>>");
+    log("$minY>>>>>>>>>>>>>>>>>>>>>>> minY");
     double maxY = (maxVal / gap).ceil() * gap;
+    log("$maxY>>>>>>>>>>>>>>>>>>>>>>> maxY");
     // if minY == maxY (all values equal), expand a little
     if (minY == maxY) {
       minY = (minY - gap).clamp(0, double.infinity);
@@ -746,6 +748,18 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
   }
 
   Widget dateWiseDataInChart() {
+    if (dateWiseList.isEmpty) {
+      return SizedBox(
+        height: 120,
+        width: double.infinity,
+        child: Center(
+          child: Text(
+            Statics.getLabel("dateWiseDataNotAvailable"),
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+      );
+    }
     // parse json
 
     final List<Map<String, dynamic>> table = dateWiseList.map((e) => Map<String, dynamic>.from(e.toJson())).toList();
@@ -792,8 +806,9 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
     // compute nice minY and maxY
     // ensure minY is floored to nearest gap, maxY is ceiled to nearest gap
     double minY = (minVal / gap).floor() * gap;
-    print("$minY>>>>>>>>>>>>>>>>>>>>>>>");
+    print("$minY>>>>>>>>>>>>>>>>>>>>>>> minY");
     double maxY = (maxVal / gap).ceil() * gap;
+    log("$maxY>>>>>>>>>>>>>>>>>>>>>>> maxY");
     // if minY == maxY (all values equal), expand a little
     if (minY == maxY) {
       minY = (minY - gap).clamp(0, double.infinity);
@@ -883,7 +898,7 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                       return BarChartRodData(
                         toY: v,
                         width: 20,
-                        rodStackItems: [BarChartRodStackItem(v, (v) + 40, Colors.red, label: v.toInt().toString(), labelStyle: TextStyle(color: seriesColors[seriesIndex]))],
+                        rodStackItems: [BarChartRodStackItem(v, dataMax * 1.15, Colors.transparent, label: v.toInt().toString(), labelStyle: TextStyle(color: seriesColors[seriesIndex]))],
                         borderRadius: BorderRadius.circular(4),
                         color: seriesColors[seriesIndex],
                       );
