@@ -2,8 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:csv/csv.dart';
-import 'package:device_info_plus/device_info_plus.dart';
+import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -11,7 +10,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../assets/strings/strings.dart';
@@ -3855,87 +3853,157 @@ Future<String> deleteShaakhaaVrutta(String inputJson) async {
   return responseBody['Message'].toString();
 }
 
-void convertToCsv(List<List<dynamic>> rows, String fileName, BuildContext context) async {
-  if (Platform.isIOS) {
-    if (await Permission.storage.request().isGranted) {
-      try {
-        Directory documents = await getApplicationDocumentsDirectory();
-        String dir = documents.path;
-        var file = "$dir";
-        File f = new File(file + fileName + ".csv");
-        print(f.path);
-        String csv = const ListToCsvConverter().convert(rows);
-        f.writeAsString(csv);
-        print(f.path);
-        await OpenFilex.open(f.path);
-        return;
-      } catch (e) {
-        print(e);
-        return;
-      }
-    } else {
-      Statics.showToast("Storage permission is not granted");
-      print("no permission");
-    }
-  }
-  final deviceInfo = await DeviceInfoPlugin().androidInfo;
+Future<String> _getDirectoryPathFun(String fileName) async {
+  Directory? dir;
+  if (Platform.isAndroid) {
+    dir = Directory('/storage/emulated/0/Download');
 
-  if (deviceInfo.version.sdkInt > 32) {
-    if (!await Permission.photos.isGranted) {
-      await Permission.photos.request();
-    }
-    if (await Permission.photos.request().isGranted) {
-      try {
-        Directory documents = await getApplicationDocumentsDirectory();
-        String dir = Platform.isAndroid
-            ? '/storage/emulated/0/Download/'
-            : Platform.isIOS
-                ? documents.path
-                : "";
-        var file = "$dir";
-        File f = new File(file + fileName + ".csv");
-
-        print(f.path);
-        String csv = const ListToCsvConverter().convert(rows);
-        f.writeAsString(csv);
-        print(f.path);
-        await OpenFilex.open(f.path);
-      } catch (e) {
-        print(e);
-      }
-    } else {
-      Statics.showToast("Storage permission is not granted");
-      print("no permission");
+    if (!await dir.exists()) {
+      dir = await getExternalStorageDirectory();
     }
   } else {
-    if (!await Permission.storage.isGranted) {
-      await Permission.photos.request();
-    }
-    if (await Permission.storage.request().isGranted) {
-      try {
-        Directory documents = await getApplicationDocumentsDirectory();
-        String dir = Platform.isAndroid
-            ? '/storage/emulated/0/Download/'
-            : Platform.isIOS
-                ? documents.path
-                : "";
-        var file = "$dir";
-        File f = new File(file + fileName + ".csv");
-
-        print(f.path);
-        // convert rows to String and write as csv file
-        String csv = const ListToCsvConverter().convert(rows);
-        f.writeAsString(csv);
-        print(f.path);
-        await OpenFilex.open(f.path);
-      } catch (e) {
-        print(e);
-      }
-    } else {
-      Statics.showToast("Storage permission is not granted");
-      print("no permission");
-    }
+    dir = await getApplicationDocumentsDirectory();
   }
+  final ts = DateTime.now().toIso8601String().replaceAll(':', '-').split(".").first;
+  final path = '${dir!.path}/${fileName}_$ts.xlsx';
+  log(path);
+  return path;
+}
+
+void convertToCsv(List<List<dynamic>> rows, String fileName, BuildContext context) async {
+  try {
+    final _path = await _getDirectoryPathFun(fileName);
+    final file = File(_path);
+
+    // Create Excel
+    final excel = Excel.createExcel();
+    final sheet = excel['Sheet1'];
+
+    for (final row in rows) {
+      sheet.appendRow(row);
+    }
+
+    // Save file
+    final bytes = excel.save();
+    await file.create(recursive: true);
+    await file.writeAsBytes(bytes!);
+
+    final result = await OpenFilex.open(file.path);
+
+    // Check result type
+    if (result.type != ResultType.done) {
+      // Handle known failure types
+      String message;
+      switch (result.type) {
+        case ResultType.noAppToOpen:
+          message = Statics.getLabel("noExcelAppFoundError");
+          break;
+        case ResultType.error:
+          message = Statics.getLabel("errorOccurred");
+          break;
+        case ResultType.permissionDenied:
+          message = Statics.getLabel("noPermissionGiven");
+          break;
+        default:
+          message = Statics.getLabel("unableToOpenFile");
+      }
+
+      Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+      );
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Excel file saved and opened: $_path')),
+    );
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Failed to export file: $e')),
+    );
+  }
+
+  ///OLD CODE
+  // if (Platform.isIOS) {
+  //   if (await Permission.storage.request().isGranted) {
+  //     try {
+  //       Directory documents = await getApplicationDocumentsDirectory();
+  //       String dir = documents.path;
+  //       var file = "$dir";
+  //       File f = new File(file + fileName + ".csv");
+  //       print(f.path);
+  //       String csv = const ListToCsvConverter().convert(rows);
+  //       f.writeAsString(csv);
+  //       print(f.path);
+  //       await OpenFilex.open(f.path);
+  //       return;
+  //     } catch (e) {
+  //       print(e);
+  //       return;
+  //     }
+  //   } else {
+  //     Statics.showToast("Storage permission is not granted");
+  //     print("no permission");
+  //   }
+  // }
+  // final deviceInfo = await DeviceInfoPlugin().androidInfo;
+  //
+  // if (deviceInfo.version.sdkInt > 32) {
+  //   if (!await Permission.photos.isGranted) {
+  //     await Permission.photos.request();
+  //   }
+  //   if (await Permission.photos.request().isGranted) {
+  //     try {
+  //       Directory documents = await getApplicationDocumentsDirectory();
+  //       String dir = Platform.isAndroid
+  //           ? '/storage/emulated/0/Download/'
+  //           : Platform.isIOS
+  //               ? documents.path
+  //               : "";
+  //       var file = "$dir";
+  //       File f = new File(file + fileName + ".csv");
+  //
+  //       print(f.path);
+  //       String csv = const ListToCsvConverter().convert(rows);
+  //       f.writeAsString(csv);
+  //       print(f.path);
+  //       await OpenFilex.open(f.path);
+  //     } catch (e) {
+  //       print(e);
+  //     }
+  //   } else {
+  //     Statics.showToast("Storage permission is not granted");
+  //     print("no permission");
+  //   }
+  // } else {
+  //   if (!await Permission.storage.isGranted) {
+  //     await Permission.photos.request();
+  //   }
+  //   if (await Permission.storage.request().isGranted) {
+  //     try {
+  //       Directory documents = await getApplicationDocumentsDirectory();
+  //       String dir = Platform.isAndroid
+  //           ? '/storage/emulated/0/Download/'
+  //           : Platform.isIOS
+  //               ? documents.path
+  //               : "";
+  //       var file = "$dir";
+  //       File f = new File(file + fileName + ".csv");
+  //
+  //       print(f.path);
+  //       // convert rows to String and write as csv file
+  //       String csv = const ListToCsvConverter().convert(rows);
+  //       f.writeAsString(csv);
+  //       print(f.path);
+  //       await OpenFilex.open(f.path);
+  //     } catch (e) {
+  //       print(e);
+  //     }
+  //   } else {
+  //     Statics.showToast("Storage permission is not granted");
+  //     print("no permission");
+  //   }
+  // }
 }
 
 Future<String> saveShaakhaaCoordinatesForApp(String inputJson) async {
