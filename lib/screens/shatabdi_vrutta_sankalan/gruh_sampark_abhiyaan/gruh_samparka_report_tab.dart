@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart' as txt;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -425,9 +426,9 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
       Statics.getLabel('gruhSpecialContact'),
       Statics.getLabel('gruhSahabhaagiKaaryakartaaMaleCount'),
       Statics.getLabel('gruhSahabhaagiKaaryakartaaFemaleCount'),
-      Statics.getLabel('gruhSahabhaagiKaaryakartaaTotalCount'),
+      // Statics.getLabel('gruhSahabhaagiKaaryakartaaTotalCount'),
       if (levelWiseList.any((e) => e.ekunswayamsevak != null)) Statics.getLabel('gruhAbhiyaanSwayamsevakCount'),
-      // "सहभागी टोळी \nसंख्या", //Statics.getLabel('gruhAttendance'),
+      Statics.getLabel('gruhSwayamsevakKaryakartaCount'),
       // Statics.getLabel('gruhAttendance'),
     ];
     return Container(
@@ -489,16 +490,17 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                   controller: horizontalController,
                   scrollDirection: Axis.horizontal,
                   child: DataTable(
-                    columnSpacing: 14,
-                    horizontalMargin: 12,
+                    columnSpacing: 0,
+                    horizontalMargin: 0,
                     headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
                     border: TableBorder(
-                      verticalInside: BorderSide(width: 0.7, color: Colors.grey.shade200),
+                      verticalInside: BorderSide(width: 0.7, color: Colors.grey.shade300),
                     ),
                     columns: headers
                         .map((header) => DataColumn(
                               label: Container(
-                                constraints: const BoxConstraints(minWidth: 30, maxWidth: 100),
+                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                constraints: const BoxConstraints(minWidth: 30, maxWidth: 130),
                                 child: Text(
                                   header,
                                   softWrap: true,
@@ -520,9 +522,18 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                           DataCell(Center(child: Text((item.totalAtithiCount ?? 0).toString()))),
                           DataCell(Center(child: Text((item.malecount ?? 0).toString()))),
                           DataCell(Center(child: Text((item.femalecount ?? 0).toString()))),
-                          DataCell(Center(child: Text((item.ekunsamparkhetukaryakarta ?? 0).toString()))),
+                          // DataCell(Center(child: Text((item.ekunsamparkhetukaryakarta ?? 0).toString()))),
                           if (levelWiseList.any((e) => e.ekunswayamsevak != null)) DataCell(Center(child: Text((item.ekunswayamsevak ?? 0).toString()))),
-                          // DataCell(Center(child: Text((item.samparkhetutolisankhya ?? 0).toString()))),
+                          DataCell(Container(
+                            width: double.infinity,
+                            margin: EdgeInsets.symmetric(vertical: 0.4),
+                            decoration: BoxDecoration(color: Colors.green.shade100),
+                            child: Center(
+                                child: Text(
+                              ((item.malecount ?? 0) + (item.femalecount ?? 0) + (item.ekunswayamsevak ?? 0)).toString(),
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            )),
+                          )),
                           // DataCell(Center(child: Text((item.attcount ?? 0).toString()))),
                         ]);
                       }),
@@ -535,9 +546,20 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                         DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.totalAtithiCount ?? 0)).toString()))),
                         DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.malecount ?? 0)).toString()))),
                         DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.femalecount ?? 0)).toString()))),
-                        DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.ekunsamparkhetukaryakarta ?? 0)).toString()))),
+                        // DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.ekunsamparkhetukaryakarta ?? 0)).toString()))),
                         if (levelWiseList.any((e) => e.ekunswayamsevak != null)) DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.ekunswayamsevak ?? 0)).toString()))),
-                        // DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.samparkhetutolisankhya ?? 0)).toString()))),
+                        DataCell(Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.green.shade100)), color: Colors.green.shade100),
+                          child: Center(
+                              child: Text(
+                            (levelWiseList.fold(0, (sum, item) => sum + (item.malecount ?? 0)) +
+                                    levelWiseList.fold(0, (sum, item) => sum + (item.femalecount ?? 0)) +
+                                    levelWiseList.fold(0, (sum, item) => sum + (item.ekunswayamsevak ?? 0)))
+                                .toString(),
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )),
+                        )),
                         // DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.attcount ?? 0)).toString()))),
                       ])
                     ],
@@ -841,17 +863,21 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
             const SizedBox(height: 6),
             SizedBox(
               height: 400,
-              child: BarChart(
-                BarChartData(
-                  alignment: BarChartAlignment.spaceAround,
+              child: LineChart(
+                LineChartData(
+                  // For horizontal margin
+                  minX: -0.2,
+                  maxX: (rows.length - 1) + 0.2,
+                  // For horizontal margin
                   maxY: dataMax == 0 ? 10 : dataMax * 1.15,
                   minY: minY,
-                  groupsSpace: 24,
-                  barTouchData: BarTouchData(enabled: true, touchTooltipData: BarTouchTooltipData(getTooltipColor: (group) => Colors.white)),
+                  // groupsSpace: 24,
+                  // lineTouchData: const LineTouchData(enabled: false),
+                  lineTouchData: LineTouchData(enabled: true, touchTooltipData: LineTouchTooltipData(getTooltipColor: (group) => Colors.white)),
                   titlesData: FlTitlesData(
                     leftTitles: AxisTitles(
                       sideTitles: SideTitles(
-                        showTitles: false,
+                        showTitles: true,
                         reservedSize: 42,
                         // interval: gap,
                         getTitlesWidget: (value, meta) {
@@ -868,18 +894,24 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                     bottomTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: true,
+                        interval: 1, // Ensure every date label is shown
                         getTitlesWidget: (double value, TitleMeta meta) {
-                          final index = value.toInt();
-                          if (index < 0 || index >= rows.length) {
+                          // Prevent duplicate labels: only show for integer indices
+                          if (value % 1 != 0) {
                             return const SizedBox.shrink();
                           }
 
-                          // final date = DateFormat('dd/MM/yyyy HH:mm:ss').parse(rows[index]['AbhiyaanDate']);
-                          final label = rows[index]['AbhiyaanDate'].split(" ").first;
+                          final index = value.toInt();
+                          if (index < 0 || index >= rows.length) return const SizedBox.shrink();
 
-                          return Text(
-                            label,
-                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                          final label = rows[index]['AbhiyaanDate'].toString().split(" ").first;
+
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Text(
+                              label,
+                              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+                            ),
                           );
                         },
                       ),
@@ -892,24 +924,58 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                     getDrawingHorizontalLine: (value) => FlLine(color: Colors.grey.withOpacity(0.12), strokeWidth: 1),
                   ),
                   borderData: FlBorderData(show: false),
-                  barGroups: List.generate(rows.length, (groupIndex) {
-                    final rods = List.generate(keys.length, (seriesIndex) {
-                      final v = values[groupIndex][seriesIndex];
-                      return BarChartRodData(
-                        toY: v,
-                        width: 20,
-                        rodStackItems: [BarChartRodStackItem(v, dataMax * 1.15, Colors.transparent, label: v.toInt().toString(), labelStyle: TextStyle(color: seriesColors[seriesIndex]))],
-                        borderRadius: BorderRadius.circular(4),
-                        color: seriesColors[seriesIndex],
-                      );
+                  lineBarsData: List.generate(keys.length, (seriesIndex) {
+                    // Generate points (FlSpots)
+                    final List<FlSpot> spots = List.generate(rows.length, (dateIndex) {
+                      return FlSpot(dateIndex.toDouble(), values[dateIndex][seriesIndex]);
                     });
 
-                    // position bars inside group: use rods with showingTooltips? fl_chart will display them stacked by x position if you place them as BarChartGroupData with multiple rods
-                    return BarChartGroupData(
-                      x: groupIndex,
-                      barRods: rods,
-                      // spacing between bars inside group
-                      barsSpace: 6,
+                    return LineChartBarData(
+                      spots: spots,
+                      isCurved: false,
+                      color: seriesColors[seriesIndex],
+                      barWidth: 3,
+                      isStrokeCapRound: true,
+                      // Dots at data points
+                      dotData: FlDotData(
+                        show: true,
+                        getDotPainter: (spot, percent, barData, index) {
+                          // Dynamic Collision logic
+                          final double currentVal = spot.y;
+                          // Find the value of the other series at the same X point
+                          final String otherKey = keys[seriesIndex == 0 ? 1 : 0];
+                          final double otherVal = (rows[index][otherKey] ?? 0).toDouble();
+
+                          double verticalOffset = -6; // Default distance above dot
+                          final double diff = (currentVal - otherVal).abs();
+
+                          // If gap < 8, shift the higher value further up and the lower value slightly down
+                          if (diff < 8) {
+                            if (currentVal >= otherVal) {
+                              verticalOffset = -18; // Push higher value up
+                            } else {
+                              verticalOffset = 4; // Push lower value below the dot
+                            }
+                          }
+                          return LabelWithCirclePainter(
+                            label: spot.y.toInt().toString(),
+                            labelStyle: TextStyle(
+                              color: seriesColors[seriesIndex],
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                            ),
+                            radius: 4,
+                            color: Colors.white,
+                            strokeWidth: 2,
+                            strokeColor: seriesColors[seriesIndex],
+                            offsetY: verticalOffset,
+                          );
+                        },
+                      ),
+                      belowBarData: BarAreaData(
+                        show: true,
+                        color: seriesColors[seriesIndex].withOpacity(0.15),
+                      ),
                     );
                   }),
                 ),
@@ -1133,8 +1199,9 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
       Statics.getLabel('gruhSpecialContact'),
       if (dateWiseList.any((e) => e.malecount != null)) Statics.getLabel('gruhSahabhaagiKaaryakartaaMaleCount'),
       if (dateWiseList.any((e) => e.femalecount != null)) Statics.getLabel('gruhSahabhaagiKaaryakartaaFemaleCount'),
-      if (dateWiseList.any((e) => e.ekunsamparkhetukaryakarta != null)) Statics.getLabel('gruhKaaryakartaaTotalCount'),
       if (dateWiseList.any((e) => e.ekunswayamsevak != null)) Statics.getLabel('gruhAbhiyaanSwayamsevakCount'),
+      if (dateWiseList.any((e) => e.ekunsamparkhetukaryakarta != null)) Statics.getLabel('gruhSahabhaagiKaaryakartaaTotalCount'),
+      if (dateWiseList.any((e) => e.ekuntotal != null)) Statics.getLabel('gruhSwayamsevakKaryakartaCount'),
     ];
 
     if (dateWiseList.isEmpty)
@@ -1172,15 +1239,20 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                   DataTable(
                     headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
                     columnSpacing: 0,
-                    horizontalMargin: 16,
+                    horizontalMargin: 0,
                     border: TableBorder.all(color: Colors.black26),
                     columns: [
                       DataColumn(
-                        label: Center(
+                        label: Container(
+                          alignment: Alignment.center,
+                          // width: MediaQuery.sizeOf(context).width * 0.4,
+                          constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.38),
+                          padding: EdgeInsets.symmetric(horizontal: 16),
                           child: Text(
                             "${Statics.getLabel("LevelName")}",
                             softWrap: true,
                             maxLines: 2,
+                            textAlign: TextAlign.center,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
@@ -1191,9 +1263,19 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                     // dataRowMaxHeight: 120,
                     rows: [
                       // rows from data
-                      ...level.map((item) {
+                      ...level.asMap().entries.map((entry) {
+                        final index = entry.key;
+                        final item = entry.value;
                         return DataRow(cells: [
-                          DataCell(Text(item)),
+                          DataCell(Container(
+                              // width: MediaQuery.sizeOf(context).width * 0.4,
+                              constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.38),
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              decoration: BoxDecoration(color: (index == (level.length - 1)) ? Colors.green.shade100 : null),
+                              child: Text(
+                                item,
+                                style: TextStyle(fontWeight: (index == (level.length - 1)) ? FontWeight.bold : FontWeight.w500),
+                              ))),
                         ]);
                       }),
                     ],
@@ -1317,6 +1399,17 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                                     child: Text(dateWiseList.fold(0, (sum, item) => sum + (item.femalecount ?? 0)).toString()))),
                                 if (dateWiseList.any((e) => e.femalecount != null)) ...dateWiseList.map((item) => DataCell(Center(child: Text((item.femalecount ?? 0).toString())))).toList(),
                               ]),
+                            if (dateWiseList.any((e) => e.ekunswayamsevak != null))
+                              DataRow(cells: [
+                                DataCell(Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.yellow.shade50,
+                                      border: Border.all(color: Colors.black26, width: 0.7),
+                                    ),
+                                    alignment: Alignment.center,
+                                    child: Text(dateWiseList.fold(0, (sum, item) => sum + (item.ekunswayamsevak ?? 0)).toString()))),
+                                if (dateWiseList.any((e) => e.ekunswayamsevak != null)) ...dateWiseList.map((item) => DataCell(Center(child: Text((item.ekunswayamsevak ?? 0).toString())))).toList(),
+                              ]),
                             if (dateWiseList.any((e) => e.ekunsamparkhetukaryakarta != null))
                               DataRow(cells: [
                                 DataCell(Container(
@@ -1329,16 +1422,31 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                                 if (dateWiseList.any((e) => e.ekunsamparkhetukaryakarta != null))
                                   ...dateWiseList.map((item) => DataCell(Center(child: Text((item.ekunsamparkhetukaryakarta ?? 0).toString())))).toList(),
                               ]),
-                            if (dateWiseList.any((e) => e.ekunswayamsevak != null))
+                            if (dateWiseList.any((e) => e.ekuntotal != null))
                               DataRow(cells: [
                                 DataCell(Container(
                                     decoration: BoxDecoration(
-                                      color: Colors.yellow.shade50,
+                                      color: Colors.green.shade100,
                                       border: Border.all(color: Colors.black26, width: 0.7),
                                     ),
                                     alignment: Alignment.center,
-                                    child: Text(dateWiseList.fold(0, (sum, item) => sum + (item.ekunswayamsevak ?? 0)).toString()))),
-                                if (dateWiseList.any((e) => e.ekunswayamsevak != null)) ...dateWiseList.map((item) => DataCell(Center(child: Text((item.ekunswayamsevak ?? 0).toString())))).toList(),
+                                    child: Text(
+                                      dateWiseList.fold(0, (sum, item) => sum + (item.ekuntotal ?? 0)).toString(),
+                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                    ))),
+                                if (dateWiseList.any((e) => e.ekuntotal != null))
+                                  ...dateWiseList
+                                      .map((item) => DataCell(Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.green.shade100,
+                                            border: Border.all(color: Colors.black26, width: 0.7),
+                                          ),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            (item.ekuntotal ?? 0).toString(),
+                                            style: TextStyle(fontWeight: FontWeight.bold),
+                                          ))))
+                                      .toList(),
                               ]),
                           ],
                         ),
@@ -2152,4 +2260,47 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                   child: Text(Statics.getLabel('clear'))),
             ],
           ),*/
+}
+
+/// CUSTOM PAINTER CLASS
+/// This class handles drawing the point dot and the text value directly above it.
+class LabelWithCirclePainter extends FlDotCirclePainter {
+  final String label;
+  final TextStyle labelStyle;
+  final double offsetY;
+
+  LabelWithCirclePainter({
+    required this.label,
+    required this.labelStyle,
+    required this.offsetY,
+    double? radius,
+    Color? color,
+    double? strokeWidth,
+    Color? strokeColor,
+  }) : super(
+          radius: radius,
+          color: color ?? Colors.purple,
+          strokeWidth: strokeWidth ?? 2,
+          strokeColor: strokeColor ?? Colors.purple,
+        );
+
+  @override
+  void draw(Canvas canvas, FlSpot spot, Offset offsetInCanvas) {
+    // 1. Draw the actual circle dot
+    super.draw(canvas, spot, offsetInCanvas);
+
+    // 2. Setup the text painter for the value
+    final textPainter = TextPainter(
+      text: TextSpan(text: label, style: labelStyle),
+      textDirection: txt.TextDirection.ltr,
+    )..layout();
+
+    // 3. Position the text (centered horizontally, above the dot)
+    final dx = offsetInCanvas.dx - (textPainter.width / 2);
+    // final dy = offsetInCanvas.dy - (radius ?? 4) - textPainter.height - 7;
+    final dy = offsetInCanvas.dy + offsetY - (offsetY < 0 ? textPainter.height : 0);
+
+    // 4. Paint label onto canvas
+    textPainter.paint(canvas, Offset(dx, dy));
+  }
 }

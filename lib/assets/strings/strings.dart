@@ -1709,7 +1709,8 @@ Map<String, String> resEnglish = {
   'gruhSahabhaagiKaaryakartaaTotalCount': 'Total Abhiyaan Kaaryakarte',
   'gruhSahabhaagiKaaryakartaaMaleCount': 'Abhiyaan Kaaryakarte (M)',
   'gruhSahabhaagiKaaryakartaaFemaleCount': 'Abhiyaan Kaaryakarte (F)',
-  'gruhAbhiyaanSwayamsevakCount': 'Total Abhiyaan Swayamsevak',
+  'gruhAbhiyaanSwayamsevakCount': 'Total Sahabhagi Swayamsevak',
+  'gruhSwayamsevakKaryakartaCount': 'Total (Kaaryakarte + Swayamsevak)',
 };
 
 ///1,584
@@ -3421,9 +3422,10 @@ Map<String, String> resMarathi = {
   'specialContactDataNotAvailable': 'विशेष संपर्क तपशील उपलब्ध नाही.',
   'gruhKaaryakartaaTotalCount': 'एकुण कार्यकर्ते',
   'gruhSahabhaagiKaaryakartaaTotalCount': 'एकुण अभियान कार्यकर्ते',
-  'gruhSahabhaagiKaaryakartaaMaleCount': 'सहभागी कार्यकर्ते (पु)',
-  'gruhSahabhaagiKaaryakartaaFemaleCount': 'सहभागी कार्यकर्ते (म)',
-  'gruhAbhiyaanSwayamsevakCount': 'एकुण अभियान स्वयंसेवक',
+  'gruhSahabhaagiKaaryakartaaMaleCount': 'अभियान कार्यकर्ते (पु)',
+  'gruhSahabhaagiKaaryakartaaFemaleCount': 'अभियान कार्यकर्ते (म)',
+  'gruhAbhiyaanSwayamsevakCount': 'एकुण सहभागी स्वयंसेवक',
+  'gruhSwayamsevakKaryakartaCount': 'एकुण (कार्यकर्ते + स्वयंसेवक)',
 };
 
 ///1,583
@@ -5136,5 +5138,6 @@ Map<String, String> resHindi = {
   'gruhSahabhaagiKaaryakartaaTotalCount': 'कुल अभियान कार्यकर्ते',
   'gruhSahabhaagiKaaryakartaaMaleCount': 'सहभागी कार्यकर्ते (पु)',
   'gruhSahabhaagiKaaryakartaaFemaleCount': 'सहभागी कार्यकर्ते (म)',
-  'gruhAbhiyaanSwayamsevakCount': 'कुल अभियान स्वयंसेवक',
+  'gruhAbhiyaanSwayamsevakCount': 'कुल सहभागी स्वयंसेवक',
+  'gruhSwayamsevakKaryakartaCount': 'कुल (कार्यकर्ते + स्वयंसेवक)',
 };

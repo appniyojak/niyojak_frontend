@@ -146,7 +146,8 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
   }
 
   bool get isAbhiyaanButKaryavah {
-    final level = Statics.userDetails["LevelID"];
+    final levelIdStr = Statics.userDetails["LevelID"]?.toString() ?? "0";
+    final levelId = int.tryParse(levelIdStr) ?? 0;
 
     final _isKaaryavaah = [
       "Kaaryavaah",
@@ -171,7 +172,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
       "सह प्रचारक"
     ].contains(Statics.userDetails["DaayitvaName"]);
 
-    return _isKaaryavaah && (level >= 6);
+    return _isKaaryavaah && (levelId >= 6);
   }
 
   List<List<PreviousDay>> separatedLists = [];
@@ -307,6 +308,8 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
   }
 
   Future<void> _removeFromToli() async {
+    if (_selectedTolisIds.isEmpty) return;
+
     print("calling");
     _isEditing = false;
     bool isConnected = await Statics.isInternetConnected();

@@ -80,6 +80,7 @@ class Table1List {
   int? vitaritkarpatra;
   int? ekunswayamsevak;
   int? ekunsamparkhetukaryakarta;
+  int? ekuntotal;
   int? femalecount;
   int? malecount;
 
@@ -96,6 +97,7 @@ class Table1List {
     this.vitaritkarpatra,
     this.ekunswayamsevak,
     this.ekunsamparkhetukaryakarta,
+    this.ekuntotal,
     this.femalecount,
     this.malecount,
   });
@@ -113,6 +115,7 @@ class Table1List {
     vitaritkarpatra = json['vitaritkarpatra'];
     ekunswayamsevak = json['ekunswayamsevak'];
     ekunsamparkhetukaryakarta = json['ekunsamparkhetukaryakarta'];
+    ekuntotal = json['ekuntotal'];
     femalecount = json['femalecount'];
     malecount = json['malecount'];
   }
@@ -131,6 +134,7 @@ class Table1List {
     data['vitaritkarpatra'] = this.vitaritkarpatra;
     data['ekunswayamsevak'] = this.ekunswayamsevak;
     data['ekunsamparkhetukaryakarta'] = this.ekunsamparkhetukaryakarta;
+    data['ekuntotal'] = this.ekuntotal;
     data['femalecount'] = this.femalecount;
     data['malecount'] = this.malecount;
     return data;
