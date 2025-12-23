@@ -387,9 +387,15 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
             ),
             SizedBox(height: 15),
             _buildExpansionPanel(),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+            SizedBox(height: MediaQuery
+                .of(context)
+                .size
+                .height * 0.03),
             if (_searched) ...[
-              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+              SizedBox(height: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.03),
               nagarMandalCountsTable(),
               SizedBox(height: 21),
               vastiGramNamesTable(),
@@ -402,14 +408,17 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                 ),
               ),
               SizedBox(height: 8),
-              dateWiseDataInChart(),
-              SizedBox(height: 12),
+              // dateWiseDataInChart(),
+              // SizedBox(height: 12),
               levelWiseTable(),
               SizedBox(height: 21),
               dateWiseTable(),
               SizedBox(height: 21),
               specialVyaktiTable(),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+              SizedBox(height: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.1),
             ],
           ],
         ),
@@ -497,20 +506,21 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                       verticalInside: BorderSide(width: 0.7, color: Colors.grey.shade300),
                     ),
                     columns: headers
-                        .map((header) => DataColumn(
-                              label: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 8),
-                                constraints: const BoxConstraints(minWidth: 30, maxWidth: 130),
-                                child: Text(
-                                  header,
-                                  softWrap: true,
-                                  maxLines: 2,
-                                  textAlign: TextAlign.center,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ))
+                        .map((header) =>
+                        DataColumn(
+                          label: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 8),
+                            constraints: const BoxConstraints(minWidth: 30, maxWidth: 130),
+                            child: Text(
+                              header,
+                              softWrap: true,
+                              maxLines: 2,
+                              textAlign: TextAlign.center,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ))
                         .toList(),
                     rows: [
                       // per-item rows
@@ -530,9 +540,9 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                             decoration: BoxDecoration(color: Colors.green.shade100),
                             child: Center(
                                 child: Text(
-                              ((item.malecount ?? 0) + (item.femalecount ?? 0) + (item.ekunswayamsevak ?? 0)).toString(),
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            )),
+                                  ((item.malecount ?? 0) + (item.femalecount ?? 0) + (item.ekunswayamsevak ?? 0)).toString(),
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )),
                           )),
                           // DataCell(Center(child: Text((item.attcount ?? 0).toString()))),
                         ]);
@@ -553,12 +563,12 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                           decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.green.shade100)), color: Colors.green.shade100),
                           child: Center(
                               child: Text(
-                            (levelWiseList.fold(0, (sum, item) => sum + (item.malecount ?? 0)) +
+                                (levelWiseList.fold(0, (sum, item) => sum + (item.malecount ?? 0)) +
                                     levelWiseList.fold(0, (sum, item) => sum + (item.femalecount ?? 0)) +
                                     levelWiseList.fold(0, (sum, item) => sum + (item.ekunswayamsevak ?? 0)))
-                                .toString(),
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          )),
+                                    .toString(),
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              )),
                         )),
                         // DataCell(Center(child: Text(levelWiseList.fold(0, (sum, item) => sum + (item.attcount ?? 0)).toString()))),
                       ])
@@ -904,7 +914,10 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                           final index = value.toInt();
                           if (index < 0 || index >= rows.length) return const SizedBox.shrink();
 
-                          final label = rows[index]['AbhiyaanDate'].toString().split(" ").first;
+                          final label = rows[index]['AbhiyaanDate']
+                              .toString()
+                              .split(" ")
+                              .first;
 
                           return Padding(
                             padding: const EdgeInsets.only(top: 8.0),
@@ -1201,7 +1214,7 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
       if (dateWiseList.any((e) => e.femalecount != null)) Statics.getLabel('gruhSahabhaagiKaaryakartaaFemaleCount'),
       if (dateWiseList.any((e) => e.ekunswayamsevak != null)) Statics.getLabel('gruhAbhiyaanSwayamsevakCount'),
       if (dateWiseList.any((e) => e.ekunsamparkhetukaryakarta != null)) Statics.getLabel('gruhSahabhaagiKaaryakartaaTotalCount'),
-      if (dateWiseList.any((e) => e.ekuntotal != null)) Statics.getLabel('gruhSwayamsevakKaryakartaCount'),
+      if (dateWiseList.any((e) => e.ekuntotal != null)) Statics.getLabel('gruhSwayamsevakKaryakartaCount2'),
     ];
 
     if (dateWiseList.isEmpty)
@@ -1246,7 +1259,9 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                         label: Container(
                           alignment: Alignment.center,
                           // width: MediaQuery.sizeOf(context).width * 0.4,
-                          constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.38),
+                          constraints: BoxConstraints(maxWidth: MediaQuery
+                              .sizeOf(context)
+                              .width * 0.38),
                           padding: EdgeInsets.symmetric(horizontal: 16),
                           child: Text(
                             "${Statics.getLabel("LevelName")}",
@@ -1263,13 +1278,18 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                     // dataRowMaxHeight: 120,
                     rows: [
                       // rows from data
-                      ...level.asMap().entries.map((entry) {
+                      ...level
+                          .asMap()
+                          .entries
+                          .map((entry) {
                         final index = entry.key;
                         final item = entry.value;
                         return DataRow(cells: [
                           DataCell(Container(
-                              // width: MediaQuery.sizeOf(context).width * 0.4,
-                              constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.38),
+                            // width: MediaQuery.sizeOf(context).width * 0.4,
+                              constraints: BoxConstraints(maxWidth: MediaQuery
+                                  .sizeOf(context)
+                                  .width * 0.38),
                               padding: EdgeInsets.symmetric(horizontal: 16),
                               decoration: BoxDecoration(color: (index == (level.length - 1)) ? Colors.green.shade100 : null),
                               child: Text(
@@ -1295,36 +1315,40 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                           headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
                           border: TableBorder(verticalInside: BorderSide(width: 0.7, color: Colors.grey.shade200)),
                           columns: [
-                                DataColumn(
-                                  label: Container(
-                                    alignment: Alignment.center,
-                                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                    decoration: BoxDecoration(color: Colors.yellow.shade100, border: Border.all(color: Colors.black26)),
-                                    // constraints: const BoxConstraints(minWidth: 30, maxWidth: 70),
-                                    child: Text(
-                                      Statics.getLabel("Total"),
-                                      softWrap: true,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                )
-                              ] +
+                            DataColumn(
+                              label: Container(
+                                alignment: Alignment.center,
+                                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                decoration: BoxDecoration(color: Colors.yellow.shade100, border: Border.all(color: Colors.black26)),
+                                // constraints: const BoxConstraints(minWidth: 30, maxWidth: 70),
+                                child: Text(
+                                  Statics.getLabel("Total"),
+                                  softWrap: true,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            )
+                          ] +
                               dateWiseList
-                                  .map((header) => DataColumn(
-                                        label: Container(
-                                          margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                          constraints: const BoxConstraints(minWidth: 30, maxWidth: 200),
-                                          child: Text(
-                                            header.abhiyaanDate.toString().split(" ").first,
-                                            softWrap: true,
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                      ))
+                                  .map((header) =>
+                                  DataColumn(
+                                    label: Container(
+                                      margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                      constraints: const BoxConstraints(minWidth: 30, maxWidth: 200),
+                                      child: Text(
+                                        header.abhiyaanDate
+                                            .toString()
+                                            .split(" ")
+                                            .first,
+                                        softWrap: true,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ))
                                   .toList(),
                           rows: [
                             // DataRow(cells: [
@@ -1436,7 +1460,8 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                                     ))),
                                 if (dateWiseList.any((e) => e.ekuntotal != null))
                                   ...dateWiseList
-                                      .map((item) => DataCell(Container(
+                                      .map((item) =>
+                                      DataCell(Container(
                                           decoration: BoxDecoration(
                                             color: Colors.green.shade100,
                                             border: Border.all(color: Colors.black26, width: 0.7),
@@ -1463,16 +1488,18 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
   }
 
   void showPopupList(String vastiStepStartedNames, {String type = "graam"}) {
-    if (vastiStepStartedNames.trim().isEmpty) {
+    if (vastiStepStartedNames
+        .trim()
+        .isEmpty) {
       Statics.showToast(Statics.getLabel(type == "graam"
           ? 'graamNotAvailable'
           : type == "vasti"
-              ? 'vastiNotAvailable'
-              : type == "nagar"
-                  ? 'nagarNotAvailable'
-                  : type == "taluka"
-                      ? 'taalukaNotAvailable'
-                      : 'mandalNotAvailable'));
+          ? 'vastiNotAvailable'
+          : type == "nagar"
+          ? 'nagarNotAvailable'
+          : type == "taluka"
+          ? 'taalukaNotAvailable'
+          : 'mandalNotAvailable'));
       return;
     }
 
@@ -1482,106 +1509,108 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
       Statics.showToast(Statics.getLabel(type == "graam"
           ? 'graamNotAvailable'
           : type == "vasti"
-              ? 'vastiNotAvailable'
-              : type == "nagar"
-                  ? 'nagarNotAvailable'
-                  : type == "taluka"
-                      ? 'taalukaNotAvailable'
-                      : 'mandalNotAvailable'));
+          ? 'vastiNotAvailable'
+          : type == "nagar"
+          ? 'nagarNotAvailable'
+          : type == "taluka"
+          ? 'taalukaNotAvailable'
+          : 'mandalNotAvailable'));
       return;
     }
 
     showDialog(
       context: context,
-      builder: (_) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        child: Container(
-          width: double.maxFinite,
-          height: 500,
-          padding: EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Colors.white,
-          ),
-          child: Column(
-            children: [
-              Row(
+      builder: (_) =>
+          Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            child: Container(
+              width: double.maxFinite,
+              height: 500,
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.white,
+              ),
+              child: Column(
                 children: [
-                  Icon(Icons.list_alt, color: Colors.purpleAccent),
-                  SizedBox(width: 10),
-                  Text(
-                    Statics.getLabel(type == "graam"
-                        ? 'graamYaadi'
-                        : type == "vasti"
+                  Row(
+                    children: [
+                      Icon(Icons.list_alt, color: Colors.purpleAccent),
+                      SizedBox(width: 10),
+                      Text(
+                        Statics.getLabel(type == "graam"
+                            ? 'graamYaadi'
+                            : type == "vasti"
                             ? 'vastiYaadi'
                             : type == "nagar"
-                                ? 'nagarYaadi'
-                                : type == "taluka"
-                                    ? 'taalukaYaadi'
-                                    : 'mandalYaadi'),
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.purpleAccent,
-                    ),
+                            ? 'nagarYaadi'
+                            : type == "taluka"
+                            ? 'taalukaYaadi'
+                            : 'mandalYaadi'),
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.purpleAccent,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              Divider(thickness: 1, height: 20),
-              Expanded(
-                child: Scrollbar(
-                  thumbVisibility: true,
-                  thickness: 6,
-                  radius: Radius.circular(10),
-                  child: ListView.builder(
-                    itemCount: namesList.length,
-                    itemBuilder: (_, index) => Padding(
-                      padding: EdgeInsets.symmetric(vertical: 4.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${index + 1})  ',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          Expanded(
-                            child: Text(
-                              namesList[index],
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black87,
+                  Divider(thickness: 1, height: 20),
+                  Expanded(
+                    child: Scrollbar(
+                      thumbVisibility: true,
+                      thickness: 6,
+                      radius: Radius.circular(10),
+                      child: ListView.builder(
+                        itemCount: namesList.length,
+                        itemBuilder: (_, index) =>
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 4.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${index + 1})  ',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      namesList[index],
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ),
-                        ],
                       ),
                     ),
                   ),
-                ),
-              ),
-              SizedBox(height: 20),
-              Align(
-                alignment: Alignment.center,
-                child: ElevatedButton.icon(
-                  onPressed: () => Navigator.pop(context),
-                  icon: Icon(Icons.close),
-                  label: Text("${Statics.getLabel('bandKara')}"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.purpleAccent,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                  SizedBox(height: 20),
+                  Align(
+                    alignment: Alignment.center,
+                    child: ElevatedButton.icon(
+                      onPressed: () => Navigator.pop(context),
+                      icon: Icon(Icons.close),
+                      label: Text("${Statics.getLabel('bandKara')}"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.purpleAccent,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              )
-            ],
+                  )
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
     );
   }
 
@@ -1644,17 +1673,18 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                       ),
                       DataColumn(
                           label: IconButton(
-                        icon: Icon(Icons.remove_red_eye, color: Colors.teal),
-                        onPressed: () => showPopupList(_vastiData.vastiname.toString(), type: "vasti"),
-                      )),
+                            icon: Icon(Icons.remove_red_eye, color: Colors.teal),
+                            onPressed: () => showPopupList(_vastiData.vastiname.toString(), type: "vasti"),
+                          )),
                     ],
                     rows: vastiTitleList
                         .asMap()
                         .entries
-                        .map((e) => DataRow(color: MaterialStateProperty.all(Colors.orange.shade50), cells: [
-                              DataCell(Container(margin: EdgeInsets.symmetric(horizontal: 8), alignment: Alignment.center, child: Text(Statics.getLabel(e.value.keys.first.toString())))),
-                              DataCell(Align(alignment: Alignment.center, child: Text(e.value.values.first.toString(), style: TextStyle(fontWeight: FontWeight.w600)))),
-                            ]))
+                        .map((e) =>
+                        DataRow(color: MaterialStateProperty.all(Colors.orange.shade50), cells: [
+                          DataCell(Container(margin: EdgeInsets.symmetric(horizontal: 8), alignment: Alignment.center, child: Text(Statics.getLabel(e.value.keys.first.toString())))),
+                          DataCell(Align(alignment: Alignment.center, child: Text(e.value.values.first.toString(), style: TextStyle(fontWeight: FontWeight.w600)))),
+                        ]))
                         .toList(),
                   ),
                 ),
@@ -1686,17 +1716,18 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                       ),
                       DataColumn(
                           label: IconButton(
-                        icon: Icon(Icons.remove_red_eye, color: Colors.teal),
-                        onPressed: () => showPopupList(_gramData.gramname.toString(), type: "graam"),
-                      )),
+                            icon: Icon(Icons.remove_red_eye, color: Colors.teal),
+                            onPressed: () => showPopupList(_gramData.gramname.toString(), type: "graam"),
+                          )),
                     ],
                     rows: graamTitleList
                         .asMap()
                         .entries
-                        .map((e) => DataRow(color: MaterialStateProperty.all(Colors.green.shade50), cells: [
-                              DataCell(Container(margin: EdgeInsets.symmetric(horizontal: 8), alignment: Alignment.center, child: Text(Statics.getLabel(e.value.keys.first.toString())))),
-                              DataCell(Align(alignment: Alignment.center, child: Text(e.value.values.first.toString(), style: TextStyle(fontWeight: FontWeight.w600)))),
-                            ]))
+                        .map((e) =>
+                        DataRow(color: MaterialStateProperty.all(Colors.green.shade50), cells: [
+                          DataCell(Container(margin: EdgeInsets.symmetric(horizontal: 8), alignment: Alignment.center, child: Text(Statics.getLabel(e.value.keys.first.toString())))),
+                          DataCell(Align(alignment: Alignment.center, child: Text(e.value.values.first.toString(), style: TextStyle(fontWeight: FontWeight.w600)))),
+                        ]))
                         .toList(),
                   ),
                 ),
@@ -1893,32 +1924,33 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                   DataColumn(label: Text('')),
                 ],
                 rows: levelWiseCountsList
-                    .map((e) => DataRow(
-                          color: MaterialStateProperty.all(Colors.purple.shade50),
-                          cells: [
-                            // DataCell(Align(alignment: Alignment.center, child: Text("${Statics.getLabel('Vasti')}"))),
-                            DataCell(Align(
-                              alignment: Alignment.center,
-                              child: Text(Statics.getLabel(e.type == "nagar"
-                                  ? "NagarShahari"
-                                  : e.type == "taluka"
-                                      ? "taalukaa"
-                                      : e.type.toString())),
-                            )),
-                            DataCell(Align(
-                              alignment: Alignment.center,
-                              child: Text("${e.totalcount ?? "0"}"),
-                            )),
-                            DataCell(Align(
-                              alignment: Alignment.center,
-                              child: Text("${e.startedcount ?? "0"}"),
-                            )),
-                            DataCell(IconButton(
-                              icon: Icon(Icons.remove_red_eye, color: Colors.teal),
-                              onPressed: () => showPopupList(e.namelist.toString(), type: e.type.toString()),
-                            )),
-                          ],
-                        ))
+                    .map((e) =>
+                    DataRow(
+                      color: MaterialStateProperty.all(Colors.purple.shade50),
+                      cells: [
+                        // DataCell(Align(alignment: Alignment.center, child: Text("${Statics.getLabel('Vasti')}"))),
+                        DataCell(Align(
+                          alignment: Alignment.center,
+                          child: Text(Statics.getLabel(e.type == "nagar"
+                              ? "NagarShahari"
+                              : e.type == "taluka"
+                              ? "taalukaa"
+                              : e.type.toString())),
+                        )),
+                        DataCell(Align(
+                          alignment: Alignment.center,
+                          child: Text("${e.totalcount ?? "0"}"),
+                        )),
+                        DataCell(Align(
+                          alignment: Alignment.center,
+                          child: Text("${e.startedcount ?? "0"}"),
+                        )),
+                        DataCell(IconButton(
+                          icon: Icon(Icons.remove_red_eye, color: Colors.teal),
+                          onPressed: () => showPopupList(e.namelist.toString(), type: e.type.toString()),
+                        )),
+                      ],
+                    ))
                     .toList(),
               ),
             ),
@@ -1928,7 +1960,10 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
 
   Widget _buildExpansionPanel() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.9,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width * 0.9,
       margin: EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
@@ -1962,10 +1997,11 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                       label: Statics.getLabel('Mahaanagar'),
                       value: _linkedMahaanagarValue,
                       items: _linkedMahaanagar!
-                          .map((bg) => DropdownMenuItem(
-                                value: bg.geoUnitID.toString(),
-                                child: Text(bg.name!),
-                              ))
+                          .map((bg) =>
+                          DropdownMenuItem(
+                            value: bg.geoUnitID.toString(),
+                            child: Text(bg.name!),
+                          ))
                           .toList(),
                       onChanged: (value) async {
                         final selectedItem = _linkedMahaanagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
@@ -1988,10 +2024,11 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                       label: Statics.getLabel('Vibhaag'),
                       value: _linkedVibhaagValue,
                       items: _linkedVibhaag!
-                          .map((bg) => DropdownMenuItem(
-                                value: bg.geoUnitID.toString(),
-                                child: Text(bg.name!),
-                              ))
+                          .map((bg) =>
+                          DropdownMenuItem(
+                            value: bg.geoUnitID.toString(),
+                            child: Text(bg.name!),
+                          ))
                           .toList(),
                       onChanged: (value) {
                         final selectedItem = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
@@ -2011,10 +2048,11 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                       label: Statics.getLabel('Bhaag'),
                       value: _linkedbhaagValue,
                       items: _linkedbhaag!
-                          .map((bg) => DropdownMenuItem(
-                                value: bg.geoUnitID.toString(),
-                                child: Text(bg.name!),
-                              ))
+                          .map((bg) =>
+                          DropdownMenuItem(
+                            value: bg.geoUnitID.toString(),
+                            child: Text(bg.name!),
+                          ))
                           .toList(),
                       onChanged: (value) {
                         final selectedItem = _linkedbhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
@@ -2035,10 +2073,11 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                       label: Statics.getLabel('Shahar'),
                       value: _linkedshaharValue,
                       items: _linkedshahar!
-                          .map((bg) => DropdownMenuItem(
-                                value: bg.geoUnitID.toString(),
-                                child: Text(bg.name!),
-                              ))
+                          .map((bg) =>
+                          DropdownMenuItem(
+                            value: bg.geoUnitID.toString(),
+                            child: Text(bg.name!),
+                          ))
                           .toList(),
                       onChanged: (value) {
                         final selectedItem = _linkedshahar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
@@ -2058,10 +2097,11 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                       label: Statics.getLabel('Nagar'),
                       value: _linkednagarValue,
                       items: _linkednagar!
-                          .map((bg) => DropdownMenuItem(
-                                value: bg.geoUnitID.toString(),
-                                child: Text(bg.name!),
-                              ))
+                          .map((bg) =>
+                          DropdownMenuItem(
+                            value: bg.geoUnitID.toString(),
+                            child: Text(bg.name!),
+                          ))
                           .toList(),
                       onChanged: (value) {
                         final selectedItem = _linkednagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
@@ -2155,8 +2195,14 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                           horizontal: 35,
                           vertical: 5,
                         ),
-                        color: Theme.of(context).primaryColor,
-                        textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                        color: Theme
+                            .of(context)
+                            .primaryColor,
+                        textColor: Theme
+                            .of(context)
+                            .primaryTextTheme
+                            .labelMedium
+                            ?.color,
                         onPressed: () async {
                           _selctedLevelNameList = [];
                           setState(() {});
@@ -2278,11 +2324,11 @@ class LabelWithCirclePainter extends FlDotCirclePainter {
     double? strokeWidth,
     Color? strokeColor,
   }) : super(
-          radius: radius,
-          color: color ?? Colors.purple,
-          strokeWidth: strokeWidth ?? 2,
-          strokeColor: strokeColor ?? Colors.purple,
-        );
+    radius: radius,
+    color: color ?? Colors.purple,
+    strokeWidth: strokeWidth ?? 2,
+    strokeColor: strokeColor ?? Colors.purple,
+  );
 
   @override
   void draw(Canvas canvas, FlSpot spot, Offset offsetInCanvas) {
@@ -2293,7 +2339,8 @@ class LabelWithCirclePainter extends FlDotCirclePainter {
     final textPainter = TextPainter(
       text: TextSpan(text: label, style: labelStyle),
       textDirection: txt.TextDirection.ltr,
-    )..layout();
+    )
+      ..layout();
 
     // 3. Position the text (centered horizontally, above the dot)
     final dx = offsetInCanvas.dx - (textPainter.width / 2);
