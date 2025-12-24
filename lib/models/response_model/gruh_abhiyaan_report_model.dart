@@ -1,17 +1,21 @@
 class GruhAbhiyaanReportModel {
   String? message;
   String? status;
+  int? ekununiquekaryakarta;
+  int? ekununiqueswayamsevak;
   List<Table1List>? table1List;
   List<Table1List>? table2List;
   List<Table3List>? table3List;
   List<Table4List>? table4List;
   List<Table5List>? table5List;
 
-  GruhAbhiyaanReportModel({this.message, this.status, this.table1List, this.table2List, this.table3List, this.table4List, this.table5List});
+  GruhAbhiyaanReportModel({this.message, this.status, this.ekununiquekaryakarta, this.ekununiqueswayamsevak, this.table1List, this.table2List, this.table3List, this.table4List, this.table5List});
 
   GruhAbhiyaanReportModel.fromJson(Map<String, dynamic> json) {
     message = json['Message'];
     status = json['Status'];
+    ekununiquekaryakarta = json['ekununiquekaryakarta'];
+    ekununiqueswayamsevak = json['ekununiqueswayamsevak'];
     if (json['table1List'] != null) {
       table1List = <Table1List>[];
       json['table1List'].forEach((v) {
@@ -48,6 +52,8 @@ class GruhAbhiyaanReportModel {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['Message'] = this.message;
     data['Status'] = this.status;
+    data['ekununiquekaryakarta'] = this.ekununiquekaryakarta;
+    data['ekununiqueswayamsevak'] = this.ekununiqueswayamsevak;
     if (this.table1List != null) {
       data['table1List'] = this.table1List!.map((v) => v.toJson()).toList();
     }

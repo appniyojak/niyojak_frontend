@@ -425,7 +425,7 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
             context: context,
             builder: (ctnx) => AlertDialog(
               title: Text(getLabel('AskConfirmation')),
-              content: Text("तुम्हाला आणखी एक स्वयंसेवक जोडायचा आहे का?"),
+              content: Text(Statics.getLabel("gruhVruttaQues1")),
               actions: <Widget>[
                 TextButton(
                   child: Text(getLabel('ConfirmationNo')),
@@ -501,7 +501,7 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
             context: context,
             builder: (ctnx) => AlertDialog(
               title: Text(getLabel('AskConfirmation')),
-              content: Text("तुम्हाला आणखी एक स्वयंसेवक जोडायचा आहे का?"),
+              content: Text(Statics.getLabel("gruhVruttaQues1")),
               actions: <Widget>[
                 TextButton(
                   child: Text(getLabel('ConfirmationNo')),
@@ -581,7 +581,7 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("अभियान कार्यकर्ता जोडा"),
+        title: Text(Statics.getLabel("addAbhiyaanKaryakarta")),
       ),
       body: ModalProgressHUD(
         inAsyncCall: _isSearching,
@@ -661,7 +661,7 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                         decoration: InputDecoration(
                           isDense: true,
                           prefixIcon: Icon(Icons.search),
-                          hintText: "नाव किंवा नंबरने शोधा",
+                          hintText: Statics.getLabel("gruhSearchByNameOrNumber"),
                           contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                           // suffixIcon: InkWell(
                           //   onTap: () async {
@@ -697,7 +697,7 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                           borderRadius: BorderRadius.circular(12),
                           onTap: () => setState(() {
                             if (e.isPresentInAsSewak) {
-                              Statics.showToast(Statics.getLabel("workInProgress"));
+                              Statics.showToast(Statics.getLabel("alreadyPresent"));
                               return;
                             }
                             _selectedKaryakarta = e;
@@ -905,7 +905,7 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                                         textInputAction: TextInputAction.done,
                                         controller: _anyaSansthaCntrl,
                                         decoration: InputDecoration(
-                                          hintText: "संस्था कुठल्या विषयात काम करते",
+                                          hintText: Statics.getLabel("gruhVruttaQues3"),
                                         ),
                                         keyboardType: TextInputType.text,
                                         onSaved: (value) {
@@ -1131,7 +1131,7 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                             context: context,
                             builder: (ctnx) => AlertDialog(
                               title: Text(getLabel('AskConfirmation')),
-                              content: Text("निवडलेले स्वयंसेवक जोडायचे आहे का?"),
+                              content: Text(Statics.getLabel("gruhVruttaQues2")),
                               actions: <Widget>[
                                 TextButton(
                                   child: Text(getLabel('ConfirmationNo')),
@@ -1181,11 +1181,11 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                               // } else
                               if (showFields && _fullNameCntrl.text.isEmpty) {
                                 print("पूर्ण नाव प्रविष्ट करा");
-                                Statics.showToast("पूर्ण नाव प्रविष्ट करा");
+                                Statics.showToast(Statics.getLabel("addAbhiyaanKaryakartaValidation1"));
                                 return null;
                               } else if (showFields && _mobileCntrl.text.isEmpty) {
                                 print("मोबाइल क्रमांक प्रविष्ट करा");
-                                Statics.showToast("मोबाइल क्रमांक प्रविष्ट करा");
+                                Statics.showToast(Statics.getLabel("addAbhiyaanKaryakartaValidation2"));
                                 return null;
                                 // } else if (showFields && _linkedvastiValue == null && _linkedgraamValue == null) {
                                 //   print("निवास स्थान निवडा");
@@ -1193,15 +1193,15 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                                 //   return null;
                               } else if (showFields && selectedSansthaValue == "अन्य" && _anyaSansthaCntrl.text.isEmpty) {
                                 print("अन्य संस्था प्रविष्ट करा");
-                                Statics.showToast("अन्य संस्था प्रविष्ट करा");
+                                Statics.showToast(Statics.getLabel("addAbhiyaanKaryakartaValidation3"));
                                 return null;
                               } else if (showFields && selectedSansthaValue != "" && _sansthaNameCntrl.text.isEmpty) {
                                 print("संस्थेचे नाव प्रविष्ट करा");
-                                Statics.showToast("संस्थेचे नाव प्रविष्ट करा");
+                                Statics.showToast(Statics.getLabel("addAbhiyaanKaryakartaValidation4"));
                                 return null;
                               } else if (showFields && selectedSansthaValue != "" && _sansthaPadhCntrl.text.isEmpty) {
                                 print("संस्थेमध्ये पद प्रविष्ट करा");
-                                Statics.showToast("संस्थेमध्ये पद प्रविष्ट करा");
+                                Statics.showToast(Statics.getLabel("addAbhiyaanKaryakartaValidation5"));
                                 return null;
                                 // } else if (selectedDayitvValue.isEmpty) {
                                 //   print("दायित्व निवडा");
@@ -1209,7 +1209,7 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                                 //   return null;
                               } else {
                                 if (!showFields) {
-                                  Statics.showToast("मोबाइल क्रमांक प्रविष्ट करा");
+                                  Statics.showToast(Statics.getLabel("addAbhiyaanKaryakartaValidation2"));
                                   return null;
                                 }
                                 print("saving data");
@@ -1236,7 +1236,7 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
                               //   );
                               //   return;
                               // }
-                              if (_searchController.text.length < 3) {
+                              if (_searchController.text.trim().length < 3) {
                                 Statics.showToast(Statics.getLabel('minimumWordsRequired'));
                                 return null;
                               }
