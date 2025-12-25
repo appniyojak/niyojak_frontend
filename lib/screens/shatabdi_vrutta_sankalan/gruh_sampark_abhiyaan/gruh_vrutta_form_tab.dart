@@ -462,7 +462,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
         log(jsonEncode(_data));
 
         var result = await Statics.saveVisheshVyaktiDataforGruhAbhiyaan(_data, context: context);
-        if (result != null && result) {
+        if (result != null && result == true) {
           if (refresh) await _getSwList();
           setState(() {
             _isEditing = false;
@@ -472,10 +472,15 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
             // vitritKarpatrakController.clear();
             // pustakVikriController.clear();
             createdUserId = null;
-            selectedSajjanshaktiItems = [];
+            // selectedSajjanshaktiItems = [];
+            // selectedAnyaprabhaviItems = [];
           });
           // await Future.wait(<Future>[_getSwList(), _getPreviousDayDataList()]);
           print("succeed");
+        } else if (result != null && result.toString().isNotEmpty) {
+          selectedSajjanshaktiItems = [];
+          selectedAnyaprabhaviItems = [];
+          Statics.showToast(result + " " + Statics.getLabel('visheshVyaktiAlreadyExists'));
         } else {
           Statics.showToast(Statics.getLabel('unableToSaveData'));
         }

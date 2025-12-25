@@ -3094,7 +3094,7 @@ Future<AbhiyanSwayamsevakdata?> saveDataforGruhAbhiyaan(Map<String, dynamic> inp
   }
 }
 
-Future<bool?> saveVisheshVyaktiDataforGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
+Future<dynamic> saveVisheshVyaktiDataforGruhAbhiyaan(Map<String, dynamic> inputJson, {BuildContext? context}) async {
   if (context != null) showLoaderDialog(context);
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
   log(addvisheshgruhApi);
@@ -3110,7 +3110,7 @@ Future<bool?> saveVisheshVyaktiDataforGruhAbhiyaan(Map<String, dynamic> inputJso
       if (data["Status"] == "200" || data["Status"] == "Success") {
         return true; // ✅ return karna zaroori hai
       }
-      return false; // ✅ error case
+      return data["Names"]; // ✅ error case
     } else {
       log("Error: ${response.statusCode} - ${response.body}");
       return null; // ✅ error case
