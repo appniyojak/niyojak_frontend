@@ -1730,7 +1730,13 @@ Map<String, String> resEnglish = {
   'addAbhiyaanKaryakartaValidation4': "Enter Sanstha name ",
   'addAbhiyaanKaryakartaValidation5': "Enter designation ",
   'visheshVyaktiAlreadyExists': "special persons are already added",
-  ////////////////////////////////////// Gruh Block //////////////////////////////////////
+  ////////////////////////////////////// Hindu Sanmelan Block //////////////////////////////////////
+  'AddSanmelanFiles': 'Add Sanmelan Images',
+  'AddSanmelanFilesDesc': 'Add Description for Sanmelan Images',
+  'AddSanmelanFilesSubtitle': 'Add maximum 3',
+  'AddAdvSanmelanFiles': 'Add photos of Sanmelan-related news',
+  'AddAdvSanmelanFilesDesc': 'Add Description for photos of Sanmelan-related news',
+  'AddAdvSanmelanFilesSubtitle': 'Add maximum 10',
 };
 
 ///1,584
@@ -3465,7 +3471,13 @@ Map<String, String> resMarathi = {
   'addAbhiyaanKaryakartaValidation4': "संस्थेचे नाव प्रविष्ट करा",
   'addAbhiyaanKaryakartaValidation5': "संस्थेमध्ये पद प्रविष्ट करा",
   'visheshVyaktiAlreadyExists': "या विशेष व्यक्तींचे आधीच नोंदणी आहे.",
-  ////////////////////////////////////// Gruh Block //////////////////////////////////////
+  ////////////////////////////////////// Hindu Sanmelan Block //////////////////////////////////////
+  'AddSanmelanFiles': 'संमेलनासंबंधित छायाचित्र जोडा',
+  'AddSanmelanFilesDesc': 'संमेलनासंबंधित छायाचित्रांचे वर्णन जोडा',
+  'AddAdvSanmelanFiles': 'संमेलनासंबंधित बातम्यांचे छायाचित्र जोडा',
+  'AddAdvSanmelanFilesDesc': 'संमेलनासंबंधित बातम्यांच्या छायाचित्रांचे वर्णन जोडा',
+  'AddSanmelanFilesSubtitle': 'जास्तीत जास्त ३ जोडा',
+  'AddAdvSanmelanFilesSubtitle': 'जास्तीत जास्त १० जोडा',
 };
 
 ///1,583
@@ -5199,5 +5211,11 @@ Map<String, String> resHindi = {
   'addAbhiyaanKaryakartaValidation4': "संस्था का नाम प्रविष्ट करें",
   'addAbhiyaanKaryakartaValidation5': "संस्था मे अधिकृत दायित्व",
   'visheshVyaktiAlreadyExists': "इन विशेष व्यक्तीं का नाम पहले से जुडा है।",
-  ////////////////////////////////////// Gruh Block //////////////////////////////////////
+  ////////////////////////////////////// Hindu Sanmelan Block //////////////////////////////////////
+  'AddSanmelanFiles': 'सम्मेलन से संबंधित छायाचित्र जोड़ें',
+  'AddSanmelanFilesDesc': 'सम्मेलन से संबंधित छायाचित्र के वर्णन जोड़ें',
+  'AddAdvSanmelanFiles': 'सम्मेलन से संबंधित समाचार के छायाचित्र जोड़ें  ',
+  'AddAdvSanmelanFilesDesc': 'सम्मेलन से संबंधित समाचार के वर्णन जोड़ें  ',
+  'AddSanmelanFilesSubtitle': 'अधिकतम ३ संलग्न करें',
+  'AddAdvSanmelanFilesSubtitle': 'अधिकतम १० संलग्न करें',
 };

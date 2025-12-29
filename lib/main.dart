@@ -82,6 +82,7 @@ import 'screens/forget_password.dart';
 import 'screens/shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/add_abhiyaan_karyakarta_screen.dart';
 import 'screens/shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/add_abhiyaan_pramukh.dart';
 import 'screens/shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/gruh_abhiyaan_main_tab_screen.dart';
+import 'screens/shatabdi_vrutta_sankalan/hindu_sanmelan/hindu_sanmelan_form.dart';
 import 'screens/shatabdi_vrutta_sankalan/vijayadashami/vijayadashami_form_view.dart';
 
 void main() async {
@@ -319,6 +320,7 @@ class NiyojakAppState extends State<NiyojakApp> {
         GruhAbhiyaanMainTabScreen.routeName: (ctx) => GruhAbhiyaanMainTabScreen(),
         AddAbhiyaanKaryakartaScreen.routeName: (ctx) => AddAbhiyaanKaryakartaScreen(),
         AddAbhiyaanPramukhScreen.routeName: (ctx) => AddAbhiyaanPramukhScreen(),
+        HinduSanmelanForm.routeName: (ctx) => HinduSanmelanForm(),
         SearchSankalpScreen.routeName: (ctx) => ChangeNotifierProvider<SankalpScreenProvider>(create: (context) => SankalpScreenProvider(), child: SearchSankalpScreen()),
         // SearchSankalpScreen.routeName: (ctx) => ChangeNotifierProvider<SankalpScreenProvider>(create: (context) => SankalpScreenProvider(), child: SearchSankalpScreen()),
       },
