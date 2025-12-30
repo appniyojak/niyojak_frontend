@@ -4021,14 +4021,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         Expanded(
                           child: InkWell(
-                            onTap: () => Navigator.of(context).pushNamed(HinduSanmelanForm.routeName),
-                            // onTap: () async {
-                            // Fluttertoast.showToast(
-                            //   msg: Statics.getLabel("workInProgress"),
-                            //   toastLength: Toast.LENGTH_SHORT,
-                            //   gravity: ToastGravity.BOTTOM,
-                            // );
-                            // },
+                            // onTap: () => Navigator.of(context).pushNamed(HinduSanmelanForm.routeName),
+                            onTap: () async {
+                              Fluttertoast.showToast(
+                                msg: Statics.getLabel("workInProgress"),
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                              );
+                            },
                             child: Container(
                               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                               decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
