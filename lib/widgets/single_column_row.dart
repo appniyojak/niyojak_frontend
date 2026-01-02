@@ -8,11 +8,13 @@ class SingleColumnRow extends StatelessWidget {
   var value;
   double? fontsize;
   Color? rowColor;
+  Color? dividerColor;
   FontWeight? fontWeight;
   bool? view;
   VoidCallback? btnAction;
   Widget? subChild;
   bool showDivider;
+  bool showTitle;
   EdgeInsetsGeometry? padding;
   EdgeInsetsGeometry? subChildPadding;
   EdgeInsetsGeometry? subChildMargin;
@@ -25,9 +27,11 @@ class SingleColumnRow extends StatelessWidget {
     this.fontWeight,
     this.view,
     this.rowColor,
+    this.dividerColor,
     this.btnAction,
     this.subChild,
     this.showDivider = true,
+    this.showTitle = true,
     this.padding,
     this.subChildPadding,
     this.subChildMargin,
@@ -37,36 +41,37 @@ class SingleColumnRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          decoration: BoxDecoration(color: rowColor),
-          padding: padding ?? EdgeInsets.symmetric(vertical: 8),
-          // color: Colors.red,
-          child: Center(
-            child: SizedBox(
-              width: Statics.getDeviceSize(context).width * 0.84,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(txtString, style: TextStyle(fontSize: fontsize, fontWeight: fontWeight ?? FontWeight.w500)),
-                  ),
-                  view == true
-                      ? IconButton(
-                          onPressed: btnAction,
-                          icon: Icon(
-                            FontAwesomeIcons.list,
-                            color: Colors.purpleAccent,
-                            size: 20,
-                          ))
-                      : Container(
-                          margin: EdgeInsets.only(left: 8),
-                          child: Text(value == "null" || value == null ? "0" : value.toString(), style: TextStyle(fontSize: fontsize, fontWeight: fontWeight ?? FontWeight.w600)),
-                        ),
-                ],
+        if (txtString != null)
+          Container(
+            decoration: BoxDecoration(color: rowColor),
+            padding: padding ?? EdgeInsets.symmetric(vertical: 8),
+            // color: Colors.red,
+            child: Center(
+              child: SizedBox(
+                width: Statics.getDeviceSize(context).width * 0.84,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(txtString, style: TextStyle(fontSize: fontsize, fontWeight: fontWeight ?? FontWeight.w500)),
+                    ),
+                    view == true
+                        ? IconButton(
+                            onPressed: btnAction,
+                            icon: Icon(
+                              FontAwesomeIcons.list,
+                              color: Colors.purpleAccent,
+                              size: 20,
+                            ))
+                        : Container(
+                            margin: EdgeInsets.only(left: 8),
+                            child: Text(value == "null" || value == null ? "0" : value.toString(), style: TextStyle(fontSize: fontsize, fontWeight: fontWeight ?? FontWeight.w600)),
+                          ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
         if (subChild != null)
           Container(
             padding: subChildPadding ?? EdgeInsets.only(top: 2, bottom: 6),
@@ -84,7 +89,7 @@ class SingleColumnRow extends StatelessWidget {
             width: Statics.getDeviceSize(context).width,
             child: Divider(
               height: 1,
-              color: Colors.black,
+              color: dividerColor ?? Colors.black,
             ),
           ),
         ),

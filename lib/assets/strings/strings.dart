@@ -1731,6 +1731,7 @@ Map<String, String> resEnglish = {
   'addAbhiyaanKaryakartaValidation5': "Enter designation ",
   'visheshVyaktiAlreadyExists': "special persons are already added",
   ////////////////////////////////////// Hindu Sanmelan Block //////////////////////////////////////
+  'selectVastiMandal': "Select Vasti/Mandal",
   'sammelan': 'Sammelan',
   'sammelanInfo': 'Sammelan Information',
   'hinduSammelanReport': 'Hindu Sammelan Report',
@@ -1753,6 +1754,10 @@ Map<String, String> resEnglish = {
   'addVakta': 'Add Vakta',
   'sanmelanVaktaName': 'Name of Speaker of Sanmelan',
   'sanmelanVaktaTask': 'Responsibility of Speaker of Sanmelan',
+  'addGraam': "Add Graam",
+  'images': "Images",
+  'advImages': "News Images",
+  'advLinks': "News Links"
 };
 
 ///1,584
@@ -3488,10 +3493,11 @@ Map<String, String> resMarathi = {
   'addAbhiyaanKaryakartaValidation5': "संस्थेमध्ये पद प्रविष्ट करा",
   'visheshVyaktiAlreadyExists': "या विशेष व्यक्तींचे आधीच नोंदणी आहे.",
   ////////////////////////////////////// Hindu Sanmelan Block //////////////////////////////////////
+  'selectVastiMandal': "वस्ती/मंडल निवडा",
   'sammelan': 'संमेलन',
   'sammelanInfo': 'संमेलन माहिती',
   'hinduSammelanReport': 'हिंदु संमेलन अहवाल',
-  'AddSanmelanFiles': 'संमेलनासंबंधित छायाचित्र जोडा',
+  'AddSanmelanFiles': 'संमेलना संबंधित छायाचित्र जोडा',
   'AddSanmelanFilesDesc': 'संमेलना संबंधित छायाचित्रांचे वर्णन जोडा',
   'AddAdvSanmelanFiles': 'संमेलना संबंधित बातम्यांचे छायाचित्र जोडा',
   'AddAdvSanmelanFilesDesc': 'संमेलना संबंधित बातम्यांच्या छायाचित्रांचे वर्णन जोडा',
@@ -3509,7 +3515,11 @@ Map<String, String> resMarathi = {
   'sanmelanVakta': 'संमेलनातील वक्ता',
   'addVakta': 'वक्ता जोडा',
   'sanmelanVaktaName': 'संमेलनाच्या वक्त्याचे नाव',
-  'sanmelanVaktaTask': 'वक्त्यांची जबाबदारी',
+  'sanmelanVaktaTask': 'वक्त्याची जबाबदारी',
+  'addGraam': "ग्राम जोडा",
+  'images': "छायाचित्रे",
+  'advImages': "बातम्यांचे छायाचित्रे",
+  'advLinks': "बातम्यांचे दुवे"
 };
 
 ///1,583
@@ -5244,6 +5254,7 @@ Map<String, String> resHindi = {
   'addAbhiyaanKaryakartaValidation5': "संस्था मे अधिकृत दायित्व",
   'visheshVyaktiAlreadyExists': "इन विशेष व्यक्तीं का नाम पहले से जुडा है।",
   ////////////////////////////////////// Hindu Sanmelan Block //////////////////////////////////////
+  'selectVastiMandal': "वस्ती/मंडल चुने",
   'sammelan': 'सम्मेलन',
   'sammelanInfo': 'संमेलन जानकारी',
   'hinduSammelanReport': 'हिंदु सम्मेलन अहवाल',
@@ -5266,4 +5277,8 @@ Map<String, String> resHindi = {
   'addVakta': 'वक्ता जोड़ें',
   'sanmelanVaktaName': 'वक्ता का नाम ',
   'sanmelanVaktaTask': 'वक्ता का विद्यमान दायित्व',
+  'addGraam': "ग्राम जोड़ें",
+  'images': "छायाचित्र",
+  'advImages': "समाचार के छायाचित्र",
+  'advLinks': "समाचार के लिंक"
 };
