@@ -1,23 +1,24 @@
 import 'dart:convert';
 import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import '../dialogs/levelwise_dropdown.dart';
-import '../providers/swayamsevak_provider.dart';
-import '../widgets/titlebar.dart';
-import '../providers/bals.dart';
-import '../helpers/static_data.dart' as Statics;
-import '../screens/edit_swayamsevak_screen.dart';
-import '../screens/edit_swayamsevak_basic_info.dart';
-import '../screens/home_screen.dart';
-import '../widgets/swayamsevak_card.dart';
-import '../widgets/app_drawer.dart';
-import '../widgets/legend.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
+import '../dialogs/levelwise_dropdown.dart';
+import '../helpers/static_data.dart' as Statics;
+import '../providers/bals.dart';
+import '../providers/swayamsevak_provider.dart';
+import '../screens/edit_swayamsevak_basic_info.dart';
+import '../screens/edit_swayamsevak_screen.dart';
+import '../screens/home_screen.dart';
+import '../widgets/app_drawer.dart';
+import '../widgets/legend.dart';
+import '../widgets/swayamsevak_card.dart';
+import '../widgets/titlebar.dart';
 import 'edit_swayamsevak_soochi.dart';
 
 class SwayamSevakSearch extends StatefulWidget {
@@ -915,7 +916,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
       row.add(data["OtherInfo"]["SecondaryEmail"].toString());
       row.add(data["OtherInfo"]["TwitterHandle"].toString());
       row.add(data["OtherInfo"]["InstagramHandle"].toString());
-      row.add(data["OtherInfo"]["KooHandle"].toString());
+      row.add(data["OtherInfo"]["KooHandle"] ?? "");
 
       row.add(data["OtherInfo"]["IsPratidnyit"] == null
           ? ""
@@ -1168,7 +1169,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
       row.add(data["OtherInfo"]["SecondaryEmail"].toString());
       row.add(data["OtherInfo"]["TwitterHandle"].toString());
       row.add(data["OtherInfo"]["InstagramHandle"].toString());
-      row.add(data["OtherInfo"]["KooHandle"].toString());
+      row.add(data["OtherInfo"]["KooHandle"] ?? "");
 
       row.add(data["OtherInfo"]["IsPratidnyit"] == null
           ? ""
@@ -1745,6 +1746,25 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                     padding: EdgeInsets.all(20),
                     child: Column(
                       children: <Widget>[
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "${Statics.getLabel('Note')} :- ${Statics.getLabel('searchSwayamsevakScreenTip')}",
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 2),
+                            Container(
+                              height: 2,
+                              width: 300,
+                              color: Colors.red,
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 12),
                         TitleBar(legendString: "searchSwayamsevakScreenBanner", fontsize: 20),
                         // Legend(
                         //     legendString: 'searchSwayamsevakScreenBanner',

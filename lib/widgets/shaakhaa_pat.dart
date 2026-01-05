@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import '../widgets/titlebar.dart';
+import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
+
+import '../helpers/static_data.dart' as Statics;
 import '../providers/bals.dart';
 import '../widgets/shaakha_swayamsevak_card.dart';
-import '../helpers/static_data.dart' as Statics;
-
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
+import '../widgets/titlebar.dart';
 
 class ShaakhaaPat extends StatefulWidget {
   static const routeName = '/shaakhaa-pat-screen';
@@ -382,7 +381,7 @@ class _ShaakhaaPatState extends State<ShaakhaaPat> {
       row.add(data["SecondaryEmail"]);
       row.add(data["TwitterHandle"]);
       row.add(data["InstagramHandle"]);
-      row.add(data["KooHandle"]);
+      row.add(data["KooHandle"] ?? "");
       row.add(data["IsPratidnyit"]);
       row.add(data["PratidnyaYear"]);
       row.add(data["GanaveshComplete"]);

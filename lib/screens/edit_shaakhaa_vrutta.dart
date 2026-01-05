@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import '../providers/bals.dart';
 
 import '../helpers/static_data.dart' as Statics;
+import '../providers/bals.dart';
 
 class EditShaakhaaVrutta extends StatefulWidget {
   static const String routeName = '/edit-shaakhaa-vrutta-screen';
@@ -267,7 +267,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                     TextFormField(
                       textInputAction: TextInputAction.next,
                       controller: _shishuCtrl,
-                      decoration: InputDecoration(labelText: Statics.getLabel('ShishuCount')),
+                      decoration: InputDecoration(labelText: Statics.getLabel('ShishuCount') + " " + Statics.getLabel('ShishuCountRange')),
                       keyboardType: TextInputType.number,
                       onSaved: (value) {
                         vrutta!.shishuCount = value == "" ? null : int.parse(value!);
@@ -279,7 +279,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                     TextFormField(
                       textInputAction: TextInputAction.next,
                       controller: _baalCtrl,
-                      decoration: InputDecoration(labelText: Statics.getLabel('BaalCount')),
+                      decoration: InputDecoration(labelText: Statics.getLabel('BaalCount') + " " + Statics.getLabel('BaalCountRange')),
                       keyboardType: TextInputType.number,
                       onSaved: (value) {
                         vrutta!.baalVidyaarthiCount = value == "" ? null : int.parse(value!);
@@ -291,7 +291,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                     TextFormField(
                       textInputAction: TextInputAction.next,
                       controller: _tarunVidhyaarthiCtrl,
-                      decoration: InputDecoration(labelText: Statics.getLabel('TarunVidyaarthiCount')),
+                      decoration: InputDecoration(labelText: Statics.getLabel('TarunVidyaarthiCount') + " " + Statics.getLabel('TarunVidyaarthiCountRange')),
                       keyboardType: TextInputType.number,
                       onSaved: (value) {
                         vrutta!.tarunVidyaarthiCount = value == "" ? null : int.parse(value!);
@@ -303,7 +303,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                     TextFormField(
                       textInputAction: TextInputAction.next,
                       controller: _tarunVyavsaayeeCtrl,
-                      decoration: InputDecoration(labelText: Statics.getLabel('TarunVyavasaayeeCount')),
+                      decoration: InputDecoration(labelText: Statics.getLabel('TarunVyavasaayeeCount') + " " + Statics.getLabel('TarunVyavasaayeeCountRange')),
                       keyboardType: TextInputType.number,
                       onSaved: (value) {
                         vrutta!.tarunVyavasaayeeCount = value == "" ? null : int.parse(value!);
@@ -315,7 +315,7 @@ class _EditShaakhaaVruttaState extends State<EditShaakhaaVrutta> {
                     TextFormField(
                       textInputAction: TextInputAction.next,
                       controller: _proudhaCtrl,
-                      decoration: InputDecoration(labelText: Statics.getLabel('ProudhaCount')),
+                      decoration: InputDecoration(labelText: Statics.getLabel('ProudhaCount') + " " + Statics.getLabel('ProudhaCountRange')),
                       keyboardType: TextInputType.number,
                       onSaved: (value) {
                         vrutta!.proudhaVyavasaayeeCount = value == "" ? null : int.parse(value!);

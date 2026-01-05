@@ -1,13 +1,13 @@
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:niyojak_prod/screens/swayamsevak_search.dart';
+
+import '../helpers/static_data.dart' as Statics;
 import '../providers/bals.dart';
 import '../providers/swayamsevak_provider.dart';
-import '../helpers/static_data.dart' as Statics;
 import '../widgets/legend.dart';
 
 class SwayamsevakOtherInfo extends StatefulWidget {
@@ -373,7 +373,7 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
 
           _instaUsage = swOtherInfo!.instagramUsage == null ? null : swOtherInfo!.instagramUsage.toString();
 
-          _kooUsage = swOtherInfo!.kooUsage == null ? null : swOtherInfo!.kooUsage.toString();
+          _kooUsage = swOtherInfo!.kooUsage == null ? null : (swOtherInfo?.kooUsage ?? "");
 
           _hasShaakhaaExperience = swOtherInfo!.hasShaakhaaExperience == true ? true : false;
           _hasBaalShaakhaaExperience = swOtherInfo!.hasBaalShaakhaaExperience == true ? true : false;
@@ -550,7 +550,7 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
         "SanghaPraveshYear": swOtherInfo!.sanghaPraveshYear,
         "FacebookUsage": swOtherInfo!.facebookUsage,
         "TwitterUsage": swOtherInfo!.twitterUsage,
-        "KooUsage": swOtherInfo!.kooUsage,
+        "KooUsage": "", //swOtherInfo!.kooUsage,
         "InstagramUsage": swOtherInfo!.instagramUsage,
         "IsPratidnyit": _isPratidnyit,
         "PratidnyaYear": swOtherInfo!.pratidnyaYear,
@@ -587,7 +587,7 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
         "SecondaryEmail": swOtherInfo!.secondaryEmail,
         "TwitterHandle": swOtherInfo!.twitterHandle,
         "InstagramHandle": swOtherInfo!.instagramHandle,
-        "KooHandle": swOtherInfo!.kooHandle,
+        "KooHandle": "", //swOtherInfo!.kooHandle,
         "MaxDaayitva": swOtherInfo!.maxDaayitva,
         "HasBeenVistaarak": null,
         "HasBeenPrachaarak": null,
@@ -2181,22 +2181,22 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
                           swOtherInfo!.instagramHandle = null;
                       },
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      textInputAction: TextInputAction.next,
-                      controller: _txtKooHandleCtrl,
-                      decoration: InputDecoration(labelText: Statics.getLabel('KooHandle')),
-                      keyboardType: TextInputType.text,
-                      maxLength: 100,
-                      onSaved: (value) {
-                        if (value!.isNotEmpty)
-                          swOtherInfo!.kooHandle = value.trim();
-                        else
-                          swOtherInfo!.kooHandle = null;
-                      },
-                    ),
+                    // SizedBox(
+                    //   height: 10
+                    // ),
+                    // TextFormField(
+                    //   textInputAction: TextInputAction.next,
+                    //   controller: _txtKooHandleCtrl,
+                    //   decoration: InputDecoration(labelText: Statics.getLabel('KooHandle')),
+                    //   keyboardType: TextInputType.text,
+                    //   maxLength: 100,
+                    //   onSaved: (value) {
+                    //     if (value!.isNotEmpty)
+                    //       swOtherInfo!.kooHandle = value.trim();
+                    //     else
+                    //       swOtherInfo!.kooHandle = null;
+                    //   },
+                    // ),
                     SizedBox(height: 10),
                     if (_usage != null)
                       DropdownButtonFormField(
@@ -2237,29 +2237,27 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
                             swOtherInfo!.twitterUsage = null;
                         },
                       ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    DropdownButtonFormField(
-                      decoration: InputDecoration(labelText: Statics.getLabel('SelectKooUsage')),
-                      isExpanded: true,
-                      value: _kooUsage == "" ? null : _kooUsage,
-                      items: _usage,
-                      onChanged: (value) {
-                        setState(() {
-                          _kooUsage = value;
-                        });
-                      },
-                      onSaved: (value) {
-                        if (value != null && value.isNotEmpty)
-                          swOtherInfo!.kooUsage = value;
-                        else
-                          swOtherInfo!.kooUsage = null;
-                      },
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
+                    SizedBox(height: 10),
+                    // DropdownButtonFormField(
+                    //   decoration: InputDecoration(labelText: Statics.getLabel('SelectKooUsage')),
+                    //   isExpanded: true,
+                    //   value: _kooUsage == "" ? null : _kooUsage,
+                    //   items: _usage,
+                    //   onChanged: (value) {
+                    //     setState(() {
+                    //       _kooUsage = value;
+                    //     });
+                    //   },
+                    //   onSaved: (value) {
+                    //     if (value != null && value.isNotEmpty)
+                    //       swOtherInfo!.kooUsage = value;
+                    //     else
+                    //       swOtherInfo!.kooUsage = null;
+                    //   },
+                    // ),
+                    // SizedBox(
+                    //   height: 10
+                    // ),
                     DropdownButtonFormField(
                       decoration: InputDecoration(labelText: Statics.getLabel('SelectInstaUsage')),
                       isExpanded: true,

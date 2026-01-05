@@ -123,7 +123,7 @@ class SwayamsevakProvider {
           data['SecondaryEmail'],
           data['TwitterHandle'],
           data['InstagramHandle'],
-          data['KooHandle'],
+          data['KooHandle'] ?? "",
           data['MaxDaayitva'],
           data['HasBeenVistaarak'],
           data['HasBeenPrachaarak'],
