@@ -600,44 +600,44 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
             SizedBox(
               height: 10,
             ),
-// ================================== 1 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
-            mainContainer(
-              "${Statics.getLabel('sammelanInfo')}",
-              Column(
-                children: [
-                  yesNoRadioButton(
-                    question: "${Statics.getLabel('sanmelanQuestion1')}",
-                    selectedOption: programNirdharitVed ?? 2,
-                    imp: " *",
-                    onChanged: (value) {
-                      setState(() {
-                        programNirdharitVed = value;
-                      });
-                    },
-                  ),
-                  // yesNoRadioButton(
-                  //   question: "${Statics.getLabel('vaiyaktikGitKantashtha')}",
-                  //   selectedOption: vaiyaktikGitKantashtha ?? 2,
-                  //   imp: " *",
-                  //   onChanged: (value) {
-                  //     setState(() {
-                  //       vaiyaktikGitKantashtha = value;
-                  //     });
-                  //   },
-                  // ),
-                  yesNoRadioButton(
-                    question: "${Statics.getLabel('sanmelanQuestion2')}",
-                    selectedOption: programHishobh24Hour ?? 2,
-                    imp: " *",
-                    onChanged: (value) {
-                      setState(() {
-                        programHishobh24Hour = value;
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ),
+// // ================================== 1 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
+//             mainContainer(
+//               "${Statics.getLabel('sammelanInfo')}",
+//               Column(
+//                 children: [
+//                   yesNoRadioButton(
+//                     question: "${Statics.getLabel('sanmelanQuestion1')}",
+//                     selectedOption: programNirdharitVed ?? 2,
+//                     imp: " *",
+//                     onChanged: (value) {
+//                       setState(() {
+//                         programNirdharitVed = value;
+//                       });
+//                     },
+//                   ),
+//                   // yesNoRadioButton(
+//                   //   question: "${Statics.getLabel('vaiyaktikGitKantashtha')}",
+//                   //   selectedOption: vaiyaktikGitKantashtha ?? 2,
+//                   //   imp: " *",
+//                   //   onChanged: (value) {
+//                   //     setState(() {
+//                   //       vaiyaktikGitKantashtha = value;
+//                   //     });
+//                   //   },
+//                   // ),
+//                   yesNoRadioButton(
+//                     question: "${Statics.getLabel('sanmelanQuestion2')}",
+//                     selectedOption: programHishobh24Hour ?? 2,
+//                     imp: " *",
+//                     onChanged: (value) {
+//                       setState(() {
+//                         programHishobh24Hour = value;
+//                       });
+//                     },
+//                   ),
+//                 ],
+//               ),
+//             ),
 // ================================== 2 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
             mainContainer(
               "${Statics.getLabel('mukhyaAtithi')}",
@@ -916,185 +916,185 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
               "${Statics.getLabel('sanmelanVakta')}",
               vaktaTable(),
             ),
-// ================================== 5 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
-            mainContainer(
-              "${Statics.getLabel('swayamsewakUpastithi')}",
-              Column(
-                children: [
-                  Scrollbar(
-                    controller: _scrollController,
-                    interactive: true,
-                    thumbVisibility: true,
-                    radius: Radius.circular(8),
-                    child: SingleChildScrollView(
-                      controller: _scrollController,
-                      scrollDirection: Axis.horizontal, // 👉 Horizontal scroll
-                      child: Container(
-                        width: 450,
-                        padding: const EdgeInsets.all(8),
-                        child: Table(
-                          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                          border: TableBorder.all(color: Colors.black),
-                          columnWidths: const {
-                            0: FlexColumnWidth(3),
-                            1: FlexColumnWidth(2),
-                            2: FlexColumnWidth(1.5),
-                            // 3: FlexColumnWidth(2.5),
-                            3: FlexColumnWidth(2),
-                          },
-                          children: [
-                            // Header Row
-                            TableRow(
-                              decoration: BoxDecoration(color: Colors.purpleAccent.shade100),
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text("${Statics.getLabel('Vayogat')}", style: const TextStyle(fontSize: 15.6, fontWeight: FontWeight.bold, color: Colors.white)),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child:
-                                      Text("${Statics.getLabel('patSankhyaa')}", textAlign: TextAlign.center, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white)),
-                                ),
-                                Center(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text("${Statics.getLabel('Total')}", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white)),
-                                  ),
-                                ),
-                                // Padding(
-                                //   padding: const EdgeInsets.all(8.0),
-                                //   child: Text("${Statics.getLabel('ganveshatPresentCount')}", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white)),
-                                // ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text("${Statics.getLabel('otherSwayamsewakPresentCount')}",
-                                      textAlign: TextAlign.center, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white)),
-                                ),
-                              ],
-                            ),
-
-                            // Data Rows
-                            TableRow(
-                              // decoration: BoxDecoration(color: Colors.grey.shade300),
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text("${Statics.getLabel('Shishu')}/${Statics.getLabel('Baal')}", style: TextStyle(fontSize: 14.5)),
-                                ),
-                                _numberField(patShishuBaalCtrl, textBoxColor: Colors.grey.shade300, containerColor: Colors.grey.shade300),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 14.0),
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(color: Colors.grey.shade300),
-                                  child: Text(_rowTotal(ganShishuBaalCtrl.text, anyaShishuBaalCtrl.text).toString()),
-                                ),
-                                // _numberField(ganShishuBaalCtrl, limitController: patShishuBaalCtrl, otherController: anyaShishuBaalCtrl),
-                                _numberField(anyaShishuBaalCtrl, limitController: patShishuBaalCtrl, otherController: ganShishuBaalCtrl),
-                              ],
-                            ),
-
-                            TableRow(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
-                                  child: Text("${Statics.getLabel('MahaavidyaalayeenTarunLabel')}", style: TextStyle(fontSize: 14.5)),
-                                ),
-                                _numberField(patMahavidyaCtrl, padding: const EdgeInsets.symmetric(vertical: 12.0), textBoxColor: Colors.grey.shade300, containerColor: Colors.grey.shade300),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(color: Colors.grey.shade300),
-                                  child: Text(_rowTotal(ganMahavidyaCtrl.text, anyaMahavidyaCtrl.text).toString()),
-                                ),
-                                // _numberField(ganMahavidyaCtrl, limitController: patMahavidyaCtrl, otherController: anyaMahavidyaCtrl),
-                                _numberField(anyaMahavidyaCtrl, limitController: patMahavidyaCtrl, otherController: ganMahavidyaCtrl),
-                              ],
-                            ),
-
-                            TableRow(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text("${Statics.getLabel('TarunVyavasaayee')}", style: TextStyle(fontSize: 14.5)),
-                                ),
-                                _numberField(patTarunVyavCtrl, textBoxColor: Colors.grey.shade300, containerColor: Colors.grey.shade300),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 14.0),
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(color: Colors.grey.shade300),
-                                  child: Text(_rowTotal(ganTarunVyavCtrl.text, anyaTarunVyavCtrl.text).toString()),
-                                ),
-                                // _numberField(ganTarunVyavCtrl, limitController: patTarunVyavCtrl, otherController: anyaTarunVyavCtrl),
-                                _numberField(anyaTarunVyavCtrl, limitController: patTarunVyavCtrl, otherController: ganTarunVyavCtrl),
-                              ],
-                            ),
-
-                            TableRow(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text("${Statics.getLabel('ProudhaVyavasaayeeLabel')}", style: TextStyle(fontSize: 14.5)),
-                                ),
-                                _numberField(patProudhVyavCtrl, textBoxColor: Colors.grey.shade300, containerColor: Colors.grey.shade300),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 14.0),
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(color: Colors.grey.shade300),
-                                  child: Text(_rowTotal(ganProudhVyavCtrl.text, anyaProudhVyavCtrl.text).toString()),
-                                ),
-                                // _numberField(ganProudhVyavCtrl, limitController: patProudhVyavCtrl, otherController: anyaProudhVyavCtrl),
-                                _numberField(anyaProudhVyavCtrl, limitController: patProudhVyavCtrl, otherController: ganProudhVyavCtrl),
-                              ],
-                            ),
-
-                            // Total Row
-                            TableRow(
-                              decoration: const BoxDecoration(color: Colors.amberAccent),
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("${Statics.getLabel('Total')}", style: TextStyle(fontSize: 14.7, fontWeight: FontWeight.w900)),
-                                ),
-                                Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(_getColumnTotal([patShishuBaalCtrl, patMahavidyaCtrl, patTarunVyavCtrl, patProudhVyavCtrl]).toString(), style: TextStyle(fontWeight: FontWeight.w900)),
-                                  ),
-                                ),
-                                Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                        (_getColumnTotal([ganShishuBaalCtrl, ganMahavidyaCtrl, ganTarunVyavCtrl, ganProudhVyavCtrl]) +
-                                                _getColumnTotal([anyaShishuBaalCtrl, anyaMahavidyaCtrl, anyaTarunVyavCtrl, anyaProudhVyavCtrl]))
-                                            .toString(),
-                                        style: TextStyle(fontWeight: FontWeight.w900)),
-                                  ),
-                                ),
-                                // Center(
-                                //   child: Padding(
-                                //     padding: const EdgeInsets.all(8.0),
-                                //     child: Text(_getColumnTotal([ganShishuBaalCtrl, ganMahavidyaCtrl, ganTarunVyavCtrl, ganProudhVyavCtrl]).toString(), style: TextStyle(fontWeight: FontWeight.w900)),
-                                //   ),
-                                // ),
-                                Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child:
-                                        Text(_getColumnTotal([anyaShishuBaalCtrl, anyaMahavidyaCtrl, anyaTarunVyavCtrl, anyaProudhVyavCtrl]).toString(), style: TextStyle(fontWeight: FontWeight.w900)),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+// // ================================== 5 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
+//             mainContainer(
+//               "${Statics.getLabel('swayamsewakUpastithi')}",
+//               Column(
+//                 children: [
+//                   Scrollbar(
+//                     controller: _scrollController,
+//                     interactive: true,
+//                     thumbVisibility: true,
+//                     radius: Radius.circular(8),
+//                     child: SingleChildScrollView(
+//                       controller: _scrollController,
+//                       scrollDirection: Axis.horizontal, // 👉 Horizontal scroll
+//                       child: Container(
+//                         width: 450,
+//                         padding: const EdgeInsets.all(8),
+//                         child: Table(
+//                           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+//                           border: TableBorder.all(color: Colors.black),
+//                           columnWidths: const {
+//                             0: FlexColumnWidth(3),
+//                             1: FlexColumnWidth(2),
+//                             2: FlexColumnWidth(1.5),
+//                             // 3: FlexColumnWidth(2.5),
+//                             3: FlexColumnWidth(2),
+//                           },
+//                           children: [
+//                             // Header Row
+//                             TableRow(
+//                               decoration: BoxDecoration(color: Colors.purpleAccent.shade100),
+//                               children: [
+//                                 Padding(
+//                                   padding: const EdgeInsets.all(8.0),
+//                                   child: Text("${Statics.getLabel('Vayogat')}", style: const TextStyle(fontSize: 15.6, fontWeight: FontWeight.bold, color: Colors.white)),
+//                                 ),
+//                                 Padding(
+//                                   padding: const EdgeInsets.all(8.0),
+//                                   child:
+//                                       Text("${Statics.getLabel('patSankhyaa')}", textAlign: TextAlign.center, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white)),
+//                                 ),
+//                                 Center(
+//                                   child: Padding(
+//                                     padding: EdgeInsets.all(8.0),
+//                                     child: Text("${Statics.getLabel('Total')}", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white)),
+//                                   ),
+//                                 ),
+//                                 // Padding(
+//                                 //   padding: const EdgeInsets.all(8.0),
+//                                 //   child: Text("${Statics.getLabel('ganveshatPresentCount')}", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white)),
+//                                 // ),
+//                                 Padding(
+//                                   padding: const EdgeInsets.all(8.0),
+//                                   child: Text("${Statics.getLabel('otherSwayamsewakPresentCount')}",
+//                                       textAlign: TextAlign.center, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white)),
+//                                 ),
+//                               ],
+//                             ),
+//
+//                             // Data Rows
+//                             TableRow(
+//                               // decoration: BoxDecoration(color: Colors.grey.shade300),
+//                               children: [
+//                                 Padding(
+//                                   padding: const EdgeInsets.all(8.0),
+//                                   child: Text("${Statics.getLabel('Shishu')}/${Statics.getLabel('Baal')}", style: TextStyle(fontSize: 14.5)),
+//                                 ),
+//                                 _numberField(patShishuBaalCtrl, textBoxColor: Colors.grey.shade300, containerColor: Colors.grey.shade300),
+//                                 Container(
+//                                   padding: const EdgeInsets.symmetric(vertical: 14.0),
+//                                   alignment: Alignment.center,
+//                                   decoration: BoxDecoration(color: Colors.grey.shade300),
+//                                   child: Text(_rowTotal(ganShishuBaalCtrl.text, anyaShishuBaalCtrl.text).toString()),
+//                                 ),
+//                                 // _numberField(ganShishuBaalCtrl, limitController: patShishuBaalCtrl, otherController: anyaShishuBaalCtrl),
+//                                 _numberField(anyaShishuBaalCtrl, limitController: patShishuBaalCtrl, otherController: ganShishuBaalCtrl),
+//                               ],
+//                             ),
+//
+//                             TableRow(
+//                               children: [
+//                                 Padding(
+//                                   padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
+//                                   child: Text("${Statics.getLabel('MahaavidyaalayeenTarunLabel')}", style: TextStyle(fontSize: 14.5)),
+//                                 ),
+//                                 _numberField(patMahavidyaCtrl, padding: const EdgeInsets.symmetric(vertical: 12.0), textBoxColor: Colors.grey.shade300, containerColor: Colors.grey.shade300),
+//                                 Container(
+//                                   padding: const EdgeInsets.symmetric(vertical: 20.0),
+//                                   alignment: Alignment.center,
+//                                   decoration: BoxDecoration(color: Colors.grey.shade300),
+//                                   child: Text(_rowTotal(ganMahavidyaCtrl.text, anyaMahavidyaCtrl.text).toString()),
+//                                 ),
+//                                 // _numberField(ganMahavidyaCtrl, limitController: patMahavidyaCtrl, otherController: anyaMahavidyaCtrl),
+//                                 _numberField(anyaMahavidyaCtrl, limitController: patMahavidyaCtrl, otherController: ganMahavidyaCtrl),
+//                               ],
+//                             ),
+//
+//                             TableRow(
+//                               children: [
+//                                 Padding(
+//                                   padding: const EdgeInsets.all(8.0),
+//                                   child: Text("${Statics.getLabel('TarunVyavasaayee')}", style: TextStyle(fontSize: 14.5)),
+//                                 ),
+//                                 _numberField(patTarunVyavCtrl, textBoxColor: Colors.grey.shade300, containerColor: Colors.grey.shade300),
+//                                 Container(
+//                                   padding: const EdgeInsets.symmetric(vertical: 14.0),
+//                                   alignment: Alignment.center,
+//                                   decoration: BoxDecoration(color: Colors.grey.shade300),
+//                                   child: Text(_rowTotal(ganTarunVyavCtrl.text, anyaTarunVyavCtrl.text).toString()),
+//                                 ),
+//                                 // _numberField(ganTarunVyavCtrl, limitController: patTarunVyavCtrl, otherController: anyaTarunVyavCtrl),
+//                                 _numberField(anyaTarunVyavCtrl, limitController: patTarunVyavCtrl, otherController: ganTarunVyavCtrl),
+//                               ],
+//                             ),
+//
+//                             TableRow(
+//                               children: [
+//                                 Padding(
+//                                   padding: const EdgeInsets.all(8.0),
+//                                   child: Text("${Statics.getLabel('ProudhaVyavasaayeeLabel')}", style: TextStyle(fontSize: 14.5)),
+//                                 ),
+//                                 _numberField(patProudhVyavCtrl, textBoxColor: Colors.grey.shade300, containerColor: Colors.grey.shade300),
+//                                 Container(
+//                                   padding: const EdgeInsets.symmetric(vertical: 14.0),
+//                                   alignment: Alignment.center,
+//                                   decoration: BoxDecoration(color: Colors.grey.shade300),
+//                                   child: Text(_rowTotal(ganProudhVyavCtrl.text, anyaProudhVyavCtrl.text).toString()),
+//                                 ),
+//                                 // _numberField(ganProudhVyavCtrl, limitController: patProudhVyavCtrl, otherController: anyaProudhVyavCtrl),
+//                                 _numberField(anyaProudhVyavCtrl, limitController: patProudhVyavCtrl, otherController: ganProudhVyavCtrl),
+//                               ],
+//                             ),
+//
+//                             // Total Row
+//                             TableRow(
+//                               decoration: const BoxDecoration(color: Colors.amberAccent),
+//                               children: [
+//                                 Padding(
+//                                   padding: EdgeInsets.all(8.0),
+//                                   child: Text("${Statics.getLabel('Total')}", style: TextStyle(fontSize: 14.7, fontWeight: FontWeight.w900)),
+//                                 ),
+//                                 Center(
+//                                   child: Padding(
+//                                     padding: const EdgeInsets.all(8.0),
+//                                     child: Text(_getColumnTotal([patShishuBaalCtrl, patMahavidyaCtrl, patTarunVyavCtrl, patProudhVyavCtrl]).toString(), style: TextStyle(fontWeight: FontWeight.w900)),
+//                                   ),
+//                                 ),
+//                                 Center(
+//                                   child: Padding(
+//                                     padding: const EdgeInsets.all(8.0),
+//                                     child: Text(
+//                                         (_getColumnTotal([ganShishuBaalCtrl, ganMahavidyaCtrl, ganTarunVyavCtrl, ganProudhVyavCtrl]) +
+//                                                 _getColumnTotal([anyaShishuBaalCtrl, anyaMahavidyaCtrl, anyaTarunVyavCtrl, anyaProudhVyavCtrl]))
+//                                             .toString(),
+//                                         style: TextStyle(fontWeight: FontWeight.w900)),
+//                                   ),
+//                                 ),
+//                                 // Center(
+//                                 //   child: Padding(
+//                                 //     padding: const EdgeInsets.all(8.0),
+//                                 //     child: Text(_getColumnTotal([ganShishuBaalCtrl, ganMahavidyaCtrl, ganTarunVyavCtrl, ganProudhVyavCtrl]).toString(), style: TextStyle(fontWeight: FontWeight.w900)),
+//                                 //   ),
+//                                 // ),
+//                                 Center(
+//                                   child: Padding(
+//                                     padding: const EdgeInsets.all(8.0),
+//                                     child:
+//                                         Text(_getColumnTotal([anyaShishuBaalCtrl, anyaMahavidyaCtrl, anyaTarunVyavCtrl, anyaProudhVyavCtrl]).toString(), style: TextStyle(fontWeight: FontWeight.w900)),
+//                                   ),
+//                                 ),
+//                               ],
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
 // ================================== 6 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
             if (_linkedmandalValue != null && _linkedmandalValue!.isNotEmpty)
               mainContainer(
@@ -1466,7 +1466,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
 //             ),
 // ================================== 11 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
             mainContainer(
-              "${Statics.getLabel('anyaUpstithMahiti')}",
+              "${Statics.getLabel('sanmelanJoinedCount')}",
               Column(
                 children: [
                   Row(
@@ -1489,20 +1489,20 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                     ],
                   ),
                   //
-                  SingleColumnRow(
-                    txtString: "${Statics.getLabel('presentTotalMaleFemale')} ",
-                    value: total.toString(),
-                  ),
+                  // SingleColumnRow(
+                  //   txtString: "${Statics.getLabel('presentTotalMaleFemale')} ",
+                  //   value: total.toString(),
+                  // ),
                   //
                   // SingleColumnRow(
                   //   txtString: "${Statics.getLabel('presentGanveshatTotal')} ",
                   //   value: _getColumnTotal([ganShishuBaalCtrl, ganMahavidyaCtrl, ganTarunVyavCtrl, ganProudhVyavCtrl]).toString(),
                   // ),
                   //
-                  SingleColumnRow(
-                    txtString: "${Statics.getLabel('otherSwayamsewakPresentCount')} ",
-                    value: _getColumnTotal([anyaShishuBaalCtrl, anyaMahavidyaCtrl, anyaTarunVyavCtrl, anyaProudhVyavCtrl]).toString(),
-                  ),
+                  // SingleColumnRow(
+                  //   txtString: "${Statics.getLabel('otherSwayamsewakPresentCount')} ",
+                  //   value: _getColumnTotal([anyaShishuBaalCtrl, anyaMahavidyaCtrl, anyaTarunVyavCtrl, anyaProudhVyavCtrl]).toString(),
+                  // ),
                   //
                   // SingleColumnRow(
                   //   txtString: "${Statics.getLabel('presentSamajik')} ",
@@ -1512,12 +1512,13 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                   SingleColumnRow(
                     rowColor: Colors.grey.shade300,
                     txtString: "${Statics.getLabel('presentTotal')} ",
-                    value: "${total + _getColumnTotal([ganShishuBaalCtrl, ganMahavidyaCtrl, ganTarunVyavCtrl, ganProudhVyavCtrl]) + _getColumnTotal([
-                              anyaShishuBaalCtrl,
-                              anyaMahavidyaCtrl,
-                              anyaTarunVyavCtrl,
-                              anyaProudhVyavCtrl
-                            ])}",
+                    value: total.toString(),
+                    // value: "${total + _getColumnTotal([ganShishuBaalCtrl, ganMahavidyaCtrl, ganTarunVyavCtrl, ganProudhVyavCtrl]) + _getColumnTotal([
+                    //           anyaShishuBaalCtrl,
+                    //           anyaMahavidyaCtrl,
+                    //           anyaTarunVyavCtrl,
+                    //           anyaProudhVyavCtrl
+                    //         ])}",
                   ),
                   // const SizedBox(height: 10),
                   // Text(
@@ -1576,10 +1577,10 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                     Fluttertoast.showToast(msg: "${Statics.getLabel('NagarSelectionImportant')}");
                     return;
                   }
-                  if ([null, 2].contains(programNirdharitVed) || [null, 2].contains(programHishobh24Hour)) {
-                    Fluttertoast.showToast(msg: "${Statics.getLabel('impInfoRequired')}");
-                    return;
-                  }
+                  // if ([null, 2].contains(programNirdharitVed) || [null, 2].contains(programHishobh24Hour)) {
+                  //   Fluttertoast.showToast(msg: "${Statics.getLabel('impInfoRequired')}");
+                  //   return;
+                  // }
                   // submitForm();
                 },
                 child: Text(
@@ -1587,7 +1588,8 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                 ),
               ),
-            )
+            ),
+            SizedBox(height: 70),
           ],
         ),
       ),
@@ -1649,7 +1651,14 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                     "${Statics.getLabel('sanmelanVaktaTask')}",
                   )),
                 ],
-                rows: vaktaList.asMap().entries.map((entry) {
+                rows: vaktaList
+                    .where(
+                      (e) => e.isdefault == 0,
+                    )
+                    .toList()
+                    .asMap()
+                    .entries
+                    .map((entry) {
                   int index = entry.key;
                   var data = entry.value;
                   bool isSelected = selectedVaktaIndex == index;
@@ -1773,9 +1782,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
               },
               child: Icon(Icons.remove_red_eye, color: Colors.green, size: 20),
             ),
-            SizedBox(
-              width: 20,
-            ),
+            SizedBox(width: 20),
             InkWell(
               onTap: () {
                 if (selectedVaktaIndex != null) {
@@ -1786,9 +1793,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
               },
               child: Icon(Icons.edit, color: Colors.blue, size: 20),
             ),
-            SizedBox(
-              width: 20,
-            ),
+            SizedBox(width: 20),
             InkWell(
               onTap: () async {
                 if (selectedVaktaIndex != null) {
@@ -1897,6 +1902,8 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
   }
 
   showAddVaktaDialogBox({bool fromEditing = false}) {
+    txtVaktaNameController.clear();
+    txtVaktaTaskController.clear();
     return showDialog(
       context: context,
       builder: (ct) {

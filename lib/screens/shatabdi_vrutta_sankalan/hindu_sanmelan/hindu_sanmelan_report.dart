@@ -418,7 +418,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
             shape: RoundedRectangleBorder(side: BorderSide.none, borderRadius: BorderRadius.circular(12)),
             collapsedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             title: Text(
-              Statics.getLabel("searchSwayamsevakScreenLabel"),
+              Statics.getLabel("bhougolikPratinidhitwa"),
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.purple.shade600,
@@ -429,89 +429,16 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                 decoration: BoxDecoration(color: Colors.white),
                 padding: EdgeInsets.only(bottom: 12),
                 // padding: EdgeInsets.symmetric(horizontal: 14),
-                child: Column(
-                  children: [
-                    SingleColumnRow(
-                      dividerColor: Colors.grey.shade400,
-                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      subChildPadding: EdgeInsets.only(top: 2, bottom: 6, right: 12, left: 12),
-                      txtString: Statics.getLabel('present'),
-                      fontWeight: FontWeight.w700,
-                      value: "",
-                      fontsize: 16,
-                      rowColor: Colors.purple.shade50,
-                      subChild: Column(
-                        children: [
-                          Row(children: [
-                            Expanded(child: Text(Statics.getLabel('totalPat'))),
-                            Container(
-                              margin: EdgeInsets.only(left: 8),
-                              child: Text((data.ekunpat ?? 0).toString()),
-                            ),
-                          ]),
-                          // SizedBox(height: 8),
-                          // SizedBox(width: MediaQuery
-                          //     .sizeOf(context)
-                          //     .width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
-                          // SizedBox(height: 8),
-                          // Row(children: [
-                          //   Expanded(child: Text(Statics.getLabel('presentGanveshatTotal'))),
-                          //   Container(
-                          //     margin: EdgeInsets.only(left: 8),
-                          //     child: Text((data.ekungan ?? 0).toString()),
-                          //   ),
-                          // ]),
-                          // SizedBox(height: 8),
-                          // Row(children: [
-                          //   Expanded(child: Text(Statics.getLabel('presentSanchalanatTotal'))),
-                          //   Container(
-                          //     margin: EdgeInsets.only(left: 8),
-                          //     child: Text((data.ekunsanchalan ?? 0).toString()),
-                          //   ),
-                          // ]),
-                          SizedBox(height: 8),
-                          Row(children: [
-                            Expanded(child: Text(Statics.getLabel('anyaUpasthit') + " " + Statics.getLabel('searchSwayamsevakScreenLabel'))),
-                            Container(
-                              margin: EdgeInsets.only(left: 8),
-                              child: Text((data.ekunupastiti ?? 0).toString()),
-                            ),
-                          ]),
-                          SizedBox(height: 6),
-                          SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
-                          SizedBox(height: 6),
-                          Row(children: [
-                            Expanded(child: Text(Statics.getLabel('presentTotal') + " " + Statics.getLabel('searchSwayamsevakScreenLabel'))),
-                            Container(
-                              margin: EdgeInsets.only(left: 8),
-                              child: Text(((data.ekungan ?? 0) + (data.ekunupastiti ?? 0)).toString()),
-                            ),
-                          ]),
-                        ],
-                      ),
+                child: Container(
+                  padding: EdgeInsets.only(top: 2, bottom: 6, right: 12, left: 12),
+                  margin: EdgeInsets.only(left: 16, right: 8),
+                  child: Row(children: [
+                    Expanded(child: Text(Statics.getLabel('gramPratinidhitwa'))),
+                    Container(
+                      margin: EdgeInsets.only(left: 8),
+                      child: Text((data.gramcountpratinidhatva ?? 0).toString()),
                     ),
-                    SingleColumnRow(
-                      dividerColor: Colors.grey.shade400,
-                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      subChildPadding: EdgeInsets.only(top: 2, bottom: 6, right: 12, left: 12),
-                      txtString: Statics.getLabel('gramPratinidhitwa'),
-                      fontWeight: FontWeight.w700,
-                      value: "",
-                      fontsize: 16,
-                      rowColor: Colors.purple.shade50,
-                      subChild: Column(
-                        children: [
-                          Row(children: [
-                            Expanded(child: Text(Statics.getLabel('gramPratinidhitwa'))),
-                            Container(
-                              margin: EdgeInsets.only(left: 8),
-                              child: Text((data.gramcountpratinidhatva ?? 0).toString()),
-                            ),
-                          ]),
-                        ],
-                      ),
-                    ),
-                  ],
+                  ]),
                 ),
               )
             ],
@@ -827,68 +754,15 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                             child: Text((data.ekunfemale ?? 0).toString()),
                           ),
                         ]),
-                        SizedBox(height: 6),
-                        SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
-                        SizedBox(height: 6),
-                        Row(children: [
-                          Expanded(child: Text(Statics.getLabel('presentTotalMaleFemale2'))),
-                          Container(
-                            margin: EdgeInsets.only(left: 8),
-                            child: Text((data.ekumalenfemale ?? 0).toString()),
-                          ),
-                        ]),
-                        SizedBox(height: 6),
-                        SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
-                        SizedBox(height: 6),
-                        //
-                        // SingleColumnRow(
-                        //   txtString: "${Statics.getLabel('presentTotalMaleFemale')} ",
-                        //   value: data.ekumalenfemale.toString(),
-                        // ),
-                        //
-                        // Row(children: [
-                        //   Expanded(child: Text(Statics.getLabel('presentGanveshatTotal'))),
-                        //   Container(
-                        //     margin: EdgeInsets.only(left: 8),
-                        //     child: Text((data.ekunganvash ?? 0).toString()),
-                        //   ),
-                        // ]),
-                        // SizedBox(height: 8),
-                        // SingleColumnRow(
-                        //   txtString: "${Statics.getLabel('presentGanveshatTotal')} ",
-                        //   value: data.ekunganvash.toString(),
-                        // ),
-                        //
-                        Row(children: [
-                          Expanded(child: Text(Statics.getLabel('otherSwayamsewakPresentCount'))),
-                          Container(
-                            margin: EdgeInsets.only(left: 8),
-                            child: Text((data.ekunanya ?? 0).toString()),
-                          ),
-                        ]),
                         SizedBox(height: 8),
-                        // SingleColumnRow(
-                        //   txtString: "${Statics.getLabel('otherSwayamsewakPresentCount')} ",
-                        //   value: data.ekunanya.toString(),
-                        // ),
-                        //
-                        // SingleColumnRow(
-                        //   txtString: "${Statics.getLabel('presentSamajik')} ",
-                        //   value: "${totalShakhaCount + totalMilanCount + totalSanghaMandaliCount}",
-                        // ),
                         // ✅ Total
                         SingleColumnRow(
                           padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
                           rowColor: Colors.purple.shade50,
                           txtString: "${Statics.getLabel('presentAllTotal')} ",
-                          value: data.ekunupastitisummary.toString(),
+                          value: data.ekumalenfemale.toString(),
                           fontWeight: FontWeight.bold,
                         ),
-                        // const SizedBox(height: 10),
-                        // Text(
-                        //   "${Statics.getLabel('Total')} : $total",
-                        //   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                        // ),
                       ],
                     ),
                   ),
@@ -986,7 +860,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                 columns: headers
                     .map((header) => DataColumn(
                           label: Container(
-                            constraints: BoxConstraints(minWidth: 40, maxWidth: 150),
+                            constraints: BoxConstraints(minWidth: 40, maxWidth: 200),
                             // constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.2),
                             child: Text(header, softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold)),
                           ),
@@ -1011,21 +885,23 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                           ],
                         ))),
                         DataCell(Center(
-                            child: Row(
-                          mainAxisAlignment: (level.vyaktigeetkhantastakcount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
-                          children: [
-                            if (level.vyaktigeetkhantastakcount != 0) SizedBox(width: 1),
-                            Container(margin: EdgeInsets.only(right: level.vyaktigeetkhantastakcount != 0 ? 0 : 10), child: Text(level.vyaktigeetkhantastakcount.toString())),
-                            if (level.vyaktigeetkhantastakcount != 0)
-                              InkWell(
-                                borderRadius: BorderRadius.circular(50),
-                                onTap: () {
-                                  showInfoDialogBox(names: level.vyaktigeetkhantastakcountNames ?? "", title: Statics.getLabel("sanmelanReportTable2"));
-                                },
-                                child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
-                              ),
-                          ],
-                        ))),
+                            child: level.levelname == Statics.getLabel("Vasti")
+                                ? Text("--")
+                                : Row(
+                                    mainAxisAlignment: (level.vyaktigeetkhantastakcount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                                    children: [
+                                      if (level.vyaktigeetkhantastakcount != 0) SizedBox(width: 1),
+                                      Container(margin: EdgeInsets.only(right: level.vyaktigeetkhantastakcount != 0 ? 0 : 10), child: Text(level.vyaktigeetkhantastakcount.toString())),
+                                      if (level.vyaktigeetkhantastakcount != 0)
+                                        InkWell(
+                                          borderRadius: BorderRadius.circular(50),
+                                          onTap: () {
+                                            showInfoDialogBox(names: level.vyaktigeetkhantastakcountNames ?? "", title: Statics.getLabel("sanmelanReportTable2"));
+                                          },
+                                          child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
+                                        ),
+                                    ],
+                                  ))),
                         DataCell(Center(
                             child: Row(
                           mainAxisAlignment: (level.skaraykramhisob24tasapurnacount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,

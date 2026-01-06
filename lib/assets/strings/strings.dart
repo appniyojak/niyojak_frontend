@@ -1764,7 +1764,8 @@ Map<String, String> resEnglish = {
   'addGraam': "Add Graam",
   'images': "Images",
   'advImages': "News Images",
-  'advLinks': "News Links"
+  'advLinks': "News Links",
+  'sanmelanJoinedCount': "Sanmelan Participants Count"
 };
 
 ///1,584
@@ -3518,7 +3519,7 @@ Map<String, String> resMarathi = {
   'AddSanmelanFilesSubtitle': 'जास्तीत जास्त ३ जोडा',
   'AddAdvSanmelanFilesSubtitle': 'जास्तीत जास्त १० जोडा',
   'sanmelanReportTable0': "संमेलन स्तर",
-  'sanmelanReportTable1': "सम्मेलन संख्या",
+  'sanmelanReportTable1': "संमेलन संख्या",
   'sanmelanReportTable2': "ग्राम प्रतिनिधित्व",
   'sanmelanReportTable3': "अतिथी संख्या \n(मुख्य + विशिष्ट)",
   'sanmelanReportTable4': "पुरुष संख्या",
@@ -3533,7 +3534,8 @@ Map<String, String> resMarathi = {
   'addGraam': "ग्राम जोडा",
   'images': "छायाचित्रे",
   'advImages': "बातम्यांचे छायाचित्रे",
-  'advLinks': "बातम्यांचे दुवे"
+  'advLinks': "बातम्यांचे दुवे",
+  'sanmelanJoinedCount': "संमेलनातिल सहभागी संख्या"
 };
 
 ///1,583
@@ -5277,7 +5279,7 @@ Map<String, String> resHindi = {
   ////////////////////////////////////// Hindu Sanmelan Block //////////////////////////////////////
   'selectVastiMandal': "वस्ती/मंडल चुने",
   'sammelan': 'सम्मेलन',
-  'sammelanInfo': 'संमेलन जानकारी',
+  'sammelanInfo': 'सम्मेलन जानकारी',
   'hinduSammelanReport': 'हिंदु सम्मेलन अहवाल',
   'AddSanmelanFiles': 'सम्मेलन से संबंधित छायाचित्र जोड़ें',
   'AddSanmelanFilesDesc': 'सम्मेलन से संबंधित छायाचित्र के वर्णन जोड़ें',
@@ -5285,21 +5287,22 @@ Map<String, String> resHindi = {
   'AddAdvSanmelanFilesDesc': 'सम्मेलन से संबंधित समाचार के वर्णन जोड़ें  ',
   'AddSanmelanFilesSubtitle': 'अधिकतम ३ संलग्न करें',
   'AddAdvSanmelanFilesSubtitle': 'अधिकतम १० संलग्न करें',
-  'sanmelanReportTable0': "संमेलन स्तर",
+  'sanmelanReportTable0': "सम्मेलन स्तर",
   'sanmelanReportTable1': "सम्मेलन संख्या",
   'sanmelanReportTable2': "ग्राम प्रतिनिधित्व",
   'sanmelanReportTable3': "अतिथी संख्या \n(मुख्य + विशिष्ट)",
   'sanmelanReportTable4': "पुरुष संख्या",
   'sanmelanReportTable5': "महिला संख्या",
   'sanmelanReportTable6': "कुल संख्या \n(अतिथी + पुरुष + महिला)",
-  'sanmelanQuestion1': "क्या संमेलन निर्धारित समय पर शुरू हुआ ?",
-  'sanmelanQuestion2': "क्या संमेलन का हिसाब 24 घंटे के अंदर पूरा हुआ ?",
-  'sanmelanVakta': 'संमेलन वक्ता',
+  'sanmelanQuestion1': "क्या सम्मेलन निर्धारित समय पर शुरू हुआ ?",
+  'sanmelanQuestion2': "क्या सम्मेलन का हिसाब 24 घंटे के अंदर पूरा हुआ ?",
+  'sanmelanVakta': 'सम्मेलन वक्ता',
   'addVakta': 'वक्ता जोड़ें',
   'sanmelanVaktaName': 'वक्ता का नाम ',
   'sanmelanVaktaTask': 'वक्ता का विद्यमान दायित्व',
   'addGraam': "ग्राम जोड़ें",
   'images': "छायाचित्र",
   'advImages': "समाचार के छायाचित्र",
-  'advLinks': "समाचार के लिंक"
+  'advLinks': "समाचार के लिंक",
+  'sanmelanJoinedCount': "सम्मेलन में प्रतिभागियों की संख्या"
 };
