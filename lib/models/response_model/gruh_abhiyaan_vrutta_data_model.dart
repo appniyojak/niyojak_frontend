@@ -94,16 +94,20 @@ class GruhAbhiyaanVruttaDataModel {
 
 class AbhiyaanPeopleModel {
   String? fullName;
+  String? name;
+  String? desgination;
   int? swayamsevakID;
   String? daayitva;
   int? isdefault;
   String? mobileno;
   bool isSelected = false;
 
-  AbhiyaanPeopleModel({this.fullName, this.swayamsevakID, this.daayitva, this.isdefault, this.mobileno, this.isSelected = false});
+  AbhiyaanPeopleModel({this.fullName, this.name, this.desgination, this.swayamsevakID, this.daayitva, this.isdefault, this.mobileno, this.isSelected = false});
 
   AbhiyaanPeopleModel.fromJson(Map<String, dynamic> json) {
     fullName = json['FullName'];
+    name = json['name'];
+    desgination = json['desgination'];
     swayamsevakID = json['SwayamsevakID'];
     daayitva = json['daayitva'];
     isdefault = json['isdefault'];
@@ -114,6 +118,8 @@ class AbhiyaanPeopleModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['FullName'] = this.fullName;
+    data['name'] = this.name;
+    data['desgination'] = this.desgination;
     data['SwayamsevakID'] = this.swayamsevakID;
     data['daayitva'] = this.daayitva;
     data['isdefault'] = this.isdefault;

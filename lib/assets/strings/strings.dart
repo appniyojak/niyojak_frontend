@@ -1765,7 +1765,9 @@ Map<String, String> resEnglish = {
   'images': "Images",
   'advImages': "News Images",
   'advLinks': "News Links",
-  'sanmelanJoinedCount': "Sanmelan Participants Count"
+  'sanmelanJoinedCount': "Sanmelan Participants Count",
+  'sanmelanFormat': "Sanmelan Format",
+  'AddSanmelanFormat': "Define the Sanmelan's Format",
 };
 
 ///1,584
@@ -3535,7 +3537,13 @@ Map<String, String> resMarathi = {
   'images': "छायाचित्रे",
   'advImages': "बातम्यांचे छायाचित्रे",
   'advLinks': "बातम्यांचे दुवे",
-  'sanmelanJoinedCount': "संमेलनातिल सहभागी संख्या"
+  'sanmelanJoinedCount': "संमेलनातिल सहभागी संख्या",
+  'sanmelanFormat': "संमेलन स्वरूप",
+  'AddSanmelanFormat': "संमेलनाचे स्वरूप परिभाषित करा",
+  'SanmelanStartedCountVasti': 'संमेलन झालेले वस्ती',
+  'SanmelanStartedCountGraam': 'संमेलन झालेले ग्राम',
+  'SanmelanStartedCountNagar': 'संमेलन झालेले नगर/तालुका',
+  'SanmelanStartedCountMandal': 'संमेलन झालेली मंडल ',
 };
 
 ///1,583
@@ -5304,5 +5312,7 @@ Map<String, String> resHindi = {
   'images': "छायाचित्र",
   'advImages': "समाचार के छायाचित्र",
   'advLinks': "समाचार के लिंक",
-  'sanmelanJoinedCount': "सम्मेलन में प्रतिभागियों की संख्या"
+  'sanmelanJoinedCount': "सम्मेलन में प्रतिभागियों की संख्या",
+  'sanmelanFormat': "संमेलन प्रारूप",
+  'AddSanmelanFormat': "सम्मेलन के प्रारूप को परिभाषित करें",
 };

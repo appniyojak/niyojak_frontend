@@ -23,7 +23,6 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
   late ScrollController _scrollController;
   bool _searched = false;
   bool _isExpanded = true;
-  bool _isLoading = false;
 
   List<GeoUnitMasterBAL>? _linkedMahaanagar;
   List<GeoUnitMasterBAL>? _linkedVibhaag;
@@ -179,7 +178,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
   getReportDataFun() async {
     setState(() {
       vijayadashamiReport = null;
-      _isLoading = true;
+      // _isLoading = true;
     });
     Map<String, dynamic> formData = {
       "GeoUnitID": int.tryParse(_selectedGeoUnitId.toString()) ?? null,
@@ -191,7 +190,6 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
     vijayadashamiReport = await Statics.getVijayaDashamiUtsavReportData(context, formData);
     // log("vijayadashamiReport >>>>>>>>>>>>>>>>> ${jsonDecode(jsonEncode(vijayadashamiReport))}");
     setState(() {
-      _isLoading = false;
       vijayadashamiReport;
     });
   }
@@ -223,7 +221,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
             SizedBox(height: 10),
             _buildExpansionPanel(),
             SizedBox(height: 20),
-            if (_selctedLevel != "" && _selctedLevelName != "")
+            if (_searched) ...[
               Container(
                   height: 40,
                   width: double.infinity,
@@ -245,14 +243,14 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                       ),
                     ],
                   )),
-            SizedBox(height: 10),
-            Divider(color: Colors.black),
-            SizedBox(height: 10),
-            if (_isLoading) SizedBox(height: MediaQuery.sizeOf(context).height * 0.2, child: Center(child: CircularProgressIndicator())),
-            if (vijayadashamiReport?.vijayadashaminagarlist != null && vijayadashamiReport?.vijayadashaminagarlist != []) buildMarathiDataTable(vijayadashamiReport!.vijayadashaminagarlist!),
-            SizedBox(height: 18),
-            if (vijayadashamiReport?.vijayadashamiReport != null) buildCountCards(vijayadashamiReport!.vijayadashamiReport!),
-            SizedBox(height: 30),
+              SizedBox(height: 10),
+              Divider(color: Colors.black),
+              SizedBox(height: 10),
+              if (vijayadashamiReport?.vijayadashaminagarlist != null && vijayadashamiReport?.vijayadashaminagarlist != []) buildMarathiDataTable(vijayadashamiReport!.vijayadashaminagarlist!),
+              SizedBox(height: 18),
+              if (vijayadashamiReport?.vijayadashamiReport != null) buildCountCards(vijayadashamiReport!.vijayadashamiReport!),
+              SizedBox(height: 30),
+            ]
           ],
         ),
       ),
@@ -427,20 +425,111 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
             children: [
               Container(
                 decoration: BoxDecoration(color: Colors.white),
-                padding: EdgeInsets.only(bottom: 12),
+                padding: EdgeInsets.symmetric(vertical: 14, horizontal: 12),
                 // padding: EdgeInsets.symmetric(horizontal: 14),
+                // margin: EdgeInsets.symmetric(vertical: 8),
                 child: Container(
-                  padding: EdgeInsets.only(top: 2, bottom: 6, right: 12, left: 12),
                   margin: EdgeInsets.only(left: 16, right: 8),
                   child: Row(children: [
-                    Expanded(child: Text(Statics.getLabel('gramPratinidhitwa'))),
+                    Expanded(child: Text("${Statics.getLabel('Total')} ${Statics.getLabel('Vasti')}")),
                     Container(
                       margin: EdgeInsets.only(left: 8),
                       child: Text((data.gramcountpratinidhatva ?? 0).toString()),
                     ),
                   ]),
                 ),
-              )
+              ),
+              SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                margin: EdgeInsets.only(left: 16, right: 8),
+                child: Row(children: [
+                  Expanded(
+                      child: Text(
+                    Statics.getLabel('SanmelanStartedCountVasti'),
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  )),
+                  Container(
+                    margin: EdgeInsets.only(left: 8),
+                    child: Text(
+                      (data.gramcountpratinidhatva ?? 0).toString(),
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ]),
+              ),
+              SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+              Container(
+                decoration: BoxDecoration(color: Colors.white),
+                padding: EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+                // padding: EdgeInsets.symmetric(horizontal: 14),
+                child: Container(
+                  margin: EdgeInsets.only(left: 16, right: 8),
+                  child: Row(children: [
+                    Expanded(child: Text("${Statics.getLabel('Total')} ${Statics.getLabel('Mandal')}")),
+                    Container(
+                      margin: EdgeInsets.only(left: 8),
+                      child: Text((data.gramcountpratinidhatva ?? 0).toString()),
+                    ),
+                  ]),
+                ),
+              ),
+              SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                margin: EdgeInsets.only(left: 16, right: 8),
+                child: Row(children: [
+                  Expanded(
+                      child: Text(
+                    Statics.getLabel('SanmelanStartedCountMandal'),
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  )),
+                  Container(
+                    margin: EdgeInsets.only(left: 8),
+                    child: Text(
+                      (data.gramcountpratinidhatva ?? 0).toString(),
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ]),
+              ),
+              SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+              Container(
+                decoration: BoxDecoration(color: Colors.white),
+                padding: EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+                // padding: EdgeInsets.symmetric(horizontal: 14),
+                child: Container(
+                  margin: EdgeInsets.only(left: 16, right: 8),
+                  child: Row(children: [
+                    Expanded(child: Text("${Statics.getLabel('Total')} ${Statics.getLabel('Graam')}")),
+                    Container(
+                      margin: EdgeInsets.only(left: 8),
+                      child: Text((data.gramcountpratinidhatva ?? 0).toString()),
+                    ),
+                  ]),
+                ),
+              ),
+              SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                margin: EdgeInsets.only(left: 16, right: 8),
+                child: Row(children: [
+                  Expanded(
+                      child: Text(
+                    Statics.getLabel('SanmelanStartedCountGraam'),
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  )),
+                  Container(
+                    margin: EdgeInsets.only(left: 8),
+                    child: Text(
+                      (data.gramcountpratinidhatva ?? 0).toString(),
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ]),
+              ),
+              SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+              SizedBox(height: 8),
             ],
           ),
         ),
@@ -626,45 +715,45 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                           ],
                         ),
                       ),
-                      SingleColumnRow(
-                        dividerColor: Colors.grey.shade400,
-                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        subChildPadding: EdgeInsets.only(top: 2, bottom: 6, right: 12, left: 12),
-                        txtString: Statics.getLabel("anyaUpasthit"),
-                        value: "",
-                        fontsize: 16,
-                        fontWeight: FontWeight.w600,
-                        rowColor: Colors.purple.shade50,
-                        subChild: Column(
-                          children: [
-                            Row(children: [
-                              Expanded(child: Text(Statics.getLabel('Male'))),
-                              Container(
-                                margin: EdgeInsets.only(left: 8),
-                                child: Text((data.anyauppasstitimale ?? 0).toString()),
-                              ),
-                            ]),
-                            SizedBox(height: 8),
-                            Row(children: [
-                              Expanded(child: Text(Statics.getLabel('Female'))),
-                              Container(
-                                margin: EdgeInsets.only(left: 8),
-                                child: Text((data.anyanuppasstitifemale ?? 0).toString()),
-                              ),
-                            ]),
-                            SizedBox(height: 6),
-                            SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
-                            SizedBox(height: 6),
-                            Row(children: [
-                              Expanded(child: Text(Statics.getLabel('Total'))),
-                              Container(
-                                margin: EdgeInsets.only(left: 8),
-                                child: Text(((data.anyauppasstitimale ?? 0) + (data.anyanuppasstitifemale ?? 0)).toString()),
-                              ),
-                            ]),
-                          ],
-                        ),
-                      ),
+                      // SingleColumnRow(
+                      //   dividerColor: Colors.grey.shade400,
+                      //   padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      //   subChildPadding: EdgeInsets.only(top: 2, bottom: 6, right: 12, left: 12),
+                      //   txtString: Statics.getLabel("anyaUpasthit"),
+                      //   value: "",
+                      //   fontsize: 16,
+                      //   fontWeight: FontWeight.w600,
+                      //   rowColor: Colors.purple.shade50,
+                      //   subChild: Column(
+                      //     children: [
+                      //       Row(children: [
+                      //         Expanded(child: Text(Statics.getLabel('Male'))),
+                      //         Container(
+                      //           margin: EdgeInsets.only(left: 8),
+                      //           child: Text((data.anyauppasstitimale ?? 0).toString()),
+                      //         ),
+                      //       ]),
+                      //       SizedBox(height: 8),
+                      //       Row(children: [
+                      //         Expanded(child: Text(Statics.getLabel('Female'))),
+                      //         Container(
+                      //           margin: EdgeInsets.only(left: 8),
+                      //           child: Text((data.anyanuppasstitifemale ?? 0).toString()),
+                      //         ),
+                      //       ]),
+                      //       SizedBox(height: 6),
+                      //       SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+                      //       SizedBox(height: 6),
+                      //       Row(children: [
+                      //         Expanded(child: Text(Statics.getLabel('Total'))),
+                      //         Container(
+                      //           margin: EdgeInsets.only(left: 8),
+                      //           child: Text(((data.anyauppasstitimale ?? 0) + (data.anyanuppasstitifemale ?? 0)).toString()),
+                      //         ),
+                      //       ]),
+                      //     ],
+                      //   ),
+                      // ),
                       SingleColumnRow(
                         dividerColor: Colors.grey.shade400,
                         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -710,65 +799,65 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
           ),
         ),
 
-        //
-        Card(
-          clipBehavior: Clip.antiAlias,
-          margin: EdgeInsets.only(top: 16),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          surfaceTintColor: Colors.transparent,
-          child: ExpansionTile(
-              tilePadding: EdgeInsets.only(right: 16, left: 16),
-              childrenPadding: EdgeInsets.zero,
-              collapsedBackgroundColor: Colors.yellow.shade100,
-              backgroundColor: Colors.yellow.shade100,
-              initiallyExpanded: true,
-              shape: RoundedRectangleBorder(side: BorderSide.none),
-              title: Text(
-                Statics.getLabel("anyaUpstithSummary"),
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blueAccent.shade700,
-                ),
-              ),
-              children: [
-                Container(
-                  color: Colors.white,
-                  padding: const EdgeInsets.only(left: 18.0, right: 18.0, bottom: 8.0, top: 12),
-                  child: Container(
-                    decoration: BoxDecoration(border: Border.all(color: Colors.grey.shade800)),
-                    padding: EdgeInsets.all(12),
-                    child: Column(
-                      children: [
-                        Row(children: [
-                          Expanded(child: Text(Statics.getLabel('Male'))),
-                          Container(
-                            margin: EdgeInsets.only(left: 8),
-                            child: Text((data.ekunmale ?? 0).toString()),
-                          ),
-                        ]),
-                        SizedBox(height: 8),
-                        Row(children: [
-                          Expanded(child: Text(Statics.getLabel('Female'))),
-                          Container(
-                            margin: EdgeInsets.only(left: 8),
-                            child: Text((data.ekunfemale ?? 0).toString()),
-                          ),
-                        ]),
-                        SizedBox(height: 8),
-                        // ✅ Total
-                        SingleColumnRow(
-                          padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-                          rowColor: Colors.purple.shade50,
-                          txtString: "${Statics.getLabel('presentAllTotal')} ",
-                          value: data.ekumalenfemale.toString(),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ]),
-        )
+        // //
+        // Card(
+        //   clipBehavior: Clip.antiAlias,
+        //   margin: EdgeInsets.only(top: 16),
+        //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        //   surfaceTintColor: Colors.transparent,
+        //   child: ExpansionTile(
+        //       tilePadding: EdgeInsets.only(right: 16, left: 16),
+        //       childrenPadding: EdgeInsets.zero,
+        //       collapsedBackgroundColor: Colors.yellow.shade100,
+        //       backgroundColor: Colors.yellow.shade100,
+        //       initiallyExpanded: true,
+        //       shape: RoundedRectangleBorder(side: BorderSide.none),
+        //       title: Text(
+        //         Statics.getLabel("anyaUpstithSummary"),
+        //         style: TextStyle(
+        //           fontWeight: FontWeight.bold,
+        //           color: Colors.blueAccent.shade700,
+        //         ),
+        //       ),
+        //       children: [
+        //         Container(
+        //           color: Colors.white,
+        //           padding: const EdgeInsets.only(left: 18.0, right: 18.0, bottom: 8.0, top: 12),
+        //           child: Container(
+        //             decoration: BoxDecoration(border: Border.all(color: Colors.grey.shade800)),
+        //             padding: EdgeInsets.all(12),
+        //             child: Column(
+        //               children: [
+        //                 Row(children: [
+        //                   Expanded(child: Text(Statics.getLabel('Male'))),
+        //                   Container(
+        //                     margin: EdgeInsets.only(left: 8),
+        //                     child: Text((data.ekunmale ?? 0).toString()),
+        //                   ),
+        //                 ]),
+        //                 SizedBox(height: 8),
+        //                 Row(children: [
+        //                   Expanded(child: Text(Statics.getLabel('Female'))),
+        //                   Container(
+        //                     margin: EdgeInsets.only(left: 8),
+        //                     child: Text((data.ekunfemale ?? 0).toString()),
+        //                   ),
+        //                 ]),
+        //                 SizedBox(height: 8),
+        //                 // ✅ Total
+        //                 SingleColumnRow(
+        //                   padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+        //                   rowColor: Colors.purple.shade50,
+        //                   txtString: "${Statics.getLabel('presentAllTotal')} ",
+        //                   value: data.ekumalenfemale.toString(),
+        //                   fontWeight: FontWeight.bold,
+        //                 ),
+        //               ],
+        //             ),
+        //           ),
+        //         ),
+        //       ]),
+        // )
       ],
     );
   }

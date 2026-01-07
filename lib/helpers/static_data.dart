@@ -23,6 +23,7 @@ import '../models/response_model/get_vijaya_dashami_geounit_data.dart';
 import '../models/response_model/get_vijayadashmi_report_resp_model.dart';
 import '../models/response_model/gruh_abhiyaan_report_model.dart';
 import '../models/response_model/gruh_abhiyaan_vrutta_data_model.dart';
+import '../models/response_model/hindu_sanmelan_model.dart';
 import '../models/response_model/mandalVastisarvekshanReportModel.dart';
 import '../models/response_model/nagar_vasti_model.dart';
 import '../models/response_model/nirikshan_baithak_vrutta.dart';
@@ -217,6 +218,12 @@ const String getDataWhileAddUpdateUPLevelForGruh = baseUrlAPI + '/GetDataWhileAd
 const String urlCheckExistsAbhiyaanKaryakarta = baseUrlAPI + '/checkexistsabhiyaankaryakarta';
 const String urlGetAllAbhiyaanVruttaData = baseUrlAPI + '/GetAllAbhiyaanVruttaData';
 const String urlRemoveSwayamsevakFromToli = baseUrlAPI + '/removeswayamsevaktoliingruhabhiyaan';
+
+const String urlGetHinduSanmelanData = baseUrlAPI + '/getdataforhindusanmelan';
+const String urlDeleteHinduSanmelanFiles = baseUrlAPI + '/deletehindusanmelanfiles';
+const String urlSaveHinduSanmelanFiles = baseUrlAPI + '/savehindusanmelanfiles';
+const String urlSaveHinduSanmelanForm = baseUrlAPI + '/savehindusanmelan';
+const String urlSearchvisheshfromannya = baseUrlAPI + '/searchvisheshfromannya';
 
 //////////////////////////////////////////////////////////////////////////////////////////
 const String patchSuffix = '';
@@ -4484,6 +4491,132 @@ Future<List<dynamic>> getShaakhaaToliSadasyaForApp(String strInput) async {
   return responseBody['ListToliSadasya'];
 }
 
+Future<HinduSanmelanModel?> getHinduSanmelanFormData(context, {required String userID, required String? targetGeoUnitID}) async {
+  try {
+    showLoaderDialog(context);
+
+    print("${userID}  --- $targetGeoUnitID  ");
+    Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+    log(urlGetHinduSanmelanData);
+    print(json.encode({"AppUserID": userID, "GeoUnitID": targetGeoUnitID ?? "0"}));
+
+    var response = await http.post(
+      Uri.parse(urlGetHinduSanmelanData),
+      headers: jHeaders,
+      body: json.encode({"AppUserID": userID, "GeoUnitID": targetGeoUnitID ?? "0"}),
+    );
+    // log("response ==>  $response");
+    log("response ==>  ${jsonDecode(response.body)}");
+
+    if (response.statusCode == 200) {
+      var responseBody = json.decode(response.body);
+
+      if (responseBody["Status"] == "200") {
+        Fluttertoast.showToast(msg: "माहिती प्राप्त झाली.", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
+        return HinduSanmelanModel.fromJson(responseBody);
+      }
+      Fluttertoast.showToast(msg: Statics.getLabel('errorOccurred'), backgroundColor: Colors.red.shade400, toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM);
+      return null;
+    } else {
+      log("Error: ${response.statusCode}");
+
+      return null;
+    }
+  } catch (e) {
+    print("errorr >>>>>>>>>>>>>>>>>> $e");
+    log("errorr >>>>>>>>>>>>>>>>>> $e");
+  } finally {
+    Navigator.of(context, rootNavigator: true).pop();
+  }
+  return null;
+}
+
+Future<HinduSanmelanModel?> searchVisheshAndAnyaInHinduSanmelan({required BuildContext context, required String search, bool showLoader = false}) async {
+  if (showLoader) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  var response = await http.post(
+    Uri.parse(urlSearchvisheshfromannya),
+    headers: jHeaders,
+    body: jsonEncode({"search": search}), // ✅ Encode here
+  );
+
+  print("Response searchVisheshAndAnyaInHinduSanmelan >>>>>>>>>>>> ${response.body}");
+  print("response.statusCode: ${response.statusCode}");
+
+  if (showLoader) Navigator.of(context, rootNavigator: true).pop();
+
+  if (response.statusCode == 200) {
+    var responseBody = json.decode(response.body);
+
+    if (responseBody["Status"] == "200") {
+      return HinduSanmelanModel.fromJson(responseBody);
+    }
+    return null;
+  } else {
+    print("Error: ${response.statusCode} - ${response.body}");
+    Statics.showToast(Statics.getLabel('errorOccurred'));
+    return null;
+  }
+}
+
+Future<String?> saveHinduSanmelanImageData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
+  if (showLoader) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  var response = await http.post(
+    Uri.parse(urlSaveHinduSanmelanFiles),
+    headers: jHeaders,
+    body: jsonEncode(inputJson), // ✅ Encode here
+  );
+
+  print("Response saveHinduSanmelanImageData >>>>>>>>>>>> ${response.body}");
+  print("response.statusCode: ${response.statusCode}");
+
+  if (showLoader) Navigator.of(context, rootNavigator: true).pop();
+
+  if (response.statusCode == 200) {
+    // Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+    final responseData = json.decode(response.body);
+    return responseData["Message"].toString();
+  } else {
+    print("Error: ${response.statusCode} - ${response.body}");
+    Statics.showToast(Statics.getLabel('errorOccurred'));
+    return null;
+  }
+}
+
+Future<bool> deleteHinduSanmelanImageData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
+  if (showLoader) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  var response = await http.post(
+    Uri.parse(urlDeleteHinduSanmelanFiles),
+    headers: jHeaders,
+    body: jsonEncode(inputJson), // ✅ Encode here
+  );
+
+  print("Response deleteHinduSanmelanImageData >>>>>>>>>>>> ${response.body}");
+  print("response.statusCode: ${response.statusCode}");
+
+  if (showLoader) Navigator.of(context, rootNavigator: true).pop();
+
+  if (response.statusCode == 200) {
+    // Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+    final responseData = json.decode(response.body);
+    if (responseData["Status"].toString() == "Success") {
+      return true;
+    }
+    return false;
+  } else {
+    print("Error: ${response.statusCode} - ${response.body}");
+    Statics.showToast(Statics.getLabel('errorOccurred'));
+    return false;
+  }
+}
+
+//
 Widget createWidgetFromString(BuildContext context, String label, double width, double height, Alignment alignment, {bool isTotalRow = false}) {
   return Container(
     child: Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
