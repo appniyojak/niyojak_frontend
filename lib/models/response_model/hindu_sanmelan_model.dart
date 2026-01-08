@@ -14,9 +14,9 @@ class HinduSanmelanModel {
   List<Vastisanyaprabhavi>? vastisanyaprabhavi;
   List<AbhiyaanPeopleModel>? vaktaList;
   List<UpnagarmandallistVijayaDashami>? gramlist;
-  List<TypeValueData>? urldata;
-  List<TypeValueData>? imgdata;
-  List<TypeValueData>? advimgdata;
+  List<TypeValueData>? urldata; //type : url
+  List<TypeValueData>? imgdata; //type: img
+  List<TypeValueData>? advimgdata; //type: advimg
 
   HinduSanmelanModel({
     this.message,
@@ -55,9 +55,9 @@ class HinduSanmelanModel {
         vastisanyaprabhavi!.add(new Vastisanyaprabhavi.fromJson(v));
       });
     }
-    if (json['vaktaList'] != null) {
+    if (json['hindusammalen'] != null) {
       vaktaList = <AbhiyaanPeopleModel>[];
-      json['vaktaList'].forEach((v) {
+      json['hindusammalen'].forEach((v) {
         vaktaList!.add(new AbhiyaanPeopleModel.fromJson(v));
       });
     }
@@ -103,7 +103,7 @@ class HinduSanmelanModel {
       data['Vastisanyaprabhavi'] = this.vastisanyaprabhavi!.map((v) => v.toJson()).toList();
     }
     if (this.vaktaList != null) {
-      data['vaktaList'] = this.vaktaList!.map((v) => v.toJson()).toList();
+      data['hindusammalen'] = this.vaktaList!.map((v) => v.toJson()).toList();
     }
     if (this.gramlist != null) {
       data['gramlist'] = this.gramlist!.map((v) => v.toJson()).toList();

@@ -24,6 +24,7 @@ import '../models/response_model/get_vijayadashmi_report_resp_model.dart';
 import '../models/response_model/gruh_abhiyaan_report_model.dart';
 import '../models/response_model/gruh_abhiyaan_vrutta_data_model.dart';
 import '../models/response_model/hindu_sanmelan_model.dart';
+import '../models/response_model/hindu_sanmelan_report_model.dart';
 import '../models/response_model/mandalVastisarvekshanReportModel.dart';
 import '../models/response_model/nagar_vasti_model.dart';
 import '../models/response_model/nirikshan_baithak_vrutta.dart';
@@ -224,6 +225,8 @@ const String urlDeleteHinduSanmelanFiles = baseUrlAPI + '/deletehindusanmelanfil
 const String urlSaveHinduSanmelanFiles = baseUrlAPI + '/savehindusanmelanfiles';
 const String urlSaveHinduSanmelanForm = baseUrlAPI + '/savehindusanmelan';
 const String urlSearchvisheshfromannya = baseUrlAPI + '/searchvisheshfromannya';
+const String urlSavevisheshfromannya = baseUrlAPI + '/savevisheshfromannya';
+const String urlHinduSanmelanReport = baseUrlAPI + '/hindusanmelanreport';
 
 //////////////////////////////////////////////////////////////////////////////////////////
 const String patchSuffix = '';
@@ -4532,31 +4535,123 @@ Future<HinduSanmelanModel?> getHinduSanmelanFormData(context, {required String u
   return null;
 }
 
-Future<HinduSanmelanModel?> searchVisheshAndAnyaInHinduSanmelan({required BuildContext context, required String search, bool showLoader = false}) async {
+Future<void> saveHinduSanmelanFormData(BuildContext context, Map<String, dynamic> inputJson, bool showLoader) async {
   if (showLoader) showLoaderDialog(context);
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
+  print(urlSaveHinduSanmelanForm);
+  print(jsonEncode(inputJson));
+
   var response = await http.post(
-    Uri.parse(urlSearchvisheshfromannya),
+    Uri.parse(urlSaveHinduSanmelanForm),
     headers: jHeaders,
-    body: jsonEncode({"search": search}), // ✅ Encode here
+    body: jsonEncode(inputJson), // ✅ Encode here
   );
 
-  print("Response searchVisheshAndAnyaInHinduSanmelan >>>>>>>>>>>> ${response.body}");
+  print("Response: ${response.body}");
   print("response.statusCode: ${response.statusCode}");
 
   if (showLoader) Navigator.of(context, rootNavigator: true).pop();
 
   if (response.statusCode == 200) {
-    var responseBody = json.decode(response.body);
-
-    if (responseBody["Status"] == "200") {
-      return HinduSanmelanModel.fromJson(responseBody);
+    final responseData = json.decode(response.body);
+    if (responseData["Status"].toString() == "200" || responseData["Status"].toString() == "Success") {
+      Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
     }
-    return null;
+    Statics.showToast(Statics.getLabel('errorOccurred'));
   } else {
     print("Error: ${response.statusCode} - ${response.body}");
     Statics.showToast(Statics.getLabel('errorOccurred'));
+  }
+}
+
+Future<void> saveSajjanAnyaFromSearch(BuildContext context, Map<String, dynamic> inputJson, {bool showLoader = true}) async {
+  try {
+    if (showLoader) showLoaderDialog(context);
+    Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+    print(urlSavevisheshfromannya);
+    print(jsonEncode(inputJson));
+
+    var response = await http.post(
+      Uri.parse(urlSavevisheshfromannya),
+      headers: jHeaders,
+      body: jsonEncode(inputJson), // ✅ Encode here
+    );
+
+    print("Response: ${response.body}");
+    print("response.statusCode: ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      final responseData = json.decode(response.body);
+      if (responseData["Status"].toString() == "200" || responseData["Status"].toString() == "Success") {
+        Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+      }
+      Statics.showToast(Statics.getLabel('errorOccurred'));
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      Statics.showToast(Statics.getLabel('errorOccurred'));
+    }
+  } catch (e) {
+    print("error occured >>>errorOccurred>>> $e");
+  } finally {
+    if (showLoader) Navigator.of(context, rootNavigator: true).pop();
+  }
+}
+
+Future<HinduSanmelanModel?> searchSajjanAnyaForVisheshMukhyaFun(Map<String, dynamic> inputJson, {BuildContext? context}) async {
+  if (context != null) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+  log(urlSearchvisheshfromannya);
+
+  try {
+    var response = await http.post(Uri.parse(urlSearchvisheshfromannya), headers: jHeaders, body: jsonEncode(inputJson));
+
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+
+      if (data["Status"] == "Success" || data["Status"] == "200") {
+        log("searchSajjanAnyaForVisheshMukhyaFun >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+
+        return HinduSanmelanModel.fromJson(data); // ✅ return karna zaroori hai
+      }
+      return null; // ✅ error case
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null; // ✅ error case
+    }
+  } catch (e) {
+    if (context != null) Navigator.of(context, rootNavigator: true).pop();
+    print("Exception: $e");
+    return null;
+  }
+}
+
+Future<HinduSanmelanReportModel?> getHinduSanmelanReportData(BuildContext context, Map<String, dynamic> inputJson) async {
+  showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+  log(urlHinduSanmelanReport);
+  try {
+    var response = await http.post(Uri.parse(urlHinduSanmelanReport), headers: jHeaders, body: jsonEncode(inputJson));
+
+    Navigator.of(context, rootNavigator: true).pop();
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+
+      HinduSanmelanReportModel model = HinduSanmelanReportModel.fromJson(data);
+      log("getHinduSanmelanReportData >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+
+      return model; // ✅ return karna zaroori hai
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null; // ✅ error case
+    }
+  } catch (e) {
+    Navigator.of(context, rootNavigator: true).pop();
+    print("Exception: $e");
     return null;
   }
 }

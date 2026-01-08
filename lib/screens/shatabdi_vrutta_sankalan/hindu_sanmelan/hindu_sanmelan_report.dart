@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../helpers/static_data.dart' as Statics;
-import '../../../models/response_model/get_vijayadashmi_report_resp_model.dart';
+import '../../../models/response_model/hindu_sanmelan_report_model.dart';
 import '../../../providers/bals.dart';
 import '../../../utils/cust_painters.dart';
 import '../../../widgets/single_column_row.dart';
@@ -58,7 +58,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
   List<String?> _selctedLevelNameList = [];
   String? _selectedGeoUnitId;
 
-  GetVijayadashamiReportModel? vijayadashamiReport;
+  HinduSanmelanReportModel? report;
 
   final List<bool> _expanded = List.generate(3, (_) => true);
 
@@ -177,7 +177,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
 
   getReportDataFun() async {
     setState(() {
-      vijayadashamiReport = null;
+      report = null;
       // _isLoading = true;
     });
     Map<String, dynamic> formData = {
@@ -187,10 +187,10 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
 
     String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
     log("Form Data (JSON):\n$formattedJson");
-    vijayadashamiReport = await Statics.getVijayaDashamiUtsavReportData(context, formData);
+    report = await Statics.getHinduSanmelanReportData(context, formData);
     // log("vijayadashamiReport >>>>>>>>>>>>>>>>> ${jsonDecode(jsonEncode(vijayadashamiReport))}");
     setState(() {
-      vijayadashamiReport;
+      report;
     });
   }
 
@@ -246,9 +246,9 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
               SizedBox(height: 10),
               Divider(color: Colors.black),
               SizedBox(height: 10),
-              if (vijayadashamiReport?.vijayadashaminagarlist != null && vijayadashamiReport?.vijayadashaminagarlist != []) buildMarathiDataTable(vijayadashamiReport!.vijayadashaminagarlist!),
+              if (report?.list1 != null && report?.list1 != []) buildMarathiDataTable(report?.list1 ?? []),
               SizedBox(height: 18),
-              if (vijayadashamiReport?.vijayadashamiReport != null) buildCountCards(vijayadashamiReport!.vijayadashamiReport!),
+              if (report != null) buildCountCards(report!),
               SizedBox(height: 30),
             ]
           ],
@@ -257,15 +257,14 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
     );
   }
 
-  Widget buildCountCards(VijayadashamiReport data) {
+  Widget buildCountCards(HinduSanmelanReportModel data) {
     int calculateTotalMale() {
-      final total = (data.mukhyaatithimale ?? 0) + (data.sadbavkaryamale ?? 0) + (data.sajjanskhatiuppasstitimale ?? 0) + (data.pramukhjhanuppasstitimale ?? 0) + (data.anyauppasstitimale ?? 0);
+      final total = (data.mukhyaatithimale ?? 0) + (data.sadbavkaryamale ?? 0) + (data.sajjanskhatiuppasstitimale ?? 0) + (data.pramukhjhanuppasstitimale ?? 0);
       return total;
     }
 
     int calculateTotalFemale() {
-      final total =
-          (data.mukhyaatithifemale ?? 0) + (data.sadbavkaryafemale ?? 0) + (data.sajjanskhatiuppasstitifemale ?? 0) + (data.pramukhjhanuppasstitifemale ?? 0) + (data.anyanuppasstitifemale ?? 0);
+      final total = (data.mukhyaatithifemale ?? 0) + (data.sadbavkaryafemale ?? 0) + (data.sajjanskhatiuppasstitifemale ?? 0) + (data.pramukhjhanuppasstitifemale ?? 0);
       return total;
     }
 
@@ -320,7 +319,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                             spacing: 2,
                             children: [
                               Text(
-                                (data.ekunpat ?? 0).toString(),
+                                (data.imgCount ?? 0).toString(),
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               InkWell(
@@ -349,7 +348,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                             spacing: 2,
                             children: [
                               Text(
-                                (data.ekunupastiti ?? 0).toString(),
+                                (data.advCount ?? 0).toString(),
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               InkWell(
@@ -378,7 +377,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                             spacing: 2,
                             children: [
                               Text(
-                                ((data.ekungan ?? 0) + (data.ekunupastiti ?? 0)).toString(),
+                                (data.urlCount ?? 0).toString(),
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               InkWell(
@@ -434,7 +433,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                     Expanded(child: Text("${Statics.getLabel('Total')} ${Statics.getLabel('Vasti')}")),
                     Container(
                       margin: EdgeInsets.only(left: 8),
-                      child: Text((data.gramcountpratinidhatva ?? 0).toString()),
+                      child: Text((data.totalvasti ?? 0).toString()),
                     ),
                   ]),
                 ),
@@ -452,7 +451,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                   Container(
                     margin: EdgeInsets.only(left: 8),
                     child: Text(
-                      (data.gramcountpratinidhatva ?? 0).toString(),
+                      (data.vastiStartedcount ?? 0).toString(),
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -469,7 +468,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                     Expanded(child: Text("${Statics.getLabel('Total')} ${Statics.getLabel('Mandal')}")),
                     Container(
                       margin: EdgeInsets.only(left: 8),
-                      child: Text((data.gramcountpratinidhatva ?? 0).toString()),
+                      child: Text((data.totalmandalCount ?? 0).toString()),
                     ),
                   ]),
                 ),
@@ -487,7 +486,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                   Container(
                     margin: EdgeInsets.only(left: 8),
                     child: Text(
-                      (data.gramcountpratinidhatva ?? 0).toString(),
+                      (data.mandalStartedcount ?? 0).toString(),
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -504,7 +503,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                     Expanded(child: Text("${Statics.getLabel('Total')} ${Statics.getLabel('Graam')}")),
                     Container(
                       margin: EdgeInsets.only(left: 8),
-                      child: Text((data.gramcountpratinidhatva ?? 0).toString()),
+                      child: Text((data.totalgramCount ?? 0).toString()),
                     ),
                   ]),
                 ),
@@ -885,7 +884,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
     );
   }
 
-  Widget buildMarathiDataTable(List<Vijayadashaminagarlist> data) {
+  Widget buildMarathiDataTable(List<List1> data) {
     final List<String> headers = [
       // 'कार्यक्रम स्तर',
       Statics.getLabel('sanmelanReportTable1'),
@@ -917,9 +916,9 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
               ),
             ),
           ],
-          rows: data.where((e) => [Statics.getLabel("Vasti"), Statics.getLabel("Mandal")].contains(e.levelname)).map((level) {
+          rows: data.map((level) {
                 return DataRow(cells: [
-                  DataCell(Text(level.levelname.toString())),
+                  DataCell(Text(level.levelMarathi.toString())),
                 ]);
               }).toList() +
               [
@@ -955,37 +954,37 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                           ),
                         ))
                     .toList(),
-                rows: data.where((e) => [Statics.getLabel("Vasti"), Statics.getLabel("Mandal")].contains(e.levelname)).map((level) {
+                rows: data.map((level) {
                       return DataRow(cells: [
                         DataCell(Center(
                             child: Row(
-                          mainAxisAlignment: (level.karyakramnirdharitvedhvarcount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                          mainAxisAlignment: (level.sanmelancount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
                           children: [
-                            if (level.karyakramnirdharitvedhvarcount != 0) SizedBox(width: 1),
-                            Container(margin: EdgeInsets.only(right: level.karyakramnirdharitvedhvarcount != 0 ? 0 : 10), child: Text(level.karyakramnirdharitvedhvarcount.toString())),
-                            if (level.karyakramnirdharitvedhvarcount != 0)
+                            if (level.sanmelancount != 0) SizedBox(width: 1),
+                            Container(margin: EdgeInsets.only(right: level.sanmelancount != 0 ? 0 : 10), child: Text(level.sanmelancount.toString())),
+                            if (level.sanmelancount != 0)
                               InkWell(
                                 borderRadius: BorderRadius.circular(50),
                                 onTap: () {
-                                  showInfoDialogBox(names: level.karyakramnirdharitvedhvarcountNames ?? "", title: Statics.getLabel("sanmelanReportTable1"));
+                                  showInfoDialogBox(names: level.sanmelancountnames ?? "", title: Statics.getLabel("sanmelanReportTable1"));
                                 },
                                 child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
                               ),
                           ],
                         ))),
                         DataCell(Center(
-                            child: level.levelname == Statics.getLabel("Vasti")
+                            child: level.levelMarathi == Statics.getLabel("Vasti")
                                 ? Text("--")
                                 : Row(
-                                    mainAxisAlignment: (level.vyaktigeetkhantastakcount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                                    mainAxisAlignment: (level.grammprati != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
                                     children: [
-                                      if (level.vyaktigeetkhantastakcount != 0) SizedBox(width: 1),
-                                      Container(margin: EdgeInsets.only(right: level.vyaktigeetkhantastakcount != 0 ? 0 : 10), child: Text(level.vyaktigeetkhantastakcount.toString())),
-                                      if (level.vyaktigeetkhantastakcount != 0)
+                                      if (level.grammprati != 0) SizedBox(width: 1),
+                                      Container(margin: EdgeInsets.only(right: level.grammprati != 0 ? 0 : 10), child: Text(level.grammprati.toString())),
+                                      if (level.grammprati != 0)
                                         InkWell(
                                           borderRadius: BorderRadius.circular(50),
                                           onTap: () {
-                                            showInfoDialogBox(names: level.vyaktigeetkhantastakcountNames ?? "", title: Statics.getLabel("sanmelanReportTable2"));
+                                            showInfoDialogBox(names: level.grammpratinames ?? "", title: Statics.getLabel("sanmelanReportTable2"));
                                           },
                                           child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
                                         ),
@@ -993,15 +992,15 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                                   ))),
                         DataCell(Center(
                             child: Row(
-                          mainAxisAlignment: (level.skaraykramhisob24tasapurnacount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                          mainAxisAlignment: (level.specialpersontotalcount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
                           children: [
-                            if (level.skaraykramhisob24tasapurnacount != 0) SizedBox(width: 1),
-                            Container(margin: EdgeInsets.only(right: level.skaraykramhisob24tasapurnacount != 0 ? 0 : 10), child: Text(level.skaraykramhisob24tasapurnacount.toString())),
-                            if (level.skaraykramhisob24tasapurnacount != 0)
+                            if (level.specialpersontotalcount != 0) SizedBox(width: 1),
+                            Container(margin: EdgeInsets.only(right: level.specialpersontotalcount != 0 ? 0 : 10), child: Text(level.specialpersontotalcount.toString())),
+                            if (level.specialpersontotalcount != 0)
                               InkWell(
                                 borderRadius: BorderRadius.circular(50),
                                 onTap: () {
-                                  showInfoDialogBox(names: level.skaraykramhisob24tasapurnacountNames ?? "", title: Statics.getLabel("sanmelanReportTable3"));
+                                  showInfoDialogBox(names: level.specialpersontotalcountnames ?? "", title: Statics.getLabel("sanmelanReportTable3"));
                                 },
                                 child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
                               ),
@@ -1011,15 +1010,15 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                         //sanchalan
                         DataCell(Center(
                             child: Row(
-                          mainAxisAlignment: (level.shanchalancount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                          mainAxisAlignment: (level.totalmale != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
                           children: [
-                            if (level.shanchalancount != 0) SizedBox(width: 1),
-                            Container(margin: EdgeInsets.only(right: level.shanchalancount != 0 ? 0 : 10), child: Text(level.shanchalancount.toString())),
-                            if (level.shanchalancount != 0)
+                            if (level.totalmale != 0) SizedBox(width: 1),
+                            Container(margin: EdgeInsets.only(right: level.totalmale != 0 ? 0 : 10), child: Text(level.totalmale.toString())),
+                            if (level.totalmale != 0)
                               InkWell(
                                 borderRadius: BorderRadius.circular(50),
                                 onTap: () {
-                                  showInfoDialogBox(names: level.shanchalancountNames ?? "", title: Statics.getLabel("sanmelanReportTable4"));
+                                  showInfoDialogBox(names: level.totalmalenames ?? "", title: Statics.getLabel("sanmelanReportTable4"));
                                 },
                                 child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
                               ),
@@ -1027,15 +1026,15 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                         ))),
                         DataCell(Center(
                             child: Row(
-                          mainAxisAlignment: (level.shanchalanghosvandancount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                          mainAxisAlignment: (level.totalfemale != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
                           children: [
-                            if (level.shanchalanghosvandancount != 0) SizedBox(width: 1),
-                            Container(margin: EdgeInsets.only(right: level.shanchalanghosvandancount != 0 ? 0 : 10), child: Text(level.shanchalanghosvandancount.toString())),
-                            if (level.shanchalanghosvandancount != 0)
+                            if (level.totalfemale != 0) SizedBox(width: 1),
+                            Container(margin: EdgeInsets.only(right: level.totalfemale != 0 ? 0 : 10), child: Text(level.totalfemale.toString())),
+                            if (level.totalfemale != 0)
                               InkWell(
                                 borderRadius: BorderRadius.circular(50),
                                 onTap: () {
-                                  showInfoDialogBox(names: level.shanchalanghosvandancountNames ?? "", title: Statics.getLabel("sanmelanReportTable5"));
+                                  showInfoDialogBox(names: level.totalfemalenames ?? "", title: Statics.getLabel("sanmelanReportTable5"));
                                 },
                                 child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
                               ),
@@ -1043,15 +1042,15 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                         ))),
                         DataCell(Center(
                             child: Row(
-                          mainAxisAlignment: (level.shanchalansadandacount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                          mainAxisAlignment: (level.ekunfinalcount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
                           children: [
-                            if (level.shanchalansadandacount != 0) SizedBox(width: 1),
-                            Container(margin: EdgeInsets.only(right: level.shanchalansadandacount != 0 ? 0 : 10), child: Text(level.shanchalansadandacount.toString())),
-                            if (level.shanchalansadandacount != 0)
+                            if (level.ekunfinalcount != 0) SizedBox(width: 1),
+                            Container(margin: EdgeInsets.only(right: level.ekunfinalcount != 0 ? 0 : 10), child: Text(level.ekunfinalcount.toString())),
+                            if (level.ekunfinalcount != 0)
                               InkWell(
                                 borderRadius: BorderRadius.circular(50),
                                 onTap: () {
-                                  showInfoDialogBox(names: level.shanchalansadandacountNames ?? "", title: Statics.getLabel("sanmelanReportTable6"));
+                                  showInfoDialogBox(names: level.ekunfinalcountnames ?? "", title: Statics.getLabel("sanmelanReportTable6"));
                                 },
                                 child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
                               ),
@@ -1063,34 +1062,34 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                       DataRow(color: MaterialStatePropertyAll(Colors.yellow.shade100), cells: [
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.karyakramnirdharitvedhvarcount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.sanmelancount ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.vyaktigeetkhantastakcount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.grammprati ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.skaraykramhisob24tasapurnacount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.specialpersontotalcount ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
 
                         //sanchalan
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.shanchalancount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.totalmale ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.shanchalanghosvandancount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.totalfemale ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.shanchalansadandacount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.ekunfinalcount ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                       ])
@@ -1446,7 +1445,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                               _linkedVibhaagValue = _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
                               // type = "praant";
                             });
-                            // await populateDropdown(isClear: true);
+                            await populateDropdown();
                           },
                           child: Text(Statics.getLabel('clear'))),
                     ],

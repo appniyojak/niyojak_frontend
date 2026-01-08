@@ -1044,7 +1044,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                             rows: filteredAbhiyaanSwayamsevakDataList.asMap().entries.map((entry) {
                               int index = entry.key;
                               var data = entry.value;
-                              bool isSelected = ((data.isdefault == 1) || _selectedSwayamsevakIds.contains(data));
+                              bool isSelected = ((data.isactive == 1) || _selectedSwayamsevakIds.contains(data));
                               return DataRow(
                                   selected: isSelected,
                                   color: MaterialStateProperty.resolveWith<Color?>(
@@ -1054,7 +1054,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                                     },
                                   ),
                                   onSelectChanged: (bool? selected) {
-                                    if ((data.isdefault == 1)) {
+                                    if ((data.isactive == 1)) {
                                       return;
                                     }
                                     if (!isSelected) {
@@ -1170,7 +1170,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                       rows: abhiyaanKaryakartaDataList.asMap().entries.map((entry) {
                         int index = entry.key;
                         var data = entry.value;
-                        bool isSelected = (data.isdefault == 1) || _selectedKaryakartaIds.contains(data);
+                        bool isSelected = (data.isactive == 1) || _selectedKaryakartaIds.contains(data);
                         return DataRow(
                             selected: isSelected,
                             color: MaterialStateProperty.resolveWith<Color?>(
@@ -1180,7 +1180,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                               },
                             ),
                             onSelectChanged: (bool? selected) {
-                              if ((data.isdefault == 1)) {
+                              if ((data.isactive == 1)) {
                                 return;
                               }
                               if (!isSelected) {
@@ -2646,7 +2646,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                           // if (gruhAbhiyaanVruttaData!.abhiyaandata!.ishide) {
                           //   return;
                           // }
-                          if ((data.isdefault == 1)) {
+                          if ((data.isactive == 1)) {
                             return;
                           }
                           if (!isSelected) {

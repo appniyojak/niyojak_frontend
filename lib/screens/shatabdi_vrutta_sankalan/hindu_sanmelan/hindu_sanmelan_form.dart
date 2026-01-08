@@ -24,6 +24,7 @@ import '../../../validation_blocks/validator.dart';
 import '../vijayadashami/add_mukhya_atithi_form.dart';
 import '../vijayadashami/add_vishesh_vyakti.dart';
 import 'hindu_sanmelan_report.dart';
+import 'search_sajjan_anya_screen.dart';
 
 class HinduSanmelanForm extends StatefulWidget {
   static const String routeName = '/hindu_sanmelan-form-view';
@@ -91,7 +92,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
   List<String?> _selctedLevelNameList = [];
   String? _selectedGeoUnitId;
 
-  List<int?> selectedUpnagarList = [];
+  // List<int?> selectedUpnagarList = [];
 
   Vastisarsajjanshakti? selectedPerson;
   Vastisanyaprabhavi? selectedPrabhavi;
@@ -109,28 +110,72 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
   }
 
   _getForm() async {
+    ///
+    selectedPerson = null;
+    selectedPrabhavi = null;
+    selectedVastiCount = null;
+    presentMaleController.clear();
+    presentMatrushaktiController.clear();
+    txtSanmelanFormatController.clear();
+    selectedSajjanshaktiItemsIds = null;
+    selectedAnyaprabhaviItemsIds = null;
+    selectedBhougolikPratinidhitwaVastiIds = null;
+    _urlsList = [];
+    vaktaList = [];
+
+    ///
     // if (_linkedmandalValue != null && _linkedmandalValue!.isNotEmpty)
     data = await Statics.getHinduSanmelanFormData(context, userID: Statics.userDetails["userID"], targetGeoUnitID: _selectedGeoUnitId);
-    print("searchVijayaDashami data ${data?.vastisarsajjanshakti}");
-    selectedPrabhavi = null;
-    selectedPerson = null;
+
+    if (data != null) {
+      final List<Vastisarsajjanshakti?>? _list1 = data?.vastisarsajjanshakti;
+      final List<Vastisanyaprabhavi?>? _list2 = data?.vastisanyaprabhavi;
+      if (_list1 != null && _list1.isNotEmpty) selectedPerson = _list1.where((e) => e?.isMukhyadefault == 1).cast().firstOrNull;
+      if (_list2 != null && _list2.isNotEmpty) selectedPrabhavi = _list2.where((e) => e?.isMukhyadefault == 1).cast().firstOrNull;
+      selectedVastiCount = data?.selectedgramcount;
+      presentMaleController.text = (data?.malecount ?? 0).toString();
+      presentMatrushaktiController.text = (data?.femalecount ?? 0).toString();
+      txtSanmelanFormatController.text = data?.sanmelandesc ?? "";
+      selectedSajjanshaktiItemsIds = data?.vastisarsajjanshakti?.where((e) => e.isVisheshdefault == 1).map((e) => e.pkid).join(',');
+      selectedSajjanshaktiItems = data?.vastisarsajjanshakti?.where((e) => e.isVisheshdefault == 1).toList() ?? [];
+      selectedAnyaprabhaviItemsIds = data?.vastisanyaprabhavi?.where((e) => e.isVisheshdefault == 1).map((e) => e.pkId).join(',');
+      selectedAnyaprabhaviItems = data?.vastisanyaprabhavi?.where((e) => e.isVisheshdefault == 1).toList() ?? [];
+      selectedBhougolikPratinidhitwaVastiIds = data?.gramlist?.where((e) => e.isdefault == 1).map((e) => e.geoUnitID).join(',');
+      _urlsList = data?.urldata ?? [];
+      _selectedFileNames1 = data?.imgdata?.map((url) => url.value).toList() ?? [];
+      _selectedFileNames2 = data?.advimgdata?.map((url) => url.value).toList() ?? [];
+      vaktaList = data?.vaktaList ?? [];
+
+      print("searchVijayaDashami data ${data?.vastisarsajjanshakti}");
+    }
   }
 
   Future<void> submitForm({bool showLoader = true}) async {
     Map<String, dynamic> formData = {
-      "GeoUnitID": selectedUpnagarList.isEmpty ? selctedLevelId.toString() : selectedUpnagarList.join(","),
+      "geounitid": _selectedGeoUnitId,
       "AppUserID": int.parse(Statics.userDetails['userID']),
+      "sajjanmukhyaatitiid": selectedPerson?.pkid ?? 0,
+      "annyamukhyaatitiid": selectedPrabhavi?.pkId ?? 0,
+      "selectedgramcount": selectedVastiCount,
+      "malecount": presentMaleController.text.trim().isNotEmpty ? int.parse(presentMaleController.text) : 0,
+      "femalecount": presentMatrushaktiController.text.trim().isNotEmpty ? int.parse(presentMatrushaktiController.text) : 0,
+      "sanmelandesc": txtSanmelanFormatController.text.trim(),
+      "sajjanvisheshtiid": selectedSajjanshaktiItemsIds ?? "",
+      "annyavisheshtiid": selectedAnyaprabhaviItemsIds ?? "",
+      "gramids": selectedBhougolikPratinidhitwaVastiIds ?? "",
+      "urls": _urlsList,
+      "hindusanmelanvatta": vaktaList,
     };
 
     String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
     log("Form Data (JSON):\n$formattedJson");
-    await Statics.saveVijayaDashamiUtsavData(context, formData, showLoader);
+    await Statics.saveHinduSanmelanFormData(context, formData, showLoader);
     // getFormData();
   }
 
   Future<String?> submitImageDataFun({bool showLoader = false, required String type}) async {
     Map<String, dynamic> formData = {
-      "GeoUnitID": selectedUpnagarList.isEmpty ? selctedLevelId.toString() : selectedUpnagarList.join(","),
+      "GeoUnitID": _selectedGeoUnitId,
       "filebase": selectedFilePath,
       "type": type,
     };
@@ -144,7 +189,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
 
   Future<bool> deleteImageDataFun({bool showLoader = true, required String imageName}) async {
     Map<String, dynamic> formData = {
-      "GeoUnitID": selectedUpnagarList.isEmpty ? selctedLevelId.toString() : selectedUpnagarList.join(","),
+      "GeoUnitID": _selectedGeoUnitId,
       "filepath": imageName,
     };
 
@@ -155,105 +200,65 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
     return _result;
   }
 
-  // Future<void> clearForm() async {
-  //   setState(() {
-  //     // Reset int flags (as per your logic: 2 = default)
-  //     programNirdharitVed = 2;
-  //     vaiyaktikGitKantashtha = 2;
-  //     programHishobh24Hour = 2;
-  //     sanchalanZaleKa = 2;
-  //     sanchalanSadandaZalKa = 2;
-  //     sanchalanGhoshVadanZalKa = 2;
-  //
-  //     // Reset text controllers
-  //     presentMatrushaktiController.clear();
-  //     presentMaleController.clear();
-  //     patShishuBaalCtrl.clear();
-  //     ganShishuBaalCtrl.clear();
-  //     anyaShishuBaalCtrl.clear();
-  //     patMahavidyaCtrl.clear();
-  //     ganMahavidyaCtrl.clear();
-  //     anyaMahavidyaCtrl.clear();
-  //     patTarunVyavCtrl.clear();
-  //     ganTarunVyavCtrl.clear();
-  //     anyaTarunVyavCtrl.clear();
-  //     patProudhVyavCtrl.clear();
-  //     ganProudhVyavCtrl.clear();
-  //     anyaProudhVyavCtrl.clear();
-  //
-  //     // Reset expand/collapse state
-  //     _isExpanded = false;
-  //
-  //     // Reset dropdowns / linked values
-  //     _linkedMahaanagarValue = null;
-  //     _linkedVibhaagValue = null;
-  //     _linkedbhaagValue = null;
-  //     _linkedshaharValue = null;
-  //     _linkednagarValue = null;
-  //     _linkedmandalValue = null;
-  //     _linkedgraamValue = null;
-  //     _linkedvastiValue = null;
-  //     selectedUpnagarList = [];
-  //
-  //     // Reset data lists
-  //     _linkedbhaag = null;
-  //     _linkedshahar = null;
-  //     _linkednagar = null;
-  //     _linkedmandal = null;
-  //     _linkedgraam = null;
-  //     _linkedvasti = null;
-  //
-  //     // Reset level tracking
-  //     selctedLevel = '';
-  //     selctedLevelName = '';
-  //     selctedLevelId = null;
-  //     selctedLevelIdForMandalDropdown = null;
-  //     selctedLevelIdForVastiDropdown = null;
-  //     utsavKontyaStaravar = "6";
-  //
-  //     // Reset selections
-  //     selectedMukhyaAtithi = null;
-  //     selectedType = null;
-  //     selectedSajjanshaktiItems = [];
-  //     selectedAnyaprabhaviItems = [];
-  //     selectedBhougolikPratinidhitwaVastiIds = null;
-  //     selectedShakhaaPratinidhitwaVastiIds = null;
-  //     selectedMilanPratinidhitwaVastiIds = null;
-  //     selectedSanghaMandaliPratinidhitwaVastiIds = null;
-  //
-  //     // Reset counts for Vasti
-  //     selectedVastiCount = 0;
-  //     totalVastiCount = 0;
-  //
-  //     // ✅ Reset Sangha Mandali
-  //     countsSanghaMandali = null;
-  //     checkboxSanghaMandaliSelectedItems = [];
-  //     totalSanghaMandaliCount = 0;
-  //     selectedSanghaMandaliCount = 0;
-  //     averageSanghaMandaliCount = "0";
-  //     selectedSanghaMandaliPratinidhitwaVastiIds = null;
-  //
-  //     // ✅ Reset Milan
-  //     countsMilan = null;
-  //     checkboxMilanSelectedItems = [];
-  //     totalMilanCount = 0;
-  //     selectedMilanCount = 0;
-  //     averageMilanCount = "0";
-  //     selectedMilanPratinidhitwaVastiIds = null;
-  //
-  //     // ✅ Reset Shakha
-  //     checkboxShakhaSelectedItems = [];
-  //     totalShakhaCount = 0;
-  //     selectedShakhaCount = 0;
-  //     averageShakhaCount = "0";
-  //     selectedShakhaaPratinidhitwaVastiIds = null;
-  //
-  //     selectedPrabhavi = null;
-  //     selectedPerson = null;
-  //     // Re-populate base dropdowns
-  //     populatelinkedVibhaagDropdown('');
-  //   });
-  // }
+  Future<void> clearForm() async {
+    setState(() {
+      // Reset expand/collapse state
+      _isExpanded = false;
+
+      // // Reset dropdowns / linked values
+      // _linkedMahaanagarValue = null;
+      // _linkedVibhaagValue = null;
+      // _linkedbhaagValue = null;
+      // _linkedshaharValue = null;
+      // _linkednagarValue = null;
+      // _linkedmandalValue = null;
+      // _linkedgraamValue = null;
+      // _linkedvastiValue = null;
+      // selectedUpnagarList = [];
+      //
+      // // Reset data lists
+      // _linkedbhaag = null;
+      // _linkedshahar = null;
+      // _linkednagar = null;
+      // _linkedmandal = null;
+      // _linkedgraam = null;
+      // _linkedvasti = null;
+      //
+      // // Reset level tracking
+      // selctedLevel = '';
+      // selctedLevelName = '';
+      // selctedLevelId = null;
+      // selctedLevelIdForMandalDropdown = null;
+      // selctedLevelIdForVastiDropdown = null;
+
+      selectedPerson = null;
+      selectedPrabhavi = null;
+      selectedVastiCount = null;
+      presentMaleController.clear();
+      presentMatrushaktiController.clear();
+      txtSanmelanFormatController.clear();
+      selectedSajjanshaktiItemsIds = null;
+      selectedAnyaprabhaviItemsIds = null;
+      selectedBhougolikPratinidhitwaVastiIds = null;
+      _urlsList = [];
+      vaktaList = [];
+
+      // Reset selections
+      selectedType = null;
+      selectedSajjanshaktiItems = [];
+      selectedAnyaprabhaviItems = [];
+      selectedBhougolikPratinidhitwaVastiIds = null;
+
+      // Reset counts for Vasti
+      selectedVastiCount = 0;
+      totalVastiCount = 0;
+
+      selectedPrabhavi = null;
+      selectedPerson = null;
+      // Re-populate base dropdowns
+      // populatelinkedVibhaagDropdown('');
+    });
+  }
 
   //////////////////////////////////////////////////////////////////////////////////////
 
@@ -267,7 +272,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
 
   Future<List<GeoUnitMasterBAL>> populatelinkedMahaanagarDropdown() async {
     _linkedVibhaagValue = _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-    List<GeoUnitMasterBAL> data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MahaanagarLevelID'].toString(), '', '', '', isAbhiyaan: true);
+    List<GeoUnitMasterBAL> data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MahaanagarLevelID'].toString(), '', '', '', isAbhiyaan: false);
     setState(() {
       _linkedMahaanagar = data;
     });
@@ -278,7 +283,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
     _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedbhaagName = _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
     print("populatelinkedVibhaagDropdown $mahaanagarIDStr");
-    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '', isAbhiyaan: true);
+    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '', isAbhiyaan: false);
     setState(() {
       _linkedVibhaag = data;
     });
@@ -289,7 +294,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
     _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedbhaagName = _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
     _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = [];
-    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '', isAbhiyaan: true);
+    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '', isAbhiyaan: false);
     setState(() {
       _linkedbhaag = data;
     });
@@ -299,7 +304,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
   Future<List<GeoUnitMasterBAL>> populatelinkedShaharDropdown(String bhaagIDStr) async {
     _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
-    var shDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', '', isAbhiyaan: true);
+    var shDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', '', isAbhiyaan: false);
     setState(() {
       _linkedshahar = (shDD.length > 0 ? shDD : null);
     });
@@ -314,13 +319,13 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
     print("print LevelID > ${Statics.userDetails["LevelID"]}");
     print("shaharIDStr shaharIDStr $shaharIDStr");
     if (shaharIDStr != null) {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), shaharIDStr!, 'Shahar', '', isAbhiyaan: true);
+      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), shaharIDStr!, 'Shahar', '', isAbhiyaan: false);
       setState(() {
         _linkednagar = (ngDD.length > 0 ? ngDD : null);
       });
       return ngDD;
     } else {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '', isAbhiyaan: true);
+      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '', isAbhiyaan: false);
       setState(() {
         _linkednagar = (ngDD.length > 0 ? ngDD : null);
       });
@@ -332,7 +337,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
     _linkedmandalValue = _linkedgraamValue = null;
     _linkedmandalName = _linkedgraamName = null;
     _linkedmandal = _linkedgraam = null;
-    var mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, 'Nagar', '', isAbhiyaan: true);
+    var mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, 'Nagar', '', isAbhiyaan: false);
     setState(() {
       _linkedmandal = (mnDD.length > 0 ? mnDD : null);
     });
@@ -342,7 +347,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
   Future<List<GeoUnitMasterBAL>> populatelinkedGraamDropdown(String? mandalIDStr) async {
     _linkedgraamValue = null;
     _linkedgraamName = null;
-    var gmDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['GraamLevelID'].toString(), mandalIDStr!, 'Mandal', '', isAbhiyaan: true);
+    var gmDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['GraamLevelID'].toString(), mandalIDStr!, 'Mandal', '', isAbhiyaan: false);
     setState(() {
       _linkedgraam = (gmDD.length > 0 ? gmDD : null);
     });
@@ -352,7 +357,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
   Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(String? nagarIDStr) async {
     _linkedvastiValue = null;
     _linkedvastiName = null;
-    var vsDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, 'Nagar', '', isAbhiyaan: true);
+    var vsDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, 'Nagar', '', isAbhiyaan: false);
     setState(() {
       _linkedvasti = (vsDD.length > 0 ? vsDD : null);
     });
@@ -363,7 +368,8 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
 
   String? selctedLevel = 'praant';
   String? selctedLevelName = '';
-  String? selctedLevelId = '';
+
+  // String? selctedLevelId = '';
   String? selctedLevelIdForMandalDropdown = '';
   String? selctedLevelIdForVastiDropdown = '';
   String? selctedSanchalanLevelId = '';
@@ -695,35 +701,36 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                             Fluttertoast.showToast(msg: "${Statics.getLabel('NagarSelectionImportant')}");
                             return;
                           }
-                          final list = data?.vastisarsajjanshakti ?? [];
-                          final preselected = list.any((e) => e.pkid == selectedMukhyaAtithi) ? list.firstWhere((e) => e.pkid == selectedMukhyaAtithi) : null;
+                          // final list = data?.vastisarsajjanshakti ?? [];
+                          // final list2 = data?.vastisanyaprabhavi ?? [];
+                          // final preselected = list.any((e) => e.isMukhyadefault == 1) ? list.firstWhere((e) => e.isMukhyadefault == 1) : list2.firstWhere((e) => e.isMukhyadefault == 1,orElse: () => list2.first);
 
                           showMukhyaAtithiSelectionPopup(
                             context,
-                            vastisarsajjanshaktiList: data?.vastisarsajjanshakti ?? [],
-                            vastisanyaprabhaviList: data?.vastisanyaprabhavi ?? [],
-                            preselectedItem: preselected,
-                            preselectedType: selectedType,
-                            onSubmit: (id, type, selectedItem) {
-                              setState(() {
-                                selectedType = type;
-                                if (type == "sarsajjanshakti") {
-                                  selectedPerson = selectedItem as Vastisarsajjanshakti;
-                                  selectedPrabhavi = null;
-                                  selectedMukhyaAtithi = selectedPerson?.pkid;
-                                } else {
-                                  selectedPrabhavi = selectedItem as Vastisanyaprabhavi;
-                                  selectedPerson = null;
-                                  selectedMukhyaAtithi = selectedPrabhavi?.pkId;
-                                }
-                              });
-                            },
-                            onAdd: () {
-                              Navigator.of(context).pushReplacementNamed(
-                                AddMukhyaAtithi.routeName,
-                                arguments: {'linkedNagar': _linkednagar, 'selectedLevelId': _linkednagarValue},
-                              ).then((value) => _getForm());
-                            },
+                            // vastisarsajjanshaktiList: data?.vastisarsajjanshakti ?? [],
+                            // vastisanyaprabhaviList: data?.vastisanyaprabhavi ?? [],
+                            // preselectedItem: preselected,
+                            // preselectedType: selectedType,
+                            // onSubmit: (id, type, selectedItem) {
+                            //   setState(() {
+                            //     selectedType = type;
+                            //     if (type == "sarsajjanshakti") {
+                            //       selectedPerson = selectedItem as Vastisarsajjanshakti;
+                            //       selectedPrabhavi = null;
+                            //       selectedMukhyaAtithi = selectedPerson?.pkid;
+                            //     } else {
+                            //       selectedPrabhavi = selectedItem as Vastisanyaprabhavi;
+                            //       selectedPerson = null;
+                            //       selectedMukhyaAtithi = selectedPrabhavi?.pkId;
+                            //     }
+                            //   });
+                            // },
+                            // onAdd: () {
+                            //   Navigator.of(context).pushReplacementNamed(
+                            //     AddMukhyaAtithi.routeName,
+                            //     arguments: {'linkedNagar': _linkednagar, 'selectedLevelId': _linkednagarValue},
+                            //   ).then((value) => _getForm());
+                            // },
                           );
                         },
                         child: Container(
@@ -813,26 +820,16 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                             Fluttertoast.showToast(msg: "${Statics.getLabel('NagarSelectionImportant')}");
                             return;
                           }
+
+                          final _tempFiles1 = (data?.vastisarsajjanshakti ?? []).where((e) => e.pkid != selectedPerson?.pkid || e.isMukhyadefault == 0).toList();
+                          final _tempFiles2 = (data?.vastisanyaprabhavi ?? []).where((e) => e.pkId != selectedPrabhavi?.pkId || e.isMukhyadefault == 0).toList();
+
+                          // _tempFiles1.where((e) => e.pkid != selectedPerson?.pkid || e.isMukhyadefault == 0).toList();
+                          // _tempFiles2.where((e) => e.pkId != selectedPrabhavi?.pkId || e.isMukhyadefault == 0).toList();
                           await showVisheshAtithiSelectionPopup(
                             context,
-                            onAdd: () async {
-                              Navigator.of(context).pushReplacementNamed(
-                                AddVishisthaAtithi.routeName,
-                                arguments: {'geoUnitId': _selectedGeoUnitId},
-                              ).then(
-                                (value) async {
-                                  // data = await Statics.getSajjanAndAnyaGuestData(
-                                  //     context,
-                                  //     Statics.userDetails["userID"],
-                                  //     _linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? _linkedvastiValue! : _linkedgraamValue!,
-                                  //     _linkedvastiValue != null && _linkedvastiValue!.isNotEmpty ? "2" : "3");
-                                  setState(() {});
-                                  // if(Statics.userDetails[])
-                                  // await _getSwList();
-                                  // setState(() {});
-                                },
-                              );
-                            },
+                            sarsajjanshaktiList: _tempFiles1,
+                            sanyaprabhaviList: _tempFiles2,
                           );
                         },
                         child: Container(
@@ -1669,7 +1666,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                   //   Fluttertoast.showToast(msg: "${Statics.getLabel('impInfoRequired')}");
                   //   return;
                   // }
-                  // submitForm();
+                  submitForm();
                 },
                 child: Text(
                   Statics.getLabel('Submit'),
@@ -1731,14 +1728,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                 "${Statics.getLabel('sanmelanVaktaTask')}",
               )),
             ],
-            rows: vaktaList
-                .where(
-                  (e) => e.isdefault == 0,
-                )
-                .toList()
-                .asMap()
-                .entries
-                .map((entry) {
+            rows: vaktaList.where((e) => e.isactive == 1).toList().asMap().entries.map((entry) {
               int index = entry.key;
               var data = entry.value;
               bool isSelected = selectedVaktaIndex == index;
@@ -1792,8 +1782,8 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                   },
                   cells: [
                     // if (!isAbhiyaanButPramukh) DataCell(Icon(isSelected ? Icons.check_box_rounded : Icons.check_box_outline_blank_rounded, color: Colors.yellow.shade900, size: 21)),
-                    DataCell(Container(constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.4), child: Text(data.fullName ?? ''))),
-                    DataCell(Text(data.mobileno ?? '')),
+                    DataCell(Container(constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.4), child: Text(data.name ?? ''))),
+                    DataCell(Text(data.desgination ?? '')),
                     // DataCell(Text(Statics.getLabel(data.daayitva.toString(), returnKey: true))),
                   ]);
             }).toList(),
@@ -1833,9 +1823,9 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                             children: [
                               Divider(thickness: 1, color: Colors.deepPurple.shade100),
                               SizedBox(height: 4),
-                              _buildInfoRow("${Statics.getLabel('Name')}", selectedData.fullName),
+                              _buildInfoRow("${Statics.getLabel('Name')}", selectedData.name),
                               SizedBox(),
-                              _buildInfoRow("${Statics.getLabel('sanmelanVaktaTask')}", selectedData.mobileno),
+                              _buildInfoRow("${Statics.getLabel('sanmelanVaktaTask')}", selectedData.desgination),
                             ],
                           ),
                         ),
@@ -1864,8 +1854,8 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
             InkWell(
               onTap: () {
                 if (selectedVaktaIndex != null) {
-                  txtVaktaNameController.text = vaktaList[selectedVaktaIndex!].fullName.toString();
-                  txtVaktaTaskController.text = vaktaList[selectedVaktaIndex!].mobileno.toString();
+                  txtVaktaNameController.text = vaktaList[selectedVaktaIndex!].name ?? "--";
+                  txtVaktaTaskController.text = vaktaList[selectedVaktaIndex!].desgination ?? "--";
                   showAddVaktaDialogBox(fromEditing: true);
                 }
               },
@@ -1936,7 +1926,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                   );
                   if (shouldDelete == true) {
                     setState(() {
-                      vaktaList[selectedVaktaIndex!].isdefault = 0;
+                      vaktaList[selectedVaktaIndex!].isactive = 0;
                       selectedVaktaIndex = null;
                     });
                   }
@@ -1984,8 +1974,10 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
       Fluttertoast.showToast(msg: "${Statics.getLabel('NagarSelectionImportant')}");
       return;
     }
-    txtVaktaNameController.clear();
-    txtVaktaTaskController.clear();
+    if (!fromEditing) {
+      txtVaktaNameController.clear();
+      txtVaktaTaskController.clear();
+    }
     return showDialog(
       context: context,
       builder: (ct) {
@@ -2037,7 +2029,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                         ),
                         onPressed: () async {
-                          vaktaList.add(AbhiyaanPeopleModel(fullName: txtVaktaNameController.text.trim(), mobileno: txtVaktaTaskController.text.trim()));
+                          vaktaList.add(AbhiyaanPeopleModel(pkid: 0, name: txtVaktaNameController.text.trim(), desgination: txtVaktaTaskController.text.trim(), isactive: 1));
                           txtVaktaNameController.clear();
                           txtVaktaTaskController.clear();
                           // Statics.showToast(Statics.getLabel("workInProgress"));
@@ -2340,7 +2332,8 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                               _linkedVibhaagValue = _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
                               _selctedLevel = "praant";
                             });
-                            // await populateDropdown(isClear: true);
+                            clearForm();
+                            await populateDropdown();
                           },
                           child: Text(Statics.getLabel('clear'))),
                     ],
@@ -2471,7 +2464,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                                                 });
                                                 setState(() {});
                                                 print(img.toString() == _currentImg);
-                                                await MyAppGlobals.downloadFile('${Statics.baseUrl}/Files/vijayadhasmifiles/$img', img.toString());
+                                                await MyAppGlobals.downloadFile('${Statics.baseUrl}/Files/hindusanmelanfiles/$img', img.toString());
                                                 set(() {
                                                   loadingNotifier3.value = false;
                                                 });
@@ -2501,7 +2494,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                                         ),
                                         SizedBox(height: 6),
                                         CachedNetworkImage(
-                                          imageUrl: '${Statics.baseUrl}/Files/vijayadhasmifiles/$img',
+                                          imageUrl: '${Statics.baseUrl}/Files/hindusanmelanfiles/$img',
                                           errorWidget: (context, error, stackTrace) =>
                                               SizedBox(width: MediaQuery.sizeOf(context).width, height: 120, child: Center(child: Text(Statics.getLabel("errorOccurred")))),
                                           progressIndicatorBuilder: (context, child, loadingProgress) =>
@@ -2628,36 +2621,40 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                 XFile? result;
                 final isCamera = await showDialog(
                   context: context,
-                  builder: (ctx) => AlertDialog(
-                    title: Text(Statics.getLabel('chooseAnOption')),
-                    content: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        IconButton.filled(
-                          onPressed: () async {
-                            Navigator.of(ctx).pop(true);
+                  barrierDismissible: false,
+                  builder: (ctx) => PopScope(
+                    canPop: false,
+                    child: AlertDialog(
+                      title: Text(Statics.getLabel('chooseAnOption')),
+                      content: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          IconButton.filled(
+                            onPressed: () async {
+                              Navigator.of(ctx).pop(true);
+                            },
+                            icon: Icon(Icons.camera_alt),
+                          ),
+                          IconButton.filled(
+                            onPressed: () async {
+                              Navigator.of(ctx).pop(false);
+                            },
+                            icon: Icon(Icons.photo_library),
+                          ),
+                        ],
+                      ),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text(Statics.getLabel('clear')),
+                          onPressed: () {
+                            Navigator.of(ctx).pop();
+                            setState(() {
+                              loadingNotifier?.value = false;
+                            });
                           },
-                          icon: Icon(Icons.camera_alt),
-                        ),
-                        IconButton.filled(
-                          onPressed: () async {
-                            Navigator.of(ctx).pop(false);
-                          },
-                          icon: Icon(Icons.photo_library),
-                        ),
+                        )
                       ],
                     ),
-                    actions: <Widget>[
-                      TextButton(
-                        child: Text(Statics.getLabel('clear')),
-                        onPressed: () {
-                          Navigator.of(ctx).pop();
-                          setState(() {
-                            loadingNotifier?.value = false;
-                          });
-                        },
-                      )
-                    ],
                   ),
                 );
                 setState(() {});
@@ -2859,7 +2856,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                                                 set(() {
                                                   loadingNotifier3.value = true;
                                                 });
-                                                await MyAppGlobals.downloadFile('${Statics.baseUrl}/Files/vijayadhasmifiles/$img', img.toString());
+                                                await MyAppGlobals.downloadFile('${Statics.baseUrl}/Files/hindusanmelanfiles/$img', img.toString());
                                                 set(() {
                                                   loadingNotifier3.value = false;
                                                 });
@@ -2887,7 +2884,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                                         ),
                                         SizedBox(height: 6),
                                         CachedNetworkImage(
-                                          imageUrl: '${Statics.baseUrl}/Files/vijayadhasmifiles/$img',
+                                          imageUrl: '${Statics.baseUrl}/Files/hindusanmelanfiles/$img',
                                           errorWidget: (context, error, stackTrace) =>
                                               SizedBox(width: MediaQuery.sizeOf(context).width, height: 120, child: Center(child: Text(Statics.getLabel("errorOccurred")))),
                                           progressIndicatorBuilder: (context, child, loadingProgress) =>
@@ -3014,36 +3011,40 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                 XFile? result;
                 final isCamera = await showDialog(
                   context: context,
-                  builder: (ctx) => AlertDialog(
-                    title: Text(Statics.getLabel('chooseAnOption')),
-                    content: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        IconButton.filled(
-                          onPressed: () async {
-                            Navigator.of(ctx).pop(true);
+                  barrierDismissible: false,
+                  builder: (ctx) => PopScope(
+                    canPop: false,
+                    child: AlertDialog(
+                      title: Text(Statics.getLabel('chooseAnOption')),
+                      content: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          IconButton.filled(
+                            onPressed: () async {
+                              Navigator.of(ctx).pop(true);
+                            },
+                            icon: Icon(Icons.camera_alt),
+                          ),
+                          IconButton.filled(
+                            onPressed: () async {
+                              Navigator.of(ctx).pop(false);
+                            },
+                            icon: Icon(Icons.photo_library),
+                          ),
+                        ],
+                      ),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text(Statics.getLabel('clear')),
+                          onPressed: () {
+                            Navigator.of(ctx).pop();
+                            setState(() {
+                              loadingNotifier?.value = false;
+                            });
                           },
-                          icon: Icon(Icons.camera_alt),
-                        ),
-                        IconButton.filled(
-                          onPressed: () async {
-                            Navigator.of(ctx).pop(false);
-                          },
-                          icon: Icon(Icons.photo_library),
-                        ),
+                        )
                       ],
                     ),
-                    actions: <Widget>[
-                      TextButton(
-                        child: Text(Statics.getLabel('clear')),
-                        onPressed: () {
-                          Navigator.of(ctx).pop();
-                          setState(() {
-                            loadingNotifier?.value = false;
-                          });
-                        },
-                      )
-                    ],
                   ),
                 );
                 setState(() {});
@@ -3075,7 +3076,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                       String base64String = base64Encode(compressedBytes);
                       String base64File = "data:image/jpg;base64,$base64String";
                       selectedFilePath = base64File;
-                      final _result = await submitImageDataFun(type: "adv", showLoader: true);
+                      final _result = await submitImageDataFun(type: "advimg", showLoader: true);
                       _selectedFileNames2.add(_result ?? fileName);
                       setState(() {});
                     }
@@ -3272,7 +3273,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                       Fluttertoast.showToast(msg: "${Statics.getLabel('urlValidation')}");
                       return;
                     }
-                    _urlsList.add(TypeValueData(value: txtUrlsController.text.trim(), description: txtUrlDescController.text.trim()));
+                    _urlsList.add(TypeValueData(type: "url", value: txtUrlsController.text.trim(), description: txtUrlDescController.text.trim()));
                     txtUrlsController.clear();
                     txtUrlDescController.clear();
                   } else {
@@ -3449,20 +3450,14 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
 // ================================ END  Swayamsewak POPUP ==================================================================
 
   String? selectedType;
-  int? selectedMukhyaAtithi;
 
-  Future<void> showMukhyaAtithiSelectionPopup(
-    BuildContext context, {
-    required List<Vastisarsajjanshakti> vastisarsajjanshaktiList,
-    required List<Vastisanyaprabhavi> vastisanyaprabhaviList,
-    required void Function(String id, String type, dynamic selectedItem) onSubmit,
-    required VoidCallback onAdd,
-    dynamic preselectedItem,
-    String? preselectedType,
-  }) async {
-    dynamic selectedItem = preselectedItem ?? (vastisarsajjanshaktiList.isNotEmpty ? vastisarsajjanshaktiList.firstWhere((e) => e.pkid == selectedMukhyaAtithi) : null);
-    String? selectedType = preselectedType;
-    _linkedNagarValuePopup = "";
+  // int? selectedMukhyaAtithi;
+
+  Future<void> showMukhyaAtithiSelectionPopup(BuildContext context, {dynamic preselectedItem}) async {
+    // print(vastisarsajjanshaktiList.length);
+    dynamic selectedItem = selectedPerson ?? selectedPrabhavi;
+    // String? selectedType = preselectedType;
+    // _linkedNagarValuePopup = "";
     log("showMukhyaAtithiSelectionPopup Opened >>>>>>>>>>>>>>>>>>>>> ");
 
     await showDialog(
@@ -3528,9 +3523,50 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                   //   },
                   // ),
                   // SizedBox(height: 6),
-                  Align(
-                      alignment: Alignment.centerRight,
-                      child: OutlinedButton(
+                  Row(
+                    spacing: 12,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          backgroundColor: Colors.green,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        ),
+                        onPressed: () async {
+                          if (selectedItem != null || selectedPerson != null || selectedPrabhavi != null) {
+                            Statics.showToast("test");
+                            return;
+                          }
+                          await submitForm();
+                          Navigator.of(context).pushReplacementNamed(
+                            SearchSajjanAnyaScreen.routeName,
+                            arguments: {'geoUnitId': _selectedGeoUnitId},
+                          ).then(
+                            (value) async {
+                              await _getForm();
+                              setState(() {});
+                            },
+                          );
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.search,
+                              color: Colors.white,
+                            ),
+                            Text(
+                              Statics.getLabel('Search'),
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                      OutlinedButton(
                         style: OutlinedButton.styleFrom(
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
@@ -3539,12 +3575,20 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                           ),
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                         ),
-                        onPressed: onAdd,
+                        onPressed: () async {
+                          await submitForm();
+                          Navigator.of(context).pushReplacementNamed(
+                            AddMukhyaAtithi.routeName,
+                            arguments: {'linkedNagar': _linkednagar, 'selectedLevelId': _linkednagarValue},
+                          ).then((value) => _getForm());
+                        },
                         child: Text(
                           Statics.getLabel('fillNewRecord'),
                           style: const TextStyle(color: Colors.purpleAccent),
                         ),
-                      )),
+                      ),
+                    ],
+                  ),
                 ],
               ),
               contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -3607,7 +3651,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                                   ),
                                 ],
                               ),
-                              ...vastisarsajjanshaktiList.map((item) {
+                              ...(data?.vastisarsajjanshakti ?? []).map((item) {
                                 return TableRow(
                                   children: [
                                     Center(
@@ -3619,9 +3663,13 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                                       onChanged: (val) {
                                         print("printing the val >>>>>>>> ${jsonEncode(val)}");
                                         set(() {
-                                          selectedItem = val;
+                                          // item.isMukhyadefault = 1;
+                                          selectedItem = item;
                                           selectedType = "sarsajjanshakti";
+                                          selectedPrabhavi = null;
+                                          // selectedPerson = item;
                                         });
+                                        setState(() {});
                                       },
                                     )),
                                     Padding(
@@ -3692,7 +3740,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                                   ),
                                 ],
                               ),
-                              ...vastisanyaprabhaviList.map((item) {
+                              ...(data?.vastisanyaprabhavi ?? []).map((item) {
                                 return TableRow(
                                   children: [
                                     Center(
@@ -3703,9 +3751,13 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                       onChanged: (val) {
                                         set(() {
-                                          selectedItem = val;
+                                          // item.isMukhyadefault = 1;
+                                          selectedItem = item;
                                           selectedType = "anyaprabhavi";
+                                          selectedPerson = null;
+                                          // selectedPrabhavi = item;
                                         });
+                                        setState(() {});
                                       },
                                     )),
                                     Padding(
@@ -3742,6 +3794,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
               actions: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: 12,
                   children: [
                     Expanded(
                       child: ElevatedButton(
@@ -3754,15 +3807,20 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                         ),
                         onPressed: () {
                           if (selectedItem != null && selectedType != null) {
-                            String id = "";
-                            if (selectedType == "sarsajjanshakti") {
-                              id = (selectedItem as Vastisarsajjanshakti).pkid.toString();
-                            } else {
-                              id = (selectedItem as Vastisanyaprabhavi).pkId.toString();
-                            }
-                            onSubmit(id, selectedType!, selectedItem);
-                            Navigator.pop(context);
+                            set(() {
+                              if (selectedType == "sarsajjanshakti") {
+                                selectedPerson = selectedItem as Vastisarsajjanshakti;
+                                selectedPrabhavi = null;
+                                // selectedMukhyaAtithi = selectedPerson?.pkid;
+                              } else {
+                                selectedPrabhavi = selectedItem as Vastisanyaprabhavi;
+                                selectedPerson = null;
+                                // selectedMukhyaAtithi = selectedPrabhavi?.pkId;
+                              }
+                            });
+                            setState(() {});
                           }
+                          Navigator.pop(context);
                         },
                         child: Text(
                           Statics.getLabel('Submit'),
@@ -3773,20 +3831,38 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                     // SizedBox(
                     //   width: 15,
                     // ),
-                    // OutlinedButton(
-                    //   style: OutlinedButton.styleFrom(
-                    //     side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
-                    //     shape: RoundedRectangleBorder(
-                    //       borderRadius: BorderRadius.circular(12),
-                    //     ),
-                    //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    //   ),
-                    //   onPressed: onAdd,
-                    //   child: Text(
-                    //     Statics.getLabel('fillNewRecord'),
-                    //     style: const TextStyle(color: Colors.purpleAccent),
-                    //   ),
-                    // ),
+                    if (selectedItem != null || selectedPerson != null || selectedPrabhavi != null)
+                      Expanded(
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                          ),
+                          onPressed: () {
+                            set(() {
+                              selectedItem = null;
+                              selectedPerson = null;
+                              selectedPrabhavi = null;
+
+                              for (final item in data!.vastisarsajjanshakti!) {
+                                item.isMukhyadefault = 0;
+                              }
+
+                              for (final item in data!.vastisanyaprabhavi!) {
+                                item.isMukhyadefault = 0;
+                              }
+                            });
+                            setState(() {});
+                          },
+                          child: Text(
+                            Statics.getLabel('clear'),
+                            style: const TextStyle(color: Colors.purpleAccent),
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               ],
@@ -3932,10 +4008,10 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
   String? selectedSajjanshaktiItemsIds;
   String? selectedAnyaprabhaviItemsIds;
 
-  Future<void> showVisheshAtithiSelectionPopup(BuildContext context, {required VoidCallback onAdd}) async {
+  Future<void> showVisheshAtithiSelectionPopup(BuildContext context, {sarsajjanshaktiList, sanyaprabhaviList}) async {
     print("showVisheshAtithiSelectionPopup onTap >>>>>>>>>>>>>>> ");
-    final _sarsajjanshaktiList = data?.vastisarsajjanshakti ?? [];
-    final _sanyaprabhaviList = data?.vastisanyaprabhavi ?? [];
+    // final _sarsajjanshaktiList = data?.vastisarsajjanshakti ?? [];
+    // final _sanyaprabhaviList = data?.vastisanyaprabhavi ?? [];
 
     await showDialog(
       context: context,
@@ -3993,9 +4069,46 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             // SizedBox(height: 24),
-                            Align(
-                                alignment: Alignment.centerRight,
-                                child: OutlinedButton(
+                            Row(
+                              spacing: 12,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    backgroundColor: Colors.green,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                                  ),
+                                  onPressed: () async {
+                                    await submitForm();
+                                    Navigator.of(context).pushReplacementNamed(
+                                      SearchSajjanAnyaScreen.routeName,
+                                      arguments: {'geoUnitId': _selectedGeoUnitId},
+                                    ).then(
+                                      (value) async {
+                                        await _getForm();
+                                        setState(() {});
+                                      },
+                                    );
+                                  },
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.search,
+                                        color: Colors.white,
+                                      ),
+                                      Text(
+                                        Statics.getLabel('Search'),
+                                        style: const TextStyle(color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                OutlinedButton(
                                   style: OutlinedButton.styleFrom(
                                     side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
                                     shape: RoundedRectangleBorder(
@@ -4003,12 +4116,25 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                                     ),
                                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                                   ),
-                                  onPressed: onAdd,
+                                  onPressed: () async {
+                                    await _getForm();
+                                    Navigator.of(context).pushReplacementNamed(
+                                      AddVishisthaAtithi.routeName,
+                                      arguments: {'geoUnitId': _selectedGeoUnitId},
+                                    ).then(
+                                      (value) async {
+                                        await _getForm();
+                                        setState(() {});
+                                      },
+                                    );
+                                  },
                                   child: Text(
                                     Statics.getLabel('fillNewRecord'),
                                     style: const TextStyle(color: Colors.purpleAccent),
                                   ),
-                                )),
+                                ),
+                              ],
+                            ),
                             SizedBox(height: 6),
                             Flexible(
                               child: SingleChildScrollView(
@@ -4055,7 +4181,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                                               ),
                                             ],
                                           ),
-                                          ..._sarsajjanshaktiList.map((item) {
+                                          ...sarsajjanshaktiList.map((item) {
                                             return TableRow(
                                               children: [
                                                 Center(
@@ -4133,7 +4259,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                                               ),
                                             ],
                                           ),
-                                          ..._sanyaprabhaviList.map((item) {
+                                          ...sanyaprabhaviList.map((item) {
                                             return TableRow(
                                               children: [
                                                 Center(
@@ -4560,81 +4686,5 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
         );
       },
     );
-  }
-}
-
-class VastiPerson {
-  String? samparkasutranava;
-  String? address;
-  String? doorabhaash;
-  int? isactive;
-  String? name;
-  int? pkid;
-  String? prabhaavkshetrName;
-  int? prabhaavkshetrid;
-  String? samparkasutraMobileNumber;
-  String? samparksthitiName;
-  int? samparksthitiid;
-  String? sanstheCheNaav;
-  String? sansthechaKuthalaPadavar;
-  String? selectedDropdownValueName;
-  String? selectedDropdownValueName1;
-  String? selectedDropdownValueName2;
-  String? shreneedhiName;
-  int? shreneeid;
-  int? vastiid;
-  String? vastiname;
-  int? visheshId;
-  String? visheshname;
-
-  VastiPerson({
-    this.samparkasutranava,
-    this.address,
-    this.doorabhaash,
-    this.isactive,
-    this.name,
-    this.pkid,
-    this.prabhaavkshetrName,
-    this.prabhaavkshetrid,
-    this.samparkasutraMobileNumber,
-    this.samparksthitiName,
-    this.samparksthitiid,
-    this.sanstheCheNaav,
-    this.sansthechaKuthalaPadavar,
-    this.selectedDropdownValueName,
-    this.selectedDropdownValueName1,
-    this.selectedDropdownValueName2,
-    this.shreneedhiName,
-    this.shreneeid,
-    this.vastiid,
-    this.vastiname,
-    this.visheshId,
-    this.visheshname,
-  });
-}
-
-class VastiCounts {
-  final Map<String, int> prakarCounts;
-  final Map<String, int> vayogatCounts;
-
-  VastiCounts({
-    required this.prakarCounts,
-    required this.vayogatCounts,
-  });
-
-  // Factory for JSON parsing
-  factory VastiCounts.fromJson(Map<String, dynamic> json) {
-    return VastiCounts(
-      prakarCounts: Map<String, int>.from(json['prakarCounts'] ?? {}),
-      vayogatCounts: Map<String, int>.from(json['vayogatCounts'] ?? {}),
-    );
-  }
-
-  // To JSON
-  Map<String, dynamic> toJson() {
-    return {
-      'prakarCounts': prakarCounts,
-      'vayogatCounts': vayogatCounts,
-    };
   }
 }
