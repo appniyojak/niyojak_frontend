@@ -4565,7 +4565,7 @@ Future<void> saveHinduSanmelanFormData(BuildContext context, Map<String, dynamic
   }
 }
 
-Future<void> saveSajjanAnyaFromSearch(BuildContext context, Map<String, dynamic> inputJson, {bool showLoader = true}) async {
+Future<bool> saveSajjanAnyaFromSearch(BuildContext context, Map<String, dynamic> inputJson, {bool showLoader = true}) async {
   try {
     if (showLoader) showLoaderDialog(context);
     Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -4586,16 +4586,21 @@ Future<void> saveSajjanAnyaFromSearch(BuildContext context, Map<String, dynamic>
       final responseData = json.decode(response.body);
       if (responseData["Status"].toString() == "200" || responseData["Status"].toString() == "Success") {
         Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+        return true;
       }
       Statics.showToast(Statics.getLabel('errorOccurred'));
+      return false;
     } else {
       print("Error: ${response.statusCode} - ${response.body}");
       Statics.showToast(Statics.getLabel('errorOccurred'));
+      return false;
     }
   } catch (e) {
     print("error occured >>>errorOccurred>>> $e");
+    return false;
   } finally {
     if (showLoader) Navigator.of(context, rootNavigator: true).pop();
+    return false;
   }
 }
 
@@ -4609,12 +4614,11 @@ Future<HinduSanmelanModel?> searchSajjanAnyaForVisheshMukhyaFun(Map<String, dyna
 
     if (context != null) Navigator.of(context, rootNavigator: true).pop();
 
+    log("searchSajjanAnyaForVisheshMukhyaFun >>>>>>>>>>>>>>>>> ${(jsonEncode(jsonDecode(response.body)))}");
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
 
       if (data["Status"] == "Success" || data["Status"] == "200") {
-        log("searchSajjanAnyaForVisheshMukhyaFun >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
-
         return HinduSanmelanModel.fromJson(data); // ✅ return karna zaroori hai
       }
       return null; // ✅ error case

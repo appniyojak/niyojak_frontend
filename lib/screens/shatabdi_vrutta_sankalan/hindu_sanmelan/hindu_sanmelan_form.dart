@@ -3544,7 +3544,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                           await submitForm();
                           Navigator.of(context).pushReplacementNamed(
                             SearchSajjanAnyaScreen.routeName,
-                            arguments: {'geoUnitId': _selectedGeoUnitId},
+                            arguments: {'geoUnitId': _selectedGeoUnitId, 'fromMukhya': true},
                           ).then(
                             (value) async {
                               await _getForm();

@@ -1,112 +1,48 @@
 class HinduSanmelanReportModel {
   String? status;
   String? message;
-  int? totalmandalCount;
-  int? totalmandalStartedcount;
-  int? totalgramCount;
-  int? pratigramcount;
-  int? totalvasti;
-  int? vastiStartedcount;
-  int? mandalStartedcount;
-  int? gramcountpratinidhatva;
-  int? urlCount;
-  int? imgCount;
-  int? advCount;
-  int? mukhyaatithifemale;
-  int? mukhyaatithimale;
-  int? sadbavkaryafemale;
-  int? sadbavkaryamale;
-  int? sajjanskhatiuppasstitifemale;
-  int? sajjanskhatiuppasstitimale;
-  int? pramukhjhanuppasstitifemale;
-  int? pramukhjhanuppasstitimale;
-  List<List1>? list1;
+  List<Table1>? table1;
+  Otherinfo? otherinfo;
+  Bhougolikprati? bhougolikprati;
+  Samaj? samaj;
 
-  HinduSanmelanReportModel(
-      {this.status,
-      this.message,
-      this.totalmandalCount,
-      this.totalmandalStartedcount,
-      this.totalgramCount,
-      this.pratigramcount,
-      this.totalvasti,
-      this.vastiStartedcount,
-      this.mandalStartedcount,
-      this.gramcountpratinidhatva,
-      this.urlCount,
-      this.imgCount,
-      this.advCount,
-      this.mukhyaatithifemale,
-      this.mukhyaatithimale,
-      this.sadbavkaryafemale,
-      this.sadbavkaryamale,
-      this.sajjanskhatiuppasstitifemale,
-      this.sajjanskhatiuppasstitimale,
-      this.pramukhjhanuppasstitifemale,
-      this.pramukhjhanuppasstitimale,
-      this.list1});
+  HinduSanmelanReportModel({this.status, this.message, this.table1, this.otherinfo, this.bhougolikprati, this.samaj});
 
   HinduSanmelanReportModel.fromJson(Map<String, dynamic> json) {
     status = json['Status'];
     message = json['Message'];
-    totalmandalCount = json['totalmandalCount'];
-    totalmandalStartedcount = json['totalmandalStartedcount'];
-    totalgramCount = json['totalgramCount'];
-    pratigramcount = json['pratigramcount'];
-    totalvasti = json['totalvasti'];
-    vastiStartedcount = json['vastiStartedcount'];
-    mandalStartedcount = json['mandalStartedcount'];
-    gramcountpratinidhatva = json['gramcountpratinidhatva'];
-    urlCount = json['urlCount'];
-    imgCount = json['ImgCount'];
-    advCount = json['AdvCount'];
-    mukhyaatithifemale = json['mukhyaatithifemale'];
-    mukhyaatithimale = json['mukhyaatithimale'];
-    sadbavkaryafemale = json['sadbavkaryafemale'];
-    sadbavkaryamale = json['sadbavkaryamale'];
-    sajjanskhatiuppasstitifemale = json['sajjanskhatiuppasstitifemale'];
-    sajjanskhatiuppasstitimale = json['sajjanskhatiuppasstitimale'];
-    pramukhjhanuppasstitifemale = json['pramukhjhanuppasstitifemale'];
-    pramukhjhanuppasstitimale = json['pramukhjhanuppasstitimale'];
-    if (json['List1'] != null) {
-      list1 = <List1>[];
-      json['List1'].forEach((v) {
-        list1!.add(new List1.fromJson(v));
+    if (json['table1'] != null) {
+      table1 = <Table1>[];
+      json['table1'].forEach((v) {
+        table1!.add(new Table1.fromJson(v));
       });
     }
+    otherinfo = json['otherinfo'] != null ? new Otherinfo.fromJson(json['otherinfo']) : null;
+    bhougolikprati = json['bhougolikprati'] != null ? new Bhougolikprati.fromJson(json['bhougolikprati']) : null;
+    samaj = json['samaj'] != null ? new Samaj.fromJson(json['samaj']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['Status'] = this.status;
     data['Message'] = this.message;
-    data['totalmandalCount'] = this.totalmandalCount;
-    data['totalmandalStartedcount'] = this.totalmandalStartedcount;
-    data['totalgramCount'] = this.totalgramCount;
-    data['pratigramcount'] = this.pratigramcount;
-    data['totalvasti'] = this.totalvasti;
-    data['vastiStartedcount'] = this.vastiStartedcount;
-    data['mandalStartedcount'] = this.mandalStartedcount;
-    data['gramcountpratinidhatva'] = this.gramcountpratinidhatva;
-    data['urlCount'] = this.urlCount;
-    data['ImgCount'] = this.imgCount;
-    data['AdvCount'] = this.advCount;
-    data['mukhyaatithifemale'] = this.mukhyaatithifemale;
-    data['mukhyaatithimale'] = this.mukhyaatithimale;
-    data['sadbavkaryafemale'] = this.sadbavkaryafemale;
-    data['sadbavkaryamale'] = this.sadbavkaryamale;
-    data['sajjanskhatiuppasstitifemale'] = this.sajjanskhatiuppasstitifemale;
-    data['sajjanskhatiuppasstitimale'] = this.sajjanskhatiuppasstitimale;
-    data['pramukhjhanuppasstitifemale'] = this.pramukhjhanuppasstitifemale;
-    data['pramukhjhanuppasstitimale'] = this.pramukhjhanuppasstitimale;
-    if (this.list1 != null) {
-      data['List1'] = this.list1!.map((v) => v.toJson()).toList();
+    if (this.table1 != null) {
+      data['table1'] = this.table1!.map((v) => v.toJson()).toList();
+    }
+    if (this.otherinfo != null) {
+      data['otherinfo'] = this.otherinfo!.toJson();
+    }
+    if (this.bhougolikprati != null) {
+      data['bhougolikprati'] = this.bhougolikprati!.toJson();
+    }
+    if (this.samaj != null) {
+      data['samaj'] = this.samaj!.toJson();
     }
     return data;
   }
 }
 
-class List1 {
+class Table1 {
   String? levelMarathi;
   int? sanmelancount;
   String? sanmelancountnames;
@@ -123,25 +59,24 @@ class List1 {
   int? ekunfinalcount;
   String? ekunfinalcountnames;
 
-  List1({
-    this.levelMarathi,
-    this.sanmelancount,
-    this.sanmelancountnames,
-    this.totalcount,
-    this.totalcountnames,
-    this.grammprati,
-    this.grammpratinames,
-    this.totalmale,
-    this.totalmalenames,
-    this.totalfemale,
-    this.totalfemalenames,
-    this.specialpersontotalcount,
-    this.specialpersontotalcountnames,
-    this.ekunfinalcount,
-    this.ekunfinalcountnames,
-  });
+  Table1(
+      {this.levelMarathi,
+      this.sanmelancount,
+      this.sanmelancountnames,
+      this.totalcount,
+      this.totalcountnames,
+      this.grammprati,
+      this.grammpratinames,
+      this.totalmale,
+      this.totalmalenames,
+      this.totalfemale,
+      this.totalfemalenames,
+      this.specialpersontotalcount,
+      this.specialpersontotalcountnames,
+      this.ekunfinalcount,
+      this.ekunfinalcountnames});
 
-  List1.fromJson(Map<String, dynamic> json) {
+  Table1.fromJson(Map<String, dynamic> json) {
     levelMarathi = json['LevelMarathi'];
     sanmelancount = json['sanmelancount'];
     sanmelancountnames = json['sanmelancountnames'];
@@ -176,6 +111,121 @@ class List1 {
     data['specialpersontotalcountnames'] = this.specialpersontotalcountnames;
     data['ekunfinalcount'] = this.ekunfinalcount;
     data['ekunfinalcountnames'] = this.ekunfinalcountnames;
+    return data;
+  }
+}
+
+class Otherinfo {
+  int? urlCount;
+  String? urlCountnames;
+  int? imgCount;
+  String? imgCountnames;
+  int? advCount;
+  String? advCountnames;
+
+  Otherinfo({this.urlCount, this.urlCountnames, this.imgCount, this.imgCountnames, this.advCount, this.advCountnames});
+
+  Otherinfo.fromJson(Map<String, dynamic> json) {
+    urlCount = json['urlCount'];
+    urlCountnames = json['urlCountnames'];
+    imgCount = json['imgCount'];
+    imgCountnames = json['imgCountnames'];
+    advCount = json['advCount'];
+    advCountnames = json['advCountnames'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['urlCount'] = this.urlCount;
+    data['urlCountnames'] = this.urlCountnames;
+    data['imgCount'] = this.imgCount;
+    data['imgCountnames'] = this.imgCountnames;
+    data['advCount'] = this.advCount;
+    data['advCountnames'] = this.advCountnames;
+    return data;
+  }
+}
+
+class Bhougolikprati {
+  int? totalmandalCount;
+  int? totalmandalStartedcount;
+  int? totalgramCount;
+  int? pratigramcount;
+  int? totalvasti;
+  int? vastiStartedcount;
+
+  Bhougolikprati({this.totalmandalCount, this.totalmandalStartedcount, this.totalgramCount, this.pratigramcount, this.totalvasti, this.vastiStartedcount});
+
+  Bhougolikprati.fromJson(Map<String, dynamic> json) {
+    totalmandalCount = json['totalmandalCount'];
+    totalmandalStartedcount = json['totalmandalStartedcount'];
+    totalgramCount = json['totalgramCount'];
+    pratigramcount = json['pratigramcount'];
+    totalvasti = json['totalvasti'];
+    vastiStartedcount = json['vastiStartedcount'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['totalmandalCount'] = this.totalmandalCount;
+    data['totalmandalStartedcount'] = this.totalmandalStartedcount;
+    data['totalgramCount'] = this.totalgramCount;
+    data['pratigramcount'] = this.pratigramcount;
+    data['totalvasti'] = this.totalvasti;
+    data['vastiStartedcount'] = this.vastiStartedcount;
+    return data;
+  }
+}
+
+class Samaj {
+  int? mukhyaatithifemale;
+  int? mukhyaatithimale;
+  int? sadbavkaryafemale;
+  int? sadbavkaryamale;
+  int? sajjanskhatiuppasstitifemale;
+  int? sajjanskhatiuppasstitimale;
+  int? pramukhjhanuppasstitifemale;
+  int? pramukhjhanuppasstitimale;
+  int? ekuntotalmale;
+  int? ekuntotalfemale;
+
+  Samaj(
+      {this.mukhyaatithifemale,
+      this.mukhyaatithimale,
+      this.sadbavkaryafemale,
+      this.sadbavkaryamale,
+      this.sajjanskhatiuppasstitifemale,
+      this.sajjanskhatiuppasstitimale,
+      this.pramukhjhanuppasstitifemale,
+      this.pramukhjhanuppasstitimale,
+      this.ekuntotalmale,
+      this.ekuntotalfemale});
+
+  Samaj.fromJson(Map<String, dynamic> json) {
+    mukhyaatithifemale = json['mukhyaatithifemale'];
+    mukhyaatithimale = json['mukhyaatithimale'];
+    sadbavkaryafemale = json['sadbavkaryafemale'];
+    sadbavkaryamale = json['sadbavkaryamale'];
+    sajjanskhatiuppasstitifemale = json['sajjanskhatiuppasstitifemale'];
+    sajjanskhatiuppasstitimale = json['sajjanskhatiuppasstitimale'];
+    pramukhjhanuppasstitifemale = json['pramukhjhanuppasstitifemale'];
+    pramukhjhanuppasstitimale = json['pramukhjhanuppasstitimale'];
+    ekuntotalmale = json['ekuntotalmale'];
+    ekuntotalfemale = json['ekuntotalfemale'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['mukhyaatithifemale'] = this.mukhyaatithifemale;
+    data['mukhyaatithimale'] = this.mukhyaatithimale;
+    data['sadbavkaryafemale'] = this.sadbavkaryafemale;
+    data['sadbavkaryamale'] = this.sadbavkaryamale;
+    data['sajjanskhatiuppasstitifemale'] = this.sajjanskhatiuppasstitifemale;
+    data['sajjanskhatiuppasstitimale'] = this.sajjanskhatiuppasstitimale;
+    data['pramukhjhanuppasstitifemale'] = this.pramukhjhanuppasstitifemale;
+    data['pramukhjhanuppasstitimale'] = this.pramukhjhanuppasstitimale;
+    data['ekuntotalmale'] = this.ekuntotalmale;
+    data['ekuntotalfemale'] = this.ekuntotalfemale;
     return data;
   }
 }

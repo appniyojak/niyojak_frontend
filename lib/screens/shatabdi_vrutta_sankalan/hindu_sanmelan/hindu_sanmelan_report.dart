@@ -246,7 +246,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
               SizedBox(height: 10),
               Divider(color: Colors.black),
               SizedBox(height: 10),
-              if (report?.list1 != null && report?.list1 != []) buildMarathiDataTable(report?.list1 ?? []),
+              if (report?.table1 != null && report?.table1 != []) buildMarathiDataTable(report?.table1 ?? []),
               SizedBox(height: 18),
               if (report != null) buildCountCards(report!),
               SizedBox(height: 30),
@@ -259,12 +259,12 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
 
   Widget buildCountCards(HinduSanmelanReportModel data) {
     int calculateTotalMale() {
-      final total = (data.mukhyaatithimale ?? 0) + (data.sadbavkaryamale ?? 0) + (data.sajjanskhatiuppasstitimale ?? 0) + (data.pramukhjhanuppasstitimale ?? 0);
+      final total = (data.samaj?.mukhyaatithimale ?? 0) + (data.samaj?.sadbavkaryamale ?? 0) + (data.samaj?.sajjanskhatiuppasstitimale ?? 0) + (data.samaj?.pramukhjhanuppasstitimale ?? 0);
       return total;
     }
 
     int calculateTotalFemale() {
-      final total = (data.mukhyaatithifemale ?? 0) + (data.sadbavkaryafemale ?? 0) + (data.sajjanskhatiuppasstitifemale ?? 0) + (data.pramukhjhanuppasstitifemale ?? 0);
+      final total = (data.samaj?.mukhyaatithifemale ?? 0) + (data.samaj?.sadbavkaryafemale ?? 0) + (data.samaj?.sajjanskhatiuppasstitifemale ?? 0) + (data.samaj?.pramukhjhanuppasstitifemale ?? 0);
       return total;
     }
 
@@ -319,19 +319,18 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                             spacing: 2,
                             children: [
                               Text(
-                                (data.imgCount ?? 0).toString(),
+                                (data.otherinfo?.imgCount ?? 0).toString(),
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
-                              InkWell(
-                                borderRadius: BorderRadius.circular(50),
-                                onTap: () {
-                                  showInfoDialogBox(
-                                      names:
-                                          "कल्याण --> पालघर --> बोईसर नगर --> ओस्तवाल, कल्याण --> पालघर --> बोईसर नगर --> धोडी पूजा, कल्याण --> पालघर --> बोईसर नगर --> पाश्‍थल, कल्याण --> पालघर --> बोईसर नगर --> बेटेगाव, कल्याण --> पालघर --> बोईसर नगर --> यशवंत सृष्टी, कल्याण --> पालघर --> बोईसर नगर --> हेडगेवार नगर",
-                                      title: Statics.getLabel("images"));
-                                },
-                                child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 14),
-                              ),
+                              if (data.otherinfo?.imgCount != 0)
+                                InkWell(
+                                  borderRadius: BorderRadius.circular(50),
+                                  onTap: () {
+                                    final _names = data.otherinfo?.imgCountnames;
+                                    if (_names != null && _names.isNotEmpty) showInfoDialogBox(names: _names, title: Statics.getLabel("images"));
+                                  },
+                                  child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 14),
+                                ),
                             ],
                           ),
                         ),
@@ -348,19 +347,18 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                             spacing: 2,
                             children: [
                               Text(
-                                (data.advCount ?? 0).toString(),
+                                (data.otherinfo?.advCount ?? 0).toString(),
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
-                              InkWell(
-                                borderRadius: BorderRadius.circular(50),
-                                onTap: () {
-                                  showInfoDialogBox(
-                                      names:
-                                          "कल्याण --> पालघर --> बोईसर नगर --> ओस्तवाल, कल्याण --> पालघर --> बोईसर नगर --> धोडी पूजा, कल्याण --> पालघर --> बोईसर नगर --> पाश्‍थल, कल्याण --> पालघर --> बोईसर नगर --> बेटेगाव, कल्याण --> पालघर --> बोईसर नगर --> यशवंत सृष्टी, कल्याण --> पालघर --> बोईसर नगर --> हेडगेवार नगर",
-                                      title: Statics.getLabel("advImages"));
-                                },
-                                child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 14),
-                              ),
+                              if (data.otherinfo?.advCount != 0)
+                                InkWell(
+                                  borderRadius: BorderRadius.circular(50),
+                                  onTap: () {
+                                    final _names = data.otherinfo?.advCountnames;
+                                    if (_names != null && _names.isNotEmpty) showInfoDialogBox(names: _names, title: Statics.getLabel("advImages"));
+                                  },
+                                  child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 14),
+                                ),
                             ],
                           ),
                         ),
@@ -377,19 +375,18 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                             spacing: 2,
                             children: [
                               Text(
-                                (data.urlCount ?? 0).toString(),
+                                (data.otherinfo?.urlCount ?? 0).toString(),
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
-                              InkWell(
-                                borderRadius: BorderRadius.circular(50),
-                                onTap: () {
-                                  showInfoDialogBox(
-                                      names:
-                                          "कल्याण --> पालघर --> बोईसर नगर --> ओस्तवाल, कल्याण --> पालघर --> बोईसर नगर --> धोडी पूजा, कल्याण --> पालघर --> बोईसर नगर --> पाश्‍थल, कल्याण --> पालघर --> बोईसर नगर --> बेटेगाव, कल्याण --> पालघर --> बोईसर नगर --> यशवंत सृष्टी, कल्याण --> पालघर --> बोईसर नगर --> हेडगेवार नगर",
-                                      title: Statics.getLabel("advLinks"));
-                                },
-                                child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 14),
-                              ),
+                              if (data.otherinfo?.urlCount != 0)
+                                InkWell(
+                                  borderRadius: BorderRadius.circular(50),
+                                  onTap: () {
+                                    final _names = data.otherinfo?.urlCountnames;
+                                    if (_names != null && _names.isNotEmpty) showInfoDialogBox(names: _names, title: Statics.getLabel("advLinks"));
+                                  },
+                                  child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 14),
+                                ),
                             ],
                           ),
                         ),
@@ -433,7 +430,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                     Expanded(child: Text("${Statics.getLabel('Total')} ${Statics.getLabel('Vasti')}")),
                     Container(
                       margin: EdgeInsets.only(left: 8),
-                      child: Text((data.totalvasti ?? 0).toString()),
+                      child: Text((data.bhougolikprati?.totalvasti ?? 0).toString()),
                     ),
                   ]),
                 ),
@@ -451,7 +448,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                   Container(
                     margin: EdgeInsets.only(left: 8),
                     child: Text(
-                      (data.vastiStartedcount ?? 0).toString(),
+                      (data.bhougolikprati?.vastiStartedcount ?? 0).toString(),
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -468,7 +465,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                     Expanded(child: Text("${Statics.getLabel('Total')} ${Statics.getLabel('Mandal')}")),
                     Container(
                       margin: EdgeInsets.only(left: 8),
-                      child: Text((data.totalmandalCount ?? 0).toString()),
+                      child: Text((data.bhougolikprati?.totalmandalCount ?? 0).toString()),
                     ),
                   ]),
                 ),
@@ -486,7 +483,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                   Container(
                     margin: EdgeInsets.only(left: 8),
                     child: Text(
-                      (data.mandalStartedcount ?? 0).toString(),
+                      (data.bhougolikprati?.totalmandalStartedcount ?? 0).toString(),
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -503,7 +500,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                     Expanded(child: Text("${Statics.getLabel('Total')} ${Statics.getLabel('Graam')}")),
                     Container(
                       margin: EdgeInsets.only(left: 8),
-                      child: Text((data.totalgramCount ?? 0).toString()),
+                      child: Text((data.bhougolikprati?.totalgramCount ?? 0).toString()),
                     ),
                   ]),
                 ),
@@ -515,20 +512,20 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                 child: Row(children: [
                   Expanded(
                       child: Text(
-                    Statics.getLabel('SanmelanStartedCountGraam'),
+                    Statics.getLabel('gramPratinidhitwa'),
                     style: TextStyle(fontWeight: FontWeight.w600),
                   )),
                   Container(
                     margin: EdgeInsets.only(left: 8),
                     child: Text(
-                      (data.gramcountpratinidhatva ?? 0).toString(),
+                      (data.bhougolikprati?.pratigramcount ?? 0).toString(),
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
                 ]),
               ),
               SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
-              SizedBox(height: 8),
+              Container(height: 8, width: MediaQuery.sizeOf(context).width, color: Colors.white),
             ],
           ),
         ),
@@ -573,7 +570,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                               Expanded(child: Text(Statics.getLabel('Male'))),
                               Container(
                                 margin: EdgeInsets.only(left: 8),
-                                child: Text((data.mukhyaatithimale ?? 0).toString()),
+                                child: Text((data.samaj?.mukhyaatithimale ?? 0).toString()),
                               ),
                             ]),
                             SizedBox(height: 8),
@@ -581,7 +578,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                               Expanded(child: Text(Statics.getLabel('Female'))),
                               Container(
                                 margin: EdgeInsets.only(left: 8),
-                                child: Text((data.mukhyaatithifemale ?? 0).toString()),
+                                child: Text((data.samaj?.mukhyaatithifemale ?? 0).toString()),
                               ),
                             ]),
                             SizedBox(height: 6),
@@ -591,7 +588,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                               Expanded(child: Text(Statics.getLabel('Total'))),
                               Container(
                                 margin: EdgeInsets.only(left: 8),
-                                child: Text(((data.mukhyaatithimale ?? 0) + (data.mukhyaatithifemale ?? 0)).toString()),
+                                child: Text(((data.samaj?.mukhyaatithimale ?? 0) + (data.samaj?.mukhyaatithifemale ?? 0)).toString()),
                               ),
                             ]),
                           ],
@@ -612,7 +609,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                               Expanded(child: Text(Statics.getLabel('Male'))),
                               Container(
                                 margin: EdgeInsets.only(left: 8),
-                                child: Text((data.sadbavkaryamale ?? 0).toString()),
+                                child: Text((data.samaj?.sadbavkaryamale ?? 0).toString()),
                               ),
                             ]),
                             SizedBox(height: 8),
@@ -620,7 +617,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                               Expanded(child: Text(Statics.getLabel('Female'))),
                               Container(
                                 margin: EdgeInsets.only(left: 8),
-                                child: Text((data.sadbavkaryafemale ?? 0).toString()),
+                                child: Text((data.samaj?.sadbavkaryafemale ?? 0).toString()),
                               ),
                             ]),
                             SizedBox(height: 6),
@@ -630,7 +627,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                               Expanded(child: Text(Statics.getLabel('Total'))),
                               Container(
                                 margin: EdgeInsets.only(left: 8),
-                                child: Text(((data.sadbavkaryamale ?? 0) + (data.sadbavkaryafemale ?? 0)).toString()),
+                                child: Text(((data.samaj?.sadbavkaryamale ?? 0) + (data.samaj?.sadbavkaryafemale ?? 0)).toString()),
                               ),
                             ]),
                           ],
@@ -651,7 +648,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                               Expanded(child: Text(Statics.getLabel('Male'))),
                               Container(
                                 margin: EdgeInsets.only(left: 8),
-                                child: Text((data.sajjanskhatiuppasstitimale ?? 0).toString()),
+                                child: Text((data.samaj?.sajjanskhatiuppasstitimale ?? 0).toString()),
                               ),
                             ]),
                             SizedBox(height: 8),
@@ -659,7 +656,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                               Expanded(child: Text(Statics.getLabel('Female'))),
                               Container(
                                 margin: EdgeInsets.only(left: 8),
-                                child: Text((data.sajjanskhatiuppasstitifemale ?? 0).toString()),
+                                child: Text((data.samaj?.sajjanskhatiuppasstitifemale ?? 0).toString()),
                               ),
                             ]),
                             SizedBox(height: 6),
@@ -669,7 +666,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                               Expanded(child: Text(Statics.getLabel('Total'))),
                               Container(
                                 margin: EdgeInsets.only(left: 8),
-                                child: Text(((data.sajjanskhatiuppasstitimale ?? 0) + (data.sajjanskhatiuppasstitifemale ?? 0)).toString()),
+                                child: Text(((data.samaj?.sajjanskhatiuppasstitimale ?? 0) + (data.samaj?.sajjanskhatiuppasstitifemale ?? 0)).toString()),
                               ),
                             ]),
                           ],
@@ -690,7 +687,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                               Expanded(child: Text(Statics.getLabel('Male'))),
                               Container(
                                 margin: EdgeInsets.only(left: 8),
-                                child: Text((data.pramukhjhanuppasstitimale ?? 0).toString()),
+                                child: Text((data.samaj?.pramukhjhanuppasstitimale ?? 0).toString()),
                               ),
                             ]),
                             SizedBox(height: 8),
@@ -698,7 +695,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                               Expanded(child: Text(Statics.getLabel('Female'))),
                               Container(
                                 margin: EdgeInsets.only(left: 8),
-                                child: Text((data.pramukhjhanuppasstitifemale ?? 0).toString()),
+                                child: Text((data.samaj?.pramukhjhanuppasstitifemale ?? 0).toString()),
                               ),
                             ]),
                             SizedBox(height: 6),
@@ -708,7 +705,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                               Expanded(child: Text(Statics.getLabel('Total'))),
                               Container(
                                 margin: EdgeInsets.only(left: 8),
-                                child: Text(((data.pramukhjhanuppasstitimale ?? 0) + (data.pramukhjhanuppasstitifemale ?? 0)).toString()),
+                                child: Text(((data.samaj?.pramukhjhanuppasstitimale ?? 0) + (data.samaj?.pramukhjhanuppasstitifemale ?? 0)).toString()),
                               ),
                             ]),
                           ],
@@ -884,7 +881,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
     );
   }
 
-  Widget buildMarathiDataTable(List<List1> data) {
+  Widget buildMarathiDataTable(List<Table1> data) {
     final List<String> headers = [
       // 'कार्यक्रम स्तर',
       Statics.getLabel('sanmelanReportTable1'),
