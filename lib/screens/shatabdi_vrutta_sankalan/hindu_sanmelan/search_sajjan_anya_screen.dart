@@ -49,14 +49,16 @@ class _SearchSajjanAnyaScreenState extends State<SearchSajjanAnyaScreen> {
 
   Future<void> _getSwList() async {
     sajjanList = [];
+    selectedsajjanList = [];
     anyaList = [];
+    selectedanyaList = [];
     sajjanMukhya = null;
     anyaMukhya = null;
     log("calling");
     bool isConnected = await Statics.isInternetConnected();
     if (isConnected) {
       var inputData = {
-        "geounitid": geoUnitId,
+        "geounitid": int.parse(geoUnitId ?? "0"),
         // "AppUserID": "5693",
         "search": _searchController.text.trim(),
       };
@@ -79,8 +81,8 @@ class _SearchSajjanAnyaScreenState extends State<SearchSajjanAnyaScreen> {
       var inputData = {
         "sajjanvisheshtiid": selectedsajjanList.map((e) => e.pkid.toString()).join(","),
         "annyavisheshtiid": selectedanyaList.map((e) => e.pkId.toString()).join(","),
-        "sajjanmukhyaatitiid": sajjanMukhya?.pkid,
-        "annyamukhyaatitiid": anyaMukhya?.pkId,
+        "sajjanmukhyaatitiid": sajjanMukhya?.pkid ?? 0,
+        "annyamukhyaatitiid": anyaMukhya?.pkId ?? 0,
         "geounitid": geoUnitId,
         "AppUserID": int.parse(Statics.userDetails['userID']),
       };
@@ -152,7 +154,12 @@ class _SearchSajjanAnyaScreenState extends State<SearchSajjanAnyaScreen> {
                       autofocus: false,
                       onChanged: (v) {
                         if (v.isEmpty) {
-                          // _selectedPramukh = null;
+                          sajjanList = [];
+                          selectedsajjanList = [];
+                          anyaList = [];
+                          selectedanyaList = [];
+                          sajjanMukhya = null;
+                          anyaMukhya = null;
                         }
                         setState(() {});
                       },
@@ -225,6 +232,7 @@ class _SearchSajjanAnyaScreenState extends State<SearchSajjanAnyaScreen> {
                               decoration: BoxDecoration(color: selectedsajjanList.contains(_data) ? Colors.purple.shade50 : Colors.white),
                               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                               child: Row(
+                                spacing: 8,
                                 children: [
                                   if (selectedsajjanList.contains(_data) || sajjanMukhya == _data)
                                     Icon(
@@ -252,14 +260,14 @@ class _SearchSajjanAnyaScreenState extends State<SearchSajjanAnyaScreen> {
                                       ],
                                     ),
                                   ),
-                                  if (selectedsajjanList.contains(_data))
-                                    InkWell(
-                                      onTap: () => showPersonDetailsPopup(context, _data, index + 1),
-                                      child: Icon(
-                                        Icons.remove_red_eye,
-                                        color: Colors.purple,
-                                      ),
+                                  // if (selectedsajjanList.contains(_data))
+                                  InkWell(
+                                    onTap: () => showPersonDetailsPopup(context, _data, index + 1),
+                                    child: Icon(
+                                      Icons.remove_red_eye,
+                                      color: Colors.purple,
                                     ),
+                                  ),
                                 ],
                               )),
                         ),
@@ -353,7 +361,27 @@ class _SearchSajjanAnyaScreenState extends State<SearchSajjanAnyaScreen> {
 
               //
               SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-              (selectedsajjanList.isNotEmpty || selectedanyaList.isNotEmpty)
+              // _searchController.text.trim().isNotEmpty
+              //     ? MaterialButton(
+              //         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+              //         padding: EdgeInsets.symmetric(
+              //           horizontal: 15,
+              //           vertical: 8,
+              //         ),
+              //         color: Theme.of(context).primaryColor,
+              //         textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+              //         onPressed: () async {
+              //           FocusManager.instance.primaryFocus?.unfocus();
+              //           // if (_searchController.text.trim().isNotEmpty) {
+              //             _search();
+              //         },
+              //         child: Text(
+              //           Statics.getLabel('Submit'),
+              //           style: TextStyle(fontSize: 16),
+              //         ),
+              //       )
+              //     :
+              (selectedsajjanList.isNotEmpty || selectedanyaList.isNotEmpty || sajjanMukhya != null || anyaMukhya != null)
                   ? MaterialButton(
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                       padding: EdgeInsets.symmetric(
@@ -364,10 +392,8 @@ class _SearchSajjanAnyaScreenState extends State<SearchSajjanAnyaScreen> {
                       textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                       onPressed: () async {
                         FocusManager.instance.primaryFocus?.unfocus();
-                        if (_searchController.text.trim().isEmpty) {
-                          return;
-                        }
-                        _search();
+                        // if (_searchController.text.trim().isNotEmpty) {
+                        saveData();
                       },
                       child: Text(
                         Statics.getLabel('Submit'),

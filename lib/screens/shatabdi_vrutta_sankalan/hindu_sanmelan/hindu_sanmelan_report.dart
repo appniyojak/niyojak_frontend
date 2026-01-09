@@ -209,15 +209,15 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
         child: Column(
           children: [
             SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  "*Dummy Data",
-                  style: TextStyle(color: Colors.grey.shade600, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                )
-              ],
-            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.end,
+            //   children: [
+            //     Text(
+            //       "*Dummy Data",
+            //       style: TextStyle(color: Colors.grey.shade600, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+            //     )
+            //   ],
+            // ),
             SizedBox(height: 10),
             _buildExpansionPanel(),
             SizedBox(height: 20),
@@ -989,68 +989,68 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                                   ))),
                         DataCell(Center(
                             child: Row(
-                          mainAxisAlignment: (level.specialpersontotalcount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            if (level.specialpersontotalcount != 0) SizedBox(width: 1),
+                            // if (level.specialpersontotalcount != 0) SizedBox(width: 1),
                             Container(margin: EdgeInsets.only(right: level.specialpersontotalcount != 0 ? 0 : 10), child: Text(level.specialpersontotalcount.toString())),
-                            if (level.specialpersontotalcount != 0)
-                              InkWell(
-                                borderRadius: BorderRadius.circular(50),
-                                onTap: () {
-                                  showInfoDialogBox(names: level.specialpersontotalcountnames ?? "", title: Statics.getLabel("sanmelanReportTable3"));
-                                },
-                                child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
-                              ),
+                            // if (level.specialpersontotalcount != 0)
+                            //   InkWell(
+                            //     borderRadius: BorderRadius.circular(50),
+                            //     onTap: () {
+                            //       showInfoDialogBox(names: level.specialpersontotalcountnames ?? "", title: Statics.getLabel("sanmelanReportTable3"));
+                            //     },
+                            //     child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
+                            //   ),
                           ],
                         ))),
 
                         //sanchalan
                         DataCell(Center(
                             child: Row(
-                          mainAxisAlignment: (level.totalmale != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            if (level.totalmale != 0) SizedBox(width: 1),
+                            // if (level.totalmale != 0) SizedBox(width: 1),
                             Container(margin: EdgeInsets.only(right: level.totalmale != 0 ? 0 : 10), child: Text(level.totalmale.toString())),
-                            if (level.totalmale != 0)
-                              InkWell(
-                                borderRadius: BorderRadius.circular(50),
-                                onTap: () {
-                                  showInfoDialogBox(names: level.totalmalenames ?? "", title: Statics.getLabel("sanmelanReportTable4"));
-                                },
-                                child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
-                              ),
+                            // if (level.totalmale != 0)
+                            //   InkWell(
+                            //     borderRadius: BorderRadius.circular(50),
+                            //     onTap: () {
+                            //       showInfoDialogBox(names: level.totalmalenames ?? "", title: Statics.getLabel("sanmelanReportTable4"));
+                            //     },
+                            //     child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
+                            //   ),
                           ],
                         ))),
                         DataCell(Center(
                             child: Row(
-                          mainAxisAlignment: (level.totalfemale != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            if (level.totalfemale != 0) SizedBox(width: 1),
+                            // if (level.totalfemale != 0) SizedBox(width: 1),
                             Container(margin: EdgeInsets.only(right: level.totalfemale != 0 ? 0 : 10), child: Text(level.totalfemale.toString())),
-                            if (level.totalfemale != 0)
-                              InkWell(
-                                borderRadius: BorderRadius.circular(50),
-                                onTap: () {
-                                  showInfoDialogBox(names: level.totalfemalenames ?? "", title: Statics.getLabel("sanmelanReportTable5"));
-                                },
-                                child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
-                              ),
+                            // if (level.totalfemale != 0)
+                            //   InkWell(
+                            //     borderRadius: BorderRadius.circular(50),
+                            //     onTap: () {
+                            //       showInfoDialogBox(names: level.totalfemalenames ?? "", title: Statics.getLabel("sanmelanReportTable5"));
+                            //     },
+                            //     child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
+                            //   ),
                           ],
                         ))),
                         DataCell(Center(
                             child: Row(
-                          mainAxisAlignment: (level.ekunfinalcount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            if (level.ekunfinalcount != 0) SizedBox(width: 1),
+                            // if (level.ekunfinalcount != 0) SizedBox(width: 1),
                             Container(margin: EdgeInsets.only(right: level.ekunfinalcount != 0 ? 0 : 10), child: Text(level.ekunfinalcount.toString())),
-                            if (level.ekunfinalcount != 0)
-                              InkWell(
-                                borderRadius: BorderRadius.circular(50),
-                                onTap: () {
-                                  showInfoDialogBox(names: level.ekunfinalcountnames ?? "", title: Statics.getLabel("sanmelanReportTable6"));
-                                },
-                                child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
-                              ),
+                            // if (level.ekunfinalcount != 0)
+                            //   InkWell(
+                            //     borderRadius: BorderRadius.circular(50),
+                            //     onTap: () {
+                            //       showInfoDialogBox(names: level.ekunfinalcountnames ?? "", title: Statics.getLabel("sanmelanReportTable6"));
+                            //     },
+                            //     child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
+                            //   ),
                           ],
                         ))),
                       ]);

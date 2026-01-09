@@ -10,6 +10,8 @@ class HinduSanmelanModel {
   int? selectedgramcount;
   int? malecount;
   int? femalecount;
+  String? imgDesc;
+  String? advDesc;
   List<Vastisarsajjanshakti>? vastisarsajjanshakti;
   List<Vastisanyaprabhavi>? vastisanyaprabhavi;
   List<AbhiyaanPeopleModel>? vaktaList;
@@ -26,6 +28,8 @@ class HinduSanmelanModel {
     this.selectedgramcount,
     this.malecount,
     this.femalecount,
+    this.imgDesc,
+    this.advDesc,
     this.vastisarsajjanshakti,
     this.vastisanyaprabhavi,
     this.vaktaList,
@@ -43,6 +47,8 @@ class HinduSanmelanModel {
     selectedgramcount = json['selectedgramcount'];
     malecount = json['malecount'];
     femalecount = json['femalecount'];
+    imgDesc = json['imgDesc'];
+    advDesc = json['advDesc'];
     if (json['Vastisarsajjanshakti'] != null) {
       vastisarsajjanshakti = <Vastisarsajjanshakti>[];
       json['Vastisarsajjanshakti'].forEach((v) {
@@ -96,6 +102,8 @@ class HinduSanmelanModel {
     data['selectedgramcount'] = this.selectedgramcount;
     data['malecount'] = this.malecount;
     data['femalecount'] = this.femalecount;
+    data['imgDesc'] = this.imgDesc;
+    data['advDesc'] = this.advDesc;
     if (this.vastisarsajjanshakti != null) {
       data['Vastisarsajjanshakti'] = this.vastisarsajjanshakti!.map((v) => v.toJson()).toList();
     }

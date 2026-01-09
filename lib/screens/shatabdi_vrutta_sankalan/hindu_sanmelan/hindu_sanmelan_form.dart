@@ -136,6 +136,8 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
       presentMaleController.text = (data?.malecount ?? 0).toString();
       presentMatrushaktiController.text = (data?.femalecount ?? 0).toString();
       txtSanmelanFormatController.text = data?.sanmelandesc ?? "";
+      txtUtsavPhotoDescController.text = data?.imgDesc ?? "";
+      txtUtsavAddPhotoDescController.text = data?.advDesc ?? "";
       selectedSajjanshaktiItemsIds = data?.vastisarsajjanshakti?.where((e) => e.isVisheshdefault == 1).map((e) => e.pkid).join(',');
       selectedSajjanshaktiItems = data?.vastisarsajjanshakti?.where((e) => e.isVisheshdefault == 1).toList() ?? [];
       selectedAnyaprabhaviItemsIds = data?.vastisanyaprabhavi?.where((e) => e.isVisheshdefault == 1).map((e) => e.pkId).join(',');
@@ -163,6 +165,8 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
       "sajjanvisheshtiid": selectedSajjanshaktiItemsIds ?? "",
       "annyavisheshtiid": selectedAnyaprabhaviItemsIds ?? "",
       "gramids": selectedBhougolikPratinidhitwaVastiIds ?? "",
+      "imgDesc": txtUtsavPhotoDescController.text.trim(),
+      "advDesc": txtUtsavAddPhotoDescController.text.trim(),
       "urls": _urlsList,
       "hindusanmelanvatta": vaktaList,
     };
@@ -581,15 +585,15 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  "*Dummy UI",
-                  style: TextStyle(color: Colors.grey.shade600, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                )
-              ],
-            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.end,
+            //   children: [
+            //     Text(
+            //       "*Dummy UI",
+            //       style: TextStyle(color: Colors.grey.shade600, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+            //     )
+            //   ],
+            // ),
             SizedBox(height: 12),
 //=======================================   SEARCH FILTERS ==========================================================================================
             vastiMandalDropdown(),

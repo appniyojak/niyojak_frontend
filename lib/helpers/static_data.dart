@@ -4557,6 +4557,7 @@ Future<void> saveHinduSanmelanFormData(BuildContext context, Map<String, dynamic
     final responseData = json.decode(response.body);
     if (responseData["Status"].toString() == "200" || responseData["Status"].toString() == "Success") {
       Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+      return;
     }
     Statics.showToast(Statics.getLabel('errorOccurred'));
   } else {
