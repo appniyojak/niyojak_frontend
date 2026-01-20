@@ -101,6 +101,8 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
 
   HinduSanmelanModel? data;
 
+  List<UpnagarmandallistVijayaDashami> checkboxGraamVastiSelectedItems = [];
+
   @override
   void initState() {
     super.initState();
@@ -113,7 +115,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
     ///
     selectedPerson = null;
     selectedPrabhavi = null;
-    selectedVastiCount = null;
+    selectedVastiCount = 0;
     presentMaleController.clear();
     presentMatrushaktiController.clear();
     txtSanmelanFormatController.clear();
@@ -143,6 +145,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
       selectedAnyaprabhaviItemsIds = data?.vastisanyaprabhavi?.where((e) => e.isVisheshdefault == 1).map((e) => e.pkId).join(',');
       selectedAnyaprabhaviItems = data?.vastisanyaprabhavi?.where((e) => e.isVisheshdefault == 1).toList() ?? [];
       selectedBhougolikPratinidhitwaVastiIds = data?.gramlist?.where((e) => e.isdefault == 1).map((e) => e.geoUnitID).join(',');
+      checkboxGraamVastiSelectedItems = data!.gramlist!.where((e) => e.isdefault == 1).toList();
       _urlsList = data?.urldata ?? [];
       _selectedFileNames1 = data?.imgdata?.map((url) => url.value).toList() ?? [];
       _selectedFileNames2 = data?.advimgdata?.map((url) => url.value).toList() ?? [];
@@ -237,7 +240,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
 
       selectedPerson = null;
       selectedPrabhavi = null;
-      selectedVastiCount = null;
+      selectedVastiCount = 0;
       presentMaleController.clear();
       presentMatrushaktiController.clear();
       txtSanmelanFormatController.clear();
@@ -3877,7 +3880,6 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
     );
   }
 
-  List<UpnagarmandallistVijayaDashami> checkboxGraamVastiSelectedItems = [];
   int? selectedVastiCount = 0;
   int totalVastiCount = 0;
   String? selectedBhougolikPratinidhitwaVastiIds;
@@ -3892,6 +3894,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
       int totalCount,
     ) onSubmit,
   }) async {
+    print(">>>>>>>>>>> $preselectedItems");
     List<UpnagarmandallistVijayaDashami> selectedItems = List.from(preselectedItems ?? []);
     print((vastiList.length));
     await showDialog(
@@ -3954,7 +3957,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                             final isSelected = selectedItems.contains(item);
 
                             return CheckboxListTile(
-                              title: Text(item.preferedname ?? ""),
+                              title: Text(item.geoUnitName ?? ""),
                               value: selectedItems.any((e) => e.geoUnitID == item.geoUnitID), // ✅ check by id
                               onChanged: (bool? checked) {
                                 setState(() {

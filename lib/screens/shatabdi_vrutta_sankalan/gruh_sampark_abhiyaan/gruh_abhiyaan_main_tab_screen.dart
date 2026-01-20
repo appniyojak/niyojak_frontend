@@ -189,7 +189,9 @@ class _GruhAbhiyaanMainTabScreenState extends State<GruhAbhiyaanMainTabScreen> w
             ],
           ),
         ),
-        drawer: (Statics.userDetails['userID'].toString().isEmpty || Statics.userDetails['userID'] == "0") ? AppAbhiyanDrawer() : AppDrawer(),
+        drawer: (Statics.userDetails['userID'] == "0" || Statics.userDetails['userID'] == null || Statics.userDetails['LevelID'] == "null" || Statics.userDetails['userID'].toString().isEmpty)
+            ? AppAbhiyanDrawer()
+            : AppDrawer(),
         body: ModalProgressHUD(
           inAsyncCall: _isSearching,
           child:

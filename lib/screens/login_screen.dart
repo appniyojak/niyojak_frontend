@@ -860,11 +860,31 @@ class _LogInCardState extends State<LogInCard> {
         print("switchScreens 5");
         await Statics.populateUserDetailsMap();
         await Statics.populateUserAbhiyaanDetailsMap();
+        print("tyadcc gbcud chbhc a cba bc  ac ajc bja bcjsab cjacas");
+        print(Statics.userDetails['LevelID'] == "null");
+        print((Statics.userDetails['LevelID'] == null ||
+                Statics.userDetails['LevelID'] == "null" ||
+                Statics.userDetails['userID'].toString().isEmpty ||
+                Statics.userDetails['userID'].toString() == "0") &&
+            initialData != null);
+        print((Statics.userDetails['LevelID'] == null ||
+                Statics.userDetails['LevelID'] == "null" ||
+                (Statics.userDetails['userID'].toString().isNotEmpty && Statics.userDetails['userID'].toString() != "0")) &&
+            initialData != null);
         if (Statics.userDetails['isFirstLogin']) {
           print("switchScreens 6");
           landingPage = ChangePassword();
         } else if ((Statics.userDetails['userID'].toString().isEmpty || Statics.userDetails['userID'].toString() == "0") && initialData != null) {
           print("switchScreens 7");
+          print("1234:- ${Statics.userDetails['userID'].toString()}");
+          Database db = await DatabaseHelper.database;
+          await db.execute('UPDATE UserDataMaster SET PreferredLanguageID=6;');
+          await db.execute('UPDATE UserDataMaster SET PreferredLanguageCode=\'Marathi\';');
+          Statics.userDetails['languagePreference'] = 'Marathi';
+          // landingPage = AbhiyanScreen();
+          landingPage = GruhAbhiyaanMainTabScreen();
+        } else if (Statics.userDetails['LevelID'] == null || Statics.userDetails['LevelID'] == "null") {
+          print("switchScreens 7.5");
           print("1234:- ${Statics.userDetails['userID'].toString()}");
           Database db = await DatabaseHelper.database;
           await db.execute('UPDATE UserDataMaster SET PreferredLanguageID=6;');

@@ -20,6 +20,7 @@ import '../screens/home_screen.dart';
 import '../screens/login_screen.dart';
 import '../screens/update_version.dart';
 import 'AbhiyanScreen.dart';
+import 'shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/gruh_abhiyaan_main_tab_screen.dart';
 
 class SplashScreenCheck extends StatefulWidget {
   static const routeName = '/splash-screen';
@@ -117,7 +118,16 @@ class _SplashScreenCheckState extends State<SplashScreenCheck> {
           if (otpuser != null && otpuser == "true") {
             landingPage = EditSwayamsevakScreen();
           } else {
-            landingPage = HomeScreen();
+            print("test ?????????????????????????????????????????????????");
+            print(Statics.userDetails['LevelID']);
+            print(Statics.userDetails['LevelID'] == null);
+            // print(Statics.userDetails['LevelID'].toString().isEmpty);
+            // print((Statics.userDetails['LevelID'] == null || Statics.userDetails['LevelID'].toString().isEmpty));
+            if (Statics.userDetails['LevelID'] == null || Statics.userDetails['LevelID'] == "null") {
+              landingPage = GruhAbhiyaanMainTabScreen();
+            } else {
+              landingPage = HomeScreen();
+            }
           }
         }
       } else {
