@@ -1438,7 +1438,7 @@ Map<String, String> resEnglish = {
   'otherBalopasanaKendra': 'Other Fitness Centre Type',
   'nirmanadhinMothePrakalpa': 'Proposed Mega Residential Complex ',
   'prakalpaOnly': 'Project',
-  'hospitals': 'Hospital',
+  'hospital': 'Hospital',
   'fireBrigateCenter': 'Fire Brigade',
   'isFireBrigateCenter': 'IS there a Firebrigade Station',
   'policeStations': 'Police Station',
@@ -1768,6 +1768,15 @@ Map<String, String> resEnglish = {
   'sanmelanJoinedCount': "Sanmelan Participants Count",
   'sanmelanFormat': "Sanmelan Format",
   'AddSanmelanFormat': "Define the Sanmelan's Format",
+  ////////////////////////////////////// Vasti Sarvekshan Export Block //////////////////////////////////////
+  'vastiSarvekshan': "Vasti Survekshan",
+  'vasahat': "Vasahat Sampark Stithi",
+  'sajjan': "Special Status People",
+  'samajikkaryakram': "Samajik Karyakram",
+  'mothevyavasayi': "Mothe Vyavasayik",
+  'maidan': "Playground / Gardens Name",
+  'karyakram': "Karyakram",
+  'durjan': "Durjan Shakti",
 };
 
 ///1,584
@@ -3213,7 +3222,7 @@ Map<String, String> resMarathi = {
   'otherBalopasanaKendra': 'अन्य बलोपासना केंद्र',
   'nirmanadhinMothePrakalpa': 'निर्माणाधीन मोठे प्रकल्प',
   'prakalpaOnly': 'प्रकल्प',
-  'hospitals': 'रुग्णालय',
+  'hospital': 'रुग्णालय',
   'fireBrigateCenter': 'अग्निशमन दल केंद्र',
   'isFireBrigateCenter': 'अग्निशमन दल केंद्र आहे?',
   'policeStations': 'पोलीस ठाणे/चौकी',
@@ -3544,6 +3553,15 @@ Map<String, String> resMarathi = {
   'SanmelanStartedCountGraam': 'संमेलन झालेले ग्राम',
   'SanmelanStartedCountNagar': 'संमेलन झालेले नगर/तालुका',
   'SanmelanStartedCountMandal': 'संमेलन झालेली मंडल ',
+  ////////////////////////////////////// Vasti Sarvekshan Export Block //////////////////////////////////////
+  'vastiSarvekshan': "वस्ती सर्वेक्षण",
+  'vasahat': "वसाहत संपर्क स्थिती",
+  'sajjan': "सज्जन शक्ति",
+  'samajikkaryakram': "सामाजिक कार्यक्रम",
+  'mothevyavasayi': "मोठे व्यवसायिक",
+  'maidan': "मैदान / उद्यान नाव",
+  'karyakram': "कार्यक्रम",
+  'durjan': "दुर्जन शक्ती",
 };
 
 ///1,583
@@ -4989,7 +5007,7 @@ Map<String, String> resHindi = {
   'otherBalopasanaKendra': 'अन्य पूजा केंद्र',
   'nirmanadhinMothePrakalpa': 'निर्माणाधीन प्रमुख परियोजना',
   'prakalpaOnly': 'परियोजना',
-  'hospitals': 'अस्पताल',
+  'hospital': 'अस्पताल',
   'fireBrigateCenter': 'अग्निशमन विभाग केंद्र',
   'isFireBrigateCenter': 'क्या कोई अग्निशमन विभाग केंद्र है?',
   'policeStations': 'पुलिस स्टेशन/पोस्ट',
@@ -5315,4 +5333,13 @@ Map<String, String> resHindi = {
   'sanmelanJoinedCount': "सम्मेलन में प्रतिभागियों की संख्या",
   'sanmelanFormat': "संमेलन प्रारूप",
   'AddSanmelanFormat': "सम्मेलन के प्रारूप को परिभाषित करें",
+  ////////////////////////////////////// Vasti Sarvekshan Export Block //////////////////////////////////////
+  'vastiSarvekshan': "वस्ती सर्वेक्षण",
+  'vasahat': "वसाहत संपर्क स्थिती",
+  'sajjan': "सज्जन शक्ति",
+  'samajikkaryakram': "सामाजिक कार्यक्रम",
+  'mothevyavasayi': "मोठे व्यवसायिक",
+  'maidan': "मैदान / उद्यान नाव",
+  'karyakram': "कार्यक्रम",
+  'durjan': "दुर्जन शक्ती",
 };

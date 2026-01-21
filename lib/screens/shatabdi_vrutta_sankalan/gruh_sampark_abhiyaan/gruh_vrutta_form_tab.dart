@@ -710,80 +710,94 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
     showDialog(
       context: context,
       useSafeArea: true,
-      builder: (ct) => StatefulBuilder(
-        builder: (ctx, set) => Dialog(
-          surfaceTintColor: Colors.transparent,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          // contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          insetPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 16),
-          // titlePadding: const EdgeInsets.fromLTRB(20, 20, 12, 0),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 12),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          Statics.getLabel('abhiyaanKaryakartaList'),
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+      barrierDismissible: false,
+      builder: (ct) => PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) return;
+          filteredAbhiyaanSwayamsevakDataList = abhiyaanSwayamsevakDataList;
+          _searchController.clear();
+          Navigator.pop(ct);
+        },
+        child: StatefulBuilder(
+          builder: (ctx, set) => Dialog(
+            surfaceTintColor: Colors.transparent,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            // contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            insetPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 16),
+            // titlePadding: const EdgeInsets.fromLTRB(20, 20, 12, 0),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 12),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            Statics.getLabel('abhiyaanKaryakartaList'),
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.close, color: Colors.redAccent),
-                        onPressed: () {
-                          set(() {
-                            // selectedKaryakartaList = [];
-                            _selectedSwayamsevakIds = [];
-                            _selectedKaryakartaIds = [];
-                          });
-                          _searchController.clear();
-                          Navigator.pop(ctx);
-                        },
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 6),
-                  SizedBox(height: 16),
-                  swayamsevakAndKaryakartaTable(ct, set),
-                  SizedBox(height: 12),
-                  // selectedKaryakartaTable(ct, set),
-                  SizedBox(height: 12),
-                  SizedBox(height: 8),
-                  if (_selectedSwayamsevakIds.isNotEmpty || _selectedKaryakartaIds.isNotEmpty)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.purpleAccent,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                            ),
-                            onPressed: () async {
-                              // Statics.showToast(Statics.getLabel("workInProgress"));
-                              Navigator.pop(ctx);
-                              await addToToliListFun();
-                            },
-                            child: Text(
-                              Statics.getLabel('Submit'),
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          ),
+                        IconButton(
+                          icon: const Icon(Icons.close, color: Colors.redAccent),
+                          onPressed: () {
+                            set(() {
+                              // selectedKaryakartaList = [];
+                              _selectedSwayamsevakIds = [];
+                              _selectedKaryakartaIds = [];
+                            });
+                            filteredAbhiyaanSwayamsevakDataList = abhiyaanSwayamsevakDataList;
+                            _searchController.clear();
+                            Navigator.pop(ctx);
+                          },
                         ),
                       ],
                     ),
-                ],
+                    SizedBox(height: 6),
+                    SizedBox(height: 16),
+                    swayamsevakAndKaryakartaTable(ct, set),
+                    SizedBox(height: 12),
+                    // selectedKaryakartaTable(ct, set),
+                    SizedBox(height: 12),
+                    SizedBox(height: 8),
+                    if (_selectedSwayamsevakIds.isNotEmpty || _selectedKaryakartaIds.isNotEmpty)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.purpleAccent,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                              ),
+                              onPressed: () async {
+                                // Statics.showToast(Statics.getLabel("workInProgress"));
+                                Navigator.pop(ctx);
+
+                                filteredAbhiyaanSwayamsevakDataList = abhiyaanSwayamsevakDataList;
+                                _searchController.clear();
+                                await addToToliListFun();
+                              },
+                              child: Text(
+                                Statics.getLabel('Submit'),
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
               ),
             ),
           ),

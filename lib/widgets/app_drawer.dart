@@ -15,6 +15,7 @@ import '../screens/search_annual_baithak_vrutta.dart';
 import '../screens/search_shaakhaa.dart';
 import '../screens/search_swayamsevak_transfer.dart';
 import '../screens/sewa_vasti_list.dart';
+import '../screens/shatabdi_vrutta_sankalan/vasti_sarvekshan_screen.dart';
 
 class AppDrawer extends StatefulWidget {
   const AppDrawer({Key? key}) : super(key: key);
@@ -1002,6 +1003,18 @@ class _AppDrawerState extends State<AppDrawer> {
                   Navigator.of(context).pushReplacementNamed(SearchSwayamsevakTransfer.routeName);
                 },
               ),
+            Divider(),
+            ListTile(
+              dense: true,
+              leading: Icon(Icons.download),
+              title: Text(
+                Statics.getLabel('helpScreenTitle'),
+                style: TextStyle(fontSize: 18),
+              ),
+              onTap: () {
+                Navigator.of(context).pushReplacementNamed(VastiSarvekshanScreen.routeName);
+              },
+            ),
             Divider(),
             ListTile(
               dense: true,

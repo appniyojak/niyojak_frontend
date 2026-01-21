@@ -9718,7 +9718,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             columns: [
                               DataColumn(
                                   label: Text(
-                                "${Statics.getLabel('hospitals')}",
+                                "${Statics.getLabel('hospital')}",
                               )),
                               DataColumn(
                                   label: Text(
@@ -9789,7 +9789,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                         children: [
                                           Divider(thickness: 1, color: Colors.deepPurple.shade100),
                                           SizedBox(height: 12),
-                                          _buildInfoRow("${Statics.getLabel('hospitals')}", selectedData.selectedDropdownValueName),
+                                          _buildInfoRow("${Statics.getLabel('hospital')}", selectedData.selectedDropdownValueName),
                                           _buildInfoRow("${Statics.getLabel('Name')}", selectedData.name),
                                         ],
                                       ),
