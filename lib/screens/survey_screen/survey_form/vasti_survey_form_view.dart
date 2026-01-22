@@ -2643,7 +2643,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                               label: SizedBox(
                                 width: MediaQuery.of(context).size.width < 400 ? 100 : 140,
                                 child: Text(
-                                  "${Statics.getLabel('bhavnacheNaav')}",
+                                  "${Statics.getLabel('bhavanachenav')}",
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
@@ -2751,7 +2751,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                         SizedBox(height: 12),
                                         _buildInfoRow("${Statics.getLabel('SelectFrequency')}", selectedData.selectedDropdownValueName),
                                         SizedBox(height: 12),
-                                        _buildInfoRow("${Statics.getLabel('bhavnacheNaav')}", selectedData.bhavanachenav),
+                                        _buildInfoRow("${Statics.getLabel('bhavanachenav')}", selectedData.bhavanachenav),
                                         SizedBox(height: 12),
                                         _buildInfoRow("${Statics.getLabel('samparkStithi')}", selectedData.selectedDropdownValueName1),
                                         SizedBox(height: 12),
@@ -6484,7 +6484,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                         ],
                       ),
                       const SizedBox(height: 10),
-                      textControllerField2(controller: vsahatPrakarBhavnacheNavController, name: "${Statics.getLabel('bhavnacheNaav')}", keyboardType: TextInputType.text, height: 50),
+                      textControllerField2(controller: vsahatPrakarBhavnacheNavController, name: "${Statics.getLabel('bhavanachenav')}", keyboardType: TextInputType.text, height: 50),
                       const SizedBox(height: 10),
                       // Dropdown 1
                       Align(
@@ -9948,7 +9948,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
               )),
 //==================================  SHAIKSHANIK SANSTHA FORM =================================================================================================================================================
           mainContainer(
-              "${Statics.getLabel('shaikshanikSanstha')}",
+              "${Statics.getLabel('shaikshaniksansthaan')}",
               Column(
                 children: [
                   Row(
@@ -10080,7 +10080,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                             children: [
                                               Divider(thickness: 1, color: Colors.deepPurple.shade100),
                                               SizedBox(height: 12),
-                                              _buildInfoRow("${Statics.getLabel('shaikshanikSanstha')}", selectedData.name),
+                                              _buildInfoRow("${Statics.getLabel('shaikshaniksansthaan')}", selectedData.name),
                                               if (selectedData.shaikshaniksansthaan == 315) _buildInfoRow("${Statics.getLabel('schoolPrakar')}", selectedData.selectedDropdownValueName),
                                               if (selectedData.shaikshaniksansthaan == 315) _buildInfoRow("${Statics.getLabel('shikshanacheMadhyam')}", selectedData.selectedDropdownValueName1),
                                               if (selectedData.shaikshaniksansthaan == 315) _buildInfoRow("${Statics.getLabel('sansthaCHalakPrakar')}", selectedData.selectedDropdownValueName2),
@@ -11444,7 +11444,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("${Statics.getLabel('shaikshanikSanstha')}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.purpleAccent)),
+              Text("${Statics.getLabel('shaikshaniksansthaan')}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.purpleAccent)),
               IconButton(
                 icon: Icon(Icons.close, color: Colors.grey),
                 onPressed: () {

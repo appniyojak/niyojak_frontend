@@ -6,6 +6,11 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class MyAppGlobals {
+  static String checkTextNullEmpty(String? txt) {
+    if (txt == null || txt.isEmpty) return "N/A";
+    return txt;
+  }
+
   static String beautifyHeader(String key) {
     // Optional: turn ekunPat → "Ekun Pat", etc.
     final regex = RegExp(r'(?<=[a-z])(?=[A-Z])');

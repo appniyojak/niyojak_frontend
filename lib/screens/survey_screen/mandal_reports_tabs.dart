@@ -5,13 +5,13 @@ import 'package:niyojak_prod/screens/survey_screen/report_view/mandal_report_tab
 import 'package:niyojak_prod/widgets/app_drawer.dart';
 
 import '../../helpers/static_data.dart' as Statics;
+import 'vasti_sarvekshan_screen.dart';
 
 class MandalSurveyReportScreen extends StatefulWidget {
   static const String routeName = '/mandal-survey-report';
 
   @override
-  _MandalSurveyReportScreenState createState() =>
-      _MandalSurveyReportScreenState();
+  _MandalSurveyReportScreenState createState() => _MandalSurveyReportScreenState();
 }
 
 class _MandalSurveyReportScreenState extends State<MandalSurveyReportScreen> {
@@ -25,6 +25,7 @@ class _MandalSurveyReportScreenState extends State<MandalSurveyReportScreen> {
             Statics.getLabel('mandalSurveyReport'),
             style: TextStyle(fontSize: 24),
           ),
+          actions: [IconButton(onPressed: () => Navigator.of(context).pushNamed(VastiSarvekshanScreen.routeName), icon: Icon(Icons.download, color: Colors.white)), SizedBox(width: 8)],
           bottom: TabBar(
             indicatorColor: Colors.white,
             indicatorSize: TabBarIndicatorSize.label,

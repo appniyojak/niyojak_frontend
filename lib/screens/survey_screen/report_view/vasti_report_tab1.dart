@@ -2940,7 +2940,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                     ),
 
                     commonExpansionTile(
-                      title: 'shaikshanikSanstha',
+                      title: 'shaikshaniksansthaan',
                       children: [
                         Container(
                           // height: 300,
@@ -2956,7 +2956,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                   padding: EdgeInsets.symmetric(vertical: 8),
                                   child: Center(
                                     child: Text(
-                                      "${Statics.getLabel('school')}",
+                                      "${Statics.getLabel('school1')}",
                                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                     ),
                                   ),
@@ -2982,7 +2982,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                           label: Expanded(
                                             child: Center(
                                               child: Text(
-                                                "${Statics.getLabel('school')}",
+                                                "${Statics.getLabel('school1')}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(fontWeight: FontWeight.bold),
                                               ),

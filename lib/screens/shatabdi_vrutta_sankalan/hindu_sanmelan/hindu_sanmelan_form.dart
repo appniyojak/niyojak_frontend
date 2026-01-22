@@ -708,14 +708,16 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                             Fluttertoast.showToast(msg: "${Statics.getLabel('NagarSelectionImportant')}");
                             return;
                           }
-                          // final list = data?.vastisarsajjanshakti ?? [];
-                          // final list2 = data?.vastisanyaprabhavi ?? [];
+
+                          final _tempFiles1 = (data?.vastisarsajjanshakti ?? []).where((e) => !selectedSajjanshaktiItems.contains(e)).toList();
+                          final _tempFiles2 = (data?.vastisanyaprabhavi ?? []).where((e) => !selectedAnyaprabhaviItems.contains(e)).toList();
+
                           // final preselected = list.any((e) => e.isMukhyadefault == 1) ? list.firstWhere((e) => e.isMukhyadefault == 1) : list2.firstWhere((e) => e.isMukhyadefault == 1,orElse: () => list2.first);
 
                           showMukhyaAtithiSelectionPopup(
                             context,
-                            // vastisarsajjanshaktiList: data?.vastisarsajjanshakti ?? [],
-                            // vastisanyaprabhaviList: data?.vastisanyaprabhavi ?? [],
+                            sarsajjanshaktiList: _tempFiles1,
+                            sanyaprabhaviList: _tempFiles2,
                             // preselectedItem: preselected,
                             // preselectedType: selectedType,
                             // onSubmit: (id, type, selectedItem) {
@@ -828,8 +830,8 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                             return;
                           }
 
-                          final _tempFiles1 = (data?.vastisarsajjanshakti ?? []).where((e) => e.pkid != selectedPerson?.pkid || e.isMukhyadefault == 0).toList();
-                          final _tempFiles2 = (data?.vastisanyaprabhavi ?? []).where((e) => e.pkId != selectedPrabhavi?.pkId || e.isMukhyadefault == 0).toList();
+                          final _tempFiles1 = (data?.vastisarsajjanshakti ?? []).where((e) => selectedPerson != e).toList();
+                          final _tempFiles2 = (data?.vastisanyaprabhavi ?? []).where((e) => selectedPrabhavi != e).toList();
 
                           // _tempFiles1.where((e) => e.pkid != selectedPerson?.pkid || e.isMukhyadefault == 0).toList();
                           // _tempFiles2.where((e) => e.pkId != selectedPrabhavi?.pkId || e.isMukhyadefault == 0).toList();
@@ -1667,6 +1669,14 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                 onPressed: () {
                   if (!_searched) {
                     Fluttertoast.showToast(msg: "${Statics.getLabel('NagarSelectionImportant')}");
+                    return;
+                  }
+                  if (_selectedFileNames1.isNotEmpty && txtUtsavPhotoDescController.text.isEmpty) {
+                    Statics.showToast("${Statics.getLabel('AddSanmelanFilesDesc')}", toastLength: Toast.LENGTH_LONG);
+                    return;
+                  }
+                  if (_selectedFileNames2.isNotEmpty && txtUtsavAddPhotoDescController.text.isEmpty) {
+                    Statics.showToast("${Statics.getLabel('AddAdvSanmelanFilesDesc')}", toastLength: Toast.LENGTH_LONG);
                     return;
                   }
                   // if ([null, 2].contains(programNirdharitVed) || [null, 2].contains(programHishobh24Hour)) {
@@ -3123,6 +3133,11 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
             ),
           ),
         SizedBox(height: 14),
+        // Text(
+        //   "वर्तमान पत्राचे नाव, दिनांक  आणि आवृत्ति",
+        //   style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600, color: Colors.grey.shade700, fontStyle: FontStyle.italic),
+        // ),
+        // SizedBox(height: 14),
         TextFormField(
           controller: txtUtsavAddPhotoDescController,
           textAlignVertical: TextAlignVertical.center,
@@ -3460,7 +3475,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
 
   // int? selectedMukhyaAtithi;
 
-  Future<void> showMukhyaAtithiSelectionPopup(BuildContext context, {dynamic preselectedItem}) async {
+  Future<void> showMukhyaAtithiSelectionPopup(BuildContext context, {sarsajjanshaktiList, sanyaprabhaviList, dynamic preselectedItem}) async {
     // print(vastisarsajjanshaktiList.length);
     dynamic selectedItem = selectedPerson ?? selectedPrabhavi;
     // String? selectedType = preselectedType;
@@ -3658,7 +3673,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                                   ),
                                 ],
                               ),
-                              ...(data?.vastisarsajjanshakti ?? []).map((item) {
+                              ...sarsajjanshaktiList.map((item) {
                                 return TableRow(
                                   children: [
                                     Center(
@@ -3747,7 +3762,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                                   ),
                                 ],
                               ),
-                              ...(data?.vastisanyaprabhavi ?? []).map((item) {
+                              ...sanyaprabhaviList.map((item) {
                                 return TableRow(
                                   children: [
                                     Center(
@@ -3818,10 +3833,12 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                               if (selectedType == "sarsajjanshakti") {
                                 selectedPerson = selectedItem as Vastisarsajjanshakti;
                                 selectedPrabhavi = null;
+                                print(selectedPerson?.pkid);
                                 // selectedMukhyaAtithi = selectedPerson?.pkid;
                               } else {
                                 selectedPrabhavi = selectedItem as Vastisanyaprabhavi;
                                 selectedPerson = null;
+                                print(selectedPrabhavi?.pkId);
                                 // selectedMukhyaAtithi = selectedPrabhavi?.pkId;
                               }
                             });

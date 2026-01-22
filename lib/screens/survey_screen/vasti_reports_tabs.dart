@@ -4,13 +4,13 @@ import 'package:niyojak_prod/screens/survey_screen/report_view/vasti_report_tab2
 import 'package:niyojak_prod/widgets/app_drawer.dart';
 
 import '../../helpers/static_data.dart' as Statics;
+import 'vasti_sarvekshan_screen.dart';
 
 class VastiSurveyReportScreen extends StatefulWidget {
   static const String routeName = '/vasti-survey-report-tab-view';
 
   @override
-  _VastiSurveyReportScreenState createState() =>
-      _VastiSurveyReportScreenState();
+  _VastiSurveyReportScreenState createState() => _VastiSurveyReportScreenState();
 }
 
 class _VastiSurveyReportScreenState extends State<VastiSurveyReportScreen> {
@@ -36,6 +36,7 @@ class _VastiSurveyReportScreenState extends State<VastiSurveyReportScreen> {
               ),
             ],
           ),
+          actions: [IconButton(onPressed: () => Navigator.of(context).pushNamed(VastiSarvekshanScreen.routeName), icon: Icon(Icons.download, color: Colors.white)), SizedBox(width: 8)],
         ),
         drawer: AppDrawer(),
         body: TabBarView(

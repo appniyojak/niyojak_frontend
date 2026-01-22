@@ -85,8 +85,8 @@ import 'screens/shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/gruh_abhiyaan_mai
 import 'screens/shatabdi_vrutta_sankalan/hindu_sanmelan/hindu_sanmelan_form.dart';
 import 'screens/shatabdi_vrutta_sankalan/hindu_sanmelan/hindu_sanmelan_report.dart';
 import 'screens/shatabdi_vrutta_sankalan/hindu_sanmelan/search_sajjan_anya_screen.dart';
-import 'screens/shatabdi_vrutta_sankalan/vasti_sarvekshan_screen.dart';
 import 'screens/shatabdi_vrutta_sankalan/vijayadashami/vijayadashami_form_view.dart';
+import 'screens/survey_screen/vasti_sarvekshan_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,12 +1,17 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:excel/excel.dart' as exc;
 import 'package:flutter/material.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../helpers/static_data.dart' as Statics;
 import '../../models/response_model/vasti_sarvekshan_resp_model.dart';
 import '../../providers/bals.dart';
-import '../../widgets/app_drawer.dart';
+import '../../utils/globals.dart';
 
 class VastiSarvekshanScreen extends StatefulWidget {
   static const String routeName = '/vasti-sarvekshan-view';
@@ -19,7 +24,7 @@ class VastiSarvekshanScreen extends StatefulWidget {
 
 class _VastiSarvekshanScreenState extends State<VastiSarvekshanScreen> {
   bool _isExpanded = true;
-  bool _searched = true;
+  bool _searched = false;
 
   List<GeoUnitMasterBAL>? _linkedMahaanagar;
   List<GeoUnitMasterBAL>? _linkedVibhaag;
@@ -80,11 +85,12 @@ class _VastiSarvekshanScreenState extends State<VastiSarvekshanScreen> {
     populateDropdown();
   }
 
-  clearForm() {
-    populateDropdown();
-    _selectedGeoUnitId = null;
-    selectedType = null;
-    setState(() {});
+  clearForm() async {
+    await populateDropdown();
+    setState(() {
+      _selectedGeoUnitId = null;
+      selectedType = null;
+    });
   }
 
   //////////////////////////////////////////////////////////////////////////////////////
@@ -213,22 +219,171 @@ class _VastiSarvekshanScreenState extends State<VastiSarvekshanScreen> {
     });
   }
 
+  List<dynamic> getSelectedList() {
+    if (data == null || selectedType == null) return [];
+
+    switch (selectedType) {
+      case "vasahat":
+        return data?.vasahatList ?? [];
+      case "sajjan":
+        return data?.sajjanList ?? [];
+      case "anya":
+        return data?.anyaList ?? [];
+      case "mahatvacesana":
+        return data?.mahatvaCesanaList ?? [];
+      case "samajikkaryakram":
+        return data?.samajikKaryakramList ?? [];
+      case "mothevyavasayi":
+        return data?.motheVyavasayiList ?? [];
+      case "motherugnalaya":
+        return data?.motherUgnalayaList ?? [];
+      case "school":
+        return data?.schoolList ?? [];
+      case "maidan":
+        return data?.maidanList ?? [];
+      case "karyakram":
+        return data?.karyakramList ?? [];
+      case "dhaarmik":
+        return data?.dharmikList ?? [];
+      case "durjan":
+        return data?.durjanList ?? [];
+      case "hinduvirayadi":
+        return data?.hinduVirayadiList ?? [];
+      default:
+        return [];
+    }
+  }
+
+  List<dynamic> selectedList = [];
+
+  Future<void> exportSelectedTypeToExcel() async {
+    final list = getSelectedList();
+
+    if (list.isEmpty) {
+      print("No data to export");
+      return;
+    }
+
+    // Ask storage permission
+    await Permission.storage.request();
+
+    var excel = exc.Excel.createExcel();
+    exc.Sheet sheet = excel['Report'];
+
+    // Original keys
+    final keys = list.first.toJson().keys.toList();
+
+    // Formatted headers
+    final translatedHeader = keys.map((k) => Statics.getLabel(k.toString().toLowerCase(), returnKey: true)).toList();
+
+    // 🔹 Header row
+    sheet.appendRow(translatedHeader);
+
+    // 🔹 Blank row (space between header & data)
+    sheet.appendRow(List.filled(translatedHeader.length, ""));
+
+    // Generate headers
+    final headers = list.first.toJson().keys.toList();
+
+    // Data rows
+    for (var item in list) {
+      final json = item.toJson();
+      sheet.appendRow(headers.map((h) => json[h]?.toString() ?? "").toList());
+    }
+
+    // Save file
+    final directory = await getExternalStorageDirectory();
+    final filePath = "${directory!.path}/${selectedType}_${DateTime.now().millisecondsSinceEpoch}.xlsx";
+
+    final fileBytes = excel.encode();
+    final file = File(filePath);
+    await file.writeAsBytes(fileBytes!);
+
+    print("Excel Exported: $filePath");
+
+    // 🔹 Open the file using OpenFilex
+    await OpenFilex.open(filePath);
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "${Statics.getLabel('hinduSammelan')}",
+          "${Statics.getLabel('vastiSurveyReport')}",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
       ),
-      drawer: AppDrawer(),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.only(right: 16, left: 16, top: 24, bottom: 16),
-        child: Column(
-          children: [vastiMandalDropdown(), if (_searched) ...[]],
-        ),
+      // drawer: AppDrawer(),
+      floatingActionButton: _searched && selectedList.isNotEmpty
+          ? FloatingActionButton(
+              tooltip: Statics.getLabel("ExportToExcel"),
+              onPressed: exportSelectedTypeToExcel,
+              child: Icon(Icons.download_sharp),
+              backgroundColor: Colors.green,
+            )
+          : null,
+      body: Column(
+        children: [
+          vastiMandalDropdown(),
+          if (_searched) ...[
+            SizedBox(height: 18),
+            if (_selctedLevel != "" && _selctedLevelName != "")
+              Container(
+                height: 40,
+                margin: EdgeInsets.symmetric(horizontal: 16),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.purpleAccent, width: 1),
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "${Statics.getLabel(_selctedLevel ?? "Mahaanagar")}  ->  ",
+                      style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    Text(
+                      " $_selctedLevelName",
+                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17),
+                    ),
+                  ],
+                ),
+              ),
+            SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Divider(color: Colors.black),
+            ),
+            SizedBox(height: 18),
+            Expanded(
+              child: selectedList.isEmpty
+                  ? Center(
+                      child: Text("No Data Found"),
+                    )
+                  : Scrollbar(
+                      thumbVisibility: true,
+                      child: ListView.builder(
+                        padding: EdgeInsets.only(right: 16, left: 16, top: 8, bottom: 90),
+                        itemCount: selectedList.length,
+                        itemBuilder: (context, index) {
+                          final item = selectedList[index];
+
+                          return commonInfoCard(
+                            item,
+                            () => showPersonDetailsPopup(context, item, index + 1),
+                          );
+                        },
+                      ),
+                    ),
+            )
+          ]
+        ],
       ),
     );
   }
@@ -240,6 +395,7 @@ class _VastiSarvekshanScreenState extends State<VastiSarvekshanScreen> {
         borderRadius: BorderRadius.circular(5),
         border: Border.all(width: 0.7, color: Colors.grey.shade700),
       ),
+      margin: EdgeInsets.only(left: 16, right: 16, top: 24),
       child: ExpansionPanelList(
         elevation: 0,
         expandedHeaderPadding: EdgeInsets.zero,
@@ -467,7 +623,7 @@ class _VastiSarvekshanScreenState extends State<VastiSarvekshanScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // if ((_linkedgraamValue != "" && _linkedgraamValue != null) || (_linkedvastiValue != "" && _linkedvastiValue != null))
+                      // if ( selectedType != null)
                       MaterialButton(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                         padding: EdgeInsets.symmetric(
@@ -477,6 +633,10 @@ class _VastiSarvekshanScreenState extends State<VastiSarvekshanScreen> {
                         color: Theme.of(context).primaryColor,
                         textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                         onPressed: () async {
+                          if (selectedType == null) {
+                            Statics.showToast("please select type");
+                            return;
+                          }
                           _selctedLevelNameList = [];
                           setState(() {});
                           // _selctedLevelNameList.add(_linkedMahaanagarName);
@@ -492,6 +652,7 @@ class _VastiSarvekshanScreenState extends State<VastiSarvekshanScreen> {
                           await getReportDataFun();
 
                           setState(() {
+                            selectedList = getSelectedList();
                             _selctedLevelNames = _selctedLevelNameList
                                 .where((e) => e != null && e.isNotEmpty) // remove null or empty strings
                                 .cast<String>() // convert from String? to String
@@ -513,9 +674,9 @@ class _VastiSarvekshanScreenState extends State<VastiSarvekshanScreen> {
                               _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedvastiValue = _linkedgraamValue = null;
                               _linkedVibhaagValue = _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
                               _selctedLevel = "praant";
+                              selectedType = null;
                             });
-                            clearForm();
-                            await populateDropdown();
+                            await clearForm();
                           },
                           child: Text(Statics.getLabel('clear'))),
                     ],
@@ -546,6 +707,155 @@ class _VastiSarvekshanScreenState extends State<VastiSarvekshanScreen> {
         items: items,
         onChanged: onChanged,
       ),
+    );
+  }
+
+  Widget commonInfoCard(dynamic item, VoidCallback onView) {
+    final json = item.toJson();
+
+    return Card(
+      elevation: 3,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: ListTile(
+        title: Text(
+          MyAppGlobals.checkTextNullEmpty(json["Name"] ?? json["BhavanacheNav"] ?? json["Saan"] ?? json["ShaikshanikSansthaan"]),
+        ),
+        subtitle: Text(json["VastigramName"] ?? ""),
+        trailing: IconButton(
+          icon: const Icon(Icons.remove_red_eye, color: Colors.purple),
+          onPressed: onView,
+        ),
+      ),
+    );
+  }
+
+  List<Map<String, String>> buildDetails(dynamic item) {
+    final Map<String, dynamic> jsonMap = item.toJson();
+
+    return jsonMap.entries.map((entry) {
+      return {entry.key: entry.value?.toString() ?? "--"};
+    }).toList();
+  }
+
+  Future<void> showPersonDetailsPopup(BuildContext context, dynamic item, int srNo) {
+    List<Map<String, String>> details = buildDetails(item);
+
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          insetPadding: const EdgeInsets.all(16),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Header
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.purple, Colors.purpleAccent],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "${Statics.getLabel('moreInfo')}",
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close, color: Colors.white),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Details
+                Flexible(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      children: details.map((e) {
+                        return Container(
+                          margin: const EdgeInsets.symmetric(vertical: 6),
+                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.05),
+                                blurRadius: 5,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            spacing: 8,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                flex: 3,
+                                child: Text(
+                                  Statics.getLabel(e.keys.first.toLowerCase(), returnKey: true),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 5,
+                                child: Text(
+                                  e.values.first.isEmpty ? "--" : e.values.first,
+                                  style: const TextStyle(fontSize: 14),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 8),
+
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.purpleAccent,
+                      minimumSize: const Size.fromHeight(45),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(Icons.check_circle, color: Colors.white),
+                    label: Text(
+                      "${Statics.getLabel('bandKara')}",
+                      style: const TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

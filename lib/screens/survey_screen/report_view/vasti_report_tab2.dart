@@ -45,6 +45,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
   String? selctedLevelId = '';
   String? selctedLevelNameNew = '';
   String? selctedLevelIdNew = '';
+
   //=====================================  NEW  ADD ========================================================================================
   final rowTitles = [
     "${Statics.getLabel('Shaakhaa')}",
@@ -56,6 +57,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
     "${Statics.getLabel('purviShakhaHoti')}",
     "${Statics.getLabel('isBeforeSaaptahikMilan')}",
   ];
+
   String getCellValueByRowIndex(SanghaKaryaStithiData e, int index) {
     switch (index) {
       case 0:
@@ -81,67 +83,55 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
 
   var geoUnitID;
   var geoUnitName;
+
   void populateDropdown() async {
     var data = await Statics.getStaticLDB('AnnualBaithakType');
     populatelinkedMahaanagarDropdown();
     populatelinkedVibhaagDropdown('');
     if (!mounted) return;
     _baithakTypes = data;
-    _baithakTypes = _baithakTypes!
-        .where((element) => element.showAnnualBaithakkey!.contains('1'))
-        .toList();
+    _baithakTypes = _baithakTypes!.where((element) => element.showAnnualBaithakkey!.contains('1')).toList();
     print("_baithakTypes :-- $_baithakTypes");
     setState(() {});
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedMahaanagarDropdown() async {
-    var data = await Statics.getGeoUnitsByLevelAndParentForVasti(
-        Statics.levels['MahaanagarLevelID'].toString(), '', '', '');
+    var data = await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['MahaanagarLevelID'].toString(), '', '', '');
     setState(() {
       _linkedMahaanagar = data;
     });
     return data;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(
-      String vibhaagIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(String vibhaagIDStr) async {
     _linkedNagarValue = null;
-    var data = await Statics.getGeoUnitsByLevelAndParentForVasti(
-        Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
+    var data = await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
     setState(() {
       _linkedBhaag = data;
     });
     return data;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(
-      String mahaanagarIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
     _linkedBhaagValue = null;
-    var data = await Statics.getGeoUnitsByLevelAndParentForVasti(
-        Statics.levels['VibhaagLevelID'].toString(),
-        mahaanagarIDStr,
-        (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'),
-        '');
+    var data = await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '');
     setState(() {
       _linkedVibhaag = data;
     });
     return data;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(
-      String? bhaagIDStr, String? shaharIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
     _linkedNagarValue = null;
     _linkedNagar = null;
     if (shaharIDStr != null) {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParentForVasti(
-          Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
+      var ngDD = await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
       setState(() {
         _linkedNagar = (ngDD.length > 0 ? ngDD : null);
       });
       return ngDD;
     } else {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParentForVasti(
-          Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
+      var ngDD = await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
       setState(() {
         _linkedNagar = (ngDD.length > 0 ? ngDD : null);
       });
@@ -149,11 +139,9 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
     }
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(
-      String nagarIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(String nagarIDStr) async {
     _linkedvastiValue = null;
-    var vsDD = await Statics.getGeoUnitsByLevelAndParentForVasti(
-        Statics.levels['VastiLevelID'].toString(), nagarIDStr, 'Nagar', '');
+    var vsDD = await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['VastiLevelID'].toString(), nagarIDStr, 'Nagar', '');
     setState(() {
       _linkedvasti = (vsDD.length > 0 ? vsDD : null);
     });
@@ -185,17 +173,15 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
   void getGeoUnitID() async {
     setState(() {
       geoUnitID = Statics.userDetails["DaayitvaGeoUnitID"];
-      geoUnitName = Statics.userDetails["DaayitvaGeoUnitName"] +
-          "-" +
-          Statics.userDetails["LevelName"];
+      geoUnitName = Statics.userDetails["DaayitvaGeoUnitName"] + "-" + Statics.userDetails["LevelName"];
     });
   }
 
   VastiSurveyReportModel? vastiSurveyReportModel;
   Vastisarvekshan? data;
+
   void getMyDetailsColumnsAndRows() async {
-    vastiSurveyReportModel = await Statics.vastisarvekshanReportData(
-        context, Statics.userDetails["userID"], selctedLevelId);
+    vastiSurveyReportModel = await Statics.vastisarvekshanReportData(context, Statics.userDetails["userID"], selctedLevelId);
     setState(() {
       data = vastiSurveyReportModel!.vastisarvekshan;
     });
@@ -230,10 +216,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                       backgroundColor: Colors.transparent,
                       headerBuilder: (BuildContext context, bool isExpanded) {
                         return ListTile(
-                          title: Text("${Statics.getLabel('selectStar')}",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold)),
+                          title: Text("${Statics.getLabel('selectStar')}", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
                           trailing: IconButton(
                               onPressed: () {
                                 resetData();
@@ -250,13 +233,9 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                           children: [
                             if (_linkedMahaanagar != null)
                               DropdownButtonFormField(
-                                decoration: InputDecoration(
-                                    labelText:
-                                        "${Statics.getLabel('mahaanagar')}"),
+                                decoration: InputDecoration(labelText: "${Statics.getLabel('mahaanagar')}"),
                                 isExpanded: true,
-                                value: _linkedMahaanagarValue == ""
-                                    ? null
-                                    : _linkedMahaanagarValue,
+                                value: _linkedMahaanagarValue == "" ? null : _linkedMahaanagarValue,
                                 items: _linkedMahaanagar!
                                     .map((bg) => DropdownMenuItem(
                                           value: bg.geoUnitID.toString(),
@@ -264,9 +243,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                         ))
                                     .toList(),
                                 onChanged: (value) {
-                                  final selectedItem = _linkedMahaanagar!
-                                      .firstWhere((bg) =>
-                                          bg.geoUnitID.toString() == value);
+                                  final selectedItem = _linkedMahaanagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                                   setState(() {
                                     _linkedMahaanagarValue = value;
                                     _linkedVibhaagValue = null;
@@ -279,8 +256,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     selctedLevel = 'Mahanagar';
                                   });
                                   print("Selected Id: $value");
-                                  print(
-                                      "Selected Level Name: ${selectedItem.name}");
+                                  print("Selected Level Name: ${selectedItem.name}");
                                 },
                               ),
                             SizedBox(
@@ -288,37 +264,25 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                             ),
                             if (_linkedVibhaag != null)
                               DropdownButtonFormField(
-                                decoration: InputDecoration(
-                                    labelText:
-                                        "${Statics.getLabel('vibhaag')}"),
+                                decoration: InputDecoration(labelText: "${Statics.getLabel('vibhaag')}"),
                                 isExpanded: true,
-                                value: _linkedVibhaagValue == ""
-                                    ? null
-                                    : _linkedVibhaagValue,
-                                items: _linkedVibhaag!
-                                    .map((bg) => DropdownMenuItem(
-                                        value: bg.geoUnitID.toString(),
-                                        child: Text(bg.name!)))
-                                    .toList(),
+                                value: _linkedVibhaagValue == "" ? null : _linkedVibhaagValue,
+                                items: _linkedVibhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                 onChanged: (value) {
-                                  final selectedItem = _linkedVibhaag!
-                                      .firstWhere((bg) =>
-                                          bg.geoUnitID.toString() == value);
+                                  final selectedItem = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                                   print(value);
                                   setState(() {
                                     _linkedVibhaagValue = value;
                                     populatelinkedBhaagDropdown(value!);
                                     vibhagId = value;
-                                    _linkedBhaagValue =
-                                        _linkedNagarValue = null;
+                                    _linkedBhaagValue = _linkedNagarValue = null;
                                     _linkedBhaag = _linkedNagar = null;
                                     selctedLevelId = value;
                                     selctedLevelName = selectedItem.name ?? "";
                                     selctedLevel = 'Vibhaag';
                                   });
                                   print("Selected Id: $value");
-                                  print(
-                                      "Selected Level Name: ${selectedItem.name}");
+                                  print("Selected Level Name: ${selectedItem.name}");
                                 },
                               ),
                             SizedBox(
@@ -326,20 +290,12 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                             ),
                             if (_linkedBhaag != null)
                               DropdownButtonFormField(
-                                decoration: InputDecoration(
-                                    labelText: Statics.getLabel('Bhaag')),
+                                decoration: InputDecoration(labelText: Statics.getLabel('Bhaag')),
                                 isExpanded: true,
-                                value: _linkedBhaagValue == ""
-                                    ? null
-                                    : _linkedBhaagValue,
-                                items: _linkedBhaag!
-                                    .map((bg) => DropdownMenuItem(
-                                        value: bg.geoUnitID.toString(),
-                                        child: Text(bg.name!)))
-                                    .toList(),
+                                value: _linkedBhaagValue == "" ? null : _linkedBhaagValue,
+                                items: _linkedBhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                 onChanged: (value) {
-                                  final selectedItem = _linkedBhaag!.firstWhere(
-                                      (bg) => bg.geoUnitID.toString() == value);
+                                  final selectedItem = _linkedBhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                                   setState(() {
                                     _linkedBhaagValue = value;
                                     populatelinkedNagarDropdown(value, null);
@@ -348,31 +304,20 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     selctedLevel = 'Bhaag';
                                   });
                                   print("Selected Id: $value");
-                                  print(
-                                      "Selected Level Name: ${selectedItem.name}");
+                                  print("Selected Level Name: ${selectedItem.name}");
                                 },
                               ),
                             SizedBox(
                               height: 10,
                             ),
-                            if (_linkedNagar != null &&
-                                _linkedNagar!.length > 0)
+                            if (_linkedNagar != null && _linkedNagar!.length > 0)
                               DropdownButtonFormField(
-                                decoration: InputDecoration(
-                                    labelText:
-                                        "${Statics.getLabel('NagarShahari')}"),
+                                decoration: InputDecoration(labelText: "${Statics.getLabel('NagarShahari')}"),
                                 isExpanded: true,
-                                value: _linkedNagarValue == ""
-                                    ? null
-                                    : _linkedNagarValue,
-                                items: _linkedNagar!
-                                    .map((bg) => DropdownMenuItem(
-                                        value: bg.geoUnitID.toString(),
-                                        child: Text(bg.name!)))
-                                    .toList(),
+                                value: _linkedNagarValue == "" ? null : _linkedNagarValue,
+                                items: _linkedNagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                 onChanged: (value) {
-                                  final selectedItem = _linkedNagar!.firstWhere(
-                                      (bg) => bg.geoUnitID.toString() == value);
+                                  final selectedItem = _linkedNagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                                   setState(() {
                                     _linkedNagarValue = value;
                                     populatelinkedVastiDropdown(value!);
@@ -381,33 +326,21 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     selctedLevel = 'Nagar';
                                   });
                                   print("Selected Id: $value");
-                                  print(
-                                      "Selected Level Name: ${selectedItem.name}");
+                                  print("Selected Level Name: ${selectedItem.name}");
                                 },
                               ),
-                            if (_linkedNagar != null &&
-                                _linkedNagar!.length > 0)
+                            if (_linkedNagar != null && _linkedNagar!.length > 0)
                               SizedBox(
                                 height: 10,
                               ),
-                            if (_linkedvasti != null &&
-                                _linkedvasti!.length > 0)
+                            if (_linkedvasti != null && _linkedvasti!.length > 0)
                               DropdownButtonFormField(
-                                decoration: InputDecoration(
-                                    labelText:
-                                        "${Statics.getLabel('vastiLabel')}"),
+                                decoration: InputDecoration(labelText: "${Statics.getLabel('vastiLabel')}"),
                                 isExpanded: true,
-                                value: _linkedvastiValue == ""
-                                    ? null
-                                    : _linkedvastiValue,
-                                items: _linkedvasti!
-                                    .map((bg) => DropdownMenuItem(
-                                        value: bg.geoUnitID.toString(),
-                                        child: Text(bg.name!)))
-                                    .toList(),
+                                value: _linkedvastiValue == "" ? null : _linkedvastiValue,
+                                items: _linkedvasti!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                 onChanged: (value) {
-                                  final selectedItem = _linkedvasti!.firstWhere(
-                                      (bg) => bg.geoUnitID.toString() == value);
+                                  final selectedItem = _linkedvasti!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                                   setState(() {
                                     _linkedvastiValue = value;
                                     selctedLevelId = value;
@@ -415,12 +348,10 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     selctedLevel = 'Vasti';
                                   });
                                   print("Selected Id: $value");
-                                  print(
-                                      "Selected Level Name: ${selectedItem.name}");
+                                  print("Selected Level Name: ${selectedItem.name}");
                                 },
                               ),
-                            if (_linkedvasti != null &&
-                                _linkedvasti!.length > 0)
+                            if (_linkedvasti != null && _linkedvasti!.length > 0)
                               SizedBox(
                                 height: 10,
                               ),
@@ -428,28 +359,20 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                               Align(
                                 alignment: Alignment.center,
                                 child: ElevatedButton(
-                                  style: ButtonStyle(
-                                      backgroundColor: MaterialStatePropertyAll(
-                                          Colors.purpleAccent)),
+                                  style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.purpleAccent)),
                                   onPressed: () {
-                                    if (selctedLevel == "Vasti" ||
-                                        selctedLevel == "Graam") {
+                                    if (selctedLevel == "Vasti" || selctedLevel == "Graam") {
                                       setState(() {
                                         isVastiSearch = true;
                                         _isExpanded = false;
                                       });
-                                      print(
-                                          "selctedLevel $selctedLevel -- selctedLevelId $selctedLevelId -- selctedLevelName $selctedLevelName");
+                                      print("selctedLevel $selctedLevel -- selctedLevelId $selctedLevelId -- selctedLevelName $selctedLevelName");
                                       getMyDetailsColumnsAndRows();
                                     } else {
-                                      Statics.showToast(Statics.getLabel(
-                                          'vastiGramValidation'));
+                                      Statics.showToast(Statics.getLabel('vastiGramValidation'));
                                     }
                                   },
-                                  child: Text("${Statics.getLabel('Filters')}",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold)),
+                                  child: Text("${Statics.getLabel('Filters')}", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                                 ),
                               )
                           ],
@@ -460,15 +383,11 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                   ],
                 ),
               ),
-              if (selctedLevel == "Vasti" &&
-                  selctedLevelName != "" &&
-                  isVastiSearch == true)
+              if (selctedLevel == "Vasti" && selctedLevelName != "" && isVastiSearch == true)
                 SizedBox(
                   height: 20,
                 ),
-              if (selctedLevel == "Vasti" &&
-                  selctedLevelName != "" &&
-                  isVastiSearch == true)
+              if (selctedLevel == "Vasti" && selctedLevelName != "" && isVastiSearch == true)
                 Container(
                     height: 40,
                     width: double.infinity,
@@ -482,17 +401,11 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                       children: [
                         Text(
                           "${Statics.getLabel('Vasti')} ->  ",
-                          style: TextStyle(
-                              color: Colors.purpleAccent,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16),
+                          style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                         Text(
                           " $selctedLevelName",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 17),
+                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17),
                         ),
                       ],
                     )),
@@ -508,86 +421,46 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                     commonExpansionTile(
                       title: 'VastiInfo',
                       children: [
-                        SingleColumnRow(
-                            txtString:
-                                "${Statics.getLabel('vastiPramukhName')}",
-                            value: data?.vastiPramukhName,
-                            fontsize: 15),
-                        SingleColumnRow(
-                            txtString:
-                                "${Statics.getLabel('vastiSamitiSadasyaCount')}",
-                            value: data?.vastiSamitiSadhyasyaCount.toString(),
-                            fontsize: 15),
-                        SingleColumnRow(
-                            txtString:
-                                "${Statics.getLabel('vastitSewaVastiCount')}",
-                            value: data?.vastiSewaVastiCount.toString(),
-                            fontsize: 15),
-                        SingleColumnRow(
-                            txtString:
-                                "${Statics.getLabel('vastichiLoksankhya')}",
-                            value: data?.vastichiLoksankhyaCount,
-                            fontsize: 15),
-                        SingleColumnRow(
-                            txtString:
-                                "${Statics.getLabel('vastiBhougolikSima')}",
-                            value: data?.vastiBhougolikSima,
-                            fontsize: 15),
+                        SingleColumnRow(txtString: "${Statics.getLabel('vastiPramukhName')}", value: data?.vastiPramukhName, fontsize: 15),
+                        SingleColumnRow(txtString: "${Statics.getLabel('vastiSamitiSadasyaCount')}", value: data?.vastiSamitiSadhyasyaCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: "${Statics.getLabel('vastitSewaVastiCount')}", value: data?.vastiSewaVastiCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: "${Statics.getLabel('vastichiLoksankhya')}", value: data?.vastichiLoksankhyaCount, fontsize: 15),
+                        SingleColumnRow(txtString: "${Statics.getLabel('vastiBhougolikSima')}", value: data?.vastiBhougolikSima, fontsize: 15),
                         Column(
                           children: [
                             Center(
                               child: Container(
-                                width:
-                                    Statics.getDeviceSize(context).width * 0.84,
+                                width: Statics.getDeviceSize(context).width * 0.84,
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Flexible(
-                                      child: Text(
-                                          "${Statics.getLabel('vastichhaNakashaa')}",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w500)),
+                                      child: Text("${Statics.getLabel('vastichhaNakashaa')}", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
                                     ),
                                     data?.vastichaNakasha != ""
                                         ? IconButton(
                                             onPressed: () {
                                               showDialog(
                                                 context: context,
-                                                builder:
-                                                    (BuildContext context) {
+                                                builder: (BuildContext context) {
                                                   return Container(
                                                     color: Colors.transparent,
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            20),
+                                                    padding: const EdgeInsets.all(20),
                                                     child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
+                                                      mainAxisSize: MainAxisSize.min,
                                                       children: [
                                                         Align(
-                                                          alignment: Alignment
-                                                              .topRight,
+                                                          alignment: Alignment.topRight,
                                                           child: Container(
-                                                            decoration:
-                                                                BoxDecoration(
+                                                            decoration: BoxDecoration(
                                                               color: Colors.red,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          20),
+                                                              borderRadius: BorderRadius.circular(20),
                                                             ),
                                                             child: IconButton(
                                                               onPressed: () {
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
+                                                                Navigator.of(context).pop();
                                                               },
-                                                              icon: Icon(
-                                                                  Icons.close,
-                                                                  color: Colors
-                                                                      .white),
+                                                              icon: Icon(Icons.close, color: Colors.white),
                                                             ),
                                                           ),
                                                         ),
@@ -609,11 +482,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                               color: Colors.purpleAccent,
                                               size: 20,
                                             ))
-                                        : Text("-",
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.red)),
+                                        : Text("-", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.red)),
                                   ],
                                 ),
                               ),
@@ -629,8 +498,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                           ],
                         ),
                         SingleColumnRow(
-                            txtString:
-                                "${Statics.getLabel('fireBrigateCenterCount')}",
+                            txtString: "${Statics.getLabel('fireBrigateCenterCount')}",
                             value: data?.vastiFireBrigade == 1
                                 ? "${Statics.getLabel('ConfirmationYes')}"
                                 : data?.vastiFireBrigade == 0
@@ -638,8 +506,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     : "-",
                             fontsize: 15),
                         SingleColumnRow(
-                            txtString:
-                                "${Statics.getLabel('policeThaneChowki')}",
+                            txtString: "${Statics.getLabel('policeThaneChowki')}",
                             value: data?.vastiPoliceStation == 1
                                 ? "${Statics.getLabel('ConfirmationYes')}"
                                 : data?.vastiPoliceStation == 0
@@ -652,73 +519,30 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                     commonExpansionTile(
                       title: 'SwayamsevakCount',
                       children: [
-                        SingleColumnRow(
-                            txtString:
-                                Statics.getLabel('TotalKaaryakartaaCount'),
-                            value: data?.totalSwayamsevakCount.toString(),
-                            fontsize: 15),
-                        SingleColumnRow(
-                            txtString: Statics.getLabel('PratidnyitCount'),
-                            value: data?.pratidnyitCount.toString(),
-                            fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('TotalKaaryakartaaCount'), value: data?.totalSwayamsevakCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('PratidnyitCount'), value: data?.pratidnyitCount.toString(), fontsize: 15),
                       ],
                     ),
                     commonExpansionTile(
                       title: 'SwayamsevakCountByAge',
                       children: [
-                        SingleColumnRow(
-                            txtString: Statics.getLabel('Shishu'),
-                            value: data?.shishuCount.toString(),
-                            fontsize: 15),
-                        SingleColumnRow(
-                            txtString: Statics.getLabel('Baal'),
-                            value: data?.baalCount.toString(),
-                            fontsize: 15),
-                        SingleColumnRow(
-                            txtString: Statics.getLabel('TarunVidyaarthi'),
-                            value: data?.tarunVidyaarthiCount.toString(),
-                            fontsize: 15),
-                        SingleColumnRow(
-                            txtString: Statics.getLabel('TarunVyavasaayee'),
-                            value: data?.tarunVyavasaayeeCount.toString(),
-                            fontsize: 15),
-                        SingleColumnRow(
-                            txtString: Statics.getLabel('ProudhVyavasaayee'),
-                            value: data?.proudhaVyavasaayeeCount.toString(),
-                            fontsize: 15),
-                        SingleColumnRow(
-                            txtString: Statics.getLabel('UnkownAge'),
-                            value: data?.unknownAgeCount.toString(),
-                            fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('Shishu'), value: data?.shishuCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('Baal'), value: data?.baalCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('TarunVidyaarthi'), value: data?.tarunVidyaarthiCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('TarunVyavasaayee'), value: data?.tarunVyavasaayeeCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('ProudhVyavasaayee'), value: data?.proudhaVyavasaayeeCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('UnkownAge'), value: data?.unknownAgeCount.toString(), fontsize: 15),
                       ],
                     ),
                     commonExpansionTile(
                       title: 'ShikshitSwayamsevakCount',
                       children: [
-                        SingleColumnRow(
-                            txtString: Statics.getLabel('PrarambhikShikshit'),
-                            value: data?.prarambhikShikshitCount.toString(),
-                            fontsize: 15),
-                        SingleColumnRow(
-                            txtString: Statics.getLabel('PraathamikShikshit'),
-                            value: data?.praathamikShikshitCount.toString(),
-                            fontsize: 15),
-                        SingleColumnRow(
-                            txtString: Statics.getLabel('PrathamVarshShikshit'),
-                            value: data?.prathamVarshaShikshitCount.toString(),
-                            fontsize: 15),
-                        SingleColumnRow(
-                            txtString: Statics.getLabel('DwitiyaVarshShikshit'),
-                            value: data?.dwitiyaVarshaShikshitCount.toString(),
-                            fontsize: 15),
-                        SingleColumnRow(
-                            txtString: Statics.getLabel('TrutiyaVarshShikshit'),
-                            value: data?.trutiyaVarshaShikshitCount.toString(),
-                            fontsize: 15),
-                        SingleColumnRow(
-                            txtString: Statics.getLabel('NoShikshan'),
-                            value: data?.noShikshanCount.toString(),
-                            fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('PrarambhikShikshit'), value: data?.prarambhikShikshitCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('PraathamikShikshit'), value: data?.praathamikShikshitCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('PrathamVarshShikshit'), value: data?.prathamVarshaShikshitCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('DwitiyaVarshShikshit'), value: data?.dwitiyaVarshaShikshitCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('TrutiyaVarshShikshit'), value: data?.trutiyaVarshaShikshitCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('NoShikshan'), value: data?.noShikshanCount.toString(), fontsize: 15),
                       ],
                     ),
                     commonExpansionTile(
@@ -726,70 +550,57 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                       children: [
                         TwoColumnRow(
                           txtString: Statics.getLabel('Shaakhaa'),
-                          value:
-                              data?.dailyShaakhaaKaaryakartaaCount.toString(),
+                          value: data?.dailyShaakhaaKaaryakartaaCount.toString(),
                           txtString2: Statics.getLabel('SaaptaahikLabelShort'),
-                          value2:
-                              data?.saaptaahikMilanKaaryakartaaCount.toString(),
+                          value2: data?.saaptaahikMilanKaaryakartaaCount.toString(),
                           fontsize: 15,
                         ),
                         TwoColumnRow(
                           txtString: Statics.getLabel('MilanMandali'),
                           value: data?.maasikMilanKaaryakartaaCount.toString(),
-                          txtString2:
-                              Statics.getLabel('VastiKaaryakartaaCount'),
+                          txtString2: Statics.getLabel('VastiKaaryakartaaCount'),
                           value2: data?.vastiKaaryakartaaCount.toString(),
                           fontsize: 15,
                         ),
                         TwoColumnRow(
                           txtString: Statics.getLabel('GraamKaaryakartaaCount'),
                           value: data?.graamKaaryakartaaCount.toString(),
-                          txtString2:
-                              Statics.getLabel('MandalKaaryakartaaCount'),
+                          txtString2: Statics.getLabel('MandalKaaryakartaaCount'),
                           value2: data?.mandalKaaryakartaaCount.toString(),
                           fontsize: 15,
                         ),
                         TwoColumnRow(
                           txtString: Statics.getLabel('NagarKaaryakartaaCount'),
                           value: data?.nagarKaaryakartaaCount.toString(),
-                          txtString2:
-                              Statics.getLabel('ShaharKaaryakartaaCount'),
+                          txtString2: Statics.getLabel('ShaharKaaryakartaaCount'),
                           value2: data?.shaharKaaryakartaaCount.toString(),
                           fontsize: 15,
                         ),
                         TwoColumnRow(
                           txtString: Statics.getLabel('BhaagKaaryakartaaCount'),
                           value: data?.bhaagKaaryakartaaCount.toString(),
-                          txtString2:
-                              Statics.getLabel('VibhaagKaaryakartaaCount'),
+                          txtString2: Statics.getLabel('VibhaagKaaryakartaaCount'),
                           value2: data?.vibhaagKaaryakartaaCount.toString(),
                           fontsize: 15,
                         ),
                         TwoColumnRow(
-                          txtString:
-                              Statics.getLabel('MahaanagarKaaryakartaaCount'),
+                          txtString: Statics.getLabel('MahaanagarKaaryakartaaCount'),
                           value: data?.mahaanagarKaaryakartaaCount.toString(),
-                          txtString2:
-                              Statics.getLabel('PraantKaaryakartaaCount'),
+                          txtString2: Statics.getLabel('PraantKaaryakartaaCount'),
                           value2: data?.praantKaaryakartaaCount.toString(),
                           fontsize: 15,
                         ),
                         TwoColumnRow(
-                          txtString:
-                              Statics.getLabel('KshetraKaaryakartaaCount'),
+                          txtString: Statics.getLabel('KshetraKaaryakartaaCount'),
                           value: data?.kshetraKaaryakartaaCount.toString(),
-                          txtString2: Statics.getLabel(
-                              'AkhilBhaaratiyaKaaryakartaaCount'),
-                          value2:
-                              data?.akhilBhaaratiyaKaaryakartaaCount.toString(),
+                          txtString2: Statics.getLabel('AkhilBhaaratiyaKaaryakartaaCount'),
+                          value2: data?.akhilBhaaratiyaKaaryakartaaCount.toString(),
                           fontsize: 15,
                         ),
                         TwoColumnRow(
-                          txtString:
-                              Statics.getLabel('PravaaseeKaaryakartaaCount'),
+                          txtString: Statics.getLabel('PravaaseeKaaryakartaaCount'),
                           value: data?.pravaaseeKaaryakartaaCount.toString(),
-                          txtString2:
-                              Statics.getLabel('TotalKaaryakartaaCount'),
+                          txtString2: Statics.getLabel('TotalKaaryakartaaCount'),
                           value2: data?.totalKaaryakartaaCount.toString(),
                           fontsize: 15,
                         ),
@@ -799,35 +610,16 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                     commonExpansionTile(
                       title: 'GatividhiAayaamSansthaaKaaryakartaaCount',
                       children: [
-                        SingleColumnRow(
-                            txtString:
-                                Statics.getLabel('GatividhiKaaryakartaaCount'),
-                            value: data?.gatividhiKaaryakartaaCount.toString(),
-                            fontsize: 15),
-                        SingleColumnRow(
-                            txtString:
-                                Statics.getLabel('AayaamKaaryakartaaCount'),
-                            value: data?.aayaamKaaryakartaaCount.toString(),
-                            fontsize: 15),
-                        SingleColumnRow(
-                            txtString: Statics.getLabel(
-                                'SanghaPreritSansthaaKaaryakartaaCount'),
-                            value: data?.sanghaPreritSansthaaKaaryakartaaCount
-                                .toString(),
-                            fontsize: 15),
-                        SingleColumnRow(
-                            txtString: Statics.getLabel(
-                                'SocialOrganizationKaaryakartaaCount'),
-                            value: data?.socialOrganizationKaaryakartaaCount
-                                .toString(),
-                            fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('GatividhiKaaryakartaaCount'), value: data?.gatividhiKaaryakartaaCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('AayaamKaaryakartaaCount'), value: data?.aayaamKaaryakartaaCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('SanghaPreritSansthaaKaaryakartaaCount'), value: data?.sanghaPreritSansthaaKaaryakartaaCount.toString(), fontsize: 15),
+                        SingleColumnRow(txtString: Statics.getLabel('SocialOrganizationKaaryakartaaCount'), value: data?.socialOrganizationKaaryakartaaCount.toString(), fontsize: 15),
                       ],
                     ),
                     commonExpansionTile(
                       title: 'Gatividhi',
                       children: [
-                        if (data != null &&
-                            data!.listKaaryakartaaCountByGatividhi != null)
+                        if (data != null && data!.listKaaryakartaaCountByGatividhi != null)
                           Container(
                             // margin: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
@@ -837,8 +629,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: DataTable(
-                                headingRowColor:
-                                    MaterialStateProperty.resolveWith(
+                                headingRowColor: MaterialStateProperty.resolveWith(
                                   (states) => Colors.purpleAccent[200],
                                 ),
                                 headingTextStyle: const TextStyle(
@@ -846,22 +637,14 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                   fontWeight: FontWeight.bold,
                                 ),
                                 columns: [
-                                  DataColumn(
-                                      label: Text(
-                                          "${Statics.getLabel('Gatividhi')}")),
-                                  DataColumn(
-                                      label: Text(
-                                          "${Statics.getLabel('KaaryakartaaCount')}")),
+                                  DataColumn(label: Text("${Statics.getLabel('Gatividhi')}")),
+                                  DataColumn(label: Text("${Statics.getLabel('KaaryakartaaCount')}")),
                                 ],
-                                rows: data!.listKaaryakartaaCountByGatividhi!
-                                    .map((item) {
+                                rows: data!.listKaaryakartaaCountByGatividhi!.map((item) {
                                   return DataRow(
                                     cells: [
                                       DataCell(Text(item.gatividhiName ?? '')),
-                                      DataCell(Center(
-                                          child: Text(item.kaaryakartaaCount
-                                                  .toString() ??
-                                              "0"))),
+                                      DataCell(Center(child: Text(item.kaaryakartaaCount.toString() ?? "0"))),
                                     ],
                                   );
                                 }).toList(),
@@ -873,8 +656,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                     commonExpansionTile(
                       title: 'Aayaam',
                       children: [
-                        if (data != null &&
-                            data!.listKaaryakartaaCountByAayaam != null)
+                        if (data != null && data!.listKaaryakartaaCountByAayaam != null)
                           Container(
                             // margin: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
@@ -884,8 +666,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: DataTable(
-                                headingRowColor:
-                                    MaterialStateProperty.resolveWith(
+                                headingRowColor: MaterialStateProperty.resolveWith(
                                   (states) => Colors.purpleAccent[200],
                                 ),
                                 headingTextStyle: const TextStyle(
@@ -893,22 +674,14 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                   fontWeight: FontWeight.bold,
                                 ),
                                 columns: [
-                                  DataColumn(
-                                      label: Text(
-                                          "${Statics.getLabel('Aayaam')}")),
-                                  DataColumn(
-                                      label: Text(
-                                          "${Statics.getLabel('KaaryakartaaCount')}")),
+                                  DataColumn(label: Text("${Statics.getLabel('Aayaam')}")),
+                                  DataColumn(label: Text("${Statics.getLabel('KaaryakartaaCount')}")),
                                 ],
-                                rows: data!.listKaaryakartaaCountByAayaam!
-                                    .map((item) {
+                                rows: data!.listKaaryakartaaCountByAayaam!.map((item) {
                                   return DataRow(
                                     cells: [
                                       DataCell(Text(item.aayaamName ?? '')),
-                                      DataCell(Center(
-                                          child: Text(item.kaaryakartaaCount
-                                                  .toString() ??
-                                              "0"))),
+                                      DataCell(Center(child: Text(item.kaaryakartaaCount.toString() ?? "0"))),
                                     ],
                                   );
                                 }).toList(),
@@ -920,9 +693,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                     commonExpansionTile(
                       title: 'Sangha-PreritSansthaa',
                       children: [
-                        if (data != null &&
-                            data!.listSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation !=
-                                null)
+                        if (data != null && data!.listSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation != null)
                           Container(
                             // margin: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
@@ -932,8 +703,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: DataTable(
-                                headingRowColor:
-                                    MaterialStateProperty.resolveWith(
+                                headingRowColor: MaterialStateProperty.resolveWith(
                                   (states) => Colors.purpleAccent[200],
                                 ),
                                 headingTextStyle: const TextStyle(
@@ -941,24 +711,14 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                   fontWeight: FontWeight.bold,
                                 ),
                                 columns: [
-                                  DataColumn(
-                                      label: Text(
-                                          "${Statics.getLabel('sanghaPreritSanghatana')}")),
-                                  DataColumn(
-                                      label: Text(
-                                          "${Statics.getLabel('KaaryakartaaCount')}")),
+                                  DataColumn(label: Text("${Statics.getLabel('sanghaPreritSanghatana')}")),
+                                  DataColumn(label: Text("${Statics.getLabel('KaaryakartaaCount')}")),
                                 ],
-                                rows: data!
-                                    .listSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation!
-                                    .map((item) {
+                                rows: data!.listSanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation!.map((item) {
                                   return DataRow(
                                     cells: [
-                                      DataCell(
-                                          Text(item.areaOfOperation ?? '')),
-                                      DataCell(Center(
-                                          child: Text(item.kaaryakartaaCount
-                                                  .toString() ??
-                                              "0"))),
+                                      DataCell(Text(item.areaOfOperation ?? '')),
+                                      DataCell(Center(child: Text(item.kaaryakartaaCount.toString() ?? "0"))),
                                     ],
                                   );
                                 }).toList(),
@@ -970,9 +730,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                     commonExpansionTile(
                       title: 'OtherSocialOrganization',
                       children: [
-                        if (data != null &&
-                            data!.listSocialOrganizationKaaryakartaaCountByAreaOfOperation !=
-                                null)
+                        if (data != null && data!.listSocialOrganizationKaaryakartaaCountByAreaOfOperation != null)
                           Container(
                             // margin: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
@@ -982,8 +740,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: DataTable(
-                                headingRowColor:
-                                    MaterialStateProperty.resolveWith(
+                                headingRowColor: MaterialStateProperty.resolveWith(
                                   (states) => Colors.purpleAccent[200],
                                 ),
                                 headingTextStyle: const TextStyle(
@@ -991,24 +748,14 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                   fontWeight: FontWeight.bold,
                                 ),
                                 columns: [
-                                  DataColumn(
-                                      label: Text(
-                                          "${Statics.getLabel('OtherSocialOrganization')}")),
-                                  DataColumn(
-                                      label:
-                                          Text("${Statics.getLabel('count')}")),
+                                  DataColumn(label: Text("${Statics.getLabel('OtherSocialOrganization')}")),
+                                  DataColumn(label: Text("${Statics.getLabel('count')}")),
                                 ],
-                                rows: data!
-                                    .listSocialOrganizationKaaryakartaaCountByAreaOfOperation!
-                                    .map((item) {
+                                rows: data!.listSocialOrganizationKaaryakartaaCountByAreaOfOperation!.map((item) {
                                   return DataRow(
                                     cells: [
-                                      DataCell(
-                                          Text(item.areaOfOperation ?? '')),
-                                      DataCell(Center(
-                                          child: Text(item.kaaryakartaaCount
-                                                  .toString() ??
-                                              "0"))),
+                                      DataCell(Text(item.areaOfOperation ?? '')),
+                                      DataCell(Center(child: Text(item.kaaryakartaaCount.toString() ?? "0"))),
                                     ],
                                   );
                                 }).toList(),
@@ -1020,8 +767,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                     commonExpansionTile(
                       title: 'StudentCategory',
                       children: [
-                        if (data != null &&
-                            data!.listSwayamsevakCountByStudentCategory != null)
+                        if (data != null && data!.listSwayamsevakCountByStudentCategory != null)
                           Container(
                             // margin: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
@@ -1031,8 +777,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: DataTable(
-                                headingRowColor:
-                                    MaterialStateProperty.resolveWith(
+                                headingRowColor: MaterialStateProperty.resolveWith(
                                   (states) => Colors.purpleAccent[200],
                                 ),
                                 headingTextStyle: const TextStyle(
@@ -1040,25 +785,14 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                   fontWeight: FontWeight.bold,
                                 ),
                                 columns: [
-                                  DataColumn(
-                                      label: Text(
-                                          "${Statics.getLabel('StudentCategory')}")),
-                                  DataColumn(
-                                      label:
-                                          Text("${Statics.getLabel('count')}")),
+                                  DataColumn(label: Text("${Statics.getLabel('StudentCategory')}")),
+                                  DataColumn(label: Text("${Statics.getLabel('count')}")),
                                 ],
-                                rows: data!
-                                    .listSwayamsevakCountByStudentCategory!
-                                    .map((item) {
+                                rows: data!.listSwayamsevakCountByStudentCategory!.map((item) {
                                   return DataRow(
                                     cells: [
-                                      DataCell(
-                                          Text(item.studentCategoryName ?? '')),
-                                      DataCell(Center(
-                                          child: Text(item
-                                                  .countByStudentCategory
-                                                  .toString() ??
-                                              "0"))),
+                                      DataCell(Text(item.studentCategoryName ?? '')),
+                                      DataCell(Center(child: Text(item.countByStudentCategory.toString() ?? "0"))),
                                     ],
                                   );
                                 }).toList(),
@@ -1079,23 +813,18 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                           child: SingleChildScrollView(
                               child: Column(
                             children: [
-                              if (data != null &&
-                                  data!.listSwayamsevakCountByVyavasaayeeCategory !=
-                                      null)
+                              if (data != null && data!.listSwayamsevakCountByVyavasaayeeCategory != null)
                                 Container(
                                   decoration: BoxDecoration(
-                                    border:
-                                        Border.all(color: Colors.grey.shade300),
+                                    border: Border.all(color: Colors.grey.shade300),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: SingleChildScrollView(
-                                    scrollDirection:
-                                        Axis.horizontal, // horizontal scroll
+                                    scrollDirection: Axis.horizontal, // horizontal scroll
                                     child: SizedBox(
                                       width: 320,
                                       child: DataTable(
-                                        headingRowColor:
-                                            MaterialStateProperty.resolveWith(
+                                        headingRowColor: MaterialStateProperty.resolveWith(
                                           (states) => Colors.purpleAccent[200],
                                         ),
                                         headingTextStyle: const TextStyle(
@@ -1109,9 +838,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                                 child: Text(
                                                   "${Statics.getLabel('VyavasaayeeCategory')}",
                                                   textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
+                                                  style: TextStyle(fontWeight: FontWeight.bold),
                                                 ),
                                               ),
                                             ),
@@ -1122,27 +849,17 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                                 child: Text(
                                                   "${Statics.getLabel('count')}",
                                                   textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
+                                                  style: TextStyle(fontWeight: FontWeight.bold),
                                                 ),
                                               ),
                                             ),
                                           ),
                                         ],
-                                        rows: data!
-                                            .listSwayamsevakCountByVyavasaayeeCategory!
-                                            .map((item) {
+                                        rows: data!.listSwayamsevakCountByVyavasaayeeCategory!.map((item) {
                                           return DataRow(
                                             cells: [
-                                              DataCell(Center(
-                                                  child: Text(
-                                                      item.vyavasaayeeCategoryName ??
-                                                          ''))),
-                                              DataCell(Center(
-                                                  child: Text(item
-                                                      .countByVyavasaayeeCategory
-                                                      .toString()))),
+                                              DataCell(Center(child: Text(item.vyavasaayeeCategoryName ?? ''))),
+                                              DataCell(Center(child: Text(item.countByVyavasaayeeCategory.toString()))),
                                             ],
                                           );
                                         }).toList(),
@@ -1165,16 +882,10 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                             children: [
                               // Fixed First Column
                               DataTable(
-                                headingRowColor: MaterialStateProperty.all(
-                                    Colors.purpleAccent[200]),
-                                headingTextStyle: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15),
+                                headingRowColor: MaterialStateProperty.all(Colors.purpleAccent[200]),
+                                headingTextStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
                                 columns: [
-                                  DataColumn(
-                                      label: Text(
-                                          "${Statics.getLabel('sanghaKaryaStithi')}")),
+                                  DataColumn(label: Text("${Statics.getLabel('sanghaKaryaStithi')}")),
                                 ],
                                 rows: List<DataRow>.generate(
                                   rowTitles.length,
@@ -1187,22 +898,14 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                 child: SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
                                   child: DataTable(
-                                    headingRowColor: MaterialStateProperty.all(
-                                        Colors.purpleAccent[200]),
-                                    headingTextStyle: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15),
-                                    columns: sanghaData
-                                        .map((e) => DataColumn(
-                                            label: Text(e.vayogatCode ?? '')))
-                                        .toList(),
+                                    headingRowColor: MaterialStateProperty.all(Colors.purpleAccent[200]),
+                                    headingTextStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
+                                    columns: sanghaData.map((e) => DataColumn(label: Text(e.vayogatCode ?? ''))).toList(),
                                     rows: List<DataRow>.generate(
                                       rowTitles.length,
                                       (index) => DataRow(
                                         cells: sanghaData.map((e) {
-                                          final value =
-                                              getCellValueByRowIndex(e, index);
+                                          final value = getCellValueByRowIndex(e, index);
                                           return DataCell(Text(value));
                                         }).toList(),
                                       ),
@@ -1225,13 +928,11 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: SizedBox(
                                 width: 900, // total width of all columns
                                 child: DataTable(
-                                  headingRowColor:
-                                      MaterialStateProperty.resolveWith(
+                                  headingRowColor: MaterialStateProperty.resolveWith(
                                     (states) => Colors.purpleAccent[200],
                                   ),
                                   columnSpacing: 20,
@@ -1240,33 +941,18 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('SelectFrequency')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('bhavnacheNaav')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('samparkSthiti')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('samparkSootraNaav')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('doorBhash')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('SelectFrequency')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('bhavanachenav')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('samparkSthiti')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('samparkSootraNaav')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('doorBhash')}")),
                                   ],
                                   rows: data!.vastiVasahatPrakar!.map((item) {
                                     return DataRow(
                                       cells: [
-                                        DataCell(Text(
-                                            item.selectedDropdownValueName ??
-                                                '')),
-                                        DataCell(
-                                            Text(item.bhavanachenav ?? '')),
-                                        DataCell(Text(
-                                            item.selectedDropdownValueName1 ??
-                                                '')),
+                                        DataCell(Text(item.selectedDropdownValueName ?? '')),
+                                        DataCell(Text(item.bhavanachenav ?? '')),
+                                        DataCell(Text(item.selectedDropdownValueName1 ?? '')),
                                         DataCell(Text(item.samparksootr ?? '')),
                                         DataCell(Text(item.doorabhaash ?? '')),
                                       ],
@@ -1281,8 +967,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                     commonExpansionTile(
                       title: 'BhashaaBolnare',
                       children: [
-                        if (data != null &&
-                            data!.vastiVividhBhashaBolnare != null)
+                        if (data != null && data!.vastiVividhBhashaBolnare != null)
                           Container(
                             // margin: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
@@ -1290,11 +975,9 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: DataTable(
-                                headingRowColor:
-                                    MaterialStateProperty.resolveWith(
+                                headingRowColor: MaterialStateProperty.resolveWith(
                                   (states) => Colors.purpleAccent[200],
                                 ),
                                 headingTextStyle: const TextStyle(
@@ -1302,20 +985,13 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                   fontWeight: FontWeight.bold,
                                 ),
                                 columns: [
-                                  DataColumn(
-                                      label: Text(
-                                          "${Statics.getLabel('onlyBhasha')}")),
-                                  DataColumn(
-                                      label: Text(
-                                          "${Statics.getLabel('avgPersent')}")),
+                                  DataColumn(label: Text("${Statics.getLabel('onlyBhasha')}")),
+                                  DataColumn(label: Text("${Statics.getLabel('avgPersent')}")),
                                 ],
-                                rows:
-                                    data!.vastiVividhBhashaBolnare!.map((item) {
+                                rows: data!.vastiVividhBhashaBolnare!.map((item) {
                                   return DataRow(
                                     cells: [
-                                      DataCell(Text(
-                                          item.selectedDropdownValueName ??
-                                              '')),
+                                      DataCell(Text(item.selectedDropdownValueName ?? '')),
                                       DataCell(Text(item.andaje ?? '')),
                                     ],
                                   );
@@ -1337,11 +1013,9 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: DataTable(
-                                headingRowColor:
-                                    MaterialStateProperty.resolveWith(
+                                headingRowColor: MaterialStateProperty.resolveWith(
                                   (states) => Colors.purpleAccent[200],
                                 ),
                                 headingTextStyle: const TextStyle(
@@ -1349,19 +1023,13 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                   fontWeight: FontWeight.bold,
                                 ),
                                 columns: [
-                                  DataColumn(
-                                      label: Text(
-                                          "${Statics.getLabel('praant')}")),
-                                  DataColumn(
-                                      label: Text(
-                                          "${Statics.getLabel('avgPersent')}")),
+                                  DataColumn(label: Text("${Statics.getLabel('praant')}")),
+                                  DataColumn(label: Text("${Statics.getLabel('avgPersent')}")),
                                 ],
                                 rows: data!.vastiKontyaPraantache!.map((item) {
                                   return DataRow(
                                     cells: [
-                                      DataCell(Text(
-                                          item.selectedDropdownValueName ??
-                                              '')),
+                                      DataCell(Text(item.selectedDropdownValueName ?? '')),
                                       DataCell(Text(item.andaje ?? '')),
                                     ],
                                   );
@@ -1383,20 +1051,16 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                           child: SingleChildScrollView(
                               child: Column(
                             children: [
-                              if (data != null &&
-                                  data!.vastiKontyaReligion != null)
+                              if (data != null && data!.vastiKontyaReligion != null)
                                 Container(
                                   decoration: BoxDecoration(
-                                    border:
-                                        Border.all(color: Colors.grey.shade300),
+                                    border: Border.all(color: Colors.grey.shade300),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: SingleChildScrollView(
-                                    scrollDirection:
-                                        Axis.horizontal, // horizontal scroll
+                                    scrollDirection: Axis.horizontal, // horizontal scroll
                                     child: DataTable(
-                                      headingRowColor:
-                                          MaterialStateProperty.resolveWith(
+                                      headingRowColor: MaterialStateProperty.resolveWith(
                                         (states) => Colors.purpleAccent[200],
                                       ),
                                       headingTextStyle: const TextStyle(
@@ -1410,9 +1074,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                               child: Text(
                                                 "${Statics.getLabel('religion')}",
                                                 textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                                style: TextStyle(fontWeight: FontWeight.bold),
                                               ),
                                             ),
                                           ),
@@ -1423,25 +1085,17 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                               child: Text(
                                                 "${Statics.getLabel('avgPersent')}",
                                                 textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                                style: TextStyle(fontWeight: FontWeight.bold),
                                               ),
                                             ),
                                           ),
                                         ),
                                       ],
-                                      rows: data!.vastiKontyaReligion!
-                                          .map((item) {
+                                      rows: data!.vastiKontyaReligion!.map((item) {
                                         return DataRow(
                                           cells: [
-                                            DataCell(Center(
-                                                child: Text(
-                                                    item.selectedDropdownValueName ??
-                                                        ''))),
-                                            DataCell(Center(
-                                                child: Text(
-                                                    item.andaje.toString()))),
+                                            DataCell(Center(child: Text(item.selectedDropdownValueName ?? ''))),
+                                            DataCell(Center(child: Text(item.andaje.toString()))),
                                           ],
                                         );
                                       }).toList(),
@@ -1464,13 +1118,11 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: SizedBox(
                                 width: 300,
                                 child: DataTable(
-                                  headingRowColor:
-                                      MaterialStateProperty.resolveWith(
+                                  headingRowColor: MaterialStateProperty.resolveWith(
                                     (states) => Colors.purpleAccent[200],
                                   ),
                                   headingTextStyle: const TextStyle(
@@ -1478,26 +1130,15 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('UpasanaSthal')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('SelectFrequency')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('count')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('UpasanaSthal')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('SelectFrequency')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('count')}")),
                                   ],
-                                  rows:
-                                      data!.vastiUpasanaSthalInfo!.map((item) {
+                                  rows: data!.vastiUpasanaSthalInfo!.map((item) {
                                     return DataRow(
                                       cells: [
-                                        DataCell(Text(
-                                            item.selectedDropdownValueName ??
-                                                '')),
-                                        DataCell(Text(
-                                            item.selectedDropdownValueName1 ??
-                                                '')),
+                                        DataCell(Text(item.selectedDropdownValueName ?? '')),
+                                        DataCell(Text(item.selectedDropdownValueName1 ?? '')),
                                         DataCell(Text(item.sankhya ?? '')),
                                       ],
                                     );
@@ -1519,13 +1160,11 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: SizedBox(
                                 // width: 300,
                                 child: DataTable(
-                                  headingRowColor:
-                                      MaterialStateProperty.resolveWith(
+                                  headingRowColor: MaterialStateProperty.resolveWith(
                                     (states) => Colors.purpleAccent[200],
                                   ),
                                   headingTextStyle: const TextStyle(
@@ -1533,26 +1172,16 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('SelectFrequency')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('aayojakSansthachiNave')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('aayojakNaav')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('SelectFrequency')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('aayojakSansthachiNave')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('aayojakNaav')}")),
                                   ],
-                                  rows:
-                                      data!.vastitSajareHonareSan!.map((item) {
+                                  rows: data!.vastitSajareHonareSan!.map((item) {
                                     return DataRow(
                                       cells: [
-                                        DataCell(Text(
-                                            "${item.selectedDropdownValueName} ${item.otherSajareSan != "" ? "- ${item.otherSajareSan}" : ""}")),
-                                        DataCell(Text(
-                                            item.ayojakasansthacinave ?? '')),
-                                        DataCell(
-                                            Text(item.ayojakancinave ?? '')),
+                                        DataCell(Text("${item.selectedDropdownValueName} ${item.otherSajareSan != "" ? "- ${item.otherSajareSan}" : ""}")),
+                                        DataCell(Text(item.ayojakasansthacinave ?? '')),
+                                        DataCell(Text(item.ayojakancinave ?? '')),
                                       ],
                                     );
                                   }).toList(),
@@ -1573,13 +1202,11 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: SizedBox(
                                 // width: 300,
                                 child: DataTable(
-                                  headingRowColor:
-                                      MaterialStateProperty.resolveWith(
+                                  headingRowColor: MaterialStateProperty.resolveWith(
                                     (states) => Colors.purpleAccent[200],
                                   ),
                                   headingTextStyle: const TextStyle(
@@ -1587,26 +1214,16 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('SelectFrequency')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('aayojakSansthachiNave')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('aayojakNaav')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('SelectFrequency')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('aayojakSansthachiNave')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('aayojakNaav')}")),
                                   ],
-                                  rows:
-                                      data!.vastiSamajikKaryakram!.map((item) {
+                                  rows: data!.vastiSamajikKaryakram!.map((item) {
                                     return DataRow(
                                       cells: [
-                                        DataCell(Text(
-                                            "${item.selectedDropdownValueName} ${item.otherKaryakram != "" ? "- ${item.otherKaryakram}" : ""}")),
-                                        DataCell(Text(
-                                            item.ayojakasansthacinave ?? '')),
-                                        DataCell(
-                                            Text(item.ayojakancinave ?? '')),
+                                        DataCell(Text("${item.selectedDropdownValueName} ${item.otherKaryakram != "" ? "- ${item.otherKaryakram}" : ""}")),
+                                        DataCell(Text(item.ayojakasansthacinave ?? '')),
+                                        DataCell(Text(item.ayojakancinave ?? '')),
                                       ],
                                     );
                                   }).toList(),
@@ -1626,13 +1243,11 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: SizedBox(
                                 // width: 300,
                                 child: DataTable(
-                                  headingRowColor:
-                                      MaterialStateProperty.resolveWith(
+                                  headingRowColor: MaterialStateProperty.resolveWith(
                                     (states) => Colors.purpleAccent[200],
                                   ),
                                   headingTextStyle: const TextStyle(
@@ -1640,27 +1255,16 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('Gatividhi')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('upkram')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('varamvarita')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('Gatividhi')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('upkram')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('varamvarita')}")),
                                   ],
                                   rows: data!.vastiGatividhiUpkram!.map((item) {
                                     return DataRow(
                                       cells: [
-                                        DataCell(Text(
-                                            item.selectedDropdownValueName ??
-                                                '')),
-                                        DataCell(Text(
-                                            item.niyamitacalanareupakrama ??
-                                                '')),
-                                        DataCell(Text(
-                                            "${item.selectedDropdownValueName1} ${item.otherVaranvarita != "" ? "- ${item.otherVaranvarita}" : ""}")),
+                                        DataCell(Text(item.selectedDropdownValueName ?? '')),
+                                        DataCell(Text(item.niyamitacalanareupakrama ?? '')),
+                                        DataCell(Text("${item.selectedDropdownValueName1} ${item.otherVaranvarita != "" ? "- ${item.otherVaranvarita}" : ""}")),
                                       ],
                                     );
                                   }).toList(),
@@ -1680,13 +1284,11 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: SizedBox(
                                 // width: 300,
                                 child: DataTable(
-                                  headingRowColor:
-                                      MaterialStateProperty.resolveWith(
+                                  headingRowColor: MaterialStateProperty.resolveWith(
                                     (states) => Colors.purpleAccent[200],
                                   ),
                                   headingTextStyle: const TextStyle(
@@ -1694,28 +1296,16 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('KaryaVibhaag')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('upkram')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('varamvarita')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('KaryaVibhaag')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('upkram')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('varamvarita')}")),
                                   ],
-                                  rows:
-                                      data!.vastiJagranshreniInfo!.map((item) {
+                                  rows: data!.vastiJagranshreniInfo!.map((item) {
                                     return DataRow(
                                       cells: [
-                                        DataCell(Text(
-                                            item.selectedDropdownValueName ??
-                                                '')),
-                                        DataCell(Text(
-                                            item.niyamitacalanareupakrama ??
-                                                '')),
-                                        DataCell(Text(
-                                            "${item.selectedDropdownValueName1} ${item.otherVaranvarita != "" ? "- ${item.otherVaranvarita}" : ""}")),
+                                        DataCell(Text(item.selectedDropdownValueName ?? '')),
+                                        DataCell(Text(item.niyamitacalanareupakrama ?? '')),
+                                        DataCell(Text("${item.selectedDropdownValueName1} ${item.otherVaranvarita != "" ? "- ${item.otherVaranvarita}" : ""}")),
                                       ],
                                     );
                                   }).toList(),
@@ -1728,21 +1318,18 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                     commonExpansionTile(
                       title: 'BalopasanaKendra',
                       children: [
-                        if (data != null &&
-                            data!.vastiBalopasanaCenterInfo != null)
+                        if (data != null && data!.vastiBalopasanaCenterInfo != null)
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.shade300),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: SizedBox(
                                 // width: 300,
                                 child: DataTable(
-                                  headingRowColor:
-                                      MaterialStateProperty.resolveWith(
+                                  headingRowColor: MaterialStateProperty.resolveWith(
                                     (states) => Colors.purpleAccent[200],
                                   ),
                                   headingTextStyle: const TextStyle(
@@ -1750,25 +1337,16 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('Name')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('Konasathi')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('shreni')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('Name')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('Konasathi')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('shreni')}")),
                                   ],
-                                  rows: data!.vastiBalopasanaCenterInfo!
-                                      .map((item) {
+                                  rows: data!.vastiBalopasanaCenterInfo!.map((item) {
                                     return DataRow(
                                       cells: [
                                         DataCell(Text(item.name ?? '')),
                                         DataCell(Text(item.konasathi ?? '')),
-                                        DataCell(Text(
-                                            item.selectedDropdownValueName ??
-                                                '')),
+                                        DataCell(Text(item.selectedDropdownValueName ?? '')),
                                       ],
                                     );
                                   }).toList(),
@@ -1790,13 +1368,11 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: SizedBox(
                                 // width: 300,
                                 child: DataTable(
-                                  headingRowColor:
-                                      MaterialStateProperty.resolveWith(
+                                  headingRowColor: MaterialStateProperty.resolveWith(
                                     (states) => Colors.purpleAccent[200],
                                   ),
                                   headingTextStyle: const TextStyle(
@@ -1804,51 +1380,26 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('Name')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('Address')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('doorBhash')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('shreni')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('sanstha')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('samparkSthiti')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('prbhaavkshetra')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('samparkSootraNaav')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('Name')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('Address')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('doorBhash')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('shreni')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('sanstha')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('samparkSthiti')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('prbhaavkshetra')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('samparkSootraNaav')}")),
                                   ],
-                                  rows:
-                                      data!.vastiSajjanShaktiData!.map((item) {
+                                  rows: data!.vastiSajjanShaktiData!.map((item) {
                                     return DataRow(
                                       cells: [
                                         DataCell(Text(item.name ?? '')),
                                         DataCell(Text(item.address ?? '')),
                                         DataCell(Text(item.doorabhaash ?? '')),
-                                        DataCell(Text(
-                                            item.selectedDropdownValueName ??
-                                                '')),
-                                        DataCell(
-                                            Text(item.sanstheCheNaav ?? '')),
-                                        DataCell(Text(
-                                            item.selectedDropdownValueName1 ??
-                                                '')),
-                                        DataCell(Text(
-                                            item.selectedDropdownValueName2 ??
-                                                '')),
-                                        DataCell(
-                                            Text(item.samparkasutranava ?? '')),
+                                        DataCell(Text(item.selectedDropdownValueName ?? '')),
+                                        DataCell(Text(item.sanstheCheNaav ?? '')),
+                                        DataCell(Text(item.selectedDropdownValueName1 ?? '')),
+                                        DataCell(Text(item.selectedDropdownValueName2 ?? '')),
+                                        DataCell(Text(item.samparkasutranava ?? '')),
                                       ],
                                     );
                                   }).toList(),
@@ -1869,13 +1420,11 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: SizedBox(
                                 // width: 300,
                                 child: DataTable(
-                                  headingRowColor:
-                                      MaterialStateProperty.resolveWith(
+                                  headingRowColor: MaterialStateProperty.resolveWith(
                                     (states) => Colors.purpleAccent[200],
                                   ),
                                   headingTextStyle: const TextStyle(
@@ -1883,33 +1432,15 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('Name')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('Address')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('doorBhash')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('shreni')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('upshreni')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('upshreni2')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('samparkSthiti')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('prbhaavkshetra')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('samparkSootraNaav')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('Name')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('Address')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('doorBhash')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('shreni')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('upshreni')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('upshreni2')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('samparkSthiti')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('prbhaavkshetra')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('samparkSootraNaav')}")),
                                   ],
                                   rows: data!.vastiAnyaPrabhaviLok!.map((item) {
                                     return DataRow(
@@ -1917,21 +1448,12 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                         DataCell(Text(item.name ?? '')),
                                         DataCell(Text(item.address ?? '')),
                                         DataCell(Text(item.doorabhaash ?? '')),
-                                        DataCell(Text(
-                                            item.selectedDropdownValueName ??
-                                                '')),
-                                        DataCell(Text(
-                                            "${item.selectedDropdownValueName1} ${item.otherupshrenee != "" ? "- ${item.otherupshrenee}" : ""}")),
-                                        DataCell(Text(
-                                            "${item.selectedDropdownValueName2} ${item.otherupshrenee2 != "" ? "- ${item.otherupshrenee2}" : ""}")),
-                                        DataCell(Text(
-                                            item.selectedDropdownValueName3 ??
-                                                '')),
-                                        DataCell(Text(
-                                            item.selectedDropdownValueName4 ??
-                                                '')),
-                                        DataCell(
-                                            Text(item.samparkasutranav ?? '')),
+                                        DataCell(Text(item.selectedDropdownValueName ?? '')),
+                                        DataCell(Text("${item.selectedDropdownValueName1} ${item.otherupshrenee != "" ? "- ${item.otherupshrenee}" : ""}")),
+                                        DataCell(Text("${item.selectedDropdownValueName2} ${item.otherupshrenee2 != "" ? "- ${item.otherupshrenee2}" : ""}")),
+                                        DataCell(Text(item.selectedDropdownValueName3 ?? '')),
+                                        DataCell(Text(item.selectedDropdownValueName4 ?? '')),
+                                        DataCell(Text(item.samparkasutranav ?? '')),
                                       ],
                                     );
                                   }).toList(),
@@ -1945,21 +1467,18 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                     commonExpansionTile(
                       title: 'MotheVyasaayiKendra',
                       children: [
-                        if (data != null &&
-                            data!.vastiMotheVyasayikCenterInfo != null)
+                        if (data != null && data!.vastiMotheVyasayikCenterInfo != null)
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.shade300),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: SizedBox(
                                 // width: 300,
                                 child: DataTable(
-                                  headingRowColor:
-                                      MaterialStateProperty.resolveWith(
+                                  headingRowColor: MaterialStateProperty.resolveWith(
                                     (states) => Colors.purpleAccent[200],
                                   ),
                                   headingTextStyle: const TextStyle(
@@ -1967,21 +1486,14 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('Name')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('SelectFrequency')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('Name')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('SelectFrequency')}")),
                                   ],
-                                  rows: data!.vastiMotheVyasayikCenterInfo!
-                                      .map((item) {
+                                  rows: data!.vastiMotheVyasayikCenterInfo!.map((item) {
                                     return DataRow(
                                       cells: [
                                         DataCell(Text(item.name ?? '')),
-                                        DataCell(Text(
-                                            item.selectedDropdownValueName ??
-                                                '')),
+                                        DataCell(Text(item.selectedDropdownValueName ?? '')),
                                       ],
                                     );
                                   }).toList(),
@@ -1994,21 +1506,18 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                     commonExpansionTile(
                       title: 'MotheRugnalay',
                       children: [
-                        if (data != null &&
-                            data!.vastiMotheHospitalInfo != null)
+                        if (data != null && data!.vastiMotheHospitalInfo != null)
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.shade300),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: SizedBox(
                                 // width: 300,
                                 child: DataTable(
-                                  headingRowColor:
-                                      MaterialStateProperty.resolveWith(
+                                  headingRowColor: MaterialStateProperty.resolveWith(
                                     (states) => Colors.purpleAccent[200],
                                   ),
                                   headingTextStyle: const TextStyle(
@@ -2016,21 +1525,14 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('Name')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('SelectFrequency')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('Name')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('SelectFrequency')}")),
                                   ],
-                                  rows:
-                                      data!.vastiMotheHospitalInfo!.map((item) {
+                                  rows: data!.vastiMotheHospitalInfo!.map((item) {
                                     return DataRow(
                                       cells: [
                                         DataCell(Text(item.name ?? '')),
-                                        DataCell(Text(
-                                            item.selectedDropdownValueName ??
-                                                '')),
+                                        DataCell(Text(item.selectedDropdownValueName ?? '')),
                                       ],
                                     );
                                   }).toList(),
@@ -2041,10 +1543,10 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                       ],
                     ),
                     commonExpansionTile(
-                      title: 'shaikshanikSanstha',
+                      title: 'shaikshaniksansthaan',
                       children: [
                         Text(
-                          "${Statics.getLabel('school')}",
+                          "${Statics.getLabel('school1')}",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
@@ -2052,21 +1554,18 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                           ),
                         ),
                         Divider(),
-                        if (data != null &&
-                            data!.vastiShaikshanikSansthaData != null)
+                        if (data != null && data!.vastiShaikshanikSansthaData != null)
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.shade300),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: SizedBox(
                                 // width: 300,
                                 child: DataTable(
-                                  headingRowColor:
-                                      MaterialStateProperty.resolveWith(
+                                  headingRowColor: MaterialStateProperty.resolveWith(
                                     (states) => Colors.purpleAccent[200],
                                   ),
                                   headingTextStyle: const TextStyle(
@@ -2074,47 +1573,23 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('Name')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('school')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('Name')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('school1')}")),
                                     // DataColumn(label: Text('शाळा प्रकार')),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('shikshanacheMadhyam')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('sansthaCHalakPrakar')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('milkat')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('shikshanacheMadhyam')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('sansthaCHalakPrakar')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('milkat')}")),
                                   ],
-                                  rows: data!.vastiShaikshanikSansthaData!
-                                      .asMap()
-                                      .entries
-                                      .where((item) =>
-                                          item.value.shaikshaniksansthaan ==
-                                          315)
-                                      .map((item) {
+                                  rows: data!.vastiShaikshanikSansthaData!.asMap().entries.where((item) => item.value.shaikshaniksansthaan == 315).map((item) {
                                     var data = item.value;
                                     return DataRow(
                                       cells: [
                                         DataCell(Text(data.name ?? '')),
-                                        DataCell(Text(
-                                            data.selectedDropdownValueName1 ??
-                                                '')),
+                                        DataCell(Text(data.selectedDropdownValueName1 ?? '')),
                                         // DataCell(Text(data.selectedDropdownValueName2 ?? '')),
-                                        DataCell(Text(
-                                            data.selectedDropdownValueName2 ??
-                                                '')),
-                                        DataCell(Text(
-                                            data.selectedDropdownValueName3 ??
-                                                '')),
-                                        DataCell(Text(
-                                            data.selectedDropdownValueName4 ??
-                                                '')),
+                                        DataCell(Text(data.selectedDropdownValueName2 ?? '')),
+                                        DataCell(Text(data.selectedDropdownValueName3 ?? '')),
+                                        DataCell(Text(data.selectedDropdownValueName4 ?? '')),
                                       ],
                                     );
                                   }).toList(),
@@ -2134,21 +1609,18 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                           ),
                         ),
                         Divider(),
-                        if (data != null &&
-                            data!.vastiShaikshanikSansthaData != null)
+                        if (data != null && data!.vastiShaikshanikSansthaData != null)
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.shade300),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: SizedBox(
                                 // width: 300,
                                 child: DataTable(
-                                  headingRowColor:
-                                      MaterialStateProperty.resolveWith(
+                                  headingRowColor: MaterialStateProperty.resolveWith(
                                     (states) => Colors.purpleAccent[200],
                                   ),
                                   headingTextStyle: const TextStyle(
@@ -2156,35 +1628,19 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('Name')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('Name')}")),
                                     // DataColumn(label: Text("${Statics.getLabel('College')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('College')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('milkat')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('College')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('milkat')}")),
                                   ],
-                                  rows: data!.vastiShaikshanikSansthaData!
-                                      .asMap()
-                                      .entries
-                                      .where((item) =>
-                                          item.value.shaikshaniksansthaan ==
-                                          316)
-                                      .map((item) {
+                                  rows: data!.vastiShaikshanikSansthaData!.asMap().entries.where((item) => item.value.shaikshaniksansthaan == 316).map((item) {
                                     var data = item.value;
                                     return DataRow(
                                       cells: [
                                         DataCell(Text(data.name ?? '')),
                                         // DataCell(Text(data.selectedDropdownValueName ?? '')),
-                                        DataCell(Text(
-                                            data.selectedDropdownValueName1 ??
-                                                '')),
-                                        DataCell(Text(
-                                            data.selectedDropdownValueName4 ??
-                                                '')),
+                                        DataCell(Text(data.selectedDropdownValueName1 ?? '')),
+                                        DataCell(Text(data.selectedDropdownValueName4 ?? '')),
                                       ],
                                     );
                                   }).toList(),
@@ -2204,21 +1660,18 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                           ),
                         ),
                         Divider(),
-                        if (data != null &&
-                            data!.vastiShaikshanikSansthaData != null)
+                        if (data != null && data!.vastiShaikshanikSansthaData != null)
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.shade300),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: SizedBox(
                                 // width: 300,
                                 child: DataTable(
-                                  headingRowColor:
-                                      MaterialStateProperty.resolveWith(
+                                  headingRowColor: MaterialStateProperty.resolveWith(
                                     (states) => Colors.purpleAccent[200],
                                   ),
                                   headingTextStyle: const TextStyle(
@@ -2226,27 +1679,15 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('Name')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('milkat')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('Name')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('milkat')}")),
                                   ],
-                                  rows: data!.vastiShaikshanikSansthaData!
-                                      .asMap()
-                                      .entries
-                                      .where((item) =>
-                                          item.value.shaikshaniksansthaan ==
-                                          317)
-                                      .map((item) {
+                                  rows: data!.vastiShaikshanikSansthaData!.asMap().entries.where((item) => item.value.shaikshaniksansthaan == 317).map((item) {
                                     var data = item.value;
                                     return DataRow(
                                       cells: [
                                         DataCell(Text(data.name ?? '')),
-                                        DataCell(Text(
-                                            data.selectedDropdownValueName4 ??
-                                                '')),
+                                        DataCell(Text(data.selectedDropdownValueName4 ?? '')),
                                       ],
                                     );
                                   }).toList(),
@@ -2268,20 +1709,16 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                           child: SingleChildScrollView(
                               child: Column(
                             children: [
-                              if (data != null &&
-                                  data!.vastiMaidanListData != null)
+                              if (data != null && data!.vastiMaidanListData != null)
                                 Container(
                                   decoration: BoxDecoration(
-                                    border:
-                                        Border.all(color: Colors.grey.shade300),
+                                    border: Border.all(color: Colors.grey.shade300),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: SingleChildScrollView(
-                                    scrollDirection:
-                                        Axis.horizontal, // horizontal scroll
+                                    scrollDirection: Axis.horizontal, // horizontal scroll
                                     child: DataTable(
-                                      headingRowColor:
-                                          MaterialStateProperty.resolveWith(
+                                      headingRowColor: MaterialStateProperty.resolveWith(
                                         (states) => Colors.purpleAccent[200],
                                       ),
                                       headingTextStyle: const TextStyle(
@@ -2295,21 +1732,16 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                               child: Text(
                                                 "${Statics.getLabel('maiddanUdyyanNaav')}",
                                                 textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                                style: TextStyle(fontWeight: FontWeight.bold),
                                               ),
                                             ),
                                           ),
                                         ),
                                       ],
-                                      rows: data!.vastiMaidanListData!
-                                          .map((item) {
+                                      rows: data!.vastiMaidanListData!.map((item) {
                                         return DataRow(
                                           cells: [
-                                            DataCell(Center(
-                                                child: Text(
-                                                    item.name.toString()))),
+                                            DataCell(Center(child: Text(item.name.toString()))),
                                           ],
                                         );
                                       }).toList(),
@@ -2324,21 +1756,18 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                     commonExpansionTile(
                       title: 'karyakramKarnyacheThikaan',
                       children: [
-                        if (data != null &&
-                            data!.vastiKaryakramcheThikanData != null)
+                        if (data != null && data!.vastiKaryakramcheThikanData != null)
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.shade300),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: SizedBox(
                                 // width: 300,
                                 child: DataTable(
-                                  headingRowColor:
-                                      MaterialStateProperty.resolveWith(
+                                  headingRowColor: MaterialStateProperty.resolveWith(
                                     (states) => Colors.purpleAccent[200],
                                   ),
                                   headingTextStyle: const TextStyle(
@@ -2346,40 +1775,24 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('Name')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('SelectFrequency')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('shamta')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('NnivaasAvailable')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('nivaasShamta')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('Name')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('SelectFrequency')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('shamta')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('NnivaasAvailable')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('nivaasShamta')}")),
                                   ],
-                                  rows: data!.vastiKaryakramcheThikanData!
-                                      .map((item) {
+                                  rows: data!.vastiKaryakramcheThikanData!.map((item) {
                                     return DataRow(
                                       cells: [
                                         DataCell(Text(item.name ?? '')),
-                                        DataCell(Text(
-                                            item.selectedDropdownValueName ??
-                                                '')),
+                                        DataCell(Text(item.selectedDropdownValueName ?? '')),
                                         DataCell(Text(item.shamta ?? '')),
-                                        DataCell(Text(item
-                                                    .nivasasathiupalabdha ==
-                                                1
+                                        DataCell(Text(item.nivasasathiupalabdha == 1
                                             ? "${Statics.getLabel('ConfirmationYes')}"
                                             : item.nivasasathiupalabdha == 0
                                                 ? "${Statics.getLabel('ConfirmationNo')}"
                                                 : "")),
-                                        DataCell(
-                                            Text(item.nivaaskshamata ?? '')),
+                                        DataCell(Text(item.nivaaskshamata ?? '')),
                                       ],
                                     );
                                   }).toList(),
@@ -2392,21 +1805,18 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                     commonExpansionTile(
                       title: 'VastiSamajikGarja',
                       children: [
-                        if (data != null &&
-                            data!.vastiSamajikGarajaData != null)
+                        if (data != null && data!.vastiSamajikGarajaData != null)
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.shade300),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: SizedBox(
                                 // width: 300,
                                 child: DataTable(
-                                  headingRowColor:
-                                      MaterialStateProperty.resolveWith(
+                                  headingRowColor: MaterialStateProperty.resolveWith(
                                     (states) => Colors.purpleAccent[200],
                                   ),
                                   headingTextStyle: const TextStyle(
@@ -2414,22 +1824,14 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('VastiSamajikGarja')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('tapshil')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('VastiSamajikGarja')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('tapshil')}")),
                                   ],
-                                  rows:
-                                      data!.vastiSamajikGarajaData!.map((item) {
+                                  rows: data!.vastiSamajikGarajaData!.map((item) {
                                     return DataRow(
                                       cells: [
-                                        DataCell(Center(
-                                            child: Text(item.name ?? ''))),
-                                        DataCell(Text(
-                                            item.selectedDropdownValueName ??
-                                                '')),
+                                        DataCell(Center(child: Text(item.name ?? ''))),
+                                        DataCell(Text(item.selectedDropdownValueName ?? '')),
                                       ],
                                     );
                                   }).toList(),
@@ -2449,13 +1851,11 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: SizedBox(
                                 // width: 300,
                                 child: DataTable(
-                                  headingRowColor:
-                                      MaterialStateProperty.resolveWith(
+                                  headingRowColor: MaterialStateProperty.resolveWith(
                                     (states) => Colors.purpleAccent[200],
                                   ),
                                   headingTextStyle: const TextStyle(
@@ -2463,21 +1863,14 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('Name')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('religion')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('Name')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('religion')}")),
                                   ],
                                   rows: data!.vastiDharmiknetData!.map((item) {
                                     return DataRow(
                                       cells: [
-                                        DataCell(Center(
-                                            child: Text(item.name ?? ''))),
-                                        DataCell(Text(
-                                            item.selectedDropdownValueName ??
-                                                '')),
+                                        DataCell(Center(child: Text(item.name ?? ''))),
+                                        DataCell(Text(item.selectedDropdownValueName ?? '')),
                                       ],
                                     );
                                   }).toList(),
@@ -2497,13 +1890,11 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: SizedBox(
                                 // width: 300,
                                 child: DataTable(
-                                  headingRowColor:
-                                      MaterialStateProperty.resolveWith(
+                                  headingRowColor: MaterialStateProperty.resolveWith(
                                     (states) => Colors.purpleAccent[200],
                                   ),
                                   headingTextStyle: const TextStyle(
@@ -2511,34 +1902,18 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   columns: [
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('Name')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('SelectFrequency')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('shiksha')}")),
-                                    DataColumn(
-                                        label: Text(
-                                            "${Statics.getLabel('crime')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('Name')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('SelectFrequency')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('shiksha')}")),
+                                    DataColumn(label: Text("${Statics.getLabel('crime')}")),
                                   ],
-                                  rows:
-                                      data!.vastiDurjanShaktiData!.map((item) {
+                                  rows: data!.vastiDurjanShaktiData!.map((item) {
                                     return DataRow(
                                       cells: [
-                                        DataCell(Center(
-                                            child: Text(item.name ?? ''))),
-                                        DataCell(Text(
-                                            item.selectedDropdownValueName ??
-                                                '')),
-                                        DataCell(Text(
-                                            item.selectedDropdownValueName1 ??
-                                                '')),
-                                        DataCell(Text(
-                                            item.selectedDropdownValueName2 ??
-                                                '')),
+                                        DataCell(Center(child: Text(item.name ?? ''))),
+                                        DataCell(Text(item.selectedDropdownValueName ?? '')),
+                                        DataCell(Text(item.selectedDropdownValueName1 ?? '')),
+                                        DataCell(Text(item.selectedDropdownValueName2 ?? '')),
                                       ],
                                     );
                                   }).toList(),
@@ -2551,21 +1926,18 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                     commonExpansionTile(
                       title: 'HinduVeerYaadi',
                       children: [
-                        if (data != null &&
-                            data!.vastiHinduVeerListData != null)
+                        if (data != null && data!.vastiHinduVeerListData != null)
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.shade300),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: SizedBox(
                                 width: 250,
                                 child: DataTable(
-                                  headingRowColor:
-                                      MaterialStateProperty.resolveWith(
+                                  headingRowColor: MaterialStateProperty.resolveWith(
                                     (states) => Colors.purpleAccent[200],
                                   ),
                                   headingTextStyle: const TextStyle(
@@ -2580,19 +1952,16 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                           child: Text(
                                             "${Statics.getLabel('Name')}",
                                             textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
+                                            style: TextStyle(fontWeight: FontWeight.bold),
                                           ),
                                         ),
                                       ),
                                     ),
                                   ],
-                                  rows:
-                                      data!.vastiHinduVeerListData!.map((item) {
+                                  rows: data!.vastiHinduVeerListData!.map((item) {
                                     return DataRow(
                                       cells: [
-                                        DataCell(Center(
-                                            child: Text(item.name ?? ''))),
+                                        DataCell(Center(child: Text(item.name ?? ''))),
                                       ],
                                     );
                                   }).toList(),
@@ -2642,8 +2011,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
           collapsedBackgroundColor: Colors.transparent,
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: children,

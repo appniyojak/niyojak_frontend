@@ -1042,7 +1042,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             // if (level.ekunfinalcount != 0) SizedBox(width: 1),
-                            Container(margin: EdgeInsets.only(right: level.ekunfinalcount != 0 ? 0 : 10), child: Text(level.ekunfinalcount.toString())),
+                            Container(margin: EdgeInsets.only(right: level.totalcount != 0 ? 0 : 10), child: Text(level.totalcount.toString())),
                             // if (level.ekunfinalcount != 0)
                             //   InkWell(
                             //     borderRadius: BorderRadius.circular(50),
@@ -1086,7 +1086,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.ekunfinalcount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.totalcount ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                       ])
