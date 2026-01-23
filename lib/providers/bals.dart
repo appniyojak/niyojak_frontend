@@ -7,6 +7,7 @@ class SwayamsevakBAL {
   String? fullName;
   String? mobileNumber;
   String? email;
+  String? birthDate;
   int? linkedGeoUnitID;
   String? linkedGeoUnitName;
   int? linkedShaakhaaID;
@@ -16,8 +17,8 @@ class SwayamsevakBAL {
   bool? canUseApp;
   bool? canEdit;
 
-  SwayamsevakBAL(this.swayamsevakID, this.praantID, this.fullName, this.mobileNumber, this.email, this.linkedGeoUnitID, this.linkedGeoUnitName, this.linkedShaakhaaID, this.linkedShaakhaaName,
-      this.preferredLanguageID, this.preferredLanguageCode, this.canUseApp, this.canEdit);
+  SwayamsevakBAL(this.swayamsevakID, this.praantID, this.fullName, this.mobileNumber, this.email, this.birthDate, this.linkedGeoUnitID, this.linkedGeoUnitName, this.linkedShaakhaaID,
+      this.linkedShaakhaaName, this.preferredLanguageID, this.preferredLanguageCode, this.canUseApp, this.canEdit);
 }
 
 class SwayamsevakOtherInfoBAL {
@@ -416,6 +417,15 @@ class StateMasterBAL {
     code = map["Code"];
     stateName = map["StateName"];
   }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['StateID'] = this.stateID;
+    data['GSTStateCode'] = this.gSTStateCode;
+    data['Code'] = this.code;
+    data['StateName'] = this.stateName;
+    return data;
+  }
 }
 
 class GeoUnitMasterBAL {
@@ -440,6 +450,7 @@ class GeoUnitMasterBAL {
   int? parentMandalID;
   int? parentVastiID;
   int? parentGraamID;
+
   // bool? canEdit;
 
   GeoUnitMasterBAL(
@@ -570,6 +581,7 @@ class UserDataBAL {
   int? levelID;
   String? fullName;
   String? email;
+  String? birthDate;
   int? daayitvaStartYear;
   String? daayitvaName;
   String? daayitvaNameforshow;
@@ -577,7 +589,6 @@ class UserDataBAL {
   String? daayitvaGeoUnitName;
   int? daayitvaGeoUnitID;
   int? bhaagID;
-  String? birthDate;
   String? linkedGeoUnitHierarchy;
   bool? isFirstLogin;
   String? lastLoginTimeStamp;
@@ -658,6 +669,7 @@ class AbhiyaanUserDataBAL {
   int? abhiyanSwayamsevakID;
   String? daayityaName;
   String? email;
+  String? birthDate;
   String? fullName;
   int? geoUnitID;
   String? geoUnitName;
@@ -676,6 +688,7 @@ class AbhiyaanUserDataBAL {
       this.abhiyanSwayamsevakID,
       this.daayityaName,
       this.email,
+      this.birthDate,
       this.fullName,
       this.geoUnitID,
       this.geoUnitName,
@@ -694,6 +707,7 @@ class AbhiyaanUserDataBAL {
     abhiyanSwayamsevakID = json['AbhiyanSwayamsevakID'];
     daayityaName = json['DaayityaName'];
     email = json['Email'];
+    birthDate = json['BirthDate'];
     fullName = json['FullName'];
     geoUnitID = json['GeoUnitID'];
     geoUnitName = json['GeoUnitName'];
@@ -714,6 +728,7 @@ class AbhiyaanUserDataBAL {
     data['AbhiyanSwayamsevakID'] = this.abhiyanSwayamsevakID;
     data['DaayityaName'] = this.daayityaName;
     data['Email'] = this.email;
+    data['BirthDate'] = this.birthDate;
     data['FullName'] = this.fullName;
     data['GeoUnitID'] = this.geoUnitID;
     data['GeoUnitName'] = this.geoUnitName;

@@ -3671,6 +3671,10 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                                     padding: EdgeInsets.all(8),
                                     child: Text("${Statics.getLabel('Name')}", style: TextStyle(fontWeight: FontWeight.bold)),
                                   ),
+                                  // Padding(
+                                  //   padding: EdgeInsets.all(8),
+                                  //   child: Text("${Statics.getLabel('SelectDaayitva')}", style: TextStyle(fontWeight: FontWeight.bold)),
+                                  // ),
                                 ],
                               ),
                               ...sarsajjanshaktiList.map((item) {
@@ -3698,6 +3702,10 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                                       padding: const EdgeInsets.all(8),
                                       child: Text(item.name ?? "Unknown"),
                                     ),
+                                    // Padding(
+                                    //   padding: const EdgeInsets.all(8),
+                                    //   child: Text(item.da ?? "Unknown"),
+                                    // ),
                                   ],
                                 );
                               }),

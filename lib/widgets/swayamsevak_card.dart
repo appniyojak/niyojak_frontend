@@ -1,19 +1,21 @@
 import 'dart:convert';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/painting/basic_types.dart' as flutter_axis;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:niyojak_prod/models/response_model/AbhiyaanSwayamsevakListResponse.dart';
 import 'package:niyojak_prod/screens/AbhiyanEditSwayamsevak.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
-import 'package:flutter/src/painting/basic_types.dart' as flutter_axis;
+
+import '../helpers/static_data.dart' as Statics;
 import '../providers/swayamsevak_provider.dart';
 import '../screens/AbhiyanViewSwayamsevak.dart';
-import '../screens/edit_swayamsevak_screen.dart';
-import '../screens/edit_swayamsevak_transfer.dart';
 import '../screens/edit_swayamsevak_basic_info.dart';
 import '../screens/edit_swayamsevak_daayitva.dart';
 import '../screens/edit_swayamsevak_other_info.dart';
-import '../helpers/static_data.dart' as Statics;
+import '../screens/edit_swayamsevak_screen.dart';
+import '../screens/edit_swayamsevak_transfer.dart';
 
 class SwayamsevakCard extends StatefulWidget {
   final swItem;
@@ -21,7 +23,9 @@ class SwayamsevakCard extends StatefulWidget {
   var onUnCheckCard;
   bool? _isChecked;
   var onSaveDetails;
+
   SwayamsevakCard(this.swItem, this.onCheckCard, this.onUnCheckCard, this._isChecked, this.onSaveDetails);
+
   @override
   _SwayamsevakCardState createState() => _SwayamsevakCardState();
 }
@@ -68,186 +72,333 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
       Statics.showErrorDialog(context, Statics.getLabel('unableToCompleteProcess'));
     }
   }
+
   int? canEditStatus;
+
   @override
   Widget build(BuildContext context) {
     var showTransferMenu = false;
-    var showEditMenu = false;
+    var showEditMenu = true;
     var showResetPasswordMenu = false;
-    var  showDeleteMenu = false;
-    if (((Statics.userDetails['LevelName'] == 'Praant'   ||Statics.userDetails['LevelName'] == 'प्रांत' ||
-        Statics.userDetails['LevelName'] == 'Mahaanagar' ||Statics.userDetails['LevelName'] == 'महानगर' ||
-        Statics.userDetails['LevelName'] == 'Bhaag'      ||Statics.userDetails['LevelName'] == 'भाग/जिल्हा' ||Statics.userDetails['LevelName'] == 'भाग/जिला' ||
-        Statics.userDetails['LevelName'] == 'Vibhaag'    ||Statics.userDetails['LevelName'] == 'विभाग' ||
-        Statics.userDetails['LevelName'] == 'Nagar' || Statics.userDetails['LevelName'] == 'Nagar/Taalukaa' || Statics.userDetails['LevelName'] == 'नगर/तालुका') &&
-            (Statics.userDetails["DaayitvaName"] == "Join RSS Sanyojak" || Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. संयोजक" ||
-                Statics.userDetails["DaayitvaName"] == "Join RSS Pramukh" || Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. प्रमुख" ||
-                Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' || Statics.userDetails['DaayitvaName'] == 'कार्यवाह' ||
-                Statics.userDetails["DaayitvaName"] == "karyalay sachiv" ||Statics.userDetails["DaayitvaName"] == "कार्यालय सचिव" ||
-                Statics.userDetails['DaayitvaName'] == 'Saha-Kaaryavaah' || Statics.userDetails['DaayitvaName'] == 'सह कार्यवाह' ||
-                Statics.userDetails['DaayitvaName'] == 'Baal Vidyaarthi Pramukh'   || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख'   || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख'  ||
-                Statics.userDetails['DaayitvaName'] == 'Mahaavidyaalayeen Vidyaarthi Pramukh'   || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख'   || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख'  ||
-                Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Pramukh'   || Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख'   || Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख'  ||
-                Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Saha-Pramukh'   || Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख'   || Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख'  ||
-                Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Pramukh' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Pramukh' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Bal Vidyarthi Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Mahavidyaleen Vidyarthi Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'App Sanyojak'  || Statics.userDetails['DaayitvaName'] == 'एप संयोजक' ||
-                Statics.userDetails['DaayitvaName'] == 'Kaaryaalay Pramukh' || Statics.userDetails['DaayitvaName'] == 'कार्यालय प्रमुख')) ||
-        (Statics.userDetails['LevelName'] == 'Shaakhaa' || Statics.userDetails['LevelName'] == 'शाखा' &&
-            (Statics.userDetails['DaayitvaName'] == 'Mukhya Shikshak' || Statics.userDetails['DaayitvaName'] == 'मुख्य शिक्षक' || Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' || Statics.userDetails['DaayitvaName'] == 'कार्यवाह')) ||
-        (//Statics.userDetails['LevelName'] == 'Praant' || Statics.userDetails['LevelName'] == 'प्रांत' && https://trello.com/c/lMAE64Rh 9223534792 p/w efgh प्रांत सेवा सह प्रमुख
-            Statics.userDetails["DaayitvaName"] == "Join RSS Sanyojak" || Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. संयोजक" ||
-            Statics.userDetails["DaayitvaName"] == "Join RSS Pramukh" || Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. प्रमुख" ||
-            Statics.userDetails['DaayitvaName'] == 'Baal Vidyaarthi Pramukh'   || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख'   || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख'  ||
-            Statics.userDetails['DaayitvaName'] == 'Mahaavidyaalayeen Vidyaarthi Pramukh'   || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख'   || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख'  ||
-            Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Pramukh'   || Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख'   || Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख'  ||
-            Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Saha-Pramukh'   || Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख'   || Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख'  ||
-            Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Pramukh' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Pramukh' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Bal Vidyarthi Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Mahavidyaleen Vidyarthi Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'App Sanyojak'  || Statics.userDetails['DaayitvaName'] == 'एप संयोजक') ||
-        (Statics.userDetails['DaayitvaName'] == 'Prachaarak' || Statics.userDetails['DaayitvaName'] == 'प्रचारक' || Statics.userDetails['DaayitvaName'] == 'Saha-Prachaarak' || Statics.userDetails['DaayitvaName'] == 'सह प्रचारक'))
-      showTransferMenu = true;
-
-
-
-    if (((Statics.userDetails['LevelName'] == 'Praant' ||  Statics.userDetails['LevelName'] == 'प्रांत' ||
-        Statics.userDetails['LevelName'] == 'Mahaanagar' ||   Statics.userDetails['LevelName'] == 'महानगर' ||
-        Statics.userDetails['LevelName'] == 'Bhaag' ||  Statics.userDetails['LevelName'] == 'भाग/जिल्हा' || Statics.userDetails['LevelName'] == 'भाग/जिला' ||
-        Statics.userDetails['LevelName'] == 'Vibhaag' || Statics.userDetails['LevelName'] == 'विभाग'||
-        Statics.userDetails['LevelName'] == 'Nagar' || Statics.userDetails['LevelName'] == 'Nagar/Taalukaa' || Statics.userDetails['LevelName'] == 'नगर/तालुका') &&
-            (Statics.userDetails["DaayitvaName"] == "Join RSS Sanyojak" || Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. संयोजक" ||
-                Statics.userDetails["DaayitvaName"] == "Join RSS Pramukh" || Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. प्रमुख" ||
-                Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' || Statics.userDetails['DaayitvaName'] == 'कार्यवाह' ||
-                Statics.userDetails["DaayitvaName"] == "karyalay sachiv" ||Statics.userDetails["DaayitvaName"] == "कार्यालय सचिव" ||
-                Statics.userDetails['DaayitvaName'] == 'Saha-Kaaryavaah' || Statics.userDetails['DaayitvaName'] == 'सह कार्यवाह' ||
-                Statics.userDetails['DaayitvaName'] == 'Baal Vidyaarthi Pramukh'|| Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख'   || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख'  ||
-                Statics.userDetails['DaayitvaName'] == 'Mahaavidyaalayeen Vidyaarthi Pramukh'   || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख'|| Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख'  ||
-                Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Pramukh'   || Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख'||  Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख'  ||
-                Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Saha-Pramukh'|| Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख'   || Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख'  ||
-                Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Pramukh' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Pramukh' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Bal Vidyarthi Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Mahavidyaleen Vidyarthi Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'App Sanyojak'  || Statics.userDetails['DaayitvaName'] == 'एप संयोजक' ||
-                Statics.userDetails['DaayitvaName'] == 'Vasti Pramukh' || Statics.userDetails['DaayitvaName'] == 'वस्ती प्रमुख' ||
-                Statics.userDetails['DaayitvaName'] == 'Kaaryaalay Pramukh' || Statics.userDetails['DaayitvaName'] == 'कार्यालय प्रमुख')) ||
-        (Statics.userDetails['LevelName'] == 'Shaakhaa' || Statics.userDetails['LevelName'] == 'शाखा' &&
-            (Statics.userDetails['DaayitvaName'] == 'Mukhya Shikshak' || Statics.userDetails['DaayitvaName'] == 'मुख्य शिक्षक' || Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' || Statics.userDetails['DaayitvaName'] == 'कार्यवाह')) ||
-        (//Statics.userDetails['LevelName'] == 'Praant' || Statics.userDetails['LevelName'] == 'प्रांत' &&  // 9223534792 p/w efgh प्रांत सेवा सह प्रमुख https://trello.com/c/lMAE64Rh
-            Statics.userDetails["DaayitvaName"] == "Join RSS Sanyojak" || Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. संयोजक" ||
-            Statics.userDetails["DaayitvaName"] == "Join RSS Pramukh" || Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. प्रमुख" ||
-            Statics.userDetails['DaayitvaName'] == 'Baal Vidyaarthi Pramukh'   || 
- Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख'   || 
- Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख'  || 
-Statics.userDetails['DaayitvaName'] == 'Mahaavidyaalayeen Vidyaarthi Pramukh'   || 
- Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख'   || 
- Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख'  || 
-Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Pramukh'   || 
- Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख'   || 
- Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख'  || 
-Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Saha-Pramukh'   || 
- Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख'   || 
- Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख'  || 
- Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Pramukh' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Pramukh' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Bal Vidyarthi Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Mahavidyaleen Vidyarthi Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'App Sanyojak'  || Statics.userDetails['DaayitvaName'] == 'एप संयोजक') ||
-        (Statics.userDetails['DaayitvaName'] == 'Prachaarak' || Statics.userDetails['DaayitvaName'] == 'प्रचारक' ||
-            Statics.userDetails['DaayitvaName'] == 'Saha-Prachaarak' || Statics.userDetails['DaayitvaName'] == 'सह प्रचारक')
-    ) showEditMenu = true;
-
+    var showDeleteMenu = false;
+    if (((Statics.userDetails['LevelName'] == 'Praant' ||
+                Statics.userDetails['LevelName'] == 'प्रांत' ||
+                Statics.userDetails['LevelName'] == 'Mahaanagar' ||
+                Statics.userDetails['LevelName'] == 'महानगर' ||
+                Statics.userDetails['LevelName'] == 'Bhaag' ||
+                Statics.userDetails['LevelName'] == 'भाग/जिल्हा' ||
+                Statics.userDetails['LevelName'] == 'भाग/जिला' ||
+                Statics.userDetails['LevelName'] == 'Vibhaag' ||
+                Statics.userDetails['LevelName'] == 'विभाग' ||
+                Statics.userDetails['LevelName'] == 'Nagar' ||
+                Statics.userDetails['LevelName'] == 'Nagar/Taalukaa' ||
+                Statics.userDetails['LevelName'] == 'नगर/तालुका') &&
+            (Statics.userDetails["DaayitvaName"] == "Join RSS Sanyojak" ||
+                Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. संयोजक" ||
+                Statics.userDetails["DaayitvaName"] == "Join RSS Pramukh" ||
+                Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. प्रमुख" ||
+                Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' ||
+                Statics.userDetails['DaayitvaName'] == 'कार्यवाह' ||
+                Statics.userDetails["DaayitvaName"] == "karyalay sachiv" ||
+                Statics.userDetails["DaayitvaName"] == "कार्यालय सचिव" ||
+                Statics.userDetails['DaayitvaName'] == 'Saha-Kaaryavaah' ||
+                Statics.userDetails['DaayitvaName'] == 'सह कार्यवाह' ||
+                Statics.userDetails['DaayitvaName'] == 'Baal Vidyaarthi Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Mahaavidyaalayeen Vidyaarthi Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Saha-Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Sah Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Sah Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Bal Vidyarthi Sah Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Mahavidyaleen Vidyarthi Sah Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'App Sanyojak' ||
+                Statics.userDetails['DaayitvaName'] == 'एप संयोजक' ||
+                Statics.userDetails['DaayitvaName'] == 'Kaaryaalay Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'कार्यालय प्रमुख')) ||
+        (Statics.userDetails['LevelName'] == 'Shaakhaa' ||
+            Statics.userDetails['LevelName'] == 'शाखा' &&
+                (Statics.userDetails['DaayitvaName'] == 'Mukhya Shikshak' ||
+                    Statics.userDetails['DaayitvaName'] == 'मुख्य शिक्षक' ||
+                    Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' ||
+                    Statics.userDetails['DaayitvaName'] == 'कार्यवाह')) ||
+        ( //Statics.userDetails['LevelName'] == 'Praant' || Statics.userDetails['LevelName'] == 'प्रांत' && https://trello.com/c/lMAE64Rh 9223534792 p/w efgh प्रांत सेवा सह प्रमुख
+            Statics.userDetails["DaayitvaName"] == "Join RSS Sanyojak" ||
+                Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. संयोजक" ||
+                Statics.userDetails["DaayitvaName"] == "Join RSS Pramukh" ||
+                Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. प्रमुख" ||
+                Statics.userDetails['DaayitvaName'] == 'Baal Vidyaarthi Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Mahaavidyaalayeen Vidyaarthi Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Saha-Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Sah Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Sah Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Bal Vidyarthi Sah Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Mahavidyaleen Vidyarthi Sah Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'App Sanyojak' ||
+                Statics.userDetails['DaayitvaName'] == 'एप संयोजक') ||
+        (Statics.userDetails['DaayitvaName'] == 'Prachaarak' ||
+            Statics.userDetails['DaayitvaName'] == 'प्रचारक' ||
+            Statics.userDetails['DaayitvaName'] == 'Saha-Prachaarak' ||
+            Statics.userDetails['DaayitvaName'] == 'सह प्रचारक')) showTransferMenu = true;
+//
+//
+//
+//     if (((Statics.userDetails['LevelName'] == 'Praant' ||  Statics.userDetails['LevelName'] == 'प्रांत' ||
+//         Statics.userDetails['LevelName'] == 'Mahaanagar' ||   Statics.userDetails['LevelName'] == 'महानगर' ||
+//         Statics.userDetails['LevelName'] == 'Bhaag' ||  Statics.userDetails['LevelName'] == 'भाग/जिल्हा' || Statics.userDetails['LevelName'] == 'भाग/जिला' ||
+//         Statics.userDetails['LevelName'] == 'Vibhaag' || Statics.userDetails['LevelName'] == 'विभाग'||
+//         Statics.userDetails['LevelName'] == 'Nagar' || Statics.userDetails['LevelName'] == 'Nagar/Taalukaa' || Statics.userDetails['LevelName'] == 'नगर/तालुका') &&
+//             (Statics.userDetails["DaayitvaName"] == "Join RSS Sanyojak" || Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. संयोजक" ||
+//                 Statics.userDetails["DaayitvaName"] == "Join RSS Pramukh" || Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. प्रमुख" ||
+//                 Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' || Statics.userDetails['DaayitvaName'] == 'कार्यवाह' ||
+//                 Statics.userDetails["DaayitvaName"] == "karyalay sachiv" ||Statics.userDetails["DaayitvaName"] == "कार्यालय सचिव" ||
+//                 Statics.userDetails['DaayitvaName'] == 'Saha-Kaaryavaah' || Statics.userDetails['DaayitvaName'] == 'सह कार्यवाह' ||
+//                 Statics.userDetails['DaayitvaName'] == 'Baal Vidyaarthi Pramukh'|| Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख'   || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख'  ||
+//                 Statics.userDetails['DaayitvaName'] == 'Mahaavidyaalayeen Vidyaarthi Pramukh'   || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख'|| Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख'  ||
+//                 Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Pramukh'   || Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख'||  Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख'  ||
+//                 Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Saha-Pramukh'|| Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख'   || Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख'  ||
+//                 Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Pramukh' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' ||
+// Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Pramukh' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' ||
+// Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' ||
+// Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' ||
+// Statics.userDetails['DaayitvaName'] == 'Bal Vidyarthi Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' ||
+// Statics.userDetails['DaayitvaName'] == 'Mahavidyaleen Vidyarthi Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' ||
+// Statics.userDetails['DaayitvaName'] == 'App Sanyojak'  || Statics.userDetails['DaayitvaName'] == 'एप संयोजक' ||
+//                 Statics.userDetails['DaayitvaName'] == 'Vasti Pramukh' || Statics.userDetails['DaayitvaName'] == 'वस्ती प्रमुख' ||
+//                 Statics.userDetails['DaayitvaName'] == 'Kaaryaalay Pramukh' || Statics.userDetails['DaayitvaName'] == 'कार्यालय प्रमुख')) ||
+//         (Statics.userDetails['LevelName'] == 'Shaakhaa' || Statics.userDetails['LevelName'] == 'शाखा' &&
+//             (Statics.userDetails['DaayitvaName'] == 'Mukhya Shikshak' || Statics.userDetails['DaayitvaName'] == 'मुख्य शिक्षक' || Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' || Statics.userDetails['DaayitvaName'] == 'कार्यवाह')) ||
+//         (//Statics.userDetails['LevelName'] == 'Praant' || Statics.userDetails['LevelName'] == 'प्रांत' &&  // 9223534792 p/w efgh प्रांत सेवा सह प्रमुख https://trello.com/c/lMAE64Rh
+//             Statics.userDetails["DaayitvaName"] == "Join RSS Sanyojak" || Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. संयोजक" ||
+//             Statics.userDetails["DaayitvaName"] == "Join RSS Pramukh" || Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. प्रमुख" ||
+//             Statics.userDetails['DaayitvaName'] == 'Baal Vidyaarthi Pramukh'   ||
+//  Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख'   ||
+//  Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख'  ||
+// Statics.userDetails['DaayitvaName'] == 'Mahaavidyaalayeen Vidyaarthi Pramukh'   ||
+//  Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख'   ||
+//  Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख'  ||
+// Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Pramukh'   ||
+//  Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख'   ||
+//  Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख'  ||
+// Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Saha-Pramukh'   ||
+//  Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख'   ||
+//  Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख'  ||
+//  Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Pramukh' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' ||
+// Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Pramukh' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' ||
+// Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' ||
+// Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' ||
+// Statics.userDetails['DaayitvaName'] == 'Bal Vidyarthi Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' ||
+// Statics.userDetails['DaayitvaName'] == 'Mahavidyaleen Vidyarthi Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' ||
+// Statics.userDetails['DaayitvaName'] == 'App Sanyojak'  || Statics.userDetails['DaayitvaName'] == 'एप संयोजक') ||
+//         (Statics.userDetails['DaayitvaName'] == 'Prachaarak' || Statics.userDetails['DaayitvaName'] == 'प्रचारक' ||
+//             Statics.userDetails['DaayitvaName'] == 'Saha-Prachaarak' || Statics.userDetails['DaayitvaName'] == 'सह प्रचारक')
+//     ) showEditMenu = true;
+//
     if (int.parse(Statics.userDetails['LevelID']) >= 4 &&
-        (Statics.userDetails["DaayitvaName"] == "Join RSS Sanyojak" || Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. संयोजक" ||
-            Statics.userDetails["DaayitvaName"] == "Join RSS Pramukh" || Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. प्रमुख" ||
-            Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' || Statics.userDetails['DaayitvaName'] == 'कार्यवाह' ||
-            Statics.userDetails["DaayitvaName"] == "karyalay sachiv" ||Statics.userDetails["DaayitvaName"] == "कार्यालय सचिव" ||
-            Statics.userDetails['DaayitvaName'] == 'Saha-Kaaryavaah' || Statics.userDetails['DaayitvaName'] == 'सह कार्यवाह' ||
-            Statics.userDetails['DaayitvaName'] == 'Prachaarak' || Statics.userDetails['DaayitvaName'] == 'प्रचारक' ||
-            Statics.userDetails['DaayitvaName'] == 'Saha-Prachaarak' || Statics.userDetails['DaayitvaName'] == 'सह प्रचारक' ||
-            Statics.userDetails['DaayitvaName'] == 'Baal Vidyaarthi Pramukh'   ||  Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख'  ||
-            Statics.userDetails['DaayitvaName'] == 'Mahaavidyaalayeen Vidyaarthi Pramukh'   || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख'  ||
-            Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Pramukh'   || Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख'  ||
-            Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Saha-Pramukh'   || Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख'  ||
-            Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Pramukh' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Pramukh' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Bal Vidyarthi Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Mahavidyaleen Vidyarthi Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'App Sanyojak'  || Statics.userDetails['DaayitvaName'] == 'एप संयोजक' ||
-            Statics.userDetails['DaayitvaName'] == 'Prachaarak' || Statics.userDetails['DaayitvaName'] == 'प्रचारक' ||
-            Statics.userDetails['DaayitvaName'] == 'Kaaryaalay Pramukh' || Statics.userDetails['DaayitvaName'] == 'कार्यालय प्रमुख') &&
+        (Statics.userDetails["DaayitvaName"] == "Join RSS Sanyojak" ||
+            Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. संयोजक" ||
+            Statics.userDetails["DaayitvaName"] == "Join RSS Pramukh" ||
+            Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. प्रमुख" ||
+            Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' ||
+            Statics.userDetails['DaayitvaName'] == 'कार्यवाह' ||
+            Statics.userDetails["DaayitvaName"] == "karyalay sachiv" ||
+            Statics.userDetails["DaayitvaName"] == "कार्यालय सचिव" ||
+            Statics.userDetails['DaayitvaName'] == 'Saha-Kaaryavaah' ||
+            Statics.userDetails['DaayitvaName'] == 'सह कार्यवाह' ||
+            Statics.userDetails['DaayitvaName'] == 'Prachaarak' ||
+            Statics.userDetails['DaayitvaName'] == 'प्रचारक' ||
+            Statics.userDetails['DaayitvaName'] == 'Saha-Prachaarak' ||
+            Statics.userDetails['DaayitvaName'] == 'सह प्रचारक' ||
+            Statics.userDetails['DaayitvaName'] == 'Baal Vidyaarthi Pramukh' ||
+            Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख' ||
+            Statics.userDetails['DaayitvaName'] == 'Mahaavidyaalayeen Vidyaarthi Pramukh' ||
+            Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख' ||
+            Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Pramukh' ||
+            Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख' ||
+            Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Saha-Pramukh' ||
+            Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख' ||
+            Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Pramukh' ||
+            Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' ||
+            Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' ||
+            Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Pramukh' ||
+            Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' ||
+            Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' ||
+            Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Sah Pramukh' ||
+            Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' ||
+            Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' ||
+            Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Sah Pramukh' ||
+            Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' ||
+            Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' ||
+            Statics.userDetails['DaayitvaName'] == 'Bal Vidyarthi Sah Pramukh' ||
+            Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' ||
+            Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' ||
+            Statics.userDetails['DaayitvaName'] == 'Mahavidyaleen Vidyarthi Sah Pramukh' ||
+            Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' ||
+            Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' ||
+            Statics.userDetails['DaayitvaName'] == 'App Sanyojak' ||
+            Statics.userDetails['DaayitvaName'] == 'एप संयोजक' ||
+            Statics.userDetails['DaayitvaName'] == 'Prachaarak' ||
+            Statics.userDetails['DaayitvaName'] == 'प्रचारक' ||
+            Statics.userDetails['DaayitvaName'] == 'Kaaryaalay Pramukh' ||
+            Statics.userDetails['DaayitvaName'] == 'कार्यालय प्रमुख') &&
         widget.swItem["CanUseApp"] == true) showResetPasswordMenu = true;
-
-    if (((Statics.userDetails['LevelName'] == 'Praant' || Statics.userDetails['LevelName'] == 'प्रांत' ||
-        Statics.userDetails['LevelName'] == 'Mahaanagar' || Statics.userDetails['LevelName'] == 'महानगर' ||
-        Statics.userDetails['LevelName'] == 'Bhaag' ||  Statics.userDetails['LevelName'] == 'भाग/जिल्हा' ||  Statics.userDetails['LevelName'] == 'भाग/जिला' ||
-        Statics.userDetails['LevelName'] == 'Vibhaag' || Statics.userDetails['LevelName'] == 'विभाग' ||
-        Statics.userDetails['LevelName'] == 'Nagar' || Statics.userDetails['LevelName'] == 'Nagar/Taalukaa' || Statics.userDetails['LevelName'] == 'नगर/तालुका')
-        &&
-            (Statics.userDetails["DaayitvaName"] == "Join RSS Sanyojak" || Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. संयोजक" ||
-                Statics.userDetails["DaayitvaName"] == "Join RSS Pramukh" || Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. प्रमुख" ||
-                Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' || Statics.userDetails['DaayitvaName'] == 'कार्यवाह' ||
-                Statics.userDetails["DaayitvaName"] == "karyalay sachiv" ||Statics.userDetails["DaayitvaName"] == "कार्यालय सचिव" ||
-                Statics.userDetails['DaayitvaName'] == 'Saha-Kaaryavaah' || Statics.userDetails['DaayitvaName'] == 'सह कार्यवाह' ||
-                Statics.userDetails['DaayitvaName'] == 'Baal Vidyaarthi Pramukh'   || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख'   || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख'  ||
-Statics.userDetails['DaayitvaName'] == 'Mahaavidyaalayeen Vidyaarthi Pramukh'   || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख'   || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख'  ||
-Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Pramukh'   || Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख'   || Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख'  ||
-Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Saha-Pramukh'   || Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख'   || Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख'  ||
- Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Pramukh' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Pramukh' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Bal Vidyarthi Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Mahavidyaleen Vidyarthi Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'App Sanyojak'  || Statics.userDetails['DaayitvaName'] == 'एप संयोजक' ||
-                Statics.userDetails['DaayitvaName'] == 'Kaaryaalay Pramukh' || Statics.userDetails['DaayitvaName'] == 'कार्यालय प्रमुख'))
-        ||
-        (Statics.userDetails['LevelName'] == 'Shaakhaa' || Statics.userDetails['LevelName'] == 'शाखा'
-            &&
-            (Statics.userDetails['DaayitvaName'] == 'Mukhya Shikshak' || Statics.userDetails['DaayitvaName'] == 'मुख्य शिक्षक' ||
-                Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' || Statics.userDetails['DaayitvaName'] == 'कार्यवाह'
-            ))
-        ||
-        (// Statics.userDetails['LevelName'] == 'Praant' || Statics.userDetails['LevelName'] == 'प्रांत' || // 9223534792 p/w efgh प्रांत सेवा सह प्रमुख https://trello.com/c/lMAE64Rh
+//
+    if (((Statics.userDetails['LevelName'] == 'Praant' ||
+                Statics.userDetails['LevelName'] == 'प्रांत' ||
+                Statics.userDetails['LevelName'] == 'Mahaanagar' ||
+                Statics.userDetails['LevelName'] == 'महानगर' ||
+                Statics.userDetails['LevelName'] == 'Bhaag' ||
+                Statics.userDetails['LevelName'] == 'भाग/जिल्हा' ||
+                Statics.userDetails['LevelName'] == 'भाग/जिला' ||
+                Statics.userDetails['LevelName'] == 'Vibhaag' ||
+                Statics.userDetails['LevelName'] == 'विभाग' ||
+                Statics.userDetails['LevelName'] == 'Nagar' ||
+                Statics.userDetails['LevelName'] == 'Nagar/Taalukaa' ||
+                Statics.userDetails['LevelName'] == 'नगर/तालुका') &&
+            (Statics.userDetails["DaayitvaName"] == "Join RSS Sanyojak" ||
+                Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. संयोजक" ||
+                Statics.userDetails["DaayitvaName"] == "Join RSS Pramukh" ||
+                Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. प्रमुख" ||
+                Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' ||
+                Statics.userDetails['DaayitvaName'] == 'कार्यवाह' ||
+                Statics.userDetails["DaayitvaName"] == "karyalay sachiv" ||
+                Statics.userDetails["DaayitvaName"] == "कार्यालय सचिव" ||
+                Statics.userDetails['DaayitvaName'] == 'Saha-Kaaryavaah' ||
+                Statics.userDetails['DaayitvaName'] == 'सह कार्यवाह' ||
+                Statics.userDetails['DaayitvaName'] == 'Baal Vidyaarthi Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Mahaavidyaalayeen Vidyaarthi Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Saha-Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Sah Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Sah Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Bal Vidyarthi Sah Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Mahavidyaleen Vidyarthi Sah Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'App Sanyojak' ||
+                Statics.userDetails['DaayitvaName'] == 'एप संयोजक' ||
+                Statics.userDetails['DaayitvaName'] == 'Kaaryaalay Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'कार्यालय प्रमुख')) ||
+        (Statics.userDetails['LevelName'] == 'Shaakhaa' ||
+            Statics.userDetails['LevelName'] == 'शाखा' &&
+                (Statics.userDetails['DaayitvaName'] == 'Mukhya Shikshak' ||
+                    Statics.userDetails['DaayitvaName'] == 'मुख्य शिक्षक' ||
+                    Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' ||
+                    Statics.userDetails['DaayitvaName'] == 'कार्यवाह')) ||
+        ( // Statics.userDetails['LevelName'] == 'Praant' || Statics.userDetails['LevelName'] == 'प्रांत' || // 9223534792 p/w efgh प्रांत सेवा सह प्रमुख https://trello.com/c/lMAE64Rh
             // Statics.userDetails['LevelName'] == 'Mahaanagar' ||   Statics.userDetails['LevelName'] == 'महानगर' || //9930945083 p/w efgh महानगर सेवा प्रमुख sathi comment kel https://trello.com/c/p7IbNEGM
             // Statics.userDetails['LevelName'] == 'Bhaag' ||  Statics.userDetails['LevelName'] == 'भाग/जिल्हा' || //  sewa pramukha bhag/jilha sathi hide kel
-            Statics.userDetails['LevelName'] == 'Vibhaag' || Statics.userDetails['LevelName'] == 'विभाग'
-            &&
-            Statics.userDetails["DaayitvaName"] == "Join RSS Sanyojak" || Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. संयोजक" ||
-            Statics.userDetails["DaayitvaName"] == "Join RSS Pramukh" || Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. प्रमुख" ||
-            Statics.userDetails['DaayitvaName'] == 'Baal Vidyaarthi Pramukh'|| Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख'   || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख'  ||
-            Statics.userDetails['DaayitvaName'] == 'Mahaavidyaalayeen Vidyaarthi Pramukh'   || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख'   || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख'  ||
-            Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Pramukh'   || Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख'   || Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख'  ||
-            Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Saha-Pramukh'   || Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख'   || Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख'  ||
-            // Statics.userDetails["DaayitvaName"] == "Sewa Pramukh" ||Statics.userDetails["DaayitvaName"] == "सेवा प्रमुख" ||
-            Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Pramukh' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Pramukh' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Bal Vidyarthi Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'Mahavidyaleen Vidyarthi Sah Pramukh' || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' || Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' ||
-Statics.userDetails['DaayitvaName'] == 'App Sanyojak'  || Statics.userDetails['DaayitvaName'] == 'एप संयोजक' || Statics.userDetails['DaayitvaName'] == 'एप संयोजक')
-        ||
-        (Statics.userDetails['DaayitvaName'] == 'Prachaarak' || Statics.userDetails['DaayitvaName'] == 'प्रचारक' ||Statics.userDetails['DaayitvaName'] == 'प्रचारक' ||
-            Statics.userDetails['DaayitvaName'] == 'Saha-Prachaarak' || Statics.userDetails['DaayitvaName'] == 'सह प्रचारक' || Statics.userDetails['DaayitvaName'] == 'सह प्रचारक')
+            Statics.userDetails['LevelName'] == 'Vibhaag' ||
+                Statics.userDetails['LevelName'] == 'विभाग' && Statics.userDetails["DaayitvaName"] == "Join RSS Sanyojak" ||
+                Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. संयोजक" ||
+                Statics.userDetails["DaayitvaName"] == "Join RSS Pramukh" ||
+                Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. प्रमुख" ||
+                Statics.userDetails['DaayitvaName'] == 'Baal Vidyaarthi Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Mahaavidyaalayeen Vidyaarthi Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'व्यवसायी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Vyavasaayee Saha-Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'व्यवसायी सह प्रमुख' ||
+                // Statics.userDetails["DaayitvaName"] == "Sewa Pramukh" ||Statics.userDetails["DaayitvaName"] == "सेवा प्रमुख" ||
+                Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Tarun Vyavsayee Sah Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'तरुण व्यवसायी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Praudh Vyavsayee Sah Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'प्रौढ व्यवसायी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Bal Vidyarthi Sah Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'बाल विद्यार्थी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'Mahavidyaleen Vidyarthi Sah Pramukh' ||
+                Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'महाविद्यालयीन विद्यार्थी सह प्रमुख' ||
+                Statics.userDetails['DaayitvaName'] == 'App Sanyojak' ||
+                Statics.userDetails['DaayitvaName'] == 'एप संयोजक' ||
+                Statics.userDetails['DaayitvaName'] == 'एप संयोजक') ||
+        (Statics.userDetails['DaayitvaName'] == 'Prachaarak' ||
+            Statics.userDetails['DaayitvaName'] == 'प्रचारक' ||
+            Statics.userDetails['DaayitvaName'] == 'प्रचारक' ||
+            Statics.userDetails['DaayitvaName'] == 'Saha-Prachaarak' ||
+            Statics.userDetails['DaayitvaName'] == 'सह प्रचारक' ||
+            Statics.userDetails['DaayitvaName'] == 'सह प्रचारक')) showDeleteMenu = true;
 
-    ) showDeleteMenu = true;
-
-   return Card(
+    return Card(
       margin: EdgeInsets.all(5),
       elevation: 5,
       child: Padding(
@@ -276,16 +427,28 @@ Statics.userDetails['DaayitvaName'] == 'App Sanyojak'  || Statics.userDetails['D
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Title
-                  Text(widget.swItem["FullName"],style: TextStyle(fontSize: 16),),
+                  Text(
+                    widget.swItem["FullName"],
+                    style: TextStyle(fontSize: 16),
+                  ),
                   SizedBox(height: 5),
                   // Subtitle
                   if (widget.swItem["DaayitvaGeoUnitName"].toString().isNotEmpty)
                     Wrap(
                       spacing: 1,
                       children: [
-                        Text(widget.swItem["DaayitvaGeoUnitName"],style: TextStyle(fontSize: 14,color: Colors.black54),),
-                        Text(widget.swItem["LevelName"],style: TextStyle(fontSize: 14,color: Colors.black54),),
-                        Text(widget.swItem["DaayitvaName"],style: TextStyle(fontSize: 14,color: Colors.black54),),
+                        Text(
+                          widget.swItem["DaayitvaGeoUnitName"],
+                          style: TextStyle(fontSize: 14, color: Colors.black54),
+                        ),
+                        Text(
+                          widget.swItem["LevelName"],
+                          style: TextStyle(fontSize: 14, color: Colors.black54),
+                        ),
+                        Text(
+                          widget.swItem["DaayitvaName"],
+                          style: TextStyle(fontSize: 14, color: Colors.black54),
+                        ),
                       ],
                     ),
                   SizedBox(height: 5),
@@ -357,24 +520,20 @@ Statics.userDetails['DaayitvaName'] == 'App Sanyojak'  || Statics.userDetails['D
                       PopupMenuButton(
                         onSelected: (value) {
                           if (value == "ResetPassword") {
-                            Statics.showConfirmationBox(
-                                context, Statics.getLabel('ConfirmResetpassword'), "ResetPassword", widget.swItem["SwayamsevakID"].toString());
+                            Statics.showConfirmationBox(context, Statics.getLabel('ConfirmResetpassword'), "ResetPassword", widget.swItem["SwayamsevakID"].toString());
                           } else if (value == "Delete") {
                             _deleteSwayamSevak(context, widget.swItem["SwayamsevakID"].toString());
                           } else if (value == "Transfer") {
-                          setState(() {
-                            Navigator.of(context).pushNamed(EditSwayamsevakTransferScreen.routeName,
-                                arguments: Statics.ScreenArgumentsSwayamsevakTransfer('0', widget.swItem["SwayamsevakID"].toString(), value));
-                          });
+                            setState(() {
+                              Navigator.of(context)
+                                  .pushNamed(EditSwayamsevakTransferScreen.routeName, arguments: Statics.ScreenArgumentsSwayamsevakTransfer('0', widget.swItem["SwayamsevakID"].toString(), value));
+                            });
                           } else if (value == "EditMenuNew") {
-                            Navigator.of(context).pushNamed(EditSwayamsevakBasicInfo.routeName,
-                                arguments: Statics.ScreenArgumentsNew(widget.swItem["SwayamsevakID"], value));
+                            Navigator.of(context).pushNamed(EditSwayamsevakBasicInfo.routeName, arguments: Statics.ScreenArgumentsNew(widget.swItem["SwayamsevakID"], value));
                           } else if (value == "DaayitvaMenu") {
-                            Navigator.of(context).pushNamed(EditSwayamsevakDaayitva.routeName,
-                                arguments: Statics.ScreenArguments(widget.swItem["SwayamsevakID"], value));
+                            Navigator.of(context).pushNamed(EditSwayamsevakDaayitva.routeName, arguments: Statics.ScreenArguments(widget.swItem["SwayamsevakID"], value));
                           } else if (value == "OtherInfoMenu") {
-                            Navigator.of(context).pushNamed(EditSwayamsevakOtherInfo.routeName,
-                                arguments: Statics.ScreenArguments(widget.swItem["SwayamsevakID"], value));
+                            Navigator.of(context).pushNamed(EditSwayamsevakOtherInfo.routeName, arguments: Statics.ScreenArguments(widget.swItem["SwayamsevakID"], value));
                           }
                           // else if (value == "AddinSoochi") {
                           //   print("${widget.swItem["SwayamsevakID"]}");
@@ -383,9 +542,8 @@ Statics.userDetails['DaayitvaName'] == 'App Sanyojak'  || Statics.userDetails['D
                           //   );
                           //
                           // }
-                            else {
-                            Navigator.of(context).pushNamed(EditSwayamsevakScreen.routeName,
-                                arguments: Statics.ScreenArgumentsNew(widget.swItem["SwayamsevakID"], value));
+                          else {
+                            Navigator.of(context).pushNamed(EditSwayamsevakScreen.routeName, arguments: Statics.ScreenArgumentsNew(widget.swItem["SwayamsevakID"], value));
                           }
                         },
                         icon: Icon(
@@ -409,11 +567,9 @@ Statics.userDetails['DaayitvaName'] == 'App Sanyojak'  || Statics.userDetails['D
                             if (showEditMenu == true && Statics.userDetails['MobileNumber'] == '9322406725-1234')
                               Statics.MenuItem(Statics.getLabel('Occupation') + '-New', FontAwesomeIcons.edit, 'OccupationMenu'),
                             Statics.MenuItem(Statics.getLabel('ViewMenu'), FontAwesomeIcons.eye, 'ViewMenu'),
-                            if (showResetPasswordMenu == true)
-                              Statics.MenuItem(Statics.getLabel('ResetPassword'), Icons.settings_backup_restore, 'ResetPassword'),
+                            if (showResetPasswordMenu == true) Statics.MenuItem(Statics.getLabel('ResetPassword'), Icons.settings_backup_restore, 'ResetPassword'),
                             if (showDeleteMenu == true) Statics.MenuItem(Statics.getLabel('Delete'), Icons.delete, 'Delete'),
-                            if (showTransferMenu == true)
-                              Statics.MenuItem(Statics.getLabel('CardMenuSwayamsevakTransfer'), Icons.transfer_within_a_station, 'Transfer'),
+                            if (showTransferMenu == true) Statics.MenuItem(Statics.getLabel('CardMenuSwayamsevakTransfer'), Icons.transfer_within_a_station, 'Transfer'),
                           ].map((Statics.MenuItem menuItem) {
                             return PopupMenuItem(
                               value: menuItem.menuKey,
@@ -437,7 +593,6 @@ Statics.userDetails['DaayitvaName'] == 'App Sanyojak'  || Statics.userDetails['D
         ),
       ),
     );
-
   }
 
   Future<void> changeEditStatus(bool newValue) async {
@@ -447,9 +602,7 @@ Statics.userDetails['DaayitvaName'] == 'App Sanyojak'  || Statics.userDetails['D
     var inputData = '{"userid":"$userId","can_edit":$editStatus}';
     await SwayamsevakProvider().changeSwayamsewakCanEditStatus(inputData);
   }
-
 }
-
 
 class SwayamsevakHomeAbhiyanCard extends StatefulWidget {
   AbhiyanSwayamsevakList swItem;
@@ -459,9 +612,11 @@ class SwayamsevakHomeAbhiyanCard extends StatefulWidget {
   Function getAbhiyaanSwayamsevakListData;
 
   SwayamsevakHomeAbhiyanCard(this.swItem, this.onCheckCard, this.onUnCheckCard, this._isChecked, this.getAbhiyaanSwayamsevakListData);
+
   @override
   _SwayamsevakHomeAbhiyanCardState createState() => _SwayamsevakHomeAbhiyanCardState();
 }
+
 // void deleteSahbhagiKaryakarta(var context, var sahabhagikaryakartaId) async {
 //   try {
 //     bool isConnected = await Statics.isInternetConnected();
@@ -691,13 +846,9 @@ class _SwayamsevakHomeAbhiyanCardState extends State<SwayamsevakHomeAbhiyanCard>
                   padding: EdgeInsets.all(5),
                   onSelected: (value) {
                     if (value == "सुधार") {
-                      Navigator.of(context)
-                          .pushNamed(AbhiyanEditSwayamsevakScreen.routeName, arguments: widget.swItem)
-                          .then((value) => widget.getAbhiyaanSwayamsevakListData.call());
+                      Navigator.of(context).pushNamed(AbhiyanEditSwayamsevakScreen.routeName, arguments: widget.swItem).then((value) => widget.getAbhiyaanSwayamsevakListData.call());
                     } else if (value == "माहिती पहा") {
-                      Navigator.of(context)
-                          .pushNamed(AbhiyanViewSwayamsevakScreen.routeName, arguments: widget.swItem)
-                          .then((value) => widget.getAbhiyaanSwayamsevakListData.call());
+                      Navigator.of(context).pushNamed(AbhiyanViewSwayamsevakScreen.routeName, arguments: widget.swItem).then((value) => widget.getAbhiyaanSwayamsevakListData.call());
                     } else if (value == "हटवा") {
                       setState(() {
                         deleteSahbhagiKaryakarta(context, widget.swItem.abhiyanSwayamsevakID, () {
@@ -798,7 +949,9 @@ class _SwayamsevakHomeAbhiyanCardState extends State<SwayamsevakHomeAbhiyanCard>
 class AbhiyanSwayamsevakCard extends StatefulWidget {
   final swItem;
   var onSaveDetails;
+
   AbhiyanSwayamsevakCard(this.swItem, this.onSaveDetails);
+
   @override
   _AbhiyanSwayamsevakCardState createState() => _AbhiyanSwayamsevakCardState();
 }
@@ -814,55 +967,46 @@ class _AbhiyanSwayamsevakCardState extends State<AbhiyanSwayamsevakCard> {
         title: Text(widget.swItem["FullName"]),
         subtitle: Container(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 5,
-                ),
-                if (widget.swItem["DaayitvaGeoUnitName"]
-                    .toString()
-                    .isNotEmpty)
-                  Wrap(
-                    spacing: 1,
-                    children: [
-                      Text(widget.swItem["DaayitvaGeoUnitName"]),
-                      Text(widget.swItem["LevelName"]),
-                      Text(widget.swItem["DaayitvaName"]),
-                    ],
-                  ),
-                SizedBox(
-                  height: 5,
-                ),
-                Wrap(spacing: 2, children: [
-                  RichText(
-                      text: TextSpan(
-                        text: 'M: ${widget.swItem["MobileNumber"]
-                            .toString()}${widget.swItem["Email"]
-                            .toString()
-                            .isNotEmpty ? ',' : ''}',
-                        style: TextStyle(color: Colors.blue),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            UrlLauncher.launch("tel://" +
-                                widget.swItem["MobileNumber"].toString());
-                          },
-                      )),
-                  if (widget.swItem['Email']
-                      .toString()
-                      .isNotEmpty)
-                    RichText(
-                      text: TextSpan(
-                          text: 'E: ${widget.swItem["Email"].toString()}',
-                          style: TextStyle(color: Colors.blue),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              UrlLauncher.launch("mailto:" +
-                                  widget.swItem["Email"].toString());
-                            }),
-                    )
-                ])
-              ],
-            )),
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 5,
+            ),
+            if (widget.swItem["DaayitvaGeoUnitName"].toString().isNotEmpty)
+              Wrap(
+                spacing: 1,
+                children: [
+                  Text(widget.swItem["DaayitvaGeoUnitName"]),
+                  Text(widget.swItem["LevelName"]),
+                  Text(widget.swItem["DaayitvaName"]),
+                ],
+              ),
+            SizedBox(
+              height: 5,
+            ),
+            Wrap(spacing: 2, children: [
+              RichText(
+                  text: TextSpan(
+                text: 'M: ${widget.swItem["MobileNumber"].toString()}${widget.swItem["Email"].toString().isNotEmpty ? ',' : ''}',
+                style: TextStyle(color: Colors.blue),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    UrlLauncher.launch("tel://" + widget.swItem["MobileNumber"].toString());
+                  },
+              )),
+              if (widget.swItem['Email'].toString().isNotEmpty)
+                RichText(
+                  text: TextSpan(
+                      text: 'E: ${widget.swItem["Email"].toString()}',
+                      style: TextStyle(color: Colors.blue),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          UrlLauncher.launch("mailto:" + widget.swItem["Email"].toString());
+                        }),
+                )
+            ])
+          ],
+        )),
       ),
     );
   }

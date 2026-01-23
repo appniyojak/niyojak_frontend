@@ -407,28 +407,28 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Row(
       children: <Widget>[
-        _createWidget(Statics.tgLstdashboardSadyaSthitiData[index].shaakhaaCount.toString(), 60, 52, Alignment.center, isTotalRow: isTotalRow),
-        _createWidget(Statics.tgLstdashboardSadyaSthitiData[index].sankalpitShaakhaaCount.toString(), 100, 52, Alignment.center, isTotalRow: isTotalRow),
+        _createWidget(Statics.tgLstdashboardSadyaSthitiData[index].shaakhaaCount.toString(), 130, 52, Alignment.center, isTotalRow: isTotalRow),
+        _createWidget(Statics.tgLstdashboardSadyaSthitiData[index].sankalpitShaakhaaCount.toString(), 130, 52, Alignment.center, isTotalRow: isTotalRow),
         _createAdditionWidget(
-            Statics.tgLstdashboardSadyaSthitiData[index].shaakhaaCount.toString(), Statics.tgLstdashboardSadyaSthitiData[index].sankalpitShaakhaaCount.toString(), 100, 52, Alignment.center,
+            Statics.tgLstdashboardSadyaSthitiData[index].shaakhaaCount.toString(), Statics.tgLstdashboardSadyaSthitiData[index].sankalpitShaakhaaCount.toString(), 130, 52, Alignment.center,
             isTotalRow: isTotalRow),
 
-        _createWidget(Statics.tgLstdashboardSadyaSthitiData[index].saaptaahikCount.toString(), 100, 52, Alignment.center, isTotalRow: isTotalRow),
-        _createWidget(Statics.tgLstdashboardSadyaSthitiData[index].sankalpitSaaptaahikCount.toString(), 100, 52, Alignment.center, isTotalRow: isTotalRow),
+        _createWidget(Statics.tgLstdashboardSadyaSthitiData[index].saaptaahikCount.toString(), 130, 52, Alignment.center, isTotalRow: isTotalRow),
+        _createWidget(Statics.tgLstdashboardSadyaSthitiData[index].sankalpitSaaptaahikCount.toString(), 130, 52, Alignment.center, isTotalRow: isTotalRow),
         _createAdditionWidget(
-            Statics.tgLstdashboardSadyaSthitiData[index].saaptaahikCount.toString(), Statics.tgLstdashboardSadyaSthitiData[index].sankalpitSaaptaahikCount.toString(), 100, 52, Alignment.center,
+            Statics.tgLstdashboardSadyaSthitiData[index].saaptaahikCount.toString(), Statics.tgLstdashboardSadyaSthitiData[index].sankalpitSaaptaahikCount.toString(), 130, 52, Alignment.center,
             isTotalRow: isTotalRow),
 
-        _createWidget(Statics.tgLstdashboardSadyaSthitiData[index].maasikMilanCount.toString(), 100, 52, Alignment.center, isTotalRow: isTotalRow),
-        _createWidget(Statics.tgLstdashboardSadyaSthitiData[index].sankalpitMaasikMilanCount.toString(), 100, 52, Alignment.center, isTotalRow: isTotalRow), // navin mami
+        _createWidget(Statics.tgLstdashboardSadyaSthitiData[index].maasikMilanCount.toString(), 130, 52, Alignment.center, isTotalRow: isTotalRow),
+        _createWidget(Statics.tgLstdashboardSadyaSthitiData[index].sankalpitMaasikMilanCount.toString(), 130, 52, Alignment.center, isTotalRow: isTotalRow), // navin mami
         _createAdditionWidget(
-            Statics.tgLstdashboardSadyaSthitiData[index].maasikMilanCount.toString(), Statics.tgLstdashboardSadyaSthitiData[index].sankalpitMaasikMilanCount.toString(), 100, 52, Alignment.center,
+            Statics.tgLstdashboardSadyaSthitiData[index].maasikMilanCount.toString(), Statics.tgLstdashboardSadyaSthitiData[index].sankalpitMaasikMilanCount.toString(), 130, 52, Alignment.center,
             isTotalRow: isTotalRow),
 
-        _createWidget(Statics.tgLstdashboardSadyaSthitiData[index].sanghaMandaliCount.toString(), 100, 52, Alignment.center, isTotalRow: isTotalRow),
-        _createWidget(Statics.tgLstdashboardSadyaSthitiData[index].sankalpitSanghaMandaliCount.toString(), 100, 52, Alignment.center, isTotalRow: isTotalRow),
+        _createWidget(Statics.tgLstdashboardSadyaSthitiData[index].sanghaMandaliCount.toString(), 130, 52, Alignment.center, isTotalRow: isTotalRow),
+        _createWidget(Statics.tgLstdashboardSadyaSthitiData[index].sankalpitSanghaMandaliCount.toString(), 130, 52, Alignment.center, isTotalRow: isTotalRow),
         _createAdditionWidget(
-            Statics.tgLstdashboardSadyaSthitiData[index].sanghaMandaliCount.toString(), Statics.tgLstdashboardSadyaSthitiData[index].sankalpitSanghaMandaliCount.toString(), 100, 52, Alignment.center,
+            Statics.tgLstdashboardSadyaSthitiData[index].sanghaMandaliCount.toString(), Statics.tgLstdashboardSadyaSthitiData[index].sankalpitSanghaMandaliCount.toString(), 130, 52, Alignment.center,
             isTotalRow: isTotalRow),
       ],
     );
@@ -612,11 +612,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Row(
       children: <Widget>[
-        _createWidget(sankalpAadhaar, 100, 52, Alignment.center, isTotalRow: isTotalRow),
-        _createWidget(Statics.tgLstSankalpByAadhaarData[index].sankalpitShaakhaaCount.toString(), 100, 52, Alignment.center, isTotalRow: isTotalRow),
-        _createWidget(Statics.tgLstSankalpByAadhaarData[index].sankalpitSaaptaahikCount.toString(), 100, 52, Alignment.center, isTotalRow: isTotalRow),
-        _createWidget(Statics.tgLstSankalpByAadhaarData[index].sankalpitMasikMilankCount.toString(), 100, 52, Alignment.center, isTotalRow: isTotalRow),
-        _createWidget(Statics.tgLstSankalpByAadhaarData[index].sankalpitSanghaMandalikCount.toString(), 100, 52, Alignment.center, isTotalRow: isTotalRow),
+        _createWidget(sankalpAadhaar, 130, 52, Alignment.center, isTotalRow: isTotalRow),
+        _createWidget(Statics.tgLstSankalpByAadhaarData[index].sankalpitShaakhaaCount.toString(), 130, 52, Alignment.center, isTotalRow: isTotalRow),
+        _createWidget(Statics.tgLstSankalpByAadhaarData[index].sankalpitSaaptaahikCount.toString(), 130, 52, Alignment.center, isTotalRow: isTotalRow),
+        _createWidget(Statics.tgLstSankalpByAadhaarData[index].sankalpitMasikMilankCount.toString(), 130, 52, Alignment.center, isTotalRow: isTotalRow),
+        _createWidget(Statics.tgLstSankalpByAadhaarData[index].sankalpitSanghaMandalikCount.toString(), 130, 52, Alignment.center, isTotalRow: isTotalRow),
       ],
     );
   }
@@ -1355,23 +1355,23 @@ class _HomeScreenState extends State<HomeScreen> {
         // tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('SankalpitShaakhaa'), 100, 56, Alignment.centerLeft, isTotalRow: false));
         // tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('SaaptaahikMilan'), 100, 56, Alignment.centerLeft, isTotalRow: false));
         // tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('SankalpitSaaptaahikMilan'), 100, 56, Alignment.centerLeft, isTotalRow: false));
-        tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('Vayogat'), 100, 56, Alignment.centerLeft, isTotalRow: false));
+        tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('Vayogat'), 130, 56, Alignment.centerLeft, isTotalRow: false));
 
-        tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('RegisterShaakhaa'), 60, 56, Alignment.centerLeft, isTotalRow: false));
-        tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('SankalpitShaakhaa'), 100, 56, Alignment.centerLeft, isTotalRow: false));
-        tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('TotalSankalpitShaakhaa'), 100, 56, Alignment.centerLeft, isTotalRow: false));
+        tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('RegisterShaakhaa'), 130, 56, Alignment.centerLeft, isTotalRow: false));
+        tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('SankalpitShaakhaa'), 130, 56, Alignment.centerLeft, isTotalRow: false));
+        tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('TotalSankalpitShaakhaa'), 130, 56, Alignment.centerLeft, isTotalRow: false));
 
-        tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('RegisteredSaaptaahikMilan'), 100, 56, Alignment.centerLeft, isTotalRow: false));
-        tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('SankalpitSaaptaahikMilan'), 100, 56, Alignment.centerLeft, isTotalRow: false));
-        tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('TotalSankalpitSaaptaahikMilan'), 100, 56, Alignment.centerLeft, isTotalRow: false));
+        tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('RegisteredSaaptaahikMilan'), 130, 56, Alignment.centerLeft, isTotalRow: false));
+        tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('SankalpitSaaptaahikMilan'), 130, 56, Alignment.centerLeft, isTotalRow: false));
+        tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('TotalSankalpitSaaptaahikMilan'), 130, 56, Alignment.centerLeft, isTotalRow: false));
 
-        tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('RegisteredMasikMilan'), 100, 56, Alignment.centerLeft, isTotalRow: false));
-        tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('SankalpitMasikMilan'), 100, 56, Alignment.centerLeft, isTotalRow: false));
-        tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('TotalSankalpitMasikMilan'), 100, 56, Alignment.centerLeft, isTotalRow: false));
+        tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('RegisteredMasikMilan'), 130, 56, Alignment.centerLeft, isTotalRow: false));
+        tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('SankalpitMasikMilan'), 130, 56, Alignment.centerLeft, isTotalRow: false));
+        tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('TotalSankalpitMasikMilan'), 130, 56, Alignment.centerLeft, isTotalRow: false));
 
-        tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('RegisteredSanghaMandali'), 100, 56, Alignment.centerLeft, isTotalRow: false));
-        tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('SankalpitSanghMandali'), 100, 56, Alignment.centerLeft, isTotalRow: false));
-        tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('TotalSankalpitSanghMandali'), 100, 56, Alignment.centerLeft, isTotalRow: false));
+        tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('RegisteredSanghaMandali'), 130, 56, Alignment.centerLeft, isTotalRow: false));
+        tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('SankalpitSanghMandali'), 130, 56, Alignment.centerLeft, isTotalRow: false));
+        tgSadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('TotalSankalpitSanghMandali'), 130, 56, Alignment.centerLeft, isTotalRow: false));
 
         //   for (var data in Statics.tgLstdashboardSadyaSthitiData) {
         //     if (data.vayogatID == -1) {
@@ -2526,7 +2526,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                     Legend(legendString: "SankalpTable", fontsize: 18),
                                     Container(
-                                      height: Statics.getDeviceSize(context).height * (_mySadyasthitiHeaderRow != null ? 0.40 : 0.07),
+                                      constraints: BoxConstraints(maxHeight: Statics.getDeviceSize(context).height * 0.4, minHeight: Statics.getDeviceSize(context).height * 0.07),
+                                      // height: Statics.getDeviceSize(context).height * (_mySadyasthitiHeaderRow != null ? 0.40 : 0.07),
                                       width: Statics.getDeviceSize(context).width,
                                       child: _mySadyasthitiHeaderRow != null
                                           ? HorizontalDataTable(
@@ -3295,12 +3296,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                           Legend(legendString: "SankalpTable", fontsize: 18),
                                           Container(
-                                            height: Statics.getDeviceSize(context).height * (_tgSadyasthitiHeaderRow != null ? 0.40 : 0.07),
+                                            constraints: BoxConstraints(maxHeight: Statics.getDeviceSize(context).height * 0.4, minHeight: Statics.getDeviceSize(context).height * 0.07),
+                                            //height: Statics.getDeviceSize(context).height * (_tgSadyasthitiHeaderRow != null ? 0.40 : 0.07),
                                             width: Statics.getDeviceSize(context).width,
                                             child: _tgSadyasthitiHeaderRow != null
                                                 ? HorizontalDataTable(
                                                     leftHandSideColumnWidth: 100,
-                                                    rightHandSideColumnWidth: 1160,
+                                                    rightHandSideColumnWidth: 130 * 12,
                                                     isFixedHeader: true,
                                                     headerWidgets: _tgSadyasthitiHeaderRow,
                                                     leftSideItemBuilder: _tgSadyasthitiFirstColumn,
@@ -3339,7 +3341,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             child: _tgSankalpDataHeaderRow != null
                                                 ? HorizontalDataTable(
                                                     leftHandSideColumnWidth: 100,
-                                                    rightHandSideColumnWidth: 500,
+                                                    rightHandSideColumnWidth: 130 * 5,
                                                     isFixedHeader: true,
                                                     headerWidgets: _tgSankalpDataHeaderRow,
                                                     leftSideItemBuilder: _tgSankalpDataFirstColumn,

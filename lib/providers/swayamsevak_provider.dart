@@ -40,6 +40,7 @@ class SwayamsevakProvider {
         data['FullName'],
         data['MobileNumber'],
         data['Email'],
+        data['BirthDate'],
         data['LinkedGeoUnitID'],
         data['LinkedGeoUnitName'],
         data['LinkedShaakhaaID'],

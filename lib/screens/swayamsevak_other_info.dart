@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
@@ -101,8 +100,9 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
   List<dynamic>? _sanghaPreritSanstha;
   String? _shaakhaSanchalanvalue = "";
 
-  DateTime? _birthDate;
-  var _birthDateCntrl = TextEditingController();
+  // DateTime? _birthDate;
+
+  // var _birthDateCntrl = TextEditingController();
   var _sanghaPraveshYearCtrl = TextEditingController();
 
   int _feildNum = 0;
@@ -282,7 +282,7 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
     _permanantPinCodeCtrl.dispose();
     _pratidnyaYearCtrl.dispose();
     //_shaakhaaExperienceCtrl.dispose();
-    _birthDateCntrl.dispose();
+    // _birthDateCntrl.dispose();
     _sanghaPraveshYearCtrl.dispose();
     _preritDesgCtrl.dispose();
     _preritRemarkCtrl.dispose();
@@ -319,53 +319,53 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
       setState(() {
         swOtherInfo = data;
         if (swOtherInfo != null) {
-          _curAddressLine1Cntrl.text = swOtherInfo!.currentAddressLine1 == null ? "" : swOtherInfo!.currentAddressLine1.toString();
-          _curAddressLine2Cntrl.text = swOtherInfo!.currentAddressLine2 == null ? "" : swOtherInfo!.currentAddressLine2.toString();
-          _curGraamCityCntrl.text = swOtherInfo!.currentGraamCityName == null ? "" : swOtherInfo!.currentGraamCityName.toString();
-          _curPostOfficeCntrl.text = swOtherInfo!.currentPostOffice == null ? "" : swOtherInfo!.currentPostOffice.toString();
+          _curAddressLine1Cntrl.text = (swOtherInfo?.currentAddressLine1 ?? "").toString();
+          _curAddressLine2Cntrl.text = (swOtherInfo?.currentAddressLine2 ?? "").toString();
+          _curGraamCityCntrl.text = (swOtherInfo?.currentGraamCityName ?? "").toString();
+          _curPostOfficeCntrl.text = (swOtherInfo?.currentPostOffice ?? "").toString();
 
-          _curPinCodeCtrl.text = swOtherInfo!.currentPinCode == null ? "" : swOtherInfo!.currentPinCode.toString();
-          _curStateValue = swOtherInfo!.currentStateID.toString();
+          _curPinCodeCtrl.text = (swOtherInfo?.currentPinCode ?? "").toString();
+          _curStateValue = (swOtherInfo?.currentStateID ?? "").toString();
 
-          _permanantAddressLine1Cntrl.text = swOtherInfo!.permanentAddressLine1 == null ? "" : swOtherInfo!.permanentAddressLine1.toString();
-          _permanantAddressLine2Cntrl.text = swOtherInfo!.permanentAddressLine2 == null ? "" : swOtherInfo!.permanentAddressLine2.toString();
-          _permanantGraamCityCntrl.text = swOtherInfo!.permanentGraamCityName == null ? "" : swOtherInfo!.permanentGraamCityName.toString();
-          _permanantPostOfficeCntrl.text = swOtherInfo!.permanentPostOffice == null ? "" : swOtherInfo!.permanentPostOffice.toString();
+          _permanantAddressLine1Cntrl.text = (swOtherInfo?.permanentAddressLine1 ?? "").toString();
+          _permanantAddressLine2Cntrl.text = (swOtherInfo?.permanentAddressLine2 ?? "").toString();
+          _permanantGraamCityCntrl.text = (swOtherInfo?.permanentGraamCityName ?? "").toString();
+          _permanantPostOfficeCntrl.text = (swOtherInfo?.permanentPostOffice ?? "").toString();
 
-          _permanantPinCodeCtrl.text = swOtherInfo!.permanentPinCode == null ? "" : swOtherInfo!.permanentPinCode.toString();
-          _permanantStateValue = swOtherInfo!.permanentStateID == null ? null : swOtherInfo!.permanentStateID.toString();
+          _permanantPinCodeCtrl.text = (swOtherInfo?.permanentPinCode ?? "").toString();
+          _permanantStateValue = swOtherInfo?.permanentStateID == null ? null : swOtherInfo?.permanentStateID.toString();
 
-          _isPratidnyit = swOtherInfo!.isPratidnyit == true ? true : false;
-          _pratidnyaYearCtrl.text = swOtherInfo!.pratidnyaYear == null ? "" : swOtherInfo!.pratidnyaYear.toString();
+          _isPratidnyit = swOtherInfo?.isPratidnyit ?? false;
+          _pratidnyaYearCtrl.text = (swOtherInfo?.pratidnyaYear ?? "").toString();
 
-          _hasCap = swOtherInfo!.hasCap == true ? true : false;
-          _hasShirt = swOtherInfo!.hasShirt == true ? true : false;
-          _hasBelt = swOtherInfo!.hasBelt == true ? true : false;
-          print("_hasBelt = swOtherInfo!.hasBelt == true ? true : false;  $_hasBelt");
-          _hasPant = swOtherInfo!.hasPant == true ? true : false;
-          _hasShoes = swOtherInfo!.hasShoes == true ? true : false;
-          _hasSocks = swOtherInfo!.hasSocks == true ? true : false;
-          _hasDanda = swOtherInfo!.hasDanda == true ? true : false;
+          _hasCap = swOtherInfo?.hasCap ?? false;
+          _hasShirt = swOtherInfo?.hasShirt ?? false;
+          _hasBelt = swOtherInfo?.hasBelt ?? false;
+          print("_hasBelt = swOtherInfo?.hasBelt ?? false;  $_hasBelt");
+          _hasPant = swOtherInfo?.hasPant ?? false;
+          _hasShoes = swOtherInfo?.hasShoes ?? false;
+          _hasSocks = swOtherInfo?.hasSocks ?? false;
+          _hasDanda = swOtherInfo?.hasDanda ?? false;
 
-          _has2Wheeler = swOtherInfo!.has2WVehicle == true ? true : false;
-          _has3Wheeler = swOtherInfo!.has3WVehicle == true ? true : false;
-          _has4Wheeler = swOtherInfo!.has4WVehicle == true ? true : false;
-          _hasVehicleDriver = swOtherInfo!.hasVehicleDriver == true ? true : false;
+          _has2Wheeler = swOtherInfo?.has2WVehicle ?? false;
+          _has3Wheeler = swOtherInfo?.has3WVehicle ?? false;
+          _has4Wheeler = swOtherInfo?.has4WVehicle ?? false;
+          _hasVehicleDriver = swOtherInfo?.hasVehicleDriver ?? false;
 
-          _bldGrpvalue = swOtherInfo!.bloodGroupID == null ? null : swOtherInfo!.bloodGroupID.toString();
+          _bldGrpvalue = swOtherInfo?.bloodGroupID == null ? null : swOtherInfo!.bloodGroupID.toString();
 
-          _bldGrpCode = swOtherInfo!.bloodGroupCode == null ? null : swOtherInfo!.bloodGroupCode.toString();
+          _bldGrpCode = swOtherInfo?.bloodGroupCode == null ? null : swOtherInfo!.bloodGroupCode.toString();
 
-          _mthrTngvalue = swOtherInfo!.motherTongueID == null ? null : swOtherInfo!.motherTongueID.toString();
+          _mthrTngvalue = swOtherInfo?.motherTongueID == null ? null : swOtherInfo!.motherTongueID.toString();
 
-          _othLangCntrl.text = swOtherInfo!.motherTongueCode == null ? "" : swOtherInfo!.motherTongueCode.toString();
+          _othLangCntrl.text = (swOtherInfo?.motherTongueCode ?? "").toString();
 
-          _faceBookPageCntrl.text = swOtherInfo!.facebookUsage == null ? "" : swOtherInfo!.facebookUsage.toString();
+          _faceBookPageCntrl.text = (swOtherInfo?.facebookUsage ?? "").toString();
 
-          _birthDate = ((swOtherInfo!.birthDate != null && swOtherInfo!.birthDate != "") ? DateTime.parse(swOtherInfo!.birthDate!) : null);
-          _birthDateCntrl.text = ((swOtherInfo!.birthDate != null && swOtherInfo!.birthDate != "") ? DateFormat('dd-MMM-yyyy').format(_birthDate!) : '');
+          // _birthDate = ((swOtherInfo!.birthDate != null && swOtherInfo!.birthDate != "") ? DateTime.parse(swOtherInfo!.birthDate!) : null);
+          // _birthDateCntrl.text = ((swOtherInfo!.birthDate != null && swOtherInfo!.birthDate != "") ? DateFormat('dd-MMM-yyyy').format(_birthDate!) : '');
 
-          _sanghaPraveshYearCtrl.text = swOtherInfo!.sanghaPraveshYear == null ? "" : swOtherInfo!.sanghaPraveshYear.toString();
+          _sanghaPraveshYearCtrl.text = (swOtherInfo?.sanghaPraveshYear ?? "").toString();
 
           _fbUsage = swOtherInfo!.facebookUsage == null ? null : swOtherInfo!.facebookUsage.toString();
 
@@ -375,37 +375,37 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
 
           _kooUsage = swOtherInfo!.kooUsage == null ? null : (swOtherInfo?.kooUsage ?? "");
 
-          _hasShaakhaaExperience = swOtherInfo!.hasShaakhaaExperience == true ? true : false;
-          _hasBaalShaakhaaExperience = swOtherInfo!.hasBaalShaakhaaExperience == true ? true : false;
-          _hasTarunVyavShaakhaaExperience = swOtherInfo!.hasTarunVyavasaayeeShaakhaaExperience == true ? true : false;
-          _hasTarunVidShaakhaaExperience = swOtherInfo!.hasTarunVidyaarthiShaakhaaExperience == true ? true : false;
-          _hasProudhaVyavShaakhaaExperience = swOtherInfo!.hasProudhaVyavasaayeeShaakhaaExperience == true ? true : false;
+          _hasShaakhaaExperience = swOtherInfo?.hasShaakhaaExperience ?? false;
+          _hasBaalShaakhaaExperience = swOtherInfo?.hasBaalShaakhaaExperience ?? false;
+          _hasTarunVyavShaakhaaExperience = swOtherInfo?.hasTarunVyavasaayeeShaakhaaExperience ?? false;
+          _hasTarunVidShaakhaaExperience = swOtherInfo?.hasTarunVidyaarthiShaakhaaExperience ?? false;
+          _hasProudhaVyavShaakhaaExperience = swOtherInfo?.hasProudhaVyavasaayeeShaakhaaExperience ?? false;
 
-          _shaakhaSanchalanvalue = swOtherInfo!.shaakhaaExperienceYearID == null ? "" : swOtherInfo!.shaakhaaExperienceYearID.toString();
+          _shaakhaSanchalanvalue = (swOtherInfo?.shaakhaaExperienceYearID ?? "").toString();
 
-          _hasShaakhaaOpeningExperience = swOtherInfo!.hasShaakhaaOpeningExperience == true ? true : false;
-          _hasBaalShaakhaaOpeningExperience = swOtherInfo!.hasBaalShaakhaaOpeningExperience == true ? true : false;
-          _hasTarunVyavShaakhaaOpeningExperience = swOtherInfo!.hasTarunVyavasaayeeShaakhaaOpeningExperience == true ? true : false;
-          _hasTarunVidShaakhaaOpeningExperience = swOtherInfo!.hasTarunVidyaarthiShaakhaaOpeningExperience == true ? true : false;
-          _hasProudhaVyavShaakhaaOpeningExperience = swOtherInfo!.hasProudhaVyavasaayeeShaakhaaOpeningExperience == true ? true : false;
+          _hasShaakhaaOpeningExperience = swOtherInfo?.hasShaakhaaOpeningExperience ?? false;
+          _hasBaalShaakhaaOpeningExperience = swOtherInfo?.hasBaalShaakhaaOpeningExperience ?? false;
+          _hasTarunVyavShaakhaaOpeningExperience = swOtherInfo?.hasTarunVyavasaayeeShaakhaaOpeningExperience ?? false;
+          _hasTarunVidShaakhaaOpeningExperience = swOtherInfo?.hasTarunVidyaarthiShaakhaaOpeningExperience ?? false;
+          _hasProudhaVyavShaakhaaOpeningExperience = swOtherInfo?.hasProudhaVyavasaayeeShaakhaaOpeningExperience ?? false;
 
-          _txtNumber1Ctrl.text = swOtherInfo!.secondaryMobileNumber == null ? "" : swOtherInfo!.secondaryMobileNumber.toString();
+          _txtNumber1Ctrl.text = (swOtherInfo?.secondaryMobileNumber ?? "").toString();
 
-          _txtNumber2Ctrl.text = swOtherInfo!.officePhoneNumber == null ? "" : swOtherInfo!.officePhoneNumber.toString();
+          _txtNumber2Ctrl.text = (swOtherInfo?.officePhoneNumber ?? "").toString();
 
-          _txtNumber3Ctrl.text = swOtherInfo!.homePhoneNumber == null ? "" : swOtherInfo!.homePhoneNumber.toString();
+          _txtNumber3Ctrl.text = (swOtherInfo?.homePhoneNumber ?? "").toString();
 
-          _txtNumber4Ctrl.text = swOtherInfo!.whatsAppNumber == null ? "" : swOtherInfo!.whatsAppNumber.toString();
+          _txtNumber4Ctrl.text = (swOtherInfo?.whatsAppNumber ?? "").toString();
 
-          _txtSecondayEmailCtrl.text = swOtherInfo!.secondaryEmail == null ? "" : swOtherInfo!.secondaryEmail.toString();
+          _txtSecondayEmailCtrl.text = (swOtherInfo?.secondaryEmail ?? "").toString();
 
-          _txtInstagramHandleCtrl.text = swOtherInfo!.instagramHandle == null ? "" : swOtherInfo!.instagramHandle.toString();
+          _txtInstagramHandleCtrl.text = (swOtherInfo?.instagramHandle ?? "").toString();
 
-          _txtKooHandleCtrl.text = swOtherInfo!.kooHandle == null ? "" : swOtherInfo!.kooHandle.toString();
+          _txtKooHandleCtrl.text = (swOtherInfo?.kooHandle ?? "").toString();
 
-          _txtTwitterHandleCtrl.text = swOtherInfo!.twitterHandle == null ? "" : swOtherInfo!.twitterHandle.toString();
+          _txtTwitterHandleCtrl.text = (swOtherInfo?.twitterHandle ?? "").toString();
 
-          _faceBookPageCntrl.text = swOtherInfo!.facebookPage == null ? "" : swOtherInfo!.facebookPage.toString();
+          _faceBookPageCntrl.text = (swOtherInfo?.facebookPage ?? "").toString();
 
           _feildNum = 0;
           _shwFirstField = false;
@@ -442,10 +442,10 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
           //     : swOtherInfo!.maxDaayitva.toString();
 
           // _hasBeenPrachaarak =
-          //     swOtherInfo!.hasBeenPrachaarak == true ? true : false;
+          //     swOtherInfo!.hasBeenPrachaarak ?? false;
 
           // _hasbeenVistarak =
-          //     swOtherInfo!.hasBeenVistaarak == true ? true : false;
+          //     swOtherInfo!.hasBeenVistaarak ?? false;
 
           // _txtVistaarakMonthCountCtrl.text =
           //     swOtherInfo!.vistaarakMonthCount == null
@@ -528,67 +528,67 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
       "OtherInfo": {
         "SwayamsevakID": int.parse(widget.swId),
         "PraantID": 1,
-        "CurrentAddressLine1": swOtherInfo!.currentAddressLine1,
-        "CurrentAddressLine2": swOtherInfo!.currentAddressLine2,
-        "CurrentGraamName": swOtherInfo!.currentGraamCityName,
-        "CurrentPostOffice": swOtherInfo!.currentPostOffice,
-        "CurrentDistrictID": swOtherInfo!.currentDistrictID,
-        "CurrentPinCode": swOtherInfo!.currentPinCode,
-        "CurrentStateID": swOtherInfo!.currentStateID,
-        "PermanentAddressLine1": swOtherInfo!.permanentAddressLine1,
-        "PermanentAddressLine2": swOtherInfo!.permanentAddressLine2,
-        "PermanentGraamName": swOtherInfo!.permanentGraamCityName,
-        "PermanentPostOffice": swOtherInfo!.permanentPostOffice,
-        "PermanentDistrictID": swOtherInfo!.permanentDistrictID,
-        "PermanentPinCode": swOtherInfo!.permanentPinCode,
-        "PermanentStateID": swOtherInfo!.permanentStateID,
-        "BloodGroupID": swOtherInfo!.bloodGroupID,
-        "BloodGroupCode": swOtherInfo!.bloodGroupCode,
-        "MotherTongueID": swOtherInfo!.motherTongueID,
-        "MotherTongueCode": swOtherInfo!.motherTongueCode,
-        "BirthDateStr": (_birthDate != null ? DateFormat('dd-MM-yyyy').format(_birthDate!) : null),
-        "SanghaPraveshYear": swOtherInfo!.sanghaPraveshYear,
-        "FacebookUsage": swOtherInfo!.facebookUsage,
-        "TwitterUsage": swOtherInfo!.twitterUsage,
-        "KooUsage": "", //swOtherInfo!.kooUsage,
-        "InstagramUsage": swOtherInfo!.instagramUsage,
+        "CurrentAddressLine1": swOtherInfo?.currentAddressLine1,
+        "CurrentAddressLine2": swOtherInfo?.currentAddressLine2,
+        "CurrentGraamName": swOtherInfo?.currentGraamCityName,
+        "CurrentPostOffice": swOtherInfo?.currentPostOffice,
+        "CurrentDistrictID": swOtherInfo?.currentDistrictID,
+        "CurrentPinCode": swOtherInfo?.currentPinCode,
+        "CurrentStateID": swOtherInfo?.currentStateID,
+        "PermanentAddressLine1": swOtherInfo?.permanentAddressLine1,
+        "PermanentAddressLine2": swOtherInfo?.permanentAddressLine2,
+        "PermanentGraamName": swOtherInfo?.permanentGraamCityName,
+        "PermanentPostOffice": swOtherInfo?.permanentPostOffice,
+        "PermanentDistrictID": swOtherInfo?.permanentDistrictID,
+        "PermanentPinCode": swOtherInfo?.permanentPinCode,
+        "PermanentStateID": swOtherInfo?.permanentStateID,
+        "BloodGroupID": swOtherInfo?.bloodGroupID,
+        "BloodGroupCode": swOtherInfo?.bloodGroupCode,
+        "MotherTongueID": swOtherInfo?.motherTongueID,
+        "MotherTongueCode": swOtherInfo?.motherTongueCode,
+        // "BirthDateStr": (_birthDate != null ? DateFormat('dd-MM-yyyy').format(_birthDate!) : null),
+        "SanghaPraveshYear": swOtherInfo?.sanghaPraveshYear,
+        "FacebookUsage": swOtherInfo?.facebookUsage,
+        "TwitterUsage": swOtherInfo?.twitterUsage,
+        "KooUsage": "", //swOtherInfo?.kooUsage,
+        "InstagramUsage": swOtherInfo?.instagramUsage,
         "IsPratidnyit": _isPratidnyit,
-        "PratidnyaYear": swOtherInfo!.pratidnyaYear,
+        "PratidnyaYear": swOtherInfo?.pratidnyaYear,
         //"IsGanaveshComplete": _isGanaveshComplete,
-        "HasCap": _hasCap == true ? true : false,
-        "HasShirt": _hasShirt == true ? true : false,
-        "HasPant": _hasPant == true ? true : false,
-        "HasBelt": _hasBelt == true ? true : false,
-        "HasShoes": _hasShoes == true ? true : false,
-        "HasSocks": _hasSocks == true ? true : false,
-        "HasDanda": _hasDanda == true ? true : false,
-        "HasShaakhaaSanchaalanExperience": _hasShaakhaaExperience == true ? true : false,
-        "HasBaalShaakhaaExperience": _hasBaalShaakhaaExperience == true ? true : false,
-        "HasTarunVidyaarthiShaakhaaExperience": _hasTarunVidShaakhaaExperience == true ? true : false,
-        "HasTarunVyavasaayeeShaakhaaExperience": _hasTarunVyavShaakhaaExperience == true ? true : false,
-        "HasProudhaVyavasaayeeShaakhaaExperience": _hasProudhaVyavShaakhaaExperience == true ? true : false,
-        "ShaakhaaExperienceYearID": swOtherInfo!.shaakhaaExperienceYearID,
-        "HasShaakhaaOpeningExperience": _hasShaakhaaOpeningExperience == true ? true : false,
-        "HasBaalShaakhaaOpeningExperience": _hasBaalShaakhaaOpeningExperience == true ? true : false,
-        "HasTarunVidyaarthiShaakhaaOpeningExperience": _hasTarunVidShaakhaaOpeningExperience == true ? true : false,
-        "HasTarunVyavasaayeeShaakhaaOpeningExperience": _hasTarunVyavShaakhaaOpeningExperience == true ? true : false,
-        "HasProudhaVyavasaayeeShaakhaaOpeningExperience": _hasProudhaVyavShaakhaaOpeningExperience == true ? true : false,
-        "Has2WVehicle": _has2Wheeler == true ? true : false,
-        "Has3WVehicle": _has3Wheeler == true ? true : false,
-        "Has4WVehicle": _has4Wheeler == true ? true : false,
-        "HasVehicleDriver": _hasVehicleDriver == true ? true : false,
+        "HasCap": _hasCap ?? false,
+        "HasShirt": _hasShirt ?? false,
+        "HasPant": _hasPant ?? false,
+        "HasBelt": _hasBelt ?? false,
+        "HasShoes": _hasShoes ?? false,
+        "HasSocks": _hasSocks ?? false,
+        "HasDanda": _hasDanda ?? false,
+        "HasShaakhaaSanchaalanExperience": _hasShaakhaaExperience ?? false,
+        "HasBaalShaakhaaExperience": _hasBaalShaakhaaExperience ?? false,
+        "HasTarunVidyaarthiShaakhaaExperience": _hasTarunVidShaakhaaExperience ?? false,
+        "HasTarunVyavasaayeeShaakhaaExperience": _hasTarunVyavShaakhaaExperience ?? false,
+        "HasProudhaVyavasaayeeShaakhaaExperience": _hasProudhaVyavShaakhaaExperience ?? false,
+        "ShaakhaaExperienceYearID": swOtherInfo?.shaakhaaExperienceYearID,
+        "HasShaakhaaOpeningExperience": _hasShaakhaaOpeningExperience ?? false,
+        "HasBaalShaakhaaOpeningExperience": _hasBaalShaakhaaOpeningExperience ?? false,
+        "HasTarunVidyaarthiShaakhaaOpeningExperience": _hasTarunVidShaakhaaOpeningExperience ?? false,
+        "HasTarunVyavasaayeeShaakhaaOpeningExperience": _hasTarunVyavShaakhaaOpeningExperience ?? false,
+        "HasProudhaVyavasaayeeShaakhaaOpeningExperience": _hasProudhaVyavShaakhaaOpeningExperience ?? false,
+        "Has2WVehicle": _has2Wheeler ?? false,
+        "Has3WVehicle": _has3Wheeler ?? false,
+        "Has4WVehicle": _has4Wheeler ?? false,
+        "HasVehicleDriver": _hasVehicleDriver ?? false,
         "AreaOfInterestIDs": areaOfInterestIDs.trim() == '' ? null : areaOfInterestIDs,
         "AreaOfExpertiseIDs": areaOfExpertiseIDs.trim() == '' ? null : areaOfExpertiseIDs,
-        "SecondaryMobileNumber": swOtherInfo!.secondaryMobileNumber == "" ? null : swOtherInfo!.secondaryMobileNumber,
-        "OfficePhoneNumber": swOtherInfo!.officePhoneNumber == "" ? null : swOtherInfo!.officePhoneNumber,
-        "HomePhoneNumber": swOtherInfo!.homePhoneNumber == "" ? null : swOtherInfo!.homePhoneNumber,
-        "WhatsAppNumber": swOtherInfo!.whatsAppNumber == "" ? null : swOtherInfo!.whatsAppNumber,
-        "FacebookPage": swOtherInfo!.facebookPage,
-        "SecondaryEmail": swOtherInfo!.secondaryEmail,
-        "TwitterHandle": swOtherInfo!.twitterHandle,
-        "InstagramHandle": swOtherInfo!.instagramHandle,
-        "KooHandle": "", //swOtherInfo!.kooHandle,
-        "MaxDaayitva": swOtherInfo!.maxDaayitva,
+        "SecondaryMobileNumber": swOtherInfo?.secondaryMobileNumber == "" ? null : swOtherInfo?.secondaryMobileNumber,
+        "OfficePhoneNumber": swOtherInfo?.officePhoneNumber == "" ? null : swOtherInfo?.officePhoneNumber,
+        "HomePhoneNumber": swOtherInfo?.homePhoneNumber == "" ? null : swOtherInfo?.homePhoneNumber,
+        "WhatsAppNumber": swOtherInfo?.whatsAppNumber == "" ? null : swOtherInfo?.whatsAppNumber,
+        "FacebookPage": swOtherInfo?.facebookPage,
+        "SecondaryEmail": swOtherInfo?.secondaryEmail,
+        "TwitterHandle": swOtherInfo?.twitterHandle,
+        "InstagramHandle": swOtherInfo?.instagramHandle,
+        "KooHandle": "", //swOtherInfo?.kooHandle,
+        "MaxDaayitva": swOtherInfo?.maxDaayitva,
         "HasBeenVistaarak": null,
         "HasBeenPrachaarak": null,
         "VistaarakWeekCount": null,
@@ -617,6 +617,10 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
     var data4 = await Statics.getSanghaPreritSanstha("1", null, null);
 
     // if (!mounted)
+
+    // print("data5 >>>>>>>>>>>>>>>> ");
+    data.forEach((e) => print("data >>>>>>>>>>>>>>>> ${e.toJson()}"));
+
     setState(() {
       _curState = data.isEmpty ? null : data;
       _permanantState = data5;
@@ -629,20 +633,20 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
     // return;
   }
 
-  _pickDate() async {
-    DateTime? date = await showDatePicker(
-        context: context,
-        initialDate: _birthDate == null ? DateTime.now() : _birthDate!,
-        firstDate: DateTime((_birthDate == null ? DateTime.now().year : _birthDate!.year) - 80),
-        lastDate: DateTime((_birthDate == null ? DateTime.now().year : _birthDate!.year) + 80));
-
-    if (date != null) {
-      setState(() {
-        _birthDate = date;
-        _birthDateCntrl.text = DateFormat('dd-MMM-yyyy').format(date);
-      });
-    }
-  }
+  // _pickDate() async {
+  //   DateTime? date = await showDatePicker(
+  //       context: context,
+  //       initialDate: _birthDate == null ? DateTime.now() : _birthDate!,
+  //       firstDate: DateTime((_birthDate == null ? DateTime.now().year : _birthDate!.year) - 80),
+  //       lastDate: DateTime((_birthDate == null ? DateTime.now().year : _birthDate!.year) + 80));
+  //
+  //   if (date != null) {
+  //     setState(() {
+  //       _birthDate = date;
+  //       _birthDateCntrl.text = DateFormat('dd-MMM-yyyy').format(date);
+  //     });
+  //   }
+  // }
 
   populateDistrict(String? stateID, String type) async {
     var data = await Statics.getDistrictForApp("1", stateID, null);
@@ -1752,24 +1756,24 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
                             ),
                           ],
                         ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: Statics.getDeviceSize(context).width * 0.7,
-                          child: TextField(
-                            enabled: false,
-                            controller: _birthDateCntrl,
-                            decoration: InputDecoration(labelText: Statics.getLabel('BirthDate')),
-                            textInputAction: TextInputAction.done,
-                          ),
-                        ),
-                        IconButton(
-                          color: Colors.purple,
-                          icon: FaIcon(FontAwesomeIcons.solidCalendarAlt),
-                          onPressed: _pickDate,
-                        ),
-                      ],
-                    ),
+                    // Row(
+                    //   children: [
+                    //     SizedBox(
+                    //       width: Statics.getDeviceSize(context).width * 0.7,
+                    //       child: TextField(
+                    //         enabled: false,
+                    //         controller: _birthDateCntrl,
+                    //         decoration: InputDecoration(labelText: Statics.getLabel('BirthDate')),
+                    //         textInputAction: TextInputAction.done,
+                    //       ),
+                    //     ),
+                    //     IconButton(
+                    //       color: Colors.purple,
+                    //       icon: FaIcon(FontAwesomeIcons.solidCalendarAlt),
+                    //       onPressed: _pickDate,
+                    //     ),
+                    //   ],
+                    // ),
                     SizedBox(
                       height: 20,
                     ),
