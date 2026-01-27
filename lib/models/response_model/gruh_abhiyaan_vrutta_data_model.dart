@@ -100,10 +100,11 @@ class AbhiyaanPeopleModel {
   int? swayamsevakID;
   String? daayitva;
   int? isactive;
+  int? isdefault;
   String? mobileno;
   bool isSelected = false;
 
-  AbhiyaanPeopleModel({this.pkid, this.fullName, this.name, this.desgination, this.swayamsevakID, this.daayitva, this.isactive, this.mobileno, this.isSelected = false});
+  AbhiyaanPeopleModel({this.pkid, this.fullName, this.name, this.desgination, this.swayamsevakID, this.daayitva, this.isactive, this.isdefault, this.mobileno, this.isSelected = false});
 
   AbhiyaanPeopleModel.fromJson(Map<String, dynamic> json) {
     pkid = json['pkid'];
@@ -113,6 +114,7 @@ class AbhiyaanPeopleModel {
     swayamsevakID = json['SwayamsevakID'];
     daayitva = json['daayitva'];
     isactive = json['isactive'];
+    isdefault = json['isdefault'];
     mobileno = json['mobileno'];
     isSelected = json['isSelected'] ?? false;
   }
@@ -126,6 +128,7 @@ class AbhiyaanPeopleModel {
     data['SwayamsevakID'] = this.swayamsevakID;
     data['daayitva'] = this.daayitva;
     data['isactive'] = this.isactive;
+    data['isdefault'] = this.isdefault;
     data['mobileno'] = this.mobileno;
     data['isSelected'] = this.isSelected;
     return data;

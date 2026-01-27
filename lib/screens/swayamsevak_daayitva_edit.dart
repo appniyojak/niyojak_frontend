@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import '../providers/swayamsevak_provider.dart';
-import '../widgets/legend.dart';
-import '../providers/bals.dart';
 
 import '../helpers/static_data.dart' as Statics;
+import '../providers/bals.dart';
+import '../providers/swayamsevak_provider.dart';
+import '../widgets/legend.dart';
 
 class SwayamSevakDaayitvaEdit extends StatefulWidget {
   static const routeName = '/daayitva-detail-screen';
@@ -402,11 +402,13 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
                                         items: _level!
                                             .map((bg) => DropdownMenuItem(
                                                 value: bg.levelID.toString(),
-                                                child: Text(bg.levelName == "Bhaag"
-                                                    ? "Bhaag / Jilha"
-                                                    : bg.levelName == "Nagar"
-                                                        ? "Nagar / Taluka"
-                                                        : bg.levelName!)))
+                                                child: Text(Statics.getLabel(
+                                                    bg.levelName == "Nagar"
+                                                        ? "Nagar/Taluka"
+                                                        : bg.levelName == "Akhil Bhaaratiya"
+                                                            ? "AkhilBhaaratiya"
+                                                            : bg.levelName!,
+                                                    returnKey: true))))
                                             .toList(),
                                         onChanged: (value) {
                                           setState(() {

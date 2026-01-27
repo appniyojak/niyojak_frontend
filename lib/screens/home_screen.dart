@@ -39,7 +39,6 @@ import 'search_join_rss.dart';
 import 'search_rjb_nidhi_sankalan.dart';
 import 'search_soochi_screen.dart';
 import 'shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/gruh_abhiyaan_main_tab_screen.dart';
-import 'shatabdi_vrutta_sankalan/hindu_sanmelan/hindu_sanmelan_form.dart';
 import 'shatabdi_vrutta_sankalan/vijayadashami/vijaya_dashami_report.dart';
 import 'shatabdi_vrutta_sankalan/vijayadashami/vijayadashami_form_view.dart';
 import 'survey_screen/mandal_reports_tabs.dart';
@@ -320,7 +319,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _createWidget(String label, double width, double? height, Alignment? alignment, {bool isTotalRow = false}) {
     return Container(
-      child: Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
+      child: Text(label, textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold)),
       width: width,
       height: height,
       padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
@@ -371,25 +370,25 @@ class _HomeScreenState extends State<HomeScreen> {
     if (Statics.lstdashboardSadyaSthitiData.length > 0 && Statics.lstdashboardSadyaSthitiData.length == index + 1) isTotalRow = true;
     return Row(
       children: <Widget>[
-        _createWidget(Statics.lstdashboardSadyaSthitiData[index].shaakhaaCount.toString(), 60, 52, Alignment.center, isTotalRow: isTotalRow),
-        _createWidget(Statics.lstdashboardSadyaSthitiData[index].sankalpitShaakhaaCount.toString(), 100, 52, Alignment.center, isTotalRow: isTotalRow),
+        _createWidget(Statics.lstdashboardSadyaSthitiData[index].shaakhaaCount.toString(), 130, 52, Alignment.center, isTotalRow: isTotalRow),
+        _createWidget(Statics.lstdashboardSadyaSthitiData[index].sankalpitShaakhaaCount.toString(), 130, 52, Alignment.center, isTotalRow: isTotalRow),
         _createAdditionWidget(
-            Statics.lstdashboardSadyaSthitiData[index].shaakhaaCount.toString(), Statics.lstdashboardSadyaSthitiData[index].sankalpitShaakhaaCount.toString(), 100, 52, Alignment.center,
+            Statics.lstdashboardSadyaSthitiData[index].shaakhaaCount.toString(), Statics.lstdashboardSadyaSthitiData[index].sankalpitShaakhaaCount.toString(), 130, 52, Alignment.center,
             isTotalRow: isTotalRow),
-        _createWidget(Statics.lstdashboardSadyaSthitiData[index].saaptaahikCount.toString(), 100, 52, Alignment.center, isTotalRow: isTotalRow),
-        _createWidget(Statics.lstdashboardSadyaSthitiData[index].sankalpitSaaptaahikCount.toString(), 100, 52, Alignment.center, isTotalRow: isTotalRow),
+        _createWidget(Statics.lstdashboardSadyaSthitiData[index].saaptaahikCount.toString(), 130, 52, Alignment.center, isTotalRow: isTotalRow),
+        _createWidget(Statics.lstdashboardSadyaSthitiData[index].sankalpitSaaptaahikCount.toString(), 130, 52, Alignment.center, isTotalRow: isTotalRow),
         _createAdditionWidget(
-            Statics.lstdashboardSadyaSthitiData[index].saaptaahikCount.toString(), Statics.lstdashboardSadyaSthitiData[index].sankalpitSaaptaahikCount.toString(), 100, 52, Alignment.center,
+            Statics.lstdashboardSadyaSthitiData[index].saaptaahikCount.toString(), Statics.lstdashboardSadyaSthitiData[index].sankalpitSaaptaahikCount.toString(), 130, 52, Alignment.center,
             isTotalRow: isTotalRow),
-        _createWidget(Statics.lstdashboardSadyaSthitiData[index].maasikMilanCount.toString(), 100, 52, Alignment.center, isTotalRow: isTotalRow),
-        _createWidget(Statics.lstdashboardSadyaSthitiData[index].sankalpitMaasikMilanCount.toString(), 100, 52, Alignment.center, isTotalRow: isTotalRow),
+        _createWidget(Statics.lstdashboardSadyaSthitiData[index].maasikMilanCount.toString(), 130, 52, Alignment.center, isTotalRow: isTotalRow),
+        _createWidget(Statics.lstdashboardSadyaSthitiData[index].sankalpitMaasikMilanCount.toString(), 130, 52, Alignment.center, isTotalRow: isTotalRow),
         _createAdditionWidget(
-            Statics.lstdashboardSadyaSthitiData[index].maasikMilanCount.toString(), Statics.lstdashboardSadyaSthitiData[index].sankalpitMaasikMilanCount.toString(), 100, 52, Alignment.center,
+            Statics.lstdashboardSadyaSthitiData[index].maasikMilanCount.toString(), Statics.lstdashboardSadyaSthitiData[index].sankalpitMaasikMilanCount.toString(), 130, 52, Alignment.center,
             isTotalRow: isTotalRow),
-        _createWidget(Statics.lstdashboardSadyaSthitiData[index].sanghaMandaliCount.toString(), 100, 52, Alignment.center, isTotalRow: isTotalRow),
-        _createWidget(Statics.lstdashboardSadyaSthitiData[index].sankalpitSanghaMandaliCount.toString(), 100, 52, Alignment.center, isTotalRow: isTotalRow),
+        _createWidget(Statics.lstdashboardSadyaSthitiData[index].sanghaMandaliCount.toString(), 130, 52, Alignment.center, isTotalRow: isTotalRow),
+        _createWidget(Statics.lstdashboardSadyaSthitiData[index].sankalpitSanghaMandaliCount.toString(), 130, 52, Alignment.center, isTotalRow: isTotalRow),
         _createAdditionWidget(
-            Statics.lstdashboardSadyaSthitiData[index].sanghaMandaliCount.toString(), Statics.lstdashboardSadyaSthitiData[index].sankalpitSanghaMandaliCount.toString(), 100, 52, Alignment.center,
+            Statics.lstdashboardSadyaSthitiData[index].sanghaMandaliCount.toString(), Statics.lstdashboardSadyaSthitiData[index].sankalpitSanghaMandaliCount.toString(), 130, 52, Alignment.center,
             isTotalRow: isTotalRow),
       ],
     );
@@ -590,11 +589,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Row(
       children: <Widget>[
-        _createWidget(sankalpAadhaar, 100, 52, Alignment.center, isTotalRow: isTotalRow),
-        _createWidget(Statics.lstSankalpByAadhaarData[index].sankalpitShaakhaaCount.toString(), 100, 52, Alignment.center, isTotalRow: isTotalRow),
-        _createWidget(Statics.lstSankalpByAadhaarData[index].sankalpitSaaptaahikCount.toString(), 100, 52, Alignment.center, isTotalRow: isTotalRow),
-        _createWidget(Statics.lstSankalpByAadhaarData[index].sankalpitMasikMilankCount.toString(), 100, 52, Alignment.center, isTotalRow: isTotalRow),
-        _createWidget(Statics.lstSankalpByAadhaarData[index].sankalpitSanghaMandalikCount.toString(), 100, 52, Alignment.center, isTotalRow: isTotalRow),
+        _createWidget(sankalpAadhaar, 130, 52, Alignment.center, isTotalRow: isTotalRow),
+        _createWidget(Statics.lstSankalpByAadhaarData[index].sankalpitShaakhaaCount.toString(), 130, 52, Alignment.center, isTotalRow: isTotalRow),
+        _createWidget(Statics.lstSankalpByAadhaarData[index].sankalpitSaaptaahikCount.toString(), 130, 52, Alignment.center, isTotalRow: isTotalRow),
+        _createWidget(Statics.lstSankalpByAadhaarData[index].sankalpitMasikMilankCount.toString(), 130, 52, Alignment.center, isTotalRow: isTotalRow),
+        _createWidget(Statics.lstSankalpByAadhaarData[index].sankalpitSanghaMandalikCount.toString(), 130, 52, Alignment.center, isTotalRow: isTotalRow),
       ],
     );
   }
@@ -624,7 +623,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _myStudentCategoryFirstColumn(BuildContext context, int index) {
     bool isTotalRow = false;
     if (Statics.lstStudentCategory.length > 0 && Statics.lstStudentCategory.length == index + 1) isTotalRow = true;
-    return _createWidget(Statics.lstStudentCategory[index].studentCategoryName!, 150, 52, Alignment.centerLeft, isTotalRow: isTotalRow);
+    return _createWidget(Statics.lstStudentCategory[index].studentCategoryName!, 150, index == 0 ? 72 : 52, Alignment.centerLeft, isTotalRow: isTotalRow);
   }
 
   Widget _myStudentCategoryOtherColumns(BuildContext context, int index) {
@@ -633,7 +632,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Row(
       children: <Widget>[
-        _createWidget(Statics.lstStudentCategory[index].countByStudentCategory.toString(), 150, 52, Alignment.center, isTotalRow: isTotalRow),
+        _createWidget(Statics.lstStudentCategory[index].countByStudentCategory.toString(), 150, index == 0 ? 72 : 52, Alignment.center, isTotalRow: isTotalRow),
       ],
     );
   }
@@ -641,7 +640,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _tgStudentCategoryFirstColumn(BuildContext context, int index) {
     bool isTotalRow = false;
     if (Statics.tgLstStudentCategory.length > 0 && Statics.tgLstStudentCategory.length == index + 1) isTotalRow = true;
-    return _createWidget(Statics.tgLstStudentCategory[index].studentCategoryName!, 150, 52, Alignment.centerLeft, isTotalRow: isTotalRow);
+    return _createWidget(Statics.tgLstStudentCategory[index].studentCategoryName!, 150, index == 0 ? 72 : 52, Alignment.centerLeft, isTotalRow: isTotalRow);
   }
 
   Widget _tgStudentCategoryOtherColumns(BuildContext context, int index) {
@@ -650,7 +649,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Row(
       children: <Widget>[
-        _createWidget(Statics.tgLstStudentCategory[index].countByStudentCategory.toString(), 150, 52, Alignment.center, isTotalRow: isTotalRow),
+        _createWidget(Statics.tgLstStudentCategory[index].countByStudentCategory.toString(), 150, index == 0 ? 72 : 52, Alignment.center, isTotalRow: isTotalRow),
       ],
     );
   }
@@ -1021,35 +1020,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
       if (Statics.lstdashboardSadyaSthitiData.length > 0) {
         mySadyasthitiHeaderRow = [];
-        mySadyasthitiHeaderRow.add(_createWidget2(label: Statics.getLabel('Vayogat'), constraints: BoxConstraints(minWidth: 80, maxWidth: 110, minHeight: 60, maxHeight: 80), isTotalRow: false));
+        mySadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('Vayogat'), 100, 70, Alignment.center, isTotalRow: false));
 
-        mySadyasthitiHeaderRow
-            .add(_createWidget2(label: Statics.getLabel('RegisterShaakhaa'), constraints: BoxConstraints(minWidth: 80, maxWidth: 100, minHeight: 60, maxHeight: 80), isTotalRow: false));
-        mySadyasthitiHeaderRow
-            .add(_createWidget2(label: Statics.getLabel('SankalpitShaakhaa'), constraints: BoxConstraints(minWidth: 80, maxWidth: 110, minHeight: 60, maxHeight: 80), isTotalRow: false));
-        mySadyasthitiHeaderRow
-            .add(_createWidget2(label: Statics.getLabel('TotalSankalpitShaakhaa'), constraints: BoxConstraints(minWidth: 80, maxWidth: 110, minHeight: 60, maxHeight: 80), isTotalRow: false));
+        mySadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('RegisterShaakhaa'), 130, 70, Alignment.centerLeft, isTotalRow: false));
+        mySadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('SankalpitShaakhaa'), 130, 70, Alignment.centerLeft, isTotalRow: false));
+        mySadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('TotalSankalpitShaakhaa'), 130, 70, Alignment.centerLeft, isTotalRow: false));
 
-        mySadyasthitiHeaderRow
-            .add(_createWidget2(label: Statics.getLabel('RegisteredSaaptaahikMilan'), constraints: BoxConstraints(minWidth: 80, maxWidth: 110, minHeight: 60, maxHeight: 80), isTotalRow: false));
-        mySadyasthitiHeaderRow
-            .add(_createWidget2(label: Statics.getLabel('SankalpitSaaptaahikMilan'), constraints: BoxConstraints(minWidth: 80, maxWidth: 110, minHeight: 60, maxHeight: 80), isTotalRow: false));
-        mySadyasthitiHeaderRow
-            .add(_createWidget2(label: Statics.getLabel('TotalSankalpitSaaptaahikMilan'), constraints: BoxConstraints(minWidth: 80, maxWidth: 110, minHeight: 60, maxHeight: 80), isTotalRow: false));
+        mySadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('RegisteredSaaptaahikMilan'), 130, 70, Alignment.centerLeft, isTotalRow: false));
+        mySadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('SankalpitSaaptaahikMilan'), 130, 70, Alignment.centerLeft, isTotalRow: false));
+        mySadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('TotalSankalpitSaaptaahikMilan'), 130, 70, Alignment.centerLeft, isTotalRow: false));
 
-        mySadyasthitiHeaderRow
-            .add(_createWidget2(label: Statics.getLabel('RegisteredMasikMilan'), constraints: BoxConstraints(minWidth: 80, maxWidth: 110, minHeight: 60, maxHeight: 80), isTotalRow: false));
-        mySadyasthitiHeaderRow
-            .add(_createWidget2(label: Statics.getLabel('SankalpitMasikMilan'), constraints: BoxConstraints(minWidth: 80, maxWidth: 110, minHeight: 60, maxHeight: 80), isTotalRow: false));
-        mySadyasthitiHeaderRow
-            .add(_createWidget2(label: Statics.getLabel('TotalSankalpitMasikMilan'), constraints: BoxConstraints(minWidth: 80, maxWidth: 110, minHeight: 60, maxHeight: 80), isTotalRow: false));
+        mySadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('RegisteredMasikMilan'), 130, 70, Alignment.centerLeft, isTotalRow: false));
+        mySadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('SankalpitMasikMilan'), 130, 70, Alignment.centerLeft, isTotalRow: false));
+        mySadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('TotalSankalpitMasikMilan'), 130, 70, Alignment.centerLeft, isTotalRow: false));
 
-        mySadyasthitiHeaderRow
-            .add(_createWidget2(label: Statics.getLabel('RegisteredSanghaMandali'), constraints: BoxConstraints(minWidth: 80, maxWidth: 110, minHeight: 60, maxHeight: 80), isTotalRow: false));
-        mySadyasthitiHeaderRow
-            .add(_createWidget2(label: Statics.getLabel('SankalpitSanghMandali'), constraints: BoxConstraints(minWidth: 80, maxWidth: 110, minHeight: 60, maxHeight: 80), isTotalRow: false));
-        mySadyasthitiHeaderRow
-            .add(_createWidget2(label: Statics.getLabel('TotalSankalpitSanghMandali'), constraints: BoxConstraints(minWidth: 80, maxWidth: 110, minHeight: 60, maxHeight: 80), isTotalRow: false));
+        mySadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('RegisteredSanghaMandali'), 130, 70, Alignment.centerLeft, isTotalRow: false));
+        mySadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('SankalpitSanghMandali'), 130, 70, Alignment.centerLeft, isTotalRow: false));
+        mySadyasthitiHeaderRow.add(_createWidget(Statics.getLabel('TotalSankalpitSanghMandali'), 130, 70, Alignment.centerLeft, isTotalRow: false));
 
         for (var data in Statics.lstdashboardSadyaSthitiData) {
           if (data.vayogatID == -1) {
@@ -1205,12 +1192,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
       if (Statics.lstSankalpByAadhaarData.length > 0) {
         mySankalpDataHeaderRow = [];
-        mySankalpDataHeaderRow.add(_createWidget(Statics.getLabel('Vayogat'), 100, 56, Alignment.center, isTotalRow: false));
-        mySankalpDataHeaderRow.add(_createWidget(Statics.getLabel('SankalpAadhaar'), 100, 56, Alignment.center, isTotalRow: false));
-        mySankalpDataHeaderRow.add(_createWidget(Statics.getLabel('SankalpitShaakhaa'), 100, 56, Alignment.center, isTotalRow: false));
-        mySankalpDataHeaderRow.add(_createWidget(Statics.getLabel('SankalpitSaaptaahikMilan'), 100, 56, Alignment.center, isTotalRow: false));
-        mySankalpDataHeaderRow.add(_createWidget(Statics.getLabel('SankalpitMasikMilan'), 100, 56, Alignment.center, isTotalRow: false));
-        mySankalpDataHeaderRow.add(_createWidget(Statics.getLabel('SankalpitSanghMandali'), 100, 56, Alignment.center, isTotalRow: false));
+        mySankalpDataHeaderRow.add(_createWidget(Statics.getLabel('Vayogat'), 100, 70, Alignment.center));
+        mySankalpDataHeaderRow.add(_createWidget(Statics.getLabel('SankalpAadhaar'), 130, 70, Alignment.center));
+        mySankalpDataHeaderRow.add(_createWidget(Statics.getLabel('SankalpitShaakhaa'), 130, 70, Alignment.center));
+        mySankalpDataHeaderRow.add(_createWidget(Statics.getLabel('SankalpitSaaptaahikMilan'), 130, 70, Alignment.center));
+        mySankalpDataHeaderRow.add(_createWidget(Statics.getLabel('SankalpitMasikMilan'), 130, 70, Alignment.center));
+        mySankalpDataHeaderRow.add(_createWidget(Statics.getLabel('SankalpitSanghMandali'), 130, 70, Alignment.center));
         stateSankalpDataHeaderRow = mySankalpDataHeaderRow;
       } else {
         stateSankalpDataHeaderRow = null;
@@ -1556,12 +1543,12 @@ class _HomeScreenState extends State<HomeScreen> {
         // tgSankalpDataHeaderRow.add(_createWidget(Statics.getLabel('SankalpAadhaar'), 100, 56, Alignment.centerLeft, isTotalRow: false));
         // tgSankalpDataHeaderRow.add(_createWidget(Statics.getLabel('SankalpitShaakhaa'), 100, 56, Alignment.centerLeft, isTotalRow: false));
         // tgSankalpDataHeaderRow.add(_createWidget(Statics.getLabel('SankalpitSaaptaahikMilan'), 100, 56, Alignment.centerLeft, isTotalRow: false));
-        tgSankalpDataHeaderRow.add(_createWidget(Statics.getLabel('Vayogat'), 100, 56, Alignment.center, isTotalRow: false));
-        tgSankalpDataHeaderRow.add(_createWidget(Statics.getLabel('SankalpAadhaar'), 100, 56, Alignment.center, isTotalRow: false));
-        tgSankalpDataHeaderRow.add(_createWidget(Statics.getLabel('SankalpitShaakhaa'), 100, 56, Alignment.center, isTotalRow: false));
-        tgSankalpDataHeaderRow.add(_createWidget(Statics.getLabel('SankalpitSaaptaahikMilan'), 100, 56, Alignment.center, isTotalRow: false));
-        tgSankalpDataHeaderRow.add(_createWidget(Statics.getLabel('SankalpitMasikMilan'), 100, 56, Alignment.center, isTotalRow: false));
-        tgSankalpDataHeaderRow.add(_createWidget(Statics.getLabel('SankalpitSanghMandali'), 100, 56, Alignment.center, isTotalRow: false));
+        tgSankalpDataHeaderRow.add(_createWidget(Statics.getLabel('Vayogat'), 100, 60, Alignment.center, isTotalRow: false));
+        tgSankalpDataHeaderRow.add(_createWidget(Statics.getLabel('SankalpAadhaar'), 130, 60, Alignment.center, isTotalRow: false));
+        tgSankalpDataHeaderRow.add(_createWidget(Statics.getLabel('SankalpitShaakhaa'), 130, 60, Alignment.center, isTotalRow: false));
+        tgSankalpDataHeaderRow.add(_createWidget(Statics.getLabel('SankalpitSaaptaahikMilan'), 130, 60, Alignment.center, isTotalRow: false));
+        tgSankalpDataHeaderRow.add(_createWidget(Statics.getLabel('SankalpitMasikMilan'), 130, 60, Alignment.center, isTotalRow: false));
+        tgSankalpDataHeaderRow.add(_createWidget(Statics.getLabel('SankalpitSanghMandali'), 130, 60, Alignment.center, isTotalRow: false));
 
         stateSankalpDataHeaderRow = tgSankalpDataHeaderRow;
       } else {
@@ -2532,7 +2519,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       child: _mySadyasthitiHeaderRow != null
                                           ? HorizontalDataTable(
                                               leftHandSideColumnWidth: 100,
-                                              rightHandSideColumnWidth: 1160,
+                                              rightHandSideColumnWidth: 1560,
                                               isFixedHeader: true,
                                               headerWidgets: _mySadyasthitiHeaderRow,
                                               leftSideItemBuilder: _mySadyasthitiFirstColumn,
@@ -2573,7 +2560,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       child: _mySankalpDataHeaderRow != null
                                           ? HorizontalDataTable(
                                               leftHandSideColumnWidth: 100,
-                                              rightHandSideColumnWidth: 500,
+                                              rightHandSideColumnWidth: 130 * 5,
                                               isFixedHeader: true,
                                               headerWidgets: _mySankalpDataHeaderRow,
                                               leftSideItemBuilder: _mySankalpDataFirstColumn,
@@ -4023,14 +4010,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         Expanded(
                           child: InkWell(
-                            onTap: () => Navigator.of(context).pushNamed(HinduSanmelanForm.routeName),
-                            // onTap: () async {
-                            //   Fluttertoast.showToast(
-                            //     msg: Statics.getLabel("workInProgress"),
-                            //     toastLength: Toast.LENGTH_SHORT,
-                            //     gravity: ToastGravity.BOTTOM,
-                            //   );
-                            // },
+                            // onTap: () => Navigator.of(context).pushNamed(HinduSanmelanForm.routeName),
+                            onTap: () async {
+                              Fluttertoast.showToast(
+                                msg: Statics.getLabel("workInProgress"),
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                              );
+                            },
                             child: Container(
                               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                               decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),

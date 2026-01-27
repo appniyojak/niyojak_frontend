@@ -1277,9 +1277,22 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                               constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.38),
                               padding: EdgeInsets.symmetric(horizontal: 16),
                               decoration: BoxDecoration(color: (index == (level.length - 1)) ? Colors.green.shade100 : null),
-                              child: Text(
-                                item,
-                                style: TextStyle(fontWeight: (index == (level.length - 1)) ? FontWeight.bold : FontWeight.w500),
+                              child: txt.Row(
+                                children: [
+                                  txt.Expanded(
+                                    child: Text(
+                                      item,
+                                      style: TextStyle(fontWeight: (index == (level.length - 1)) ? FontWeight.bold : FontWeight.w500),
+                                    ),
+                                  ),
+                                  if (item == Statics.getLabel('gruhAbhiyaanSwayamsevakCount') ||
+                                      item == Statics.getLabel('gruhSahabhaagiKaaryakartaaTotalCount') ||
+                                      item == Statics.getLabel('gruhSwayamsevakKaryakartaCount2'))
+                                    Text(
+                                      " *",
+                                      style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                                    ),
+                                ],
                               ))),
                         ]);
                       }),
@@ -1412,8 +1425,8 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                                       border: Border.all(color: Colors.black26, width: 0.7),
                                     ),
                                     alignment: Alignment.center,
-                                    child:
-                                        Text(dateWiseList.fold(0, (sum, item) => sum + (item.ekunswayamsevak ?? 0)).toString() + (ekununiqueswayamsevak != null ? " ($ekununiqueswayamsevak)" : "")))),
+                                    child: Text(ekununiqueswayamsevak.toString()))),
+                                // Text(dateWiseList.fold(0, (sum, item) => sum + (item.ekunswayamsevak ?? 0)).toString() + (ekununiqueswayamsevak != null ? " ($ekununiqueswayamsevak)" : "")))),
                                 if (dateWiseList.any((e) => e.ekunswayamsevak != null)) ...dateWiseList.map((item) => DataCell(Center(child: Text((item.ekunswayamsevak ?? 0).toString())))).toList(),
                               ]),
                             if (dateWiseList.any((e) => e.ekunsamparkhetukaryakarta != null))
@@ -1424,8 +1437,9 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                                       border: Border.all(color: Colors.black26, width: 0.7),
                                     ),
                                     alignment: Alignment.center,
-                                    child: Text(dateWiseList.fold(0, (sum, item) => sum + (item.ekunsamparkhetukaryakarta ?? 0)).toString() +
-                                        (ekununiquekaryakarta != null ? " ($ekununiquekaryakarta)" : "")))),
+                                    child: Text(ekununiquekaryakarta.toString()))),
+                                // child: Text(dateWiseList.fold(0, (sum, item) => sum + (item.ekunsamparkhetukaryakarta ?? 0)).toString() +
+                                //     (ekununiquekaryakarta != null ? " ($ekununiquekaryakarta)" : "")))),
                                 if (dateWiseList.any((e) => e.ekunsamparkhetukaryakarta != null))
                                   ...dateWiseList.map((item) => DataCell(Center(child: Text((item.ekunsamparkhetukaryakarta ?? 0).toString())))).toList(),
                               ]),
@@ -1438,8 +1452,9 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                                     ),
                                     alignment: Alignment.center,
                                     child: Text(
-                                      dateWiseList.fold(0, (sum, item) => sum + (item.ekuntotal ?? 0)).toString() +
-                                          ((ekununiqueswayamsevak != null || ekununiquekaryakarta != null) ? " (${(ekununiqueswayamsevak ?? 0) + (ekununiquekaryakarta ?? 0)})" : ""),
+                                      ((ekununiqueswayamsevak ?? 0) + (ekununiquekaryakarta ?? 0)).toString(),
+                                      // dateWiseList.fold(0, (sum, item) => sum + (item.ekuntotal ?? 0)).toString() +
+                                      //     ((ekununiqueswayamsevak != null || ekununiquekaryakarta != null) ? " (${(ekununiqueswayamsevak ?? 0) + (ekununiquekaryakarta ?? 0)})" : ""),
                                       style: TextStyle(fontWeight: FontWeight.bold),
                                     ))),
                                 if (dateWiseList.any((e) => e.ekuntotal != null))
@@ -1464,6 +1479,19 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                 ],
               ),
             ),
+          ),
+          SizedBox(height: 8),
+          txt.Row(
+            children: [
+              Text(
+                "* " + Statics.getLabel('Note') + " : ",
+                style: TextStyle(color: Colors.red.shade700, fontWeight: FontWeight.w600, decoration: txt.TextDecoration.underline, decorationColor: Colors.red, fontStyle: FontStyle.italic),
+              ),
+              Text(
+                Statics.getLabel('gruhTip'),
+                style: TextStyle(color: Colors.grey.shade700, fontWeight: FontWeight.w600, fontStyle: FontStyle.italic),
+              ),
+            ],
           ),
         ],
       ),
@@ -2108,50 +2136,50 @@ class _GruhSamparkaReportTabState extends State<GruhSamparkaReportTab> with Auto
                       },
                       isDisabled: false,
                     ),
-                  // if (_linkedgraam != null && _linkedgraam!.isNotEmpty)
-                  //   _buildDropdownField(
-                  //     label: Statics.getLabel('Graam'),
-                  //     value: _linkedgraamValue,
-                  //     items: _linkedgraam!
-                  //         .map((bg) => DropdownMenuItem(
-                  //               value: bg.geoUnitID.toString(),
-                  //               child: Text(bg.name!),
-                  //             ))
-                  //         .toList(),
-                  //     onChanged: (value) {
-                  //       final selectedItem = _linkedgraam!.firstWhere((bg) => bg.geoUnitID.toString() == value);
-                  //       setState(() {
-                  //         _linkedgraamValue = value;
-                  //         _selectedGeoUnitId = value.toString();
-                  //         _selctedLevel = 'Graam';
-                  //         _selctedLevelName = selectedItem.name ?? "";
-                  //         _linkedgraamName = selectedItem.name ?? "";
-                  //       });
-                  //     },
-                  //     isDisabled: false,
-                  //   ),
-                  // if (_linkedvasti != null && _linkedvasti!.isNotEmpty)
-                  //   _buildDropdownField(
-                  //     label: Statics.getLabel('Vasti'),
-                  //     value: _linkedvastiValue,
-                  //     items: _linkedvasti!
-                  //         .map((bg) => DropdownMenuItem(
-                  //               value: bg.geoUnitID.toString(),
-                  //               child: Text(bg.name!),
-                  //             ))
-                  //         .toList(),
-                  //     onChanged: (value) {
-                  //       final selectedItem = _linkedvasti!.firstWhere((bg) => bg.geoUnitID.toString() == value);
-                  //       setState(() {
-                  //         _linkedvastiValue = value;
-                  //         _selectedGeoUnitId = value.toString();
-                  //         _selctedLevel = 'Vasti';
-                  //         _selctedLevelName = selectedItem.name ?? "";
-                  //         _linkedvastiName = selectedItem.name ?? "";
-                  //       });
-                  //     },
-                  //     isDisabled: false,
-                  //   ),
+                  if (_linkedgraam != null && _linkedgraam!.isNotEmpty)
+                    _buildDropdownField(
+                      label: Statics.getLabel('Graam'),
+                      value: _linkedgraamValue,
+                      items: _linkedgraam!
+                          .map((bg) => DropdownMenuItem(
+                                value: bg.geoUnitID.toString(),
+                                child: Text(bg.name!),
+                              ))
+                          .toList(),
+                      onChanged: (value) {
+                        final selectedItem = _linkedgraam!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                        setState(() {
+                          _linkedgraamValue = value;
+                          _selectedGeoUnitId = value.toString();
+                          _selctedLevel = 'Graam';
+                          _selctedLevelName = selectedItem.name ?? "";
+                          _linkedgraamName = selectedItem.name ?? "";
+                        });
+                      },
+                      isDisabled: false,
+                    ),
+                  if (_linkedvasti != null && _linkedvasti!.isNotEmpty)
+                    _buildDropdownField(
+                      label: Statics.getLabel('Vasti'),
+                      value: _linkedvastiValue,
+                      items: _linkedvasti!
+                          .map((bg) => DropdownMenuItem(
+                                value: bg.geoUnitID.toString(),
+                                child: Text(bg.name!),
+                              ))
+                          .toList(),
+                      onChanged: (value) {
+                        final selectedItem = _linkedvasti!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                        setState(() {
+                          _linkedvastiValue = value;
+                          _selectedGeoUnitId = value.toString();
+                          _selctedLevel = 'Vasti';
+                          _selctedLevelName = selectedItem.name ?? "";
+                          _linkedvastiName = selectedItem.name ?? "";
+                        });
+                      },
+                      isDisabled: false,
+                    ),
                   SizedBox(height: 15),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

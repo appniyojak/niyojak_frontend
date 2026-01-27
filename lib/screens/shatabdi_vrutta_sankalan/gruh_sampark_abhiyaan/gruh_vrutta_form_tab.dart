@@ -166,10 +166,10 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
       "SanghaChaalak",
       "संघचालक",
       "Saha-SanghaChaalak",
-      "सह संघचालक"
-          "Prachaarak",
-      "प्रचारक"
-          "Saha-Prachaarak",
+      "सह संघचालक",
+      "Prachaarak",
+      "प्रचारक",
+      "Saha-Prachaarak",
       "सह प्रचारक"
     ].contains(Statics.userDetails["DaayitvaName"]);
 
@@ -707,6 +707,9 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
 
   /////////////////////////////////////////// AVAILABLE KARYAKARTA & SWAYAMSEVAK DATA /////////////////////////////////////////////
   showAvailableKaryakartaDialog() {
+    setState(() {
+      _markAtt = false;
+    });
     showDialog(
       context: context,
       useSafeArea: true,
@@ -728,76 +731,83 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
             // titlePadding: const EdgeInsets.fromLTRB(20, 20, 12, 0),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 12),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(
+                    child: ListView(
+                      shrinkWrap: true,
+                      // mainAxisSize: MainAxisSize.min,
                       children: [
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            Statics.getLabel('abhiyaanKaryakartaList'),
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.close, color: Colors.redAccent),
-                          onPressed: () {
-                            set(() {
-                              // selectedKaryakartaList = [];
-                              _selectedSwayamsevakIds = [];
-                              _selectedKaryakartaIds = [];
-                            });
-                            filteredAbhiyaanSwayamsevakDataList = abhiyaanSwayamsevakDataList;
-                            _searchController.clear();
-                            Navigator.pop(ctx);
-                          },
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 6),
-                    SizedBox(height: 16),
-                    swayamsevakAndKaryakartaTable(ct, set),
-                    SizedBox(height: 12),
-                    // selectedKaryakartaTable(ct, set),
-                    SizedBox(height: 12),
-                    SizedBox(height: 8),
-                    if (_selectedSwayamsevakIds.isNotEmpty || _selectedKaryakartaIds.isNotEmpty)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.purpleAccent,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                Statics.getLabel('abhiyaanKaryakartaList'),
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                               ),
-                              onPressed: () async {
-                                // Statics.showToast(Statics.getLabel("workInProgress"));
-                                Navigator.pop(ctx);
-
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.close, color: Colors.redAccent),
+                              onPressed: () {
+                                set(() {
+                                  // selectedKaryakartaList = [];
+                                  _selectedSwayamsevakIds = [];
+                                  _selectedKaryakartaIds = [];
+                                });
                                 filteredAbhiyaanSwayamsevakDataList = abhiyaanSwayamsevakDataList;
                                 _searchController.clear();
-                                await addToToliListFun();
+                                Navigator.pop(ctx);
                               },
-                              child: Text(
-                                Statics.getLabel('Submit'),
-                                style: const TextStyle(color: Colors.white),
-                              ),
                             ),
+                          ],
+                        ),
+                        SizedBox(height: 6),
+                        SizedBox(height: 16),
+                        swayamsevakAndKaryakartaTable(ct, set),
+                        SizedBox(height: 12),
+                        // selectedKaryakartaTable(ct, set),
+                        SizedBox(height: 18),
+                      ],
+                    ),
+                  ),
+                  // if (_selectedSwayamsevakIds.isNotEmpty || _selectedKaryakartaIds.isNotEmpty)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.purpleAccent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                           ),
-                        ],
+                          onPressed: (_selectedSwayamsevakIds.isNotEmpty || _selectedKaryakartaIds.isNotEmpty)
+                              ? () async {
+                                  // Statics.showToast(Statics.getLabel("workInProgress"));
+                                  Navigator.pop(ctx);
+
+                                  filteredAbhiyaanSwayamsevakDataList = abhiyaanSwayamsevakDataList;
+                                  _searchController.clear();
+                                  await addToToliListFun();
+                                }
+                              : null,
+                          child: Text(
+                            Statics.getLabel('Submit'),
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ),
                       ),
-                  ],
-                ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),
@@ -967,7 +977,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
           SizedBox(height: 12),
           Container(
             width: double.infinity,
-            constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.4),
+            constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.3),
             padding: const EdgeInsets.symmetric(vertical: 10),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.black54),
@@ -1058,7 +1068,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                             rows: filteredAbhiyaanSwayamsevakDataList.asMap().entries.map((entry) {
                               int index = entry.key;
                               var data = entry.value;
-                              bool isSelected = ((data.isactive == 1) || _selectedSwayamsevakIds.contains(data));
+                              bool isSelected = ((data.isdefault == 1) || _selectedSwayamsevakIds.contains(data));
                               return DataRow(
                                   selected: isSelected,
                                   color: MaterialStateProperty.resolveWith<Color?>(
@@ -1068,7 +1078,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                                     },
                                   ),
                                   onSelectChanged: (bool? selected) {
-                                    if ((data.isactive == 1)) {
+                                    if ((data.isdefault == 1)) {
                                       return;
                                     }
                                     if (!isSelected) {
@@ -1143,7 +1153,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
           SizedBox(height: 12),
           Container(
             width: double.infinity,
-            constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.4),
+            constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.3),
             padding: EdgeInsets.symmetric(vertical: 10),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.black54),
@@ -1184,7 +1194,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                       rows: abhiyaanKaryakartaDataList.asMap().entries.map((entry) {
                         int index = entry.key;
                         var data = entry.value;
-                        bool isSelected = (data.isactive == 1) || _selectedKaryakartaIds.contains(data);
+                        bool isSelected = (data.isdefault == 1) || _selectedKaryakartaIds.contains(data);
                         return DataRow(
                             selected: isSelected,
                             color: MaterialStateProperty.resolveWith<Color?>(
@@ -1194,7 +1204,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                               },
                             ),
                             onSelectChanged: (bool? selected) {
-                              if ((data.isactive == 1)) {
+                              if ((data.isdefault == 1)) {
                                 return;
                               }
                               if (!isSelected) {
@@ -2660,7 +2670,8 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                           // if (gruhAbhiyaanVruttaData!.abhiyaandata!.ishide) {
                           //   return;
                           // }
-                          if ((data.isactive == 1)) {
+                          if ((data.isdefault == 1)) {
+                            Statics.showToast(Statics.getLabel("cannotDeleteValidation"));
                             return;
                           }
                           if (!isSelected) {
@@ -3556,6 +3567,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
                             setState(() {
                               _selectedTolisIds = [];
                               _searched = true;
+                              _markAtt = false;
                               _isExpanded = false;
                               _isEditing = false;
                               _isEditingForPramukh = false;

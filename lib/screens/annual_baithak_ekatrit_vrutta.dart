@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -1751,15 +1750,12 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                           children: [
                             TableRow(
                               children: [
-                                Container(
-                                    height: 40,
-                                    child: Text(
-                                      "${Statics.getLabel('Vayogat')}",
-                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                                    )),
-                                Container(height: 40, child: Text('सध्या स्थिती', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
-                                Container(
-                                    height: 40, child: Text(Statics.getLabel('TotalSankalpitShaakhaa'), textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
+                                Text(
+                                  "${Statics.getLabel('Vayogat')}",
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                ),
+                                Text('सध्या स्थिती', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                                Text(Statics.getLabel('TotalSankalpitShaakhaa'), textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                                 // Container(height: 40,child: Text(Statics.getLabel('TotalSankalpitSanghMandali'),textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
                               ],
                             ),
@@ -2107,17 +2103,13 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                               },
                               children: [
                                 TableRow(children: [
-                                  Container(
-                                      height: 40,
-                                      child: Text(
-                                        "${Statics.getLabel('Vayogat')}",
-                                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                                      )),
-                                  Container(height: 40, child: Text('सध्या स्थिती', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
+                                  Text(
+                                    "${Statics.getLabel('Vayogat')}",
+                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                  ),
+                                  Text('सध्या स्थिती', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                                   // Container(height: 40,child: Text(Statics.getLabel('sankalp'),textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
-                                  Container(
-                                      height: 40,
-                                      child: Text(Statics.getLabel('TotalSankalpitSaaptaahikMilan'), textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
+                                  Text(Statics.getLabel('TotalSankalpitSaaptaahikMilan'), textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                                 ]),
                                 TableRow(children: [
                                   Text(Statics.getLabel('baalSanyukt'), style: TextStyle(fontSize: 15)),
@@ -2266,16 +2258,13 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                           children: [
                             TableRow(
                               children: [
-                                Container(
-                                    height: 40,
-                                    child: Text(
-                                      "${Statics.getLabel('Vayogat')}",
-                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                                    )),
-                                Container(height: 40, child: Text('सध्या स्थिती', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
+                                Text(
+                                  "${Statics.getLabel('Vayogat')}",
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                ),
+                                Text('सध्या स्थिती', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                                 // Container(height: 40,child: Text(Statics.getLabel('sankalp'),textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
-                                Container(
-                                    height: 40, child: Text(Statics.getLabel('TotalSankalpitMasikMilan'), textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
+                                Text(Statics.getLabel('TotalSankalpitMasikMilan'), textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                               ],
                             ),
                             TableRow(children: [
@@ -2355,16 +2344,13 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                           children: [
                             TableRow(
                               children: [
-                                Container(
-                                    height: 40,
-                                    child: Text(
-                                      "${Statics.getLabel('Vayogat')}",
-                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                                    )),
-                                Container(height: 40, child: Text('सध्या स्थिती', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
+                                Text(
+                                  "${Statics.getLabel('Vayogat')}",
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                ),
+                                Text('सध्या स्थिती', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                                 // Container(height: 40,child: Text(Statics.getLabel('sankalp'),textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
-                                Container(
-                                    height: 40, child: Text(Statics.getLabel('TotalSankalpitSanghMandali'), textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
+                                Text(Statics.getLabel('TotalSankalpitSanghMandali'), textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                               ],
                             ),
                             TableRow(children: [
