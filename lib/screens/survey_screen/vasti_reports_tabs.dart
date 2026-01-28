@@ -36,7 +36,10 @@ class _VastiSurveyReportScreenState extends State<VastiSurveyReportScreen> {
               ),
             ],
           ),
-          actions: [IconButton(onPressed: () => Navigator.of(context).pushNamed(VastiSarvekshanScreen.routeName), icon: Icon(Icons.download, color: Colors.white)), SizedBox(width: 8)],
+          actions: [
+            IconButton(onPressed: () => Navigator.of(context).pushNamed(VastiSarvekshanScreen.routeName, arguments: true), icon: Icon(Icons.download, color: Colors.white)),
+            SizedBox(width: 8)
+          ],
         ),
         drawer: AppDrawer(),
         body: TabBarView(

@@ -25,6 +25,7 @@ class VastiSarvekshanScreen extends StatefulWidget {
 class _VastiSarvekshanScreenState extends State<VastiSarvekshanScreen> {
   bool _isExpanded = true;
   bool _searched = false;
+  bool fromVasti = false;
 
   List<GeoUnitMasterBAL>? _linkedMahaanagar;
   List<GeoUnitMasterBAL>? _linkedVibhaag;
@@ -91,6 +92,14 @@ class _VastiSarvekshanScreenState extends State<VastiSarvekshanScreen> {
       _selectedGeoUnitId = null;
       selectedType = null;
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    fromVasti = ModalRoute.of(context)?.settings.arguments as bool? ?? false;
+
+    print("fromVasti :----$fromVasti");
   }
 
   //////////////////////////////////////////////////////////////////////////////////////
@@ -292,8 +301,15 @@ class _VastiSarvekshanScreenState extends State<VastiSarvekshanScreen> {
     }
 
     // Save file
-    final directory = await getExternalStorageDirectory();
-    final filePath = "${directory!.path}/${selectedType}_${DateTime.now().millisecondsSinceEpoch}.xlsx";
+    Directory directory;
+
+    if (Platform.isAndroid) {
+      directory = (await getExternalStorageDirectory())!;
+    } else {
+      directory = await getApplicationDocumentsDirectory();
+    }
+
+    final filePath = "${directory.path}/${selectedType}_${DateTime.now().millisecondsSinceEpoch}.xlsx";
 
     final fileBytes = excel.encode();
     final file = File(filePath);
@@ -313,7 +329,7 @@ class _VastiSarvekshanScreenState extends State<VastiSarvekshanScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "${Statics.getLabel('vastiSurveyReport')}",
+          Statics.getLabel(fromVasti ? 'vastiSurveyReport' : 'mandalSurveyReport'),
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
       ),
