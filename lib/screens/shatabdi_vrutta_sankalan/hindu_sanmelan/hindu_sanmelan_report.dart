@@ -1217,9 +1217,10 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                       onChanged: (value) async {
                         final selectedItem = _linkedMahaanagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                         setState(() {
+                          _searched = false;
                           _linkedMahaanagarValue = value;
                           _linkedVibhaagValue = null;
-                          _selctedLevel = 'Mahanagar';
+                          _selctedLevel = 'Mahaanagar';
                           _selctedLevelName = selectedItem.name ?? "";
                           _selectedGeoUnitId = value;
                           // _linkedMahaanagarName = selectedItem.name ?? "";
@@ -1243,6 +1244,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                       onChanged: (value) {
                         final selectedItem = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                         setState(() {
+                          _searched = false;
                           _linkedVibhaagValue = value;
                           _selctedLevel = 'Vibhaag';
                           _selctedLevelName = selectedItem.name ?? "";
@@ -1266,6 +1268,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                       onChanged: (value) {
                         final selectedItem = _linkedbhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                         setState(() {
+                          _searched = false;
                           _linkedbhaagValue = value;
                           _selctedLevel = 'Bhaag';
                           _selctedLevelName = selectedItem.name ?? "";
@@ -1290,6 +1293,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                       onChanged: (value) {
                         final selectedItem = _linkedshahar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                         setState(() {
+                          _searched = false;
                           _linkedshaharValue = value;
                           _selectedGeoUnitId = value;
                           _selctedLevel = 'Shahar';
@@ -1313,6 +1317,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                       onChanged: (value) {
                         final selectedItem = _linkednagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                         setState(() {
+                          _searched = false;
                           _linkednagarValue = value;
                           _selectedGeoUnitId = value;
                           _selctedLevel = 'Nagar';
@@ -1437,10 +1442,11 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
                           onPressed: () async {
                             setState(() {
                               _searched = false;
+                              _selctedLevelName = "";
                               _selectedGeoUnitId = null;
                               _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedvastiValue = _linkedgraamValue = null;
                               _linkedVibhaagValue = _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
-                              // type = "praant";
+                              _selctedLevel = "praant";
                             });
                             await populateDropdown();
                           },

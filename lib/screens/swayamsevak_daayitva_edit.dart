@@ -45,10 +45,20 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
   SwayamsevakDaayitvaBAL? swDaayitva;
 
   StaticMasterBAL? _daayitvaForValue;
-  String? _levelValue = "";
+  int? _levelValue;
   String? _aayaamValue = "";
   String? _gatividhiValue = "";
   String? _geoUnitsValue = "";
+
+  // String? _linkedMahaanagarName = '';
+  // String? _linkedVibhaagName = '';
+  String? _linkedbhaagName = "";
+  String? _linkedshaharName = "";
+  String? _linkednagarName = "";
+  String? _linkedmandalName = "";
+  String? _linkedgraamName = "";
+  String? _linkedvastiName = "";
+  String? _linkedshaakhaaName = "";
 
   var _startYearCtrl = TextEditingController();
   var _endYearCtrl = TextEditingController();
@@ -64,10 +74,46 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
 
   List<AreaOfOperationsBAL> _areaOfOperations = [];
 
+  List<GeoUnitMasterBAL>? _linkedMahaanagar;
+  List<GeoUnitMasterBAL>? _linkedVibhaag;
+  List<GeoUnitMasterBAL>? _linkedbhaag;
+  List<GeoUnitMasterBAL>? _linkedshahar;
+  List<GeoUnitMasterBAL>? _linkednagar;
+  List<GeoUnitMasterBAL>? _linkedmandal;
+  List<GeoUnitMasterBAL>? _linkedgraam;
+  List<GeoUnitMasterBAL>? _linkedvasti;
+  List<GeoUnitMasterBAL>? _linkedshaakhaa;
+
+  bool? _linkedMahaanagarDisable = false;
+  bool? _linkedVibhaagDisable = false;
+  bool? _linkedbhaagDisable = false;
+  bool? _linkedshaharDisable = false;
+  bool? _linkednagarDisable = false;
+  bool? _linkedmandalDisable = false;
+  bool? _linkedgraamDisable = false;
+  bool? _linkedvastiDisable = false;
+
+  String? _linkedMahaanagarValue = '';
+  String? _linkedVibhaagValue = '';
+  String? _linkedbhaagValue = "";
+  String? _linkedshaharValue = "";
+  String? _linkednagarValue = "";
+  String? _linkedmandalValue = "";
+  String? _linkedgraamValue = "";
+  String? _linkedvastiValue = "";
+  String? _linkedshaakhaaValue = "";
+
+  String? _selctedLevel = 'praant';
+  String? _selctedLevelName = '';
+  String _selctedLevelNames = '';
+  List<String?> _selctedLevelNameList = [];
+  String? _selectedGeoUnitId;
+
   @override
   void initState() {
     super.initState();
     populateDropdown();
+    populateDropdownT();
     int dataID = int.parse(widget.dataID);
     print("dataID :::---- $dataID");
     if (dataID > 0) {
@@ -89,6 +135,8 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
     _endYearCtrl.dispose();
   }
 
+  //////////////////////////////////////////////////////////////////////////////////////
+
   populateDropdown() async {
     var data = await Statics.getStaticLDB("DaayitvaFor");
     var data2 = await Statics.getLevelLDB();
@@ -98,6 +146,9 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
     //populateDaayitva(_daayitvaValue);
 
     if (!mounted) return;
+
+    data2.removeWhere((e) => e.levelID == 5);
+
     setState(() {
       _daayitvaFor = data;
       _level = data2;
@@ -106,6 +157,110 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
       _sanghaPreritSanstha = data5;
     });
   }
+
+  Future<void> populateDropdownT({bool isClear = false}) async {
+    setState(() {
+      _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    });
+    await populatelinkedMahaanagarDropdown();
+    await populatelinkedVibhaagDropdown('');
+  }
+
+  Future<List<GeoUnitMasterBAL>> populatelinkedMahaanagarDropdown() async {
+    _linkedVibhaagValue = _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    List<GeoUnitMasterBAL> data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MahaanagarLevelID'].toString(), '', '', '', isAbhiyaan: true);
+    setState(() {
+      _linkedMahaanagar = data;
+    });
+    return data;
+  }
+
+  Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
+    _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    _linkedbhaagName = _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
+    print("populatelinkedVibhaagDropdown $mahaanagarIDStr");
+    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '', isAbhiyaan: true);
+    setState(() {
+      _linkedVibhaag = data;
+    });
+    return data;
+  }
+
+  Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(String vibhaagIDStr) async {
+    _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    _linkedbhaagName = _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
+    _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = [];
+    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '', isAbhiyaan: true);
+    setState(() {
+      _linkedbhaag = data;
+    });
+    return data;
+  }
+
+  Future<List<GeoUnitMasterBAL>> populatelinkedShaharDropdown(String bhaagIDStr) async {
+    _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
+    var shDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', '', isAbhiyaan: true);
+    setState(() {
+      _linkedshahar = (shDD.length > 0 ? shDD : null);
+    });
+    return shDD;
+  }
+
+  Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
+// print("populatelinkedNagarDropdown ${bhaagIDStr} == ${shaharIDStr}  ");
+    _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
+    _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
+    print("print LevelID > ${Statics.userDetails["LevelID"]}");
+    print("shaharIDStr shaharIDStr $shaharIDStr");
+    if (shaharIDStr != null) {
+      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), shaharIDStr!, 'Shahar', '', isAbhiyaan: true);
+      setState(() {
+        _linkednagar = (ngDD.length > 0 ? ngDD : null);
+      });
+      return ngDD;
+    } else {
+      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '', isAbhiyaan: true);
+      setState(() {
+        _linkednagar = (ngDD.length > 0 ? ngDD : null);
+      });
+      return ngDD;
+    }
+  }
+
+  Future<List<GeoUnitMasterBAL>> populatelinkedMandalDropdown(String? nagarIDStr) async {
+    _linkedmandalValue = _linkedgraamValue = null;
+    _linkedmandalName = _linkedgraamName = null;
+    _linkedmandal = _linkedgraam = null;
+    var mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, 'Nagar', '', isAbhiyaan: true);
+    setState(() {
+      _linkedmandal = (mnDD.length > 0 ? mnDD : null);
+    });
+    return mnDD;
+  }
+
+  Future<List<GeoUnitMasterBAL>> populatelinkedGraamDropdown(String? mandalIDStr) async {
+    _linkedgraamValue = null;
+    _linkedgraamName = null;
+    var gmDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['GraamLevelID'].toString(), mandalIDStr!, 'Mandal', '', isAbhiyaan: true);
+    setState(() {
+      _linkedgraam = (gmDD.length > 0 ? gmDD : null);
+    });
+    return gmDD;
+  }
+
+  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(String? nagarIDStr) async {
+    _linkedvastiValue = null;
+    _linkedvastiName = null;
+    var vsDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, 'Nagar', '', isAbhiyaan: true);
+    setState(() {
+      _linkedvasti = (vsDD.length > 0 ? vsDD : null);
+    });
+    return vsDD;
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) {
@@ -147,6 +302,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
       var data = await SwayamsevakProvider().getSwayamSevakDaayitva(swayamsevakID, daayitvaForID, daayitvaForCode, dataID);
       var data1 = await Statics.getStaticLDB("DaayitvaFor");
       await populateDropdown();
+      await populateDropdownT();
 
       if (data != null) {
         var data2 = await Statics.getDaayitvaLDB("", "", data.daayitvaID.toString());
@@ -162,7 +318,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
               : null;
           //}
           _daayitvaValue = swDaayitva!.daayitvaID == null ? null : swDaayitva!.daayitvaID.toString();
-          _levelValue = swDaayitva!.levelID == null ? null : swDaayitva!.levelID.toString();
+          _levelValue = swDaayitva!.levelID == null ? null : swDaayitva!.levelID;
           if (_levelValue != null) populateGeoUnits(_levelValue!);
           _geoUnitsValue = swDaayitva!.daayitvaGeoUnitID == null ? null : swDaayitva!.daayitvaGeoUnitID.toString();
           _daayitvaController.text = (swDaayitva!.daayitvaName == null || swDaayitva!.daayitvaName == ""
@@ -274,12 +430,12 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
     });
   }
 
-  void populateGeoUnits(String levelID) async {
+  void populateGeoUnits(int levelID) async {
     var data4;
     if (levelID == "") {
       data4 = await Statics.getGeoUnitsByLevel(Statics.levels['MahaanagarLevelID']);
     } else
-      data4 = await Statics.getGeoUnitsByLevel(levelID);
+      data4 = await Statics.getGeoUnitsByLevel(levelID.toString());
     if (!mounted) return;
     setState(() {
       _geoUnits = data4;
@@ -398,10 +554,10 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
                                       DropdownButtonFormField(
                                         decoration: InputDecoration(labelText: Statics.getLabel('SelectLevel')),
                                         isExpanded: true,
-                                        value: _levelValue == "" ? null : _levelValue,
+                                        value: _levelValue,
                                         items: _level!
                                             .map((bg) => DropdownMenuItem(
-                                                value: bg.levelID.toString(),
+                                                value: bg.levelID,
                                                 child: Text(Statics.getLabel(
                                                     bg.levelName == "Nagar"
                                                         ? "Nagar/Taluka"
@@ -413,17 +569,21 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
                                         onChanged: (value) {
                                           setState(() {
                                             _levelValue = value;
-                                            populateGeoUnits(value!);
+                                            if (value != null && value > 8)
+                                              populateGeoUnits(value);
+                                            else
+                                              populateDropdownT();
                                             _lblValue = value == "1" ? "Shaakhaa/Saaptaahik/Maasik/Mandali" : "SelectLevelName";
                                           });
+                                          print("_levelValue >>>>>>>> $_levelValue");
                                         },
                                         validator: (value) {
-                                          if (value == null || value.isEmpty) return (Statics.getLabel('LevelValidationMessage'));
+                                          if (value == null) return (Statics.getLabel('LevelValidationMessage'));
                                           return null;
                                         },
                                         onSaved: (value) {
-                                          if (value != null && value.isNotEmpty) {
-                                            swDaayitva!.levelID = int.parse(value);
+                                          if (value != null) {
+                                            swDaayitva!.levelID = value as int?;
                                             print("field SelectLevel :--${value}");
                                           } else {
                                             swDaayitva!.levelID = null;
@@ -431,232 +591,287 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
                                         },
                                       ),
                                       SizedBox(height: 10),
-                                      if (_geoUnits != null)
-                                        DropdownButtonFormField(
-                                          decoration: InputDecoration(labelText: Statics.getLabel(_lblValue == "" ? 'SelectLevelName' : _lblValue!)),
-                                          isExpanded: true,
-                                          value: _geoUnitsValue == ""
-                                              ? null
-                                              : _geoUnits != null
-                                                  ? _geoUnits!.indexWhere((p) => p.geoUnitID.toString() == _geoUnitsValue) > -1
-                                                      ? _geoUnitsValue
-                                                      : null
-                                                  : null,
-                                          items: _geoUnits!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                                          onChanged: (value) {
-                                            setState(() {
-                                              _geoUnitsValue = value;
-                                            });
-                                          },
-                                          validator: (value) {
-                                            if (value == null || value.isEmpty) return (Statics.getLabel('GeoUnitValidationMessage'));
-                                            return null;
-                                          },
-                                          onSaved: (value) {
-                                            if (value != null && value.isNotEmpty) {
-                                              swDaayitva!.daayitvaGeoUnitID = int.parse(value);
-                                              print("field SelectLevelName :--${value}");
-                                            } else
-                                              swDaayitva!.daayitvaGeoUnitID = null;
-                                          },
-                                        ),
+                                      _buildExpansionPanel(),
+                                      // DropdownButtonFormField(
+                                      //   decoration: InputDecoration(labelText: Statics.getLabel(_lblValue == "" ? 'SelectLevelName' : _lblValue!)),
+                                      //   isExpanded: true,
+                                      //   value: _geoUnitsValue == ""
+                                      //       ? null
+                                      //       : _geoUnits != null
+                                      //           ? _geoUnits!.indexWhere((p) => p.geoUnitID.toString() == _geoUnitsValue) > -1
+                                      //               ? _geoUnitsValue
+                                      //               : null
+                                      //           : null,
+                                      //   items: _geoUnits!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                      //   onChanged: (value) {
+                                      //     setState(() {
+                                      //       _geoUnitsValue = value;
+                                      //     });
+                                      //   },
+                                      //   validator: (value) {
+                                      //     if (value == null || value.isEmpty) return (Statics.getLabel('GeoUnitValidationMessage'));
+                                      //     return null;
+                                      //   },
+                                      //   onSaved: (value) {
+                                      //     if (value != null && value.isNotEmpty) {
+                                      //       swDaayitva!.daayitvaGeoUnitID = int.parse(value);
+                                      //       print("field SelectLevelName :--${value}");
+                                      //     } else
+                                      //       swDaayitva!.daayitvaGeoUnitID = null;
+                                      //   },
+                                      // ),
                                       SizedBox(
                                         height: 10,
                                       ),
-                                    ],
-                                  ),
-                              if (_daayitvaForValue != null)
-                                if (_daayitvaForValue!.code != "SanghaPreritSansthaa" && _daayitvaForValue!.code != "OtherSocialOrganization")
-                                  // Row(
-                                  //   children: [
-                                  //     Container(
-                                  //       width: Statics.getDeviceSize(context).width * 0.63,
-                                  //       child: TypeAheadField<DaayitvaMasterBAL>(
-                                  //         controller: _daayitvaController,
-                                  //         builder: (context, controller, focusNode) {
-                                  //           return TextField(
-                                  //               controller: _daayitvaController,
-                                  //               focusNode: focusNode,
-                                  //               decoration: InputDecoration(
-                                  //                 isDense: true,
-                                  //                 border: UnderlineInputBorder(),
-                                  //                 labelText: Statics.getLabel('SelectDaayitva'),
-                                  //               )
-                                  //           );
-                                  //         },
-                                  //         // textFieldConfiguration:
-                                  //         //     TextFieldConfiguration(
-                                  //         //         controller:
-                                  //         //             this._daayitvaController,
-                                  //         //         decoration: InputDecoration(
-                                  //         //             labelText: Statics.getLabel(
-                                  //         //                 'SelectDaayitva'))),
-                                  //         suggestionsCallback: (pattern) {
-                                  //           this._daayitvaValue = "";
-                                  //           return populateDaayitva(
-                                  //               _daayitvaForValue == null ||
-                                  //                       _daayitvaForValue!.code == "SanghaPreritSansthaa" ||
-                                  //                       _daayitvaForValue!.code == "OtherSocialOrganization"
-                                  //                   ? ""
-                                  //                   : _daayitvaForValue!.staticID.toString(),
-                                  //               pattern);
-                                  //         },
-                                  //         itemBuilder: (context, suggestion) {
-                                  //           return ListTile(
-                                  //             title: Text(suggestion.daayitvaName!),
-                                  //           );
-                                  //         },
-                                  //         // validator: (value) {
-                                  //         //   if ((value.isEmpty ||
-                                  //         //       _daayitvaValue == null ||
-                                  //         //       _daayitvaValue.isEmpty)) {
-                                  //         //     return Statics.getLabel(
-                                  //         //         'DaayitvaValidationMessage');
-                                  //         //   }
-                                  //         //   return null;
-                                  //         // },
-                                  //         // transitionBuilder: (context,
-                                  //         //     suggestionsBox, controller) {
-                                  //         //   return suggestionsBox;
-                                  //         // },
-                                  //         onSelected: (suggestion) {
-                                  //           this._daayitvaController.text = suggestion.daayitvaName!;
-                                  //           _daayitvaValue = suggestion.daayitvaID.toString();
-                                  //           print("field SelectDaayitva name :--${suggestion.daayitvaName}");
-                                  //           print("field SelectDaayitva ID :--${_daayitvaValue}");
-                                  //
-                                  //         },
-                                  //         // onSaved: (value) {
-                                  //         //   if (_daayitvaValue != null &&
-                                  //         //       _daayitvaValue.isNotEmpty)
-                                  //         //     swDaayitva!.daayitvaID =
-                                  //         //         int.parse(_daayitvaValue);
-                                  //         //   else
-                                  //         //     swDaayitva!.daayitvaID = null;
-                                  //         // },
-                                  //       ),
-                                  //     ),
-                                  //     IconButton(
-                                  //         color: Colors.purple,
-                                  //         onPressed: () {
-                                  //           setState(() {
-                                  //             this._daayitvaController.text = "";
-                                  //             _daayitvaValue = "";
-                                  //           });
-                                  //         },
-                                  //         icon: Icon(Icons.cancel)),
-                                  //   ],
-                                  // ),
-                                  // Row(
-                                  //   children: [
-                                  //     Container(
-                                  //       width: Statics.getDeviceSize(context).width * 0.63,
-                                  //       child: TypeAheadField<DaayitvaMasterBAL>(
-                                  //         controller: _daayitvaController,
-                                  //         builder: (context, controller, focusNode) {
-                                  //           return TextField(
-                                  //             controller: _daayitvaController,
-                                  //             focusNode: focusNode,
-                                  //             decoration: InputDecoration(
-                                  //               isDense: true,
-                                  //               border: UnderlineInputBorder(),
-                                  //               labelText: Statics.getLabel('SelectDaayitva'),
-                                  //             ),
-                                  //           );
-                                  //         },
-                                  //         suggestionsCallback: (pattern) {
-                                  //           _daayitvaValue = "";
-                                  //           return populateDaayitva(
-                                  //               _daayitvaForValue == null ||
-                                  //                   _daayitvaForValue!.code == "SanghaPreritSansthaa" ||
-                                  //                   _daayitvaForValue!.code == "OtherSocialOrganization"
-                                  //                   ? ""
-                                  //                   : _daayitvaForValue!.staticID.toString(),
-                                  //               pattern
-                                  //           );
-                                  //         },
-                                  //         itemBuilder: (context, suggestion) {
-                                  //           return ListTile(
-                                  //             title: Text(suggestion.daayitvaName!),
-                                  //           );
-                                  //         },
-                                  //         onSelected: (suggestion) {
-                                  //           setState(() {
-                                  //             _daayitvaController.text = suggestion.daayitvaName!;
-                                  //             _daayitvaValue = suggestion.daayitvaID.toString();
-                                  //             print("field SelectDaayitva name :--${suggestion.daayitvaName}");
-                                  //             print("field SelectDaayitva ID :--${_daayitvaValue}");
-                                  //           });
-                                  //         },
-                                  //       ),
-                                  //     ),
-                                  //     IconButton(
-                                  //         color: Colors.purple,
-                                  //         onPressed: () {
-                                  //           setState(() {
-                                  //             _daayitvaController.text = "";
-                                  //             _daayitvaValue = "";
-                                  //           });
-                                  //         },
-                                  //         icon: Icon(Icons.cancel)
-                                  //     ),
-                                  //   ],
-                                  // ),
-                                  Row(
-                                    children: [
-                                      Container(
-                                        width: Statics.getDeviceSize(context).width * 0.63,
-                                        child: TypeAheadField<DaayitvaMasterBAL>(
-                                          controller: _daayitvaController,
-                                          builder: (context, controller, focusNode) {
-                                            return TextField(
+                                      Row(
+                                        children: [
+                                          Container(
+                                            width: Statics.getDeviceSize(context).width * 0.63,
+                                            child: TypeAheadField<DaayitvaMasterBAL>(
                                               controller: _daayitvaController,
-                                              focusNode: focusNode,
-                                              decoration: InputDecoration(
-                                                isDense: true,
-                                                border: UnderlineInputBorder(),
-                                                labelText: Statics.getLabel('SelectDaayitva'),
-                                              ),
-                                            );
-                                          },
-                                          suggestionsCallback: (pattern) {
-                                            _daayitvaValue = "";
-                                            return populateDaayitva(
-                                              _daayitvaForValue == null || _daayitvaForValue!.code == "SanghaPreritSansthaa" || _daayitvaForValue!.code == "OtherSocialOrganization"
-                                                  ? ""
-                                                  : _daayitvaForValue!.staticID.toString(),
-                                              pattern,
-                                            );
-                                          },
-                                          itemBuilder: (context, suggestion) {
-                                            return ListTile(
-                                              title: Text(suggestion.daayitvaName!),
-                                            );
-                                          },
-                                          onSelected: (suggestion) {
-                                            setState(() {
-                                              _daayitvaController.text = suggestion.daayitvaName!;
-                                              _daayitvaValue = suggestion.daayitvaID.toString();
-                                              _selectedDaayitvaID = suggestion.daayitvaID.toString();
-                                              print("field SelectDaayitva name :--${suggestion.daayitvaName}");
-                                              print("field SelectDaayitva ID :--${_daayitvaValue}");
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                      IconButton(
-                                        color: Colors.purple,
-                                        onPressed: () {
-                                          setState(() {
-                                            _daayitvaController.text = "";
-                                            _daayitvaValue = "";
-                                            _selectedDaayitvaID = ""; // Reset the class level variable
-                                          });
-                                        },
-                                        icon: Icon(Icons.cancel),
+                                              builder: (context, controller, focusNode) {
+                                                return TextField(
+                                                  controller: _daayitvaController,
+                                                  focusNode: focusNode,
+                                                  decoration: InputDecoration(
+                                                    isDense: true,
+                                                    border: UnderlineInputBorder(),
+                                                    labelText: Statics.getLabel('SelectDaayitva'),
+                                                  ),
+                                                );
+                                              },
+                                              suggestionsCallback: (pattern) {
+                                                _daayitvaValue = "";
+                                                return populateDaayitva(
+                                                  _daayitvaForValue == null || _daayitvaForValue!.code == "SanghaPreritSansthaa" || _daayitvaForValue!.code == "OtherSocialOrganization"
+                                                      ? ""
+                                                      : _daayitvaForValue!.staticID.toString(),
+                                                  pattern,
+                                                );
+                                              },
+                                              itemBuilder: (context, suggestion) {
+                                                return ListTile(
+                                                  title: Text(suggestion.daayitvaName!),
+                                                );
+                                              },
+                                              onSelected: (suggestion) {
+                                                setState(() {
+                                                  _daayitvaController.text = suggestion.daayitvaName!;
+                                                  _daayitvaValue = suggestion.daayitvaID.toString();
+                                                  _selectedDaayitvaID = suggestion.daayitvaID.toString();
+                                                  print("field SelectDaayitva name :--${suggestion.daayitvaName}");
+                                                  print("field SelectDaayitva ID :--${_daayitvaValue}");
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                          IconButton(
+                                            color: Colors.purple,
+                                            onPressed: () {
+                                              setState(() {
+                                                _daayitvaController.text = "";
+                                                _daayitvaValue = "";
+                                                _selectedDaayitvaID = ""; // Reset the class level variable
+                                              });
+                                            },
+                                            icon: Icon(Icons.cancel),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
+                              // if (_daayitvaForValue != null)
+                              //   if (_daayitvaForValue!.code != "SanghaPreritSansthaa" && _daayitvaForValue!.code != "OtherSocialOrganization")
+                              //     // Row(
+                              //     //   children: [
+                              //     //     Container(
+                              //     //       width: Statics.getDeviceSize(context).width * 0.63,
+                              //     //       child: TypeAheadField<DaayitvaMasterBAL>(
+                              //     //         controller: _daayitvaController,
+                              //     //         builder: (context, controller, focusNode) {
+                              //     //           return TextField(
+                              //     //               controller: _daayitvaController,
+                              //     //               focusNode: focusNode,
+                              //     //               decoration: InputDecoration(
+                              //     //                 isDense: true,
+                              //     //                 border: UnderlineInputBorder(),
+                              //     //                 labelText: Statics.getLabel('SelectDaayitva'),
+                              //     //               )
+                              //     //           );
+                              //     //         },
+                              //     //         // textFieldConfiguration:
+                              //     //         //     TextFieldConfiguration(
+                              //     //         //         controller:
+                              //     //         //             this._daayitvaController,
+                              //     //         //         decoration: InputDecoration(
+                              //     //         //             labelText: Statics.getLabel(
+                              //     //         //                 'SelectDaayitva'))),
+                              //     //         suggestionsCallback: (pattern) {
+                              //     //           this._daayitvaValue = "";
+                              //     //           return populateDaayitva(
+                              //     //               _daayitvaForValue == null ||
+                              //     //                       _daayitvaForValue!.code == "SanghaPreritSansthaa" ||
+                              //     //                       _daayitvaForValue!.code == "OtherSocialOrganization"
+                              //     //                   ? ""
+                              //     //                   : _daayitvaForValue!.staticID.toString(),
+                              //     //               pattern);
+                              //     //         },
+                              //     //         itemBuilder: (context, suggestion) {
+                              //     //           return ListTile(
+                              //     //             title: Text(suggestion.daayitvaName!),
+                              //     //           );
+                              //     //         },
+                              //     //         // validator: (value) {
+                              //     //         //   if ((value.isEmpty ||
+                              //     //         //       _daayitvaValue == null ||
+                              //     //         //       _daayitvaValue.isEmpty)) {
+                              //     //         //     return Statics.getLabel(
+                              //     //         //         'DaayitvaValidationMessage');
+                              //     //         //   }
+                              //     //         //   return null;
+                              //     //         // },
+                              //     //         // transitionBuilder: (context,
+                              //     //         //     suggestionsBox, controller) {
+                              //     //         //   return suggestionsBox;
+                              //     //         // },
+                              //     //         onSelected: (suggestion) {
+                              //     //           this._daayitvaController.text = suggestion.daayitvaName!;
+                              //     //           _daayitvaValue = suggestion.daayitvaID.toString();
+                              //     //           print("field SelectDaayitva name :--${suggestion.daayitvaName}");
+                              //     //           print("field SelectDaayitva ID :--${_daayitvaValue}");
+                              //     //
+                              //     //         },
+                              //     //         // onSaved: (value) {
+                              //     //         //   if (_daayitvaValue != null &&
+                              //     //         //       _daayitvaValue.isNotEmpty)
+                              //     //         //     swDaayitva!.daayitvaID =
+                              //     //         //         int.parse(_daayitvaValue);
+                              //     //         //   else
+                              //     //         //     swDaayitva!.daayitvaID = null;
+                              //     //         // },
+                              //     //       ),
+                              //     //     ),
+                              //     //     IconButton(
+                              //     //         color: Colors.purple,
+                              //     //         onPressed: () {
+                              //     //           setState(() {
+                              //     //             this._daayitvaController.text = "";
+                              //     //             _daayitvaValue = "";
+                              //     //           });
+                              //     //         },
+                              //     //         icon: Icon(Icons.cancel)),
+                              //     //   ],
+                              //     // ),
+                              //     // Row(
+                              //     //   children: [
+                              //     //     Container(
+                              //     //       width: Statics.getDeviceSize(context).width * 0.63,
+                              //     //       child: TypeAheadField<DaayitvaMasterBAL>(
+                              //     //         controller: _daayitvaController,
+                              //     //         builder: (context, controller, focusNode) {
+                              //     //           return TextField(
+                              //     //             controller: _daayitvaController,
+                              //     //             focusNode: focusNode,
+                              //     //             decoration: InputDecoration(
+                              //     //               isDense: true,
+                              //     //               border: UnderlineInputBorder(),
+                              //     //               labelText: Statics.getLabel('SelectDaayitva'),
+                              //     //             ),
+                              //     //           );
+                              //     //         },
+                              //     //         suggestionsCallback: (pattern) {
+                              //     //           _daayitvaValue = "";
+                              //     //           return populateDaayitva(
+                              //     //               _daayitvaForValue == null ||
+                              //     //                   _daayitvaForValue!.code == "SanghaPreritSansthaa" ||
+                              //     //                   _daayitvaForValue!.code == "OtherSocialOrganization"
+                              //     //                   ? ""
+                              //     //                   : _daayitvaForValue!.staticID.toString(),
+                              //     //               pattern
+                              //     //           );
+                              //     //         },
+                              //     //         itemBuilder: (context, suggestion) {
+                              //     //           return ListTile(
+                              //     //             title: Text(suggestion.daayitvaName!),
+                              //     //           );
+                              //     //         },
+                              //     //         onSelected: (suggestion) {
+                              //     //           setState(() {
+                              //     //             _daayitvaController.text = suggestion.daayitvaName!;
+                              //     //             _daayitvaValue = suggestion.daayitvaID.toString();
+                              //     //             print("field SelectDaayitva name :--${suggestion.daayitvaName}");
+                              //     //             print("field SelectDaayitva ID :--${_daayitvaValue}");
+                              //     //           });
+                              //     //         },
+                              //     //       ),
+                              //     //     ),
+                              //     //     IconButton(
+                              //     //         color: Colors.purple,
+                              //     //         onPressed: () {
+                              //     //           setState(() {
+                              //     //             _daayitvaController.text = "";
+                              //     //             _daayitvaValue = "";
+                              //     //           });
+                              //     //         },
+                              //     //         icon: Icon(Icons.cancel)
+                              //     //     ),
+                              //     //   ],
+                              //     // ),
+                              //     Row(
+                              //       children: [
+                              //         Container(
+                              //           width: Statics.getDeviceSize(context).width * 0.63,
+                              //           child: TypeAheadField<DaayitvaMasterBAL>(
+                              //             controller: _daayitvaController,
+                              //             builder: (context, controller, focusNode) {
+                              //               return TextField(
+                              //                 controller: _daayitvaController,
+                              //                 focusNode: focusNode,
+                              //                 decoration: InputDecoration(
+                              //                   isDense: true,
+                              //                   border: UnderlineInputBorder(),
+                              //                   labelText: Statics.getLabel('SelectDaayitva'),
+                              //                 ),
+                              //               );
+                              //             },
+                              //             suggestionsCallback: (pattern) {
+                              //               _daayitvaValue = "";
+                              //               return populateDaayitva(
+                              //                 _daayitvaForValue == null || _daayitvaForValue!.code == "SanghaPreritSansthaa" || _daayitvaForValue!.code == "OtherSocialOrganization"
+                              //                     ? ""
+                              //                     : _daayitvaForValue!.staticID.toString(),
+                              //                 pattern,
+                              //               );
+                              //             },
+                              //             itemBuilder: (context, suggestion) {
+                              //               return ListTile(
+                              //                 title: Text(suggestion.daayitvaName!),
+                              //               );
+                              //             },
+                              //             onSelected: (suggestion) {
+                              //               setState(() {
+                              //                 _daayitvaController.text = suggestion.daayitvaName!;
+                              //                 _daayitvaValue = suggestion.daayitvaID.toString();
+                              //                 _selectedDaayitvaID = suggestion.daayitvaID.toString();
+                              //                 print("field SelectDaayitva name :--${suggestion.daayitvaName}");
+                              //                 print("field SelectDaayitva ID :--${_daayitvaValue}");
+                              //               });
+                              //             },
+                              //           ),
+                              //         ),
+                              //         IconButton(
+                              //           color: Colors.purple,
+                              //           onPressed: () {
+                              //             setState(() {
+                              //               _daayitvaController.text = "";
+                              //               _daayitvaValue = "";
+                              //               _selectedDaayitvaID = ""; // Reset the class level variable
+                              //             });
+                              //           },
+                              //           icon: Icon(Icons.cancel),
+                              //         ),
+                              //       ],
+                              //     ),
                               if (_daayitvaForValue != null)
                                 if (_daayitvaForValue!.code == "SanghaPreritSansthaa")
                                   Column(
@@ -900,5 +1115,246 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
           ),
         ),
         inAsyncCall: _isFetchingData);
+  }
+
+  Widget _buildExpansionPanel() {
+    return Container(
+      margin: EdgeInsets.all(10),
+      child: Column(
+        children: [
+          if ((_levelValue ?? 0) > 8 && (_levelValue ?? 0) < 13 && _geoUnits != null)
+            DropdownButtonFormField(
+              decoration: InputDecoration(labelText: Statics.getLabel(_lblValue == "" ? 'SelectLevelName' : _lblValue!)),
+              isExpanded: true,
+              value: _geoUnitsValue == ""
+                  ? null
+                  : _geoUnits != null
+                      ? _geoUnits!.indexWhere((p) => p.geoUnitID.toString() == _geoUnitsValue) > -1
+                          ? _geoUnitsValue
+                          : null
+                      : null,
+              items: _geoUnits!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+              onChanged: (value) {
+                setState(() {
+                  _geoUnitsValue = value;
+                });
+              },
+              validator: (value) {
+                if (value == null || value.isEmpty) return (Statics.getLabel('GeoUnitValidationMessage'));
+                return null;
+              },
+              onSaved: (value) {
+                if (value != null && value.isNotEmpty) {
+                  swDaayitva!.daayitvaGeoUnitID = int.parse(value);
+                  print("field SelectLevelName :--${value}");
+                } else
+                  swDaayitva!.daayitvaGeoUnitID = null;
+              },
+            ),
+          if (_levelValue != null && (_levelValue ?? 0) < 9 && _linkedVibhaag != null)
+            _buildDropdownField(
+              label: Statics.getLabel('Vibhaag'),
+              value: _linkedVibhaagValue,
+              items: _linkedVibhaag!
+                  .map((bg) => DropdownMenuItem(
+                        value: bg.geoUnitID.toString(),
+                        child: Text(bg.name!),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                final selectedItem = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                setState(() {
+                  _linkedVibhaagValue = value;
+                  _selctedLevel = 'Vibhaag';
+                  _selctedLevelName = selectedItem.name ?? "";
+                  _selectedGeoUnitId = value;
+                  // _linkedVibhaagName = selectedItem.name ?? "";
+                });
+                populatelinkedBhaagDropdown(value!);
+              },
+              isDisabled: false,
+            ),
+          if (_levelValue != null && (_levelValue ?? 0) < 8 && _linkedVibhaagValue != null && _linkedbhaag != null && _linkedbhaag!.isNotEmpty)
+            _buildDropdownField(
+              label: Statics.getLabel('Bhaag'),
+              value: _linkedbhaagValue,
+              items: _linkedbhaag!
+                  .map((bg) => DropdownMenuItem(
+                        value: bg.geoUnitID.toString(),
+                        child: Text(bg.name!),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                final selectedItem = _linkedbhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                setState(() {
+                  _linkedbhaagValue = value;
+                  _selctedLevel = 'Bhaag';
+                  _selctedLevelName = selectedItem.name ?? "";
+                  _linkedbhaagName = selectedItem.name ?? "";
+                  _selectedGeoUnitId = value;
+                  populatelinkedShaharDropdown(value!);
+                  populatelinkedNagarDropdown(value, null);
+                });
+              },
+              isDisabled: false,
+            ),
+          // if (_levelValue != null && (_levelValue ?? 0) < 7 && _linkedshahar != null && _linkedshahar!.isNotEmpty)
+          //   _buildDropdownField(
+          //     label: Statics.getLabel('Shahar'),
+          //     value: _linkedshaharValue,
+          //     items: _linkedshahar!
+          //         .map((bg) => DropdownMenuItem(
+          //               value: bg.geoUnitID.toString(),
+          //               child: Text(bg.name!),
+          //             ))
+          //         .toList(),
+          //     onChanged: (value) {
+          //       final selectedItem = _linkedshahar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+          //       setState(() {
+          //         _linkedshaharValue = value;
+          //         _selectedGeoUnitId = value;
+          //         _selctedLevel = 'Shahar';
+          //         _selctedLevelName = selectedItem.name ?? "";
+          //         _linkedshaharName = selectedItem.name ?? "";
+          //         populatelinkedNagarDropdown(null, value);
+          //       });
+          //     },
+          //     isDisabled: false,
+          //   ),
+          if (_levelValue != null && (_levelValue ?? 0) < 7 && _linkedbhaagValue != null && _linkednagar != null && _linkednagar!.isNotEmpty)
+            _buildDropdownField(
+              label: Statics.getLabel('Nagar'),
+              value: _linkednagarValue,
+              items: _linkednagar!
+                  .map((bg) => DropdownMenuItem(
+                        value: bg.geoUnitID.toString(),
+                        child: Text(bg.name!),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                final selectedItem = _linkednagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                setState(() {
+                  _linkednagarValue = value;
+                  _selectedGeoUnitId = value;
+                  _selctedLevel = 'Nagar';
+                  _selctedLevelName = selectedItem.name ?? "";
+                  _linkednagarName = selectedItem.name ?? "";
+                  populatelinkedMandalDropdown(value);
+                  populatelinkedVastiDropdown(value);
+                });
+              },
+              isDisabled: false,
+            ),
+          if (_levelValue != null && (_levelValue ?? 0) < 5 && _linkednagarValue != null && _linkedmandal != null && _linkedmandal!.isNotEmpty)
+            _buildDropdownField(
+              label: Statics.getLabel('Mandal'),
+              value: _linkedmandalValue,
+              items: _linkedmandal!
+                  .map((bg) => DropdownMenuItem(
+                        value: bg.geoUnitID.toString(),
+                        child: Text(bg.name!),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                final selectedItem = _linkedmandal!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                setState(() {
+                  _linkedmandalValue = value;
+                  _selectedGeoUnitId = value.toString();
+                  _selctedLevel = 'Mandal';
+                  _selctedLevelName = selectedItem.name ?? "";
+                  _linkedmandalName = selectedItem.name ?? "";
+                  populatelinkedGraamDropdown(value);
+                });
+              },
+              isDisabled: false,
+            ),
+          if (_levelValue != null && (_levelValue ?? 0) < 4 && _linkedmandalValue != null && _linkedgraam != null && _linkedgraam!.isNotEmpty)
+            _buildDropdownField(
+              label: Statics.getLabel('Graam'),
+              value: _linkedgraamValue,
+              items: _linkedgraam!
+                  .map((bg) => DropdownMenuItem(
+                        value: bg.geoUnitID.toString(),
+                        child: Text(bg.name!),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                final selectedItem = _linkedgraam!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                setState(() {
+                  _linkedgraamValue = value;
+                  _selectedGeoUnitId = value.toString();
+                  _selctedLevel = 'Graam';
+                  _selctedLevelName = selectedItem.name ?? "";
+                  _linkedgraamName = selectedItem.name ?? "";
+                });
+              },
+              isDisabled: false,
+            ),
+          if (_levelValue != null && (_levelValue ?? 0) < 3 && _linkednagarValue != null && _linkedvasti != null && _linkedvasti!.isNotEmpty)
+            _buildDropdownField(
+              label: Statics.getLabel('Vasti'),
+              value: _linkedvastiValue,
+              items: _linkedvasti!
+                  .map((bg) => DropdownMenuItem(
+                        value: bg.geoUnitID.toString(),
+                        child: Text(bg.name!),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                final selectedItem = _linkedvasti!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                setState(() {
+                  _linkedvastiValue = value;
+                  _selectedGeoUnitId = value.toString();
+                  _selctedLevel = 'Vasti';
+                  _selctedLevelName = selectedItem.name ?? "";
+                  _linkedvastiName = selectedItem.name ?? "";
+                });
+              },
+              isDisabled: false,
+            ),
+          if (_levelValue != null && (_levelValue ?? 0) < 2 && _linkedshaakhaa != null && _linkedshaakhaa!.isNotEmpty)
+            _buildDropdownField(
+              label: Statics.getLabel('Shaakhaa'),
+              value: _linkedshaakhaaValue,
+              items: _linkedshaakhaa!
+                  .map((bg) => DropdownMenuItem(
+                        value: bg.geoUnitID.toString(),
+                        child: Text(bg.name!),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                final selectedItem = _linkedshaakhaa!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                setState(() {
+                  _linkedshaakhaaValue = value;
+                  _selectedGeoUnitId = value.toString();
+                  _selctedLevel = 'Shaakhaa';
+                  _selctedLevelName = selectedItem.name ?? "";
+                  _linkedshaakhaaName = selectedItem.name ?? "";
+                });
+              },
+              isDisabled: false,
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDropdownField({
+    required String label,
+    required String? value,
+    required List<DropdownMenuItem<String>> items,
+    required ValueChanged<String?> onChanged,
+    required bool isDisabled,
+  }) {
+    return IgnorePointer(
+      ignoring: isDisabled,
+      child: DropdownButtonFormField(
+        decoration: InputDecoration(labelText: label),
+        isExpanded: true,
+        value: value == "" ? null : value,
+        items: items,
+        onChanged: onChanged,
+      ),
+    );
   }
 }

@@ -665,24 +665,24 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                                   headerWidgets: [
                                     Container(
                                       width: leftColumnWidth,
-                                      height: rowHeight,
+                                      height: rowHeight + 40,
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
-                                      child: Text(Statics.getLabel('Level'), style: TextStyle(fontWeight: FontWeight.bold)),
+                                      child: Text(Statics.getLabel('Level'), textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold)),
                                     ),
                                     Container(
                                       width: columnWidth,
-                                      height: rowHeight,
+                                      height: rowHeight + 40,
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(border: Border.symmetric(horizontal: BorderSide(color: Colors.grey))),
-                                      child: Text(Statics.getLabel('Total'), style: TextStyle(fontWeight: FontWeight.bold)),
+                                      child: Text(Statics.getLabel('Total'), textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold)),
                                     ),
                                     ...setStatusCodes!.map((status) => Container(
                                           width: columnWidth,
-                                          height: rowHeight,
+                                          height: rowHeight + 40,
                                           alignment: Alignment.center,
                                           decoration: BoxDecoration(border: Border.symmetric(horizontal: BorderSide(color: Colors.grey))),
-                                          child: Text(status, style: TextStyle(fontWeight: FontWeight.bold)),
+                                          child: Text(status, textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold)),
                                         )),
                                   ],
                                   leftSideItemBuilder: (context, index) {
