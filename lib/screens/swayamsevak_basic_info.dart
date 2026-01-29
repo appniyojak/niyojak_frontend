@@ -519,10 +519,10 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
                             decoration: InputDecoration(labelText: Statics.getLabel('BirthDate')),
                             textInputAction: TextInputAction.next,
                             // controller: widget.viewType == 'JoinRss' ? emailController : _emailCntrl,
-                            maxLength: 100,
+                            // maxLength: 100,
                             validator: (value) {
-                              if (value == null || value.trim().isEmpty) {
-                                (Statics.getLabel('DobValidationMessage'));
+                              if (value == null || value.toString().trim().isEmpty || value.trim() == "") {
+                                return (Statics.getLabel('DobValidationMessage'));
                               }
                               return null;
                             },

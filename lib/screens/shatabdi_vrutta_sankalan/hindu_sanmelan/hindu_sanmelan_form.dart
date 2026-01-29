@@ -138,8 +138,8 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
       presentMaleController.text = (data?.malecount ?? 0).toString();
       presentMatrushaktiController.text = (data?.femalecount ?? 0).toString();
       txtSanmelanFormatController.text = data?.sanmelandesc ?? "";
-      txtUtsavPhotoDescController.text = data?.imgDesc ?? "";
-      txtUtsavAddPhotoDescController.text = data?.advDesc ?? "";
+      // txtUtsavPhotoDescController.text = data?.imgDesc ?? "";
+      // txtUtsavAddPhotoDescController.text = data?.advDesc ?? "";
       selectedSajjanshaktiItemsIds = data?.vastisarsajjanshakti?.where((e) => e.isVisheshdefault == 1).map((e) => e.pkid).join(',');
       selectedSajjanshaktiItems = data?.vastisarsajjanshakti?.where((e) => e.isVisheshdefault == 1).toList() ?? [];
       selectedAnyaprabhaviItemsIds = data?.vastisanyaprabhavi?.where((e) => e.isVisheshdefault == 1).map((e) => e.pkId).join(',');
@@ -147,8 +147,8 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
       selectedBhougolikPratinidhitwaVastiIds = data?.gramlist?.where((e) => e.isdefault == 1).map((e) => e.geoUnitID).join(',');
       checkboxGraamVastiSelectedItems = data!.gramlist!.where((e) => e.isdefault == 1).toList();
       _urlsList = data?.urldata ?? [];
-      _selectedFileNames1 = data?.imgdata?.map((url) => url.value).toList() ?? [];
-      _selectedFileNames2 = data?.advimgdata?.map((url) => url.value).toList() ?? [];
+      _selectedFileNames1 = data?.imgdata ?? [];
+      _selectedFileNames2 = data?.advimgdata ?? [];
       vaktaList = data?.vaktaList ?? [];
 
       print("searchVijayaDashami data ${data?.vastisarsajjanshakti}");
@@ -168,8 +168,8 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
       "sajjanvisheshtiid": selectedSajjanshaktiItemsIds ?? "",
       "annyavisheshtiid": selectedAnyaprabhaviItemsIds ?? "",
       "gramids": selectedBhougolikPratinidhitwaVastiIds ?? "",
-      "imgDesc": txtUtsavPhotoDescController.text.trim(),
-      "advDesc": txtUtsavAddPhotoDescController.text.trim(),
+      "imgDesc": "", //txtUtsavPhotoDescController.text.trim(),
+      "advDesc": "", //txtUtsavAddPhotoDescController.text.trim(),
       "urls": _urlsList,
       "hindusanmelanvatta": vaktaList,
     };
@@ -180,11 +180,12 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
     // getFormData();
   }
 
-  Future<String?> submitImageDataFun({bool showLoader = false, required String type}) async {
+  Future<String?> submitImageDataFun({bool showLoader = false, required String type, required String description}) async {
     Map<String, dynamic> formData = {
       "GeoUnitID": _selectedGeoUnitId,
       "filebase": selectedFilePath,
       "type": type,
+      "Desc": description,
     };
 
     String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
@@ -1671,12 +1672,20 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                     Fluttertoast.showToast(msg: "${Statics.getLabel('NagarSelectionImportant')}");
                     return;
                   }
-                  if (_selectedFileNames1.isNotEmpty && txtUtsavPhotoDescController.text.isEmpty) {
-                    Statics.showToast("${Statics.getLabel('AddSanmelanFilesDesc')}", toastLength: Toast.LENGTH_LONG);
+                  // if (_selectedFileNames1.isNotEmpty && txtUtsavPhotoDescController.text.trim().isEmpty) {
+                  //   Statics.showToast("${Statics.getLabel('AddSanmelanFilesDesc')}", toastLength: Toast.LENGTH_LONG);
+                  //   return;
+                  // }
+                  // if (_selectedFileNames2.isNotEmpty && txtUtsavAddPhotoDescController.text.trim().isEmpty) {
+                  //   Statics.showToast("${Statics.getLabel('AddAdvSanmelanFilesDesc')}", toastLength: Toast.LENGTH_LONG);
+                  //   return;
+                  // }
+                  if (txtUrlsController.text.trim().isNotEmpty && txtUrlDescController.text.trim().isEmpty) {
+                    Statics.showToast("${Statics.getLabel('urlDescIsImp')}", toastLength: Toast.LENGTH_LONG);
                     return;
                   }
-                  if (_selectedFileNames2.isNotEmpty && txtUtsavAddPhotoDescController.text.isEmpty) {
-                    Statics.showToast("${Statics.getLabel('AddAdvSanmelanFilesDesc')}", toastLength: Toast.LENGTH_LONG);
+                  if (txtUrlsController.text.trim().isNotEmpty && txtUrlDescController.text.trim().isNotEmpty) {
+                    Statics.showToast("${Statics.getLabel('clickOnAddBtn')}", toastLength: Toast.LENGTH_LONG);
                     return;
                   }
                   // if ([null, 2].contains(programNirdharitVed) || [null, 2].contains(programHishobh24Hour)) {
@@ -2386,8 +2395,8 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
 
   String? selectedFilePath;
   String? filePathOg;
-  List<String?> _selectedFileNames1 = []; // To display the file name
-  List<String?> _selectedFileNames2 = []; // To display the file name
+  List<TypeValueData?> _selectedFileNames1 = []; // To display the file name
+  List<TypeValueData?> _selectedFileNames2 = []; // To display the file name
   List<TypeValueData?> _urlsList = []; // To display the file name
   // int? imageAdd = 0;
   final int _maxImages = 3;
@@ -2467,7 +2476,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                                           children: [
                                             Expanded(
                                               child: Text(
-                                                "${(index + 1)}. $img",
+                                                "${(index + 1)}. ${img?.value}",
                                                 style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                                               ),
                                             ),
@@ -2481,7 +2490,9 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                                                 });
                                                 setState(() {});
                                                 print(img.toString() == _currentImg);
-                                                await MyAppGlobals.downloadFile('${Statics.baseUrl}/Files/hindusanmelanfiles/$img', img.toString());
+                                                print("printing img name >>>>>>>> ${img?.value}");
+                                                log("printing img name >>>>>>>> ${img?.value}");
+                                                await MyAppGlobals.downloadFile('${Statics.baseUrl}/Files/hindusanmelanfiles/${img?.value}', (img?.value).toString());
                                                 set(() {
                                                   loadingNotifier3.value = false;
                                                 });
@@ -2510,8 +2521,13 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                                           ],
                                         ),
                                         SizedBox(height: 6),
+                                        Text(
+                                          img?.description ?? "--",
+                                          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14.5),
+                                        ),
+                                        SizedBox(height: 6),
                                         CachedNetworkImage(
-                                          imageUrl: '${Statics.baseUrl}/Files/hindusanmelanfiles/$img',
+                                          imageUrl: '${Statics.baseUrl}/Files/hindusanmelanfiles/${img?.value}',
                                           errorWidget: (context, error, stackTrace) =>
                                               SizedBox(width: MediaQuery.sizeOf(context).width, height: 120, child: Center(child: Text(Statics.getLabel("errorOccurred")))),
                                           progressIndicatorBuilder: (context, child, loadingProgress) =>
@@ -2548,7 +2564,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
               children: [
                 Expanded(
                   child: Text(
-                    img ?? "${Statics.getLabel('selectFile')}",
+                    img?.value ?? "${Statics.getLabel('selectFile')}",
                     style: TextStyle(color: Colors.black87),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -2602,7 +2618,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                     );
 
                     if (_shouldDelete) {
-                      final _result = await deleteImageDataFun(imageName: img.toString());
+                      final _result = await deleteImageDataFun(imageName: (img?.value).toString());
                       if (_result) {
                         setState(() {
                           _selectedFileNames1.remove(img);
@@ -2642,21 +2658,66 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                   builder: (ctx) => PopScope(
                     canPop: false,
                     child: AlertDialog(
-                      title: Text(Statics.getLabel('chooseAnOption')),
-                      content: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      title: Text(Statics.getLabel('AddSanmelanFiles')),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        spacing: 8,
                         children: [
-                          IconButton.filled(
-                            onPressed: () async {
-                              Navigator.of(ctx).pop(true);
+                          TextFormField(
+                            controller: txtUtsavPhotoDescController,
+                            textAlignVertical: TextAlignVertical.center,
+                            // textAlign: TextAlign.left,
+                            autofocus: false,
+                            readOnly: !_searched,
+                            onTap: () {
+                              if (!_searched) {
+                                Fluttertoast.showToast(
+                                  msg: "${Statics.getLabel('NagarSelectionImportant')}",
+                                );
+                              }
                             },
-                            icon: Icon(Icons.camera_alt),
+                            maxLines: 5,
+                            onChanged: (value) => setState(() {}),
+                            onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
+                            decoration: InputDecoration(
+                              hintText: Statics.getLabel("AddSanmelanFilesDesc"),
+                              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                              // enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                              // focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.purple),borderRadius: BorderRadius.circular(12)),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return Statics.getLabel("AddSanmelanFilesDesc");
+                              }
+                              return null;
+                            },
                           ),
-                          IconButton.filled(
-                            onPressed: () async {
-                              Navigator.of(ctx).pop(false);
-                            },
-                            icon: Icon(Icons.photo_library),
+                          SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              IconButton.filled(
+                                onPressed: () async {
+                                  if (txtUtsavPhotoDescController.text.trim().isEmpty) {
+                                    Statics.showToast(Statics.getLabel("AddSanmelanFilesDesc"));
+                                    return;
+                                  }
+                                  Navigator.of(ctx).pop(true);
+                                },
+                                icon: Icon(Icons.camera_alt),
+                              ),
+                              IconButton.filled(
+                                onPressed: () async {
+                                  if (txtUtsavPhotoDescController.text.trim().isEmpty) {
+                                    Statics.showToast(Statics.getLabel("AddSanmelanFilesDesc"));
+                                    return;
+                                  }
+                                  Navigator.of(ctx).pop(false);
+                                },
+                                icon: Icon(Icons.photo_library),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -2703,9 +2764,12 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                       String base64String = base64Encode(compressedBytes);
                       String base64File = "data:image/jpg;base64,$base64String";
                       selectedFilePath = base64File;
-                      final _result = await submitImageDataFun(type: "img", showLoader: true);
-                      _selectedFileNames1.add(_result ?? fileName);
-                      setState(() {});
+                      final _result = await submitImageDataFun(type: "img", showLoader: true, description: txtUtsavPhotoDescController.text.trim());
+                      _selectedFileNames1.add(TypeValueData(type: "img", value: _result ?? fileName, description: txtUtsavPhotoDescController.text.trim()));
+                      setState(() {
+                        txtUtsavPhotoDescController.clear();
+                        txtUtsavAddPhotoDescController.clear();
+                      });
                     }
                   }
                 } catch (e) {
@@ -2741,51 +2805,51 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
             ),
           ),
         SizedBox(height: 14),
-        TextFormField(
-          controller: txtUtsavPhotoDescController,
-          textAlignVertical: TextAlignVertical.center,
-          // textAlign: TextAlign.left,
-          autofocus: false,
-          readOnly: !_searched,
-          onTap: () {
-            if (!_searched) {
-              Fluttertoast.showToast(
-                msg: "${Statics.getLabel('NagarSelectionImportant')}",
-              );
-            }
-          },
-          maxLines: 5,
-          onChanged: (value) => setState(() {}),
-          onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
-          decoration: InputDecoration(
-            hintText: Statics.getLabel("AddSanmelanFilesDesc"),
-            contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-            // enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-            // focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.purple),borderRadius: BorderRadius.circular(12)),
-          ),
-          // validator: (value) {
-          //   // if (value != null && value.trim().isNotEmpty && value.length < 9 && memberController.contactList.value.isEmpty){
-          //   //   return "Invalid contact number";
-          //   // }else
-          //   if (memberController.contactList.value.isEmpty) {
-          //     if (value == null || value.trim().isEmpty) {
-          //       return "Please enter contact number";
-          //     }
-          //     if (value.length < 9) {
-          //       return "Invalid contact number";
-          //     }
-          //     return null;
-          //     // return "Please enter at least one contact number";
-          //   } else {
-          //     if (value != null && value.trim().isNotEmpty && value.length < 9) {
-          //       return "Invalid contact number";
-          //     }
-          //   }
-          //
-          //   return null;
-          // },
-        ),
+        // TextFormField(
+        //   controller: txtUtsavPhotoDescController,
+        //   textAlignVertical: TextAlignVertical.center,
+        //   // textAlign: TextAlign.left,
+        //   autofocus: false,
+        //   readOnly: !_searched,
+        //   onTap: () {
+        //     if (!_searched) {
+        //       Fluttertoast.showToast(
+        //         msg: "${Statics.getLabel('NagarSelectionImportant')}",
+        //       );
+        //     }
+        //   },
+        //   maxLines: 5,
+        //   onChanged: (value) => setState(() {}),
+        //   onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
+        //   decoration: InputDecoration(
+        //     hintText: Statics.getLabel("AddSanmelanFilesDesc"),
+        //     contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        //     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        //     // enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        //     // focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.purple),borderRadius: BorderRadius.circular(12)),
+        //   ),
+        //   // validator: (value) {
+        //   //   // if (value != null && value.trim().isNotEmpty && value.length < 9 && memberController.contactList.value.isEmpty){
+        //   //   //   return "Invalid contact number";
+        //   //   // }else
+        //   //   if (memberController.contactList.value.isEmpty) {
+        //   //     if (value == null || value.trim().isEmpty) {
+        //   //       return "Please enter contact number";
+        //   //     }
+        //   //     if (value.length < 9) {
+        //   //       return "Invalid contact number";
+        //   //     }
+        //   //     return null;
+        //   //     // return "Please enter at least one contact number";
+        //   //   } else {
+        //   //     if (value != null && value.trim().isNotEmpty && value.length < 9) {
+        //   //       return "Invalid contact number";
+        //   //     }
+        //   //   }
+        //   //
+        //   //   return null;
+        //   // },
+        // ),
       ],
     );
   }
@@ -2861,7 +2925,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                                           children: [
                                             Expanded(
                                               child: Text(
-                                                "${(index + 1)}. $img",
+                                                "${(index + 1)}. ${img?.value}",
                                                 style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                                               ),
                                             ),
@@ -2873,7 +2937,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                                                 set(() {
                                                   loadingNotifier3.value = true;
                                                 });
-                                                await MyAppGlobals.downloadFile('${Statics.baseUrl}/Files/hindusanmelanfiles/$img', img.toString());
+                                                await MyAppGlobals.downloadFile('${Statics.baseUrl}/Files/hindusanmelanfiles/${img?.value}', (img?.value).toString());
                                                 set(() {
                                                   loadingNotifier3.value = false;
                                                 });
@@ -2900,8 +2964,13 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                                           ],
                                         ),
                                         SizedBox(height: 6),
+                                        Text(
+                                          img?.description ?? "--",
+                                          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14.5),
+                                        ),
+                                        SizedBox(height: 6),
                                         CachedNetworkImage(
-                                          imageUrl: '${Statics.baseUrl}/Files/hindusanmelanfiles/$img',
+                                          imageUrl: '${Statics.baseUrl}/Files/hindusanmelanfiles/${img?.value}',
                                           errorWidget: (context, error, stackTrace) =>
                                               SizedBox(width: MediaQuery.sizeOf(context).width, height: 120, child: Center(child: Text(Statics.getLabel("errorOccurred")))),
                                           progressIndicatorBuilder: (context, child, loadingProgress) =>
@@ -2938,7 +3007,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
               children: [
                 Expanded(
                   child: Text(
-                    img ?? "${Statics.getLabel('selectFile')}",
+                    img?.value ?? "${Statics.getLabel('selectFile')}",
                     style: TextStyle(color: Colors.black87),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -2992,7 +3061,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                     );
 
                     if (_shouldDelete) {
-                      final _result = await deleteImageDataFun(imageName: img.toString());
+                      final _result = await deleteImageDataFun(imageName: (img?.value).toString());
                       if (_result) {
                         setState(() {
                           _selectedFileNames2.remove(img);
@@ -3032,21 +3101,66 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                   builder: (ctx) => PopScope(
                     canPop: false,
                     child: AlertDialog(
-                      title: Text(Statics.getLabel('chooseAnOption')),
-                      content: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      title: Text(Statics.getLabel('AddSanmelanFiles')),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        spacing: 8,
                         children: [
-                          IconButton.filled(
-                            onPressed: () async {
-                              Navigator.of(ctx).pop(true);
+                          TextFormField(
+                            controller: txtUtsavAddPhotoDescController,
+                            textAlignVertical: TextAlignVertical.center,
+                            // textAlign: TextAlign.left,
+                            autofocus: false,
+                            readOnly: !_searched,
+                            onTap: () {
+                              if (!_searched) {
+                                Fluttertoast.showToast(
+                                  msg: "${Statics.getLabel('NagarSelectionImportant')}",
+                                );
+                              }
                             },
-                            icon: Icon(Icons.camera_alt),
+                            maxLines: 5,
+                            onChanged: (value) => setState(() {}),
+                            onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
+                            decoration: InputDecoration(
+                              hintText: Statics.getLabel("AddAdvSanmelanFilesDesc"),
+                              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                              // enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                              // focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.purple),borderRadius: BorderRadius.circular(12)),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return Statics.getLabel("AddAdvSanmelanFilesDesc");
+                              }
+                              return null;
+                            },
                           ),
-                          IconButton.filled(
-                            onPressed: () async {
-                              Navigator.of(ctx).pop(false);
-                            },
-                            icon: Icon(Icons.photo_library),
+                          SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              IconButton.filled(
+                                onPressed: () async {
+                                  if (txtUtsavPhotoDescController.text.trim().isEmpty) {
+                                    Statics.showToast(Statics.getLabel("AddAdvSanmelanFilesDesc"));
+                                    return;
+                                  }
+                                  Navigator.of(ctx).pop(true);
+                                },
+                                icon: Icon(Icons.camera_alt),
+                              ),
+                              IconButton.filled(
+                                onPressed: () async {
+                                  if (txtUtsavPhotoDescController.text.trim().isEmpty) {
+                                    Statics.showToast(Statics.getLabel("AddAdvSanmelanFilesDesc"));
+                                    return;
+                                  }
+                                  Navigator.of(ctx).pop(false);
+                                },
+                                icon: Icon(Icons.photo_library),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -3093,9 +3207,12 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                       String base64String = base64Encode(compressedBytes);
                       String base64File = "data:image/jpg;base64,$base64String";
                       selectedFilePath = base64File;
-                      final _result = await submitImageDataFun(type: "advimg", showLoader: true);
-                      _selectedFileNames2.add(_result ?? fileName);
-                      setState(() {});
+                      final _result = await submitImageDataFun(type: "advimg", showLoader: true, description: txtUtsavPhotoDescController.text.trim());
+                      _selectedFileNames2.add(TypeValueData(type: "advimg", description: txtUtsavPhotoDescController.text.trim(), value: _result ?? fileName));
+                      setState(() {
+                        txtUtsavPhotoDescController.clear();
+                        txtUtsavAddPhotoDescController.clear();
+                      });
                     }
                   }
                 } catch (e) {
@@ -3138,51 +3255,51 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
         //   style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600, color: Colors.grey.shade700, fontStyle: FontStyle.italic),
         // ),
         // SizedBox(height: 14),
-        TextFormField(
-          controller: txtUtsavAddPhotoDescController,
-          textAlignVertical: TextAlignVertical.center,
-          // textAlign: TextAlign.left,
-          autofocus: false,
-          readOnly: !_searched,
-          onTap: () {
-            if (!_searched) {
-              Fluttertoast.showToast(
-                msg: "${Statics.getLabel('NagarSelectionImportant')}",
-              );
-            }
-          },
-          maxLines: 5,
-          onChanged: (value) => setState(() {}),
-          onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
-          decoration: InputDecoration(
-            hintText: Statics.getLabel("AddAdvSanmelanFilesDesc"),
-            contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-            // enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-            // focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.purple),borderRadius: BorderRadius.circular(12)),
-          ),
-          // validator: (value) {
-          //   // if (value != null && value.trim().isNotEmpty && value.length < 9 && memberController.contactList.value.isEmpty){
-          //   //   return "Invalid contact number";
-          //   // }else
-          //   if (memberController.contactList.value.isEmpty) {
-          //     if (value == null || value.trim().isEmpty) {
-          //       return "Please enter contact number";
-          //     }
-          //     if (value.length < 9) {
-          //       return "Invalid contact number";
-          //     }
-          //     return null;
-          //     // return "Please enter at least one contact number";
-          //   } else {
-          //     if (value != null && value.trim().isNotEmpty && value.length < 9) {
-          //       return "Invalid contact number";
-          //     }
-          //   }
-          //
-          //   return null;
-          // },
-        ),
+        // TextFormField(
+        //   controller: txtUtsavAddPhotoDescController,
+        //   textAlignVertical: TextAlignVertical.center,
+        //   // textAlign: TextAlign.left,
+        //   autofocus: false,
+        //   readOnly: !_searched,
+        //   onTap: () {
+        //     if (!_searched) {
+        //       Fluttertoast.showToast(
+        //         msg: "${Statics.getLabel('NagarSelectionImportant')}",
+        //       );
+        //     }
+        //   },
+        //   maxLines: 5,
+        //   onChanged: (value) => setState(() {}),
+        //   onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
+        //   decoration: InputDecoration(
+        //     hintText: Statics.getLabel("AddAdvSanmelanFilesDesc"),
+        //     contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        //     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        //     // enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        //     // focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.purple),borderRadius: BorderRadius.circular(12)),
+        //   ),
+        //   // validator: (value) {
+        //   //   // if (value != null && value.trim().isNotEmpty && value.length < 9 && memberController.contactList.value.isEmpty){
+        //   //   //   return "Invalid contact number";
+        //   //   // }else
+        //   //   if (memberController.contactList.value.isEmpty) {
+        //   //     if (value == null || value.trim().isEmpty) {
+        //   //       return "Please enter contact number";
+        //   //     }
+        //   //     if (value.length < 9) {
+        //   //       return "Invalid contact number";
+        //   //     }
+        //   //     return null;
+        //   //     // return "Please enter at least one contact number";
+        //   //   } else {
+        //   //     if (value != null && value.trim().isNotEmpty && value.length < 9) {
+        //   //       return "Invalid contact number";
+        //   //     }
+        //   //   }
+        //   //
+        //   //   return null;
+        //   // },
+        // ),
       ],
     );
   }
