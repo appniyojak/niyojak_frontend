@@ -77,7 +77,7 @@ class DatabaseHelper {
           ' LevelID INT, DisplaySequence INT, ' +
           '   HasGraaminKshetra BOOL, ParentKshetraID INT, ParentPraantID INT, ParentMahaanagarID INT, ' +
           '   ParentVibhaagID INT, ParentBhaagID INT, ParentNagarID INT, ParentShaharID INT, ' +
-          '   ParentMandalID INT, ParentVastiID INT, ParentGraamID INT)');
+          '   ParentMandalID INT, ParentVastiID INT, ParentGraamID INT, ParentUpaNagarID INT)');
 
       db.execute(' CREATE TABLE SwayamsevakMaster(SwayamsevakID INT, FullName VARCHAR(50), ' + '   MobileNumber VARCHAR(10), LinkedGeoUnitID INT, AppPassword VARCHAR(20), PreferredLanguageID INT)');
       db.execute(' CREATE TABLE DaayitvaMaster(DaayitvaID INT, PraantID INT, DaayitvaName VARCHAR(50), DaayitvaForID INT, ' + '   IsPravaasiDaayitva BIT)');
@@ -290,7 +290,7 @@ class DatabaseHelper {
               (cnt == 1
                   ? 'INSERT INTO GeoUnitMaster(GeoUnitID, PraantID, GeoUnitName, LevelID, DisplaySequence, ' +
                       ' ParentKshetraID, ParentPraantID, ParentMahaanagarID, ParentVibhaagID, ParentBhaagID, ParentNagarID, ' +
-                      ' ParentShaharID, ParentMandalID, ParentGraamID, ParentVastiID, HasGraaminKshetra) VALUES '
+                      ' ParentShaharID, ParentMandalID, ParentGraamID, ParentVastiID, HasGraaminKshetra, ParentUpaNagarID) VALUES '
                   : ',') +
               '(' +
               data['GeoUnitID'].toString() +
@@ -324,6 +324,8 @@ class DatabaseHelper {
               data['ParentVastiID'].toString() +
               ',' +
               (data['HasGraaminKshetra'].toString() == 'true' ? '1' : '0') +
+              ',' +
+              (data['ParentUpaNagarID'].toString()) +
               ')';
         }
         cnt = cnt + 1;
@@ -773,7 +775,7 @@ class DatabaseHelper {
       // Record not found, then insert
       sqlStr = 'INSERT INTO GeoUnitMaster(GeoUnitID, PraantID, GeoUnitName, LevelID, DisplaySequence, ' +
           ' ParentKshetraID, ParentPraantID, ParentMahaanagarID, ParentVibhaagID, ParentBhaagID, ParentNagarID, ' +
-          ' ParentShaharID, ParentMandalID, ParentGraamID, ParentVastiID, HasGraaminKshetra) VALUES (' +
+          ' ParentShaharID, ParentMandalID, ParentGraamID, ParentVastiID, HasGraaminKshetra, ParentUpaNagarID) VALUES (' +
           data['GeoUnitID'].toString() +
           ',' +
           data['PraantID'].toString() +
@@ -805,6 +807,8 @@ class DatabaseHelper {
           data['ParentVastiID'].toString() +
           ',' +
           (data['HasGraaminKshetra'].toString() == 'true' ? '1' : '0') +
+          ',' +
+          (data['ParentUpaNagarID'].toString()) +
           ');';
       // }
     } else if (tableName == 'AbhiyaanGeoUnitMaster') {

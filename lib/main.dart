@@ -83,8 +83,11 @@ import 'screens/shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/add_abhiyaan_kary
 import 'screens/shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/add_abhiyaan_pramukh.dart';
 import 'screens/shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/gruh_abhiyaan_main_tab_screen.dart';
 import 'screens/shatabdi_vrutta_sankalan/hindu_sanmelan/hindu_sanmelan_form.dart';
+import 'screens/shatabdi_vrutta_sankalan/hindu_sanmelan/hindu_sanmelan_main_tab.dart';
 import 'screens/shatabdi_vrutta_sankalan/hindu_sanmelan/hindu_sanmelan_report.dart';
 import 'screens/shatabdi_vrutta_sankalan/hindu_sanmelan/search_sajjan_anya_screen.dart';
+import 'screens/shatabdi_vrutta_sankalan/sadbhav_baithak/sadbhav_baithak_main_tab.dart';
+import 'screens/shatabdi_vrutta_sankalan/sadbhav_baithak/sadbhav_creation_screen.dart';
 import 'screens/shatabdi_vrutta_sankalan/vijayadashami/vijayadashami_form_view.dart';
 import 'screens/survey_screen/vasti_sarvekshan_screen.dart';
 
@@ -323,10 +326,13 @@ class NiyojakAppState extends State<NiyojakApp> {
         GruhAbhiyaanMainTabScreen.routeName: (ctx) => GruhAbhiyaanMainTabScreen(),
         AddAbhiyaanKaryakartaScreen.routeName: (ctx) => AddAbhiyaanKaryakartaScreen(),
         AddAbhiyaanPramukhScreen.routeName: (ctx) => AddAbhiyaanPramukhScreen(),
+        HinduSanmelanMainTab.routeName: (ctx) => HinduSanmelanMainTab(),
         HinduSanmelanForm.routeName: (ctx) => HinduSanmelanForm(),
         HinduSanmelanReport.routeName: (ctx) => HinduSanmelanReport(),
         SearchSajjanAnyaScreen.routeName: (ctx) => SearchSajjanAnyaScreen(),
         VastiSarvekshanScreen.routeName: (ctx) => VastiSarvekshanScreen(),
+        SadbhavBaithakMainTab.routeName: (ctx) => SadbhavBaithakMainTab(),
+        SadbhavCreationScreen.routeName: (ctx) => SadbhavCreationScreen(),
         SearchSankalpScreen.routeName: (ctx) => ChangeNotifierProvider<SankalpScreenProvider>(create: (context) => SankalpScreenProvider(), child: SearchSankalpScreen()),
         // SearchSankalpScreen.routeName: (ctx) => ChangeNotifierProvider<SankalpScreenProvider>(create: (context) => SankalpScreenProvider(), child: SearchSankalpScreen()),
       },

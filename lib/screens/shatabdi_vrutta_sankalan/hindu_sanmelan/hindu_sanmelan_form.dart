@@ -23,7 +23,6 @@ import '../../../utils/globals.dart';
 import '../../../validation_blocks/validator.dart';
 import '../vijayadashami/add_mukhya_atithi_form.dart';
 import '../vijayadashami/add_vishesh_vyakti.dart';
-import 'hindu_sanmelan_report.dart';
 import 'search_sajjan_anya_screen.dart';
 
 class HinduSanmelanForm extends StatefulWidget {
@@ -570,19 +569,19 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "${Statics.getLabel('hinduSammelan')}",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed(HinduSanmelanReport.routeName);
-              },
-              icon: Icon(Icons.document_scanner_outlined))
-        ],
-      ),
+      // appBar: AppBar(
+      //   title: Text(
+      //     "${Statics.getLabel('hinduSammelan')}",
+      //     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      //   ),
+      //   // actions: [
+      //   //   IconButton(
+      //   //       onPressed: () {
+      //   //         Navigator.of(context).pushNamed(HinduSanmelanReport.routeName);
+      //   //       },
+      //   //       icon: Icon(Icons.document_scanner_outlined))
+      //   // ],
+      // ),
       drawer: AppDrawer(),
       body: Form(
         key: _formKey,

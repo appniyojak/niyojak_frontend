@@ -43,10 +43,14 @@ import '../providers/bals.dart';
 import './database_helper.dart';
 
 ///Production
-const String baseUrl = 'http://114.79.135.131:8014';
-const String baseUrlAPI = 'http://114.79.135.131:8014/WCFServices/NiyojakProdMobileApp.svc';
+// const String baseUrl = 'http://114.79.135.131:8014';
+// const String baseUrlAPI = 'http://114.79.135.131:8014/WCFServices/NiyojakProdMobileApp.svc';
 
 /// Development
+const String baseUrl = 'http://94.136.191.127:8074';
+const String baseUrlAPI = 'http://94.136.191.127:8074/WCFServices/NiyojakProdMobileApp.svc';
+
+///OLD Development
 // const String baseUrl = 'http://108.181.165.29:8027';
 // const String baseUrlAPI = 'http://108.181.165.29:8027/WCFServices/NiyojakProdMobileApp.svc';
 // ========================================================================================
@@ -68,8 +72,7 @@ const String urlSendMail = baseUrlAPI + '/sendmail';
 //========================================================================================
 
 const String urlUpdatedVersion = 'https://play.google.com/store/apps/details?id=com.softiq.niyojak_prod';
-const String urlIOSUpdatedVersion = 'https://apps'
-    '.apple.com/us/app/niyojak/id6451251464';
+const String urlIOSUpdatedVersion = 'https://apps.apple.com/us/app/niyojak/id6451251464';
 const String urlUserCanUseApp = baseUrlAPI + '/UserCanUseApp';
 const String urlGetSwayamsevakBasicInfoForApp = baseUrlAPI + '/GetSwayamsevakBasicInfoForApp';
 const String urlGetSwayamsevakOtherInfoForApp = baseUrlAPI + '/GetSwayamsevakOtherInfoForApp';
@@ -326,6 +329,7 @@ Map<String, dynamic> levels = {
   'BhaagLevelID': '',
   'ShaharLevelID': '',
   'NagarLevelID': '',
+  'UpaNagarLevelID': '',
   'MandalLevelID': '',
   'GraamLevelID': '',
   'VastiLevelID': '',
@@ -634,6 +638,8 @@ Future<void> populateUserDetailsMap() async {
       levels['VastiLevelID'] = lvlItem.levelID.toString();
     } else if (lvlItem.levelName == 'Shaakhaa') {
       levels['ShaakhaaLevelID'] = lvlItem.levelID.toString();
+    } else if (lvlItem.levelID == 13) {
+      levels['UpaNagarLevelID'] = lvlItem.levelID.toString();
     }
   });
 }
@@ -885,13 +891,15 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForVasti(String levelI
                               ? " AND ParentShaharID=" + parentID
                               : parentType == "Nagar"
                                   ? " AND ParentNagarID=" + parentID
-                                  : parentType == "Mandal"
-                                      ? " AND ParentMandalID=" + parentID
-                                      : parentType == "Graam"
-                                          ? " AND ParentGraamID=" + parentID
-                                          : parentType == "Vasti"
-                                              ? " AND ParentVastiID=" + parentID
-                                              : ""
+                                  : parentType == "Upnagar"
+                                      ? " AND ParentUpaNagarID=" + parentID
+                                      : parentType == "Mandal"
+                                          ? " AND ParentMandalID=" + parentID
+                                          : parentType == "Graam"
+                                              ? " AND ParentGraamID=" + parentID
+                                              : parentType == "Vasti"
+                                                  ? " AND ParentVastiID=" + parentID
+                                                  : ""
           : "") +
       (pattern == "" ? "" : " AND GeoUnitMaster.GeoUnitName LIKE \'$pattern%\'") +
       " ORDER BY GeoUnitMaster.DisplaySequence;";
@@ -998,7 +1006,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForMandal(String level
 
 //===================================================================================================================================================================
 
-Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParent(String levelID, String parentID, String parentType, String pattern, {bool isAbhiyaan = false}) async {
+Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParent(String levelID, String parentID, String parentType, String pattern, {String upnagarId = "0", bool isAbhiyaan = false}) async {
   print("isabhiyaan >>>>>>>>>>>>>>>>>>>>>> $isAbhiyaan");
   if (parentID == '') parentID = '0';
   String strSql = "Select * from ${isAbhiyaan ? "AbhiyaanGeoUnitMaster" : "GeoUnitMaster"} WHERE LevelID=" +
@@ -1016,13 +1024,15 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParent(String levelID, Strin
                               ? " AND ParentShaharID=" + parentID
                               : parentType == "Nagar"
                                   ? " AND ParentNagarID=" + parentID
-                                  : parentType == "Mandal"
-                                      ? " AND ParentMandalID=" + parentID
-                                      : parentType == "Graam"
-                                          ? " AND ParentGraamID=" + parentID
-                                          : parentType == "Vasti"
-                                              ? " AND ParentVastiID=" + parentID
-                                              : ""
+                                  : parentType == "Upnagar"
+                                      ? " AND ParentUpaNagarID=" + parentID
+                                      : parentType == "Mandal"
+                                          ? " AND ParentMandalID=" + parentID
+                                          : parentType == "Graam"
+                                              ? " AND ParentGraamID=" + parentID
+                                              : parentType == "Vasti"
+                                                  ? " AND ParentVastiID=" + parentID
+                                                  : ""
           : "") +
       (pattern == "" ? "" : " AND ${isAbhiyaan ? "AbhiyaanGeoUnitMaster" : "GeoUnitMaster"}.GeoUnitName LIKE \'$pattern%\'") +
       " ORDER BY ${isAbhiyaan ? "AbhiyaanGeoUnitMaster" : "GeoUnitMaster"}.DisplaySequence;";

@@ -197,13 +197,13 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          Statics.getLabel('hinduSammelanReport'),
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        // actions: [IconButton(onPressed: getExcelReportDataFun, icon: Icon(Icons.download))],
-      ),
+      // appBar: AppBar(
+      //   title: Text(
+      //     Statics.getLabel('hinduSammelanReport'),
+      //     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      //   ),
+      //   // actions: [IconButton(onPressed: getExcelReportDataFun, icon: Icon(Icons.download))],
+      // ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         child: Column(

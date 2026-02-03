@@ -6643,11 +6643,13 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
                 onPressed: () {
+                  print("CLICKED >>>>>>>>>>>>>>>>>>>>");
+                  log("CLICKED >>>>>>>>>>>>>>>>>>>>");
                   if (selectedUpasnaSthal?.isOther == 1 && anyaUpasnaSthalNameController.text == "") {
                     Statics.showToast("${Statics.getLabel('otherInfoValidation')}");
                   } else {
-                    if (gavatilMumbaikarDoorbhashConroller.text.length != 10) {
-                      Statics.showToast("${Statics.getLabel('mobileNumberLimit')}");
+                    if (upasnaSthalCountController.text.isEmpty) {
+                      Statics.showToast("${Statics.getLabel('otherInfoValidation')}");
                       return;
                     }
                     Vastisarupaasana newData = Vastisarupaasana(

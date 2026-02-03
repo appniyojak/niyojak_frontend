@@ -365,6 +365,8 @@ class LogIn {
       if (appDir.existsSync()) {
         appDir.deleteSync(recursive: true);
       }
+      // await pref.setBool("isRead", true);
+      // await pref.setString("appVer", "3.6.8");
     } catch (e) {
       print("Error during logOut: $e");
     }

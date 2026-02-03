@@ -1828,6 +1828,10 @@ Map<String, String> resEnglish = {
   'nivasasathiupalabdha': 'Residence Available',
   'nivaaskshamata': 'Residencial Capacity',
   'dhaarmiknetritva': 'Dharmik Netrutwa',
+  ////////////////////////////////////// Sadbhav Baithak Block //////////////////////////////////////
+  'selectKaryakramLevel': "Select Program Level",
+  'railwayStation': "Railway Station",
+  'addName': "Enter Name",
 };
 
 ///1,584
@@ -3111,7 +3115,7 @@ Map<String, String> resMarathi = {
   'hinduVeerCount': 'हिंदु वीर संख्या',
   'fireBrigateCenterCount': 'अग्निशमन दल केंद्र संख्या',
   'policeStationCount': 'पोलीस ठाणे / चौकी संख्या',
-  'selectStar': 'स्तर  निवडा',
+  'selectStar': 'स्तर निवडा',
   'vastiPramukhName': 'वस्ती/ग्राम प्रमुखाचे नाव',
   'vastiSamitiSadasyaCount': 'वस्ती समितीत किती सदस्य आहेत',
   'vastitSewaVastiCount': 'वस्तीत सेवा वस्त्यां (किती ?)',
@@ -3664,6 +3668,10 @@ Map<String, String> resMarathi = {
   'nivasasathiupalabdha': 'निवासासाठी उपलब्ध',
   'nivaaskshamata': 'निवास क्षमता',
   'dhaarmiknetritva': 'धार्मिक नेतृत्व',
+  ////////////////////////////////////// Sadbhav Baithak Block //////////////////////////////////////
+  'selectKaryakramLevel': "कार्यक्रम स्तर निवडा",
+  'railwayStation': "रेल्वे स्थानक",
+  'addName': "नाव प्रविष्ट करा",
 };
 
 ///1,583
@@ -5405,7 +5413,7 @@ Map<String, String> resHindi = {
   'addAbhiyaanKaryakarta': "अभियान कार्यकर्ता को जोड़ना है क्या",
   'gruhVruttaQues2': "चुने हूँए  कार्यकता को जोड़ना है क्या ?",
   'gruhVruttaQues3': "संस्था का काम किस क्षेत्र मे है ",
-  'addAbhiyaanKaryakartaValidation1': "पूरा नाम  प्रविष्ट करें ",
+  'addAbhiyaanKaryakartaValidation1': "पूरा नाम प्रविष्ट करें ",
   'addAbhiyaanKaryakartaValidation2': "मोबाइल क्रमांक प्रविष्ट करें ",
   'addAbhiyaanKaryakartaValidation3': "अन्य संस्था प्रविष्ट करें ",
   'addAbhiyaanKaryakartaValidation4': "संस्था का नाम प्रविष्ट करें",
@@ -5495,4 +5503,8 @@ Map<String, String> resHindi = {
   'nivasasathiupalabdha': 'निवास के लिए उपलब्ध',
   'nivaaskshamata': 'निवास क्षमता',
   'dhaarmiknetritva': 'धार्मिक नेतृत्व',
+  ////////////////////////////////////// Sadbhav Baithak Block //////////////////////////////////////
+  'selectKaryakramLevel': "कार्यक्रम स्तर चुने",
+  'railwayStation': "रेलवे स्थानक",
+  'addName': "नाम प्रविष्ट करें",
 };

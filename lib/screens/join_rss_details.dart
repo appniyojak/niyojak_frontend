@@ -286,13 +286,13 @@ class _JoinRSSDetailsState extends State<JoinRSSDetails> {
     _emailBodyCntrl.dispose();
   }
 
-  Future<void> _submit() async {
+  _submit() async {
     print("sub 1");
     if (!_formKey.currentState!.validate()) {
       print("sub 2");
 
       // Invalid!
-      return;
+      return false;
     }
     print("sub 3");
 
@@ -819,6 +819,7 @@ class _JoinRSSDetailsState extends State<JoinRSSDetails> {
                               value: _bhaagValue == "" ? null : _bhaagValue,
                               items: _bhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                               validator: (value) {
+                                print("ahbc acbas cjb cjacjka >>>>>>>");
                                 if (value == null || value.isEmpty) return (Statics.getLabel('SelectBhaagValidationMessage'));
                                 return null;
                               },
@@ -949,6 +950,7 @@ class _JoinRSSDetailsState extends State<JoinRSSDetails> {
                         onPressed: () async {
                           print("JKdfhskff");
                           await _submit().then((value) {
+                            if (value != null && !value) return;
                             Navigator.of(context).pop();
                           });
                         },
