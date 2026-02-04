@@ -1832,6 +1832,15 @@ Map<String, String> resEnglish = {
   'selectKaryakramLevel': "Select Program Level",
   'railwayStation': "Railway Station",
   'addName': "Enter Name",
+  'sadbhavReportTable0': "Level",
+  'sadbhavReportTable1': "Baithak Count",
+  'sadbhavReportTable2': "ज्ञाति Representation",
+  'sadbhavReportTable3': "Expected Male Count",
+  'sadbhavReportTable4': "Present Male",
+  'sadbhavReportTable5': "Expected Female Count",
+  'sadbhavReportTable6': "Present Female",
+  'sadbhavReportTable7': "Total Expected",
+  'sadbhavReportTable8': "Total Present",
 };
 
 ///1,584
@@ -3672,6 +3681,15 @@ Map<String, String> resMarathi = {
   'selectKaryakramLevel': "कार्यक्रम स्तर निवडा",
   'railwayStation': "रेल्वे स्थानक",
   'addName': "नाव प्रविष्ट करा",
+  'sadbhavReportTable0': "स्तर",
+  'sadbhavReportTable1': "बैठक संख्या",
+  'sadbhavReportTable2': "ज्ञाति प्रतिनिधित्व",
+  'sadbhavReportTable3': "अपेक्षित पुरुष यादी",
+  'sadbhavReportTable4': "उपस्थित पुरुष",
+  'sadbhavReportTable5': "अपेक्षित महिला यादी",
+  'sadbhavReportTable6': "उपस्थित महिला",
+  'sadbhavReportTable7': "एकूण अपेक्षित",
+  'sadbhavReportTable8': "एकूण उपस्थित",
 };
 
 ///1,583
@@ -5507,4 +5525,13 @@ Map<String, String> resHindi = {
   'selectKaryakramLevel': "कार्यक्रम स्तर चुने",
   'railwayStation': "रेलवे स्थानक",
   'addName': "नाम प्रविष्ट करें",
+  'sadbhavReportTable0': "स्तर",
+  'sadbhavReportTable1': "बैठक संख्या",
+  'sadbhavReportTable2': "ज्ञाति प्रतिनिधित्व",
+  'sadbhavReportTable3': "अपेक्षित पुरुष यादी",
+  'sadbhavReportTable4': "उपस्थित पुरुष",
+  'sadbhavReportTable5': "अपेक्षित महिला यादी",
+  'sadbhavReportTable6': "उपस्थित महिला",
+  'sadbhavReportTable7': "कुल अपेक्षित",
+  'sadbhavReportTable8': "कुल उपस्थित",
 };

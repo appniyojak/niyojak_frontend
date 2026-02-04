@@ -855,6 +855,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevel(String levelID) async {
       data['ParentMandalID'],
       data['ParentVastiID'],
       data['ParentGraamID'],
+      data['ParentUpaNagarID'],
     );
     _geounitList.add(info);
   });
@@ -928,6 +929,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForVasti(String levelI
       data['ParentMandalID'],
       data['ParentVastiID'],
       data['ParentGraamID'],
+      data['ParentUpaNagarID'],
     );
     _geounitList.add(info);
   });
@@ -963,13 +965,15 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForMandal(String level
                               ? " AND ParentShaharID=" + parentID
                               : parentType == "Nagar"
                                   ? " AND ParentNagarID=" + parentID
-                                  : parentType == "Mandal"
-                                      ? " AND ParentMandalID=" + parentID
-                                      : parentType == "Graam"
-                                          ? " AND ParentGraamID=" + parentID
-                                          : parentType == "Vasti"
-                                              ? " AND ParentVastiID=" + parentID
-                                              : ""
+                                  : parentType == "Upnagar"
+                                      ? " AND ParentUpaNagarID=" + parentID
+                                      : parentType == "Mandal"
+                                          ? " AND ParentMandalID=" + parentID
+                                          : parentType == "Graam"
+                                              ? " AND ParentGraamID=" + parentID
+                                              : parentType == "Vasti"
+                                                  ? " AND ParentVastiID=" + parentID
+                                                  : ""
           : "") +
       (pattern == "" ? "" : " AND GeoUnitMaster.GeoUnitName LIKE \'$pattern%\'") +
       " ORDER BY GeoUnitMaster.DisplaySequence;";
@@ -998,6 +1002,80 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForMandal(String level
       data['ParentMandalID'],
       data['ParentVastiID'],
       data['ParentGraamID'],
+      data['ParentUpaNagarID'],
+    );
+    _geounitList.add(info);
+  });
+  return _geounitList;
+}
+
+Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForUpnagar(String levelID, String parentID, String parentType, String pattern) async {
+  String? add = '';
+  if (levelID == "9") {
+    // add = "AND GeoUnitID in  (select ParentMahaanagarID from GeoUnitMaster where LevelID=2)";
+  } else if (levelID == "8") {
+    add = " AND  GeoUnitID in  (select ParentVibhaagID from GeoUnitMaster where LevelID=13)";
+  } else if (levelID == "7") {
+    add = " AND GeoUnitID in  (select ParentBhaagID from GeoUnitMaster where LevelID=13)";
+  } else if (levelID == "6") {
+    add = " AND GeoUnitID in  (select ParentNagarID from GeoUnitMaster where LevelID=13)";
+  }
+
+  if (parentID == '') parentID = '0';
+  String strSql = "Select * from GeoUnitMaster WHERE LevelID=" +
+      levelID +
+      add +
+      (parentType != ""
+          ? parentType == "Praant"
+              ? " AND ParentPraantID=" + parentID
+              : parentType == "Mahaanagar"
+                  ? " AND ParentMahaanagarID=" + parentID
+                  : parentType == "Vibhaag"
+                      ? " AND COALESCE(ParentVibhaagID,0)=" + parentID
+                      : parentType == "Bhaag"
+                          ? " AND ParentBhaagID=" + parentID
+                          : parentType == "Shahar"
+                              ? " AND ParentShaharID=" + parentID
+                              : parentType == "Nagar"
+                                  ? " AND ParentNagarID=" + parentID
+                                  : parentType == "Upnagar"
+                                      ? " AND ParentUpaNagarID=" + parentID
+                                      : parentType == "Mandal"
+                                          ? " AND ParentMandalID=" + parentID
+                                          : parentType == "Graam"
+                                              ? " AND ParentGraamID=" + parentID
+                                              : parentType == "Vasti"
+                                                  ? " AND ParentVastiID=" + parentID
+                                                  : ""
+          : "") +
+      (pattern == "" ? "" : " AND GeoUnitMaster.GeoUnitName LIKE \'$pattern%\'") +
+      " ORDER BY GeoUnitMaster.DisplaySequence;";
+  // print("strSql ==> $strSql");
+  var result = await DatabaseHelper.getData(strSql);
+
+  List<GeoUnitMasterBAL> _geounitList = <GeoUnitMasterBAL>[];
+  result.forEach((data) {
+    var info = GeoUnitMasterBAL(
+      data['GeoUnitID'],
+      data['PraantID'],
+      data['LevelID'],
+      data['GeoUnitName'],
+      "",
+      "",
+      data['GeoUnitName'],
+      data['DisplaySequence'],
+      null,
+      data['ParentKshetraID'],
+      data['ParentPraantID'],
+      data['ParentMahaanagarID'],
+      data['ParentVibhaagID'],
+      data['ParentBhaagID'],
+      data['ParentNagarID'],
+      data['ParentShaharID'],
+      data['ParentMandalID'],
+      data['ParentVastiID'],
+      data['ParentGraamID'],
+      data['ParentUpaNagarID'],
     );
     _geounitList.add(info);
   });
@@ -1006,7 +1084,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForMandal(String level
 
 //===================================================================================================================================================================
 
-Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParent(String levelID, String parentID, String parentType, String pattern, {String upnagarId = "0", bool isAbhiyaan = false}) async {
+Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParent(String levelID, String parentID, String parentType, String pattern, {bool isAbhiyaan = false}) async {
   print("isabhiyaan >>>>>>>>>>>>>>>>>>>>>> $isAbhiyaan");
   if (parentID == '') parentID = '0';
   String strSql = "Select * from ${isAbhiyaan ? "AbhiyaanGeoUnitMaster" : "GeoUnitMaster"} WHERE LevelID=" +
@@ -1061,6 +1139,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParent(String levelID, Strin
       data['ParentMandalID'],
       data['ParentVastiID'],
       data['ParentGraamID'],
+      data['ParentUpaNagarID'],
     );
     _geounitList.add(info);
   });
@@ -1099,6 +1178,7 @@ Future<GeoUnitMasterBAL?> getGeoUnitsByID(String geoUnitID) async {
       result[0]['ParentMandalID'],
       result[0]['ParentVastiID'],
       result[0]['ParentGraamID'],
+      result[0]['ParentUpaNagarID'],
     );
     return _geounit;
   } else {
@@ -4181,6 +4261,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitMasterForApp(
       data['ParentMandalID'],
       data['ParentVastiID'],
       data['ParentGraamID'],
+      data['ParentUpaNagarID'],
     );
     geoUnitList.add(info);
   });

@@ -450,6 +450,7 @@ class GeoUnitMasterBAL {
   int? parentMandalID;
   int? parentVastiID;
   int? parentGraamID;
+  int? parentUpaNagarID;
 
   // bool? canEdit;
 
@@ -474,6 +475,7 @@ class GeoUnitMasterBAL {
     this.parentMandalID,
     this.parentVastiID,
     this.parentGraamID,
+    this.parentUpaNagarID,
     // this.canEdit,
   );
 
@@ -498,6 +500,7 @@ class GeoUnitMasterBAL {
     parentMandalID = map["ParentMandalID"];
     parentVastiID = map["ParentVastiID"];
     parentGraamID = map["ParentGraamID"];
+    parentUpaNagarID = map["parentUpaNagarID"];
     // canEdit = map["canEdit"];
   }
 
@@ -520,6 +523,7 @@ class GeoUnitMasterBAL {
     data['ParentVastiID'] = this.parentVastiID;
     data['ParentVibhaagID'] = this.parentVibhaagID;
     data['PraantID'] = this.praantID;
+    data['parentUpaNagarID'] = this.parentUpaNagarID;
     // data['canEdit'] = this.canEdit;
     return data;
   }

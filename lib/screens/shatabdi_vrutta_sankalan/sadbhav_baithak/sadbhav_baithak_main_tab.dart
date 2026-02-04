@@ -9,6 +9,7 @@ import '../../../widgets/app_drawer.dart';
 import 'sadbhav_creation_screen.dart';
 import 'sadbhav_form.dart';
 import 'sadbhav_report.dart';
+import 'sadbhav_search_vrutta.dart';
 
 class SadbhavBaithakMainTab extends StatefulWidget {
   static const routeName = '/sadbhav-baithak-main-tab-screen';
@@ -102,7 +103,7 @@ class _SadbhavBaithakMainTabState extends State<SadbhavBaithakMainTab> with Sing
             controller: _tabController,
             physics: NeverScrollableScrollPhysics(),
             children: <Widget>[
-              SadbhavFormTab(),
+              SadbhavSearchVruttaTab(),
               SadbhavReportTab(),
             ],
           ),
