@@ -1,7 +1,11 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../helpers/static_data.dart' as Statics;
+import '../../../models/response_model/sadbhav_baithak_resp_model.dart';
 import '../../../providers/bals.dart';
 
 class SadbhavCreationScreen extends StatefulWidget {
@@ -57,21 +61,167 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
   String? _selectedGeoUnitId;
   List<String> _selectedNagarIds = [];
 
-  List<String> karyakramLevelsList = [
-    Statics.getLabel("Bhaag"),
-    Statics.getLabel("railwayStation"),
-    Statics.getLabel("Shahar"),
-    Statics.getLabel("other"),
-    Statics.getLabel("Nagar"),
-    Statics.getLabel("upnagarUpkhanda"),
-    Statics.getLabel("Mandal"),
+  int? baithakId;
+  bool _isViewOnly = false;
+
+  List<Map<String, dynamic>> karyakramLevelsList = [
+    {"${Statics.getLabel("Bhaag")}": 1},
+    {"${Statics.getLabel("railwayStation")}": 2},
+    {"${Statics.getLabel("Shahar")}": 3},
+    {"${Statics.getLabel("other")}": 4},
+    {"${Statics.getLabel("Nagar")}": 5},
+    {"${Statics.getLabel("upnagarUpkhanda")}": 6},
+    {"${Statics.getLabel("Mandal")}": 7},
   ];
-  String? _selectedKaryakramLevel;
+  int? _selectedKaryakramLevelId;
+
+  List<Nagardata> nagarList = [];
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) => populateDropdown());
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => getData());
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    _isViewOnly = args?["viewOnly"] ?? false;
+    baithakId = args?["id"] ?? 0;
+    // getData();
+    // viewType = args!.viewType;
+  }
+
+  getData() async {
+    print("$_isViewOnly getData called >>>>>>>>>>>>>>>>> ${_selectedKaryakramLevelId != null && dateController.text.isNotEmpty && !_isViewOnly}");
+    if (baithakId == null || baithakId == 0) return;
+    var formData = {
+      "ids": baithakId,
+      "GeoUnitID": int.parse(Statics.userDetails['userID']),
+    };
+
+    final _baithak = await Statics.GetSadbhavBaithakByIdData(context: context, inputJson: formData, showLoader: true);
+    print("getData api HiTttttt >>>>>>>>>>>>>>>>>");
+
+    final _master = _baithak?.masterdata?.first;
+
+    if (_baithak != null && _master != null) {
+      setState(() {
+        _searched = true;
+        _isExpanded = false;
+        dateController.text = _master.programdate ?? "";
+        txtGivenGroupNameController.text = _master.name ?? "";
+        _selectedKaryakramLevelId = _master.shatapdistharlevelid;
+      });
+
+      if (_master.parentMahaanagarID != null && _master.parentMahaanagarID != 0) {
+        _linkedMahaanagarValue = _master.parentMahaanagarID.toString();
+        await populatelinkedVibhaagDropdown(_master.parentMahaanagarID.toString());
+      }
+      if (_master.parentVibhaagID != null && _master.parentVibhaagID != 0) {
+        await populatelinkedBhaagDropdown(_master.parentVibhaagID.toString());
+        _linkedVibhaagValue = _master.parentVibhaagID.toString();
+      }
+      if (_master.parentBhaagID != null && _master.parentBhaagID != 0) {
+        await populatelinkedNagarDropdown(_master.parentBhaagID.toString());
+        _linkedbhaagValue = _master.parentBhaagID.toString();
+      }
+      if (_master.parentNagarID != null && _master.parentNagarID != 0) {
+        await populatelinkedUpnagarDropdown(_master.parentNagarID.toString());
+        await populatelinkedMandalDropdown('Nagar', _master.parentNagarID.toString());
+        _linkednagarValue = _master.parentNagarID.toString();
+      }
+      if (_master.parentUpaNagarID != null && _master.parentUpaNagarID != 0) {
+        await populatelinkedMandalDropdown('Upnagar', _master.parentUpaNagarID.toString());
+        _linkedupnagarValue = _master.parentUpaNagarID.toString();
+      }
+      if (_master.parentMandalID != null && _master.parentMandalID != 0) {
+        _linkedmandalValue = _master.parentMandalID.toString();
+      }
+      if (_master.geounitid != null && _master.geounitid != 0) {
+        if (_linkedbhaagValue == null || _linkedbhaagValue!.isEmpty) _linkedbhaagValue = _master.geounitid.toString();
+        if (_linkednagarValue == null || _linkedbhaagValue!.isEmpty) _linkednagarValue = _master.geounitid.toString();
+        if (_linkedupnagarValue == null || _linkedbhaagValue!.isEmpty) _linkedupnagarValue = _master.geounitid.toString();
+        if (_linkedmandalValue == null || _linkedbhaagValue!.isEmpty) _linkedmandalValue = _master.geounitid.toString();
+        _selectedGeoUnitId = _master.geounitid.toString();
+      }
+      nagarList = _baithak.nagardata ?? [];
+      setState(() {});
+      if (nagarList.isNotEmpty) _selectedNagarIds.addAll(nagarList.where((e) => e.chkstatus == 1 || e.chkstatus == 2).map((e) => e.geoUnitID.toString()).toList());
+      setState(() {});
+    }
+  }
+
+  checkIfExistsFun() async {
+    if (([2, 3, 4].contains(_selectedKaryakramLevelId)) && txtGivenGroupNameController.text.isEmpty) {
+      Statics.showToast("name message");
+      return;
+    }
+    FocusManager.instance.primaryFocus?.unfocus();
+    if (!((([2, 3, 4].contains(_selectedKaryakramLevelId)) && _selctedLevel == Statics.getLabel('Bhaag')) ||
+        _selctedLevel == karyakramLevelsList.firstWhere((e) => e.values.first == _selectedKaryakramLevelId).keys.first)) {
+      Statics.showToast("message");
+      return;
+    }
+
+    var formData = {
+      "date": dateController.text,
+      "stharid": _selectedKaryakramLevelId,
+      "geounitid": _selectedGeoUnitId,
+      "id": baithakId ?? 0,
+      "appuserid": int.parse(Statics.userDetails['userID']),
+    };
+
+    final _existData = await Statics.CheckBaithakExistsData(context: context, inputJson: formData, showLoader: true);
+
+    if (_existData == null || _existData.status == "404") {
+      Statics.showToast("Data already exists");
+      return;
+    }
+    setState(() {
+      _searched = true;
+      _isExpanded = false;
+      nagarList = _existData.nagardata ?? [];
+    });
+
+    if ([1, 5, 6, 7].contains(_selectedKaryakramLevelId)) await createSadbhavBaithakFun();
+  }
+
+  createSadbhavBaithakFun() async {
+    Map<String, dynamic> formData = {
+      "date": dateController.text,
+      "name": txtGivenGroupNameController.text.trim(),
+      "nagarids": _selectedNagarIds.isEmpty ? "" : _selectedNagarIds.join(", "),
+      "pkid": baithakId ?? 0,
+      "levelid": _selectedKaryakramLevelId,
+      "geounitid": _selectedGeoUnitId,
+      "appuserid": int.parse(Statics.userDetails['userID']),
+    };
+
+    String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
+    log("Form Data (JSON):\n$formattedJson");
+    final _res = await Statics.CreateUpdateSadbhavBaithakData(context: context, inputJson: formData, showLoader: true);
+    if (_res) {
+      Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+    }
+    // getFormData();
+  }
+
+  clearForm() async {
+    setState(() {
+      _searched = false;
+      _selectedGeoUnitId = null;
+      nagarList = [];
+      _selectedKaryakramLevelId = null;
+      dateController.clear();
+      txtGivenGroupNameController.clear();
+      _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedvastiValue = _linkedgraamValue = null;
+      _linkedVibhaagValue = _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
+    });
+    // clearForm();
+    await populateDropdown();
   }
 
   //////////////////////////////////////////////////////////////////////////////////////
@@ -81,6 +231,7 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
       _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedupnagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
       _linkedMahaanagar = _linkedVibhaag = _linkedbhaag = _linkednagar = _linkedupnagar = _linkedmandal = null;
       _selctedLevelName = _selectedGeoUnitId = null;
+      nagarList = [];
       _selctedLevel = "praant";
     });
     await populatelinkedMahaanagarDropdown();
@@ -89,6 +240,7 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
 
   Future<List<GeoUnitMasterBAL>> populatelinkedMahaanagarDropdown() async {
     _linkedVibhaagValue = _linkedbhaagValue = _linkednagarValue = _linkedupnagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    nagarList = [];
     List<GeoUnitMasterBAL> data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MahaanagarLevelID'].toString(), '', '', '');
     setState(() {
       _linkedMahaanagar = data;
@@ -99,11 +251,12 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
   Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
     _linkedbhaagValue = _linkednagarValue = _linkedupnagarValue = _linkedupnagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedbhaagName = _linkednagarName = _linkedupnagar = _linkedupnagar = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
+    nagarList = [];
     print("populatelinkedVibhaagDropdown $mahaanagarIDStr");
     var data;
-    if (_selectedKaryakramLevel == Statics.getLabel("Mandal")) {
+    if (_selectedKaryakramLevelId == 7) {
       data = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '');
-    } else if (_selectedKaryakramLevel == Statics.getLabel("upnagarUpkhanda")) {
+    } else if (_selectedKaryakramLevelId == 6) {
       data = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '');
     } else {
       data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '');
@@ -118,10 +271,11 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
     _linkedbhaagValue = _linkednagarValue = _linkedupnagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedbhaagName = _linkednagarName = _linkedupnagar = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
     _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = [];
+    nagarList = [];
     var data;
-    if (_selectedKaryakramLevel == Statics.getLabel("Mandal")) {
+    if (_selectedKaryakramLevelId == 7) {
       data = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
-    } else if (_selectedKaryakramLevel == Statics.getLabel("upnagarUpkhanda")) {
+    } else if (_selectedKaryakramLevelId == 6) {
       data = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
     } else {
       data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
@@ -135,10 +289,11 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
   Future<List<GeoUnitMasterBAL>> populatelinkedShaharDropdown(String bhaagIDStr) async {
     _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
+    nagarList = [];
     var shDD;
-    if (_selectedKaryakramLevel == Statics.getLabel("Mandal")) {
+    if (_selectedKaryakramLevelId == 7) {
       shDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', '');
-    } else if (_selectedKaryakramLevel == Statics.getLabel("upnagarUpkhanda")) {
+    } else if (_selectedKaryakramLevelId == 6) {
       shDD = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', '');
     } else {
       shDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', '');
@@ -155,13 +310,14 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
     _linkednagarValue = _linkedupnagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkednagarName = _linkedupnagar = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
     _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
+    nagarList = [];
     print("print LevelID > ${Statics.userDetails["LevelID"]}");
-    if (_selectedKaryakramLevel == Statics.getLabel("Mandal")) {
+    if (_selectedKaryakramLevelId == 7) {
       ngDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
       setState(() {
         _linkednagar = (ngDD.length > 0 ? ngDD : null);
       });
-    } else if (_selectedKaryakramLevel == Statics.getLabel("upnagarUpkhanda")) {
+    } else if (_selectedKaryakramLevelId == 6) {
       ngDD = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
       setState(() {
         _linkednagar = (ngDD.length > 0 ? ngDD : null);
@@ -179,10 +335,11 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
     _linkedupnagarValue = _linkedmandalValue = _linkedgraamValue = null;
     _linkedupnagarName = _linkedmandalName = _linkedgraamName = null;
     _linkedupnagar = _linkedmandal = _linkedgraam = null;
+    nagarList = [];
     var mnDD;
-    if (_selectedKaryakramLevel == Statics.getLabel("Mandal")) {
+    if (_selectedKaryakramLevelId == 7) {
       mnDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
-    } else if (_selectedKaryakramLevel == Statics.getLabel("upnagarUpkhanda")) {
+    } else if (_selectedKaryakramLevelId == 6) {
       mnDD = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
     } else {
       mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
@@ -197,10 +354,11 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
     _linkedmandalValue = _linkedgraamValue = null;
     _linkedmandalName = _linkedgraamName = null;
     _linkedmandal = _linkedgraam = null;
+    nagarList = [];
     var mnDD;
-    if (_selectedKaryakramLevel == Statics.getLabel("Mandal")) {
+    if (_selectedKaryakramLevelId == 7) {
       mnDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, parentType, '');
-    } else if (_selectedKaryakramLevel == Statics.getLabel("upnagarUpkhanda")) {
+    } else if (_selectedKaryakramLevelId == 6) {
       mnDD = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, parentType, '');
     } else {
       mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, parentType, '');
@@ -267,22 +425,24 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
                         controller: dateController,
                         style: TextStyle(fontSize: 14),
                         autofocus: false,
-                        onTap: () async {
-                          DateTime? date = await showDatePicker(
-                            context: context,
-                            initialDate: dateController.text.isEmpty ? DateTime.now() : DateFormat("dd/MM/yyyy").parse(dateController.text),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2100),
-                          );
-                          if (date != null) {
-                            dateController.text = DateFormat("dd/MM/yyyy").format(date);
+                        onTap: _isViewOnly
+                            ? null
+                            : () async {
+                                DateTime? date = await showDatePicker(
+                                  context: context,
+                                  initialDate: dateController.text.isEmpty ? DateTime.now() : DateFormat("dd/MM/yyyy").parse(dateController.text),
+                                  firstDate: DateTime(2000),
+                                  lastDate: DateTime(2100),
+                                );
+                                if (date != null) {
+                                  dateController.text = DateFormat("dd/MM/yyyy").format(date);
 
-                            await populateDropdown();
-                            setState(() {
-                              _searched = false;
-                            });
-                          }
-                        },
+                                  await populateDropdown();
+                                  setState(() {
+                                    _searched = false;
+                                  });
+                                }
+                              },
                         readOnly: true,
                         decoration: InputDecoration(
                             isDense: true,
@@ -299,22 +459,24 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
               SizedBox(height: 12),
               _buildDropdownField(
                 label: Statics.getLabel('selectStar'),
-                value: _selectedKaryakramLevel,
+                value: _selectedKaryakramLevelId == null ? null : _selectedKaryakramLevelId.toString(),
                 items: karyakramLevelsList
                     .map((bg) => DropdownMenuItem(
-                          value: bg.toString(),
-                          child: Text(bg),
+                          value: bg.values.first.toString(),
+                          child: Text(bg.keys.first),
                         ))
                     .toList(),
                 onChanged: (value) {
                   populateDropdown();
                   _searched = false;
-                  setState(() => _selectedKaryakramLevel = value);
+                  dateController.clear();
+                  setState(() => _selectedKaryakramLevelId = int.tryParse(value.toString()));
+                  nagarList = [];
                 },
                 isDisabled: false,
               ),
               SizedBox(height: 18),
-              if ([Statics.getLabel("railwayStation"), Statics.getLabel("Shahar"), Statics.getLabel("other")].contains(_selectedKaryakramLevel))
+              if ([2, 3, 4].contains(_selectedKaryakramLevelId))
                 Row(
                   children: [
                     Expanded(
@@ -331,6 +493,7 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
                         controller: txtGivenGroupNameController,
                         style: TextStyle(fontSize: 14),
                         autofocus: false,
+                        readOnly: _isViewOnly,
                         decoration: InputDecoration(
                             isDense: true,
                             hintText: Statics.getLabel("addName"),
@@ -343,10 +506,11 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
                   ],
                 ),
               SizedBox(height: 18),
-              if (_selectedKaryakramLevel != null) nagarDropdown(),
+              if (_selectedKaryakramLevelId != null) nagarDropdown(),
               SizedBox(height: 18),
-              if ((([Statics.getLabel("railwayStation"), Statics.getLabel("Shahar"), Statics.getLabel("other")].contains(_selectedKaryakramLevel)) && _selctedLevel == Statics.getLabel('Bhaag')) ||
-                  _selctedLevel == _selectedKaryakramLevel)
+              // if ((([2, 3, 4].contains(_selectedKaryakramLevelId)) && _selctedLevel == Statics.getLabel('Bhaag')) || _selctedLevel == _selectedKaryakramLevel)
+
+              if (_selectedKaryakramLevelId != null && dateController.text.isNotEmpty && !_isViewOnly)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -359,84 +523,97 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
                       ),
                       color: Theme.of(context).primaryColor,
                       textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                      onPressed: () async {
-                        setState(() {
-                          _searched = true;
-                          _isExpanded = false;
-                        });
-                      },
+                      onPressed: checkIfExistsFun,
                       child: Text(
                         "${Statics.getLabel('search')}",
                         style: TextStyle(fontSize: 16),
                       ),
                     ),
-                    MaterialButton(
-                        onPressed: () async {
-                          setState(() {
-                            _searched = false;
-                            _selectedGeoUnitId = null;
-                            _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedvastiValue = _linkedgraamValue = null;
-                            _linkedVibhaagValue = _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
-                            _selctedLevel = "praant";
-                          });
-                          // clearForm();
-                          await populateDropdown();
-                        },
-                        child: Text(Statics.getLabel('clear'))),
+                    MaterialButton(onPressed: clearForm, child: Text(Statics.getLabel('clear'))),
                   ],
                 ),
               SizedBox(height: 18),
-              if (_searched) ...[
+              if (_searched && nagarList.isNotEmpty) ...[
                 Wrap(
                   spacing: 12,
                   runSpacing: 18,
                   crossAxisAlignment: WrapCrossAlignment.center,
-                  children: List.generate(
-                    23,
-                    (index) => GestureDetector(
-                      onTap: () {
-                        if (_selectedNagarIds.contains("Nagar ${index + 1}"))
-                          _selectedNagarIds.removeWhere((e) => e == "Nagar ${index + 1}");
-                        else
-                          _selectedNagarIds.add("Nagar ${index + 1}");
-                        setState(() {});
-                      },
-                      child: SizedBox(
-                        width: MediaQuery.sizeOf(context).width * 0.4,
-                        child: Row(
-                          spacing: 8,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              _selectedNagarIds.contains("Nagar ${index + 1}") ? Icons.check_box_rounded : Icons.check_box_outline_blank_rounded,
-                              color: _selectedNagarIds.contains("Nagar ${index + 1}") ? Colors.purple : Colors.black,
+                  children: nagarList
+                      .map(
+                        (nagar) => IgnorePointer(
+                          ignoring: _isViewOnly,
+                          child: SizedBox(
+                            width: MediaQuery.sizeOf(context).width * 0.4,
+                            child: CheckboxListTile(
+                              value: nagar.chkstatus != 0,
+                              onChanged: nagar.chkstatus == 2
+                                  ? null
+                                  : (value) {
+                                      if (_selectedNagarIds.contains(nagar.geoUnitID.toString())) {
+                                        _selectedNagarIds.removeWhere((e) => e.toString() == nagar.geoUnitID.toString());
+                                        nagar.chkstatus = 0;
+                                      } else {
+                                        _selectedNagarIds.add(nagar.geoUnitID.toString());
+                                        nagar.chkstatus = 1;
+                                      }
+                                      setState(() {
+                                        print(nagar.chkstatus);
+                                        print(_selectedNagarIds);
+                                      });
+                                    },
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              controlAffinity: ListTileControlAffinity.leading,
+                              dense: true,
+                              title: Text(
+                                (nagar.geoname ?? "--"),
+                                style: TextStyle(fontSize: 14),
+                              ),
                             ),
-                            Expanded(child: Text("Nagar ${index + 1}")),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
+                        // (nagar) => GestureDetector(
+                        //   onTap: () {
+                        //     if (_selectedNagarIds.contains(nagar.geoUnitID.toString()))
+                        //       _selectedNagarIds.removeWhere((e) => e.toString() == nagar.geoUnitID.toString());
+                        //     else
+                        //       _selectedNagarIds.add(nagar.geoUnitID.toString());
+                        //     setState(() {});
+                        //   },
+                        //   child: SizedBox(
+                        //     width: MediaQuery.sizeOf(context).width * 0.4,
+                        //     child: Row(
+                        //       spacing: 8,
+                        //       mainAxisSize: MainAxisSize.min,
+                        //       children: [
+                        //         Icon(
+                        //           _selectedNagarIds.contains(nagar.geoUnitID.toString()) ? Icons.check_box_rounded : Icons.check_box_outline_blank_rounded,
+                        //           color: _selectedNagarIds.contains(nagar.geoUnitID.toString()) ? Colors.purple : Colors.black,
+                        //         ),
+                        //         Expanded(child: Text(nagar.geoname ?? "--")),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ),
+                      )
+                      .toList(),
                 ),
-                SizedBox(height: 18),
-                if (_selectedNagarIds.isNotEmpty)
-                  MaterialButton(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 35,
-                      vertical: 5,
-                    ),
-                    color: Theme.of(context).primaryColor,
-                    textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                    onPressed: () async {
-                      setState(() {
-                        _searched = true;
-                        _isExpanded = false;
-                      });
-                    },
-                    child: Text(
-                      "${Statics.getLabel('Submit')}",
-                      style: TextStyle(fontSize: 16),
+                SizedBox(height: 24),
+                if (_selectedNagarIds.isNotEmpty && !_isViewOnly)
+                  SizedBox(
+                    width: MediaQuery.sizeOf(context).width * 0.8,
+                    child: MaterialButton(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 35,
+                        vertical: 12,
+                      ),
+                      color: Theme.of(context).primaryColor,
+                      textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                      onPressed: createSadbhavBaithakFun,
+                      child: Text(
+                        "${Statics.getLabel('Submit')}",
+                        style: TextStyle(fontSize: 17),
+                      ),
                     ),
                   ),
               ],
@@ -454,7 +631,7 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
       margin: EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         children: [
-          if (![Statics.getLabel("Mandal"), Statics.getLabel("upnagarUpkhanda")].contains(_selectedKaryakramLevel) && _linkedMahaanagar != null)
+          if (![6, 7].contains(_selectedKaryakramLevelId) && _linkedMahaanagar != null)
             _buildDropdownField(
               label: Statics.getLabel('Mahaanagar'),
               value: _linkedMahaanagarValue,
@@ -527,7 +704,7 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
               },
               isDisabled: false,
             ),
-          if ([Statics.getLabel("Nagar"), Statics.getLabel("upnagarUpkhanda"), Statics.getLabel("Mandal")].contains(_selectedKaryakramLevel) && _linkednagar != null && _linkednagar!.isNotEmpty)
+          if ([5, 6, 7].contains(_selectedKaryakramLevelId) && _linkednagar != null && _linkednagar!.isNotEmpty)
             _buildDropdownField(
               label: Statics.getLabel('Nagar'),
               value: _linkednagarValue,
@@ -552,7 +729,7 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
               },
               isDisabled: false,
             ),
-          if ([Statics.getLabel("upnagarUpkhanda"), Statics.getLabel("Mandal")].contains(_selectedKaryakramLevel) && _linkedupnagar != null && _linkedupnagar!.isNotEmpty)
+          if ([6, 7].contains(_selectedKaryakramLevelId) && _linkedupnagar != null && _linkedupnagar!.isNotEmpty)
             _buildDropdownField(
               label: Statics.getLabel('upnagarUpkhanda'),
               value: _linkedupnagarValue,
@@ -576,7 +753,7 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
               },
               isDisabled: false,
             ),
-          if ([Statics.getLabel("Mandal")].contains(_selectedKaryakramLevel) && _linkedmandal != null && _linkedmandal!.isNotEmpty)
+          if ([7].contains(_selectedKaryakramLevelId) && _linkedmandal != null && _linkedmandal!.isNotEmpty)
             _buildDropdownField(
               label: Statics.getLabel('Mandal'),
               value: _linkedmandalValue,
@@ -657,7 +834,7 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
     required bool isDisabled,
   }) {
     return IgnorePointer(
-      ignoring: isDisabled,
+      ignoring: _isViewOnly,
       child: DropdownButtonFormField(
         decoration: InputDecoration(labelText: label),
         isExpanded: true,

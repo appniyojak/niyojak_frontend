@@ -3,7 +3,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 import '../../../helpers/static_data.dart' as Statics;
+import '../../../models/response_model/sadbhav_baithak_resp_model.dart';
 import '../../../providers/bals.dart';
+import 'sadbhav_creation_screen.dart';
 import 'sadbhav_form.dart';
 
 class SadbhavSearchVruttaTab extends StatefulWidget {
@@ -13,7 +15,11 @@ class SadbhavSearchVruttaTab extends StatefulWidget {
   State<SadbhavSearchVruttaTab> createState() => _SadbhavSearchVruttaTabState();
 }
 
-class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> {
+class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> with AutomaticKeepAliveClientMixin {
+// This override is what tells Flutter to keep the state alive.
+  @override
+  bool get wantKeepAlive => true;
+
   bool _searched = false;
   bool _isExpanded = true;
 
@@ -57,16 +63,18 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> {
   String? _selectedGeoUnitId;
   List<String> _selectedNagarIds = [];
 
-  List<String> karyakramLevelsList = [
-    Statics.getLabel("Bhaag"),
-    Statics.getLabel("railwayStation"),
-    Statics.getLabel("Shahar"),
-    Statics.getLabel("other"),
-    Statics.getLabel("Nagar"),
-    Statics.getLabel("upnagarUpkhanda"),
-    Statics.getLabel("Mandal"),
+  List<SadbhavMasterdata> sadbhavList = [];
+
+  List<Map<String, dynamic>> karyakramLevelsList = [
+    {"${Statics.getLabel("Bhaag")}": 1},
+    {"${Statics.getLabel("railwayStation")}": 2},
+    {"${Statics.getLabel("Shahar")}": 3},
+    {"${Statics.getLabel("other")}": 4},
+    {"${Statics.getLabel("Nagar")}": 5},
+    {"${Statics.getLabel("upnagarUpkhanda")}": 6},
+    {"${Statics.getLabel("Mandal")}": 7},
   ];
-  String? _selectedKaryakramLevel;
+  int? _selectedKaryakramLevelId;
 
   @override
   void initState() {
@@ -74,10 +82,43 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) => populateDropdown());
   }
 
+  getSadbhavBaithakListFun() async {
+    FocusManager.instance.primaryFocus?.unfocus();
+
+    var formData = {
+      "date": dateController.text,
+      "levelid": _selectedKaryakramLevelId,
+      // "geounitid": _selectedGeoUnitId,
+      "appuserid": int.parse(Statics.userDetails['userID']),
+    };
+
+    sadbhavList = await Statics.GetSadbhavBaithakListData(context: context, inputJson: formData, showLoader: true) ?? [];
+
+    setState(() {
+      _searched = true;
+      _isExpanded = false;
+    });
+  }
+
+  deleteSadbhavBaithakFun(String id) async {
+    FocusManager.instance.primaryFocus?.unfocus();
+
+    var formData = {
+      "ids": id,
+    };
+
+    await Statics.DeleteSadbhavBaithakData(context: context, inputJson: formData, showLoader: true) ?? [];
+
+    setState(() {
+      _searched = true;
+      _isExpanded = false;
+    });
+  }
+
   clearForm() async {
     setState(() {
       _searched = false;
-      _selectedKaryakramLevel = _selectedGeoUnitId = null;
+      _selectedKaryakramLevelId = _selectedGeoUnitId = null;
       _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedvastiValue = _linkedgraamValue = null;
       _linkedVibhaagValue = _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
       _selctedLevel = "praant";
@@ -114,9 +155,9 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> {
     _linkedbhaagName = _linkednagarName = _linkedupnagar = _linkedupnagar = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
     print("populatelinkedVibhaagDropdown $mahaanagarIDStr");
     var data;
-    if (_selectedKaryakramLevel == Statics.getLabel("Mandal")) {
+    if (_selectedKaryakramLevelId == 7) {
       data = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '');
-    } else if (_selectedKaryakramLevel == Statics.getLabel("upnagarUpkhanda")) {
+    } else if (_selectedKaryakramLevelId == 6) {
       data = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '');
     } else {
       data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '');
@@ -132,9 +173,9 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> {
     _linkedbhaagName = _linkednagarName = _linkedupnagar = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
     _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = [];
     var data;
-    if (_selectedKaryakramLevel == Statics.getLabel("Mandal")) {
+    if (_selectedKaryakramLevelId == 7) {
       data = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
-    } else if (_selectedKaryakramLevel == Statics.getLabel("upnagarUpkhanda")) {
+    } else if (_selectedKaryakramLevelId == 6) {
       data = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
     } else {
       data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
@@ -149,9 +190,9 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> {
     _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
     var shDD;
-    if (_selectedKaryakramLevel == Statics.getLabel("Mandal")) {
+    if (_selectedKaryakramLevelId == 7) {
       shDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', '');
-    } else if (_selectedKaryakramLevel == Statics.getLabel("upnagarUpkhanda")) {
+    } else if (_selectedKaryakramLevelId == 6) {
       shDD = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', '');
     } else {
       shDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', '');
@@ -169,12 +210,12 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> {
     _linkednagarName = _linkedupnagar = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
     _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
     print("print LevelID > ${Statics.userDetails["LevelID"]}");
-    if (_selectedKaryakramLevel == Statics.getLabel("Mandal")) {
+    if (_selectedKaryakramLevelId == 7) {
       ngDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
       setState(() {
         _linkednagar = (ngDD.length > 0 ? ngDD : null);
       });
-    } else if (_selectedKaryakramLevel == Statics.getLabel("upnagarUpkhanda")) {
+    } else if (_selectedKaryakramLevelId == 6) {
       ngDD = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
       setState(() {
         _linkednagar = (ngDD.length > 0 ? ngDD : null);
@@ -193,9 +234,9 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> {
     _linkedupnagarName = _linkedmandalName = _linkedgraamName = null;
     _linkedupnagar = _linkedmandal = _linkedgraam = null;
     var mnDD;
-    if (_selectedKaryakramLevel == Statics.getLabel("Mandal")) {
+    if (_selectedKaryakramLevelId == 7) {
       mnDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
-    } else if (_selectedKaryakramLevel == Statics.getLabel("upnagarUpkhanda")) {
+    } else if (_selectedKaryakramLevelId == 6) {
       mnDD = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
     } else {
       mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
@@ -211,9 +252,9 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> {
     _linkedmandalName = _linkedgraamName = null;
     _linkedmandal = _linkedgraam = null;
     var mnDD;
-    if (_selectedKaryakramLevel == Statics.getLabel("Mandal")) {
+    if (_selectedKaryakramLevelId == 7) {
       mnDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, parentType, '');
-    } else if (_selectedKaryakramLevel == Statics.getLabel("upnagarUpkhanda")) {
+    } else if (_selectedKaryakramLevelId == 6) {
       mnDD = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, parentType, '');
     } else {
       mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, parentType, '');
@@ -307,17 +348,17 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> {
               SizedBox(height: 12),
               _buildDropdownField(
                 label: Statics.getLabel('selectStar'),
-                value: _selectedKaryakramLevel,
+                value: _selectedKaryakramLevelId == null ? null : _selectedKaryakramLevelId.toString(),
                 items: karyakramLevelsList
                     .map((bg) => DropdownMenuItem(
-                          value: bg.toString(),
-                          child: Text(bg),
+                          value: bg.values.first.toString(),
+                          child: Text(bg.keys.first),
                         ))
                     .toList(),
                 onChanged: (value) {
                   populateDropdown();
                   _searched = false;
-                  setState(() => _selectedKaryakramLevel = value);
+                  setState(() => _selectedKaryakramLevelId = int.tryParse(value.toString()));
                 },
                 isDisabled: false,
               ),
@@ -325,7 +366,7 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> {
               // if (_selectedKaryakramLevel != null) nagarDropdown(),
               SizedBox(height: 18),
               // if ((([Statics.getLabel("railwayStation"), Statics.getLabel("Shahar"), Statics.getLabel("other")].contains(_selectedKaryakramLevel)) && _selctedLevel == Statics.getLabel('Bhaag')) ||_selctedLevel == _selectedKaryakramLevel)
-              if (_selectedKaryakramLevel != null)
+              if (_selectedKaryakramLevelId != null)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -338,12 +379,7 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> {
                       ),
                       color: Theme.of(context).primaryColor,
                       textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                      onPressed: () async {
-                        setState(() {
-                          _searched = true;
-                          _isExpanded = false;
-                        });
-                      },
+                      onPressed: getSadbhavBaithakListFun,
                       child: Text(
                         "${Statics.getLabel('search')}",
                         style: TextStyle(fontSize: 16),
@@ -353,14 +389,15 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> {
                   ],
                 ),
               SizedBox(height: 18),
-              if (_searched)
+              if (sadbhavList.isNotEmpty)
                 ListView.separated(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   separatorBuilder: (context, index) => SizedBox(height: 12),
-                  itemCount: 21,
+                  itemCount: sadbhavList.length,
                   itemBuilder: (context, index) {
-                    return vruttaCard();
+                    final _baithak = sadbhavList[index];
+                    return vruttaCard(_baithak);
                   },
                 ),
               SizedBox(height: 50),
@@ -371,7 +408,7 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> {
     );
   }
 
-  Widget vruttaCard() {
+  Widget vruttaCard(SadbhavMasterdata data) {
     return Card(
       margin: EdgeInsets.all(5),
       elevation: 5,
@@ -386,14 +423,15 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> {
                 children: [
                   // Title
                   Text(
-                    "GeoUnitName",
+                    [data.name, data.geoname].where((e) => e != null && e.isNotEmpty).join('  -  '),
+                    // "${data.name}  -  ${data.geoname}",
                     style: TextStyle(fontSize: 16),
                   ),
                   SizedBox(height: 5),
                   SizedBox(height: 5),
                   RichText(
                     text: TextSpan(
-                      text: 'Date: dd/MM/yyyy',
+                      text: 'Date: ${data.programdate}',
                       style: TextStyle(color: Colors.blue),
                     ),
                   )
@@ -410,16 +448,44 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> {
                   style: TextStyle(fontSize: 10),
                 ),
                 PopupMenuButton(
-                  color: Colors.grey,
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   onSelected: (value) {
                     if (value == "Delete") {
-                      // _deleteSwayamSevak(context, widget.swItem["SwayamsevakID"].toString());
-                    } else if (value == "EditMenuNew") {
-                      Navigator.of(context).pushNamed(SadbhavFormTab.routeName, arguments: {});
+                      showDialog(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          title: Text(Statics.getLabel('AskConfirmation')),
+                          content: Text(Statics.getLabel('AreyouSureYouWantToDeleteBaithak')),
+                          actions: <Widget>[
+                            MaterialButton(
+                              child: Text(Statics.getLabel('ConfirmationYes')),
+                              onPressed: () async {
+                                var _res = await Statics.DeleteSadbhavBaithakData(context: context, inputJson: {"ids": data.pkid});
+                                if (_res) {
+                                  Statics.showToast(Statics.getLabel('BaithakDeletedSuccessfully'));
+                                } else
+                                  Statics.showToast(Statics.getLabel('errorOccurred'));
+                                Navigator.of(ctx).pop();
+                                await getSadbhavBaithakListFun();
+                              },
+                            ),
+                            MaterialButton(
+                              child: Text(Statics.getLabel('ConfirmationNo')),
+                              onPressed: () {
+                                Navigator.of(ctx).pop();
+                              },
+                            )
+                          ],
+                        ),
+                      );
+                    } else if (value == "EditMenu") {
+                      print("EDIT >>>>>>>>>>>>>>");
+                      Navigator.of(context).pushNamed(SadbhavCreationScreen.routeName, arguments: {"id": data.pkid, "viewOnly": false});
                     } else if (value == "fillVrutta") {
-                      Navigator.of(context).pushNamed(SadbhavFormTab.routeName, arguments: {});
+                      Navigator.of(context).pushNamed(SadbhavFormTab.routeName, arguments: {"id": data.pkid});
                     } else {
-                      Navigator.of(context).pushNamed(SadbhavFormTab.routeName, arguments: {"viewOnly": true});
+                      Navigator.of(context).pushNamed(SadbhavCreationScreen.routeName, arguments: {"id": data.pkid, "viewOnly": true});
                     }
                   },
                   itemBuilder: (BuildContext context) {
@@ -435,6 +501,7 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> {
                       return PopupMenuItem(
                         value: menuItem.menuKey,
                         child: ListTile(
+                          // tileColor: Colors.white,
                           leading: Icon(
                             menuItem.iconVal,
                             color: Colors.purple,
@@ -459,7 +526,7 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> {
       margin: EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         children: [
-          if (![Statics.getLabel("Mandal"), Statics.getLabel("upnagarUpkhanda")].contains(_selectedKaryakramLevel) && _linkedMahaanagar != null)
+          if (![6, 7].contains(_selectedKaryakramLevelId) && _linkedMahaanagar != null)
             _buildDropdownField(
               label: Statics.getLabel('Mahaanagar'),
               value: _linkedMahaanagarValue,
@@ -532,7 +599,7 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> {
               },
               isDisabled: false,
             ),
-          if ([Statics.getLabel("Nagar"), Statics.getLabel("upnagarUpkhanda"), Statics.getLabel("Mandal")].contains(_selectedKaryakramLevel) && _linkednagar != null && _linkednagar!.isNotEmpty)
+          if ([5, 6, 7].contains(_selectedKaryakramLevelId) && _linkednagar != null && _linkednagar!.isNotEmpty)
             _buildDropdownField(
               label: Statics.getLabel('Nagar'),
               value: _linkednagarValue,
@@ -557,7 +624,7 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> {
               },
               isDisabled: false,
             ),
-          if ([Statics.getLabel("upnagarUpkhanda"), Statics.getLabel("Mandal")].contains(_selectedKaryakramLevel) && _linkedupnagar != null && _linkedupnagar!.isNotEmpty)
+          if ([6, 7].contains(_selectedKaryakramLevelId) && _linkedupnagar != null && _linkedupnagar!.isNotEmpty)
             _buildDropdownField(
               label: Statics.getLabel('upnagarUpkhanda'),
               value: _linkedupnagarValue,
@@ -581,7 +648,7 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> {
               },
               isDisabled: false,
             ),
-          if (_selectedKaryakramLevel == Statics.getLabel("Mandal") && _linkedmandal != null && _linkedmandal!.isNotEmpty)
+          if (_selectedKaryakramLevelId == 7 && _linkedmandal != null && _linkedmandal!.isNotEmpty)
             _buildDropdownField(
               label: Statics.getLabel('Mandal'),
               value: _linkedmandalValue,

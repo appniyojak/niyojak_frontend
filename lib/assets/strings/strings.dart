@@ -1841,6 +1841,11 @@ Map<String, String> resEnglish = {
   'sadbhavReportTable6': "Present Female",
   'sadbhavReportTable7': "Total Expected",
   'sadbhavReportTable8': "Total Present",
+  'AreyouSureYouWantToDeleteBaithak': 'Are you Sure You Want To Delete this Baithak?',
+  'BaithakDeletedSuccessfully': 'Baithak Deleted Successfully',
+  'presentMahanubhav': 'Present Mahanubhaav',
+  'addPresentMahanubhav': 'Add Present Mahanubhaav',
+  'submitValidation': 'Please fill atleast one info before submitting',
 };
 
 ///1,584
@@ -3690,6 +3695,11 @@ Map<String, String> resMarathi = {
   'sadbhavReportTable6': "उपस्थित महिला",
   'sadbhavReportTable7': "एकूण अपेक्षित",
   'sadbhavReportTable8': "एकूण उपस्थित",
+  'AreyouSureYouWantToDeleteBaithak': 'आपण ही बैठक काढून टाकू इच्छिता',
+  'BaithakDeletedSuccessfully': 'बैठक यशस्वीरित्या काढून टाकली',
+  'presentMahanubhav': 'उपस्थित महानुभाव',
+  'addPresentMahanubhav': 'उपस्थित महानुभाव जोडा',
+  'submitValidation': 'सबमिट करण्यापूर्वी कृपया किमान एक माहिती भरा.',
 };
 
 ///1,583
@@ -5534,4 +5544,9 @@ Map<String, String> resHindi = {
   'sadbhavReportTable6': "उपस्थित महिला",
   'sadbhavReportTable7': "कुल अपेक्षित",
   'sadbhavReportTable8': "कुल उपस्थित",
+  'AreyouSureYouWantToDeleteBaithak': 'क्या आप यह बैठक को हटाना चाहते है',
+  'BaithakDeletedSuccessfully': 'बैठक को सफलतापूर्वक हटा दिया गया',
+  'presentMahanubhav': 'उपस्थित महानुभाव',
+  'addPresentMahanubhav': 'उपस्थित महानुभाव जोड़ें',
+  'submitValidation': 'सबमिट करने से पहले कृपया कम से कम एक जानकारी भरें।',
 };

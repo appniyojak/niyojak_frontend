@@ -29,6 +29,9 @@ import '../models/response_model/mandalVastisarvekshanReportModel.dart';
 import '../models/response_model/nagar_vasti_model.dart';
 import '../models/response_model/nirikshan_baithak_vrutta.dart';
 import '../models/response_model/notification_list_model.dart';
+import '../models/response_model/sadbhav_baithak_report_model.dart';
+import '../models/response_model/sadbhav_baithak_resp_model.dart';
+import '../models/response_model/sadbhav_baithak_vrutta_resp_model.dart';
 import '../models/response_model/sankalit_data_names_model.dart';
 import '../models/response_model/search_abhiyaan_karyakarta_model.dart';
 import '../models/response_model/taluka_mandal_model.dart';
@@ -231,6 +234,15 @@ const String urlSaveHinduSanmelanForm = baseUrlAPI + '/savehindusanmelan';
 const String urlSearchvisheshfromannya = baseUrlAPI + '/searchvisheshfromannya';
 const String urlSavevisheshfromannya = baseUrlAPI + '/savevisheshfromannya';
 const String urlHinduSanmelanReport = baseUrlAPI + '/hindusanmelanreport';
+
+const String urlGetSadbhavBaithakList = baseUrlAPI + '/getallsadbhavbaithak';
+const String urlGetSadbhavBaithakById = baseUrlAPI + '/getsadbhavbaithakbyid';
+const String urlCheckBaithakExists = baseUrlAPI + '/chkbhaitakexists';
+const String urlCreateUpdateSadbhavBaithak = baseUrlAPI + '/createupdatesadbhavbaithak';
+const String urlDeleteSadbhavBaithak = baseUrlAPI + '/deletesadbhavbaithak';
+const String urlSadbhavBaithakReport = baseUrlAPI + '/sadbhavbaithakreport';
+const String urlGetSadbhavBaithakVrutta = baseUrlAPI + '/getsadbhavbaithakvrutta';
+const String urlSaveSadbhavBaithakVrutta = baseUrlAPI + '/savesadbhavbaithakvrutta';
 
 const String urlVastiSarvekshanDataDump = baseUrlAPI + '/VastisarVekshanDataDump';
 
@@ -4830,6 +4842,254 @@ Future<bool> deleteHinduSanmelanImageData({required BuildContext context, requir
     // Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
     final responseData = json.decode(response.body);
     if (responseData["Status"].toString() == "Success") {
+      return true;
+    }
+    return false;
+  } else {
+    print("Error: ${response.statusCode} - ${response.body}");
+    Statics.showToast(Statics.getLabel('errorOccurred'));
+    return false;
+  }
+}
+
+Future<List<SadbhavMasterdata>?> GetSadbhavBaithakListData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
+  if (showLoader) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  log(urlGetSadbhavBaithakList);
+  try {
+    var response = await http.post(Uri.parse(urlGetSadbhavBaithakList), headers: jHeaders, body: jsonEncode(inputJson));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+
+      SadbhavBaithakRespModel model = SadbhavBaithakRespModel.fromJson(data);
+      log("GetSadbhavBaithakListData >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+
+      return model.masterdata; // ✅ return karna zaroori hai
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null; // ✅ error case
+    }
+  } catch (e) {
+    print("Exception: $e");
+    return null;
+  } finally {
+    if (showLoader) Navigator.of(context, rootNavigator: true).pop();
+  }
+}
+
+Future<SadbhavBaithakRespModel?> GetSadbhavBaithakByIdData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
+  if (showLoader) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  log(urlGetSadbhavBaithakById);
+  try {
+    var response = await http.post(Uri.parse(urlGetSadbhavBaithakById), headers: jHeaders, body: jsonEncode(inputJson));
+
+    // Navigator.of(context, rootNavigator: true).pop();
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+
+      SadbhavBaithakRespModel model = SadbhavBaithakRespModel.fromJson(data);
+      log("GetSadbhavBaithakByIdData >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+
+      return model; // ✅ return karna zaroori hai
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null; // ✅ error case
+    }
+  } catch (e) {
+    // Navigator.of(context, rootNavigator: true).pop();
+    print("Exception: $e");
+    return null;
+  } finally {
+    if (showLoader) Navigator.of(context, rootNavigator: true).pop();
+  }
+}
+
+Future<SadbhavBaithakRespModel?> CheckBaithakExistsData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
+  if (showLoader) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  log(urlCheckBaithakExists);
+
+  var response = await http.post(
+    Uri.parse(urlCheckBaithakExists),
+    headers: jHeaders,
+    body: jsonEncode(inputJson), // ✅ Encode here
+  );
+
+  if (showLoader) Navigator.of(context, rootNavigator: true).pop();
+
+  if (response.statusCode == 200) {
+    final Map<String, dynamic> data = jsonDecode(response.body);
+
+    SadbhavBaithakRespModel model = SadbhavBaithakRespModel.fromJson(data);
+    log("CheckBaithakExistsData >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+
+    return model;
+  } else {
+    print("Error: ${response.statusCode} - ${response.body}");
+    Statics.showToast(Statics.getLabel('errorOccurred'));
+    return null;
+  }
+}
+
+Future<bool> CreateUpdateSadbhavBaithakData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
+  if (showLoader) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  log(urlCreateUpdateSadbhavBaithak);
+
+  var response = await http.post(
+    Uri.parse(urlCreateUpdateSadbhavBaithak),
+    headers: jHeaders,
+    body: jsonEncode(inputJson), // ✅ Encode here
+  );
+
+  print("Response CreateUpdateSadbhavBaithakData >>>>>>>>>>>> ${response.body}");
+  print("response.statusCode: ${response.statusCode}");
+
+  if (showLoader) Navigator.of(context, rootNavigator: true).pop();
+
+  if (response.statusCode == 200) {
+    // Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+    final responseData = json.decode(response.body);
+    if (responseData["Status"].toString() == "Success" || responseData["Status"].toString() == "200") {
+      return true;
+    }
+    return false;
+  } else {
+    print("Error: ${response.statusCode} - ${response.body}");
+    Statics.showToast(Statics.getLabel('errorOccurred'));
+    return false;
+  }
+}
+
+Future<bool> DeleteSadbhavBaithakData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
+  if (showLoader) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  log(urlDeleteSadbhavBaithak);
+
+  var response = await http.post(
+    Uri.parse(urlDeleteSadbhavBaithak),
+    headers: jHeaders,
+    body: jsonEncode(inputJson), // ✅ Encode here
+  );
+
+  print("Response DeleteSadbhavBaithakData >>>>>>>>>>>> ${response.body}");
+  print("response.statusCode: ${response.statusCode}");
+
+  if (showLoader) Navigator.of(context, rootNavigator: true).pop();
+
+  if (response.statusCode == 200) {
+    // Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+    final responseData = json.decode(response.body);
+    if (responseData["Status"].toString() == "Success" || responseData["Status"].toString() == "200") {
+      return true;
+    }
+    return false;
+  } else {
+    print("Error: ${response.statusCode} - ${response.body}");
+    Statics.showToast(Statics.getLabel('errorOccurred'));
+    return false;
+  }
+}
+
+Future<List<ReportData>?> SadbhavBaithakReportData(BuildContext context, Map<String, dynamic> inputJson) async {
+  showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  log(urlSadbhavBaithakReport);
+  try {
+    var response = await http.post(Uri.parse(urlSadbhavBaithakReport), headers: jHeaders, body: jsonEncode(inputJson));
+
+    // Navigator.of(context, rootNavigator: true).pop();
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+
+      SadbhavBaithakReportModel model = SadbhavBaithakReportModel.fromJson(data);
+      log("SadbhavBaithakReportData >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+
+      return model.data; // ✅ return karna zaroori hai
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null; // ✅ error case
+    }
+  } catch (e) {
+    // Navigator.of(context, rootNavigator: true).pop();
+    print("Exception: $e");
+    return null;
+  } finally {
+    Navigator.of(context, rootNavigator: true).pop();
+  }
+}
+
+Future<SadbhavBaithakVruttaRespModel?> GetSadbhavBaithakVruttaData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
+  if (showLoader) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  log(urlGetSadbhavBaithakVrutta);
+
+  var response = await http.post(
+    Uri.parse(urlGetSadbhavBaithakVrutta),
+    headers: jHeaders,
+    body: jsonEncode(inputJson), // ✅ Encode here
+  );
+
+  log("Response GetSadbhavBaithakVruttaData >>>>>>>>>>>> ${response.body}");
+  print("response.statusCode: ${response.statusCode}");
+
+  if (showLoader) Navigator.of(context, rootNavigator: true).pop();
+
+  if (response.statusCode == 200) {
+    // Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+    final responseData = json.decode(response.body);
+
+    SadbhavBaithakVruttaRespModel model = SadbhavBaithakVruttaRespModel.fromJson(responseData);
+    // log("GetSadbhavBaithakVruttaData >>>>>>>>>>>>>>>>> ${(jsonEncode(responseData))}");
+
+    return model;
+  } else {
+    print("Error: ${response.statusCode} - ${response.body}");
+    Statics.showToast(Statics.getLabel('errorOccurred'));
+    return null;
+  }
+}
+
+Future<bool> SaveSadbhavBaithakVruttaData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
+  if (showLoader) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  log(urlSaveSadbhavBaithakVrutta);
+
+  var response = await http.post(
+    Uri.parse(urlSaveSadbhavBaithakVrutta),
+    headers: jHeaders,
+    body: jsonEncode(inputJson), // ✅ Encode here
+  );
+
+  print("Response SaveSadbhavBaithakVruttaData >>>>>>>>>>>> ${response.body}");
+  print("response.statusCode: ${response.statusCode}");
+
+  if (showLoader) Navigator.of(context, rootNavigator: true).pop();
+
+  if (response.statusCode == 200) {
+    // Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+    final responseData = json.decode(response.body);
+    if (responseData["Status"].toString() == "Success" || responseData["Status"].toString() == "200") {
       return true;
     }
     return false;

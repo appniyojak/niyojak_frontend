@@ -19,7 +19,11 @@ class HinduSanmelanReport extends StatefulWidget {
   State<HinduSanmelanReport> createState() => _HinduSanmelanReportState();
 }
 
-class _HinduSanmelanReportState extends State<HinduSanmelanReport> {
+class _HinduSanmelanReportState extends State<HinduSanmelanReport> with AutomaticKeepAliveClientMixin {
+// This override is what tells Flutter to keep the state alive.
+  @override
+  bool get wantKeepAlive => true;
+
   late ScrollController _scrollController;
   bool _searched = false;
   bool _isExpanded = true;

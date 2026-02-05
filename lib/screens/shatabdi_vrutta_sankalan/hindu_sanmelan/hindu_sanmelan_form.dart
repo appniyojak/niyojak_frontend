@@ -34,7 +34,11 @@ class HinduSanmelanForm extends StatefulWidget {
   State<HinduSanmelanForm> createState() => _HinduSanmelanFormState();
 }
 
-class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
+class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKeepAliveClientMixin {
+// This override is what tells Flutter to keep the state alive.
+  @override
+  bool get wantKeepAlive => true;
+
   final _formKey = GlobalKey<FormState>();
 
   // final ScrollController _scrollController = ScrollController();
@@ -4265,7 +4269,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> {
                                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                                   ),
                                   onPressed: () async {
-                                    await _getForm();
+                                    await submitForm();
                                     Navigator.of(context).pushReplacementNamed(
                                       AddVishisthaAtithi.routeName,
                                       arguments: {'geoUnitId': _selectedGeoUnitId},
