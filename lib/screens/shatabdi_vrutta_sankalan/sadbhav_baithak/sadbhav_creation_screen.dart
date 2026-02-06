@@ -156,7 +156,7 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
 
   checkIfExistsFun() async {
     if (([2, 3, 4].contains(_selectedKaryakramLevelId)) && txtGivenGroupNameController.text.isEmpty) {
-      Statics.showToast("name message");
+      Statics.showToast(Statics.getLabel("baithakNameValidationMessage"));
       return;
     }
     FocusManager.instance.primaryFocus?.unfocus();
@@ -440,6 +440,7 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
                                   await populateDropdown();
                                   setState(() {
                                     _searched = false;
+                                    _selectedKaryakramLevelId = null;
                                   });
                                 }
                               },
@@ -458,6 +459,7 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
               ),
               SizedBox(height: 12),
               _buildDropdownField(
+                ignoring: (baithakId != null && baithakId != 0),
                 label: Statics.getLabel('selectStar'),
                 value: _selectedKaryakramLevelId == null ? null : _selectedKaryakramLevelId.toString(),
                 items: karyakramLevelsList
@@ -469,9 +471,10 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
                 onChanged: (value) {
                   populateDropdown();
                   _searched = false;
-                  dateController.clear();
+                  // dateController.clear();
                   setState(() => _selectedKaryakramLevelId = int.tryParse(value.toString()));
                   nagarList = [];
+                  print("baithakId >>>>>>>>>>>>>>>> ${baithakId}");
                 },
                 isDisabled: false,
               ),
@@ -510,7 +513,7 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
               SizedBox(height: 18),
               // if ((([2, 3, 4].contains(_selectedKaryakramLevelId)) && _selctedLevel == Statics.getLabel('Bhaag')) || _selctedLevel == _selectedKaryakramLevel)
 
-              if (_selectedKaryakramLevelId != null && dateController.text.isNotEmpty && !_isViewOnly)
+              if (_selectedKaryakramLevelId != null && dateController.text.isNotEmpty && (baithakId == null || baithakId == 0) && !_isViewOnly)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -525,7 +528,7 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
                       textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                       onPressed: checkIfExistsFun,
                       child: Text(
-                        "${Statics.getLabel('search')}",
+                        "${Statics.getLabel([2, 3, 4].contains(_selectedKaryakramLevelId) ? 'search' : "Add")}",
                         style: TextStyle(fontSize: 16),
                       ),
                     ),
@@ -633,6 +636,7 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
         children: [
           if (![6, 7].contains(_selectedKaryakramLevelId) && _linkedMahaanagar != null)
             _buildDropdownField(
+              ignoring: _isViewOnly ? _isViewOnly : (baithakId != null && baithakId != 0) && [2, 3, 4].contains(_selectedKaryakramLevelId),
               label: Statics.getLabel('Mahaanagar'),
               value: _linkedMahaanagarValue,
               items: _linkedMahaanagar!
@@ -659,6 +663,7 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
             ),
           if (_linkedVibhaag != null)
             _buildDropdownField(
+              ignoring: _isViewOnly ? _isViewOnly : (baithakId != null && baithakId != 0) && [2, 3, 4].contains(_selectedKaryakramLevelId),
               label: Statics.getLabel('Vibhaag'),
               value: _linkedVibhaagValue,
               items: _linkedVibhaag!
@@ -682,6 +687,7 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
             ),
           if (_linkedbhaag != null && _linkedbhaag!.isNotEmpty)
             _buildDropdownField(
+              ignoring: _isViewOnly ? _isViewOnly : (baithakId != null && baithakId != 0) && [2, 3, 4].contains(_selectedKaryakramLevelId),
               label: Statics.getLabel('Bhaag'),
               value: _linkedbhaagValue,
               items: _linkedbhaag!
@@ -827,6 +833,7 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
   }
 
   Widget _buildDropdownField({
+    bool? ignoring,
     required String label,
     required String? value,
     required List<DropdownMenuItem<String>> items,
@@ -834,7 +841,7 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
     required bool isDisabled,
   }) {
     return IgnorePointer(
-      ignoring: _isViewOnly,
+      ignoring: ignoring ?? _isViewOnly,
       child: DropdownButtonFormField(
         decoration: InputDecoration(labelText: label),
         isExpanded: true,

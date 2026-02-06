@@ -29,6 +29,7 @@ class SadbhavBaithakReportModel {
 
 class ReportData {
   String? levelname;
+  String? baithaknames;
   int? baithakcount;
   int? namecount;
   int? totalmalecount;
@@ -38,10 +39,21 @@ class ReportData {
   int? totalcount;
   int? totalpresentcount;
 
-  ReportData({this.levelname, this.baithakcount, this.namecount, this.totalmalecount, this.presentmale, this.totalfemalecount, this.presentfemale, this.totalcount, this.totalpresentcount});
+  ReportData(
+      {this.levelname,
+      this.baithaknames,
+      this.baithakcount,
+      this.namecount,
+      this.totalmalecount,
+      this.presentmale,
+      this.totalfemalecount,
+      this.presentfemale,
+      this.totalcount,
+      this.totalpresentcount});
 
   ReportData.fromJson(Map<String, dynamic> json) {
     levelname = json['levelname'];
+    baithaknames = json['baithaknames'];
     baithakcount = json['baithakcount'];
     namecount = json['namecount'];
     totalmalecount = json['totalmalecount'];
@@ -55,6 +67,7 @@ class ReportData {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['levelname'] = this.levelname;
+    data['baithaknames'] = this.baithaknames;
     data['baithakcount'] = this.baithakcount;
     data['namecount'] = this.namecount;
     data['totalmalecount'] = this.totalmalecount;

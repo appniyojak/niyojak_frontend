@@ -571,6 +571,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       // appBar: AppBar(

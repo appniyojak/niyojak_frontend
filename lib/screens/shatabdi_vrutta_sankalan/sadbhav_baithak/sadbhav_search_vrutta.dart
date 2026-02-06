@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -65,6 +66,8 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> with Au
 
   List<SadbhavMasterdata> sadbhavList = [];
 
+  Map<String, List<SadbhavMasterdata>> datewiseSadbhavList = {};
+
   List<Map<String, dynamic>> karyakramLevelsList = [
     {"${Statics.getLabel("Bhaag")}": 1},
     {"${Statics.getLabel("railwayStation")}": 2},
@@ -79,7 +82,31 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> with Au
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => populateDropdown());
+    _selectedKaryakramLevelId = 1;
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => getSadbhavBaithakListFun());
+  }
+
+  Map<String, List<SadbhavMasterdata>> groupByDate() {
+    datewiseSadbhavList = groupBy(sadbhavList, (item) => item.programdate.toString());
+
+    // for (var item in sadbhavList) {
+    //   String date = item.programdate.toString();
+    //
+    //   datewiseSadbhavList.putIfAbsent(date, () => []);
+    //   datewiseSadbhavList[date]!.add(item);
+    // }
+
+    setState(() {});
+    datewiseSadbhavList.keys.toList()
+      ..sort((a, b) {
+        DateTime dateA = DateFormat('dd/MM/yyyy').parse(a);
+        DateTime dateB = DateFormat('dd/MM/yyyy').parse(b);
+
+        return dateB.compareTo(dateA); // latest first
+      });
+
+    setState(() {});
+    return datewiseSadbhavList;
   }
 
   getSadbhavBaithakListFun() async {
@@ -87,7 +114,7 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> with Au
 
     var formData = {
       "date": dateController.text,
-      "levelid": _selectedKaryakramLevelId,
+      "levelid": _selectedKaryakramLevelId ?? 1,
       // "geounitid": _selectedGeoUnitId,
       "appuserid": int.parse(Statics.userDetails['userID']),
     };
@@ -98,6 +125,7 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> with Au
       _searched = true;
       _isExpanded = false;
     });
+    await groupByDate();
   }
 
   deleteSadbhavBaithakFun(String id) async {
@@ -117,6 +145,8 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> with Au
 
   clearForm() async {
     setState(() {
+      sadbhavList = [];
+      datewiseSadbhavList = {};
       _searched = false;
       _selectedKaryakramLevelId = _selectedGeoUnitId = null;
       _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedvastiValue = _linkedgraamValue = null;
@@ -289,6 +319,7 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> with Au
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 16),
@@ -389,17 +420,27 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> with Au
                   ],
                 ),
               SizedBox(height: 18),
-              if (sadbhavList.isNotEmpty)
-                ListView.separated(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  separatorBuilder: (context, index) => SizedBox(height: 12),
-                  itemCount: sadbhavList.length,
-                  itemBuilder: (context, index) {
-                    final _baithak = sadbhavList[index];
-                    return vruttaCard(_baithak);
-                  },
-                ),
+              sadbhavList.isEmpty
+                  ? SizedBox(
+                      height: MediaQuery.sizeOf(context).height * 0.45,
+                      child: Center(
+                        child: Text(
+                          Statics.getLabel("baithakNotFound"),
+                          style: TextStyle(fontWeight: FontWeight.w800),
+                        ),
+                      ),
+                    )
+                  : ListView.separated(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      separatorBuilder: (context, index) => SizedBox(height: 12),
+                      itemCount: datewiseSadbhavList.length,
+                      itemBuilder: (context, index) {
+                        String date = datewiseSadbhavList.keys.toList()[index];
+                        final items = datewiseSadbhavList[date]!;
+                        return dateWiseCard(index == 0, date, items);
+                      },
+                    ),
               SizedBox(height: 50),
             ],
           ),
@@ -408,7 +449,35 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> with Au
     );
   }
 
-  Widget vruttaCard(SadbhavMasterdata data) {
+  Widget dateWiseCard(bool isFirst, String date, List<SadbhavMasterdata> items) {
+    return ExpansionTile(
+      tilePadding: EdgeInsets.only(right: 16, left: 16),
+      childrenPadding: EdgeInsets.only(right: 12, left: 12, top: 12, bottom: 8),
+      collapsedBackgroundColor: Colors.purple.shade100,
+      backgroundColor: Colors.purple.shade50,
+      initiallyExpanded: isFirst,
+      shape: RoundedRectangleBorder(side: BorderSide.none, borderRadius: BorderRadius.circular(12)),
+      collapsedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      showTrailingIcon: true,
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [Text("(${items.length})"), Icon(Icons.keyboard_arrow_down_outlined)],
+      ),
+      title: Text(
+        date.toString(),
+        style: TextStyle(fontWeight: FontWeight.w800),
+      ),
+      // subtitle: Text(
+      //   (karyakramLevelsList.firstWhere((e) => e.values.first == items.first.shatapdistharlevelid).keys.first).toString(),
+      //   style: TextStyle(color: Colors.blue),
+      // ),
+      children: items.asMap().entries.map((_baithak) => vruttaCard(_baithak)).toList(),
+    );
+  }
+
+  Widget vruttaCard(MapEntry<int, SadbhavMasterdata> maps) {
+    final index = maps.key;
+    final data = maps.value;
     return Card(
       margin: EdgeInsets.all(5),
       elevation: 5,
@@ -421,6 +490,12 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> with Au
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // index
+                  Text(
+                    "${index + 1}. ",
+                    // "${data.name}  -  ${data.geoname}",
+                    style: TextStyle(fontSize: 16),
+                  ),
                   // Title
                   Text(
                     [data.name, data.geoname].where((e) => e != null && e.isNotEmpty).join('  -  '),
@@ -429,12 +504,12 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> with Au
                   ),
                   SizedBox(height: 5),
                   SizedBox(height: 5),
-                  RichText(
-                    text: TextSpan(
-                      text: 'Date: ${data.programdate}',
-                      style: TextStyle(color: Colors.blue),
-                    ),
-                  )
+                  // RichText(
+                  //   text: TextSpan(
+                  //     text: 'Date: ${data.programdate}',
+                  //     style: TextStyle(color: Colors.blue),
+                  //   ),
+                  // )
                 ],
               ),
             ),

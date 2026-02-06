@@ -1028,7 +1028,7 @@ class DatabaseHelper {
           data['PreferredLanguageID'].toString() +
           ' );';
 
-      log(sqlStr);
+      // log(sqlStr);
     } else if (tableName == 'HomeScreenData') {
       // Record not found, then insert
       sqlStr = 'INSERT INTO HomeScreenData( ShishuCount, BaalCount,	TarunVidyaarthiCount,	TarunVyavasayeeCount,	' +

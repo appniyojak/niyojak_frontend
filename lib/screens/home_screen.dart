@@ -219,6 +219,144 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // Load notification data
     fetchNotificationData();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => getReleaseNotes());
+  }
+
+  getReleaseNotes() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    var _data;
+    try {
+      final _isRead = await pref.getBool("isRead") ?? false;
+      final _appVer = await pref.getString("appVer");
+      if (!_isRead && _appVer != Statics.packageInfo['versionNumber']) _data = await Statics.getVersionReleaseNotes();
+      setState(() {});
+      if (_data != null && !_isRead) {
+        return showDialog(
+          context: context,
+          useSafeArea: true,
+          builder: (ct) => PopScope(
+            canPop: false,
+            child: Dialog(
+              surfaceTintColor: Colors.transparent,
+              backgroundColor: Colors.white,
+              clipBehavior: Clip.antiAlias,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              insetPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Colors.purple, Colors.purpleAccent],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ),
+                    ),
+                    child: Text(
+                      "Release Notes - $_appVer",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: (Statics.currentLang() == 1
+                                ? _data.hinditext
+                                : Statics.currentLang() == 2
+                                    ? _data.englishtext
+                                    : _data.marathitext)
+                            .toString()
+                            .split("-->")
+                            .asMap()
+                            .entries
+                            .map(
+                              (e) => Container(
+                                margin: const EdgeInsets.symmetric(vertical: 6),
+                                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.05),
+                                      blurRadius: 5,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        "${e.key + 1}. ",
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w800,
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 7,
+                                      child: Text(
+                                        e.value,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14,
+                                          color: Colors.grey.shade700,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.purpleAccent,
+                        minimumSize: const Size.fromHeight(45),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      onPressed: () async {
+                        await pref.setBool("isRead", true);
+                        await pref.setString("appVer", Statics.packageInfo['versionNumber']);
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(Icons.check_circle, color: Colors.white),
+                      label: Text(
+                        "${Statics.getLabel('bandKara')}",
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      print('Error fetching getReleaseNotes data: $e');
+    }
   }
 
   Future<void> fetchNotificationData() async {

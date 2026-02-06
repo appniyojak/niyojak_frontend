@@ -196,6 +196,7 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       // appBar: AppBar(
       //   title: Text(
@@ -291,10 +292,10 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
             ),
           ],
           rows: data.map((level) {
-            return DataRow(cells: [
-              DataCell(Container(constraints: BoxConstraints(minWidth: 40, maxWidth: 120), child: Text(level.levelname.toString()))),
-            ]);
-          }).toList() +
+                return DataRow(cells: [
+                  DataCell(Container(constraints: BoxConstraints(minWidth: 40, maxWidth: 120), child: Text(level.levelname.toString()))),
+                ]);
+              }).toList() +
               [
                 DataRow(color: MaterialStatePropertyAll(Colors.yellow.shade100), cells: [
                   DataCell(Container(
@@ -323,101 +324,103 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
                 headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
                 border: TableBorder(verticalInside: BorderSide(width: 0.7, color: Colors.grey.shade200)),
                 columns: headers
-                    .map((header) =>
-                    DataColumn(
-                      label: Container(
-                        constraints: BoxConstraints(minWidth: 40, maxWidth: 200),
-                        // constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.2),
-                        child: Text(header, softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold)),
-                      ),
-                    ))
+                    .map((header) => DataColumn(
+                          label: Container(
+                            constraints: BoxConstraints(minWidth: 40, maxWidth: 200),
+                            // constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.2),
+                            child: Text(header, softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold)),
+                          ),
+                        ))
                     .toList(),
                 rows: data.map((level) {
-                  return DataRow(cells: [
-                    DataCell(Center(
-                        child: Row(
-                          mainAxisAlignment: (level.baithakcount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                      return DataRow(cells: [
+                        DataCell(Center(
+                            child: Row(
+                          mainAxisAlignment: (level.baithakcount != 0 && level.baithaknames != null && level.baithaknames!.isNotEmpty) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
                           children: [
-                            if (level.baithakcount != 0) SizedBox(width: 1),
-                            Container(margin: EdgeInsets.only(right: level.baithakcount != 0 ? 0 : 10), child: Text(level.baithakcount.toString())),
-                            if (level.baithakcount != 0)
+                            if (level.baithakcount != 0 && level.baithaknames != null && level.baithaknames!.isNotEmpty) SizedBox(width: 1),
+                            Container(
+                                margin: EdgeInsets.only(right: (level.baithakcount != 0 && level.baithaknames != null && level.baithaknames!.isNotEmpty) ? 0 : 10),
+                                child: Text(level.baithakcount.toString())),
+                            if (level.baithakcount != 0 && level.baithaknames != null && level.baithaknames!.isNotEmpty)
                               InkWell(
                                 borderRadius: BorderRadius.circular(50),
                                 onTap: () {
-                                  // showInfoDialogBox(names: level.baithakcount ?? "", title: Statics.getLabel("sanmelanReportTable1"));
+                                  showInfoDialogBox(names: level.baithaknames ?? "", title: Statics.getLabel("sanmelanReportTable1"));
                                 },
                                 child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
                               ),
                           ],
                         ))),
-                    DataCell(Center(
-                        child: level.namecount == Statics.getLabel("Vasti")
-                            ? Text("--")
-                            : Row(
-                          mainAxisAlignment: (level.namecount != 0) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                        DataCell(Center(
+                            child: Row(
+                          mainAxisAlignment: // (level.namecount != 0) ? MainAxisAlignment.spaceBetween :
+                              MainAxisAlignment.center,
                           children: [
-                            if (level.namecount != 0) SizedBox(width: 1),
-                            Container(margin: EdgeInsets.only(right: level.namecount != 0 ? 0 : 10), child: Text(level.namecount.toString())),
-                            if (level.namecount != 0)
-                              InkWell(
-                                borderRadius: BorderRadius.circular(50),
-                                onTap: () {
-                                  // showInfoDialogBox(names: level.namecount ?? "", title: Statics.getLabel("sanmelanReportTable2"));
-                                },
-                                child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
-                              ),
+                            // if (level.namecount != 0) SizedBox(width: 1),
+                            Container(
+                                //margin: EdgeInsets.only(right: level.namecount != 0 ? 0 : 10),
+                                child: Text(level.namecount.toString())),
+                            // if (level.namecount != 0)
+                            //   InkWell(
+                            //     borderRadius: BorderRadius.circular(50),
+                            //     onTap: () {
+                            //       // showInfoDialogBox(names: level.namecount ?? "", title: Statics.getLabel("sanmelanReportTable2"));
+                            //     },
+                            //     child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
+                            //   ),
                           ],
                         ))),
-                    DataCell(Center(child: Text(level.totalmalecount.toString()))),
-                    DataCell(Center(child: Text(level.presentmale.toString()))),
-                    DataCell(Center(child: Text(level.totalfemalecount.toString()))),
-                    DataCell(Center(child: Text(level.presentfemale.toString()))),
-                    DataCell(Center(child: Text(level.totalcount.toString()))),
-                    DataCell(Center(child: Text(level.totalpresentcount.toString()))),
-                  ]);
-                }).toList() +
+                        DataCell(Center(child: Text(level.totalmalecount.toString()))),
+                        DataCell(Center(child: Text(level.presentmale.toString()))),
+                        DataCell(Center(child: Text(level.totalfemalecount.toString()))),
+                        DataCell(Center(child: Text(level.presentfemale.toString()))),
+                        DataCell(Center(child: Text(level.totalcount.toString()))),
+                        DataCell(Center(child: Text(level.totalpresentcount.toString()))),
+                      ]);
+                    }).toList() +
                     [
                       DataRow(color: MaterialStatePropertyAll(Colors.yellow.shade100), cells: [
                         DataCell(Center(
                             child: Text(
-                              data.fold(0, (sum, item) => sum + (item.baithakcount ?? 0)).toString(),
-                              style: TextStyle(fontWeight: FontWeight.w700),
-                            ))),
+                          data.fold(0, (sum, item) => sum + (item.baithakcount ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
                         DataCell(Center(
                             child: Text(
-                              data.fold(0, (sum, item) => sum + (item.namecount ?? 0)).toString(),
-                              style: TextStyle(fontWeight: FontWeight.w700),
-                            ))),
+                          data.fold(0, (sum, item) => sum + (item.namecount ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
                         DataCell(Center(
                             child: Text(
-                              data.fold(0, (sum, item) => sum + (item.totalmalecount ?? 0)).toString(),
-                              style: TextStyle(fontWeight: FontWeight.w700),
-                            ))),
+                          data.fold(0, (sum, item) => sum + (item.totalmalecount ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
                         DataCell(Center(
                             child: Text(
-                              data.fold(0, (sum, item) => sum + (item.presentmale ?? 0)).toString(),
-                              style: TextStyle(fontWeight: FontWeight.w700),
-                            ))),
+                          data.fold(0, (sum, item) => sum + (item.presentmale ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
                         DataCell(Center(
                             child: Text(
-                              data.fold(0, (sum, item) => sum + (item.totalfemalecount ?? 0)).toString(),
-                              style: TextStyle(fontWeight: FontWeight.w700),
-                            ))),
+                          data.fold(0, (sum, item) => sum + (item.totalfemalecount ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
                         DataCell(Center(
                             child: Text(
-                              data.fold(0, (sum, item) => sum + (item.presentfemale ?? 0)).toString(),
-                              style: TextStyle(fontWeight: FontWeight.w700),
-                            ))),
+                          data.fold(0, (sum, item) => sum + (item.presentfemale ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
                         DataCell(Center(
                             child: Text(
-                              data.fold(0, (sum, item) => sum + (item.totalcount ?? 0)).toString(),
-                              style: TextStyle(fontWeight: FontWeight.w700),
-                            ))),
+                          data.fold(0, (sum, item) => sum + (item.totalcount ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
                         DataCell(Center(
                             child: Text(
-                              data.fold(0, (sum, item) => sum + (item.totalpresentcount ?? 0)).toString(),
-                              style: TextStyle(fontWeight: FontWeight.w700),
-                            ))),
+                          data.fold(0, (sum, item) => sum + (item.totalpresentcount ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
                       ])
                     ],
               ),
@@ -443,10 +446,7 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
               title: Text(title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Colors.purple.shade400)),
               content: SingleChildScrollView(
                 child: SizedBox(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width,
+                  width: MediaQuery.of(context).size.width,
                   child: Scrollbar(
                     controller: _scrollController,
                     thumbVisibility: true,
@@ -466,25 +466,18 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
                         columns: [
                           DataColumn(
                               label: Container(
-                                constraints: BoxConstraints(maxWidth: 40),
-                                child: Text(" "),
-                              )),
+                            constraints: BoxConstraints(maxWidth: 40),
+                            child: Text(" "),
+                          )),
                           DataColumn(
                               label: Container(
-                                constraints: BoxConstraints(minWidth: MediaQuery
-                                    .sizeOf(context)
-                                    .width * 0.5),
-                                child: Text(
-                                  "${Statics.getLabel('Name')}",
-                                ),
-                              )),
+                            constraints: BoxConstraints(minWidth: MediaQuery.sizeOf(context).width * 0.5),
+                            child: Text(
+                              "${Statics.getLabel('Name')}",
+                            ),
+                          )),
                         ],
-                        rows: names
-                            .split(",")
-                            .toList()
-                            .asMap()
-                            .entries
-                            .map((entry) {
+                        rows: names.split(",").toList().asMap().entries.map((entry) {
                           int index = entry.key;
                           var data = entry.value;
                           return DataRow(cells: [
@@ -548,11 +541,10 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
                       label: Statics.getLabel('Mahaanagar'),
                       value: _linkedMahaanagarValue,
                       items: _linkedMahaanagar!
-                          .map((bg) =>
-                          DropdownMenuItem(
-                            value: bg.geoUnitID.toString(),
-                            child: Text(bg.name!),
-                          ))
+                          .map((bg) => DropdownMenuItem(
+                                value: bg.geoUnitID.toString(),
+                                child: Text(bg.name!),
+                              ))
                           .toList(),
                       onChanged: (value) async {
                         final selectedItem = _linkedMahaanagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
@@ -576,11 +568,10 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
                       label: Statics.getLabel('Vibhaag'),
                       value: _linkedVibhaagValue,
                       items: _linkedVibhaag!
-                          .map((bg) =>
-                          DropdownMenuItem(
-                            value: bg.geoUnitID.toString(),
-                            child: Text(bg.name!),
-                          ))
+                          .map((bg) => DropdownMenuItem(
+                                value: bg.geoUnitID.toString(),
+                                child: Text(bg.name!),
+                              ))
                           .toList(),
                       onChanged: (value) {
                         final selectedItem = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
@@ -601,11 +592,10 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
                       label: Statics.getLabel('Bhaag'),
                       value: _linkedbhaagValue,
                       items: _linkedbhaag!
-                          .map((bg) =>
-                          DropdownMenuItem(
-                            value: bg.geoUnitID.toString(),
-                            child: Text(bg.name!),
-                          ))
+                          .map((bg) => DropdownMenuItem(
+                                value: bg.geoUnitID.toString(),
+                                child: Text(bg.name!),
+                              ))
                           .toList(),
                       onChanged: (value) {
                         final selectedItem = _linkedbhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
@@ -627,11 +617,10 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
                       label: Statics.getLabel('Shahar'),
                       value: _linkedshaharValue,
                       items: _linkedshahar!
-                          .map((bg) =>
-                          DropdownMenuItem(
-                            value: bg.geoUnitID.toString(),
-                            child: Text(bg.name!),
-                          ))
+                          .map((bg) => DropdownMenuItem(
+                                value: bg.geoUnitID.toString(),
+                                child: Text(bg.name!),
+                              ))
                           .toList(),
                       onChanged: (value) {
                         final selectedItem = _linkedshahar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
@@ -652,11 +641,10 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
                       label: Statics.getLabel('Nagar'),
                       value: _linkednagarValue,
                       items: _linkednagar!
-                          .map((bg) =>
-                          DropdownMenuItem(
-                            value: bg.geoUnitID.toString(),
-                            child: Text(bg.name!),
-                          ))
+                          .map((bg) => DropdownMenuItem(
+                                value: bg.geoUnitID.toString(),
+                                child: Text(bg.name!),
+                              ))
                           .toList(),
                       onChanged: (value) {
                         final selectedItem = _linkednagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
@@ -751,14 +739,8 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
                           horizontal: 35,
                           vertical: 5,
                         ),
-                        color: Theme
-                            .of(context)
-                            .primaryColor,
-                        textColor: Theme
-                            .of(context)
-                            .primaryTextTheme
-                            .labelMedium
-                            ?.color,
+                        color: Theme.of(context).primaryColor,
+                        textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                         onPressed: () async {
                           _selctedLevelNameList = [];
                           setState(() {});

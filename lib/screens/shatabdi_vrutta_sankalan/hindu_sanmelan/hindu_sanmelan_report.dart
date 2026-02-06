@@ -200,6 +200,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> with Automati
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       // appBar: AppBar(
       //   title: Text(

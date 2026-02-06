@@ -29,6 +29,7 @@ import '../models/response_model/mandalVastisarvekshanReportModel.dart';
 import '../models/response_model/nagar_vasti_model.dart';
 import '../models/response_model/nirikshan_baithak_vrutta.dart';
 import '../models/response_model/notification_list_model.dart';
+import '../models/response_model/release_notes_model.dart';
 import '../models/response_model/sadbhav_baithak_report_model.dart';
 import '../models/response_model/sadbhav_baithak_resp_model.dart';
 import '../models/response_model/sadbhav_baithak_vrutta_resp_model.dart';
@@ -245,6 +246,7 @@ const String urlGetSadbhavBaithakVrutta = baseUrlAPI + '/getsadbhavbaithakvrutta
 const String urlSaveSadbhavBaithakVrutta = baseUrlAPI + '/savesadbhavbaithakvrutta';
 
 const String urlVastiSarvekshanDataDump = baseUrlAPI + '/VastisarVekshanDataDump';
+const String urlGetReleaseNotes = baseUrlAPI + '/getreleasenote';
 
 //////////////////////////////////////////////////////////////////////////////////////////
 const String patchSuffix = '';
@@ -437,6 +439,23 @@ List<BhaugolikVistaarBAL> tgLstBhaugolikVistaar = [];
 //     return resHindi[key].toString();
 //   return resMarathi[key].toString();
 // }
+
+int currentLang() {
+  String language = userDetails['languagePreference'];
+  if (language == 'Marathi') {
+    return 0;
+  }
+  if (language == 'Hindi') {
+    return 1;
+  }
+
+  if (language == 'English') {
+    return 2;
+  }
+
+  // Default to Marathi if language not matched
+  return 0;
+}
 
 String getLabel(String key, {bool returnKey = false}) {
   String language = userDetails['languagePreference'];
@@ -2304,6 +2323,29 @@ Future<TalukaMandalSampurnaModel?> vastisarvekshanAllReportDataForMandal(context
     log("Error: ${response.statusCode}");
     Navigator.of(context, rootNavigator: true).pop();
 
+    return null;
+  }
+}
+
+//==========================================================================================================================
+Future<Notes?> getVersionReleaseNotes() async {
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  var response = await http.get(Uri.parse(urlGetReleaseNotes), headers: jHeaders);
+
+  if (response.statusCode == 200) {
+    final responseData = json.decode(response.body);
+    print(urlGetReleaseNotes);
+    print(responseData);
+
+    ReleaseNotesRespModel model = ReleaseNotesRespModel.fromJson(responseData);
+
+    if (model.status == "200" || model.status == "Success") {
+      return model.notes;
+    }
+    return null;
+  } else {
+    log("Error: ${response.statusCode}");
     return null;
   }
 }
