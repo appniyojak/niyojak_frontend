@@ -394,12 +394,12 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "${Statics.getLabel('selectKaryakramLevel')}",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-        ),
-      ),
+      // appBar: AppBar(
+      //   title: Text(
+      //     "${Statics.getLabel('selectKaryakramLevel')}",
+      //     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+      //   ),
+      // ),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         child: SingleChildScrollView(
@@ -458,25 +458,38 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
                 ),
               ),
               SizedBox(height: 12),
-              _buildDropdownField(
-                ignoring: (baithakId != null && baithakId != 0),
-                label: Statics.getLabel('selectStar'),
-                value: _selectedKaryakramLevelId == null ? null : _selectedKaryakramLevelId.toString(),
-                items: karyakramLevelsList
-                    .map((bg) => DropdownMenuItem(
-                          value: bg.values.first.toString(),
-                          child: Text(bg.keys.first),
-                        ))
-                    .toList(),
-                onChanged: (value) {
-                  populateDropdown();
-                  _searched = false;
-                  // dateController.clear();
-                  setState(() => _selectedKaryakramLevelId = int.tryParse(value.toString()));
-                  nagarList = [];
-                  print("baithakId >>>>>>>>>>>>>>>> ${baithakId}");
+              InkWell(
+                onTap: () {
+                  if (dateController.text.isEmpty) {
+                    Statics.showToast("Please select date first");
+                    return;
+                  }
                 },
-                isDisabled: false,
+                child: _buildDropdownField(
+                  ignoring: dateController.text.isEmpty || (baithakId != null && baithakId != 0),
+                  label: Statics.getLabel('selectStar'),
+                  value: _selectedKaryakramLevelId == null ? null : _selectedKaryakramLevelId.toString(),
+                  items: karyakramLevelsList
+                      .map((bg) => DropdownMenuItem(
+                            value: bg.values.first.toString(),
+                            child: Text(bg.keys.first),
+                          ))
+                      .toList(),
+                  onTap: dateController.text.isEmpty ? null : () {},
+                  onChanged: (value) {
+                    if (dateController.text.isEmpty) {
+                      Statics.showToast("Please select date first");
+                      return;
+                    }
+                    populateDropdown();
+                    _searched = false;
+                    // dateController.clear();
+                    setState(() => _selectedKaryakramLevelId = int.tryParse(value.toString()));
+                    nagarList = [];
+                    print("baithakId >>>>>>>>>>>>>>>> ${baithakId}");
+                  },
+                  isDisabled: false,
+                ),
               ),
               SizedBox(height: 18),
               if ([2, 3, 4].contains(_selectedKaryakramLevelId))
@@ -836,9 +849,10 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
     bool? ignoring,
     required String label,
     required String? value,
-    required List<DropdownMenuItem<String>> items,
-    required ValueChanged<String?> onChanged,
+    required List<DropdownMenuItem<String>>? items,
+    required ValueChanged<String?>? onChanged,
     required bool isDisabled,
+    void Function()? onTap,
   }) {
     return IgnorePointer(
       ignoring: ignoring ?? _isViewOnly,
@@ -847,6 +861,7 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
         isExpanded: true,
         value: value == "" ? null : value,
         items: items,
+        onTap: onTap,
         onChanged: onChanged,
       ),
     );

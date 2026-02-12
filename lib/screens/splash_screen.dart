@@ -68,6 +68,7 @@ class _SplashScreenCheckState extends State<SplashScreenCheck> {
     Statics.packageInfo['versionNumber'] = info.version;
     print("App version >> " + info.version);
     SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setString("appVer", Statics.packageInfo['versionNumber']);
     var data = pref.getString("AbhiyanSwayamsevakData");
     var loggedIn = pref.getString("loggedIn");
     var otpuser = pref.getString("otpuser");

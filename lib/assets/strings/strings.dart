@@ -1831,6 +1831,7 @@ Map<String, String> resEnglish = {
   ////////////////////////////////////// Sadbhav Baithak Block //////////////////////////////////////
   'selectKaryakramLevel': "Select Program Level",
   'searchBaithak': "Search Baithak",
+  'addBaithak': "Add Baithak",
   'baithakNotFound': "Baithak Not Found",
   'railwayStation': "Railway Station",
   'addName': "Enter Name",
@@ -3688,6 +3689,7 @@ Map<String, String> resMarathi = {
   ////////////////////////////////////// Sadbhav Baithak Block //////////////////////////////////////
   'selectKaryakramLevel': "कार्यक्रम स्तर निवडा",
   'searchBaithak': "बैठक शोधा",
+  'addBaithak': "बैठक जोडा",
   'baithakNotFound': "बैठक उपलब्ध नाही",
   'railwayStation': "रेल्वे स्थानक",
   'addName': "नाव प्रविष्ट करा",
@@ -5540,6 +5542,7 @@ Map<String, String> resHindi = {
   ////////////////////////////////////// Sadbhav Baithak Block //////////////////////////////////////
   'selectKaryakramLevel': "कार्यक्रम स्तर चुने",
   'searchBaithak': "बैठक खोजें",
+  'addBaithak': "बैठक जोड़ें",
   'baithakNotFound': "बैठक उपलब्ध नहीं है",
   'railwayStation': "रेलवे स्थानक",
   'addName': "नाम प्रविष्ट करें",

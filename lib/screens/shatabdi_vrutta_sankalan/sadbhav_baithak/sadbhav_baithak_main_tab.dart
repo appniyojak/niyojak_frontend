@@ -28,7 +28,7 @@ class _SadbhavBaithakMainTabState extends State<SadbhavBaithakMainTab> with Sing
   void initState() {
     print("initState");
     // getInitialData();
-    _tabController = new TabController(length: 2, vsync: this);
+    _tabController = new TabController(length: 3, vsync: this);
     log("initState SadbhavBaithakMainTab runnn >>>>>>>>>>>>>> ");
     // WidgetsBinding.instance.addPostFrameCallback((t) => getAbhiyaanGeoUnitsFun());
     super.initState();
@@ -45,7 +45,7 @@ class _SadbhavBaithakMainTabState extends State<SadbhavBaithakMainTab> with Sing
             "${Statics.getLabel('sadbhavBaithak')} ${Statics.getLabel('Vrutta')}",
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
           ),
-          actions: [IconButton(onPressed: () => Navigator.of(context).pushNamed(SadbhavCreationScreen.routeName), icon: Icon(Icons.add)), SizedBox(width: 12)],
+          // actions: [IconButton(onPressed: () => Navigator.of(context).pushNamed(SadbhavCreationScreen.routeName), icon: Icon(Icons.add)), SizedBox(width: 12)],
           bottom:
               // (Statics.abhiyaanUserDetails["isEmpty"] && int.parse(Statics.userDetails["LevelID"].toString()) < 6)
               //     ? null
@@ -61,7 +61,24 @@ class _SadbhavBaithakMainTabState extends State<SadbhavBaithakMainTab> with Sing
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
-                      FontAwesomeIcons.fileArrowUp,
+                      FontAwesomeIcons.fileCirclePlus,
+                      size: 18,
+                    ),
+                    Text(
+                      "${Statics.getLabel('addBaithak')}",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ],
+                ),
+              ),
+              Tab(
+                child: Row(
+                  spacing: 16,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      FontAwesomeIcons.fileCircleQuestion,
                       size: 18,
                     ),
                     Text(
@@ -102,6 +119,7 @@ class _SadbhavBaithakMainTabState extends State<SadbhavBaithakMainTab> with Sing
             controller: _tabController,
             physics: NeverScrollableScrollPhysics(),
             children: <Widget>[
+              SadbhavCreationScreen(),
               SadbhavSearchVruttaTab(),
               SadbhavReportTab(),
             ],
