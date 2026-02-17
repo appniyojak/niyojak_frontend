@@ -762,7 +762,7 @@ class _SadbhavFormTabState extends State<SadbhavFormTab> {
               padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
               decoration: BoxDecoration(border: Border.all(color: Colors.purpleAccent.shade100), borderRadius: BorderRadius.circular(15)),
               child: Text(
-                "${Statics.getLabel('addVakta')}",
+                "${Statics.getLabel('addGyati')}",
                 style: const TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold),
               ),
             ),
@@ -1067,7 +1067,7 @@ class _SadbhavFormTabState extends State<SadbhavFormTab> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "${Statics.getLabel('sanmelanVakta')}",
+                    "${Statics.getLabel('addGyati')}",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -1078,7 +1078,7 @@ class _SadbhavFormTabState extends State<SadbhavFormTab> {
                   Divider(thickness: 1, color: Colors.deepPurple.shade100),
                   SizedBox(height: 4),
                   textControllerField2(
-                    name: Statics.getLabel("sanmelanVaktaName"),
+                    name: Statics.getLabel("gyati"),
                     controller: txtVaktaNameController,
                     keyboardType: TextInputType.name,
                   ),

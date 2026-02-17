@@ -82,7 +82,6 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> with Au
   @override
   void initState() {
     super.initState();
-    _selectedKaryakramLevelId = 1;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) => getSadbhavBaithakListFun());
   }
 
@@ -114,7 +113,7 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> with Au
 
     var formData = {
       "date": dateController.text,
-      "levelid": _selectedKaryakramLevelId ?? 1,
+      "levelid": _selectedKaryakramLevelId ?? 0,
       // "geounitid": _selectedGeoUnitId,
       "appuserid": int.parse(Statics.userDetails['userID']),
     };

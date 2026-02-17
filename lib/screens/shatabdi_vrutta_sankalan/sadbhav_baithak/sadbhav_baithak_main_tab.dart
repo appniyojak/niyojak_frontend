@@ -65,7 +65,7 @@ class _SadbhavBaithakMainTabState extends State<SadbhavBaithakMainTab> with Sing
                       size: 18,
                     ),
                     Text(
-                      "${Statics.getLabel('addBaithak')}",
+                      "${Statics.getLabel('addCentre')}",
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 15),
                     ),

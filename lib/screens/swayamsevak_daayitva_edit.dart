@@ -55,6 +55,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
   String? _linkedbhaagName = "";
   String? _linkedshaharName = "";
   String? _linkednagarName = "";
+  String? _linkedupnagarName = "";
   String? _linkedmandalName = "";
   String? _linkedgraamName = "";
   String? _linkedvastiName = "";
@@ -79,6 +80,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
   List<GeoUnitMasterBAL>? _linkedbhaag;
   List<GeoUnitMasterBAL>? _linkedshahar;
   List<GeoUnitMasterBAL>? _linkednagar;
+  List<GeoUnitMasterBAL>? _linkedupnagar;
   List<GeoUnitMasterBAL>? _linkedmandal;
   List<GeoUnitMasterBAL>? _linkedgraam;
   List<GeoUnitMasterBAL>? _linkedvasti;
@@ -98,6 +100,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
   String? _linkedbhaagValue = "";
   String? _linkedshaharValue = "";
   String? _linkednagarValue = "";
+  String? _linkedupnagarValue = "";
   String? _linkedmandalValue = "";
   String? _linkedgraamValue = "";
   String? _linkedvastiValue = "";
@@ -180,7 +183,14 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
     _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedbhaagName = _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
     print("populatelinkedVibhaagDropdown $mahaanagarIDStr");
-    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '', isAbhiyaan: false);
+    var data;
+    if (_levelValue == 4) {
+      data = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '');
+    } else if (_levelValue == 13) {
+      data = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '');
+    } else {
+      data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '', isAbhiyaan: false);
+    }
     setState(() {
       _linkedVibhaag = data;
     });
@@ -191,7 +201,14 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
     _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedbhaagName = _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
     _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = [];
-    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '', isAbhiyaan: false);
+    var data;
+    if (_levelValue == 4) {
+      data = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
+    } else if (_levelValue == 13) {
+      data = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
+    } else {
+      data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '', isAbhiyaan: false);
+    }
     setState(() {
       _linkedbhaag = data;
     });
@@ -216,13 +233,27 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
     print("print LevelID > ${Statics.userDetails["LevelID"]}");
     print("shaharIDStr shaharIDStr $shaharIDStr");
     if (shaharIDStr != null) {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), shaharIDStr!, 'Shahar', '', isAbhiyaan: false);
+      var ngDD;
+      if (_levelValue == 4) {
+        ngDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
+      } else if (_levelValue == 13) {
+        ngDD = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
+      } else {
+        ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '', isAbhiyaan: false);
+      }
       setState(() {
         _linkednagar = (ngDD.length > 0 ? ngDD : null);
       });
       return ngDD;
     } else {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '', isAbhiyaan: false);
+      var ngDD;
+      if (_levelValue == 4) {
+        ngDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
+      } else if (_levelValue == 13) {
+        ngDD = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
+      } else {
+        ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '', isAbhiyaan: false);
+      }
       setState(() {
         _linkednagar = (ngDD.length > 0 ? ngDD : null);
       });
@@ -230,11 +261,34 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
     }
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedMandalDropdown(String? nagarIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedUpnagarDropdown(String? nagarIDStr) async {
+    _linkedupnagarValue = _linkedmandalValue = _linkedgraamValue = null;
+    _linkedupnagarName = _linkedmandalName = _linkedgraamName = null;
+    _linkedupnagar = _linkedmandal = _linkedgraam = null;
+    var mnDD;
+    if (_levelValue == 4) {
+      mnDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
+    } else if (_levelValue == 13) {
+      mnDD = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
+    } else {
+      mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
+    }
+    setState(() {
+      _linkedupnagar = (mnDD.length > 0 ? mnDD : null);
+    });
+    return mnDD;
+  }
+
+  Future<List<GeoUnitMasterBAL>> populatelinkedMandalDropdown(String parentType, String? nagarIDStr) async {
     _linkedmandalValue = _linkedgraamValue = null;
     _linkedmandalName = _linkedgraamName = null;
     _linkedmandal = _linkedgraam = null;
-    var mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, 'Nagar', '', isAbhiyaan: false);
+    var mnDD;
+    if (_levelValue == 4) {
+      mnDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, parentType, '');
+    } else {
+      mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, parentType, '');
+    }
     setState(() {
       _linkedmandal = (mnDD.length > 0 ? mnDD : null);
     });
@@ -406,7 +460,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
           //           ?
           _selectedDaayitvaID == "" ? swDaayitva!.daayitvaID : _selectedDaayitvaID,
       "StartYear": swDaayitva!.startYear,
-      "EndYear": swDaayitva!.endYear,
+      "EndYear": swDaayitva?.endYear ?? 0,
       "GatividhiID": _daayitvaForValue!.code == "Gatividhi" ? swDaayitva!.gatividhiID : null,
       "AayaamID": _daayitvaForValue!.code == "Aayaam" ? swDaayitva!.aayaamID : null,
       "SanghaPreritSansthaaID": _daayitvaForValue!.code == "SanghaPreritSansthaa" ? swDaayitva!.sanghaPreritSansthaaID : null,
@@ -579,21 +633,28 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
                                         isExpanded: true,
                                         value: _levelValue,
                                         items: _level!
-                                            .map((bg) => DropdownMenuItem(
+                                            .map(
+                                              (bg) => DropdownMenuItem(
                                                 value: bg.levelID,
-                                                child: Text(Statics.getLabel(
-                                                    bg.levelName == "Nagar"
-                                                        ? "Nagar/Taluka"
-                                                        : bg.levelName == "Akhil Bhaaratiya"
-                                                            ? "AkhilBhaaratiya"
-                                                            : bg.levelName!,
-                                                    returnKey: true))))
+                                                child: Text(
+                                                  Statics.getLabel(
+                                                      bg.levelID == 13
+                                                          ? "upnagarUpkhanda"
+                                                          : bg.levelID == 6
+                                                              ? "Nagar/Taluka"
+                                                              : bg.levelName == "Akhil Bhaaratiya"
+                                                                  ? "AkhilBhaaratiya"
+                                                                  : bg.levelName!,
+                                                      returnKey: true),
+                                                ),
+                                              ),
+                                            )
                                             .toList(),
                                         onChanged: (value) {
                                           setState(() {
                                             _selectedGeoUnitId = null;
                                             _levelValue = value;
-                                            if (value != null && value > 8)
+                                            if (value != null && value > 8 && value < 12)
                                               populateGeoUnits(value);
                                             else
                                               populateDropdownT();
@@ -615,7 +676,12 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
                                         },
                                       ),
                                       SizedBox(height: 10),
+
+                                      ///
                                       _buildExpansionPanel(),
+
+                                      ///
+
                                       // DropdownButtonFormField(
                                       //   decoration: InputDecoration(labelText: Statics.getLabel(_lblValue == "" ? 'SelectLevelName' : _lblValue!)),
                                       //   isExpanded: true,
@@ -644,9 +710,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
                                       //       swDaayitva!.daayitvaGeoUnitID = null;
                                       //   },
                                       // ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
+                                      SizedBox(height: 10),
                                       Row(
                                         children: [
                                           Container(
@@ -1076,20 +1140,20 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
                                 decoration: InputDecoration(labelText: Statics.getLabel('EndYear')),
                                 keyboardType: TextInputType.number,
                                 maxLength: 4,
-                                validator: (value) {
-                                  // if (value!.isNotEmpty && value.length < 4)
-                                  if (value == null || value.isEmpty)
-                                    return (Statics.getLabel('ValidEndYearValidationMessage'));
-                                  else if (value.isNotEmpty) if ((int.parse(value) > int.parse(DateFormat('yyyy').format(DateTime.now())))) {
-                                    return (Statics.getLabel('ValidEndYearValidationMessage'));
-                                  }
-                                  return null;
-                                },
+                                // validator: (value) {
+                                //   // if (value!.isNotEmpty && value.length < 4)
+                                //   if (value == null || value.isEmpty)
+                                //     return (Statics.getLabel('ValidEndYearValidationMessage'));
+                                //   else if (value.isNotEmpty) if ((int.parse(value) > int.parse(DateFormat('yyyy').format(DateTime.now())))) {
+                                //     return (Statics.getLabel('ValidEndYearValidationMessage'));
+                                //   }
+                                //   return null;
+                                // },
                                 onSaved: (value) {
                                   if (value != null && value.isNotEmpty)
                                     swDaayitva!.endYear = int.parse(value);
                                   else
-                                    swDaayitva!.endYear = null;
+                                    swDaayitva!.endYear = 0;
                                 },
                               ),
                               SizedBox(
@@ -1165,10 +1229,16 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
                       : null,
               items: _geoUnits!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
               onChanged: (value) {
+                final selectedItem = _geoUnits!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                 setState(() {
                   _geoUnitsValue = value;
+                  _selectedGeoUnitId = value;
 
                   _selectedLevelId = _levelValue;
+
+                  // _linkedVibhaagValue = value;
+                  _selctedLevel = _lblValue;
+                  _selctedLevelName = selectedItem.name ?? "";
                 });
               },
               validator: (value) {
@@ -1183,7 +1253,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
                   swDaayitva!.daayitvaGeoUnitID = null;
               },
             ),
-          if (_levelValue != null && (_levelValue ?? 0) < 9 && _linkedVibhaag != null)
+          if (_levelValue != null && ((_levelValue ?? 0) < 9 || (_levelValue ?? 0) > 12) && _linkedVibhaag != null)
             _buildDropdownField(
               label: Statics.getLabel('Vibhaag'),
               value: _linkedVibhaagValue,
@@ -1208,7 +1278,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
               },
               isDisabled: false,
             ),
-          if (_levelValue != null && (_levelValue ?? 0) < 8 && _linkedVibhaagValue != null && _linkedbhaag != null && _linkedbhaag!.isNotEmpty)
+          if (_levelValue != null && ((_levelValue ?? 0) < 8 || (_levelValue ?? 0) > 12) && _linkedVibhaagValue != null && _linkedbhaag != null && _linkedbhaag!.isNotEmpty)
             _buildDropdownField(
               label: Statics.getLabel('Bhaag'),
               value: _linkedbhaagValue,
@@ -1257,7 +1327,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
           //     },
           //     isDisabled: false,
           //   ),
-          if (_levelValue != null && (_levelValue ?? 0) < 7 && _linkedbhaagValue != null && _linkednagar != null && _linkednagar!.isNotEmpty)
+          if (_levelValue != null && ((_levelValue ?? 0) < 7 || (_levelValue ?? 0) > 12) && _linkedbhaagValue != null && _linkednagar != null && _linkednagar!.isNotEmpty)
             _buildDropdownField(
               label: Statics.getLabel('Nagar'),
               value: _linkednagarValue,
@@ -1277,7 +1347,33 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
                   _linkednagarName = selectedItem.name ?? "";
 
                   _selectedLevelId = 6;
-                  populatelinkedMandalDropdown(value);
+                  populatelinkedUpnagarDropdown(value);
+                  populatelinkedMandalDropdown('Nagar', value);
+                  populatelinkedVastiDropdown(value);
+                });
+              },
+              isDisabled: false,
+            ),
+
+          if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
+            _buildDropdownField(
+              label: Statics.getLabel('upnagarUpkhanda'),
+              value: _linkedupnagarValue,
+              items: _linkedupnagar!
+                  .map((bg) => DropdownMenuItem(
+                        value: bg.geoUnitID.toString(),
+                        child: Text(bg.name!),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                final selectedItem = _linkedupnagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                setState(() {
+                  _linkedupnagarValue = value;
+                  _selectedGeoUnitId = value;
+                  _selctedLevel = Statics.getLabel('upnagarUpkhanda');
+                  _selctedLevelName = selectedItem.name ?? "";
+                  _linkedupnagarName = selectedItem.name ?? "";
+                  populatelinkedMandalDropdown('Upnagar', value);
                   populatelinkedVastiDropdown(value);
                 });
               },

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter/services.dart';
 
 import '../../../helpers/static_data.dart' as Statics;
 import '../../../models/response_model/sadbhav_baithak_resp_model.dart';
@@ -23,6 +23,9 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
 
   TextEditingController dateController = TextEditingController();
   TextEditingController txtGivenGroupNameController = TextEditingController();
+  TextEditingController txtPramukhNameController = TextEditingController();
+  TextEditingController txtPramukhMobileController = TextEditingController();
+  TextEditingController txtCentreNameController = TextEditingController();
 
   List<GeoUnitMasterBAL>? _linkedMahaanagar;
   List<GeoUnitMasterBAL>? _linkedVibhaag;
@@ -405,68 +408,86 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      "${Statics.getLabel('date2')} : ",
-                      style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
-                    ),
-                    // Text(
-                    //   " *",
-                    //   style: TextStyle(fontSize: 15, color: Colors.red, fontWeight: FontWeight.bold),
-                    // ),
-                    SizedBox(width: 12),
-                    SizedBox(
-                      width: MediaQuery.sizeOf(context).width * 0.4,
-                      child: TextField(
-                        controller: dateController,
-                        style: TextStyle(fontSize: 14),
-                        autofocus: false,
-                        onTap: _isViewOnly
-                            ? null
-                            : () async {
-                                DateTime? date = await showDatePicker(
-                                  context: context,
-                                  initialDate: dateController.text.isEmpty ? DateTime.now() : DateFormat("dd/MM/yyyy").parse(dateController.text),
-                                  firstDate: DateTime(2000),
-                                  lastDate: DateTime(2100),
-                                );
-                                if (date != null) {
-                                  dateController.text = DateFormat("dd/MM/yyyy").format(date);
-
-                                  await populateDropdown();
-                                  setState(() {
-                                    _searched = false;
-                                    _selectedKaryakramLevelId = null;
-                                  });
-                                }
-                              },
-                        readOnly: true,
-                        decoration: InputDecoration(
-                            isDense: true,
-                            hintText: "DD/MM/YYYY",
-                            contentPadding: EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 12),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                            )),
-                      ),
-                    ),
-                  ],
-                ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.end,
+              //     children: [
+              //       Text(
+              //         "${Statics.getLabel('date2')} : ",
+              //         style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
+              //       ),
+              //       // Text(
+              //       //   " *",
+              //       //   style: TextStyle(fontSize: 15, color: Colors.red, fontWeight: FontWeight.bold),
+              //       // ),
+              //       SizedBox(width: 12),
+              //       SizedBox(
+              //         width: MediaQuery.sizeOf(context).width * 0.4,
+              //         child: TextField(
+              //           controller: dateController,
+              //           style: TextStyle(fontSize: 14),
+              //           autofocus: false,
+              //           onTap: _isViewOnly
+              //               ? null
+              //               : () async {
+              //                   DateTime? date = await showDatePicker(
+              //                     context: context,
+              //                     initialDate: dateController.text.isEmpty ? DateTime.now() : DateFormat("dd/MM/yyyy").parse(dateController.text),
+              //                     firstDate: DateTime(2000),
+              //                     lastDate: DateTime(2100),
+              //                   );
+              //                   if (date != null) {
+              //                     dateController.text = DateFormat("dd/MM/yyyy").format(date);
+              //
+              //                     await populateDropdown();
+              //                     setState(() {
+              //                       _searched = false;
+              //                       _selectedKaryakramLevelId = null;
+              //                     });
+              //                   }
+              //                 },
+              //           readOnly: true,
+              //           decoration: InputDecoration(
+              //               isDense: true,
+              //               hintText: "DD/MM/YYYY",
+              //               contentPadding: EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 12),
+              //               border: OutlineInputBorder(
+              //                 borderRadius: BorderRadius.circular(5),
+              //               )),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              SizedBox(height: 12),
+              textControllerField2(
+                name: Statics.getLabel("centrePramukhName"),
+                controller: txtPramukhNameController,
+                keyboardType: TextInputType.name,
+              ),
+              SizedBox(height: 12),
+              textControllerField2(
+                name: Statics.getLabel("centrePramukhMobile"),
+                controller: txtPramukhMobileController,
+                keyboardType: TextInputType.name,
+              ),
+              SizedBox(height: 12),
+              textControllerField2(
+                name: Statics.getLabel("centreName"),
+                controller: txtCentreNameController,
+                keyboardType: TextInputType.name,
               ),
               SizedBox(height: 12),
               InkWell(
                 onTap: () {
-                  if (dateController.text.isEmpty) {
-                    Statics.showToast("Please select date first");
-                    return;
-                  }
+                  // if (dateController.text.isEmpty) {
+                  //   Statics.showToast("Please select date first");
+                  //   return;
+                  // }
                 },
                 child: _buildDropdownField(
-                  ignoring: dateController.text.isEmpty || (baithakId != null && baithakId != 0),
+                  // ignoring: dateController.text.isEmpty || (baithakId != null && baithakId != 0),
                   label: Statics.getLabel('selectStar'),
                   value: _selectedKaryakramLevelId == null ? null : _selectedKaryakramLevelId.toString(),
                   items: karyakramLevelsList
@@ -475,12 +496,12 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
                             child: Text(bg.keys.first),
                           ))
                       .toList(),
-                  onTap: dateController.text.isEmpty ? null : () {},
+                  // onTap: dateController.text.isEmpty ? null : () {},
                   onChanged: (value) {
-                    if (dateController.text.isEmpty) {
-                      Statics.showToast("Please select date first");
-                      return;
-                    }
+                    // if (dateController.text.isEmpty) {
+                    //   Statics.showToast("Please select date first");
+                    //   return;
+                    // }
                     populateDropdown();
                     _searched = false;
                     // dateController.clear();
@@ -638,6 +659,68 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget textControllerField2({
+    required String name,
+    required TextEditingController controller,
+    double height = 50.0,
+    TextInputType keyboardType = TextInputType.text,
+    bool isEdit = false,
+    String? hintTextString,
+    String? imp,
+    int? maxInput,
+    bool isTextBold = true,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: name,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: isTextBold ? FontWeight.bold : FontWeight.normal,
+                  color: Colors.black,
+                ),
+              ),
+              TextSpan(
+                text: imp,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 5),
+        SizedBox(
+          height: height,
+          child: TextFormField(
+            controller: controller,
+            keyboardType: keyboardType,
+            inputFormatters: keyboardType == TextInputType.number ? [FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*$'))] : [],
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              filled: true,
+              fillColor: Colors.white,
+              hintText: hintTextString,
+            ),
+            readOnly: isEdit || !_searched,
+            maxLength: maxInput,
+            buildCounter: (context, {int? currentLength, int? maxLength, bool? isFocused}) => null,
+          ),
+        ),
+        const SizedBox(height: 10),
+      ],
     );
   }
 
