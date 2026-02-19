@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_expandable_table/flutter_expandable_table.dart';
 
 import '../../../helpers/static_data.dart' as Statics;
 import '../../../models/response_model/sadbhav_baithak_resp_model.dart';
@@ -18,6 +19,8 @@ class SadbhavCreationScreen extends StatefulWidget {
 }
 
 class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey();
+
   bool _searched = false;
   bool _isExpanded = true;
 
@@ -158,6 +161,10 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
   }
 
   checkIfExistsFun() async {
+    if (!_formKey.currentState!.validate()) {
+      Statics.showToast(Statics.getLabel("impInfoRequired"));
+      return;
+    }
     if (([2, 3, 4].contains(_selectedKaryakramLevelId)) && txtGivenGroupNameController.text.isEmpty) {
       Statics.showToast(Statics.getLabel("baithakNameValidationMessage"));
       return;
@@ -403,276 +410,541 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
       //     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
       //   ),
       // ),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.end,
-              //     children: [
-              //       Text(
-              //         "${Statics.getLabel('date2')} : ",
-              //         style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
-              //       ),
-              //       // Text(
-              //       //   " *",
-              //       //   style: TextStyle(fontSize: 15, color: Colors.red, fontWeight: FontWeight.bold),
-              //       // ),
-              //       SizedBox(width: 12),
-              //       SizedBox(
-              //         width: MediaQuery.sizeOf(context).width * 0.4,
-              //         child: TextField(
-              //           controller: dateController,
-              //           style: TextStyle(fontSize: 14),
-              //           autofocus: false,
-              //           onTap: _isViewOnly
-              //               ? null
-              //               : () async {
-              //                   DateTime? date = await showDatePicker(
-              //                     context: context,
-              //                     initialDate: dateController.text.isEmpty ? DateTime.now() : DateFormat("dd/MM/yyyy").parse(dateController.text),
-              //                     firstDate: DateTime(2000),
-              //                     lastDate: DateTime(2100),
-              //                   );
-              //                   if (date != null) {
-              //                     dateController.text = DateFormat("dd/MM/yyyy").format(date);
-              //
-              //                     await populateDropdown();
-              //                     setState(() {
-              //                       _searched = false;
-              //                       _selectedKaryakramLevelId = null;
-              //                     });
-              //                   }
-              //                 },
-              //           readOnly: true,
-              //           decoration: InputDecoration(
-              //               isDense: true,
-              //               hintText: "DD/MM/YYYY",
-              //               contentPadding: EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 12),
-              //               border: OutlineInputBorder(
-              //                 borderRadius: BorderRadius.circular(5),
-              //               )),
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              SizedBox(height: 12),
-              textControllerField2(
-                name: Statics.getLabel("centrePramukhName"),
-                controller: txtPramukhNameController,
-                keyboardType: TextInputType.name,
-              ),
-              SizedBox(height: 12),
-              textControllerField2(
-                name: Statics.getLabel("centrePramukhMobile"),
-                controller: txtPramukhMobileController,
-                keyboardType: TextInputType.name,
-              ),
-              SizedBox(height: 12),
-              textControllerField2(
-                name: Statics.getLabel("centreName"),
-                controller: txtCentreNameController,
-                keyboardType: TextInputType.name,
-              ),
-              SizedBox(height: 12),
-              InkWell(
-                onTap: () {
-                  // if (dateController.text.isEmpty) {
-                  //   Statics.showToast("Please select date first");
-                  //   return;
-                  // }
-                },
-                child: _buildDropdownField(
-                  // ignoring: dateController.text.isEmpty || (baithakId != null && baithakId != 0),
-                  label: Statics.getLabel('selectStar'),
-                  value: _selectedKaryakramLevelId == null ? null : _selectedKaryakramLevelId.toString(),
-                  items: karyakramLevelsList
-                      .map((bg) => DropdownMenuItem(
-                            value: bg.values.first.toString(),
-                            child: Text(bg.keys.first),
-                          ))
-                      .toList(),
-                  // onTap: dateController.text.isEmpty ? null : () {},
-                  onChanged: (value) {
+      body: Form(
+        key: _formKey,
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.end,
+                //     children: [
+                //       Text(
+                //         "${Statics.getLabel('date2')} : ",
+                //         style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
+                //       ),
+                //       // Text(
+                //       //   " *",
+                //       //   style: TextStyle(fontSize: 15, color: Colors.red, fontWeight: FontWeight.bold),
+                //       // ),
+                //       SizedBox(width: 12),
+                //       SizedBox(
+                //         width: MediaQuery.sizeOf(context).width * 0.4,
+                //         child: TextField(
+                //           controller: dateController,
+                //           style: TextStyle(fontSize: 14),
+                //           autofocus: false,
+                //           onTap: _isViewOnly
+                //               ? null
+                //               : () async {
+                //                   DateTime? date = await showDatePicker(
+                //                     context: context,
+                //                     initialDate: dateController.text.isEmpty ? DateTime.now() : DateFormat("dd/MM/yyyy").parse(dateController.text),
+                //                     firstDate: DateTime(2000),
+                //                     lastDate: DateTime(2100),
+                //                   );
+                //                   if (date != null) {
+                //                     dateController.text = DateFormat("dd/MM/yyyy").format(date);
+                //
+                //                     await populateDropdown();
+                //                     setState(() {
+                //                       _searched = false;
+                //                       _selectedKaryakramLevelId = null;
+                //                     });
+                //                   }
+                //                 },
+                //           readOnly: true,
+                //           decoration: InputDecoration(
+                //               isDense: true,
+                //               hintText: "DD/MM/YYYY",
+                //               contentPadding: EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 12),
+                //               border: OutlineInputBorder(
+                //                 borderRadius: BorderRadius.circular(5),
+                //               )),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                SizedBox(height: 12),
+                // textControllerField2(
+                //   name: Statics.getLabel("centrePramukhName"),
+                //   controller: txtPramukhNameController,
+                //   keyboardType: TextInputType.name,
+                // ),
+                // SizedBox(height: 12),
+                // textControllerField2(
+                //   name: Statics.getLabel("centrePramukhMobile"),
+                //   controller: txtPramukhMobileController,
+                //   keyboardType: TextInputType.name,
+                // ),
+                // SizedBox(height: 12),
+                // textControllerField2(
+                //   name: Statics.getLabel("centreName"),
+                //   controller: txtCentreNameController,
+                //   keyboardType: TextInputType.name,
+                // ),
+                SizedBox(height: 12),
+                InkWell(
+                  onTap: () {
                     // if (dateController.text.isEmpty) {
                     //   Statics.showToast("Please select date first");
                     //   return;
                     // }
-                    populateDropdown();
-                    _searched = false;
-                    // dateController.clear();
-                    setState(() => _selectedKaryakramLevelId = int.tryParse(value.toString()));
-                    nagarList = [];
-                    print("baithakId >>>>>>>>>>>>>>>> ${baithakId}");
                   },
-                  isDisabled: false,
+                  child: _buildDropdownField(
+                    // ignoring: dateController.text.isEmpty || (baithakId != null && baithakId != 0),
+                    label: Statics.getLabel('selectStar'),
+                    value: _selectedKaryakramLevelId == null ? null : _selectedKaryakramLevelId.toString(),
+                    items: karyakramLevelsList
+                        .map((bg) => DropdownMenuItem(
+                              value: bg.values.first.toString(),
+                              child: Text(bg.keys.first),
+                            ))
+                        .toList(),
+                    // onTap: dateController.text.isEmpty ? null : () {},
+                    onChanged: (value) {
+                      // if (dateController.text.isEmpty) {
+                      //   Statics.showToast("Please select date first");
+                      //   return;
+                      // }
+                      populateDropdown();
+                      _searched = false;
+                      // dateController.clear();
+                      setState(() => _selectedKaryakramLevelId = int.tryParse(value.toString()));
+                      nagarList = [];
+                      print("baithakId >>>>>>>>>>>>>>>> ${baithakId}");
+                    },
+                    isDisabled: false,
+                  ),
                 ),
-              ),
-              SizedBox(height: 18),
-              if ([2, 3, 4].contains(_selectedKaryakramLevelId))
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: Text(
-                        "${Statics.getLabel("Name")} : ",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
+                SizedBox(height: 18),
+                if ([2, 3, 4].contains(_selectedKaryakramLevelId))
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          "${Statics.getLabel("Name")} : ",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      flex: 5,
-                      child: TextFormField(
-                        controller: txtGivenGroupNameController,
-                        style: TextStyle(fontSize: 14),
-                        autofocus: false,
-                        readOnly: _isViewOnly,
-                        decoration: InputDecoration(
-                            isDense: true,
-                            hintText: Statics.getLabel("addName"),
-                            contentPadding: EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 12),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                            )),
+                      Expanded(
+                        flex: 5,
+                        child: TextFormField(
+                          controller: txtGivenGroupNameController,
+                          style: TextStyle(fontSize: 14),
+                          autofocus: false,
+                          readOnly: _isViewOnly,
+                          decoration: InputDecoration(
+                              isDense: true,
+                              hintText: Statics.getLabel("addName"),
+                              contentPadding: EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 12),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5),
+                              )),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              SizedBox(height: 18),
-              if (_selectedKaryakramLevelId != null) nagarDropdown(),
-              SizedBox(height: 18),
-              // if ((([2, 3, 4].contains(_selectedKaryakramLevelId)) && _selctedLevel == Statics.getLabel('Bhaag')) || _selctedLevel == _selectedKaryakramLevel)
+                    ],
+                  ),
+                SizedBox(height: 18),
+                if (_selectedKaryakramLevelId != null) nagarDropdown(),
+                SizedBox(height: 18),
+                // if ((([2, 3, 4].contains(_selectedKaryakramLevelId)) && _selctedLevel == Statics.getLabel('Bhaag')) || _selctedLevel == _selectedKaryakramLevel)
 
-              if (_selectedKaryakramLevelId != null && dateController.text.isNotEmpty && (baithakId == null || baithakId == 0) && !_isViewOnly)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // if ((_linkedgraamValue != "" && _linkedgraamValue != null) || (_linkedvastiValue != "" && _linkedvastiValue != null))
-                    MaterialButton(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 35,
-                        vertical: 5,
+                if (_selectedKaryakramLevelId != null && (baithakId == null || baithakId == 0) && !_isViewOnly)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // if ((_linkedgraamValue != "" && _linkedgraamValue != null) || (_linkedvastiValue != "" && _linkedvastiValue != null))
+                      MaterialButton(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 35,
+                          vertical: 5,
+                        ),
+                        color: Theme.of(context).primaryColor,
+                        textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                        onPressed: checkIfExistsFun,
+                        child: Text(
+                          "${Statics.getLabel([2, 3, 4].contains(_selectedKaryakramLevelId) ? 'search' : "Add")}",
+                          style: TextStyle(fontSize: 16),
+                        ),
                       ),
-                      color: Theme.of(context).primaryColor,
-                      textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                      onPressed: checkIfExistsFun,
-                      child: Text(
-                        "${Statics.getLabel([2, 3, 4].contains(_selectedKaryakramLevelId) ? 'search' : "Add")}",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    MaterialButton(onPressed: clearForm, child: Text(Statics.getLabel('clear'))),
-                  ],
-                ),
-              SizedBox(height: 18),
-              if (_searched && nagarList.isNotEmpty) ...[
-                Wrap(
-                  spacing: 12,
-                  runSpacing: 18,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: nagarList
-                      .map(
-                        (nagar) => IgnorePointer(
-                          ignoring: _isViewOnly,
-                          child: SizedBox(
-                            width: MediaQuery.sizeOf(context).width * 0.4,
-                            child: CheckboxListTile(
-                              value: nagar.chkstatus != 0,
-                              onChanged: nagar.chkstatus == 2
-                                  ? null
-                                  : (value) {
-                                      if (_selectedNagarIds.contains(nagar.geoUnitID.toString())) {
-                                        _selectedNagarIds.removeWhere((e) => e.toString() == nagar.geoUnitID.toString());
-                                        nagar.chkstatus = 0;
-                                      } else {
-                                        _selectedNagarIds.add(nagar.geoUnitID.toString());
-                                        nagar.chkstatus = 1;
-                                      }
-                                      setState(() {
-                                        print(nagar.chkstatus);
-                                        print(_selectedNagarIds);
-                                      });
-                                    },
-                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              controlAffinity: ListTileControlAffinity.leading,
-                              dense: true,
-                              title: Text(
-                                (nagar.geoname ?? "--"),
-                                style: TextStyle(fontSize: 14),
+                      MaterialButton(onPressed: clearForm, child: Text(Statics.getLabel('clear'))),
+                    ],
+                  ),
+                SizedBox(height: 18),
+                if (_searched && nagarList.isNotEmpty) ...[
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 18,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: nagarList
+                        .map(
+                          (nagar) => IgnorePointer(
+                            ignoring: _isViewOnly,
+                            child: SizedBox(
+                              width: MediaQuery.sizeOf(context).width * 0.4,
+                              child: CheckboxListTile(
+                                value: nagar.chkstatus != 0,
+                                onChanged: nagar.chkstatus == 2
+                                    ? null
+                                    : (value) {
+                                        if (_selectedNagarIds.contains(nagar.geoUnitID.toString())) {
+                                          _selectedNagarIds.removeWhere((e) => e.toString() == nagar.geoUnitID.toString());
+                                          nagar.chkstatus = 0;
+                                        } else {
+                                          _selectedNagarIds.add(nagar.geoUnitID.toString());
+                                          nagar.chkstatus = 1;
+                                        }
+                                        setState(() {
+                                          print(nagar.chkstatus);
+                                          print(_selectedNagarIds);
+                                        });
+                                      },
+                                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                controlAffinity: ListTileControlAffinity.leading,
+                                dense: true,
+                                title: Text(
+                                  (nagar.geoname ?? "--"),
+                                  style: TextStyle(fontSize: 14),
+                                ),
                               ),
                             ),
                           ),
+                          // (nagar) => GestureDetector(
+                          //   onTap: () {
+                          //     if (_selectedNagarIds.contains(nagar.geoUnitID.toString()))
+                          //       _selectedNagarIds.removeWhere((e) => e.toString() == nagar.geoUnitID.toString());
+                          //     else
+                          //       _selectedNagarIds.add(nagar.geoUnitID.toString());
+                          //     setState(() {});
+                          //   },
+                          //   child: SizedBox(
+                          //     width: MediaQuery.sizeOf(context).width * 0.4,
+                          //     child: Row(
+                          //       spacing: 8,
+                          //       mainAxisSize: MainAxisSize.min,
+                          //       children: [
+                          //         Icon(
+                          //           _selectedNagarIds.contains(nagar.geoUnitID.toString()) ? Icons.check_box_rounded : Icons.check_box_outline_blank_rounded,
+                          //           color: _selectedNagarIds.contains(nagar.geoUnitID.toString()) ? Colors.purple : Colors.black,
+                          //         ),
+                          //         Expanded(child: Text(nagar.geoname ?? "--")),
+                          //       ],
+                          //     ),
+                          //   ),
+                          // ),
+                        )
+                        .toList(),
+                  ),
+                  SizedBox(height: 24),
+                  if (_selectedNagarIds.isNotEmpty && !_isViewOnly)
+                    SizedBox(
+                      width: MediaQuery.sizeOf(context).width * 0.8,
+                      child: MaterialButton(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 35,
+                          vertical: 12,
                         ),
-                        // (nagar) => GestureDetector(
-                        //   onTap: () {
-                        //     if (_selectedNagarIds.contains(nagar.geoUnitID.toString()))
-                        //       _selectedNagarIds.removeWhere((e) => e.toString() == nagar.geoUnitID.toString());
-                        //     else
-                        //       _selectedNagarIds.add(nagar.geoUnitID.toString());
-                        //     setState(() {});
-                        //   },
-                        //   child: SizedBox(
-                        //     width: MediaQuery.sizeOf(context).width * 0.4,
-                        //     child: Row(
-                        //       spacing: 8,
-                        //       mainAxisSize: MainAxisSize.min,
-                        //       children: [
-                        //         Icon(
-                        //           _selectedNagarIds.contains(nagar.geoUnitID.toString()) ? Icons.check_box_rounded : Icons.check_box_outline_blank_rounded,
-                        //           color: _selectedNagarIds.contains(nagar.geoUnitID.toString()) ? Colors.purple : Colors.black,
-                        //         ),
-                        //         Expanded(child: Text(nagar.geoname ?? "--")),
-                        //       ],
-                        //     ),
-                        //   ),
-                        // ),
-                      )
-                      .toList(),
-                ),
-                SizedBox(height: 24),
-                if (_selectedNagarIds.isNotEmpty && !_isViewOnly)
-                  SizedBox(
-                    width: MediaQuery.sizeOf(context).width * 0.8,
-                    child: MaterialButton(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 35,
-                        vertical: 12,
-                      ),
-                      color: Theme.of(context).primaryColor,
-                      textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                      onPressed: createSadbhavBaithakFun,
-                      child: Text(
-                        "${Statics.getLabel('Submit')}",
-                        style: TextStyle(fontSize: 17),
+                        color: Theme.of(context).primaryColor,
+                        textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                        onPressed: createSadbhavBaithakFun,
+                        child: Text(
+                          "${Statics.getLabel('Submit')}",
+                          style: TextStyle(fontSize: 17),
+                        ),
                       ),
                     ),
-                  ),
+                ],
+                SizedBox(height: 50),
               ],
-              SizedBox(height: 50),
-            ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget textControllerField2({
-    required String name,
-    required TextEditingController controller,
-    double height = 50.0,
-    TextInputType keyboardType = TextInputType.text,
-    bool isEdit = false,
-    String? hintTextString,
-    String? imp,
-    int? maxInput,
-    bool isTextBold = true,
-  }) {
+  Widget myAreaReport() {
+    return ExpansionPanelList(
+      children: [
+        ExpansionPanel(
+          headerBuilder: (BuildContext context, bool isExpanded) {
+            return ListTile(
+              title: Text(Statics.getLabel('MyGeoUnitDetails')),
+            );
+          },
+          body: Container(
+            margin: EdgeInsets.all(20),
+            child: Column(
+              children: [],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // UI Helper for Header Cells
+  ExpandableTableCell _buildHeaderCell(String text) {
+    return ExpandableTableCell(
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 8),
+        decoration: BoxDecoration(color: Colors.purple.shade100, border: Border.all(color: Colors.grey.shade700, width: 0.7)),
+        alignment: Alignment.center,
+        child: Text(
+          text,
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+  }
+
+  // UI Helper for Body Cells
+  ExpandableTableCell _buildCell(String text, {Color? color, bool showBorder = true, Widget? child, FontWeight? fontWeight}) {
+    return ExpandableTableCell(
+      builder: (context, details) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        decoration: BoxDecoration(color: color ?? Colors.white, border: showBorder ? Border.all(color: Colors.grey.shade700, width: 0.7) : null),
+        alignment: child != null ? null : Alignment.center,
+        child: child ??
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (details.row?.children != null)
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: AnimatedRotation(
+                      duration: const Duration(milliseconds: 500),
+                      turns: details.row?.childrenExpanded == true ? 0.25 : 0,
+                      child: const Icon(
+                        Icons.keyboard_arrow_right,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                Expanded(
+                  child: Text(
+                    text,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: fontWeight ?? FontWeight.w600),
+                  ),
+                ),
+              ],
+            ),
+      ),
+    );
+  }
+
+  // Widget otherDaysExpandableTable() {
+  //   final List<String> _headers = [
+  //     // 'कार्यक्रम स्तर',
+  //     // Statics.getLabel('gruhSamarkitGhar'),
+  //     Statics.getLabel('centrePramukhName'),
+  //     Statics.getLabel('centrePramukhMobile'),
+  //     Statics.getLabel('centreName'),
+  //     "",
+  //   ];
+  //   // if (separatedPreviousLists.isEmpty) return SizedBox();
+  //
+  //   // final _totalSampark = separatedPreviousLists.expand((inner) => inner).fold(0.0, (prev, item) => prev + (item.samparkitghar ?? 0)).toInt();
+  //   // final _totalVitarit = separatedPreviousLists.expand((inner) => inner).fold(0.0, (prev, item) => prev + (item.vitaritkarpatra ?? 0)).toInt();
+  //   // final _totalPustak = separatedPreviousLists.expand((inner) => inner).fold(0.0, (prev, item) => prev + (item.pustakvikrisankhya ?? 0)).toInt();
+  //   // final _totalSpecial = separatedPreviousLists.expand((inner) => inner).fold(0.0, (prev, item) => prev + (item.totalAtithiCount ?? 0)).toInt();
+  //
+  //   return Padding(
+  //     padding: const EdgeInsets.symmetric(horizontal: 16.0),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         // if (separatedPreviousLists.isNotEmpty) ...[
+  //           Text("${Statics.getLabel("yoursPreviousDaysData")} :", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+  //           SizedBox(height: 8),
+  //           Container(
+  //             constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.65),
+  //             // padding: const EdgeInsets.symmetric(horizontal: 16.0),
+  //             child: ExpandableTable(
+  //               expanded: false,
+  //               thumbVisibilityScrollbar: true,
+  //               visibleScrollbar: true,
+  //               // --- Dimensions ---
+  //               firstColumnWidth: 140,
+  //               headerHeight: 50,
+  //               // rowsCount: totalRows,
+  //
+  //               // --- Header ---
+  //               firstHeaderCell: _buildHeaderCell(Statics.getLabel('LevelName')),
+  //               headers: _headers.map((e) => ExpandableTableHeader(cell: _buildHeaderCell(e))).toList(),
+  //
+  //               // --- Body Rows ---
+  //               rows: separatedPreviousLists.map(
+  //                     (group) {
+  //                       // group is List<PreviousDayModel> for one CreatedUserID
+  //                       final _first = group.first;
+  //                       final _geoUnitName = (isAbhiyaanButPramukh ? _first.participantName : _first.geoUnitName) ?? '--';
+  //
+  //                       // compute totals for this group
+  //                       final totalSampark = group.fold<int>(0, (s, e) => s + (e.samparkitghar ?? 0));
+  //                       final totalVitarit = group.fold<int>(0, (s, e) => s + (e.vitaritkarpatra ?? 0));
+  //                       final totalPustak = group.fold<int>(0, (s, e) => s + (e.pustakvikrisankhya ?? 0));
+  //                       final totalSpecial = group.fold<int>(0, (s, e) => s + (e.totalAtithiCount ?? 0));
+  //
+  //                       // return group.length > 1
+  //                       //     ?
+  //                       return ExpandableTableRow(
+  //                         height: 50,
+  //
+  //                         // childrenExpanded: true,
+  //                         legend: Container(
+  //                           decoration: BoxDecoration(color: Colors.red.shade100),
+  //                           child: Text(
+  //                             "",
+  //                             style: TextStyle(
+  //                               fontWeight: FontWeight.normal,
+  //                             ),
+  //                           ),
+  //                         ),
+  //                         firstCell: _buildCell(_geoUnitName, color: Colors.red.shade100),
+  //                         children: group
+  //                             .map((item) => ExpandableTableRow(
+  //                                   height: 50,
+  //                                   firstCell: _buildCell(item.abhiyaanDate.toString()),
+  //                                   cells: [
+  //                                     // _buildCell(item.samparkitghar.toString()),
+  //                                     _buildCell(item.vitaritkarpatra.toString()),
+  //                                     _buildCell(item.pustakvikrisankhya.toString()),
+  //                                     _buildCell(item.totalAtithiCount.toString()),
+  //                                     _buildCell("",
+  //                                         child: Container(
+  //                                           constraints: BoxConstraints(maxWidth: 30),
+  //                                           child: InkWell(
+  //                                               // onTap: () {
+  //                                               //   Statics.showToast(Statics.getLabel("workInProgress"));
+  //                                               // },
+  //                                               onTap: () async {
+  //                                                 log(jsonEncode(item));
+  //                                                 // _selctedLevelNameList = [];
+  //                                                 await Future.delayed(
+  //                                                     Duration(milliseconds: 100),
+  //                                                     () => setState(() {
+  //                                                           dateController.text = DateFormat("dd/MM/yyyy").format(DateFormat("dd-MM-yyyy").parse(item.abhiyaanDate.toString()));
+  //                                                           // samparkitGhareController.text = item.samparkitghar.toString();
+  //                                                           vitritKarpatrakController.text = item.vitaritkarpatra.toString();
+  //                                                           pustakVikriController.text = item.pustakvikrisankhya.toString();
+  //                                                           createdUserId = item.createdUserID;
+  //
+  //                                                           // if (item.createdUserID == Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"] && isAbhiyaanButPramukh)
+  //                                                           //   samparkaSahabhagiController.text = item.samparkhetusahbhagisankhya.toString();
+  //                                                           // if (item.createdUserID == Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"] && isAbhiyaanButPramukh)
+  //                                                           //   samparkaToliController.text = item.samparkhetutolisankhya.toString();
+  //                                                         }));
+  //                                                 // if (!isAbhiyaanButPramukh) {
+  //                                                 //   await populateDropdownForEdit(
+  //                                                 //     item.geoUnitID,
+  //                                                 //     item.levelID,
+  //                                                 //     item.parentMahaanagarID,
+  //                                                 //     item.parentVibhaagID,
+  //                                                 //     item.parentBhaagID,
+  //                                                 //     item.parentNagarID,
+  //                                                 //     item.parentMandalID,
+  //                                                 //   );
+  //                                                 // } else {
+  //                                                 setState(() {
+  //                                                   _selectedEditGeoUnitId = item.geoUnitID.toString();
+  //                                                 });
+  //                                                 // }
+  //
+  //                                                 // // if ((item.visititAtithiSajjanShaktiids != null && item.visititAtithiSajjanShaktiids!.isNotEmpty) ||
+  //                                                 // //     (item.visititAtithiAnyaprabhaViLokamids != null && item.visititAtithiAnyaprabhaViLokamids!.isNotEmpty)) {
+  //                                                 // data = await Statics.getSajjanAndAnyaGuestData(context, Statics.userDetails["userID"], item.geoUnitID.toString(),
+  //                                                 //     item.parentMandalID != null && item.parentMandalID.toString().isNotEmpty ? "3" : "2");
+  //                                                 // // }
+  //                                                 // setState(() {
+  //                                                 //   _isExpanded = false;
+  //                                                 //   // _selctedLevelNameList.add(_linkedbhaagName);
+  //                                                 //   // _selctedLevelNameList.add(_linkedshaharName);
+  //                                                 //   // _selctedLevelNameList.add(_linkednagarName);
+  //                                                 //   // _selctedLevelNameList.add(_linkedmandalName);
+  //                                                 //   // _selctedLevelNameList.add(_linkedgraamName);
+  //                                                 //   // _selctedLevelNameList.add(_linkedvastiName);
+  //                                                 // });
+  //                                                 // setState(() {
+  //                                                 //   if (data != null) {
+  //                                                 //     // setState(() {
+  //                                                 //     selectedSajjanshaktiItems =
+  //                                                 //         data!.vastisarsajjanshakti!.where((e) => item.visititAtithiSajjanShaktiids!.split(",").contains(e.pkid.toString())).toList();
+  //                                                 //     selectedAnyaprabhaviItems =
+  //                                                 //         data!.vastisanyaprabhavi!.where((e) => item.visititAtithiAnyaprabhaViLokamids!.split(",").contains(e.pkId.toString())).toList();
+  //                                                 //     // if (data!.swayamsevaklistforgruh != null)
+  //                                                 //     //   selectedVisitedSwayamsevak =
+  //                                                 //     //       data!.swayamsevaklistforgruh!.where((e) => item.swayamsevakIds!.split(",").contains(e.swayamsevakID.toString())).toList();
+  //                                                 //     // });
+  //                                                 //   }
+  //                                                 // });
+  //                                                 // await _scrollController.animateTo(
+  //                                                 //   0,
+  //                                                 //   duration: const Duration(milliseconds: 600),
+  //                                                 //   curve: Curves.easeInOutSine,
+  //                                                 // );
+  //                                                 setState(() {
+  //                                                   _isEditing = true;
+  //                                                   _searched = true;
+  //                                                   if (item.createdUserID == Statics.abhiyaanUserDetails["AbhiyanSwayamsevakID"] && isAbhiyaanButPramukh) _isEditingForPramukh = true;
+  //                                                 });
+  //
+  //                                                 showEditableGruhAbhiyaanForm();
+  //                                               },
+  //                                               child: Icon(
+  //                                                 Icons.edit,
+  //                                                 color: Colors.green.shade700,
+  //                                               )),
+  //                                         )),
+  //                                   ],
+  //                                 ))
+  //                             .toList(),
+  //                       );
+  //                     },
+  //                   ).toList() +
+  //                   [
+  //                     ExpandableTableRow(
+  //                       height: 50,
+  //                       firstCell: _buildCell(Statics.getLabel("Total"), color: Colors.yellow.shade100),
+  //                       cells: [
+  //                         // _buildCell(_totalSampark.toString(), fontWeight: FontWeight.bold, color: Colors.yellow.shade50),
+  //                         _buildCell(_totalVitarit.toString(), fontWeight: FontWeight.bold, color: Colors.yellow.shade50),
+  //                         _buildCell(_totalPustak.toString(), fontWeight: FontWeight.bold, color: Colors.yellow.shade50),
+  //                         _buildCell(_totalSpecial.toString(), fontWeight: FontWeight.bold, color: Colors.yellow.shade50),
+  //                         _buildCell("", fontWeight: FontWeight.bold, color: Colors.yellow.shade50),
+  //                       ],
+  //                     )
+  //                   ],
+  //             ),
+  //           ),
+  //         // ],
+  //       ],
+  //     ),
+  //   );
+  // }
+
+  Widget textControllerField2(
+      {required String name,
+      required TextEditingController controller,
+      double height = 50.0,
+      TextInputType keyboardType = TextInputType.text,
+      bool isEdit = false,
+      String? hintTextString,
+      String? imp,
+      int? maxInput,
+      bool isTextBold = true,
+      String? Function(String?)? validator}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -717,6 +989,7 @@ class _SadbhavCreationScreenState extends State<SadbhavCreationScreen> {
             readOnly: isEdit || !_searched,
             maxLength: maxInput,
             buildCounter: (context, {int? currentLength, int? maxLength, bool? isFocused}) => null,
+            validator: validator,
           ),
         ),
         const SizedBox(height: 10),
