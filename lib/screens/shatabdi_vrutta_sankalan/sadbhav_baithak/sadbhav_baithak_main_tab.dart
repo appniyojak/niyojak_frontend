@@ -6,7 +6,7 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import '../../../helpers/static_data.dart' as Statics;
 import '../../../widgets/app_drawer.dart';
-import 'sadbhav_creation_screen.dart';
+import 'sadbhav_centers_list_screen.dart';
 import 'sadbhav_report.dart';
 import 'sadbhav_search_vrutta.dart';
 
@@ -119,7 +119,7 @@ class _SadbhavBaithakMainTabState extends State<SadbhavBaithakMainTab> with Sing
             controller: _tabController,
             physics: NeverScrollableScrollPhysics(),
             children: <Widget>[
-              SadbhavCreationScreen(),
+              SadbhavCenterListScreen(onChanged: () => setState(() => _tabController!.animateTo(1))),
               SadbhavSearchVruttaTab(),
               SadbhavReportTab(),
             ],

@@ -1831,6 +1831,7 @@ Map<String, String> resEnglish = {
   ////////////////////////////////////// Sadbhav Baithak Block //////////////////////////////////////
   'selectKaryakramLevel': "Select Program Level",
   'searchBaithak': "Search Baithak",
+  'baithak': "Baithak",
   'addCentre': "Add Centre",
   'centrePramukhName': "Centre Pramukh Name",
   'centrePramukhMobile': "Centre Pramukh Mobile No.",
@@ -1856,6 +1857,9 @@ Map<String, String> resEnglish = {
   'addPresentMahanubhav': 'Add Present Mahanubhaav',
   'submitValidation': 'Please fill atleast one info before submitting',
   'baithakNameValidationMessage': 'Please Enter Baithak Name',
+  'centrePramukhNameValidationMessage': 'Centre Pramukh Name required',
+  'centrePramukhMobileValidationMessage': 'Centre Pramukh Mobile No. required',
+  'centreNameValidationMessage': 'Centre Name required',
 };
 
 ///1,584
@@ -3695,10 +3699,11 @@ Map<String, String> resMarathi = {
   ////////////////////////////////////// Sadbhav Baithak Block //////////////////////////////////////
   'selectKaryakramLevel': "कार्यक्रम स्तर निवडा",
   'searchBaithak': "बैठक शोधा",
+  'baithak': "बैठक",
   'addCentre': "केंद्र जोडा",
   'centrePramukhName': "केंद्र प्रमुखाचे नाव",
   'centrePramukhMobile': "केंद्र प्रमुखाचे मोबाईल क्र.",
-  'centreName': "केंद्राचे का नाम",
+  'centreName': "केंद्राचे नाव",
   'addBaithak': "बैठक जोडा",
   'baithakNotFound': "बैठक उपलब्ध नाही",
   'railwayStation': "रेल्वे स्थानक",
@@ -3720,6 +3725,9 @@ Map<String, String> resMarathi = {
   'addPresentMahanubhav': 'उपस्थित महानुभाव जोडा',
   'submitValidation': 'सबमिट करण्यापूर्वी कृपया किमान एक माहिती भरा.',
   'baithakNameValidationMessage': 'बैठक नाव आवश्यक आहे',
+  'centrePramukhNameValidationMessage': 'केंद्र प्रमुखाचे नाव आवश्यक',
+  'centrePramukhMobileValidationMessage': 'केंद्र प्रमुखाचे मोबाईल क्र. आवश्यक',
+  'centreNameValidationMessage': 'केंद्राचे नाव आवश्यक',
 };
 
 ///1,583
@@ -5554,6 +5562,7 @@ Map<String, String> resHindi = {
   ////////////////////////////////////// Sadbhav Baithak Block //////////////////////////////////////
   'selectKaryakramLevel': "कार्यक्रम स्तर चुने",
   'searchBaithak': "बैठक खोजें",
+  'baithak': "बैठक",
   'addCentre': "केंद्र जोड़ें",
   'centrePramukhName': "केंद्र प्रमुख का नाम",
   'centrePramukhMobile': "केंद्र प्रमुख का मोबाईल क्र.",
@@ -5579,4 +5588,7 @@ Map<String, String> resHindi = {
   'addPresentMahanubhav': 'उपस्थित महानुभाव जोड़ें',
   'submitValidation': 'सबमिट करने से पहले कृपया कम से कम एक जानकारी भरें।',
   'baithakNameValidationMessage': 'बैठक का नाम आवश्यक',
+  'centrePramukhNameValidationMessage': 'केंद्र प्रमुख का नाम आवश्यक',
+  'centrePramukhMobileValidationMessage': 'केंद्र प्रमुख का मोबाईल क्र. आवश्यक',
+  'centreNameValidationMessage': 'केंद्र का नाम आवश्यक',
 };
