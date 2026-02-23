@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_expandable_table/flutter_expandable_table.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../../../helpers/static_data.dart' as Statics;
 import '../../../models/response_model/sadbhav_baithak_resp_model.dart';
 import '../../../providers/bals.dart';
+import '../../../providers/sadbhav_provider.dart';
 import 'sadbhav_form.dart';
 
 class SadbhavSearchVruttaTab extends StatefulWidget {
@@ -319,6 +321,7 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> with Au
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final sadbhavProvider = context.watch<SadbhavProvider>();
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => showDialog(
@@ -410,11 +413,15 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> with Au
               //     mainAxisAlignment: MainAxisAlignment.end,
               //     children: [
               Text(
-                "${Statics.getLabel('centreName')}  : ${Statics.getLabel('railwayStation')}",
+                "${Statics.getLabel('LevelType')}  : ${sadbhavProvider.selectedSadbhav?.sthartype ?? "--"}",
                 style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
               ),
               Text(
-                "${Statics.getLabel('GeoUnit')} :  Mumba Devi",
+                "${Statics.getLabel('centreName')}  : ${sadbhavProvider.selectedSadbhav?.centername ?? "--"}",
+                style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                "${Statics.getLabel('LevelName')} :  ${sadbhavProvider.selectedSadbhav?.geounitname ?? "--"}",
                 style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
               ),
               //       // Text(
@@ -516,7 +523,7 @@ class _SadbhavSearchVruttaTabState extends State<SadbhavSearchVruttaTab> with Au
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                       separatorBuilder: (context, index) => SizedBox(height: 12),
-                      itemCount: sadbhavList.length,
+                      itemCount: sadbhavList.length > 4 ? 3 : sadbhavList.length,
                       itemBuilder: (context, index) {
                         // String date = datewiseSadbhavList.keys.toList()[index];
                         // final items = datewiseSadbhavList[date]!;

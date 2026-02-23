@@ -5,10 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_expandable_table/flutter_expandable_table.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 import '../../../helpers/static_data.dart' as Statics;
 import '../../../models/response_model/sadbhav_baithak_resp_model.dart';
+import '../../../models/response_model/sadbhav_center_list_resp_model.dart';
 import '../../../providers/bals.dart';
+import '../../../providers/sadbhav_provider.dart';
 import 'sadbhav_center_creation_screen.dart';
 
 class SadbhavCenterListScreen extends StatefulWidget {
@@ -21,7 +24,11 @@ class SadbhavCenterListScreen extends StatefulWidget {
   State<SadbhavCenterListScreen> createState() => _SadbhavCenterListScreenState();
 }
 
-class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> {
+class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with AutomaticKeepAliveClientMixin {
+// This override is what tells Flutter to keep the state alive.
+  @override
+  bool get wantKeepAlive => true;
+
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   bool _searched = false;
@@ -406,6 +413,9 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+    final sadbhavProvider = Provider.of<SadbhavProvider>(context, listen: false);
+
     return Scaffold(
       // appBar: AppBar(
       //   title: Text(
@@ -413,11 +423,11 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> {
       //     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
       //   ),
       // ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName),
-        backgroundColor: Colors.green.shade400,
-        label: Icon(Icons.add),
-      ),
+      // floatingActionButton: FloatingActionButton.extended(
+      //   onPressed: () => Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName),
+      //   backgroundColor: Colors.green.shade400,
+      //   label: Icon(Icons.add),
+      // ),
       body: Form(
         key: _formKey,
         child: Container(
@@ -671,6 +681,26 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> {
                 // //       ),
                 // //     ),
                 // // ],
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      "*Dummy Data",
+                      style: TextStyle(color: Colors.grey.shade600, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+                    )
+                  ],
+                ),
+                SizedBox(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    OutlinedButton(
+                      style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)), side: BorderSide(color: Colors.purple, width: 0.7)),
+                      onPressed: () => Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName),
+                      child: Text("+  " + Statics.getLabel("AddMore")),
+                    )
+                  ],
+                ),
                 SizedBox(height: 24),
                 myAreaReport(), SizedBox(height: 18), otherAreaReport(),
                 SizedBox(height: 90),
@@ -778,7 +808,8 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> {
             ],
           ),
         SizedBox(height: 24),
-        otherAreaExpandableTable(),
+        myAreaExpandableTable(),
+        // otherAreaExpandableTable(),
       ],
     );
 
@@ -851,6 +882,7 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> {
   }
 
   Widget myAreaExpandableTable() {
+    final sadbhavProvider = context.read<SadbhavProvider>();
     final List<String> _headers = [
       // 'कार्यक्रम स्तर',
       // Statics.getLabel('gruhSamarkitGhar'),
@@ -886,219 +918,29 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> {
         // --- Body Rows ---
         rows: [
           ExpandableTableRow(
-              // height: 50,
+            // height: 50,
 
-              // childrenExpanded: true,
-              legend: Container(
-                decoration: BoxDecoration(color: Colors.red.shade100),
-                child: Text(
-                  "",
-                  style: TextStyle(
-                    fontWeight: FontWeight.normal,
-                  ),
+            // childrenExpanded: true,
+            legend: Container(
+              decoration: BoxDecoration(color: Colors.red.shade100),
+              child: Text(
+                "",
+                style: TextStyle(
+                  fontWeight: FontWeight.normal,
                 ),
               ),
-              firstCell: _buildCell("Sthar Name", color: Colors.red.shade100),
-              children: [
-                ExpandableTableRow(
-                  // height: 50,
-                  firstCell: _buildCell("acsacs"),
-                  cells: [
-                    // _buildCell(item.samparkitghar.toString()),
-                    _buildCell("ascacaca"),
-                    _buildCell("ascacaca"),
-                    _buildCell("ascacaca"),
-                    _buildCell("",
-                        child: PopupMenuButton(
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          onSelected: (value) {
-                            if (value == "Delete") {
-                              showDialog(
-                                context: context,
-                                builder: (ctx) => AlertDialog(
-                                  title: Text(Statics.getLabel('AskConfirmation')),
-                                  content: Text(Statics.getLabel('AreyouSureYouWantToDeleteBaithak')),
-                                  actions: <Widget>[
-                                    MaterialButton(
-                                      child: Text(Statics.getLabel('ConfirmationYes')),
-                                      onPressed: () async {
-                                        // var _res = await Statics.DeleteSadbhavBaithakData(context: context, inputJson: {"ids": data.pkid});
-                                        // if (_res) {
-                                        //   Statics.showToast(Statics.getLabel('BaithakDeletedSuccessfully'));
-                                        // } else
-                                        //   Statics.showToast(Statics.getLabel('errorOccurred'));
-                                        // Navigator.of(ctx).pop();
-                                        // await getSadbhavBaithakListFun();
-                                      },
-                                    ),
-                                    MaterialButton(
-                                      child: Text(Statics.getLabel('ConfirmationNo')),
-                                      onPressed: () {
-                                        Navigator.of(ctx).pop();
-                                      },
-                                    )
-                                  ],
-                                ),
-                              );
-                            } else if (value == "EditMenu") {
-                              print("EDIT >>>>>>>>>>>>>>");
-                              Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
-                            } else if (value == "baithak") {
-                              if (widget.onChanged != null) widget.onChanged!();
-                              // Navigator.of(context).pushNamed(SadbhavFormTab.routeName); //, arguments: {"id": data.pkid});
-                            } else {
-                              Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
-                              // Navigator.of(context).pushNamed(SadbhavCenterListScreen.routeName); //, arguments: {"id": data.pkid, "viewOnly": true});
-                            }
-                          },
-                          itemBuilder: (BuildContext context) {
-                            return [
-                              // Statics.MenuItem(Statics.getLabel('addinSoochi'), Icons.list, 'AddinSoochi'),
-                              // if (showEditMenu == true)
-                              Statics.MenuItem(Statics.getLabel('EditMenu'), FontAwesomeIcons.edit, 'EditMenu'),
-                              Statics.MenuItem(Statics.getLabel('ViewMenu'), FontAwesomeIcons.eye, 'ViewMenu'),
-                              // if (showDeleteMenu == true)
-                              Statics.MenuItem(Statics.getLabel('Delete'), Icons.delete, 'Delete'),
-                              Statics.MenuItem(Statics.getLabel('baithak'), Icons.edit_note_rounded, 'baithak'),
-                            ].map((Statics.MenuItem menuItem) {
-                              return PopupMenuItem(
-                                value: menuItem.menuKey,
-                                child: ListTile(
-                                  // tileColor: Colors.white,
-                                  leading: Icon(
-                                    menuItem.iconVal,
-                                    color: Colors.purple,
-                                  ),
-                                  title: Text(menuItem.menuVal),
-                                ),
-                              );
-                            }).toList();
-                          },
-                        )),
-                  ],
-                ),
-              ]),
-          ExpandableTableRow(
-              // height: 50,
-
-              // childrenExpanded: true,
-              legend: Container(
-                decoration: BoxDecoration(color: Colors.red.shade100),
-                child: Text(
-                  "",
-                  style: TextStyle(
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              ),
-              firstCell: _buildCell("Sthar Name", color: Colors.red.shade100),
-              children: [
-                ExpandableTableRow(
-                  // height: 50,
-                  firstCell: _buildCell("acsacs"),
-                  cells: [
-                    // _buildCell(item.samparkitghar.toString()),
-                    _buildCell("ascacaca"),
-                    _buildCell("ascacaca"),
-                    _buildCell("ascacaca"),
-                    _buildCell("",
-                        child: PopupMenuButton(
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          onSelected: (value) {
-                            if (value == "Delete") {
-                              showDialog(
-                                context: context,
-                                builder: (ctx) => AlertDialog(
-                                  title: Text(Statics.getLabel('AskConfirmation')),
-                                  content: Text(Statics.getLabel('AreyouSureYouWantToDeleteBaithak')),
-                                  actions: <Widget>[
-                                    MaterialButton(
-                                      child: Text(Statics.getLabel('ConfirmationYes')),
-                                      onPressed: () async {
-                                        // var _res = await Statics.DeleteSadbhavBaithakData(context: context, inputJson: {"ids": data.pkid});
-                                        // if (_res) {
-                                        //   Statics.showToast(Statics.getLabel('BaithakDeletedSuccessfully'));
-                                        // } else
-                                        //   Statics.showToast(Statics.getLabel('errorOccurred'));
-                                        // Navigator.of(ctx).pop();
-                                        // await getSadbhavBaithakListFun();
-                                      },
-                                    ),
-                                    MaterialButton(
-                                      child: Text(Statics.getLabel('ConfirmationNo')),
-                                      onPressed: () {
-                                        Navigator.of(ctx).pop();
-                                      },
-                                    )
-                                  ],
-                                ),
-                              );
-                            } else if (value == "EditMenu") {
-                              print("EDIT >>>>>>>>>>>>>>");
-                              Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
-                              // Navigator.of(context).pushNamed(SadbhavCenterListScreen.routeName); //, arguments: {"id": data.pkid, "viewOnly": false});
-                            } else if (value == "baithak") {
-                              if (widget.onChanged != null) widget.onChanged!();
-                              // Navigator.of(context).pushNamed(SadbhavFormTab.routeName); //, arguments: {"id": data.pkid});
-                            } else {
-                              Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
-                              // Navigator.of(context).pushNamed(SadbhavCenterListScreen.routeName); //, arguments: {"id": data.pkid, "viewOnly": true});
-                            }
-                          },
-                          itemBuilder: (BuildContext context) {
-                            return [
-                              // Statics.MenuItem(Statics.getLabel('addinSoochi'), Icons.list, 'AddinSoochi'),
-                              // if (showEditMenu == true)
-                              Statics.MenuItem(Statics.getLabel('EditMenu'), FontAwesomeIcons.edit, 'EditMenu'),
-                              Statics.MenuItem(Statics.getLabel('ViewMenu'), FontAwesomeIcons.eye, 'ViewMenu'),
-                              // if (showDeleteMenu == true)
-                              Statics.MenuItem(Statics.getLabel('Delete'), Icons.delete, 'Delete'),
-                              Statics.MenuItem(Statics.getLabel('baithak'), Icons.edit_note_rounded, 'baithak'),
-                            ].map((Statics.MenuItem menuItem) {
-                              return PopupMenuItem(
-                                value: menuItem.menuKey,
-                                child: ListTile(
-                                  // tileColor: Colors.white,
-                                  leading: Icon(
-                                    menuItem.iconVal,
-                                    color: Colors.purple,
-                                  ),
-                                  title: Text(menuItem.menuVal),
-                                ),
-                              );
-                            }).toList();
-                          },
-                        )),
-                  ],
-                ),
-              ]),
-          ExpandableTableRow(
-              // height: 50,
-
-              // childrenExpanded: true,
-              legend: Container(
-                decoration: BoxDecoration(color: Colors.red.shade100),
-                child: Text(
-                  "",
-                  style: TextStyle(
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              ),
-              firstCell: _buildCell("Sthar Name", color: Colors.red.shade100),
-              children: [
-                ExpandableTableRow(
-                  // height: 50,
-                  firstCell: _buildCell("acsacs"),
-                  cells: [
-                    // _buildCell(item.samparkitghar.toString()),
-                    _buildCell("ascacaca"),
-                    _buildCell("ascacaca"),
-                    _buildCell("ascacaca"),
-                    _buildCell(
-                      "",
+            ),
+            firstCell: _buildCell(Statics.getLabel("railwayStation"), color: Colors.red.shade100),
+            children: [
+              ExpandableTableRow(
+                // height: 50,
+                firstCell: _buildCell("कोळीवाडा"),
+                cells: [
+                  // _buildCell(item.samparkitghar.toString()),
+                  _buildCell("नवीन केंद्र"),
+                  _buildCell("हितेश"),
+                  _buildCell("8888888888"),
+                  _buildCell("",
                       child: PopupMenuButton(
                         color: Colors.white,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -1134,8 +976,8 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> {
                           } else if (value == "EditMenu") {
                             print("EDIT >>>>>>>>>>>>>>");
                             Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
-                            // Navigator.of(context).pushNamed(SadbhavCenterListScreen.routeName); //, arguments: {"id": data.pkid, "viewOnly": false});
                           } else if (value == "baithak") {
+                            sadbhavProvider.updateSadbhavVal(SadbhavCenter(centername: "नवीन केंद्र", geounitname: "कोळीवाडा", sthartype: Statics.getLabel("railwayStation")));
                             if (widget.onChanged != null) widget.onChanged!();
                             // Navigator.of(context).pushNamed(SadbhavFormTab.routeName); //, arguments: {"id": data.pkid});
                           } else {
@@ -1166,22 +1008,360 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> {
                             );
                           }).toList();
                         },
-                      ),
-                    ),
-                  ],
+                      )),
+                ],
+              ),
+              ExpandableTableRow(
+                // height: 50,
+                firstCell: _buildCell("नवकर"),
+                cells: [
+                  // _buildCell(item.samparkitghar.toString()),
+                  _buildCell("नवकर केंद्र"),
+                  _buildCell("नवकर"),
+                  _buildCell("3333333333"),
+                  _buildCell("",
+                      child: PopupMenuButton(
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        onSelected: (value) {
+                          if (value == "Delete") {
+                            showDialog(
+                              context: context,
+                              builder: (ctx) => AlertDialog(
+                                title: Text(Statics.getLabel('AskConfirmation')),
+                                content: Text(Statics.getLabel('AreyouSureYouWantToDeleteBaithak')),
+                                actions: <Widget>[
+                                  MaterialButton(
+                                    child: Text(Statics.getLabel('ConfirmationYes')),
+                                    onPressed: () async {
+                                      // var _res = await Statics.DeleteSadbhavBaithakData(context: context, inputJson: {"ids": data.pkid});
+                                      // if (_res) {
+                                      //   Statics.showToast(Statics.getLabel('BaithakDeletedSuccessfully'));
+                                      // } else
+                                      //   Statics.showToast(Statics.getLabel('errorOccurred'));
+                                      // Navigator.of(ctx).pop();
+                                      // await getSadbhavBaithakListFun();
+                                    },
+                                  ),
+                                  MaterialButton(
+                                    child: Text(Statics.getLabel('ConfirmationNo')),
+                                    onPressed: () {
+                                      Navigator.of(ctx).pop();
+                                    },
+                                  )
+                                ],
+                              ),
+                            );
+                          } else if (value == "EditMenu") {
+                            print("EDIT >>>>>>>>>>>>>>");
+                            Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
+                          } else if (value == "baithak") {
+                            sadbhavProvider.updateSadbhavVal(SadbhavCenter(
+                              sthartype: Statics.getLabel("railwayStation"),
+                              geounitname: "नवकर",
+                              centername: "नवकर केंद्र",
+                            ));
+                            if (widget.onChanged != null) widget.onChanged!();
+                            // Navigator.of(context).pushNamed(SadbhavFormTab.routeName); //, arguments: {"id": data.pkid});
+                          } else {
+                            Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
+                            // Navigator.of(context).pushNamed(SadbhavCenterListScreen.routeName); //, arguments: {"id": data.pkid, "viewOnly": true});
+                          }
+                        },
+                        itemBuilder: (BuildContext context) {
+                          return [
+                            // Statics.MenuItem(Statics.getLabel('addinSoochi'), Icons.list, 'AddinSoochi'),
+                            // if (showEditMenu == true)
+                            Statics.MenuItem(Statics.getLabel('EditMenu'), FontAwesomeIcons.edit, 'EditMenu'),
+                            Statics.MenuItem(Statics.getLabel('ViewMenu'), FontAwesomeIcons.eye, 'ViewMenu'),
+                            // if (showDeleteMenu == true)
+                            Statics.MenuItem(Statics.getLabel('Delete'), Icons.delete, 'Delete'),
+                            Statics.MenuItem(Statics.getLabel('baithak'), Icons.edit_note_rounded, 'baithak'),
+                          ].map((Statics.MenuItem menuItem) {
+                            return PopupMenuItem(
+                              value: menuItem.menuKey,
+                              child: ListTile(
+                                // tileColor: Colors.white,
+                                leading: Icon(
+                                  menuItem.iconVal,
+                                  color: Colors.purple,
+                                ),
+                                title: Text(menuItem.menuVal),
+                              ),
+                            );
+                          }).toList();
+                        },
+                      )),
+                ],
+              ),
+              ExpandableTableRow(
+                // height: 50,
+                firstCell: _buildCell("कोंडगाव"),
+                cells: [
+                  // _buildCell(item.samparkitghar.toString()),
+                  _buildCell("कोंडगाव केंद्र"),
+                  _buildCell("प्रथम"),
+                  _buildCell("7777777777"),
+                  _buildCell("",
+                      child: PopupMenuButton(
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        onSelected: (value) {
+                          if (value == "Delete") {
+                            showDialog(
+                              context: context,
+                              builder: (ctx) => AlertDialog(
+                                title: Text(Statics.getLabel('AskConfirmation')),
+                                content: Text(Statics.getLabel('AreyouSureYouWantToDeleteBaithak')),
+                                actions: <Widget>[
+                                  MaterialButton(
+                                    child: Text(Statics.getLabel('ConfirmationYes')),
+                                    onPressed: () async {
+                                      // var _res = await Statics.DeleteSadbhavBaithakData(context: context, inputJson: {"ids": data.pkid});
+                                      // if (_res) {
+                                      //   Statics.showToast(Statics.getLabel('BaithakDeletedSuccessfully'));
+                                      // } else
+                                      //   Statics.showToast(Statics.getLabel('errorOccurred'));
+                                      // Navigator.of(ctx).pop();
+                                      // await getSadbhavBaithakListFun();
+                                    },
+                                  ),
+                                  MaterialButton(
+                                    child: Text(Statics.getLabel('ConfirmationNo')),
+                                    onPressed: () {
+                                      Navigator.of(ctx).pop();
+                                    },
+                                  )
+                                ],
+                              ),
+                            );
+                          } else if (value == "EditMenu") {
+                            print("EDIT >>>>>>>>>>>>>>");
+                            Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
+                          } else if (value == "baithak") {
+                            sadbhavProvider.updateSadbhavVal(SadbhavCenter(
+                              sthartype: Statics.getLabel("railwayStation"),
+                              geounitname: "कोंडगाव",
+                              centername: "कोंडगाव केंद्र",
+                            ));
+                            if (widget.onChanged != null) widget.onChanged!();
+                            // Navigator.of(context).pushNamed(SadbhavFormTab.routeName); //, arguments: {"id": data.pkid});
+                          } else {
+                            Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
+                            // Navigator.of(context).pushNamed(SadbhavCenterListScreen.routeName); //, arguments: {"id": data.pkid, "viewOnly": true});
+                          }
+                        },
+                        itemBuilder: (BuildContext context) {
+                          return [
+                            // Statics.MenuItem(Statics.getLabel('addinSoochi'), Icons.list, 'AddinSoochi'),
+                            // if (showEditMenu == true)
+                            Statics.MenuItem(Statics.getLabel('EditMenu'), FontAwesomeIcons.edit, 'EditMenu'),
+                            Statics.MenuItem(Statics.getLabel('ViewMenu'), FontAwesomeIcons.eye, 'ViewMenu'),
+                            // if (showDeleteMenu == true)
+                            Statics.MenuItem(Statics.getLabel('Delete'), Icons.delete, 'Delete'),
+                            Statics.MenuItem(Statics.getLabel('baithak'), Icons.edit_note_rounded, 'baithak'),
+                          ].map((Statics.MenuItem menuItem) {
+                            return PopupMenuItem(
+                              value: menuItem.menuKey,
+                              child: ListTile(
+                                // tileColor: Colors.white,
+                                leading: Icon(
+                                  menuItem.iconVal,
+                                  color: Colors.purple,
+                                ),
+                                title: Text(menuItem.menuVal),
+                              ),
+                            );
+                          }).toList();
+                        },
+                      )),
+                ],
+              ),
+            ],
+          ),
+          ExpandableTableRow(
+            // height: 50,
+
+            // childrenExpanded: true,
+            legend: Container(
+              decoration: BoxDecoration(color: Colors.red.shade100),
+              child: Text(
+                "",
+                style: TextStyle(
+                  fontWeight: FontWeight.normal,
                 ),
-              ]),
-          // ExpandableTableRow(
-          //   // height: 50,
-          //   firstCell: _buildCell("ascacs"), //, color: Colors.yellow.shade100),
-          //   cells: [
-          //     // _buildCell(_totalSampark.toString(), fontWeight: FontWeight.bold, color: Colors.yellow.shade50),
-          //     _buildCell("acascasc", fontWeight: FontWeight.bold),
-          //     _buildCell("acascasc", fontWeight: FontWeight.bold),
-          //     _buildCell("acascasc", fontWeight: FontWeight.bold),
-          //     _buildCell("dvsdvs", fontWeight: FontWeight.bold),
-          //   ],
-          // )
+              ),
+            ),
+            firstCell: _buildCell(Statics.getLabel("Mandal"), color: Colors.red.shade100),
+            children: [
+              ExpandableTableRow(
+                // height: 50,
+                firstCell: _buildCell("चिंचघर"),
+                cells: [
+                  // _buildCell(item.samparkitghar.toString()),
+                  _buildCell("चिंचघर केंद्र"),
+                  _buildCell("तेजस"),
+                  _buildCell("6666666666"),
+                  _buildCell("",
+                      child: PopupMenuButton(
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        onSelected: (value) {
+                          if (value == "Delete") {
+                            showDialog(
+                              context: context,
+                              builder: (ctx) => AlertDialog(
+                                title: Text(Statics.getLabel('AskConfirmation')),
+                                content: Text(Statics.getLabel('AreyouSureYouWantToDeleteBaithak')),
+                                actions: <Widget>[
+                                  MaterialButton(
+                                    child: Text(Statics.getLabel('ConfirmationYes')),
+                                    onPressed: () async {
+                                      // var _res = await Statics.DeleteSadbhavBaithakData(context: context, inputJson: {"ids": data.pkid});
+                                      // if (_res) {
+                                      //   Statics.showToast(Statics.getLabel('BaithakDeletedSuccessfully'));
+                                      // } else
+                                      //   Statics.showToast(Statics.getLabel('errorOccurred'));
+                                      // Navigator.of(ctx).pop();
+                                      // await getSadbhavBaithakListFun();
+                                    },
+                                  ),
+                                  MaterialButton(
+                                    child: Text(Statics.getLabel('ConfirmationNo')),
+                                    onPressed: () {
+                                      Navigator.of(ctx).pop();
+                                    },
+                                  )
+                                ],
+                              ),
+                            );
+                          } else if (value == "EditMenu") {
+                            print("EDIT >>>>>>>>>>>>>>");
+                            Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
+                          } else if (value == "baithak") {
+                            sadbhavProvider.updateSadbhavVal(SadbhavCenter(
+                              sthartype: Statics.getLabel("Mandal"),
+                              geounitname: "चिंचघर",
+                              centername: "चिंचघर केंद्र",
+                            ));
+                            if (widget.onChanged != null) widget.onChanged!();
+                            // Navigator.of(context).pushNamed(SadbhavFormTab.routeName); //, arguments: {"id": data.pkid});
+                          } else {
+                            Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
+                            // Navigator.of(context).pushNamed(SadbhavCenterListScreen.routeName); //, arguments: {"id": data.pkid, "viewOnly": true});
+                          }
+                        },
+                        itemBuilder: (BuildContext context) {
+                          return [
+                            // Statics.MenuItem(Statics.getLabel('addinSoochi'), Icons.list, 'AddinSoochi'),
+                            // if (showEditMenu == true)
+                            Statics.MenuItem(Statics.getLabel('EditMenu'), FontAwesomeIcons.edit, 'EditMenu'),
+                            Statics.MenuItem(Statics.getLabel('ViewMenu'), FontAwesomeIcons.eye, 'ViewMenu'),
+                            // if (showDeleteMenu == true)
+                            Statics.MenuItem(Statics.getLabel('Delete'), Icons.delete, 'Delete'),
+                            Statics.MenuItem(Statics.getLabel('baithak'), Icons.edit_note_rounded, 'baithak'),
+                          ].map((Statics.MenuItem menuItem) {
+                            return PopupMenuItem(
+                              value: menuItem.menuKey,
+                              child: ListTile(
+                                // tileColor: Colors.white,
+                                leading: Icon(
+                                  menuItem.iconVal,
+                                  color: Colors.purple,
+                                ),
+                                title: Text(menuItem.menuVal),
+                              ),
+                            );
+                          }).toList();
+                        },
+                      )),
+                ],
+              ),
+              ExpandableTableRow(
+                // height: 50,
+                firstCell: _buildCell("परळी"),
+                cells: [
+                  // _buildCell(item.samparkitghar.toString()),
+                  _buildCell("परळी केंद्र"),
+                  _buildCell("तुषार"),
+                  _buildCell("5555555555"),
+                  _buildCell("",
+                      child: PopupMenuButton(
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        onSelected: (value) {
+                          if (value == "Delete") {
+                            showDialog(
+                              context: context,
+                              builder: (ctx) => AlertDialog(
+                                title: Text(Statics.getLabel('AskConfirmation')),
+                                content: Text(Statics.getLabel('AreyouSureYouWantToDeleteBaithak')),
+                                actions: <Widget>[
+                                  MaterialButton(
+                                    child: Text(Statics.getLabel('ConfirmationYes')),
+                                    onPressed: () async {
+                                      // var _res = await Statics.DeleteSadbhavBaithakData(context: context, inputJson: {"ids": data.pkid});
+                                      // if (_res) {
+                                      //   Statics.showToast(Statics.getLabel('BaithakDeletedSuccessfully'));
+                                      // } else
+                                      //   Statics.showToast(Statics.getLabel('errorOccurred'));
+                                      // Navigator.of(ctx).pop();
+                                      // await getSadbhavBaithakListFun();
+                                    },
+                                  ),
+                                  MaterialButton(
+                                    child: Text(Statics.getLabel('ConfirmationNo')),
+                                    onPressed: () {
+                                      Navigator.of(ctx).pop();
+                                    },
+                                  )
+                                ],
+                              ),
+                            );
+                          } else if (value == "EditMenu") {
+                            print("EDIT >>>>>>>>>>>>>>");
+                            Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
+                          } else if (value == "baithak") {
+                            sadbhavProvider.updateSadbhavVal(SadbhavCenter(
+                              sthartype: Statics.getLabel("Mandal"),
+                              geounitname: "परळी",
+                              centername: "परळी केंद्र",
+                            ));
+                            if (widget.onChanged != null) widget.onChanged!();
+                            // Navigator.of(context).pushNamed(SadbhavFormTab.routeName); //, arguments: {"id": data.pkid});
+                          } else {
+                            Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
+                            // Navigator.of(context).pushNamed(SadbhavCenterListScreen.routeName); //, arguments: {"id": data.pkid, "viewOnly": true});
+                          }
+                        },
+                        itemBuilder: (BuildContext context) {
+                          return [
+                            // Statics.MenuItem(Statics.getLabel('addinSoochi'), Icons.list, 'AddinSoochi'),
+                            // if (showEditMenu == true)
+                            Statics.MenuItem(Statics.getLabel('EditMenu'), FontAwesomeIcons.edit, 'EditMenu'),
+                            Statics.MenuItem(Statics.getLabel('ViewMenu'), FontAwesomeIcons.eye, 'ViewMenu'),
+                            // if (showDeleteMenu == true)
+                            Statics.MenuItem(Statics.getLabel('Delete'), Icons.delete, 'Delete'),
+                            Statics.MenuItem(Statics.getLabel('baithak'), Icons.edit_note_rounded, 'baithak'),
+                          ].map((Statics.MenuItem menuItem) {
+                            return PopupMenuItem(
+                              value: menuItem.menuKey,
+                              child: ListTile(
+                                // tileColor: Colors.white,
+                                leading: Icon(
+                                  menuItem.iconVal,
+                                  color: Colors.purple,
+                                ),
+                                title: Text(menuItem.menuVal),
+                              ),
+                            );
+                          }).toList();
+                        },
+                      )),
+                ],
+              ),
+            ],
+          ),
         ],
       ),
     );
