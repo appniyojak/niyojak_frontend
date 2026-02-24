@@ -67,8 +67,8 @@ class _SewaVastiDetailsState extends State<SewaVastiDetails> {
     // populateBhaagDropdown();
     int sewaVastiID = int.parse(widget.sewaVastiID);
     if (sewaVastiID > 0) {
-      getSewaVastiDetails(widget.sewaVastiID);
       populateDropdown();
+      getSewaVastiDetails(widget.sewaVastiID);
     } else {
       if (!mounted) return;
       setState(() {
@@ -343,15 +343,18 @@ class _SewaVastiDetailsState extends State<SewaVastiDetails> {
       _nagarValue = sDetails!.nagarID?.toString();
       _population.text = sDetails!.population?.toString() ?? "";
       _remarkCntrl.text = sDetails!.remark ?? "";
+      type = "mahanagar";
 
       // Populate dropdowns
       if (_bhaagValue != null) {
         populateShaharDropdown(_bhaagValue!);
         populateNagarDropdown(_bhaagValue, null);
+        type = "bhag";
       }
 
       if (_shaharValue != null) {
         populateNagarDropdown(null, _shaharValue);
+        type = "shahar";
       }
 
       // Linked hierarchy dropdowns
@@ -360,18 +363,21 @@ class _SewaVastiDetailsState extends State<SewaVastiDetails> {
       if (sDetails!.mahaanagarID != null) {
         _linkedMahaanagarValue = sDetails!.mahaanagarID.toString();
         _isExpanded = true;
+        type = "mahanagar";
       }
 
       if (sDetails!.vibhaagID != null) {
         _linkedVibhaagValue = sDetails!.vibhaagID.toString();
         populatelinkedVibhaagDropdown('');
         populatelinkedBhaagDropdown(_linkedVibhaagValue);
+        type = "vibhag";
         _isExpanded = true;
       }
 
       if (sDetails!.bhaagID != null) {
         _linkedbhaagValue = sDetails!.bhaagID.toString();
         populatelinkedNagarDropdown(_linkedbhaagValue, null);
+        type = "bhag";
         _isExpanded = true;
       }
 
@@ -380,20 +386,24 @@ class _SewaVastiDetailsState extends State<SewaVastiDetails> {
         populatelinkedMandalDropdown(_linkednagarValue);
         populatelinkedVastiDropdown(_linkednagarValue);
         print("_linkednagarValue $_linkednagarValue  -----");
+        type = "nagar";
         _isExpanded = true;
       }
 
       if (sDetails!.mandalID != null) {
         _linkedmandalValue = sDetails!.mandalID.toString();
         populatelinkedGraamDropdown(_linkedmandalValue);
+        type = "mandal";
         _isExpanded = true;
       }
 
       if (sDetails!.vastiID != null && (sDetails!.vastiName?.isNotEmpty ?? false)) {
         _linkedvastiValue = sDetails!.vastiID.toString();
+        type = "vasti";
         _isExpanded = true;
       } else if (sDetails!.graamID != null && (sDetails!.graamName?.isNotEmpty ?? false)) {
         _linkedgraamValue = sDetails!.graamID.toString();
+        type = "gram";
         _isExpanded = true;
       }
 
@@ -461,9 +471,21 @@ class _SewaVastiDetailsState extends State<SewaVastiDetails> {
     var inputData = json.encode({
       "SewaVastiID": widget.sewaVastiID,
       "PraantID": 1,
-      "BhaagID": _bhaagValue == "" ? null : _bhaagValue,
-      "ShaharID": _shaharValue == "" ? null : _shaharValue,
-      "NagarID": _nagarValue == "" ? null : _nagarValue,
+      "BhaagID": _bhaagValue == ""
+          ? null
+          : _linkedbhaagValue == ""
+              ? null
+              : _linkedbhaagValue ?? _bhaagValue,
+      "ShaharID": _shaharValue == ""
+          ? null
+          : _linkedshaharValue == ""
+              ? null
+              : _linkedshaharValue ?? _shaharValue,
+      "NagarID": _nagarValue == ""
+          ? null
+          : _linkednagarValue == ""
+              ? null
+              : _linkednagarValue ?? _nagarValue,
       "SewaVastiName": sDetails!.sewaVastiName,
       "Population": sDetails!.population,
       "NecessarySewaTypeIDs": necessitiesIDs == "" ? null : necessitiesIDs,
@@ -476,9 +498,9 @@ class _SewaVastiDetailsState extends State<SewaVastiDetails> {
               : type == "vibhag"
                   ? _linkedVibhaagValue
                   : type == "bhag"
-                      ? _linkedbhaagValue
+                      ? _linkedbhaagValue ?? _bhaagValue
                       : type == "nagar"
-                          ? _linkednagarValue
+                          ? _linkednagarValue ?? _nagarValue
                           : type == "mandal"
                               ? _linkedmandalValue
                               : type == "gram"
@@ -566,7 +588,7 @@ class _SewaVastiDetailsState extends State<SewaVastiDetails> {
     print("populatelinkedNagarDropdown Runnnn 222");
 
     var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
-    print("Statics.levels['NagarLevelID'].toString() ${Statics.levels['NagarLevelID'].toString()} \n ngDD -- ${ngDD}");
+    print("Statics.levels['NagarLevelID'] ${Statics.levels['NagarLevelID']}");
     setState(() {
       _linkednagar = (ngDD.length > 0 ? ngDD : null);
     });
@@ -603,7 +625,7 @@ class _SewaVastiDetailsState extends State<SewaVastiDetails> {
     // print("vsDD ------  $vsDD");
     setState(() {
       _linkedvasti = (vsDD.length > 0 ? vsDD : null);
-      print("vsDD ------  $_linkedvasti");
+      // print("vsDD ------  $_linkedvasti");
     });
   }
 
