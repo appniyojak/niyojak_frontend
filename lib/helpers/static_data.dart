@@ -3823,7 +3823,7 @@ Future<List<dynamic>> getAnnualBaithakShaakhaaVruttaForAppById(String strInput) 
   print(Uri.parse(GetAnnualBaithakShaakhaaVruttaForAppbyid));
   print(strInput.toString());
   var responseBody = json.decode(response.body);
-  print("responseBody getAnnualBaithakShaakhaaVruttaForAppById $responseBody");
+  log("responseBody getAnnualBaithakShaakhaaVruttaForAppById ${jsonEncode(responseBody)}");
   return responseBody['ListShaakhaaVrutta'];
 }
 

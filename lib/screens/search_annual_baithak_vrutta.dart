@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:horizontal_data_table/horizontal_data_table.dart';
@@ -342,6 +343,7 @@ class _SearchAnnualBaithakVruttaState extends State<SearchAnnualBaithakVrutta> {
               shaakhaaVrutta.geoUnitName!,
               shaakhaaVrutta.annualBaithakTypeID,
               shaakhaaVrutta.annualBaithakTypeCode,
+              shaakhaaVrutta.viewOnly,
             );
             print(
                 " shaakhaaVrutta.annualBaithakShaakhaaVruttaID ==> ${shaakhaaVrutta.annualBaithakShaakhaaVruttaID},\n shaakhaaVrutta.geoUnitID ==> ${shaakhaaVrutta.geoUnitID},\n shaakhaaVrutta.geoUnitName! ==> ${shaakhaaVrutta.geoUnitName!},\n shaakhaaVrutta.annualBaithakTypeID ==> ${shaakhaaVrutta.annualBaithakTypeID},\n shaakhaaVrutta.annualBaithakTypeCode ==> ${shaakhaaVrutta.annualBaithakTypeCode}");
@@ -490,7 +492,8 @@ class _SearchAnnualBaithakVruttaState extends State<SearchAnnualBaithakVrutta> {
     );
   }
 
-  void _onEditShaakhaaVrutta(int? abShaakhaaVruttaID, int? geoUnitID, String? geoUnitName, int? abTypeID, String? abTypeCode) async {
+  void _onEditShaakhaaVrutta(int? abShaakhaaVruttaID, int? geoUnitID, String? geoUnitName, int? abTypeID, String? abTypeCode, int? viewOnly) async {
+    print("acacasc ascasca ssc asc asc ascasca cas casc $viewOnly");
     await Navigator.push(
         context,
         MaterialPageRoute(
@@ -501,7 +504,7 @@ class _SearchAnnualBaithakVruttaState extends State<SearchAnnualBaithakVrutta> {
                   annualBaithakTypeID: abTypeID,
                   annualBaithakTypeCode: abTypeCode,
                   onSaveDetails: _search,
-                  viewType: (selectedViewOnly == 0 ? "EditVrutta" : "ViewOnly"),
+                  viewType: (viewOnly == 0 ? "EditVrutta" : "ViewOnly"),
                 )));
     print(
         "annualBaithakShaakhaaVruttaID ==> ${abShaakhaaVruttaID},\n geoUnitID ==> ${geoUnitID},\n geoUnitName! ==> ${geoUnitName!},\n annualBaithakTypeID ==> ${abTypeID},\n annualBaithakTypeCode ==> ${abTypeCode}\n selectedViewOnly ==> ${selectedViewOnly}");
@@ -584,7 +587,7 @@ class _SearchAnnualBaithakVruttaState extends State<SearchAnnualBaithakVrutta> {
         }
         print("_lstShaakhaaVrutta!.length  ===> ${_lstShaakhaaVrutta!.length}");
         if (_lstShaakhaaVrutta != null && _lstShaakhaaVrutta!.length > 0) {
-          print("_lstShaakhaaVrutta === > $_lstShaakhaaVrutta");
+          log("_lstShaakhaaVrutta === > $_lstShaakhaaVrutta");
           double rowHeight = 115;
           shaakhaaVruttaHeaderRow.add(Statics.createWidgetFromString(context, Statics.getLabel('Shaakhaa/Saaptaahik/Maasik/Mandali'), 100, rowHeight, Alignment.centerLeft, isTotalRow: false));
           shaakhaaVruttaHeaderRow

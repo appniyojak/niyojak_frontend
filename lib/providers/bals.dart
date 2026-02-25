@@ -1694,6 +1694,8 @@ class AnnualBaithakShaakhaaVruttaBAL {
   String? graamName;
   String? vastiName;
 
+  int? viewOnly;
+
   AnnualBaithakShaakhaaVruttaBAL(
     this.annualBaithakShaakhaaVruttaID,
     this.geoUnitID,
@@ -1762,6 +1764,7 @@ class AnnualBaithakShaakhaaVruttaBAL {
     this.mandalName,
     this.graamName,
     this.vastiName,
+    this.viewOnly,
   );
 
   AnnualBaithakShaakhaaVruttaBAL.fromMap(Map<String, dynamic> map) {
@@ -1834,6 +1837,8 @@ class AnnualBaithakShaakhaaVruttaBAL {
     mandalName = map['MandalName'];
     graamName = map['GraamName'];
     vastiName = map['VastiName'];
+
+    viewOnly = map['viewOnly'] ?? 0;
   }
 }
 
