@@ -8,7 +8,7 @@ import '../helpers/static_data.dart' as Statics;
 import '../providers/login.dart';
 
 downloadVersion() async {
-  await LogIn().logOut();
+  await LogIn().logOut(isUpdate: true);
   BackgroundFetch.stop().then((int status) {
     print('[BackgroundFetch] stop success: $status');
   });

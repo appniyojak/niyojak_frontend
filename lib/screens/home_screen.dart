@@ -40,7 +40,6 @@ import 'search_rjb_nidhi_sankalan.dart';
 import 'search_soochi_screen.dart';
 import 'shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/gruh_abhiyaan_main_tab_screen.dart';
 import 'shatabdi_vrutta_sankalan/hindu_sanmelan/hindu_sanmelan_main_tab.dart';
-import 'shatabdi_vrutta_sankalan/sadbhav_baithak/sadbhav_baithak_main_tab.dart';
 import 'shatabdi_vrutta_sankalan/vijayadashami/vijaya_dashami_report.dart';
 import 'shatabdi_vrutta_sankalan/vijayadashami/vijayadashami_form_view.dart';
 import 'survey_screen/mandal_reports_tabs.dart';
@@ -227,9 +226,14 @@ class _HomeScreenState extends State<HomeScreen> {
     var _data;
     try {
       final _isRead = await pref.getBool("isRead") ?? false;
-      final _appVer = await pref.getString("appVer");
-      if (!_isRead && _appVer != Statics.packageInfo['versionNumber']) _data = await Statics.getVersionReleaseNotes();
+      // final _appVer = await pref.getString("appVer");
+      print("Printing the logic >>>>>>>>>>>>>>>>>>>>>>>>>> ${_isRead}");
+      print("Printing the logic >>>>>>>>>>>>>>>>>>>>>>>>>> ${Statics.packageInfo['versionNumber']}");
+      // print("Printing the logic >>>>>>>>>>>>>>>>>>>>>>>>>> ${_appVer != Statics.packageInfo['versionNumber']}");
+      // print("Printing the logic >>>>>>>>>>>>>>>>>>>>>>>>>> ${(!_isRead && _appVer != Statics.packageInfo['versionNumber'])}");
+      if (!_isRead) _data = await Statics.getVersionReleaseNotes();
       setState(() {});
+      print("Printing the logic 2222222222222222 ${(_data != null && !_isRead)}");
       if (_data != null && !_isRead) {
         return showDialog(
           context: context,
@@ -256,7 +260,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     child: Text(
-                      "Release Notes - $_appVer",
+                      "Release Notes - ${Statics.packageInfo['versionNumber']}",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -1876,11 +1880,11 @@ class _HomeScreenState extends State<HomeScreen> {
   getInitialData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     var data = pref.getString("AbhiyanSwayamsevakData");
-    var loginDate = pref.getString("loginDate");
-    print("loginDate ==== > $loginDate");
+    // var loginDate = pref.getString("loginDate");
+    // print("loginDate ==== > $loginDate");
     print("data ==== >  $data");
     userDaayitvaNameforshow = pref.getString("DaayitvaNameforshow") ?? '';
-    await checkLoginDate(DateTime.tryParse(loginDate.toString()) ?? null);
+    await checkLoginDate();
     if (data != null) {
       initialData = AbhiyanSwayamsevakdata.fromJson(jsonDecode(data));
     }
@@ -1948,7 +1952,7 @@ class _HomeScreenState extends State<HomeScreen> {
               });
               final _list = bhougolikReportForExcel?.datanameList;
               if (_list != null && _list.isNotEmpty) {
-                await buildExcelFromData3(rows: bhougolikReportForExcel!.toJson()["dataname"]);
+                await buildExcelFromData3(geoHierarchyData: bhougolikReportForExcel!.toJson()["GeoHierarchyData"]);
               } else {
                 Fluttertoast.showToast(
                   msg: Statics.getLabel("errorOccurred"),
@@ -1969,17 +1973,107 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future<void> buildExcelFromData3({required List<Map<String, dynamic>> rows}) async {
-    if (rows.isEmpty) {
+  Future<void> buildExcelFromData3({required List<Map<String, dynamic>> geoHierarchyData}) async {
+    if (geoHierarchyData.isEmpty) {
       throw ArgumentError('No data rows provided.');
     }
 
-    // Workbook + sheet
+    List<Map<String, dynamic>> rows = [];
+
+    for (var data in geoHierarchyData) {
+      // Define all keys to ensure column order is consistent
+      Map<String, dynamic> flatItem = {
+        'NagarName': data['NagarName']?.toString() ?? '',
+        //
+        'UpnagarName': '',
+        'MappedVastis': '',
+        'VastiNames': '',
+        //
+        'UpkhandName': '',
+        'MappedMandals': '',
+        'MandalName': '',
+        'GraamNames': '',
+      }; // Upkhands -> MappedMandals mapping
+
+      // Helper to check if a list is truly empty or contains only nulls
+      bool isPopulated(dynamic list) => list != null && (list as List).isNotEmpty;
+
+      // Upkhands -> MappedMandals
+      List<String> upkhandNames = [];
+      List<String> mappedMandals = [];
+      if (isPopulated(data['Upkhands'])) {
+        for (var u in data['Upkhands']) {
+          List mandals = u['MappedMandals'] ?? [];
+          if (mandals.isEmpty) {
+            upkhandNames.add(u['UpkhandName']?.toString() ?? '--');
+            mappedMandals.add('--');
+          } else {
+            for (var m in mandals) {
+              upkhandNames.add(u['UpkhandName']?.toString() ?? '--');
+              mappedMandals.add(m.toString());
+            }
+          }
+        }
+      }
+      flatItem['UpkhandName'] = upkhandNames.isEmpty ? '--' : upkhandNames.join(' --> ');
+      flatItem['MappedMandals'] = mappedMandals.isEmpty ? '--' : mappedMandals.join(' --> ');
+
+      // Upnagars -> MappedVastis
+      List<String> upnagarNames = [];
+      List<String> mappedVastis = [];
+      if (isPopulated(data['Upnagars'])) {
+        for (var u in data['Upnagars']) {
+          List vastis = u['MappedVastis'] ?? [];
+          if (vastis.isEmpty) {
+            upnagarNames.add(u['UpnagarName']?.toString() ?? '--');
+            mappedVastis.add('--');
+          } else {
+            for (var v in vastis) {
+              upnagarNames.add(u['UpnagarName']?.toString() ?? '--');
+              mappedVastis.add(v.toString());
+            }
+          }
+        }
+      }
+      flatItem['UpnagarName'] = upnagarNames.isEmpty ? '--' : upnagarNames.join(' --> ');
+      flatItem['MappedVastis'] = mappedVastis.isEmpty ? '--' : mappedVastis.join(' --> ');
+
+      // Mandals -> Grams
+      List<String> mandalNames = [];
+      List<String> gramNames = [];
+      if (isPopulated(data['Mandals'])) {
+        for (var m in data['Mandals']) {
+          List grams = m['GraamNames'] ?? [];
+          if (grams.isEmpty) {
+            mandalNames.add(m['MandalName']?.toString() ?? '--');
+            gramNames.add('--');
+          } else {
+            for (var g in grams) {
+              mandalNames.add(m['MandalName']?.toString() ?? '--');
+              gramNames.add(g.toString());
+            }
+          }
+        }
+      }
+      flatItem['MandalName'] = mandalNames.isEmpty ? '--' : mandalNames.join(' --> ');
+      flatItem['GraamNames'] = gramNames.isEmpty ? '--' : gramNames.join(' --> ');
+
+      // VastiNames (Simple List) - Only add if not empty
+      if (isPopulated(data['VastiNames'])) {
+        flatItem['VastiNames'] = (data['VastiNames'] as List).join(' --> ');
+      } else {
+        flatItem['VastiNames'] = '--';
+      }
+
+      rows.add(flatItem);
+    }
+
+    /// Workbook + sheet
     final xls.Workbook wb = xls.Workbook();
     final xls.Worksheet _sheet = wb.worksheets[0];
     _sheet.name = Statics.getLabel('bhougolikExcelReport');
 
-    // Styles (kept same as your original)
+    /// Styles (kept same as your original)
     final headerStyle = wb.styles.add('Header')
       ..bold = true
       ..hAlign = xls.HAlignType.center
@@ -2005,17 +2099,17 @@ class _HomeScreenState extends State<HomeScreen> {
       ..vAlign = xls.VAlignType.center
       ..backColor = '#D6E3BC';
 
-    // Keys/order from the first row (keeps insertion order)
-    final keys = rows.first.keys.toList();
+    /// Keys/order from the first row (keeps insertion order)
+    final headers = rows.first.keys.toList();
     int _colForSheet = 1; // XlsIO is 1-based
 
-    // Header row (single row header like before)
+    /// Header row (single row header like before)
     _sheet.getRangeByIndex(1, _colForSheet).setText('Sr No');
     _sheet.getRangeByIndex(1, _colForSheet, 2, _colForSheet).cellStyle = headerStyle;
     _colForSheet++;
 
-    for (final key in keys) {
-      _sheet.getRangeByIndex(1, _colForSheet).setText(Statics.getLabel(key));
+    for (final header in headers) {
+      _sheet.getRangeByIndex(1, _colForSheet).setText(Statics.getLabel(header));
       _sheet.getRangeByIndex(1, _colForSheet).cellStyle = headerStyle;
       _colForSheet++;
     }
@@ -2023,13 +2117,41 @@ class _HomeScreenState extends State<HomeScreen> {
     int rowIndex = 2;
     int srNo = 1;
 
-    for (final item in rows) {
-      // Expand values that contain '-->' into lists, others into single-item lists
-      final Map<int, int> countsByCol = {}; // key: column index (1-based), value: count
+    for (int dataIndex = 0; dataIndex < geoHierarchyData.length; dataIndex++) {
+      final data = geoHierarchyData[dataIndex];
+      final item = rows[dataIndex]; // Flat row prepared in step 1
+
+      // 1. CALCULATE ACTUAL TOTALS FROM SOURCE DATA (Fixes the count issue)
+      int countUpkhand = (data['Upkhands'] as List?)?.length ?? 0;
+      int countMappedMandals = 0;
+      if (data['Upkhands'] != null) {
+        for (var u in data['Upkhands']) {
+          countMappedMandals += (u['MappedMandals'] as List?)?.length ?? 0;
+        }
+      }
+
+      int countMandal = (data['Mandals'] as List?)?.length ?? 0;
+      int countGrams = 0;
+      if (data['Mandals'] != null) {
+        for (var m in data['Mandals']) {
+          countGrams += (m['GraamNames'] as List?)?.length ?? 0;
+        }
+      }
+
+      int countUpnagar = (data['Upnagars'] as List?)?.length ?? 0;
+      int countMappedVastis = 0;
+      if (data['Upnagars'] != null) {
+        for (var u in data['Upnagars']) {
+          countMappedVastis += (u['MappedVastis'] as List?)?.length ?? 0;
+        }
+      }
+
+      int countVastiNames = (data['VastiNames'] as List?)?.length ?? 0;
+
+      // 2. EXPAND ROWS FOR VISUAL MERGING (Logic preserved)
       final Map<String, List<String>> expanded = {};
       int maxLines = 1;
-
-      for (final key in keys) {
+      for (final key in headers) {
         final val = item[key];
         if (val is String && val.contains('-->')) {
           final parts = val.split('-->').map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
@@ -2040,86 +2162,109 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       }
 
-      // Write expanded lines for this object
+      // 3. WRITE DATA ROWS
       final int startRow = rowIndex;
       for (int i = 0; i < maxLines; i++) {
         int writeCol = 1;
-
-        // Sr No (only on the first sub-row)
-        if (i == 0) {
-          _sheet.getRangeByIndex(rowIndex, writeCol).setNumber(srNo.toDouble());
-          _sheet.getRangeByIndex(rowIndex, writeCol).cellStyle = _cellStyle;
-        } else {
-          // ensure blank cell exists for alignment (will be merged later)
-          _sheet.getRangeByIndex(rowIndex, writeCol).setText('');
-          _sheet.getRangeByIndex(rowIndex, writeCol).cellStyle = _cellStyle;
-        }
+        _sheet.getRangeByIndex(rowIndex, writeCol).setText(i == 0 ? srNo.toString() : '');
+        _sheet.getRangeByIndex(rowIndex, writeCol).cellStyle = _cellStyle;
         writeCol++;
 
-        // Fill each key column for this sub-row
-        for (final key in keys) {
+        for (final key in headers) {
           final values = expanded[key]!;
           final text = (i < values.length) ? values[i] : '--';
-
-          final col = writeCol; // capture current column
           _sheet.getRangeByIndex(rowIndex, writeCol).setText(text);
           _sheet.getRangeByIndex(rowIndex, writeCol).cellStyle = _cellStyle;
-          if (col >= 4) {
-            final t = text.trim();
-            if (t.isNotEmpty && t != '--') {
-              countsByCol[col] = (countsByCol[col] ?? 0) + 1;
-            }
-          }
           writeCol++;
         }
-
         rowIndex++;
       }
 
       final int endRow = rowIndex - 1;
 
-      // Merge Sr No vertically for this object
-      _sheet.getRangeByIndex(startRow, 1, endRow, 1).merge();
-      _sheet.getRangeByIndex(startRow, 1).cellStyle = _cellStyle;
+      // 4. PERFORM MERGES (Logic preserved)
+      _sheet.getRangeByIndex(startRow, 1, endRow, 1).merge(); // Sr No
 
-      // Helper to merge a named key if present
       void tryMergeKey(String keyName) {
-        final int keyPos = keys.indexOf(keyName);
+        final int keyPos = headers.indexOf(keyName);
         if (keyPos >= 0) {
-          // +2 because column 1 = Sr No, columns start at 2 for first key
-          final int colForKey = keyPos + 2;
-          _sheet.getRangeByIndex(startRow, colForKey, endRow, colForKey).merge();
-          _sheet.getRangeByIndex(startRow, colForKey).cellStyle = _cellStyle;
+          final int col = keyPos + 2;
+          _sheet.getRangeByIndex(startRow, col, endRow, col).merge();
         }
       }
 
-      // Merge bhagname, vibhagname and nagarname vertically if they exist
-      tryMergeKey('GoUnitName');
-      tryMergeKey('NagarNames');
+      void tryMergeSubGroups(String keyName) {
+        final int keyPos = headers.indexOf(keyName);
+        if (keyPos < 0) return;
+        final int col = keyPos + 2;
+        int currentStart = startRow;
+        String currentVal = (expanded[keyName]?.isNotEmpty == true) ? expanded[keyName]!.first : '--';
+        for (int r = 1; r < maxLines; r++) {
+          final text = (r < (expanded[keyName]?.length ?? 0)) ? expanded[keyName]![r] : '--';
+          if (text != currentVal) {
+            if (r - 1 > currentStart - startRow) {
+              _sheet.getRangeByIndex(currentStart, col, startRow + r - 1, col).merge();
+            }
+            currentStart = startRow + r;
+            currentVal = text;
+          }
+        }
+        if (startRow + maxLines - 1 > currentStart) {
+          _sheet.getRangeByIndex(currentStart, col, startRow + maxLines - 1, col).merge();
+        }
+      }
 
-      srNo++;
+      tryMergeKey('NagarName');
+      tryMergeSubGroups('UpkhandName');
+      tryMergeSubGroups('UpnagarName');
+      tryMergeSubGroups('MandalName');
 
-      _sheet.getRangeByIndex(rowIndex, 1, rowIndex, 3).merge();
-      final _totalLabelRangeForSheet1 = _sheet.getRangeByIndex(rowIndex, 1);
-      _totalLabelRangeForSheet1.setText('Total');
-      _sheet.getRangeByIndex(rowIndex, 1, rowIndex, 3).cellStyle = boldCellStyle..backColor = '#D6E3BC';
+      // Merge child rows if they are all empty
+      ['MappedMandals', 'GraamNames', 'MappedVastis', 'VastiNames'].forEach((key) {
+        final values = expanded[key]!;
+        if (values.every((v) => v == '--' || v.trim().isEmpty))
+          tryMergeKey(key);
+        else
+          tryMergeSubGroups(key);
+      });
 
-      // Add a separated Total row
-      for (int col = 4; col <= (keys.length + 1); col++) {
-        final count = countsByCol[col] ?? 0;
-        _sheet.getRangeByIndex(rowIndex, col).setNumber(count.toDouble());
+      // 5. WRITE CORRECT TOTAL ROW
+      // Map counts to specific header keys
+      Map<String, int> finalCounts = {
+        'UpkhandName': countUpkhand,
+        'MappedMandals': countMappedMandals,
+        'MandalName': countMandal,
+        'GraamNames': countGrams,
+        'UpnagarName': countUpnagar,
+        'MappedVastis': countMappedVastis,
+        'VastiNames': countVastiNames,
+      };
+
+      _sheet.getRangeByIndex(rowIndex, 1, rowIndex, 2).merge(); // Sr No & NagarName
+      _sheet.getRangeByIndex(rowIndex, 1).setText('Total');
+      _sheet.getRangeByIndex(rowIndex, 1, rowIndex, 2).cellStyle = boldCellStyle..backColor = '#D6E3BC';
+
+      for (int i = 0; i < headers.length; i++) {
+        final key = headers[i];
+        final col = i + 2;
+        if (finalCounts.containsKey(key)) {
+          _sheet.getRangeByIndex(rowIndex, col).setNumber(finalCounts[key]!.toDouble());
+        } else {
+          _sheet.getRangeByIndex(rowIndex, col).setText('');
+        }
         _sheet.getRangeByIndex(rowIndex, col).cellStyle = blankRowStyle;
       }
 
       rowIndex++; // leave one blank row after each object
+      srNo++;
     }
 
     // Auto-fit columns
-    for (int c = 1; c <= keys.length + 1; c++) {
+    for (int c = 1; c <= headers.length + 1; c++) {
       _sheet.autoFitColumn(c);
     }
 
-    // Save + open (same as your existing approach)
+    /// Save + open
     try {
       final _path = await _getDirectoryPathFun();
       final file = File(_path);
@@ -2185,7 +2330,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return path;
   }
 
-  Future<String?> checkLoginDate(DateTime? oldDate) async {
+  Future<String?> checkLoginDate() async {
     try {
       Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
@@ -2196,18 +2341,16 @@ class _HomeScreenState extends State<HomeScreen> {
       print(response.request!.url);
       print(response.body);
       var body = json.decode(response.body);
-      DateTime? newDate = DateTime.tryParse(body['ForceLogout']) ?? null;
-      print("oldDate--->  $oldDate");
-      print("newDate---->  $newDate");
-      if (newDate != null) {
-        print(oldDate);
-        print(newDate);
-        if (oldDate!.isBefore(newDate)) {
-          print("object");
-          print("Logout True");
-          await LogIn().logOut();
-          Navigator.of(context).pushReplacementNamed('/');
-        }
+      // DateTime? newDate = DateTime.tryParse(body['ForceLogout']) ?? null;
+      // print("oldDate--->  $oldDate");
+      // print("newDate---->  $newDate");
+      print(body['isForceLogout']);
+      // if (oldDate!.isBefore(newDate)) {
+      if (body['isForceLogout'] == 1) {
+        print("object");
+        print("Logout True");
+        await LogIn().logOut();
+        Navigator.of(context).pushReplacementNamed('/');
       }
       return body['ForceLogout'];
     } catch (e) {
@@ -4181,14 +4324,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Expanded(
                           child: InkWell(
-                            onTap: () => Navigator.of(context).pushNamed(SadbhavBaithakMainTab.routeName),
-                            // onTap: () {
-                            //   Fluttertoast.showToast(
-                            //     msg: Statics.getLabel("workInProgress"),
-                            //     toastLength: Toast.LENGTH_SHORT,
-                            //     gravity: ToastGravity.BOTTOM,
-                            //   );
-                            // },
+                            // onTap: () => Navigator.of(context).pushNamed(SadbhavBaithakMainTab.routeName),
+                            onTap: () {
+                              Fluttertoast.showToast(
+                                msg: Statics.getLabel("workInProgress"),
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                              );
+                            },
                             child: Container(
                               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                               decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
@@ -29,7 +30,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   var _isLoading = false;
   bool _isFetchingData = false;
-  bool _isCurrent = false;
+  bool _isCurrent = true;
 
   List<StaticMasterBAL>? _daayitvaFor;
   List<LevelMasterBAL>? _level;
@@ -184,7 +185,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
     _linkedbhaagName = _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
     print("populatelinkedVibhaagDropdown $mahaanagarIDStr");
     var data;
-    if (_levelValue == 4) {
+    if (_levelValue == 4 || _levelValue == 3) {
       data = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '');
     } else if (_levelValue == 13) {
       data = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '');
@@ -202,7 +203,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
     _linkedbhaagName = _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
     _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = [];
     var data;
-    if (_levelValue == 4) {
+    if (_levelValue == 4 || _levelValue == 3) {
       data = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
     } else if (_levelValue == 13) {
       data = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
@@ -234,7 +235,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
     print("shaharIDStr shaharIDStr $shaharIDStr");
     if (shaharIDStr != null) {
       var ngDD;
-      if (_levelValue == 4) {
+      if (_levelValue == 4 || _levelValue == 3) {
         ngDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
       } else if (_levelValue == 13) {
         ngDD = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
@@ -247,7 +248,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
       return ngDD;
     } else {
       var ngDD;
-      if (_levelValue == 4) {
+      if (_levelValue == 4 || _levelValue == 3) {
         ngDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
       } else if (_levelValue == 13) {
         ngDD = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
@@ -266,7 +267,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
     _linkedupnagarName = _linkedmandalName = _linkedgraamName = null;
     _linkedupnagar = _linkedmandal = _linkedgraam = null;
     var mnDD;
-    if (_levelValue == 4) {
+    if (_levelValue == 4 || _levelValue == 3) {
       mnDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
     } else if (_levelValue == 13) {
       mnDD = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
@@ -284,7 +285,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
     _linkedmandalName = _linkedgraamName = null;
     _linkedmandal = _linkedgraam = null;
     var mnDD;
-    if (_levelValue == 4) {
+    if (_levelValue == 4 || _levelValue == 3) {
       mnDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, parentType, '');
     } else {
       mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, parentType, '');
@@ -334,6 +335,10 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) {
       // Invalid!
+      if (!_isCurrent && _endYearCtrl.text.trim().isEmpty) {
+        Statics.showToast(Statics.getLabel("swayamsevakDaayitvaValidation"), toastLength: Toast.LENGTH_LONG);
+        return;
+      }
       return;
     }
     if (_daayitvaForValue!.code != "SanghaPreritSansthaa" && _daayitvaForValue!.code != "OtherSocialOrganization" && (_selectedGeoUnitId == null || _selectedGeoUnitId.toString().trim().isEmpty)) {
@@ -342,6 +347,10 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
     }
     if (_daayitvaForValue!.code != "SanghaPreritSansthaa" && _daayitvaForValue!.code != "OtherSocialOrganization" && _selectedLevelId != _levelValue) {
       Statics.showToast(Statics.getLabel("selectGeoUnitAsPerLevel"));
+      return;
+    }
+    if (!_isCurrent && _endYearCtrl.text.trim().isEmpty) {
+      Statics.showToast(Statics.getLabel("swayamsevakDaayitvaValidation"), toastLength: Toast.LENGTH_LONG);
       return;
     }
     _formKey.currentState!.save();
@@ -1140,15 +1149,17 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
                                 decoration: InputDecoration(labelText: Statics.getLabel('EndYear')),
                                 keyboardType: TextInputType.number,
                                 maxLength: 4,
-                                // validator: (value) {
-                                //   // if (value!.isNotEmpty && value.length < 4)
-                                //   if (value == null || value.isEmpty)
-                                //     return (Statics.getLabel('ValidEndYearValidationMessage'));
-                                //   else if (value.isNotEmpty) if ((int.parse(value) > int.parse(DateFormat('yyyy').format(DateTime.now())))) {
-                                //     return (Statics.getLabel('ValidEndYearValidationMessage'));
-                                //   }
-                                //   return null;
-                                // },
+                                validator: _isCurrent
+                                    ? null
+                                    : (value) {
+                                        // if (value!.isNotEmpty && value.length < 4)
+                                        if (value == null || value.isEmpty)
+                                          return (Statics.getLabel('ValidEndYearValidationMessage'));
+                                        else if (value.isNotEmpty) if ((int.parse(value) > int.parse(DateFormat('yyyy').format(DateTime.now())))) {
+                                          return (Statics.getLabel('ValidEndYearValidationMessage'));
+                                        }
+                                        return null;
+                                      },
                                 onSaved: (value) {
                                   if (value != null && value.isNotEmpty)
                                     swDaayitva!.endYear = int.parse(value);
@@ -1167,7 +1178,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
                                   title: Text(Statics.getLabel('IsCurrent'), style: TextStyle(fontSize: 15)),
                                   checkColor: Colors.white,
                                   activeColor: Colors.purple,
-                                  value: _isCurrent == null ? false : _isCurrent,
+                                  value: _isCurrent,
                                   onChanged: (value) {
                                     setState(() {
                                       _isCurrent = value!;

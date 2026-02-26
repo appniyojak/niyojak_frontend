@@ -759,6 +759,45 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> with Automati
                         dividerColor: Colors.grey.shade400,
                         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                         subChildPadding: EdgeInsets.only(top: 2, bottom: 6, right: 12, left: 12),
+                        txtString: Statics.getLabel("anyaUpasthit"),
+                        value: "",
+                        fontsize: 16,
+                        fontWeight: FontWeight.w600,
+                        rowColor: Colors.purple.shade50,
+                        subChild: Column(
+                          children: [
+                            Row(children: [
+                              Expanded(child: Text(Statics.getLabel('Male'))),
+                              Container(
+                                margin: EdgeInsets.only(left: 8),
+                                child: Text((data.samaj?.malecount ?? 0).toString()),
+                              ),
+                            ]),
+                            SizedBox(height: 8),
+                            Row(children: [
+                              Expanded(child: Text(Statics.getLabel('Female'))),
+                              Container(
+                                margin: EdgeInsets.only(left: 8),
+                                child: Text((data.samaj?.femalecount ?? 0).toString()),
+                              ),
+                            ]),
+                            SizedBox(height: 6),
+                            SizedBox(width: MediaQuery.sizeOf(context).width, child: CustomPaint(painter: DashedLinePainter(dashWidth: 7, thickness: 0.7))),
+                            SizedBox(height: 6),
+                            Row(children: [
+                              Expanded(child: Text(Statics.getLabel('Total'))),
+                              Container(
+                                margin: EdgeInsets.only(left: 8),
+                                child: Text((((data.samaj?.malecount ?? 0)) + ((data.samaj?.femalecount ?? 0))).toString()),
+                              ),
+                            ]),
+                          ],
+                        ),
+                      ),
+                      SingleColumnRow(
+                        dividerColor: Colors.grey.shade400,
+                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        subChildPadding: EdgeInsets.only(top: 2, bottom: 6, right: 12, left: 12),
                         txtString: Statics.getLabel("presentTotal"),
                         value: "",
                         fontsize: 16,
@@ -770,7 +809,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> with Automati
                               Expanded(child: Text(Statics.getLabel('Male'))),
                               Container(
                                 margin: EdgeInsets.only(left: 8),
-                                child: Text(calculateTotalMale().toString()),
+                                child: Text((data.samaj?.ekuntotalmale ?? 0).toString()),
                               ),
                             ]),
                             SizedBox(height: 8),
@@ -778,7 +817,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> with Automati
                               Expanded(child: Text(Statics.getLabel('Female'))),
                               Container(
                                 margin: EdgeInsets.only(left: 8),
-                                child: Text(calculateTotalFemale().toString()),
+                                child: Text((data.samaj?.ekuntotalfemale ?? 0).toString()),
                               ),
                             ]),
                             SizedBox(height: 6),
@@ -788,7 +827,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> with Automati
                               Expanded(child: Text(Statics.getLabel('Total'))),
                               Container(
                                 margin: EdgeInsets.only(left: 8),
-                                child: Text((calculateTotalMale() + calculateTotalFemale()).toString()),
+                                child: Text(((data.samaj?.ekuntotalmale ?? 0) + (data.samaj?.ekuntotalfemale ?? 0)).toString()),
                               ),
                             ]),
                           ],

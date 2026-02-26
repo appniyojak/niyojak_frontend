@@ -47,27 +47,27 @@ class LogIn {
     return Statics.userDetails['isAuthorized'];
   }
 
-  checkLoginDate() async {
-    try {
-      Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
-      // var response = await http.get(Uri.parse(Statics.urlCheckLoginDate),
-      //     headers: jHeaders);
-      var response = await http.post(Uri.parse(Statics.urlCheckLoginDate), headers: jHeaders, body: json.encode({"swayamsevakid": Statics.userDetails["userID"]}));
-      print(response.request!.url);
-      print(response.body);
-      var body = json.decode(response.body);
-      DateTime? newDate = DateTime.tryParse(body['ForceLogout']) ?? null;
-      print("newDate --> $newDate");
-      if (newDate != null) {
-        SharedPreferences pref = await SharedPreferences.getInstance();
-        await pref.setString("loginDate", body['ForceLogout'].toString());
-      }
-      return body['ForceLogout'].toString();
-    } catch (e) {
-      print(e);
-      return null;
-    }
-  }
+  // checkLoginDate() async {
+  //   try {
+  //     Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+  //     // var response = await http.get(Uri.parse(Statics.urlCheckLoginDate),
+  //     //     headers: jHeaders);
+  //     var response = await http.post(Uri.parse(Statics.urlCheckLoginDate), headers: jHeaders, body: json.encode({"swayamsevakid": Statics.userDetails["userID"]}));
+  //     print(response.request!.url);
+  //     print(response.body);
+  //     var body = json.decode(response.body);
+  //     DateTime? newDate = DateTime.tryParse(body['ForceLogout']) ?? null;
+  //     print("newDate --> $newDate");
+  //     if (newDate != null) {
+  //       SharedPreferences pref = await SharedPreferences.getInstance();
+  //       await pref.setString("loginDate", body['ForceLogout'].toString());
+  //     }
+  //     return body['ForceLogout'].toString();
+  //   } catch (e) {
+  //     print(e);
+  //     return null;
+  //   }
+  // }
 
   Future<void> usrLogIn(BuildContext ctx, String mobileNumber, String? password, String otplogin) async {
     await DatabaseHelper.dropCompleteDB();
@@ -320,7 +320,7 @@ class LogIn {
   //   await clearData();
   //   print("logOut Done");
   // }
-  Future<void> logOut() async {
+  Future<void> logOut({bool isUpdate = false}) async {
     try {
       print("logOut running");
 
@@ -365,8 +365,8 @@ class LogIn {
       if (appDir.existsSync()) {
         appDir.deleteSync(recursive: true);
       }
-      await pref.setBool("isRead", false);
-      await pref.setString("appVer", Statics.packageInfo['versionNumber']);
+      await pref.setBool("isRead", isUpdate ? false : true);
+      // await pref.setString("appVer", Statics.packageInfo['versionNumber']);
     } catch (e) {
       print("Error during logOut: $e");
     }

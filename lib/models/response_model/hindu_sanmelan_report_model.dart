@@ -186,6 +186,8 @@ class Samaj {
   int? sajjanskhatiuppasstitimale;
   int? pramukhjhanuppasstitifemale;
   int? pramukhjhanuppasstitimale;
+  int? malecount;
+  int? femalecount;
   int? ekuntotalmale;
   int? ekuntotalfemale;
 
@@ -198,6 +200,8 @@ class Samaj {
       this.sajjanskhatiuppasstitimale,
       this.pramukhjhanuppasstitifemale,
       this.pramukhjhanuppasstitimale,
+      this.malecount,
+      this.femalecount,
       this.ekuntotalmale,
       this.ekuntotalfemale});
 
@@ -210,6 +214,8 @@ class Samaj {
     sajjanskhatiuppasstitimale = json['sajjanskhatiuppasstitimale'];
     pramukhjhanuppasstitifemale = json['pramukhjhanuppasstitifemale'];
     pramukhjhanuppasstitimale = json['pramukhjhanuppasstitimale'];
+    malecount = json['malecount'];
+    femalecount = json['femalecount'];
     ekuntotalmale = json['ekuntotalmale'];
     ekuntotalfemale = json['ekuntotalfemale'];
   }
@@ -224,6 +230,8 @@ class Samaj {
     data['sajjanskhatiuppasstitimale'] = this.sajjanskhatiuppasstitimale;
     data['pramukhjhanuppasstitifemale'] = this.pramukhjhanuppasstitifemale;
     data['pramukhjhanuppasstitimale'] = this.pramukhjhanuppasstitimale;
+    data['malecount'] = this.malecount;
+    data['femalecount'] = this.femalecount;
     data['ekuntotalmale'] = this.ekuntotalmale;
     data['ekuntotalfemale'] = this.ekuntotalfemale;
     return data;

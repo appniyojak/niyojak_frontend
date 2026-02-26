@@ -1692,6 +1692,11 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                     Statics.showToast("${Statics.getLabel('clickOnAddBtn')}", toastLength: Toast.LENGTH_LONG);
                     return;
                   }
+                  if ((presentMatrushaktiController.text.trim().isEmpty || presentMatrushaktiController.text == "0") &&
+                      (presentMaleController.text.trim().isEmpty || presentMaleController.text == "0")) {
+                    Statics.showToast("${Statics.getLabel('presentMaleFemaleValidation')}", toastLength: Toast.LENGTH_LONG);
+                    return;
+                  }
                   // if ([null, 2].contains(programNirdharitVed) || [null, 2].contains(programHishobh24Hour)) {
                   //   Fluttertoast.showToast(msg: "${Statics.getLabel('impInfoRequired')}");
                   //   return;
@@ -2315,44 +2320,44 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // if ((_linkedgraamValue != "" && _linkedgraamValue != null) || (_linkedvastiValue != "" && _linkedvastiValue != null))
-                      MaterialButton(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 35,
-                          vertical: 5,
-                        ),
-                        color: Theme.of(context).primaryColor,
-                        textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                        onPressed: () async {
-                          _selctedLevelNameList = [];
-                          setState(() {});
-                          // _selctedLevelNameList.add(_linkedMahaanagarName);
-                          // _selctedLevelNameList.add(_linkedVibhaagName);
-                          _selctedLevelNameList.add(_linkedbhaagName);
-                          _selctedLevelNameList.add(_linkedshaharName);
-                          _selctedLevelNameList.add(_linkednagarName);
-                          _selctedLevelNameList.add(_linkedmandalName);
-                          _selctedLevelNameList.add(_linkedgraamName);
-                          _selctedLevelNameList.add(_linkedvastiName);
-                          setState(() {});
+                      if ((_linkedmandalValue != null && _linkedmandalValue!.isNotEmpty) || (_linkedvastiValue != null && _linkedvastiValue!.isNotEmpty))
+                        MaterialButton(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 35,
+                            vertical: 5,
+                          ),
+                          color: Theme.of(context).primaryColor,
+                          textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                          onPressed: () async {
+                            _selctedLevelNameList = [];
+                            setState(() {});
+                            // _selctedLevelNameList.add(_linkedMahaanagarName);
+                            // _selctedLevelNameList.add(_linkedVibhaagName);
+                            _selctedLevelNameList.add(_linkedbhaagName);
+                            _selctedLevelNameList.add(_linkedshaharName);
+                            _selctedLevelNameList.add(_linkednagarName);
+                            _selctedLevelNameList.add(_linkedmandalName);
+                            _selctedLevelNameList.add(_linkedgraamName);
+                            _selctedLevelNameList.add(_linkedvastiName);
+                            setState(() {});
 
-                          await _getForm();
+                            await _getForm();
 
-                          setState(() {
-                            _selctedLevelNames = _selctedLevelNameList
-                                .where((e) => e != null && e.isNotEmpty) // remove null or empty strings
-                                .cast<String>() // convert from String? to String
-                                .join(' -> ');
-                            _searched = true;
-                            _isExpanded = false;
-                          });
-                        },
-                        child: Text(
-                          "${Statics.getLabel('search')}",
-                          style: TextStyle(fontSize: 16),
+                            setState(() {
+                              _selctedLevelNames = _selctedLevelNameList
+                                  .where((e) => e != null && e.isNotEmpty) // remove null or empty strings
+                                  .cast<String>() // convert from String? to String
+                                  .join(' -> ');
+                              _searched = true;
+                              _isExpanded = false;
+                            });
+                          },
+                          child: Text(
+                            "${Statics.getLabel('search')}",
+                            style: TextStyle(fontSize: 16),
+                          ),
                         ),
-                      ),
                       MaterialButton(
                           onPressed: () async {
                             setState(() {
