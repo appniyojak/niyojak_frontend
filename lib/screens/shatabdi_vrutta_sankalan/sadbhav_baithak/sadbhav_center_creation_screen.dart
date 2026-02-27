@@ -10,6 +10,7 @@ import '../../../providers/bals.dart';
 
 class SadbhavCenterCreationScreen extends StatefulWidget {
   static const routeName = '/sadbhav-center-creation-screen';
+
   const SadbhavCenterCreationScreen({super.key});
 
   @override
@@ -24,9 +25,10 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
 
   TextEditingController dateController = TextEditingController();
   TextEditingController txtGivenGroupNameController = TextEditingController();
-  TextEditingController txtPramukhNameController = TextEditingController();
-  TextEditingController txtPramukhMobileController = TextEditingController();
-  TextEditingController txtCentreNameController = TextEditingController();
+
+  // TextEditingController txtPramukhNameController = TextEditingController();
+  // TextEditingController txtPramukhMobileController = TextEditingController();
+  // TextEditingController txtCentreNameController = TextEditingController();
 
   List<GeoUnitMasterBAL>? _linkedMahaanagar;
   List<GeoUnitMasterBAL>? _linkedVibhaag;
@@ -468,41 +470,41 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
                 //   ),
                 // ),
                 SizedBox(height: 12),
-                textControllerField2(
-                  name: Statics.getLabel("centrePramukhName"),
-                  controller: txtPramukhNameController,
-                  keyboardType: TextInputType.name,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return Statics.getLabel("centrePramukhNameValidationMessage");
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 12),
-                textControllerField2(
-                  name: Statics.getLabel("centrePramukhMobile"),
-                  controller: txtPramukhMobileController,
-                  keyboardType: TextInputType.name,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return Statics.getLabel("centrePramukhMobileValidationMessage");
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 12),
-                textControllerField2(
-                  name: Statics.getLabel("centreName"),
-                  controller: txtCentreNameController,
-                  keyboardType: TextInputType.name,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return Statics.getLabel("centreNameValidationMessage");
-                    }
-                    return null;
-                  },
-                ),
+                // textControllerField2(
+                //   name: Statics.getLabel("centrePramukhName"),
+                //   controller: txtPramukhNameController,
+                //   keyboardType: TextInputType.name,
+                //   validator: (value) {
+                //     if (value == null || value.isEmpty) {
+                //       return Statics.getLabel("centrePramukhNameValidationMessage");
+                //     }
+                //     return null;
+                //   },
+                // ),
+                // SizedBox(height: 12),
+                // textControllerField2(
+                //   name: Statics.getLabel("centrePramukhMobile"),
+                //   controller: txtPramukhMobileController,
+                //   keyboardType: TextInputType.name,
+                //   validator: (value) {
+                //     if (value == null || value.isEmpty) {
+                //       return Statics.getLabel("centrePramukhMobileValidationMessage");
+                //     }
+                //     return null;
+                //   },
+                // ),
+                // SizedBox(height: 12),
+                // textControllerField2(
+                //   name: Statics.getLabel("centreName"),
+                //   controller: txtCentreNameController,
+                //   keyboardType: TextInputType.name,
+                //   validator: (value) {
+                //     if (value == null || value.isEmpty) {
+                //       return Statics.getLabel("centreNameValidationMessage");
+                //     }
+                //     return null;
+                //   },
+                // ),
                 SizedBox(height: 12),
                 InkWell(
                   onTap: () {

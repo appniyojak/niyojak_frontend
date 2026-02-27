@@ -46,13 +46,15 @@ import '../models/response_model/vijayadashmi_excel_resp_model.dart';
 import '../providers/bals.dart';
 import './database_helper.dart';
 
+bool isDevelopment = baseUrl == 'http://94.136.191.127:8074';
+
 ///Production
-const String baseUrl = 'http://114.79.135.131:8014';
-const String baseUrlAPI = 'http://114.79.135.131:8014/WCFServices/NiyojakProdMobileApp.svc';
+// const String baseUrl = 'http://114.79.135.131:8014';
+// const String baseUrlAPI = 'http://114.79.135.131:8014/WCFServices/NiyojakProdMobileApp.svc';
 
 /// Development
-// const String baseUrl = 'http://94.136.191.127:8074';
-// const String baseUrlAPI = 'http://94.136.191.127:8074/WCFServices/NiyojakProdMobileApp.svc';
+const String baseUrl = 'http://94.136.191.127:8074';
+const String baseUrlAPI = 'http://94.136.191.127:8074/WCFServices/NiyojakProdMobileApp.svc';
 
 ///OLD Development
 // const String baseUrl = 'http://108.181.165.29:8027';

@@ -60,12 +60,12 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
   @override
   void initState() {
     super.initState();
-    fetchVastiSurveyDropdownData();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => fetchVastiSurveyDropdownData());
   }
 
   getDataFromScreen() {
     // 👇 Receive the arguments properly
-    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
 
     if (args.isNotEmpty) {
       if (args["linkedNagar"] != null) {
@@ -112,6 +112,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
     var mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr, 'Nagar', '');
     setState(() {
       _linkedmandal = (mnDD.length > 0 ? mnDD : null);
+      print("Test111 >>>>>>>>>>>>>>>>>>> ${_linkedmandal}");
     });
     return mnDD;
   }
@@ -121,6 +122,7 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
     var gmDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['GraamLevelID'].toString(), mandalIDStr, 'Mandal', '');
     setState(() {
       _linkedgraam = (gmDD.length > 0 ? gmDD : null);
+      print("Test >>>>>>>>>>>>>>>>>>> ${_linkedgraam}");
     });
     return gmDD;
   }
@@ -134,13 +136,14 @@ class _AddMukhyaAtithiState extends State<AddMukhyaAtithi> {
     return vsDD;
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    getDataFromScreen();
-  }
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   getDataFromScreen();
+  // }
 
   Future<void> fetchVastiSurveyDropdownData() async {
+    await getDataFromScreen();
     try {
       vastisarvekshanDropDownDataModel = await Statics.getVastiSurveyDropDownList(Statics.userDetails["userID"]);
       setState(() {});

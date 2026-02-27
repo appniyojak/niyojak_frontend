@@ -8,7 +8,6 @@ import '../../../helpers/static_data.dart' as Statics;
 import '../../../widgets/app_drawer.dart';
 import 'sadbhav_centers_list_screen.dart';
 import 'sadbhav_report.dart';
-import 'sadbhav_search_vrutta.dart';
 
 class SadbhavBaithakMainTab extends StatefulWidget {
   static const routeName = '/sadbhav-baithak-main-tab-screen';
@@ -28,7 +27,7 @@ class _SadbhavBaithakMainTabState extends State<SadbhavBaithakMainTab> with Sing
   void initState() {
     print("initState");
     // getInitialData();
-    _tabController = new TabController(length: 3, vsync: this);
+    _tabController = new TabController(length: 2, vsync: this);
     log("initState SadbhavBaithakMainTab runnn >>>>>>>>>>>>>> ");
     // WidgetsBinding.instance.addPostFrameCallback((t) => getAbhiyaanGeoUnitsFun());
     super.initState();
@@ -72,23 +71,23 @@ class _SadbhavBaithakMainTabState extends State<SadbhavBaithakMainTab> with Sing
                   ],
                 ),
               ),
-              Tab(
-                child: Row(
-                  spacing: 16,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      FontAwesomeIcons.fileCircleQuestion,
-                      size: 18,
-                    ),
-                    Text(
-                      "${Statics.getLabel('baithak')}",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 15),
-                    ),
-                  ],
-                ),
-              ),
+              // Tab(
+              //   child: Row(
+              //     spacing: 16,
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: [
+              //       Icon(
+              //         FontAwesomeIcons.fileCircleQuestion,
+              //         size: 18,
+              //       ),
+              //       Text(
+              //         "${Statics.getLabel('baithak')}",
+              //         textAlign: TextAlign.center,
+              //         style: TextStyle(fontSize: 15),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               Tab(
                 child: Row(
                   spacing: 16,
@@ -119,8 +118,8 @@ class _SadbhavBaithakMainTabState extends State<SadbhavBaithakMainTab> with Sing
             controller: _tabController,
             physics: NeverScrollableScrollPhysics(),
             children: <Widget>[
-              SadbhavCenterListScreen(onChanged: () => setState(() => _tabController!.animateTo(1))),
-              SadbhavSearchVruttaTab(),
+              SadbhavCenterListScreen(),
+              // SadbhavSearchVruttaTab(),
               SadbhavReportTab(),
             ],
           ),

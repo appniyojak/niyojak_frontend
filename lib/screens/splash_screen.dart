@@ -245,7 +245,7 @@ class _SplashScreenCheckState extends State<SplashScreenCheck> {
                   SizedBox(
                     height: 50,
                   ),
-                  if (Statics.baseUrl == "http://94.136.191.127:8074")
+                  if (Statics.isDevelopment)
                     Text(
                       "Development Pointed APK",
                       style: TextStyle(fontSize: 18, color: Colors.grey),

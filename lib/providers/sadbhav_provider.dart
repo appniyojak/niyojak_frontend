@@ -23,4 +23,9 @@ class SadbhavProvider extends ChangeNotifier {
     _selectedSadbhav = data;
     notifyListeners();
   }
+
+  set setSadbhav(SadbhavCenter? value) {
+    _selectedSadbhav = value;
+    notifyListeners();
+  }
 }

@@ -5,20 +5,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_expandable_table/flutter_expandable_table.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../helpers/static_data.dart' as Statics;
 import '../../../models/response_model/sadbhav_baithak_resp_model.dart';
+import '../../../models/response_model/sadbhav_baithak_vrutta_resp_model.dart';
 import '../../../models/response_model/sadbhav_center_list_resp_model.dart';
+import '../../../models/response_model/vijayaDashamiInitModel.dart';
 import '../../../providers/bals.dart';
 import '../../../providers/sadbhav_provider.dart';
 import 'sadbhav_center_creation_screen.dart';
 
 class SadbhavCenterListScreen extends StatefulWidget {
   static const routeName = '/sadbhav-center-list-screen';
-  final void Function()? onChanged;
 
-  const SadbhavCenterListScreen({this.onChanged, super.key});
+  const SadbhavCenterListScreen({super.key});
 
   @override
   State<SadbhavCenterListScreen> createState() => _SadbhavCenterListScreenState();
@@ -30,6 +32,7 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
   bool get wantKeepAlive => true;
 
   final GlobalKey<FormState> _formKey = GlobalKey();
+  SadbhavBaithakVruttaRespModel? vruttaData;
 
   bool _searched = false;
   bool _isExpanded = true;
@@ -226,6 +229,50 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
     if (_res) {
       Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
     }
+    // getFormData();
+  }
+
+  String? selectedSajjanshaktiItemsIds;
+  String? selectedAnyaprabhaviItemsIds;
+  List<Vastisarsajjanshakti> selectedSajjanshaktiItems = [];
+  List<Vastisanyaprabhavi> selectedAnyaprabhaviItems = [];
+
+  _getForm(pkId) async {
+    var formData = {
+      "ids": pkId,
+      "AppUserID": int.parse(Statics.userDetails['userID']),
+    };
+    vruttaData = await Statics.GetSadbhavBaithakVruttaData(context: context, inputJson: formData);
+    setState(() {});
+    if (vruttaData != null) {
+      selectedSajjanshaktiItemsIds = vruttaData?.vastisarsajjanshakti?.where((e) => e.isVisheshdefault == 1).map((e) => e.pkid).join(',');
+      selectedSajjanshaktiItems = vruttaData?.vastisarsajjanshakti?.where((e) => e.isVisheshdefault == 1).toList() ?? [];
+      selectedAnyaprabhaviItemsIds = vruttaData?.vastisanyaprabhavi?.where((e) => e.isVisheshdefault == 1).map((e) => e.pkId).join(',');
+      selectedAnyaprabhaviItems = vruttaData?.vastisanyaprabhavi?.where((e) => e.isVisheshdefault == 1).toList() ?? [];
+
+      // vaktaList = vruttaData?.namesList ?? [];
+      _selectedGeoUnitId = vruttaData?.geounitid.toString();
+    }
+  }
+
+  Future<void> submitForm(pkId, {bool showLoader = true}) async {
+    if (selectedSajjanshaktiItemsIds == null || selectedSajjanshaktiItemsIds!.isEmpty || selectedAnyaprabhaviItemsIds == null || selectedAnyaprabhaviItemsIds!.isEmpty) {
+      Statics.showToast(Statics.getLabel("submitValidation"));
+      return;
+    }
+
+    Map<String, dynamic> formData = {
+      "pkid": pkId,
+      "sajjanids": selectedSajjanshaktiItemsIds ?? "",
+      "annyaids": selectedAnyaprabhaviItemsIds ?? "",
+      // "sadbhavbaithaknames": vaktaList,
+      "geounitid": _selectedGeoUnitId,
+      "AppUserID": int.parse(Statics.userDetails['userID']),
+    };
+
+    String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
+    log("Form Data (JSON):\n$formattedJson");
+    await Statics.SaveSadbhavBaithakVruttaData(context: context, inputJson: formData, showLoader: showLoader);
     // getFormData();
   }
 
@@ -697,7 +744,7 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
                     OutlinedButton(
                       style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)), side: BorderSide(color: Colors.purple, width: 0.7)),
                       onPressed: () => Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName),
-                      child: Text("+  " + Statics.getLabel("AddMore")),
+                      child: Text("+  " + Statics.getLabel("addCentre")),
                     )
                   ],
                 ),
@@ -713,6 +760,7 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
   }
 
   Widget myAreaReport() {
+    final sadbhavProvider = context.read<SadbhavProvider>();
     return ExpansionTile(
       initiallyExpanded: true,
       backgroundColor: Colors.purple.shade50,
@@ -721,31 +769,100 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       collapsedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       title: Text(
-        Statics.getLabel('MyGeoUnitDetails'),
+        Statics.getLabel('baithakData'),
         style: TextStyle(fontWeight: FontWeight.w700),
       ),
       children: [
-        myAreaExpandableTable(),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: DataTable(
+            headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
+            columnSpacing: 16,
+            horizontalMargin: 12,
+            border: TableBorder.all(color: Colors.black26),
+            columns: [
+              DataColumn(
+                label: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  constraints: const BoxConstraints(minWidth: 30, maxWidth: 130),
+                  child: Text(
+                    Statics.getLabel('serialNo'),
+                    softWrap: true,
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              DataColumn(
+                label: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  constraints: const BoxConstraints(minWidth: 30, maxWidth: 130),
+                  child: Text(
+                    Statics.getLabel('SelectLevelName'),
+                    softWrap: true,
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              DataColumn(
+                label: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  constraints: const BoxConstraints(minWidth: 30, maxWidth: 130),
+                  child: Text(
+                    Statics.getLabel('sadbhavCentre'),
+                    softWrap: true,
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              DataColumn(label: SizedBox()),
+            ],
+            rows: [
+              DataRow(
+                cells: [
+                  DataCell(Center(child: Text("1"))),
+                  DataCell(Center(child: Text(Statics.getLabel("railwayStation")))),
+                  DataCell(Center(child: Text("पार्ले"))),
+                  DataCell(OutlinedButton(
+                    style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)), side: BorderSide(color: Colors.purple, width: 0.7)),
+                    onPressed: () {
+                      sadbhavProvider.updateSadbhavVal(SadbhavCenter(centername: "पार्ले", geounitname: "पार्ले", sthartype: Statics.getLabel("railwayStation")));
+                    },
+                    child: Text("+  " + Statics.getLabel("baithak")),
+                  )),
+                ],
+              ),
+              DataRow(
+                cells: [
+                  DataCell(Center(child: Text("2"))),
+                  DataCell(Center(child: Text(Statics.getLabel("Bhaag")))),
+                  DataCell(Center(child: Text("मुम्बादेवी"))),
+                  DataCell(OutlinedButton(
+                    style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)), side: BorderSide(color: Colors.purple, width: 0.7)),
+                    onPressed: () {
+                      sadbhavProvider.updateSadbhavVal(SadbhavCenter(centername: "मुम्बादेवी", geounitname: "मुम्बादेवी", sthartype: Statics.getLabel("Bhaag")));
+                    },
+                    child: Text("+  " + Statics.getLabel("baithak")),
+                  )),
+                ],
+              ),
+            ],
+          ),
+        ),
       ],
     );
-
-    // return ExpansionPanelList(
-    //   expansionCallback: (panelIndex, isExpanded) => setState(() => _isExpanded = !_isExpanded),
-    //   children: [
-    //     ExpansionPanel(
-    //       isExpanded: _isExpanded,
-    //       headerBuilder: (BuildContext context, bool isExpanded) {
-    //         return ListTile(
-    //           title: Text(Statics.getLabel('MyGeoUnitDetails')),
-    //         );
-    //       },
-    //       body: myAreaExpandableTable(),
-    //     ),
-    //   ],
-    // );
   }
 
   Widget otherAreaReport() {
+    final sadbhavProvider = context.watch<SadbhavProvider>();
     return ExpansionTile(
       initiallyExpanded: true,
       backgroundColor: Colors.purple.shade50,
@@ -754,62 +871,215 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       collapsedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       childrenPadding: EdgeInsets.only(left: 12, right: 12, bottom: 10, top: 16),
+      expandedCrossAxisAlignment: CrossAxisAlignment.start,
       title: Text(
-        Statics.getLabel('TargetGeoUnitDetails'),
+        Statics.getLabel('baithakData'),
         style: TextStyle(fontWeight: FontWeight.w700),
       ),
       children: [
-        _buildDropdownField(
-          // ignoring: dateController.text.isEmpty || (baithakId != null && baithakId != 0),
-          label: Statics.getLabel('selectStar'),
-          value: _selectedKaryakramLevelId == null ? null : _selectedKaryakramLevelId.toString(),
-          items: karyakramLevelsList
-              .map((bg) => DropdownMenuItem(
-                    value: bg.values.first.toString(),
-                    child: Text(bg.keys.first),
-                  ))
-              .toList(),
-          // onTap: dateController.text.isEmpty ? null : () {},
-          onChanged: (value) {
-            // if (dateController.text.isEmpty) {
-            //   Statics.showToast("Please select date first");
-            //   return;
-            // }
-            populateDropdown();
-            _searched = false;
-            // dateController.clear();
-            setState(() => _selectedKaryakramLevelId = int.tryParse(value.toString()));
-            nagarList = [];
-            print("baithakId >>>>>>>>>>>>>>>> ${baithakId}");
-          },
-          isDisabled: false,
-        ),
-        if (_selectedKaryakramLevelId != null) nagarDropdown(),
-        if (_selectedKaryakramLevelId != null && (baithakId == null || baithakId == 0) && !_isViewOnly)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // if ((_linkedgraamValue != "" && _linkedgraamValue != null) || (_linkedvastiValue != "" && _linkedvastiValue != null))
-              MaterialButton(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                padding: EdgeInsets.symmetric(
-                  horizontal: 35,
-                  vertical: 5,
-                ),
-                color: Theme.of(context).primaryColor,
-                textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                onPressed: checkIfExistsFun,
-                child: Text(
-                  Statics.getLabel('search'),
-                  style: TextStyle(fontSize: 16),
-                ),
+        Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "${Statics.getLabel('LevelName')} :  ${sadbhavProvider.selectedSadbhav?.sthartype ?? "--"}",
+                    style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    "${Statics.getLabel('centreName')}  : ${sadbhavProvider.selectedSadbhav?.geounitname ?? "--"}",
+                    style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
-              MaterialButton(onPressed: clearForm, child: Text(Statics.getLabel('clear'))),
-            ],
+            ),
+            IconButton(
+              onPressed: () => setState(() => sadbhavProvider.setSadbhav = null),
+              icon: Icon(Icons.cancel, color: Colors.red),
+            )
+          ],
+        ),
+        SizedBox(height: 12),
+        if (sadbhavProvider.selectedSadbhav != null)
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: DataTable(
+              headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
+              columnSpacing: 18,
+              horizontalMargin: 12,
+              border: TableBorder.all(color: Colors.black26),
+              columns: [
+                DataColumn(
+                  label: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    constraints: const BoxConstraints(minWidth: 30, maxWidth: 130),
+                    child: Text(
+                      Statics.getLabel('serialNo'),
+                      softWrap: true,
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                DataColumn(
+                  label: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    constraints: const BoxConstraints(minWidth: 30, maxWidth: 130),
+                    child: Text(
+                      Statics.getLabel('date2'),
+                      softWrap: true,
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                DataColumn(
+                  label: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    constraints: const BoxConstraints(minWidth: 30, maxWidth: 130),
+                    child: Text(
+                      Statics.getLabel('baithakStatus'),
+                      softWrap: true,
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                DataColumn(
+                  label: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    constraints: const BoxConstraints(minWidth: 30, maxWidth: 130),
+                    child: Text(
+                      Statics.getLabel('anya_upastiti_male'),
+                      softWrap: true,
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                DataColumn(
+                  label: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    constraints: const BoxConstraints(minWidth: 30, maxWidth: 130),
+                    child: Text(
+                      Statics.getLabel('anya_upastiti_matrushakti'),
+                      softWrap: true,
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                DataColumn(
+                  label: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    constraints: const BoxConstraints(minWidth: 30, maxWidth: 130),
+                    child: Text(
+                      Statics.getLabel('sadbhavReportTable2'),
+                      softWrap: true,
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                DataColumn(label: SizedBox()),
+              ],
+              rows: [
+                DataRow(
+                  cells: [
+                    DataCell(Center(child: Text("1"))),
+                    DataCell(Center(child: Text("DD/MM/YYYY"))),
+                    DataCell(Center(child: Text("Yes"))),
+                    DataCell(Center(child: Text("25"))),
+                    DataCell(Center(child: Text("25"))),
+                    DataCell(Center(child: Text("10"))),
+                    DataCell(PopupMenuButton(
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      onSelected: (value) async {
+                        if (value == "Delete") {
+                          showDialog(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                              title: Text(Statics.getLabel('AskConfirmation')),
+                              content: Text(Statics.getLabel('AreyouSureYouWantToDeleteBaithak')),
+                              actions: <Widget>[
+                                MaterialButton(
+                                  child: Text(Statics.getLabel('ConfirmationYes')),
+                                  onPressed: () async {
+                                    // var _res = await Statics.DeleteSadbhavBaithakData(context: context, inputJson: {"ids": data.pkid});
+                                    // if (_res) {
+                                    //   Statics.showToast(Statics.getLabel('BaithakDeletedSuccessfully'));
+                                    // } else
+                                    //   Statics.showToast(Statics.getLabel('errorOccurred'));
+                                    // Navigator.of(ctx).pop();
+                                    // await getSadbhavBaithakListFun();
+                                  },
+                                ),
+                                MaterialButton(
+                                  child: Text(Statics.getLabel('ConfirmationNo')),
+                                  onPressed: () {
+                                    Navigator.of(ctx).pop();
+                                  },
+                                )
+                              ],
+                            ),
+                          );
+                        } else if (value == "EditMenu") {
+                          print("EDIT >>>>>>>>>>>>>>");
+                          await _getForm(2);
+                          showBaithakDetailPopup();
+                          // Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
+                          // } else if (value == "baithak") {
+                          // sadbhavProvider.updateSadbhavVal(SadbhavCenter(centername: "नवीन केंद्र", geounitname: "कोळीवाडा", sthartype: Statics.getLabel("railwayStation")));
+
+                          // Navigator.of(context).pushNamed(SadbhavFormTab.routeName); //, arguments: {"id": data.pkid});
+                        } else {
+                          Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
+                          // Navigator.of(context).pushNamed(SadbhavCenterListScreen.routeName); //, arguments: {"id": data.pkid, "viewOnly": true});
+                        }
+                      },
+                      itemBuilder: (BuildContext context) {
+                        return [
+                          // Statics.MenuItem(Statics.getLabel('addinSoochi'), Icons.list, 'AddinSoochi'),
+                          // if (showEditMenu == true)
+                          Statics.MenuItem(Statics.getLabel('EditMenu'), FontAwesomeIcons.edit, 'EditMenu'),
+                          Statics.MenuItem(Statics.getLabel('ViewMenu'), FontAwesomeIcons.eye, 'ViewMenu'),
+                          // if (showDeleteMenu == true)
+                          Statics.MenuItem(Statics.getLabel('Delete'), Icons.delete, 'Delete'),
+                          // Statics.MenuItem(Statics.getLabel('baithak'), Icons.edit_note_rounded, 'baithak'),
+                        ].map((Statics.MenuItem menuItem) {
+                          return PopupMenuItem(
+                            value: menuItem.menuKey,
+                            child: ListTile(
+                              // tileColor: Colors.white,
+                              leading: Icon(
+                                menuItem.iconVal,
+                                color: Colors.purple,
+                              ),
+                              title: Text(menuItem.menuVal),
+                            ),
+                          );
+                        }).toList();
+                      },
+                    )),
+                  ],
+                )
+              ],
+            ),
           ),
-        SizedBox(height: 24),
-        myAreaExpandableTable(),
-        // otherAreaExpandableTable(),
       ],
     );
 
@@ -827,6 +1097,394 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
     //     ),
     //   ],
     // );
+  }
+
+  void showBaithakDetailPopup() {
+    final sarsajjanshaktiList = (vruttaData?.vastisarsajjanshakti ?? []).toList();
+    final sanyaprabhaviList = (vruttaData?.vastisanyaprabhavi ?? []).toList();
+
+    showDialog(
+      context: context,
+      useSafeArea: true,
+      builder: (ct) => StatefulBuilder(
+        builder: (ctx, set) => Dialog(
+          surfaceTintColor: Colors.transparent,
+          backgroundColor: Colors.white,
+          clipBehavior: Clip.antiAlias,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          insetPadding: const EdgeInsets.all(16),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.purple, Colors.purpleAccent],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "वृत्त भरणे",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close, color: Colors.white),
+                        onPressed: () => Navigator.pop(ct),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 12),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            "${Statics.getLabel('date2')} : ",
+                            style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
+                          ),
+                          // Text(
+                          //   " *",
+                          //   style: TextStyle(fontSize: 15, color: Colors.red, fontWeight: FontWeight.bold),
+                          // ),
+                          SizedBox(width: 12),
+                          SizedBox(
+                            width: MediaQuery.sizeOf(context).width * 0.4,
+                            child: TextField(
+                              controller: dateController,
+                              style: TextStyle(fontSize: 14),
+                              autofocus: false,
+                              onTap: _isViewOnly
+                                  ? null
+                                  : () async {
+                                      DateTime? date = await showDatePicker(
+                                        context: context,
+                                        initialDate: dateController.text.isEmpty ? DateTime.now() : DateFormat("dd/MM/yyyy").parse(dateController.text),
+                                        firstDate: DateTime(2000),
+                                        lastDate: DateTime(2100),
+                                      );
+                                      if (date != null) {
+                                        dateController.text = DateFormat("dd/MM/yyyy").format(date);
+
+                                        await populateDropdown();
+                                        setState(() {
+                                          _searched = false;
+                                          _selectedKaryakramLevelId = null;
+                                        });
+                                      }
+                                    },
+                              readOnly: true,
+                              decoration: InputDecoration(
+                                  isDense: true,
+                                  hintText: "DD/MM/YYYY",
+                                  contentPadding: EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 12),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  )),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      CheckboxListTile(
+                        controlAffinity: ListTileControlAffinity.trailing,
+                        value: _isExpanded,
+                        onChanged: (value) => set(() => _isExpanded = value ?? false),
+                        title: Text("Is Vrutta Started ? "),
+                      ),
+                      // customTextFields(title: Statics.getLabel("gruhVitaritKarpatra") + ": ", controller: vitritKarpatrakController),
+                      // customTextFields(title: Statics.getLabel("gruhPustakVikti") + ": ", controller: pustakVikriController),
+
+                      Flexible(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              /// Content
+                              const SizedBox(height: 12),
+                              Text(
+                                Statics.getLabel('SajjanShakti'),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                  color: Colors.blueGrey,
+                                ),
+                              ),
+                              const Divider(),
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black12),
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.white,
+                                ),
+                                child: Table(
+                                  border: TableBorder.symmetric(
+                                    inside: const BorderSide(color: Colors.black12),
+                                  ),
+                                  columnWidths: const {
+                                    0: FixedColumnWidth(50),
+                                  },
+                                  children: [
+                                    // Header
+                                    TableRow(
+                                      decoration: BoxDecoration(
+                                        color: Colors.blue.shade50,
+                                      ),
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.all(8),
+                                          child: Text("✔", style: TextStyle(fontWeight: FontWeight.bold)),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.all(8),
+                                          child: Text(Statics.getLabel("Name"), style: TextStyle(fontWeight: FontWeight.bold)),
+                                        ),
+                                      ],
+                                    ),
+                                    ...sarsajjanshaktiList.map((item) {
+                                      return TableRow(
+                                        children: [
+                                          Center(
+                                              child: Checkbox(
+                                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                            value: selectedSajjanshaktiItems.any((x) => x.pkid == item.pkid),
+                                            onChanged: (val) {
+                                              set(() {
+                                                if (val == true) {
+                                                  selectedSajjanshaktiItems.add(item);
+                                                } else {
+                                                  selectedSajjanshaktiItems.removeWhere((x) => x.pkid == item.pkid);
+                                                }
+                                              });
+                                              selectedSajjanshaktiItemsIds = selectedSajjanshaktiItems.map((e) => e.pkid.toString()).join(",");
+                                              // String anyaIds = selectedAnyaprabhavi.map((e) => e.pkId.toString()).join(",");
+                                              log(selectedSajjanshaktiItemsIds.toString());
+                                              log("-----------------------------");
+                                              // log(anyaIds);
+
+                                              // onSubmit(sajIds, anyaIds, selectedSajjanshakti, selectedAnyaprabhavi);
+                                              set(() {});
+                                            },
+                                          )),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8),
+                                            child: Text(item.name ?? "Unknown"),
+                                          ),
+                                        ],
+                                      );
+                                    }),
+                                  ],
+                                ),
+                              ),
+
+                              const SizedBox(height: 12),
+
+                              /// Anya Prabhavi Lok
+                              Text(
+                                Statics.getLabel('anyaPrabhaviLok'),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                  color: Colors.blueGrey,
+                                ),
+                              ),
+                              const Divider(),
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black12),
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.white,
+                                ),
+                                child: Table(
+                                  border: TableBorder.symmetric(
+                                    inside: const BorderSide(color: Colors.black12),
+                                  ),
+                                  columnWidths: const {
+                                    0: FixedColumnWidth(50),
+                                  },
+                                  children: [
+                                    // Header
+                                    TableRow(
+                                      decoration: BoxDecoration(
+                                        color: Colors.blue.shade50,
+                                      ),
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.all(8),
+                                          child: Text("✔", style: TextStyle(fontWeight: FontWeight.bold)),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.all(8),
+                                          child: Text(Statics.getLabel("Name"), style: TextStyle(fontWeight: FontWeight.bold)),
+                                        ),
+                                      ],
+                                    ),
+                                    ...sanyaprabhaviList.map((item) {
+                                      return TableRow(
+                                        children: [
+                                          Center(
+                                              child: Checkbox(
+                                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                            value: selectedAnyaprabhaviItems.any((x) => x.pkId == item.pkId),
+                                            onChanged: (val) {
+                                              set(() {
+                                                if (val == true) {
+                                                  selectedAnyaprabhaviItems.add(item);
+                                                } else {
+                                                  selectedAnyaprabhaviItems.removeWhere((x) => x.pkId == item.pkId);
+                                                }
+                                              });
+                                              // String sajIds = selectedSajjanshakti.map((e) => e.pkid.toString()).join(",");
+                                              selectedAnyaprabhaviItemsIds = selectedAnyaprabhaviItems.map((e) => e.pkId.toString()).join(",");
+
+                                              // onSubmit(sajIds, anyaIds, selectedSajjanshakti, selectedAnyaprabhavi);
+                                              // log(sajIds);
+                                              log(selectedAnyaprabhaviItemsIds.toString());
+                                              set(() {});
+                                            },
+                                          )),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8),
+                                            child: Text(item.name ?? "Unknown"),
+                                          ),
+                                        ],
+                                      );
+                                    }),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(height: 21),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // if (!isAbhiyaanButPramukh || _isEditing)
+                          MaterialButton(
+                            minWidth: MediaQuery.sizeOf(context).width * 0.4,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 12,
+                            ),
+                            color: Theme.of(context).primaryColor,
+                            textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                            // onPressed: () {
+                            //   Statics.showToast(Statics.getLabel("workInProgress"));
+                            // },
+                            onPressed: () async {
+                              Navigator.pop(ct);
+                            },
+                            child: Text(
+                              Statics.getLabel('Submit'),
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ),
+                          // if (_isEditing)
+                          MaterialButton(
+                            minWidth: MediaQuery.sizeOf(context).width * 0.35,
+                            onPressed: () async {
+                              // setState(() {
+                              //   _isEditing = false;
+                              //   _isEditingForPramukh = false;
+                              //   dateController.text = DateFormat("dd/MM/yyyy").format(DateTime.now());
+                              //   // samparkitGhareController.clear();
+                              //   vitritKarpatrakController.clear();
+                              //   pustakVikriController.clear();
+                              //   createdUserId = null;
+                              //   selectedSajjanshaktiItems = [];
+                              //   selectedAnyaprabhaviItems = [];
+                              //   selectedVisitedSwayamsevak = [];
+                              //   // _selctedLevelNameList = [];
+                              // });
+                              Navigator.pop(ct);
+                              // await _getSwList();
+                              // await populateDropdown(isClear: true);
+                            },
+                            child: Text(
+                              Statics.getLabel('clear'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  customTextFields({required String title, bool isRequired = false, required TextEditingController controller, String? hintText, bool readOnly = false, void Function()? onTap}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            flex: 4,
+            child: Row(
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
+                ),
+                if (isRequired)
+                  Text(
+                    " *",
+                    style: TextStyle(fontSize: 15, color: Colors.red, fontWeight: FontWeight.bold),
+                  ),
+                // TextSpan(
+                //  text: " : ",
+                //   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                // ),
+              ],
+            ),
+          ),
+          // Text(
+          //   " : ",
+          //   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+          // ),
+          Expanded(
+            flex: 3,
+            child: TextFormField(
+              controller: controller,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(4)],
+              style: TextStyle(fontSize: 14),
+              autofocus: false,
+              onTap: onTap,
+              readOnly: readOnly,
+              enabled: !readOnly,
+              keyboardType: TextInputType.number,
+              textInputAction: TextInputAction.done,
+              decoration: InputDecoration(
+                  // isDense: true,
+                  hintText: hintText ?? "0",
+                  contentPadding: EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 12),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(5))),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   // UI Helper for Header Cells
@@ -978,7 +1636,7 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
                             Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
                           } else if (value == "baithak") {
                             sadbhavProvider.updateSadbhavVal(SadbhavCenter(centername: "नवीन केंद्र", geounitname: "कोळीवाडा", sthartype: Statics.getLabel("railwayStation")));
-                            if (widget.onChanged != null) widget.onChanged!();
+
                             // Navigator.of(context).pushNamed(SadbhavFormTab.routeName); //, arguments: {"id": data.pkid});
                           } else {
                             Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
@@ -1061,7 +1719,7 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
                               geounitname: "नवकर",
                               centername: "नवकर केंद्र",
                             ));
-                            if (widget.onChanged != null) widget.onChanged!();
+
                             // Navigator.of(context).pushNamed(SadbhavFormTab.routeName); //, arguments: {"id": data.pkid});
                           } else {
                             Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
@@ -1144,7 +1802,7 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
                               geounitname: "कोंडगाव",
                               centername: "कोंडगाव केंद्र",
                             ));
-                            if (widget.onChanged != null) widget.onChanged!();
+
                             // Navigator.of(context).pushNamed(SadbhavFormTab.routeName); //, arguments: {"id": data.pkid});
                           } else {
                             Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
@@ -1244,7 +1902,7 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
                               geounitname: "चिंचघर",
                               centername: "चिंचघर केंद्र",
                             ));
-                            if (widget.onChanged != null) widget.onChanged!();
+
                             // Navigator.of(context).pushNamed(SadbhavFormTab.routeName); //, arguments: {"id": data.pkid});
                           } else {
                             Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
@@ -1327,7 +1985,7 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
                               geounitname: "परळी",
                               centername: "परळी केंद्र",
                             ));
-                            if (widget.onChanged != null) widget.onChanged!();
+
                             // Navigator.of(context).pushNamed(SadbhavFormTab.routeName); //, arguments: {"id": data.pkid});
                           } else {
                             Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
@@ -1459,7 +2117,6 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
                             Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
                             // Navigator.of(context).pushNamed(SadbhavCenterListScreen.routeName); //, arguments: {"id": data.pkid, "viewOnly": false});
                           } else if (value == "baithak") {
-                            if (widget.onChanged != null) widget.onChanged!();
                             // Navigator.of(context).pushNamed(SadbhavFormTab.routeName); //, arguments: {"id": data.pkid});
                           } else {
                             Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
@@ -1554,7 +2211,6 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
                             Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
                             // Navigator.of(context).pushNamed(SadbhavCenterListScreen.routeName); //, arguments: {"id": data.pkid, "viewOnly": false});
                           } else if (value == "baithak") {
-                            if (widget.onChanged != null) widget.onChanged!();
                             // Navigator.of(context).pushNamed(SadbhavFormTab.routeName); //, arguments: {"id": data.pkid});
                           } else {
                             Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
@@ -1650,7 +2306,6 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
                           Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
                           // Navigator.of(context).pushNamed(SadbhavCenterListScreen.routeName); //, arguments: {"id": data.pkid, "viewOnly": false});
                         } else if (value == "baithak") {
-                          if (widget.onChanged != null) widget.onChanged!();
                           // Navigator.of(context).pushNamed(SadbhavFormTab.routeName); //, arguments: {"id": data.pkid});
                         } else {
                           Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});

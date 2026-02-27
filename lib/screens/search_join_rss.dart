@@ -621,200 +621,200 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
         drawer: AppDrawer(),
         body: Container(
           margin: EdgeInsets.all(10),
-          child: Column(
-            children: <Widget>[
-              ExpansionPanelList(
-                expansionCallback: (int index, bool isExpanded) {
-                  setState(() {
-                    _isExpanded1 = isExpanded;
-                  });
-                },
-                children: [
-                  ExpansionPanel(
-                    headerBuilder: (BuildContext context, bool isExpanded) {
-                      return ListTile(
-                        title: Text(Statics.getLabel('StatusWiseDetails')),
-                      );
-                    },
-                    body: Container(
-                      child: Column(
-                        children: [
-                          if (setSummerData == null)
-                            Container(
-                              height: Statics.getDeviceSize(context).height * 0.30,
-                              width: Statics.getDeviceSize(context).width,
-                              alignment: Alignment.center,
-                              child: CircularProgressIndicator(),
-                            )
-                          else if (setSummerData.isEmpty)
-                            Container(
-                              height: Statics.getDeviceSize(context).height * 0.30,
-                              width: Statics.getDeviceSize(context).width,
-                              alignment: Alignment.center,
-                              child: Text('No Data Found'),
-                            )
-                          else
-                            Container(
-                              height: Statics.getDeviceSize(context).height * 0.50,
-                              width: Statics.getDeviceSize(context).width,
-                              child: HorizontalDataTable(
-                                leftHandSideColumnWidth: leftColumnWidth,
-                                rightHandSideColumnWidth: setStatusCodes.length * columnWidth + columnWidth,
-                                isFixedHeader: true,
-                                headerWidgets: [
-                                  Container(
-                                    width: leftColumnWidth,
-                                    height: rowHeight + 40,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
-                                    child: Text(Statics.getLabel('Level'), textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold)),
-                                  ),
-                                  Container(
-                                    width: columnWidth,
-                                    height: rowHeight + 40,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(border: Border.symmetric(horizontal: BorderSide(color: Colors.grey))),
-                                    child: Text(Statics.getLabel('Total'), textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold)),
-                                  ),
-                                  ...setStatusCodes!.map((status) => Container(
-                                        width: columnWidth,
-                                        height: rowHeight + 40,
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                ExpansionPanelList(
+                  expansionCallback: (int index, bool isExpanded) {
+                    setState(() {
+                      _isExpanded1 = isExpanded;
+                    });
+                  },
+                  children: [
+                    ExpansionPanel(
+                      headerBuilder: (BuildContext context, bool isExpanded) {
+                        return ListTile(
+                          title: Text(Statics.getLabel('StatusWiseDetails')),
+                        );
+                      },
+                      body: Container(
+                        child: Column(
+                          children: [
+                            if (setSummerData == null)
+                              Container(
+                                height: Statics.getDeviceSize(context).height * 0.30,
+                                width: Statics.getDeviceSize(context).width,
+                                alignment: Alignment.center,
+                                child: CircularProgressIndicator(),
+                              )
+                            else if (setSummerData.isEmpty)
+                              Container(
+                                height: Statics.getDeviceSize(context).height * 0.30,
+                                width: Statics.getDeviceSize(context).width,
+                                alignment: Alignment.center,
+                                child: Text('No Data Found'),
+                              )
+                            else
+                              Container(
+                                height: Statics.getDeviceSize(context).height * 0.50,
+                                width: Statics.getDeviceSize(context).width,
+                                child: HorizontalDataTable(
+                                  leftHandSideColumnWidth: leftColumnWidth,
+                                  rightHandSideColumnWidth: setStatusCodes.length * columnWidth + columnWidth,
+                                  isFixedHeader: true,
+                                  headerWidgets: [
+                                    Container(
+                                      width: leftColumnWidth,
+                                      height: rowHeight + 40,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
+                                      child: Text(Statics.getLabel('Level'), textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold)),
+                                    ),
+                                    Container(
+                                      width: columnWidth,
+                                      height: rowHeight + 40,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(border: Border.symmetric(horizontal: BorderSide(color: Colors.grey))),
+                                      child: Text(Statics.getLabel('Total'), textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold)),
+                                    ),
+                                    ...setStatusCodes!.map((status) => Container(
+                                          width: columnWidth,
+                                          height: rowHeight + 40,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(border: Border.symmetric(horizontal: BorderSide(color: Colors.grey))),
+                                          child: Text(status, textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold)),
+                                        )),
+                                  ],
+                                  leftSideItemBuilder: (context, index) {
+                                    if (index == setNaavList!.length) {
+                                      return Container(
+                                        width: leftColumnWidth,
+                                        height: rowHeight,
                                         alignment: Alignment.center,
-                                        decoration: BoxDecoration(border: Border.symmetric(horizontal: BorderSide(color: Colors.grey))),
-                                        child: Text(status, textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold)),
-                                      )),
-                                ],
-                                leftSideItemBuilder: (context, index) {
-                                  if (index == setNaavList!.length) {
+                                        decoration: BoxDecoration(border: Border.all(color: Colors.grey), color: Colors.grey[300]),
+                                        child: Text(
+                                          Statics.getLabel('Total'),
+                                          style: TextStyle(fontWeight: FontWeight.bold),
+                                        ),
+                                      );
+                                    }
                                     return Container(
                                       width: leftColumnWidth,
                                       height: rowHeight,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(border: Border.all(color: Colors.grey), color: Colors.grey[300]),
-                                      child: Text(
-                                        Statics.getLabel('Total'),
-                                        style: TextStyle(fontWeight: FontWeight.bold),
-                                      ),
+                                      padding: EdgeInsets.all(8),
+                                      alignment: Alignment.centerLeft,
+                                      decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
+                                      child: Text(setNaavList![index]),
                                     );
-                                  }
-                                  return Container(
-                                    width: leftColumnWidth,
-                                    height: rowHeight,
-                                    padding: EdgeInsets.all(8),
-                                    alignment: Alignment.centerLeft,
-                                    decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
-                                    child: Text(setNaavList![index]),
-                                  );
-                                },
-                                rightSideItemBuilder: (context, index) {
-                                  if (index == setNaavList!.length) {
-                                    return Row(
-                                      children: [
-                                        Container(
-                                          width: columnWidth,
-                                          height: rowHeight,
-                                          alignment: Alignment.center,
-                                          decoration: BoxDecoration(border: Border.all(color: Colors.grey), color: Colors.grey[400]),
-                                          child: Text(
-                                            "${Statics.getLabel('Total')} ${Statics.getLabel('Women')}: ${setNaavList!.fold(0, (sum, naav) => sum + setStatusCodes!.fold(0, (s, status) => s + (setGroupedData![naav]?[status]?['female'] ?? 0)))}\n"
-                                            "${Statics.getLabel('Total')} ${Statics.getLabel('Men')}: ${setNaavList!.fold(0, (sum, naav) => sum + setStatusCodes!.fold(0, (s, status) => s + (setGroupedData![naav]?[status]?['male'] ?? 0)))}",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        ...setStatusCodes!.map((status) {
-                                          int totalFemale = setNaavList!.fold(0, (sum, naav) => sum + (setGroupedData![naav]?[status]?['female'] ?? 0));
-                                          int totalMale = setNaavList!.fold(0, (sum, naav) => sum + (setGroupedData![naav]?[status]?['male'] ?? 0));
-
-                                          return Container(
+                                  },
+                                  rightSideItemBuilder: (context, index) {
+                                    if (index == setNaavList!.length) {
+                                      return Row(
+                                        children: [
+                                          Container(
                                             width: columnWidth,
                                             height: rowHeight,
                                             alignment: Alignment.center,
-                                            decoration: BoxDecoration(border: Border.all(color: Colors.grey), color: Colors.grey[300]),
+                                            decoration: BoxDecoration(border: Border.all(color: Colors.grey), color: Colors.grey[400]),
                                             child: Text(
-                                              "${Statics.getLabel('Women')}: $totalFemale\n${Statics.getLabel('Men')}: $totalMale",
+                                              "${Statics.getLabel('Total')} ${Statics.getLabel('Women')}: ${setNaavList!.fold(0, (sum, naav) => sum + setStatusCodes!.fold(0, (s, status) => s + (setGroupedData![naav]?[status]?['female'] ?? 0)))}\n"
+                                              "${Statics.getLabel('Total')} ${Statics.getLabel('Men')}: ${setNaavList!.fold(0, (sum, naav) => sum + setStatusCodes!.fold(0, (s, status) => s + (setGroupedData![naav]?[status]?['male'] ?? 0)))}",
                                               textAlign: TextAlign.center,
                                               style: TextStyle(fontWeight: FontWeight.bold),
                                             ),
-                                          );
-                                        }),
-                                      ],
-                                    );
-                                  }
+                                          ),
+                                          ...setStatusCodes!.map((status) {
+                                            int totalFemale = setNaavList!.fold(0, (sum, naav) => sum + (setGroupedData![naav]?[status]?['female'] ?? 0));
+                                            int totalMale = setNaavList!.fold(0, (sum, naav) => sum + (setGroupedData![naav]?[status]?['male'] ?? 0));
 
-                                  String naav = setNaavList![index];
-                                  int totalFemale = 0;
-                                  int totalMale = 0;
-
-                                  List<Widget> rowCells = setStatusCodes!.map((status) {
-                                    var counts = setGroupedData![naav]?[status] ?? {"female": 0, "male": 0};
-                                    totalFemale += counts['female'] ?? 0;
-                                    totalMale += counts['male'] ?? 0;
-
-                                    return Container(
-                                      width: columnWidth,
-                                      height: rowHeight,
-                                      padding: EdgeInsets.all(8),
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(border: Border.symmetric(horizontal: BorderSide(color: Colors.grey))),
-                                      child: Text(
-                                        "${Statics.getLabel('Women')}: ${counts['female']}\n${Statics.getLabel('Men')}: ${counts['male']}",
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    );
-                                  }).toList();
-
-                                  // rowCells.add(Container(
-                                  //   width: columnWidth,
-                                  //   height: rowHeight,
-                                  //   padding: EdgeInsets.all(8),
-                                  //   alignment: Alignment.center,
-                                  //   decoration: BoxDecoration(
-                                  //       border: Border.symmetric(
-                                  //           horizontal: BorderSide(
-                                  //               color: Colors.grey))),
-                                  //   child: Text(
-                                  //     "${Statics.getLabel('Total')} ${Statics.getLabel('Women')}: $totalFemale\n${Statics.getLabel('Total')} ${Statics.getLabel('Men')}: $totalMale",
-                                  //     textAlign: TextAlign.center,
-                                  //   ),
-                                  // ));
-
-                                  return Row(
-                                      children: <Widget>[
-                                            Container(
+                                            return Container(
                                               width: columnWidth,
                                               height: rowHeight,
-                                              padding: EdgeInsets.all(8),
                                               alignment: Alignment.center,
-                                              decoration: BoxDecoration(border: Border.symmetric(horizontal: BorderSide(color: Colors.grey))),
+                                              decoration: BoxDecoration(border: Border.all(color: Colors.grey), color: Colors.grey[300]),
                                               child: Text(
-                                                "${Statics.getLabel('Total')} ${Statics.getLabel('Women')}: $totalFemale\n${Statics.getLabel('Total')} ${Statics.getLabel('Men')}: $totalMale",
+                                                "${Statics.getLabel('Women')}: $totalFemale\n${Statics.getLabel('Men')}: $totalMale",
                                                 textAlign: TextAlign.center,
+                                                style: TextStyle(fontWeight: FontWeight.bold),
                                               ),
-                                            )
-                                          ] +
-                                          rowCells);
-                                },
-                                itemCount: setNaavList!.length + 1,
-                                rowSeparatorWidget: Divider(color: Colors.grey, height: 1.0, thickness: 0.5),
-                                leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
-                                rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                            );
+                                          }),
+                                        ],
+                                      );
+                                    }
+
+                                    String naav = setNaavList![index];
+                                    int totalFemale = 0;
+                                    int totalMale = 0;
+
+                                    List<Widget> rowCells = setStatusCodes!.map((status) {
+                                      var counts = setGroupedData![naav]?[status] ?? {"female": 0, "male": 0};
+                                      totalFemale += counts['female'] ?? 0;
+                                      totalMale += counts['male'] ?? 0;
+
+                                      return Container(
+                                        width: columnWidth,
+                                        height: rowHeight,
+                                        padding: EdgeInsets.all(8),
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(border: Border.symmetric(horizontal: BorderSide(color: Colors.grey))),
+                                        child: Text(
+                                          "${Statics.getLabel('Women')}: ${counts['female']}\n${Statics.getLabel('Men')}: ${counts['male']}",
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      );
+                                    }).toList();
+
+                                    // rowCells.add(Container(
+                                    //   width: columnWidth,
+                                    //   height: rowHeight,
+                                    //   padding: EdgeInsets.all(8),
+                                    //   alignment: Alignment.center,
+                                    //   decoration: BoxDecoration(
+                                    //       border: Border.symmetric(
+                                    //           horizontal: BorderSide(
+                                    //               color: Colors.grey))),
+                                    //   child: Text(
+                                    //     "${Statics.getLabel('Total')} ${Statics.getLabel('Women')}: $totalFemale\n${Statics.getLabel('Total')} ${Statics.getLabel('Men')}: $totalMale",
+                                    //     textAlign: TextAlign.center,
+                                    //   ),
+                                    // ));
+
+                                    return Row(
+                                        children: <Widget>[
+                                              Container(
+                                                width: columnWidth,
+                                                height: rowHeight,
+                                                padding: EdgeInsets.all(8),
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(border: Border.symmetric(horizontal: BorderSide(color: Colors.grey))),
+                                                child: Text(
+                                                  "${Statics.getLabel('Total')} ${Statics.getLabel('Women')}: $totalFemale\n${Statics.getLabel('Total')} ${Statics.getLabel('Men')}: $totalMale",
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              )
+                                            ] +
+                                            rowCells);
+                                  },
+                                  itemCount: setNaavList!.length + 1,
+                                  rowSeparatorWidget: Divider(color: Colors.grey, height: 1.0, thickness: 0.5),
+                                  leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                  rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
+                                ),
                               ),
-                            ),
-                        ],
+                          ],
+                        ),
                       ),
+                      isExpanded: _isExpanded1,
                     ),
-                    isExpanded: _isExpanded1,
-                  ),
-                ],
-              ),
-              SizedBox(height: 20),
-              Legend(
-                legendString: 'searchJoinRSSScreenBanner',
-                fontsize: 20,
-              ),
-              SingleChildScrollView(
-                child: ExpansionPanelList(
+                  ],
+                ),
+                SizedBox(height: 20),
+                Legend(
+                  legendString: 'searchJoinRSSScreenBanner',
+                  fontsize: 20,
+                ),
+                ExpansionPanelList(
                   expansionCallback: (int index, bool isExpanded) {
                     setState(() {
                       _isExpanded = isExpanded;
@@ -1180,79 +1180,77 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                     ),
                   ],
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    if (_isSearching)
-                      CircularProgressIndicator()
-                    else
-                      Wrap(
-                        children: [
-                          MaterialButton(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 15,
-                              vertical: 8,
-                            ),
-                            color: Theme.of(context).primaryColor,
-                            textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                            onPressed: () {
-                              _searchNew("Search");
-                            },
-                            child: Text(
-                              Statics.getLabel('Search'),
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          MaterialButton(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 15,
-                              vertical: 8,
-                            ),
-                            color: Theme.of(context).primaryColor,
-                            textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                            onPressed: () {
-                              _searchNew("Export");
-                            },
-                            child: Text(
-                              Statics.getLabel('ExportToExcel'),
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          MaterialButton(
+                Container(
+                  margin: EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      if (_isSearching)
+                        CircularProgressIndicator()
+                      else
+                        Wrap(
+                          children: [
+                            MaterialButton(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 15,
+                                vertical: 8,
+                              ),
+                              color: Theme.of(context).primaryColor,
+                              textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                               onPressed: () {
-                                geoUnitIDnew = null;
-                                type = "prant";
-                                setState(() {
-                                  _bhaagValue = _shaharValue = _nagarValue = null;
-                                  _bhaag = _shahar = _statusValue = _nagar = _fromDate = _toDate = null;
-                                  _searchController.text = _toDateCntrl.text = _fromDateCntrl.text = _fromAgeController.text = _toAgeController.text = "";
-                                  isGender = 0;
-                                  dropdownKey.currentState?.clearSelections();
-                                  _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedvastiValue = _linkedgraamValue = null;
-                                  _linkedVibhaagValue = _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
-                                  type = "prant";
-                                });
-                                populateDropdown();
+                                _searchNew("Search");
                               },
-                              child: Text(Statics.getLabel('clear'))),
-                        ],
-                      ),
-                  ],
+                              child: Text(
+                                Statics.getLabel('Search'),
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            MaterialButton(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 15,
+                                vertical: 8,
+                              ),
+                              color: Theme.of(context).primaryColor,
+                              textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                              onPressed: () {
+                                _searchNew("Export");
+                              },
+                              child: Text(
+                                Statics.getLabel('ExportToExcel'),
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            MaterialButton(
+                                onPressed: () {
+                                  geoUnitIDnew = null;
+                                  type = "prant";
+                                  setState(() {
+                                    _bhaagValue = _shaharValue = _nagarValue = null;
+                                    _bhaag = _shahar = _statusValue = _nagar = _fromDate = _toDate = null;
+                                    _searchController.text = _toDateCntrl.text = _fromDateCntrl.text = _fromAgeController.text = _toAgeController.text = "";
+                                    isGender = 0;
+                                    dropdownKey.currentState?.clearSelections();
+                                    _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedvastiValue = _linkedgraamValue = null;
+                                    _linkedVibhaagValue = _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
+                                    type = "prant";
+                                  });
+                                  populateDropdown();
+                                },
+                                child: Text(Statics.getLabel('clear'))),
+                          ],
+                        ),
+                    ],
+                  ),
                 ),
-              ),
-              if (_showList == true)
-                Expanded(
-                  child: FutureBuilder<List<dynamic>>(
+                if (_showList == true)
+                  FutureBuilder<List<dynamic>>(
                     future: _joinRSSList,
                     builder: (ctx, dataSnapshot) {
                       if (dataSnapshot.connectionState != ConnectionState.done) {
@@ -1269,6 +1267,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                       return dataSnapshot.hasData && dataSnapshot.data!.length > 0
                           ? ListView.builder(
                               shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
                               itemCount: dataSnapshot.data!.length,
                               padding: EdgeInsets.only(bottom: 18),
                               itemBuilder: (context, index) {
@@ -1283,8 +1282,8 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                           : Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch')));
                     },
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

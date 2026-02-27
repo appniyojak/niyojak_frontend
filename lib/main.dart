@@ -351,7 +351,7 @@ class NiyojakAppState extends State<NiyojakApp> {
                 // SearchSankalpScreen.routeName: (ctx) => ChangeNotifierProvider<SankalpScreenProvider>(create: (context) => SankalpScreenProvider(), child: SearchSankalpScreen()),
               },
             ),
-            if (Statics.baseUrl == "http://94.136.191.127:8074")
+            if (Statics.isDevelopment)
               Positioned(
                 top: MediaQuery.of(context).size.height * 0.04,
                 right: 0,
