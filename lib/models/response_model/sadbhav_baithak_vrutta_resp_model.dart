@@ -4,6 +4,7 @@ class SadbhavBaithakVruttaRespModel {
   String? status;
   String? message;
   String? programdate;
+  int? peoplecount;
   String? name;
   String? geoname;
   String? stharname;
@@ -18,6 +19,7 @@ class SadbhavBaithakVruttaRespModel {
     this.status,
     this.message,
     this.programdate,
+    this.peoplecount,
     this.name,
     this.geoname,
     this.stharname,
@@ -33,6 +35,7 @@ class SadbhavBaithakVruttaRespModel {
     status = json['Status'];
     message = json['Message'];
     programdate = json['programdate'];
+    peoplecount = json['peoplecount'];
     name = json['name'];
     geoname = json['geoname'];
     stharname = json['stharname'];
@@ -64,6 +67,7 @@ class SadbhavBaithakVruttaRespModel {
     data['Status'] = this.status;
     data['Message'] = this.message;
     data['programdate'] = this.programdate;
+    data['peoplecount'] = this.peoplecount;
     data['name'] = this.name;
     data['geoname'] = this.geoname;
     data['stharname'] = this.stharname;

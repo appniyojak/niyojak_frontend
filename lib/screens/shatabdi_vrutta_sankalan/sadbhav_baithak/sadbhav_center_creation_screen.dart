@@ -23,7 +23,7 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
   bool _searched = false;
   bool _isExpanded = true;
 
-  TextEditingController dateController = TextEditingController();
+  // TextEditingController dateController = TextEditingController();
   TextEditingController txtGivenGroupNameController = TextEditingController();
 
   // TextEditingController txtPramukhNameController = TextEditingController();
@@ -64,7 +64,7 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
   String? _selctedLevelName = '';
   String _selctedLevelNames = '';
   List<String?> _selctedLevelNameList = [];
-  String? _selectedGeoUnitId;
+  String? _selectedGeoUnitIdForCreat;
   List<String> _selectedNagarIds = [];
 
   int? baithakId;
@@ -96,28 +96,27 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
     final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     _isViewOnly = args?["viewOnly"] ?? false;
     baithakId = args?["id"] ?? 0;
+    // _selectedGeoUnitId = args?["geoUnitId"] ?? 0;
     // getData();
     // viewType = args!.viewType;
   }
 
   getData() async {
-    print("$_isViewOnly getData called >>>>>>>>>>>>>>>>> ${_selectedKaryakramLevelId != null && dateController.text.isNotEmpty && !_isViewOnly}");
-    if (baithakId == null || baithakId == 0) return;
     var formData = {
       "ids": baithakId,
-      "GeoUnitID": int.parse(Statics.userDetails['userID']),
+      "AppUserID": int.parse(Statics.userDetails['userID']),
     };
 
-    final _baithak = await Statics.GetSadbhavBaithakByIdData(context: context, inputJson: formData, showLoader: true);
+    final _baithak = await Statics.GetSadbhavBaithakListByKendraIdData(context: context, inputJson: formData, showLoader: true);
     print("getData api HiTttttt >>>>>>>>>>>>>>>>>");
 
     final _master = _baithak?.masterdata?.first;
+    // selectedKendra = _baithak?.masterdata?.first ?? selectedKendra ?? null;
 
     if (_baithak != null && _master != null) {
       setState(() {
         _searched = true;
         _isExpanded = false;
-        dateController.text = _master.programdate ?? "";
         txtGivenGroupNameController.text = _master.name ?? "";
         _selectedKaryakramLevelId = _master.shatapdistharlevelid;
       });
@@ -151,7 +150,7 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
         if (_linkednagarValue == null || _linkedbhaagValue!.isEmpty) _linkednagarValue = _master.geounitid.toString();
         if (_linkedupnagarValue == null || _linkedbhaagValue!.isEmpty) _linkedupnagarValue = _master.geounitid.toString();
         if (_linkedmandalValue == null || _linkedbhaagValue!.isEmpty) _linkedmandalValue = _master.geounitid.toString();
-        _selectedGeoUnitId = _master.geounitid.toString();
+        _selectedGeoUnitIdForCreat = _master.geounitid.toString();
       }
       nagarList = _baithak.nagardata ?? [];
       setState(() {});
@@ -177,14 +176,13 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
     }
 
     var formData = {
-      "date": dateController.text,
       "stharid": _selectedKaryakramLevelId,
-      "geounitid": _selectedGeoUnitId,
+      "geounitid": _selectedGeoUnitIdForCreat,
       "id": baithakId ?? 0,
       "appuserid": int.parse(Statics.userDetails['userID']),
     };
 
-    final _existData = await Statics.CheckBaithakExistsData(context: context, inputJson: formData, showLoader: true);
+    final _existData = await Statics.CheckKendraExistsData(context: context, inputJson: formData, showLoader: true);
 
     if (_existData == null || _existData.status == "404") {
       Statics.showToast("Data already exists");
@@ -201,18 +199,17 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
 
   createSadbhavBaithakFun() async {
     Map<String, dynamic> formData = {
-      "date": dateController.text,
       "name": txtGivenGroupNameController.text.trim(),
       "nagarids": _selectedNagarIds.isEmpty ? "" : _selectedNagarIds.join(", "),
       "pkid": baithakId ?? 0,
       "levelid": _selectedKaryakramLevelId,
-      "geounitid": _selectedGeoUnitId,
+      "geounitid": _selectedGeoUnitIdForCreat,
       "appuserid": int.parse(Statics.userDetails['userID']),
     };
 
     String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
     log("Form Data (JSON):\n$formattedJson");
-    final _res = await Statics.CreateUpdateSadbhavBaithakData(context: context, inputJson: formData, showLoader: true);
+    final _res = await Statics.CreateUpdateSadbhavKendraData(context: context, inputJson: formData, showLoader: true);
     if (_res) {
       Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
     }
@@ -222,10 +219,9 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
   clearForm() async {
     setState(() {
       _searched = false;
-      _selectedGeoUnitId = null;
+      _selectedGeoUnitIdForCreat = null;
       nagarList = [];
       _selectedKaryakramLevelId = null;
-      dateController.clear();
       txtGivenGroupNameController.clear();
       _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedvastiValue = _linkedgraamValue = null;
       _linkedVibhaagValue = _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
@@ -240,7 +236,7 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
     setState(() {
       _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedupnagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
       _linkedMahaanagar = _linkedVibhaag = _linkedbhaag = _linkednagar = _linkedupnagar = _linkedmandal = null;
-      _selctedLevelName = _selectedGeoUnitId = null;
+      _selctedLevelName = _selectedGeoUnitIdForCreat = null;
       nagarList = [];
       _selctedLevel = "praant";
     });
@@ -774,7 +770,7 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
                   _linkedVibhaagValue = null;
                   _selctedLevel = Statics.getLabel('Mahaanagar');
                   _selctedLevelName = selectedItem.name ?? "";
-                  _selectedGeoUnitId = value;
+                  _selectedGeoUnitIdForCreat = value;
                   // _linkedMahaanagarName = selectedItem.name ?? "";
                   // _resetLinkedValues();
                 });
@@ -800,7 +796,7 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
                   _linkedVibhaagValue = value;
                   _selctedLevel = Statics.getLabel('Vibhaag');
                   _selctedLevelName = selectedItem.name ?? "";
-                  _selectedGeoUnitId = value;
+                  _selectedGeoUnitIdForCreat = value;
                   // _linkedVibhaagName = selectedItem.name ?? "";
                 });
                 populatelinkedBhaagDropdown(value!);
@@ -825,7 +821,7 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
                   _selctedLevel = Statics.getLabel('Bhaag');
                   _selctedLevelName = selectedItem.name ?? "";
                   _linkedbhaagName = selectedItem.name ?? "";
-                  _selectedGeoUnitId = value;
+                  _selectedGeoUnitIdForCreat = value;
                   populatelinkedShaharDropdown(value!);
                   populatelinkedNagarDropdown(value);
                 });
@@ -846,7 +842,7 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
                 final selectedItem = _linkednagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                 setState(() {
                   _linkednagarValue = value;
-                  _selectedGeoUnitId = value;
+                  _selectedGeoUnitIdForCreat = value;
                   _selctedLevel = Statics.getLabel('Nagar');
                   _selctedLevelName = selectedItem.name ?? "";
                   _linkednagarName = selectedItem.name ?? "";
@@ -871,7 +867,7 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
                 final selectedItem = _linkedupnagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                 setState(() {
                   _linkedupnagarValue = value;
-                  _selectedGeoUnitId = value;
+                  _selectedGeoUnitIdForCreat = value;
                   _selctedLevel = Statics.getLabel('upnagarUpkhanda');
                   _selctedLevelName = selectedItem.name ?? "";
                   _linkedupnagarName = selectedItem.name ?? "";
@@ -895,7 +891,7 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
                 final selectedItem = _linkedmandal!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                 setState(() {
                   _linkedmandalValue = value;
-                  _selectedGeoUnitId = value.toString();
+                  _selectedGeoUnitIdForCreat = value.toString();
                   _selctedLevel = Statics.getLabel('Mandal');
                   _selctedLevelName = selectedItem.name ?? "";
                   _linkedmandalName = selectedItem.name ?? "";
