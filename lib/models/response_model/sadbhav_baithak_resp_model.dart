@@ -148,16 +148,20 @@ class Nagardata {
 
 class Bhaitakdata {
   String? programdate;
+  String? stharname;
+  String? kendraname;
   int? male;
   int? pkid;
   int? female;
   int? totmalefemale;
   int? peoplecount;
 
-  Bhaitakdata({this.programdate, this.male, this.pkid, this.female, this.totmalefemale, this.peoplecount});
+  Bhaitakdata({this.programdate, this.stharname, this.kendraname, this.male, this.pkid, this.female, this.totmalefemale, this.peoplecount});
 
   Bhaitakdata.fromJson(Map<String, dynamic> json) {
     programdate = json['programdate'];
+    stharname = json['stharname'];
+    kendraname = json['kendraname'];
     male = json['male'];
     pkid = json['pkid'];
     female = json['female'];
@@ -168,6 +172,8 @@ class Bhaitakdata {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['programdate'] = this.programdate;
+    data['stharname'] = this.stharname;
+    data['kendraname'] = this.kendraname;
     data['male'] = this.male;
     data['pkid'] = this.pkid;
     data['female'] = this.female;

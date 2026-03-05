@@ -30,7 +30,11 @@ class SadbhavBaithakReportModel {
 class ReportData {
   String? levelname;
   String? baithaknames;
+  String? startedname;
+  String? remainingname;
   int? baithakcount;
+  int? startedcnt;
+  int? remainingcnt;
   int? namecount;
   int? totalmalecount;
   int? presentmale;
@@ -42,7 +46,11 @@ class ReportData {
   ReportData(
       {this.levelname,
       this.baithaknames,
+      this.startedname,
+      this.remainingname,
       this.baithakcount,
+      this.startedcnt,
+      this.remainingcnt,
       this.namecount,
       this.totalmalecount,
       this.presentmale,
@@ -53,8 +61,12 @@ class ReportData {
 
   ReportData.fromJson(Map<String, dynamic> json) {
     levelname = json['levelname'];
-    baithaknames = json['baithaknames'];
+    baithaknames = json['baithakname'];
+    startedname = json['startedname'];
+    remainingname = json['remainingname'];
     baithakcount = json['baithakcount'];
+    startedcnt = json['startedcnt'];
+    remainingcnt = json['remainingcnt'];
     namecount = json['namecount'];
     totalmalecount = json['totalmalecount'];
     presentmale = json['presentmale'];
@@ -67,8 +79,12 @@ class ReportData {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['levelname'] = this.levelname;
-    data['baithaknames'] = this.baithaknames;
+    data['baithakname'] = this.baithaknames;
+    data['startedname'] = this.startedname;
+    data['remainingname'] = this.remainingname;
     data['baithakcount'] = this.baithakcount;
+    data['startedcnt'] = this.startedcnt;
+    data['remainingcnt'] = this.remainingcnt;
     data['namecount'] = this.namecount;
     data['totalmalecount'] = this.totalmalecount;
     data['presentmale'] = this.presentmale;

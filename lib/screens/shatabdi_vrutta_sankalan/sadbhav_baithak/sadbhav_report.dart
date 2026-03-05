@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -181,12 +178,12 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
       // _isLoading = true;
     });
     Map<String, dynamic> formData = {
-      "GeoUnitID": int.tryParse(_selectedGeoUnitId.toString()) ?? null,
-      "AppUserID": int.tryParse(Statics.userDetails['userID']) ?? null,
+      "geounitid": int.tryParse(_selectedGeoUnitId.toString()) ?? null,
+      "appuserid": int.tryParse(Statics.userDetails['userID']) ?? null,
     };
 
-    String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
-    log("Form Data (JSON):\n$formattedJson");
+    // String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
+    // log("Form Data (JSON):\n$formattedJson");
     report = await Statics.SadbhavBaithakReportData(context, formData) ?? [];
     // log("vijayadashamiReport >>>>>>>>>>>>>>>>> ${jsonDecode(jsonEncode(vijayadashamiReport))}");
     setState(() {
@@ -257,9 +254,12 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
   }
 
   Widget buildMarathiDataTable(List<ReportData> data) {
+    bool showRemaining = data.any((item) => item.remainingcnt != null);
     final List<String> headers = [
       // 'कार्यक्रम स्तर',
       Statics.getLabel('sadbhavReportTable1'),
+      Statics.getLabel('sadbhavReportTable15'),
+      if (showRemaining) Statics.getLabel('sadbhavReportTable155'),
       Statics.getLabel('sadbhavReportTable2'),
       Statics.getLabel('sadbhavReportTable3'),
       Statics.getLabel('sadbhavReportTable4'),
@@ -354,6 +354,43 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
                         ))),
                         DataCell(Center(
                             child: Row(
+                          mainAxisAlignment: (level.startedcnt != 0 && level.startedname != null && level.startedname!.isNotEmpty) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                          children: [
+                            if (level.startedcnt != 0 && level.startedname != null && level.startedname!.isNotEmpty) SizedBox(width: 1),
+                            Container(
+                                margin: EdgeInsets.only(right: (level.startedcnt != 0 && level.startedname != null && level.startedname!.isNotEmpty) ? 0 : 10),
+                                child: Text(level.startedcnt.toString())),
+                            if (level.startedcnt != 0 && level.startedname != null && level.startedname!.isNotEmpty)
+                              InkWell(
+                                borderRadius: BorderRadius.circular(50),
+                                onTap: () {
+                                  showInfoDialogBox(names: level.startedname ?? "", title: Statics.getLabel("sanmelanReportTable15"));
+                                },
+                                child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
+                              ),
+                          ],
+                        ))),
+                        if (showRemaining)
+                          DataCell(Center(
+                              child: Row(
+                            mainAxisAlignment: (level.remainingcnt != 0 && level.remainingname != null && level.remainingname!.isNotEmpty) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                            children: [
+                              if (level.remainingcnt != 0 && level.remainingname != null && level.remainingname!.isNotEmpty) SizedBox(width: 1),
+                              Container(
+                                  margin: EdgeInsets.only(right: (level.remainingcnt != 0 && level.remainingname != null && level.remainingname!.isNotEmpty) ? 0 : 10),
+                                  child: Text(level.remainingcnt.toString())),
+                              if (level.remainingcnt != 0 && level.remainingname != null && level.remainingname!.isNotEmpty)
+                                InkWell(
+                                  borderRadius: BorderRadius.circular(50),
+                                  onTap: () {
+                                    showInfoDialogBox(names: level.remainingname ?? "", title: Statics.getLabel("sanmelanReportTable15"));
+                                  },
+                                  child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
+                                ),
+                            ],
+                          ))),
+                        DataCell(Center(
+                            child: Row(
                           mainAxisAlignment: // (level.namecount != 0) ? MainAxisAlignment.spaceBetween :
                               MainAxisAlignment.center,
                           children: [
@@ -386,6 +423,17 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
                           data.fold(0, (sum, item) => sum + (item.baithakcount ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.startedcnt ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        if (showRemaining)
+                          DataCell(Center(
+                              child: Text(
+                            data.fold(0, (sum, item) => sum + (item.remainingcnt ?? 0)).toString(),
+                            style: TextStyle(fontWeight: FontWeight.w700),
+                          ))),
                         DataCell(Center(
                             child: Text(
                           data.fold(0, (sum, item) => sum + (item.namecount ?? 0)).toString(),

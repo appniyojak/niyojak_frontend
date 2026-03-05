@@ -242,6 +242,7 @@ const String urlGetAllSadbhavKendra = baseUrlAPI + '/getallsadbhavkendra';
 const String urlCheckKendraExists = baseUrlAPI + '/chkkendraexists';
 const String urlCreateUpdateSadbhavKendra = baseUrlAPI + '/createupdatesadbhavkendra';
 const String urlGetSadbhavKendraById = baseUrlAPI + '/getsadbhavkendrabyid';
+const String urlGetAllSadbhavBaithak = baseUrlAPI + '/getallsadbhavkendrabaithak';
 const String urlCreateBaithak = baseUrlAPI + '/createbaithak';
 const String urlGetSadbhavBaithakVrutta = baseUrlAPI + '/getsadbhavbaithakvrutta';
 const String urlSaveSadbhavBaithakVrutta = baseUrlAPI + '/savesadbhavbaithakvrutta';
@@ -4918,6 +4919,37 @@ Future<List<SadbhavKendraMasterdata>?> GetSadbhavKendraListData({required BuildC
       return null; // ✅ error case
     }
   } catch (e) {
+    print("Exception: $e");
+    return null;
+  } finally {
+    if (showLoader) Navigator.of(context, rootNavigator: true).pop();
+  }
+}
+
+Future<SadbhavKendraRespModel?> GetAllSadbhavBaithakListData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
+  if (showLoader) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  log(urlGetAllSadbhavBaithak);
+  try {
+    var response = await http.post(Uri.parse(urlGetAllSadbhavBaithak), headers: jHeaders, body: jsonEncode(inputJson));
+
+    // Navigator.of(context, rootNavigator: true).pop();
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+
+      SadbhavKendraRespModel model = SadbhavKendraRespModel.fromJson(data);
+      log("GetSadbhavBaithakByIdData >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+
+      return model; // ✅ return karna zaroori hai
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null; // ✅ error case
+    }
+  } catch (e) {
+    // Navigator.of(context, rootNavigator: true).pop();
     print("Exception: $e");
     return null;
   } finally {
