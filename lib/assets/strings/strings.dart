@@ -1885,6 +1885,8 @@ Map<String, String> resEnglish = {
   'centrePramukhNameValidationMessage': 'Centre Pramukh Name required',
   'centrePramukhMobileValidationMessage': 'Centre Pramukh Mobile No. required',
   'centreNameValidationMessage': 'Centre Name required',
+  'enableVruttaValidationMessage': 'Vrutta will open from {date}',
+  'sadbhavTip': 'Select a Kendra for Baithak Data.',
 };
 
 ///1,584
@@ -3753,9 +3755,9 @@ Map<String, String> resMarathi = {
   'addGyati': "ज्ञाति प्रविष्ट करा",
   'gyati': "ज्ञाति",
   'sadbhavReportTable0': "स्तर",
-  'sadbhavReportTable1': "बैठक संख्या",
-  'sadbhavReportTable15': "झालेल्या बैठक",
-  'sadbhavReportTable155': "उरलेल्या बैठक",
+  'sadbhavReportTable1': "बैठका संख्या",
+  'sadbhavReportTable15': "झालेल्या बैठका",
+  'sadbhavReportTable155': "उरलेल्या बैठका",
   'sadbhavReportTable2': "ज्ञाति प्रतिनिधित्व",
   'sadbhavReportTable3': "अपेक्षित पुरुष यादी",
   'sadbhavReportTable4': "उपस्थित पुरुष",
@@ -3774,6 +3776,8 @@ Map<String, String> resMarathi = {
   'centrePramukhNameValidationMessage': 'केंद्र प्रमुखाचे नाव आवश्यक',
   'centrePramukhMobileValidationMessage': 'केंद्र प्रमुखाचे मोबाईल क्र. आवश्यक',
   'centreNameValidationMessage': 'केंद्राचे नाव आवश्यक',
+  'enableVruttaValidationMessage': '{date} तारखेपासून वृत्त उघडेल',
+  'sadbhavTip': 'बैठक तपशील साठी केंद्र निवडा',
 };
 
 ///1,583
@@ -5662,4 +5666,6 @@ Map<String, String> resHindi = {
   'centrePramukhNameValidationMessage': 'केंद्र प्रमुख का नाम आवश्यक',
   'centrePramukhMobileValidationMessage': 'केंद्र प्रमुख का मोबाईल क्र. आवश्यक',
   'centreNameValidationMessage': 'केंद्र का नाम आवश्यक',
+  'enableVruttaValidationMessage': '{date} तारीख से वृत्त खुलेगा',
+  'sadbhavTip': 'बैठक तपशील के लिए एक केंद्र चुनें',
 };

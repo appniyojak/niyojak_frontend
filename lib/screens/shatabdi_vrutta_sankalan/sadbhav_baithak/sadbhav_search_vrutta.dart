@@ -295,120 +295,118 @@ class _AllBaithakTableScreenState extends State<AllBaithakTableScreen> with Auto
               ),
             )
           // : baithakListExpandableTable(),
-          : Expanded(
+          : SingleChildScrollView(
               child: SingleChildScrollView(
-                child: SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                  scrollDirection: Axis.horizontal,
-                  child: DataTable(
-                    headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
-                    columnSpacing: 18,
-                    horizontalMargin: 12,
-                    border: TableBorder.all(color: Colors.black26),
-                    columns: headers
-                        .map((e) => DataColumn(
-                              label: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 8),
-                                constraints: const BoxConstraints(minWidth: 30, maxWidth: 130),
-                                child: Text(
-                                  Statics.getLabel(e),
-                                  softWrap: true,
-                                  maxLines: 2,
-                                  textAlign: TextAlign.center,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(fontWeight: FontWeight.bold),
-                                ),
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                scrollDirection: Axis.horizontal,
+                child: DataTable(
+                  headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
+                  columnSpacing: 18,
+                  horizontalMargin: 12,
+                  border: TableBorder.all(color: Colors.black26),
+                  columns: headers
+                      .map((e) => DataColumn(
+                            label: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 8),
+                              constraints: const BoxConstraints(minWidth: 30, maxWidth: 130),
+                              child: Text(
+                                Statics.getLabel(e),
+                                softWrap: true,
+                                maxLines: 2,
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(fontWeight: FontWeight.bold),
                               ),
-                            ))
-                        .toList(),
-                    rows: kendraBaithakList.asMap().entries.map((e) {
-                      final index = e.key;
-                      final data = e.value;
-                      return DataRow(
-                        cells: [
-                          DataCell(Center(child: Text((index + 1).toString()))),
-                          DataCell(Center(child: Text(data.stharname ?? "--"))),
-                          DataCell(Center(child: Text(data.kendraname ?? "--"))),
-                          DataCell(Center(child: Text(data.programdate ?? "--"))),
-                          DataCell(Center(child: Text((data.male ?? 0).toString()))),
-                          DataCell(Center(child: Text((data.female ?? 0).toString()))),
-                          DataCell(Center(child: Text((data.totmalefemale ?? 0).toString()))),
-                          DataCell(Center(child: Text((data.peoplecount ?? 0).toString()))),
-                          // DataCell(PopupMenuButton(
-                          //   color: Colors.white,
-                          //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          //   onSelected: (value) async {
-                          //     if (value == "Delete") {
-                          //       showDialog(
-                          //         context: context,
-                          //         builder: (ctx) => AlertDialog(
-                          //           title: Text(Statics.getLabel('AskConfirmation')),
-                          //           content: Text(Statics.getLabel('AreyouSureYouWantToDeleteBaithak')),
-                          //           actions: <Widget>[
-                          //             MaterialButton(
-                          //               child: Text(Statics.getLabel('ConfirmationYes')),
-                          //               onPressed: () async {
-                          //                 var _res = await Statics.DeleteSadbhavBaithakData(context: context, inputJson: {"id": data.pkid, "type": "vrutta"});
-                          //                 if (_res) {
-                          //                   Statics.showToast(Statics.getLabel('BaithakDeletedSuccessfully'));
-                          //                 } else
-                          //                   Statics.showToast(Statics.getLabel('errorOccurred'));
-                          //                 Navigator.of(ctx).pop();
-                          //                 await getBaithakListData(selectedKendra?.pkid ?? 0);
-                          //               },
-                          //             ),
-                          //             MaterialButton(
-                          //               child: Text(Statics.getLabel('ConfirmationNo')),
-                          //               onPressed: () {
-                          //                 Navigator.of(ctx).pop();
-                          //               },
-                          //             )
-                          //           ],
-                          //         ),
-                          //       );
-                          //     } else if (value == "EditMenu") {
-                          //       print("EDIT >>>>>>>>>>>>>>");
-                          //       await _getForm(data.pkid);
-                          //       showBaithakDetailPopup(data);
-                          //       // Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
-                          //       // } else if (value == "baithak") {
-                          //       // sadbhavProvider.updateSadbhavVal(SadbhavCenter(centername: "नवीन केंद्र", geounitname: "कोळीवाडा", sthartype: Statics.getLabel("railwayStation")));
-                          //
-                          //       // Navigator.of(context).pushNamed(SadbhavFormTab.routeName); //, arguments: {"id": data.pkid});
-                          //     } else {
-                          //       showBaithakDetailPopup(data, viewOnly: true);
-                          //       // Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
-                          //       // Navigator.of(context).pushNamed(SadbhavCenterListScreen.routeName); //, arguments: {"id": data.pkid, "viewOnly": true});
-                          //     }
-                          //   },
-                          //   itemBuilder: (BuildContext context) {
-                          //     return [
-                          //       // Statics.MenuItem(Statics.getLabel('addinSoochi'), Icons.list, 'AddinSoochi'),
-                          //       // if (showEditMenu == true)
-                          //       Statics.MenuItem(Statics.getLabel('baithakVrutta'), FontAwesomeIcons.edit, 'EditMenu'),
-                          //       Statics.MenuItem(Statics.getLabel('ViewMenu'), FontAwesomeIcons.eye, 'ViewMenu'),
-                          //       // if (showDeleteMenu == true)
-                          //       Statics.MenuItem(Statics.getLabel('Delete'), Icons.delete, 'Delete'),
-                          //       // Statics.MenuItem(Statics.getLabel('baithak'), Icons.edit_note_rounded, 'baithak'),
-                          //     ].map((Statics.MenuItem menuItem) {
-                          //       return PopupMenuItem(
-                          //         value: menuItem.menuKey,
-                          //         child: ListTile(
-                          //           // tileColor: Colors.white,
-                          //           leading: Icon(
-                          //             menuItem.iconVal,
-                          //             color: Colors.purple,
-                          //           ),
-                          //           title: Text(menuItem.menuVal),
-                          //         ),
-                          //       );
-                          //     }).toList();
-                          //   },
-                          // )),
-                        ],
-                      );
-                    }).toList(),
-                  ),
+                            ),
+                          ))
+                      .toList(),
+                  rows: kendraBaithakList.asMap().entries.map((e) {
+                    final index = e.key;
+                    final data = e.value;
+                    return DataRow(
+                      cells: [
+                        DataCell(Center(child: Text((index + 1).toString()))),
+                        DataCell(Center(child: Text(data.stharname ?? "--"))),
+                        DataCell(Center(child: Text(data.kendraname ?? "--"))),
+                        DataCell(Center(child: Text(data.programdate ?? "--"))),
+                        DataCell(Center(child: Text((data.male ?? 0).toString()))),
+                        DataCell(Center(child: Text((data.female ?? 0).toString()))),
+                        DataCell(Center(child: Text((data.totmalefemale ?? 0).toString()))),
+                        DataCell(Center(child: Text((data.peoplecount ?? 0).toString()))),
+                        // DataCell(PopupMenuButton(
+                        //   color: Colors.white,
+                        //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        //   onSelected: (value) async {
+                        //     if (value == "Delete") {
+                        //       showDialog(
+                        //         context: context,
+                        //         builder: (ctx) => AlertDialog(
+                        //           title: Text(Statics.getLabel('AskConfirmation')),
+                        //           content: Text(Statics.getLabel('AreyouSureYouWantToDeleteBaithak')),
+                        //           actions: <Widget>[
+                        //             MaterialButton(
+                        //               child: Text(Statics.getLabel('ConfirmationYes')),
+                        //               onPressed: () async {
+                        //                 var _res = await Statics.DeleteSadbhavBaithakData(context: context, inputJson: {"id": data.pkid, "type": "vrutta"});
+                        //                 if (_res) {
+                        //                   Statics.showToast(Statics.getLabel('BaithakDeletedSuccessfully'));
+                        //                 } else
+                        //                   Statics.showToast(Statics.getLabel('errorOccurred'));
+                        //                 Navigator.of(ctx).pop();
+                        //                 await getBaithakListData(selectedKendra?.pkid ?? 0);
+                        //               },
+                        //             ),
+                        //             MaterialButton(
+                        //               child: Text(Statics.getLabel('ConfirmationNo')),
+                        //               onPressed: () {
+                        //                 Navigator.of(ctx).pop();
+                        //               },
+                        //             )
+                        //           ],
+                        //         ),
+                        //       );
+                        //     } else if (value == "EditMenu") {
+                        //       print("EDIT >>>>>>>>>>>>>>");
+                        //       await _getForm(data.pkid);
+                        //       showBaithakDetailPopup(data);
+                        //       // Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
+                        //       // } else if (value == "baithak") {
+                        //       // sadbhavProvider.updateSadbhavVal(SadbhavCenter(centername: "नवीन केंद्र", geounitname: "कोळीवाडा", sthartype: Statics.getLabel("railwayStation")));
+                        //
+                        //       // Navigator.of(context).pushNamed(SadbhavFormTab.routeName); //, arguments: {"id": data.pkid});
+                        //     } else {
+                        //       showBaithakDetailPopup(data, viewOnly: true);
+                        //       // Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
+                        //       // Navigator.of(context).pushNamed(SadbhavCenterListScreen.routeName); //, arguments: {"id": data.pkid, "viewOnly": true});
+                        //     }
+                        //   },
+                        //   itemBuilder: (BuildContext context) {
+                        //     return [
+                        //       // Statics.MenuItem(Statics.getLabel('addinSoochi'), Icons.list, 'AddinSoochi'),
+                        //       // if (showEditMenu == true)
+                        //       Statics.MenuItem(Statics.getLabel('baithakVrutta'), FontAwesomeIcons.edit, 'EditMenu'),
+                        //       Statics.MenuItem(Statics.getLabel('ViewMenu'), FontAwesomeIcons.eye, 'ViewMenu'),
+                        //       // if (showDeleteMenu == true)
+                        //       Statics.MenuItem(Statics.getLabel('Delete'), Icons.delete, 'Delete'),
+                        //       // Statics.MenuItem(Statics.getLabel('baithak'), Icons.edit_note_rounded, 'baithak'),
+                        //     ].map((Statics.MenuItem menuItem) {
+                        //       return PopupMenuItem(
+                        //         value: menuItem.menuKey,
+                        //         child: ListTile(
+                        //           // tileColor: Colors.white,
+                        //           leading: Icon(
+                        //             menuItem.iconVal,
+                        //             color: Colors.purple,
+                        //           ),
+                        //           title: Text(menuItem.menuVal),
+                        //         ),
+                        //       );
+                        //     }).toList();
+                        //   },
+                        // )),
+                      ],
+                    );
+                  }).toList(),
                 ),
               ),
             ),

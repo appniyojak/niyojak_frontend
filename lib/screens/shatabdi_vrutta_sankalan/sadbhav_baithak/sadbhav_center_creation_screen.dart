@@ -69,6 +69,7 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
 
   int? baithakId;
   bool _isViewOnly = false;
+  bool _showSearch = true;
 
   List<Map<String, dynamic>> karyakramLevelsList = [
     {"${Statics.getLabel("Bhaag")}": 1},
@@ -102,6 +103,7 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
   }
 
   getData() async {
+    if (baithakId == 0) return;
     var formData = {
       "ids": baithakId,
       "AppUserID": int.parse(Statics.userDetails['userID']),
@@ -212,6 +214,7 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
     final _res = await Statics.CreateUpdateSadbhavKendraData(context: context, inputJson: formData, showLoader: true);
     if (_res) {
       Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+      Navigator.pop(context);
     }
     // getFormData();
   }
@@ -570,7 +573,7 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
                 SizedBox(height: 18),
                 // if ((([2, 3, 4].contains(_selectedKaryakramLevelId)) && _selctedLevel == Statics.getLabel('Bhaag')) || _selctedLevel == _selectedKaryakramLevel)
 
-                if (_selectedKaryakramLevelId != null && (baithakId == null || baithakId == 0) && !_isViewOnly)
+                if (!_isViewOnly && !([2, 3, 4].contains(_selectedKaryakramLevelId) && (baithakId != null && baithakId != 0)))
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

@@ -60,11 +60,12 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
   @override
   void initState() {
     super.initState();
+    populateDropdown();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) => fetchVastiSurveyDropdownData());
   }
 
   Future<void> fetchVastiSurveyDropdownData() async {
-    await populateDropdown();
+    // await ();
     try {
       vastisarvekshanDropDownDataModel = await Statics.getVastiSurveyDropDownList(Statics.userDetails["userID"]);
       setState(() {});

@@ -346,7 +346,7 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
                               InkWell(
                                 borderRadius: BorderRadius.circular(50),
                                 onTap: () {
-                                  showInfoDialogBox(names: level.baithaknames ?? "", title: Statics.getLabel("sanmelanReportTable1"));
+                                  showInfoDialogBox(names: level.baithaknames ?? "", title: Statics.getLabel("sadbhavReportTable1"));
                                 },
                                 child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
                               ),
@@ -364,7 +364,7 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
                               InkWell(
                                 borderRadius: BorderRadius.circular(50),
                                 onTap: () {
-                                  showInfoDialogBox(names: level.startedname ?? "", title: Statics.getLabel("sanmelanReportTable15"));
+                                  showInfoDialogBox(names: level.startedname ?? "", title: Statics.getLabel("sadbhavReportTable15"));
                                 },
                                 child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
                               ),
@@ -383,31 +383,13 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
                                 InkWell(
                                   borderRadius: BorderRadius.circular(50),
                                   onTap: () {
-                                    showInfoDialogBox(names: level.remainingname ?? "", title: Statics.getLabel("sanmelanReportTable15"));
+                                    showInfoDialogBox(names: level.remainingname ?? "", title: Statics.getLabel("sadbhavReportTable155"));
                                   },
                                   child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
                                 ),
                             ],
                           ))),
-                        DataCell(Center(
-                            child: Row(
-                          mainAxisAlignment: // (level.namecount != 0) ? MainAxisAlignment.spaceBetween :
-                              MainAxisAlignment.center,
-                          children: [
-                            // if (level.namecount != 0) SizedBox(width: 1),
-                            Container(
-                                //margin: EdgeInsets.only(right: level.namecount != 0 ? 0 : 10),
-                                child: Text(level.namecount.toString())),
-                            // if (level.namecount != 0)
-                            //   InkWell(
-                            //     borderRadius: BorderRadius.circular(50),
-                            //     onTap: () {
-                            //       // showInfoDialogBox(names: level.namecount ?? "", title: Statics.getLabel("sanmelanReportTable2"));
-                            //     },
-                            //     child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
-                            //   ),
-                          ],
-                        ))),
+                        DataCell(Center(child: Text(level.namecount.toString()))),
                         DataCell(Center(child: Text(level.totalmalecount.toString()))),
                         DataCell(Center(child: Text(level.presentmale.toString()))),
                         DataCell(Center(child: Text(level.totalfemalecount.toString()))),
