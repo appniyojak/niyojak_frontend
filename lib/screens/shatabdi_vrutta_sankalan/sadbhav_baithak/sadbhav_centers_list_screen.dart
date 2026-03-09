@@ -203,7 +203,16 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
     }
   }
 
-  Future<void> submitForm(pkId, {bool fromPopup = false, bool showLoader = true}) async {
+  Future<void> submitForm(pkId, ct, {bool fromPopup = false, bool showLoader = true}) async {
+    int givenCount = int.tryParse(txtGivenGroupNameController.text) ?? 0;
+
+    int presentCount = selectedSajjanshaktiItems.length + selectedAnyaprabhaviItems.length;
+
+    if (givenCount > presentCount) {
+      Statics.showToast(Statics.getLabel("jnyatiValidationMessage"));
+      return;
+    }
+
     if ((selectedSajjanshaktiItemsIds == null || selectedSajjanshaktiItemsIds!.isEmpty) &&
         (selectedAnyaprabhaviItemsIds == null || selectedAnyaprabhaviItemsIds!.isEmpty) &&
         (txtGivenGroupNameController.text == "0" || txtGivenGroupNameController.text.isEmpty)) {
@@ -213,6 +222,7 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
 
     Map<String, dynamic> formData = {
       "pkid": pkId,
+      "date": dateController.text.trim(),
       "sajjanids": selectedSajjanshaktiItemsIds ?? "",
       "annyaids": selectedAnyaprabhaviItemsIds ?? "",
       "peoplecount": int.tryParse(txtGivenGroupNameController.text) ?? 0,
@@ -222,8 +232,10 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
 
     String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
     log("Form Data (JSON):\n$formattedJson");
+
     final _data = await Statics.SaveSadbhavBaithakVruttaData(context: context, inputJson: formData, showLoader: showLoader);
     if (_data != null) {
+      Navigator.pop(ct);
       setState(() {
         kendraBaithakList = _data;
       });
@@ -471,14 +483,17 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
                 myAreaReport(),
                 SizedBox(height: 18),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       "* " + Statics.getLabel('Note') + " : ",
                       style: TextStyle(color: Colors.red.shade700, fontWeight: FontWeight.w600, decoration: TextDecoration.underline, decorationColor: Colors.red, fontStyle: FontStyle.italic),
                     ),
-                    Text(
-                      Statics.getLabel('sadbhavTip'),
-                      style: TextStyle(color: Colors.grey.shade700, fontWeight: FontWeight.w600, fontStyle: FontStyle.italic),
+                    Expanded(
+                      child: Text(
+                        Statics.getLabel('sadbhavTip'),
+                        style: TextStyle(color: Colors.grey.shade700, fontWeight: FontWeight.w600, fontStyle: FontStyle.italic),
+                      ),
                     ),
                   ],
                 ),
@@ -710,6 +725,7 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
                                         } else {
                                           Statics.showToast(Statics.getLabel('errorOccurred'));
                                         }
+                                        clearForm();
                                         // await getKendraListData();
                                       },
                                     ),
@@ -1061,6 +1077,7 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
                                     } else {
                                       Statics.showToast(Statics.getLabel('errorOccurred'));
                                     }
+                                    clearForm();
                                     // await getBaithakListData(selectedKendra?.pkid ?? 0);
                                   },
                                 ),
@@ -1135,6 +1152,7 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
 
   void showBaithakDetailPopup(Bhaitakdata baithak, {bool viewOnly = false}) {
     txtGivenGroupNameController.text = (vruttaData?.peoplecount ?? 0).toString();
+    dateController.text = (baithak.programdate ?? "").toString();
     final sarsajjanshaktiList = (vruttaData?.vastisarsajjanshakti ?? []).toList();
     final sanyaprabhaviList = (vruttaData?.vastisanyaprabhavi ?? []).toList();
 
@@ -1184,6 +1202,51 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      const SizedBox(height: 12),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: Text(
+                              "${Statics.getLabel('date2')} : ",
+                              style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          // Text(
+                          //   " *",
+                          //   style: TextStyle(fontSize: 15, color: Colors.red, fontWeight: FontWeight.bold),
+                          // ),
+                          Expanded(
+                            flex: 3,
+                            child: TextField(
+                              controller: dateController,
+                              style: TextStyle(fontSize: 14),
+                              autofocus: false,
+                              onTap: () async {
+                                DateTime? date = await showDatePicker(
+                                  context: context,
+                                  initialDate: dateController.text.isEmpty ? DateTime.now() : DateFormat("dd/MM/yyyy").parse(dateController.text),
+                                  firstDate: DateTime(2000),
+                                  lastDate: DateTime(2100),
+                                );
+                                if (date != null) {
+                                  dateController.text = DateFormat("dd/MM/yyyy").format(date);
+                                  set(() {});
+                                }
+                              },
+                              readOnly: true,
+                              decoration: InputDecoration(
+                                  isDense: true,
+                                  hintText: "DD/MM/YYYY",
+                                  contentPadding: EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 12),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  )),
+                            ),
+                          ),
+                        ],
+                      ),
                       IgnorePointer(ignoring: viewOnly, child: customTextFields(title: Statics.getLabel("sadbhavReportTable2") + ": ", controller: txtGivenGroupNameController)),
                       Flexible(
                         child: SingleChildScrollView(
@@ -1212,7 +1275,7 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
                                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                                       ),
                                       onPressed: () async {
-                                        await submitForm(vruttaData?.pkid, fromPopup: true);
+                                        await submitForm(vruttaData?.pkid, context, fromPopup: true);
                                         Navigator.of(context).pushReplacementNamed(
                                           AddPresentMahanubhavScreen.routeName,
                                           arguments: {'geoUnitId': (vruttaData?.geounitid ?? 0).toString()},
@@ -1427,8 +1490,7 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
                               //   Statics.showToast(Statics.getLabel("workInProgress"));
                               // },
                               onPressed: () async {
-                                Navigator.pop(ct);
-                                submitForm(vruttaData?.pkid);
+                                submitForm(vruttaData?.pkid, context);
                               },
                               child: Text(
                                 Statics.getLabel('Submit'),
@@ -1475,7 +1537,7 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
 
   customTextFields({required String title, bool isRequired = false, required TextEditingController controller, String? hintText, bool readOnly = false, void Function()? onTap}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

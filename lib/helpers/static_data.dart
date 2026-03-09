@@ -5207,6 +5207,10 @@ Future<List<Bhaitakdata>?> SaveSadbhavBaithakVruttaData({required BuildContext c
     if (responseData["Status"].toString() == "Success" || responseData["Status"].toString() == "200") {
       return SadbhavKendraRespModel.fromJson(responseData).bhaitakdata;
     }
+    if (responseData["Status"].toString() == "404") {
+      Statics.showToast(Statics.getLabel('baithakDateValidation'));
+    }
+    Statics.showToast(Statics.getLabel('errorOccurred'));
     return null;
   } else {
     print("Error: ${response.statusCode} - ${response.body}");

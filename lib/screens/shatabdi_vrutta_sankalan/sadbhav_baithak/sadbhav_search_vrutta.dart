@@ -66,6 +66,7 @@ class _AllBaithakTableScreenState extends State<AllBaithakTableScreen> with Auto
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => populateDropdown());
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) => getAllData());
   }
 
@@ -73,7 +74,9 @@ class _AllBaithakTableScreenState extends State<AllBaithakTableScreen> with Auto
     FocusManager.instance.primaryFocus?.unfocus();
 
     var formData = {
-      "AppUserID": int.parse(Statics.userDetails['userID']),
+      "levelid": _selectedKaryakramLevelId ?? 0,
+      "geounitid": int.tryParse(_selectedGeoUnitId ?? "0") ?? 0,
+      "appuserid": int.parse(Statics.userDetails['userID']),
     };
 
     final _data = await Statics.GetAllSadbhavBaithakListData(context: context, inputJson: formData, showLoader: true);
@@ -111,8 +114,8 @@ class _AllBaithakTableScreenState extends State<AllBaithakTableScreen> with Auto
       _linkedVibhaagValue = _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
       _selctedLevel = "praant";
     });
-    // clearForm();
     await populateDropdown();
+    await getAllData();
   }
 
   //////////////////////////////////////////////////////////////////////////////////////
@@ -276,6 +279,16 @@ class _AllBaithakTableScreenState extends State<AllBaithakTableScreen> with Auto
 
   List<String> headers = ["serialNo", "LevelName", "centreName", "date2", "anya_upastiti_male", "anya_upastiti_matrushakti", "Total", "sadbhavReportTable2"];
 
+  List<Map<String, dynamic>> karyakramLevelsList = [
+    {"${Statics.getLabel("Bhaag")}": 1},
+    {"${Statics.getLabel("railwayStation")}": 2},
+    {"${Statics.getLabel("Shahar")}": 3},
+    {"${Statics.getLabel("other")}": 4},
+    {"${Statics.getLabel("Nagar")}": 5},
+    {"${Statics.getLabel("upnagarUpkhanda")}": 6},
+    {"${Statics.getLabel("Mandal")}": 7},
+  ];
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -283,133 +296,450 @@ class _AllBaithakTableScreenState extends State<AllBaithakTableScreen> with Auto
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "${Statics.getLabel('selectKaryakramLevel')}",
+          "${Statics.getLabel('baithakDataTitle')}",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
         ),
       ),
-      body: kendraBaithakList.isEmpty
-          ? Center(
-              child: Text(
-                Statics.getLabel("baithakNotFound"),
-                style: TextStyle(fontWeight: FontWeight.w800),
-              ),
-            )
-          // : baithakListExpandableTable(),
-          : SingleChildScrollView(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                scrollDirection: Axis.horizontal,
-                child: DataTable(
-                  headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
-                  columnSpacing: 18,
-                  horizontalMargin: 12,
-                  border: TableBorder.all(color: Colors.black26),
-                  columns: headers
-                      .map((e) => DataColumn(
-                            label: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 8),
-                              constraints: const BoxConstraints(minWidth: 30, maxWidth: 130),
-                              child: Text(
-                                Statics.getLabel(e),
-                                softWrap: true,
-                                maxLines: 2,
-                                textAlign: TextAlign.center,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ))
-                      .toList(),
-                  rows: kendraBaithakList.asMap().entries.map((e) {
-                    final index = e.key;
-                    final data = e.value;
-                    return DataRow(
-                      cells: [
-                        DataCell(Center(child: Text((index + 1).toString()))),
-                        DataCell(Center(child: Text(data.stharname ?? "--"))),
-                        DataCell(Center(child: Text(data.kendraname ?? "--"))),
-                        DataCell(Center(child: Text(data.programdate ?? "--"))),
-                        DataCell(Center(child: Text((data.male ?? 0).toString()))),
-                        DataCell(Center(child: Text((data.female ?? 0).toString()))),
-                        DataCell(Center(child: Text((data.totmalefemale ?? 0).toString()))),
-                        DataCell(Center(child: Text((data.peoplecount ?? 0).toString()))),
-                        // DataCell(PopupMenuButton(
-                        //   color: Colors.white,
-                        //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        //   onSelected: (value) async {
-                        //     if (value == "Delete") {
-                        //       showDialog(
-                        //         context: context,
-                        //         builder: (ctx) => AlertDialog(
-                        //           title: Text(Statics.getLabel('AskConfirmation')),
-                        //           content: Text(Statics.getLabel('AreyouSureYouWantToDeleteBaithak')),
-                        //           actions: <Widget>[
-                        //             MaterialButton(
-                        //               child: Text(Statics.getLabel('ConfirmationYes')),
-                        //               onPressed: () async {
-                        //                 var _res = await Statics.DeleteSadbhavBaithakData(context: context, inputJson: {"id": data.pkid, "type": "vrutta"});
-                        //                 if (_res) {
-                        //                   Statics.showToast(Statics.getLabel('BaithakDeletedSuccessfully'));
-                        //                 } else
-                        //                   Statics.showToast(Statics.getLabel('errorOccurred'));
-                        //                 Navigator.of(ctx).pop();
-                        //                 await getBaithakListData(selectedKendra?.pkid ?? 0);
-                        //               },
-                        //             ),
-                        //             MaterialButton(
-                        //               child: Text(Statics.getLabel('ConfirmationNo')),
-                        //               onPressed: () {
-                        //                 Navigator.of(ctx).pop();
-                        //               },
-                        //             )
-                        //           ],
-                        //         ),
-                        //       );
-                        //     } else if (value == "EditMenu") {
-                        //       print("EDIT >>>>>>>>>>>>>>");
-                        //       await _getForm(data.pkid);
-                        //       showBaithakDetailPopup(data);
-                        //       // Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
-                        //       // } else if (value == "baithak") {
-                        //       // sadbhavProvider.updateSadbhavVal(SadbhavCenter(centername: "नवीन केंद्र", geounitname: "कोळीवाडा", sthartype: Statics.getLabel("railwayStation")));
-                        //
-                        //       // Navigator.of(context).pushNamed(SadbhavFormTab.routeName); //, arguments: {"id": data.pkid});
-                        //     } else {
-                        //       showBaithakDetailPopup(data, viewOnly: true);
-                        //       // Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
-                        //       // Navigator.of(context).pushNamed(SadbhavCenterListScreen.routeName); //, arguments: {"id": data.pkid, "viewOnly": true});
-                        //     }
-                        //   },
-                        //   itemBuilder: (BuildContext context) {
-                        //     return [
-                        //       // Statics.MenuItem(Statics.getLabel('addinSoochi'), Icons.list, 'AddinSoochi'),
-                        //       // if (showEditMenu == true)
-                        //       Statics.MenuItem(Statics.getLabel('baithakVrutta'), FontAwesomeIcons.edit, 'EditMenu'),
-                        //       Statics.MenuItem(Statics.getLabel('ViewMenu'), FontAwesomeIcons.eye, 'ViewMenu'),
-                        //       // if (showDeleteMenu == true)
-                        //       Statics.MenuItem(Statics.getLabel('Delete'), Icons.delete, 'Delete'),
-                        //       // Statics.MenuItem(Statics.getLabel('baithak'), Icons.edit_note_rounded, 'baithak'),
-                        //     ].map((Statics.MenuItem menuItem) {
-                        //       return PopupMenuItem(
-                        //         value: menuItem.menuKey,
-                        //         child: ListTile(
-                        //           // tileColor: Colors.white,
-                        //           leading: Icon(
-                        //             menuItem.iconVal,
-                        //             color: Colors.purple,
-                        //           ),
-                        //           title: Text(menuItem.menuVal),
-                        //         ),
-                        //       );
-                        //     }).toList();
-                        //   },
-                        // )),
-                      ],
-                    );
-                  }).toList(),
+      body: Column(
+        children: [
+          SizedBox(height: 8),
+          stharDropdown(),
+          SizedBox(height: 16),
+          kendraBaithakList.isEmpty
+              ? SizedBox(
+                  height: 170,
+                  child: Center(
+                    child: Text(
+                      Statics.getLabel("baithakNotFound"),
+                      style: TextStyle(fontWeight: FontWeight.w800),
+                    ),
+                  ),
+                )
+              // : baithakListExpandableTable(),
+              : Expanded(
+                  child: SingleChildScrollView(
+                    child: SingleChildScrollView(
+                      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                      scrollDirection: Axis.horizontal,
+                      child: DataTable(
+                        headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
+                        columnSpacing: 18,
+                        horizontalMargin: 12,
+                        border: TableBorder.all(color: Colors.black26),
+                        columns: headers
+                            .map((e) => DataColumn(
+                                  label: Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 8),
+                                    constraints: const BoxConstraints(minWidth: 30, maxWidth: 130),
+                                    child: Text(
+                                      Statics.getLabel(e),
+                                      softWrap: true,
+                                      maxLines: 2,
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ))
+                            .toList(),
+                        rows: kendraBaithakList.asMap().entries.map((e) {
+                          final index = e.key;
+                          final data = e.value;
+                          return DataRow(
+                            cells: [
+                              DataCell(Center(child: Text((index + 1).toString()))),
+                              DataCell(Center(child: Text(data.stharname ?? "--"))),
+                              DataCell(Center(child: Text(data.kendraname ?? "--"))),
+                              DataCell(Center(child: Text(data.programdate ?? "--"))),
+                              DataCell(Center(child: Text((data.male ?? 0).toString()))),
+                              DataCell(Center(child: Text((data.female ?? 0).toString()))),
+                              DataCell(Center(child: Text((data.totmalefemale ?? 0).toString()))),
+                              DataCell(Center(child: Text((data.peoplecount ?? 0).toString()))),
+                              // DataCell(PopupMenuButton(
+                              //   color: Colors.white,
+                              //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                              //   onSelected: (value) async {
+                              //     if (value == "Delete") {
+                              //       showDialog(
+                              //         context: context,
+                              //         builder: (ctx) => AlertDialog(
+                              //           title: Text(Statics.getLabel('AskConfirmation')),
+                              //           content: Text(Statics.getLabel('AreyouSureYouWantToDeleteBaithak')),
+                              //           actions: <Widget>[
+                              //             MaterialButton(
+                              //               child: Text(Statics.getLabel('ConfirmationYes')),
+                              //               onPressed: () async {
+                              //                 var _res = await Statics.DeleteSadbhavBaithakData(context: context, inputJson: {"id": data.pkid, "type": "vrutta"});
+                              //                 if (_res) {
+                              //                   Statics.showToast(Statics.getLabel('BaithakDeletedSuccessfully'));
+                              //                 } else
+                              //                   Statics.showToast(Statics.getLabel('errorOccurred'));
+                              //                 Navigator.of(ctx).pop();
+                              //                 await getBaithakListData(selectedKendra?.pkid ?? 0);
+                              //               },
+                              //             ),
+                              //             MaterialButton(
+                              //               child: Text(Statics.getLabel('ConfirmationNo')),
+                              //               onPressed: () {
+                              //                 Navigator.of(ctx).pop();
+                              //               },
+                              //             )
+                              //           ],
+                              //         ),
+                              //       );
+                              //     } else if (value == "EditMenu") {
+                              //       print("EDIT >>>>>>>>>>>>>>");
+                              //       await _getForm(data.pkid);
+                              //       showBaithakDetailPopup(data);
+                              //       // Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
+                              //       // } else if (value == "baithak") {
+                              //       // sadbhavProvider.updateSadbhavVal(SadbhavCenter(centername: "नवीन केंद्र", geounitname: "कोळीवाडा", sthartype: Statics.getLabel("railwayStation")));
+                              //
+                              //       // Navigator.of(context).pushNamed(SadbhavFormTab.routeName); //, arguments: {"id": data.pkid});
+                              //     } else {
+                              //       showBaithakDetailPopup(data, viewOnly: true);
+                              //       // Navigator.of(context).pushNamed(SadbhavCenterCreationScreen.routeName, arguments: {"id": 0, "viewOnly": true});
+                              //       // Navigator.of(context).pushNamed(SadbhavCenterListScreen.routeName); //, arguments: {"id": data.pkid, "viewOnly": true});
+                              //     }
+                              //   },
+                              //   itemBuilder: (BuildContext context) {
+                              //     return [
+                              //       // Statics.MenuItem(Statics.getLabel('addinSoochi'), Icons.list, 'AddinSoochi'),
+                              //       // if (showEditMenu == true)
+                              //       Statics.MenuItem(Statics.getLabel('baithakVrutta'), FontAwesomeIcons.edit, 'EditMenu'),
+                              //       Statics.MenuItem(Statics.getLabel('ViewMenu'), FontAwesomeIcons.eye, 'ViewMenu'),
+                              //       // if (showDeleteMenu == true)
+                              //       Statics.MenuItem(Statics.getLabel('Delete'), Icons.delete, 'Delete'),
+                              //       // Statics.MenuItem(Statics.getLabel('baithak'), Icons.edit_note_rounded, 'baithak'),
+                              //     ].map((Statics.MenuItem menuItem) {
+                              //       return PopupMenuItem(
+                              //         value: menuItem.menuKey,
+                              //         child: ListTile(
+                              //           // tileColor: Colors.white,
+                              //           leading: Icon(
+                              //             menuItem.iconVal,
+                              //             color: Colors.purple,
+                              //           ),
+                              //           title: Text(menuItem.menuVal),
+                              //         ),
+                              //       );
+                              //     }).toList();
+                              //   },
+                              // )),
+                            ],
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
                 ),
+        ],
+      ),
+    );
+  }
+
+  Widget stharDropdown() {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+      // margin: EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        border: Border.all(width: 0.7, color: Colors.grey.shade700),
+      ),
+      child: ExpansionPanelList(
+        elevation: 0,
+        expandedHeaderPadding: EdgeInsets.zero,
+        expansionCallback: (int index, bool isExpanded) {
+          setState(() {
+            _isExpanded = isExpanded;
+          });
+        },
+        children: [
+          ExpansionPanel(
+            backgroundColor: Colors.transparent,
+            headerBuilder: (BuildContext context, bool isExpanded) {
+              return ListTile(
+                title: Text(
+                  "${Statics.getLabel('selectStar')}",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+              );
+            },
+            body: Container(
+              margin: EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  _buildDropdownField(
+                    // ignoring: dateController.text.isEmpty || (baithakId != null && baithakId != 0),
+                    label: Statics.getLabel('selectStar'),
+                    value: _selectedKaryakramLevelId == null ? null : _selectedKaryakramLevelId.toString(),
+                    items: karyakramLevelsList
+                        .map((bg) => DropdownMenuItem(
+                              value: bg.values.first.toString(),
+                              child: Text(bg.keys.first),
+                            ))
+                        .toList(),
+                    // onTap: dateController.text.isEmpty ? null : () {},
+                    onChanged: (value) async {
+                      await populateDropdown();
+                      _searched = false;
+                      // dateController.clear();
+                      setState(() => _selectedKaryakramLevelId = int.tryParse(value.toString()));
+                      await getAllData();
+                    },
+                    isDisabled: false,
+                  ),
+                  SizedBox(height: 18),
+                  nagarDropdown(),
+                  SizedBox(height: 18),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (_selectedGeoUnitId != null && _selectedGeoUnitId!.isNotEmpty)
+                        MaterialButton(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 35,
+                            vertical: 5,
+                          ),
+                          color: Theme.of(context).primaryColor,
+                          textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                          onPressed: getAllData,
+                          child: Text(
+                            Statics.getLabel('search'),
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      MaterialButton(onPressed: clearForm, child: Text(Statics.getLabel('clear'))),
+                    ],
+                  ),
+                ],
               ),
             ),
+            isExpanded: _isExpanded,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget nagarDropdown() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.9,
+      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      child: Column(
+        children: [
+          if (![6, 7].contains(_selectedKaryakramLevelId) && _linkedMahaanagar != null)
+            _buildDropdownField(
+              label: Statics.getLabel('Mahaanagar'),
+              value: _linkedMahaanagarValue,
+              items: _linkedMahaanagar!
+                  .map((bg) => DropdownMenuItem(
+                        value: bg.geoUnitID.toString(),
+                        child: Text(bg.name!),
+                      ))
+                  .toList(),
+              onChanged: (value) async {
+                final selectedItem = _linkedMahaanagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                setState(() {
+                  _linkedMahaanagarValue = value;
+                  _linkedVibhaagValue = null;
+                  _selctedLevel = Statics.getLabel('Mahaanagar');
+                  _selctedLevelName = selectedItem.name ?? "";
+                  _selectedGeoUnitId = value;
+                  // _linkedMahaanagarName = selectedItem.name ?? "";
+                  // _resetLinkedValues();
+                });
+                populatelinkedVibhaagDropdown(value!);
+                populatelinkedBhaagDropdown("");
+              },
+              isDisabled: false,
+            ),
+          if (_linkedVibhaag != null)
+            _buildDropdownField(
+              label: Statics.getLabel('Vibhaag'),
+              value: _linkedVibhaagValue,
+              items: _linkedVibhaag!
+                  .map((bg) => DropdownMenuItem(
+                        value: bg.geoUnitID.toString(),
+                        child: Text(bg.name!),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                final selectedItem = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                setState(() {
+                  _linkedVibhaagValue = value;
+                  _selctedLevel = Statics.getLabel('Vibhaag');
+                  _selctedLevelName = selectedItem.name ?? "";
+                  _selectedGeoUnitId = value;
+                  // _linkedVibhaagName = selectedItem.name ?? "";
+                });
+                populatelinkedBhaagDropdown(value!);
+              },
+              isDisabled: false,
+            ),
+          if (_linkedbhaag != null && _linkedbhaag!.isNotEmpty)
+            _buildDropdownField(
+              label: Statics.getLabel('Bhaag'),
+              value: _linkedbhaagValue,
+              items: _linkedbhaag!
+                  .map((bg) => DropdownMenuItem(
+                        value: bg.geoUnitID.toString(),
+                        child: Text(bg.name!),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                final selectedItem = _linkedbhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                setState(() {
+                  _linkedbhaagValue = value;
+                  _selctedLevel = Statics.getLabel('Bhaag');
+                  _selctedLevelName = selectedItem.name ?? "";
+                  _linkedbhaagName = selectedItem.name ?? "";
+                  _selectedGeoUnitId = value;
+                  populatelinkedShaharDropdown(value!);
+                  populatelinkedNagarDropdown(value);
+                });
+              },
+              isDisabled: false,
+            ),
+          if ([5, 6, 7].contains(_selectedKaryakramLevelId) && _linkednagar != null && _linkednagar!.isNotEmpty)
+            _buildDropdownField(
+              label: Statics.getLabel('Nagar'),
+              value: _linkednagarValue,
+              items: _linkednagar!
+                  .map((bg) => DropdownMenuItem(
+                        value: bg.geoUnitID.toString(),
+                        child: Text(bg.name!),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                final selectedItem = _linkednagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                setState(() {
+                  _linkednagarValue = value;
+                  _selectedGeoUnitId = value;
+                  _selctedLevel = Statics.getLabel('Nagar');
+                  _selctedLevelName = selectedItem.name ?? "";
+                  _linkednagarName = selectedItem.name ?? "";
+                  populatelinkedUpnagarDropdown(value);
+                  populatelinkedMandalDropdown('Nagar', value);
+                  // populatelinkedVastiDropdown('Nagar', value);
+                });
+              },
+              isDisabled: false,
+            ),
+          if ([6, 7].contains(_selectedKaryakramLevelId) && _linkedupnagar != null && _linkedupnagar!.isNotEmpty)
+            _buildDropdownField(
+              label: Statics.getLabel('upnagarUpkhanda'),
+              value: _linkedupnagarValue,
+              items: _linkedupnagar!
+                  .map((bg) => DropdownMenuItem(
+                        value: bg.geoUnitID.toString(),
+                        child: Text(bg.name!),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                final selectedItem = _linkedupnagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                setState(() {
+                  _linkedupnagarValue = value;
+                  _selectedGeoUnitId = value;
+                  _selctedLevel = Statics.getLabel('upnagarUpkhanda');
+                  _selctedLevelName = selectedItem.name ?? "";
+                  _linkedupnagarName = selectedItem.name ?? "";
+                  populatelinkedMandalDropdown('Upnagar', value);
+                  // populatelinkedVastiDropdown('Upnagar', value);
+                });
+              },
+              isDisabled: false,
+            ),
+          if ([7].contains(_selectedKaryakramLevelId) && _linkedmandal != null && _linkedmandal!.isNotEmpty)
+            _buildDropdownField(
+              label: Statics.getLabel('Mandal'),
+              value: _linkedmandalValue,
+              items: _linkedmandal!
+                  .map((bg) => DropdownMenuItem(
+                        value: bg.geoUnitID.toString(),
+                        child: Text(bg.name!),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                final selectedItem = _linkedmandal!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                setState(() {
+                  _linkedmandalValue = value;
+                  _selectedGeoUnitId = value.toString();
+                  _selctedLevel = Statics.getLabel('Mandal');
+                  _selctedLevelName = selectedItem.name ?? "";
+                  _linkedmandalName = selectedItem.name ?? "";
+                  // populatelinkedGraamDropdown(value);
+                });
+              },
+              isDisabled: false,
+            ),
+          // if (_linkedgraam != null && _linkedgraam!.isNotEmpty)
+          //   _buildDropdownField(
+          //     label: Statics.getLabel('Graam'),
+          //     value: _linkedgraamValue,
+          //     items: _linkedgraam!
+          //         .map((bg) => DropdownMenuItem(
+          //               value: bg.geoUnitID.toString(),
+          //               child: Text(bg.name!),
+          //             ))
+          //         .toList(),
+          //     onChanged: (value) {
+          //       final selectedItem = _linkedgraam!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+          //       setState(() {
+          //         _linkedgraamValue = value;
+          //         _selectedGeoUnitId = value.toString();
+          //         _selctedLevel = 'Graam';
+          //         _selctedLevelName = selectedItem.name ?? "";
+          //         _linkedgraamName = selectedItem.name ?? "";
+          //       });
+          //     },
+          //     isDisabled: false,
+          //   ),
+          // if (_linkedvasti != null && _linkedvasti!.isNotEmpty)
+          //   _buildDropdownField(
+          //     label: Statics.getLabel('Vasti'),
+          //     value: _linkedvastiValue,
+          //     items: _linkedvasti!
+          //         .map((bg) => DropdownMenuItem(
+          //               value: bg.geoUnitID.toString(),
+          //               child: Text(bg.name!),
+          //             ))
+          //         .toList(),
+          //     onChanged: (value) {
+          //       final selectedItem = _linkedvasti!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+          //       setState(() {
+          //         _linkedvastiValue = value;
+          //         _selectedGeoUnitId = value.toString();
+          //         _selctedLevel = 'Vasti';
+          //         _selctedLevelName = selectedItem.name ?? "";
+          //         _linkedvastiName = selectedItem.name ?? "";
+          //       });
+          //     },
+          //     isDisabled: false,
+          //   ),
+          SizedBox(height: 15),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDropdownField({
+    bool? ignoring,
+    required String label,
+    required String? value,
+    required List<DropdownMenuItem<String>>? items,
+    required ValueChanged<String?>? onChanged,
+    required bool isDisabled,
+    void Function()? onTap,
+  }) {
+    return DropdownButtonFormField(
+      decoration: InputDecoration(labelText: label),
+      isExpanded: true,
+      value: value == "" ? null : value,
+      items: items,
+      onTap: onTap,
+      onChanged: onChanged,
     );
   }
 }
