@@ -416,127 +416,33 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
           child: SingleChildScrollView(
             child: Column(
               children: [
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.end,
-                //     children: [
-                //       Text(
-                //         "${Statics.getLabel('date2')} : ",
-                //         style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
-                //       ),
-                //       // Text(
-                //       //   " *",
-                //       //   style: TextStyle(fontSize: 15, color: Colors.red, fontWeight: FontWeight.bold),
-                //       // ),
-                //       SizedBox(width: 12),
-                //       SizedBox(
-                //         width: MediaQuery.sizeOf(context).width * 0.4,
-                //         child: TextField(
-                //           controller: dateController,
-                //           style: TextStyle(fontSize: 14),
-                //           autofocus: false,
-                //           onTap: _isViewOnly
-                //               ? null
-                //               : () async {
-                //                   DateTime? date = await showDatePicker(
-                //                     context: context,
-                //                     initialDate: dateController.text.isEmpty ? DateTime.now() : DateFormat("dd/MM/yyyy").parse(dateController.text),
-                //                     firstDate: DateTime(2000),
-                //                     lastDate: DateTime(2100),
-                //                   );
-                //                   if (date != null) {
-                //                     dateController.text = DateFormat("dd/MM/yyyy").format(date);
-                //
-                //                     await populateDropdown();
-                //                     setState(() {
-                //                       _searched = false;
-                //                       _selectedKaryakramLevelId = null;
-                //                     });
-                //                   }
-                //                 },
-                //           readOnly: true,
-                //           decoration: InputDecoration(
-                //               isDense: true,
-                //               hintText: "DD/MM/YYYY",
-                //               contentPadding: EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 12),
-                //               border: OutlineInputBorder(
-                //                 borderRadius: BorderRadius.circular(5),
-                //               )),
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
                 SizedBox(height: 12),
-                // textControllerField2(
-                //   name: Statics.getLabel("centrePramukhName"),
-                //   controller: txtPramukhNameController,
-                //   keyboardType: TextInputType.name,
-                //   validator: (value) {
-                //     if (value == null || value.isEmpty) {
-                //       return Statics.getLabel("centrePramukhNameValidationMessage");
-                //     }
-                //     return null;
-                //   },
-                // ),
-                // SizedBox(height: 12),
-                // textControllerField2(
-                //   name: Statics.getLabel("centrePramukhMobile"),
-                //   controller: txtPramukhMobileController,
-                //   keyboardType: TextInputType.name,
-                //   validator: (value) {
-                //     if (value == null || value.isEmpty) {
-                //       return Statics.getLabel("centrePramukhMobileValidationMessage");
-                //     }
-                //     return null;
-                //   },
-                // ),
-                // SizedBox(height: 12),
-                // textControllerField2(
-                //   name: Statics.getLabel("centreName"),
-                //   controller: txtCentreNameController,
-                //   keyboardType: TextInputType.name,
-                //   validator: (value) {
-                //     if (value == null || value.isEmpty) {
-                //       return Statics.getLabel("centreNameValidationMessage");
-                //     }
-                //     return null;
-                //   },
-                // ),
+
                 SizedBox(height: 12),
-                InkWell(
-                  onTap: () {
+                _buildDropdownField(
+                  // ignoring: dateController.text.isEmpty || (baithakId != null && baithakId != 0),
+                  label: Statics.getLabel('selectStar'),
+                  value: _selectedKaryakramLevelId == null ? null : _selectedKaryakramLevelId.toString(),
+                  items: karyakramLevelsList
+                      .map((bg) => DropdownMenuItem(
+                            value: bg.values.first.toString(),
+                            child: Text(bg.keys.first),
+                          ))
+                      .toList(),
+                  // onTap: dateController.text.isEmpty ? null : () {},
+                  onChanged: (value) {
                     // if (dateController.text.isEmpty) {
                     //   Statics.showToast("Please select date first");
                     //   return;
                     // }
+                    populateDropdown();
+                    _searched = false;
+                    // dateController.clear();
+                    setState(() => _selectedKaryakramLevelId = int.tryParse(value.toString()));
+                    nagarList = [];
+                    print("baithakId >>>>>>>>>>>>>>>> ${baithakId}");
                   },
-                  child: _buildDropdownField(
-                    // ignoring: dateController.text.isEmpty || (baithakId != null && baithakId != 0),
-                    label: Statics.getLabel('selectStar'),
-                    value: _selectedKaryakramLevelId == null ? null : _selectedKaryakramLevelId.toString(),
-                    items: karyakramLevelsList
-                        .map((bg) => DropdownMenuItem(
-                              value: bg.values.first.toString(),
-                              child: Text(bg.keys.first),
-                            ))
-                        .toList(),
-                    // onTap: dateController.text.isEmpty ? null : () {},
-                    onChanged: (value) {
-                      // if (dateController.text.isEmpty) {
-                      //   Statics.showToast("Please select date first");
-                      //   return;
-                      // }
-                      populateDropdown();
-                      _searched = false;
-                      // dateController.clear();
-                      setState(() => _selectedKaryakramLevelId = int.tryParse(value.toString()));
-                      nagarList = [];
-                      print("baithakId >>>>>>>>>>>>>>>> ${baithakId}");
-                    },
-                    isDisabled: false,
-                  ),
+                  isDisabled: false,
                 ),
                 SizedBox(height: 18),
                 if ([2, 3, 4].contains(_selectedKaryakramLevelId))

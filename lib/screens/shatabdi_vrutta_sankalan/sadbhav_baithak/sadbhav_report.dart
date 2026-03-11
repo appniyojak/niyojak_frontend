@@ -275,14 +275,17 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
           headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
           columnSpacing: 0,
           horizontalMargin: 16,
+          // dataRowMinHeight: 70,
+          dataRowMaxHeight: 75,
+
           border: TableBorder.all(color: Colors.black26),
           columns: [
             DataColumn(
               label: Container(
                 alignment: Alignment.center,
-                constraints: BoxConstraints(minWidth: 40, maxWidth: 120),
+                constraints: BoxConstraints(minWidth: 40, maxWidth: 115),
                 child: Text(
-                  Statics.getLabel("sanmelanReportTable0"),
+                  Statics.getLabel("sadbhavReportTable0"),
                   softWrap: true,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -293,7 +296,12 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
           ],
           rows: data.map((level) {
                 return DataRow(cells: [
-                  DataCell(Container(constraints: BoxConstraints(minWidth: 40, maxWidth: 120), child: Text(level.levelname.toString()))),
+                  DataCell(Container(
+                      constraints: BoxConstraints(minWidth: 40, maxWidth: 115),
+                      child: Text(
+                        level.levelname.toString(),
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ))),
                 ]);
               }).toList() +
               [
@@ -302,7 +310,7 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
                     constraints: BoxConstraints(minWidth: 40, maxWidth: 120),
                     child: Text(
                       Statics.getLabel("Total"),
-                      style: TextStyle(fontWeight: FontWeight.w700),
+                      style: TextStyle(fontWeight: FontWeight.w800),
                     ),
                   )),
                 ])
@@ -321,6 +329,7 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
               child: DataTable(
                 columnSpacing: 14,
                 horizontalMargin: 12,
+                dataRowMaxHeight: 75,
                 headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
                 border: TableBorder(verticalInside: BorderSide(width: 0.7, color: Colors.grey.shade200)),
                 columns: headers
@@ -557,7 +566,7 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
             headerBuilder: (BuildContext context, bool isExpanded) {
               return ListTile(
                 title: Text(
-                  "${Statics.getLabel('vastiGramNivda')}",
+                  "${Statics.getLabel('selectStar')}",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               );
