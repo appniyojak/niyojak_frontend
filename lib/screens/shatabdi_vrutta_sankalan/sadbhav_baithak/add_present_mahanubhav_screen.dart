@@ -525,7 +525,8 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
                             sajjanShaktiShreniId = id;
                             print("id = $id --- Name = $value");
                           },
-                          selectedValue: sajjanShaktiShreniEditDataId,
+                          isDisable: true,
+                          selectedValue: vastisarvekshanDropDownDataModel?.masterdata?.firstWhere((e) => e.id == 356),
                           onSelectionChanged: (newValue) {
                             setState(() {
                               sajjanShaktiShreniEditDataId = newValue;
@@ -740,8 +741,10 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
                                     vastisarvekshanDropdown3(
                                       filterTypeName: "श्रेणी",
                                       hintText: "${Statics.getLabel('otherUpshreni')}",
-                                      anyaPrabhaviLokShreniId: anyaPrabhaviLokShreniIdEdit,
-                                      anyaPrabhaviLokUpShreniId: anyaPrabhaviLokUpShreniIdEdit,
+                                      anyaPrabhaviLokShreniId: 127,
+                                      anyaPrabhaviLokUpShreniId: 128,
+                                      ignoreFirst: true,
+                                      ignoreSecond: true,
                                       anyaPrabhaviLokUpShreni1Id: anyaPrabhaviLokUpShreni1IdEdit,
                                       onValueSelected: (id, name, value) {
                                         anyaPrabhaviLokShreniId = id;
@@ -1518,6 +1521,7 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
     Masterdata? selectedValue,
     Function(Masterdata?)? onSelectionChanged,
     bool isRequired = true,
+    bool isDisable = false,
   }) {
     List<Masterdata> filteredList = dataModel.masterdata!.where((item) => item.typename == filterTypeName).toList();
 
@@ -1583,36 +1587,39 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
           if (question != null) const SizedBox(width: 12),
           Expanded(
             flex: 3,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade50,
-                border: Border.all(color: Colors.grey.shade400),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<Masterdata>(
-                  hint: Text(
-                    hintText,
-                    style: TextStyle(color: Colors.grey.shade600),
+            child: IgnorePointer(
+              ignoring: isDisable,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade50,
+                  border: Border.all(color: Colors.grey.shade400),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<Masterdata>(
+                    hint: Text(
+                      hintText,
+                      style: TextStyle(color: Colors.grey.shade600),
+                    ),
+                    value: selectedItem,
+                    isExpanded: true,
+                    items: filteredList.map((Masterdata item) {
+                      return DropdownMenuItem<Masterdata>(
+                        value: item,
+                        child: Text(
+                          item.value ?? "",
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (Masterdata? newValue) {
+                      if (newValue != null) {
+                        onItemSelected(newValue.id, newValue.value, newValue.isOther);
+                        onSelectionChanged?.call(newValue);
+                      }
+                    },
                   ),
-                  value: selectedItem,
-                  isExpanded: true,
-                  items: filteredList.map((Masterdata item) {
-                    return DropdownMenuItem<Masterdata>(
-                      value: item,
-                      child: Text(
-                        item.value ?? "",
-                        style: const TextStyle(color: Colors.black),
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (Masterdata? newValue) {
-                    if (newValue != null) {
-                      onItemSelected(newValue.id, newValue.value, newValue.isOther);
-                      onSelectionChanged?.call(newValue);
-                    }
-                  },
                 ),
               ),
             ),
@@ -1648,6 +1655,9 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
     Color? iconColor,
     bool? viewName,
     bool isRequired = true,
+    bool ignoreFirst = false,
+    bool ignoreSecond = false,
+    bool ignoreThird = false,
   }) {
     Masterdata? selectedValue = selectedShreni;
     Masterdata? selectedDependentValue = selectedUpShreni;
@@ -1690,82 +1700,91 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         if (filteredItems.isNotEmpty)
-          _buildDropdown2(
-            hintText: hintText,
-            value: selectedValue,
-            items: filteredItems,
-            onChanged: (newValue) {
-              if (newValue != null) {
-                anyaPrabhaviLokShreniId = newValue.id;
-                anyaPrabhaviLokShreniName = newValue.value;
+          IgnorePointer(
+            ignoring: ignoreFirst,
+            child: _buildDropdown2(
+              hintText: hintText,
+              value: selectedValue,
+              items: filteredItems,
+              onChanged: (newValue) {
+                if (newValue != null) {
+                  anyaPrabhaviLokShreniId = newValue.id;
+                  anyaPrabhaviLokShreniName = newValue.value;
 
-                setState(() {
-                  selectedShreni = newValue;
-                  selectedUpShreni = null;
-                  selectedUpShreni2 = null;
-                });
+                  setState(() {
+                    selectedShreni = newValue;
+                    selectedUpShreni = null;
+                    selectedUpShreni2 = null;
+                  });
 
-                onValueSelected(newValue.id!, newValue.value!, newValue);
-              }
-            },
-            decoration: decoration,
-            borderColor: borderColor,
-            iconColor: iconColor,
-            textColor: textColor,
-            viewName: viewName,
+                  onValueSelected(newValue.id!, newValue.value!, newValue);
+                }
+              },
+              decoration: decoration,
+              borderColor: borderColor,
+              iconColor: iconColor,
+              textColor: textColor,
+              viewName: viewName,
+            ),
           ),
         if (dependentItems.isNotEmpty) SizedBox(height: 10),
         if (dependentItems.isNotEmpty)
-          _buildDropdown2(
-            hintText: "${Statics.getLabel('selectUpshreni')}",
-            value: selectedDependentValue,
-            items: dependentItems,
-            onChanged: (newValue) {
-              if (newValue != null) {
-                anyaPrabhaviLokUpShreniId = newValue.id;
-                anyaPrabhaviLokUpShreniName = newValue.value;
+          IgnorePointer(
+            ignoring: ignoreSecond,
+            child: _buildDropdown2(
+              hintText: "${Statics.getLabel('selectUpshreni')}",
+              value: selectedDependentValue,
+              items: dependentItems,
+              onChanged: (newValue) {
+                if (newValue != null) {
+                  anyaPrabhaviLokUpShreniId = newValue.id;
+                  anyaPrabhaviLokUpShreniName = newValue.value;
 
-                setState(() {
-                  selectedUpShreni = newValue;
-                  selectedUpShreni2 = null;
-                });
+                  setState(() {
+                    selectedUpShreni = newValue;
+                    selectedUpShreni2 = null;
+                  });
 
-                if (onDependentValueSelected != null) {
-                  onDependentValueSelected(newValue.id!, newValue.value!, newValue);
+                  if (onDependentValueSelected != null) {
+                    onDependentValueSelected(newValue.id!, newValue.value!, newValue);
+                  }
                 }
-              }
-            },
-            decoration: decoration,
-            borderColor: borderColor,
-            iconColor: iconColor,
-            textColor: textColor,
-            viewName: viewName,
+              },
+              decoration: decoration,
+              borderColor: borderColor,
+              iconColor: iconColor,
+              textColor: textColor,
+              viewName: viewName,
+            ),
           ),
         if (thirdLevelItems.isNotEmpty) SizedBox(height: 10),
         if (thirdLevelItems.isNotEmpty)
-          _buildDropdown2(
-            hintText: "${Statics.getLabel('selectUpshreni2')}",
-            value: selectedThirdLevelValue,
-            items: thirdLevelItems,
-            onChanged: (newValue) {
-              if (newValue != null) {
-                anyaPrabhaviLokUpShreni1Id = newValue.id;
-                anyaPrabhaviLokUpShreni1Name = newValue.value;
+          IgnorePointer(
+            ignoring: ignoreThird,
+            child: _buildDropdown2(
+              hintText: "${Statics.getLabel('selectUpshreni2')}",
+              value: selectedThirdLevelValue,
+              items: thirdLevelItems,
+              onChanged: (newValue) {
+                if (newValue != null) {
+                  anyaPrabhaviLokUpShreni1Id = newValue.id;
+                  anyaPrabhaviLokUpShreni1Name = newValue.value;
 
-                setState(() {
-                  selectedUpShreni2 = newValue;
-                });
+                  setState(() {
+                    selectedUpShreni2 = newValue;
+                  });
 
-                if (onThirdLevelValueSelected != null) {
-                  onThirdLevelValueSelected(newValue.id!, newValue.value!, newValue);
+                  if (onThirdLevelValueSelected != null) {
+                    onThirdLevelValueSelected(newValue.id!, newValue.value!, newValue);
+                  }
                 }
-              }
-            },
-            decoration: decoration,
-            borderColor: borderColor,
-            iconColor: iconColor,
-            textColor: textColor,
-            viewName: viewName,
+              },
+              decoration: decoration,
+              borderColor: borderColor,
+              iconColor: iconColor,
+              textColor: textColor,
+              viewName: viewName,
+            ),
           ),
       ],
     );

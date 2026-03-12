@@ -554,6 +554,7 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
                       nagarList = [];
                       // print("baithakId >>>>>>>>>>>>>>>> ${baithakId}");
                       await getKendraListData();
+                      await populateDropdown();
                     },
                     isDisabled: false,
                   ),
@@ -757,7 +758,7 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
                             return [
                               // Statics.MenuItem(Statics.getLabel('addinSoochi'), Icons.list, 'AddinSoochi'),
                               // if (showEditMenu == true)
-                              Statics.MenuItem(Statics.getLabel('EditMenu'), FontAwesomeIcons.edit, 'EditMenu'),
+                              // Statics.MenuItem(Statics.getLabel('EditMenu'), FontAwesomeIcons.edit, 'EditMenu'),
                               Statics.MenuItem(Statics.getLabel('ViewMenu'), FontAwesomeIcons.eye, 'ViewMenu'),
                               // if (showDeleteMenu == true)
                               Statics.MenuItem(Statics.getLabel('Delete'), Icons.delete, 'Delete'),
@@ -1265,7 +1266,7 @@ class _SadbhavCenterListScreenState extends State<SadbhavCenterListScreen> with 
                                     ),
                                     onPressed: () async {
                                       await submitForm(vruttaData?.pkid, context, fromPopup: true);
-                                      Navigator.of(context).pushReplacementNamed(
+                                      Navigator.of(context).pushNamed(
                                         AddPresentMahanubhavScreen.routeName,
                                         arguments: {'geoUnitId': (vruttaData?.geounitid ?? 0).toString()},
                                       ).then(

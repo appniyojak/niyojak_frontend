@@ -2379,12 +2379,13 @@ Future<VastisarvekshanDropDownDataModel?> getVastiSurveyDropDownList(String? use
 
   var response = await http.post(Uri.parse(getVastisarvekshanmasterdata), headers: jHeaders, body: json.encode({"SwayamsevakID": userID}));
 
+  print(getVastisarvekshanmasterdata);
   print(json.encode({"SwayamsevakID": userID}));
 
   if (response.statusCode == 200) {
     var responseBody = json.decode(response.body);
     if (context != null) Navigator.of(context, rootNavigator: true).pop();
-    // log("getVastiSurveyDropDownList ==>>  ${responseBody}");
+    log("getVastiSurveyDropDownList ==>>  ${responseBody}");
     return VastisarvekshanDropDownDataModel.fromJson(responseBody);
   } else {
     if (context != null) Navigator.of(context, rootNavigator: true).pop();

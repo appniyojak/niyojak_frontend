@@ -520,6 +520,7 @@ Map<String, String> resEnglish = {
   'SummaryReport1': 'Abhiyaan Status',
   'LevelName': 'Level Name',
   'LevelType': 'Level Type',
+  'SelectLevelType': 'SelectLevel Type',
   'TotalCount': 'Total Sankhyaa',
   'AbhiyaanStartedIn': 'Abhiyaan Started In',
   'ComparativeAnalysis': 'Comparative Analysis',
@@ -1891,6 +1892,8 @@ Map<String, String> resEnglish = {
   'jnyatiValidationMessage': 'The Jnyati representation count should not be less than the number present',
   'baithakDateValidation': 'Baithak already present on this date',
   'addNewSajjAnyaBtn': 'Add Sajjan Shakti / Other Influencers',
+  ////////////////////////////////////// Pramukh Jansanvaad Block //////////////////////////////////////
+  'sanvaadCount': "Sanvaad Count",
 };
 
 ///1,584
@@ -2417,6 +2420,7 @@ Map<String, String> resMarathi = {
   'SummaryReport1': 'अभियान स्थिती',
   'LevelName': 'स्तर नाव',
   'LevelType': 'स्तर प्रकार',
+  'SelectLevelType': 'स्तर प्रकार निवडा',
   'TotalCount': 'एकूण संख्या',
   'AbhiyaanStartedIn': 'अभियान सुरु केले',
   'ComparativeAnalysis': 'तुलनात्मक विश्लेषण',
@@ -3786,6 +3790,8 @@ Map<String, String> resMarathi = {
   'jnyatiValidationMessage': 'ज्ञाति प्रतिनिधित्व संख्या उपस्थित संख्येपेक्षा कमी नसावी',
   'baithakDateValidation': 'या तारखेला एक बैठक आधीच अस्तित्वात आहे.',
   'addNewSajjAnyaBtn': 'नवीन सज्जनशक्ती / अन्य प्रभावी व्यक्ती जोडा',
+  ////////////////////////////////////// Pramukh Jansanvaad Block //////////////////////////////////////
+  'sanvaadCount': "संवाद संख्या",
 };
 
 ///1,583
@@ -4310,6 +4316,7 @@ Map<String, String> resHindi = {
   'SummaryReport1': 'अभियान स्थिती',
   'LevelName': 'स्तर का नाम',
   'LevelType': 'स्तर का प्रकार',
+  'SelectLevelType': 'स्तर का प्रकार चुनें',
   'TotalCount': 'कुल संख्या',
   'AbhiyaanStartedIn': 'अभियान प्रारंभ किया',
   'ComparativeAnalysis': 'तुलनात्मक विश्लेषण',
@@ -5680,4 +5687,6 @@ Map<String, String> resHindi = {
   'jnyatiValidationMessage': 'ज्ञाति प्रतिनिधित्व संख्या उपस्थित संख्या से कम नहीं होनी चाहिए।',
   'baithakDateValidation': 'यह तारीख पर बैठक पहले से ही मौजूद है',
   'addNewSajjAnyaBtn': 'नए सज्जन शक्ति/अन्य प्रभावी व्यक्ति जोड़ें',
+  ////////////////////////////////////// Pramukh Jansanvaad Block //////////////////////////////////////
+  'sanvaadReportTable1': "संवाद संख्या",
 };

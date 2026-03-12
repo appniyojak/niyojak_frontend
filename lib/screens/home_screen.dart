@@ -40,6 +40,7 @@ import 'search_rjb_nidhi_sankalan.dart';
 import 'search_soochi_screen.dart';
 import 'shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/gruh_abhiyaan_main_tab_screen.dart';
 import 'shatabdi_vrutta_sankalan/hindu_sanmelan/hindu_sanmelan_main_tab.dart';
+import 'shatabdi_vrutta_sankalan/pramukh_jansanvad/pramukh_jan_main_tab.dart';
 import 'shatabdi_vrutta_sankalan/sadbhav_baithak/sadbhav_baithak_main_tab.dart';
 import 'shatabdi_vrutta_sankalan/vijayadashami/vijaya_dashami_report.dart';
 import 'shatabdi_vrutta_sankalan/vijayadashami/vijayadashami_form_view.dart';
@@ -4350,13 +4351,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         Expanded(
                           child: InkWell(
-                            onTap: () {
-                              Fluttertoast.showToast(
-                                msg: Statics.getLabel("workInProgress"),
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.BOTTOM,
-                              );
-                            },
+                            onTap: () => Navigator.of(context).pushNamed(PramukhJansanvadMainTab.routeName),
+                            // onTap: () {
+                            //   Fluttertoast.showToast(
+                            //     msg: Statics.getLabel("workInProgress"),
+                            //     toastLength: Toast.LENGTH_SHORT,
+                            //     gravity: ToastGravity.BOTTOM,
+                            //   );
+                            // },
                             child: Container(
                               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                               decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
