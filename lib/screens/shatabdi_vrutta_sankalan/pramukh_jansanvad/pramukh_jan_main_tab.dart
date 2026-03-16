@@ -63,7 +63,7 @@ class _PramukhJansanvadMainTabState extends State<PramukhJansanvadMainTab> with 
                       size: 18,
                     ),
                     Text(
-                      "${Statics.getLabel('addGruhaSampark')}",
+                      "${Statics.getLabel('Vruttaonly')}",
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 15),
                     ),

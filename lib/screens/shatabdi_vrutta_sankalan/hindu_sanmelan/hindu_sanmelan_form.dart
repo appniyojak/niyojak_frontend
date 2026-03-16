@@ -3151,7 +3151,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                             children: [
                               IconButton.filled(
                                 onPressed: () async {
-                                  if (txtUtsavPhotoDescController.text.trim().isEmpty) {
+                                  if (txtUtsavAddPhotoDescController.text.trim().isEmpty) {
                                     Statics.showToast(Statics.getLabel("AddAdvSanmelanFilesDesc"));
                                     return;
                                   }
@@ -3161,7 +3161,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                               ),
                               IconButton.filled(
                                 onPressed: () async {
-                                  if (txtUtsavPhotoDescController.text.trim().isEmpty) {
+                                  if (txtUtsavAddPhotoDescController.text.trim().isEmpty) {
                                     Statics.showToast(Statics.getLabel("AddAdvSanmelanFilesDesc"));
                                     return;
                                   }

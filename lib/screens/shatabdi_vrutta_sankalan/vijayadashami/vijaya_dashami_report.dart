@@ -1810,7 +1810,137 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
     }
 
     return Column(
+      spacing: 12,
       children: [
+        Card(
+          margin: EdgeInsets.zero,
+          child: ExpansionTile(
+            tilePadding: EdgeInsets.only(right: 16, left: 16),
+            childrenPadding: EdgeInsets.zero,
+            collapsedBackgroundColor: Colors.purple.shade50,
+            collapsedTextColor: Colors.blueAccent.shade700,
+            // backgroundColor: Colors.purple.shade100,
+            initiallyExpanded: true,
+            shape: RoundedRectangleBorder(side: BorderSide.none, borderRadius: BorderRadius.circular(12)),
+            collapsedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            title: Text(
+              Statics.getLabel("OtherInfo"),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.purple.shade600,
+              ),
+            ),
+            children: [
+              Container(
+                decoration: BoxDecoration(color: Colors.white),
+                padding: EdgeInsets.only(bottom: 12),
+                // padding: EdgeInsets.symmetric(horizontal: 14),
+                child: SingleColumnRow(
+                  dividerColor: Colors.transparent,
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  subChildPadding: EdgeInsets.only(top: 12, bottom: 6, right: 12, left: 0),
+                  txtString: null,
+                  fontWeight: FontWeight.w700,
+                  value: "",
+                  fontsize: 16,
+                  rowColor: Colors.purple.shade50,
+                  subChild: Column(
+                    spacing: 8,
+                    children: [
+                      SizedBox(),
+                      Row(children: [
+                        Expanded(
+                            child: Text(
+                          Statics.getLabel('images'),
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                        )),
+                        Container(
+                          margin: EdgeInsets.only(left: 8),
+                          child: Row(
+                            spacing: 2,
+                            children: [
+                              Text(
+                                (data.otherinfo?.imgCount ?? 0).toString(),
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              if (data.otherinfo?.imgCount != 0)
+                                InkWell(
+                                  borderRadius: BorderRadius.circular(50),
+                                  onTap: () {
+                                    final _names = data.otherinfo?.imgCountnames;
+                                    if (_names != null && _names.isNotEmpty) showInfoDialogBox(names: _names, title: Statics.getLabel("images"));
+                                  },
+                                  child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 14),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ]),
+                      Row(children: [
+                        Expanded(
+                            child: Text(
+                          Statics.getLabel('advImages'),
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                        )),
+                        Container(
+                          margin: EdgeInsets.only(left: 8),
+                          child: Row(
+                            spacing: 2,
+                            children: [
+                              Text(
+                                (data.otherinfo?.advCount ?? 0).toString(),
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              if (data.otherinfo?.advCount != 0)
+                                InkWell(
+                                  borderRadius: BorderRadius.circular(50),
+                                  onTap: () {
+                                    final _names = data.otherinfo?.advCountnames;
+                                    if (_names != null && _names.isNotEmpty) showInfoDialogBox(names: _names, title: Statics.getLabel("advImages"));
+                                  },
+                                  child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 14),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ]),
+                      Row(children: [
+                        Expanded(
+                            child: Text(
+                          Statics.getLabel('advLinks'),
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                        )),
+                        Container(
+                          margin: EdgeInsets.only(left: 8),
+                          child: Row(
+                            spacing: 2,
+                            children: [
+                              Text(
+                                (data.otherinfo?.urlCount ?? 0).toString(),
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              if (data.otherinfo?.urlCount != 0)
+                                InkWell(
+                                  borderRadius: BorderRadius.circular(50),
+                                  onTap: () {
+                                    final _names = data.otherinfo?.urlCountnames;
+                                    if (_names != null && _names.isNotEmpty) showInfoDialogBox(names: _names, title: Statics.getLabel("advLinks"));
+                                  },
+                                  child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 14),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ]),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+
+        //
         ExpansionPanelList(
           expansionCallback: (index, isExpanded) {
             setState(() {

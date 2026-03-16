@@ -1,3 +1,5 @@
+import 'hindu_sanmelan_report_model.dart';
+
 class GetVijayadashamiReportModel {
   String? message;
   String? status;
@@ -33,6 +35,8 @@ class GetVijayadashamiReportModel {
 }
 
 class VijayadashamiReport {
+  Otherinfo? otherinfo;
+
   int? anyanuppasstitifemale;
   int? anyauppasstitimale;
   int? ekungan;
@@ -87,6 +91,7 @@ class VijayadashamiReport {
     this.ekunganvash,
     this.ekunanya,
     this.ekunupastitisummary,
+    this.otherinfo,
   });
 
   VijayadashamiReport.fromJson(Map<String, dynamic> json) {
@@ -116,6 +121,7 @@ class VijayadashamiReport {
     ekunganvash = json['ekunganvash'];
     ekunanya = json['ekunanya'];
     ekunupastitisummary = json['ekunupastitisummary'];
+    otherinfo = json['otherinfo'] != null ? new Otherinfo.fromJson(json['otherinfo']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -146,6 +152,9 @@ class VijayadashamiReport {
     data['ekunganvash'] = this.ekunganvash;
     data['ekunanya'] = this.ekunanya;
     data['ekunupastitisummary'] = this.ekunupastitisummary;
+    if (this.otherinfo != null) {
+      data['otherinfo'] = this.otherinfo!.toJson();
+    }
     return data;
   }
 }

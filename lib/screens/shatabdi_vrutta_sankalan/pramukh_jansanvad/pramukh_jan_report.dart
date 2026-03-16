@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../helpers/static_data.dart' as Statics;
@@ -183,7 +184,7 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
 
     // String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
     // log("Form Data (JSON):\n$formattedJson");
-    report = await Statics.SadbhavBaithakReportData(context, formData) ?? [];
+    report = await Statics.PramukhJanReportData(context, formData) ?? [];
     // log("vijayadashamiReport >>>>>>>>>>>>>>>>> ${jsonDecode(jsonEncode(vijayadashamiReport))}");
     setState(() {
       report;
@@ -342,24 +343,24 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
                     .toList(),
                 rows: data.map((level) {
                       return DataRow(cells: [
-                        // DataCell(Center(
-                        //     child: Row(
-                        //   mainAxisAlignment: (level.baithakcount != 0 && level.baithaknames != null && level.baithaknames!.isNotEmpty) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
-                        //   children: [
-                        //     if (level.baithakcount != 0 && level.baithaknames != null && level.baithaknames!.isNotEmpty) SizedBox(width: 1),
-                        //     Container(
-                        //         margin: EdgeInsets.only(right: (level.baithakcount != 0 && level.baithaknames != null && level.baithaknames!.isNotEmpty) ? 0 : 10),
-                        //         child: Text(level.baithakcount.toString())),
-                        //     if (level.baithakcount != 0 && level.baithaknames != null && level.baithaknames!.isNotEmpty)
-                        //       InkWell(
-                        //         borderRadius: BorderRadius.circular(50),
-                        //         onTap: () {
-                        //           showInfoDialogBox(names: level.baithaknames ?? "", title: Statics.getLabel("sadbhavReportTable1"));
-                        //         },
-                        //         child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
-                        //       ),
-                        //   ],
-                        // ))),
+                        DataCell(Center(
+                            child: Row(
+                          mainAxisAlignment: (level.baithakcount != 0 && level.baithaknames != null && level.baithaknames!.isNotEmpty) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                          children: [
+                            if (level.baithakcount != 0 && level.baithaknames != null && level.baithaknames!.isNotEmpty) SizedBox(width: 1),
+                            Container(
+                                margin: EdgeInsets.only(right: (level.baithakcount != 0 && level.baithaknames != null && level.baithaknames!.isNotEmpty) ? 0 : 10),
+                                child: Text(level.baithakcount.toString())),
+                            if (level.baithakcount != 0 && level.baithaknames != null && level.baithaknames!.isNotEmpty)
+                              InkWell(
+                                borderRadius: BorderRadius.circular(50),
+                                onTap: () {
+                                  showInfoDialogBox(names: level.baithaknames ?? "", title: Statics.getLabel("sadbhavReportTable1"));
+                                },
+                                child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
+                              ),
+                          ],
+                        ))),
                         // DataCell(Center(
                         //     child: Row(
                         //   mainAxisAlignment: (level.startedcnt != 0 && level.startedname != null && level.startedname!.isNotEmpty) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
@@ -397,7 +398,7 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
                         //         ),
                         //     ],
                         //   ))),
-                        DataCell(Center(child: Text(level.namecount.toString()))),
+                        // DataCell(Center(child: Text(level.namecount.toString()))),
                         DataCell(Center(child: Text(level.totalmalecount.toString()))),
                         DataCell(Center(child: Text(level.presentmale.toString()))),
                         DataCell(Center(child: Text(level.totalfemalecount.toString()))),
