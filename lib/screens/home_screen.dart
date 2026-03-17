@@ -1989,7 +1989,7 @@ class _HomeScreenState extends State<HomeScreen> {
         //
         'UpnagarName': '',
         'MappedVastis': '',
-        'VastiNames': '',
+        // 'VastiNames': '',
         //
         'UpkhandName': '',
         'MappedMandals': '',
@@ -2060,12 +2060,12 @@ class _HomeScreenState extends State<HomeScreen> {
       flatItem['MandalName'] = mandalNames.isEmpty ? '--' : mandalNames.join(' --> ');
       flatItem['GraamNames'] = gramNames.isEmpty ? '--' : gramNames.join(' --> ');
 
-      // VastiNames (Simple List) - Only add if not empty
-      if (isPopulated(data['VastiNames'])) {
-        flatItem['VastiNames'] = (data['VastiNames'] as List).join(' --> ');
-      } else {
-        flatItem['VastiNames'] = '--';
-      }
+      // // VastiNames (Simple List) - Only add if not empty
+      // if (isPopulated(data['VastiNames'])) {
+      //   flatItem['VastiNames'] = (data['VastiNames'] as List).join(' --> ');
+      // } else {
+      //   flatItem['VastiNames'] = '--';
+      // }
 
       rows.add(flatItem);
     }
@@ -2148,7 +2148,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       }
 
-      int countVastiNames = (data['VastiNames'] as List?)?.length ?? 0;
+      // int countVastiNames = (data['VastiNames'] as List?)?.length ?? 0;
 
       // 2. EXPAND ROWS FOR VISUAL MERGING (Logic preserved)
       final Map<String, List<String>> expanded = {};
@@ -2222,7 +2222,7 @@ class _HomeScreenState extends State<HomeScreen> {
       tryMergeSubGroups('MandalName');
 
       // Merge child rows if they are all empty
-      ['MappedMandals', 'GraamNames', 'MappedVastis', 'VastiNames'].forEach((key) {
+      ['MappedMandals', 'GraamNames', 'MappedVastis'].forEach((key) {
         final values = expanded[key]!;
         if (values.every((v) => v == '--' || v.trim().isEmpty))
           tryMergeKey(key);
@@ -2239,7 +2239,7 @@ class _HomeScreenState extends State<HomeScreen> {
         'GraamNames': countGrams,
         'UpnagarName': countUpnagar,
         'MappedVastis': countMappedVastis,
-        'VastiNames': countVastiNames,
+        // 'VastiNames': countVastiNames,
       };
 
       _sheet.getRangeByIndex(rowIndex, 1, rowIndex, 2).merge(); // Sr No & NagarName

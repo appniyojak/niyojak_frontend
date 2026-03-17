@@ -101,9 +101,10 @@ class GeoHierarchyData {
   String? nagarName;
   List<Upkhands>? upkhands;
   List<Upnagars>? upnagars;
-  List<String>? vastiNames;
 
-  GeoHierarchyData({this.mandals, this.nagarID, this.nagarName, this.upkhands, this.upnagars, this.vastiNames});
+  // List<String>? vastiNames;
+
+  GeoHierarchyData({this.mandals, this.nagarID, this.nagarName, this.upkhands, this.upnagars}); //, this.vastiNames});
 
   GeoHierarchyData.fromJson(Map<String, dynamic> json) {
     if (json['Mandals'] != null) {
@@ -126,7 +127,7 @@ class GeoHierarchyData {
         upnagars!.add(new Upnagars.fromJson(v));
       });
     }
-    vastiNames = json['VastiNames'].cast<String>();
+    // vastiNames = json['VastiNames'].cast<String>();
   }
 
   Map<String, dynamic> toJson() {
@@ -142,7 +143,7 @@ class GeoHierarchyData {
     if (this.upnagars != null) {
       data['Upnagars'] = this.upnagars!.map((v) => v.toJson()).toList();
     }
-    data['VastiNames'] = this.vastiNames;
+    // data['VastiNames'] = this.vastiNames;
     return data;
   }
 }
