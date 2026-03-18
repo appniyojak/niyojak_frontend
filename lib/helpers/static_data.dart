@@ -49,12 +49,12 @@ import './database_helper.dart';
 bool isDevelopment = baseUrl == 'http://94.136.191.127:8074';
 
 ///Production
-// const String baseUrl = 'http://114.79.135.131:8014';
-// const String baseUrlAPI = 'http://114.79.135.131:8014/WCFServices/NiyojakProdMobileApp.svc';
+const String baseUrl = 'http://114.79.135.131:8014';
+const String baseUrlAPI = 'http://114.79.135.131:8014/WCFServices/NiyojakProdMobileApp.svc';
 
 /// Development
-const String baseUrl = 'http://94.136.191.127:8074';
-const String baseUrlAPI = 'http://94.136.191.127:8074/WCFServices/NiyojakProdMobileApp.svc';
+// const String baseUrl = 'http://94.136.191.127:8074';
+// const String baseUrlAPI = 'http://94.136.191.127:8074/WCFServices/NiyojakProdMobileApp.svc';
 
 ///OLD Development
 // const String baseUrl = 'http://108.181.165.29:8027';
@@ -5054,7 +5054,7 @@ Future<bool> CreateUpdateSadbhavKendraData({required BuildContext context, requi
     if (responseData["Status"].toString() == "Success" || responseData["Status"].toString() == "200") {
       return true;
     } else if (responseData["Status"].toString() == "404") {
-      Statics.showToast("Data already exists");
+      Statics.showToast(Statics.getLabel("dataAlreadyExists"));
       return false;
     }
     return false;
@@ -5089,7 +5089,7 @@ Future<bool> CreateBaithakData({required BuildContext context, required Map<Stri
     if (responseData["Status"].toString() == "Success" || responseData["Status"].toString() == "200") {
       return true;
     } else if (responseData["Status"].toString() == "404" || responseData["Status"] == null) {
-      Statics.showToast("Data already exists");
+      Statics.showToast(Statics.getLabel("dataAlreadyExists"));
       return false;
     }
     return false;
@@ -5375,7 +5375,7 @@ Future<bool> CreateUpdatePramukhJanData({required BuildContext context, required
     if (responseData["Status"].toString() == "Success" || responseData["Status"].toString() == "200") {
       return true;
     } else if (responseData["Status"].toString() == "404") {
-      Statics.showToast("Data already exists");
+      Statics.showToast(Statics.getLabel("dataAlreadyExists"));
       return false;
     }
     return false;
@@ -5410,7 +5410,7 @@ Future<bool> CreatePramukhJanData({required BuildContext context, required Map<S
     if (responseData["Status"].toString() == "Success" || responseData["Status"].toString() == "200") {
       return true;
     } else if (responseData["Status"].toString() == "404" || responseData["Status"] == null) {
-      Statics.showToast("Data already exists");
+      Statics.showToast(Statics.getLabel("dataAlreadyExists"));
       return false;
     }
     return false;

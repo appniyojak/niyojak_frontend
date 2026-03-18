@@ -72,11 +72,12 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
     //   _shaakhaaList = _getshaakhaaList(-1, "get nothing", null, null);
     //   print("_shaakhaaList_shaakhaaList  --->>> $_shaakhaaList");
     // }
-    if ((int.parse(Statics.userDetails['LevelID']) > 1) &&
-        !(Statics.userDetails['DaayitvaName'] == 'Mukhya Shikshak' ||
-            Statics.userDetails['DaayitvaName'] == 'मुख्य शिक्षक' ||
-            Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' ||
-            Statics.userDetails['DaayitvaName'] == 'कार्यवाह')) {
+    if ((int.parse(Statics.userDetails['LevelID']) > 1)) {
+      // &&
+      //   !(Statics.userDetails['DaayitvaName'] == 'Mukhya Shikshak' ||
+      //       Statics.userDetails['DaayitvaName'] == 'मुख्य शिक्षक' ||
+      //       Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' ||
+      //       Statics.userDetails['DaayitvaName'] == 'कार्यवाह')) {
       print("jfhdjkfh asjkhjkfhd sjkahjkhk f shkjshfk f");
     } else {
       _shaakhaaList = _getshaakhaaList(-1, "get nothing", null, null);
@@ -572,11 +573,12 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
                     });
                   },
                   children: [
-                    if ((int.parse(Statics.userDetails['LevelID']) > 1) &&
-                        !(Statics.userDetails['DaayitvaName'] == 'Mukhya Shikshak' ||
-                            Statics.userDetails['DaayitvaName'] == 'मुख्य शिक्षक' ||
-                            Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' ||
-                            Statics.userDetails['DaayitvaName'] == 'कार्यवाह'))
+                    if ((int.parse(Statics.userDetails['LevelID']) > 1))
+                      // &&
+                      // !(Statics.userDetails['DaayitvaName'] == 'Mukhya Shikshak' ||
+                      //     Statics.userDetails['DaayitvaName'] == 'मुख्य शिक्षक' ||
+                      //     Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' ||
+                      //     Statics.userDetails['DaayitvaName'] == 'कार्यवाह'))
                       ExpansionPanel(
                         headerBuilder: (BuildContext context, bool isExpanded) {
                           return ListTile(
@@ -761,11 +763,12 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
                       ),
                   ],
                 ),
-                if ((int.parse(Statics.userDetails['LevelID']) > 1) &&
-                    !(Statics.userDetails['DaayitvaName'] == 'Mukhya Shikshak' ||
-                        Statics.userDetails['DaayitvaName'] == 'मुख्य शिक्षक' ||
-                        Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' ||
-                        Statics.userDetails['DaayitvaName'] == 'कार्यवाह'))
+                if ((int.parse(Statics.userDetails['LevelID']) > 1))
+                  // &&
+                  //   !(Statics.userDetails['DaayitvaName'] == 'Mukhya Shikshak' ||
+                  //       Statics.userDetails['DaayitvaName'] == 'मुख्य शिक्षक' ||
+                  //       Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' ||
+                  //       Statics.userDetails['DaayitvaName'] == 'कार्यवाह'))
                   Container(
                     margin: EdgeInsets.all(20),
                     child: Column(

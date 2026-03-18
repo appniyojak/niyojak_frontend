@@ -187,7 +187,7 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
     final _existData = await Statics.CheckKendraExistsData(context: context, inputJson: formData, showLoader: true);
 
     if (_existData == null || _existData.status == "404") {
-      Statics.showToast("Data already exists");
+      Statics.showToast(Statics.getLabel("dataAlreadyExists"));
       return;
     }
     setState(() {

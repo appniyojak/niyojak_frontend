@@ -187,7 +187,7 @@ class _KaryakramCreationScreenState extends State<KaryakramCreationScreen> {
     final _existData = await Statics.CheckPramukhJanExistsData(context: context, inputJson: formData, showLoader: true);
 
     if (_existData == null || _existData.status == "404") {
-      Statics.showToast("Data already exists");
+      Statics.showToast(Statics.getLabel("dataAlreadyExists"));
       return;
     }
     setState(() {
