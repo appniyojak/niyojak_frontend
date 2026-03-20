@@ -1575,7 +1575,7 @@ Map<String, String> resEnglish = {
   'hinduSammelan': 'Hindu Sammelan',
   'sadbhavBaithak': 'Sadbhav Baithak',
   'pramukhJansanvaad': 'Pramukh Jan Samvad',
-  'yuvaSangam': 'Yuva Sangam',
+  'yuvaSangam': 'Yuva Sangam/Sammelan',
   'shakhaVistaar': 'Shaakha Vistar Week',
   'menu': 'Menu',
   'mainScreenTab2': 'Vrutta and Other Reports',

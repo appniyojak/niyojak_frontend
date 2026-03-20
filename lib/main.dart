@@ -98,6 +98,8 @@ import 'screens/shatabdi_vrutta_sankalan/sadbhav_baithak/sadbhav_center_creation
 import 'screens/shatabdi_vrutta_sankalan/sadbhav_baithak/sadbhav_centers_list_screen.dart';
 import 'screens/shatabdi_vrutta_sankalan/sadbhav_baithak/sadbhav_search_vrutta.dart';
 import 'screens/shatabdi_vrutta_sankalan/vijayadashami/vijayadashami_form_view.dart';
+import 'screens/shatabdi_vrutta_sankalan/yuva-sangam_sanmelan/add_new_karyakram_screen.dart';
+import 'screens/shatabdi_vrutta_sankalan/yuva-sangam_sanmelan/yuva_sangam_main_tab.dart';
 import 'screens/survey_screen/vasti_sarvekshan_screen.dart';
 
 void main() async {
@@ -357,6 +359,8 @@ class NiyojakAppState extends State<NiyojakApp> {
                 AllSanvaadScreen.routeName: (ctx) => AllSanvaadScreen(),
                 KaryakramCreationScreen.routeName: (ctx) => KaryakramCreationScreen(),
                 AddSajjanAnyaPrakukhJanScreen.routeName: (ctx) => AddSajjanAnyaPrakukhJanScreen(),
+                AddNewKaryakramScreen.routeName: (ctx) => AddNewKaryakramScreen(),
+                YuvaSangamMainTab.routeName: (ctx) => YuvaSangamMainTab(),
                 SearchSankalpScreen.routeName: (ctx) => ChangeNotifierProvider<SankalpScreenProvider>(create: (context) => SankalpScreenProvider(), child: SearchSankalpScreen()),
                 // SearchSankalpScreen.routeName: (ctx) => ChangeNotifierProvider<SankalpScreenProvider>(create: (context) => SankalpScreenProvider(), child: SearchSankalpScreen()),
               },

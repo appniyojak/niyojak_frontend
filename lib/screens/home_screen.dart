@@ -44,6 +44,7 @@ import 'shatabdi_vrutta_sankalan/pramukh_jansanvad/pramukh_jan_main_tab.dart';
 import 'shatabdi_vrutta_sankalan/sadbhav_baithak/sadbhav_baithak_main_tab.dart';
 import 'shatabdi_vrutta_sankalan/vijayadashami/vijaya_dashami_report.dart';
 import 'shatabdi_vrutta_sankalan/vijayadashami/vijayadashami_form_view.dart';
+import 'shatabdi_vrutta_sankalan/yuva-sangam_sanmelan/yuva_sangam_main_tab.dart';
 import 'survey_screen/mandal_reports_tabs.dart';
 import 'survey_screen/survey_form/mandal_survey_form_view.dart';
 import 'survey_screen/survey_form/vasti_survey_form_view.dart';
@@ -4382,13 +4383,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Expanded(
                           child: InkWell(
-                            onTap: () {
-                              Fluttertoast.showToast(
-                                msg: Statics.getLabel("workInProgress"),
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.BOTTOM,
-                              );
-                            },
+                            onTap: () => Navigator.of(context).pushNamed(YuvaSangamMainTab.routeName),
+                            // onTap: () {
+                            //   Fluttertoast.showToast(
+                            //     msg: Statics.getLabel("workInProgress"),
+                            //     toastLength: Toast.LENGTH_SHORT,
+                            //     gravity: ToastGravity.BOTTOM,
+                            //   );
+                            // },
                             child: Container(
                               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                               decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
