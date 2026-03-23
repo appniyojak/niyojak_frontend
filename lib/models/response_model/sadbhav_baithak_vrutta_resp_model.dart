@@ -90,14 +90,16 @@ class SadbhavBaithakVruttaRespModel {
 class NamesList {
   int? pkid;
   String? name;
+  String? daayitva;
   int? fksadbhavbaithakmasterid;
   int? isactive;
 
-  NamesList({this.pkid, this.name, this.fksadbhavbaithakmasterid, this.isactive});
+  NamesList({this.pkid, this.name, this.daayitva, this.fksadbhavbaithakmasterid, this.isactive});
 
   NamesList.fromJson(Map<String, dynamic> json) {
     pkid = json['pkid'];
     name = json['name'];
+    daayitva = json['daayitva'];
     fksadbhavbaithakmasterid = json['fksadbhavbaithakmasterid'];
     isactive = json['isactive'];
   }
@@ -106,6 +108,7 @@ class NamesList {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['pkid'] = this.pkid;
     data['name'] = this.name;
+    data['daayitva'] = this.daayitva;
     data['fksadbhavbaithakmasterid'] = this.fksadbhavbaithakmasterid;
     data['isactive'] = this.isactive;
     return data;

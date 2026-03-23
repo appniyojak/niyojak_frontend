@@ -3216,8 +3216,8 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                       String base64String = base64Encode(compressedBytes);
                       String base64File = "data:image/jpg;base64,$base64String";
                       selectedFilePath = base64File;
-                      final _result = await submitImageDataFun(type: "advimg", showLoader: true, description: txtUtsavPhotoDescController.text.trim());
-                      _selectedFileNames2.add(TypeValueData(type: "advimg", description: txtUtsavPhotoDescController.text.trim(), value: _result ?? fileName));
+                      final _result = await submitImageDataFun(type: "advimg", showLoader: true, description: txtUtsavAddPhotoDescController.text.trim());
+                      _selectedFileNames2.add(TypeValueData(type: "advimg", description: txtUtsavAddPhotoDescController.text.trim(), value: _result ?? fileName));
                       setState(() {
                         txtUtsavPhotoDescController.clear();
                         txtUtsavAddPhotoDescController.clear();

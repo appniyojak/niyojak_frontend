@@ -13,6 +13,7 @@ import '../../../models/response_model/sadbhav_baithak_vrutta_resp_model.dart';
 import '../../../models/response_model/vijayaDashamiInitModel.dart';
 import '../../../providers/bals.dart';
 import 'add_new_karyakram_screen.dart';
+import 'yuva_sangam_form_screen.dart';
 
 class YuvaSangamListTab extends StatefulWidget {
   const YuvaSangamListTab({super.key});
@@ -194,6 +195,74 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
       // vaktaList = vruttaData?.namesList ?? [];
       // _selectedGeoUnitId = vruttaData?.geounitid.toString();
     }
+  }
+
+  showEditDatePopup(String date) {
+    dateController.text = date;
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(builder: (context, set) {
+          return AlertDialog(
+            insetPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 24),
+            title: Text(Statics.getLabel("changeDate")),
+            content: SizedBox(
+              width: double.infinity,
+              child: TextField(
+                controller: dateController,
+                style: TextStyle(fontSize: 14),
+                autofocus: false,
+                onTap: () async {
+                  DateTime? date = await showDatePicker(
+                    context: context,
+                    initialDate: dateController.text.isEmpty ? DateTime.now() : DateFormat("dd/MM/yyyy").parse(dateController.text),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100),
+                  );
+                  if (date != null) {
+                    dateController.text = DateFormat("dd/MM/yyyy").format(date);
+                    set(() {});
+                  }
+                },
+                readOnly: true,
+                decoration: InputDecoration(
+                    isDense: true,
+                    hintText: "DD/MM/YYYY",
+                    contentPadding: EdgeInsets.only(left: 12, right: 12, top: 14, bottom: 12),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    )),
+              ),
+            ),
+            actions: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // if ((_linkedgraamValue != "" && _linkedgraamValue != null) || (_linkedvastiValue != "" && _linkedvastiValue != null))
+                  MaterialButton(
+                    minWidth: MediaQuery.sizeOf(context).width * 0.4,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 12,
+                    ),
+                    color: Theme.of(context).primaryColor,
+                    disabledColor: Colors.grey,
+                    textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                    onPressed: dateController.text.trim().isEmpty ? null : createSadbhavBaithakFun,
+                    child: Text(
+                      Statics.getLabel('Submit'),
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                  MaterialButton(onPressed: () => Navigator.pop(context), child: Text(Statics.getLabel('clear'))),
+                ],
+              ),
+            ],
+          );
+        });
+      },
+    );
   }
 
   Future<void> submitForm(pkId, ct, {bool fromPopup = false, bool showLoader = true}) async {
@@ -424,34 +493,26 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
     LocationCard(
       district: Statics.getLabel("Bhaag"),
       taluka: 'Taluka',
-      date: '2026-03-25',
+      date: '25/03/2026',
       locationName: 'Chandur',
-      onFill: () {},
-      onEdit: () {},
     ),
     LocationCard(
       district: Statics.getLabel("Nagar"),
       taluka: 'Taluka',
-      date: '2026-03-20',
+      date: '20/03/2026',
       locationName: 'Nirmal',
-      onFill: () {},
-      onEdit: () {},
     ),
     LocationCard(
       district: Statics.getLabel("Mandal"),
       taluka: 'Taluka',
-      date: '2026-03-29',
+      date: '29/03/2026',
       locationName: 'Naigaon',
-      onFill: () {},
-      onEdit: () {},
     ),
     LocationCard(
       district: Statics.getLabel("Bhaag"),
       taluka: 'Taluka',
-      date: '2026-04-02',
+      date: '02/04/2026',
       locationName: 'Thane',
-      onFill: () {},
-      onEdit: () {},
     )
   ];
 
@@ -479,15 +540,15 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
             children: [
               SizedBox(height: 12),
               stharDropdown(),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.end,
-              //   children: [
-              //     Text(
-              //       "*Dummy Data",
-              //       style: TextStyle(color: Colors.grey.shade600, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-              //     )
-              //   ],
-              // ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    "*Dummy Data",
+                    style: TextStyle(color: Colors.grey.shade600, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+                  )
+                ],
+              ),
               SizedBox(height: 24),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -543,7 +604,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
                                     // const SizedBox(width: 6),
 
                                     // Date tag
-                                    _TagChip(label: _item.date, icon: Icons.calendar_today, iconColor: Colors.grey, onEditTap: _item.onEdit),
+                                    _TagChip(label: _item.date, icon: Icons.calendar_today, iconColor: Colors.grey, onEditTap: () => showEditDatePopup(_item.date)),
                                   ],
                                 ),
                               ),
@@ -595,10 +656,10 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
                           // ── Edit Button ───────────────────────────────────────────
                           Center(
                             child: GestureDetector(
-                              onTap: _item.onEdit,
+                              onTap: () => Navigator.of(context).pushNamed(YuvaSangamFormScreen.routeName),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
-                                children: const [
+                                children: [
                                   Icon(
                                     Icons.edit_outlined,
                                     size: 16,
@@ -606,7 +667,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
                                   ),
                                   SizedBox(width: 5),
                                   Text(
-                                    'Vrut Sampaadit Kara (Edit)',
+                                    Statics.getLabel("vruttaTitle"),
                                     style: TextStyle(
                                       fontSize: 14,
                                       color: Color(0xFF3B82F6),
@@ -2001,16 +2062,12 @@ class LocationCard {
   final String taluka;
   final String date;
   final String locationName;
-  final VoidCallback onFill;
-  final VoidCallback onEdit;
 
   const LocationCard({
     required this.district,
     required this.taluka,
     required this.date,
     required this.locationName,
-    required this.onFill,
-    required this.onEdit,
   });
 }
 

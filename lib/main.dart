@@ -99,6 +99,7 @@ import 'screens/shatabdi_vrutta_sankalan/sadbhav_baithak/sadbhav_centers_list_sc
 import 'screens/shatabdi_vrutta_sankalan/sadbhav_baithak/sadbhav_search_vrutta.dart';
 import 'screens/shatabdi_vrutta_sankalan/vijayadashami/vijayadashami_form_view.dart';
 import 'screens/shatabdi_vrutta_sankalan/yuva-sangam_sanmelan/add_new_karyakram_screen.dart';
+import 'screens/shatabdi_vrutta_sankalan/yuva-sangam_sanmelan/yuva_sangam_form_screen.dart';
 import 'screens/shatabdi_vrutta_sankalan/yuva-sangam_sanmelan/yuva_sangam_main_tab.dart';
 import 'screens/survey_screen/vasti_sarvekshan_screen.dart';
 
@@ -361,6 +362,7 @@ class NiyojakAppState extends State<NiyojakApp> {
                 AddSajjanAnyaPrakukhJanScreen.routeName: (ctx) => AddSajjanAnyaPrakukhJanScreen(),
                 AddNewKaryakramScreen.routeName: (ctx) => AddNewKaryakramScreen(),
                 YuvaSangamMainTab.routeName: (ctx) => YuvaSangamMainTab(),
+                YuvaSangamFormScreen.routeName: (ctx) => YuvaSangamFormScreen(),
                 SearchSankalpScreen.routeName: (ctx) => ChangeNotifierProvider<SankalpScreenProvider>(create: (context) => SankalpScreenProvider(), child: SearchSankalpScreen()),
                 // SearchSankalpScreen.routeName: (ctx) => ChangeNotifierProvider<SankalpScreenProvider>(create: (context) => SankalpScreenProvider(), child: SearchSankalpScreen()),
               },
