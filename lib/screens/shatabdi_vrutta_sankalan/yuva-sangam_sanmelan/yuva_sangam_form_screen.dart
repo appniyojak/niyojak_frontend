@@ -10,8 +10,6 @@ import '../../../models/response_model/sadbhav_baithak_vrutta_resp_model.dart';
 import '../../../models/response_model/vijayaDashamiInitModel.dart';
 import '../../../providers/bals.dart';
 import '../../../widgets/single_column_row.dart';
-import '../hindu_sanmelan/search_sajjan_anya_screen.dart';
-import '../vijayadashami/add_vishesh_vyakti.dart';
 import '../vijayadashami/vijayadashami_form_view.dart';
 
 class YuvaSangamFormScreen extends StatefulWidget {
@@ -70,7 +68,8 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
   String? _selectedGeoUnitId;
 
   int? pkId;
-  SadbhavBaithakVruttaRespModel? vruttaData;
+
+  // SadbhavBaithakVruttaRespModel? vruttaData;
 
   Vastisarsajjanshakti? selectedPerson;
   Vastisanyaprabhavi? selectedPrabhavi;
@@ -98,13 +97,26 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
   var _othDesgCtrl = TextEditingController();
   var _othRemarksCtrl = TextEditingController();
 
+  String _type = "";
+  String _date = "";
+  String _geo = "";
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) => _initFormState());
   }
 
+  List<Shakhaalist> selectedItems = [];
+  List<String> vayogatOptions = [];
+
   _initFormState() async {
+    final _data = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+    if (_data != null) {
+      _type = _data["type"];
+      _date = _data["date"];
+      _geo = _data["geo"];
+    }
     await populateDropdown();
     await _getForm();
   }
@@ -124,23 +136,29 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
   String? selectedAnyaprabhaviItemsIds;
 
   _getForm() async {
-    var formData = {
-      "ids": pkId,
-      "AppUserID": int.parse(Statics.userDetails['userID']),
-    };
-    vruttaData = await Statics.GetSadbhavBaithakVruttaData(context: context, inputJson: formData);
-    setState(() {});
-    if (vruttaData != null) {
-      selectedSajjanshaktiItemsIds = vruttaData?.vastisarsajjanshakti?.where((e) => e.isVisheshdefault == 1).map((e) => e.pkid).join(',');
-      selectedSajjanshaktiItems = vruttaData?.vastisarsajjanshakti?.where((e) => e.isVisheshdefault == 1).toList() ?? [];
-      selectedAnyaprabhaviItemsIds = vruttaData?.vastisanyaprabhavi?.where((e) => e.isVisheshdefault == 1).map((e) => e.pkId).join(',');
-      selectedAnyaprabhaviItems = vruttaData?.vastisanyaprabhavi?.where((e) => e.isVisheshdefault == 1).toList() ?? [];
-
-      vaktaList = vruttaData?.namesList ?? [];
-      _selectedGeoUnitId = vruttaData?.geounitid.toString();
-    }
+    // var formData = {
+    //   "ids": 2,
+    //   "AppUserID": int.parse(Statics.userDetails['userID']),
+    // };
+    // vruttaData = await Statics.GetSadbhavBaithakVruttaData(context: context, inputJson: formData);
+    // setState(() {});
+    // if (vruttaData != null) {
+    //   selectedSajjanshaktiItemsIds = vruttaData?.vastisarsajjanshakti?.where((e) => e.isVisheshdefault == 1).map((e) => e.pkid).join(',');
+    //   selectedSajjanshaktiItems = vruttaData?.vastisarsajjanshakti?.where((e) => e.isVisheshdefault == 1).toList() ?? [];
+    //   selectedAnyaprabhaviItemsIds = vruttaData?.vastisanyaprabhavi?.where((e) => e.isVisheshdefault == 1).map((e) => e.pkId).join(',');
+    //   selectedAnyaprabhaviItems = vruttaData?.vastisanyaprabhavi?.where((e) => e.isVisheshdefault == 1).toList() ?? [];
+    //
+    //   vaktaList = vruttaData?.namesList ?? [];
+    //   _selectedGeoUnitId = vruttaData?.geounitid.toString();
+    // }
     data = await Statics.getVijayadashamiInitData(context, Statics.userDetails["userID"], "14255", "6");
-    setState(() {});
+    setState(() {
+      // Initialize selected items from the preselected list
+      selectedItems = List.from(data?.shakhaalist ?? []);
+
+      // Extract unique categories (e.g., Senior Professionals, etc.)
+      vayogatOptions = checkboxShakhaSelectedItems.map((e) => e.vayogatname ?? "").where((e) => e.isNotEmpty).toSet().toList();
+    });
   }
 
   Future<void> submitForm({bool showLoader = true}) async {
@@ -283,12 +301,85 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
 
   GetVijayadashamiInitModel? data;
 
+  final _extraList = [
+    Shakhaalist(
+        frequencyName: "शाखा",
+        geoUnitID: 1,
+        geoUnitName: "example abc मिलन",
+        geoUnitNameHindi: "example abc मिलन",
+        geoUnitNameMarathi: "example abc मिलन",
+        isSankalpit: 0,
+        preferedname: "example abc मिलन",
+        vayogatname: "प्रौढ व्यवसायी",
+        linkedUpaNagarID: 0),
+    Shakhaalist(
+        frequencyName: "शाखा",
+        geoUnitID: 1,
+        geoUnitName: "example abc मिलन 2",
+        geoUnitNameHindi: "example abc मिलन 2",
+        geoUnitNameMarathi: "example abc मिलन 2",
+        isSankalpit: 0,
+        preferedname: "example abc मिलन 2",
+        vayogatname: "प्रौढ व्यवसायी",
+        linkedUpaNagarID: 0),
+    Shakhaalist(
+        frequencyName: "शाखा",
+        geoUnitID: 1,
+        geoUnitName: "example abc मिलन 3",
+        geoUnitNameHindi: "example abc मिलन 3",
+        geoUnitNameMarathi: "example abc मिलन 3",
+        isSankalpit: 0,
+        preferedname: "example abc मिलन 3",
+        vayogatname: "तरुण विद्यार्थी",
+        linkedUpaNagarID: 0),
+    Shakhaalist(
+        frequencyName: "शाखा",
+        geoUnitID: 1,
+        geoUnitName: "example abc मिलन 4",
+        geoUnitNameHindi: "example abc मिलन 4",
+        geoUnitNameMarathi: "example abc मिलन 4",
+        isSankalpit: 0,
+        preferedname: "example abc मिलन 4",
+        vayogatname: "तरुण व्यवसायी",
+        linkedUpaNagarID: 0),
+    Shakhaalist(
+        frequencyName: "शाखा",
+        geoUnitID: 1,
+        geoUnitName: "example abc मिलन 5",
+        geoUnitNameHindi: "example abc मिलन 5",
+        geoUnitNameMarathi: "example abc मिलन 5",
+        isSankalpit: 0,
+        preferedname: "example abc मिलन 5",
+        vayogatname: "तरुण व्यवसायी",
+        linkedUpaNagarID: 0),
+    Shakhaalist(
+        frequencyName: "शाखा",
+        geoUnitID: 1,
+        geoUnitName: "example abc मिलन 6",
+        geoUnitNameHindi: "example abc मिलन 6",
+        geoUnitNameMarathi: "example abc मिलन 6",
+        isSankalpit: 0,
+        preferedname: "example abc मिलन 6",
+        vayogatname: "बाल/संयुक्त",
+        linkedUpaNagarID: 0),
+    Shakhaalist(
+        frequencyName: "शाखा",
+        geoUnitID: 1,
+        geoUnitName: "example abc मिलन 7",
+        geoUnitNameHindi: "example abc मिलन 7",
+        geoUnitNameMarathi: "example abc मिलन 7",
+        isSankalpit: 0,
+        preferedname: "example abc मिलन 7",
+        vayogatname: "बाल/संयुक्त",
+        linkedUpaNagarID: 0),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "${Statics.getLabel('sadbhavBaithak')} ${Statics.getLabel('Vrutta')}",
+          "${Statics.getLabel('yuvaSangam')} ${Statics.getLabel('Vrutta')}",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         // actions: [IconButton(onPressed: getExcelReportDataFun, icon: Icon(Icons.download))],
@@ -325,7 +416,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'District', // Replaced 'भाग - जिल्हा' and 'नगर'
+                          _type, // Replaced 'भाग - जिल्हा' and 'नगर'
                           style: TextStyle(
                             color: Colors.grey.shade400,
                             fontSize: 12,
@@ -334,7 +425,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                         ),
                         SizedBox(height: 4),
                         Text(
-                          'Chembur', // Assuming 'Zone - Chembur' or 'Zone: Chembur' isn't needed as user said to replace with simple English words. Just District value is good.
+                          _geo, // Assuming 'Zone - Chembur' or 'Zone: Chembur' isn't needed as user said to replace with simple English words. Just District value is good.
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
@@ -347,7 +438,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Row(
-                          children: const [
+                          children: [
                             Icon(
                               Icons.calendar_month_outlined, // Replaced gift box icon with standard calendar icon
                               color: Colors.white70,
@@ -355,7 +446,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                             ),
                             SizedBox(width: 4),
                             Text(
-                              'Date', // Replaced 'Date / दिनांक'
+                              Statics.getLabel('date2'),
                               style: TextStyle(
                                 color: Colors.white70,
                                 fontSize: 12,
@@ -365,8 +456,8 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                           ],
                         ),
                         const SizedBox(height: 4),
-                        const Text(
-                          '2026-03-13', // Date value kept as is
+                        Text(
+                          _date, // Date value kept as is
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
@@ -384,7 +475,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
 
               // Main White Card with Shadow
               mainContainer(
-                "${Statics.getLabel("youth")} & ${Statics.getLabel("professor")} ${Statics.getLabel("upastithi")}",
+                "${Statics.getLabel("youthProfessorAtt")}",
                 Column(
                   children: [
                     // Table Column Headers Row
@@ -499,7 +590,47 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                       ],
                     ),
                     const SizedBox(height: 12),
-                    // Row 3: Faculty fields
+                    // Row 3: Yuva Mandal fields
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              hintText: '${Statics.getLabel(("yuvaMandal"))}',
+                              // Replaced 'युवा व्यवसायी (< 3)' placeholder
+                              hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+                              fillColor: const Color(0xFFF0F0F2),
+                              filled: true,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide.none,
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                            ),
+                            style: const TextStyle(color: Colors.grey, fontSize: 14),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              hintText: '${Statics.getLabel(("yuvaMandal"))}',
+                              hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+                              fillColor: const Color(0xFFF0F0F2),
+                              filled: true,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide.none,
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                            ),
+                            style: const TextStyle(color: Colors.grey, fontSize: 14),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    // Row 4: Faculty fields
                     Row(
                       children: [
                         Expanded(
@@ -545,7 +676,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
 
               // Main White Card with Shadow
               mainContainer(
-                "${Statics.getLabel("schools")} & ${Statics.getLabel("vastigruh")} ${Statics.getLabel("upastithi")}",
+                "${Statics.getLabel("schoolsVastigruhAtt")}",
                 Column(
                   children: [
                     // Table Column Headers Row
@@ -804,76 +935,155 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
               mainContainer(
                 "${Statics.getLabel('shakhaMilanPratinidhitwa')}",
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // ✅ Header Row
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        InkWell(
-                          onTap: () {
-                            // if (_isSearching == false) {
-                            //   Fluttertoast.showToast(
-                            //     msg: "${Statics.getLabel('NagarSelectionImportant')}",
-                            //   );
-                            //   return;
-                            // }
-                            showShakhaalistPopup(
-                              context,
-                              shakhaalist: data?.shakhaalist ?? [],
-                              preselectedItems: checkboxShakhaSelectedItems,
-                              onSubmit: (selectedItems, counts) {
-                                setState(() {
-                                  checkboxShakhaSelectedItems = selectedItems;
-                                  countsShakhaa = counts; // model me store
-
-                                  // ✅ Total shakha count
-                                  totalShakhaCount = (data?.shakhaalist ?? []).where((item) => item.frequencyName == "शाखा").length;
-
-                                  // ✅ Selected shakha count
-                                  selectedShakhaCount = selectedItems.where((item) => item.frequencyName == "शाखा").length;
-                                  selectedShakhaaPratinidhitwaVastiIds = selectedItems.map((e) => e.geoUnitID.toString()).join(",");
-                                  // ✅ Average shakha count (percentage)
-                                  if (totalShakhaCount > 0) {
-                                    averageShakhaCount = ((selectedShakhaCount / totalShakhaCount) * 100).round().toString();
-                                  } else {
-                                    averageShakhaCount = "0";
-                                  }
-                                });
-                              },
-                            );
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            width: 120,
-                            height: 35,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.purpleAccent.shade100),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const SizedBox(width: 5),
-                                  Text(
-                                    "${Statics.getLabel('selectshakhaa')}",
-                                    style: const TextStyle(
-                                      color: Colors.purpleAccent,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                        Text(
+                          Statics.getLabel('selectshakhaa'),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: Colors.purpleAccent,
+                          ),
+                        ),
+                        Text(
+                          "${Statics.getLabel('selectedTotal')} : $selectedShakhaCount",
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.blue,
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 8),
 
-                    // ✅ Results after submit
+                    // ✅ One ExpansionTile per vayogat group
+                    ...() {
+                      final List<String> vayogatOptions = (data?.shakhaalist ?? []).map((e) => e.vayogatname ?? "").where((e) => e.isNotEmpty).toSet().toList();
+
+                      return vayogatOptions.map((vayogat) {
+                        final groupItems = ((data?.shakhaalist ?? []) + _extraList.toList()).where((e) => e.vayogatname == vayogat && e.frequencyName == "शाखा").toList();
+
+                        final selectedInGroup = checkboxShakhaSelectedItems.where((e) => e.vayogatname == vayogat).length;
+
+                        return Card(
+                          margin: const EdgeInsets.symmetric(vertical: 4),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            side: BorderSide(color: Colors.purpleAccent.shade100),
+                          ),
+                          elevation: 0,
+                          child: ExpansionTile(
+                            tilePadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                            childrenPadding: EdgeInsets.zero,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            collapsedShape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            title: Text(
+                              vayogat,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                            subtitle: Text(
+                              "${Statics.getLabel('Total')} : ${groupItems.length}   •   ${Statics.getLabel('selectedTotal')} : $selectedInGroup",
+                              style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                            ),
+                            // ✅ Leading checkbox: select/deselect entire group
+                            leading: Checkbox(
+                              tristate: true,
+                              value: selectedInGroup == 0
+                                  ? false
+                                  : selectedInGroup == groupItems.length
+                                      ? true
+                                      : null,
+                              activeColor: Colors.purpleAccent,
+                              onChanged: (val) {
+                                setState(() {
+                                  if (val == true) {
+                                    // Add all from group not already added
+                                    for (var item in groupItems) {
+                                      if (!checkboxShakhaSelectedItems.contains(item)) {
+                                        checkboxShakhaSelectedItems.add(item);
+                                      }
+                                    }
+                                  } else {
+                                    // Remove all from group
+                                    checkboxShakhaSelectedItems.removeWhere((item) => item.vayogatname == vayogat);
+                                  }
+                                  _recalculateShakhaCounts(data);
+                                });
+                              },
+                            ),
+                            children: [
+                              const Divider(height: 1),
+                              ...groupItems.map((item) {
+                                final isSelected = checkboxShakhaSelectedItems.contains(item);
+                                return InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      if (isSelected) {
+                                        checkboxShakhaSelectedItems.remove(item);
+                                      } else {
+                                        checkboxShakhaSelectedItems.add(item);
+                                      }
+                                      _recalculateShakhaCounts(data);
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                    child: Row(
+                                      children: [
+                                        Checkbox(
+                                          value: isSelected,
+                                          activeColor: Colors.purpleAccent,
+                                          onChanged: (checked) {
+                                            setState(() {
+                                              if (checked == true) {
+                                                checkboxShakhaSelectedItems.add(item);
+                                              } else {
+                                                checkboxShakhaSelectedItems.remove(item);
+                                              }
+                                              _recalculateShakhaCounts(data);
+                                            });
+                                          },
+                                        ),
+                                        const SizedBox(width: 6),
+                                        Expanded(
+                                          child: Text(
+                                            item.preferedname ?? "",
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              color: isSelected ? Colors.purpleAccent.shade700 : Colors.black87,
+                                              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            ],
+                          ),
+                        );
+                      }).toList();
+                    }(),
+
+                    const SizedBox(height: 12),
+
+                    // ✅ Summary rows
                     SingleColumnRow(
                       txtString: "${Statics.getLabel('Total')} ${Statics.getLabel('Shaakhaa')} ",
-                      value: "${(data?.shakhaalist ?? []).where((item) => item.frequencyName == "शाखा").length}",
+                      value: "${((data?.shakhaalist ?? []) + _extraList.toList()).where((item) => item.frequencyName == "शाखा").length}",
                     ),
                     SingleColumnRow(
                       txtString: " ${Statics.getLabel('Shaakhaa')} ${Statics.getLabel('pratinidhitva')}",
@@ -882,8 +1092,8 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                     SingleColumnRow(
                       rowColor: Colors.grey.shade300,
                       txtString: " ${Statics.getLabel('Shaakhaa')} ${Statics.getLabel('average')} ${Statics.getLabel('pratinidhitva')} ",
-                      value: ((data?.shakhaalist ?? []).where((item) => item.frequencyName == "शाखा").length > 0
-                              ? ((selectedShakhaCount / (data?.shakhaalist ?? []).where((item) => item.frequencyName == "शाखा").length) * 100).round().toString()
+                      value: (((data?.shakhaalist ?? []) + _extraList.toList()).where((item) => item.frequencyName == "शाखा").length > 0
+                              ? ((selectedShakhaCount / ((data?.shakhaalist ?? []) + _extraList.toList()).where((item) => item.frequencyName == "शाखा").length) * 100).round().toString()
                               : "0") +
                           " %",
                     ),
@@ -988,6 +1198,35 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
   int selectedShakhaCount = 0;
   String averageShakhaCount = "0";
   String? selectedShakhaaPratinidhitwaVastiIds;
+
+  void _recalculateShakhaCounts(GetVijayadashamiInitModel? data) {
+    // ✅ Total shakha count
+    totalShakhaCount = (data?.shakhaalist ?? []).where((item) => item.frequencyName == "शाखा").length;
+
+    // ✅ Selected shakha count
+    selectedShakhaCount = checkboxShakhaSelectedItems.where((item) => item.frequencyName == "शाखा").length;
+
+    // ✅ Comma-separated IDs
+    selectedShakhaaPratinidhitwaVastiIds = checkboxShakhaSelectedItems.map((e) => e.geoUnitID.toString()).join(",");
+
+    // ✅ Average percentage
+    if (totalShakhaCount > 0) {
+      averageShakhaCount = ((selectedShakhaCount / totalShakhaCount) * 100).round().toString();
+    } else {
+      averageShakhaCount = "0";
+    }
+
+    // ✅ Build VastiCounts
+    final Map<String, int> vayogatCounts = {};
+    for (var item in checkboxShakhaSelectedItems) {
+      final key = item.vayogatname ?? "Unknown";
+      vayogatCounts[key] = (vayogatCounts[key] ?? 0) + 1;
+    }
+    countsShakhaa = VastiCounts(
+      prakarCounts: {},
+      vayogatCounts: vayogatCounts,
+    );
+  }
 
   Future<void> showShakhaalistPopup(
     BuildContext context, {
@@ -1198,333 +1437,333 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
     );
   }
 
-  Future<void> showVisheshAtithiSelectionPopup(BuildContext context, {sarsajjanshaktiList, sanyaprabhaviList}) async {
-    print("showVisheshAtithiSelectionPopup onTap >>>>>>>>>>>>>>> ");
-    // final _sarsajjanshaktiList = data?.vastisarsajjanshakti ?? [];
-    // final _sanyaprabhaviList = data?.vastisanyaprabhavi ?? [];
-
-    await showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (ctx) {
-        if (vruttaData == null) {
-          return Center(child: CircularProgressIndicator());
-        }
-        return StatefulBuilder(
-          builder: (ctnx, set) {
-            return AlertDialog(
-              clipBehavior: Clip.antiAlias,
-              contentPadding: EdgeInsets.zero,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-              content: Container(
-                // padding: const EdgeInsets.all(16),
-                width: double.maxFinite,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    /// Title with Close Button
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-                      // decoration: const BoxDecoration(
-                      //   gradient: LinearGradient(
-                      //     colors: [Colors.purple, Colors.purpleAccent],
-                      //     begin: Alignment.centerLeft,
-                      //     end: Alignment.centerRight,
-                      //   ),
-                      // ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            Statics.getLabel('presentMahanubhav'),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                              color: Colors.black,
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.close, color: Colors.red),
-                            onPressed: () => Navigator.pop(ctnx),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Flexible(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            // SizedBox(height: 24),
-                            Row(
-                              spacing: 12,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                    backgroundColor: Colors.green,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                                  ),
-                                  onPressed: () async {
-                                    // await submitForm();
-                                    Navigator.of(context).pushReplacementNamed(
-                                      SearchSajjanAnyaScreen.routeName,
-                                      arguments: {'geoUnitId': _selectedGeoUnitId},
-                                    ).then(
-                                      (value) async {
-                                        await _getForm();
-                                        setState(() {});
-                                      },
-                                    );
-                                  },
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(
-                                        Icons.search,
-                                        color: Colors.white,
-                                      ),
-                                      Text(
-                                        Statics.getLabel('Search'),
-                                        style: const TextStyle(color: Colors.white),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                OutlinedButton(
-                                  style: OutlinedButton.styleFrom(
-                                    side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                                  ),
-                                  onPressed: () async {
-                                    //await submitForm();
-                                    Navigator.of(context).pushReplacementNamed(
-                                      AddVishisthaAtithi.routeName,
-                                      arguments: {'geoUnitId': _selectedGeoUnitId},
-                                    ).then(
-                                      (value) async {
-                                        await _getForm();
-                                        setState(() {});
-                                      },
-                                    );
-                                  },
-                                  child: Text(
-                                    Statics.getLabel('fillNewRecord'),
-                                    style: const TextStyle(color: Colors.purpleAccent),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 6),
-                            Flexible(
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  children: [
-                                    /// Content
-                                    const SizedBox(height: 12),
-                                    Text(
-                                      Statics.getLabel('SajjanShakti'),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
-                                        color: Colors.blueGrey,
-                                      ),
-                                    ),
-                                    const Divider(),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.black12),
-                                        borderRadius: BorderRadius.circular(12),
-                                        color: Colors.white,
-                                      ),
-                                      child: Table(
-                                        border: TableBorder.symmetric(
-                                          inside: const BorderSide(color: Colors.black12),
-                                        ),
-                                        columnWidths: const {
-                                          0: FixedColumnWidth(50),
-                                        },
-                                        children: [
-                                          // Header
-                                          TableRow(
-                                            decoration: BoxDecoration(
-                                              color: Colors.blue.shade50,
-                                            ),
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsets.all(8),
-                                                child: Text("✔", style: TextStyle(fontWeight: FontWeight.bold)),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.all(8),
-                                                child: Text(Statics.getLabel("Name"), style: TextStyle(fontWeight: FontWeight.bold)),
-                                              ),
-                                            ],
-                                          ),
-                                          ...sarsajjanshaktiList.map((item) {
-                                            return TableRow(
-                                              children: [
-                                                Center(
-                                                    child: Checkbox(
-                                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                                  value: selectedSajjanshaktiItems.any((x) => x.pkid == item.pkid),
-                                                  onChanged: (val) {
-                                                    set(() {
-                                                      if (val == true) {
-                                                        selectedSajjanshaktiItems.add(item);
-                                                      } else {
-                                                        selectedSajjanshaktiItems.removeWhere((x) => x.pkid == item.pkid);
-                                                      }
-                                                    });
-                                                    selectedSajjanshaktiItemsIds = selectedSajjanshaktiItems.map((e) => e.pkid.toString()).join(",");
-                                                    // String anyaIds = selectedAnyaprabhavi.map((e) => e.pkId.toString()).join(",");
-                                                    log(selectedSajjanshaktiItemsIds.toString());
-                                                    log("-----------------------------");
-                                                    // log(anyaIds);
-
-                                                    // onSubmit(sajIds, anyaIds, selectedSajjanshakti, selectedAnyaprabhavi);
-                                                    set(() {});
-                                                  },
-                                                )),
-                                                Padding(
-                                                  padding: const EdgeInsets.all(8),
-                                                  child: Text(item.name ?? "Unknown"),
-                                                ),
-                                              ],
-                                            );
-                                          }),
-                                        ],
-                                      ),
-                                    ),
-
-                                    const SizedBox(height: 12),
-
-                                    /// Anya Prabhavi Lok
-                                    Text(
-                                      Statics.getLabel('anyaPrabhaviLok'),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
-                                        color: Colors.blueGrey,
-                                      ),
-                                    ),
-                                    const Divider(),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.black12),
-                                        borderRadius: BorderRadius.circular(12),
-                                        color: Colors.white,
-                                      ),
-                                      child: Table(
-                                        border: TableBorder.symmetric(
-                                          inside: const BorderSide(color: Colors.black12),
-                                        ),
-                                        columnWidths: const {
-                                          0: FixedColumnWidth(50),
-                                        },
-                                        children: [
-                                          // Header
-                                          TableRow(
-                                            decoration: BoxDecoration(
-                                              color: Colors.blue.shade50,
-                                            ),
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsets.all(8),
-                                                child: Text("✔", style: TextStyle(fontWeight: FontWeight.bold)),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.all(8),
-                                                child: Text(Statics.getLabel("Name"), style: TextStyle(fontWeight: FontWeight.bold)),
-                                              ),
-                                            ],
-                                          ),
-                                          ...sanyaprabhaviList.map((item) {
-                                            return TableRow(
-                                              children: [
-                                                Center(
-                                                    child: Checkbox(
-                                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                                  value: selectedAnyaprabhaviItems.any((x) => x.pkId == item.pkId),
-                                                  onChanged: (val) {
-                                                    set(() {
-                                                      if (val == true) {
-                                                        selectedAnyaprabhaviItems.add(item);
-                                                      } else {
-                                                        selectedAnyaprabhaviItems.removeWhere((x) => x.pkId == item.pkId);
-                                                      }
-                                                    });
-                                                    // String sajIds = selectedSajjanshakti.map((e) => e.pkid.toString()).join(",");
-                                                    selectedAnyaprabhaviItemsIds = selectedAnyaprabhaviItems.map((e) => e.pkId.toString()).join(",");
-
-                                                    // onSubmit(sajIds, anyaIds, selectedSajjanshakti, selectedAnyaprabhavi);
-                                                    // log(sajIds);
-                                                    log(selectedAnyaprabhaviItemsIds.toString());
-                                                    set(() {});
-                                                  },
-                                                )),
-                                                Padding(
-                                                  padding: const EdgeInsets.all(8),
-                                                  child: Text(item.name ?? "Unknown"),
-                                                ),
-                                              ],
-                                            );
-                                          }),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 12),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.purpleAccent,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
-                                    onPressed: () async {
-                                      set(() {});
-                                      Navigator.pop(ctx);
-                                      setState(() {});
-                                    },
-                                    child: Text(
-                                      Statics.getLabel('Submit'),
-                                      style: const TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 24),
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
+  // Future<void> showVisheshAtithiSelectionPopup(BuildContext context, {sarsajjanshaktiList, sanyaprabhaviList}) async {
+  //   print("showVisheshAtithiSelectionPopup onTap >>>>>>>>>>>>>>> ");
+  //   // final _sarsajjanshaktiList = data?.vastisarsajjanshakti ?? [];
+  //   // final _sanyaprabhaviList = data?.vastisanyaprabhavi ?? [];
+  //
+  //   await showDialog(
+  //     context: context,
+  //     barrierDismissible: false,
+  //     builder: (ctx) {
+  //       if (vruttaData == null) {
+  //         return Center(child: CircularProgressIndicator());
+  //       }
+  //       return StatefulBuilder(
+  //         builder: (ctnx, set) {
+  //           return AlertDialog(
+  //             clipBehavior: Clip.antiAlias,
+  //             contentPadding: EdgeInsets.zero,
+  //             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+  //             insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+  //             content: Container(
+  //               // padding: const EdgeInsets.all(16),
+  //               width: double.maxFinite,
+  //               child: Column(
+  //                 mainAxisSize: MainAxisSize.min,
+  //                 children: [
+  //                   /// Title with Close Button
+  //                   Container(
+  //                     width: double.infinity,
+  //                     padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+  //                     // decoration: const BoxDecoration(
+  //                     //   gradient: LinearGradient(
+  //                     //     colors: [Colors.purple, Colors.purpleAccent],
+  //                     //     begin: Alignment.centerLeft,
+  //                     //     end: Alignment.centerRight,
+  //                     //   ),
+  //                     // ),
+  //                     child: Row(
+  //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                       children: [
+  //                         Text(
+  //                           Statics.getLabel('presentMahanubhav'),
+  //                           style: const TextStyle(
+  //                             fontWeight: FontWeight.bold,
+  //                             fontSize: 18,
+  //                             color: Colors.black,
+  //                           ),
+  //                         ),
+  //                         IconButton(
+  //                           icon: const Icon(Icons.close, color: Colors.red),
+  //                           onPressed: () => Navigator.pop(ctnx),
+  //                         ),
+  //                       ],
+  //                     ),
+  //                   ),
+  //                   Flexible(
+  //                     child: Padding(
+  //                       padding: const EdgeInsets.symmetric(horizontal: 16),
+  //                       child: Column(
+  //                         mainAxisSize: MainAxisSize.min,
+  //                         children: [
+  //                           // SizedBox(height: 24),
+  //                           Row(
+  //                             spacing: 12,
+  //                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                             children: [
+  //                               ElevatedButton(
+  //                                 style: ElevatedButton.styleFrom(
+  //                                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+  //                                   backgroundColor: Colors.green,
+  //                                   shape: RoundedRectangleBorder(
+  //                                     borderRadius: BorderRadius.circular(12),
+  //                                   ),
+  //                                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+  //                                 ),
+  //                                 onPressed: () async {
+  //                                   // await submitForm();
+  //                                   Navigator.of(context).pushReplacementNamed(
+  //                                     SearchSajjanAnyaScreen.routeName,
+  //                                     arguments: {'geoUnitId': _selectedGeoUnitId},
+  //                                   ).then(
+  //                                     (value) async {
+  //                                       await _getForm();
+  //                                       setState(() {});
+  //                                     },
+  //                                   );
+  //                                 },
+  //                                 child: Row(
+  //                                   mainAxisSize: MainAxisSize.min,
+  //                                   children: [
+  //                                     Icon(
+  //                                       Icons.search,
+  //                                       color: Colors.white,
+  //                                     ),
+  //                                     Text(
+  //                                       Statics.getLabel('Search'),
+  //                                       style: const TextStyle(color: Colors.white),
+  //                                     ),
+  //                                   ],
+  //                                 ),
+  //                               ),
+  //                               OutlinedButton(
+  //                                 style: OutlinedButton.styleFrom(
+  //                                   side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
+  //                                   shape: RoundedRectangleBorder(
+  //                                     borderRadius: BorderRadius.circular(12),
+  //                                   ),
+  //                                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+  //                                 ),
+  //                                 onPressed: () async {
+  //                                   //await submitForm();
+  //                                   Navigator.of(context).pushReplacementNamed(
+  //                                     AddVishisthaAtithi.routeName,
+  //                                     arguments: {'geoUnitId': _selectedGeoUnitId},
+  //                                   ).then(
+  //                                     (value) async {
+  //                                       await _getForm();
+  //                                       setState(() {});
+  //                                     },
+  //                                   );
+  //                                 },
+  //                                 child: Text(
+  //                                   Statics.getLabel('fillNewRecord'),
+  //                                   style: const TextStyle(color: Colors.purpleAccent),
+  //                                 ),
+  //                               ),
+  //                             ],
+  //                           ),
+  //                           SizedBox(height: 6),
+  //                           Flexible(
+  //                             child: SingleChildScrollView(
+  //                               child: Column(
+  //                                 children: [
+  //                                   /// Content
+  //                                   const SizedBox(height: 12),
+  //                                   Text(
+  //                                     Statics.getLabel('SajjanShakti'),
+  //                                     style: const TextStyle(
+  //                                       fontWeight: FontWeight.w600,
+  //                                       fontSize: 16,
+  //                                       color: Colors.blueGrey,
+  //                                     ),
+  //                                   ),
+  //                                   const Divider(),
+  //                                   Container(
+  //                                     decoration: BoxDecoration(
+  //                                       border: Border.all(color: Colors.black12),
+  //                                       borderRadius: BorderRadius.circular(12),
+  //                                       color: Colors.white,
+  //                                     ),
+  //                                     child: Table(
+  //                                       border: TableBorder.symmetric(
+  //                                         inside: const BorderSide(color: Colors.black12),
+  //                                       ),
+  //                                       columnWidths: const {
+  //                                         0: FixedColumnWidth(50),
+  //                                       },
+  //                                       children: [
+  //                                         // Header
+  //                                         TableRow(
+  //                                           decoration: BoxDecoration(
+  //                                             color: Colors.blue.shade50,
+  //                                           ),
+  //                                           children: [
+  //                                             Padding(
+  //                                               padding: EdgeInsets.all(8),
+  //                                               child: Text("✔", style: TextStyle(fontWeight: FontWeight.bold)),
+  //                                             ),
+  //                                             Padding(
+  //                                               padding: EdgeInsets.all(8),
+  //                                               child: Text(Statics.getLabel("Name"), style: TextStyle(fontWeight: FontWeight.bold)),
+  //                                             ),
+  //                                           ],
+  //                                         ),
+  //                                         ...sarsajjanshaktiList.map((item) {
+  //                                           return TableRow(
+  //                                             children: [
+  //                                               Center(
+  //                                                   child: Checkbox(
+  //                                                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+  //                                                 value: selectedSajjanshaktiItems.any((x) => x.pkid == item.pkid),
+  //                                                 onChanged: (val) {
+  //                                                   set(() {
+  //                                                     if (val == true) {
+  //                                                       selectedSajjanshaktiItems.add(item);
+  //                                                     } else {
+  //                                                       selectedSajjanshaktiItems.removeWhere((x) => x.pkid == item.pkid);
+  //                                                     }
+  //                                                   });
+  //                                                   selectedSajjanshaktiItemsIds = selectedSajjanshaktiItems.map((e) => e.pkid.toString()).join(",");
+  //                                                   // String anyaIds = selectedAnyaprabhavi.map((e) => e.pkId.toString()).join(",");
+  //                                                   log(selectedSajjanshaktiItemsIds.toString());
+  //                                                   log("-----------------------------");
+  //                                                   // log(anyaIds);
+  //
+  //                                                   // onSubmit(sajIds, anyaIds, selectedSajjanshakti, selectedAnyaprabhavi);
+  //                                                   set(() {});
+  //                                                 },
+  //                                               )),
+  //                                               Padding(
+  //                                                 padding: const EdgeInsets.all(8),
+  //                                                 child: Text(item.name ?? "Unknown"),
+  //                                               ),
+  //                                             ],
+  //                                           );
+  //                                         }),
+  //                                       ],
+  //                                     ),
+  //                                   ),
+  //
+  //                                   const SizedBox(height: 12),
+  //
+  //                                   /// Anya Prabhavi Lok
+  //                                   Text(
+  //                                     Statics.getLabel('anyaPrabhaviLok'),
+  //                                     style: const TextStyle(
+  //                                       fontWeight: FontWeight.w600,
+  //                                       fontSize: 16,
+  //                                       color: Colors.blueGrey,
+  //                                     ),
+  //                                   ),
+  //                                   const Divider(),
+  //                                   Container(
+  //                                     decoration: BoxDecoration(
+  //                                       border: Border.all(color: Colors.black12),
+  //                                       borderRadius: BorderRadius.circular(12),
+  //                                       color: Colors.white,
+  //                                     ),
+  //                                     child: Table(
+  //                                       border: TableBorder.symmetric(
+  //                                         inside: const BorderSide(color: Colors.black12),
+  //                                       ),
+  //                                       columnWidths: const {
+  //                                         0: FixedColumnWidth(50),
+  //                                       },
+  //                                       children: [
+  //                                         // Header
+  //                                         TableRow(
+  //                                           decoration: BoxDecoration(
+  //                                             color: Colors.blue.shade50,
+  //                                           ),
+  //                                           children: [
+  //                                             Padding(
+  //                                               padding: EdgeInsets.all(8),
+  //                                               child: Text("✔", style: TextStyle(fontWeight: FontWeight.bold)),
+  //                                             ),
+  //                                             Padding(
+  //                                               padding: EdgeInsets.all(8),
+  //                                               child: Text(Statics.getLabel("Name"), style: TextStyle(fontWeight: FontWeight.bold)),
+  //                                             ),
+  //                                           ],
+  //                                         ),
+  //                                         ...sanyaprabhaviList.map((item) {
+  //                                           return TableRow(
+  //                                             children: [
+  //                                               Center(
+  //                                                   child: Checkbox(
+  //                                                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+  //                                                 value: selectedAnyaprabhaviItems.any((x) => x.pkId == item.pkId),
+  //                                                 onChanged: (val) {
+  //                                                   set(() {
+  //                                                     if (val == true) {
+  //                                                       selectedAnyaprabhaviItems.add(item);
+  //                                                     } else {
+  //                                                       selectedAnyaprabhaviItems.removeWhere((x) => x.pkId == item.pkId);
+  //                                                     }
+  //                                                   });
+  //                                                   // String sajIds = selectedSajjanshakti.map((e) => e.pkid.toString()).join(",");
+  //                                                   selectedAnyaprabhaviItemsIds = selectedAnyaprabhaviItems.map((e) => e.pkId.toString()).join(",");
+  //
+  //                                                   // onSubmit(sajIds, anyaIds, selectedSajjanshakti, selectedAnyaprabhavi);
+  //                                                   // log(sajIds);
+  //                                                   log(selectedAnyaprabhaviItemsIds.toString());
+  //                                                   set(() {});
+  //                                                 },
+  //                                               )),
+  //                                               Padding(
+  //                                                 padding: const EdgeInsets.all(8),
+  //                                                 child: Text(item.name ?? "Unknown"),
+  //                                               ),
+  //                                             ],
+  //                                           );
+  //                                         }),
+  //                                       ],
+  //                                     ),
+  //                                   ),
+  //                                 ],
+  //                               ),
+  //                             ),
+  //                           ),
+  //                           SizedBox(height: 12),
+  //                           Row(
+  //                             children: [
+  //                               Expanded(
+  //                                 child: ElevatedButton(
+  //                                   style: ElevatedButton.styleFrom(
+  //                                     backgroundColor: Colors.purpleAccent,
+  //                                     shape: RoundedRectangleBorder(
+  //                                       borderRadius: BorderRadius.circular(12),
+  //                                     ),
+  //                                   ),
+  //                                   onPressed: () async {
+  //                                     set(() {});
+  //                                     Navigator.pop(ctx);
+  //                                     setState(() {});
+  //                                   },
+  //                                   child: Text(
+  //                                     Statics.getLabel('Submit'),
+  //                                     style: const TextStyle(color: Colors.white),
+  //                                   ),
+  //                                 ),
+  //                               ),
+  //                             ],
+  //                           ),
+  //                           SizedBox(height: 24),
+  //                         ],
+  //                       ),
+  //                     ),
+  //                   )
+  //                 ],
+  //               ),
+  //             ),
+  //           );
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
 
   Widget vaktaTable() {
     return Column(

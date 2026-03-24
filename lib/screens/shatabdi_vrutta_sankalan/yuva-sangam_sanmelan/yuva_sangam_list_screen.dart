@@ -494,25 +494,25 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
       district: Statics.getLabel("Bhaag"),
       taluka: 'Taluka',
       date: '25/03/2026',
-      locationName: 'Chandur',
+      locationName: 'मुंबई -> परळ -> मुंबा देवी',
     ),
     LocationCard(
       district: Statics.getLabel("Nagar"),
       taluka: 'Taluka',
       date: '20/03/2026',
-      locationName: 'Nirmal',
+      locationName: 'ठाणे -> वसई -> निर्मळ',
     ),
     LocationCard(
       district: Statics.getLabel("Mandal"),
       taluka: 'Taluka',
       date: '29/03/2026',
-      locationName: 'Naigaon',
+      locationName: 'पालघर -> वाडा -> मौज',
     ),
     LocationCard(
       district: Statics.getLabel("Bhaag"),
       taluka: 'Taluka',
       date: '02/04/2026',
-      locationName: 'Thane',
+      locationName: 'मुंबई -> गोरेगाव -> बोरिवली',
     )
   ];
 
@@ -656,7 +656,11 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
                           // ── Edit Button ───────────────────────────────────────────
                           Center(
                             child: GestureDetector(
-                              onTap: () => Navigator.of(context).pushNamed(YuvaSangamFormScreen.routeName),
+                              onTap: () => Navigator.of(context).pushNamed(YuvaSangamFormScreen.routeName, arguments: {
+                                "type": _item.district,
+                                "date": _item.date,
+                                "geo": _item.locationName,
+                              }),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [

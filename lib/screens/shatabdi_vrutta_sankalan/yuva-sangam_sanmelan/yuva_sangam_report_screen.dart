@@ -276,6 +276,14 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
       Statics.getLabel('yuvaReportTable14'),
       Statics.getLabel('yuvaReportTable15'),
       Statics.getLabel('yuvaReportTable16'),
+      Statics.getLabel('yuvaReportTable17'),
+      Statics.getLabel('yuvaReportTable18'),
+      Statics.getLabel('yuvaReportTable19'),
+      Statics.getLabel('yuvaReportTable20'),
+      Statics.getLabel('yuvaReportTable21'),
+      Statics.getLabel('yuvaReportTable22'),
+      Statics.getLabel('yuvaReportTable23'),
+      Statics.getLabel('yuvaReportTable24'),
     ];
 
     return Row(
@@ -423,6 +431,14 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                         DataCell(Center(child: Text(level.totalpresentcount.toString()))),
                         DataCell(Center(child: Text(level.totalpresentcount.toString()))),
                         DataCell(Center(child: Text(level.totalpresentcount.toString()))),
+                        DataCell(Center(child: Text(level.presentmale.toString()))),
+                        DataCell(Center(child: Text(level.totalfemalecount.toString()))),
+                        DataCell(Center(child: Text(level.presentfemale.toString()))),
+                        DataCell(Center(child: Text(level.totalcount.toString()))),
+                        DataCell(Center(child: Text(level.totalpresentcount.toString()))),
+                        DataCell(Center(child: Text(level.totalpresentcount.toString()))),
+                        DataCell(Center(child: Text(level.totalpresentcount.toString()))),
+                        DataCell(Center(child: Text(level.totalpresentcount.toString()))),
                       ]);
                     }).toList() +
                     [
@@ -501,6 +517,46 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                         DataCell(Center(
                             child: Text(
                           data.fold(0, (sum, item) => sum + (item.presentfemale ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.totalcount ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.totalpresentcount ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.totalcount ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.totalpresentcount ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.totalfemalecount ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.presentfemale ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.totalcount ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.totalpresentcount ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
