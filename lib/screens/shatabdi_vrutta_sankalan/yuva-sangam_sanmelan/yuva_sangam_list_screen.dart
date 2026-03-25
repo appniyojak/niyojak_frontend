@@ -156,23 +156,23 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
     });
   }
 
-  createSadbhavBaithakFun() async {
-    Map<String, dynamic> formData = {
-      "id": selectedKendra?.pkid ?? 0,
-      "date": dateController.text,
-      "appuserid": int.parse(Statics.userDetails['userID']),
-    };
-
-    String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
-    log("Form Data (JSON):\n$formattedJson");
-    final _res = await Statics.CreatePramukhJanData(context: context, inputJson: formData, showLoader: true);
-    if (_res) {
-      Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
-      Navigator.pop(context);
-      await getBaithakListData(selectedKendra?.pkid ?? 0);
-    }
-    // getFormData();
-  }
+  // createSadbhavBaithakFun() async {
+  //   Map<String, dynamic> formData = {
+  //     "id": selectedKendra?.pkid ?? 0,
+  //     "date": dateController.text,
+  //     "appuserid": int.parse(Statics.userDetails['userID']),
+  //   };
+  //
+  //   String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
+  //   log("Form Data (JSON):\n$formattedJson");
+  //   final _res = await Statics.CreatePramukhJanData(context: context, inputJson: formData, showLoader: true);
+  //   if (_res) {
+  //     Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+  //     Navigator.pop(context);
+  //     await getBaithakListData(selectedKendra?.pkid ?? 0);
+  //   }
+  //   // getFormData();
+  // }
 
   String? selectedSajjanshaktiItemsIds;
   String? selectedAnyaprabhaviItemsIds;
@@ -249,7 +249,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
                     color: Theme.of(context).primaryColor,
                     disabledColor: Colors.grey,
                     textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                    onPressed: dateController.text.trim().isEmpty ? null : createSadbhavBaithakFun,
+                    onPressed: dateController.text.trim().isEmpty ? null : () => Navigator.pop(context),
                     child: Text(
                       Statics.getLabel('Submit'),
                       style: TextStyle(fontSize: 16),
@@ -265,43 +265,22 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
     );
   }
 
-  Future<void> submitForm(pkId, ct, {bool fromPopup = false, bool showLoader = true}) async {
-    int givenCount = int.tryParse(txtGivenGroupNameController.text) ?? 0;
-
-    int presentCount = selectedSajjanshaktiItems.length + selectedAnyaprabhaviItems.length;
-
-    if (givenCount > presentCount) {
-      Statics.showToast(Statics.getLabel("jnyatiValidationMessage"));
-      return;
-    }
-
-    if ((selectedSajjanshaktiItemsIds == null || selectedSajjanshaktiItemsIds!.isEmpty) &&
-        (selectedAnyaprabhaviItemsIds == null || selectedAnyaprabhaviItemsIds!.isEmpty) &&
-        (txtGivenGroupNameController.text == "0" || txtGivenGroupNameController.text.isEmpty)) {
-      if (!fromPopup) Statics.showToast(Statics.getLabel("submitValidation"));
-      return;
-    }
-
+  changeDateData() async {
     Map<String, dynamic> formData = {
-      "pkid": pkId,
-      "date": dateController.text.trim(),
-      "sajjanids": selectedSajjanshaktiItemsIds ?? "",
-      "annyaids": selectedAnyaprabhaviItemsIds ?? "",
-      "peoplecount": 0 ?? int.tryParse(txtGivenGroupNameController.text) ?? 0,
-      "geounitid": _selectedGeoUnitId,
+      "id": selectedKendra?.pkid ?? 0,
+      "date": dateController.text,
       "appuserid": int.parse(Statics.userDetails['userID']),
     };
 
     String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
     log("Form Data (JSON):\n$formattedJson");
-
-    final _data = await Statics.SavePramukhJanVruttaData(context: context, inputJson: formData, showLoader: showLoader);
-    if (_data != null) {
-      Navigator.pop(ct);
-      setState(() {
-        kendraBaithakList = _data;
-      });
+    final _res = await Statics.UpdateYuvaSangamDateData(context: context, inputJson: formData, showLoader: true);
+    if (_res) {
+      Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+      Navigator.pop(context);
+      // await getBaithakListData(selectedKendra?.pkid ?? 0);
     }
+    // getFormData();
   }
 
   clearForm() async {
@@ -1106,7 +1085,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
                                   color: Theme.of(context).primaryColor,
                                   disabledColor: Colors.grey,
                                   textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                                  onPressed: dateController.text.trim().isEmpty ? null : createSadbhavBaithakFun,
+                                  onPressed: dateController.text.trim().isEmpty ? null : () => Navigator.pop(context),
                                   child: Text(
                                     Statics.getLabel('Submit'),
                                     style: TextStyle(fontSize: 16),
@@ -1393,7 +1372,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
                                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                                     ),
                                     onPressed: () async {
-                                      await submitForm(vruttaData?.pkid, context, fromPopup: true);
+                                      // await submitForm(vruttaData?.pkid, context, fromPopup: true);
                                       // Navigator.of(context).pushNamed(
                                       //   AddSajjanAnyaPrakukhJanScreen.routeName,
                                       //   arguments: {'geoUnitId': (vruttaData?.geounitid ?? 0).toString()},
@@ -1623,7 +1602,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
                               //   Statics.showToast(Statics.getLabel("workInProgress"));
                               // },
                               onPressed: () async {
-                                submitForm(vruttaData?.pkid, context);
+                                // submitForm(vruttaData?.pkid, context);
                               },
                               child: Text(
                                 Statics.getLabel('Submit'),

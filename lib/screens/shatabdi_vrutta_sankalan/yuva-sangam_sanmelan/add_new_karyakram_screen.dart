@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -61,7 +64,7 @@ class _AddNewKaryakramScreenState extends State<AddNewKaryakramScreen> {
   String? _selctedLevel = 'praant';
   String? _selctedLevelName = '';
   String _selctedLevelNames = '';
-  List<String?> _selctedLevelNameList = [];
+  List<int?> _selctedLevelList = [];
   String? _selectedGeoUnitIdForCreat;
   List<String> _selectedNagarIds = [];
 
@@ -159,7 +162,56 @@ class _AddNewKaryakramScreenState extends State<AddNewKaryakramScreen> {
     }
   }
 
-  checkIfExistsFun() async {
+  // checkIfExistsFun() async {
+  //   if (!_formKey.currentState!.validate()) {
+  //     Statics.showToast(Statics.getLabel("impInfoRequired"));
+  //     return;
+  //   }
+  //   if (dateController.text.trim().isEmpty) {
+  //     Statics.showToast(Statics.getLabel("selectDate"));
+  //     return;
+  //   }
+  //   if (([2, 3, 4].contains(_selectedKaryakramLevelId)) && txtGivenGroupNameController.text.isEmpty) {
+  //     Statics.showToast(Statics.getLabel("baithakNameValidationMessage"));
+  //     return;
+  //   }
+  //   FocusManager.instance.primaryFocus?.unfocus();
+  //   if (!((([2, 3, 4].contains(_selectedKaryakramLevelId)) && _selctedLevel == Statics.getLabel('Bhaag')) ||
+  //       _selctedLevel == karyakramLevelsList.firstWhere((e) => e.values.first == _selectedKaryakramLevelId).keys.first)) {
+  //     Statics.showToast("Please select the required GeoUnit");
+  //     return;
+  //   }
+  //
+  //   var formData = {
+  //     "stharid": _selectedKaryakramLevelId,
+  //     "geounitid": _selectedGeoUnitIdForCreat,
+  //     "id": baithakId ?? 0,
+  //     "appuserid": int.parse(Statics.userDetails['userID']),
+  //   };
+  //
+  //   final _create = await Statics.CreateYuvaSangamData(context: context, inputJson: formData, showLoader: true);
+  //   //
+  //   if (_create) {
+  //     Statics.showToast(Statics.getLabel("dataAlreadyExists"));
+  //     return;
+  //   }
+  //   setState(() {
+  //     _searched = true;
+  //     _isExpanded = false;
+  //     nagarList = _existData.nagardata ?? [];
+  //   });
+  //   if (_selectedKaryakramLevelId != 4) await createSadbhavBaithakFun();
+  // }
+
+  getNagarList() async {
+    print(_selectedGeoUnitIdForCreat);
+    await populatelinkedNagarDropdown(_selectedGeoUnitIdForCreat);
+    setState(() {
+      _searched = true;
+    });
+  }
+
+  createSadbhavBaithakFun() async {
     if (!_formKey.currentState!.validate()) {
       Statics.showToast(Statics.getLabel("impInfoRequired"));
       return;
@@ -168,60 +220,39 @@ class _AddNewKaryakramScreenState extends State<AddNewKaryakramScreen> {
       Statics.showToast(Statics.getLabel("selectDate"));
       return;
     }
-    if (([2, 3, 4].contains(_selectedKaryakramLevelId)) && txtGivenGroupNameController.text.isEmpty) {
+    if (_selectedKaryakramLevelId == 4 && txtGivenGroupNameController.text.isEmpty) {
       Statics.showToast(Statics.getLabel("baithakNameValidationMessage"));
       return;
     }
     FocusManager.instance.primaryFocus?.unfocus();
-    if (!((([2, 3, 4].contains(_selectedKaryakramLevelId)) && _selctedLevel == Statics.getLabel('Bhaag')) ||
+    if (!((_selectedKaryakramLevelId == 4 && _selctedLevel == Statics.getLabel('Bhaag')) ||
         _selctedLevel == karyakramLevelsList.firstWhere((e) => e.values.first == _selectedKaryakramLevelId).keys.first)) {
       Statics.showToast("Please select the required GeoUnit");
       return;
     }
 
-    var formData = {
-      "stharid": _selectedKaryakramLevelId,
+// last 3 (ya jitne available ho)
+    final lastThree = _selctedLevelList.length > 3 ? _selctedLevelList.sublist(_selctedLevelList.length - 3) : _selctedLevelList;
+
+// null remove karke join
+    final result = lastThree.where((e) => e != null).join(',');
+    Map<String, dynamic> formData = {
+      "yuvadate": dateController.text.trim(),
+      "trailids": result,
+      "name": txtGivenGroupNameController.text.trim(),
+      "nagarids": _selectedNagarIds.isEmpty ? "" : _selectedNagarIds.join(", "),
+      "shatapdistharlevelid": _selectedKaryakramLevelId,
       "geounitid": _selectedGeoUnitIdForCreat,
-      "id": baithakId ?? 0,
-      "appuserid": int.parse(Statics.userDetails['userID']),
+      "cuserid": int.parse(Statics.userDetails['userID']),
     };
-    //
-    if (_selectedKaryakramLevelId != 4) {
-      Statics.showToast(Statics.getLabel("dataSavedSuccessfully"));
+
+    String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
+    log("Form Data (JSON):\n$formattedJson");
+    final _res = await Statics.CreateYuvaSangamData(context: context, inputJson: formData, showLoader: true);
+    if (_res) {
+      Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
       Navigator.pop(context);
     }
-
-    final _existData = await Statics.CheckPramukhJanExistsData(context: context, inputJson: formData, showLoader: true);
-    //
-    if (_existData == null || _existData.status == "404") {
-      // Statics.showToast(Statics.getLabel("dataAlreadyExists"));
-      return;
-    }
-    setState(() {
-      _searched = true;
-      _isExpanded = false;
-      nagarList = _existData.nagardata ?? [];
-    });
-    // if ([1, 5, 6, 7].contains(_selectedKaryakramLevelId)) await createSadbhavBaithakFun();
-  }
-
-  createSadbhavBaithakFun() async {
-    // Map<String, dynamic> formData = {
-    //   "name": txtGivenGroupNameController.text.trim(),
-    //   "nagarids": _selectedNagarIds.isEmpty ? "" : _selectedNagarIds.join(", "),
-    //   "pkid": baithakId ?? 0,
-    //   "levelid": _selectedKaryakramLevelId,
-    //   "geounitid": _selectedGeoUnitIdForCreat,
-    //   "appuserid": int.parse(Statics.userDetails['userID']),
-    // };
-    //
-    // String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
-    // log("Form Data (JSON):\n$formattedJson");
-    // final _res = await Statics.CreateUpdatePramukhJanData(context: context, inputJson: formData, showLoader: true);
-    // if (_res) {
-    Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
-    Navigator.pop(context);
-    // }
     // getFormData();
   }
 
@@ -552,7 +583,7 @@ class _AddNewKaryakramScreenState extends State<AddNewKaryakramScreen> {
                         ),
                         color: Theme.of(context).primaryColor,
                         textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                        onPressed: checkIfExistsFun,
+                        onPressed: [2, 3, 4].contains(_selectedKaryakramLevelId) ? getNagarList : createSadbhavBaithakFun,
                         child: Text(
                           "${Statics.getLabel([2, 3, 4].contains(_selectedKaryakramLevelId) ? 'search' : "Add")}",
                           style: TextStyle(fontSize: 16),
@@ -562,39 +593,37 @@ class _AddNewKaryakramScreenState extends State<AddNewKaryakramScreen> {
                     ],
                   ),
                 SizedBox(height: 18),
-                if (_searched && nagarList.isNotEmpty) ...[
+                if (_searched && [2, 3, 4].contains(_selectedKaryakramLevelId) && _linkednagar != null && _linkednagar!.isNotEmpty) ...[
                   Wrap(
                     spacing: 12,
                     runSpacing: 18,
                     crossAxisAlignment: WrapCrossAlignment.center,
-                    children: nagarList
+                    children: _linkednagar!
                         .map(
                           (nagar) => IgnorePointer(
                             ignoring: _isViewOnly,
                             child: SizedBox(
                               width: MediaQuery.sizeOf(context).width * 0.4,
                               child: CheckboxListTile(
-                                value: nagar.chkstatus != 0,
-                                onChanged: nagar.chkstatus == 2
-                                    ? null
-                                    : (value) {
-                                        if (_selectedNagarIds.contains(nagar.geoUnitID.toString())) {
-                                          _selectedNagarIds.removeWhere((e) => e.toString() == nagar.geoUnitID.toString());
-                                          nagar.chkstatus = 0;
-                                        } else {
-                                          _selectedNagarIds.add(nagar.geoUnitID.toString());
-                                          nagar.chkstatus = 1;
-                                        }
-                                        setState(() {
-                                          print(nagar.chkstatus);
-                                          print(_selectedNagarIds);
-                                        });
-                                      },
+                                value: _selectedNagarIds.contains(nagar.geoUnitID.toString()),
+                                onChanged: (value) {
+                                  if (_selectedNagarIds.contains(nagar.geoUnitID.toString())) {
+                                    _selectedNagarIds.removeWhere((e) => e.toString() == nagar.geoUnitID.toString());
+                                    // nagar.chkstatus = 0;
+                                  } else {
+                                    _selectedNagarIds.add(nagar.geoUnitID.toString());
+                                    // nagar.chkstatus = 1;
+                                  }
+                                  setState(() {
+                                    // print(nagar.chkstatus);
+                                    print(_selectedNagarIds);
+                                  });
+                                },
                                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                 controlAffinity: ListTileControlAffinity.leading,
                                 dense: true,
                                 title: Text(
-                                  (nagar.geoname ?? "--"),
+                                  (nagar.geoUnitName ?? "--"),
                                   style: TextStyle(fontSize: 14),
                                 ),
                               ),
@@ -740,6 +769,7 @@ class _AddNewKaryakramScreenState extends State<AddNewKaryakramScreen> {
                   _selctedLevel = Statics.getLabel('Mahaanagar');
                   _selctedLevelName = selectedItem.name ?? "";
                   _selectedGeoUnitIdForCreat = value;
+                  _selctedLevelList.add(selectedItem.geoUnitID);
                   // _linkedMahaanagarName = selectedItem.name ?? "";
                   // _resetLinkedValues();
                 });
@@ -766,6 +796,7 @@ class _AddNewKaryakramScreenState extends State<AddNewKaryakramScreen> {
                   _selctedLevel = Statics.getLabel('Vibhaag');
                   _selctedLevelName = selectedItem.name ?? "";
                   _selectedGeoUnitIdForCreat = value;
+                  _selctedLevelList.add(selectedItem.geoUnitID);
                   // _linkedVibhaagName = selectedItem.name ?? "";
                 });
                 populatelinkedBhaagDropdown(value!);
@@ -791,6 +822,7 @@ class _AddNewKaryakramScreenState extends State<AddNewKaryakramScreen> {
                   _selctedLevelName = selectedItem.name ?? "";
                   _linkedbhaagName = selectedItem.name ?? "";
                   _selectedGeoUnitIdForCreat = value;
+                  _selctedLevelList.add(selectedItem.geoUnitID);
                   populatelinkedShaharDropdown(value!);
                   populatelinkedNagarDropdown(value);
                 });
@@ -815,6 +847,7 @@ class _AddNewKaryakramScreenState extends State<AddNewKaryakramScreen> {
                   _selctedLevel = Statics.getLabel('Nagar');
                   _selctedLevelName = selectedItem.name ?? "";
                   _linkednagarName = selectedItem.name ?? "";
+                  _selctedLevelList.add(selectedItem.geoUnitID);
                   populatelinkedUpnagarDropdown(value);
                   populatelinkedMandalDropdown('Nagar', value);
                   // populatelinkedVastiDropdown('Nagar', value);
@@ -840,6 +873,7 @@ class _AddNewKaryakramScreenState extends State<AddNewKaryakramScreen> {
                   _selctedLevel = Statics.getLabel('upnagarUpkhanda');
                   _selctedLevelName = selectedItem.name ?? "";
                   _linkedupnagarName = selectedItem.name ?? "";
+                  _selctedLevelList.add(selectedItem.geoUnitID);
                   populatelinkedMandalDropdown('Upnagar', value);
                   // populatelinkedVastiDropdown('Upnagar', value);
                 });
@@ -864,6 +898,7 @@ class _AddNewKaryakramScreenState extends State<AddNewKaryakramScreen> {
                   _selctedLevel = Statics.getLabel('Mandal');
                   _selctedLevelName = selectedItem.name ?? "";
                   _linkedmandalName = selectedItem.name ?? "";
+                  _selctedLevelList.add(selectedItem.geoUnitID);
                   // populatelinkedGraamDropdown(value);
                 });
               },

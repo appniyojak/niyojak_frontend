@@ -260,6 +260,16 @@ const String urlSavePramukhJanVrutta = baseUrlAPI + '/savepramukhjanvrutta';
 const String urlDeletePramukhJan = baseUrlAPI + '/deletepramukhjan';
 const String urlPramukhJanReport = baseUrlAPI + '/pramukhjanreport';
 
+const String urlGetAllYuvaSangam = baseUrlAPI + '/getallyuvasangam';
+const String urlCreateUpdateYuvaSangam = baseUrlAPI + '/createyuvasangammaster';
+const String urlEditYuvaSangamDate = baseUrlAPI + '/updateyuvasangammasterdate';
+// const String urlGetAllPramukhJanKaryakram = baseUrlAPI + '/getallpramukhjankendra';
+// const String urlCreatePramukhJan = baseUrlAPI + '/createpramukhjanbaithak';
+// const String urlGetPramukhJanVrutta = baseUrlAPI + '/getpramukhjanvrutta';
+const String urlSaveYuvaSangamVrutta = baseUrlAPI + '/saveyuvasangamvrutta';
+const String urlDeleteYuvaSangamJan = baseUrlAPI + '/deleteyuvasangam';
+const String urlYuvaSangamReport = baseUrlAPI + '/yuvasangamnreport';
+
 const String urlVastiSarvekshanDataDump = baseUrlAPI + '/VastisarVekshanDataDump';
 const String urlGetReleaseNotes = baseUrlAPI + '/getreleasenote';
 
@@ -5552,6 +5562,112 @@ Future<List<Bhaitakdata>?> SavePramukhJanVruttaData({required BuildContext conte
     return null;
   }
 }
+
+Future<bool> CreateYuvaSangamData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
+  if (showLoader) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  log(urlCreateUpdateYuvaSangam);
+
+  var response = await http.post(
+    Uri.parse(urlCreateUpdateYuvaSangam),
+    headers: jHeaders,
+    body: jsonEncode(inputJson), // ✅ Encode here
+  );
+
+  print("Response CreateYuvaSangamData >>>>>>>>>>>> ${response.body}");
+  print("response.statusCode: ${response.statusCode}");
+
+  if (showLoader) Navigator.of(context, rootNavigator: true).pop();
+
+  if (response.statusCode == 200) {
+    // Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+    final responseData = json.decode(response.body);
+    if (responseData["Status"].toString() == "Success" || responseData["Status"].toString() == "200") {
+      return true;
+    } else if (responseData["Status"].toString() == "409") {
+      Statics.showToast(Statics.getLabel("dataAlreadyExists"));
+      return false;
+    }
+    return false;
+  } else {
+    print("Error: ${response.statusCode} - ${response.body}");
+    Statics.showToast(Statics.getLabel('errorOccurred'));
+    return false;
+  }
+}
+
+Future<bool> UpdateYuvaSangamDateData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
+  if (showLoader) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  log(urlEditYuvaSangamDate);
+
+  var response = await http.post(
+    Uri.parse(urlEditYuvaSangamDate),
+    headers: jHeaders,
+    body: jsonEncode(inputJson), // ✅ Encode here
+  );
+
+  print("Response UpdateYuvaSangamDateData >>>>>>>>>>>> ${response.body}");
+  print("response.statusCode: ${response.statusCode}");
+
+  if (showLoader) Navigator.of(context, rootNavigator: true).pop();
+
+  if (response.statusCode == 200) {
+    // Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+    final responseData = json.decode(response.body);
+    if (responseData["Status"].toString() == "Success" || responseData["Status"].toString() == "200") {
+      return true;
+    } else if (responseData["Status"].toString() == "409" || responseData["Status"] == null) {
+      Statics.showToast(Statics.getLabel("dataAlreadyExists"));
+      return false;
+    }
+    return false;
+  } else {
+    print("Error: ${response.statusCode} - ${response.body}");
+    Statics.showToast(Statics.getLabel('errorOccurred'));
+    return false;
+  }
+}
+
+// Future<List<Bhaitakdata>?> SavePramukhJanVruttaData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
+//   if (showLoader) showLoaderDialog(context);
+//   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+//
+//   print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+//   log(urlSavePramukhJanVrutta);
+//
+//   var response = await http.post(
+//     Uri.parse(urlSavePramukhJanVrutta),
+//     headers: jHeaders,
+//     body: jsonEncode(inputJson), // ✅ Encode here
+//   );
+//
+//   print("Response SavePramukhJanVruttaData >>>>>>>>>>>> ${response.body}");
+//   print("response.statusCode: ${response.statusCode}");
+//
+//   if (showLoader) Navigator.of(context, rootNavigator: true).pop();
+//
+//   if (response.statusCode == 200) {
+//     // Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+//     final responseData = json.decode(response.body);
+//     if (responseData["Status"].toString() == "Success" || responseData["Status"].toString() == "200") {
+//       return SadbhavKendraRespModel.fromJson(responseData).bhaitakdata;
+//     }
+//     if (responseData["Status"].toString() == "404") {
+//       Statics.showToast(Statics.getLabel('baithakDateValidation'));
+//     }
+//     Statics.showToast(Statics.getLabel('errorOccurred'));
+//     return null;
+//   } else {
+//     print("Error: ${response.statusCode} - ${response.body}");
+//     Statics.showToast(Statics.getLabel('errorOccurred'));
+//     return null;
+//   }
+// }
 
 //
 Widget createWidgetFromString(BuildContext context, String label, double width, double height, Alignment alignment, {bool isTotalRow = false}) {
