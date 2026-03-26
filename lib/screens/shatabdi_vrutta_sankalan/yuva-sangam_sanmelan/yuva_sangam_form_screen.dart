@@ -6,8 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../helpers/static_data.dart' as Statics;
-import '../../../models/response_model/sadbhav_baithak_vrutta_resp_model.dart';
 import '../../../models/response_model/vijayaDashamiInitModel.dart';
+import '../../../models/response_model/yuva_sangam_vrutta_resp.dart';
 import '../../../providers/bals.dart';
 import '../../../widgets/single_column_row.dart';
 import '../vijayadashami/vijayadashami_form_view.dart';
@@ -26,7 +26,20 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
   final TextEditingController txtVaktaNameController = TextEditingController();
   final TextEditingController txtVaktaTaskController = TextEditingController();
 
-  List<NamesList> vaktaList = [];
+  TextEditingController txtExpMahaTarunController = TextEditingController();
+  TextEditingController txtPresentMahaTarunController = TextEditingController();
+  TextEditingController txtExpTaurunProfController = TextEditingController();
+  TextEditingController txtPresentTaurunProfController = TextEditingController();
+  TextEditingController txtExpYuvaMandalController = TextEditingController();
+  TextEditingController txtPresentYuvaMandalController = TextEditingController();
+  TextEditingController txtExpProfController = TextEditingController();
+  TextEditingController txtPresentProfController = TextEditingController();
+  TextEditingController txtExpMahavidController = TextEditingController();
+  TextEditingController txtPresentMahavidController = TextEditingController();
+  TextEditingController txtExpVastigruhController = TextEditingController();
+  TextEditingController txtPresentVastigruhController = TextEditingController();
+
+  List<YuvaaSpeaker> vaktaList = [];
   int? selectedVaktaIndex;
 
   bool _searched = true;
@@ -69,7 +82,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
 
   int? pkId;
 
-  // SadbhavBaithakVruttaRespModel? vruttaData;
+  YuvaVruttadata? vruttaData;
 
   Vastisarsajjanshakti? selectedPerson;
   Vastisanyaprabhavi? selectedPrabhavi;
@@ -87,16 +100,17 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
   SwayamsevakDaayitvaBAL? swDaayitva;
   StaticMasterBAL? _daayitvaForValue;
   int? _levelValue;
-  String? _aayaamValue = "";
-  String? _gatividhiValue = "";
+  int? _aayaamValue;
+  int? _gatividhiValue;
+  int? _preritSansthaValue;
   List<dynamic>? _sanghaPreritSanstha;
-  String? _preritSansthaValue = "";
   var _preritDesgCtrl = TextEditingController();
   var _preritRemarkCtrl = TextEditingController();
   var _othOrgNameCtrl = TextEditingController();
   var _othDesgCtrl = TextEditingController();
   var _othRemarksCtrl = TextEditingController();
 
+  int? _pkid;
   String _type = "";
   String _date = "";
   String _geo = "";
@@ -113,6 +127,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
   _initFormState() async {
     final _data = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
     if (_data != null) {
+      _pkid = _data["pkid"];
       _type = _data["type"];
       _date = _data["date"];
       _geo = _data["geo"];
@@ -136,49 +151,76 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
   String? selectedAnyaprabhaviItemsIds;
 
   _getForm() async {
-    // var formData = {
-    //   "ids": 2,
-    //   "AppUserID": int.parse(Statics.userDetails['userID']),
-    // };
-    // vruttaData = await Statics.GetSadbhavBaithakVruttaData(context: context, inputJson: formData);
-    // setState(() {});
-    // if (vruttaData != null) {
-    //   selectedSajjanshaktiItemsIds = vruttaData?.vastisarsajjanshakti?.where((e) => e.isVisheshdefault == 1).map((e) => e.pkid).join(',');
-    //   selectedSajjanshaktiItems = vruttaData?.vastisarsajjanshakti?.where((e) => e.isVisheshdefault == 1).toList() ?? [];
-    //   selectedAnyaprabhaviItemsIds = vruttaData?.vastisanyaprabhavi?.where((e) => e.isVisheshdefault == 1).map((e) => e.pkId).join(',');
-    //   selectedAnyaprabhaviItems = vruttaData?.vastisanyaprabhavi?.where((e) => e.isVisheshdefault == 1).toList() ?? [];
-    //
-    //   vaktaList = vruttaData?.namesList ?? [];
-    //   _selectedGeoUnitId = vruttaData?.geounitid.toString();
-    // }
-    data = await Statics.getVijayadashamiInitData(context, Statics.userDetails["userID"], "14255", "6");
-    setState(() {
-      // Initialize selected items from the preselected list
-      selectedItems = List.from(data?.shakhaalist ?? []);
+    var formData = {
+      "id": _pkid,
+      "appuserid": int.parse(Statics.userDetails['userID']),
+    };
+    vruttaData = await Statics.GetYuvaSangamVruttaData(context: context, inputJson: formData, showLoader: true);
+    setState(() {});
+    if (vruttaData != null) {
+      vaktaList = vruttaData?.yuvaaspeaker ?? [];
 
-      // Extract unique categories (e.g., Senior Professionals, etc.)
-      vayogatOptions = checkboxShakhaSelectedItems.map((e) => e.vayogatname ?? "").where((e) => e.isNotEmpty).toSet().toList();
-    });
+      txtExpMahaTarunController.text = (vruttaData?.yuvaexpectmaha ?? 0).toString();
+      txtPresentMahaTarunController.text = (vruttaData?.yuvapresentmaha ?? 0).toString();
+      txtExpTaurunProfController.text = (vruttaData?.yuvaexpecttarun ?? 0).toString();
+      txtPresentTaurunProfController.text = (vruttaData?.yuvapresenttarun ?? 0).toString();
+      txtExpYuvaMandalController.text = (vruttaData?.yuvaexpectmandal ?? 0).toString();
+      txtPresentYuvaMandalController.text = (vruttaData?.yuvapresentmandal ?? 0).toString();
+      txtExpProfController.text = (vruttaData?.yuvaexpectpradhyapak ?? 0).toString();
+      txtPresentProfController.text = (vruttaData?.yuvapresentpradhyapak ?? 0).toString();
+      txtExpMahavidController.text = (vruttaData?.mahaexpectmaha ?? 0).toString();
+      txtPresentMahavidController.text = (vruttaData?.mahapresentmaha ?? 0).toString();
+      txtExpVastigruhController.text = (vruttaData?.mahaexpectvasti ?? 0).toString();
+      txtPresentVastigruhController.text = (vruttaData?.mahapresentvasti ?? 0).toString();
+
+      txtSanmelanFormatController.text = vruttaData?.yuvadesc ?? "";
+
+      _initializeSelectionFromData(vruttaData);
+
+      // _selectedGeoUnitId = vruttaData?.geounitid.toString();
+    }
+    // data = await Statics.getVijayadashamiInitData(context, Statics.userDetails["userID"], "14255", "6");
+    // setState(() {
+    //   // Initialize selected items from the preselected list
+    //   selectedItems = List.from(data?.shakhaalist ?? []);
+    //
+    //   // Extract unique categories (e.g., Senior Professionals, etc.)
+    //   vayogatOptions = checkboxShakhaSelectedItems.map((e) => e.vayogatname ?? "").where((e) => e.isNotEmpty).toSet().toList();
+    // });
   }
 
   Future<void> submitForm({bool showLoader = true}) async {
-    if (selectedSajjanshaktiItemsIds == null || selectedSajjanshaktiItemsIds!.isEmpty || selectedAnyaprabhaviItemsIds == null || selectedAnyaprabhaviItemsIds!.isEmpty || vaktaList.isEmpty) {
-      Statics.showToast(Statics.getLabel("submitValidation"));
+    if (txtSanmelanFormatController.text.isEmpty) {
+      Statics.showToast(Statics.getLabel("impInfoRequired"));
       return;
     }
 
-    Map<String, dynamic> formData = {
-      "pkid": pkId,
-      "sajjanids": selectedSajjanshaktiItemsIds ?? "",
-      "annyaids": selectedAnyaprabhaviItemsIds ?? "",
-      "sadbhavbaithaknames": vaktaList,
-      "geounitid": _selectedGeoUnitId,
-      "AppUserID": int.parse(Statics.userDetails['userID']),
-    };
+    final formData = YuvaVruttadata(
+      pkid: _pkid,
+      cuserid: int.parse(Statics.userDetails['userID']),
+      yuvaexpectmaha: int.tryParse(txtExpMahaTarunController.text) ?? 0,
+      yuvapresentmaha: int.tryParse(txtPresentMahaTarunController.text) ?? 0,
+      yuvaexpecttarun: int.tryParse(txtExpTaurunProfController.text) ?? 0,
+      yuvapresenttarun: int.tryParse(txtPresentTaurunProfController.text) ?? 0,
+      yuvaexpectmandal: int.tryParse(txtExpYuvaMandalController.text) ?? 0,
+      yuvapresentmandal: int.tryParse(txtPresentYuvaMandalController.text) ?? 0,
+      yuvaexpectpradhyapak: int.tryParse(txtExpProfController.text) ?? 0,
+      yuvapresentpradhyapak: int.tryParse(txtPresentProfController.text) ?? 0,
+      mahaexpectmaha: int.tryParse(txtExpMahavidController.text) ?? 0,
+      mahapresentmaha: int.tryParse(txtPresentMahavidController.text) ?? 0,
+      mahaexpectvasti: int.tryParse(txtExpVastigruhController.text) ?? 0,
+      mahapresentvasti: int.tryParse(txtPresentVastigruhController.text) ?? 0,
+      yuvadesc: txtSanmelanFormatController.text.trim(),
+      yuvaaspeaker: vaktaList,
+      yuvasangampresentmahashaakha: selectedPresentMaha.where((e) => e.geoUnitID != null).map((e) => e.geoUnitID.toString()).join(","),
+      yuvasangampresentmahashaakhasankalpit: selectedSankalpitMaha.where((e) => e.geoUnitID != null).map((e) => e.geoUnitID.toString()).join(","),
+      yuvasangampresentvartmantarun: selectedPresentTarun.where((e) => e.geoUnitID != null).map((e) => e.geoUnitID.toString()).join(","),
+      yuvasangampresentvartmantarunsankalpit: selectedSankalpitTarun.where((e) => e.geoUnitID != null).map((e) => e.geoUnitID.toString()).join(","),
+    );
 
-    String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
+    String formattedJson = const JsonEncoder.withIndent('  ').convert(formData.toJson());
     log("Form Data (JSON):\n$formattedJson");
-    await Statics.SaveSadbhavBaithakVruttaData(context: context, inputJson: formData, showLoader: showLoader);
+    await Statics.SaveYuvaSangamVruttaData(context: context, inputJson: formData.toJson(), showLoader: showLoader);
     // getFormData();
   }
 
@@ -298,81 +340,6 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
 //   }
 //
 //   //////////////////////////////////////////////////////////////////////////////////////
-
-  GetVijayadashamiInitModel? data;
-
-  final _extraList = [
-    Shakhaalist(
-        frequencyName: "शाखा",
-        geoUnitID: 1,
-        geoUnitName: "example abc मिलन",
-        geoUnitNameHindi: "example abc मिलन",
-        geoUnitNameMarathi: "example abc मिलन",
-        isSankalpit: 0,
-        preferedname: "example abc मिलन",
-        vayogatname: "प्रौढ व्यवसायी",
-        linkedUpaNagarID: 0),
-    Shakhaalist(
-        frequencyName: "शाखा",
-        geoUnitID: 1,
-        geoUnitName: "example abc मिलन 2",
-        geoUnitNameHindi: "example abc मिलन 2",
-        geoUnitNameMarathi: "example abc मिलन 2",
-        isSankalpit: 0,
-        preferedname: "example abc मिलन 2",
-        vayogatname: "प्रौढ व्यवसायी",
-        linkedUpaNagarID: 0),
-    Shakhaalist(
-        frequencyName: "शाखा",
-        geoUnitID: 1,
-        geoUnitName: "example abc मिलन 3",
-        geoUnitNameHindi: "example abc मिलन 3",
-        geoUnitNameMarathi: "example abc मिलन 3",
-        isSankalpit: 0,
-        preferedname: "example abc मिलन 3",
-        vayogatname: "तरुण विद्यार्थी",
-        linkedUpaNagarID: 0),
-    Shakhaalist(
-        frequencyName: "शाखा",
-        geoUnitID: 1,
-        geoUnitName: "example abc मिलन 4",
-        geoUnitNameHindi: "example abc मिलन 4",
-        geoUnitNameMarathi: "example abc मिलन 4",
-        isSankalpit: 0,
-        preferedname: "example abc मिलन 4",
-        vayogatname: "तरुण व्यवसायी",
-        linkedUpaNagarID: 0),
-    Shakhaalist(
-        frequencyName: "शाखा",
-        geoUnitID: 1,
-        geoUnitName: "example abc मिलन 5",
-        geoUnitNameHindi: "example abc मिलन 5",
-        geoUnitNameMarathi: "example abc मिलन 5",
-        isSankalpit: 0,
-        preferedname: "example abc मिलन 5",
-        vayogatname: "तरुण व्यवसायी",
-        linkedUpaNagarID: 0),
-    Shakhaalist(
-        frequencyName: "शाखा",
-        geoUnitID: 1,
-        geoUnitName: "example abc मिलन 6",
-        geoUnitNameHindi: "example abc मिलन 6",
-        geoUnitNameMarathi: "example abc मिलन 6",
-        isSankalpit: 0,
-        preferedname: "example abc मिलन 6",
-        vayogatname: "बाल/संयुक्त",
-        linkedUpaNagarID: 0),
-    Shakhaalist(
-        frequencyName: "शाखा",
-        geoUnitID: 1,
-        geoUnitName: "example abc मिलन 7",
-        geoUnitNameHindi: "example abc मिलन 7",
-        geoUnitNameMarathi: "example abc मिलन 7",
-        isSankalpit: 0,
-        preferedname: "example abc मिलन 7",
-        vayogatname: "बाल/संयुक्त",
-        linkedUpaNagarID: 0),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -515,9 +482,10 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                       children: [
                         Expanded(
                           child: TextFormField(
+                            controller: txtExpMahaTarunController,
                             decoration: InputDecoration(
-                              hintText: Statics.getLabel("mahavidya"),
-                              hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+                              labelText: Statics.getLabel("mahavidya"),
+                              labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
                               fillColor: const Color(0xFFF0F0F2),
                               // Light grey fill
                               filled: true,
@@ -533,9 +501,10 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                         const SizedBox(width: 16), // Column spacing
                         Expanded(
                           child: TextFormField(
+                            controller: txtPresentMahaTarunController,
                             decoration: InputDecoration(
-                              hintText: Statics.getLabel("mahavidya"),
-                              hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+                              labelText: Statics.getLabel("mahavidya"),
+                              labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
                               fillColor: const Color(0xFFF0F0F2),
                               filled: true,
                               border: OutlineInputBorder(
@@ -555,10 +524,11 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                       children: [
                         Expanded(
                           child: TextFormField(
+                            controller: txtExpTaurunProfController,
                             decoration: InputDecoration(
-                              hintText: '${Statics.getLabel(("TarunVyavasaayee"))} (< 30)',
+                              labelText: '${Statics.getLabel(("TarunVyavasaayee"))} (< 30)',
                               // Replaced 'युवा व्यवसायी (< 3)' placeholder
-                              hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+                              labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
                               fillColor: const Color(0xFFF0F0F2),
                               filled: true,
                               border: OutlineInputBorder(
@@ -573,9 +543,10 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                         const SizedBox(width: 16),
                         Expanded(
                           child: TextFormField(
+                            controller: txtPresentTaurunProfController,
                             decoration: InputDecoration(
-                              hintText: '${Statics.getLabel(("TarunVyavasaayee"))} (< 30)',
-                              hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+                              labelText: '${Statics.getLabel(("TarunVyavasaayee"))} (< 30)',
+                              labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
                               fillColor: const Color(0xFFF0F0F2),
                               filled: true,
                               border: OutlineInputBorder(
@@ -595,10 +566,11 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                       children: [
                         Expanded(
                           child: TextFormField(
+                            controller: txtExpYuvaMandalController,
                             decoration: InputDecoration(
-                              hintText: '${Statics.getLabel(("yuvaMandal"))}',
+                              labelText: '${Statics.getLabel(("yuvaMandal"))}',
                               // Replaced 'युवा व्यवसायी (< 3)' placeholder
-                              hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+                              labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
                               fillColor: const Color(0xFFF0F0F2),
                               filled: true,
                               border: OutlineInputBorder(
@@ -613,9 +585,10 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                         const SizedBox(width: 16),
                         Expanded(
                           child: TextFormField(
+                            controller: txtPresentYuvaMandalController,
                             decoration: InputDecoration(
-                              hintText: '${Statics.getLabel(("yuvaMandal"))}',
-                              hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+                              labelText: '${Statics.getLabel(("yuvaMandal"))}',
+                              labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
                               fillColor: const Color(0xFFF0F0F2),
                               filled: true,
                               border: OutlineInputBorder(
@@ -635,10 +608,11 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                       children: [
                         Expanded(
                           child: TextFormField(
+                            controller: txtExpProfController,
                             decoration: InputDecoration(
-                              hintText: '${Statics.getLabel(("professor"))}',
+                              labelText: '${Statics.getLabel(("professor"))}',
                               // Replaced 'प्राध्यापक' placeholder
-                              hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+                              labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
                               fillColor: const Color(0xFFF0F0F2),
                               filled: true,
                               border: OutlineInputBorder(
@@ -653,9 +627,10 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                         const SizedBox(width: 16),
                         Expanded(
                           child: TextFormField(
+                            controller: txtPresentProfController,
                             decoration: InputDecoration(
-                              hintText: '${Statics.getLabel(("professor"))}',
-                              hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+                              labelText: '${Statics.getLabel(("professor"))}',
+                              labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
                               fillColor: const Color(0xFFF0F0F2),
                               filled: true,
                               border: OutlineInputBorder(
@@ -716,9 +691,10 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                       children: [
                         Expanded(
                           child: TextFormField(
+                            controller: txtExpMahavidController,
                             decoration: InputDecoration(
-                              hintText: Statics.getLabel("schools"),
-                              hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+                              labelText: Statics.getLabel("schools"),
+                              labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
                               fillColor: const Color(0xFFF0F0F2),
                               // Light grey fill
                               filled: true,
@@ -734,9 +710,10 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                         const SizedBox(width: 16), // Column spacing
                         Expanded(
                           child: TextFormField(
+                            controller: txtPresentMahavidController,
                             decoration: InputDecoration(
-                              hintText: Statics.getLabel("schools"),
-                              hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+                              labelText: Statics.getLabel("schools"),
+                              labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
                               fillColor: const Color(0xFFF0F0F2),
                               filled: true,
                               border: OutlineInputBorder(
@@ -756,10 +733,11 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                       children: [
                         Expanded(
                           child: TextFormField(
+                            controller: txtExpVastigruhController,
                             decoration: InputDecoration(
-                              hintText: '${Statics.getLabel(("vastigruh"))}',
+                              labelText: '${Statics.getLabel(("vastigruh"))}',
                               // Replaced 'युवा व्यवसायी (< 3)' placeholder
-                              hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+                              labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
                               fillColor: const Color(0xFFF0F0F2),
                               filled: true,
                               border: OutlineInputBorder(
@@ -774,9 +752,10 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                         const SizedBox(width: 16),
                         Expanded(
                           child: TextFormField(
+                            controller: txtPresentVastigruhController,
                             decoration: InputDecoration(
-                              hintText: '${Statics.getLabel(("vastigruh"))}',
-                              hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+                              labelText: '${Statics.getLabel(("vastigruh"))}',
+                              labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
                               fillColor: const Color(0xFFF0F0F2),
                               filled: true,
                               border: OutlineInputBorder(
@@ -793,144 +772,6 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                   ],
                 ),
               ),
-// // ================================== 3 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
-//               mainContainer(
-//                 "${Statics.getLabel('presentMahanubhav')}",
-//                 Column(
-//                   children: [
-//                     // Button for popup
-//                     Row(
-//                       mainAxisAlignment: MainAxisAlignment.end,
-//                       children: [
-//                         InkWell(
-//                           borderRadius: BorderRadius.circular(15),
-//                           onTap: () async {
-//                             if (!_searched) {
-//                               Fluttertoast.showToast(msg: "${Statics.getLabel('NagarSelectionImportant')}");
-//                               return;
-//                             }
-//
-//                             final _tempFiles1 = (vruttaData?.vastisarsajjanshakti ?? []).where((e) => selectedPerson != e).toList();
-//                             final _tempFiles2 = (vruttaData?.vastisanyaprabhavi ?? []).where((e) => selectedPrabhavi != e).toList();
-//
-//                             // _tempFiles1.where((e) => e.pkid != selectedPerson?.pkid || e.isMukhyadefault == 0).toList();
-//                             // _tempFiles2.where((e) => e.pkId != selectedPrabhavi?.pkId || e.isMukhyadefault == 0).toList();
-//                             await showVisheshAtithiSelectionPopup(
-//                               context,
-//                               sarsajjanshaktiList: _tempFiles1,
-//                               sanyaprabhaviList: _tempFiles2,
-//                             );
-//                           },
-//                           child: Container(
-//                             padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-//                             // width: 150,
-//                             // height: 35,
-//                             decoration: BoxDecoration(
-//                               border: Border.all(color: Colors.purpleAccent.shade100),
-//                               borderRadius: BorderRadius.circular(15),
-//                             ),
-//                             child: Text(
-//                               "${Statics.getLabel('addPresentMahanubhav')}",
-//                               style: TextStyle(
-//                                 color: Colors.purpleAccent,
-//                                 fontWeight: FontWeight.bold,
-//                               ),
-//                             ),
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//
-//                     const SizedBox(height: 20),
-//
-//                     // Table for Sajjanshakti
-//                     if (selectedSajjanshaktiItems.isNotEmpty) ...[
-//                       Text("${Statics.getLabel('SajjanShakti')}", style: TextStyle(fontWeight: FontWeight.bold)),
-//                       Table(
-//                         border: TableBorder.all(),
-//                         columnWidths: const {
-//                           0: FixedColumnWidth(40),
-//                           1: FlexColumnWidth(),
-//                           2: FlexColumnWidth(),
-//                         },
-//                         children: [
-//                           TableRow(
-//                             decoration: BoxDecoration(color: Color(0xFFE0E0E0)),
-//                             children: [
-//                               Padding(padding: EdgeInsets.all(4), child: Text("${Statics.getLabel('serialNo')}")),
-//                               Padding(padding: EdgeInsets.all(4), child: Text("${Statics.getLabel('Name')}")),
-//                               Padding(padding: EdgeInsets.all(4), child: Text("${Statics.getLabel('samparkSootraNaav')}")),
-//                               Padding(padding: EdgeInsets.all(4), child: Text("${Statics.getLabel('ViewMenu')}")),
-//                             ],
-//                           ),
-//                           ...selectedSajjanshaktiItems.asMap().entries.map((entry) {
-//                             int srNo = entry.key + 1;
-//                             final item = entry.value;
-//                             return TableRow(
-//                               children: [
-//                                 Padding(padding: const EdgeInsets.all(4), child: Text(srNo.toString())),
-//                                 Padding(padding: const EdgeInsets.all(4), child: Text(item.name ?? "")),
-//                                 Padding(padding: const EdgeInsets.all(4), child: Text(item.samparkasutranava ?? "")),
-//                                 IconButton(
-//                                   icon: Icon(Icons.remove_red_eye, size: 22, color: Colors.purpleAccent),
-//                                   onPressed: () {
-//                                     showPersonDetailsPopup(context, item, srNo);
-//                                   },
-//                                 ),
-//                               ],
-//                             );
-//                           }).toList(),
-//                         ],
-//                       ),
-//                     ],
-//
-//                     const SizedBox(height: 20),
-//
-//                     // Table for Anyaprabhavi
-//                     if (selectedAnyaprabhaviItems.isNotEmpty) ...[
-//                       Text("${Statics.getLabel('anyaPrabhaviLok')}", style: TextStyle(fontWeight: FontWeight.bold)),
-//                       Table(
-//                         border: TableBorder.all(),
-//                         columnWidths: const {
-//                           0: FixedColumnWidth(40),
-//                           1: FlexColumnWidth(),
-//                           2: FlexColumnWidth(),
-//                           3: FixedColumnWidth(50), // 👁 button column
-//                         },
-//                         children: [
-//                           TableRow(
-//                             decoration: BoxDecoration(color: Color(0xFFE0E0E0)),
-//                             children: [
-//                               Padding(padding: EdgeInsets.all(4), child: Text("${Statics.getLabel('serialNo')}")),
-//                               Padding(padding: EdgeInsets.all(4), child: Text("${Statics.getLabel('Name')}")),
-//                               Padding(padding: EdgeInsets.all(4), child: Text("${Statics.getLabel('samparkSootraNaav')}")),
-//                               Padding(padding: EdgeInsets.all(4), child: Text("${Statics.getLabel('ViewMenu')}")), // 👁 column heading
-//                             ],
-//                           ),
-//                           ...selectedAnyaprabhaviItems.asMap().entries.map((entry) {
-//                             int srNo = entry.key + 1;
-//                             final item = entry.value;
-//
-//                             return TableRow(
-//                               children: [
-//                                 Padding(padding: const EdgeInsets.all(4), child: Text(srNo.toString())),
-//                                 Padding(padding: const EdgeInsets.all(4), child: Text(item.name ?? "")),
-//                                 Padding(padding: const EdgeInsets.all(4), child: Text(item.samparkAsutraNav ?? "")),
-//                                 IconButton(
-//                                   icon: Icon(Icons.remove_red_eye, size: 22, color: Colors.purpleAccent),
-//                                   onPressed: () {
-//                                     showPersonDetailsPopup(context, item, srNo);
-//                                   },
-//                                 ),
-//                               ],
-//                             );
-//                           }).toList(),
-//                         ],
-//                       ),
-//                     ],
-//                   ],
-//                 ),
-//               ),
 // ================================== 4 QUESTIONS Box ==================================================================================================================================================================================================================================================================================================================================================
               mainContainer(
                 "${Statics.getLabel('shakhaMilanPratinidhitwa')}",
@@ -961,14 +802,34 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                     ),
                     const SizedBox(height: 8),
 
-                    // ✅ One ExpansionTile per vayogat group
+                    // ✅ Two ExpansionTiles: one for Maha, one for Tarun
                     ...() {
-                      final List<String> vayogatOptions = (data?.shakhaalist ?? []).map((e) => e.vayogatname ?? "").where((e) => e.isNotEmpty).toSet().toList();
+                      // Define the two groups from the separated lists
+                      final groups = [
+                        {
+                          'label': Statics.getLabel("shakhaMilantitle1"),
+                          'items': vruttaData?.presentmahalist ?? <YuvaShakkhaaList>[],
+                        },
+                        {
+                          'label': Statics.getLabel("shakhaMilantitle2"),
+                          'items': vruttaData?.sankalpitmahalist ?? <YuvaShakkhaaList>[],
+                        },
+                        {
+                          'label': Statics.getLabel("shakhaMilantitle3"),
+                          'items': vruttaData?.presenttarunlist ?? <YuvaShakkhaaList>[],
+                        },
+                        {
+                          'label': Statics.getLabel("shakhaMilantitle4"),
+                          'items': vruttaData?.sankalpittarunlist ?? <YuvaShakkhaaList>[],
+                        },
+                      ];
 
-                      return vayogatOptions.map((vayogat) {
-                        final groupItems = ((data?.shakhaalist ?? []) + _extraList.toList()).where((e) => e.vayogatname == vayogat && e.frequencyName == "शाखा").toList();
+                      return groups.map((group) {
+                        final groupItems = group['items'] as List<YuvaShakkhaaList>;
+                        final groupLabel = group['label'] as String;
 
-                        final selectedInGroup = checkboxShakhaSelectedItems.where((e) => e.vayogatname == vayogat).length;
+                        // Count how many from this group are selected
+                        final selectedInGroup = checkboxShakhaSelectedItems.where((e) => groupItems.any((g) => g.geoUnitID == e.geoUnitID)).length;
 
                         return Card(
                           margin: const EdgeInsets.symmetric(vertical: 4),
@@ -980,24 +841,18 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                           child: ExpansionTile(
                             tilePadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
                             childrenPadding: EdgeInsets.zero,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            collapsedShape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            collapsedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                             title: Text(
-                              vayogat,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                              ),
+                              groupLabel,
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                             ),
                             subtitle: Text(
                               "${Statics.getLabel('Total')} : ${groupItems.length}   •   ${Statics.getLabel('selectedTotal')} : $selectedInGroup",
                               style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                             ),
-                            // ✅ Leading checkbox: select/deselect entire group
+
+                            // ✅ Leading tristate checkbox: select/deselect entire group
                             leading: Checkbox(
                               tristate: true,
                               value: selectedInGroup == 0
@@ -1009,35 +864,33 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                               onChanged: (val) {
                                 setState(() {
                                   if (val == true) {
-                                    // Add all from group not already added
                                     for (var item in groupItems) {
-                                      if (!checkboxShakhaSelectedItems.contains(item)) {
+                                      final alreadyAdded = checkboxShakhaSelectedItems.any((e) => e.geoUnitID == item.geoUnitID);
+                                      if (!alreadyAdded) {
                                         checkboxShakhaSelectedItems.add(item);
+                                        item.iselected = 1; // ✅ sync iselected
                                       }
                                     }
                                   } else {
-                                    // Remove all from group
-                                    checkboxShakhaSelectedItems.removeWhere((item) => item.vayogatname == vayogat);
+                                    final groupIds = groupItems.map((e) => e.geoUnitID).toSet();
+                                    checkboxShakhaSelectedItems.removeWhere((e) => groupIds.contains(e.geoUnitID));
+                                    for (var item in groupItems) {
+                                      item.iselected = 0; // ✅ sync iselected
+                                    }
                                   }
-                                  _recalculateShakhaCounts(data);
+                                  _recalculateShakhaCounts(vruttaData);
+                                  _separateSelectedByGroup(vruttaData);
                                 });
                               },
                             ),
+
                             children: [
                               const Divider(height: 1),
                               ...groupItems.map((item) {
-                                final isSelected = checkboxShakhaSelectedItems.contains(item);
+                                final isSelected = checkboxShakhaSelectedItems.any((e) => e.geoUnitID == item.geoUnitID);
+
                                 return InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      if (isSelected) {
-                                        checkboxShakhaSelectedItems.remove(item);
-                                      } else {
-                                        checkboxShakhaSelectedItems.add(item);
-                                      }
-                                      _recalculateShakhaCounts(data);
-                                    });
-                                  },
+                                  onTap: () => _toggleItem(item, vruttaData),
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                                     child: Row(
@@ -1045,21 +898,12 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                                         Checkbox(
                                           value: isSelected,
                                           activeColor: Colors.purpleAccent,
-                                          onChanged: (checked) {
-                                            setState(() {
-                                              if (checked == true) {
-                                                checkboxShakhaSelectedItems.add(item);
-                                              } else {
-                                                checkboxShakhaSelectedItems.remove(item);
-                                              }
-                                              _recalculateShakhaCounts(data);
-                                            });
-                                          },
+                                          onChanged: (checked) => _toggleItem(item, vruttaData),
                                         ),
                                         const SizedBox(width: 6),
                                         Expanded(
                                           child: Text(
-                                            item.preferedname ?? "",
+                                            item.shaakhaaname ?? "", // ✅ was: preferedname
                                             style: TextStyle(
                                               fontSize: 13,
                                               color: isSelected ? Colors.purpleAccent.shade700 : Colors.black87,
@@ -1080,22 +924,26 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
 
                     const SizedBox(height: 12),
 
-                    // ✅ Summary rows
+                    // ✅ Summary rows — now uses sankalpitmahalist + sankalpittarunlist for totals
                     SingleColumnRow(
-                      txtString: "${Statics.getLabel('Total')} ${Statics.getLabel('Shaakhaa')} ",
-                      value: "${((data?.shakhaalist ?? []) + _extraList.toList()).where((item) => item.frequencyName == "शाखा").length}",
+                      txtString: "${Statics.getLabel('Total')} ${Statics.getLabel('shaakhaamilan')}",
+                      value:
+                          "${(vruttaData?.sankalpitmahalist ?? []).length + (vruttaData?.sankalpittarunlist ?? []).length + (vruttaData?.presenttarunlist ?? []).length + (vruttaData?.sankalpittarunlist ?? []).length}",
                     ),
                     SingleColumnRow(
-                      txtString: " ${Statics.getLabel('Shaakhaa')} ${Statics.getLabel('pratinidhitva')}",
+                      txtString: "${Statics.getLabel('shaakhaamilan')} ${Statics.getLabel('pratinidhitva')}",
                       value: "$selectedShakhaCount",
                     ),
                     SingleColumnRow(
                       rowColor: Colors.grey.shade300,
-                      txtString: " ${Statics.getLabel('Shaakhaa')} ${Statics.getLabel('average')} ${Statics.getLabel('pratinidhitva')} ",
-                      value: (((data?.shakhaalist ?? []) + _extraList.toList()).where((item) => item.frequencyName == "शाखा").length > 0
-                              ? ((selectedShakhaCount / ((data?.shakhaalist ?? []) + _extraList.toList()).where((item) => item.frequencyName == "शाखा").length) * 100).round().toString()
-                              : "0") +
-                          " %",
+                      txtString: "${Statics.getLabel('shaakhaamilan')} ${Statics.getLabel('average')} ${Statics.getLabel('pratinidhitva')}",
+                      value: () {
+                        final total = (vruttaData?.sankalpitmahalist ?? []).length +
+                            (vruttaData?.sankalpittarunlist ?? []).length +
+                            (vruttaData?.presenttarunlist ?? []).length +
+                            (vruttaData?.sankalpittarunlist ?? []).length;
+                        return total > 0 ? "${((selectedShakhaCount / total) * 100).round()} %" : "0 %";
+                      }(),
                     ),
                   ],
                 ),
@@ -1164,6 +1012,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                     ),
                   ],
                 ),
+                isRequired: true,
               ),
 
 //==============================  SUBMIT BUTTON =======================================================================
@@ -1175,8 +1024,8 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                   padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                   color: Theme.of(context).primaryColor,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-                  onPressed: () => Statics.showToast(Statics.getLabel("workInProgress")),
-                  // submitForm,
+                  onPressed: //() => Statics.showToast(Statics.getLabel("workInProgress")),
+                      submitForm,
                   child: Text(
                     Statics.getLabel('Submit'),
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
@@ -1191,23 +1040,78 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
     );
   }
 
-  VastiCounts? countsShakhaa;
+  Map<String, int>? countsShakhaa;
 
-  List<Shakhaalist> checkboxShakhaSelectedItems = [];
+  List<YuvaShakkhaaList> checkboxShakhaSelectedItems = [];
+
+  List<YuvaShakkhaaList> selectedPresentMaha = [];
+  List<YuvaShakkhaaList> selectedSankalpitMaha = [];
+  List<YuvaShakkhaaList> selectedPresentTarun = [];
+  List<YuvaShakkhaaList> selectedSankalpitTarun = [];
+
   int totalShakhaCount = 0;
   int selectedShakhaCount = 0;
   String averageShakhaCount = "0";
   String? selectedShakhaaPratinidhitwaVastiIds;
 
-  void _recalculateShakhaCounts(GetVijayadashamiInitModel? data) {
-    // ✅ Total shakha count
-    totalShakhaCount = (data?.shakhaalist ?? []).where((item) => item.frequencyName == "शाखा").length;
+  void _separateSelectedByGroup(YuvaVruttadata? vruttaData) {
+    final presentMahaIds = (vruttaData?.presentmahalist ?? []).map((e) => e.geoUnitID).toSet();
+    final sankalpitMahaIds = (vruttaData?.sankalpitmahalist ?? []).map((e) => e.geoUnitID).toSet();
+    final presentTarunIds = (vruttaData?.presenttarunlist ?? []).map((e) => e.geoUnitID).toSet();
+    final sankalpitTarunIds = (vruttaData?.sankalpittarunlist ?? []).map((e) => e.geoUnitID).toSet();
 
-    // ✅ Selected shakha count
-    selectedShakhaCount = checkboxShakhaSelectedItems.where((item) => item.frequencyName == "शाखा").length;
+    selectedPresentMaha = checkboxShakhaSelectedItems.where((e) => presentMahaIds.contains(e.geoUnitID)).toList();
+    selectedSankalpitMaha = checkboxShakhaSelectedItems.where((e) => sankalpitMahaIds.contains(e.geoUnitID)).toList();
+    selectedPresentTarun = checkboxShakhaSelectedItems.where((e) => presentTarunIds.contains(e.geoUnitID)).toList();
+    selectedSankalpitTarun = checkboxShakhaSelectedItems.where((e) => sankalpitTarunIds.contains(e.geoUnitID)).toList();
+  }
 
-    // ✅ Comma-separated IDs
-    selectedShakhaaPratinidhitwaVastiIds = checkboxShakhaSelectedItems.map((e) => e.geoUnitID.toString()).join(",");
+  // In your onTap / onChanged toggle logic, replace the raw add/remove with:
+
+  void _toggleItem(YuvaShakkhaaList item, YuvaVruttadata? vruttaData) {
+    setState(() {
+      final index = checkboxShakhaSelectedItems.indexWhere((e) => e.geoUnitID == item.geoUnitID);
+
+      if (index >= 0) {
+        // ✅ Deselect — remove and mark iselected = 0
+        checkboxShakhaSelectedItems.removeAt(index);
+        item.iselected = 0;
+      } else {
+        // ✅ Select — add and mark iselected = 1
+        checkboxShakhaSelectedItems.add(item);
+        item.iselected = 1;
+      }
+
+      _recalculateShakhaCounts(vruttaData);
+      _separateSelectedByGroup(vruttaData);
+    });
+  }
+
+  void _initializeSelectionFromData(YuvaVruttadata? vruttaData) {
+    final allItems = <YuvaShakkhaaList>[
+      ...(vruttaData?.presentmahalist ?? []),
+      ...(vruttaData?.sankalpitmahalist ?? []),
+      ...(vruttaData?.presenttarunlist ?? []),
+      ...(vruttaData?.sankalpittarunlist ?? []),
+    ];
+
+    // ✅ Pre-select items where iselected == 1
+    checkboxShakhaSelectedItems = allItems.where((e) => e.iselected == 1).toList();
+
+    // ✅ Derive group-wise split and recalculate counts
+    _recalculateShakhaCounts(vruttaData);
+    _separateSelectedByGroup(vruttaData);
+  }
+
+  void _recalculateShakhaCounts(YuvaVruttadata? vruttaData) {
+    // ✅ Total shakha count from both sankalpit lists combined
+    totalShakhaCount = (vruttaData?.sankalpitmahalist ?? []).length + (vruttaData?.sankalpittarunlist ?? []).length;
+
+    // ✅ Selected shakha count — no frequency filter needed, lists are pre-separated
+    selectedShakhaCount = checkboxShakhaSelectedItems.length;
+
+    // ✅ Comma-separated geoUnitIDs of selected items
+    selectedShakhaaPratinidhitwaVastiIds = checkboxShakhaSelectedItems.where((e) => e.geoUnitID != null).map((e) => e.geoUnitID.toString()).join(",");
 
     // ✅ Average percentage
     if (totalShakhaCount > 0) {
@@ -1216,16 +1120,14 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
       averageShakhaCount = "0";
     }
 
-    // ✅ Build VastiCounts
-    final Map<String, int> vayogatCounts = {};
+    // ✅ Build VastiCounts — grouped by freqname (e.g. "Maha" / "Tarun")
+    //    since vayogatname no longer exists in YuvaShakkhaaList
+    final Map<String, int> freqnameCounts = {};
     for (var item in checkboxShakhaSelectedItems) {
-      final key = item.vayogatname ?? "Unknown";
-      vayogatCounts[key] = (vayogatCounts[key] ?? 0) + 1;
+      final key = item.freqname ?? "Unknown";
+      freqnameCounts[key] = (freqnameCounts[key] ?? 0) + 1;
     }
-    countsShakhaa = VastiCounts(
-      prakarCounts: {},
-      vayogatCounts: vayogatCounts,
-    );
+    countsShakhaa = freqnameCounts; // reusing vayogatCounts slot for freqname groups
   }
 
   Future<void> showShakhaalistPopup(
@@ -1765,6 +1667,8 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
   //   );
   // }
 
+  // Widget (){}
+
   Widget vaktaTable() {
     return Column(
       spacing: 12,
@@ -1816,7 +1720,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                 "${Statics.getLabel('Daayitva')}",
               )),
             ],
-            rows: vaktaList.where((e) => e.isactive == 1).toList().asMap().entries.map((entry) {
+            rows: vaktaList.asMap().entries.map((entry) {
               int index = entry.key;
               var data = entry.value;
               bool isSelected = selectedVaktaIndex == index;
@@ -1872,7 +1776,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                     // if (!isAbhiyaanButPramukh) DataCell(Icon(isSelected ? Icons.check_box_rounded : Icons.check_box_outline_blank_rounded, color: Colors.yellow.shade900, size: 21)),
                     DataCell(Text("${index + 1}.")),
                     DataCell(Container(constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.4), child: Text(data.name ?? ''))),
-                    DataCell(Text(data.daayitva ?? "--")),
+                    DataCell(Text(data.daaitva ?? "--")),
                     // DataCell(Text(Statics.getLabel(data.daayitva.toString(), returnKey: true))),
                   ]);
             }).toList(),
@@ -1913,7 +1817,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                               Divider(thickness: 1, color: Colors.deepPurple.shade100),
                               SizedBox(height: 4),
                               _buildInfoRow("${Statics.getLabel('Name')}", selectedData.name),
-                              _buildInfoRow("${Statics.getLabel('Daayitva')}", selectedData.daayitva),
+                              _buildInfoRow("${Statics.getLabel('Daayitva')}", selectedData.daaitva),
                               // SizedBox(),
                               // _buildInfoRow("${Statics.getLabel('sanmelanVaktaTask')}", selectedData.fksadbhavbaithakmasterid.toString()),
                             ],
@@ -1944,8 +1848,15 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
             InkWell(
               onTap: () {
                 if (selectedVaktaIndex != null) {
-                  txtVaktaNameController.text = vaktaList[selectedVaktaIndex!].name ?? "--";
-                  txtVaktaTaskController.text = (vaktaList[selectedVaktaIndex!].daayitva ?? "--").toString();
+                  final _data = vaktaList[selectedVaktaIndex!];
+
+                  txtVaktaNameController.text = _data.name ?? "--";
+                  txtVaktaTaskController.text = (_data.daaitva ?? "--").toString();
+                  _daayitvaForValue = _daayitvaFor?.firstWhere((e) => e.staticID == _data.prakarid);
+                  _aayaamValue = _data.gatividhid;
+                  _gatividhiValue = _data.gatividhid;
+                  _preritSansthaValue = _data.gatividhid;
+                  _othOrgNameCtrl.text = (_data.annyaname ?? "").toString();
                   showAddVaktaDialogBox(fromEditing: true);
                 }
               },
@@ -2016,7 +1927,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                   );
                   if (shouldDelete == true) {
                     setState(() {
-                      vaktaList[selectedVaktaIndex!].isactive = 0;
+                      vaktaList.remove(vaktaList[selectedVaktaIndex!]);
                       selectedVaktaIndex = null;
                     });
                   }
@@ -2065,8 +1976,13 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
       return;
     }
     if (!fromEditing) {
+      _daayitvaForValue = null;
+      _aayaamValue = null;
+      _gatividhiValue = null;
+      _preritSansthaValue = null;
       txtVaktaNameController.clear();
       txtVaktaTaskController.clear();
+      _othOrgNameCtrl.clear();
     }
     return showDialog(
       context: context,
@@ -2111,7 +2027,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                     DropdownButtonFormField<StaticMasterBAL>(
                       decoration: InputDecoration(labelText: Statics.getLabel('SelectDaayitvaFor')),
                       isExpanded: true,
-                      value: _daayitvaForValue == null ? null : _daayitvaForValue,
+                      value: _daayitvaForValue,
                       items: _daayitvaFor!.map((bg) => DropdownMenuItem(value: bg, child: Text(bg.codeForDisplay!))).toList(),
                       onChanged: (value) {
                         set(() {
@@ -2136,20 +2052,20 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                           DropdownButtonFormField(
                             decoration: InputDecoration(labelText: Statics.getLabel('SelectAayaam')),
                             isExpanded: true,
-                            value: _aayaamValue == "" ? null : _aayaamValue,
-                            items: _aayam!.map((bg) => DropdownMenuItem(value: bg.aayaamID.toString(), child: Text(bg.aayaamName!))).toList(),
+                            value: _aayaamValue,
+                            items: _aayam!.map((bg) => DropdownMenuItem(value: bg.aayaamID, child: Text(bg.aayaamName!))).toList(),
                             onChanged: (value) {
                               set(() {
-                                _aayaamValue = value;
+                                _aayaamValue = int.parse(value.toString());
                               });
                             },
                             validator: (value) {
-                              if (value == null || value.isEmpty) return (Statics.getLabel('AayaamVaidationMessage'));
+                              if (value == null) return (Statics.getLabel('AayaamVaidationMessage'));
                               return null;
                             },
                             onSaved: (value) {
-                              if (value != null && value.isNotEmpty) {
-                                swDaayitva!.aayaamID = int.parse(value);
+                              if (value != null) {
+                                swDaayitva!.aayaamID = int.parse(value.toString());
                                 print("field SelectAayaam :--${value}");
                               } else {
                                 swDaayitva!.aayaamID = null;
@@ -2165,20 +2081,20 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                           DropdownButtonFormField(
                             decoration: InputDecoration(labelText: Statics.getLabel('SelectGatividhi')),
                             isExpanded: true,
-                            value: _gatividhiValue == "" ? null : _gatividhiValue,
-                            items: _gatividhi!.map((bg) => DropdownMenuItem(value: bg.gatividhiID.toString(), child: Text(bg.gatividhiName!))).toList(),
+                            value: _gatividhiValue,
+                            items: _gatividhi!.map((bg) => DropdownMenuItem(value: bg.gatividhiID, child: Text(bg.gatividhiName!))).toList(),
                             onChanged: (value) {
                               set(() {
-                                _gatividhiValue = value;
+                                _gatividhiValue = int.parse(value.toString());
                               });
                             },
                             validator: (value) {
-                              if (value == null || value.isEmpty) return (Statics.getLabel('GaitividhiVaidationMessage'));
+                              if (value == null) return (Statics.getLabel('GaitividhiVaidationMessage'));
                               return null;
                             },
                             onSaved: (value) {
-                              if (value != null && value.isNotEmpty) {
-                                swDaayitva!.gatividhiID = int.parse(value);
+                              if (value != null) {
+                                swDaayitva!.gatividhiID = int.parse(value.toString());
                                 print("field SelectGatividhi :--${value}");
                               } else {
                                 swDaayitva!.gatividhiID = null;
@@ -2198,11 +2114,11 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                           DropdownButtonFormField<dynamic>(
                             decoration: InputDecoration(labelText: Statics.getLabel('SansthaaName')),
                             isExpanded: true,
-                            value: _preritSansthaValue == "" ? null : _preritSansthaValue,
-                            items: _sanghaPreritSanstha!.map((bg) => DropdownMenuItem(value: bg["SanghaPreritSansthaaID"].toString(), child: Text(bg["SansthaaName"]))).toList(),
+                            value: _preritSansthaValue,
+                            items: _sanghaPreritSanstha!.map((bg) => DropdownMenuItem(value: bg["SanghaPreritSansthaaID"], child: Text(bg["SansthaaName"]))).toList(),
                             onChanged: (value) {
                               set(() {
-                                _preritSansthaValue = value;
+                                _preritSansthaValue = int.parse(value.toString());
                               });
                             },
                             validator: (value) {
@@ -2211,7 +2127,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                             },
                             onSaved: (value) {
                               if (value != null && value.isNotEmpty) {
-                                swDaayitva!.sanghaPreritSansthaaID = int.parse(value);
+                                swDaayitva!.sanghaPreritSansthaaID = int.parse(value.toString());
                                 print("field SansthaaName sanghaPreritSansthaaID :--${swDaayitva!.sanghaPreritSansthaaID}");
                               } else
                                 swDaayitva!.sanghaPreritSansthaaID = null;
@@ -2268,9 +2184,17 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                         ),
                         onPressed: () async {
-                          vaktaList.add(NamesList(pkid: 0, name: txtVaktaNameController.text.trim(), daayitva: txtVaktaTaskController.text.trim(), fksadbhavbaithakmasterid: 0, isactive: 1));
+                          vaktaList.add(YuvaaSpeaker(
+                              pkid: 0,
+                              name: txtVaktaNameController.text.trim(),
+                              daaitva: txtVaktaTaskController.text.trim(),
+                              prakarid: _daayitvaForValue?.staticID,
+                              gatividhid: _aayaamValue ?? _gatividhiValue ?? _preritSansthaValue,
+                              isannya: _daayitvaForValue!.code == "OtherSocialOrganization" ? 1 : 0,
+                              annyaname: _othOrgNameCtrl.text));
                           txtVaktaNameController.clear();
                           txtVaktaTaskController.clear();
+                          setState(() {});
                           // Statics.showToast(Statics.getLabel("workInProgress"));
                           Navigator.pop(ctx);
                           // await addToToliListFun();
@@ -2339,16 +2263,16 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                   items: _aayam!.map((bg) => DropdownMenuItem(value: bg.aayaamID.toString(), child: Text(bg.aayaamName!))).toList(),
                   onChanged: (value) {
                     setState(() {
-                      _aayaamValue = value;
+                      _aayaamValue = int.parse(value.toString());
                     });
                   },
                   validator: (value) {
-                    if (value == null || value.isEmpty) return (Statics.getLabel('AayaamVaidationMessage'));
+                    if (value == null) return (Statics.getLabel('AayaamVaidationMessage'));
                     return null;
                   },
                   onSaved: (value) {
-                    if (value != null && value.isNotEmpty) {
-                      swDaayitva!.aayaamID = int.parse(value);
+                    if (value != null) {
+                      swDaayitva!.aayaamID = int.parse(value.toString());
                       print("field SelectAayaam :--${value}");
                     } else {
                       swDaayitva!.aayaamID = null;
@@ -2368,16 +2292,16 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                   items: _gatividhi!.map((bg) => DropdownMenuItem(value: bg.gatividhiID.toString(), child: Text(bg.gatividhiName!))).toList(),
                   onChanged: (value) {
                     setState(() {
-                      _gatividhiValue = value;
+                      _gatividhiValue = int.parse(value.toString());
                     });
                   },
                   validator: (value) {
-                    if (value == null || value.isEmpty) return (Statics.getLabel('GaitividhiVaidationMessage'));
+                    if (value == null) return (Statics.getLabel('GaitividhiVaidationMessage'));
                     return null;
                   },
                   onSaved: (value) {
-                    if (value != null && value.isNotEmpty) {
-                      swDaayitva!.gatividhiID = int.parse(value);
+                    if (value != null) {
+                      swDaayitva!.gatividhiID = int.parse(value.toString());
                       print("field SelectGatividhi :--${value}");
                     } else {
                       swDaayitva!.gatividhiID = null;
@@ -2583,7 +2507,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
     );
   }
 
-  Widget mainContainer(String header, Widget child) {
+  Widget mainContainer(String header, Widget child, {bool isRequired = false}) {
     Size size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -2598,13 +2522,27 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              header,
-              style: TextStyle(
-                color: Colors.purpleAccent,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  header,
+                  style: TextStyle(
+                    color: Colors.purpleAccent,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+                if (isRequired)
+                  Text(
+                    "  *",
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 21,
+                    ),
+                  ),
+              ],
             ),
             Divider(color: Colors.black87, thickness: 1),
             SizedBox(

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../helpers/static_data.dart' as Statics;
-import '../../../models/response_model/sadbhav_baithak_report_model.dart';
+import '../../../models/response_model/yuva_sangam_report_model.dart';
 import '../../../providers/bals.dart';
 
 class YuvaSangamReportTab extends StatefulWidget {
@@ -55,7 +55,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
   List<String?> _selctedLevelNameList = [];
   String? _selectedGeoUnitId;
 
-  List<ReportData> report = [];
+  List<Yuvrpt> report = [];
 
   final List<bool> _expanded = List.generate(3, (_) => true);
 
@@ -178,13 +178,13 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
       // _isLoading = true;
     });
     Map<String, dynamic> formData = {
-      "geounitid": int.tryParse(_selectedGeoUnitId.toString()) ?? null,
+      "geounitid": int.tryParse(_selectedGeoUnitId.toString()) ?? 0,
       "appuserid": int.tryParse(Statics.userDetails['userID']) ?? null,
     };
 
     // String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
     // log("Form Data (JSON):\n$formattedJson");
-    report = await Statics.PramukhJanReportData(context, formData) ?? [];
+    report = await Statics.YuvaSangamReportData(context, formData) ?? [];
     // log("vijayadashamiReport >>>>>>>>>>>>>>>>> ${jsonDecode(jsonEncode(vijayadashamiReport))}");
     setState(() {
       report;
@@ -253,27 +253,25 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
     );
   }
 
-  Widget buildMarathiDataTable(List<ReportData> data) {
-    bool showRemaining = data.any((item) => item.remainingcnt != null);
+  Widget buildMarathiDataTable(List<Yuvrpt> data) {
     final List<String> headers = [
-      // 'कार्यक्रम स्तर',
-      // Statics.getLabel('sadbhavReportTable1'),
-      // Statics.getLabel('sadbhavReportTable15'),
-      // if (showRemaining) Statics.getLabel('sadbhavReportTable155'),
       Statics.getLabel('yuvaReportTable1'),
       Statics.getLabel('yuvaReportTable2'),
       Statics.getLabel('yuvaReportTable3'),
       Statics.getLabel('yuvaReportTable4'),
-      Statics.getLabel('yuvaReportTable5'),
       Statics.getLabel('yuvaReportTable6'),
-      Statics.getLabel('yuvaReportTable7'),
       Statics.getLabel('yuvaReportTable8'),
-      Statics.getLabel('yuvaReportTable9'),
-      Statics.getLabel('yuvaReportTable10'),
-      Statics.getLabel('yuvaReportTable11'),
-      Statics.getLabel('yuvaReportTable12'),
-      Statics.getLabel('yuvaReportTable13'),
+      Statics.getLabel('yuvaReportTable23'),
       Statics.getLabel('yuvaReportTable14'),
+      Statics.getLabel('yuvaReportTable5'),
+      Statics.getLabel('yuvaReportTable7'),
+      Statics.getLabel('yuvaReportTable25'),
+      Statics.getLabel('yuvaReportTable9'),
+      Statics.getLabel('yuvaReportTable145'),
+      Statics.getLabel('yuvaReportTable10'),
+      Statics.getLabel('yuvaReportTable12'),
+      Statics.getLabel('yuvaReportTable11'),
+      Statics.getLabel('yuvaReportTable13'),
       Statics.getLabel('yuvaReportTable15'),
       Statics.getLabel('yuvaReportTable16'),
       Statics.getLabel('yuvaReportTable17'),
@@ -282,8 +280,6 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
       Statics.getLabel('yuvaReportTable20'),
       Statics.getLabel('yuvaReportTable21'),
       Statics.getLabel('yuvaReportTable22'),
-      Statics.getLabel('yuvaReportTable23'),
-      Statics.getLabel('yuvaReportTable24'),
     ];
 
     return Row(
@@ -362,221 +358,207 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                       return DataRow(cells: [
                         DataCell(Center(
                             child: Row(
-                          mainAxisAlignment: (level.baithakcount != 0 && level.baithaknames != null && level.baithaknames!.isNotEmpty) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                          mainAxisAlignment: (level.pendingyuva != 0 && level.ekunyuvaname != null && level.ekunyuvaname!.isNotEmpty) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
                           children: [
-                            if (level.baithakcount != 0 && level.baithaknames != null && level.baithaknames!.isNotEmpty) SizedBox(width: 1),
+                            if (level.ekunyuva != 0 && level.ekunyuvaname != null && level.ekunyuvaname!.isNotEmpty) SizedBox(width: 1),
                             Container(
-                                margin: EdgeInsets.only(right: (level.baithakcount != 0 && level.baithaknames != null && level.baithaknames!.isNotEmpty) ? 0 : 10),
-                                child: Text(level.baithakcount.toString())),
-                            if (level.baithakcount != 0 && level.baithaknames != null && level.baithaknames!.isNotEmpty)
+                                margin: EdgeInsets.only(right: (level.ekunyuva != 0 && level.ekunyuvaname != null && level.ekunyuvaname!.isNotEmpty) ? 0 : 10), child: Text(level.ekunyuva.toString())),
+                            if (level.ekunyuva != 0 && level.ekunyuvaname != null && level.ekunyuvaname!.isNotEmpty)
                               InkWell(
                                 borderRadius: BorderRadius.circular(50),
                                 onTap: () {
-                                  showInfoDialogBox(names: level.baithaknames ?? "", title: Statics.getLabel("sadbhavReportTable1"));
+                                  showInfoDialogBox(names: level.ekunyuvaname ?? "", title: Statics.getLabel("yuvaReportTable1"));
                                 },
                                 child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
                               ),
                           ],
                         ))),
-                        // DataCell(Center(
-                        //     child: Row(
-                        //   mainAxisAlignment: (level.startedcnt != 0 && level.startedname != null && level.startedname!.isNotEmpty) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
-                        //   children: [
-                        //     if (level.startedcnt != 0 && level.startedname != null && level.startedname!.isNotEmpty) SizedBox(width: 1),
-                        //     Container(
-                        //         margin: EdgeInsets.only(right: (level.startedcnt != 0 && level.startedname != null && level.startedname!.isNotEmpty) ? 0 : 10),
-                        //         child: Text(level.startedcnt.toString())),
-                        //     if (level.startedcnt != 0 && level.startedname != null && level.startedname!.isNotEmpty)
-                        //       InkWell(
-                        //         borderRadius: BorderRadius.circular(50),
-                        //         onTap: () {
-                        //           showInfoDialogBox(names: level.startedname ?? "", title: Statics.getLabel("sadbhavReportTable15"));
-                        //         },
-                        //         child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
-                        //       ),
-                        //   ],
-                        // ))),
-                        // if (showRemaining)
-                        //   DataCell(Center(
-                        //       child: Row(
-                        //     mainAxisAlignment: (level.remainingcnt != 0 && level.remainingname != null && level.remainingname!.isNotEmpty) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
-                        //     children: [
-                        //       if (level.remainingcnt != 0 && level.remainingname != null && level.remainingname!.isNotEmpty) SizedBox(width: 1),
-                        //       Container(
-                        //           margin: EdgeInsets.only(right: (level.remainingcnt != 0 && level.remainingname != null && level.remainingname!.isNotEmpty) ? 0 : 10),
-                        //           child: Text(level.remainingcnt.toString())),
-                        //       if (level.remainingcnt != 0 && level.remainingname != null && level.remainingname!.isNotEmpty)
-                        //         InkWell(
-                        //           borderRadius: BorderRadius.circular(50),
-                        //           onTap: () {
-                        //             showInfoDialogBox(names: level.remainingname ?? "", title: Statics.getLabel("sadbhavReportTable155"));
-                        //           },
-                        //           child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
-                        //         ),
-                        //     ],
-                        //   ))),
-                        // DataCell(Center(child: Text(level.namecount.toString()))),
-                        DataCell(Center(child: Text(level.totalmalecount.toString()))),
-                        DataCell(Center(child: Text(level.presentmale.toString()))),
-                        DataCell(Center(child: Text(level.totalfemalecount.toString()))),
-                        DataCell(Center(child: Text(level.presentfemale.toString()))),
-                        DataCell(Center(child: Text(level.totalcount.toString()))),
-                        DataCell(Center(child: Text(level.totalpresentcount.toString()))),
-                        DataCell(Center(child: Text(level.totalmalecount.toString()))),
-                        DataCell(Center(child: Text(level.presentmale.toString()))),
-                        DataCell(Center(child: Text(level.totalfemalecount.toString()))),
-                        DataCell(Center(child: Text(level.presentfemale.toString()))),
-                        DataCell(Center(child: Text(level.totalcount.toString()))),
-                        DataCell(Center(child: Text(level.totalpresentcount.toString()))),
-                        DataCell(Center(child: Text(level.totalpresentcount.toString()))),
-                        DataCell(Center(child: Text(level.totalpresentcount.toString()))),
-                        DataCell(Center(child: Text(level.totalpresentcount.toString()))),
-                        DataCell(Center(child: Text(level.presentmale.toString()))),
-                        DataCell(Center(child: Text(level.totalfemalecount.toString()))),
-                        DataCell(Center(child: Text(level.presentfemale.toString()))),
-                        DataCell(Center(child: Text(level.totalcount.toString()))),
-                        DataCell(Center(child: Text(level.totalpresentcount.toString()))),
-                        DataCell(Center(child: Text(level.totalpresentcount.toString()))),
-                        DataCell(Center(child: Text(level.totalpresentcount.toString()))),
-                        DataCell(Center(child: Text(level.totalpresentcount.toString()))),
+                        DataCell(Center(
+                            child: Row(
+                          mainAxisAlignment:
+                              (level.completeyuva != 0 && level.completeyuvaname != null && level.completeyuvaname!.isNotEmpty) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                          children: [
+                            if (level.completeyuva != 0 && level.completeyuvaname != null && level.completeyuvaname!.isNotEmpty) SizedBox(width: 1),
+                            Container(
+                                margin: EdgeInsets.only(right: (level.completeyuva != 0 && level.completeyuvaname != null && level.completeyuvaname!.isNotEmpty) ? 0 : 10),
+                                child: Text(level.completeyuva.toString())),
+                            if (level.completeyuva != 0 && level.completeyuvaname != null && level.completeyuvaname!.isNotEmpty)
+                              InkWell(
+                                borderRadius: BorderRadius.circular(50),
+                                onTap: () {
+                                  showInfoDialogBox(names: level.completeyuvaname ?? "", title: Statics.getLabel("yuvaReportTable3"));
+                                },
+                                child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
+                              ),
+                          ],
+                        ))),
+                        DataCell(Center(
+                            child: Row(
+                          mainAxisAlignment: (level.ekunyuva != 0 && level.pendingyuvaname != null && level.pendingyuvaname!.isNotEmpty) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                          children: [
+                            if (level.pendingyuva != 0 && level.pendingyuvaname != null && level.pendingyuvaname!.isNotEmpty) SizedBox(width: 1),
+                            Container(
+                                margin: EdgeInsets.only(right: (level.pendingyuva != 0 && level.pendingyuvaname != null && level.pendingyuvaname!.isNotEmpty) ? 0 : 10),
+                                child: Text(level.pendingyuva.toString())),
+                            if (level.pendingyuva != 0 && level.pendingyuvaname != null && level.pendingyuvaname!.isNotEmpty)
+                              InkWell(
+                                borderRadius: BorderRadius.circular(50),
+                                onTap: () {
+                                  showInfoDialogBox(names: level.pendingyuvaname ?? "", title: Statics.getLabel("yuvaReportTable2"));
+                                },
+                                child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
+                              ),
+                          ],
+                        ))),
+                        DataCell(Center(child: Text(level.yuvaexpectmaha.toString()))),
+                        DataCell(Center(child: Text(level.yuvaexpecttarun.toString()))),
+                        DataCell(Center(child: Text(level.yuvaexpectmandal.toString()))),
+                        DataCell(Center(child: Text(level.yuvaexpectpradhyapak.toString()))),
+                        DataCell(Center(child: Text(level.ekunexcept.toString()))),
+                        DataCell(Center(child: Text(level.yuvapresentmaha.toString()))),
+                        DataCell(Center(child: Text(level.yuvapresenttarun.toString()))),
+                        DataCell(Center(child: Text(level.yuvapresentmandal.toString()))),
+                        DataCell(Center(child: Text(level.yuvapresentpradhyapak.toString()))),
+                        DataCell(Center(child: Text(level.ekunpresent.toString()))),
+                        DataCell(Center(child: Text(level.mahaexpectmaha.toString()))),
+                        DataCell(Center(child: Text(level.mahaexpectvasti.toString()))),
+                        DataCell(Center(child: Text(level.mahapresentmaha.toString()))),
+                        DataCell(Center(child: Text(level.mahapresentvasti.toString()))),
+                        DataCell(Center(child: Text(level.yuvasangampresentmahashaakha.toString()))),
+                        DataCell(Center(child: Text(level.yuvasangampresentmahashaakhasankalpit.toString()))),
+                        DataCell(Center(child: Text(level.yuvasangampresentvartmantarun.toString()))),
+                        DataCell(Center(child: Text(level.yuvasangampresentvartmantarunsankalpit.toString()))),
+                        DataCell(Center(child: Text(level.yuvasangamexceptmahashaakha.toString()))),
+                        DataCell(Center(child: Text(level.yuvasangamexceptmahashaakhasankalpit.toString()))),
+                        DataCell(Center(child: Text(level.yuvasangamexceptvartmantarun.toString()))),
+                        DataCell(Center(child: Text(level.yuvasangamexceptvartmantarunsankalpit.toString()))),
                       ]);
                     }).toList() +
                     [
                       DataRow(color: MaterialStatePropertyAll(Colors.yellow.shade100), cells: [
-                        // DataCell(Center(
-                        //     child: Text(
-                        //   data.fold(0, (sum, item) => sum + (item.baithakcount ?? 0)).toString(),
-                        //   style: TextStyle(fontWeight: FontWeight.w700),
-                        // ))),
-                        // DataCell(Center(
-                        //     child: Text(
-                        //   data.fold(0, (sum, item) => sum + (item.startedcnt ?? 0)).toString(),
-                        //   style: TextStyle(fontWeight: FontWeight.w700),
-                        // ))),
-                        // if (showRemaining)
-                        //   DataCell(Center(
-                        //       child: Text(
-                        //     data.fold(0, (sum, item) => sum + (item.remainingcnt ?? 0)).toString(),
-                        //     style: TextStyle(fontWeight: FontWeight.w700),
-                        //   ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.namecount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.ekunyuva ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.totalmalecount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.completeyuva ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.presentmale ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.pendingyuva ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.totalfemalecount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.yuvaexpectmaha ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.presentfemale ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.yuvaexpecttarun ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.totalcount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.yuvaexpectmandal ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.totalpresentcount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.yuvaexpectpradhyapak ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.namecount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.ekunexcept ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.totalmalecount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.yuvapresentmaha ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.presentmale ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.yuvapresenttarun ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.totalfemalecount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.yuvapresentmandal ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.presentfemale ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.yuvapresentpradhyapak ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.totalcount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.ekunpresent ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.totalpresentcount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.mahaexpectmaha ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.totalcount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.mahaexpectvasti ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.totalpresentcount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.mahapresentmaha ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.totalfemalecount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.mahapresentvasti ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.presentfemale ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.yuvasangampresentmahashaakha ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.totalcount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.yuvasangampresentmahashaakhasankalpit ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.totalpresentcount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.yuvasangampresentvartmantarun ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.totalcount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.yuvasangampresentvartmantarunsankalpit ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.totalpresentcount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.yuvasangamexceptmahashaakha ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.totalcount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.yuvasangamexceptmahashaakhasankalpit ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.totalpresentcount ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.yuvasangamexceptvartmantarun ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.yuvasangamexceptvartmantarunsankalpit ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                       ])

@@ -43,6 +43,9 @@ import '../models/response_model/vasti_survey_report_model.dart';
 import '../models/response_model/vasti_up_data_model.dart';
 import '../models/response_model/vijayaDashamiInitModel.dart';
 import '../models/response_model/vijayadashmi_excel_resp_model.dart';
+import '../models/response_model/yuva_sangam_model.dart';
+import '../models/response_model/yuva_sangam_report_model.dart';
+import '../models/response_model/yuva_sangam_vrutta_resp.dart';
 import '../providers/bals.dart';
 import './database_helper.dart';
 
@@ -260,15 +263,15 @@ const String urlSavePramukhJanVrutta = baseUrlAPI + '/savepramukhjanvrutta';
 const String urlDeletePramukhJan = baseUrlAPI + '/deletepramukhjan';
 const String urlPramukhJanReport = baseUrlAPI + '/pramukhjanreport';
 
-const String urlGetAllYuvaSangam = baseUrlAPI + '/getallyuvasangam';
+const String urlGetAllYuvaSangam = baseUrlAPI + '/getyuvasangammaster';
 const String urlCreateUpdateYuvaSangam = baseUrlAPI + '/createyuvasangammaster';
 const String urlEditYuvaSangamDate = baseUrlAPI + '/updateyuvasangammasterdate';
 // const String urlGetAllPramukhJanKaryakram = baseUrlAPI + '/getallpramukhjankendra';
 // const String urlCreatePramukhJan = baseUrlAPI + '/createpramukhjanbaithak';
-// const String urlGetPramukhJanVrutta = baseUrlAPI + '/getpramukhjanvrutta';
+const String urlGetYuvaSangamVrutta = baseUrlAPI + '/getyuvasangamvrutta';
 const String urlSaveYuvaSangamVrutta = baseUrlAPI + '/saveyuvasangamvrutta';
-const String urlDeleteYuvaSangamJan = baseUrlAPI + '/deleteyuvasangam';
-const String urlYuvaSangamReport = baseUrlAPI + '/yuvasangamnreport';
+const String urlDeleteYuvaSangamJan = baseUrlAPI + '/deleteyuvasangammaster';
+const String urlYuvaSangamReport = baseUrlAPI + '/yuvasangamreport';
 
 const String urlVastiSarvekshanDataDump = baseUrlAPI + '/VastisarVekshanDataDump';
 const String urlGetReleaseNotes = baseUrlAPI + '/getreleasenote';
@@ -5563,6 +5566,136 @@ Future<List<Bhaitakdata>?> SavePramukhJanVruttaData({required BuildContext conte
   }
 }
 
+Future<List<YuvaSangamData>?> GetYuvaSangamListData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
+  if (showLoader) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  log(urlGetAllYuvaSangam);
+  try {
+    var response = await http.post(Uri.parse(urlGetAllYuvaSangam), headers: jHeaders, body: jsonEncode(inputJson));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+
+      YuvaSangamRespModel model = YuvaSangamRespModel.fromJson(data);
+      log("GetSadbhavBaithakListData >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+
+      return model.dataa; // ✅ return karna zaroori hai
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null; // ✅ error case
+    }
+  } catch (e) {
+    print("Exception: $e");
+    return null;
+  } finally {
+    if (showLoader) Navigator.of(context, rootNavigator: true).pop();
+  }
+}
+
+Future<YuvaVruttadata?> GetYuvaSangamVruttaData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
+  if (showLoader) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  log(urlGetYuvaSangamVrutta);
+
+  var response = await http.post(
+    Uri.parse(urlGetYuvaSangamVrutta),
+    headers: jHeaders,
+    body: jsonEncode(inputJson), // ✅ Encode here
+  );
+
+  log("Response GetYuvaSangamVruttaData >>>>>>>>>>>> ${response.body}");
+  print("response.statusCode: ${response.statusCode}");
+
+  if (showLoader) Navigator.of(context, rootNavigator: true).pop();
+
+  if (response.statusCode == 200) {
+    // Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+    final responseData = json.decode(response.body);
+
+    YuvaSangamVruttaRespModel model = YuvaSangamVruttaRespModel.fromJson(responseData);
+    // log("GetSadbhavBaithakVruttaData >>>>>>>>>>>>>>>>> ${(jsonEncode(responseData))}");
+
+    return model.vruttadata;
+  } else {
+    print("Error: ${response.statusCode} - ${response.body}");
+    Statics.showToast(Statics.getLabel('errorOccurred'));
+    return null;
+  }
+}
+
+Future<bool> DeleteYuvaSangamData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
+  if (showLoader) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  log(urlDeleteYuvaSangamJan);
+
+  var response = await http.post(
+    Uri.parse(urlDeleteYuvaSangamJan),
+    headers: jHeaders,
+    body: jsonEncode(inputJson), // ✅ Encode here
+  );
+
+  print("Response DeleteSadbhavBaithakData >>>>>>>>>>>> ${response.body}");
+  print("response.statusCode: ${response.statusCode}");
+
+  if (showLoader) Navigator.of(context, rootNavigator: true).pop();
+
+  if (response.statusCode == 200) {
+    // Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+    final responseData = json.decode(response.body);
+    if (responseData["Status"].toString() == "Success" || responseData["Status"].toString() == "200") {
+      return true;
+    }
+    return false;
+  } else {
+    print("Error: ${response.statusCode} - ${response.body}");
+    Statics.showToast(Statics.getLabel('errorOccurred'));
+    return false;
+  }
+}
+
+Future<List<Bhaitakdata>?> SaveYuvaSangamVruttaData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
+  if (showLoader) showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  log(urlSaveYuvaSangamVrutta);
+
+  var response = await http.post(
+    Uri.parse(urlSaveYuvaSangamVrutta),
+    headers: jHeaders,
+    body: jsonEncode(inputJson), // ✅ Encode here
+  );
+
+  print("Response SaveSadbhavBaithakVruttaData >>>>>>>>>>>> ${response.body}");
+  print("response.statusCode: ${response.statusCode}");
+
+  if (showLoader) Navigator.of(context, rootNavigator: true).pop();
+
+  if (response.statusCode == 200) {
+    // Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+    final responseData = json.decode(response.body);
+    if (responseData["Status"].toString() == "Success" || responseData["Status"].toString() == "200") {
+      Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+      return SadbhavKendraRespModel.fromJson(responseData).bhaitakdata;
+    }
+    if (responseData["Status"].toString() == "404") {
+      Statics.showToast(Statics.getLabel('baithakDateValidation'));
+    }
+    Statics.showToast(Statics.getLabel('errorOccurred'));
+    return null;
+  } else {
+    print("Error: ${response.statusCode} - ${response.body}");
+    Statics.showToast(Statics.getLabel('errorOccurred'));
+    return null;
+  }
+}
+
 Future<bool> CreateYuvaSangamData({required BuildContext context, required Map<String, dynamic> inputJson, bool showLoader = false}) async {
   if (showLoader) showLoaderDialog(context);
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
@@ -5630,6 +5763,37 @@ Future<bool> UpdateYuvaSangamDateData({required BuildContext context, required M
     print("Error: ${response.statusCode} - ${response.body}");
     Statics.showToast(Statics.getLabel('errorOccurred'));
     return false;
+  }
+}
+
+Future<List<Yuvrpt>?> YuvaSangamReportData(BuildContext context, Map<String, dynamic> inputJson) async {
+  showLoaderDialog(context);
+  Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  print("req >>>>>>>>>>>> ${jsonEncode(inputJson)}");
+  log(urlYuvaSangamReport);
+  try {
+    var response = await http.post(Uri.parse(urlYuvaSangamReport), headers: jHeaders, body: jsonEncode(inputJson));
+
+    // Navigator.of(context, rootNavigator: true).pop();
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+
+      YuvaSangamReportRespModel model = YuvaSangamReportRespModel.fromJson(data);
+      log("PramukhJanReportData >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+
+      return model.yuvrpt; // ✅ return karna zaroori hai
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null; // ✅ error case
+    }
+  } catch (e) {
+    // Navigator.of(context, rootNavigator: true).pop();
+    print("Exception: $e");
+    return null;
+  } finally {
+    Navigator.of(context, rootNavigator: true).pop();
   }
 }
 
