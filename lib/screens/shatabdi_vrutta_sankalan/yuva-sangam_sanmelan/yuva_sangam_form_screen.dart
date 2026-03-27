@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:math' as m;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -379,27 +380,29 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          _type, // Replaced 'भाग - जिल्हा' and 'नगर'
-                          style: TextStyle(
-                            color: Colors.grey.shade400,
-                            fontSize: 12,
-                            fontWeight: FontWeight.normal,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _type, // Replaced 'भाग - जिल्हा' and 'नगर'
+                            style: TextStyle(
+                              color: Colors.grey.shade400,
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          _geo, // Assuming 'Zone - Chembur' or 'Zone: Chembur' isn't needed as user said to replace with simple English words. Just District value is good.
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                          SizedBox(height: 4),
+                          Text(
+                            _geo, // Assuming 'Zone - Chembur' or 'Zone: Chembur' isn't needed as user said to replace with simple English words. Just District value is good.
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -481,39 +484,17 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                     Row(
                       children: [
                         Expanded(
-                          child: TextFormField(
+                          child: numTextField(
                             controller: txtExpMahaTarunController,
-                            decoration: InputDecoration(
-                              labelText: Statics.getLabel("mahavidya"),
-                              labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
-                              fillColor: const Color(0xFFF0F0F2),
-                              // Light grey fill
-                              filled: true,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide.none, // Hide default border
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12), // Align left of field
-                            ),
-                            style: const TextStyle(color: Colors.grey, fontSize: 14), // Original fields looked greyed out
+                            labelText: Statics.getLabel("mahavidya"),
                           ),
                         ),
                         const SizedBox(width: 16), // Column spacing
                         Expanded(
-                          child: TextFormField(
+                          child: numTextField(
                             controller: txtPresentMahaTarunController,
-                            decoration: InputDecoration(
-                              labelText: Statics.getLabel("mahavidya"),
-                              labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
-                              fillColor: const Color(0xFFF0F0F2),
-                              filled: true,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide.none,
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                            ),
-                            style: const TextStyle(color: Colors.grey, fontSize: 14),
+                            expectedController: txtExpMahaTarunController,
+                            labelText: Statics.getLabel("mahavidya"),
                           ),
                         ),
                       ],
@@ -523,81 +504,17 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                     Row(
                       children: [
                         Expanded(
-                          child: TextFormField(
+                          child: numTextField(
                             controller: txtExpTaurunProfController,
-                            decoration: InputDecoration(
-                              labelText: '${Statics.getLabel(("TarunVyavasaayee"))} (< 30)',
-                              // Replaced 'युवा व्यवसायी (< 3)' placeholder
-                              labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
-                              fillColor: const Color(0xFFF0F0F2),
-                              filled: true,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide.none,
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                            ),
-                            style: const TextStyle(color: Colors.grey, fontSize: 14),
+                            labelText: '${Statics.getLabel(("TarunVyavasaayee"))} (< 30)',
                           ),
                         ),
                         const SizedBox(width: 16),
                         Expanded(
-                          child: TextFormField(
+                          child: numTextField(
                             controller: txtPresentTaurunProfController,
-                            decoration: InputDecoration(
-                              labelText: '${Statics.getLabel(("TarunVyavasaayee"))} (< 30)',
-                              labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
-                              fillColor: const Color(0xFFF0F0F2),
-                              filled: true,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide.none,
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                            ),
-                            style: const TextStyle(color: Colors.grey, fontSize: 14),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    // Row 3: Yuva Mandal fields
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            controller: txtExpYuvaMandalController,
-                            decoration: InputDecoration(
-                              labelText: '${Statics.getLabel(("yuvaMandal"))}',
-                              // Replaced 'युवा व्यवसायी (< 3)' placeholder
-                              labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
-                              fillColor: const Color(0xFFF0F0F2),
-                              filled: true,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide.none,
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                            ),
-                            style: const TextStyle(color: Colors.grey, fontSize: 14),
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: TextFormField(
-                            controller: txtPresentYuvaMandalController,
-                            decoration: InputDecoration(
-                              labelText: '${Statics.getLabel(("yuvaMandal"))}',
-                              labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
-                              fillColor: const Color(0xFFF0F0F2),
-                              filled: true,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide.none,
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                            ),
-                            style: const TextStyle(color: Colors.grey, fontSize: 14),
+                            expectedController: txtExpTaurunProfController,
+                            labelText: '${Statics.getLabel(("TarunVyavasaayee"))} (< 30)',
                           ),
                         ),
                       ],
@@ -607,39 +524,66 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                     Row(
                       children: [
                         Expanded(
-                          child: TextFormField(
+                          child: numTextField(
                             controller: txtExpProfController,
-                            decoration: InputDecoration(
-                              labelText: '${Statics.getLabel(("professor"))}',
-                              // Replaced 'प्राध्यापक' placeholder
-                              labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
-                              fillColor: const Color(0xFFF0F0F2),
-                              filled: true,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide.none,
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                            ),
-                            style: const TextStyle(color: Colors.grey, fontSize: 14),
+                            labelText: '${Statics.getLabel(("professor"))}',
                           ),
                         ),
                         const SizedBox(width: 16),
                         Expanded(
-                          child: TextFormField(
+                          child: numTextField(
                             controller: txtPresentProfController,
-                            decoration: InputDecoration(
-                              labelText: '${Statics.getLabel(("professor"))}',
-                              labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
-                              fillColor: const Color(0xFFF0F0F2),
-                              filled: true,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide.none,
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                            ),
-                            style: const TextStyle(color: Colors.grey, fontSize: 14),
+                            expectedController: txtExpProfController,
+                            labelText: '${Statics.getLabel(("professor"))}',
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    // Row 4: Faculty fields
+                    Row(
+                      children: [
+                        Expanded(
+                          child: numTextField(
+                            controller: TextEditingController(
+                                text: ((int.tryParse(txtExpMahaTarunController.text) ?? 0) + (int.tryParse(txtExpTaurunProfController.text) ?? 0) + (int.tryParse(txtExpProfController.text) ?? 0))
+                                    .toString()),
+                            labelText: '${Statics.getLabel(("Total"))}',
+                            readOnly: true,
+                            fillColor: Colors.blueGrey.shade100,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: numTextField(
+                            controller: TextEditingController(
+                                text: ((int.tryParse(txtPresentMahaTarunController.text) ?? 0) +
+                                        (int.tryParse(txtPresentTaurunProfController.text) ?? 0) +
+                                        (int.tryParse(txtPresentProfController.text) ?? 0))
+                                    .toString()),
+                            labelText: '${Statics.getLabel(("Total"))}',
+                            readOnly: true,
+                            fillColor: Colors.blueGrey.shade100,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    // Row 3: Yuva Mandal fields
+                    Row(
+                      children: [
+                        Expanded(
+                          child: numTextField(
+                            controller: txtExpYuvaMandalController,
+                            labelText: '${Statics.getLabel(("yuvaMandal"))}',
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: numTextField(
+                            controller: txtPresentYuvaMandalController,
+                            expectedController: txtExpYuvaMandalController,
+                            labelText: '${Statics.getLabel(("yuvaMandal"))}',
                           ),
                         ),
                       ],
@@ -690,39 +634,17 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                     Row(
                       children: [
                         Expanded(
-                          child: TextFormField(
+                          child: numTextField(
                             controller: txtExpMahavidController,
-                            decoration: InputDecoration(
-                              labelText: Statics.getLabel("schools"),
-                              labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
-                              fillColor: const Color(0xFFF0F0F2),
-                              // Light grey fill
-                              filled: true,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide.none, // Hide default border
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12), // Align left of field
-                            ),
-                            style: const TextStyle(color: Colors.grey, fontSize: 14), // Original fields looked greyed out
+                            labelText: Statics.getLabel("schools"),
                           ),
                         ),
                         const SizedBox(width: 16), // Column spacing
                         Expanded(
-                          child: TextFormField(
+                          child: numTextField(
                             controller: txtPresentMahavidController,
-                            decoration: InputDecoration(
-                              labelText: Statics.getLabel("schools"),
-                              labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
-                              fillColor: const Color(0xFFF0F0F2),
-                              filled: true,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide.none,
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                            ),
-                            style: const TextStyle(color: Colors.grey, fontSize: 14),
+                            expectedController: txtExpMahavidController,
+                            labelText: Statics.getLabel("schools"),
                           ),
                         ),
                       ],
@@ -732,39 +654,17 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                     Row(
                       children: [
                         Expanded(
-                          child: TextFormField(
+                          child: numTextField(
                             controller: txtExpVastigruhController,
-                            decoration: InputDecoration(
-                              labelText: '${Statics.getLabel(("vastigruh"))}',
-                              // Replaced 'युवा व्यवसायी (< 3)' placeholder
-                              labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
-                              fillColor: const Color(0xFFF0F0F2),
-                              filled: true,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide.none,
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                            ),
-                            style: const TextStyle(color: Colors.grey, fontSize: 14),
+                            labelText: '${Statics.getLabel(("vastigruh"))}',
                           ),
                         ),
                         const SizedBox(width: 16),
                         Expanded(
-                          child: TextFormField(
+                          child: numTextField(
                             controller: txtPresentVastigruhController,
-                            decoration: InputDecoration(
-                              labelText: '${Statics.getLabel(("vastigruh"))}',
-                              labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
-                              fillColor: const Color(0xFFF0F0F2),
-                              filled: true,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide.none,
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                            ),
-                            style: const TextStyle(color: Colors.grey, fontSize: 14),
+                            expectedController: txtExpVastigruhController,
+                            labelText: '${Statics.getLabel(("vastigruh"))}',
                           ),
                         ),
                       ],
@@ -1667,7 +1567,44 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
   //   );
   // }
 
-  // Widget (){}
+  Widget numTextField({required TextEditingController controller, Color? fillColor, bool readOnly = false, TextEditingController? expectedController, required String labelText}) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: TextInputType.number,
+      readOnly: readOnly,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(10),
+        if (expectedController != null)
+          TextInputFormatter.withFunction((oldValue, newValue) {
+            if (newValue.text.isEmpty) return newValue;
+
+            final int? aValue = int.tryParse(expectedController.text);
+            final int? bValue = int.tryParse(newValue.text);
+
+            if (aValue == null || bValue == null) return newValue;
+
+            if (bValue > aValue) {
+              return oldValue; // reject input
+            }
+
+            return newValue;
+          }),
+      ],
+      onChanged: (value) => setState(() {}),
+      decoration: InputDecoration(
+        labelText: labelText,
+        labelStyle: const TextStyle(color: Colors.black, fontSize: 14),
+        fillColor: fillColor ?? Colors.grey.shade50,
+        filled: true,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide.none, // Hide default border
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12), // Align left of field
+      ),
+      style: const TextStyle(color: Colors.black, fontSize: 14), // Original fields looked greyed out
+    );
+  }
 
   Widget vaktaTable() {
     return Column(
@@ -1976,6 +1913,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
       return;
     }
     if (!fromEditing) {
+      selectedVaktaIndex = null;
       _daayitvaForValue = null;
       _aayaamValue = null;
       _gatividhiValue = null;
@@ -1994,7 +1932,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
             // contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             insetPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 16),
             // titlePadding: const EdgeInsets.fromLTRB(20, 20, 12, 0),
-            child: Padding(
+            child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14),
               child: Column(
                 spacing: 8,
@@ -2010,22 +1948,11 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                   ),
                   // SizedBox(height: 4),
                   Divider(thickness: 1, color: Colors.deepPurple.shade100),
-                  SizedBox(height: 4),
-                  textControllerField2(
-                    name: Statics.getLabel("sanmelanVaktaName"),
-                    controller: txtVaktaNameController,
-                    keyboardType: TextInputType.name,
-                  ),
-                  textControllerField2(
-                    name: Statics.getLabel("Daayitva"),
-                    controller: txtVaktaTaskController,
-                    keyboardType: TextInputType.name,
-                  ),
 
                   SizedBox(height: 12),
                   if (_daayitvaFor != null)
                     DropdownButtonFormField<StaticMasterBAL>(
-                      decoration: InputDecoration(labelText: Statics.getLabel('SelectDaayitvaFor')),
+                      decoration: InputDecoration(labelText: "${Statics.getLabel('SelectDaayitvaFor')} *"),
                       isExpanded: true,
                       value: _daayitvaForValue,
                       items: _daayitvaFor!.map((bg) => DropdownMenuItem(value: bg, child: Text(bg.codeForDisplay!))).toList(),
@@ -2034,6 +1961,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                           _daayitvaForValue = value;
                         });
                         print(_daayitvaForValue!.ViewOnly);
+                        print(_daayitvaForValue!.code);
                       },
                       validator: (value) {
                         if (value == null) return (Statics.getLabel('DaayitvaForValidationMessage'));
@@ -2050,7 +1978,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                         children: [
                           SizedBox(height: 10),
                           DropdownButtonFormField(
-                            decoration: InputDecoration(labelText: Statics.getLabel('SelectAayaam')),
+                            decoration: InputDecoration(labelText: "${Statics.getLabel('SelectAayaam')} *"),
                             isExpanded: true,
                             value: _aayaamValue,
                             items: _aayam!.map((bg) => DropdownMenuItem(value: bg.aayaamID, child: Text(bg.aayaamName!))).toList(),
@@ -2079,7 +2007,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                         children: [
                           SizedBox(height: 10),
                           DropdownButtonFormField(
-                            decoration: InputDecoration(labelText: Statics.getLabel('SelectGatividhi')),
+                            decoration: InputDecoration(labelText: "${Statics.getLabel('SelectGatividhi')} *"),
                             isExpanded: true,
                             value: _gatividhiValue,
                             items: _gatividhi!.map((bg) => DropdownMenuItem(value: bg.gatividhiID, child: Text(bg.gatividhiName!))).toList(),
@@ -2112,7 +2040,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                           //     legendString: 'Sangha-PreritSansthaa',
                           //     fontsize: 18),
                           DropdownButtonFormField<dynamic>(
-                            decoration: InputDecoration(labelText: Statics.getLabel('SansthaaName')),
+                            decoration: InputDecoration(labelText: "${Statics.getLabel('SansthaaName')} *"),
                             isExpanded: true,
                             value: _preritSansthaValue,
                             items: _sanghaPreritSanstha!.map((bg) => DropdownMenuItem(value: bg["SanghaPreritSansthaaID"], child: Text(bg["SansthaaName"]))).toList(),
@@ -2165,11 +2093,19 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                       ),
                   SizedBox(height: 12),
 
-                  // textControllerField2(
-                  //   name: Statics.getLabel("sanmelanVaktaTask"),
-                  //   controller: txtVaktaTaskController,
-                  //   keyboardType: TextInputType.name,
-                  // ),
+                  SizedBox(height: 4),
+                  textControllerField2(
+                    name: Statics.getLabel("sanmelanVaktaName"),
+                    imp: " *",
+                    controller: txtVaktaNameController,
+                    keyboardType: TextInputType.name,
+                  ),
+                  textControllerField2(
+                    name: Statics.getLabel("Daayitva"),
+                    imp: " *",
+                    controller: txtVaktaTaskController,
+                    keyboardType: TextInputType.name,
+                  ),
                   SizedBox(height: 4),
                   Row(
                     spacing: 12,
@@ -2184,16 +2120,38 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                         ),
                         onPressed: () async {
-                          vaktaList.add(YuvaaSpeaker(
-                              pkid: 0,
+                          final isRequiredFieldEmpty = txtVaktaNameController.text.trim().isEmpty ||
+                              txtVaktaTaskController.text.trim().isEmpty ||
+                              _daayitvaForValue == null ||
+                              (_daayitvaForValue!.code != "Sangha" &&
+                                  _daayitvaForValue!.code != "OtherSocialOrganization" &&
+                                  _aayaamValue == null &&
+                                  _gatividhiValue == null &&
+                                  _preritSansthaValue == null);
+
+                          if (isRequiredFieldEmpty) {
+                            Statics.showToast(Statics.getLabel("impInfoRequired"));
+                            return;
+                          }
+
+                          final _data = YuvaaSpeaker(
+                              pkid: m.Random().nextInt(1000),
                               name: txtVaktaNameController.text.trim(),
                               daaitva: txtVaktaTaskController.text.trim(),
                               prakarid: _daayitvaForValue?.staticID,
                               gatividhid: _aayaamValue ?? _gatividhiValue ?? _preritSansthaValue,
                               isannya: _daayitvaForValue!.code == "OtherSocialOrganization" ? 1 : 0,
-                              annyaname: _othOrgNameCtrl.text));
+                              annyaname: _othOrgNameCtrl.text);
+
+                          if (fromEditing) {
+                            vaktaList.removeAt(selectedVaktaIndex!);
+                            vaktaList.insert(selectedVaktaIndex!, _data);
+                          } else {
+                            vaktaList.add(_data);
+                          }
                           txtVaktaNameController.clear();
                           txtVaktaTaskController.clear();
+                          _othOrgNameCtrl.clear();
                           setState(() {});
                           // Statics.showToast(Statics.getLabel("workInProgress"));
                           Navigator.pop(ctx);

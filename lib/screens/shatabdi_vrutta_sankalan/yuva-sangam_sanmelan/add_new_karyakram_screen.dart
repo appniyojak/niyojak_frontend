@@ -274,6 +274,7 @@ class _AddNewKaryakramScreenState extends State<AddNewKaryakramScreen> {
 
   Future<void> populateDropdown() async {
     setState(() {
+      _selctedLevelList = [];
       _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedupnagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
       _linkedMahaanagar = _linkedVibhaag = _linkedbhaag = _linkednagar = _linkedupnagar = _linkedmandal = null;
       _selctedLevelName = _selectedGeoUnitIdForCreat = null;

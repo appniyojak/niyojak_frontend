@@ -5781,7 +5781,7 @@ Future<List<Yuvrpt>?> YuvaSangamReportData(BuildContext context, Map<String, dyn
       final Map<String, dynamic> data = jsonDecode(response.body);
 
       YuvaSangamReportRespModel model = YuvaSangamReportRespModel.fromJson(data);
-      log("PramukhJanReportData >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
+      log("YuvaSangamReportData >>>>>>>>>>>>>>>>> ${(jsonEncode(data))}");
 
       return model.yuvrpt; // ✅ return karna zaroori hai
     } else {

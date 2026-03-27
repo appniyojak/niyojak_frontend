@@ -78,6 +78,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
 
   // int? baithakId;
   bool _isViewOnly = false;
+  bool dateWise = false;
 
   List<Map<String, dynamic>> karyakramLevelsList = [
     {"${Statics.getLabel("Bhaag")}": 1},
@@ -122,6 +123,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
       "levelid": _selectedKaryakramLevelId ?? 0,
       "geounitid": int.tryParse(_selectedGeoUnitId ?? "0") ?? 0,
       "appuserid": int.parse(Statics.userDetails['userID']),
+      "isdatewise": dateWise ? 1 : 0,
     };
 
     final _baithak = await Statics.GetYuvaSangamListData(context: context, inputJson: formData, showLoader: true);
@@ -520,13 +522,9 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
               ),
               SizedBox(height: 24),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // ElevatedButton(
-                  //   style: OutlinedButton.styleFrom(backgroundColor: Colors.purple, foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
-                  //   onPressed: () => Navigator.of(context).pushNamed(AllSanvaadScreen.routeName),
-                  //   child: Text(Statics.getLabel("allSanvaadData")),
-                  // ),
+                  buildFilterChips(),
                   OutlinedButton(
                     style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)), side: BorderSide(color: Colors.purple, width: 0.7)),
                     onPressed: () => Navigator.of(context).pushNamed(AddNewKaryakramScreen.routeName).then(
@@ -692,6 +690,38 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildFilterChips() {
+    return Row(
+      children: [
+        FilterChip(
+          label: Text(Statics.getLabel("Level")),
+          selected: !dateWise,
+          onSelected: (selected) {
+            if (selected) {
+              setState(() {
+                dateWise = false;
+              });
+              getKendraListData();
+            }
+          },
+        ),
+        const SizedBox(width: 10),
+        FilterChip(
+          label: Text(Statics.getLabel("date2")),
+          selected: dateWise,
+          onSelected: (selected) {
+            if (selected) {
+              setState(() {
+                dateWise = true;
+              });
+              getKendraListData();
+            }
+          },
+        ),
+      ],
     );
   }
 

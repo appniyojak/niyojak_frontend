@@ -259,27 +259,33 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
       Statics.getLabel('yuvaReportTable2'),
       Statics.getLabel('yuvaReportTable3'),
       Statics.getLabel('yuvaReportTable4'),
-      Statics.getLabel('yuvaReportTable6'),
-      Statics.getLabel('yuvaReportTable8'),
-      Statics.getLabel('yuvaReportTable23'),
-      Statics.getLabel('yuvaReportTable14'),
-      Statics.getLabel('yuvaReportTable5'),
-      Statics.getLabel('yuvaReportTable7'),
-      Statics.getLabel('yuvaReportTable25'),
-      Statics.getLabel('yuvaReportTable9'),
-      Statics.getLabel('yuvaReportTable145'),
-      Statics.getLabel('yuvaReportTable10'),
-      Statics.getLabel('yuvaReportTable12'),
-      Statics.getLabel('yuvaReportTable11'),
-      Statics.getLabel('yuvaReportTable13'),
       Statics.getLabel('yuvaReportTable15'),
+      Statics.getLabel('yuvaReportTable5'),
       Statics.getLabel('yuvaReportTable16'),
+      Statics.getLabel('yuvaReportTable6'),
       Statics.getLabel('yuvaReportTable17'),
+      Statics.getLabel('yuvaReportTable7'),
       Statics.getLabel('yuvaReportTable18'),
+      Statics.getLabel('yuvaReportTable8'),
       Statics.getLabel('yuvaReportTable19'),
+      Statics.getLabel('yuvaReportTable9'),
       Statics.getLabel('yuvaReportTable20'),
+      Statics.getLabel('yuvaReportTable10'),
       Statics.getLabel('yuvaReportTable21'),
+      Statics.getLabel('yuvaReportTable11'),
       Statics.getLabel('yuvaReportTable22'),
+      Statics.getLabel('yuvaReportTable12'),
+      Statics.getLabel('yuvaReportTable23'),
+      Statics.getLabel('yuvaReportTable13'),
+      Statics.getLabel('yuvaReportTable24'),
+      Statics.getLabel('yuvaReportTable14'),
+      Statics.getLabel('yuvaReportTable25'),
+      Statics.getLabel('yuvaReportTable26'),
+      Statics.getLabel('yuvaReportTable27'),
+      Statics.getLabel('yuvaReportTable28'),
+      Statics.getLabel('yuvaReportTable29'),
+      Statics.getLabel('yuvaReportTable30'),
+      Statics.getLabel('yuvaReportTable31'),
     ];
 
     return Row(
@@ -340,7 +346,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
               controller: _scrollController,
               scrollDirection: Axis.horizontal,
               child: DataTable(
-                columnSpacing: 14,
+                columnSpacing: 0,
                 horizontalMargin: 12,
                 // dataRowMaxHeight: 75,
                 headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
@@ -348,7 +354,8 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                 columns: headers
                     .map((header) => DataColumn(
                           label: Container(
-                            constraints: BoxConstraints(minWidth: 40, maxWidth: 200),
+                            margin: EdgeInsets.symmetric(horizontal: 14),
+                            constraints: BoxConstraints(minWidth: 40, maxWidth: 250),
                             // constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.2),
                             child: Text(header, softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold)),
                           ),
@@ -358,7 +365,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                       return DataRow(cells: [
                         DataCell(Center(
                             child: Row(
-                          mainAxisAlignment: (level.pendingyuva != 0 && level.ekunyuvaname != null && level.ekunyuvaname!.isNotEmpty) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                          mainAxisAlignment: (level.ekunyuva != 0 && level.ekunyuvaname != null && level.ekunyuvaname!.isNotEmpty) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
                           children: [
                             if (level.ekunyuva != 0 && level.ekunyuvaname != null && level.ekunyuvaname!.isNotEmpty) SizedBox(width: 1),
                             Container(
@@ -394,7 +401,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                         ))),
                         DataCell(Center(
                             child: Row(
-                          mainAxisAlignment: (level.ekunyuva != 0 && level.pendingyuvaname != null && level.pendingyuvaname!.isNotEmpty) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                          mainAxisAlignment: (level.pendingyuva != 0 && level.pendingyuvaname != null && level.pendingyuvaname!.isNotEmpty) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
                           children: [
                             if (level.pendingyuva != 0 && level.pendingyuvaname != null && level.pendingyuvaname!.isNotEmpty) SizedBox(width: 1),
                             Container(
@@ -411,27 +418,64 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                           ],
                         ))),
                         DataCell(Center(child: Text(level.yuvaexpectmaha.toString()))),
-                        DataCell(Center(child: Text(level.yuvaexpecttarun.toString()))),
-                        DataCell(Center(child: Text(level.yuvaexpectmandal.toString()))),
-                        DataCell(Center(child: Text(level.yuvaexpectpradhyapak.toString()))),
-                        DataCell(Center(child: Text(level.ekunexcept.toString()))),
                         DataCell(Center(child: Text(level.yuvapresentmaha.toString()))),
+//
+                        DataCell(Center(child: Text(level.yuvaexpecttarun.toString()))),
                         DataCell(Center(child: Text(level.yuvapresenttarun.toString()))),
-                        DataCell(Center(child: Text(level.yuvapresentmandal.toString()))),
+//
+                        DataCell(Center(child: Text(level.yuvaexpectpradhyapak.toString()))),
                         DataCell(Center(child: Text(level.yuvapresentpradhyapak.toString()))),
-                        DataCell(Center(child: Text(level.ekunpresent.toString()))),
+                        //
+                        DataCell(Center(child: Text(level.ekunexcept.toString(), style: TextStyle(fontWeight: FontWeight.w700)))),
+                        DataCell(Center(child: Text(level.ekunpresent.toString(), style: TextStyle(fontWeight: FontWeight.w700)))),
+                        //
+                        DataCell(Container(
+                            decoration: BoxDecoration(
+                              color: Colors.orange.shade50,
+                              border: Border.all(color: Colors.black26, width: 0.7),
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              level.yuvaexpectmandal.toString(),
+                              style: TextStyle(fontWeight: FontWeight.w700),
+                            ))),
+                        DataCell(Container(
+                            decoration: BoxDecoration(
+                              color: Colors.orange.shade50,
+                              border: Border.all(color: Colors.black26, width: 0.7),
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              level.yuvapresentmandal.toString(),
+                              style: TextStyle(fontWeight: FontWeight.w700),
+                            ))),
+                        //
                         DataCell(Center(child: Text(level.mahaexpectmaha.toString()))),
-                        DataCell(Center(child: Text(level.mahaexpectvasti.toString()))),
                         DataCell(Center(child: Text(level.mahapresentmaha.toString()))),
+                        //
+                        DataCell(Center(child: Text(level.mahaexpectvasti.toString()))),
                         DataCell(Center(child: Text(level.mahapresentvasti.toString()))),
-                        DataCell(Center(child: Text(level.yuvasangampresentmahashaakha.toString()))),
-                        DataCell(Center(child: Text(level.yuvasangampresentmahashaakhasankalpit.toString()))),
-                        DataCell(Center(child: Text(level.yuvasangampresentvartmantarun.toString()))),
-                        DataCell(Center(child: Text(level.yuvasangampresentvartmantarunsankalpit.toString()))),
+                        //
                         DataCell(Center(child: Text(level.yuvasangamexceptmahashaakha.toString()))),
+                        DataCell(Center(child: Text(level.yuvasangampresentmahashaakha.toString()))),
+                        //
                         DataCell(Center(child: Text(level.yuvasangamexceptmahashaakhasankalpit.toString()))),
+                        DataCell(Center(child: Text(level.yuvasangampresentmahashaakhasankalpit.toString()))),
+                        //
                         DataCell(Center(child: Text(level.yuvasangamexceptvartmantarun.toString()))),
+                        DataCell(Center(child: Text(level.yuvasangampresentvartmantarun.toString()))),
+                        //
                         DataCell(Center(child: Text(level.yuvasangamexceptvartmantarunsankalpit.toString()))),
+                        DataCell(Center(child: Text(level.yuvasangampresentvartmantarunsankalpit.toString()))),
+                        //
+                        DataCell(Center(child: Text(level.yuvasangamexceptshaakha.toString()))),
+                        DataCell(Center(child: Text(level.yuvasangampresentshaakha.toString()))),
+                        //
+                        DataCell(Center(child: Text(level.yuvasangamexceptvartmansankalpit.toString()))),
+                        DataCell(Center(child: Text(level.yuvasangampresentsankalpitshaakha.toString()))),
+                        //
+                        DataCell(Center(child: Text(level.totalyuvasangampresentshaakha.toString()))),
+                        DataCell(Center(child: Text(level.totalyuvasangamexceptshaakha.toString()))),
                       ]);
                     }).toList() +
                     [
@@ -458,27 +502,12 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.yuvaexpecttarun ?? 0)).toString(),
-                          style: TextStyle(fontWeight: FontWeight.w700),
-                        ))),
-                        DataCell(Center(
-                            child: Text(
-                          data.fold(0, (sum, item) => sum + (item.yuvaexpectmandal ?? 0)).toString(),
-                          style: TextStyle(fontWeight: FontWeight.w700),
-                        ))),
-                        DataCell(Center(
-                            child: Text(
-                          data.fold(0, (sum, item) => sum + (item.yuvaexpectpradhyapak ?? 0)).toString(),
-                          style: TextStyle(fontWeight: FontWeight.w700),
-                        ))),
-                        DataCell(Center(
-                            child: Text(
-                          data.fold(0, (sum, item) => sum + (item.ekunexcept ?? 0)).toString(),
-                          style: TextStyle(fontWeight: FontWeight.w700),
-                        ))),
-                        DataCell(Center(
-                            child: Text(
                           data.fold(0, (sum, item) => sum + (item.yuvapresentmaha ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.yuvaexpecttarun ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
@@ -488,7 +517,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.yuvapresentmandal ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.yuvaexpectpradhyapak ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
@@ -498,7 +527,22 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                         ))),
                         DataCell(Center(
                             child: Text(
+                          data.fold(0, (sum, item) => sum + (item.ekunexcept ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
                           data.fold(0, (sum, item) => sum + (item.ekunpresent ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.yuvaexpectmandal ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.yuvapresentmandal ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
@@ -508,12 +552,12 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.mahaexpectvasti ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.mahapresentmaha ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.mahapresentmaha ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.mahaexpectvasti ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
@@ -523,27 +567,12 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.yuvasangampresentmahashaakha ?? 0)).toString(),
-                          style: TextStyle(fontWeight: FontWeight.w700),
-                        ))),
-                        DataCell(Center(
-                            child: Text(
-                          data.fold(0, (sum, item) => sum + (item.yuvasangampresentmahashaakhasankalpit ?? 0)).toString(),
-                          style: TextStyle(fontWeight: FontWeight.w700),
-                        ))),
-                        DataCell(Center(
-                            child: Text(
-                          data.fold(0, (sum, item) => sum + (item.yuvasangampresentvartmantarun ?? 0)).toString(),
-                          style: TextStyle(fontWeight: FontWeight.w700),
-                        ))),
-                        DataCell(Center(
-                            child: Text(
-                          data.fold(0, (sum, item) => sum + (item.yuvasangampresentvartmantarunsankalpit ?? 0)).toString(),
-                          style: TextStyle(fontWeight: FontWeight.w700),
-                        ))),
-                        DataCell(Center(
-                            child: Text(
                           data.fold(0, (sum, item) => sum + (item.yuvasangamexceptmahashaakha ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.yuvasangampresentmahashaakha ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
@@ -553,12 +582,57 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                         ))),
                         DataCell(Center(
                             child: Text(
+                          data.fold(0, (sum, item) => sum + (item.yuvasangampresentmahashaakhasankalpit ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
                           data.fold(0, (sum, item) => sum + (item.yuvasangamexceptvartmantarun ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
+                          data.fold(0, (sum, item) => sum + (item.yuvasangampresentvartmantarun ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
                           data.fold(0, (sum, item) => sum + (item.yuvasangamexceptvartmantarunsankalpit ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.yuvasangampresentvartmantarunsankalpit ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.yuvasangampresentshaakha ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.yuvasangampresentsankalpitshaakha ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.yuvasangamexceptshaakha ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.yuvasangamexceptvartmansankalpit ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.totalyuvasangampresentshaakha ?? 0)).toString(),
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ))),
+                        DataCell(Center(
+                            child: Text(
+                          data.fold(0, (sum, item) => sum + (item.totalyuvasangamexceptshaakha ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                       ])

@@ -1926,19 +1926,40 @@ Map<String, String> resEnglish = {
   'yuvaReportTable1': "Total Sanmelan",
   'yuvaReportTable2': "Sanmelan Conducted",
   'yuvaReportTable3': "Remaining Sanmelan",
+
   'yuvaReportTable4': "Exp. High\nSch. Stud",
-  'yuvaReportTable5': "Pr. High\nSch. Stud",
-  'yuvaReportTable6': "Exp. Yuva \nVyavasaayee",
-  'yuvaReportTable7': "Pr. Yuva \nVyavasaayee",
-  'yuvaReportTable8': "Exp. Professor",
-  'yuvaReportTable9': "Pr. Professor",
-  'yuvaReportTable10': "Exp. High Sch.",
-  'yuvaReportTable11': "Pr. High Sch.",
-  'yuvaReportTable12': "Exp. Vasti Gruh",
-  'yuvaReportTable13': "Pr. Vasti Gruh",
-  'yuvaReportTable14': "Total Present",
-  'yuvaReportTable15': "Total Shaakha/ Milan",
-  'yuvaReportTable16': "Shaakha/ Milan Conducted",
+  'yuvaReportTable5': "Exp. Yuva \nVyavasaayee",
+  'yuvaReportTable6': "Exp. Professor",
+  'yuvaReportTable7': "Total Expected",
+  'yuvaReportTable8': "Exp. Yuva Mandal",
+  'yuvaReportTable9': "Exp. High Sch.",
+  'yuvaReportTable10': "Exp. Vasti Gruh",
+  'yuvaReportTable11': "Exp. Present High Sch.\nShaakha / Milan",
+  'yuvaReportTable12': "Exp. New Sankalpit High Sch.\nShaakha / Milan",
+  'yuvaReportTable13': "Exp. Present Tarun Vyavasaayee\nShaakha / Milan",
+  'yuvaReportTable14': "Exp. New Sankalpit Tarun\Vyavasaayee Shaakha / Milan",
+
+  'yuvaReportTable15': "Pr. High\nSch. Stud",
+  'yuvaReportTable16': "Pr. Yuva \nVyavasaayee",
+  'yuvaReportTable17': "Pr. Professor",
+  'yuvaReportTable18': "Total Present",
+  'yuvaReportTable19': "Pr. Yuva Mandal",
+  'yuvaReportTable20': "Pr. High Sch.",
+  'yuvaReportTable21': "Pr. Vasti Gruh",
+  'yuvaReportTable22': "Pr. Present High Sch.\nShaakha / Milan",
+  'yuvaReportTable23': "Pr. New Sankalpit High Sch.\nShaakha / Milan",
+  'yuvaReportTable24': "Pr. Present Tarun Vyavasaayee\nShaakha / Milan",
+  'yuvaReportTable25': "Pr. New Sankalpit Tarun\nVyavasaayee Shaakha / Milan",
+
+  'yuvaReportTable26': "Exp. Present High Sch. &\nTarun Vyavasaayee Shaakha / Milan",
+  'yuvaReportTable27': "Pr. Present High Sch. &\nTarun Vyavasaayee Shaakha / Milan",
+
+  'yuvaReportTable28': "Exp. New Sankalpit High Sch.\n& Tarun Vyavasaayee Shaakha / Milan",
+  'yuvaReportTable29': "Pr. New Sankalpit High Sch.\n& Tarun Vyavasaayee Shaakha / Milan",
+
+  'yuvaReportTable30': "Total Present High Sch. &\nTarun Vyavasaayee Shaakha / Milan",
+  'yuvaReportTable31': "Total New Sankalpit High Sch.\n& Tarun Vyavasaayee Shaakha / Milan",
+
   'shaakhaamilan': "Shaakha / Milan",
   'shakhaMilantitle1': "Current Mahaavidyaalayeen Shaakha/ Milan",
   'shakhaMilantitle2': "New Sankalpit Mahaavidyaalayeen Shaakha/ Milan",
@@ -3877,30 +3898,46 @@ Map<String, String> resMarathi = {
   'yuvaReportTable3': "उरलेले संमेलन",
 
   'yuvaReportTable4': "अपे. महाविद्या. विद्यार्थी",
-  'yuvaReportTable6': "अपे. युवा व्यवसायी",
-  'yuvaReportTable8': "अपे. प्राध्यापक",
-  'yuvaReportTable23': "अपे. युवा मंडळ",
-  'yuvaReportTable14': "एकूण अपेक्षित",
+  'yuvaReportTable15': "उप. महाविद्या. विद्यार्थी",
 
-  'yuvaReportTable5': "उप. महाविद्या. विद्यार्थी",
-  'yuvaReportTable7': "उप. युवा व्यवसायी",
-  'yuvaReportTable9': "उप. प्राध्यापक",
-  'yuvaReportTable24': "उप. युवा मंडळ",
-  'yuvaReportTable145': "एकूण उपस्थित",
+  'yuvaReportTable5': "अपे. युवा व्यवसायी",
+  'yuvaReportTable16': "उप. युवा व्यवसायी",
 
-  'yuvaReportTable10': "अपे. महाविद्यालय",
-  'yuvaReportTable12': "अपे. वसतिगृह",
-  'yuvaReportTable11': "उप. महाविद्यालय",
-  'yuvaReportTable13': "उप. वसतिगृह",
+  'yuvaReportTable6': "अपे. प्राध्यापक",
+  'yuvaReportTable17': "उप. प्राध्यापक",
 
-  'yuvaReportTable15': "अपे. महाविद्यालयीन\nशाखा / मिलन",
-  'yuvaReportTable16': "अपे. संकल्पित महाविद्यालयीन\n शाखा / मिलन",
-  'yuvaReportTable17': "अपे. तरुण व्यवसायी\n शाखा / मिलन",
-  'yuvaReportTable18': "अपे. संकल्पित तरुण\nव्यवसायी शाखा / मिलन",
-  'yuvaReportTable19': "उप. महाविद्यालयीन\nशाखा / मिलन",
-  'yuvaReportTable20': "उप. संकल्पित महाविद्यालयीन\n शाखा / मिलन",
-  'yuvaReportTable21': "उप. तरुण व्यवसायी\n शाखा / मिलन",
-  'yuvaReportTable22': "उप. संकल्पित तरुण\nव्यवसायी शाखा / मिलन",
+  'yuvaReportTable7': "एकूण अपेक्षित",
+  'yuvaReportTable18': "एकूण उपस्थित",
+
+  'yuvaReportTable8': "अपे. युवा मंडळ",
+  'yuvaReportTable19': "उप. युवा मंडळ",
+
+  'yuvaReportTable9': "अपे. महाविद्यालय",
+  'yuvaReportTable20': "उप. महाविद्यालय",
+
+  'yuvaReportTable10': "अपे. वसतिगृह",
+  'yuvaReportTable21': "उप. वसतिगृह",
+
+  'yuvaReportTable11': "अपे. वर्तमान महाविद्यालयीन\nशाखा / मिलन",
+  'yuvaReportTable22': "उप. वर्तमान महाविद्यालयीन\nशाखा / मिलन",
+
+  'yuvaReportTable12': "अपे. नवीन संकल्पित\nमहाविद्यालयीन शाखा / मिलन",
+  'yuvaReportTable23': "उप. नवीन संकल्पित\nमहाविद्यालयीन शाखा / मिलन",
+
+  'yuvaReportTable13': "अपे. वर्तमान तरुण व्यवसायी\n शाखा / मिलन",
+  'yuvaReportTable24': "उप. वर्तमान तरुण व्यवसायी\n शाखा / मिलन",
+
+  'yuvaReportTable14': "अपे. नवीन संकल्पित तरुण\nव्यवसायी शाखा / मिलन",
+  'yuvaReportTable25': "उप. नवीन संकल्पित तरुण\nव्यवसायी शाखा / मिलन",
+
+  'yuvaReportTable26': "अपे. वर्तमान महाविद्यालयीन व\nतरुण व्यवसायी शाखा / मिलन",
+  'yuvaReportTable27': "उप. वर्तमान महाविद्यालयीन व\nतरुण व्यवसायी शाखा / मिलन",
+
+  'yuvaReportTable28': "अपे. नवीन संकल्पित महाविद्यालयीन व\nतरुण व्यवसायी शाखा / मिलन",
+  'yuvaReportTable29': "उप. नवीन संकल्पित महाविद्यालयीन व\nतरुण व्यवसायी शाखा / मिलन",
+
+  'yuvaReportTable30': "एकूण वर्तमान महाविद्यालयीन व\nतरुण व्यवसायी शाखा / मिलन",
+  'yuvaReportTable31': "एकूण नवीन संकल्पित महाविद्यालयीन\nव तरुण व्यवसायी शाखा / मिलन",
 
   'shaakhaamilan': "शाखा / मिलन",
   'shakhaMilantitle1': "वर्तमान महाविद्यालयीन शाखा / मिलन",
@@ -5833,22 +5870,53 @@ Map<String, String> resHindi = {
   'schools': "महाविद्यालय",
   'vastigruh': "वसतिगृह",
   'schoolsVastigruhAtt': "महाविद्यालय व वसतिगृह उपस्थिति",
+
   'yuvaReportTable1': "कुल संमेलन",
   'yuvaReportTable2': "संपन्न संमेलन",
   'yuvaReportTable3': "बाकी संमेलन",
+
   'yuvaReportTable4': "अपे. महाविद्या. विद्यार्थी",
-  'yuvaReportTable5': "उप. महाविद्या. विद्यार्थी",
-  'yuvaReportTable6': "अपे. युवा व्यवसायी",
-  'yuvaReportTable7': "उप. युवा व्यवसायी",
-  'yuvaReportTable8': "अपे. प्राध्यापक",
-  'yuvaReportTable9': "उप. प्राध्यापक",
-  'yuvaReportTable10': "अपे. महाविद्यालय",
-  'yuvaReportTable11': "उप. महाविद्यालय",
-  'yuvaReportTable12': "अपे. वसतिगृह",
-  'yuvaReportTable13': "उप. वसतिगृह",
-  'yuvaReportTable14': "कुल उपस्थित",
-  'yuvaReportTable15': "कुल शाखा / मिलन",
-  'yuvaReportTable16': "संकल्पित शाखा / मिलन",
+  'yuvaReportTable15': "उप. महाविद्या. विद्यार्थी",
+
+  'yuvaReportTable5': "अपे. युवा व्यवसायी",
+  'yuvaReportTable16': "उप. युवा व्यवसायी",
+
+  'yuvaReportTable6': "अपे. प्राध्यापक",
+  'yuvaReportTable17': "उप. प्राध्यापक",
+
+  'yuvaReportTable7': "कुल अपेक्षित",
+  'yuvaReportTable18': "कुल उपस्थित",
+
+  'yuvaReportTable8': "अपे. युवा मंडळ",
+  'yuvaReportTable19': "उप. युवा मंडळ",
+
+  'yuvaReportTable9': "अपे. महाविद्यालय",
+  'yuvaReportTable20': "उप. महाविद्यालय",
+
+  'yuvaReportTable10': "अपे. वसतिगृह",
+  'yuvaReportTable21': "उप. वसतिगृह",
+
+  'yuvaReportTable11': "अपे. वर्तमान महाविद्यालयीन\nशाखा / मिलन",
+  'yuvaReportTable22': "उप. वर्तमान महाविद्यालयीन\nशाखा / मिलन",
+
+  'yuvaReportTable12': "अपे. नवीन संकल्पित\nमहाविद्यालयीन शाखा / मिलन",
+  'yuvaReportTable23': "उप. नवीन संकल्पित\nमहाविद्यालयीन शाखा / मिलन",
+
+  'yuvaReportTable13': "अपे. वर्तमान तरुण व्यवसायी\n शाखा / मिलन",
+  'yuvaReportTable24': "उप. वर्तमान तरुण व्यवसायी\n शाखा / मिलन",
+
+  'yuvaReportTable14': "अपे. नवीन संकल्पित तरुण\nव्यवसायी शाखा / मिलन",
+  'yuvaReportTable25': "उप. नवीन संकल्पित तरुण\nव्यवसायी शाखा / मिलन",
+
+  'yuvaReportTable26': "अपे. वर्तमान महाविद्यालयीन व\nतरुण व्यवसायी शाखा / मिलन",
+  'yuvaReportTable27': "उप. वर्तमान महाविद्यालयीन व\nतरुण व्यवसायी शाखा / मिलन",
+
+  'yuvaReportTable28': "अपे. नवीन संकल्पित महाविद्यालयीन व\nतरुण व्यवसायी शाखा / मिलन",
+  'yuvaReportTable29': "उप. नवीन संकल्पित महाविद्यालयीन व\nतरुण व्यवसायी शाखा / मिलन",
+
+  'yuvaReportTable30': "कुल वर्तमान महाविद्यालयीन व\nतरुण व्यवसायी शाखा / मिलन",
+  'yuvaReportTable31': "कुल नवीन संकल्पित महाविद्यालयीन\nव तरुण व्यवसायी शाखा / मिलन",
+
   'shaakhaamilan': "शाखा / मिलन",
   'shakhaMilantitle1': "वर्तमान महाविद्यालयीन शाखा / मिलन",
   'shakhaMilantitle2': "नवीन संकल्पित महाविद्यालयीन शाखा / मिलन",

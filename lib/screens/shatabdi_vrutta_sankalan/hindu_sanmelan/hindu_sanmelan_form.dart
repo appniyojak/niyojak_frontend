@@ -135,8 +135,14 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
     if (data != null) {
       final List<Vastisarsajjanshakti?>? _list1 = data?.vastisarsajjanshakti;
       final List<Vastisanyaprabhavi?>? _list2 = data?.vastisanyaprabhavi;
-      if (_list1 != null && _list1.isNotEmpty) selectedPerson = _list1.where((e) => e?.isMukhyadefault == 1).cast().firstOrNull;
-      if (_list2 != null && _list2.isNotEmpty) selectedPrabhavi = _list2.where((e) => e?.isMukhyadefault == 1).cast().firstOrNull;
+      if (_list1 != null && _list1.isNotEmpty) selectedPerson = _list1
+          .where((e) => e?.isMukhyadefault == 1)
+          .cast()
+          .firstOrNull;
+      if (_list2 != null && _list2.isNotEmpty) selectedPrabhavi = _list2
+          .where((e) => e?.isMukhyadefault == 1)
+          .cast()
+          .firstOrNull;
       selectedVastiCount = data?.selectedgramcount;
       presentMaleController.text = (data?.malecount ?? 0).toString();
       presentMatrushaktiController.text = (data?.femalecount ?? 0).toString();
@@ -165,8 +171,12 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
       "sajjanmukhyaatitiid": selectedPerson?.pkid ?? 0,
       "annyamukhyaatitiid": selectedPrabhavi?.pkId ?? 0,
       "selectedgramcount": selectedVastiCount,
-      "malecount": presentMaleController.text.trim().isNotEmpty ? int.parse(presentMaleController.text) : 0,
-      "femalecount": presentMatrushaktiController.text.trim().isNotEmpty ? int.parse(presentMatrushaktiController.text) : 0,
+      "malecount": presentMaleController.text
+          .trim()
+          .isNotEmpty ? int.parse(presentMaleController.text) : 0,
+      "femalecount": presentMatrushaktiController.text
+          .trim()
+          .isNotEmpty ? int.parse(presentMatrushaktiController.text) : 0,
       "sanmelandesc": txtSanmelanFormatController.text.trim(),
       "sajjanvisheshtiid": selectedSajjanshaktiItemsIds ?? "",
       "annyavisheshtiid": selectedAnyaprabhaviItemsIds ?? "",
@@ -419,7 +429,10 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
   int _getColumnTotal(List<TextEditingController> ctrls) {
     return ctrls.fold<int>(
       0,
-      (sum, c) => sum + (int.tryParse(c.text.trim().isEmpty ? "0" : c.text) ?? 0),
+          (sum, c) =>
+      sum + (int.tryParse(c.text
+          .trim()
+          .isEmpty ? "0" : c.text) ?? 0),
     );
   }
 
@@ -477,8 +490,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
   //     ),
   //   );
   // }
-  Widget _numberField(
-    TextEditingController controller, {
+  Widget _numberField(TextEditingController controller, {
     // bool showPadding = false,
     EdgeInsetsGeometry? padding,
     Color? textBoxColor,
@@ -572,7 +584,9 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery
+        .of(context)
+        .size;
     return Scaffold(
       // appBar: AppBar(
       //   title: Text(
@@ -629,8 +643,10 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
               ),
             if (selctedLevel != "" && selctedLevelName != "" && isVastiSearch == true)
               Container(
-                  // height: 40,
-                  width: MediaQuery.sizeOf(context).width,
+                // height: 40,
+                  width: MediaQuery
+                      .sizeOf(context)
+                      .width,
                   padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.purpleAccent, width: 1),
@@ -888,7 +904,10 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                             Padding(padding: EdgeInsets.all(4), child: Text("${Statics.getLabel('ViewMenu')}")),
                           ],
                         ),
-                        ...selectedSajjanshaktiItems.asMap().entries.map((entry) {
+                        ...selectedSajjanshaktiItems
+                            .asMap()
+                            .entries
+                            .map((entry) {
                           int srNo = entry.key + 1;
                           final item = entry.value;
                           return TableRow(
@@ -932,7 +951,10 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                             Padding(padding: EdgeInsets.all(4), child: Text("${Statics.getLabel('ViewMenu')}")), // 👁 column heading
                           ],
                         ),
-                        ...selectedAnyaprabhaviItems.asMap().entries.map((entry) {
+                        ...selectedAnyaprabhaviItems
+                            .asMap()
+                            .entries
+                            .map((entry) {
                           int srNo = entry.key + 1;
                           final item = entry.value;
 
@@ -1669,7 +1691,9 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
             Container(
               child: MaterialButton(
                 padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                color: Theme.of(context).primaryColor,
+                color: Theme
+                    .of(context)
+                    .primaryColor,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
                 onPressed: () {
                   if (!_searched) {
@@ -1684,16 +1708,28 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                   //   Statics.showToast("${Statics.getLabel('AddAdvSanmelanFilesDesc')}", toastLength: Toast.LENGTH_LONG);
                   //   return;
                   // }
-                  if (txtUrlsController.text.trim().isNotEmpty && txtUrlDescController.text.trim().isEmpty) {
+                  if (txtUrlsController.text
+                      .trim()
+                      .isNotEmpty && txtUrlDescController.text
+                      .trim()
+                      .isEmpty) {
                     Statics.showToast("${Statics.getLabel('urlDescIsImp')}", toastLength: Toast.LENGTH_LONG);
                     return;
                   }
-                  if (txtUrlsController.text.trim().isNotEmpty && txtUrlDescController.text.trim().isNotEmpty) {
+                  if (txtUrlsController.text
+                      .trim()
+                      .isNotEmpty && txtUrlDescController.text
+                      .trim()
+                      .isNotEmpty) {
                     Statics.showToast("${Statics.getLabel('clickOnAddBtn')}", toastLength: Toast.LENGTH_LONG);
                     return;
                   }
-                  if ((presentMatrushaktiController.text.trim().isEmpty || presentMatrushaktiController.text == "0") &&
-                      (presentMaleController.text.trim().isEmpty || presentMaleController.text == "0")) {
+                  if ((presentMatrushaktiController.text
+                      .trim()
+                      .isEmpty || presentMatrushaktiController.text == "0") &&
+                      (presentMaleController.text
+                          .trim()
+                          .isEmpty || presentMaleController.text == "0")) {
                     Statics.showToast("${Statics.getLabel('presentMaleFemaleValidation')}", toastLength: Toast.LENGTH_LONG);
                     return;
                   }
@@ -1738,7 +1774,9 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
         ),
         Container(
           width: double.infinity,
-          constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.4),
+          constraints: BoxConstraints(maxHeight: MediaQuery
+              .sizeOf(context)
+              .height * 0.4),
           padding: EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black54),
@@ -1756,21 +1794,26 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
               // if (!isAbhiyaanButPramukh) DataColumn(label: SizedBox()),
               DataColumn(
                   label: Text(
-                "${Statics.getLabel('Name')}",
-              )),
+                    "${Statics.getLabel('Name')}",
+                  )),
               DataColumn(
                   label: Text(
-                "${Statics.getLabel('sanmelanVaktaTask')}",
-              )),
+                    "${Statics.getLabel('sanmelanVaktaTask')}",
+                  )),
             ],
-            rows: vaktaList.where((e) => e.isactive == 1).toList().asMap().entries.map((entry) {
+            rows: vaktaList
+                .where((e) => e.isactive == 1)
+                .toList()
+                .asMap()
+                .entries
+                .map((entry) {
               int index = entry.key;
               var data = entry.value;
               bool isSelected = selectedVaktaIndex == index;
               return DataRow(
                   selected: isSelected,
                   color: MaterialStateProperty.resolveWith<Color?>(
-                    (Set<MaterialState> states) {
+                        (Set<MaterialState> states) {
                       if (isSelected) return Colors.yellow.shade100;
                       return null;
                     },
@@ -1817,7 +1860,9 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                   },
                   cells: [
                     // if (!isAbhiyaanButPramukh) DataCell(Icon(isSelected ? Icons.check_box_rounded : Icons.check_box_outline_blank_rounded, color: Colors.yellow.shade900, size: 21)),
-                    DataCell(Container(constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.4), child: Text(data.name ?? ''))),
+                    DataCell(Container(constraints: BoxConstraints(maxWidth: MediaQuery
+                        .sizeOf(context)
+                        .width * 0.4), child: Text(data.name ?? ''))),
                     DataCell(Text(data.desgination ?? '')),
                     // DataCell(Text(Statics.getLabel(data.daayitva.toString(), returnKey: true))),
                   ]);
@@ -1902,62 +1947,63 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                 if (selectedVaktaIndex != null) {
                   final shouldDelete = await showDialog<bool>(
                     context: context,
-                    builder: (context) => AlertDialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      backgroundColor: Colors.white,
-                      title: Center(
-                        child: Text(
-                          "${Statics.getLabel('pusthikarn')}",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: Colors.redAccent,
+                    builder: (context) =>
+                        AlertDialog(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                        ),
-                      ),
-                      content: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: Text(
-                          "${Statics.getLabel('deleteconfirmText')}",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black87,
-                          ),
-                        ),
-                      ),
-                      actionsAlignment: MainAxisAlignment.spaceEvenly,
-                      actions: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.grey.shade300,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                          backgroundColor: Colors.white,
+                          title: Center(
+                            child: Text(
+                              "${Statics.getLabel('pusthikarn')}",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Colors.redAccent,
+                              ),
                             ),
                           ),
-                          onPressed: () => Navigator.pop(context, false),
-                          child: Text(
-                            "${Statics.getLabel('ConfirmationNo')}",
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.redAccent,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                          content: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: Text(
+                              "${Statics.getLabel('deleteconfirmText')}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black87,
+                              ),
                             ),
                           ),
-                          onPressed: () => Navigator.pop(context, true),
-                          child: Text(
-                            "${Statics.getLabel('ConfirmationYes')}",
-                            style: TextStyle(color: Colors.white),
-                          ),
+                          actionsAlignment: MainAxisAlignment.spaceEvenly,
+                          actions: [
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.grey.shade300,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              onPressed: () => Navigator.pop(context, false),
+                              child: Text(
+                                "${Statics.getLabel('ConfirmationNo')}",
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.redAccent,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              onPressed: () => Navigator.pop(context, true),
+                              child: Text(
+                                "${Statics.getLabel('ConfirmationYes')}",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
                   );
                   if (shouldDelete == true) {
                     setState(() {
@@ -2064,7 +2110,14 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                         ),
                         onPressed: () async {
-                          vaktaList.add(AbhiyaanPeopleModel(pkid: 0, name: txtVaktaNameController.text.trim(), desgination: txtVaktaTaskController.text.trim(), isactive: 1));
+                          final _data = AbhiyaanPeopleModel(pkid: 0, name: txtVaktaNameController.text.trim(), desgination: txtVaktaTaskController.text.trim(), isactive: 1);
+
+                          if (fromEditing) {
+                            vaktaList.removeAt(selectedVaktaIndex!);
+                            vaktaList.insert(selectedVaktaIndex!, _data);
+                          } else {
+                            vaktaList.add(_data);
+                          }
                           txtVaktaNameController.clear();
                           txtVaktaTaskController.clear();
                           // Statics.showToast(Statics.getLabel("workInProgress"));
@@ -2134,10 +2187,11 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                       label: Statics.getLabel('Mahaanagar'),
                       value: _linkedMahaanagarValue,
                       items: _linkedMahaanagar!
-                          .map((bg) => DropdownMenuItem(
-                                value: bg.geoUnitID.toString(),
-                                child: Text(bg.name!),
-                              ))
+                          .map((bg) =>
+                          DropdownMenuItem(
+                            value: bg.geoUnitID.toString(),
+                            child: Text(bg.name!),
+                          ))
                           .toList(),
                       onChanged: (value) async {
                         final selectedItem = _linkedMahaanagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
@@ -2160,10 +2214,11 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                       label: Statics.getLabel('Vibhaag'),
                       value: _linkedVibhaagValue,
                       items: _linkedVibhaag!
-                          .map((bg) => DropdownMenuItem(
-                                value: bg.geoUnitID.toString(),
-                                child: Text(bg.name!),
-                              ))
+                          .map((bg) =>
+                          DropdownMenuItem(
+                            value: bg.geoUnitID.toString(),
+                            child: Text(bg.name!),
+                          ))
                           .toList(),
                       onChanged: (value) {
                         final selectedItem = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
@@ -2183,10 +2238,11 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                       label: Statics.getLabel('Bhaag'),
                       value: _linkedbhaagValue,
                       items: _linkedbhaag!
-                          .map((bg) => DropdownMenuItem(
-                                value: bg.geoUnitID.toString(),
-                                child: Text(bg.name!),
-                              ))
+                          .map((bg) =>
+                          DropdownMenuItem(
+                            value: bg.geoUnitID.toString(),
+                            child: Text(bg.name!),
+                          ))
                           .toList(),
                       onChanged: (value) {
                         final selectedItem = _linkedbhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
@@ -2207,10 +2263,11 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                       label: Statics.getLabel('Shahar'),
                       value: _linkedshaharValue,
                       items: _linkedshahar!
-                          .map((bg) => DropdownMenuItem(
-                                value: bg.geoUnitID.toString(),
-                                child: Text(bg.name!),
-                              ))
+                          .map((bg) =>
+                          DropdownMenuItem(
+                            value: bg.geoUnitID.toString(),
+                            child: Text(bg.name!),
+                          ))
                           .toList(),
                       onChanged: (value) {
                         final selectedItem = _linkedshahar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
@@ -2230,10 +2287,11 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                       label: Statics.getLabel('Nagar'),
                       value: _linkednagarValue,
                       items: _linkednagar!
-                          .map((bg) => DropdownMenuItem(
-                                value: bg.geoUnitID.toString(),
-                                child: Text(bg.name!),
-                              ))
+                          .map((bg) =>
+                          DropdownMenuItem(
+                            value: bg.geoUnitID.toString(),
+                            child: Text(bg.name!),
+                          ))
                           .toList(),
                       onChanged: (value) {
                         final selectedItem = _linkednagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
@@ -2254,10 +2312,11 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                       label: Statics.getLabel('Mandal'),
                       value: _linkedmandalValue,
                       items: _linkedmandal!
-                          .map((bg) => DropdownMenuItem(
-                                value: bg.geoUnitID.toString(),
-                                child: Text(bg.name!),
-                              ))
+                          .map((bg) =>
+                          DropdownMenuItem(
+                            value: bg.geoUnitID.toString(),
+                            child: Text(bg.name!),
+                          ))
                           .toList(),
                       onChanged: (value) {
                         final selectedItem = _linkedmandal!.firstWhere((bg) => bg.geoUnitID.toString() == value);
@@ -2299,10 +2358,11 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                       label: Statics.getLabel('Vasti'),
                       value: _linkedvastiValue,
                       items: _linkedvasti!
-                          .map((bg) => DropdownMenuItem(
-                                value: bg.geoUnitID.toString(),
-                                child: Text(bg.name!),
-                              ))
+                          .map((bg) =>
+                          DropdownMenuItem(
+                            value: bg.geoUnitID.toString(),
+                            child: Text(bg.name!),
+                          ))
                           .toList(),
                       onChanged: (value) {
                         final selectedItem = _linkedvasti!.firstWhere((bg) => bg.geoUnitID.toString() == value);
@@ -2327,8 +2387,14 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                             horizontal: 35,
                             vertical: 5,
                           ),
-                          color: Theme.of(context).primaryColor,
-                          textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                          color: Theme
+                              .of(context)
+                              .primaryColor,
+                          textColor: Theme
+                              .of(context)
+                              .primaryTextTheme
+                              .labelMedium
+                              ?.color,
                           onPressed: () async {
                             _selctedLevelNameList = [];
                             setState(() {});
@@ -2472,7 +2538,10 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                                   ),
                                 ),
                                 SizedBox(height: 10),
-                                ..._selectedFileNames1.asMap().entries.map((entry) {
+                                ..._selectedFileNames1
+                                    .asMap()
+                                    .entries
+                                    .map((entry) {
                                   int index = entry.key; // index
                                   var img = entry.value;
                                   return Container(
@@ -2516,14 +2585,14 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                                                 builder: (context, isLoading, _) {
                                                   return (isLoading && img.toString() == _currentImg)
                                                       ? SizedBox(
-                                                          width: 17,
-                                                          height: 17,
-                                                          child: CircularProgressIndicator(strokeWidth: 2),
-                                                        )
+                                                    width: 17,
+                                                    height: 17,
+                                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                                  )
                                                       : Icon(
-                                                          Icons.download,
-                                                          color: Colors.purple,
-                                                        );
+                                                    Icons.download,
+                                                    color: Colors.purple,
+                                                  );
                                                 },
                                               ),
                                             ),
@@ -2538,9 +2607,13 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                                         CachedNetworkImage(
                                           imageUrl: '${Statics.baseUrl}/Files/hindusanmelanfiles/${img?.value}',
                                           errorWidget: (context, error, stackTrace) =>
-                                              SizedBox(width: MediaQuery.sizeOf(context).width, height: 120, child: Center(child: Text(Statics.getLabel("errorOccurred")))),
+                                              SizedBox(width: MediaQuery
+                                                  .sizeOf(context)
+                                                  .width, height: 120, child: Center(child: Text(Statics.getLabel("errorOccurred")))),
                                           progressIndicatorBuilder: (context, child, loadingProgress) =>
-                                              SizedBox(width: MediaQuery.sizeOf(context).width, height: 120, child: Center(child: CircularProgressIndicator())),
+                                              SizedBox(width: MediaQuery
+                                                  .sizeOf(context)
+                                                  .width, height: 120, child: Center(child: CircularProgressIndicator())),
                                           fit: BoxFit.contain,
                                         ),
                                       ],
@@ -2562,84 +2635,86 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
         ),
         SizedBox(height: 8),
         ..._selectedFileNames1.map(
-          (img) => Container(
-            margin: EdgeInsets.only(bottom: 8),
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black54, width: 1),
-              borderRadius: BorderRadius.circular(11),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    img?.value ?? "${Statics.getLabel('selectFile')}",
-                    style: TextStyle(color: Colors.black87),
-                    overflow: TextOverflow.ellipsis,
-                  ),
+              (img) =>
+              Container(
+                margin: EdgeInsets.only(bottom: 8),
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black54, width: 1),
+                  borderRadius: BorderRadius.circular(11),
                 ),
-                IconButton(
-                  style: IconButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
-                  onPressed: () async {
-                    final _shouldDelete = await showDialog(
-                      context: context,
-                      builder: (ctx) => AlertDialog(
-                        backgroundColor: Colors.white,
-                        title: Text(
-                          "${Statics.getLabel('AskConfirmation')}",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.red.shade700,
-                            fontSize: 18,
-                          ),
-                        ),
-                        content: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Text(
-                            "${Statics.getLabel('AreyouSureYouWantToDeleteImage')}",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.red.shade800,
-                            ),
-                          ),
-                        ),
-                        actions: [
-                          TextButton(
-                            child: Text(Statics.getLabel('ConfirmationNo')),
-                            onPressed: () {
-                              Navigator.of(ctx).pop(false);
-                            },
-                          ),
-                          TextButton(
-                            style: TextButton.styleFrom(
-                              backgroundColor: Colors.red.shade700,
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                            ),
-                            onPressed: () => Navigator.of(ctx).pop(true),
-                            child: Text(
-                              "${Statics.getLabel('ConfirmationYes')}",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        img?.value ?? "${Statics.getLabel('selectFile')}",
+                        style: TextStyle(color: Colors.black87),
+                        overflow: TextOverflow.ellipsis,
                       ),
-                    );
+                    ),
+                    IconButton(
+                      style: IconButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+                      onPressed: () async {
+                        final _shouldDelete = await showDialog(
+                          context: context,
+                          builder: (ctx) =>
+                              AlertDialog(
+                                backgroundColor: Colors.white,
+                                title: Text(
+                                  "${Statics.getLabel('AskConfirmation')}",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red.shade700,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                content: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                  child: Text(
+                                    "${Statics.getLabel('AreyouSureYouWantToDeleteImage')}",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.red.shade800,
+                                    ),
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    child: Text(Statics.getLabel('ConfirmationNo')),
+                                    onPressed: () {
+                                      Navigator.of(ctx).pop(false);
+                                    },
+                                  ),
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                      backgroundColor: Colors.red.shade700,
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                    ),
+                                    onPressed: () => Navigator.of(ctx).pop(true),
+                                    child: Text(
+                                      "${Statics.getLabel('ConfirmationYes')}",
+                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                        );
 
-                    if (_shouldDelete) {
-                      final _result = await deleteImageDataFun(imageName: (img?.value).toString());
-                      if (_result) {
-                        setState(() {
-                          _selectedFileNames1.remove(img);
-                        });
-                      }
-                    }
-                  },
-                  icon: Icon(Icons.delete_forever, color: Colors.red),
+                        if (_shouldDelete) {
+                          final _result = await deleteImageDataFun(imageName: (img?.value).toString());
+                          if (_result) {
+                            setState(() {
+                              _selectedFileNames1.remove(img);
+                            });
+                          }
+                        }
+                      },
+                      icon: Icon(Icons.delete_forever, color: Colors.red),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
+              ),
         ),
         if (canAddMore)
           Align(
@@ -2664,85 +2739,92 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                 final isCamera = await showDialog(
                   context: context,
                   barrierDismissible: false,
-                  builder: (ctx) => PopScope(
-                    canPop: false,
-                    child: AlertDialog(
-                      title: Text(Statics.getLabel('AddSanmelanFiles')),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        spacing: 8,
-                        children: [
-                          TextFormField(
-                            controller: txtUtsavPhotoDescController,
-                            textAlignVertical: TextAlignVertical.center,
-                            // textAlign: TextAlign.left,
-                            autofocus: false,
-                            readOnly: !_searched,
-                            onTap: () {
-                              if (!_searched) {
-                                Fluttertoast.showToast(
-                                  msg: "${Statics.getLabel('NagarSelectionImportant')}",
-                                );
-                              }
-                            },
-                            maxLines: 5,
-                            onChanged: (value) => setState(() {}),
-                            onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
-                            decoration: InputDecoration(
-                              hintText: Statics.getLabel("AddSanmelanFilesDesc"),
-                              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                              // enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                              // focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.purple),borderRadius: BorderRadius.circular(12)),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.trim().isEmpty) {
-                                return Statics.getLabel("AddSanmelanFilesDesc");
-                              }
-                              return null;
-                            },
-                          ),
-                          SizedBox(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  builder: (ctx) =>
+                      PopScope(
+                        canPop: false,
+                        child: AlertDialog(
+                          title: Text(Statics.getLabel('AddSanmelanFiles')),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            spacing: 8,
                             children: [
-                              IconButton.filled(
-                                onPressed: () async {
-                                  if (txtUtsavPhotoDescController.text.trim().isEmpty) {
-                                    Statics.showToast(Statics.getLabel("AddSanmelanFilesDesc"));
-                                    return;
+                              TextFormField(
+                                controller: txtUtsavPhotoDescController,
+                                textAlignVertical: TextAlignVertical.center,
+                                // textAlign: TextAlign.left,
+                                autofocus: false,
+                                readOnly: !_searched,
+                                onTap: () {
+                                  if (!_searched) {
+                                    Fluttertoast.showToast(
+                                      msg: "${Statics.getLabel('NagarSelectionImportant')}",
+                                    );
                                   }
-                                  Navigator.of(ctx).pop(true);
                                 },
-                                icon: Icon(Icons.camera_alt),
+                                maxLines: 5,
+                                onChanged: (value) => setState(() {}),
+                                onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
+                                decoration: InputDecoration(
+                                  hintText: Statics.getLabel("AddSanmelanFilesDesc"),
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                  // enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                  // focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.purple),borderRadius: BorderRadius.circular(12)),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value
+                                      .trim()
+                                      .isEmpty) {
+                                    return Statics.getLabel("AddSanmelanFilesDesc");
+                                  }
+                                  return null;
+                                },
                               ),
-                              IconButton.filled(
-                                onPressed: () async {
-                                  if (txtUtsavPhotoDescController.text.trim().isEmpty) {
-                                    Statics.showToast(Statics.getLabel("AddSanmelanFilesDesc"));
-                                    return;
-                                  }
-                                  Navigator.of(ctx).pop(false);
-                                },
-                                icon: Icon(Icons.photo_library),
+                              SizedBox(height: 8),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  IconButton.filled(
+                                    onPressed: () async {
+                                      if (txtUtsavPhotoDescController.text
+                                          .trim()
+                                          .isEmpty) {
+                                        Statics.showToast(Statics.getLabel("AddSanmelanFilesDesc"));
+                                        return;
+                                      }
+                                      Navigator.of(ctx).pop(true);
+                                    },
+                                    icon: Icon(Icons.camera_alt),
+                                  ),
+                                  IconButton.filled(
+                                    onPressed: () async {
+                                      if (txtUtsavPhotoDescController.text
+                                          .trim()
+                                          .isEmpty) {
+                                        Statics.showToast(Statics.getLabel("AddSanmelanFilesDesc"));
+                                        return;
+                                      }
+                                      Navigator.of(ctx).pop(false);
+                                    },
+                                    icon: Icon(Icons.photo_library),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text(Statics.getLabel('clear')),
+                              onPressed: () {
+                                Navigator.of(ctx).pop();
+                                setState(() {
+                                  loadingNotifier?.value = false;
+                                });
+                              },
+                            )
+                          ],
+                        ),
                       ),
-                      actions: <Widget>[
-                        TextButton(
-                          child: Text(Statics.getLabel('clear')),
-                          onPressed: () {
-                            Navigator.of(ctx).pop();
-                            setState(() {
-                              loadingNotifier?.value = false;
-                            });
-                          },
-                        )
-                      ],
-                    ),
-                  ),
                 );
                 setState(() {});
 
@@ -2761,7 +2843,11 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                     final _imgName = m.Random().nextInt(99999999);
                     String filePath = File(result.path).path;
                     filePathOg = File(result.path).path;
-                    String fileName = isCamera ? "Img_${_imgName}.${filePathOg?.split("/").last.split(".").last}" : filePathOg!.split("/").last;
+                    String fileName = isCamera ? "Img_${_imgName}.${filePathOg
+                        ?.split("/")
+                        .last
+                        .split(".")
+                        .last}" : filePathOg!.split("/").last;
                     File file = File(filePath);
                     img.Image? originalImage = img.decodeImage(file.readAsBytesSync());
                     if (originalImage != null) {
@@ -2793,24 +2879,24 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
               },
               child: loadingNotifier != null
                   ? ValueListenableBuilder<bool>(
-                      valueListenable: loadingNotifier,
-                      builder: (context, isLoading, _) {
-                        return isLoading
-                            ? SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(strokeWidth: 2),
-                              )
-                            : Text(
-                                "+ ${Statics.getLabel("AddMore")}",
-                                style: const TextStyle(fontSize: 14, color: Colors.purple),
-                              );
-                      },
-                    )
+                valueListenable: loadingNotifier,
+                builder: (context, isLoading, _) {
+                  return isLoading
+                      ? SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                      : Text(
+                    "+ ${Statics.getLabel("AddMore")}",
+                    style: const TextStyle(fontSize: 14, color: Colors.purple),
+                  );
+                },
+              )
                   : Text(
-                      "+ ${Statics.getLabel("AddMore")}",
-                      style: const TextStyle(fontSize: 14, color: Colors.purple),
-                    ),
+                "+ ${Statics.getLabel("AddMore")}",
+                style: const TextStyle(fontSize: 14, color: Colors.purple),
+              ),
             ),
           ),
         SizedBox(height: 14),
@@ -2921,7 +3007,10 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                                   ),
                                 ),
                                 SizedBox(height: 10),
-                                ..._selectedFileNames2.asMap().entries.map((entry) {
+                                ..._selectedFileNames2
+                                    .asMap()
+                                    .entries
+                                    .map((entry) {
                                   int index = entry.key; // index
                                   var img = entry.value;
                                   return Container(
@@ -2959,14 +3048,14 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                                                 builder: (context, isLoading, _) {
                                                   return (isLoading && img.toString() == _currentImg)
                                                       ? SizedBox(
-                                                          width: 17,
-                                                          height: 17,
-                                                          child: CircularProgressIndicator(strokeWidth: 2),
-                                                        )
+                                                    width: 17,
+                                                    height: 17,
+                                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                                  )
                                                       : Icon(
-                                                          Icons.download,
-                                                          color: Colors.purple,
-                                                        );
+                                                    Icons.download,
+                                                    color: Colors.purple,
+                                                  );
                                                 },
                                               ),
                                             ),
@@ -2981,9 +3070,13 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                                         CachedNetworkImage(
                                           imageUrl: '${Statics.baseUrl}/Files/hindusanmelanfiles/${img?.value}',
                                           errorWidget: (context, error, stackTrace) =>
-                                              SizedBox(width: MediaQuery.sizeOf(context).width, height: 120, child: Center(child: Text(Statics.getLabel("errorOccurred")))),
+                                              SizedBox(width: MediaQuery
+                                                  .sizeOf(context)
+                                                  .width, height: 120, child: Center(child: Text(Statics.getLabel("errorOccurred")))),
                                           progressIndicatorBuilder: (context, child, loadingProgress) =>
-                                              SizedBox(width: MediaQuery.sizeOf(context).width, height: 120, child: Center(child: CircularProgressIndicator())),
+                                              SizedBox(width: MediaQuery
+                                                  .sizeOf(context)
+                                                  .width, height: 120, child: Center(child: CircularProgressIndicator())),
                                           fit: BoxFit.contain,
                                         ),
                                       ],
@@ -3005,84 +3098,86 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
         ),
         SizedBox(height: 8),
         ..._selectedFileNames2.map(
-          (img) => Container(
-            margin: EdgeInsets.only(bottom: 8),
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black54, width: 1),
-              borderRadius: BorderRadius.circular(11),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    img?.value ?? "${Statics.getLabel('selectFile')}",
-                    style: TextStyle(color: Colors.black87),
-                    overflow: TextOverflow.ellipsis,
-                  ),
+              (img) =>
+              Container(
+                margin: EdgeInsets.only(bottom: 8),
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black54, width: 1),
+                  borderRadius: BorderRadius.circular(11),
                 ),
-                IconButton(
-                  style: IconButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
-                  onPressed: () async {
-                    final _shouldDelete = await showDialog(
-                      context: context,
-                      builder: (ctx) => AlertDialog(
-                        backgroundColor: Colors.white,
-                        title: Text(
-                          "${Statics.getLabel('AskConfirmation')}",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.red.shade700,
-                            fontSize: 18,
-                          ),
-                        ),
-                        content: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Text(
-                            "${Statics.getLabel('AreyouSureYouWantToDeleteImage')}",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.red.shade800,
-                            ),
-                          ),
-                        ),
-                        actions: [
-                          TextButton(
-                            child: Text(Statics.getLabel('ConfirmationNo')),
-                            onPressed: () {
-                              Navigator.of(ctx).pop(false);
-                            },
-                          ),
-                          TextButton(
-                            style: TextButton.styleFrom(
-                              backgroundColor: Colors.red.shade700,
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                            ),
-                            onPressed: () => Navigator.of(ctx).pop(true),
-                            child: Text(
-                              "${Statics.getLabel('ConfirmationYes')}",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        img?.value ?? "${Statics.getLabel('selectFile')}",
+                        style: TextStyle(color: Colors.black87),
+                        overflow: TextOverflow.ellipsis,
                       ),
-                    );
+                    ),
+                    IconButton(
+                      style: IconButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+                      onPressed: () async {
+                        final _shouldDelete = await showDialog(
+                          context: context,
+                          builder: (ctx) =>
+                              AlertDialog(
+                                backgroundColor: Colors.white,
+                                title: Text(
+                                  "${Statics.getLabel('AskConfirmation')}",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red.shade700,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                content: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                  child: Text(
+                                    "${Statics.getLabel('AreyouSureYouWantToDeleteImage')}",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.red.shade800,
+                                    ),
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    child: Text(Statics.getLabel('ConfirmationNo')),
+                                    onPressed: () {
+                                      Navigator.of(ctx).pop(false);
+                                    },
+                                  ),
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                      backgroundColor: Colors.red.shade700,
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                    ),
+                                    onPressed: () => Navigator.of(ctx).pop(true),
+                                    child: Text(
+                                      "${Statics.getLabel('ConfirmationYes')}",
+                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                        );
 
-                    if (_shouldDelete) {
-                      final _result = await deleteImageDataFun(imageName: (img?.value).toString());
-                      if (_result) {
-                        setState(() {
-                          _selectedFileNames2.remove(img);
-                        });
-                      }
-                    }
-                  },
-                  icon: Icon(Icons.delete_forever, color: Colors.red),
+                        if (_shouldDelete) {
+                          final _result = await deleteImageDataFun(imageName: (img?.value).toString());
+                          if (_result) {
+                            setState(() {
+                              _selectedFileNames2.remove(img);
+                            });
+                          }
+                        }
+                      },
+                      icon: Icon(Icons.delete_forever, color: Colors.red),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
+              ),
         ),
         if (canAddMore)
           Align(
@@ -3107,85 +3202,92 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                 final isCamera = await showDialog(
                   context: context,
                   barrierDismissible: false,
-                  builder: (ctx) => PopScope(
-                    canPop: false,
-                    child: AlertDialog(
-                      title: Text(Statics.getLabel('AddSanmelanFiles')),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        spacing: 8,
-                        children: [
-                          TextFormField(
-                            controller: txtUtsavAddPhotoDescController,
-                            textAlignVertical: TextAlignVertical.center,
-                            // textAlign: TextAlign.left,
-                            autofocus: false,
-                            readOnly: !_searched,
-                            onTap: () {
-                              if (!_searched) {
-                                Fluttertoast.showToast(
-                                  msg: "${Statics.getLabel('NagarSelectionImportant')}",
-                                );
-                              }
-                            },
-                            maxLines: 5,
-                            onChanged: (value) => setState(() {}),
-                            onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
-                            decoration: InputDecoration(
-                              hintText: Statics.getLabel("AddAdvSanmelanFilesDesc"),
-                              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                              // enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                              // focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.purple),borderRadius: BorderRadius.circular(12)),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.trim().isEmpty) {
-                                return Statics.getLabel("AddAdvSanmelanFilesDesc");
-                              }
-                              return null;
-                            },
-                          ),
-                          SizedBox(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  builder: (ctx) =>
+                      PopScope(
+                        canPop: false,
+                        child: AlertDialog(
+                          title: Text(Statics.getLabel('AddSanmelanFiles')),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            spacing: 8,
                             children: [
-                              IconButton.filled(
-                                onPressed: () async {
-                                  if (txtUtsavAddPhotoDescController.text.trim().isEmpty) {
-                                    Statics.showToast(Statics.getLabel("AddAdvSanmelanFilesDesc"));
-                                    return;
+                              TextFormField(
+                                controller: txtUtsavAddPhotoDescController,
+                                textAlignVertical: TextAlignVertical.center,
+                                // textAlign: TextAlign.left,
+                                autofocus: false,
+                                readOnly: !_searched,
+                                onTap: () {
+                                  if (!_searched) {
+                                    Fluttertoast.showToast(
+                                      msg: "${Statics.getLabel('NagarSelectionImportant')}",
+                                    );
                                   }
-                                  Navigator.of(ctx).pop(true);
                                 },
-                                icon: Icon(Icons.camera_alt),
+                                maxLines: 5,
+                                onChanged: (value) => setState(() {}),
+                                onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
+                                decoration: InputDecoration(
+                                  hintText: Statics.getLabel("AddAdvSanmelanFilesDesc"),
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                  // enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                  // focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.purple),borderRadius: BorderRadius.circular(12)),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value
+                                      .trim()
+                                      .isEmpty) {
+                                    return Statics.getLabel("AddAdvSanmelanFilesDesc");
+                                  }
+                                  return null;
+                                },
                               ),
-                              IconButton.filled(
-                                onPressed: () async {
-                                  if (txtUtsavAddPhotoDescController.text.trim().isEmpty) {
-                                    Statics.showToast(Statics.getLabel("AddAdvSanmelanFilesDesc"));
-                                    return;
-                                  }
-                                  Navigator.of(ctx).pop(false);
-                                },
-                                icon: Icon(Icons.photo_library),
+                              SizedBox(height: 8),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  IconButton.filled(
+                                    onPressed: () async {
+                                      if (txtUtsavAddPhotoDescController.text
+                                          .trim()
+                                          .isEmpty) {
+                                        Statics.showToast(Statics.getLabel("AddAdvSanmelanFilesDesc"));
+                                        return;
+                                      }
+                                      Navigator.of(ctx).pop(true);
+                                    },
+                                    icon: Icon(Icons.camera_alt),
+                                  ),
+                                  IconButton.filled(
+                                    onPressed: () async {
+                                      if (txtUtsavAddPhotoDescController.text
+                                          .trim()
+                                          .isEmpty) {
+                                        Statics.showToast(Statics.getLabel("AddAdvSanmelanFilesDesc"));
+                                        return;
+                                      }
+                                      Navigator.of(ctx).pop(false);
+                                    },
+                                    icon: Icon(Icons.photo_library),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text(Statics.getLabel('clear')),
+                              onPressed: () {
+                                Navigator.of(ctx).pop();
+                                setState(() {
+                                  loadingNotifier?.value = false;
+                                });
+                              },
+                            )
+                          ],
+                        ),
                       ),
-                      actions: <Widget>[
-                        TextButton(
-                          child: Text(Statics.getLabel('clear')),
-                          onPressed: () {
-                            Navigator.of(ctx).pop();
-                            setState(() {
-                              loadingNotifier?.value = false;
-                            });
-                          },
-                        )
-                      ],
-                    ),
-                  ),
                 );
                 setState(() {});
 
@@ -3204,7 +3306,11 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                     final _imgName = m.Random().nextInt(9999999);
                     String filePath = File(result.path).path;
                     filePathOg = File(result.path).path;
-                    String fileName = isCamera ? "Img_${_imgName}.${filePathOg?.split("/").last.split(".").last}" : filePathOg!.split("/").last;
+                    String fileName = isCamera ? "Img_${_imgName}.${filePathOg
+                        ?.split("/")
+                        .last
+                        .split(".")
+                        .last}" : filePathOg!.split("/").last;
                     File file = File(filePath);
                     img.Image? originalImage = img.decodeImage(file.readAsBytesSync());
                     if (originalImage != null) {
@@ -3238,24 +3344,24 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
               },
               child: loadingNotifier != null
                   ? ValueListenableBuilder<bool>(
-                      valueListenable: loadingNotifier,
-                      builder: (context, isLoading, _) {
-                        return isLoading
-                            ? SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(strokeWidth: 2),
-                              )
-                            : Text(
-                                "+ ${Statics.getLabel("AddMore")}",
-                                style: const TextStyle(fontSize: 14, color: Colors.purple),
-                              );
-                      },
-                    )
+                valueListenable: loadingNotifier,
+                builder: (context, isLoading, _) {
+                  return isLoading
+                      ? SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                      : Text(
+                    "+ ${Statics.getLabel("AddMore")}",
+                    style: const TextStyle(fontSize: 14, color: Colors.purple),
+                  );
+                },
+              )
                   : Text(
-                      "+ ${Statics.getLabel("AddMore")}",
-                      style: const TextStyle(fontSize: 14, color: Colors.purple),
-                    ),
+                "+ ${Statics.getLabel("AddMore")}",
+                style: const TextStyle(fontSize: 14, color: Colors.purple),
+              ),
             ),
           ),
         SizedBox(height: 14),
@@ -3414,7 +3520,11 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                 ),
                 onPressed: () async {
                   // print(contactList.value.toString());
-                  if (txtUrlsController.text.trim().isNotEmpty && txtUrlDescController.text.trim().isNotEmpty) {
+                  if (txtUrlsController.text
+                      .trim()
+                      .isNotEmpty && txtUrlDescController.text
+                      .trim()
+                      .isNotEmpty) {
                     bool valid = await isValidUrl(txtUrlsController.text.trim());
                     print(valid);
                     if (!valid) {
@@ -3432,7 +3542,9 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                       setState(() {});
                       return;
                     }
-                    if (txtUrlDescController.text.trim().isEmpty) {
+                    if (txtUrlDescController.text
+                        .trim()
+                        .isEmpty) {
                       Fluttertoast.showToast(
                         msg: "${Statics.getLabel('urlDescIsImp')}",
                       );
@@ -3457,8 +3569,11 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
           crossAxisAlignment: WrapCrossAlignment.center,
           alignment: WrapAlignment.start,
           runAlignment: WrapAlignment.center,
-          children: _urlsList.asMap().entries.map(
-            (entry) {
+          children: _urlsList
+              .asMap()
+              .entries
+              .map(
+                (entry) {
               int srNo = entry.key + 1;
               final url = entry.value;
               return Container(
@@ -3514,47 +3629,48 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                       onTap: () async {
                         final _shouldDelete = await showDialog(
                           context: context,
-                          builder: (ctx) => AlertDialog(
-                            backgroundColor: Colors.white,
-                            title: Text(
-                              "${Statics.getLabel('AskConfirmation')}",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.red.shade700,
-                                fontSize: 18,
-                              ),
-                            ),
-                            content: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: Text(
-                                "${Statics.getLabel('AreyouSureYouWantToDeleteUrl')}",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.red.shade800,
+                          builder: (ctx) =>
+                              AlertDialog(
+                                backgroundColor: Colors.white,
+                                title: Text(
+                                  "${Statics.getLabel('AskConfirmation')}",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red.shade700,
+                                    fontSize: 18,
+                                  ),
                                 ),
-                              ),
-                            ),
-                            actions: [
-                              TextButton(
-                                child: Text(Statics.getLabel('ConfirmationNo')),
-                                onPressed: () {
-                                  Navigator.of(ctx).pop(false);
-                                },
-                              ),
-                              TextButton(
-                                style: TextButton.styleFrom(
-                                  backgroundColor: Colors.red.shade700,
-                                  foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                content: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                  child: Text(
+                                    "${Statics.getLabel('AreyouSureYouWantToDeleteUrl')}",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.red.shade800,
+                                    ),
+                                  ),
                                 ),
-                                onPressed: () => Navigator.of(ctx).pop(true),
-                                child: Text(
-                                  "${Statics.getLabel('ConfirmationYes')}",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
+                                actions: [
+                                  TextButton(
+                                    child: Text(Statics.getLabel('ConfirmationNo')),
+                                    onPressed: () {
+                                      Navigator.of(ctx).pop(false);
+                                    },
+                                  ),
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                      backgroundColor: Colors.red.shade700,
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                    ),
+                                    onPressed: () => Navigator.of(ctx).pop(true),
+                                    child: Text(
+                                      "${Statics.getLabel('ConfirmationYes')}",
+                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
                         );
 
                         if (_shouldDelete) {
@@ -3569,7 +3685,8 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                 ),
               );
             },
-          ).toList(),
+          )
+              .toList(),
         ),
         // if (canAddMore)
         //   Align(
@@ -3694,7 +3811,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                             SearchSajjanAnyaScreen.routeName,
                             arguments: {'geoUnitId': _selectedGeoUnitId, 'fromMukhya': true},
                           ).then(
-                            (value) async {
+                                (value) async {
                               await _getForm();
                               setState(() {});
                             },
@@ -3743,7 +3860,9 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
               content: Container(
                 width: double.maxFinite,
                 // height: 400,
-                constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.58),
+                constraints: BoxConstraints(maxHeight: MediaQuery
+                    .sizeOf(context)
+                    .height * 0.58),
                 child: Scrollbar(
                   radius: Radius.circular(8),
                   interactive: true,
@@ -3808,22 +3927,22 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                                   children: [
                                     Center(
                                         child: Radio(
-                                      value: item,
-                                      groupValue: selectedItem,
-                                      activeColor: Colors.purpleAccent,
-                                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                      onChanged: (val) {
-                                        print("printing the val >>>>>>>> ${jsonEncode(val)}");
-                                        set(() {
-                                          // item.isMukhyadefault = 1;
-                                          selectedItem = item;
-                                          selectedType = "sarsajjanshakti";
-                                          selectedPrabhavi = null;
-                                          // selectedPerson = item;
-                                        });
-                                        setState(() {});
-                                      },
-                                    )),
+                                          value: item,
+                                          groupValue: selectedItem,
+                                          activeColor: Colors.purpleAccent,
+                                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                          onChanged: (val) {
+                                            print("printing the val >>>>>>>> ${jsonEncode(val)}");
+                                            set(() {
+                                              // item.isMukhyadefault = 1;
+                                              selectedItem = item;
+                                              selectedType = "sarsajjanshakti";
+                                              selectedPrabhavi = null;
+                                              // selectedPerson = item;
+                                            });
+                                            setState(() {});
+                                          },
+                                        )),
                                     Padding(
                                       padding: const EdgeInsets.all(8),
                                       child: Text(item.name ?? "Unknown"),
@@ -3901,21 +4020,21 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                                   children: [
                                     Center(
                                         child: Radio(
-                                      value: item,
-                                      groupValue: selectedItem,
-                                      activeColor: Colors.purpleAccent,
-                                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                      onChanged: (val) {
-                                        set(() {
-                                          // item.isMukhyadefault = 1;
-                                          selectedItem = item;
-                                          selectedType = "anyaprabhavi";
-                                          selectedPerson = null;
-                                          // selectedPrabhavi = item;
-                                        });
-                                        setState(() {});
-                                      },
-                                    )),
+                                          value: item,
+                                          groupValue: selectedItem,
+                                          activeColor: Colors.purpleAccent,
+                                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                          onChanged: (val) {
+                                            set(() {
+                                              // item.isMukhyadefault = 1;
+                                              selectedItem = item;
+                                              selectedType = "anyaprabhavi";
+                                              selectedPerson = null;
+                                              // selectedPrabhavi = item;
+                                            });
+                                            setState(() {});
+                                          },
+                                        )),
                                     Padding(
                                       padding: const EdgeInsets.all(8),
                                       child: Text(item.name ?? "Unknown"),
@@ -4035,15 +4154,14 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
   int totalVastiCount = 0;
   String? selectedBhougolikPratinidhitwaVastiIds;
 
-  Future<void> showGraamVastiMandalUpnagarPopup(
-    BuildContext context, {
+  Future<void> showGraamVastiMandalUpnagarPopup(BuildContext context, {
     required List<UpnagarmandallistVijayaDashami> vastiList,
     List<UpnagarmandallistVijayaDashami>? preselectedItems,
     required void Function(
-      List<UpnagarmandallistVijayaDashami> selectedItems,
-      int selectedCount,
-      int totalCount,
-    ) onSubmit,
+        List<UpnagarmandallistVijayaDashami> selectedItems,
+        int selectedCount,
+        int totalCount,
+        ) onSubmit,
   }) async {
     print(">>>>>>>>>>> $preselectedItems");
     List<UpnagarmandallistVijayaDashami> selectedItems = List.from(preselectedItems ?? []);
@@ -4061,7 +4179,10 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
               insetPadding: const EdgeInsets.all(16),
               child: Container(
                 padding: const EdgeInsets.all(16),
-                height: MediaQuery.of(context).size.height * 0.6, // ✅ Standard height
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height * 0.6, // ✅ Standard height
                 width: double.maxFinite,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -4191,6 +4312,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+
                     /// Title with Close Button
                     Container(
                       width: double.infinity,
@@ -4246,7 +4368,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                                       SearchSajjanAnyaScreen.routeName,
                                       arguments: {'geoUnitId': _selectedGeoUnitId},
                                     ).then(
-                                      (value) async {
+                                          (value) async {
                                         await _getForm();
                                         setState(() {});
                                       },
@@ -4280,7 +4402,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                                       AddVishisthaAtithi.routeName,
                                       arguments: {'geoUnitId': _selectedGeoUnitId},
                                     ).then(
-                                      (value) async {
+                                          (value) async {
                                         await _getForm();
                                         setState(() {});
                                       },
@@ -4298,6 +4420,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                               child: SingleChildScrollView(
                                 child: Column(
                                   children: [
+
                                     /// Content
                                     const SizedBox(height: 12),
                                     Text(
@@ -4344,26 +4467,26 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                                               children: [
                                                 Center(
                                                     child: Checkbox(
-                                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                                  value: selectedSajjanshaktiItems.any((x) => x.pkid == item.pkid),
-                                                  onChanged: (val) {
-                                                    set(() {
-                                                      if (val == true) {
-                                                        selectedSajjanshaktiItems.add(item);
-                                                      } else {
-                                                        selectedSajjanshaktiItems.removeWhere((x) => x.pkid == item.pkid);
-                                                      }
-                                                    });
-                                                    selectedSajjanshaktiItemsIds = selectedSajjanshaktiItems.map((e) => e.pkid.toString()).join(",");
-                                                    // String anyaIds = selectedAnyaprabhavi.map((e) => e.pkId.toString()).join(",");
-                                                    log(selectedSajjanshaktiItemsIds.toString());
-                                                    log("-----------------------------");
-                                                    // log(anyaIds);
+                                                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                                      value: selectedSajjanshaktiItems.any((x) => x.pkid == item.pkid),
+                                                      onChanged: (val) {
+                                                        set(() {
+                                                          if (val == true) {
+                                                            selectedSajjanshaktiItems.add(item);
+                                                          } else {
+                                                            selectedSajjanshaktiItems.removeWhere((x) => x.pkid == item.pkid);
+                                                          }
+                                                        });
+                                                        selectedSajjanshaktiItemsIds = selectedSajjanshaktiItems.map((e) => e.pkid.toString()).join(",");
+                                                        // String anyaIds = selectedAnyaprabhavi.map((e) => e.pkId.toString()).join(",");
+                                                        log(selectedSajjanshaktiItemsIds.toString());
+                                                        log("-----------------------------");
+                                                        // log(anyaIds);
 
-                                                    // onSubmit(sajIds, anyaIds, selectedSajjanshakti, selectedAnyaprabhavi);
-                                                    set(() {});
-                                                  },
-                                                )),
+                                                        // onSubmit(sajIds, anyaIds, selectedSajjanshakti, selectedAnyaprabhavi);
+                                                        set(() {});
+                                                      },
+                                                    )),
                                                 Padding(
                                                   padding: const EdgeInsets.all(8),
                                                   child: Text(item.name ?? "Unknown"),
@@ -4422,25 +4545,25 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                                               children: [
                                                 Center(
                                                     child: Checkbox(
-                                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                                  value: selectedAnyaprabhaviItems.any((x) => x.pkId == item.pkId),
-                                                  onChanged: (val) {
-                                                    set(() {
-                                                      if (val == true) {
-                                                        selectedAnyaprabhaviItems.add(item);
-                                                      } else {
-                                                        selectedAnyaprabhaviItems.removeWhere((x) => x.pkId == item.pkId);
-                                                      }
-                                                    });
-                                                    // String sajIds = selectedSajjanshakti.map((e) => e.pkid.toString()).join(",");
-                                                    selectedAnyaprabhaviItemsIds = selectedAnyaprabhaviItems.map((e) => e.pkId.toString()).join(",");
+                                                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                                      value: selectedAnyaprabhaviItems.any((x) => x.pkId == item.pkId),
+                                                      onChanged: (val) {
+                                                        set(() {
+                                                          if (val == true) {
+                                                            selectedAnyaprabhaviItems.add(item);
+                                                          } else {
+                                                            selectedAnyaprabhaviItems.removeWhere((x) => x.pkId == item.pkId);
+                                                          }
+                                                        });
+                                                        // String sajIds = selectedSajjanshakti.map((e) => e.pkid.toString()).join(",");
+                                                        selectedAnyaprabhaviItemsIds = selectedAnyaprabhaviItems.map((e) => e.pkId.toString()).join(",");
 
-                                                    // onSubmit(sajIds, anyaIds, selectedSajjanshakti, selectedAnyaprabhavi);
-                                                    // log(sajIds);
-                                                    log(selectedAnyaprabhaviItemsIds.toString());
-                                                    set(() {});
-                                                  },
-                                                )),
+                                                        // onSubmit(sajIds, anyaIds, selectedSajjanshakti, selectedAnyaprabhavi);
+                                                        // log(sajIds);
+                                                        log(selectedAnyaprabhaviItemsIds.toString());
+                                                        set(() {});
+                                                      },
+                                                    )),
                                                 Padding(
                                                   padding: const EdgeInsets.all(8),
                                                   child: Text(item.name ?? "Unknown"),
@@ -4566,7 +4689,9 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
   }
 
   Widget mainContainer(String header, Widget child) {
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery
+        .of(context)
+        .size;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Container(
@@ -4641,13 +4766,13 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
               onChanged: isDisable
                   ? null
                   : (value) {
-                      if (!_searched) {
-                        // ✅ Search disabled => show toast
-                        Fluttertoast.showToast(msg: "${Statics.getLabel('NagarSelectionImportant')}");
-                        return;
-                      }
-                      if (value != null) onChanged(value);
-                    },
+                if (!_searched) {
+                  // ✅ Search disabled => show toast
+                  Fluttertoast.showToast(msg: "${Statics.getLabel('NagarSelectionImportant')}");
+                  return;
+                }
+                if (value != null) onChanged(value);
+              },
               activeColor: Colors.purpleAccent,
             ),
             Text(
@@ -4661,12 +4786,12 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
               onChanged: isDisable
                   ? null
                   : (value) {
-                      if (!_searched) {
-                        Fluttertoast.showToast(msg: "${Statics.getLabel('NagarSelectionImportant')}");
-                        return;
-                      }
-                      if (value != null) onChanged(value);
-                    },
+                if (!_searched) {
+                  Fluttertoast.showToast(msg: "${Statics.getLabel('NagarSelectionImportant')}");
+                  return;
+                }
+                if (value != null) onChanged(value);
+              },
               activeColor: Colors.purpleAccent,
             ),
             Text(
@@ -4770,7 +4895,8 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                     child: Column(
                       children: details
                           .map(
-                            (e) => Container(
+                            (e) =>
+                            Container(
                               margin: const EdgeInsets.symmetric(vertical: 6),
                               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                               decoration: BoxDecoration(
@@ -4811,7 +4937,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                                 ],
                               ),
                             ),
-                          )
+                      )
                           .toList(),
                     ),
                   ),
