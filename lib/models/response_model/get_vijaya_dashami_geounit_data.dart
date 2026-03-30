@@ -1,5 +1,7 @@
 import 'package:niyojak_prod/models/response_model/vijayaDashamiInitModel.dart';
 
+import 'hindu_sanmelan_model.dart';
+
 // import 'get_vasti_data_by_id_model.dart';
 
 class GetVijayadashamiDataByGeoUnitModel {
@@ -15,6 +17,8 @@ class GetVijayadashamiDataByGeoUnitModel {
   List<Vastisanyaprabhavi>? visititAtithiVastisarAnyaprabhavilokam;
   List<Vastisarsajjanshakti>? visititAtithiVastisarsajjanshakti;
 
+  Geodata? geodata;
+
   GetVijayadashamiDataByGeoUnitModel({
     this.message,
     this.status,
@@ -26,6 +30,7 @@ class GetVijayadashamiDataByGeoUnitModel {
     this.mukhyaAtithiVastisarsajjanshakti,
     this.visititAtithiVastisarAnyaprabhavilokam,
     this.visititAtithiVastisarsajjanshakti,
+    this.geodata,
   });
 
   GetVijayadashamiDataByGeoUnitModel.fromJson(Map<String, dynamic> json) {
@@ -83,6 +88,7 @@ class GetVijayadashamiDataByGeoUnitModel {
         });
       }
     }
+    geodata = json['geodatalist'] != null ? new Geodata.fromJson(json['geodatalist']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -112,6 +118,9 @@ class GetVijayadashamiDataByGeoUnitModel {
     }
     if (this.visititAtithiVastisarsajjanshakti != null) {
       data['visitit_atithi_Vastisarsajjanshakti'] = this.visititAtithiVastisarsajjanshakti!.map((v) => v.toJson()).toList();
+    }
+    if (this.geodata != null) {
+      data['geodatalist'] = this.geodata!.toJson();
     }
     return data;
   }

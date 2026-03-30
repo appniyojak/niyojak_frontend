@@ -19,6 +19,7 @@ class HinduSanmelanModel {
   List<TypeValueData>? urldata; //type : url
   List<TypeValueData>? imgdata; //type: img
   List<TypeValueData>? advimgdata; //type: advimg
+  Geodata? geodata;
 
   HinduSanmelanModel({
     this.message,
@@ -37,6 +38,7 @@ class HinduSanmelanModel {
     this.urldata,
     this.imgdata,
     this.advimgdata,
+    this.geodata,
   });
 
   HinduSanmelanModel.fromJson(Map<String, dynamic> json) {
@@ -91,6 +93,7 @@ class HinduSanmelanModel {
         advimgdata!.add(new TypeValueData.fromJson(v));
       });
     }
+    geodata = json['geodata'] != null ? new Geodata.fromJson(json['geodata']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -125,6 +128,40 @@ class HinduSanmelanModel {
     if (this.advimgdata != null) {
       data['advimgdata'] = this.advimgdata!.map((v) => v.toJson()).toList();
     }
+    if (this.geodata != null) {
+      data['geodata'] = this.geodata!.toJson();
+    }
+    return data;
+  }
+}
+
+class Geodata {
+  String? geounitid;
+  int? levelID;
+  int? parentBhaagID;
+  int? parentMahaanagarID;
+  int? parentNagarID;
+  int? parentVibhaagID;
+
+  Geodata({this.geounitid, this.levelID, this.parentBhaagID, this.parentMahaanagarID, this.parentNagarID, this.parentVibhaagID});
+
+  Geodata.fromJson(Map<String, dynamic> json) {
+    geounitid = json['GeoUnitID'];
+    levelID = json['LevelID'];
+    parentBhaagID = json['ParentBhaagID'];
+    parentMahaanagarID = json['ParentMahaanagarID'];
+    parentNagarID = json['ParentNagarID'];
+    parentVibhaagID = json['ParentVibhaagID'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['GeoUnitID'] = this.geounitid;
+    data['LevelID'] = this.levelID;
+    data['ParentBhaagID'] = this.parentBhaagID;
+    data['ParentMahaanagarID'] = this.parentMahaanagarID;
+    data['ParentNagarID'] = this.parentNagarID;
+    data['ParentVibhaagID'] = this.parentVibhaagID;
     return data;
   }
 }

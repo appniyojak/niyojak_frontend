@@ -456,16 +456,6 @@ class _AddNewKaryakramScreenState extends State<AddNewKaryakramScreen> {
               children: [
                 SizedBox(height: 12),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      "*Dummy Data",
-                      style: TextStyle(color: Colors.grey.shade600, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                    )
-                  ],
-                ),
-                SizedBox(height: 12),
-                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(

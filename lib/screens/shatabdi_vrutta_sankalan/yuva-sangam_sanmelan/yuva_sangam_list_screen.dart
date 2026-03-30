@@ -156,7 +156,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
   //   // getFormData();
   // }
 
-  showEditDatePopup(String date) {
+  showEditDatePopup(String date, int? id) {
     dateController.text = date;
     showDialog(
       context: context,
@@ -208,7 +208,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
                     color: Theme.of(context).primaryColor,
                     disabledColor: Colors.grey,
                     textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                    onPressed: dateController.text.trim().isEmpty ? null : changeDateData,
+                    onPressed: dateController.text.trim().isEmpty ? null : () => changeDateData(id),
                     child: Text(
                       Statics.getLabel('Submit'),
                       style: TextStyle(fontSize: 16),
@@ -224,9 +224,9 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
     );
   }
 
-  changeDateData() async {
+  changeDateData(int? id) async {
     Map<String, dynamic> formData = {
-      "id": selectedKendra?.pkid ?? 0,
+      "id": id ?? 0,
       "date": dateController.text,
       "appuserid": int.parse(Statics.userDetails['userID']),
     };
@@ -511,15 +511,6 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
             children: [
               SizedBox(height: 12),
               stharDropdown(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    "*Dummy Data",
-                    style: TextStyle(color: Colors.grey.shade600, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
               SizedBox(height: 24),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -581,7 +572,11 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
                                           // const SizedBox(width: 6),
 
                                           // Date tag
-                                          _TagChip(label: _item.yuvadate ?? "--", icon: Icons.calendar_today, iconColor: Colors.grey, onEditTap: () => showEditDatePopup(_item.yuvadate.toString())),
+                                          _TagChip(
+                                              label: _item.yuvadate ?? "--",
+                                              icon: Icons.calendar_today,
+                                              iconColor: Colors.grey,
+                                              onEditTap: () => showEditDatePopup(_item.yuvadate.toString(), _item.pkid)),
                                         ],
                                       ),
                                     ),
@@ -639,7 +634,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
                                       "type": karyakramLevelsList.firstWhere((e) => e.values.first == _item.shatapdistharlevelid).keys.first,
                                       "date": _item.yuvadate,
                                       "geo": _item.trailNames,
-                                    }),
+                                    }).then((value) => getKendraListData()),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [

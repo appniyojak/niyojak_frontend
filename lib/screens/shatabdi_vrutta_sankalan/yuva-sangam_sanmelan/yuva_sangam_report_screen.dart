@@ -207,16 +207,6 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
         child: Column(
           children: [
             SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  "*Dummy Data",
-                  style: TextStyle(color: Colors.grey.shade600, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                )
-              ],
-            ),
-            SizedBox(height: 10),
             _buildExpansionPanel(),
             SizedBox(height: 20),
             if (_searched) ...[
@@ -474,8 +464,8 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                         DataCell(Center(child: Text(level.yuvasangamexceptvartmansankalpit.toString()))),
                         DataCell(Center(child: Text(level.yuvasangampresentsankalpitshaakha.toString()))),
                         //
-                        DataCell(Center(child: Text(level.totalyuvasangampresentshaakha.toString()))),
                         DataCell(Center(child: Text(level.totalyuvasangamexceptshaakha.toString()))),
+                        DataCell(Center(child: Text(level.totalyuvasangampresentshaakha.toString()))),
                       ]);
                     }).toList() +
                     [
@@ -627,12 +617,12 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.totalyuvasangampresentshaakha ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.totalyuvasangamexceptshaakha ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.totalyuvasangamexceptshaakha ?? 0)).toString(),
+                          data.fold(0, (sum, item) => sum + (item.totalyuvasangampresentshaakha ?? 0)).toString(),
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ))),
                       ])

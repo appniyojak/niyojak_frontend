@@ -39,6 +39,7 @@ class VijayadashamiFormView extends StatefulWidget {
 class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
   final _formKey = GlobalKey<FormState>();
   final ScrollController _scrollController = ScrollController();
+  final ScrollController _mainScrollController = ScrollController();
 
   TextEditingController txtUrlsController = TextEditingController();
   TextEditingController txtUrlDescController = TextEditingController();
@@ -87,6 +88,13 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     populateDropdown();
     presentMatrushaktiController.addListener(_calculateTotal);
     presentMaleController.addListener(_calculateTotal);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => _getInitialData());
+  }
+
+  _getInitialData() async {
+    final args = ModalRoute.of(context)?.settings.arguments as String?;
+    if (args != null) await getFormData(formId: int.tryParse(args) ?? 0);
+    setState(() {});
   }
 
   Future<void> clearForm() async {
@@ -2276,6 +2284,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       body: Form(
         key: _formKey,
         child: ListView(
+          controller: _mainScrollController,
           padding: const EdgeInsets.all(16),
           children: [
             Container(
@@ -5614,17 +5623,62 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
 
   GetVijayadashamiDataByGeoUnitModel? getVijayaDashamiUtsavDataByGeounitData;
 
-  Future<void> getFormData() async {
+  Future<void> getFormData({int? formId}) async {
     Map<String, dynamic> formData = {
       "GeoUnitID": selectedUpnagarList.isEmpty ? selctedLevelId.toString() : selectedUpnagarList.join(","),
       "AppUserID": int.parse(Statics.userDetails['userID']),
       "isnagar": int.parse(utsavKontyaStaravar!),
+      "pkid": formId ?? 0,
     };
 
     String formattedJson = jsonEncode(formData);
     log("Form Data (JSON):\n$formattedJson");
     getVijayaDashamiUtsavDataByGeounitData = await Statics.getVijayaDashamiUtsavDataByGeounit(context, formData);
     log("getVijayaDashamiUtsavDataByGeounitData ${jsonDecode(jsonEncode(getVijayaDashamiUtsavDataByGeounitData))}");
+
+    final _geodata = getVijayaDashamiUtsavDataByGeounitData?.geodata;
+
+    if (_geodata != null && formId != null) {
+      utsavKontyaStaravar = _geodata.levelID.toString();
+      setState(() {});
+      if (_geodata.parentMahaanagarID != null && _geodata.parentMahaanagarID != 0) {
+        _linkedMahaanagarValue = _geodata.parentMahaanagarID.toString();
+        await populatelinkedVibhaagDropdown(_geodata.parentMahaanagarID.toString());
+      }
+      if (_geodata.parentVibhaagID != null && _geodata.parentVibhaagID != 0) {
+        await populatelinkedBhaagDropdown(_geodata.parentVibhaagID.toString());
+        _linkedVibhaagValue = _geodata.parentVibhaagID.toString();
+      }
+      if (_geodata.parentBhaagID != null && _geodata.parentBhaagID != 0) {
+        await populatelinkedNagarDropdown(_geodata.parentBhaagID.toString(), null);
+        _linkedBhaagValue = _geodata.parentBhaagID.toString();
+      }
+      if (_geodata.parentNagarID != null && _geodata.parentNagarID != 0) {
+        await populatelinkedMandalDropdown(_geodata.parentNagarID.toString());
+        await populatelinkedVastiDropdown(_geodata.parentNagarID.toString());
+        _linkedNagarValue = _geodata.parentNagarID.toString();
+      }
+      if (_geodata.levelID == 6) {
+        _linkedNagarValue = _geodata.geounitid.toString();
+      } else if (_geodata.levelID == 4) {
+        _linkedmandalValue = _geodata.geounitid.toString();
+      } else if (_geodata.levelID == 2) {
+        _linkedvastiValue = _geodata.geounitid.toString();
+      }
+      if (_geodata.geounitid != null && _geodata.geounitid != 0 && _geodata.levelID != 13) {
+        selctedLevelId = _geodata.geounitid.toString();
+      }
+      if (_geodata.levelID == 13) {
+        data = await Statics.getVijayadashamiInitData(context, Statics.userDetails["userID"], _geodata.parentNagarID.toString(), "6");
+        setState(() {
+          _linkedUpnagar = data?.upnagarmandallist ?? [];
+        });
+        selectedUpnagarList = _geodata.geounitid.toString().split(",").map((e) => int.tryParse(e)).toList();
+      }
+
+      await scrollToBottom();
+    }
+
     setState(() {
       VijayadashamiUtsav utsav = getVijayaDashamiUtsavDataByGeounitData!.vijayadashamiUtsav!;
 
@@ -5774,6 +5828,24 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       averageMilanCount = utsav.milanPratinidhatvaSahasari.toString();
       averageSanghaMandaliCount = utsav.manasikSanghMandaliPratinidhatvaSahasari.toString();
     });
+  }
+
+  Future<void> scrollToBottom() async {
+    if (!_mainScrollController.hasClients) return;
+
+    await _mainScrollController.animateTo(
+      _mainScrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeOut,
+    );
+
+    await Future.delayed(const Duration(milliseconds: 100));
+
+    await _mainScrollController.animateTo(
+      _mainScrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
   }
 
   Future<void> showPersonDetailsPopup(BuildContext context, dynamic item, int srNo) {

@@ -222,7 +222,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
     String formattedJson = const JsonEncoder.withIndent('  ').convert(formData.toJson());
     log("Form Data (JSON):\n$formattedJson");
     await Statics.SaveYuvaSangamVruttaData(context: context, inputJson: formData.toJson(), showLoader: showLoader);
-    // getFormData();
+    Navigator.pop(context);
   }
 
   //////////////////////////////////////////////////////////////////////////////////////
@@ -357,16 +357,6 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    "*Dummy Data",
-                    style: TextStyle(color: Colors.grey.shade600, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
               const SizedBox(height: 20),
               // vastiMandalDropdown(),
 
@@ -828,7 +818,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                     SingleColumnRow(
                       txtString: "${Statics.getLabel('Total')} ${Statics.getLabel('shaakhaamilan')}",
                       value:
-                          "${(vruttaData?.sankalpitmahalist ?? []).length + (vruttaData?.sankalpittarunlist ?? []).length + (vruttaData?.presenttarunlist ?? []).length + (vruttaData?.sankalpittarunlist ?? []).length}",
+                          "${(vruttaData?.sankalpitmahalist ?? []).length + (vruttaData?.presentmahalist ?? []).length + (vruttaData?.presenttarunlist ?? []).length + (vruttaData?.sankalpittarunlist ?? []).length}",
                     ),
                     SingleColumnRow(
                       txtString: "${Statics.getLabel('shaakhaamilan')} ${Statics.getLabel('pratinidhitva')}",
@@ -839,7 +829,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                       txtString: "${Statics.getLabel('shaakhaamilan')} ${Statics.getLabel('average')} ${Statics.getLabel('pratinidhitva')}",
                       value: () {
                         final total = (vruttaData?.sankalpitmahalist ?? []).length +
-                            (vruttaData?.sankalpittarunlist ?? []).length +
+                            (vruttaData?.presentmahalist ?? []).length +
                             (vruttaData?.presenttarunlist ?? []).length +
                             (vruttaData?.sankalpittarunlist ?? []).length;
                         return total > 0 ? "${((selectedShakhaCount / total) * 100).round()} %" : "0 %";

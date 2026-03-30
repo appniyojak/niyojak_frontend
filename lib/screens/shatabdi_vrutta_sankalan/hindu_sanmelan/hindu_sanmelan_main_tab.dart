@@ -21,6 +21,8 @@ class HinduSanmelanMainTab extends StatefulWidget {
 class _HinduSanmelanMainTabState extends State<HinduSanmelanMainTab> with SingleTickerProviderStateMixin {
   TabController? _tabController;
 
+  String? selectedId;
+
   bool _isSearching = false;
 
   @override
@@ -31,6 +33,15 @@ class _HinduSanmelanMainTabState extends State<HinduSanmelanMainTab> with Single
     log("initState _HinduSanmelanMainTabState runnn >>>>>>>>>>>>>> ");
     // WidgetsBinding.instance.addPostFrameCallback((t) => getAbhiyaanGeoUnitsFun());
     super.initState();
+  }
+
+  void onIdSelected(String id) {
+    setState(() {
+      selectedId = id;
+    });
+
+    // switch to first tab
+    _tabController?.animateTo(0);
   }
 
   @override
@@ -100,8 +111,8 @@ class _HinduSanmelanMainTabState extends State<HinduSanmelanMainTab> with Single
             controller: _tabController,
             physics: NeverScrollableScrollPhysics(),
             children: <Widget>[
-              HinduSanmelanForm(),
-              HinduSanmelanReport(),
+              HinduSanmelanForm(id: selectedId),
+              HinduSanmelanReport(onIdTap: onIdSelected),
             ],
           ),
         ),

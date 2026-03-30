@@ -1951,14 +1951,14 @@ Map<String, String> resEnglish = {
   'yuvaReportTable24': "Pr. Present Tarun Vyavasaayee\nShaakha / Milan",
   'yuvaReportTable25': "Pr. New Sankalpit Tarun\nVyavasaayee Shaakha / Milan",
 
-  'yuvaReportTable26': "Exp. Present High Sch. &\nTarun Vyavasaayee Shaakha / Milan",
-  'yuvaReportTable27': "Pr. Present High Sch. &\nTarun Vyavasaayee Shaakha / Milan",
+  'yuvaReportTable26': "Total Exp. Present\nShaakha / Milan",
+  'yuvaReportTable27': "Total Pr. Present\nShaakha / Milan",
 
-  'yuvaReportTable28': "Exp. New Sankalpit High Sch.\n& Tarun Vyavasaayee Shaakha / Milan",
-  'yuvaReportTable29': "Pr. New Sankalpit High Sch.\n& Tarun Vyavasaayee Shaakha / Milan",
+  'yuvaReportTable28': "Total Exp. New\nSankalpit Shaakha / Milan",
+  'yuvaReportTable29': "Total Pr. New\nSankalpit Shaakha / Milan",
 
-  'yuvaReportTable30': "Total Present High Sch. &\nTarun Vyavasaayee Shaakha / Milan",
-  'yuvaReportTable31': "Total New Sankalpit High Sch.\n& Tarun Vyavasaayee Shaakha / Milan",
+  'yuvaReportTable30': "Total Exp. Shaakha / Milan",
+  'yuvaReportTable31': "Total Pr. Shaakha / Milan",
 
   'shaakhaamilan': "Shaakha / Milan",
   'shakhaMilantitle1': "Current Mahaavidyaalayeen Shaakha/ Milan",
@@ -3930,14 +3930,14 @@ Map<String, String> resMarathi = {
   'yuvaReportTable14': "अपे. नवीन संकल्पित तरुण\nव्यवसायी शाखा / मिलन",
   'yuvaReportTable25': "उप. नवीन संकल्पित तरुण\nव्यवसायी शाखा / मिलन",
 
-  'yuvaReportTable26': "अपे. वर्तमान महाविद्यालयीन व\nतरुण व्यवसायी शाखा / मिलन",
-  'yuvaReportTable27': "उप. वर्तमान महाविद्यालयीन व\nतरुण व्यवसायी शाखा / मिलन",
+  'yuvaReportTable26': "एकुण अपे. वर्तमान\nशाखा / मिलन",
+  'yuvaReportTable27': "एकुण उप. वर्तमान\nशाखा / मिलन",
 
-  'yuvaReportTable28': "अपे. नवीन संकल्पित महाविद्यालयीन व\nतरुण व्यवसायी शाखा / मिलन",
-  'yuvaReportTable29': "उप. नवीन संकल्पित महाविद्यालयीन व\nतरुण व्यवसायी शाखा / मिलन",
+  'yuvaReportTable28': "एकुण अपे. संकल्पित\nशाखा / मिलन",
+  'yuvaReportTable29': "एकुण उप. संकल्पित\nशाखा / मिलन",
 
-  'yuvaReportTable30': "एकूण वर्तमान महाविद्यालयीन व\nतरुण व्यवसायी शाखा / मिलन",
-  'yuvaReportTable31': "एकूण नवीन संकल्पित महाविद्यालयीन\nव तरुण व्यवसायी शाखा / मिलन",
+  'yuvaReportTable30': "एकूण अपे. शाखा / मिलन",
+  'yuvaReportTable31': "एकूण उप. शाखा / मिलन",
 
   'shaakhaamilan': "शाखा / मिलन",
   'shakhaMilantitle1': "वर्तमान महाविद्यालयीन शाखा / मिलन",
@@ -5908,14 +5908,14 @@ Map<String, String> resHindi = {
   'yuvaReportTable14': "अपे. नवीन संकल्पित तरुण\nव्यवसायी शाखा / मिलन",
   'yuvaReportTable25': "उप. नवीन संकल्पित तरुण\nव्यवसायी शाखा / मिलन",
 
-  'yuvaReportTable26': "अपे. वर्तमान महाविद्यालयीन व\nतरुण व्यवसायी शाखा / मिलन",
-  'yuvaReportTable27': "उप. वर्तमान महाविद्यालयीन व\nतरुण व्यवसायी शाखा / मिलन",
+  'yuvaReportTable26': "कुल अपे. वर्तमान\nशाखा / मिलन",
+  'yuvaReportTable27': "कुल उप. वर्तमान\nशाखा / मिलन",
 
-  'yuvaReportTable28': "अपे. नवीन संकल्पित महाविद्यालयीन व\nतरुण व्यवसायी शाखा / मिलन",
-  'yuvaReportTable29': "उप. नवीन संकल्पित महाविद्यालयीन व\nतरुण व्यवसायी शाखा / मिलन",
+  'yuvaReportTable28': "कुल अपे. नवीन संकल्पित\nशाखा / मिलन",
+  'yuvaReportTable29': "कुल उप. नवीन संकल्पित\nशाखा / मिलन",
 
-  'yuvaReportTable30': "कुल वर्तमान महाविद्यालयीन व\nतरुण व्यवसायी शाखा / मिलन",
-  'yuvaReportTable31': "कुल नवीन संकल्पित महाविद्यालयीन\nव तरुण व्यवसायी शाखा / मिलन",
+  'yuvaReportTable30': "कुल अपे. शाखा / मिलन",
+  'yuvaReportTable31': "कुल उप. शाखा / मिलन",
 
   'shaakhaamilan': "शाखा / मिलन",
   'shakhaMilantitle1': "वर्तमान महाविद्यालयीन शाखा / मिलन",

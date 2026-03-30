@@ -69,6 +69,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
 
 // ==================   DROP - DOWNS =================================
   void populateDropdown() async {
+    setState(() => viewcontainer = false);
     var data = await Statics.getStaticLDB('AnnualBaithakType');
     populatelinkedMahaanagarDropdown();
     populatelinkedVibhaagDropdown('');
@@ -80,6 +81,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedMahaanagarDropdown() async {
+    setState(() => viewcontainer = false);
     var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MahaanagarLevelID'].toString(), '', '', '');
     if (mounted)
       setState(() {
@@ -89,6 +91,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(String vibhaagIDStr) async {
+    setState(() => viewcontainer = false);
     _linkedNagarValue = null;
     var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
     setState(() {
@@ -98,6 +101,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
+    setState(() => viewcontainer = false);
     _linkedBhaagValue = null;
     var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '');
     if (mounted)
@@ -108,6 +112,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedShaharDropdown(String bhaagIDStr) async {
+    setState(() => viewcontainer = false);
     _linkedShahar = null;
     var shDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', '');
     setState(() {
@@ -117,6 +122,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
+    setState(() => viewcontainer = false);
     _linkedNagarValue = null;
     _linkedNagar = null;
     if (shaharIDStr != null) {
@@ -135,6 +141,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedMandalDropdown(String nagarIDStr) async {
+    setState(() => viewcontainer = false);
     _linkedgraamValue = null;
     _linkedmandal = _linkedgraam = null;
     var mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr, 'Nagar', '');
@@ -145,6 +152,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedGraamDropdown(String mandalIDStr) async {
+    setState(() => viewcontainer = false);
     _linkedgraamValue = null;
     print("mandalIDStr mandalIDStr ==> $mandalIDStr");
     var gmDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['GraamLevelID'].toString(), mandalIDStr, 'Mandal', '');
@@ -155,6 +163,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(String nagarIDStr) async {
+    setState(() => viewcontainer = false);
     _linkedvastiValue = null;
     var vsDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr, 'Nagar', '');
     setState(() {
@@ -206,7 +215,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
       "GeoUnitName": englishNameController.text,
     });
     print("_submitForm" + inputData);
-    Statics.savelevelUpdatedata(context, inputData);
+    // Statics.savelevelUpdatedata(context, inputData);
   }
 
   @override

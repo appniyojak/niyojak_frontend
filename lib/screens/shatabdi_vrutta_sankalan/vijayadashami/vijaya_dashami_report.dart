@@ -17,6 +17,7 @@ import '../../../models/response_model/get_vijayadashmi_report_resp_model.dart';
 import '../../../models/response_model/vijayadashmi_excel_resp_model.dart';
 import '../../../providers/bals.dart';
 import '../../../utils/cust_painters.dart';
+import 'vijayadashami_form_view.dart';
 
 class VijayadashamiFormReport extends StatefulWidget {
   static const String routeName = '/vijayadashami-form-report';
@@ -1868,7 +1869,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                                   borderRadius: BorderRadius.circular(50),
                                   onTap: () {
                                     final _names = data.otherinfo?.imgCountnames;
-                                    if (_names != null && _names.isNotEmpty) showInfoDialogBox(names: _names, title: Statics.getLabel("images"));
+                                    if (_names != null && _names.isNotEmpty) showInfoDialogBox(names: _names, title: Statics.getLabel("images"), showEye: true);
                                   },
                                   child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 14),
                                 ),
@@ -1896,7 +1897,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                                   borderRadius: BorderRadius.circular(50),
                                   onTap: () {
                                     final _names = data.otherinfo?.advCountnames;
-                                    if (_names != null && _names.isNotEmpty) showInfoDialogBox(names: _names, title: Statics.getLabel("advImages"));
+                                    if (_names != null && _names.isNotEmpty) showInfoDialogBox(names: _names, title: Statics.getLabel("advImages"), showEye: true);
                                   },
                                   child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 14),
                                 ),
@@ -1924,7 +1925,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                                   borderRadius: BorderRadius.circular(50),
                                   onTap: () {
                                     final _names = data.otherinfo?.urlCountnames;
-                                    if (_names != null && _names.isNotEmpty) showInfoDialogBox(names: _names, title: Statics.getLabel("advLinks"));
+                                    if (_names != null && _names.isNotEmpty) showInfoDialogBox(names: _names, title: Statics.getLabel("advLinks"), showEye: true);
                                   },
                                   child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 14),
                                 ),
@@ -2853,8 +2854,17 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
     );
   }
 
-  showInfoDialogBox({required String names, required String title}) {
+  bool hasValueBetweenDollar(String input) {
+    final regExp = RegExp(r'\$(.*?)\$');
+    final match = regExp.firstMatch(input);
+
+    return match != null && match.group(1)!.isNotEmpty;
+  }
+
+  showInfoDialogBox({required String names, required String title, bool showEye = false}) {
     final ScrollController _scrollController = ScrollController();
+    final _containAnyDollar = hasValueBetweenDollar(names);
+    final regExp = RegExp(r'\$(\d+)\$');
     return showDialog(
       context: context,
       builder: (context) {
@@ -2891,6 +2901,12 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                             constraints: BoxConstraints(maxWidth: 40),
                             child: Text(" "),
                           )),
+                          if (showEye && _containAnyDollar)
+                            DataColumn(
+                                label: Container(
+                              constraints: BoxConstraints(maxWidth: 40),
+                              child: Text(" "),
+                            )),
                           DataColumn(
                               label: Container(
                             constraints: BoxConstraints(minWidth: MediaQuery.sizeOf(context).width * 0.5),
@@ -2902,9 +2918,22 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                         rows: names.split(",").toList().asMap().entries.map((entry) {
                           int index = entry.key;
                           var data = entry.value;
+                          String? id;
+                          final match = regExp.firstMatch(data);
+                          if (match != null) {
+                            id = match.group(1); // "15602"
+                          }
+                          String cleanedText = data.replaceAll(regExp, '').trim();
                           return DataRow(cells: [
                             DataCell(Container(constraints: BoxConstraints(maxWidth: 40), child: Text((index + 1).toString()))),
-                            DataCell(Text(data, maxLines: 2, overflow: TextOverflow.ellipsis, softWrap: true)),
+                            if (showEye && _containAnyDollar)
+                              DataCell(InkWell(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    if (id != null && id.isNotEmpty) Navigator.of(context).pushNamed(VijayadashamiFormView.routeName, arguments: id);
+                                  },
+                                  child: Icon(Icons.remove_red_eye, color: Colors.purple))),
+                            DataCell(Text(cleanedText.replaceAll("\$", ""), maxLines: 2, overflow: TextOverflow.ellipsis, softWrap: true)),
                           ]);
                         }).toList(),
                       ),

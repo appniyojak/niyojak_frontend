@@ -84,9 +84,7 @@ import 'screens/forget_password.dart';
 import 'screens/shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/add_abhiyaan_karyakarta_screen.dart';
 import 'screens/shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/add_abhiyaan_pramukh.dart';
 import 'screens/shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/gruh_abhiyaan_main_tab_screen.dart';
-import 'screens/shatabdi_vrutta_sankalan/hindu_sanmelan/hindu_sanmelan_form.dart';
 import 'screens/shatabdi_vrutta_sankalan/hindu_sanmelan/hindu_sanmelan_main_tab.dart';
-import 'screens/shatabdi_vrutta_sankalan/hindu_sanmelan/hindu_sanmelan_report.dart';
 import 'screens/shatabdi_vrutta_sankalan/hindu_sanmelan/search_sajjan_anya_screen.dart';
 import 'screens/shatabdi_vrutta_sankalan/pramukh_jansanvad/add_sajjan_anya_pramukh_jan_screen.dart';
 import 'screens/shatabdi_vrutta_sankalan/pramukh_jansanvad/all_sanvaad_screen.dart';
@@ -347,8 +345,8 @@ class NiyojakAppState extends State<NiyojakApp> {
                 AddAbhiyaanKaryakartaScreen.routeName: (ctx) => AddAbhiyaanKaryakartaScreen(),
                 AddAbhiyaanPramukhScreen.routeName: (ctx) => AddAbhiyaanPramukhScreen(),
                 HinduSanmelanMainTab.routeName: (ctx) => HinduSanmelanMainTab(),
-                HinduSanmelanForm.routeName: (ctx) => HinduSanmelanForm(),
-                HinduSanmelanReport.routeName: (ctx) => HinduSanmelanReport(),
+                // HinduSanmelanForm.routeName: (ctx) => HinduSanmelanForm(),
+                // HinduSanmelanReport.routeName: (ctx) => HinduSanmelanReport(),
                 SearchSajjanAnyaScreen.routeName: (ctx) => SearchSajjanAnyaScreen(),
                 VastiSarvekshanScreen.routeName: (ctx) => VastiSarvekshanScreen(),
                 SadbhavBaithakMainTab.routeName: (ctx) => SadbhavBaithakMainTab(),
