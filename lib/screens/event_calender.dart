@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import '../widgets/calender_card.dart';
-import '../widgets/legend.dart';
-import '../screens/edit_event.dart';
-import '../screens/home_screen.dart';
-import '../widgets/app_drawer.dart';
 
 import '../helpers/static_data.dart' as Statics;
+import '../screens/edit_event.dart';
+import '../widgets/app_drawer.dart';
+import '../widgets/calender_card.dart';
+import '../widgets/legend.dart';
+import 'home_screen/home_screen.dart';
 
 class EventCalender extends StatefulWidget {
   static const routeName = '/event-calender';

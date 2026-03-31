@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'dart:math' as m;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collection/collection.dart';
@@ -2263,6 +2262,18 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     }
   }
 
+  // ═══════════════════════════════════════════════════════════════════════════
+  // GUARD: require geo-unit selection before editing
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  bool _guardSearch() {
+    if (!_isSearching) {
+      Fluttertoast.showToast(msg: Statics.getLabel('NagarSelectionImportant'));
+      return false;
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -3451,43 +3462,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
               ),
             ),
 // ================================== 13 QUESTIONS Box =======================================================================
-            mainContainer(
-              "${Statics.getLabel('moreInfo')}",
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  filePickerField1(
-                    question: "${Statics.getLabel('AddUtsavFiles')}",
-                    subtitle: "${Statics.getLabel('AddUtsavFilesSubtitle')}",
-                    // selectedFileName: selectedFileName,
-                    // onFileSelected: (base64File, fileName) {
-                    //   setState(() {
-                    //     selectedFilePath = base64File;
-                    //     // selectedFileName = fileName;
-                    //     imageAdd = 1;
-                    //   });
-                    //   log("Selected File Path (Base64): $selectedFilePath");
-                    // },
-                    loadingNotifier: loadingNotifier1,
-                    // loadingNotifier2: loadingNotifier3,
-                    context: context,
-                  ),
-                  Divider(height: 32),
-                  filePickerField2(
-                    question: "${Statics.getLabel('AddAdvUtsavFiles')}",
-                    subtitle: "${Statics.getLabel('AddAdvUtsavFilesSubtitle')}",
-                    loadingNotifier: loadingNotifier2,
-                    // loadingNotifier2: loadingNotifier3,
-                    context: context,
-                  ),
-                  Divider(height: 32),
-                  addUrlsListWidget(
-                    question: "${Statics.getLabel('AddLinks')}",
-                    context: context,
-                  )
-                ],
-              ),
-            ),
+            mainContainer(Statics.getLabel('moreInfo'), _moreInfoSection()),
 //==============================  SUBMIT BUTTON =======================================================================
             Container(
               child: MaterialButton(
@@ -4290,10 +4265,10 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
   }
 
   String? selectedFilePath;
-  String? filePathOg;
-  List<String?> _selectedFileNames1 = []; // To display the file name
-  List<String?> _selectedFileNames2 = []; // To display the file name
-  List<TypeValueData?> _urlsList = []; // To display the file name
+  List<TypeValueData?> _selectedFileNames1 = [];
+  List<TypeValueData?> _selectedFileNames2 = [];
+  List<TypeValueData?> _urlsList = [];
+
   // int? imageAdd = 0;
   final int _maxImages = 3;
   final int _maxAddImages = 10;
@@ -4301,21 +4276,75 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
   ValueNotifier<bool> loadingNotifier2 = ValueNotifier(false);
   ValueNotifier<bool> loadingNotifier3 = ValueNotifier(false);
 
-  Widget filePickerField1({
-    required BuildContext context,
-    required String question,
-    required String subtitle,
-    // required Function(String?, String?) onFileSelected,
-    // List<String?> selectedFileNames,
-    int? questionNumber,
-    bool isLoading = false,
-    ValueNotifier<bool>? loadingNotifier,
-    // required ValueNotifier<bool> loadingNotifier2,
-  }) {
-    final canAddMore = _selectedFileNames1.length < _maxImages;
+  // ── More Info (Section 12) ─────────────────────────────────────────────────
+  /// This is the main improved section. Contains:
+  ///   1. Sanmelan format text field
+  ///   2. Utsav photos (filePickerField1 → _filePickerSection)
+  ///   3. Advertisement photos (filePickerField2 → _filePickerSection)
+  ///   4. URLs list
+  Widget _moreInfoSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // ── Utsav photos ─────────────────────────────────────────────────────
+        _filePickerSection(
+          question: Statics.getLabel('AddUtsavFiles'),
+          subtitle: Statics.getLabel('AddUtsavFilesSubtitle'),
+          descHint: Statics.getLabel('AddUtsavFilesDesc'),
+          fileList: _selectedFileNames1,
+          maxFiles: _maxImages,
+          fileType: "utsavimgdata",
+          baseUrl: '${Statics.baseUrl}/Files/vijayadhasmifiles/',
+          loadingNotifier: loadingNotifier1,
+          descController: txtUtsavPhotoDescController,
+        ),
+
+        const Divider(height: 32),
+
+        // ── Advertisement photos ──────────────────────────────────────────────
+        _filePickerSection(
+          question: Statics.getLabel('AddAdvUtsavFiles'),
+          subtitle: Statics.getLabel('AddAdvUtsavFilesSubtitle'),
+          descHint: Statics.getLabel('AddAdvUtsavFilesDesc'),
+          fileList: _selectedFileNames2,
+          maxFiles: _maxAddImages,
+          fileType: "Add",
+          baseUrl: '${Statics.baseUrl}/Files/vijayadhasmifiles/',
+          loadingNotifier: loadingNotifier2,
+          descController: txtUtsavAddPhotoDescController,
+        ),
+
+        const Divider(height: 32),
+
+        // ── URLs ──────────────────────────────────────────────────────────────
+        _urlsSection(),
+      ],
+    );
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // ─────────────────────  FILE PICKER SECTION (MERGED)  ─────────────────────
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// Single reusable widget replacing the old `filePickerField1` / `filePickerField2`.
+  /// Handles upload, view gallery, edit description/image, and delete.
+  Widget _filePickerSection({
+    required String question,
+    required String subtitle,
+    required String descHint,
+    required List<TypeValueData?> fileList,
+    required int maxFiles,
+    required String fileType, // "img" or "advimg"
+    required String baseUrl,
+    required ValueNotifier<bool> loadingNotifier,
+    required TextEditingController descController,
+  }) {
+    final canAdd = fileList.length < maxFiles;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // ── Header row: title + gallery-view icon ─────────────────────────
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -4323,1037 +4352,793 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "${questionNumber != null ? "$questionNumber. " : ""}$question",
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    subtitle,
-                    style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w400),
-                  ),
+                  Text(question, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                  Text(subtitle, style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w400)),
                 ],
               ),
             ),
             IconButton(
-              onPressed: () {
-                if (_selectedFileNames1.isNotEmpty) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Material(
-                        child: StatefulBuilder(builder: (context, set) {
-                          String _currentImg = "";
-                          return Container(
-                            color: Colors.transparent,
-                            padding: const EdgeInsets.all(20),
-                            child: ListView(
-                              // mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Align(
-                                  alignment: Alignment.topRight,
-                                  child: IconButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    icon: Icon(Icons.close, color: Colors.black),
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                ..._selectedFileNames1.asMap().entries.map((entry) {
-                                  int index = entry.key; // index
-                                  var img = entry.value;
-                                  return Container(
-                                    margin: EdgeInsets.only(bottom: 12),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                "${(index + 1)}. $img",
-                                                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
-                                              ),
-                                            ),
-                                            IconButton(
-                                              onPressed: () async {
-                                                set(() {
-                                                  _currentImg = img.toString();
-                                                });
-                                                set(() {
-                                                  loadingNotifier3.value = true;
-                                                });
-                                                setState(() {});
-                                                print(img.toString() == _currentImg);
-                                                await MyAppGlobals.downloadFile('${Statics.baseUrl}/Files/vijayadhasmifiles/$img', img.toString());
-                                                set(() {
-                                                  loadingNotifier3.value = false;
-                                                });
-
-                                                setState(() {});
-                                                set(() {
-                                                  _currentImg = "";
-                                                });
-                                              },
-                                              icon: ValueListenableBuilder<bool>(
-                                                valueListenable: loadingNotifier3,
-                                                builder: (context, isLoading, _) {
-                                                  return (isLoading && img.toString() == _currentImg)
-                                                      ? SizedBox(
-                                                          width: 17,
-                                                          height: 17,
-                                                          child: CircularProgressIndicator(strokeWidth: 2),
-                                                        )
-                                                      : Icon(
-                                                          Icons.download,
-                                                          color: Colors.purple,
-                                                        );
-                                                },
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 6),
-                                        CachedNetworkImage(
-                                          imageUrl: '${Statics.baseUrl}/Files/vijayadhasmifiles/$img',
-                                          errorWidget: (context, error, stackTrace) =>
-                                              SizedBox(width: MediaQuery.sizeOf(context).width, height: 120, child: Center(child: Text(Statics.getLabel("errorOccurred")))),
-                                          progressIndicatorBuilder: (context, child, loadingProgress) =>
-                                              SizedBox(width: MediaQuery.sizeOf(context).width, height: 120, child: Center(child: CircularProgressIndicator())),
-                                          fit: BoxFit.contain,
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }),
-                              ],
-                            ),
-                          );
-                        }),
-                      );
-                    },
-                  );
-                }
-              },
-              icon: Icon(Icons.remove_red_eye, color: Colors.purpleAccent),
+              icon: const Icon(Icons.remove_red_eye, color: Colors.purpleAccent),
+              onPressed: fileList.isEmpty ? null : () => _showGalleryDialog(fileList, baseUrl),
             ),
           ],
         ),
-        SizedBox(height: 8),
-        ..._selectedFileNames1.map(
-          (img) => Container(
-            margin: EdgeInsets.only(bottom: 8),
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black54, width: 1),
-              borderRadius: BorderRadius.circular(11),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    img ?? "${Statics.getLabel('selectFile')}",
-                    style: TextStyle(color: Colors.black87),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                IconButton(
-                  style: IconButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
-                  onPressed: () async {
-                    final _shouldDelete = await showDialog(
-                      context: context,
-                      builder: (ctx) => AlertDialog(
-                        backgroundColor: Colors.white,
-                        title: Text(
-                          "${Statics.getLabel('AskConfirmation')}",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.red.shade700,
-                            fontSize: 18,
-                          ),
-                        ),
-                        content: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Text(
-                            "${Statics.getLabel('AreyouSureYouWantToDeleteImage')}",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.red.shade800,
-                            ),
-                          ),
-                        ),
-                        actions: [
-                          TextButton(
-                            child: Text(Statics.getLabel('ConfirmationNo')),
-                            onPressed: () {
-                              Navigator.of(ctx).pop(false);
-                            },
-                          ),
-                          TextButton(
-                            style: TextButton.styleFrom(
-                              backgroundColor: Colors.red.shade700,
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                            ),
-                            onPressed: () => Navigator.of(ctx).pop(true),
-                            child: Text(
-                              "${Statics.getLabel('ConfirmationYes')}",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
 
-                    if (_shouldDelete) {
-                      final _result = await deleteImageDataFun(imageName: img.toString());
-                      if (_result) {
-                        setState(() {
-                          _selectedFileNames1.remove(img);
-                        });
-                      }
-                    }
-                  },
-                  icon: Icon(Icons.delete_forever, color: Colors.red),
-                ),
-              ],
-            ),
-          ),
-        ),
-        if (canAddMore)
+        const SizedBox(height: 8),
+
+        // ── File rows ─────────────────────────────────────────────────────
+        ...fileList.map((item) => _fileItemRow(
+              item: item,
+              baseUrl: baseUrl,
+              fileType: fileType,
+              fileList: fileList,
+            )),
+
+        // ── Add button ────────────────────────────────────────────────────
+        if (canAdd)
           Align(
             alignment: Alignment.centerRight,
-            child: OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                textStyle: const TextStyle(fontSize: 14, color: Colors.purple),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              ),
-              onPressed: () async {
-                if (!_isSearching) {
-                  Fluttertoast.showToast(
-                    msg: "${Statics.getLabel('NagarSelectionImportant')}",
-                  );
-                  return;
-                }
-                loadingNotifier?.value = true;
-                XFile? result;
-                final isCamera = await showDialog(
-                  context: context,
-                  builder: (ctx) => AlertDialog(
-                    title: Text(Statics.getLabel('chooseAnOption')),
-                    content: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        IconButton.filled(
-                          onPressed: () async {
-                            Navigator.of(ctx).pop(true);
-                          },
-                          icon: Icon(Icons.camera_alt),
-                        ),
-                        IconButton.filled(
-                          onPressed: () async {
-                            Navigator.of(ctx).pop(false);
-                          },
-                          icon: Icon(Icons.photo_library),
-                        ),
-                      ],
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                        child: Text(Statics.getLabel('clear')),
-                        onPressed: () {
-                          Navigator.of(ctx).pop();
-                          setState(() {
-                            loadingNotifier?.value = false;
-                          });
-                        },
-                      )
-                    ],
-                  ),
-                );
-                setState(() {});
-
-                if (isCamera) {
-                  result = await ImagePicker().pickImage(source: ImageSource.camera);
-                } else {
-                  result = await ImagePicker().pickImage(source: ImageSource.gallery);
-                }
-                setState(() {});
-                // showLoaderDialog(context);
-                try {
-                  if (result != null) {
-                    // final random = m.Random();
-                    final _imgName = m.Random().nextInt(99999999);
-                    String filePath = File(result.path).path;
-                    filePathOg = File(result.path).path;
-                    String fileName = isCamera ? "Img_${_imgName}.${filePathOg?.split("/").last.split(".").last}" : filePathOg!.split("/").last;
-                    File file = File(filePath);
-                    img.Image? originalImage = img.decodeImage(file.readAsBytesSync());
-                    if (originalImage != null) {
-                      img.Image compressedImage = img.copyResize(originalImage, width: originalImage.width);
-                      while (compressedImage.length > 2 * 1024 * 1024) {
-                        compressedImage = img.copyResize(compressedImage, width: (compressedImage.width * 0.9).toInt());
-                      }
-                      List<int> compressedBytes = img.encodeJpg(compressedImage, quality: 85);
-                      String base64String = base64Encode(compressedBytes);
-                      String base64File = "data:image/jpg;base64,$base64String";
-                      selectedFilePath = base64File;
-                      final _result = await submitImageDataFun(type: "utsavImgData", showLoader: true);
-                      _selectedFileNames1.add(_result ?? fileName);
-                      setState(() {});
-                    }
-                  }
-                } catch (e) {
-                  log("Error during file processing: $e");
-                } finally {
-                  loadingNotifier?.value = false;
-                }
-                setState(() {});
-                // Navigator.of(context).pop();
-
-                // log("Selected File Path (Base64): $selectedFilePath");
-              },
-              child: loadingNotifier != null
-                  ? ValueListenableBuilder<bool>(
-                      valueListenable: loadingNotifier,
-                      builder: (context, isLoading, _) {
-                        return isLoading
-                            ? SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(strokeWidth: 2),
-                              )
-                            : Text(
-                                "+ ${Statics.getLabel("AddMore")}",
-                                style: const TextStyle(fontSize: 14, color: Colors.purple),
-                              );
-                      },
-                    )
-                  : Text(
-                      "+ ${Statics.getLabel("AddMore")}",
-                      style: const TextStyle(fontSize: 14, color: Colors.purple),
-                    ),
-            ),
-          ),
-        SizedBox(height: 14),
-        TextFormField(
-          controller: txtUtsavPhotoDescController,
-          textAlignVertical: TextAlignVertical.center,
-          // textAlign: TextAlign.left,
-          autofocus: false,
-          readOnly: _isSearching == false,
-          onTap: () {
-            if (_isSearching == false) {
-              Fluttertoast.showToast(
-                msg: "${Statics.getLabel('NagarSelectionImportant')}",
-              );
-            }
-          },
-          maxLines: 5,
-          onChanged: (value) => setState(() {}),
-          onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
-          decoration: InputDecoration(
-            hintText: Statics.getLabel("AddUtsavFilesDesc"),
-            contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-            // enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-            // focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.purple),borderRadius: BorderRadius.circular(12)),
-          ),
-          // validator: (value) {
-          //   // if (value != null && value.trim().isNotEmpty && value.length < 9 && memberController.contactList.value.isEmpty){
-          //   //   return "Invalid contact number";
-          //   // }else
-          //   if (memberController.contactList.value.isEmpty) {
-          //     if (value == null || value.trim().isEmpty) {
-          //       return "Please enter contact number";
-          //     }
-          //     if (value.length < 9) {
-          //       return "Invalid contact number";
-          //     }
-          //     return null;
-          //     // return "Please enter at least one contact number";
-          //   } else {
-          //     if (value != null && value.trim().isNotEmpty && value.length < 9) {
-          //       return "Invalid contact number";
-          //     }
-          //   }
-          //
-          //   return null;
-          // },
-        ),
-      ],
-    );
-  }
-
-  Widget filePickerField2({
-    required BuildContext context,
-    required String question,
-    required String subtitle,
-    // required Function(String?, String?) onFileSelected,
-    // List<String?> selectedFileNames,
-    int? questionNumber,
-    bool isLoading = false,
-    ValueNotifier<bool>? loadingNotifier,
-    // ValueNotifier<bool>? loadingNotifier2,
-  }) {
-    final canAddMore = _selectedFileNames2.length < _maxAddImages;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "${questionNumber != null ? "$questionNumber. " : ""}$question",
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    subtitle,
-                    style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w400),
-                  ),
-                ],
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                if (_selectedFileNames2.isNotEmpty) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Material(
-                        child: StatefulBuilder(builder: (context, set) {
-                          String _currentImg = "";
-                          return Container(
-                            color: Colors.transparent,
-                            padding: const EdgeInsets.all(20),
-                            child: ListView(
-                              // mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Align(
-                                  alignment: Alignment.topRight,
-                                  child: IconButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    icon: Icon(Icons.close, color: Colors.black),
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                ..._selectedFileNames2.asMap().entries.map((entry) {
-                                  int index = entry.key; // index
-                                  var img = entry.value;
-                                  return Container(
-                                    margin: EdgeInsets.only(bottom: 12),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                "${(index + 1)}. $img",
-                                                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
-                                              ),
-                                            ),
-                                            IconButton(
-                                              onPressed: () async {
-                                                set(() {
-                                                  _currentImg = img.toString();
-                                                });
-                                                set(() {
-                                                  loadingNotifier3.value = true;
-                                                });
-                                                await MyAppGlobals.downloadFile('${Statics.baseUrl}/Files/vijayadhasmifiles/$img', img.toString());
-                                                set(() {
-                                                  loadingNotifier3.value = false;
-                                                });
-                                                set(() {
-                                                  _currentImg = "";
-                                                });
-                                              },
-                                              icon: ValueListenableBuilder<bool>(
-                                                valueListenable: loadingNotifier3,
-                                                builder: (context, isLoading, _) {
-                                                  return (isLoading && img.toString() == _currentImg)
-                                                      ? SizedBox(
-                                                          width: 17,
-                                                          height: 17,
-                                                          child: CircularProgressIndicator(strokeWidth: 2),
-                                                        )
-                                                      : Icon(
-                                                          Icons.download,
-                                                          color: Colors.purple,
-                                                        );
-                                                },
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 6),
-                                        CachedNetworkImage(
-                                          imageUrl: '${Statics.baseUrl}/Files/vijayadhasmifiles/$img',
-                                          errorWidget: (context, error, stackTrace) =>
-                                              SizedBox(width: MediaQuery.sizeOf(context).width, height: 120, child: Center(child: Text(Statics.getLabel("errorOccurred")))),
-                                          progressIndicatorBuilder: (context, child, loadingProgress) =>
-                                              SizedBox(width: MediaQuery.sizeOf(context).width, height: 120, child: Center(child: CircularProgressIndicator())),
-                                          fit: BoxFit.contain,
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }),
-                              ],
-                            ),
-                          );
-                        }),
-                      );
-                    },
-                  );
-                }
-              },
-              icon: Icon(Icons.remove_red_eye, color: Colors.purpleAccent),
-            ),
-          ],
-        ),
-        SizedBox(height: 8),
-        ..._selectedFileNames2.map(
-          (img) => Container(
-            margin: EdgeInsets.only(bottom: 8),
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black54, width: 1),
-              borderRadius: BorderRadius.circular(11),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    img ?? "${Statics.getLabel('selectFile')}",
-                    style: TextStyle(color: Colors.black87),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                IconButton(
-                  style: IconButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
-                  onPressed: () async {
-                    final _shouldDelete = await showDialog(
-                      context: context,
-                      builder: (ctx) => AlertDialog(
-                        backgroundColor: Colors.white,
-                        title: Text(
-                          "${Statics.getLabel('AskConfirmation')}",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.red.shade700,
-                            fontSize: 18,
-                          ),
-                        ),
-                        content: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Text(
-                            "${Statics.getLabel('AreyouSureYouWantToDeleteImage')}",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.red.shade800,
-                            ),
-                          ),
-                        ),
-                        actions: [
-                          TextButton(
-                            child: Text(Statics.getLabel('ConfirmationNo')),
-                            onPressed: () {
-                              Navigator.of(ctx).pop(false);
-                            },
-                          ),
-                          TextButton(
-                            style: TextButton.styleFrom(
-                              backgroundColor: Colors.red.shade700,
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                            ),
-                            onPressed: () => Navigator.of(ctx).pop(true),
-                            child: Text(
-                              "${Statics.getLabel('ConfirmationYes')}",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-
-                    if (_shouldDelete) {
-                      final _result = await deleteImageDataFun(imageName: img.toString());
-                      if (_result) {
-                        setState(() {
-                          _selectedFileNames2.remove(img);
-                        });
-                      }
-                    }
-                  },
-                  icon: Icon(Icons.delete_forever, color: Colors.red),
-                ),
-              ],
-            ),
-          ),
-        ),
-        if (canAddMore)
-          Align(
-            alignment: Alignment.centerRight,
-            child: OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                textStyle: const TextStyle(fontSize: 14, color: Colors.purple),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              ),
-              onPressed: () async {
-                if (!_isSearching) {
-                  Fluttertoast.showToast(
-                    msg: "${Statics.getLabel('NagarSelectionImportant')}",
-                  );
-                  return;
-                }
-                loadingNotifier?.value = true;
-                XFile? result;
-                final isCamera = await showDialog(
-                  context: context,
-                  builder: (ctx) => AlertDialog(
-                    title: Text(Statics.getLabel('chooseAnOption')),
-                    content: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        IconButton.filled(
-                          onPressed: () async {
-                            Navigator.of(ctx).pop(true);
-                          },
-                          icon: Icon(Icons.camera_alt),
-                        ),
-                        IconButton.filled(
-                          onPressed: () async {
-                            Navigator.of(ctx).pop(false);
-                          },
-                          icon: Icon(Icons.photo_library),
-                        ),
-                      ],
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                        child: Text(Statics.getLabel('clear')),
-                        onPressed: () {
-                          Navigator.of(ctx).pop();
-                          setState(() {
-                            loadingNotifier?.value = false;
-                          });
-                        },
-                      )
-                    ],
-                  ),
-                );
-                setState(() {});
-
-                if (isCamera) {
-                  result = await ImagePicker().pickImage(source: ImageSource.camera);
-                } else {
-                  result = await ImagePicker().pickImage(source: ImageSource.gallery);
-                }
-                setState(() {});
-                // showLoaderDialog(context);
-                try {
-                  if (result != null) {
-                    // final random = m.Random();
-                    final _imgName = m.Random().nextInt(9999999);
-                    String filePath = File(result.path).path;
-                    filePathOg = File(result.path).path;
-                    String fileName = isCamera ? "Img_${_imgName}.${filePathOg?.split("/").last.split(".").last}" : filePathOg!.split("/").last;
-                    File file = File(filePath);
-                    img.Image? originalImage = img.decodeImage(file.readAsBytesSync());
-                    if (originalImage != null) {
-                      img.Image compressedImage = img.copyResize(originalImage, width: originalImage.width);
-                      while (compressedImage.length > 2 * 1024 * 1024) {
-                        compressedImage = img.copyResize(compressedImage, width: (compressedImage.width * 0.9).toInt());
-                      }
-                      List<int> compressedBytes = img.encodeJpg(compressedImage, quality: 85);
-                      String base64String = base64Encode(compressedBytes);
-                      String base64File = "data:image/jpg;base64,$base64String";
-                      selectedFilePath = base64File;
-                      final _result = await submitImageDataFun(type: "Add", showLoader: true);
-                      _selectedFileNames2.add(_result ?? fileName);
-                      setState(() {});
-                    }
-                  }
-                } catch (e) {
-                  log("Error during file processing: $e");
-                } finally {
-                  loadingNotifier?.value = false;
-                }
-                setState(() {
-                  loadingNotifier?.value = false;
-                });
-                // Navigator.of(context).pop();
-
-                // log("Selected File Path (Base64): $selectedFilePath");
-              },
-              child: loadingNotifier != null
-                  ? ValueListenableBuilder<bool>(
-                      valueListenable: loadingNotifier,
-                      builder: (context, isLoading, _) {
-                        return isLoading
-                            ? SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(strokeWidth: 2),
-                              )
-                            : Text(
-                                "+ ${Statics.getLabel("AddMore")}",
-                                style: const TextStyle(fontSize: 14, color: Colors.purple),
-                              );
-                      },
-                    )
-                  : Text(
-                      "+ ${Statics.getLabel("AddMore")}",
-                      style: const TextStyle(fontSize: 14, color: Colors.purple),
-                    ),
-            ),
-          ),
-        SizedBox(height: 14),
-        TextFormField(
-          controller: txtUtsavAddPhotoDescController,
-          textAlignVertical: TextAlignVertical.center,
-          // textAlign: TextAlign.left,
-          autofocus: false,
-          readOnly: _isSearching == false,
-          onTap: () {
-            if (_isSearching == false) {
-              Fluttertoast.showToast(
-                msg: "${Statics.getLabel('NagarSelectionImportant')}",
-              );
-            }
-          },
-          maxLines: 5,
-          onChanged: (value) => setState(() {}),
-          onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
-          decoration: InputDecoration(
-            hintText: Statics.getLabel("AddAdvUtsavFilesDesc"),
-            contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-            // enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-            // focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.purple),borderRadius: BorderRadius.circular(12)),
-          ),
-          // validator: (value) {
-          //   // if (value != null && value.trim().isNotEmpty && value.length < 9 && memberController.contactList.value.isEmpty){
-          //   //   return "Invalid contact number";
-          //   // }else
-          //   if (memberController.contactList.value.isEmpty) {
-          //     if (value == null || value.trim().isEmpty) {
-          //       return "Please enter contact number";
-          //     }
-          //     if (value.length < 9) {
-          //       return "Invalid contact number";
-          //     }
-          //     return null;
-          //     // return "Please enter at least one contact number";
-          //   } else {
-          //     if (value != null && value.trim().isNotEmpty && value.length < 9) {
-          //       return "Invalid contact number";
-          //     }
-          //   }
-          //
-          //   return null;
-          // },
-        ),
-      ],
-    );
-  }
-
-  Widget addUrlsListWidget({
-    required BuildContext context,
-    required String question,
-    int? questionNumber,
-  }) {
-    // final canAddMore = _urlsList.length < _maxImages;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "${questionNumber != null ? "$questionNumber. " : ""}$question",
-          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 8),
-        // if (canAddMore)
-        Column(
-          children: [
-            TextFormField(
-              controller: txtUrlsController,
-              textAlignVertical: TextAlignVertical.center,
-              // textAlign: TextAlign.left,
-              autofocus: false,
-              readOnly: _isSearching == false,
-              onTap: () {
-                if (_isSearching == false) {
-                  Fluttertoast.showToast(
-                    msg: "${Statics.getLabel('NagarSelectionImportant')}",
-                  );
-                }
-              },
-              onChanged: (value) => setState(() {}),
-              onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
-              decoration: InputDecoration(
-                hintText: Statics.getLabel("url"),
-                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                // enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                // focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.purple),borderRadius: BorderRadius.circular(12)),
-              ),
-              // validator: (value) {
-              //   // if (value != null && value.trim().isNotEmpty && value.length < 9 && memberController.contactList.value.isEmpty){
-              //   //   return "Invalid contact number";
-              //   // }else
-              //   if (memberController.contactList.value.isEmpty) {
-              //     if (value == null || value.trim().isEmpty) {
-              //       return "Please enter contact number";
-              //     }
-              //     if (value.length < 9) {
-              //       return "Invalid contact number";
-              //     }
-              //     return null;
-              //     // return "Please enter at least one contact number";
-              //   } else {
-              //     if (value != null && value.trim().isNotEmpty && value.length < 9) {
-              //       return "Invalid contact number";
-              //     }
-              //   }
-              //
-              //   return null;
-              // },
-            ),
-            SizedBox(height: 8),
-            TextFormField(
-              controller: txtUrlDescController,
-              textAlignVertical: TextAlignVertical.center,
-              // textAlign: TextAlign.left,
-              autofocus: false,
-              maxLength: 160,
-              // minLines: 1,
-              maxLines: 5,
-              readOnly: _isSearching == false,
-              onTap: () {
-                if (_isSearching == false) {
-                  Fluttertoast.showToast(
-                    msg: "${Statics.getLabel('NagarSelectionImportant')}",
-                  );
-                }
-              },
-              onChanged: (value) => setState(() {}),
-              onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
-              decoration: InputDecoration(
-                hintText: Statics.getLabel("urlDesc"),
-                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                // enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                // focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-              ),
-            ),
-            SizedBox(height: 8),
-            Align(
-              alignment: Alignment.centerRight,
-              child: OutlinedButton(
+            child: ValueListenableBuilder<bool>(
+              valueListenable: loadingNotifier,
+              builder: (_, isLoading, __) => OutlinedButton(
                 style: OutlinedButton.styleFrom(
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  textStyle: const TextStyle(fontSize: 14, color: Colors.purple),
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 ),
-                onPressed: () async {
-                  // print(contactList.value.toString());
-                  if (txtUrlsController.text.trim().isNotEmpty && txtUrlDescController.text.trim().isNotEmpty) {
-                    bool valid = await isValidUrl(txtUrlsController.text.trim());
-                    print(valid);
-                    if (!valid) {
-                      Fluttertoast.showToast(msg: "${Statics.getLabel('urlValidation')}");
-                      return;
-                    }
-                    _urlsList.add(TypeValueData(value: txtUrlsController.text.trim(), description: txtUrlDescController.text.trim()));
-                    txtUrlsController.clear();
-                    txtUrlDescController.clear();
-                  } else {
-                    if (!_isSearching) {
-                      Fluttertoast.showToast(
-                        msg: "${Statics.getLabel('NagarSelectionImportant')}",
-                      );
-                      setState(() {});
-                      return;
-                    }
-                    if (txtUrlDescController.text.trim().isEmpty) {
-                      Fluttertoast.showToast(
-                        msg: "${Statics.getLabel('urlDescIsImp')}",
-                      );
-                      setState(() {});
-                      return;
-                    }
-                    Fluttertoast.showToast(msg: "${Statics.getLabel('urlValidation')}");
-                    // formKey.currentState?.validate();
-                  }
-                  setState(() {});
-                },
-                child: Text("+ ${Statics.getLabel("Add")}"),
+                onPressed: isLoading
+                    ? null
+                    : () => _pickAndUploadImage(
+                          fileList: fileList,
+                          fileType: fileType,
+                          descController: descController,
+                          descHint: descHint,
+                          loadingNotifier: loadingNotifier,
+                        ),
+                child: isLoading
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : Text(
+                        "+ ${Statics.getLabel("AddMore")}",
+                        style: const TextStyle(fontSize: 14, color: Colors.purple),
+                      ),
               ),
             ),
-          ],
+          ),
+
+        // ── Description field ──────────────────────────────────
+        const SizedBox(height: 8),
+        TextFormField(
+          controller: descController,
+          textAlignVertical: TextAlignVertical.center,
+          autofocus: false,
+          readOnly: _isSearching == false,
+          onTap: _guardSearch,
+          maxLines: 5,
+          onChanged: (value) => setState(() {}),
+          onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
+          decoration: InputDecoration(
+            hintText: descHint,
+            contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          ),
         ),
-        SizedBox(height: 8),
-        Wrap(
-          runSpacing: 8,
-          spacing: 8,
-          direction: Axis.horizontal,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          alignment: WrapAlignment.start,
-          runAlignment: WrapAlignment.center,
-          children: _urlsList.asMap().entries.map(
-            (entry) {
-              int srNo = entry.key + 1;
-              final url = entry.value;
-              return Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: Colors.grey.shade200,
-                  border: Border.all(color: Colors.grey.shade200, width: 0.7),
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                child: Row(
+
+        const SizedBox(height: 14),
+      ],
+    );
+  }
+
+  // ─── Single file item row (filename | edit | delete) ──────────────────────
+  Widget _fileItemRow({
+    required TypeValueData? item,
+    required String baseUrl,
+    required String fileType,
+    required List<TypeValueData?> fileList,
+  }) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black54, width: 1),
+        borderRadius: BorderRadius.circular(11),
+      ),
+      child: Row(
+        children: [
+          // filename
+          Expanded(
+            child: Text(
+              item?.value ?? Statics.getLabel('selectFile'),
+              style: const TextStyle(color: Colors.black87),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          // edit
+          IconButton(
+            style: IconButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+            icon: const Icon(Icons.edit, color: Colors.blue, size: 20),
+            tooltip: Statics.getLabel('edit'),
+            onPressed: () => _showEditFileDialog(item: item, baseUrl: baseUrl, fileType: fileType),
+          ),
+          // delete
+          IconButton(
+            style: IconButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+            icon: const Icon(Icons.delete_forever, color: Colors.red),
+            onPressed: () async {
+              final shouldDelete = await _showDeleteConfirmDialog(message: Statics.getLabel('AreyouSureYouWantToDeleteImage'));
+              if (shouldDelete == true) {
+                final ok = await deleteImageDataFun(imageName: (item?.value).toString());
+                if (ok) setState(() => fileList.remove(item));
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ─── Edit file popup ───────────────────────────────────────────────────────
+  /// Allows editing the description and optionally replacing the image.
+  /// On save: calls `submitImageDataFun` with:
+  ///   - `pkid`  = item.pkid
+  ///   - `isimg` = true if image was replaced
+  ///   - `newfilebase` (via selectedFilePath)
+  ///   - `description` = new description text
+  Future<void> _showEditFileDialog({
+    required TypeValueData? item,
+    required String baseUrl,
+    required String fileType,
+  }) async {
+    if (!_guardSearch()) return;
+    if (item == null) return;
+
+    final descCtrl = TextEditingController(text: item.description ?? "");
+    bool imageReplaced = false;
+    String? previewBase64; // local base64 preview after pick
+    final savingNotifier = ValueNotifier<bool>(false);
+
+    await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, set) {
+          return Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: SingleChildScrollView(
+                child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      srNo.toString() + ". ",
-                      // maxLines: 2, softWrap: true, overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
-                      // style: AppTextStyles.labels(Get.context!).copyWith(fontWeight: FontWeight.w500),
+                    // ── Title ──────────────────────────────────────────────
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          Statics.getLabel('Edit'),
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.purpleAccent),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.close, color: Colors.redAccent),
+                          onPressed: () => Navigator.pop(ctx),
+                        ),
+                      ],
                     ),
-                    SizedBox(width: 4),
-                    Flexible(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          InkWell(
-                            onTap: () async {
-                              final Uri uri = Uri.parse((url?.value).toString());
-                              if (await isValidUrl((url?.value).toString())) {
-                                await launchUrl(uri, mode: LaunchMode.externalApplication);
-                              } else {
-                                Fluttertoast.showToast(msg: "${Statics.getLabel('errorOccurred')}");
-                              }
+                    Divider(color: Colors.deepPurple.shade100),
+                    const SizedBox(height: 8),
+
+                    // ── Current filename ───────────────────────────────────
+                    Text(
+                      "${Statics.getLabel('submittedFile')}:   ${item.value ?? ''}",
+                      style: TextStyle(fontSize: 13, color: Colors.grey.shade700, fontStyle: FontStyle.italic),
+                    ),
+
+                    // Preview of new image (if picked)
+                    if (item.value != null && item.value!.isNotEmpty)
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 8),
+                        height: 120,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade300),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: CachedNetworkImage(
+                            imageUrl: '$baseUrl${item.value}',
+                            errorWidget: (_, __, ___) => SizedBox(width: double.infinity, height: 120, child: Center(child: Text(Statics.getLabel("errorOccurred")))),
+                            progressIndicatorBuilder: (_, __, ___) => const SizedBox(width: double.infinity, height: 120, child: Center(child: CircularProgressIndicator())),
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                    const SizedBox(height: 12),
+
+                    // // ── Description field ──────────────────────────────────
+                    // TextFormField(
+                    //   controller: descCtrl,
+                    //   maxLines: 3,
+                    //   decoration: InputDecoration(
+                    //     labelText: Statics.getLabel('AddSanmelanFilesDesc'),
+                    //     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    //     contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    //   ),
+                    // ),
+                    const SizedBox(height: 16),
+
+                    // ── Replace image section ──────────────────────────────
+                    Text(
+                      Statics.getLabel('replacedFile'),
+                      style: TextStyle(fontSize: 13, color: Colors.grey.shade700, fontStyle: FontStyle.italic),
+                    ),
+                    const SizedBox(height: 8),
+
+                    // Preview of new image (if picked)
+                    if (previewBase64 != null)
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 8),
+                        height: 120,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade300),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.memory(
+                            base64Decode(previewBase64!.split(',').last),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _iconPickerBtn(
+                          icon: Icons.camera_alt,
+                          label: Statics.getLabel('camera'),
+                          onTap: () async {
+                            final base64 = await _pickAndCompressImage(ImageSource.camera);
+                            if (base64 != null) {
+                              set(() {
+                                previewBase64 = base64;
+                                selectedFilePath = base64;
+                                imageReplaced = true;
+                              });
+                            }
+                          },
+                        ),
+                        _iconPickerBtn(
+                          icon: Icons.photo_library,
+                          label: Statics.getLabel('gallery'),
+                          onTap: () async {
+                            final base64 = await _pickAndCompressImage(ImageSource.gallery);
+                            if (base64 != null) {
+                              set(() {
+                                previewBase64 = base64;
+                                selectedFilePath = base64;
+                                imageReplaced = true;
+                              });
+                            }
+                          },
+                        ),
+                        if (imageReplaced)
+                          TextButton(
+                            onPressed: () {
+                              set(() {
+                                previewBase64 = null;
+                                selectedFilePath = null;
+                                imageReplaced = false;
+                              });
                             },
-                            child: Text(
-                              (url?.value).toString(),
-                              maxLines: 2, softWrap: true, overflow: TextOverflow.ellipsis,
-                              style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline, decorationColor: Colors.blue),
-                              // style: AppTextStyles.labels(Get.context!).copyWith(fontWeight: FontWeight.w500),
+                            child: Row(
+                              spacing: 4,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.cancel, color: Colors.orange.shade700),
+                                Text(
+                                  Statics.getLabel('clear'),
+                                  style: TextStyle(color: Colors.orange.shade700),
+                                ),
+                              ],
                             ),
                           ),
-                          SizedBox(height: 4),
-                          Text(
-                            (url?.description).toString(),
-                            // maxLines: 2, softWrap: true, overflow: TextOverflow.ellipsis,
-                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
-                            // style: AppTextStyles.labels(Get.context!).copyWith(fontWeight: FontWeight.w500),
-                          ),
-                        ],
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+
+                    // ── Save button ────────────────────────────────────────
+                    ValueListenableBuilder<bool>(
+                      valueListenable: savingNotifier,
+                      builder: (_, saving, __) => ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.purpleAccent,
+                          minimumSize: const Size.fromHeight(44),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        ),
+                        onPressed: saving
+                            ? null
+                            : () async {
+                                final regExp = RegExp(r'\$(\d+)\$');
+                                savingNotifier.value = true;
+                                final _res = await submitImageDataFun(
+                                  pkid: item.pkid ?? 0,
+                                  type: fileType,
+                                  isimg: imageReplaced,
+                                  filebase: item.value,
+                                  newfilebase: imageReplaced ? selectedFilePath : "",
+                                  description: descCtrl.text.trim(),
+                                );
+                                if (_res != null && _res.isNotEmpty) {
+                                  String? id;
+                                  final match = regExp.firstMatch(_res);
+                                  if (match != null) {
+                                    id = match.group(1); // "15602"
+                                  }
+                                  String cleanedText = _res.replaceAll(regExp, '').trim();
+                                  final _containAnyDollar = MyAppGlobals.hasValueBetweenDollar(_res);
+                                  // Update local item
+                                  setState(() {
+                                    item.description = descCtrl.text.trim();
+                                    if (imageReplaced) {
+                                      item.isimg = 1;
+                                      item.pkid = _containAnyDollar ? int.tryParse(id.toString()) : 0;
+                                      item.newfilebase = selectedFilePath;
+                                      item.value = cleanedText;
+                                      selectedFilePath = null;
+                                    }
+                                  });
+                                }
+                                savingNotifier.value = false;
+                                if (mounted) Navigator.pop(ctx);
+                              },
+                        child: saving
+                            ? const SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                              )
+                            : Text(
+                                Statics.getLabel('Submit'),
+                                style: const TextStyle(color: Colors.white),
+                              ),
                       ),
                     ),
-                    SizedBox(width: 8),
-                    InkWell(
-                      onTap: () async {
-                        final _shouldDelete = await showDialog(
-                          context: context,
-                          builder: (ctx) => AlertDialog(
-                            backgroundColor: Colors.white,
-                            title: Text(
-                              "${Statics.getLabel('AskConfirmation')}",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.red.shade700,
-                                fontSize: 18,
-                              ),
-                            ),
-                            content: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: Text(
-                                "${Statics.getLabel('AreyouSureYouWantToDeleteUrl')}",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.red.shade800,
-                                ),
-                              ),
-                            ),
-                            actions: [
-                              TextButton(
-                                child: Text(Statics.getLabel('ConfirmationNo')),
-                                onPressed: () {
-                                  Navigator.of(ctx).pop(false);
-                                },
-                              ),
-                              TextButton(
-                                style: TextButton.styleFrom(
-                                  backgroundColor: Colors.red.shade700,
-                                  foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                ),
-                                onPressed: () => Navigator.of(ctx).pop(true),
-                                child: Text(
-                                  "${Statics.getLabel('ConfirmationYes')}",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-
-                        if (_shouldDelete) {
-                          setState(() {
-                            _urlsList.removeWhere((e) => e == url);
-                          });
-                        }
-                      },
-                      child: Icon(Icons.delete_forever, color: Colors.red, size: 18),
-                    )
                   ],
                 ),
-              );
-            },
-          ).toList(),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  // ─── Gallery / view-all dialog ─────────────────────────────────────────────
+  void _showGalleryDialog(List<TypeValueData?> fileList, String baseUrl) {
+    showDialog(
+      context: context,
+      builder: (ctx) => Material(
+        child: StatefulBuilder(builder: (context, set) {
+          String _currentImg = "";
+          return Container(
+            color: Colors.transparent,
+            padding: const EdgeInsets.all(20),
+            child: ListView(
+              children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () => Navigator.pop(ctx),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                ...fileList.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final fi = entry.value;
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "${index + 1}. ${fi?.value}",
+                                style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () async {
+                                set(() => _currentImg = fi.toString());
+                                loadingNotifier3.value = true;
+                                await MyAppGlobals.downloadFile('$baseUrl${fi?.value}', (fi?.value).toString());
+                                loadingNotifier3.value = false;
+                                set(() => _currentImg = "");
+                              },
+                              icon: ValueListenableBuilder<bool>(
+                                valueListenable: loadingNotifier3,
+                                builder: (_, loading, __) => loading && fi.toString() == _currentImg
+                                    ? const SizedBox(
+                                        width: 17,
+                                        height: 17,
+                                        child: CircularProgressIndicator(strokeWidth: 2),
+                                      )
+                                    : const Icon(Icons.download, color: Colors.purple),
+                              ),
+                            ),
+                          ],
+                        ),
+                        if ((fi?.description ?? "").isNotEmpty) Text(fi!.description!, style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14.5)),
+                        const SizedBox(height: 6),
+                        CachedNetworkImage(
+                          imageUrl: '$baseUrl${fi?.value}',
+                          errorWidget: (_, __, ___) => SizedBox(width: double.infinity, height: 120, child: Center(child: Text(Statics.getLabel("errorOccurred")))),
+                          progressIndicatorBuilder: (_, __, ___) => const SizedBox(width: double.infinity, height: 120, child: Center(child: CircularProgressIndicator())),
+                          fit: BoxFit.contain,
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+              ],
+            ),
+          );
+        }),
+      ),
+    );
+  }
+
+  // ─── Pick + upload flow (add new) ──────────────────────────────────────────
+  Future<void> _pickAndUploadImage({
+    required List<TypeValueData?> fileList,
+    required String fileType,
+    required TextEditingController descController,
+    required String descHint,
+    required ValueNotifier<bool> loadingNotifier,
+  }) async {
+    if (!_guardSearch()) return;
+    loadingNotifier.value = true;
+
+    // Ask for description + source
+    final isCamera = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => PopScope(
+        canPop: false,
+        child: AlertDialog(
+          title: Text(Statics.getLabel('AddSanmelanFiles')),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // TextFormField(
+              //   controller: descController,
+              //   maxLines: 3,
+              //   decoration: InputDecoration(
+              //     hintText: descHint,
+              //     contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              //     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              //   ),
+              // ),
+              const SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _iconPickerBtn(
+                      icon: Icons.camera_alt,
+                      label: Statics.getLabel('camera'),
+                      onTap: () {
+                        // if (descController.text.trim().isEmpty) {
+                        //   Statics.showToast(descHint);
+                        //   return;
+                        // }
+                        Navigator.pop(ctx, true);
+                      }),
+                  _iconPickerBtn(
+                      icon: Icons.photo_library,
+                      label: Statics.getLabel('gallery'),
+                      onTap: () {
+                        // if (descController.text.trim().isEmpty) {
+                        //   Statics.showToast(descHint);
+                        //   return;
+                        // }
+                        Navigator.pop(ctx, false);
+                      }),
+                ],
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: Text(Statics.getLabel('clear')),
+              onPressed: () {
+                loadingNotifier.value = false;
+                Navigator.pop(ctx);
+              },
+            ),
+          ],
         ),
-        // if (canAddMore)
-        //   Align(
-        //     alignment: Alignment.centerRight,
-        //     child: OutlinedButton(
-        //       style: OutlinedButton.styleFrom(
-        //         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        //         side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
-        //         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        //         textStyle: const TextStyle(fontSize: 14, color: Colors.purple),
-        //         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        //       ),
-        //       onPressed: () async {
-        //         // _urlsList.add();
-        //       },
-        //       child: Text(
-        //         "+ Add more",
-        //         style: const TextStyle(fontSize: 14, color: Colors.purple),
-        //       ),
-        //     ),
-        //   )
+      ),
+    );
+
+    if (isCamera == null) {
+      loadingNotifier.value = false;
+      return;
+    }
+
+    try {
+      final regExp = RegExp(r'\$(\d+)\$');
+      final base64File = await _pickAndCompressImage(isCamera ? ImageSource.camera : ImageSource.gallery);
+      if (base64File != null) {
+        selectedFilePath = base64File;
+        final resultName = await submitImageDataFun(
+          pkid: 0,
+          type: fileType,
+          showLoader: true,
+          isimg: true,
+          description: descController.text.trim(),
+        );
+        String? id;
+        if (resultName != null && resultName.isNotEmpty) {
+          final match = regExp.firstMatch(resultName);
+          if (match != null) {
+            id = match.group(1); // "15602"
+          }
+          String cleanedText = resultName.replaceAll(regExp, '').trim();
+          final _containAnyDollar = MyAppGlobals.hasValueBetweenDollar(resultName);
+          setState(() {
+            fileList.add(TypeValueData(
+              pkid: int.tryParse(id.toString()) ?? 0,
+              type: fileType,
+              value: cleanedText,
+              // description: descController.text.trim(),
+            ));
+            // descController.clear();
+            selectedFilePath = null;
+          });
+        }
+      }
+    } catch (e) {
+      log("Error during file processing: $e");
+    } finally {
+      loadingNotifier.value = false;
+    }
+    setState(() {});
+  }
+
+  // ─── Image pick + compress helper ─────────────────────────────────────────
+  Future<String?> _pickAndCompressImage(ImageSource source) async {
+    final result = await ImagePicker().pickImage(source: source);
+    if (result == null) return null;
+    try {
+      final file = File(result.path);
+      img.Image? original = img.decodeImage(file.readAsBytesSync());
+      if (original == null) return null;
+      img.Image compressed = img.copyResize(original, width: original.width);
+      while (compressed.length > 2 * 1024 * 1024) {
+        compressed = img.copyResize(compressed, width: (compressed.width * 0.9).toInt());
+      }
+      final bytes = img.encodeJpg(compressed, quality: 85);
+      return "data:image/jpg;base64,${base64Encode(bytes)}";
+    } catch (e) {
+      log("Image compress error: $e");
+      return null;
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // URL SECTION
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  Widget _urlsSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(Statics.getLabel('AddLinks'), style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        TextFormField(
+          controller: txtUrlsController,
+          readOnly: !_isSearching,
+          onTap: () => _guardSearch(),
+          onChanged: (_) => setState(() {}),
+          onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+          decoration: InputDecoration(
+            hintText: Statics.getLabel("url"),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+        ),
+        const SizedBox(height: 8),
+        TextFormField(
+          controller: txtUrlDescController,
+          maxLines: 3,
+          maxLength: 160,
+          readOnly: !_isSearching,
+          onTap: () => _guardSearch(),
+          onChanged: (_) => setState(() {}),
+          onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+          decoration: InputDecoration(
+            hintText: Statics.getLabel("urlDesc"),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Align(
+          alignment: Alignment.centerRight,
+          child: OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              side: const BorderSide(color: Colors.purpleAccent, width: 1.5),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            ),
+            onPressed: () async {
+              if (txtUrlsController.text.trim().isNotEmpty && txtUrlDescController.text.trim().isNotEmpty) {
+                final valid = await isValidUrl(txtUrlsController.text.trim());
+                if (!valid) {
+                  Fluttertoast.showToast(msg: Statics.getLabel('urlValidation'));
+                  return;
+                }
+                setState(() {
+                  _urlsList.add(TypeValueData(
+                    type: "url",
+                    value: txtUrlsController.text.trim(),
+                    description: txtUrlDescController.text.trim(),
+                  ));
+                  txtUrlsController.clear();
+                  txtUrlDescController.clear();
+                });
+              } else {
+                if (!_guardSearch()) return;
+                if (txtUrlDescController.text.trim().isEmpty) {
+                  Fluttertoast.showToast(msg: Statics.getLabel('urlDescIsImp'));
+                } else {
+                  Fluttertoast.showToast(msg: Statics.getLabel('urlValidation'));
+                }
+              }
+            },
+            child: Text("+ ${Statics.getLabel("Add")}"),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Wrap(
+          runSpacing: 8,
+          spacing: 8,
+          children: _urlsList.asMap().entries.map((entry) {
+            final srNo = entry.key + 1;
+            final url = entry.value;
+            return Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Colors.grey.shade200,
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("$srNo. ", style: const TextStyle(fontWeight: FontWeight.w700)),
+                  const SizedBox(width: 4),
+                  Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        InkWell(
+                          onTap: () async {
+                            final uri = Uri.parse((url?.value).toString());
+                            if (await isValidUrl((url?.value).toString())) {
+                              await launchUrl(uri, mode: LaunchMode.externalApplication);
+                            }
+                          },
+                          child: Text(
+                            (url?.value).toString(),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline, decorationColor: Colors.blue),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text((url?.description).toString(), style: const TextStyle(fontWeight: FontWeight.w500)),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  InkWell(
+                    onTap: () async {
+                      final del = await _showDeleteConfirmDialog(message: Statics.getLabel('AreyouSureYouWantToDeleteUrl'));
+                      if (del == true) {
+                        setState(() => _urlsList.removeWhere((e) => e == url));
+                      }
+                    },
+                    child: const Icon(Icons.delete_forever, color: Colors.red, size: 18),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        ),
       ],
+    );
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // SMALL HELPERS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// Generic confirm-delete dialog — returns `true` if user confirms.
+  Future<bool?> _showDeleteConfirmDialog({required String message}) {
+    return showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Colors.white,
+        title: Text(
+          Statics.getLabel('AskConfirmation'),
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red.shade700, fontSize: 18),
+        ),
+        content: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Text(message, style: TextStyle(fontSize: 16, color: Colors.red.shade800)),
+        ),
+        actions: [
+          TextButton(
+            child: Text(Statics.getLabel('ConfirmationNo')),
+            onPressed: () => Navigator.pop(ctx, false),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: Colors.red.shade700,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            ),
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(Statics.getLabel('ConfirmationYes'), style: const TextStyle(fontWeight: FontWeight.bold)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Small icon + label button used in image-source pickers.
+  Widget _iconPickerBtn({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        IconButton.filled(
+          onPressed: onTap,
+          icon: Icon(icon),
+        ),
+        Text(label, style: const TextStyle(fontSize: 12)),
+      ],
+    );
+  }
+
+  /// Purple outline button used throughout (add mukhya atithi, add graam …).
+  Widget _outlineButton({required String label, required VoidCallback onTap}) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(15),
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.purpleAccent.shade100),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Text(label, style: const TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold)),
+      ),
     );
   }
 
@@ -5594,31 +5379,34 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     getFormData();
   }
 
-  Future<String?> submitImageDataFun({bool showLoader = false, required String type}) async {
-    Map<String, dynamic> formData = {
+  Future<String?> submitImageDataFun({
+    bool showLoader = false,
+    bool isimg = false,
+    required int pkid,
+    required String type,
+    String? filebase,
+    String? newfilebase,
+    required String description,
+  }) async {
+    final formData = {
+      "pkid": pkid,
       "GeoUnitID": selectedUpnagarList.isEmpty ? selctedLevelId.toString() : selectedUpnagarList.join(","),
-      "filebase": selectedFilePath,
+      "filebase": filebase ?? selectedFilePath,
       "type": type,
+      "Desc": description,
+      "newfilebase": newfilebase ?? "",
+      "isimg": isimg ? 1 : 0,
     };
-
-    String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
-    log("Form Data (JSON):\n$formattedJson");
-    final _result = await Statics.saveVijayaDashamiImageData(context: context, inputJson: formData, showLoader: showLoader);
-    // getFormData();
-    return _result;
+    log("Image Data:\n${const JsonEncoder.withIndent('  ').convert(formData)}");
+    return await Statics.saveVijayaDashamiImageData(context: context, inputJson: formData, showLoader: showLoader);
   }
 
-  Future<bool> deleteImageDataFun({bool showLoader = true, required String imageName}) async {
-    Map<String, dynamic> formData = {
-      "GeoUnitID": selectedUpnagarList.isEmpty ? selctedLevelId.toString() : selectedUpnagarList.join(","),
-      "filepath": imageName,
-    };
-
-    String formattedJson = const JsonEncoder.withIndent('  ').convert(formData);
-    log("Form Data (JSON):\n$formattedJson");
-    final _result = await Statics.deleteVijayaDashamiImageData(context: context, inputJson: formData, showLoader: showLoader);
-    // getFormData();
-    return _result;
+  Future<bool> deleteImageDataFun({
+    bool showLoader = true,
+    required String imageName,
+  }) async {
+    final formData = {"GeoUnitID": selectedUpnagarList.isEmpty ? selctedLevelId.toString() : selectedUpnagarList.join(","), "filepath": imageName};
+    return await Statics.deleteVijayaDashamiImageData(context: context, inputJson: formData, showLoader: showLoader);
   }
 
   GetVijayadashamiDataByGeoUnitModel? getVijayaDashamiUtsavDataByGeounitData;
@@ -5669,6 +5457,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
         selctedLevelId = _geodata.geounitid.toString();
       }
       if (_geodata.levelID == 13) {
+        selctedLevel = 'upnagarUpkhanda';
         data = await Statics.getVijayadashamiInitData(context, Statics.userDetails["userID"], _geodata.parentNagarID.toString(), "6");
         setState(() {
           _linkedUpnagar = data?.upnagarmandallist ?? [];
@@ -5687,8 +5476,8 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       txtVaktaTaskController.text = getVijayaDashamiUtsavDataByGeounitData?.vijayadashamiUtsav?.karyakramVaktaTask ?? "";
       txtUtsavPhotoDescController.text = getVijayaDashamiUtsavDataByGeounitData?.vijayadashamiUtsav?.utsavPhotoDesc ?? "";
       txtUtsavAddPhotoDescController.text = getVijayaDashamiUtsavDataByGeounitData?.vijayadashamiUtsav?.utsavAddPhotoDesc ?? "";
-      _selectedFileNames1 = getVijayaDashamiUtsavDataByGeounitData?.eventdata?.map((url) => url.value).toList() ?? [];
-      _selectedFileNames2 = getVijayaDashamiUtsavDataByGeounitData?.adddata?.map((url) => url.value).toList() ?? [];
+      _selectedFileNames1 = getVijayaDashamiUtsavDataByGeounitData?.eventdata ?? [];
+      _selectedFileNames2 = getVijayaDashamiUtsavDataByGeounitData?.adddata ?? [];
 
       // Example text controllers
       presentMatrushaktiController.text = utsav.anyaUpastitiMatrushakti?.toString() ?? '';

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/app_drawer.dart';
 
 import '../helpers/static_data.dart' as Statics;
-import '../screens/home_screen.dart';
+import 'home_screen/home_screen.dart';
 
 class ChangePassword extends StatefulWidget {
   static const String routeName = '/change-password-screen';

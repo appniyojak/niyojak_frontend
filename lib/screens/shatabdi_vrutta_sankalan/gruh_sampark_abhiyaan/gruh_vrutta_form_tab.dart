@@ -173,7 +173,7 @@ class _GruhVruttaTabState extends State<GruhVruttaTab> with AutomaticKeepAliveCl
       "सह प्रचारक"
     ].contains(Statics.userDetails["DaayitvaName"]);
 
-    return _isKaaryavaah && (levelId >= 6);
+    return (levelId >= 6);
   }
 
   List<List<PreviousDay>> separatedLists = [];

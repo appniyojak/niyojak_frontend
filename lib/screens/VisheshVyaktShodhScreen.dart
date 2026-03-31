@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,20 +8,15 @@ import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:niyojak_prod/models/response_model/AbhiyaanListResponse.dart';
 import 'package:niyojak_prod/models/response_model/AbhiyaanLoginDataResponse.dart';
-import 'package:niyojak_prod/models/response_model/AbhiyaanSwayamsevakListResponse.dart';
-import 'package:niyojak_prod/models/response_model/AbhiyanGruhasamparkResponse.dart';
 import 'package:niyojak_prod/models/response_model/VisheshVyaktiListResponse.dart';
 import 'package:niyojak_prod/providers/bals.dart';
 import 'package:niyojak_prod/providers/swayamsevak_provider.dart';
 import 'package:niyojak_prod/screens/view_vishesh_vyakti_shodh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../helpers/static_data.dart' as Statics;
-import '../models/response_model/VishishtaVyaktiModel.dart';
-import 'AbhiyanEditSwayamsevak.dart';
-import 'AddEditVisheshVyaktiScreen.dart';
 import 'edit_vishesh_vyakti_shod.dart';
-import 'home_screen.dart';
 
 class VisheshVyaktiShodhScreen extends StatefulWidget {
   static const routeName = '/vishesh-vyakti-shodh-screen';

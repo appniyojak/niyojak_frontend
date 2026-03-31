@@ -1,18 +1,15 @@
 import 'dart:convert';
 
 import 'package:background_fetch/background_fetch.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../helpers/static_data.dart' as Statics;
 import '../providers/bals.dart';
 import '../providers/login.dart';
 import '../providers/swayamsevak_provider.dart';
-import '../helpers/static_data.dart' as Statics;
-import 'home_screen.dart';
 
 class SwayamsevakOcuupation extends StatefulWidget {
   var swId;

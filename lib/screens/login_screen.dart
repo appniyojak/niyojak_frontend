@@ -21,9 +21,9 @@ import '../helpers/static_data.dart';
 import '../models/response_model/get_otp_model.dart';
 import '../providers/login.dart';
 import '../screens/change_password.dart';
-import '../screens/home_screen.dart';
 import '../screens/update_version.dart';
 import '../utils/hard_loader.dart';
+import 'home_screen/home_screen.dart';
 import 'shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/gruh_abhiyaan_main_tab_screen.dart';
 
 class LogInScreen extends StatefulWidget {

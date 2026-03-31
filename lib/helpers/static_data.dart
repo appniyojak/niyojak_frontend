@@ -2924,6 +2924,7 @@ Future<String?> saveVijayaDashamiImageData({required BuildContext context, requi
   if (showLoader) showLoaderDialog(context);
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
+  log(savevijayadashamiutsavfiles);
   var response = await http.post(
     Uri.parse(savevijayadashamiutsavfiles),
     headers: jHeaders,

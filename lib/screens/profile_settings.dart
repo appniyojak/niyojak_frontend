@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../widgets/legend.dart';
-
 import '../helpers/static_data.dart' as Statics;
-import '../widgets/app_drawer.dart';
-import '../screens/home_screen.dart';
 import '../providers/bals.dart';
+import '../widgets/app_drawer.dart';
+import '../widgets/legend.dart';
+import 'home_screen/home_screen.dart';
 
 class ProfileSettings extends StatefulWidget {
   static const String routeName = '/profile-settings';

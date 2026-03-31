@@ -344,13 +344,19 @@ class TypeValueData {
   String? type;
   String? value;
   String? description;
+  String? newfilebase;
+  int? pkid;
+  int? isimg;
 
-  TypeValueData({this.type, this.value, this.description});
+  TypeValueData({this.type, this.value, this.description, this.newfilebase, this.pkid, this.isimg});
 
   TypeValueData.fromJson(Map<String, dynamic> json) {
     type = json['type'];
     value = json['value'];
     description = json['description'];
+    newfilebase = json['newfilebase'];
+    pkid = json['pkid'];
+    isimg = json['isimg'];
   }
 
   Map<String, dynamic> toJson() {
@@ -358,6 +364,9 @@ class TypeValueData {
     data['type'] = this.type;
     data['value'] = this.value;
     data['description'] = this.description;
+    data['newfilebase'] = this.newfilebase;
+    data['pkid'] = this.pkid;
+    data['isimg'] = this.isimg;
     return data;
   }
 }

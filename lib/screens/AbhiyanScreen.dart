@@ -18,7 +18,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../helpers/static_data.dart' as Statics;
 import 'AbhiyanAddSwayamsevak.dart';
 import 'VisheshVyaktShodhScreen.dart';
-import 'home_screen.dart';
+import 'home_screen/home_screen.dart';
 
 class AbhiyanScreen extends StatefulWidget {
   static const routeName = '/abhiyan-screen';

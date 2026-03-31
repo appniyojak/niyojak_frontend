@@ -1,9 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import '../widgets/titlebar.dart';
+
 import '../helpers/static_data.dart' as Statics;
+import '../widgets/titlebar.dart';
 
 class ShaakhaaSevaVastiLink extends StatefulWidget {
   static const routeName = '/shaakhaa-sewa-vasti-screen';
@@ -142,71 +141,73 @@ class _ShaakhaaSevaVastiLinkState extends State<ShaakhaaSevaVastiLink> {
                     absorbing: (
                             // (Statics.userDetails["LevelName"] == "Bhaag" || Statics.userDetails["LevelName"] == "Nagar")
                             (Statics.userDetails["LevelName"] == "Bhaag" ||
-                                        Statics.userDetails["LevelName"] == "भाग/जिला" ||
-                                        Statics.userDetails["LevelName"] == "भाग/जिल्हा" ||
-                                        Statics.userDetails["LevelName"] == "Nagar" ||
-                                        Statics.userDetails["LevelName"] == "नगर/तालुका") &&
-                                    // (Statics.userDetails["DaayitvaName"] == "Baal Vidyaarthi Pramukh"   || Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी प्रमुख"   || Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी प्रमुख"  ||Statics.userDetails["DaayitvaName"] == "Mahaavidyaalayeen Vidyaarthi Pramukh"   || Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन प्रमुख"   || Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन प्रमुख"  ||Statics.userDetails["DaayitvaName"] == "Vyavasaayee Pramukh"   || Statics.userDetails["DaayitvaName"] == "व्यवसायी प्रमुख"   || Statics.userDetails["DaayitvaName"] == "व्यवसायी प्रमुख"  ||Statics.userDetails["DaayitvaName"] == "Vyavasaayee Saha-Pramukh"   || Statics.userDetails["DaayitvaName"] == "व्यवसायी सह प्रमुख"   || Statics.userDetails["DaayitvaName"] == "व्यवसायी सह प्रमुख"  || Statics.userDetails["DaayitvaName"] == "Tarun Vyavsayee Pramukh" || Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी प्रमुख" || Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी प्रमुख" ||
-                                    Statics.userDetails["DaayitvaName"] == "Praudh Vyavsayee Pramukh" ||
-                                Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी प्रमुख" ||
-                                Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी प्रमुख" ||
-                                Statics.userDetails["DaayitvaName"] == "Tarun Vyavsayee Sah Pramukh" ||
-                                Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी सह प्रमुख" ||
-                                Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी सह प्रमुख" ||
-                                Statics.userDetails["DaayitvaName"] == "Praudh Vyavsayee Sah Pramukh" ||
-                                Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी सह प्रमुख" ||
-                                Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी सह प्रमुख" ||
-                                Statics.userDetails["DaayitvaName"] == "Bal Vidyarthi Sah Pramukh" ||
-                                Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी सह प्रमुख" ||
-                                Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी सह प्रमुख" ||
-                                Statics.userDetails["DaayitvaName"] == "Mahavidyaleen Vidyarthi Sah Pramukh" ||
-                                Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन विद्यार्थी सह प्रमुख" ||
-                                Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन विद्यार्थी सह प्रमुख" ||
-                                Statics.userDetails["DaayitvaName"] == "App Sanyojak" ||
-                                //     Statics.userDetails["DaayitvaName"] == "Kaaryavaah" ||
-                                //     Statics.userDetails["DaayitvaName"] == "Saha-Kaaryavaah")
-                                (Statics.userDetails["DaayitvaName"] == "Join RSS Sanyojak" ||
-                                    Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. संयोजक" ||
-                                    Statics.userDetails["DaayitvaName"] == "Join RSS Pramukh" ||
-                                    Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. प्रमुख" ||
-                                    Statics.userDetails["DaayitvaName"] == "Baal Vidyaarthi Pramukh" ||
-                                    Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी प्रमुख" ||
-                                    Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी प्रमुख" ||
-                                    Statics.userDetails["DaayitvaName"] == "Mahaavidyaalayeen Vidyaarthi Pramukh" ||
-                                    Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन प्रमुख" ||
-                                    Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन प्रमुख" ||
-                                    Statics.userDetails["DaayitvaName"] == "Vyavasaayee Pramukh" ||
-                                    Statics.userDetails["DaayitvaName"] == "व्यवसायी प्रमुख" ||
-                                    Statics.userDetails["DaayitvaName"] == "व्यवसायी प्रमुख" ||
-                                    Statics.userDetails["DaayitvaName"] == "Vyavasaayee Saha-Pramukh" ||
-                                    Statics.userDetails["DaayitvaName"] == "व्यवसायी सह प्रमुख" ||
-                                    Statics.userDetails["DaayitvaName"] == "व्यवसायी सह प्रमुख" ||
-                                    Statics.userDetails["DaayitvaName"] == "Tarun Vyavsayee Pramukh" ||
-                                    Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी प्रमुख" ||
-                                    Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी प्रमुख" ||
-                                    Statics.userDetails["DaayitvaName"] == "Praudh Vyavsayee Pramukh" ||
-                                    Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी प्रमुख" ||
-                                    Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी प्रमुख" ||
-                                    Statics.userDetails["DaayitvaName"] == "Tarun Vyavsayee Sah Pramukh" ||
-                                    Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी सह प्रमुख" ||
-                                    Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी सह प्रमुख" ||
-                                    Statics.userDetails["DaayitvaName"] == "Praudh Vyavsayee Sah Pramukh" ||
-                                    Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी सह प्रमुख" ||
-                                    Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी सह प्रमुख" ||
-                                    Statics.userDetails["DaayitvaName"] == "Bal Vidyarthi Sah Pramukh" ||
-                                    Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी सह प्रमुख" ||
-                                    Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी सह प्रमुख" ||
-                                    Statics.userDetails["DaayitvaName"] == "Mahavidyaleen Vidyarthi Sah Pramukh" ||
-                                    Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन विद्यार्थी सह प्रमुख" ||
-                                    Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन विद्यार्थी सह प्रमुख" ||
-                                    Statics.userDetails["DaayitvaName"] == "App Sanyojak" ||
-                                    Statics.userDetails["DaayitvaName"] == "एप संयोजक" ||
-                                    Statics.userDetails["DaayitvaName"] == "Kaaryavaah" ||
-                                    Statics.userDetails["DaayitvaName"] == "कार्यवाह" ||
-                                    Statics.userDetails["DaayitvaName"] == "karyalay sachiv" ||
-                                    Statics.userDetails["DaayitvaName"] == "कार्यालय सचिव" ||
-                                    Statics.userDetails["DaayitvaName"] == "Saha-Kaaryavaah" ||
-                                    Statics.userDetails["DaayitvaName"] == "सह कार्यवाह"))
+                                Statics.userDetails["LevelName"] == "भाग/जिला" ||
+                                Statics.userDetails["LevelName"] == "भाग/जिल्हा" ||
+                                Statics.userDetails["LevelName"] == "Nagar" ||
+                                Statics.userDetails["LevelName"] == "नगर/तालुका")
+                        // &&
+                        //     // (Statics.userDetails["DaayitvaName"] == "Baal Vidyaarthi Pramukh"   || Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी प्रमुख"   || Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी प्रमुख"  ||Statics.userDetails["DaayitvaName"] == "Mahaavidyaalayeen Vidyaarthi Pramukh"   || Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन प्रमुख"   || Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन प्रमुख"  ||Statics.userDetails["DaayitvaName"] == "Vyavasaayee Pramukh"   || Statics.userDetails["DaayitvaName"] == "व्यवसायी प्रमुख"   || Statics.userDetails["DaayitvaName"] == "व्यवसायी प्रमुख"  ||Statics.userDetails["DaayitvaName"] == "Vyavasaayee Saha-Pramukh"   || Statics.userDetails["DaayitvaName"] == "व्यवसायी सह प्रमुख"   || Statics.userDetails["DaayitvaName"] == "व्यवसायी सह प्रमुख"  || Statics.userDetails["DaayitvaName"] == "Tarun Vyavsayee Pramukh" || Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी प्रमुख" || Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी प्रमुख" ||
+                        //     Statics.userDetails["DaayitvaName"] == "Praudh Vyavsayee Pramukh" ||
+                        // Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी प्रमुख" ||
+                        // Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी प्रमुख" ||
+                        // Statics.userDetails["DaayitvaName"] == "Tarun Vyavsayee Sah Pramukh" ||
+                        // Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी सह प्रमुख" ||
+                        // Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी सह प्रमुख" ||
+                        // Statics.userDetails["DaayitvaName"] == "Praudh Vyavsayee Sah Pramukh" ||
+                        // Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी सह प्रमुख" ||
+                        // Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी सह प्रमुख" ||
+                        // Statics.userDetails["DaayitvaName"] == "Bal Vidyarthi Sah Pramukh" ||
+                        // Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी सह प्रमुख" ||
+                        // Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी सह प्रमुख" ||
+                        // Statics.userDetails["DaayitvaName"] == "Mahavidyaleen Vidyarthi Sah Pramukh" ||
+                        // Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन विद्यार्थी सह प्रमुख" ||
+                        // Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन विद्यार्थी सह प्रमुख" ||
+                        // Statics.userDetails["DaayitvaName"] == "App Sanyojak" ||
+                        // //     Statics.userDetails["DaayitvaName"] == "Kaaryavaah" ||
+                        // //     Statics.userDetails["DaayitvaName"] == "Saha-Kaaryavaah")
+                        // (Statics.userDetails["DaayitvaName"] == "Join RSS Sanyojak" ||
+                        //     Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. संयोजक" ||
+                        //     Statics.userDetails["DaayitvaName"] == "Join RSS Pramukh" ||
+                        //     Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. प्रमुख" ||
+                        //     Statics.userDetails["DaayitvaName"] == "Baal Vidyaarthi Pramukh" ||
+                        //     Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी प्रमुख" ||
+                        //     Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी प्रमुख" ||
+                        //     Statics.userDetails["DaayitvaName"] == "Mahaavidyaalayeen Vidyaarthi Pramukh" ||
+                        //     Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन प्रमुख" ||
+                        //     Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन प्रमुख" ||
+                        //     Statics.userDetails["DaayitvaName"] == "Vyavasaayee Pramukh" ||
+                        //     Statics.userDetails["DaayitvaName"] == "व्यवसायी प्रमुख" ||
+                        //     Statics.userDetails["DaayitvaName"] == "व्यवसायी प्रमुख" ||
+                        //     Statics.userDetails["DaayitvaName"] == "Vyavasaayee Saha-Pramukh" ||
+                        //     Statics.userDetails["DaayitvaName"] == "व्यवसायी सह प्रमुख" ||
+                        //     Statics.userDetails["DaayitvaName"] == "व्यवसायी सह प्रमुख" ||
+                        //     Statics.userDetails["DaayitvaName"] == "Tarun Vyavsayee Pramukh" ||
+                        //     Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी प्रमुख" ||
+                        //     Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी प्रमुख" ||
+                        //     Statics.userDetails["DaayitvaName"] == "Praudh Vyavsayee Pramukh" ||
+                        //     Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी प्रमुख" ||
+                        //     Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी प्रमुख" ||
+                        //     Statics.userDetails["DaayitvaName"] == "Tarun Vyavsayee Sah Pramukh" ||
+                        //     Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी सह प्रमुख" ||
+                        //     Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी सह प्रमुख" ||
+                        //     Statics.userDetails["DaayitvaName"] == "Praudh Vyavsayee Sah Pramukh" ||
+                        //     Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी सह प्रमुख" ||
+                        //     Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी सह प्रमुख" ||
+                        //     Statics.userDetails["DaayitvaName"] == "Bal Vidyarthi Sah Pramukh" ||
+                        //     Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी सह प्रमुख" ||
+                        //     Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी सह प्रमुख" ||
+                        //     Statics.userDetails["DaayitvaName"] == "Mahavidyaleen Vidyarthi Sah Pramukh" ||
+                        //     Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन विद्यार्थी सह प्रमुख" ||
+                        //     Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन विद्यार्थी सह प्रमुख" ||
+                        //     Statics.userDetails["DaayitvaName"] == "App Sanyojak" ||
+                        //     Statics.userDetails["DaayitvaName"] == "एप संयोजक" ||
+                        //     Statics.userDetails["DaayitvaName"] == "Kaaryavaah" ||
+                        //     Statics.userDetails["DaayitvaName"] == "कार्यवाह" ||
+                        //     Statics.userDetails["DaayitvaName"] == "karyalay sachiv" ||
+                        //     Statics.userDetails["DaayitvaName"] == "कार्यालय सचिव" ||
+                        //     Statics.userDetails["DaayitvaName"] == "Saha-Kaaryavaah" ||
+                        //     Statics.userDetails["DaayitvaName"] == "सह कार्यवाह")
+                        )
                         ? false
                         : true,
                     child: Container(
@@ -258,71 +259,73 @@ class _ShaakhaaSevaVastiLinkState extends State<ShaakhaaSevaVastiLink> {
                   else if ((
                           // (Statics.userDetails["LevelName"] == "Bhaag" || Statics.userDetails["LevelName"] == "Nagar")
                           (Statics.userDetails["LevelName"] == "Bhaag" ||
-                                      Statics.userDetails["LevelName"] == "भाग/जिला" ||
-                                      Statics.userDetails["LevelName"] == "भाग/जिल्हा" ||
-                                      Statics.userDetails["LevelName"] == "Nagar" ||
-                                      Statics.userDetails["LevelName"] == "नगर/तालुका") &&
-                                  // (Statics.userDetails["DaayitvaName"] == "Baal Vidyaarthi Pramukh"   || Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी प्रमुख"   || Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी प्रमुख"  ||Statics.userDetails["DaayitvaName"] == "Mahaavidyaalayeen Vidyaarthi Pramukh"   || Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन प्रमुख"   || Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन प्रमुख"  ||Statics.userDetails["DaayitvaName"] == "Vyavasaayee Pramukh"   || Statics.userDetails["DaayitvaName"] == "व्यवसायी प्रमुख"   || Statics.userDetails["DaayitvaName"] == "व्यवसायी प्रमुख"  ||Statics.userDetails["DaayitvaName"] == "Vyavasaayee Saha-Pramukh"   || Statics.userDetails["DaayitvaName"] == "व्यवसायी सह प्रमुख"   || Statics.userDetails["DaayitvaName"] == "व्यवसायी सह प्रमुख"  || Statics.userDetails["DaayitvaName"] == "Tarun Vyavsayee Pramukh" || Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी प्रमुख" || Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी प्रमुख" ||
-                                  Statics.userDetails["DaayitvaName"] == "Praudh Vyavsayee Pramukh" ||
-                              Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी प्रमुख" ||
-                              Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी प्रमुख" ||
-                              Statics.userDetails["DaayitvaName"] == "Tarun Vyavsayee Sah Pramukh" ||
-                              Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी सह प्रमुख" ||
-                              Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी सह प्रमुख" ||
-                              Statics.userDetails["DaayitvaName"] == "Praudh Vyavsayee Sah Pramukh" ||
-                              Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी सह प्रमुख" ||
-                              Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी सह प्रमुख" ||
-                              Statics.userDetails["DaayitvaName"] == "Bal Vidyarthi Sah Pramukh" ||
-                              Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी सह प्रमुख" ||
-                              Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी सह प्रमुख" ||
-                              Statics.userDetails["DaayitvaName"] == "Mahavidyaleen Vidyarthi Sah Pramukh" ||
-                              Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन विद्यार्थी सह प्रमुख" ||
-                              Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन विद्यार्थी सह प्रमुख" ||
-                              Statics.userDetails["DaayitvaName"] == "App Sanyojak" ||
-                              //     Statics.userDetails["DaayitvaName"] == "Kaaryavaah" ||
-                              //     Statics.userDetails["DaayitvaName"] == "Saha-Kaaryavaah")
-                              (Statics.userDetails["DaayitvaName"] == "Join RSS Sanyojak" ||
-                                  Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. संयोजक" ||
-                                  Statics.userDetails["DaayitvaName"] == "Join RSS Pramukh" ||
-                                  Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. प्रमुख" ||
-                                  Statics.userDetails["DaayitvaName"] == "Baal Vidyaarthi Pramukh" ||
-                                  Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी प्रमुख" ||
-                                  Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी प्रमुख" ||
-                                  Statics.userDetails["DaayitvaName"] == "Mahaavidyaalayeen Vidyaarthi Pramukh" ||
-                                  Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन प्रमुख" ||
-                                  Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन प्रमुख" ||
-                                  Statics.userDetails["DaayitvaName"] == "Vyavasaayee Pramukh" ||
-                                  Statics.userDetails["DaayitvaName"] == "व्यवसायी प्रमुख" ||
-                                  Statics.userDetails["DaayitvaName"] == "व्यवसायी प्रमुख" ||
-                                  Statics.userDetails["DaayitvaName"] == "Vyavasaayee Saha-Pramukh" ||
-                                  Statics.userDetails["DaayitvaName"] == "व्यवसायी सह प्रमुख" ||
-                                  Statics.userDetails["DaayitvaName"] == "व्यवसायी सह प्रमुख" ||
-                                  Statics.userDetails["DaayitvaName"] == "Tarun Vyavsayee Pramukh" ||
-                                  Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी प्रमुख" ||
-                                  Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी प्रमुख" ||
-                                  Statics.userDetails["DaayitvaName"] == "Praudh Vyavsayee Pramukh" ||
-                                  Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी प्रमुख" ||
-                                  Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी प्रमुख" ||
-                                  Statics.userDetails["DaayitvaName"] == "Tarun Vyavsayee Sah Pramukh" ||
-                                  Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी सह प्रमुख" ||
-                                  Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी सह प्रमुख" ||
-                                  Statics.userDetails["DaayitvaName"] == "Praudh Vyavsayee Sah Pramukh" ||
-                                  Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी सह प्रमुख" ||
-                                  Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी सह प्रमुख" ||
-                                  Statics.userDetails["DaayitvaName"] == "Bal Vidyarthi Sah Pramukh" ||
-                                  Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी सह प्रमुख" ||
-                                  Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी सह प्रमुख" ||
-                                  Statics.userDetails["DaayitvaName"] == "Mahavidyaleen Vidyarthi Sah Pramukh" ||
-                                  Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन विद्यार्थी सह प्रमुख" ||
-                                  Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन विद्यार्थी सह प्रमुख" ||
-                                  Statics.userDetails["DaayitvaName"] == "App Sanyojak" ||
-                                  Statics.userDetails["DaayitvaName"] == "एप संयोजक" ||
-                                  Statics.userDetails["DaayitvaName"] == "Kaaryavaah" ||
-                                  Statics.userDetails["DaayitvaName"] == "कार्यवाह" ||
-                                  Statics.userDetails["DaayitvaName"] == "karyalay sachiv" ||
-                                  Statics.userDetails["DaayitvaName"] == "कार्यालय सचिव" ||
-                                  Statics.userDetails["DaayitvaName"] == "Saha-Kaaryavaah" ||
-                                  Statics.userDetails["DaayitvaName"] == "सह कार्यवाह")) ==
+                              Statics.userDetails["LevelName"] == "भाग/जिला" ||
+                              Statics.userDetails["LevelName"] == "भाग/जिल्हा" ||
+                              Statics.userDetails["LevelName"] == "Nagar" ||
+                              Statics.userDetails["LevelName"] == "नगर/तालुका")
+                      // &&
+                      //     // (Statics.userDetails["DaayitvaName"] == "Baal Vidyaarthi Pramukh"   || Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी प्रमुख"   || Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी प्रमुख"  ||Statics.userDetails["DaayitvaName"] == "Mahaavidyaalayeen Vidyaarthi Pramukh"   || Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन प्रमुख"   || Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन प्रमुख"  ||Statics.userDetails["DaayitvaName"] == "Vyavasaayee Pramukh"   || Statics.userDetails["DaayitvaName"] == "व्यवसायी प्रमुख"   || Statics.userDetails["DaayitvaName"] == "व्यवसायी प्रमुख"  ||Statics.userDetails["DaayitvaName"] == "Vyavasaayee Saha-Pramukh"   || Statics.userDetails["DaayitvaName"] == "व्यवसायी सह प्रमुख"   || Statics.userDetails["DaayitvaName"] == "व्यवसायी सह प्रमुख"  || Statics.userDetails["DaayitvaName"] == "Tarun Vyavsayee Pramukh" || Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी प्रमुख" || Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी प्रमुख" ||
+                      //     Statics.userDetails["DaayitvaName"] == "Praudh Vyavsayee Pramukh" ||
+                      // Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी प्रमुख" ||
+                      // Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी प्रमुख" ||
+                      // Statics.userDetails["DaayitvaName"] == "Tarun Vyavsayee Sah Pramukh" ||
+                      // Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी सह प्रमुख" ||
+                      // Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी सह प्रमुख" ||
+                      // Statics.userDetails["DaayitvaName"] == "Praudh Vyavsayee Sah Pramukh" ||
+                      // Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी सह प्रमुख" ||
+                      // Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी सह प्रमुख" ||
+                      // Statics.userDetails["DaayitvaName"] == "Bal Vidyarthi Sah Pramukh" ||
+                      // Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी सह प्रमुख" ||
+                      // Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी सह प्रमुख" ||
+                      // Statics.userDetails["DaayitvaName"] == "Mahavidyaleen Vidyarthi Sah Pramukh" ||
+                      // Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन विद्यार्थी सह प्रमुख" ||
+                      // Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन विद्यार्थी सह प्रमुख" ||
+                      // Statics.userDetails["DaayitvaName"] == "App Sanyojak" ||
+                      // //     Statics.userDetails["DaayitvaName"] == "Kaaryavaah" ||
+                      // //     Statics.userDetails["DaayitvaName"] == "Saha-Kaaryavaah")
+                      // (Statics.userDetails["DaayitvaName"] == "Join RSS Sanyojak" ||
+                      //     Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. संयोजक" ||
+                      //     Statics.userDetails["DaayitvaName"] == "Join RSS Pramukh" ||
+                      //     Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. प्रमुख" ||
+                      //     Statics.userDetails["DaayitvaName"] == "Baal Vidyaarthi Pramukh" ||
+                      //     Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी प्रमुख" ||
+                      //     Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी प्रमुख" ||
+                      //     Statics.userDetails["DaayitvaName"] == "Mahaavidyaalayeen Vidyaarthi Pramukh" ||
+                      //     Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन प्रमुख" ||
+                      //     Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन प्रमुख" ||
+                      //     Statics.userDetails["DaayitvaName"] == "Vyavasaayee Pramukh" ||
+                      //     Statics.userDetails["DaayitvaName"] == "व्यवसायी प्रमुख" ||
+                      //     Statics.userDetails["DaayitvaName"] == "व्यवसायी प्रमुख" ||
+                      //     Statics.userDetails["DaayitvaName"] == "Vyavasaayee Saha-Pramukh" ||
+                      //     Statics.userDetails["DaayitvaName"] == "व्यवसायी सह प्रमुख" ||
+                      //     Statics.userDetails["DaayitvaName"] == "व्यवसायी सह प्रमुख" ||
+                      //     Statics.userDetails["DaayitvaName"] == "Tarun Vyavsayee Pramukh" ||
+                      //     Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी प्रमुख" ||
+                      //     Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी प्रमुख" ||
+                      //     Statics.userDetails["DaayitvaName"] == "Praudh Vyavsayee Pramukh" ||
+                      //     Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी प्रमुख" ||
+                      //     Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी प्रमुख" ||
+                      //     Statics.userDetails["DaayitvaName"] == "Tarun Vyavsayee Sah Pramukh" ||
+                      //     Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी सह प्रमुख" ||
+                      //     Statics.userDetails["DaayitvaName"] == "तरुण व्यवसायी सह प्रमुख" ||
+                      //     Statics.userDetails["DaayitvaName"] == "Praudh Vyavsayee Sah Pramukh" ||
+                      //     Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी सह प्रमुख" ||
+                      //     Statics.userDetails["DaayitvaName"] == "प्रौढ व्यवसायी सह प्रमुख" ||
+                      //     Statics.userDetails["DaayitvaName"] == "Bal Vidyarthi Sah Pramukh" ||
+                      //     Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी सह प्रमुख" ||
+                      //     Statics.userDetails["DaayitvaName"] == "बाल विद्यार्थी सह प्रमुख" ||
+                      //     Statics.userDetails["DaayitvaName"] == "Mahavidyaleen Vidyarthi Sah Pramukh" ||
+                      //     Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन विद्यार्थी सह प्रमुख" ||
+                      //     Statics.userDetails["DaayitvaName"] == "महाविद्यालयीन विद्यार्थी सह प्रमुख" ||
+                      //     Statics.userDetails["DaayitvaName"] == "App Sanyojak" ||
+                      //     Statics.userDetails["DaayitvaName"] == "एप संयोजक" ||
+                      //     Statics.userDetails["DaayitvaName"] == "Kaaryavaah" ||
+                      //     Statics.userDetails["DaayitvaName"] == "कार्यवाह" ||
+                      //     Statics.userDetails["DaayitvaName"] == "karyalay sachiv" ||
+                      //     Statics.userDetails["DaayitvaName"] == "कार्यालय सचिव" ||
+                      //     Statics.userDetails["DaayitvaName"] == "Saha-Kaaryavaah" ||
+                      //     Statics.userDetails["DaayitvaName"] == "सह कार्यवाह")
+                      ) ==
                       false)
                     Container()
                   else

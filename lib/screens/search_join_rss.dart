@@ -9,7 +9,7 @@ import '../dialogs/levelwise_dropdown.dart';
 import '../helpers/static_data.dart' as Statics;
 import '../providers/bals.dart';
 import '../screens/edit_join_rss.dart';
-import '../screens/home_screen.dart';
+import 'home_screen/home_screen.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/join_rss_card.dart';
 import '../widgets/legend.dart';

@@ -1,16 +1,17 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:horizontal_data_table/horizontal_data_table.dart';
+import 'package:intl/intl.dart';
+
+import '../helpers/static_data.dart' as Statics;
 import '../providers/bals.dart';
 import '../screens/edit_shaakhaa_vrutta.dart';
 import '../widgets/legend.dart';
 
-import '../helpers/static_data.dart' as Statics;
-
 class ShaakhaaVrutta extends StatefulWidget {
   static const String routeName = '/shaakhaa-vrutta-screen';
+
   @override
   _ShaakhaaVruttaState createState() => _ShaakhaaVruttaState();
 }
@@ -24,10 +25,89 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
   List<ShaakhaaVruttaBAL> lstShaakhaaVrutta = [];
 
   var vayogatCode = '', shaakhaaName = '';
+
   // List<String> lst1 = ['Bhaag', 'भाग/जिल्हा', 'Nagar', 'नगर/तालुका'];
-  List<String>    lst2 = ['Kaaryavaah', 'कार्यवाह', 'Saha-Kaaryavaah', 'सह कार्यवाह', 'Kaaryaalay Pramukh', 'कार्यालय प्रमुख', 'App Sanyojak', 'एप संयोजक', 'सह कार्यालय प्रमुख','शाखा कार्यवाह','साप्ताहिक मिलन प्रमुख','साप्ताहिक मिलन सह प्रमुख','मासिक मिलन प्रमुख','मासिक मिलन सह प्रमुख','Baal Vidyaarthi Pramukh',	'बाल विद्यार्थी प्रमुख','बाल विद्यार्थी प्रमुख','Mahaavidyaalayeen Vidyaarthi Pramukh','महाविद्यालयीन प्रमुख','महाविद्यालयीन प्रमुख','Vyavasaayee Pramukh','व्यवसायी प्रमुख','व्यवसायी प्रमुख','Vyavasaayee Saha-Pramukh','व्यवसायी सह प्रमुख','व्यवसायी सह प्रमुख'];
-  List<String> lst3 = ['Mukhya Shikshak','मुख्य शिक्षक', 'Kaaryavaah', 'कार्यवाह', 'Milan Pramukh', 'मिलन प्रमुख', 'Milan Saha-Pramukh', 'मिलन सह प्रमुख', 'सह कार्यालय प्रमुख' , 'शाखा कार्यवाह' , 'साप्ताहिक मिलन प्रमुख' , 'साप्ताहिक मिलन सह प्रमुख' , 'मासिक मिलन प्रमुख' , 'मासिक मिलन सह प्रमुख','Baal Vidyaarthi Pramukh',	'बाल विद्यार्थी प्रमुख','बाल विद्यार्थी प्रमुख','Mahaavidyaalayeen Vidyaarthi Pramukh','महाविद्यालयीन प्रमुख','महाविद्यालयीन प्रमुख','Vyavasaayee Pramukh','व्यवसायी प्रमुख','व्यवसायी प्रमुख','Vyavasaayee Saha-Pramukh','व्यवसायी सह प्रमुख','व्यवसायी सह प्रमुख'];
-  List<String> lst4 = ['Prachaarak','प्रचारक', 'Saha-Prachaarak', 'सह प्रचारक','सह कार्यालय प्रमुख','शाखा कार्यवाह','साप्ताहिक मिलन प्रमुख','साप्ताहिक मिलन सह प्रमुख','मासिक मिलन प्रमुख','मासिक मिलन सह प्रमुख''Baal Vidyaarthi Pramukh',	'बाल विद्यार्थी प्रमुख','बाल विद्यार्थी प्रमुख','Mahaavidyaalayeen Vidyaarthi Pramukh','महाविद्यालयीन प्रमुख','महाविद्यालयीन प्रमुख','Vyavasaayee Pramukh','व्यवसायी प्रमुख','व्यवसायी प्रमुख','Vyavasaayee Saha-Pramukh','व्यवसायी सह प्रमुख','व्यवसायी सह प्रमुख'];
+  List<String> lst2 = [
+    'Kaaryavaah',
+    'कार्यवाह',
+    'Saha-Kaaryavaah',
+    'सह कार्यवाह',
+    'Kaaryaalay Pramukh',
+    'कार्यालय प्रमुख',
+    'Mandal Samiti Sadasya',
+    'मंडल समिती सदस्य',
+    'App Sanyojak',
+    'एप संयोजक',
+    'सह कार्यालय प्रमुख',
+    'शाखा कार्यवाह',
+    'साप्ताहिक मिलन प्रमुख',
+    'साप्ताहिक मिलन सह प्रमुख',
+    'मासिक मिलन प्रमुख',
+    'मासिक मिलन सह प्रमुख',
+    'Baal Vidyaarthi Pramukh',
+    'बाल विद्यार्थी प्रमुख',
+    'बाल विद्यार्थी प्रमुख',
+    'Mahaavidyaalayeen Vidyaarthi Pramukh',
+    'महाविद्यालयीन प्रमुख',
+    'महाविद्यालयीन प्रमुख',
+    'Vyavasaayee Pramukh',
+    'व्यवसायी प्रमुख',
+    'व्यवसायी प्रमुख',
+    'Vyavasaayee Saha-Pramukh',
+    'व्यवसायी सह प्रमुख',
+    'व्यवसायी सह प्रमुख'
+  ];
+  List<String> lst3 = [
+    'Mukhya Shikshak',
+    'मुख्य शिक्षक',
+    'Kaaryavaah',
+    'कार्यवाह',
+    'Milan Pramukh',
+    'मिलन प्रमुख',
+    'Milan Saha-Pramukh',
+    'मिलन सह प्रमुख',
+    'सह कार्यालय प्रमुख',
+    'शाखा कार्यवाह',
+    'साप्ताहिक मिलन प्रमुख',
+    'साप्ताहिक मिलन सह प्रमुख',
+    'मासिक मिलन प्रमुख',
+    'मासिक मिलन सह प्रमुख',
+    'Baal Vidyaarthi Pramukh',
+    'बाल विद्यार्थी प्रमुख',
+    'बाल विद्यार्थी प्रमुख',
+    'Mahaavidyaalayeen Vidyaarthi Pramukh',
+    'महाविद्यालयीन प्रमुख',
+    'महाविद्यालयीन प्रमुख',
+    'Vyavasaayee Pramukh',
+    'व्यवसायी प्रमुख',
+    'व्यवसायी प्रमुख',
+    'Vyavasaayee Saha-Pramukh',
+    'व्यवसायी सह प्रमुख',
+    'व्यवसायी सह प्रमुख'
+  ];
+  List<String> lst4 = [
+    'Prachaarak',
+    'प्रचारक',
+    'Saha-Prachaarak',
+    'सह प्रचारक',
+    'सह कार्यालय प्रमुख',
+    'शाखा कार्यवाह',
+    'साप्ताहिक मिलन प्रमुख',
+    'साप्ताहिक मिलन सह प्रमुख',
+    'मासिक मिलन प्रमुख',
+    'मासिक मिलन सह प्रमुख' 'Baal Vidyaarthi Pramukh',
+    'बाल विद्यार्थी प्रमुख',
+    'बाल विद्यार्थी प्रमुख',
+    'Mahaavidyaalayeen Vidyaarthi Pramukh',
+    'महाविद्यालयीन प्रमुख',
+    'महाविद्यालयीन प्रमुख',
+    'Vyavasaayee Pramukh',
+    'व्यवसायी प्रमुख',
+    'व्यवसायी प्रमुख',
+    'Vyavasaayee Saha-Pramukh',
+    'व्यवसायी सह प्रमुख',
+    'व्यवसायी सह प्रमुख'
+  ];
 
   bool _isFetchingData = false;
 
@@ -85,8 +165,7 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
   }
 
   Widget _shaakhaaVruttaFirstColumn(BuildContext context, int index) {
-    return Statics.createWidgetFromString(context,
-        DateFormat('dd-MMM-yyyy').format(DateFormat("yyyy/MM/dd").parse(lstShaakhaaVrutta[index].vruttaDate!)), 100, 52, Alignment.centerLeft,
+    return Statics.createWidgetFromString(context, DateFormat('dd-MMM-yyyy').format(DateFormat("yyyy/MM/dd").parse(lstShaakhaaVrutta[index].vruttaDate!)), 100, 52, Alignment.centerLeft,
         isTotalRow: false);
   }
 
@@ -96,8 +175,7 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
       Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].baalVidyaarthiCount.toString(), 60, 52, Alignment.center, isTotalRow: false),
       Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].tarunVidyaarthiCount.toString(), 60, 52, Alignment.center, isTotalRow: false),
       Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].tarunVyavasaayeeCount.toString(), 60, 52, Alignment.center, isTotalRow: false),
-      Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].proudhaVyavasaayeeCount.toString(), 60, 52, Alignment.center,
-          isTotalRow: false),
+      Statics.createWidgetFromString(context, lstShaakhaaVrutta[index].proudhaVyavasaayeeCount.toString(), 60, 52, Alignment.center, isTotalRow: false),
     ];
     if (vayogatCode == 'Proudh Vyavasaayee') {
       widgetArray.add(lstShaakhaaVrutta[index].isDoneDeepBreathing == true
@@ -131,9 +209,9 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
         ? Statics.createWidgetFromIcon(context, Icons.check, 100, 52, Alignment.center, isTotalRow: false)
         : Statics.createWidgetFromString(context, '-', 100, 52, Alignment.center, isTotalRow: false));
     if ((
-        // lst1.contains(Statics.userDetails['LevelName']) &&
+            // lst1.contains(Statics.userDetails['LevelName']) &&
             lst2.contains(Statics.userDetails['DaayitvaName'])) ||
-        (Statics.userDetails['LevelName'] == 'Shaakhaa'  || Statics.userDetails['LevelName'] == 'शाखा' && lst3.contains(Statics.userDetails['DaayitvaName'])) ||
+        (Statics.userDetails['LevelName'] == 'Shaakhaa' || Statics.userDetails['LevelName'] == 'शाखा' && lst3.contains(Statics.userDetails['DaayitvaName'])) ||
         lst4.contains(Statics.userDetails['DaayitvaName'])) {
       widgetArray.add(Container(
           width: 70,
@@ -201,7 +279,7 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
     headerRow.add(Statics.createWidgetFromString(context, 'अन्य वैकल्पिक कार्यक्रम', 100, 56, Alignment.centerLeft, isTotalRow: false));
 
     if ((
-        // lst1.contains(Statics.userDetails['LevelName']) &&
+            // lst1.contains(Statics.userDetails['LevelName']) &&
             lst2.contains(Statics.userDetails['DaayitvaName'])) ||
         (Statics.userDetails['LevelName'] == 'Shaakhaa' || Statics.userDetails['LevelName'] == 'शाखा' && lst3.contains(Statics.userDetails['DaayitvaName'])) ||
         lst4.contains(Statics.userDetails['DaayitvaName'])) {
@@ -281,8 +359,8 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
         ),
         actions: <Widget>[
           if ((
-              // lst1.contains(Statics.userDetails['LevelName']) &&
-              lst2.contains(Statics.userDetails['DaayitvaName'])) ||
+                  // lst1.contains(Statics.userDetails['LevelName']) &&
+                  lst2.contains(Statics.userDetails['DaayitvaName'])) ||
               (Statics.userDetails['LevelName'] == 'Shaakhaa' || Statics.userDetails['LevelName'] == 'शाखा' && lst3.contains(Statics.userDetails['DaayitvaName'])) ||
               lst4.contains(Statics.userDetails['DaayitvaName']))
             IconButton(

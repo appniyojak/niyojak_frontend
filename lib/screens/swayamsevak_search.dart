@@ -14,12 +14,12 @@ import '../providers/bals.dart';
 import '../providers/swayamsevak_provider.dart';
 import '../screens/edit_swayamsevak_basic_info.dart';
 import '../screens/edit_swayamsevak_screen.dart';
-import '../screens/home_screen.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/legend.dart';
 import '../widgets/swayamsevak_card.dart';
 import '../widgets/titlebar.dart';
 import 'edit_swayamsevak_soochi.dart';
+import 'home_screen/home_screen.dart';
 
 class SwayamSevakSearch extends StatefulWidget {
   static const routeName = '/swayamsevak-search';

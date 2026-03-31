@@ -56,7 +56,7 @@ import './screens/event_calender.dart';
 import './screens/event_members.dart';
 import './screens/event_vrutta.dart';
 import './screens/help_screen.dart';
-import './screens/home_screen.dart';
+import 'screens/home_screen/home_screen.dart';
 import './screens/login_screen.dart';
 import './screens/maps_display.dart';
 import './screens/profile_settings.dart';

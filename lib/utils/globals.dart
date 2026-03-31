@@ -57,4 +57,11 @@ class MyAppGlobals {
       // showError("Error!", "Failed to downloaded Receipt");
     }
   }
+
+  static bool hasValueBetweenDollar(String input) {
+    final regExp = RegExp(r'\$(.*?)\$');
+    final match = regExp.firstMatch(input);
+
+    return match != null && match.group(1)!.isNotEmpty;
+  }
 }
