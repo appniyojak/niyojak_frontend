@@ -6,7 +6,6 @@ import 'package:horizontal_data_table/refresh/pull_to_refresh/src/indicator/wate
 import 'package:horizontal_data_table/refresh/pull_to_refresh/src/smart_refresher.dart';
 import 'package:niyojak_prod/helpers/database_helper.dart';
 import 'package:niyojak_prod/models/response_model/AbhiyaanLoginDataResponse.dart';
-import 'package:niyojak_prod/screens/edit_swayamsevak_screen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 // import 'package:package_info/package_info.dart';
@@ -22,6 +21,7 @@ import '../screens/login_screen.dart';
 import '../screens/update_version.dart';
 import 'AbhiyanScreen.dart';
 import 'shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/gruh_abhiyaan_main_tab_screen.dart';
+import 'swayamsevak_module/edit_module/edit_swayamsevak_screen.dart';
 
 class SplashScreenCheck extends StatefulWidget {
   static const routeName = '/splash-screen';

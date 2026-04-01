@@ -1,13 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+
 import '../helpers/static_data.dart' as Statics;
 import '../providers/swayamsevak_provider.dart';
-
 
 class ContactUs extends StatefulWidget {
   static const routeName = '/contact-us';
@@ -49,7 +50,7 @@ class _ContactUsState extends State<ContactUs> {
       ),
       body: ModalProgressHUD(
         inAsyncCall: _isSearching,
-        child: Padding(
+        child: SingleChildScrollView(
           padding: EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,9 +68,7 @@ class _ContactUsState extends State<ContactUs> {
                 clipBehavior: Clip.antiAlias,
                 width: size.width,
                 height: size.height * 0.1,
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(3)),
+                decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.circular(3)),
                 child: TextField(
                   // clipBehavior: Clip.antiAlias,
                   controller: messageController,
@@ -96,70 +95,64 @@ class _ContactUsState extends State<ContactUs> {
                   },
                   child: _selectedImage != null
                       ? Stack(
-                    children: [
-                      Container(
-                        // margin: EdgeInsets.only(top: 10,bottom: 20),
-                        padding: EdgeInsets.all(7),
-                        width: size.width,
-                        height: size.height * 0.25,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(3)),
-                        child: Image.file(
-                          File(_selectedImage!.path),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Positioned(
-                        right: 5,
-                        top: 5,
-                        child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              _selectedImage = null;
-                            });
-                          },
-                          child: Container(
-                            // height: size.width*0.09,
-                            // width: size.width*0.09,
-                              padding: EdgeInsets.all(4),
-                              decoration: BoxDecoration(
-                                  color: Colors.grey.withOpacity(0.3),
-                                  shape: BoxShape.circle),
-                              child: Icon(
-                                Icons.close,
-                                size: size.width * 0.05,
-                              )),
-                        ),
-                      )
-                    ],
-                  )
-                      : Container(
-                    // margin: EdgeInsets.only(top: 10,bottom: 20),
-                      padding: EdgeInsets.all(7),
-                      width: size.width,
-                      height: size.height * 0.3,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          borderRadius: BorderRadius.circular(3)),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            CupertinoIcons.photo,
-                            size: size.width * 0.15,
-                            color: Colors.black26,
-                          ),
-                          Text(
-                            "Select Image",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black26,
+                          children: [
+                            Container(
+                              // margin: EdgeInsets.only(top: 10,bottom: 20),
+                              padding: EdgeInsets.all(7),
+                              width: size.width,
+                              height: size.height * 0.25,
+                              decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.circular(3)),
+                              child: Image.file(
+                                File(_selectedImage!.path),
+                                fit: BoxFit.cover,
+                              ),
                             ),
-                          )
-                        ],
-                      )),
+                            Positioned(
+                              right: 5,
+                              top: 5,
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    _selectedImage = null;
+                                  });
+                                },
+                                child: Container(
+                                    // height: size.width*0.09,
+                                    // width: size.width*0.09,
+                                    padding: EdgeInsets.all(4),
+                                    decoration: BoxDecoration(color: Colors.grey.withOpacity(0.3), shape: BoxShape.circle),
+                                    child: Icon(
+                                      Icons.close,
+                                      size: size.width * 0.05,
+                                    )),
+                              ),
+                            )
+                          ],
+                        )
+                      : Container(
+                          // margin: EdgeInsets.only(top: 10,bottom: 20),
+                          padding: EdgeInsets.all(7),
+                          width: size.width,
+                          height: size.height * 0.3,
+                          decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.circular(3)),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                CupertinoIcons.photo,
+                                size: size.width * 0.15,
+                                color: Colors.black26,
+                              ),
+                              Text(
+                                "Select Image",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black26,
+                                ),
+                              )
+                            ],
+                          )),
                 ),
               ),
               Center(
@@ -168,9 +161,7 @@ class _ContactUsState extends State<ContactUs> {
                   onPressed: () {
                     // send();
                     if (messageController.text.isEmpty) {
-                      Statics.showToast(
-                        "${Statics.getLabel('PleaseEnterYourMessage')}"
-                      );
+                      Statics.showToast("${Statics.getLabel('PleaseEnterYourMessage')}");
                     } else {
                       hitSendMail();
                     }
@@ -178,9 +169,7 @@ class _ContactUsState extends State<ContactUs> {
                   },
                   elevation: 0,
                   //   color: Colors.blue,
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.white),
-                      borderRadius: BorderRadius.circular(7)),
+                  shape: RoundedRectangleBorder(side: BorderSide(color: Colors.white), borderRadius: BorderRadius.circular(7)),
 
                   child: Text(
                     "${Statics.getLabel('Submit')}",
@@ -199,8 +188,7 @@ class _ContactUsState extends State<ContactUs> {
 
   Future<void> _pickImage(BuildContext context) async {
     try {
-      final pickedImage =
-      await ImagePicker().pickImage(source: ImageSource.gallery);
+      final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
       if (pickedImage != null) {
         setState(() {
           _selectedImage = pickedImage;
@@ -252,11 +240,10 @@ class _ContactUsState extends State<ContactUs> {
         }
 
         var data = {
-          "userid": Statics.userDetails["userID"],
+          "userid": (Statics.userDetails["userID"] != null && Statics.userDetails["userID"]!.toString().trim().isNotEmpty) ? Statics.userDetails["userID"] : 0,
           "msg": messageController.text,
           "file": base64Image,
-          "ext":
-          _selectedImage != null ? _selectedImage!.name.split(".").last : ""
+          "ext": _selectedImage != null ? _selectedImage!.name.split(".").last : ""
         };
 
         log(data.toString());
@@ -275,8 +262,7 @@ class _ContactUsState extends State<ContactUs> {
           setState(() {
             _isSearching = false;
           });
-          Statics.showToast(
-              Statics.getLabel('noDataFoundTryAnotherSearch').split(",").first);
+          Statics.showToast(Statics.getLabel('noDataFoundTryAnotherSearch').split(",").first);
         }
       }
     } catch (e) {
@@ -284,8 +270,7 @@ class _ContactUsState extends State<ContactUs> {
         _isSearching = false;
       });
       print(e);
-      Statics.showToast(
-          Statics.getLabel('noDataFoundTryAnotherSearch').split(",").first);
+      Statics.showToast(Statics.getLabel('noDataFoundTryAnotherSearch').split(",").first);
     }
   }
 }

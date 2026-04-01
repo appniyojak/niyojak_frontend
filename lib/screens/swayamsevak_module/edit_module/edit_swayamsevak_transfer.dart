@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import '../screens/swayamsevak_transfer_details.dart';
+import '../swayamsevak_transfer_details.dart';
 
-import '../helpers/static_data.dart' as Statics;
+import '../../../helpers/static_data.dart' as Statics;
 
 class EditSwayamsevakTransferScreen extends StatefulWidget {
   static const String routeName = '/edit-swayamsevak-transfer-screen';
+
   State<StatefulWidget> createState() {
     return new EditSwayamsevakTransferScreenState();
   }
@@ -15,7 +16,6 @@ class EditSwayamsevakTransferScreenState extends State<EditSwayamsevakTransferSc
   var theId;
   var swId;
   var viewType;
-
 
   @override
   void didChangeDependencies() {

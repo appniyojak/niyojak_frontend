@@ -11,11 +11,11 @@ import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 import '../helpers/static_data.dart' as Statics;
 import '../providers/swayamsevak_provider.dart';
 import '../screens/AbhiyanViewSwayamsevak.dart';
-import '../screens/edit_swayamsevak_basic_info.dart';
-import '../screens/edit_swayamsevak_daayitva.dart';
-import '../screens/edit_swayamsevak_other_info.dart';
-import '../screens/edit_swayamsevak_screen.dart';
-import '../screens/edit_swayamsevak_transfer.dart';
+import '../screens/swayamsevak_module/edit_module/edit_swayamsevak_basic_info.dart';
+import '../screens/swayamsevak_module/edit_module/edit_swayamsevak_daayitva.dart';
+import '../screens/swayamsevak_module/edit_module/edit_swayamsevak_other_info.dart';
+import '../screens/swayamsevak_module/edit_module/edit_swayamsevak_screen.dart';
+import '../screens/swayamsevak_module/edit_module/edit_swayamsevak_transfer.dart';
 
 class SwayamsevakCard extends StatefulWidget {
   final swItem;

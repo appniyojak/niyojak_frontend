@@ -8,8 +8,8 @@ import '../screens/edit_join_rss.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 import '../helpers/static_data.dart' as Statics;
 import '../screens/edit_shaakhaa.dart';
-import '../screens/edit_swayamsevak_basic_info.dart';
-import '../screens/edit_swayamsevak_screen.dart';
+import '../screens/swayamsevak_module/edit_module/edit_swayamsevak_basic_info.dart';
+import '../screens/swayamsevak_module/edit_module/edit_swayamsevak_screen.dart';
 
 class JoinRSSCard extends StatelessWidget {
   final joinRSSItem;

@@ -567,6 +567,9 @@ class SwayamsevakProvider {
   Future<String> saveSwayamsevakOtherInfoForApp(String inputJson) async {
     Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
+    print(Statics.urlSaveSwayamsevakOtherInfoForApp);
+    log(jsonDecode(inputJson));
+
     var response = await http.post(Uri.parse(Statics.urlSaveSwayamsevakOtherInfoForApp), headers: jHeaders, body: inputJson);
 
     var body = json.decode(response.body);

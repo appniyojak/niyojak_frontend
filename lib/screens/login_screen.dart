@@ -9,7 +9,6 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:niyojak_prod/helpers/database_helper.dart';
 import 'package:niyojak_prod/models/response_model/AbhiyaanLoginDataResponse.dart';
-import 'package:niyojak_prod/screens/edit_swayamsevak_screen.dart';
 import 'package:niyojak_prod/screens/forget_password.dart';
 import 'package:pin_input_text_field/pin_input_text_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,8 +22,10 @@ import '../providers/login.dart';
 import '../screens/change_password.dart';
 import '../screens/update_version.dart';
 import '../utils/hard_loader.dart';
+import 'ContactUsScreen.dart';
 import 'home_screen/home_screen.dart';
 import 'shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/gruh_abhiyaan_main_tab_screen.dart';
+import 'swayamsevak_module/edit_module/edit_swayamsevak_screen.dart';
 
 class LogInScreen extends StatefulWidget {
   static const String routeName = '/login-screen';
@@ -771,21 +772,25 @@ class _LogInCardState extends State<LogInCard> {
                     style: TextStyle(fontSize: 15, color: Colors.blue, decoration: TextDecoration.underline),
                   ),
                 ),
-                // SizedBox(height: 1),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //      children: [
-                //        Icon(Icons.help,size: 20,color: Colors.grey),
-                //        InkWell(
-                //          child:
-                //        Text(Statics.getLabel('helpScreenTitle'),
-                //         style: TextStyle(fontSize: 15,color: Colors.grey),),
-                //           onTap: () {
-                //             Navigator.of(context).pushReplacementNamed(HelpScreen.routeName);
-                //           },
-                //         ),
-                //      ],
-                //    ),
+                SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.help, size: 20, color: Colors.orange.shade700),
+                    InkWell(
+                      child: Text(
+                        Statics.getLabel('helpScreenTitle'),
+                        style: TextStyle(fontSize: 15, color: Colors.orange.shade700),
+                      ),
+                      onTap: () {
+                        // Navigator.of(context).pushNamed(HelpScreen.routeName);
+                        // return;
+                        Navigator.of(context).pushNamed(ContactUs.routeName);
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(height: 12),
               ],
             ),
           ),

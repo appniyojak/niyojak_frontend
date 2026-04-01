@@ -6,10 +6,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
-import '../helpers/static_data.dart' as Statics;
-import '../providers/bals.dart';
-import '../providers/swayamsevak_provider.dart';
-import '../widgets/legend.dart';
+import '../../helpers/static_data.dart' as Statics;
+import '../../providers/bals.dart';
+import '../../providers/swayamsevak_provider.dart';
+import '../../widgets/legend.dart';
 
 class SwayamSevakDaayitvaEdit extends StatefulWidget {
   static const routeName = '/daayitva-detail-screen';

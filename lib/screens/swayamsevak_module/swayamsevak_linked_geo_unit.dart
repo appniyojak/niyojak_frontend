@@ -4,10 +4,10 @@ import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
-import '../providers/bals.dart';
-import '../providers/swayamsevak_provider.dart';
+import '../../providers/bals.dart';
+import '../../providers/swayamsevak_provider.dart';
 
-import '../helpers/static_data.dart' as Statics;
+import '../../helpers/static_data.dart' as Statics;
 
 class SwayamsevakLinkedGeoUnit extends StatefulWidget {
   var swId;

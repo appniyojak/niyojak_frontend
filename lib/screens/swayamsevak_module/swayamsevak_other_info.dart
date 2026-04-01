@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
-import '../helpers/static_data.dart' as Statics;
-import '../providers/bals.dart';
-import '../providers/swayamsevak_provider.dart';
-import '../widgets/legend.dart';
+import '../../helpers/static_data.dart' as Statics;
+import '../../providers/bals.dart';
+import '../../providers/swayamsevak_provider.dart';
+import '../../widgets/legend.dart';
 
 class SwayamsevakOtherInfo extends StatefulWidget {
   var swId;
@@ -2202,45 +2202,43 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
                     //   },
                     // ),
                     SizedBox(height: 10),
-                    if (_usage != null)
-                      DropdownButtonFormField(
-                        decoration: InputDecoration(labelText: Statics.getLabel('SelectFacebookUsage')),
-                        isExpanded: true,
-                        value: _fbUsage == "" ? null : _fbUsage,
-                        items: _usage,
-                        onChanged: (value) {
-                          setState(() {
-                            _fbUsage = value;
-                          });
-                        },
-                        onSaved: (value) {
-                          if (value != null && value.isNotEmpty)
-                            swOtherInfo!.facebookUsage = value;
-                          else
-                            swOtherInfo!.facebookUsage = null;
-                        },
-                      ),
+                    DropdownButtonFormField(
+                      decoration: InputDecoration(labelText: Statics.getLabel('SelectFacebookUsage')),
+                      isExpanded: true,
+                      value: _fbUsage == "" ? null : _fbUsage,
+                      items: _usage,
+                      onChanged: (value) {
+                        setState(() {
+                          _fbUsage = value;
+                        });
+                      },
+                      onSaved: (value) {
+                        if (value != null && value.isNotEmpty)
+                          swOtherInfo!.facebookUsage = value;
+                        else
+                          swOtherInfo!.facebookUsage = null;
+                      },
+                    ),
                     SizedBox(
                       height: 10,
                     ),
-                    if (_usage != null)
-                      DropdownButtonFormField(
-                        decoration: InputDecoration(labelText: Statics.getLabel('SelectTwitterUsage')),
-                        isExpanded: true,
-                        value: _twtUsage == "" ? null : _twtUsage,
-                        items: _usage,
-                        onChanged: (value) {
-                          setState(() {
-                            _twtUsage = value;
-                          });
-                        },
-                        onSaved: (value) {
-                          if (value != null && value.isNotEmpty)
-                            swOtherInfo!.twitterUsage = value;
-                          else
-                            swOtherInfo!.twitterUsage = null;
-                        },
-                      ),
+                    DropdownButtonFormField(
+                      decoration: InputDecoration(labelText: Statics.getLabel('SelectTwitterUsage')),
+                      isExpanded: true,
+                      value: _twtUsage == "" ? null : _twtUsage,
+                      items: _usage,
+                      onChanged: (value) {
+                        setState(() {
+                          _twtUsage = value;
+                        });
+                      },
+                      onSaved: (value) {
+                        if (value != null && value.isNotEmpty)
+                          swOtherInfo!.twitterUsage = value;
+                        else
+                          swOtherInfo!.twitterUsage = null;
+                      },
+                    ),
                     SizedBox(height: 10),
                     // DropdownButtonFormField(
                     //   decoration: InputDecoration(labelText: Statics.getLabel('SelectKooUsage')),

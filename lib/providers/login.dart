@@ -15,7 +15,7 @@ import '../helpers/static_data.dart' as Statics;
 import '../models/response_model/AbhiyaanLoginDataResponse.dart';
 import '../providers/bals.dart';
 import '../providers/swayamsevak_provider.dart';
-import '../screens/edit_swayamsevak_screen.dart';
+import '../screens/swayamsevak_module/edit_module/edit_swayamsevak_screen.dart';
 import '../utils/hard_loader.dart';
 
 class LogIn {

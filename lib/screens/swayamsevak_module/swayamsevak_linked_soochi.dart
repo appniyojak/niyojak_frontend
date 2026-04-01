@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import '../widgets/legend.dart';
-import '../widgets/titlebar.dart';
-import '../helpers/static_data.dart' as Statics;
+import '../../widgets/legend.dart';
+import '../../widgets/titlebar.dart';
+import '../../helpers/static_data.dart' as Statics;
 
 class SwayamSevakLinkedSooochi extends StatefulWidget {
   var swId;
   var onSaveSwDetails;
   var viewType;
+
   SwayamSevakLinkedSooochi({Key? key, this.swId, this.onSaveSwDetails, this.viewType}) : super(key: key);
+
   @override
   _SwayamSevakLinkedSooochiState createState() => _SwayamSevakLinkedSooochiState();
 }

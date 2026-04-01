@@ -14,7 +14,7 @@ import '../../../models/response_model/gruh_abhiyaan_vrutta_data_model.dart';
 import '../../../models/response_model/vasti_up_data_model.dart';
 import '../../../models/response_model/vijayaDashamiInitModel.dart';
 import '../../../providers/bals.dart';
-import '../../edit_swayamsevak_screen.dart';
+import '../../swayamsevak_module/edit_module/edit_swayamsevak_screen.dart';
 import '../vijayadashami/add_vishesh_vyakti.dart';
 import 'add_abhiyaan_karyakarta_screen.dart';
 

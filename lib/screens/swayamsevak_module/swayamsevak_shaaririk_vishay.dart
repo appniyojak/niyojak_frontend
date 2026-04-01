@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import '../widgets/legend.dart';
+import '../../widgets/legend.dart';
 
-import '../providers/swayamsevak_provider.dart';
-import '../providers/bals.dart';
-import '../helpers/static_data.dart' as Statics;
+import '../../providers/swayamsevak_provider.dart';
+import '../../providers/bals.dart';
+import '../../helpers/static_data.dart' as Statics;
 
 class SwayamsevakShaaririkVishay extends StatefulWidget {
   var swId;

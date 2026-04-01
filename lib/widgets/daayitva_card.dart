@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../screens/edit_daayitva.dart';
-import '../screens/swayamsevak_daayitva_edit.dart';
+import '../screens/swayamsevak_module/swayamsevak_daayitva_edit.dart';
 import '../helpers/static_data.dart' as Statics;
 
 class DaayitvaCard extends StatelessWidget {
@@ -12,6 +12,7 @@ class DaayitvaCard extends StatelessWidget {
   final onSaveSwDetails;
   final swID;
   final getSwDetails;
+
   DaayitvaCard(this.swID, this._daayitvaItem, this._viewType, this.onSaveSwDetails, this.getSwDetails);
 
   void _deleteDaayitva(var context, var daayitvaID, var daayitvaFor) async {
@@ -62,6 +63,7 @@ class DaayitvaCard extends StatelessWidget {
   }
 
   final List<Statics.MenuItem> menuItem = [];
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -69,7 +71,7 @@ class DaayitvaCard extends StatelessWidget {
       elevation: 5,
       child: ListTile(
         dense: true,
-        onTap: (){
+        onTap: () {
           print("object");
         },
         title: Text(_daayitvaItem["StringValue"]),
@@ -82,8 +84,8 @@ class DaayitvaCard extends StatelessWidget {
                 _deleteDaayitva(context, _daayitvaItem["DaayitvaDataID"], _daayitvaItem["DaayitvaForCode"]);
               } else
                 Navigator.of(context).pushNamed(EditDaayitva.routeName,
-                    arguments: Statics.ScreenArguments2(swID, value, onSaveSwDetails, _daayitvaItem["DaayitvaForID"].toString(),
-                        _daayitvaItem["DaayitvaForCode"], _daayitvaItem["DaayitvaDataID"].toString()));
+                    arguments: Statics.ScreenArguments2(
+                        swID, value, onSaveSwDetails, _daayitvaItem["DaayitvaForID"].toString(), _daayitvaItem["DaayitvaForCode"], _daayitvaItem["DaayitvaDataID"].toString()));
             },
             icon: Icon(
               FontAwesomeIcons.ellipsisV,

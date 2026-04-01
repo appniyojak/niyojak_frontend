@@ -8,18 +8,18 @@ import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
-import '../dialogs/levelwise_dropdown.dart';
-import '../helpers/static_data.dart' as Statics;
-import '../providers/bals.dart';
-import '../providers/swayamsevak_provider.dart';
-import '../screens/edit_swayamsevak_basic_info.dart';
-import '../screens/edit_swayamsevak_screen.dart';
-import '../widgets/app_drawer.dart';
-import '../widgets/legend.dart';
-import '../widgets/swayamsevak_card.dart';
-import '../widgets/titlebar.dart';
-import 'edit_swayamsevak_soochi.dart';
-import 'home_screen/home_screen.dart';
+import '../../dialogs/levelwise_dropdown.dart';
+import '../../helpers/static_data.dart' as Statics;
+import '../../providers/bals.dart';
+import '../../providers/swayamsevak_provider.dart';
+import '../../widgets/app_drawer.dart';
+import '../../widgets/legend.dart';
+import '../../widgets/swayamsevak_card.dart';
+import '../../widgets/titlebar.dart';
+import '../home_screen/home_screen.dart';
+import 'edit_module/edit_swayamsevak_basic_info.dart';
+import 'edit_module/edit_swayamsevak_screen.dart';
+import 'edit_module/edit_swayamsevak_soochi.dart';
 
 class SwayamSevakSearch extends StatefulWidget {
   static const routeName = '/swayamsevak-search';
@@ -143,6 +143,12 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
   String? _preritSansthaValue = "";
   var _othOrgNameCtrl = TextEditingController();
 
+  bool _hasShaakhaaExperience = false;
+  bool _hasBaalShaakhaaExperience = false;
+  bool _hasTarunVidShaakhaaExperience = false;
+  bool _hasTarunVyavShaakhaaExperience = false;
+  bool _hasProudhaVyavShaakhaaExperience = false;
+
   List<StaticMasterBAL>? _category;
   StaticMasterBAL? _categoryValue;
   String? _progValue;
@@ -218,7 +224,11 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
 
   bool? _hasBeenShikshak = null;
   bool? _noDaayitva = null;
+  bool? _wasVistaarak = null;
+  bool? _wasPrachaarak = null;
   bool? _pravaasi = null;
+  List<AreaOfInterestBAL> _areaOfInterestForSearch = [];
+  List<AreaOfExpertiseBAL> _areaOfExpertiseForSearch = [];
 
   List<DropdownMenuItem<String>> _sortingOn = [
     new DropdownMenuItem(child: Text(Statics.getLabel("Name")), value: "Name"),
@@ -291,7 +301,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
         new MenuChoices("AddinSoochi", Icons.list, Statics.getLabel('addinSoochi')),
         new MenuChoices("SendMail", Icons.mail, Statics.getLabel('SendMail')),
         new MenuChoices("SendSMS", Icons.sms, Statics.getLabel('SendSMS')),
-        if (Statics.userDetails['MobileNumber'] == '9322406725-1234') new MenuChoices("EditMenuNew", Icons.add, Statics.getLabel('AddSwayamsevak') + '-New'),
+        // if (Statics.userDetails['MobileNumber'] == '9322406725-1234') new MenuChoices("EditMenuNew", Icons.add, Statics.getLabel('AddSwayamsevak') + '-New'),
 
         /// CONFIRMATION FROM MAHESH JOSHI SIR TO MAKE IT OPEN TO ALL
         // if ((int.parse(Statics.userDetails['LevelID']) >= 4 &&
@@ -363,6 +373,19 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
     });
   }
 
+  List<DropdownMenuItem<String>> _usage = [
+    new DropdownMenuItem(child: Text(Statics.getLabel('SocialMediaUsageNone')), value: "None"),
+    new DropdownMenuItem(child: Text(Statics.getLabel('SocialMediaUsageLow')), value: "Low"),
+    new DropdownMenuItem(child: Text(Statics.getLabel('SocialMediaUsageMedium')), value: "Medium"),
+    new DropdownMenuItem(child: Text(Statics.getLabel('SocialMediaUsageHigh')), value: "High"),
+  ];
+  bool? _isfb;
+  bool? _isinsta;
+  bool? _istwt;
+  String? _fbUsage;
+  String? _instaUsage;
+  String? _twtUsage;
+
   Future<void> populateDropdown() async {
     var data = await Statics.getStaticLDB('OccupationCategory');
     var data4 = await Statics.getStaticLDB("DaayitvaFor");
@@ -372,7 +395,16 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
     var data3 = await Statics.getStaticLDB("ShaakhaaExperienceYear");
     var data6 = await Statics.getSanghaPreritSanstha("1", null, null);
     var data7 = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), "", "", "");
+    var aoi = await Statics.getStaticLDB("AreaOfInterest");
+    var aoe = await Statics.getStaticLDB("AreaOfExpertise");
     setState(() {
+      for (var data in aoi) {
+        _areaOfInterestForSearch.add(new AreaOfInterestBAL(data.staticID, data.code, data.codeForDisplay, false));
+      }
+
+      for (var data in aoe) {
+        _areaOfExpertiseForSearch.add(new AreaOfExpertiseBAL(data.staticID, data.code, data.codeForDisplay, false));
+      }
       _category = data;
       _daayitvaFor = data4;
       _level = data5;
@@ -1490,6 +1522,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
             child: TabBarView(
               controller: _tabController,
               children: <Widget>[
+                ///
                 SingleChildScrollView(
                   child: Container(
                     padding: EdgeInsets.all(20),
@@ -2728,6 +2761,41 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                         ),
                         SizedBox(height: 30),
                         Legend(legendString: "Daayitva", fontsize: 18),
+                        SizedBox(height: 12),
+                        SizedBox(
+                          width: Statics.getDeviceSize(context).width * 0.85,
+                          child: CheckboxListTile(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                            controlAffinity: ListTileControlAffinity.leading,
+                            title: Text(Statics.getLabel('HasBeenVistaarak'), style: TextStyle(fontSize: 15)),
+                            checkColor: Colors.white,
+                            activeColor: Colors.purple,
+                            value: _wasVistaarak == null ? false : _wasVistaarak,
+                            onChanged: (value) {
+                              setState(() {
+                                _wasVistaarak = value;
+                              });
+                            },
+                          ),
+                        ),
+                        SizedBox(height: 12),
+                        SizedBox(
+                          width: Statics.getDeviceSize(context).width * 0.85,
+                          child: CheckboxListTile(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                            controlAffinity: ListTileControlAffinity.leading,
+                            title: Text(Statics.getLabel('HasBeenPrachaarak'), style: TextStyle(fontSize: 15)),
+                            checkColor: Colors.white,
+                            activeColor: Colors.purple,
+                            value: _wasPrachaarak == null ? false : _wasPrachaarak,
+                            onChanged: (value) {
+                              setState(() {
+                                _wasPrachaarak = value;
+                              });
+                            },
+                          ),
+                        ),
+                        SizedBox(height: 12),
                         CheckboxListTile(
                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                           controlAffinity: ListTileControlAffinity.leading,
@@ -2902,6 +2970,95 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                 ),
                               ],
                             ),
+                        SizedBox(height: 30),
+                        Legend(legendString: "ShaakhaExp", fontsize: 18),
+                        SizedBox(height: 5),
+                        SizedBox(
+                          width: Statics.getDeviceSize(context).width * 0.8,
+                          child: CheckboxListTile(
+                              contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                              title: Text(Statics.getLabel('HasShaakhaaSanchaalanExperience'), style: TextStyle(fontSize: 15)),
+                              checkColor: Colors.white,
+                              activeColor: Colors.purple,
+                              value: _hasShaakhaaExperience == null ? false : _hasShaakhaaExperience,
+                              controlAffinity: ListTileControlAffinity.leading,
+                              onChanged: (value) {
+                                setState(() {
+                                  _hasShaakhaaExperience = value!;
+                                });
+                              }),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        if (_hasShaakhaaExperience == true)
+                          Wrap(
+                            direction: Axis.horizontal,
+                            spacing: 10,
+                            children: [
+                              SizedBox(
+                                width: Statics.getDeviceSize(context).width * 0.4,
+                                child: CheckboxListTile(
+                                    contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                                    title: Text(Statics.getLabel('Baal'), style: TextStyle(fontSize: 15)),
+                                    checkColor: Colors.white,
+                                    activeColor: Colors.purple,
+                                    value: _hasBaalShaakhaaExperience == null ? false : _hasBaalShaakhaaExperience,
+                                    controlAffinity: ListTileControlAffinity.leading,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _hasBaalShaakhaaExperience = value!;
+                                      });
+                                    }),
+                              ),
+                              SizedBox(
+                                width: Statics.getDeviceSize(context).width * 0.4,
+                                child: CheckboxListTile(
+                                    contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                                    title: Text(Statics.getLabel('TarunVidyaarthi'), style: TextStyle(fontSize: 15)),
+                                    checkColor: Colors.white,
+                                    activeColor: Colors.purple,
+                                    value: _hasTarunVidShaakhaaExperience == null ? false : _hasTarunVidShaakhaaExperience,
+                                    controlAffinity: ListTileControlAffinity.leading,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _hasTarunVidShaakhaaExperience = value!;
+                                      });
+                                    }),
+                              ),
+                              SizedBox(
+                                width: Statics.getDeviceSize(context).width * 0.4,
+                                child: CheckboxListTile(
+                                    contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                                    title: Text(Statics.getLabel('TarunVyavasaayee'), style: TextStyle(fontSize: 15)),
+                                    checkColor: Colors.white,
+                                    activeColor: Colors.purple,
+                                    value: _hasTarunVyavShaakhaaExperience == null ? false : _hasTarunVyavShaakhaaExperience,
+                                    controlAffinity: ListTileControlAffinity.leading,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _hasTarunVyavShaakhaaExperience = value!;
+                                      });
+                                    }),
+                              ),
+                              SizedBox(
+                                width: Statics.getDeviceSize(context).width * 0.4,
+                                child: CheckboxListTile(
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                                  title: Text(Statics.getLabel('ProudhVyavasaayee'), style: TextStyle(fontSize: 15)),
+                                  checkColor: Colors.white,
+                                  activeColor: Colors.purple,
+                                  value: _hasProudhaVyavShaakhaaExperience == null ? false : _hasProudhaVyavShaakhaaExperience,
+                                  controlAffinity: ListTileControlAffinity.leading,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _hasProudhaVyavShaakhaaExperience = value!;
+                                    });
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
                         SizedBox(height: 30),
                         Legend(legendString: "Occupation", fontsize: 18),
                         SizedBox(height: 5),
@@ -3796,11 +3953,146 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                             ],
                           ),
                         ),
+                        SizedBox(height: 18),
+                        Legend(legendString: "SocialMediaUsage", fontsize: 18),
+                        SizedBox(height: 5),
+                        Container(
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                      child: reusableCheckbox(
+                                    title: Statics.getLabel("Facebook"),
+                                    value: _isfb,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _isfb = value;
+                                      });
+                                    },
+                                  )),
+                                  if (_isfb == true)
+                                    Expanded(
+                                      child: DropdownButtonFormField(
+                                        decoration: InputDecoration(labelText: Statics.getLabel('SelectFacebookUsage')),
+                                        isExpanded: true,
+                                        value: _fbUsage,
+                                        items: _usage,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _fbUsage = value;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                      child: reusableCheckbox(
+                                    title: Statics.getLabel("Insta"),
+                                    value: _isinsta,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _isinsta = value;
+                                      });
+                                    },
+                                  )),
+                                  if (_isinsta == true)
+                                    Expanded(
+                                      child: DropdownButtonFormField(
+                                        decoration: InputDecoration(labelText: Statics.getLabel('SelectInstaUsage')),
+                                        isExpanded: true,
+                                        value: _instaUsage,
+                                        items: _usage,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _instaUsage = value;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                      child: reusableCheckbox(
+                                    title: Statics.getLabel("Twitter"),
+                                    value: _istwt,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _istwt = value;
+                                      });
+                                    },
+                                  )),
+                                  if (_istwt == true)
+                                    Expanded(
+                                        child: DropdownButtonFormField(
+                                      decoration: InputDecoration(labelText: Statics.getLabel('SelectTwitterUsage')),
+                                      isExpanded: true,
+                                      value: _twtUsage,
+                                      items: _usage,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _twtUsage = value;
+                                        });
+                                      },
+                                    )),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 18),
+                        Legend(legendString: "AreasOfInterestShort", fontsize: 18),
+                        SizedBox(height: 5),
+                        Container(
+                          width: Statics.getDeviceSize(context).width * 0.8,
+                          height: Statics.getDeviceSize(context).height * 0.3,
+                          child: ListView(
+                            children: _areaOfInterestForSearch.map((area) {
+                              return reusableCheckbox(
+                                title: area.codeForDisplay,
+                                value: area.isSelected,
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    area.isSelected = value;
+                                  });
+                                },
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                        SizedBox(height: 18),
+                        Legend(legendString: "AreaOfExpertiseShort", fontsize: 18),
+                        SizedBox(height: 5),
+                        Container(
+                          width: Statics.getDeviceSize(context).width * 0.8,
+                          height: Statics.getDeviceSize(context).height * 0.3,
+                          child: ListView(
+                            children: _areaOfExpertiseForSearch.map((area) {
+                              return reusableCheckbox(
+                                title: area.codeForDisplay,
+                                value: area.isSelected,
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    area.isSelected = value;
+                                  });
+                                },
+                              );
+                            }).toList(),
+                          ),
+                        ),
                         SizedBox(height: 10),
+                        SizedBox(height: 30),
                       ],
                     ),
                   ),
                 ),
+
+                ///
                 Container(
                   padding: EdgeInsets.all(15),
                   child: Column(
@@ -3857,6 +4149,22 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
             ),
             inAsyncCall: _isSearching!),
       ),
+    );
+  }
+
+  Widget reusableCheckbox({required String? title, required bool? value, void Function(bool?)? onChanged, Color? activeColor, Color? checkColor}) {
+    return CheckboxListTile(
+      controlAffinity: ListTileControlAffinity.leading,
+      title: Text(title ?? "--"),
+      value: value ?? false,
+      activeColor: activeColor ?? Colors.purple,
+      checkColor: checkColor ?? Colors.white,
+      onChanged: onChanged ??
+          (bool? val) {
+            setState(() {
+              value = val;
+            });
+          },
     );
   }
 }

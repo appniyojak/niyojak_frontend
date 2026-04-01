@@ -8,7 +8,7 @@ import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 import '../../../helpers/static_data.dart' as Statics;
 import '../../../models/response_model/AbhiyaanSwayamsevakListResponse.dart';
-import '../../edit_swayamsevak_screen.dart';
+import '../../swayamsevak_module/edit_module/edit_swayamsevak_screen.dart';
 
 class AddAbhiyaanPramukhScreen extends StatefulWidget {
   static const String routeName = '/add-abhiyaan-pramukh-screen';

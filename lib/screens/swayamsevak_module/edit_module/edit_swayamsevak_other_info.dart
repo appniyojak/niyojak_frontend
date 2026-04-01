@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../screens/swayamsevak_other_info.dart';
-import '../helpers/static_data.dart' as Statics;
+import '../swayamsevak_other_info.dart';
+import '../../../helpers/static_data.dart' as Statics;
 
 class EditSwayamsevakOtherInfo extends StatefulWidget {
   static const String routeName = '/edit-swayamsevak-other-info-screen';
+
   State<StatefulWidget> createState() {
     return new EditSwayamsevakOtherInfoState();
   }

@@ -6,7 +6,9 @@ class Legend extends StatelessWidget {
   final legendString;
   final extraString;
   final double? fontsize;
+
   Legend({Key? key, this.legendString, this.extraString, this.fontsize}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -14,7 +16,7 @@ class Legend extends StatelessWidget {
         Wrap(
           children: [
             Text(
-              (legendString == null || legendString == "" ? "" : Statics.getLabel(legendString)),
+              (legendString == null || legendString == "" ? "" : Statics.getLabel(legendString, returnKey: true)),
               textAlign: TextAlign.left,
               style: TextStyle(color: Colors.purple, fontSize: fontsize == 0 ? 18 : fontsize, fontWeight: FontWeight.w600),
             ),

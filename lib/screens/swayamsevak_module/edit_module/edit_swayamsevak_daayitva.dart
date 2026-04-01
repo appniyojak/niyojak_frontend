@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../screens/swayamsevak_daayitva_list.dart';
-import '../helpers/static_data.dart' as Statics;
+import '../swayamsevak_daayitva_list.dart';
+import '../../../helpers/static_data.dart' as Statics;
 
 class EditSwayamsevakDaayitva extends StatefulWidget {
   static const String routeName = '/edit-swayamsevak-daayitva-screen';
+
   State<StatefulWidget> createState() {
     return new EditSwayamsevakDaayitvaState();
   }

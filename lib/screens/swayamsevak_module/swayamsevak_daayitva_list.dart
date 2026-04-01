@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
-import '../helpers/static_data.dart' as Statics;
-import '../providers/bals.dart';
-import '../providers/swayamsevak_provider.dart';
-import '../screens/edit_daayitva.dart';
+import '../../helpers/static_data.dart' as Statics;
+import '../../providers/bals.dart';
+import '../../providers/swayamsevak_provider.dart';
+import '../edit_daayitva.dart';
+
 //import '../screens/swayamsevak_daayitva_edit.dart';
-import '../widgets/daayitva_card.dart';
-import '../widgets/legend.dart';
+import '../../widgets/daayitva_card.dart';
+import '../../widgets/legend.dart';
 
 class DaayitvaList extends StatefulWidget {
   var swId;

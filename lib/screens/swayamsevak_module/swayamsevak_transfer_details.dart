@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:niyojak_prod/screens/search_swayamsevak_transfer.dart';
-import '../providers/bals.dart';
+import '../../providers/bals.dart';
 
-import '../helpers/static_data.dart' as Statics;
+import '../../helpers/static_data.dart' as Statics;
 
 class SwayamsevakTransferDetails extends StatefulWidget {
   var swayamsevakTransferID;

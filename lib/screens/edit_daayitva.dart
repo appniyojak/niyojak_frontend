@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import '../screens/swayamsevak_daayitva_edit.dart';
+import 'swayamsevak_module/swayamsevak_daayitva_edit.dart';
 import '../helpers/static_data.dart' as Statics;
 
 class EditDaayitva extends StatefulWidget {
   static const routeName = '/edit-daayitva-screen';
+
   @override
   _EditDaayitvaState createState() => _EditDaayitvaState();
 }
