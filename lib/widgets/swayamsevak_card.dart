@@ -1,4 +1,4 @@
-import 'dart:convert';
+/*import 'dart:convert';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -21,10 +21,10 @@ class SwayamsevakCard extends StatefulWidget {
   final swItem;
   var onCheckCard;
   var onUnCheckCard;
-  bool? _isChecked;
+  bool? isChecked;
   var onSaveDetails;
 
-  SwayamsevakCard(this.swItem, this.onCheckCard, this.onUnCheckCard, this._isChecked, this.onSaveDetails);
+  SwayamsevakCard({this.swItem, this.onCheckCard, this.onUnCheckCard, this.isChecked, this.onSaveDetails});
 
   @override
   _SwayamsevakCardState createState() => _SwayamsevakCardState();
@@ -416,10 +416,10 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
             Checkbox(
               checkColor: Colors.white,
               activeColor: Colors.purple,
-              value: widget._isChecked,
+              value: widget.isChecked,
               onChanged: (value) {
                 setState(() {
-                  widget._isChecked = value!;
+                  widget.isChecked = value!;
                   if (value == true)
                     widget.onCheckCard(widget.swItem["Email"], widget.swItem["MobileNumber"], widget.swItem["SwayamsevakID"].toString());
                   else
@@ -612,13 +612,13 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
 }
 
 class SwayamsevakHomeAbhiyanCard extends StatefulWidget {
-  AbhiyanSwayamsevakList swItem;
-  var onCheckCard;
-  var onUnCheckCard;
-  bool _isChecked;
-  Function getAbhiyaanSwayamsevakListData;
+  final AbhiyanSwayamsevakList swItem;
+  final dynamic onCheckCard;
+  final dynamic onUnCheckCard;
+  final bool isChecked;
+  final Function getAbhiyaanSwayamsevakListData;
 
-  SwayamsevakHomeAbhiyanCard(this.swItem, this.onCheckCard, this.onUnCheckCard, this._isChecked, this.getAbhiyaanSwayamsevakListData);
+  SwayamsevakHomeAbhiyanCard({required this.swItem, this.onCheckCard, this.onUnCheckCard, required this.isChecked, required this.getAbhiyaanSwayamsevakListData});
 
   @override
   _SwayamsevakHomeAbhiyanCardState createState() => _SwayamsevakHomeAbhiyanCardState();
@@ -954,10 +954,10 @@ class _SwayamsevakHomeAbhiyanCardState extends State<SwayamsevakHomeAbhiyanCard>
 }
 
 class AbhiyanSwayamsevakCard extends StatefulWidget {
-  final swItem;
-  var onSaveDetails;
+  final dynamic swItem;
+  final dynamic onSaveDetails;
 
-  AbhiyanSwayamsevakCard(this.swItem, this.onSaveDetails);
+  AbhiyanSwayamsevakCard({this.swItem, this.onSaveDetails});
 
   @override
   _AbhiyanSwayamsevakCardState createState() => _AbhiyanSwayamsevakCardState();
@@ -1014,6 +1014,1320 @@ class _AbhiyanSwayamsevakCardState extends State<AbhiyanSwayamsevakCard> {
             ])
           ],
         )),
+      ),
+    );
+  }
+}*/
+
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
+
+import '../helpers/static_data.dart' as Statics;
+import '../providers/swayamsevak_provider.dart';
+import '../screens/AbhiyanEditSwayamsevak.dart';
+import '../screens/AbhiyanViewSwayamsevak.dart';
+import '../screens/swayamsevak_module/edit_module/edit_swayamsevak_basic_info.dart';
+import '../screens/swayamsevak_module/edit_module/edit_swayamsevak_daayitva.dart';
+import '../screens/swayamsevak_module/edit_module/edit_swayamsevak_other_info.dart';
+import '../screens/swayamsevak_module/edit_module/edit_swayamsevak_screen.dart';
+import '../screens/swayamsevak_module/edit_module/edit_swayamsevak_transfer.dart';
+
+// ============================================================================
+// MODERNIZED SWAYAMSEVAK CARD
+// ============================================================================
+
+class SwayamsevakCard extends StatefulWidget {
+  final dynamic swItem;
+  final Function(String, String, String) onCheckCard;
+  final Function(String, String, String) onUnCheckCard;
+  final bool isChecked;
+  final Function(String) onSaveDetails;
+
+  const SwayamsevakCard({
+    Key? key,
+    required this.swItem,
+    required this.onCheckCard,
+    required this.onUnCheckCard,
+    required this.isChecked,
+    required this.onSaveDetails,
+  }) : super(key: key);
+
+  @override
+  State<SwayamsevakCard> createState() => _SwayamsevakCardState();
+}
+
+class _SwayamsevakCardState extends State<SwayamsevakCard> {
+  late bool _isChecked;
+
+  @override
+  void initState() {
+    super.initState();
+    _isChecked = widget.isChecked;
+  }
+
+  @override
+  void didUpdateWidget(SwayamsevakCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isChecked != widget.isChecked) {
+      setState(() {
+        _isChecked = widget.isChecked;
+      });
+    }
+  }
+
+  // ============================================================================
+  // PERMISSION CHECKS - Cleaner logic extracted to methods
+  // ============================================================================
+
+  PermissionSet _getPermissions() {
+    final levelName = Statics.userDetails['LevelName'];
+    final daayitvaName = Statics.userDetails['DaayitvaName'];
+    final levelID = int.tryParse(Statics.userDetails['LevelID'] ?? '0') ?? 0;
+    final mobileNumber = Statics.userDetails['MobileNumber'];
+
+    return PermissionSet(
+      canTransfer: _checkTransferPermission(levelName, daayitvaName),
+      canEdit: true,
+      // Always show edit for simplicity
+      canResetPassword: levelID >= 4 && widget.swItem["CanUseApp"] == true,
+      canDelete: _checkDeletePermission(levelName, daayitvaName),
+      isDevUser: mobileNumber == '9322406725-1234',
+    );
+  }
+
+  bool _checkTransferPermission(String? levelName, String? daayitvaName) {
+    final highLevels = ['Praant', 'प्रांत', 'Mahaanagar', 'महानगर', 'Bhaag', 'भाग/जिल्हा', 'भाग/जिला', 'Vibhaag', 'विभाग', 'Nagar', 'Nagar/Taalukaa', 'नगर/तालुका'];
+
+    final shaakhaRoles = ['Mukhya Shikshak', 'मुख्य शिक्षक', 'Kaaryavaah', 'कार्यवाह'];
+
+    final specialRoles = [
+      'Join RSS Sanyojak',
+      'जॉयन आर.एस.एस. संयोजक',
+      'Join RSS Pramukh',
+      'जॉयन आर.एस.एस. प्रमुख',
+      'Baal Vidyaarthi Pramukh',
+      'बाल विद्यार्थी प्रमुख',
+      'Mahaavidyaalayeen Vidyaarthi Pramukh',
+      'महाविद्यालयीन प्रमुख',
+      'Vyavasaayee Pramukh',
+      'व्यवसायी प्रमुख',
+      'Vyavasaayee Saha-Pramukh',
+      'व्यवसायी सह प्रमुख',
+      'App Sanyojak',
+      'एप संयोजक',
+      'Mandal Samiti Sadasya',
+      'मंडल समिती सदस्य',
+      'Prachaarak',
+      'प्रचारक',
+      'Saha-Prachaarak',
+      'सह प्रचारक'
+    ];
+
+    if (highLevels.contains(levelName)) return true;
+    if (levelName == 'Shaakhaa' || levelName == 'शाखा') {
+      return shaakhaRoles.contains(daayitvaName);
+    }
+    return specialRoles.contains(daayitvaName);
+  }
+
+  bool _checkDeletePermission(String? levelName, String? daayitvaName) {
+    final allowedLevels = ['Praant', 'प्रांत', 'Mahaanagar', 'महानगर', 'Bhaag', 'भाग/जिल्हा', 'भाग/जिला', 'Vibhaag', 'विभाग', 'Nagar', 'Nagar/Taalukaa', 'नगर/तालुका'];
+
+    final shaakhaRoles = ['Mukhya Shikshak', 'मुख्य शिक्षक', 'Kaaryavaah', 'कार्यवाह'];
+
+    final prachaarakRoles = ['Prachaarak', 'प्रचारक', 'Saha-Prachaarak', 'सह प्रचारक'];
+
+    if (allowedLevels.contains(levelName)) return true;
+    if (levelName == 'Shaakhaa' || levelName == 'शाखा') {
+      return shaakhaRoles.contains(daayitvaName);
+    }
+    if (levelName == 'Vibhaag' || levelName == 'विभाग') return true;
+    return prachaarakRoles.contains(daayitvaName);
+  }
+
+  // ============================================================================
+  // DELETE HANDLER
+  // ============================================================================
+
+  Future<void> _deleteSwayamSevak() async {
+    try {
+      bool isConnected = await Statics.isInternetConnected();
+      if (!isConnected) {
+        Statics.showMessageDialog(
+          context,
+          Statics.getLabel('internetNotConnected'),
+        );
+        return;
+      }
+
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: Text(Statics.getLabel('AskConfirmation')),
+          content: Text(Statics.getLabel('AreyouSureYouWantToDeleteSwayamsevak')),
+          actions: [
+            TextButton(
+              child: Text(
+                Statics.getLabel('ConfirmationNo'),
+                style: TextStyle(color: Colors.grey[700], fontSize: 16),
+              ),
+              onPressed: () => Navigator.of(ctx).pop(false),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+              child: Text(
+                Statics.getLabel('ConfirmationYes'),
+                style: TextStyle(fontSize: 16),
+              ),
+              onPressed: () => Navigator.of(ctx).pop(true),
+            ),
+          ],
+        ),
+      );
+
+      if (confirmed == true) {
+        final inputData = json.encode({"SwayamsevakID": widget.swItem["SwayamsevakID"]});
+        final data = await Statics.deleteSwayamsevakDataForApp(inputData);
+
+        if (data.contains("Deleted Successfully")) {
+          Statics.showToast(Statics.getLabel('SwayamsevakDeletedSuccessfully'));
+          widget.onSaveDetails("Search");
+        } else {
+          Statics.showToast(Statics.getLabel('CouldnotDeleteSwayamsevak'));
+        }
+      }
+    } catch (error) {
+      Statics.showErrorDialog(
+        context,
+        Statics.getLabel('unableToCompleteProcess'),
+      );
+    }
+  }
+
+  // ============================================================================
+  // EDIT STATUS HANDLER
+  // ============================================================================
+
+  Future<void> _changeEditStatus(bool newValue) async {
+    final userId = widget.swItem["SwayamsevakID"].toString();
+    final editStatus = newValue ? 1 : 0;
+    final inputData = '{"userid":"$userId","can_edit":$editStatus}';
+    await SwayamsevakProvider().changeSwayamsewakCanEditStatus(inputData);
+  }
+
+  // ============================================================================
+  // MENU HANDLERS
+  // ============================================================================
+
+  void _handleMenuSelection(String value, PermissionSet permissions) {
+    final swayamsevakID = widget.swItem["SwayamsevakID"];
+
+    switch (value) {
+      case "ResetPassword":
+        Statics.showConfirmationBox(
+          context,
+          Statics.getLabel('ConfirmResetpassword'),
+          "ResetPassword",
+          swayamsevakID.toString(),
+        );
+        break;
+
+      case "Delete":
+        _deleteSwayamSevak();
+        break;
+
+      case "Transfer":
+        Navigator.of(context).pushNamed(
+          EditSwayamsevakTransferScreen.routeName,
+          arguments: Statics.ScreenArgumentsSwayamsevakTransfer(
+            '0',
+            swayamsevakID.toString(),
+            value,
+          ),
+        );
+        break;
+
+      case "EditMenuNew":
+        Navigator.of(context).pushNamed(
+          EditSwayamsevakBasicInfo.routeName,
+          arguments: Statics.ScreenArgumentsNew(swayamsevakID, value),
+        );
+        break;
+
+      case "DaayitvaMenu":
+        Navigator.of(context).pushNamed(
+          EditSwayamsevakDaayitva.routeName,
+          arguments: Statics.ScreenArguments(swayamsevakID, value),
+        );
+        break;
+
+      case "OtherInfoMenu":
+        Navigator.of(context).pushNamed(
+          EditSwayamsevakOtherInfo.routeName,
+          arguments: Statics.ScreenArguments(swayamsevakID, value),
+        );
+        break;
+
+      default:
+        Navigator.of(context).pushNamed(
+          EditSwayamsevakScreen.routeName,
+          arguments: Statics.ScreenArgumentsNew(swayamsevakID, value),
+        );
+    }
+  }
+
+  List<PopupMenuEntry<String>> _buildMenuItems(PermissionSet permissions) {
+    final items = <PopupMenuEntry<String>>[];
+
+    if (permissions.canEdit) {
+      items.add(_buildMenuItem('EditMenu', Icons.edit, Statics.getLabel('EditMenu')));
+
+      if (permissions.isDevUser) {
+        items.add(_buildMenuItem('EditMenuNew', Icons.edit_note, '${Statics.getLabel('EditMenu')}-New'));
+        items.add(_buildMenuItem('DaayitvaMenu', Icons.work, '${Statics.getLabel('Daayitva')}-New'));
+        items.add(_buildMenuItem('OtherInfoMenu', Icons.info, '${Statics.getLabel('OtherInfo')}-New'));
+      }
+    }
+
+    items.add(_buildMenuItem('ViewMenu', Icons.visibility, Statics.getLabel('ViewMenu')));
+
+    if (permissions.canResetPassword) {
+      items.add(_buildMenuItem('ResetPassword', Icons.lock_reset, Statics.getLabel('ResetPassword')));
+    }
+
+    if (permissions.canDelete) {
+      items.add(_buildMenuItem('Delete', Icons.delete, Statics.getLabel('Delete')));
+    }
+
+    if (permissions.canTransfer) {
+      items.add(_buildMenuItem('Transfer', Icons.swap_horiz, Statics.getLabel('CardMenuSwayamsevakTransfer')));
+    }
+
+    return items;
+  }
+
+  PopupMenuItem<String> _buildMenuItem(String key, IconData icon, String label) {
+    return PopupMenuItem(
+      value: key,
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.deepPurple, size: 20),
+          SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              label,
+              style: TextStyle(fontSize: 15),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ============================================================================
+  // BUILD METHOD - MODERN UI
+  // ============================================================================
+
+  @override
+  Widget build(BuildContext context) {
+    final permissions = _getPermissions();
+    final canEdit = widget.swItem["can_edit"] == true;
+
+    return Card(
+      margin: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      elevation: 2,
+      surfaceTintColor: Colors.transparent,
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(
+          color: _isChecked ? Colors.deepPurple.withOpacity(0.3) : Colors.transparent,
+          width: 2,
+        ),
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          gradient: _isChecked
+              ? LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Colors.deepPurple.withOpacity(0.05),
+                    Colors.purple.withOpacity(0.02),
+                  ],
+                )
+              : null,
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(12),
+          child: Column(
+            children: [
+              // ============================================================
+              // HEADER ROW - Checkbox + Name + Actions
+              // ============================================================
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Checkbox
+                  Transform.scale(
+                    scale: 1.125,
+                    child: Checkbox(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      checkColor: Colors.white,
+                      activeColor: Colors.deepPurple,
+                      value: _isChecked,
+                      onChanged: (value) {
+                        setState(() {
+                          _isChecked = value!;
+                          if (value) {
+                            widget.onCheckCard(
+                              widget.swItem["Email"],
+                              widget.swItem["MobileNumber"],
+                              widget.swItem["SwayamsevakID"].toString(),
+                            );
+                          } else {
+                            widget.onUnCheckCard(
+                              widget.swItem["Email"],
+                              widget.swItem["MobileNumber"],
+                              widget.swItem["SwayamsevakID"].toString(),
+                            );
+                          }
+                        });
+                      },
+                    ),
+                  ),
+
+                  SizedBox(width: 8),
+
+                  // Name and Details
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Name
+                        Text(
+                          widget.swItem["FullName"] ?? "",
+                          style: TextStyle(
+                            fontSize: 15.5,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
+                            height: 1.3,
+                          ),
+                        ),
+
+                        SizedBox(height: 8),
+
+                        // Position Details
+                        if (widget.swItem["DaayitvaGeoUnitName"].toString().isNotEmpty) ...[
+                          _buildInfoChips(),
+                          SizedBox(height: 8),
+                        ],
+
+                        // Contact Information
+                        _buildContactInfo(),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(width: 8),
+
+                  // Actions Column
+                  Column(
+                    children: [
+                      // Edit Toggle
+                      _buildEditToggle(canEdit),
+                      SizedBox(height: 8),
+                      // Menu
+                      _buildMenuButton(permissions),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ============================================================================
+  // UI COMPONENTS
+  // ============================================================================
+
+  Widget _buildInfoChips() {
+    return Wrap(
+      spacing: 6,
+      runSpacing: 6,
+      children: [
+        _buildChip(widget.swItem["DaayitvaGeoUnitName"], Icons.location_on),
+        _buildChip(widget.swItem["LevelName"], Icons.layers),
+        _buildChip(widget.swItem["DaayitvaName"], Icons.work),
+      ],
+    );
+  }
+
+  Widget _buildChip(String text, IconData icon) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.deepPurple.withOpacity(0.08),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: Colors.deepPurple.withOpacity(0.2),
+          width: 1,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 14, color: Colors.deepPurple),
+          SizedBox(width: 4),
+          Text(
+            text,
+            style: TextStyle(
+              fontSize: 11.5,
+              color: Colors.deepPurple[700],
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildContactInfo() {
+    return Wrap(
+      spacing: 16,
+      runSpacing: 8,
+      children: [
+        // Phone
+        _buildContactButton(
+          icon: Icons.phone,
+          label: widget.swItem["MobileNumber"].toString(),
+          onTap: () => UrlLauncher.launch(
+            "tel://${widget.swItem["MobileNumber"]}",
+          ),
+        ),
+
+        // Email
+        if (widget.swItem['Email'].toString().isNotEmpty)
+          _buildContactButton(
+            icon: Icons.email,
+            label: widget.swItem["Email"].toString(),
+            onTap: () => UrlLauncher.launch(
+              "mailto:${widget.swItem["Email"]}",
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildContactButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        decoration: BoxDecoration(
+          color: Colors.blue.withOpacity(0.08),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.blue.withOpacity(0.3)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 16, color: Colors.blue[700]),
+            SizedBox(width: 6),
+            Flexible(
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.blue[700],
+                  fontWeight: FontWeight.w500,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEditToggle(bool canEdit) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: canEdit ? Colors.green.withOpacity(0.1) : Colors.grey.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: canEdit ? Colors.green.withOpacity(0.3) : Colors.grey.withOpacity(0.3),
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.edit,
+                size: 16,
+                color: canEdit ? Colors.green[700] : Colors.grey[600],
+              ),
+              SizedBox(width: 2),
+              Text(
+                "Edit",
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: canEdit ? Colors.green[700] : Colors.grey[600],
+                ),
+              ),
+            ],
+          ),
+          Transform.scale(
+            scale: 0.7,
+            child: Switch(
+              value: canEdit,
+              onChanged: (bool newValue) async {
+                setState(() {
+                  widget.swItem["can_edit"] = newValue;
+                });
+                await _changeEditStatus(newValue);
+              },
+              activeColor: Colors.green,
+              inactiveThumbColor: Colors.grey,
+              inactiveTrackColor: Colors.grey.withOpacity(0.3),
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMenuButton(PermissionSet permissions) {
+    return PopupMenuButton<String>(
+      padding: EdgeInsets.zero,
+      color: Colors.purple.shade50,
+      position: PopupMenuPosition.under,
+      borderRadius: BorderRadius.circular(16),
+      onSelected: (value) => _handleMenuSelection(value, permissions),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      itemBuilder: (context) => _buildMenuItems(permissions),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        decoration: BoxDecoration(
+          color: Colors.deepPurple.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.deepPurple.withOpacity(0.3)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.more_vert, size: 16, color: Colors.deepPurple),
+            SizedBox(width: 2),
+            Text(
+              "Menu",
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.w600,
+                color: Colors.deepPurple,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ============================================================================
+// PERMISSION SET CLASS
+// ============================================================================
+
+class PermissionSet {
+  final bool canTransfer;
+  final bool canEdit;
+  final bool canResetPassword;
+  final bool canDelete;
+  final bool isDevUser;
+
+  PermissionSet({
+    required this.canTransfer,
+    required this.canEdit,
+    required this.canResetPassword,
+    required this.canDelete,
+    required this.isDevUser,
+  });
+}
+
+// ============================================================================
+// LIST CONTAINER - MODERNIZED
+// ============================================================================
+
+class SwayamsevakListContainer extends StatelessWidget {
+  final bool isSelectAll;
+  final Function(bool) onSelectAll;
+  final Future<List<dynamic>>? swList;
+  final Function(String, String, String) onCheckCard;
+  final Function(String, String, String) onUnCheckCard;
+  final Function(String) search;
+
+  const SwayamsevakListContainer({
+    Key? key,
+    required this.isSelectAll,
+    required this.onSelectAll,
+    required this.swList,
+    required this.onCheckCard,
+    required this.onUnCheckCard,
+    required this.search,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(12, 16, 12, 12),
+      child: Column(
+        children: [
+          // // Header
+          // Container(
+          //   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          //   decoration: BoxDecoration(
+          //     gradient: LinearGradient(
+          //       colors: [Colors.deepPurple, Colors.purple],
+          //     ),
+          //     borderRadius: BorderRadius.circular(12),
+          //     boxShadow: [
+          //       BoxShadow(
+          //         color: Colors.deepPurple.withOpacity(0.3),
+          //         blurRadius: 8,
+          //         offset: Offset(0, 4),
+          //       ),
+          //     ],
+          //   ),
+          //   child: Row(
+          //     children: [
+          //       Icon(Icons.people, color: Colors.white, size: 28),
+          //       SizedBox(width: 12),
+          //       Text(
+          //         Statics.getLabel('SwayamsevaksList'),
+          //         style: TextStyle(
+          //           fontSize: 22,
+          //           fontWeight: FontWeight.bold,
+          //           color: Colors.white,
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
+
+          SizedBox(height: 16),
+
+          // Select All
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: Colors.grey[100],
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.grey[300]!),
+            ),
+            child: CheckboxListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Row(
+                children: [
+                  // Icon(Icons.check_circle_outline, color: Colors.deepPurple, size: 20),
+                  // SizedBox(width: 8),
+                  Text(
+                    Statics.getLabel('SelectAll'),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ],
+              ),
+              checkColor: Colors.white,
+              activeColor: Colors.deepPurple,
+              value: isSelectAll,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+              controlAffinity: ListTileControlAffinity.leading,
+              onChanged: (value) => onSelectAll(value ?? false),
+            ),
+          ),
+
+          SizedBox(height: 12),
+
+          // List
+          Expanded(
+            child: FutureBuilder<List<dynamic>>(
+              future: swList,
+              builder: (ctx, dataSnapshot) {
+                if (dataSnapshot.connectionState != ConnectionState.done) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.deepPurple),
+                        ),
+                        SizedBox(height: 16),
+                        Text(
+                          'Loading...',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+
+                if (dataSnapshot.hasError) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.error_outline, size: 64, color: Colors.red),
+                        SizedBox(height: 16),
+                        Text(
+                          'Server Error',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          'Please Try Again Later',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+
+                if (!dataSnapshot.hasData || dataSnapshot.data!.isEmpty) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.search_off,
+                          size: 64,
+                          color: Colors.grey[400],
+                        ),
+                        SizedBox(height: 16),
+                        Text(
+                          Statics.getLabel('noDataFoundTryAnotherSearch'),
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[600],
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  );
+                }
+
+                return ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  itemCount: dataSnapshot.data!.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return SwayamsevakCard(
+                      swItem: dataSnapshot.data![index],
+                      onCheckCard: onCheckCard,
+                      onUnCheckCard: onUnCheckCard,
+                      isChecked: isSelectAll,
+                      onSaveDetails: search,
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ============================================================================
+// ABHIYAN SWAYAMSEVAK CARD - MODERNIZED
+// ============================================================================
+
+class SwayamsevakHomeAbhiyanCard extends StatefulWidget {
+  final dynamic swItem;
+  final Function(String, String, String) onCheckCard;
+  final Function(String, String, String) onUnCheckCard;
+  final bool isChecked;
+  final VoidCallback getAbhiyaanSwayamsevakListData;
+
+  const SwayamsevakHomeAbhiyanCard({
+    Key? key,
+    required this.swItem,
+    required this.onCheckCard,
+    required this.onUnCheckCard,
+    required this.isChecked,
+    required this.getAbhiyaanSwayamsevakListData,
+  }) : super(key: key);
+
+  @override
+  State<SwayamsevakHomeAbhiyanCard> createState() => _SwayamsevakHomeAbhiyanCardState();
+}
+
+class _SwayamsevakHomeAbhiyanCardState extends State<SwayamsevakHomeAbhiyanCard> {
+  bool _isVisible = true;
+
+  Future<void> _deleteSahbhagiKaryakarta() async {
+    try {
+      bool isConnected = await Statics.isInternetConnected();
+      if (!isConnected) {
+        Statics.showMessageDialog(
+          context,
+          Statics.getLabel('internetNotConnected'),
+        );
+        return;
+      }
+
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: Text(Statics.getLabel('AskConfirmation')),
+          content: Text(
+            Statics.getLabel('AreyouSureYouWantToDeleteSahbhagiKaryakarta'),
+          ),
+          actions: [
+            TextButton(
+              child: Text(
+                Statics.getLabel('ConfirmationNo'),
+                style: TextStyle(color: Colors.grey[700], fontSize: 16),
+              ),
+              onPressed: () => Navigator.of(ctx).pop(false),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: Text(
+                Statics.getLabel('ConfirmationYes'),
+                style: TextStyle(fontSize: 16),
+              ),
+              onPressed: () => Navigator.of(ctx).pop(true),
+            ),
+          ],
+        ),
+      );
+
+      if (confirmed == true) {
+        final data = await Statics.deleteSahbhagiKaryakarta(
+          json.encode({"AbhiyanSwayamsevakID": widget.swItem.abhiyanSwayamsevakID}),
+        );
+
+        if (data.contains("Deleted Successfully")) {
+          Statics.showToast(
+            Statics.getLabel('SahbhagiKaryakartaDeletedSuccessfully'),
+          );
+          setState(() {
+            _isVisible = false;
+          });
+          widget.getAbhiyaanSwayamsevakListData();
+        } else {
+          Statics.showToast('Unable to delete Sahbhagi Karyakarta');
+        }
+      }
+    } catch (error) {
+      Statics.showErrorDialog(
+        context,
+        Statics.getLabel('unableToCompleteProcess'),
+      );
+    }
+  }
+
+  void _handleMenuSelection(String value) {
+    switch (value) {
+      case 'सुधार':
+        Navigator.of(context)
+            .pushNamed(
+              AbhiyanEditSwayamsevakScreen.routeName,
+              arguments: widget.swItem,
+            )
+            .then((_) => widget.getAbhiyaanSwayamsevakListData());
+        break;
+
+      case 'माहिती पहा':
+        Navigator.of(context)
+            .pushNamed(
+              AbhiyanViewSwayamsevakScreen.routeName,
+              arguments: widget.swItem,
+            )
+            .then((_) => widget.getAbhiyaanSwayamsevakListData());
+        break;
+
+      case 'हटवा':
+        _deleteSahbhagiKaryakarta();
+        break;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_isVisible) {
+      return SizedBox.shrink();
+    }
+
+    return Card(
+      margin: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: EdgeInsets.all(14),
+        child: Row(
+          children: [
+            // Main Content
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Name
+                  Text(
+                    widget.swItem.participantName ?? '',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                    ),
+                  ),
+
+                  SizedBox(height: 8),
+
+                  // Daayitva
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Colors.deepPurple.withOpacity(0.08),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: Colors.deepPurple.withOpacity(0.2),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.work,
+                          size: 14,
+                          color: Colors.deepPurple,
+                        ),
+                        SizedBox(width: 6),
+                        Text(
+                          widget.swItem.daayityaName ?? '',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.deepPurple[700],
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(height: 10),
+
+                  // Contact Info
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 8,
+                    children: [
+                      // Phone
+                      _buildContactButton(
+                        icon: Icons.phone,
+                        label: widget.swItem.participantNumber?.toString() ?? '',
+                        onTap: () => UrlLauncher.launch(
+                          "tel://${widget.swItem.participantNumber}",
+                        ),
+                      ),
+
+                      // Email
+                      if (widget.swItem.email != null && widget.swItem.email!.isNotEmpty)
+                        _buildContactButton(
+                          icon: Icons.email,
+                          label: widget.swItem.email!,
+                          onTap: () => UrlLauncher.launch(
+                            "mailto:${widget.swItem.email}",
+                          ),
+                        ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            SizedBox(width: 12),
+
+            // Action Menu
+            _buildActionMenu(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildContactButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        decoration: BoxDecoration(
+          color: Colors.blue.withOpacity(0.08),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.blue.withOpacity(0.3)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 16, color: Colors.blue[700]),
+            SizedBox(width: 6),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.blue[700],
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionMenu() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.deepPurple.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.deepPurple.withOpacity(0.3)),
+      ),
+      child: PopupMenuButton<String>(
+        padding: EdgeInsets.all(8),
+        onSelected: _handleMenuSelection,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        icon: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.more_vert, color: Colors.deepPurple, size: 20),
+            SizedBox(height: 2),
+            Text(
+              'Actions',
+              style: TextStyle(
+                fontSize: 10,
+                color: Colors.deepPurple,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+        itemBuilder: (BuildContext context) {
+          return [
+            _buildMenuItem('सुधार', Icons.edit),
+            _buildMenuItem('माहिती पहा', Icons.visibility),
+            _buildMenuItem('हटवा', Icons.delete),
+          ];
+        },
+      ),
+    );
+  }
+
+  PopupMenuItem<String> _buildMenuItem(String label, IconData icon) {
+    return PopupMenuItem(
+      value: label,
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.deepPurple, size: 20),
+          SizedBox(width: 12),
+          Text(
+            label,
+            style: TextStyle(fontSize: 15),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ============================================================================
+// SIMPLE ABHIYAN CARD - MODERNIZED
+// ============================================================================
+
+class AbhiyanSwayamsevakCard extends StatelessWidget {
+  final dynamic swItem;
+  final Function(String) onSaveDetails;
+
+  const AbhiyanSwayamsevakCard({
+    Key? key,
+    required this.swItem,
+    required this.onSaveDetails,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Name
+            Text(
+              swItem["FullName"] ?? '',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
+            ),
+
+            SizedBox(height: 10),
+
+            // Position Details
+            if (swItem["DaayitvaGeoUnitName"].toString().isNotEmpty)
+              Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: [
+                  _buildInfoChip(swItem["DaayitvaGeoUnitName"], Icons.location_on),
+                  _buildInfoChip(swItem["LevelName"], Icons.layers),
+                  _buildInfoChip(swItem["DaayitvaName"], Icons.work),
+                ],
+              ),
+
+            SizedBox(height: 10),
+
+            // Contact Info
+            Wrap(
+              spacing: 12,
+              runSpacing: 8,
+              children: [
+                // Phone
+                _buildContactButton(
+                  icon: Icons.phone,
+                  label: swItem["MobileNumber"]?.toString() ?? '',
+                  onTap: () => UrlLauncher.launch(
+                    "tel://${swItem["MobileNumber"]}",
+                  ),
+                ),
+
+                // Email
+                if (swItem['Email'].toString().isNotEmpty)
+                  _buildContactButton(
+                    icon: Icons.email,
+                    label: swItem["Email"].toString(),
+                    onTap: () => UrlLauncher.launch(
+                      "mailto:${swItem["Email"]}",
+                    ),
+                  ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoChip(String text, IconData icon) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.deepPurple.withOpacity(0.08),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: Colors.deepPurple.withOpacity(0.2),
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 14, color: Colors.deepPurple),
+          SizedBox(width: 4),
+          Text(
+            text,
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.deepPurple[700],
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildContactButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        decoration: BoxDecoration(
+          color: Colors.blue.withOpacity(0.08),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.blue.withOpacity(0.3)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 16, color: Colors.blue[700]),
+            SizedBox(width: 6),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.blue[700],
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

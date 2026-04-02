@@ -773,7 +773,7 @@ class AbhiyanAddSwayamsevakScreenState extends State<AbhiyanAddSwayamsevakScreen
                       shrinkWrap: true,
                       itemCount: newData.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return AbhiyanSwayamsevakCard(newData[index], _search);
+                        return AbhiyanSwayamsevakCard(swItem: newData[index], onSaveDetails: _search);
                       },
                     ),
                   ),

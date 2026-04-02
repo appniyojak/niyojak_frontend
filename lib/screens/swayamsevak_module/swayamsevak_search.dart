@@ -1,3 +1,1374 @@
+/*import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
+
+import '../../dialogs/levelwise_dropdown.dart';
+import '../../helpers/static_data.dart' as Statics;
+import '../../providers/swayamsevak_provider.dart';
+import '../../widgets/app_drawer.dart';
+import '../../widgets/swayamsevak_card.dart';
+import '../home_screen/home_screen.dart';
+import 'edit_module/edit_swayamsevak_basic_info.dart';
+import 'edit_module/edit_swayamsevak_screen.dart';
+import 'edit_module/edit_swayamsevak_soochi.dart';
+
+// ============================================================================
+// SEARCH FILTERS MODEL - Organized state management
+// ============================================================================
+
+class SearchFilters {
+  // Basic Info
+  String searchText = '';
+  String? bloodGroupID;
+  String? motherTongueID;
+  String? shaakhaSanchalanID;
+
+  // Location
+  String? geoUnitID;
+  String? mandalID;
+  String? graamID;
+  String? vastiID;
+
+  // Sangha Shikshan
+  String? sanghaShikshanCode;
+  String? shikshanFromYear;
+  String? shikshanToYear;
+  bool hasBeenShikshak = false;
+
+  // Daayitva
+  int? daayitvaForID;
+  String? levelID;
+  String? daayitvaID;
+  String? daayitvaGeoUnitID;
+  bool noDaayitva = false;
+  bool pravaasi = false;
+  bool wasVistaarak = false;
+  bool wasPrachaarak = false;
+  String? preritSansthaID;
+  String? otherOrgName;
+
+  // Pratidnya
+  bool? isPratidnyit;
+  String? pratidnyaYear;
+
+  // Ganavesh
+  bool isGanaveshComplete = false;
+  bool noCap = false;
+  bool noShirt = false;
+  bool noPant = false;
+  bool noBelt = false;
+  bool noShoes = false;
+  bool noSocks = false;
+  bool noDanda = false;
+
+  // Vehicle
+  String? vehicleType;
+  bool hasVehicleDriver = false;
+
+  // Shaaririk Vishay (Physical subjects)
+  Map<String, bool> mukhyaShaaririk = {
+    'Danda': false,
+    'Niyuddha': false,
+    'Yogaasan': false,
+    'Yogachaap': false,
+    'Padavinyas': false,
+    'DandaYuddha': false,
+  };
+
+  Map<String, bool> anyaShaaririk = {
+    'Danda': false,
+    'Niyuddha': false,
+    'Yogaasan': false,
+    'Yogachaap': false,
+    'Padavinyas': false,
+    'DandaYuddha': false,
+  };
+
+  // Ghosh Vishay (Musical instruments)
+  Map<String, GhoshVishayFilter> ghoshVishay = {
+    'Pratham': GhoshVishayFilter(),
+    'Dwitiya': GhoshVishayFilter(),
+    'Trutiya': GhoshVishayFilter(),
+    'Anya': GhoshVishayFilter(),
+  };
+
+  // Occupation
+  int? occupationCategoryID;
+  EducationFilter education = EducationFilter();
+  OccupationFilter occupation = OccupationFilter();
+
+  // Shaakha Experience
+  bool hasShaakhaaExperience = false;
+  ShaakhaaExperienceFilter shaakhaaExp = ShaakhaaExperienceFilter();
+
+  // Social Media
+  SocialMediaFilter socialMedia = SocialMediaFilter();
+
+  // Areas of Interest/Expertise
+  List<int> areaOfInterestIDs = [];
+  List<int> areaOfExpertiseIDs = [];
+
+  // Sorting
+  String sortOrder = 'Name';
+
+  void reset() {
+    searchText = '';
+    bloodGroupID = null;
+    motherTongueID = null;
+    shaakhaSanchalanID = null;
+    geoUnitID = null;
+    sanghaShikshanCode = null;
+    shikshanFromYear = null;
+    shikshanToYear = null;
+    hasBeenShikshak = false;
+    daayitvaForID = null;
+    levelID = null;
+    daayitvaID = null;
+    daayitvaGeoUnitID = null;
+    noDaayitva = false;
+    pravaasi = false;
+    wasVistaarak = false;
+    wasPrachaarak = false;
+    isPratidnyit = null;
+    pratidnyaYear = null;
+    isGanaveshComplete = false;
+    noCap = false;
+    noShirt = false;
+    noPant = false;
+    noBelt = false;
+    noShoes = false;
+    noSocks = false;
+    noDanda = false;
+    vehicleType = null;
+    hasVehicleDriver = false;
+    mukhyaShaaririk.updateAll((key, value) => false);
+    anyaShaaririk.updateAll((key, value) => false);
+    ghoshVishay.forEach((key, value) => value.reset());
+    occupationCategoryID = null;
+    education.reset();
+    occupation.reset();
+    hasShaakhaaExperience = false;
+    shaakhaaExp.reset();
+    socialMedia.reset();
+    areaOfInterestIDs.clear();
+    areaOfExpertiseIDs.clear();
+  }
+}
+
+class GhoshVishayFilter {
+  String? rachanaaCount;
+  bool understandsLipi = false;
+  Map<String, bool> instruments = {
+    'Vanshi': false,
+    'Venu': false,
+    'Aanak': false,
+    'Shankha': false,
+    'Naagaanga': false,
+    'Turya': false,
+    'Swarad': false,
+    'Gomukha': false,
+  };
+
+  void reset() {
+    rachanaaCount = null;
+    understandsLipi = false;
+    instruments.updateAll((key, value) => false);
+  }
+}
+
+class EducationFilter {
+  int? universityID;
+  String universityName = '';
+  String otherUniversityName = '';
+  int? collegeID;
+  String collegeName = '';
+  String otherCollegeName = '';
+  int? standardID;
+  String standardName = '';
+  String otherStandardName = '';
+  int? programID;
+  String programName = '';
+  String otherProgramName = '';
+  int? courseID;
+  String courseName = '';
+  String otherCourseName = '';
+  String schoolName = '';
+  String? program; // For Jr College
+
+  void reset() {
+    universityID = null;
+    universityName = '';
+    otherUniversityName = '';
+    collegeID = null;
+    collegeName = '';
+    otherCollegeName = '';
+    standardID = null;
+    standardName = '';
+    otherStandardName = '';
+    programID = null;
+    programName = '';
+    otherProgramName = '';
+    courseID = null;
+    courseName = '';
+    otherCourseName = '';
+    schoolName = '';
+    program = null;
+  }
+}
+
+class OccupationFilter {
+  String govtDept = '';
+  String organizationName = '';
+  String industrialVertical = '';
+  String officeLocation = '';
+  String orgAtRetirement = '';
+  String desgAtRetirement = '';
+  String deptAtRetirement = '';
+  Set<int> weeklyOffDays = {};
+
+  void reset() {
+    govtDept = '';
+    organizationName = '';
+    industrialVertical = '';
+    officeLocation = '';
+    orgAtRetirement = '';
+    desgAtRetirement = '';
+    deptAtRetirement = '';
+    weeklyOffDays.clear();
+  }
+}
+
+class ShaakhaaExperienceFilter {
+  bool baal = false;
+  bool tarunVidyaarthi = false;
+  bool tarunVyavasaayee = false;
+  bool proudhaVyavasaayee = false;
+
+  void reset() {
+    baal = false;
+    tarunVidyaarthi = false;
+    tarunVyavasaayee = false;
+    proudhaVyavasaayee = false;
+  }
+}
+
+class SocialMediaFilter {
+  bool hasFacebook = false;
+  String? facebookUsage;
+  bool hasInstagram = false;
+  String? instagramUsage;
+  bool hasTwitter = false;
+  String? twitterUsage;
+
+  void reset() {
+    hasFacebook = false;
+    facebookUsage = null;
+    hasInstagram = false;
+    instagramUsage = null;
+    hasTwitter = false;
+    twitterUsage = null;
+  }
+}
+
+// ============================================================================
+// MAIN SEARCH SCREEN
+// ============================================================================
+
+class SwayamSevakSearch extends StatefulWidget {
+  static const routeName = '/swayamsevak-search-modern';
+
+  @override
+  State<SwayamSevakSearch> createState() => _SwayamSevakSearchState();
+}
+
+class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTickerProviderStateMixin {
+  // Controllers
+  final _searchController = TextEditingController();
+  final _daayitvaController = TextEditingController();
+  late TabController _tabController;
+
+  // State
+  final SearchFilters _filters = SearchFilters();
+  bool _isSearching = false;
+  bool _isSelectAll = false;
+  Future<List<dynamic>>? _swList;
+
+  // Selected items for bulk actions
+  final Set<String> _selectedEmails = {};
+  final Set<String> _selectedMobiles = {};
+  final Set<String> _selectedSwIds = {};
+
+  // Dropdown data
+  List<dynamic>? _bloodGroups;
+  List<dynamic>? _motherTongues;
+  List<dynamic>? _shaakhaSanchalans;
+  List<dynamic>? _categories;
+  List<dynamic>? _daayitvaFor;
+  List<dynamic>? _levels;
+  List<dynamic>? _geoUnits;
+  List<dynamic>? _sanghaPreritSanstha;
+  List<dynamic>? _standards;
+  List<dynamic>? _mandals;
+  List<dynamic>? _graams;
+  List<dynamic>? _vastis;
+
+  // Area of Interest/Expertise
+  final List<AreaItem> _areasOfInterest = [];
+  final List<AreaItem> _areasOfExpertise = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    _loadDropdownData();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _daayitvaController.dispose();
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  // ============================================================================
+  // DATA LOADING
+  // ============================================================================
+
+  Future<void> _loadDropdownData() async {
+    final bloodGroups = await Statics.getStaticLDB('BloodGroup');
+    final motherTongues = await Statics.getStaticLDB('MotherTongue');
+    final shaakhaSanchalans = await Statics.getStaticLDB('ShaakhaaExperienceYear');
+    final categories = await Statics.getStaticLDB('OccupationCategory');
+    final daayitvaFor = await Statics.getStaticLDB('DaayitvaFor');
+    final levels = await Statics.getLevelLDB();
+    final sanghaPreritSanstha = await Statics.getSanghaPreritSanstha('1', null, null);
+    final aoi = await Statics.getStaticLDB('AreaOfInterest');
+    final aoe = await Statics.getStaticLDB('AreaOfExpertise');
+
+    setState(() {
+      _bloodGroups = bloodGroups;
+      _motherTongues = motherTongues;
+      _shaakhaSanchalans = shaakhaSanchalans;
+      _categories = categories;
+      _daayitvaFor = daayitvaFor;
+      _levels = levels;
+      _sanghaPreritSanstha = sanghaPreritSanstha;
+
+      _areasOfInterest.clear();
+      for (var item in aoi) {
+        _areasOfInterest.add(AreaItem(
+          id: item.staticID ?? 0,
+          name: item.codeForDisplay ?? '',
+          isSelected: false,
+        ));
+      }
+
+      _areasOfExpertise.clear();
+      for (var item in aoe) {
+        _areasOfExpertise.add(AreaItem(
+          id: item.staticID ?? 0,
+          name: item.codeForDisplay ?? '',
+          isSelected: false,
+        ));
+      }
+    });
+  }
+
+  Future<void> _loadGeoUnitsForDaayitva(String levelID) async {
+    final geoUnits = levelID.isEmpty ? await Statics.getGeoUnitsByLevel(Statics.levels['MahaanagarLevelID']) : await Statics.getGeoUnitsByLevel(levelID);
+
+    setState(() {
+      _geoUnits = geoUnits;
+    });
+  }
+
+  Future<void> _loadMandals(String nagarID) async {
+    final mandals = await Statics.getGeoUnitsByLevelAndParent(
+      Statics.levels['MandalLevelID'].toString(),
+      nagarID,
+      'Nagar',
+      '',
+    );
+
+    setState(() {
+      _mandals = mandals.isNotEmpty ? mandals : null;
+      _filters.graamID = null;
+      _graams = null;
+    });
+  }
+
+  Future<void> _loadGraams(String mandalID) async {
+    final graams = await Statics.getGeoUnitsByLevelAndParent(
+      Statics.levels['GraamLevelID'].toString(),
+      mandalID,
+      'Mandal',
+      '',
+    );
+
+    setState(() {
+      _graams = graams.isNotEmpty ? graams : null;
+    });
+  }
+
+  Future<void> _loadVastis(String nagarID) async {
+    final vastis = await Statics.getGeoUnitsByLevelAndParent(
+      Statics.levels['VastiLevelID'].toString(),
+      nagarID,
+      'Nagar',
+      '',
+    );
+
+    setState(() {
+      _vastis = vastis.isNotEmpty ? vastis : null;
+    });
+  }
+
+  Future<void> _loadStandards(String categoryCode) async {
+    List<dynamic>? standards;
+
+    if (categoryCode == 'School Student') {
+      standards = await Statics.getStaticLDB('SchoolStandard');
+    } else if (categoryCode == 'Jr College') {
+      standards = await Statics.getStaticLDB('JrCollegeStandard');
+    } else if (categoryCode == 'Senior College') {
+      standards = await Statics.getStaticLDB('SrCollegeStandard');
+    }
+
+    setState(() {
+      _standards = standards;
+    });
+  }
+
+  // ============================================================================
+  // SEARCH & EXPORT
+  // ============================================================================
+
+  Future<void> _performSearch() async {
+    setState(() {
+      _isSearching = true;
+    });
+
+    try {
+      final results = await _executeSearch();
+      setState(() {
+        _swList = Future.value(results);
+        _tabController.animateTo(1);
+      });
+    } finally {
+      setState(() {
+        _isSearching = false;
+      });
+    }
+  }
+
+  Future<List<dynamic>> _executeSearch() async {
+    final isConnected = await Statics.isInternetConnected();
+    if (!isConnected) {
+      Statics.showMessageDialog(
+        context,
+        Statics.getLabel('internetNotConnected'),
+      );
+      return [];
+    }
+
+    final inputData = _buildSearchPayload();
+    return await SwayamsevakProvider().getSwayamsevaks(inputData);
+  }
+
+  String _buildSearchPayload() {
+    // Build Shaaririk Vishay codes
+    final mukhyaCodes = _filters.mukhyaShaaririk.entries.where((e) => e.value).map((e) => e.key).join(',');
+
+    final anyaCodes = _filters.anyaShaaririk.entries.where((e) => e.value).map((e) => e.key).join(',');
+
+    // Build Ghosh Vishay codes for each level
+    String buildGhoshCodes(String level) {
+      final filter = _filters.ghoshVishay[level]!;
+      return filter.instruments.entries.where((e) => e.value).map((e) => e.key).join(',');
+    }
+
+    // Build weekly off days
+    final weeklyOffDays = _filters.occupation.weeklyOffDays.map((day) => day.toString()).join(',');
+
+    // Build areas of interest/expertise
+    final aoiIDs = _areasOfInterest.where((item) => item.isSelected).map((item) => item.id.toString()).join(',');
+
+    final aoeIDs = _areasOfExpertise.where((item) => item.isSelected).map((item) => item.id.toString()).join(',');
+
+    return json.encode({
+      'AppUserID': Statics.userDetails['userID'],
+      'SearchCriteria': _filters.searchText.isEmpty ? null : _filters.searchText,
+      'BloodGroupID': _filters.bloodGroupID,
+      'MotherTongueID': _filters.motherTongueID,
+      'ShaakhaaExperienceYearID': _filters.shaakhaSanchalanID,
+      'GeoUnitID': _filters.geoUnitID,
+      'IsPratidnyit': _filters.isPratidnyit,
+      'PratidnyaYear': _filters.pratidnyaYear,
+      'IsGanaveshComplete': _filters.isGanaveshComplete,
+      'NoCap': _filters.noCap,
+      'NoShirt': _filters.noShirt,
+      'NoPant': _filters.noPant,
+      'NoBelt': _filters.noBelt,
+      'NoShoes': _filters.noShoes,
+      'NoSocks': _filters.noSocks,
+      'NoDanda': _filters.noDanda,
+      'VehicleType': _filters.vehicleType,
+      'HasDriver': _filters.hasVehicleDriver,
+      'SanghaShikshanCode': _filters.sanghaShikshanCode,
+      'SanghaShikshanYearFrom': _filters.shikshanFromYear,
+      'SanghaShikshanYearTo': _filters.shikshanToYear,
+      'HasBeenOTCShikshak': _filters.hasBeenShikshak,
+      'MukhyaShaaririkVishayCodes': mukhyaCodes.isEmpty ? null : mukhyaCodes,
+      'AnyaShaaririkVishayCodes': anyaCodes.isEmpty ? null : anyaCodes,
+      'PrathamVaadyaCodes': buildGhoshCodes('Pratham').isEmpty ? null : buildGhoshCodes('Pratham'),
+      'DwitiyaVaadyaCodes': buildGhoshCodes('Dwitiya').isEmpty ? null : buildGhoshCodes('Dwitiya'),
+      'TrutiyaVaadyaCodes': buildGhoshCodes('Trutiya').isEmpty ? null : buildGhoshCodes('Trutiya'),
+      'AnyaVaadyaCodes': buildGhoshCodes('Anya').isEmpty ? null : buildGhoshCodes('Anya'),
+      'IsUnderstandLipiPrathamVaadya': _filters.ghoshVishay['Pratham']!.understandsLipi,
+      'IsUnderstandLipiDwitiyaVaadya': _filters.ghoshVishay['Dwitiya']!.understandsLipi,
+      'IsUnderstandLipiTrutiyaVaadya': _filters.ghoshVishay['Trutiya']!.understandsLipi,
+      'IsUnderstandLipiAnyaVaadya': _filters.ghoshVishay['Anya']!.understandsLipi,
+      'RachanaaCountPrathamVaadya': _filters.ghoshVishay['Pratham']!.rachanaaCount,
+      'RachanaaCountDwitiyaVaadya': _filters.ghoshVishay['Dwitiya']!.rachanaaCount,
+      'RachanaaCountTrutiyaVaadya': _filters.ghoshVishay['Trutiya']!.rachanaaCount,
+      'RachanaaCountAnyaVaadya': _filters.ghoshVishay['Anya']!.rachanaaCount,
+      'OccupationCategoryID': _filters.occupationCategoryID,
+      'DaayitvaForID': _filters.daayitvaForID,
+      'DaayitvaID': _filters.daayitvaID,
+      'DaayitvaLevelID': _filters.levelID,
+      'DaayitvaGeoUnitID': _filters.daayitvaGeoUnitID,
+      'IsNoDaayitva': _filters.noDaayitva,
+      'IsPravaasi': _filters.pravaasi,
+      'SanghaPreritSansthaaID': _filters.preritSansthaID,
+      'SocialOrganizationName': _filters.otherOrgName,
+      'SortOrder': _filters.sortOrder == 'Name' ? 'FullName' : 'SwayamsevakID',
+      'HasBeenVistaarak': _filters.wasVistaarak,
+      'HasBeenPrachaarak': _filters.wasPrachaarak,
+      'HasShaakhaaSanchaalanExperience': _filters.hasShaakhaaExperience,
+      'HasBaalShaakhaaExperience': _filters.shaakhaaExp.baal,
+      'HasTarunVidyaarthiShaakhaaExperience': _filters.shaakhaaExp.tarunVidyaarthi,
+      'HasTarunVyavasaayeeShaakhaaExperience': _filters.shaakhaaExp.tarunVyavasaayee,
+      'HasProudhaVyavasaayeeShaakhaaExperience': _filters.shaakhaaExp.proudhaVyavasaayee,
+      'HasFacebook': _filters.socialMedia.hasFacebook,
+      'HasInstagram': _filters.socialMedia.hasInstagram,
+      'HasTwitter': _filters.socialMedia.hasTwitter,
+      'FacebookUsage': _filters.socialMedia.facebookUsage,
+      'InstagramUsage': _filters.socialMedia.instagramUsage,
+      'TwitterUsage': _filters.socialMedia.twitterUsage,
+      'AreaOfInterestIDs': aoiIDs.isEmpty ? null : aoiIDs,
+      'AreaOfExpertiseIDs': aoeIDs.isEmpty ? null : aoeIDs,
+      'WeeklyOffDayIDs': weeklyOffDays.isEmpty ? null : weeklyOffDays,
+      // Education fields would go here - simplified for length
+      // Occupation fields would go here - simplified for length
+    });
+  }
+
+  Future<void> _exportToCsv() async {
+    setState(() {
+      _isSearching = true;
+    });
+
+    try {
+      // Implementation similar to original but cleaner
+      // This would be the full export logic
+      Statics.showToast('Export functionality - implementation needed');
+    } finally {
+      setState(() {
+        _isSearching = false;
+      });
+    }
+  }
+
+  void _clearFilters() {
+    setState(() {
+      _filters.reset();
+      _searchController.clear();
+      _daayitvaController.clear();
+      _swList = null;
+      _geoUnits = null;
+      _mandals = null;
+      _graams = null;
+      _vastis = null;
+      _standards = null;
+      _areasOfInterest.forEach((item) => item.isSelected = false);
+      _areasOfExpertise.forEach((item) => item.isSelected = false);
+    });
+  }
+
+  // ============================================================================
+  // SELECTION HANDLERS
+  // ============================================================================
+
+  void _onCheckCard(String email, String mobile, String swId) {
+    setState(() {
+      _selectedEmails.add(email);
+      _selectedMobiles.add(mobile);
+      _selectedSwIds.add(swId);
+    });
+  }
+
+  void _onUncheckCard(String email, String mobile, String swId) {
+    setState(() {
+      _selectedEmails.remove(email);
+      _selectedMobiles.remove(mobile);
+      _selectedSwIds.remove(swId);
+    });
+  }
+
+  void _onSelectAll(bool value) {
+    setState(() {
+      _isSelectAll = value;
+
+      if (value) {
+        _swList?.then((dataList) {
+          for (var data in dataList) {
+            _onCheckCard(
+              data['Email'],
+              data['MobileNumber'],
+              data['SwayamsevakID'].toString(),
+            );
+          }
+        });
+      } else {
+        _selectedEmails.clear();
+        _selectedMobiles.clear();
+        _selectedSwIds.clear();
+      }
+    });
+  }
+
+  // ============================================================================
+  // MENU ACTIONS
+  // ============================================================================
+
+  void _handleMenuAction(String action) {
+    switch (action) {
+      case 'SendMail':
+        if (_selectedEmails.isEmpty) {
+          Statics.showToast('Please select at least one member');
+          return;
+        }
+        UrlLauncher.launch('mailto:${_selectedEmails.join(',')}');
+        break;
+
+      case 'SendSMS':
+        if (_selectedMobiles.isEmpty) {
+          Statics.showToast('Please select at least one member');
+          return;
+        }
+        UrlLauncher.launch('sms:${_selectedMobiles.join(',')}');
+        break;
+
+      case 'EditMenu':
+        Navigator.of(context).pushNamed(
+          EditSwayamsevakScreen.routeName,
+          arguments: Statics.ScreenArgumentsNew(0, 'EditMenu'),
+        );
+        break;
+
+      case 'EditMenuNew':
+        Navigator.of(context).pushNamed(
+          EditSwayamsevakBasicInfo.routeName,
+          arguments: Statics.ScreenArguments(0, 'EditMenu'),
+        );
+        break;
+
+      case 'AddinSoochi':
+        if (_selectedMobiles.isEmpty) {
+          Statics.showToast('Please select at least one member');
+          return;
+        }
+        Navigator.of(context).pushNamed(
+          EditSwayamsevakSoochiInfo.routeName,
+          arguments: Statics.ScreenArgumentsForSoochi(
+            _selectedSwIds.join(','),
+            'addinSoochi',
+          ),
+        );
+        break;
+    }
+  }
+
+  // ============================================================================
+  // BUILD UI
+  // ============================================================================
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async {
+        if (_tabController.index == 1) {
+          _tabController.animateTo(0);
+          return false;
+        }
+        Navigator.popAndPushNamed(context, HomeScreen.routeName);
+        return true;
+      },
+      child: Scaffold(
+        appBar: _buildAppBar(),
+        drawer: AppDrawer(),
+        floatingActionButton: _buildFABs(),
+        body: ModalProgressHUD(
+          inAsyncCall: _isSearching,
+          child: TabBarView(
+            controller: _tabController,
+            children: [
+              _buildFiltersTab(),
+              _buildResultsTab(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  PreferredSizeWidget _buildAppBar() {
+    return AppBar(
+      title: Text(
+        Statics.getLabel('searchSwayamsevakScreenLabel'),
+        style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+      ),
+      actions: [
+        PopupMenuButton<String>(
+          icon: Icon(FontAwesomeIcons.ellipsisV),
+          onSelected: _handleMenuAction,
+          itemBuilder: (context) => [
+            _buildMenuItem('AddinSoochi', Icons.list, 'addinSoochi'),
+            _buildMenuItem('SendMail', Icons.mail, 'SendMail'),
+            _buildMenuItem('SendSMS', Icons.sms, 'SendSMS'),
+            _buildMenuItem('EditMenu', Icons.add, 'AddSwayamsevak'),
+          ],
+        ),
+      ],
+      bottom: TabBar(
+        controller: _tabController,
+        indicatorColor: Colors.white,
+        physics: NeverScrollableScrollPhysics(),
+        onTap: (index) {
+          if (index == 1) {
+            _performSearch();
+          }
+        },
+        tabs: [
+          Tab(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(FontAwesomeIcons.filter, size: 18),
+                SizedBox(width: 12),
+                Text(
+                  Statics.getLabel('Filters'),
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                ),
+              ],
+            ),
+          ),
+          Tab(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.people, size: 22),
+                SizedBox(width: 12),
+                Text(
+                  Statics.getLabel('Results'),
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  PopupMenuItem<String> _buildMenuItem(String key, IconData icon, String label) {
+    return PopupMenuItem(
+      value: key,
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.deepPurple, size: 20),
+          SizedBox(width: 12),
+          Text(Statics.getLabel(label)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFABs() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        FloatingActionButton(
+          heroTag: 'search',
+          tooltip: Statics.getLabel('Search'),
+          backgroundColor: Colors.deepPurple,
+          onPressed: _performSearch,
+          child: Icon(Icons.search),
+        ),
+        SizedBox(width: 12),
+        FloatingActionButton(
+          heroTag: 'clear',
+          tooltip: Statics.getLabel('Clear'),
+          backgroundColor: Colors.orange,
+          onPressed: _clearFilters,
+          child: Icon(Icons.clear_all),
+        ),
+        SizedBox(width: 12),
+        FloatingActionButton(
+          heroTag: 'export',
+          tooltip: Statics.getLabel('ExportToExcel'),
+          backgroundColor: Colors.green,
+          onPressed: _exportToCsv,
+          child: Icon(Icons.download),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFiltersTab() {
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildNotice(),
+          SizedBox(height: 16),
+          _buildSortingSection(),
+          SizedBox(height: 24),
+          _buildBasicInfoSection(),
+          SizedBox(height: 24),
+          _buildLocationSection(),
+          SizedBox(height: 24),
+          _buildGhoshVishaySection(),
+          SizedBox(height: 24),
+          _buildShaaririkVishaySection(),
+          SizedBox(height: 24),
+          _buildDaayitvaSection(),
+          SizedBox(height: 24),
+          _buildShaakhaaExperienceSection(),
+          SizedBox(height: 24),
+          _buildOccupationSection(),
+          SizedBox(height: 24),
+          _buildPratidnyaSection(),
+          SizedBox(height: 24),
+          _buildSanghaShikshanSection(),
+          SizedBox(height: 24),
+          _buildVehicleSection(),
+          SizedBox(height: 24),
+          _buildGanaveshSection(),
+          SizedBox(height: 24),
+          _buildSocialMediaSection(),
+          SizedBox(height: 24),
+          _buildAreasSection(),
+          SizedBox(height: 80), // Space for FABs
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNotice() {
+    return Container(
+      padding: EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.red.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.red.withOpacity(0.3)),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.info_outline, color: Colors.red, size: 20),
+          SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              '${Statics.getLabel('Note')}: ${Statics.getLabel('searchSwayamsevakScreenTip')}',
+              style: TextStyle(
+                color: Colors.red[700],
+                fontWeight: FontWeight.w500,
+                fontSize: 14,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSortingSection() {
+    return ModernCard(
+      title: 'Sorting',
+      icon: Icons.sort,
+      child: DropdownButtonFormField<String>(
+        decoration: InputDecoration(
+          labelText: Statics.getLabel('SortingOn'),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+        value: _filters.sortOrder,
+        items: [
+          DropdownMenuItem(value: 'Name', child: Text(Statics.getLabel('Name'))),
+          DropdownMenuItem(value: 'LinkedGeoUnit', child: Text(Statics.getLabel('LinkedGeoUnit'))),
+          DropdownMenuItem(value: 'Daayitva', child: Text(Statics.getLabel('Daayitva'))),
+          DropdownMenuItem(value: 'SanghaShikshan', child: Text(Statics.getLabel('SanghaShikshan'))),
+        ],
+        onChanged: (value) {
+          setState(() {
+            _filters.sortOrder = value!;
+          });
+        },
+      ),
+    );
+  }
+
+  Widget _buildBasicInfoSection() {
+    return ModernCard(
+      title: 'BasicInfo',
+      icon: Icons.person,
+      child: Column(
+        children: [
+          TextField(
+            controller: _searchController,
+            decoration: InputDecoration(
+              labelText: Statics.getLabel('searchSwayamsevakLabel'),
+              prefixIcon: Icon(Icons.search),
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+            ),
+            onChanged: (value) => _filters.searchText = value,
+          ),
+          SizedBox(height: 16),
+          if (_bloodGroups != null)
+            DropdownButtonFormField(
+              decoration: InputDecoration(
+                labelText: Statics.getLabel('SelectBloodGroup'),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+              value: _filters.bloodGroupID,
+              items: _bloodGroups!.map((bg) {
+                return DropdownMenuItem(
+                  value: bg.staticID.toString(),
+                  child: Text(bg.codeForDisplay!),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  _filters.bloodGroupID = value;
+                });
+              },
+            ),
+          SizedBox(height: 16),
+          if (_motherTongues != null)
+            DropdownButtonFormField(
+              decoration: InputDecoration(
+                labelText: Statics.getLabel('SelectMotherTongue'),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+              value: _filters.motherTongueID,
+              items: _motherTongues!.map((mt) {
+                return DropdownMenuItem(
+                  value: mt.staticID.toString(),
+                  child: Text(mt.codeForDisplay!),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  _filters.motherTongueID = value;
+                });
+              },
+            ),
+          SizedBox(height: 16),
+          if (_shaakhaSanchalans != null)
+            DropdownButtonFormField(
+              decoration: InputDecoration(
+                labelText: Statics.getLabel('ShaakhaaSanchaalan'),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+              value: _filters.shaakhaSanchalanID,
+              items: _shaakhaSanchalans!.map((ss) {
+                return DropdownMenuItem(
+                  value: ss.staticID.toString(),
+                  child: Text(ss.codeForDisplay!),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  _filters.shaakhaSanchalanID = value;
+                });
+              },
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLocationSection() {
+    return ModernCard(
+      title: 'LinkedGeoUnit',
+      icon: Icons.location_on,
+      child: LevelWiseDropdown(
+        onFinalSelection: (level, geoUnitID) {
+          setState(() {
+            _filters.geoUnitID = geoUnitID;
+            if (geoUnitID != null) {
+              _loadMandals(geoUnitID);
+              _loadVastis(geoUnitID);
+            }
+          });
+        },
+      ),
+    );
+  }
+
+  // Implement remaining sections similarly...
+  // Due to length constraints, showing pattern for other sections
+
+  Widget _buildGhoshVishaySection() {
+    return ModernCard(
+      title: 'GhoshVishay',
+      icon: Icons.music_note,
+      child: Column(
+        children: [
+          _buildGhoshVishayLevel('Pratham'),
+          SizedBox(height: 12),
+          _buildGhoshVishayLevel('Dwitiya'),
+          SizedBox(height: 12),
+          _buildGhoshVishayLevel('Trutiya'),
+          SizedBox(height: 12),
+          _buildGhoshVishayLevel('Anya'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildGhoshVishayLevel(String level) {
+    final filter = _filters.ghoshVishay[level]!;
+
+    return ExpansionTile(
+      title: Text(
+        Statics.getLabel('Ghosh${level}Vaadya'),
+        style: TextStyle(fontWeight: FontWeight.w600),
+      ),
+      children: [
+        Padding(
+          padding: EdgeInsets.all(12),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        labelText: Statics.getLabel('RachanaaCount'),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                      ),
+                      keyboardType: TextInputType.number,
+                      onChanged: (value) => filter.rachanaaCount = value,
+                    ),
+                  ),
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: CheckboxListTile(
+                      title: Text(Statics.getLabel('UnderstandLipi')),
+                      value: filter.understandsLipi,
+                      onChanged: (value) {
+                        setState(() {
+                          filter.understandsLipi = value ?? false;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 12),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: filter.instruments.keys.map((instrument) {
+                  return SizedBox(
+                    width: (MediaQuery.of(context).size.width - 64) / 3,
+                    child: CheckboxListTile(
+                      title: Text(Statics.getLabel(instrument)),
+                      value: filter.instruments[instrument],
+                      dense: true,
+                      controlAffinity: ListTileControlAffinity.leading,
+                      onChanged: (value) {
+                        setState(() {
+                          filter.instruments[instrument] = value ?? false;
+                        });
+                      },
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildShaaririkVishaySection() {
+    return ModernCard(
+      title: 'ShaaririkVishay',
+      icon: Icons.fitness_center,
+      child: Column(
+        children: [
+          _buildShaaririkCategory('Mukhya', _filters.mukhyaShaaririk),
+          SizedBox(height: 12),
+          _buildShaaririkCategory('Anya', _filters.anyaShaaririk),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildShaaririkCategory(String type, Map<String, bool> items) {
+    return ExpansionTile(
+      title: Text(
+        Statics.getLabel('${type}ShaaririkVishay'),
+        style: TextStyle(fontWeight: FontWeight.w600),
+      ),
+      children: [
+        Padding(
+          padding: EdgeInsets.all(12),
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: items.keys.map((item) {
+              return SizedBox(
+                width: (MediaQuery.of(context).size.width - 64) / 2,
+                child: CheckboxListTile(
+                  title: Text(Statics.getLabel(item)),
+                  value: items[item],
+                  dense: true,
+                  controlAffinity: ListTileControlAffinity.leading,
+                  onChanged: (value) {
+                    setState(() {
+                      items[item] = value ?? false;
+                    });
+                  },
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDaayitvaSection() {
+    return ModernCard(
+      title: 'Daayitva',
+      icon: Icons.work,
+      child: Column(
+        children: [
+          CheckboxListTile(
+            title: Text(Statics.getLabel('HasBeenVistaarak')),
+            value: _filters.wasVistaarak,
+            onChanged: (value) {
+              setState(() {
+                _filters.wasVistaarak = value ?? false;
+              });
+            },
+          ),
+          CheckboxListTile(
+            title: Text(Statics.getLabel('HasBeenPrachaarak')),
+            value: _filters.wasPrachaarak,
+            onChanged: (value) {
+              setState(() {
+                _filters.wasPrachaarak = value ?? false;
+              });
+            },
+          ),
+          CheckboxListTile(
+            title: Text(Statics.getLabel('NoDaayitva')),
+            value: _filters.noDaayitva,
+            onChanged: (value) {
+              setState(() {
+                _filters.noDaayitva = value ?? false;
+              });
+            },
+          ),
+          CheckboxListTile(
+            title: Text(Statics.getLabel('Pravaasi')),
+            value: _filters.pravaasi,
+            onChanged: (value) {
+              setState(() {
+                _filters.pravaasi = value ?? false;
+              });
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildShaakhaaExperienceSection() {
+    return ModernCard(
+      title: 'ShaakhaExp',
+      icon: Icons.school,
+      child: Column(
+        children: [
+          CheckboxListTile(
+            title: Text(Statics.getLabel('HasShaakhaaSanchaalanExperience')),
+            value: _filters.hasShaakhaaExperience,
+            onChanged: (value) {
+              setState(() {
+                _filters.hasShaakhaaExperience = value ?? false;
+              });
+            },
+          ),
+          if (_filters.hasShaakhaaExperience) ...[
+            SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                _buildExpCheckbox('Baal', _filters.shaakhaaExp.baal, (v) {
+                  setState(() => _filters.shaakhaaExp.baal = v ?? false);
+                }),
+                _buildExpCheckbox('TarunVidyaarthi', _filters.shaakhaaExp.tarunVidyaarthi, (v) {
+                  setState(() => _filters.shaakhaaExp.tarunVidyaarthi = v ?? false);
+                }),
+                _buildExpCheckbox('TarunVyavasaayee', _filters.shaakhaaExp.tarunVyavasaayee, (v) {
+                  setState(() => _filters.shaakhaaExp.tarunVyavasaayee = v ?? false);
+                }),
+                _buildExpCheckbox('ProudhVyavasaayee', _filters.shaakhaaExp.proudhaVyavasaayee, (v) {
+                  setState(() => _filters.shaakhaaExp.proudhaVyavasaayee = v ?? false);
+                }),
+              ],
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildExpCheckbox(String label, bool value, Function(bool?) onChanged) {
+    return SizedBox(
+      width: (MediaQuery.of(context).size.width - 64) / 2,
+      child: CheckboxListTile(
+        title: Text(Statics.getLabel(label)),
+        value: value,
+        dense: true,
+        controlAffinity: ListTileControlAffinity.leading,
+        onChanged: onChanged,
+      ),
+    );
+  }
+
+  // Placeholder for other sections - implement similarly
+  Widget _buildOccupationSection() => SizedBox();
+
+  Widget _buildPratidnyaSection() => SizedBox();
+
+  Widget _buildSanghaShikshanSection() => SizedBox();
+
+  Widget _buildVehicleSection() => SizedBox();
+
+  Widget _buildGanaveshSection() => SizedBox();
+
+  Widget _buildSocialMediaSection() => SizedBox();
+
+  Widget _buildAreasSection() => SizedBox();
+
+  Widget _buildResultsTab() {
+    return SwayamsevakListContainer(
+      swList: _swList,
+      isSelectAll: _isSelectAll,
+      onSelectAll: _onSelectAll,
+      onCheckCard: _onCheckCard,
+      onUnCheckCard: _onUncheckCard,
+      search: (type) => _performSearch(),
+    );
+  }
+}
+
+// ============================================================================
+// MODERN CARD WRAPPER
+// ============================================================================
+
+class ModernCard extends StatelessWidget {
+  final String title;
+  final IconData icon;
+  final Widget child;
+
+  const ModernCard({
+    Key? key,
+    required this.title,
+    required this.icon,
+    required this.child,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.deepPurple, Colors.purple],
+              ),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+            ),
+            child: Row(
+              children: [
+                Icon(icon, color: Colors.white, size: 22),
+                SizedBox(width: 12),
+                Text(
+                  Statics.getLabel(title),
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(16),
+            child: child,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ============================================================================
+// HELPER CLASSES
+// ============================================================================
+
+class AreaItem {
+  final int id;
+  final String name;
+  bool isSelected;
+
+  AreaItem({
+    required this.id,
+    required this.name,
+    this.isSelected = false,
+  });
+}*/
+
 import 'dart:convert';
 import 'dart:developer';
 
@@ -647,6 +2018,17 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
       if (_isThu == true) _weeklyOffDay = _weeklyOffDay + "4,";
       if (_isFri == true) _weeklyOffDay = _weeklyOffDay + "5,";
       if (_isSat == true) _weeklyOffDay = _weeklyOffDay + "6,";
+      //
+      var areaOfInterestIDs = '';
+      var areaOfExpertiseIDs = '';
+
+      for (var data in _areaOfExpertiseForSearch) {
+        if (data.isSelected!) areaOfInterestIDs = areaOfInterestIDs + data.staticID.toString() + ",";
+      }
+
+      for (var data in _areaOfExpertiseForSearch) {
+        if (data.isSelected!) areaOfExpertiseIDs = areaOfExpertiseIDs + data.staticID.toString() + ",";
+      }
 
       _weeklyOffDay = _weeklyOffDay == "" ? null : _weeklyOffDay.substring(0, _weeklyOffDay.length - 1);
       print("_geoUnitsValue  $_geoUnitsValue");
@@ -734,6 +2116,25 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
         "SanghaPreritSansthaaID": _preritSansthaValue == "" ? null : _preritSansthaValue,
         "SocialOrganizationName": _othOrgNameCtrl.text.isEmpty ? null : _othOrgNameCtrl.text,
         "SortOrder": _sortingOnValue == "Name" ? "FullName" : "SwayamsevakID",
+//
+        "HasBeenVistaarak": _wasVistaarak,
+        "HasBeenPrachaarak": _wasPrachaarak,
+        //
+        "HasShaakhaaSanchaalanExperience": _hasShaakhaaExperience,
+        "HasBaalShaakhaaExperience": _hasBaalShaakhaaExperience,
+        "HasTarunVidyaarthiShaakhaaExperience": _hasTarunVidShaakhaaExperience,
+        "HasTarunVyavasaayeeShaakhaaExperience": _hasTarunVyavShaakhaaExperience,
+        "HasProudhaVyavasaayeeShaakhaaExperience": _hasProudhaVyavShaakhaaExperience,
+        //
+        "HasFacebook": _isfb,
+        "HasInstagram": _isinsta,
+        "HasTwitter": _istwt,
+        "FacebookUsage": _fbUsage,
+        "InstagramUsage": _instaUsage,
+        "TwitterUsage": _twtUsage,
+        //
+        "AreaOfInterestIDs": areaOfInterestIDs.trim() == '' ? null : areaOfInterestIDs,
+        "AreaOfExpertiseIDs": areaOfExpertiseIDs.trim() == '' ? null : areaOfExpertiseIDs,
       });
       if (strType == "Search")
         return SwayamsevakProvider().getSwayamsevaks(inputData);
@@ -4093,57 +5494,18 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                 ),
 
                 ///
-                Container(
-                  padding: EdgeInsets.all(15),
-                  child: Column(
-                    children: <Widget>[
-                      Legend(legendString: 'SwayamsevaksList', fontsize: 20),
-                      CheckboxListTile(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                        title: Text(Statics.getLabel('SelectAll'), style: TextStyle(fontSize: 15)),
-                        checkColor: Colors.white,
-                        activeColor: Colors.purple,
-                        value: _isSelectAll,
-                        controlAffinity: ListTileControlAffinity.leading,
-                        onChanged: (value) {
-                          setState(() {
-                            _isSelectAll = value!;
-                            onSelectAll(value);
-                          });
-                        },
-                      ),
-                      Expanded(
-                        child: FutureBuilder<List<dynamic>>(
-                          future: _swList,
-                          builder: (ctx, dataSnapshot) {
-                            print(dataSnapshot.connectionState.toString());
-                            print(dataSnapshot.hasData.toString());
-                            print(_isSearching.toString());
-
-                            if (dataSnapshot.connectionState != ConnectionState.done) {
-                              return Center(child: CircularProgressIndicator());
-                            }
-                            if (dataSnapshot.hasError) {
-                              return Center(
-                                  child: Text(
-                                'Server Error, Please Try Again Later',
-                                style: TextStyle(color: Colors.red),
-                              ));
-                            }
-                            return dataSnapshot.hasData && dataSnapshot.data!.length > 0
-                                ? ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: dataSnapshot.data!.length,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      return SwayamsevakCard(dataSnapshot.data![index], onCheckCard, onUnCheckCard, _isSelectAll, _search);
-                                    },
-                                  )
-                                : Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch')));
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
+                SwayamsevakListContainer(
+                  swList: _swList,
+                  isSelectAll: _isSelectAll,
+                  onSelectAll: (value) {
+                    setState(() {
+                      _isSelectAll = value;
+                      onSelectAll(value);
+                    });
+                  },
+                  onCheckCard: onCheckCard,
+                  onUnCheckCard: onUnCheckCard,
+                  search: _search,
                 ),
               ],
             ),

@@ -24,6 +24,7 @@ import '../../providers/login.dart';
 import '../../screens/change_password.dart';
 import '../../utils/cust_painters.dart';
 import '../../widgets/app_drawer.dart';
+import '../../widgets/scrollable_data_table.dart';
 import '../../widgets/single_column_row.dart';
 import '../../widgets/two_column_row.dart';
 import '../AbhiyanScreen.dart';
@@ -648,62 +649,6 @@ class _HomeScreenState extends State<HomeScreen> {
   // ──────────────────────  REUSABLE TABLE WIDGETS  ──────────────────────────
   // ═══════════════════════════════════════════════════════════════════════════
 
-  /// Thin wrapper: a scrollable DataTable with consistent styling.
-  Widget _buildScrollableTable({
-    List<String>? leftFixedColumn,
-    required List<String> columns,
-    List<DataRow>? leftFixedRows,
-    required List<DataRow> rows,
-  }) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        if (leftFixedColumn != null && leftFixedRows != null)
-          DataTable(
-            headingRowColor: MaterialStateColor.resolveWith(
-              (_) => Theme.of(context).colorScheme.secondary.withOpacity(0.1),
-            ),
-            border: TableBorder.all(color: Colors.black12),
-            columnSpacing: 16,
-            horizontalMargin: 12,
-            dataRowMaxHeight: 58,
-            columns: leftFixedColumn
-                .map((c) => DataColumn(
-                      label: ConstrainedBox(
-                        constraints: const BoxConstraints(minWidth: 60, maxWidth: 170),
-                        child: Text(c, textAlign: TextAlign.center, softWrap: true, style: const TextStyle(fontWeight: FontWeight.bold)),
-                      ),
-                    ))
-                .toList(),
-            rows: leftFixedRows,
-          ),
-        Flexible(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: DataTable(
-              headingRowColor: MaterialStateColor.resolveWith(
-                (_) => Theme.of(context).colorScheme.secondary.withOpacity(0.1),
-              ),
-              border: TableBorder.all(color: Colors.black12),
-              columnSpacing: 16,
-              horizontalMargin: 12,
-              dataRowMaxHeight: 58,
-              columns: columns
-                  .map((c) => DataColumn(
-                        label: ConstrainedBox(
-                          constraints: const BoxConstraints(minWidth: 60, maxWidth: 170),
-                          child: Text(c, textAlign: TextAlign.center, softWrap: true, style: const TextStyle(fontWeight: FontWeight.bold)),
-                        ),
-                      ))
-                  .toList(),
-              rows: rows,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   /// Standard "no data" placeholder.
   Widget _buildNoData() => Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
@@ -711,27 +656,27 @@ class _HomeScreenState extends State<HomeScreen> {
       );
 
   /// Background colour for a total/summary row.
-  MaterialStateProperty<Color?> _totalRowColor() => MaterialStatePropertyAll(Theme.of(context).colorScheme.secondary.withOpacity(0.1));
+  MaterialStateProperty<Color?> _totalRowColor() => MaterialStatePropertyAll(Theme.of(context).colorScheme.secondary.withOpacity(0.2));
 
   /// Shorthand for a plain text DataCell.
-  DataCell _cell(String text) => DataCell(Center(child: Text(text, textAlign: TextAlign.center, softWrap: true)));
+  // DataCell _cell(String text) => DataCell(Center(child: Text(text, textAlign: TextAlign.center, softWrap: true)));
 
   // ── 1. Sadyasthiti / Sankalp (main big table) ────────────────────────────
   /// Shows Shaakhaa, Saaptaahik, Maasik, SanghaMandali counts vs sankalpit.
   Widget _buildSadyasthitiTable(List<DashboardSadyaSthitiDataBAL> data) {
     if (data.isEmpty) return _buildNoData();
-    return _buildScrollableTable(
-      leftFixedColumn: [Statics.getLabel('Vayogat')],
+    return ScrollableDataTable(
+      leftFixedHeaders: [Statics.getLabel('Vayogat')],
       leftFixedRows: data.map((item) {
         final isTotal = item.vayogatID == -1;
         return DataRow(
           color: isTotal ? _totalRowColor() : null,
           cells: [
-            _cell(item.vayogatCode ?? ''),
+            customDataRowCell(item.vayogatCode ?? ''),
           ],
         );
       }).toList(),
-      columns: [
+      headers: [
         Statics.getLabel('RegisterShaakhaa'),
         Statics.getLabel('SankalpitShaakhaa'),
         Statics.getLabel('TotalSankalpitShaakhaa'),
@@ -750,18 +695,18 @@ class _HomeScreenState extends State<HomeScreen> {
         return DataRow(
           color: isTotal ? _totalRowColor() : null,
           cells: [
-            _cell('${item.shaakhaaCount}'),
-            _cell('${item.sankalpitShaakhaaCount}'),
-            _cell('${(item.shaakhaaCount ?? 0) + (item.sankalpitShaakhaaCount ?? 0)}'),
-            _cell('${item.saaptaahikCount}'),
-            _cell('${item.sankalpitSaaptaahikCount}'),
-            _cell('${(item.saaptaahikCount ?? 0) + (item.sankalpitSaaptaahikCount ?? 0)}'),
-            _cell('${item.maasikMilanCount}'),
-            _cell('${item.sankalpitMaasikMilanCount}'),
-            _cell('${(item.maasikMilanCount ?? 0) + (item.sankalpitMaasikMilanCount ?? 0)}'),
-            _cell('${item.sanghaMandaliCount}'),
-            _cell('${item.sankalpitSanghaMandaliCount}'),
-            _cell('${(item.sanghaMandaliCount ?? 0) + (item.sankalpitSanghaMandaliCount ?? 0)}'),
+            customDataRowCell('${item.shaakhaaCount}'),
+            customDataRowCell('${item.sankalpitShaakhaaCount}'),
+            customDataRowCell('${(item.shaakhaaCount ?? 0) + (item.sankalpitShaakhaaCount ?? 0)}'),
+            customDataRowCell('${item.saaptaahikCount}'),
+            customDataRowCell('${item.sankalpitSaaptaahikCount}'),
+            customDataRowCell('${(item.saaptaahikCount ?? 0) + (item.sankalpitSaaptaahikCount ?? 0)}'),
+            customDataRowCell('${item.maasikMilanCount}'),
+            customDataRowCell('${item.sankalpitMaasikMilanCount}'),
+            customDataRowCell('${(item.maasikMilanCount ?? 0) + (item.sankalpitMaasikMilanCount ?? 0)}'),
+            customDataRowCell('${item.sanghaMandaliCount}'),
+            customDataRowCell('${item.sankalpitSanghaMandaliCount}'),
+            customDataRowCell('${(item.sanghaMandaliCount ?? 0) + (item.sankalpitSanghaMandaliCount ?? 0)}'),
           ],
         );
       }).toList(),
@@ -771,8 +716,8 @@ class _HomeScreenState extends State<HomeScreen> {
   // ── 2. Sankalp-by-Aadhaar table ───────────────────────────────────────────
   Widget _buildSankalpByAadhaarTable(List data) {
     if (data.isEmpty) return _buildNoData();
-    return _buildScrollableTable(
-      leftFixedColumn: [
+    return ScrollableDataTable(
+      leftFixedHeaders: [
         Statics.getLabel('Vayogat'),
       ],
       leftFixedRows: data.asMap().entries.map((e) {
@@ -782,11 +727,11 @@ class _HomeScreenState extends State<HomeScreen> {
         return DataRow(
           color: isTotal ? _totalRowColor() : null,
           cells: [
-            _cell(item.vayogatCode ?? ''),
+            customDataRowCell(item.vayogatCode ?? ''),
           ],
         );
       }).toList(),
-      columns: [
+      headers: [
         Statics.getLabel('SankalpAadhaar'),
         Statics.getLabel('SankalpitShaakhaa'),
         Statics.getLabel('SankalpitSaaptaahikMilan'),
@@ -800,11 +745,11 @@ class _HomeScreenState extends State<HomeScreen> {
         return DataRow(
           color: isTotal ? _totalRowColor() : null,
           cells: [
-            _cell(aadhaarLabel),
-            _cell('${item.sankalpitShaakhaaCount}'),
-            _cell('${item.sankalpitSaaptaahikCount}'),
-            _cell('${item.sankalpitMasikMilankCount}'),
-            _cell('${item.sankalpitSanghaMandalikCount}'),
+            customDataRowCell(aadhaarLabel),
+            customDataRowCell('${item.sankalpitShaakhaaCount}'),
+            customDataRowCell('${item.sankalpitSaaptaahikCount}'),
+            customDataRowCell('${item.sankalpitMasikMilankCount}'),
+            customDataRowCell('${item.sankalpitSanghaMandalikCount}'),
           ],
         );
       }).toList(),
@@ -814,8 +759,8 @@ class _HomeScreenState extends State<HomeScreen> {
   // ── 3. Bhaugolik Vistaar table ────────────────────────────────────────────
   Widget _buildBhaugolikTable(List data) {
     if (data.isEmpty) return _buildNoData();
-    return _buildScrollableTable(
-      leftFixedColumn: [
+    return ScrollableDataTable(
+      leftFixedHeaders: [
         Statics.getLabel('LevelName'),
       ],
       leftFixedRows: data.asMap().entries.map((e) {
@@ -824,11 +769,11 @@ class _HomeScreenState extends State<HomeScreen> {
         return DataRow(
           color: isTotal ? _totalRowColor() : null,
           cells: [
-            _cell(Statics.getLabel(item.levelName ?? '')),
+            customDataRowCell(Statics.getLabel(item.levelName ?? '')),
           ],
         );
       }).toList(),
-      columns: [
+      headers: [
         Statics.getLabel('Total'),
         Statics.getLabel('ShaakhaaYuktaLabel'),
         Statics.getLabel('SaaptaahikSLabel'),
@@ -838,10 +783,10 @@ class _HomeScreenState extends State<HomeScreen> {
         final item = e.value;
         final isTotal = e.key == data.length - 1;
         return DataRow(color: isTotal ? _totalRowColor() : null, cells: [
-          _cell('${item.totalCount}'),
-          _cell('${item.shaakhaaYuktaCount}'),
-          _cell('${item.saaptaahikYuktaCount}'),
-          _cell('${item.mandaliYuktaCount}'),
+          customDataRowCell('${item.totalCount}'),
+          customDataRowCell('${item.shaakhaaYuktaCount}'),
+          customDataRowCell('${item.saaptaahikYuktaCount}'),
+          customDataRowCell('${item.mandaliYuktaCount}'),
         ]);
       }).toList(),
     );
@@ -857,13 +802,13 @@ class _HomeScreenState extends State<HomeScreen> {
     required String Function(dynamic) countOf,
   }) {
     if (data.isEmpty) return _buildNoData();
-    return _buildScrollableTable(
-      columns: [nameHeader, countHeader],
+    return ScrollableDataTable(
+      headers: [nameHeader, countHeader],
       rows: data.asMap().entries.map((e) {
         final isTotal = e.key == data.length - 1;
         return DataRow(
           color: isTotal ? _totalRowColor() : null,
-          cells: [_cell(nameOf(e.value)), _cell(countOf(e.value))],
+          cells: [customDataRowCell(nameOf(e.value)), customDataRowCell(countOf(e.value))],
         );
       }).toList(),
     );
@@ -872,8 +817,8 @@ class _HomeScreenState extends State<HomeScreen> {
   // ── 5. Yesterday praant table ─────────────────────────────────────────────
   Widget _buildYesterdayPraantTable(List data) {
     if (data.isEmpty) return _buildNoData();
-    return _buildScrollableTable(
-      columns: [
+    return ScrollableDataTable(
+      headers: [
         Statics.getLabel('Vayogat'),
         Statics.getLabel('Shaakhaa'),
         Statics.getLabel('SaaptaahikMilan'),
@@ -884,9 +829,9 @@ class _HomeScreenState extends State<HomeScreen> {
         return DataRow(
           color: isTotal ? _totalRowColor() : null,
           cells: [
-            _cell(item.vayogatCode ?? ''),
-            _cell('${item.shaakhaaCount}'),
-            _cell('${item.saaptaahikCount}'),
+            customDataRowCell(item.vayogatCode ?? ''),
+            customDataRowCell('${item.shaakhaaCount}'),
+            customDataRowCell('${item.saaptaahikCount}'),
           ],
         );
       }).toList(),
@@ -897,8 +842,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildYesterdaySummaryTable(List data) {
     if (data.isEmpty) return _buildNoData();
     final fcHeader = _summaryFirstColumnHeader();
-    return _buildScrollableTable(
-      leftFixedColumn: [
+    return ScrollableDataTable(
+      leftFixedHeaders: [
         fcHeader,
       ],
       leftFixedRows: data.asMap().entries.map((e) {
@@ -907,11 +852,11 @@ class _HomeScreenState extends State<HomeScreen> {
         return DataRow(
           color: isTotal ? _totalRowColor() : null,
           cells: [
-            _cell(item.geoUnitName ?? ''),
+            customDataRowCell(item.geoUnitName ?? ''),
           ],
         );
       }).toList(),
-      columns: [
+      headers: [
         Statics.getLabel('Vayogat'),
         Statics.getLabel('Shaakhaa'),
         Statics.getLabel('SaaptaahikMilan'),
@@ -923,10 +868,10 @@ class _HomeScreenState extends State<HomeScreen> {
         return DataRow(
           color: isTotal ? _totalRowColor() : null,
           cells: [
-            _cell('${item.vayogatCode}'),
-            _cell('${item.shaakhaaCount}'),
-            _cell('${item.saaptaahikCount}'),
-            _cell('${item.milanMandaliCount}'),
+            customDataRowCell('${item.vayogatCode}'),
+            customDataRowCell('${item.shaakhaaCount}'),
+            customDataRowCell('${item.saaptaahikCount}'),
+            customDataRowCell('${item.milanMandaliCount}'),
           ],
         );
       }).toList(),
@@ -936,8 +881,8 @@ class _HomeScreenState extends State<HomeScreen> {
   // ── 7. Yesterday vrutt detail table ──────────────────────────────────────
   Widget _buildYesterdayDetailTable(List data) {
     if (data.isEmpty) return _buildNoData();
-    return _buildScrollableTable(
-      leftFixedColumn: [
+    return ScrollableDataTable(
+      leftFixedHeaders: [
         Statics.getLabel('GeoUnitName'),
       ],
       leftFixedRows: data.asMap().entries.map((e) {
@@ -946,11 +891,11 @@ class _HomeScreenState extends State<HomeScreen> {
         return DataRow(
           color: isTotal ? _totalRowColor() : null,
           cells: [
-            _cell(item.geoUnitName ?? ''),
+            customDataRowCell(item.geoUnitName ?? ''),
           ],
         );
       }).toList(),
-      columns: [
+      headers: [
         Statics.getLabel('FrequencyCode'),
         Statics.getLabel('VayogatCode'),
         Statics.getLabel('BaalCount'),
@@ -966,14 +911,14 @@ class _HomeScreenState extends State<HomeScreen> {
         return DataRow(
           color: isTotal ? _totalRowColor() : null,
           cells: [
-            _cell('${item.frequencyCode}'),
-            _cell('${item.vayogatCode}'),
-            _cell('${item.baalVidyaarthiCount}'),
-            _cell('${item.tarunVidyaarthiCount}'),
-            _cell('${item.tarunVyavasaayeeCount}'),
-            _cell('${item.proudhaVyavasaayeeCount}'),
-            _cell('${item.shishuCount}'),
-            _cell('${item.abhyaagatCount}'),
+            customDataRowCell('${item.frequencyCode}'),
+            customDataRowCell('${item.vayogatCode}'),
+            customDataRowCell('${item.baalVidyaarthiCount}'),
+            customDataRowCell('${item.tarunVidyaarthiCount}'),
+            customDataRowCell('${item.tarunVyavasaayeeCount}'),
+            customDataRowCell('${item.proudhaVyavasaayeeCount}'),
+            customDataRowCell('${item.shishuCount}'),
+            customDataRowCell('${item.abhyaagatCount}'),
           ],
         );
       }).toList(),

@@ -213,6 +213,21 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
           _linkedmandalValue = geo.geounitid.toString();
         else if (geo.levelID == 2) _linkedvastiValue = geo.geounitid.toString();
         if (geo.geounitid != null && geo.geounitid != 0) _selectedGeoUnitId = geo.geounitid.toString();
+        _selctedLevelNameList = [];
+        setState(() {});
+        _selctedLevelNameList.addAll([
+          _linkedbhaagName,
+          _linkedshaharName,
+          _linkednagarName,
+          _linkedmandalName,
+          _linkedgraamName,
+          _linkedvastiName,
+        ]);
+
+        _selctedLevelNames = _selctedLevelNameList.where((e) => e != null && e.isNotEmpty).cast<String>().join(' -> ');
+        _searched = true;
+        _isExpanded = false;
+        isVastiSearch = geo.levelID == 2;
       }
 
       if (id != null) await _scrollToBottom();

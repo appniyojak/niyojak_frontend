@@ -670,10 +670,12 @@ class SwayamsevakProvider {
 
   Future<void> changeSwayamsewakCanEditStatus(String inputJson) async {
     print(inputJson);
+    print(Statics.changesavamsevakcanedit);
     Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
     var response = await http.post(Uri.parse(Statics.changesavamsevakcanedit), headers: jHeaders, body: inputJson);
     if (response.statusCode == 200) {
       var responseBody = json.decode(response.body);
+      print(responseBody);
       String message = responseBody["Message"];
       // Statics.showToast(message);
     } else {

@@ -5465,6 +5465,12 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
         selectedUpnagarList = _geodata.geounitid.toString().split(",").map((e) => int.tryParse(e)).toList();
       }
 
+      setState(() {
+        _isExpanded = false;
+        isVastiSearch = true;
+        _isSearching = true;
+      });
+
       await scrollToBottom();
     }
 
