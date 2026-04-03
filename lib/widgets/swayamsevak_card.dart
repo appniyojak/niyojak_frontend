@@ -1038,12 +1038,34 @@ import '../screens/swayamsevak_module/edit_module/edit_swayamsevak_transfer.dart
 // MODERNIZED SWAYAMSEVAK CARD
 // ============================================================================
 
+class PendingModule {
+  final String name;
+  final String key;
+
+  const PendingModule({required this.name, required this.key});
+
+  factory PendingModule.fromJson(Map<String, dynamic> json) {
+    return PendingModule(
+      name: json['module']?.toString() ?? '',
+      key: json['pkeys'] != null ? (json['pkeys'] as List).map((e) => e.toString()).join(',') : "",
+    );
+  }
+}
+
+// ============================================================================
+// MODERNIZED SWAYAMSEVAK CARD
+// ============================================================================
+
 class SwayamsevakCard extends StatefulWidget {
   final dynamic swItem;
   final Function(String, String, String) onCheckCard;
   final Function(String, String, String) onUnCheckCard;
   final bool isChecked;
   final Function(String) onSaveDetails;
+
+  // NEW: Completion fields
+  final double percentage;
+  final List<PendingModule> pendingModules;
 
   const SwayamsevakCard({
     Key? key,
@@ -1052,6 +1074,8 @@ class SwayamsevakCard extends StatefulWidget {
     required this.onUnCheckCard,
     required this.isChecked,
     required this.onSaveDetails,
+    this.percentage = 0.0,
+    this.pendingModules = const [],
   }) : super(key: key);
 
   @override
@@ -1078,7 +1102,7 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
   }
 
   // ============================================================================
-  // PERMISSION CHECKS - Cleaner logic extracted to methods
+  // PERMISSION CHECKS
   // ============================================================================
 
   PermissionSet _getPermissions() {
@@ -1090,7 +1114,6 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
     return PermissionSet(
       canTransfer: _checkTransferPermission(levelName, daayitvaName),
       canEdit: true,
-      // Always show edit for simplicity
       canResetPassword: levelID >= 4 && widget.swItem["CanUseApp"] == true,
       canDelete: _checkDeletePermission(levelName, daayitvaName),
       isDevUser: mobileNumber == '9322406725-1234',
@@ -1099,9 +1122,7 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
 
   bool _checkTransferPermission(String? levelName, String? daayitvaName) {
     final highLevels = ['Praant', 'प्रांत', 'Mahaanagar', 'महानगर', 'Bhaag', 'भाग/जिल्हा', 'भाग/जिला', 'Vibhaag', 'विभाग', 'Nagar', 'Nagar/Taalukaa', 'नगर/तालुका'];
-
     final shaakhaRoles = ['Mukhya Shikshak', 'मुख्य शिक्षक', 'Kaaryavaah', 'कार्यवाह'];
-
     final specialRoles = [
       'Join RSS Sanyojak',
       'जॉयन आर.एस.एस. संयोजक',
@@ -1134,9 +1155,7 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
 
   bool _checkDeletePermission(String? levelName, String? daayitvaName) {
     final allowedLevels = ['Praant', 'प्रांत', 'Mahaanagar', 'महानगर', 'Bhaag', 'भाग/जिल्हा', 'भाग/जिला', 'Vibhaag', 'विभाग', 'Nagar', 'Nagar/Taalukaa', 'नगर/तालुका'];
-
     final shaakhaRoles = ['Mukhya Shikshak', 'मुख्य शिक्षक', 'Kaaryavaah', 'कार्यवाह'];
-
     final prachaarakRoles = ['Prachaarak', 'प्रचारक', 'Saha-Prachaarak', 'सह प्रचारक'];
 
     if (allowedLevels.contains(levelName)) return true;
@@ -1155,10 +1174,7 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
     try {
       bool isConnected = await Statics.isInternetConnected();
       if (!isConnected) {
-        Statics.showMessageDialog(
-          context,
-          Statics.getLabel('internetNotConnected'),
-        );
+        Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
         return;
       }
 
@@ -1170,10 +1186,7 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
           content: Text(Statics.getLabel('AreyouSureYouWantToDeleteSwayamsevak')),
           actions: [
             TextButton(
-              child: Text(
-                Statics.getLabel('ConfirmationNo'),
-                style: TextStyle(color: Colors.grey[700], fontSize: 16),
-              ),
+              child: Text(Statics.getLabel('ConfirmationNo'), style: TextStyle(color: Colors.grey[700], fontSize: 16)),
               onPressed: () => Navigator.of(ctx).pop(false),
             ),
             ElevatedButton(
@@ -1181,10 +1194,7 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
                 backgroundColor: Colors.red,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
-              child: Text(
-                Statics.getLabel('ConfirmationYes'),
-                style: TextStyle(fontSize: 16),
-              ),
+              child: Text(Statics.getLabel('ConfirmationYes'), style: TextStyle(fontSize: 16)),
               onPressed: () => Navigator.of(ctx).pop(true),
             ),
           ],
@@ -1194,7 +1204,6 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
       if (confirmed == true) {
         final inputData = json.encode({"SwayamsevakID": widget.swItem["SwayamsevakID"]});
         final data = await Statics.deleteSwayamsevakDataForApp(inputData);
-
         if (data.contains("Deleted Successfully")) {
           Statics.showToast(Statics.getLabel('SwayamsevakDeletedSuccessfully'));
           widget.onSaveDetails("Search");
@@ -1203,10 +1212,7 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
         }
       }
     } catch (error) {
-      Statics.showErrorDialog(
-        context,
-        Statics.getLabel('unableToCompleteProcess'),
-      );
+      Statics.showErrorDialog(context, Statics.getLabel('unableToCompleteProcess'));
     }
   }
 
@@ -1227,59 +1233,42 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
 
   void _handleMenuSelection(String value, PermissionSet permissions) {
     final swayamsevakID = widget.swItem["SwayamsevakID"];
-
     switch (value) {
       case "ResetPassword":
-        Statics.showConfirmationBox(
-          context,
-          Statics.getLabel('ConfirmResetpassword'),
-          "ResetPassword",
-          swayamsevakID.toString(),
-        );
+        Statics.showConfirmationBox(context, Statics.getLabel('ConfirmResetpassword'), "ResetPassword", swayamsevakID.toString());
         break;
-
       case "Delete":
         _deleteSwayamSevak();
         break;
-
       case "Transfer":
         Navigator.of(context).pushNamed(
           EditSwayamsevakTransferScreen.routeName,
-          arguments: Statics.ScreenArgumentsSwayamsevakTransfer(
-            '0',
-            swayamsevakID.toString(),
-            value,
-          ),
+          arguments: Statics.ScreenArgumentsSwayamsevakTransfer('0', swayamsevakID.toString(), value),
         );
         break;
-
       case "EditMenuNew":
-        Navigator.of(context).pushNamed(
-          EditSwayamsevakBasicInfo.routeName,
-          arguments: Statics.ScreenArgumentsNew(swayamsevakID, value),
-        );
+        Navigator.of(context).pushNamed(EditSwayamsevakBasicInfo.routeName, arguments: Statics.ScreenArgumentsNew(swayamsevakID, value));
         break;
-
       case "DaayitvaMenu":
-        Navigator.of(context).pushNamed(
-          EditSwayamsevakDaayitva.routeName,
-          arguments: Statics.ScreenArguments(swayamsevakID, value),
-        );
+        Navigator.of(context).pushNamed(EditSwayamsevakDaayitva.routeName, arguments: Statics.ScreenArguments(swayamsevakID, value));
         break;
-
       case "OtherInfoMenu":
-        Navigator.of(context).pushNamed(
-          EditSwayamsevakOtherInfo.routeName,
-          arguments: Statics.ScreenArguments(swayamsevakID, value),
-        );
+        Navigator.of(context).pushNamed(EditSwayamsevakOtherInfo.routeName, arguments: Statics.ScreenArguments(swayamsevakID, value));
         break;
-
       default:
-        Navigator.of(context).pushNamed(
-          EditSwayamsevakScreen.routeName,
-          arguments: Statics.ScreenArgumentsNew(swayamsevakID, value),
-        );
+        Navigator.of(context).pushNamed(EditSwayamsevakScreen.routeName, arguments: Statics.ScreenArgumentsNew(swayamsevakID, value));
     }
+  }
+
+  /// Navigate directly to the screen for a pending module key.
+  /// Add/extend cases here as your route map grows.
+  void _handlePendingModuleTap(PendingModule module) {
+    Navigator.of(context).pop(); // close the bottom sheet first
+    final swayamsevakID = widget.swItem["SwayamsevakID"];
+    Navigator.of(context).pushNamed(
+      EditSwayamsevakScreen.routeName,
+      arguments: Statics.ScreenArgumentsNew(swayamsevakID, module.key),
+    );
   }
 
   List<PopupMenuEntry<String>> _buildMenuItems(PermissionSet permissions) {
@@ -1287,7 +1276,6 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
 
     if (permissions.canEdit) {
       items.add(_buildMenuItem('EditMenu', Icons.edit, Statics.getLabel('EditMenu')));
-
       if (permissions.isDevUser) {
         items.add(_buildMenuItem('EditMenuNew', Icons.edit_note, '${Statics.getLabel('EditMenu')}-New'));
         items.add(_buildMenuItem('DaayitvaMenu', Icons.work, '${Statics.getLabel('Daayitva')}-New'));
@@ -1300,11 +1288,9 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
     if (permissions.canResetPassword) {
       items.add(_buildMenuItem('ResetPassword', Icons.lock_reset, Statics.getLabel('ResetPassword')));
     }
-
     if (permissions.canDelete) {
       items.add(_buildMenuItem('Delete', Icons.delete, Statics.getLabel('Delete')));
     }
-
     if (permissions.canTransfer) {
       items.add(_buildMenuItem('Transfer', Icons.swap_horiz, Statics.getLabel('CardMenuSwayamsevakTransfer')));
     }
@@ -1319,25 +1305,21 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
         children: [
           Icon(icon, color: Colors.deepPurple, size: 20),
           SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              label,
-              style: TextStyle(fontSize: 15),
-            ),
-          ),
+          Expanded(child: Text(label, style: TextStyle(fontSize: 15))),
         ],
       ),
     );
   }
 
   // ============================================================================
-  // BUILD METHOD - MODERN UI
+  // BUILD METHOD
   // ============================================================================
 
   @override
   Widget build(BuildContext context) {
     final permissions = _getPermissions();
     final canEdit = widget.swItem["can_edit"] == true;
+    final bool isComplete = widget.percentage >= 100.0;
 
     return Card(
       margin: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -1358,20 +1340,18 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
               ? LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [
-                    Colors.deepPurple.withOpacity(0.05),
-                    Colors.purple.withOpacity(0.02),
-                  ],
+                  colors: [Colors.deepPurple.withOpacity(0.05), Colors.purple.withOpacity(0.02)],
                 )
               : null,
         ),
         child: Padding(
           padding: EdgeInsets.all(12),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ============================================================
-              // HEADER ROW - Checkbox + Name + Actions
-              // ============================================================
+              // ==============================================================
+              // HEADER ROW — Checkbox + Name + Actions
+              // ==============================================================
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -1379,9 +1359,7 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
                   Transform.scale(
                     scale: 1.125,
                     child: Checkbox(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4),
-                      ),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
                       checkColor: Colors.white,
                       activeColor: Colors.deepPurple,
                       value: _isChecked,
@@ -1389,17 +1367,9 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
                         setState(() {
                           _isChecked = value!;
                           if (value) {
-                            widget.onCheckCard(
-                              widget.swItem["Email"],
-                              widget.swItem["MobileNumber"],
-                              widget.swItem["SwayamsevakID"].toString(),
-                            );
+                            widget.onCheckCard(widget.swItem["Email"], widget.swItem["MobileNumber"], widget.swItem["SwayamsevakID"].toString());
                           } else {
-                            widget.onUnCheckCard(
-                              widget.swItem["Email"],
-                              widget.swItem["MobileNumber"],
-                              widget.swItem["SwayamsevakID"].toString(),
-                            );
+                            widget.onUnCheckCard(widget.swItem["Email"], widget.swItem["MobileNumber"], widget.swItem["SwayamsevakID"].toString());
                           }
                         });
                       },
@@ -1413,26 +1383,15 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Name
                         Text(
                           widget.swItem["FullName"] ?? "",
-                          style: TextStyle(
-                            fontSize: 15.5,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black87,
-                            height: 1.3,
-                          ),
+                          style: TextStyle(fontSize: 15.5, fontWeight: FontWeight.w600, color: Colors.black87, height: 1.3),
                         ),
-
                         SizedBox(height: 8),
-
-                        // Position Details
                         if (widget.swItem["DaayitvaGeoUnitName"].toString().isNotEmpty) ...[
                           _buildInfoChips(),
                           SizedBox(height: 8),
                         ],
-
-                        // Contact Information
                         _buildContactInfo(),
                       ],
                     ),
@@ -1443,15 +1402,19 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
                   // Actions Column
                   Column(
                     children: [
-                      // Edit Toggle
                       _buildEditToggle(canEdit),
                       SizedBox(height: 8),
-                      // Menu
                       _buildMenuButton(permissions),
                     ],
                   ),
                 ],
               ),
+
+              // ==============================================================
+              // COMPLETION INDICATOR BAR
+              // ==============================================================
+              SizedBox(height: 10),
+              _buildCompletionIndicator(isComplete),
             ],
           ),
         ),
@@ -1460,7 +1423,176 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
   }
 
   // ============================================================================
-  // UI COMPONENTS
+  // COMPLETION INDICATOR
+  // ============================================================================
+
+  Widget _buildCompletionIndicator(bool isComplete) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      decoration: BoxDecoration(
+        color: isComplete ? Colors.green.withOpacity(0.07) : Colors.orange.withOpacity(0.07),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: isComplete ? Colors.green.withOpacity(0.25) : Colors.orange.withOpacity(0.25),
+        ),
+      ),
+      child: isComplete ? _buildCompleteState() : _buildIncompleteState(),
+    );
+  }
+
+  /// 100% — simple green tick + label
+  Widget _buildCompleteState() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Row: label + percentage + info button
+        Row(
+          children: [
+            Container(
+              padding: EdgeInsets.all(3),
+              decoration: BoxDecoration(
+                color: Colors.green,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.check, color: Colors.white, size: 13),
+            ),
+            SizedBox(width: 6),
+            Text(
+              Statics.getLabel('ProfileComplete'),
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: _percentageColor(100)),
+            ),
+            Spacer(),
+            // Percentage badge
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              decoration: BoxDecoration(
+                color: _percentageColor(100).withOpacity(0.15),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: _percentageColor(100).withOpacity(0.4)),
+              ),
+              child: Text(
+                '100%',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: _percentageColor(100),
+                ),
+              ),
+            ),
+            SizedBox(width: 6),
+          ],
+        ),
+
+        SizedBox(height: 8),
+
+        // Progress bar
+        ClipRRect(
+          borderRadius: BorderRadius.circular(4),
+          child: LinearProgressIndicator(
+            value: widget.percentage.clamp(0.0, 100.0) / 100.0,
+            minHeight: 6,
+            backgroundColor: Colors.grey.withOpacity(0.2),
+            valueColor: AlwaysStoppedAnimation<Color>(_percentageColor(100)),
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// < 100% — progress bar + percentage + info button
+  Widget _buildIncompleteState() {
+    final int pct = widget.percentage.clamp(0.0, 100.0).toInt();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Row: label + percentage + info button
+        Row(
+          children: [
+            Icon(Icons.pending_actions_outlined, size: 14, color: Colors.orange[700]),
+            SizedBox(width: 6),
+            Text(
+              Statics.getLabel('ProfileIncomplete'), // e.g. "Profile Incomplete"
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.orange[800]),
+            ),
+            Spacer(),
+            // Percentage badge
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              decoration: BoxDecoration(
+                color: _percentageColor(pct).withOpacity(0.15),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: _percentageColor(pct).withOpacity(0.4)),
+              ),
+              child: Text(
+                '$pct%',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: _percentageColor(pct),
+                ),
+              ),
+            ),
+            SizedBox(width: 6),
+            // Info button — only when there are pending modules to show
+            if (widget.pendingModules.isNotEmpty)
+              GestureDetector(
+                onTap: _showPendingModulesSheet,
+                child: Container(
+                  padding: EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: Colors.deepPurple.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.deepPurple.withOpacity(0.3)),
+                  ),
+                  child: Icon(Icons.info_outline, size: 15, color: Colors.deepPurple),
+                ),
+              ),
+          ],
+        ),
+
+        SizedBox(height: 8),
+
+        // Progress bar
+        ClipRRect(
+          borderRadius: BorderRadius.circular(4),
+          child: LinearProgressIndicator(
+            value: widget.percentage.clamp(0.0, 100.0) / 100.0,
+            minHeight: 6,
+            backgroundColor: Colors.grey.withOpacity(0.2),
+            valueColor: AlwaysStoppedAnimation<Color>(_percentageColor(pct)),
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// Color transitions: red → orange → green as pct climbs
+  Color _percentageColor(int pct) {
+    if (pct < 40) return Colors.red[600]!;
+    if (pct < 75) return Colors.orange[700]!;
+    return Colors.teal[600]!;
+  }
+
+  // ============================================================================
+  // PENDING MODULES BOTTOM SHEET
+  // ============================================================================
+
+  void _showPendingModulesSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => _PendingModulesSheet(
+        pendingModules: widget.pendingModules,
+        percentage: widget.percentage,
+        onModuleTap: _handlePendingModuleTap,
+      ),
+    );
+  }
+
+  // ============================================================================
+  // UI COMPONENTS (unchanged)
   // ============================================================================
 
   Widget _buildInfoChips() {
@@ -1481,24 +1613,14 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
       decoration: BoxDecoration(
         color: Colors.deepPurple.withOpacity(0.08),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: Colors.deepPurple.withOpacity(0.2),
-          width: 1,
-        ),
+        border: Border.all(color: Colors.deepPurple.withOpacity(0.2), width: 1),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 14, color: Colors.deepPurple),
           SizedBox(width: 4),
-          Text(
-            text,
-            style: TextStyle(
-              fontSize: 11.5,
-              color: Colors.deepPurple[700],
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+          Text(text, style: TextStyle(fontSize: 11.5, color: Colors.deepPurple[700], fontWeight: FontWeight.w500)),
         ],
       ),
     );
@@ -1509,33 +1631,22 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
       spacing: 16,
       runSpacing: 8,
       children: [
-        // Phone
         _buildContactButton(
           icon: Icons.phone,
           label: widget.swItem["MobileNumber"].toString(),
-          onTap: () => UrlLauncher.launch(
-            "tel://${widget.swItem["MobileNumber"]}",
-          ),
+          onTap: () => UrlLauncher.launch("tel://${widget.swItem["MobileNumber"]}"),
         ),
-
-        // Email
         if (widget.swItem['Email'].toString().isNotEmpty)
           _buildContactButton(
             icon: Icons.email,
             label: widget.swItem["Email"].toString(),
-            onTap: () => UrlLauncher.launch(
-              "mailto:${widget.swItem["Email"]}",
-            ),
+            onTap: () => UrlLauncher.launch("mailto:${widget.swItem["Email"]}"),
           ),
       ],
     );
   }
 
-  Widget _buildContactButton({
-    required IconData icon,
-    required String label,
-    required VoidCallback onTap,
-  }) {
+  Widget _buildContactButton({required IconData icon, required String label, required VoidCallback onTap}) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(8),
@@ -1554,11 +1665,7 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
             Flexible(
               child: Text(
                 label,
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Colors.blue[700],
-                  fontWeight: FontWeight.w500,
-                ),
+                style: TextStyle(fontSize: 13, color: Colors.blue[700], fontWeight: FontWeight.w500),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -1574,29 +1681,16 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
       decoration: BoxDecoration(
         color: canEdit ? Colors.green.withOpacity(0.1) : Colors.grey.withOpacity(0.1),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: canEdit ? Colors.green.withOpacity(0.3) : Colors.grey.withOpacity(0.3),
-        ),
+        border: Border.all(color: canEdit ? Colors.green.withOpacity(0.3) : Colors.grey.withOpacity(0.3)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             children: [
-              Icon(
-                Icons.edit,
-                size: 16,
-                color: canEdit ? Colors.green[700] : Colors.grey[600],
-              ),
+              Icon(Icons.edit, size: 16, color: canEdit ? Colors.green[700] : Colors.grey[600]),
               SizedBox(width: 2),
-              Text(
-                "Edit",
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                  color: canEdit ? Colors.green[700] : Colors.grey[600],
-                ),
-              ),
+              Text("Edit", style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: canEdit ? Colors.green[700] : Colors.grey[600])),
             ],
           ),
           Transform.scale(
@@ -1604,9 +1698,7 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
             child: Switch(
               value: canEdit,
               onChanged: (bool newValue) async {
-                setState(() {
-                  widget.swItem["can_edit"] = newValue;
-                });
+                setState(() => widget.swItem["can_edit"] = newValue);
                 await _changeEditStatus(newValue);
               },
               activeColor: Colors.green,
@@ -1627,9 +1719,7 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
       position: PopupMenuPosition.under,
       borderRadius: BorderRadius.circular(16),
       onSelected: (value) => _handleMenuSelection(value, permissions),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       itemBuilder: (context) => _buildMenuItems(permissions),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
@@ -1643,18 +1733,176 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
           children: [
             Icon(Icons.more_vert, size: 16, color: Colors.deepPurple),
             SizedBox(width: 2),
-            Text(
-              "Menu",
-              style: TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w600,
-                color: Colors.deepPurple,
-              ),
-            ),
+            Text("Menu", style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: Colors.deepPurple)),
           ],
         ),
       ),
     );
+  }
+}
+
+// ============================================================================
+// PENDING MODULES BOTTOM SHEET  (separate widget for cleanliness)
+// ============================================================================
+
+class _PendingModulesSheet extends StatelessWidget {
+  final List<PendingModule> pendingModules;
+  final double percentage;
+  final void Function(PendingModule) onModuleTap;
+
+  const _PendingModulesSheet({
+    required this.pendingModules,
+    required this.percentage,
+    required this.onModuleTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final int pct = percentage.clamp(0.0, 100.0).toInt();
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 20, offset: Offset(0, -4))],
+      ),
+      padding: EdgeInsets.fromLTRB(20, 12, 20, 24 + MediaQuery.of(context).viewInsets.bottom),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Drag handle
+          Center(
+            child: Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(2)),
+            ),
+          ),
+          SizedBox(height: 16),
+
+          // Title row
+          Row(
+            children: [
+              Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.orange.withOpacity(0.12),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(Icons.pending_actions, color: Colors.orange[700], size: 20),
+              ),
+              SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      Statics.getLabel('PendingFields'), // e.g. "Pending Fields"
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.black87),
+                    ),
+                    Text(
+                      '${pendingModules.length} ${Statics.getLabel('FieldsRemaining')}', // e.g. "fields remaining"
+                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    ),
+                  ],
+                ),
+              ),
+              // Circular progress indicator
+              SizedBox(
+                width: 48,
+                height: 48,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    CircularProgressIndicator(
+                      value: percentage.clamp(0.0, 100.0) / 100.0,
+                      strokeWidth: 4,
+                      backgroundColor: Colors.grey.withOpacity(0.2),
+                      valueColor: AlwaysStoppedAnimation<Color>(_percentageColor(pct)),
+                    ),
+                    Text(
+                      '$pct%',
+                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: _percentageColor(pct)),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+
+          SizedBox(height: 16),
+          Divider(height: 1, color: Colors.grey[200]),
+          SizedBox(height: 8),
+
+          // Module list
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.45,
+            ),
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemCount: pendingModules.length,
+              separatorBuilder: (_, __) => SizedBox(height: 6),
+              itemBuilder: (ctx, index) {
+                final module = (pendingModules[index]);
+                return _buildModuleTile(module, index);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildModuleTile(PendingModule module, int index) {
+    return InkWell(
+      // onTap: () => onModuleTap(module),
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: BoxDecoration(
+          color: Colors.deepPurple.withOpacity(0.04),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.deepPurple.withOpacity(0.12)),
+        ),
+        child: Row(
+          children: [
+            // Index bubble
+            Container(
+              width: 26,
+              height: 26,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.orange.withOpacity(0.15),
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.orange.withOpacity(0.4)),
+              ),
+              child: Text(
+                '${index + 1}',
+                style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.orange[800]),
+              ),
+            ),
+            SizedBox(width: 12),
+            // Module name
+            Expanded(
+              child: Text(
+                module.name,
+                style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w500, color: Colors.black87),
+              ),
+            ),
+            // Tap cue
+            // Icon(Icons.arrow_forward_ios_rounded, size: 13, color: Colors.deepPurple.withOpacity(0.5)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Color _percentageColor(int pct) {
+    if (pct < 40) return Colors.red[600]!;
+    if (pct < 75) return Colors.orange[700]!;
+    return Colors.teal[600]!;
   }
 }
 
@@ -1863,6 +2111,8 @@ class SwayamsevakListContainer extends StatelessWidget {
                       onUnCheckCard: onUnCheckCard,
                       isChecked: isSelectAll,
                       onSaveDetails: search,
+                      percentage: (dataSnapshot.data![index]["percentage"] ?? 0).toDouble(),
+                      pendingModules: ((dataSnapshot.data![index]['pendindpoints'] as List?) ?? []).map((e) => PendingModule.fromJson(e as Map<String, dynamic>)).toList(),
                     );
                   },
                 );
