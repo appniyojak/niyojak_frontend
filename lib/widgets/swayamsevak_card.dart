@@ -1040,14 +1040,17 @@ import '../screens/swayamsevak_module/edit_module/edit_swayamsevak_transfer.dart
 
 class PendingModule {
   final String name;
-  final String key;
+  final List<String> keys;
 
-  const PendingModule({required this.name, required this.key});
+  const PendingModule({
+    required this.name,
+    required this.keys,
+  });
 
   factory PendingModule.fromJson(Map<String, dynamic> json) {
     return PendingModule(
       name: json['module']?.toString() ?? '',
-      key: json['pkeys'] != null ? (json['pkeys'] as List).map((e) => e.toString()).join(',') : "",
+      keys: json['pkeys'] != null ? List<String>.from(json['pkeys'].map((e) => e.toString())) : [],
     );
   }
 }
@@ -1055,6 +1058,8 @@ class PendingModule {
 // ============================================================================
 // MODERNIZED SWAYAMSEVAK CARD
 // ============================================================================
+
+final regExp = RegExp(r'\$(\d+)\$');
 
 class SwayamsevakCard extends StatefulWidget {
   final dynamic swItem;
@@ -1265,9 +1270,14 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
   void _handlePendingModuleTap(PendingModule module) {
     Navigator.of(context).pop(); // close the bottom sheet first
     final swayamsevakID = widget.swItem["SwayamsevakID"];
+    String? tabNo;
+    final match = regExp.firstMatch(module.name);
+    if (match != null) {
+      tabNo = match.group(1); // "15602"
+    }
     Navigator.of(context).pushNamed(
       EditSwayamsevakScreen.routeName,
-      arguments: Statics.ScreenArgumentsNew(swayamsevakID, module.key),
+      arguments: Statics.ScreenArgumentsNew(swayamsevakID, Statics.getLabel('EditMenu'), tabNo: int.tryParse(tabNo ?? "0") ?? 0),
     );
   }
 
@@ -1750,7 +1760,7 @@ class _PendingModulesSheet extends StatelessWidget {
   final double percentage;
   final void Function(PendingModule) onModuleTap;
 
-  const _PendingModulesSheet({
+  _PendingModulesSheet({
     required this.pendingModules,
     required this.percentage,
     required this.onModuleTap,
@@ -1856,8 +1866,9 @@ class _PendingModulesSheet extends StatelessWidget {
   }
 
   Widget _buildModuleTile(PendingModule module, int index) {
+    String cleanedText = module.name.replaceAll(regExp, '').trim();
     return InkWell(
-      // onTap: () => onModuleTap(module),
+      onTap: () => onModuleTap(module),
       borderRadius: BorderRadius.circular(12),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -1867,6 +1878,7 @@ class _PendingModulesSheet extends StatelessWidget {
           border: Border.all(color: Colors.deepPurple.withOpacity(0.12)),
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Index bubble
             Container(
@@ -1886,13 +1898,27 @@ class _PendingModulesSheet extends StatelessWidget {
             SizedBox(width: 12),
             // Module name
             Expanded(
-              child: Text(
-                module.name,
-                style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w500, color: Colors.black87),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 4,
+                children: [
+                  Text(
+                    cleanedText,
+                    style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600, color: Colors.black),
+                  ),
+                  Text(
+                    module.keys.asMap().entries.map((entry) => '${String.fromCharCode(97 + entry.key)}. ${entry.value}').join('\n'),
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ],
               ),
             ),
             // Tap cue
-            // Icon(Icons.arrow_forward_ios_rounded, size: 13, color: Colors.deepPurple.withOpacity(0.5)),
+            Icon(Icons.arrow_forward_ios_rounded, size: 13, color: Colors.deepPurple.withOpacity(0.5)),
           ],
         ),
       ),

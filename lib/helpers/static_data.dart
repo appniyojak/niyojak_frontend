@@ -5876,8 +5876,9 @@ class ScreenArgumentsNew {
   final String? name;
   final String? email;
   final String? mobile;
+  final int? tabNo;
 
-  ScreenArgumentsNew(this.itemID, this.viewType, {this.name, this.email, this.mobile});
+  ScreenArgumentsNew(this.itemID, this.viewType, {this.name, this.email, this.mobile, this.tabNo});
 }
 
 class ScreenArgumentsForSoochi {
