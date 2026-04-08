@@ -779,13 +779,13 @@ class _LogInCardState extends State<LogInCard> {
                     Icon(Icons.help, size: 20, color: Colors.orange.shade700),
                     InkWell(
                       child: Text(
-                        Statics.getLabel('helpScreenTitle'),
+                        Statics.getLabel('contactUs'),
                         style: TextStyle(fontSize: 15, color: Colors.orange.shade700),
                       ),
                       onTap: () {
                         // Navigator.of(context).pushNamed(HelpScreen.routeName);
                         // return;
-                        Navigator.of(context).pushNamed(ContactUs.routeName);
+                        Navigator.of(context).pushNamed(ContactUs.routeName, arguments: true);
                       },
                     ),
                   ],

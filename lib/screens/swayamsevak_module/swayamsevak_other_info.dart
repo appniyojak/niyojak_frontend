@@ -679,8 +679,10 @@ class SwayamsevakOtherInfoState extends State<SwayamsevakOtherInfo> {
         await saveSwDetails();
       }
     } on Exception catch (error) {
+      print("EXECPTION >>>>>>>>>>>>>>>>>>>> $error");
       Statics.showErrorDialog(context, Statics.getLabel('unableToCompleteProcess'));
     } catch (error) {
+      print("EXECPTION 2222222222 >>>>>>>>>>>>>>>>>>>> $error");
       Statics.showErrorDialog(context, Statics.getLabel('unableToCompleteProcess'));
     }
 

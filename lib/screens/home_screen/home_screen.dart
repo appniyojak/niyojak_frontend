@@ -217,7 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _fetchNotificationData() async {
     try {
-      notificationListdata = await Statics.getNotificationDataList(Statics.userDetails["userID"]) as NotificationListModel?;
+      notificationListdata = await Statics.getNotificationDataList(Statics.userDetails["userID"]);
       setState(() {});
     } catch (e) {
       print('Error fetching notification data: $e');

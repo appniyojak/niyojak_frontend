@@ -568,13 +568,15 @@ class SwayamsevakProvider {
     Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
     print(Statics.urlSaveSwayamsevakOtherInfoForApp);
-    log(jsonDecode(inputJson));
+    log(jsonEncode(inputJson));
 
     var response = await http.post(Uri.parse(Statics.urlSaveSwayamsevakOtherInfoForApp), headers: jHeaders, body: inputJson);
 
     var body = json.decode(response.body);
     //var message = body["Message"];
     String retValue = '';
+
+    log(jsonEncode(body));
 
     retValue = body['OutputSwayamsevakID'].toString();
 

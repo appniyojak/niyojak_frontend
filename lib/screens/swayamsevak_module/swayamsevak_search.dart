@@ -2019,16 +2019,9 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
       if (_isFri == true) _weeklyOffDay = _weeklyOffDay + "5,";
       if (_isSat == true) _weeklyOffDay = _weeklyOffDay + "6,";
       //
-      var areaOfInterestIDs = '';
-      var areaOfExpertiseIDs = '';
+      var areaOfInterestIDs = _areaOfInterestForSearch.where((data) => data.isSelected!).map((data) => data.staticID.toString()).join(',');
 
-      for (var data in _areaOfExpertiseForSearch) {
-        if (data.isSelected!) areaOfInterestIDs = areaOfInterestIDs + data.staticID.toString() + ",";
-      }
-
-      for (var data in _areaOfExpertiseForSearch) {
-        if (data.isSelected!) areaOfExpertiseIDs = areaOfExpertiseIDs + data.staticID.toString() + ",";
-      }
+      var areaOfExpertiseIDs = _areaOfExpertiseForSearch.where((data) => data.isSelected!).map((data) => data.staticID.toString()).join(',');
 
       _weeklyOffDay = _weeklyOffDay == "" ? null : _weeklyOffDay.substring(0, _weeklyOffDay.length - 1);
       print("_geoUnitsValue  $_geoUnitsValue");
@@ -2902,6 +2895,22 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                       _noDaayitva = false;
                       _pravaasi = false;
                       geoUnitIDnew = "";
+//
+                      _wasVistaarak = null;
+                      _wasPrachaarak = null;
+                      _hasShaakhaaExperience = false;
+                      _hasBaalShaakhaaExperience = false;
+                      _hasTarunVidShaakhaaExperience = false;
+                      _hasTarunVyavShaakhaaExperience = false;
+                      _hasProudhaVyavShaakhaaExperience = false;
+                      _isfb = null;
+                      _isinsta = null;
+                      _istwt = null;
+                      _fbUsage = null;
+                      _instaUsage = null;
+                      _twtUsage = null;
+                      _areaOfInterestForSearch = [];
+                      _areaOfExpertiseForSearch = [];
                     });
                   },
                   child: Icon(Icons.cleaning_services_rounded),
