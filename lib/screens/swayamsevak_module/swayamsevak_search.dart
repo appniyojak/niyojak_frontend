@@ -2019,9 +2019,9 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
       if (_isFri == true) _weeklyOffDay = _weeklyOffDay + "5,";
       if (_isSat == true) _weeklyOffDay = _weeklyOffDay + "6,";
       //
-      var areaOfInterestIDs = _areaOfInterestForSearch.where((data) => data.isSelected!).map((data) => data.staticID.toString()).join(',');
+      var areaOfInterestIDs = _areaOfInterestForSearch.where((data) => data.isSelected == true).map((data) => data.staticID.toString()).join(',');
 
-      var areaOfExpertiseIDs = _areaOfExpertiseForSearch.where((data) => data.isSelected!).map((data) => data.staticID.toString()).join(',');
+      var areaOfExpertiseIDs = _areaOfExpertiseForSearch.where((data) => data.isSelected == true).map((data) => data.staticID.toString()).join(',');
 
       _weeklyOffDay = _weeklyOffDay == "" ? null : _weeklyOffDay.substring(0, _weeklyOffDay.length - 1);
       print("_geoUnitsValue  $_geoUnitsValue");
@@ -2615,7 +2615,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
       UrlLauncher.launch("sms:" + strMobile!.join(','));
     } else if (choice.menuType == "EditMenu") {
       print("EditMenu");
-      Navigator.of(context).pushNamed(EditSwayamsevakScreen.routeName, arguments: Statics.ScreenArgumentsNew(0, Statics.getLabel('EditMenu')));
+      Navigator.of(context).pushNamed(EditSwayamsevakScreen.routeName, arguments: Statics.ScreenArgumentsNew(0, 'EditMenu'));
     } else if (choice.menuType == 'EditMenuNew') {
       print('EditMenuNew');
 
@@ -2909,8 +2909,10 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                       _fbUsage = null;
                       _instaUsage = null;
                       _twtUsage = null;
-                      _areaOfInterestForSearch = [];
-                      _areaOfExpertiseForSearch = [];
+                      _areaOfInterestForSearch.forEach((e) => e.isSelected = null);
+                      _areaOfExpertiseForSearch.forEach((e) => e.isSelected = null);
+                      // _areaOfInterestForSearch = [];
+                      // _areaOfExpertiseForSearch = [];
                     });
                   },
                   child: Icon(Icons.cleaning_services_rounded),

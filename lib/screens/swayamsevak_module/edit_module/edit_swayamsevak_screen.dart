@@ -44,31 +44,23 @@ class EditSwayamsevakScreenState extends State<EditSwayamsevakScreen> with Singl
   }
 
   getData() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    _otpUser = pref.getString("otpuser") ?? '';
-    args = ModalRoute.of(context)?.settings.arguments as Statics.ScreenArgumentsNew;
-    theId = args!.itemID;
-    viewType = args!.viewType;
-
-    String? name = args?.name ?? "";
-    String? mobile = args?.mobile ?? "";
-    String? email = args?.email ?? "";
-
+    // SharedPreferences pref = await SharedPreferences.getInstance();
+    // _otpUser = pref.getString("otpuser") ?? '';
+    // args = ModalRoute.of(context)?.settings.arguments as Statics.ScreenArgumentsNew;
+    // theId = args!.itemID;
+    // viewType = args!.viewType;
+    //
+    // String? name = args?.name ?? "";
+    // String? mobile = args?.mobile ?? "";
+    // String? email = args?.email ?? "";
+    //
     checkIfSoochiExits(theId);
-
-    setState(() {
-      preFilledName = name;
-      preFilledMobile = mobile;
-      preFilledEmail = email;
-    });
-
-    _tabController = new TabController(
-        length: _otpUser == "true"
-            ? 4
-            : isSoochiAvailable == true
-                ? 7
-                : 6,
-        vsync: this);
+    //
+    // setState(() {
+    //   preFilledName = name;
+    //   preFilledMobile = mobile;
+    //   preFilledEmail = email;
+    // });
 
     _tabController?.animateTo(args?.tabNo ?? 0);
   }
@@ -103,26 +95,34 @@ class EditSwayamsevakScreenState extends State<EditSwayamsevakScreen> with Singl
   //   }
   // }
 
-  // ///
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   args = ModalRoute.of(context)?.settings.arguments as Statics.ScreenArgumentsNew;
-  //   theId = args!.itemID;
-  //   viewType = args!.viewType;
-  //
-  //   String? name = args?.name ?? "";
-  //   String? mobile = args?.mobile ?? "";
-  //   String? email = args?.email ?? "";
-  //
-  //   checkIfSoochiExits(theId);
-  //
-  //   setState(() {
-  //     preFilledName = name;
-  //     preFilledMobile = mobile;
-  //     preFilledEmail = email;
-  //   });
-  // }
+  ///
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    args = ModalRoute.of(context)?.settings.arguments as Statics.ScreenArgumentsNew;
+    theId = args!.itemID;
+    viewType = args!.viewType;
+
+    String? name = args?.name ?? "";
+    String? mobile = args?.mobile ?? "";
+    String? email = args?.email ?? "";
+
+    // checkIfSoochiExits(theId);
+
+    setState(() {
+      preFilledName = name;
+      preFilledMobile = mobile;
+      preFilledEmail = email;
+    });
+
+    _tabController = TabController(
+        length: _otpUser == "true"
+            ? 4
+            : isSoochiAvailable == true
+                ? 7
+                : 6,
+        vsync: this);
+  }
 
   void onSaveSwDetails(outputID) {
     setState(() {

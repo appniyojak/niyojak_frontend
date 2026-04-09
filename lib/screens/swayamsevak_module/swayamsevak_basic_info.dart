@@ -93,9 +93,10 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
       getSwDetails(widget.swId);
     } else {
       if (!mounted) return;
-      setState(() {
-        swDetails = new SwayamsevakBAL(swID, 1, "", "", "", "", null, "", null, "", null, "", false, false);
-      });
+      if (mounted)
+        setState(() {
+          swDetails = new SwayamsevakBAL(swID, 1, "", "", "", "", null, "", null, "", null, "", false, false);
+        });
     }
     print("viewType ${widget.viewType} -- name ${widget.preFilledName} -- email ${widget.preFilledEmail} -- mobile ${widget.preFilledMobile}");
     // Initialize controllers with pre-filled data
@@ -105,9 +106,10 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
   }
 
   void getSwDetails(var theId) async {
-    setState(() {
-      _isfetingData = true;
-    });
+    if (mounted)
+      setState(() {
+        _isfetingData = true;
+      });
     var data;
     bool isConnected = await Statics.isInternetConnected();
     if (!isConnected) {
@@ -115,35 +117,37 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
     } else {
       data = await SwayamsevakProvider().getSwayamSevakByID(theId.toString(), "BasicInfo");
       if (!mounted) return;
-      setState(() {
-        swDetails = data;
-        if (swDetails != null) {
-          _fullNameCntrl.text = swDetails!.fullName.toString();
-          _mobileCntrl.text = swDetails!.mobileNumber.toString();
-          _emailCntrl.text = swDetails!.email.toString();
+      if (mounted)
+        setState(() {
+          swDetails = data;
+          if (swDetails != null) {
+            _fullNameCntrl.text = swDetails!.fullName.toString();
+            _mobileCntrl.text = swDetails!.mobileNumber.toString();
+            _emailCntrl.text = swDetails!.email.toString();
 
-          _birthDate = ((swDetails!.birthDate != null && swDetails!.birthDate != "") ? (DateFormat('dd/MM/yyyy').parse(swDetails!.birthDate!.split(" ").first)) : null);
-          _birthDateCntrl.text = ((swDetails!.birthDate != null && swDetails!.birthDate != "") ? DateFormat('dd-MMM-yyyy').format(_birthDate!) : '');
+            _birthDate = ((swDetails!.birthDate != null && swDetails!.birthDate != "") ? (DateFormat('dd/MM/yyyy').parse(swDetails!.birthDate!.split(" ").first)) : null);
+            _birthDateCntrl.text = ((swDetails!.birthDate != null && swDetails!.birthDate != "") ? DateFormat('dd-MMM-yyyy').format(_birthDate!) : '');
 
-          var _geoUnitID = swDetails!.linkedGeoUnitID == null ? null : swDetails!.linkedGeoUnitID.toString();
+            var _geoUnitID = swDetails!.linkedGeoUnitID == null ? null : swDetails!.linkedGeoUnitID.toString();
 
-          if (_geoUnitID != null) {
-            getGeoUnitDets(_geoUnitID);
+            if (_geoUnitID != null) {
+              getGeoUnitDets(_geoUnitID);
+            }
+
+            _linkedShaakhaaValue = swDetails!.linkedShaakhaaID == null ? null : swDetails!.linkedShaakhaaID.toString();
+
+            if (_linkedShaakhaaValue != null) {
+              getLinkedGeoUnitDets(_linkedShaakhaaValue);
+            }
+
+            _canUseApp = swDetails!.canUseApp!;
           }
-
-          _linkedShaakhaaValue = swDetails!.linkedShaakhaaID == null ? null : swDetails!.linkedShaakhaaID.toString();
-
-          if (_linkedShaakhaaValue != null) {
-            getLinkedGeoUnitDets(_linkedShaakhaaValue);
-          }
-
-          _canUseApp = swDetails!.canUseApp!;
-        }
-      });
+        });
     }
-    setState(() {
-      _isfetingData = false;
-    });
+    if (mounted)
+      setState(() {
+        _isfetingData = false;
+      });
   }
 
   void getGeoUnitDets(geoUnitID) async {
@@ -208,10 +212,11 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
         lastDate: DateTime((_birthDate == null ? DateTime.now().year : _birthDate!.year) + 80));
 
     if (date != null) {
-      setState(() {
-        _birthDate = date;
-        _birthDateCntrl.text = DateFormat('dd-MMM-yyyy').format(date);
-      });
+      if (mounted)
+        setState(() {
+          _birthDate = date;
+          _birthDateCntrl.text = DateFormat('dd-MMM-yyyy').format(date);
+        });
     }
   }
 
@@ -230,9 +235,10 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
     print("populatelinkedBhaagDropdown ${data.toList()}");
 
     if (mounted) {
-      setState(() {
-        _linkedbhaag = data;
-      });
+      if (mounted)
+        setState(() {
+          _linkedbhaag = data;
+        });
     } else {
       _linkedbhaag = data;
     }
@@ -241,9 +247,10 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
   void populatelinkedShaharDropdown(String bhaagIDStr) async {
     _linkedshaharValue = _linkedvastiValue = _linkedshahar = _linkedvasti = null;
     var shDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', '');
-    setState(() {
-      _linkedshahar = (shDD.length > 0 ? shDD : null);
-    });
+    if (mounted)
+      setState(() {
+        _linkedshahar = (shDD.length > 0 ? shDD : null);
+      });
   }
 
   void populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
@@ -251,14 +258,16 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
     _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
     if (shaharIDStr != null) {
       var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
-      setState(() {
-        _linkednagar = (ngDD.length > 0 ? ngDD : null);
-      });
+      if (mounted)
+        setState(() {
+          _linkednagar = (ngDD.length > 0 ? ngDD : null);
+        });
     } else {
       var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
-      setState(() {
-        _linkednagar = (ngDD.length > 0 ? ngDD : null);
-      });
+      if (mounted)
+        setState(() {
+          _linkednagar = (ngDD.length > 0 ? ngDD : null);
+        });
     }
   }
 
@@ -266,33 +275,37 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
     _linkedmandalValue = _linkedgraamValue = null;
     _linkedmandal = _linkedgraam = null;
     var mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr, 'Nagar', '');
-    setState(() {
-      _linkedmandal = (mnDD.length > 0 ? mnDD : null);
-    });
+    if (mounted)
+      setState(() {
+        _linkedmandal = (mnDD.length > 0 ? mnDD : null);
+      });
   }
 
   void populatelinkedGraamDropdown(String mandalIDStr) async {
     _linkedgraamValue = null;
     var gmDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['GraamLevelID'].toString(), mandalIDStr, 'Mandal', '');
-    setState(() {
-      _linkedgraam = (gmDD.length > 0 ? gmDD : null);
-    });
+    if (mounted)
+      setState(() {
+        _linkedgraam = (gmDD.length > 0 ? gmDD : null);
+      });
   }
 
   void populatelinkedVastiDropdown(String nagarIDStr) async {
     _linkedvastiValue = null;
     var vsDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr, 'Nagar', '');
-    setState(() {
-      _linkedvasti = (vsDD.length > 0 ? vsDD : null);
-    });
+    if (mounted)
+      setState(() {
+        _linkedvasti = (vsDD.length > 0 ? vsDD : null);
+      });
   }
 
   void populatelinkedShaakhaDropdown(String iDStr, String strType) async {
     _linkedShaakhaaValue = null;
     var vsDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaakhaaLevelID'].toString(), iDStr, strType, '');
-    setState(() {
-      _linkedShaakhaa = (vsDD.length > 0 ? vsDD : null);
-    });
+    if (mounted)
+      setState(() {
+        _linkedShaakhaa = (vsDD.length > 0 ? vsDD : null);
+      });
   }
 
   Future<void> saveSwDetails() async {
@@ -312,17 +325,18 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
     });
 
     var data = await SwayamsevakProvider().saveSwayamsevakDetails(inputData);
-    setState(() {
-      if (data == '-11') {
-        Statics.showToast(Statics.getLabel('unableToCompleteProcess'));
-      } else if (data == '-12') {
-        Statics.showToast(Statics.getLabel('uniqueMobileNumberViolation'));
-      } else {
-        widget.swId = data;
-        widget.onSaveSwDetails(widget.swId);
-        Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
-      }
-    });
+    if (mounted)
+      setState(() {
+        if (data == '-11') {
+          Statics.showToast(Statics.getLabel('unableToCompleteProcess'));
+        } else if (data == '-12') {
+          Statics.showToast(Statics.getLabel('uniqueMobileNumberViolation'));
+        } else {
+          widget.swId = data;
+          widget.onSaveSwDetails(widget.swId);
+          Statics.showToast(Statics.getLabel('dataSavedSuccessfully'));
+        }
+      });
   }
 
   void populateDropdown() async {
@@ -333,9 +347,10 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
   void populateBhaagDropdown() async {
     var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), "", "", "");
 
-    setState(() {
-      _bhaag = data;
-    });
+    if (mounted)
+      setState(() {
+        _bhaag = data;
+      });
   }
 
   void populateShaharDropdown(String bhaagIDStr) async {
@@ -344,9 +359,10 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
     _shahar = null;
     _vasti = null;
     var shDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', '');
-    setState(() {
-      _shahar = (shDD.length > 0 ? shDD : null);
-    });
+    if (mounted)
+      setState(() {
+        _shahar = (shDD.length > 0 ? shDD : null);
+      });
   }
 
   void populateNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
@@ -357,14 +373,16 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
     _nagar = _mandal = _graam = _vasti = null;
     if (shaharIDStr != null) {
       var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
-      setState(() {
-        _nagar = (ngDD.length > 0 ? ngDD : null);
-      });
+      if (mounted)
+        setState(() {
+          _nagar = (ngDD.length > 0 ? ngDD : null);
+        });
     } else {
       var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
-      setState(() {
-        _nagar = (ngDD.length > 0 ? ngDD : null);
-      });
+      if (mounted)
+        setState(() {
+          _nagar = (ngDD.length > 0 ? ngDD : null);
+        });
     }
   }
 
@@ -372,25 +390,28 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
     _mandalValue = _graamValue = null;
     _mandal = _graam = null;
     var mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr, 'Nagar', '');
-    setState(() {
-      _mandal = (mnDD.length > 0 ? mnDD : null);
-    });
+    if (mounted)
+      setState(() {
+        _mandal = (mnDD.length > 0 ? mnDD : null);
+      });
   }
 
   void populateGraamDropdown(String mandalIDStr) async {
     _graamValue = null;
     var gmDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['GraamLevelID'].toString(), mandalIDStr, 'Mandal', '');
-    setState(() {
-      _graam = (gmDD.length > 0 ? gmDD : null);
-    });
+    if (mounted)
+      setState(() {
+        _graam = (gmDD.length > 0 ? gmDD : null);
+      });
   }
 
   void populateVastiDropdown(String nagarIDStr) async {
     _vastiValue = null;
     var vsDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr, 'Nagar', '');
-    setState(() {
-      _vasti = (vsDD.length > 0 ? vsDD : null);
-    });
+    if (mounted)
+      setState(() {
+        _vasti = (vsDD.length > 0 ? vsDD : null);
+      });
   }
 
   Future<void> _submit() async {
@@ -399,9 +420,10 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
       return;
     }
     _formKey.currentState!.save();
-    setState(() {
-      _isLoading = true;
-    });
+    if (mounted)
+      setState(() {
+        _isLoading = true;
+      });
     try {
       bool isConnected = await Statics.isInternetConnected();
       if (!isConnected) {
@@ -422,9 +444,10 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
       }
     }
     if (mounted) {
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted)
+        setState(() {
+          _isLoading = false;
+        });
     }
   }
 
