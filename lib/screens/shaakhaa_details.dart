@@ -2092,7 +2092,7 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
                         CircularProgressIndicator()
                       else if (widget.viewType == "ViewMenu")
                         Text(Statics.getLabel('canNotMakeChanges'))
-                      else if (((Statics.userDetails['LevelName'] == 'Bhaag' ||
+                      /*else if (((Statics.userDetails['LevelName'] == 'Bhaag' ||
                               Statics.userDetails['LevelName'] == 'भाग/जिल्हा' ||
                               Statics.userDetails['LevelName'] == 'भाग/जिल्हा' ||
                               Statics.userDetails['LevelName'] == 'Nagar/Taalukaa' ||
@@ -2181,7 +2181,8 @@ class ShaakhaaDetailState extends State<ShaakhaaDetails> {
                           (Statics.userDetails['DaayitvaName'] == 'Prachaarak' ||
                               Statics.userDetails['DaayitvaName'] == 'प्रचारक' ||
                               Statics.userDetails['DaayitvaName'] == 'Saha-Prachaarak' ||
-                              Statics.userDetails['DaayitvaName'] == 'सह प्रचारक'))
+                              Statics.userDetails['DaayitvaName'] == 'सह प्रचारक'))*/
+                      else if (Statics.levelId > 3)
                         MaterialButton(
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                           padding: EdgeInsets.symmetric(

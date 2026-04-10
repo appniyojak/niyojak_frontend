@@ -440,7 +440,7 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
             style: TextStyle(fontSize: 24),
           ),
           actions: <Widget>[
-            if (((Statics.userDetails['LevelName'] == 'Praant' ||
+            /*if (((Statics.userDetails['LevelName'] == 'Praant' ||
                     Statics.userDetails['LevelName'] == 'Mahaanagar' ||
                     Statics.userDetails['LevelName'] == 'Bhaag' ||
                     Statics.userDetails['LevelName'] == 'Vibhaag' ||
@@ -544,7 +544,8 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
                 (Statics.userDetails['DaayitvaName'] == 'Prachaarak' ||
                     Statics.userDetails['DaayitvaName'] == 'प्रचारक' ||
                     Statics.userDetails['DaayitvaName'] == 'Saha-Prachaarak' ||
-                    Statics.userDetails['DaayitvaName'] == 'सह प्रचारक'))
+                    Statics.userDetails['DaayitvaName'] == 'सह प्रचारक'))*/
+            if (Statics.levelId > 3)
               Row(
                 children: [
                   IconButton(

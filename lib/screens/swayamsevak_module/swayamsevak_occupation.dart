@@ -907,31 +907,32 @@ class SwayamsevakOcuupationState extends State<SwayamsevakOcuupation> {
                       if (_categoryValue!.code == 'School Student' || _categoryValue!.code == 'Jr College' || _categoryValue!.code == 'Senior College')
                         Column(
                           children: [
-                            DropdownButtonFormField<StaticMasterBAL>(
-                              decoration: InputDecoration(labelText: Statics.getLabel('Standard')),
-                              isExpanded: true,
-                              value: _standardValue == null
-                                  ? null
-                                  : _standard != null
-                                      ? _standard!.indexWhere((p) => p.staticID == _standardValue!.staticID) > -1
-                                          ? _standard![_standard!.indexWhere((p) => p.staticID == _standardValue!.staticID)]
-                                          : null
-                                      : null,
-                              validator: (value) {
-                                if (value == null) return (Statics.getLabel('StandardValidationMessage'));
-                                return null;
-                              },
-                              items: _standard!.map((bg) => DropdownMenuItem(value: bg, child: Text(bg.codeForDisplay!))).toList(),
-                              onChanged: (value) {
-                                setState(() {
+                            if (_standard != null)
+                              DropdownButtonFormField<StaticMasterBAL>(
+                                decoration: InputDecoration(labelText: Statics.getLabel('Standard')),
+                                isExpanded: true,
+                                value: _standardValue == null
+                                    ? null
+                                    : _standard != null
+                                        ? _standard!.indexWhere((p) => p.staticID == _standardValue!.staticID) > -1
+                                            ? _standard![_standard!.indexWhere((p) => p.staticID == _standardValue!.staticID)]
+                                            : null
+                                        : null,
+                                validator: (value) {
+                                  if (value == null) return (Statics.getLabel('StandardValidationMessage'));
+                                  return null;
+                                },
+                                items: _standard!.map((bg) => DropdownMenuItem(value: bg, child: Text(bg.codeForDisplay!))).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    _standardValue = value;
+                                  });
+                                },
+                                onSaved: (value) {
                                   _standardValue = value;
-                                });
-                              },
-                              onSaved: (value) {
-                                _standardValue = value;
-                                swOccupation!.educationStandardID = value!.staticID;
-                              },
-                            ),
+                                  swOccupation!.educationStandardID = value!.staticID;
+                                },
+                              ),
                             if (_standardValue != null && _standardValue!.code == "Other")
                               TextFormField(
                                 textInputAction: TextInputAction.next,

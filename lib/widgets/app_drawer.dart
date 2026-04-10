@@ -579,7 +579,7 @@ class _AppDrawerState extends State<AppDrawer> {
                         Statics.userDetails["DaayitvaName"] == "Saha-Prachaarak" ||
                         Statics.userDetails["DaayitvaName"] == "सह प्रचारक")))
               Divider(),
-            if (int.parse(Statics.userDetails["LevelID"]) >= 6
+            if (int.parse(Statics.userDetails["LevelID"]) >= 4
                 // &&
                 // (Statics.userDetails["DaayitvaName"] == "Join RSS Sanyojak" ||
                 //     Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. संयोजक" ||
@@ -655,7 +655,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   Navigator.of(context).pushNamed(SearchAnnualBaithakVrutta.routeName);
                 },
               ),
-            if (int.parse(Statics.userDetails["LevelID"]) >= 6
+            if (int.parse(Statics.userDetails["LevelID"]) >= 4
                 // &&
                 // (Statics.userDetails["DaayitvaName"] == "Join RSS Sanyojak" ||
                 //     Statics.userDetails["DaayitvaName"] == "जॉयन आर.एस.एस. संयोजक" ||
@@ -721,7 +721,8 @@ class _AppDrawerState extends State<AppDrawer> {
                 )
               // if (Statics.userDetails["MobileNumber"] == "7738167968")
               Divider(),
-            if (int.parse(Statics.userDetails["LevelID"]) >= 6)
+            if (Statics.levelId > 3)
+
               // if (Statics.userDetails["MobileNumber"] == "7738167968")
               ListTile(
                 dense: true,
@@ -734,7 +735,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   Navigator.of(context).pushNamed(AnnualBaithakEkatritVrutta.routeName);
                 },
               ),
-            if (int.parse(Statics.userDetails["LevelID"]) >= 6) Divider(),
+            if (Statics.levelId > 3) Divider(),
             ListTile(
               dense: true,
               leading: Icon(FontAwesomeIcons.university),
@@ -859,7 +860,7 @@ class _AppDrawerState extends State<AppDrawer> {
             //       Navigator.of(context).pushReplacementNamed(SearchSewaVasti.routeName);
             //     },
             //   ),
-            if (!((Statics.userDetails['LevelName'] == 'Shaakhaa' || Statics.userDetails["LevelName"] == "शाखा") &&
+            /*if (!((Statics.userDetails['LevelName'] == 'Shaakhaa' || Statics.userDetails["LevelName"] == "शाखा") &&
                     (Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' || Statics.userDetails["DaayitvaName"] == "कार्यवाह")) &&
                 (((Statics.userDetails["LevelName"] == "Praant" ||
                         Statics.userDetails["LevelName"] == "प्रांत" ||
@@ -922,7 +923,8 @@ class _AppDrawerState extends State<AppDrawer> {
                         Statics.userDetails['DaayitvaName'] == 'Saha-Prachaarak' ||
                         Statics.userDetails['DaayitvaName'] == 'सह प्रचारक' ||
                         Statics.userDetails["DaayitvaName"] == "Kaaryavaah" ||
-                        Statics.userDetails["DaayitvaName"] == "कार्यवाह")))
+                        Statics.userDetails["DaayitvaName"] == "कार्यवाह")))*/
+            if (Statics.levelId > 3)
               ListTile(
                 dense: true,
                 leading: Icon(Icons.home_work),
@@ -934,7 +936,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   Navigator.of(context).pushReplacementNamed(SearchSewaVasti.routeName);
                 },
               ),
-            if (!((Statics.userDetails['LevelName'] == 'Shaakhaa' || Statics.userDetails["LevelName"] == "शाखा") &&
+            /*if (!((Statics.userDetails['LevelName'] == 'Shaakhaa' || Statics.userDetails["LevelName"] == "शाखा") &&
                     (Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' || Statics.userDetails["DaayitvaName"] == "कार्यवाह")) &&
                 (((Statics.userDetails["LevelName"] == "Praant" ||
                         Statics.userDetails["LevelName"] == "प्रांत" ||
@@ -997,8 +999,8 @@ class _AppDrawerState extends State<AppDrawer> {
                         Statics.userDetails['DaayitvaName'] == 'Saha-Prachaarak' ||
                         Statics.userDetails['DaayitvaName'] == 'सह प्रचारक' ||
                         Statics.userDetails["DaayitvaName"] == "Kaaryavaah" ||
-                        Statics.userDetails["DaayitvaName"] == "कार्यवाह")))
-              Divider(),
+                        Statics.userDetails["DaayitvaName"] == "कार्यवाह")))*/
+            if (Statics.levelId > 3) Divider(),
             if (!((Statics.userDetails['LevelName'] == 'Shaakhaa' || Statics.userDetails["LevelName"] == "शाखा") &&
                 (Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' || Statics.userDetails["DaayitvaName"] == "कार्यवाह")))
               ListTile(

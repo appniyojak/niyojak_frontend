@@ -208,11 +208,12 @@ class _ShaakhaaVruttaState extends State<ShaakhaaVrutta> {
     widgetArray.add(lstShaakhaaVrutta[index].isOptionalOther == true
         ? Statics.createWidgetFromIcon(context, Icons.check, 100, 52, Alignment.center, isTotalRow: false)
         : Statics.createWidgetFromString(context, '-', 100, 52, Alignment.center, isTotalRow: false));
-    if ((
-            // lst1.contains(Statics.userDetails['LevelName']) &&
-            lst2.contains(Statics.userDetails['DaayitvaName'])) ||
+    if (
+
+        // (lst1.contains(Statics.userDetails['LevelName']) &&
+        // lst2.contains(Statics.userDetails['DaayitvaName'])) ||
         (Statics.userDetails['LevelName'] == 'Shaakhaa' || Statics.userDetails['LevelName'] == 'शाखा' && lst3.contains(Statics.userDetails['DaayitvaName'])) ||
-        lst4.contains(Statics.userDetails['DaayitvaName'])) {
+            lst4.contains(Statics.userDetails['DaayitvaName'])) {
       widgetArray.add(Container(
           width: 70,
           child: Row(

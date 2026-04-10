@@ -23,11 +23,13 @@ class EditSwayamsevakScreen extends StatefulWidget {
 }
 
 class EditSwayamsevakScreenState extends State<EditSwayamsevakScreen> with SingleTickerProviderStateMixin {
-  TabController? _tabController;
+  late TabController _tabController;
   Statics.ScreenArgumentsNew? args;
   var theId;
   var viewType;
   bool isSoochiAvailable = false;
+  bool _isReady = false;
+  bool _isInitialized = false;
 
   String _otpUser = "";
 
@@ -37,32 +39,36 @@ class EditSwayamsevakScreenState extends State<EditSwayamsevakScreen> with Singl
 
   String? preFilledEmail;
 
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => getData());
-    super.initState();
+  int get _tabLength {
+    if (_otpUser == "true") return 4;
+    if (isSoochiAvailable == true) return 7;
+    return 6;
   }
 
-  getData() async {
-    // SharedPreferences pref = await SharedPreferences.getInstance();
-    // _otpUser = pref.getString("otpuser") ?? '';
-    // args = ModalRoute.of(context)?.settings.arguments as Statics.ScreenArgumentsNew;
-    // theId = args!.itemID;
-    // viewType = args!.viewType;
-    //
-    // String? name = args?.name ?? "";
-    // String? mobile = args?.mobile ?? "";
-    // String? email = args?.email ?? "";
-    //
-    checkIfSoochiExits(theId);
-    //
-    // setState(() {
-    //   preFilledName = name;
-    //   preFilledMobile = mobile;
-    //   preFilledEmail = email;
-    // });
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
 
-    _tabController?.animateTo(args?.tabNo ?? 0);
+  Future<void> getData() async {
+    if (!mounted) return;
+    final pref = await SharedPreferences.getInstance();
+    _otpUser = pref.getString("otpuser") ?? '';
+
+    await checkIfSoochiExits(theId);
+
+    _tabController = TabController(
+      length: _tabLength,
+      vsync: this,
+    );
+
+    final targetIndex = (args?.tabNo ?? 0).clamp(0, _tabLength - 1);
+    _tabController.animateTo(targetIndex);
+
+    setState(() {
+      _isReady = true;
+    });
   }
 
   // @override
@@ -99,29 +105,24 @@ class EditSwayamsevakScreenState extends State<EditSwayamsevakScreen> with Singl
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    args = ModalRoute.of(context)?.settings.arguments as Statics.ScreenArgumentsNew;
+
+    if (_isInitialized) return;
+
+    if (!mounted) return;
+
+    final route = ModalRoute.of(context);
+    if (route == null) return;
+
+    args = route.settings.arguments as Statics.ScreenArgumentsNew;
+
     theId = args!.itemID;
     viewType = args!.viewType;
 
-    String? name = args?.name ?? "";
-    String? mobile = args?.mobile ?? "";
-    String? email = args?.email ?? "";
+    preFilledName = args?.name ?? "";
+    preFilledMobile = args?.mobile ?? "";
+    preFilledEmail = args?.email ?? "";
 
-    // checkIfSoochiExits(theId);
-
-    setState(() {
-      preFilledName = name;
-      preFilledMobile = mobile;
-      preFilledEmail = email;
-    });
-
-    _tabController = TabController(
-        length: _otpUser == "true"
-            ? 4
-            : isSoochiAvailable == true
-                ? 7
-                : 6,
-        vsync: this);
+    _isInitialized = true;
   }
 
   void onSaveSwDetails(outputID) {
@@ -131,7 +132,7 @@ class EditSwayamsevakScreenState extends State<EditSwayamsevakScreen> with Singl
     checkIfSoochiExits(theId);
   }
 
-  void checkIfSoochiExits(swId) async {
+  Future<void> checkIfSoochiExits(swId) async {
     var membersData = await Statics.getSwayamSevakMembersInSoochi(swId.toString());
 
     var data = membersData == null ? null : membersData["TaggedSoochi"];
@@ -150,8 +151,17 @@ class EditSwayamsevakScreenState extends State<EditSwayamsevakScreen> with Singl
   }
 
   @override
+  void dispose() {
+    _tabController?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     //theId = ModalRoute.of(context).settings.arguments as String;
+    if (!_isReady) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -206,7 +216,7 @@ class EditSwayamsevakScreenState extends State<EditSwayamsevakScreen> with Singl
                 )
               : Container(),
         ],
-        bottom: new TabBar(
+        bottom: TabBar(
           controller: _tabController,
           isScrollable: true,
           indicatorColor: Colors.white,
@@ -269,7 +279,7 @@ class EditSwayamsevakScreenState extends State<EditSwayamsevakScreen> with Singl
           ],
         ),
       ),
-      body: new TabBarView(
+      body: TabBarView(
         controller: _tabController,
         children: <Widget>[
           if (_otpUser != "true")

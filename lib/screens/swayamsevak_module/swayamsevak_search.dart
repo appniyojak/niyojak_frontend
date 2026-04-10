@@ -2140,6 +2140,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
   }
 
   void _getCsv() async {
+    FocusManager.instance.primaryFocus?.unfocus();
     setState(() {
       _isSearching = true;
     });
@@ -2736,197 +2737,195 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
           ),
         ),
         drawer: AppDrawer(),
-        floatingActionButton: Stack(
-          children: <Widget>[
-            Wrap(
-              children: [
-                FloatingActionButton(
-                  heroTag: "btn1",
-                  tooltip: Statics.getLabel("Search"),
-                  onPressed: () async {
-                    _isSearching = true;
-                    setState(() {
-                      _isSearching = true;
-                    });
-                    _swList = _getSwList("Search");
+        floatingActionButton: Wrap(
+          children: [
+            FloatingActionButton(
+              heroTag: "btn1",
+              tooltip: Statics.getLabel("Search"),
+              onPressed: () async {
+                FocusManager.instance.primaryFocus?.unfocus();
+                _isSearching = true;
+                setState(() {
+                  _isSearching = true;
+                });
+                _swList = _getSwList("Search");
 
-                    // var data = await _getSwList("Search");
+                // var data = await _getSwList("Search");
 
-                    _tabController!.animateTo(1);
+                _tabController!.animateTo(1);
 
-                    setState(() {
-                      _isSearching = false;
-                    });
-                  },
-                  child: Icon(Icons.search),
-                  backgroundColor: Colors.green,
-                ),
-                SizedBox(width: 20),
-                FloatingActionButton(
-                  heroTag: "btn2",
-                  tooltip: Statics.getLabel("Clear"),
-                  onPressed: () async {
-                    setState(() {
-                      _swList = null;
-                      _linkedbhaagValue = null;
-                      _linkedshaharValue = null;
-                      _linkednagarValue = null;
-                      _linkedmandalValue = null;
-                      _linkedgraamValue = null;
-                      _linkedvastiValue = null;
-                      _daayitvaForValue = null;
-                      _levelValue = null;
-                      _daayitvaValue = null;
-                      _geoUnitsValue = null;
-                      _categoryValue = null;
-                      _sanghaShikshaVarsha = null;
-                      _vehicleValue = null;
-                      _bldGrpvalue = null;
-                      _mthrTngvalue = null;
-                      _programValue = null;
-                      _program = null;
-                      _standard = null;
-                      _standardValue = null;
+                setState(() {
+                  _isSearching = false;
+                });
+              },
+              child: Icon(Icons.search),
+              backgroundColor: Colors.green,
+            ),
+            SizedBox(width: 20),
+            FloatingActionButton(
+              heroTag: "btn2",
+              tooltip: Statics.getLabel("Clear"),
+              onPressed: () async {
+                FocusManager.instance.primaryFocus?.unfocus();
+                setState(() {
+                  _swList = null;
+                  _linkedbhaagValue = null;
+                  _linkedshaharValue = null;
+                  _linkednagarValue = null;
+                  _linkedmandalValue = null;
+                  _linkedgraamValue = null;
+                  _linkedvastiValue = null;
+                  _daayitvaForValue = null;
+                  _levelValue = null;
+                  _daayitvaValue = null;
+                  _geoUnitsValue = null;
+                  _categoryValue = null;
+                  _sanghaShikshaVarsha = null;
+                  _vehicleValue = null;
+                  _bldGrpvalue = null;
+                  _mthrTngvalue = null;
+                  _programValue = null;
+                  _program = null;
+                  _standard = null;
+                  _standardValue = null;
 
-                      _searchController.text = "";
-                      _daayitvaController.text = "";
-                      _shikshaFromYearCntrl.text = "";
-                      _shikshaToYearCntrl.text = "";
-                      _pratidnyaYearCtrl.text = "";
-                      _schoolNameCntrl.text = "";
-                      _collegeNameCntrl.text = "";
-                      _govtDeptCtrl.text = "";
-                      _organizationNameCtrl.text = "";
-                      _industrialVerticalCtrl.text = "";
-                      _officeLocationCtrl.text = "";
-                      _organizationAtRetirementCtrl.text = "";
-                      _desgAtRetirementCtrl.text = "";
-                      _deptAtRetirementCtrl.text = "";
+                  _searchController.text = "";
+                  _daayitvaController.text = "";
+                  _shikshaFromYearCntrl.text = "";
+                  _shikshaToYearCntrl.text = "";
+                  _pratidnyaYearCtrl.text = "";
+                  _schoolNameCntrl.text = "";
+                  _collegeNameCntrl.text = "";
+                  _govtDeptCtrl.text = "";
+                  _organizationNameCtrl.text = "";
+                  _industrialVerticalCtrl.text = "";
+                  _officeLocationCtrl.text = "";
+                  _organizationAtRetirementCtrl.text = "";
+                  _desgAtRetirementCtrl.text = "";
+                  _deptAtRetirementCtrl.text = "";
 
-                      _isTrainedInMukhyaDanda = null;
-                      _isTrainedInMukhyaNiyuddha = null;
-                      _isTrainedInMukhyaYogaasan = null;
-                      _isTrainedInMukhyaYogachaap = null;
-                      _isTrainedInMukhyaPadavinyas = null;
-                      _isTrainedInMukhyaDandaYuddha = null;
-                      _isTrainedInAnyaDanda = null;
-                      _isTrainedInAnyaNiyuddha = null;
-                      _isTrainedInAnyaYogaasan = null;
-                      _isTrainedInAnyaYogachaap = null;
-                      _isTrainedInAnyaPadavinyas = null;
-                      _isTrainedInAnyaDandaYuddha = null;
-                      _hasVehicleDriver = null;
-                      _isPratidnyit = null;
-                      _isGanveshComplete = null;
-                      _noBelt = null;
-                      _noCap = null;
-                      _noDanda = null;
-                      _noPant = null;
-                      _noShirt = null;
-                      _noShoes = null;
-                      _noSocks = null;
-                      _isMon = null;
-                      _isTue = null;
-                      _isWed = null;
-                      _isThu = null;
-                      _isFri = null;
-                      _isSat = null;
-                      _isSun = null;
-                      _shaakhaSanchalanvalue = null;
+                  _isTrainedInMukhyaDanda = null;
+                  _isTrainedInMukhyaNiyuddha = null;
+                  _isTrainedInMukhyaYogaasan = null;
+                  _isTrainedInMukhyaYogachaap = null;
+                  _isTrainedInMukhyaPadavinyas = null;
+                  _isTrainedInMukhyaDandaYuddha = null;
+                  _isTrainedInAnyaDanda = null;
+                  _isTrainedInAnyaNiyuddha = null;
+                  _isTrainedInAnyaYogaasan = null;
+                  _isTrainedInAnyaYogachaap = null;
+                  _isTrainedInAnyaPadavinyas = null;
+                  _isTrainedInAnyaDandaYuddha = null;
+                  _hasVehicleDriver = null;
+                  _isPratidnyit = null;
+                  _isGanveshComplete = null;
+                  _noBelt = null;
+                  _noCap = null;
+                  _noDanda = null;
+                  _noPant = null;
+                  _noShirt = null;
+                  _noShoes = null;
+                  _noSocks = null;
+                  _isMon = null;
+                  _isTue = null;
+                  _isWed = null;
+                  _isThu = null;
+                  _isFri = null;
+                  _isSat = null;
+                  _isSun = null;
+                  _shaakhaSanchalanvalue = null;
 
-                      _isTrainedInPrathamVanshi = null;
-                      _isTrainedInPrathamVenu = null;
-                      _isTrainedInPrathamAanak = null;
-                      _isTrainedInPrathamShankha = null;
-                      _isTrainedInPrathamNaagaanga = null;
-                      _isTrainedInPrathamTurya = null;
-                      _isTrainedInPrathamSwarad = null;
-                      _isTrainedInPrathamGomukha = null;
-                      _isTrainedInDwitiyaVanshi = null;
-                      _isTrainedInDwitiyaVenu = null;
-                      _isTrainedInDwitiyaAanak = null;
-                      _isTrainedInDwitiyaShankha = null;
-                      _isTrainedInDwitiyaNaagaanga = null;
-                      _isTrainedInDwitiyaTurya = null;
-                      _isTrainedInDwitiyaSwarad = null;
-                      _isTrainedInDwitiyaGomukha = null;
-                      _isTrainedInTrutiyaVanshi = null;
-                      _isTrainedInTrutiyaVenu = null;
-                      _isTrainedInTrutiyaAanak = null;
-                      _isTrainedInTrutiyaShankha = null;
-                      _isTrainedInTrutiyaNaagaanga = null;
-                      _isTrainedInTrutiyaTurya = null;
-                      _isTrainedInTrutiyaSwarad = null;
-                      _isTrainedInTrutiyaGomukha = null;
-                      _isTrainedInAnyaVanshi = null;
-                      _isTrainedInAnyaVenu = null;
-                      _isTrainedInAnyaAanak = null;
-                      _isTrainedInAnyaShankha = null;
-                      _isTrainedInAnyaNaagaanga = null;
-                      _isTrainedInAnyaTurya = null;
-                      _isTrainedInAnyaSwarad = null;
-                      _isTrainedInAnyaGomukha = null;
-                      _isPrathamLipi = null;
-                      _isDwitiyaLipi = null;
-                      _isTrutiyaLipi = null;
-                      _isAnyaLipi = null;
-                      _rachanaaCountPrathamCntrl.text = "";
-                      _rachanaaCountDwitiyaCntrl.text = "";
-                      _rachanaaCountTrutiyaCntrl.text = "";
-                      _rachanaaCountAnyaCntrl.text = "";
-                      _educationUniversityID = null;
-                      _collegeID = null;
-                      _educationProgramID = null;
-                      _educationCourseID = null;
-                      _progValue = null;
-                      _educationOthrUniversityNameCntrl.text = "";
-                      _collegeOthrNameCntrl.text = "";
-                      _educationOthrProgramName.text = "";
-                      _educationOthrCourseName.text = "";
-                      _educationUniversityNameCntrl.text = "";
-                      _collegeNameCntrl.text = "";
-                      _educationProgramName.text = "";
-                      _educationCourseName.text = "";
-                      _standardValue = null;
-                      _educationOthrStandardNameCntrl.text = "";
-                      _othOrgNameCtrl.text = "";
-                      _preritSansthaValue = "";
-                      _hasBeenShikshak = false;
-                      _noDaayitva = false;
-                      _pravaasi = false;
-                      geoUnitIDnew = "";
-//
-                      _wasVistaarak = null;
-                      _wasPrachaarak = null;
-                      _hasShaakhaaExperience = false;
-                      _hasBaalShaakhaaExperience = false;
-                      _hasTarunVidShaakhaaExperience = false;
-                      _hasTarunVyavShaakhaaExperience = false;
-                      _hasProudhaVyavShaakhaaExperience = false;
-                      _isfb = null;
-                      _isinsta = null;
-                      _istwt = null;
-                      _fbUsage = null;
-                      _instaUsage = null;
-                      _twtUsage = null;
-                      _areaOfInterestForSearch.forEach((e) => e.isSelected = null);
-                      _areaOfExpertiseForSearch.forEach((e) => e.isSelected = null);
-                      // _areaOfInterestForSearch = [];
-                      // _areaOfExpertiseForSearch = [];
-                    });
-                  },
-                  child: Icon(Icons.cleaning_services_rounded),
-                  backgroundColor: Colors.green,
-                ),
-                SizedBox(width: 20),
-                FloatingActionButton(
-                  heroTag: "btn3",
-                  tooltip: Statics.getLabel("ExportToExcel"),
-                  onPressed: _getCsv,
-                  child: Icon(Icons.download_sharp),
-                  backgroundColor: Colors.green,
-                ),
-              ],
+                  _isTrainedInPrathamVanshi = null;
+                  _isTrainedInPrathamVenu = null;
+                  _isTrainedInPrathamAanak = null;
+                  _isTrainedInPrathamShankha = null;
+                  _isTrainedInPrathamNaagaanga = null;
+                  _isTrainedInPrathamTurya = null;
+                  _isTrainedInPrathamSwarad = null;
+                  _isTrainedInPrathamGomukha = null;
+                  _isTrainedInDwitiyaVanshi = null;
+                  _isTrainedInDwitiyaVenu = null;
+                  _isTrainedInDwitiyaAanak = null;
+                  _isTrainedInDwitiyaShankha = null;
+                  _isTrainedInDwitiyaNaagaanga = null;
+                  _isTrainedInDwitiyaTurya = null;
+                  _isTrainedInDwitiyaSwarad = null;
+                  _isTrainedInDwitiyaGomukha = null;
+                  _isTrainedInTrutiyaVanshi = null;
+                  _isTrainedInTrutiyaVenu = null;
+                  _isTrainedInTrutiyaAanak = null;
+                  _isTrainedInTrutiyaShankha = null;
+                  _isTrainedInTrutiyaNaagaanga = null;
+                  _isTrainedInTrutiyaTurya = null;
+                  _isTrainedInTrutiyaSwarad = null;
+                  _isTrainedInTrutiyaGomukha = null;
+                  _isTrainedInAnyaVanshi = null;
+                  _isTrainedInAnyaVenu = null;
+                  _isTrainedInAnyaAanak = null;
+                  _isTrainedInAnyaShankha = null;
+                  _isTrainedInAnyaNaagaanga = null;
+                  _isTrainedInAnyaTurya = null;
+                  _isTrainedInAnyaSwarad = null;
+                  _isTrainedInAnyaGomukha = null;
+                  _isPrathamLipi = null;
+                  _isDwitiyaLipi = null;
+                  _isTrutiyaLipi = null;
+                  _isAnyaLipi = null;
+                  _rachanaaCountPrathamCntrl.text = "";
+                  _rachanaaCountDwitiyaCntrl.text = "";
+                  _rachanaaCountTrutiyaCntrl.text = "";
+                  _rachanaaCountAnyaCntrl.text = "";
+                  _educationUniversityID = null;
+                  _collegeID = null;
+                  _educationProgramID = null;
+                  _educationCourseID = null;
+                  _progValue = null;
+                  _educationOthrUniversityNameCntrl.text = "";
+                  _collegeOthrNameCntrl.text = "";
+                  _educationOthrProgramName.text = "";
+                  _educationOthrCourseName.text = "";
+                  _educationUniversityNameCntrl.text = "";
+                  _collegeNameCntrl.text = "";
+                  _educationProgramName.text = "";
+                  _educationCourseName.text = "";
+                  _standardValue = null;
+                  _educationOthrStandardNameCntrl.text = "";
+                  _othOrgNameCtrl.text = "";
+                  _preritSansthaValue = "";
+                  _hasBeenShikshak = false;
+                  _noDaayitva = false;
+                  _pravaasi = false;
+                  geoUnitIDnew = "";
+                  //
+                  _wasVistaarak = null;
+                  _wasPrachaarak = null;
+                  _hasShaakhaaExperience = false;
+                  _hasBaalShaakhaaExperience = false;
+                  _hasTarunVidShaakhaaExperience = false;
+                  _hasTarunVyavShaakhaaExperience = false;
+                  _hasProudhaVyavShaakhaaExperience = false;
+                  _isfb = null;
+                  _isinsta = null;
+                  _istwt = null;
+                  _fbUsage = null;
+                  _instaUsage = null;
+                  _twtUsage = null;
+                  _areaOfInterestForSearch.forEach((e) => e.isSelected = null);
+                  _areaOfExpertiseForSearch.forEach((e) => e.isSelected = null);
+                  // _areaOfInterestForSearch = [];
+                  // _areaOfExpertiseForSearch = [];
+                });
+              },
+              child: Icon(Icons.cleaning_services_rounded),
+              backgroundColor: Colors.green,
+            ),
+            SizedBox(width: 20),
+            FloatingActionButton(
+              heroTag: "btn3",
+              tooltip: Statics.getLabel("ExportToExcel"),
+              onPressed: _getCsv,
+              child: Icon(Icons.download_sharp),
+              backgroundColor: Colors.green,
             ),
           ],
         ),

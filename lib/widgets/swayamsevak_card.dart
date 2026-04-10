@@ -1117,10 +1117,12 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
     final mobileNumber = Statics.userDetails['MobileNumber'];
 
     return PermissionSet(
-      canTransfer: _checkTransferPermission(levelName, daayitvaName),
+      canTransfer: true,
+      // _checkTransferPermission(levelName, daayitvaName),
       canEdit: true,
       canResetPassword: levelID >= 4 && widget.swItem["CanUseApp"] == true,
-      canDelete: _checkDeletePermission(levelName, daayitvaName),
+      canDelete: levelID >= 4,
+      // _checkDeletePermission(levelName, daayitvaName),
       isDevUser: mobileNumber == '9322406725-1234',
     );
   }

@@ -52,12 +52,12 @@ import './database_helper.dart';
 bool isDevelopment = baseUrl == 'http://94.136.191.127:8074';
 
 ///Production
-const String baseUrl = 'http://114.79.135.131:8014';
-const String baseUrlAPI = 'http://114.79.135.131:8014/WCFServices/NiyojakProdMobileApp.svc';
+// const String baseUrl = 'http://114.79.135.131:8014';
+// const String baseUrlAPI = 'http://114.79.135.131:8014/WCFServices/NiyojakProdMobileApp.svc';
 
 /// Development
-// const String baseUrl = 'http://94.136.191.127:8074';
-// const String baseUrlAPI = 'http://94.136.191.127:8074/WCFServices/NiyojakProdMobileApp.svc';
+const String baseUrl = 'http://94.136.191.127:8074';
+const String baseUrlAPI = 'http://94.136.191.127:8074/WCFServices/NiyojakProdMobileApp.svc';
 
 ///OLD Development
 // const String baseUrl = 'http://108.181.165.29:8027';
@@ -311,6 +311,8 @@ Map<String, String> vaarshikotsavMonths = {
   '11': 'Nov',
   '12': 'Dec',
 };
+
+final levelId = int.tryParse(Statics.userDetails["LevelID"]?.toString() ?? "0") ?? 0;
 
 Map<String, dynamic> userDetails = {
   'userID': '',
@@ -2359,11 +2361,11 @@ Future<Notes?> getVersionReleaseNotes() async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
 
   var response = await http.get(Uri.parse(urlGetReleaseNotes), headers: jHeaders);
+  print(urlGetReleaseNotes);
 
   if (response.statusCode == 200) {
     final responseData = json.decode(response.body);
-    print(urlGetReleaseNotes);
-    print(responseData);
+    log(responseData);
 
     ReleaseNotesRespModel model = ReleaseNotesRespModel.fromJson(responseData);
 
@@ -4610,6 +4612,9 @@ Future<dynamic> getSwayamsevakTransferByID(String swayamsevakTransferID, String 
 
 Future<String> saveSwayamsevakTransferDetails(String inputJson) async {
   Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
+
+  log(urlSaveSwayamsevakTransferForApp);
+  log(inputJson);
 
   var response = await http.post(Uri.parse(urlSaveSwayamsevakTransferForApp), headers: jHeaders, body: inputJson);
 

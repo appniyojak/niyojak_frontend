@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:niyojak_prod/screens/search_swayamsevak_transfer.dart';
-import '../../providers/bals.dart';
 
 import '../../helpers/static_data.dart' as Statics;
+import '../../providers/bals.dart';
 
 class SwayamsevakTransferDetails extends StatefulWidget {
   var swayamsevakTransferID;
@@ -181,6 +181,14 @@ class SwayamsevakTransferDetailState extends State<SwayamsevakTransferDetails> {
       return;
     }
     _formKey.currentState!.save();
+
+    bool isVastiEmpty = _vastiValue == null || _vastiValue!.isEmpty;
+    bool isGraamEmpty = _graamValue == null || _graamValue!.isEmpty;
+
+    if (_statusValue == "220" && isVastiEmpty && isGraamEmpty) {
+      Statics.showMessageDialog(context, Statics.getLabel('VastiGraamValidation'));
+      return;
+    }
     setState(() {
       _isLoading = true;
     });
