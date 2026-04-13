@@ -99,6 +99,8 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
   // List<Bhaitakdata> kendraBaithakList = [];
   SadbhavKendraMasterdata? selectedKendra;
 
+  // AbhiyanSwayamsevakdata? initialData;
+
   @override
   void initState() {
     super.initState();
@@ -305,6 +307,74 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
     });
     await populatelinkedMahaanagarDropdown();
     await populatelinkedVibhaagDropdown('');
+    // if (initialData != null) {
+    //   setState(() {
+    //     if (initialData!.parentMahaanagarID != null) {
+    //       _isExpanded = true;
+    //       _linkedMahaanagarDisable = true;
+    //       _linkedMahaanagarValue = initialData!.parentMahaanagarID.toString();
+    //     }
+    //     if (initialData!.parentVibhaagID != null) {
+    //       populatelinkedVibhaagDropdown('');
+    //       _isExpanded = true;
+    //       _linkedVibhaagDisable = true;
+    //       _linkedVibhaagValue = initialData!.parentVibhaagID.toString();
+    //     }
+    //     if (initialData!.parentBhaagID != null) {
+    //       _isExpanded = true;
+    //       _linkedbhaagDisable = true;
+    //       _linkedbhaagValue = initialData!.parentBhaagID.toString();
+    //       populatelinkedNagarDropdown(_linkedbhaagValue, null);
+    //     }
+    //     if (initialData!.parentNagarID != null) {
+    //       _isExpanded = true;
+    //       _linkednagarDisable = true;
+    //       _linkednagarValue = initialData!.parentNagarID.toString();
+    //       populatelinkedMandalDropdown(_linkednagarValue);
+    //       populatelinkedVastiDropdown(_linkednagarValue);
+    //     }
+    //     if (initialData!.parentMandalID != null) {
+    //       _isExpanded = true;
+    //       _linkedmandalDisable = true;
+    //       _linkedmandalValue = initialData!.parentMandalID.toString();
+    //       populatelinkedGraamDropdown(_linkedmandalValue);
+    //     }
+    //     if (initialData!.levelName == "Vasti" && initialData!.geoUnitID != null) {
+    //       _isExpanded = true;
+    //       _linkedvastiDisable = true;
+    //       _linkedvastiValue = initialData!.geoUnitID.toString();
+    //     } else if (initialData!.levelName == "Graam" && initialData!.geoUnitID != null) {
+    //       _isExpanded = true;
+    //       _linkedgraamDisable = true;
+    //       _linkedgraamValue = initialData!.geoUnitID.toString();
+    //     } else if (initialData!.levelName == "Mandal" && initialData!.geoUnitID != null) {
+    //       _isExpanded = true;
+    //       _linkedmandalDisable = true;
+    //       _linkedmandalValue = initialData!.geoUnitID.toString();
+    //       populatelinkedGraamDropdown(_linkedmandalValue);
+    //     } else if (initialData!.levelName == "Nagar" && initialData!.geoUnitID != null) {
+    //       _isExpanded = true;
+    //       _linkednagarDisable = true;
+    //       _linkednagarValue = initialData!.geoUnitID.toString();
+    //       populatelinkedMandalDropdown(_linkednagarValue);
+    //       populatelinkedVastiDropdown(_linkednagarValue);
+    //     } else if (initialData!.levelName == "Bhaag" && initialData!.geoUnitID != null) {
+    //       _isExpanded = true;
+    //       _linkedbhaagDisable = true;
+    //       _linkedbhaagValue = initialData!.geoUnitID.toString();
+    //       populatelinkedNagarDropdown(_linkedbhaagValue, null);
+    //     } else {
+    //       _isExpanded = false;
+    //       // _linkedgraamDisable = true;
+    //       _linkedbhaagValue = null;
+    //       _linkedshaharValue = null;
+    //       _linkednagarValue = null;
+    //       _linkedmandalValue = null;
+    //       _linkedgraamValue = null;
+    //       _linkedvastiValue = null;
+    //     }
+    //   });
+    // }
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedMahaanagarDropdown() async {

@@ -343,7 +343,7 @@ class _SearchSewaVastiState extends State<SearchSewaVasti> {
             //     //     Statics.userDetails["DaayitvaName"] == "karyalay sachiv" ||
             //     //     Statics.userDetails["DaayitvaName"] == "कार्यालय सचिव")
             //     )
-            if ((int.tryParse(Statics.userDetails["LevelID"]?.toString() ?? "0") ?? 0) > 4)
+            if ((int.tryParse(Statics.userDetails["LevelID"]?.toString() ?? "0") ?? 0) > 1)
               IconButton(
                 padding: EdgeInsets.all(8),
                 icon: const Icon(Icons.add),

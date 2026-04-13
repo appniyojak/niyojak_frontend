@@ -9,10 +9,10 @@ import '../dialogs/levelwise_dropdown.dart';
 import '../helpers/static_data.dart' as Statics;
 import '../providers/bals.dart';
 import '../screens/edit_join_rss.dart';
-import 'home_screen/home_screen.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/join_rss_card.dart';
 import '../widgets/legend.dart';
+import 'home_screen/home_screen.dart';
 
 class SearchJoinRss extends StatefulWidget {
   static const routeName = '/search-joinrss-screen';
@@ -1058,7 +1058,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                                       SizedBox(
                                         height: 10,
                                       ),
-                                    if (_linkedmandal != null && _linkedmandal!.length > 0)
+                                    /*if (_linkedmandal != null && _linkedmandal!.length > 0)
                                       IgnorePointer(
                                         ignoring: _linkedmandalDisable!,
                                         child: DropdownButtonFormField(
@@ -1113,7 +1113,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                                             });
                                           },
                                         ),
-                                      ),
+                                      ),*/
                                   ],
                                 ),
                               ),

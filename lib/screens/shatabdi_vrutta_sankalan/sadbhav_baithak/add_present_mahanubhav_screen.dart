@@ -23,7 +23,7 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
   int? isVastiOrGraam;
 
   // All your variables here
-  int? sajjanShaktiShreniId;
+  int? sajjanShaktiShreniId = 356;
   String? sajjanShaktiShreniName;
   int? sajjanShaktiShreniEditId;
   Masterdata? sajjanShaktiShreniEditDataId;
@@ -243,10 +243,10 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
   Masterdata? selectedAnyaPrabhaviLokSamparkStithi;
   int? isActiveAnyaPrabhavilok = 1;
   int? pkidAnyaPrabhaviLok = 0;
-  int? anyaPrabhaviLokShreniId;
+  int? anyaPrabhaviLokShreniId = 127;
   int? anyaPrabhaviLokShreniIdEdit;
   String? anyaPrabhaviLokShreniName;
-  int? anyaPrabhaviLokUpShreniId;
+  int? anyaPrabhaviLokUpShreniId = 128;
   int? anyaPrabhaviLokUpShreniIdEdit;
   String? anyaPrabhaviLokUpShreniName;
   int? anyaPrabhaviLokUpShreni1Id;
@@ -522,7 +522,7 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
                           hintText: Statics.getLabel('Category'),
                           onItemSelected: (id, value, isOther) {
                             sajjanShaktiShreniName = value;
-                            sajjanShaktiShreniId = id;
+                            sajjanShaktiShreniId = 356;
                             print("id = $id --- Name = $value");
                           },
                           isDisable: true,
@@ -747,7 +747,7 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
                                       ignoreSecond: true,
                                       anyaPrabhaviLokUpShreni1Id: anyaPrabhaviLokUpShreni1IdEdit,
                                       onValueSelected: (id, name, value) {
-                                        anyaPrabhaviLokShreniId = id;
+                                        anyaPrabhaviLokShreniId = 127;
                                         anyaPrabhaviLokShreniName = name;
                                         setState(() {
                                           selectedShreni = value;
@@ -757,7 +757,7 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
                                         print("id = $id --- Name = $value");
                                       },
                                       onDependentValueSelected: (id, name, value) {
-                                        anyaPrabhaviLokUpShreniId = id;
+                                        anyaPrabhaviLokUpShreniId = 128;
                                         anyaPrabhaviLokUpShreniName = name;
                                         setState(() {
                                           selectedUpShreni = value;
@@ -1070,7 +1070,7 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
                               name: sajjanShaktiNameController.text.trim(),
                               address: sajjanShaktiAddressController.text.trim(),
                               doorabhaash: sajjanShaktiPhoneController.text.trim(),
-                              shreneeid: sajjanShaktiShreniId,
+                              shreneeid: sajjanShaktiShreniId ?? 356,
                               selectedDropdownValueName: sajjanShaktiShreniName,
                               otherShreniName: sajjanShaktiAnyaShreniNameController.text.trim(),
                               sanstheCheNaav: sajjanShaktiSansthecheNaavController.text.trim(),
@@ -1125,9 +1125,9 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
                               name: anyaPrabhaviLokNaavController.text,
                               address: anyaPrabhaviLokAddressController.text,
                               doorabhaash: anyaPrabhaviLokMobileNoController.text,
-                              shreneeid: anyaPrabhaviLokShreniId,
+                              shreneeid: anyaPrabhaviLokShreniId ?? 127,
                               selectedDropdownValueName: anyaPrabhaviLokShreniName,
-                              upshreneeid: anyaPrabhaviLokUpShreniId,
+                              upshreneeid: anyaPrabhaviLokUpShreniId ?? 128,
                               selectedDropdownValueName1: anyaPrabhaviLokUpShreniName,
                               upshreneeid2: anyaPrabhaviLokUpShreni1Id,
                               selectedDropdownValueName2: anyaPrabhaviLokUpShreni1Name,
