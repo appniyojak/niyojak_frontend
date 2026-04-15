@@ -163,12 +163,15 @@ class Single1ColumnRow extends StatelessWidget {
   var txtString;
   var value;
   double? fontsize = 0;
-
+  int? valFlex;
+  EdgeInsets? padding;
   Single1ColumnRow({
     Key? key,
     this.txtString,
     this.value,
     this.fontsize,
+    this.valFlex,
+    this.padding,
   }) : super(key: key);
 
   @override
@@ -178,6 +181,7 @@ class Single1ColumnRow extends StatelessWidget {
         Center(
           child: Container(
             width: Statics.getDeviceSize(context).width * 0.84,
+            padding: padding ?? EdgeInsets.zero,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -186,7 +190,7 @@ class Single1ColumnRow extends StatelessWidget {
                   child: Text(txtString, style: TextStyle(fontSize: fontsize, fontWeight: FontWeight.w500)),
                 ),
                 Flexible(
-                  flex: 1,
+                  flex: valFlex ?? 1,
                   child: Text(value == "null" ? "0" : value, style: TextStyle(fontSize: fontsize, fontWeight: FontWeight.w600)),
                 ),
               ],

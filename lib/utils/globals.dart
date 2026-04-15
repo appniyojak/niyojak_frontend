@@ -1,9 +1,12 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:niyojak_prod/models/response_model/dropdown_level_responsemodel.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+import '../helpers/database_helper.dart';
 
 class MyAppGlobals {
   static String checkTextNullEmpty(String? txt) {
@@ -63,5 +66,12 @@ class MyAppGlobals {
     final match = regExp.firstMatch(input);
 
     return match != null && match.group(1)!.isNotEmpty;
+  }
+
+  Future<DropDownModel> getLevelLDB() async {
+    var result = await DatabaseHelper.getData("Select * from DaayitwaLevelMaster;");
+    var ddmodel = DropDownModel.fromJson(result.first);
+    //List<DropDownModel> dropdownlist = result.map((e) => DropDownModel.fromJson(e)).toList();
+    return ddmodel;
   }
 }

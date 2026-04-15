@@ -85,92 +85,44 @@ class _HomeScreenState extends State<HomeScreen> {
   // ─── My – Shaakhaa Vrutta Summary ─────────────────────────────────────────
   String? myMaasikEQ0 = '', myMaasikEQ1 = '';
   String? mySaaptaahik1To3 = '', mySaaptaahikEQ0 = '', mySaaptaahikGTE4 = '';
-  String? myShaakhaa1To24 = '',
-      myShaakhaaEQ0 = '',
-      myShaakhaaGTE25 = '',
-      myShaakhaaEQ30 = '';
+  String? myShaakhaa1To24 = '', myShaakhaaEQ0 = '', myShaakhaaGTE25 = '', myShaakhaaEQ30 = '';
 
   // ─── Tg – Shaakhaa Vrutta Summary ─────────────────────────────────────────
   String? tgMaasikEQ0 = '', tgMaasikEQ1 = '';
   String? tgSaaptaahik1To3 = '', tgSaaptaahikEQ0 = '', tgSaaptaahikGTE4 = '';
-  String? tgShaakhaa1To24 = '',
-      tgShaakhaaEQ0 = '',
-      tgShaakhaaGTE25 = '',
-      tgShaakhaaEQ30 = '';
+  String? tgShaakhaa1To24 = '', tgShaakhaaEQ0 = '', tgShaakhaaGTE25 = '', tgShaakhaaEQ30 = '';
 
   // ─── My – counts ───────────────────────────────────────────────────────────
-  String? myTotalKaaryakartaaCount = '',
-      myPratidnyitCount = '',
-      myTotalSwayamsevakCount = '';
+  String? myTotalKaaryakartaaCount = '', myPratidnyitCount = '', myTotalSwayamsevakCount = '';
   String? myShishuCount = '', myBaalCount = '', myTarunVidyaarthiCount = '';
-  String? myTarunVyavasaayeeCount = '',
-      myProudhaVyavasaayeeCount = '',
-      myUnknownAgeCount = '';
+  String? myTarunVyavasaayeeCount = '', myProudhaVyavasaayeeCount = '', myUnknownAgeCount = '';
   String? myPraarambhikShikshitCount = '', myPraathamikShikshitCount = '';
-  String? myPrathamVarshaShikshitCount = '',
-      myDwitiyaVarshaShikshitCount = '',
-      myTrutiyaVarshaShikshitCount = '';
+  String? myPrathamVarshaShikshitCount = '', myDwitiyaVarshaShikshitCount = '', myTrutiyaVarshaShikshitCount = '';
   String? myNoShikshanCount = '';
-  String? myDailyShaakhaaKaaryakartaaCount = '',
-      mySaaptaahikMilanKaaryakartaaCount = '',
-      myMaasikMilanKaaryakartaaCount = '';
-  String? myVastiKaaryakartaaCount = '',
-      myGraamKaaryakartaaCount = '',
-      myMandalKaaryakartaaCount = '';
-  String? myNagarKaaryakartaaCount = '',
-      myShaharKaaryakartaaCount = '',
-      myBhaagKaaryakartaaCount = '';
-  String? myVibhaagKaaryakartaaCount = '',
-      myMahaanagarKaaryakartaaCount = '',
-      myPraantKaaryakartaaCount = '';
-  String? myKshetraKaaryakartaaCount = '',
-      myAkhilBhaaratiyaKaaryakartaaCount = '',
-      myPravaaseeKaaryakartaaCount = '';
+  String? myDailyShaakhaaKaaryakartaaCount = '', mySaaptaahikMilanKaaryakartaaCount = '', myMaasikMilanKaaryakartaaCount = '';
+  String? myVastiKaaryakartaaCount = '', myGraamKaaryakartaaCount = '', myMandalKaaryakartaaCount = '';
+  String? myNagarKaaryakartaaCount = '', myShaharKaaryakartaaCount = '', myBhaagKaaryakartaaCount = '';
+  String? myVibhaagKaaryakartaaCount = '', myMahaanagarKaaryakartaaCount = '', myPraantKaaryakartaaCount = '';
+  String? myKshetraKaaryakartaaCount = '', myAkhilBhaaratiyaKaaryakartaaCount = '', myPravaaseeKaaryakartaaCount = '';
   String? myGatividhiKaaryakartaaCount = '', myAayaamKaaryakartaaCount = '';
-  String? mySanghaPreritSansthaaKaaryakartaaCount = '',
-      mySocialOrganizationKaaryakartaaCount = '';
+  String? mySanghaPreritSansthaaKaaryakartaaCount = '', mySocialOrganizationKaaryakartaaCount = '';
 //------ Blood Group - count-------------------------------------------------//
-  String? opos = '',
-      oneg = '',
-      apos = '',
-      aneg = '',
-      bpos = '',
-      bneg = '',
-      abpos = '',
-      abneg = '',
-      nivadlenahi = '';
+  String? opos = '', oneg = '', apos = '', aneg = '', bpos = '', bneg = '', abpos = '', abneg = '', nivadlenahi = '';
   // ─── Tg – counts ───────────────────────────────────────────────────────────
-  String? tgTotalKaaryakartaaCount = '',
-      tgPratidnyitCount = '',
-      tgTotalSwayamsevakCount = '';
+  String? tgTotalKaaryakartaaCount = '', tgPratidnyitCount = '', tgTotalSwayamsevakCount = '';
   String? tgShaakhaaKaaryakartaaCount = '';
   String? tgShishuCount = '', tgBaalCount = '', tgTarunVidyaarthiCount = '';
-  String? tgTarunVyavasaayeeCount = '',
-      tgProudhaVyavasaayeeCount = '',
-      tgUnknownAgeCount = '';
+  String? tgTarunVyavasaayeeCount = '', tgProudhaVyavasaayeeCount = '', tgUnknownAgeCount = '';
   String? tgPraarambhikShikshitCount = '', tgPraathamikShikshitCount = '';
-  String? tgPrathamVarshaShikshitCount = '',
-      tgDwitiyaVarshaShikshitCount = '',
-      tgTrutiyaVarshaShikshitCount = '';
+  String? tgPrathamVarshaShikshitCount = '', tgDwitiyaVarshaShikshitCount = '', tgTrutiyaVarshaShikshitCount = '';
   String? tgNoShikshanCount = '';
-  String? tgDailyShaakhaaKaaryakartaaCount = '',
-      tgSaaptaahikMilanKaaryakartaaCount = '',
-      tgMaasikMilanKaaryakartaaCount = '';
-  String? tgVastiKaaryakartaaCount = '',
-      tgGraamKaaryakartaaCount = '',
-      tgMandalKaaryakartaaCount = '';
-  String? tgNagarKaaryakartaaCount = '',
-      tgShaharKaaryakartaaCount = '',
-      tgBhaagKaaryakartaaCount = '';
-  String? tgVibhaagKaaryakartaaCount = '',
-      tgMahaanagarKaaryakartaaCount = '',
-      tgPraantKaaryakartaaCount = '';
-  String? tgKshetraKaaryakartaaCount = '',
-      tgAkhilBhaaratiyaKaaryakartaaCount = '',
-      tgPravaaseeKaaryakartaaCount = '';
+  String? tgDailyShaakhaaKaaryakartaaCount = '', tgSaaptaahikMilanKaaryakartaaCount = '', tgMaasikMilanKaaryakartaaCount = '';
+  String? tgVastiKaaryakartaaCount = '', tgGraamKaaryakartaaCount = '', tgMandalKaaryakartaaCount = '';
+  String? tgNagarKaaryakartaaCount = '', tgShaharKaaryakartaaCount = '', tgBhaagKaaryakartaaCount = '';
+  String? tgVibhaagKaaryakartaaCount = '', tgMahaanagarKaaryakartaaCount = '', tgPraantKaaryakartaaCount = '';
+  String? tgKshetraKaaryakartaaCount = '', tgAkhilBhaaratiyaKaaryakartaaCount = '', tgPravaaseeKaaryakartaaCount = '';
   String? tgGatividhiKaaryakartaaCount = '', tgAayaamKaaryakartaaCount = '';
-  String? tgSanghaPreritSansthaaKaaryakartaaCount = '',
-      tgSocialOrganizationKaaryakartaaCount = '';
+  String? tgSanghaPreritSansthaaKaaryakartaaCount = '', tgSocialOrganizationKaaryakartaaCount = '';
   String? tgMasikMilanCount = '', tgSanghaMandaliCount = '';
 
   // ─── Misc ──────────────────────────────────────────────────────────────────
@@ -183,22 +135,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // ─── Dropdown data – set 1 (Target GeoUnit panel) ─────────────────────────
   List<GeoUnitMasterBAL>? _linkedMahaanagar, _linkedVibhaag, _linkedbhaag;
-  List<GeoUnitMasterBAL>? _linkedshahar,
-      _linkednagar,
-      _linkedmandal,
-      _linkedgraam,
-      _linkedvasti;
-  String? _linkedMahaanagarValue = "",
-      _linkedVibhaagValue = "",
-      _linkedbhaagValue = "";
-  String? _linkedshaharValue = "",
-      _linkednagarValue = "",
-      _linkedmandalValue = "";
+  List<GeoUnitMasterBAL>? _linkedshahar, _linkednagar, _linkedmandal, _linkedgraam, _linkedvasti;
+  String? _linkedMahaanagarValue = "", _linkedVibhaagValue = "", _linkedbhaagValue = "";
+  String? _linkedshaharValue = "", _linkednagarValue = "", _linkedmandalValue = "";
   String? _linkedgraamValue = "", _linkedvastiValue = "";
 
   // ─── Dropdown data – set 2 (Bhaugolik rachana panel) ──────────────────────
   List<GeoUnitMasterBAL>? _linkedMahaanagar2, _linkedVibhaag2;
   String? _linkedMahaanagarValue2 = "", _linkedVibhaagValue2 = "";
+
+  //-------Ganvesh data-------------//
 
   late List<GetCount> _bloodgroup = [];
   late List<GetCount> _expertieslist = [];
@@ -206,13 +152,10 @@ class _HomeScreenState extends State<HomeScreen> {
   late List<GetCount> _interestlist = [];
   late List<GetCount> _sangayulist = [];
   late List<GetCount> _ghoshwadlist = [];
+  GanveshData? _ganveshData;
+  Vehicle? _vehicle;
   // ─── Access-control lists ─────────────────────────────────────────────────
-  final List<String> _deniedLevels = [
-    "Shakha",
-    "Saptahik Milan",
-    "शाखा",
-    "साप्ताहिक मिलन"
-  ];
+  final List<String> _deniedLevels = ["Shakha", "Saptahik Milan", "शाखा", "साप्ताहिक मिलन"];
 
   final List<String> _allowedLevelsForGeoUnitChange = [
     "Praant",
@@ -285,8 +228,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _fetchNotificationData() async {
     try {
-      notificationListdata =
-          await Statics.getNotificationDataList(Statics.userDetails["userID"]);
+      notificationListdata = await Statics.getNotificationDataList(Statics.userDetails["userID"]);
       setState(() {});
     } catch (e) {
       print('Error fetching notification data: $e');
@@ -298,13 +240,11 @@ class _HomeScreenState extends State<HomeScreen> {
     final data = pref.getString("AbhiyanSwayamsevakData");
     userDaayitvaNameforshow = pref.getString("DaayitvaNameforshow") ?? '';
     await _checkLoginDate();
-    if (data != null)
-      initialData = AbhiyanSwayamsevakdata.fromJson(jsonDecode(data));
+    if (data != null) initialData = AbhiyanSwayamsevakdata.fromJson(jsonDecode(data));
     setState(() {});
   }
 
-  Future<void> _getUpkhandUpnagarReport(
-      String? targetGeoUnitID, String levelName) async {
+  Future<void> _getUpkhandUpnagarReport(String? targetGeoUnitID, String levelName) async {
     setState(() => _isLoading = true);
     final data = await Statics.upkhandUpnagarReportData(
       userID: Statics.userDetails["userID"],
@@ -320,32 +260,29 @@ class _HomeScreenState extends State<HomeScreen> {
   // ── My dashboard data ──────────────────────────────────────────────────────
   Future<void> _fetchMyDashboardData() async {
     setState(() => _isMySearching = true);
-    final data = await Statics.refreshDashboardData(
-        Statics.userDetails["userID"], geoUnitID);
+    final data = await Statics.refreshDashboardData(Statics.userDetails["userID"], geoUnitID);
     if (data['Status'] != "Success") {
       setState(() => _isMySearching = false);
       return;
     }
     final sd = data["HomeScreenData"];
     final vd = sd["ShaakhaaVruttaSummaryData"];
+
     if (sd["BloodGroup"] != null) {
       _bloodgroup.clear();
       sd["BloodGroup"].forEach((v) => _bloodgroup.add(GetCount.fromJson(v)));
     }
     if (sd["AreaOfExpertise"] != null) {
       _expertieslist.clear();
-      sd["AreaOfExpertise"]
-          .forEach((v) => _expertieslist.add(GetCount.fromJson(v)));
+      sd["AreaOfExpertise"].forEach((v) => _expertieslist.add(GetCount.fromJson(v)));
     }
     if (sd["AreaOfInterest"] != null) {
       _interestlist.clear();
-      sd["AreaOfInterest"]
-          .forEach((v) => _interestlist.add(GetCount.fromJson(v)));
+      sd["AreaOfInterest"].forEach((v) => _interestlist.add(GetCount.fromJson(v)));
     }
     if (sd["MotherTongue"] != null) {
       _mothertonguelist.clear();
-      sd["MotherTongue"]
-          .forEach((v) => _mothertonguelist.add(GetCount.fromJson(v)));
+      sd["MotherTongue"].forEach((v) => _mothertonguelist.add(GetCount.fromJson(v)));
     }
     if (sd["sangaayu"] != null) {
       _sangayulist.clear();
@@ -354,6 +291,12 @@ class _HomeScreenState extends State<HomeScreen> {
     if (sd["goshwad"] != null) {
       _ghoshwadlist.clear();
       sd["goshwad"].forEach((v) => _ghoshwadlist.add(GetCount.fromJson(v)));
+    }
+    if (sd["GanaveshData"] != null) {
+      _ganveshData = GanveshData.fromJson(sd["GanaveshData"]);
+    }
+    if (sd['VehicleData'] != null) {
+      _vehicle = Vehicle.fromJson(sd['VehicleData']);
     }
     setState(() {
       myTotalKaaryakartaaCount = sd["TotalKaaryakartaaCount"].toString();
@@ -368,19 +311,13 @@ class _HomeScreenState extends State<HomeScreen> {
       myUnknownAgeCount = sd["UnknownAgeCount"].toString();
       myPraarambhikShikshitCount = sd["PrarambhikShikshitCount"].toString();
       myPraathamikShikshitCount = sd["PraathamikShikshitCount"].toString();
-      myPrathamVarshaShikshitCount =
-          sd["PrathamVarshaShikshitCount"].toString();
-      myDwitiyaVarshaShikshitCount =
-          sd["DwitiyaVarshaShikshitCount"].toString();
-      myTrutiyaVarshaShikshitCount =
-          sd["TrutiyaVarshaShikshitCount"].toString();
+      myPrathamVarshaShikshitCount = sd["PrathamVarshaShikshitCount"].toString();
+      myDwitiyaVarshaShikshitCount = sd["DwitiyaVarshaShikshitCount"].toString();
+      myTrutiyaVarshaShikshitCount = sd["TrutiyaVarshaShikshitCount"].toString();
       myNoShikshanCount = sd["NoShikshanCount"].toString();
-      myDailyShaakhaaKaaryakartaaCount =
-          sd["DailyShaakhaaKaaryakartaaCount"].toString();
-      mySaaptaahikMilanKaaryakartaaCount =
-          sd["SaaptaahikMilanKaaryakartaaCount"].toString();
-      myMaasikMilanKaaryakartaaCount =
-          sd["MaasikMilanKaaryakartaaCount"].toString();
+      myDailyShaakhaaKaaryakartaaCount = sd["DailyShaakhaaKaaryakartaaCount"].toString();
+      mySaaptaahikMilanKaaryakartaaCount = sd["SaaptaahikMilanKaaryakartaaCount"].toString();
+      myMaasikMilanKaaryakartaaCount = sd["MaasikMilanKaaryakartaaCount"].toString();
       myVastiKaaryakartaaCount = sd["VastiKaaryakartaaCount"].toString();
       myGraamKaaryakartaaCount = sd["GraamKaaryakartaaCount"].toString();
       myMandalKaaryakartaaCount = sd["MandalKaaryakartaaCount"].toString();
@@ -388,21 +325,15 @@ class _HomeScreenState extends State<HomeScreen> {
       myShaharKaaryakartaaCount = sd["ShaharKaaryakartaaCount"].toString();
       myBhaagKaaryakartaaCount = sd["BhaagKaaryakartaaCount"].toString();
       myVibhaagKaaryakartaaCount = sd["VibhaagKaaryakartaaCount"].toString();
-      myMahaanagarKaaryakartaaCount =
-          sd["MahaanagarKaaryakartaaCount"].toString();
+      myMahaanagarKaaryakartaaCount = sd["MahaanagarKaaryakartaaCount"].toString();
       myPraantKaaryakartaaCount = sd["PraantKaaryakartaaCount"].toString();
       myKshetraKaaryakartaaCount = sd["KshetraKaaryakartaaCount"].toString();
-      myAkhilBhaaratiyaKaaryakartaaCount =
-          sd["AkhilBhaaratiyaKaaryakartaaCount"].toString();
-      myPravaaseeKaaryakartaaCount =
-          sd["PravaaseeKaaryakartaaCount"].toString();
-      myGatividhiKaaryakartaaCount =
-          sd["GatividhiKaaryakartaaCount"].toString();
+      myAkhilBhaaratiyaKaaryakartaaCount = sd["AkhilBhaaratiyaKaaryakartaaCount"].toString();
+      myPravaaseeKaaryakartaaCount = sd["PravaaseeKaaryakartaaCount"].toString();
+      myGatividhiKaaryakartaaCount = sd["GatividhiKaaryakartaaCount"].toString();
       myAayaamKaaryakartaaCount = sd["AayaamKaaryakartaaCount"].toString();
-      mySanghaPreritSansthaaKaaryakartaaCount =
-          sd["SanghaPreritSansthaaKaaryakartaaCount"].toString();
-      mySocialOrganizationKaaryakartaaCount =
-          sd["SocialOrganizationKaaryakartaaCount"].toString();
+      mySanghaPreritSansthaaKaaryakartaaCount = sd["SanghaPreritSansthaaKaaryakartaaCount"].toString();
+      mySocialOrganizationKaaryakartaaCount = sd["SocialOrganizationKaaryakartaaCount"].toString();
       notificationCount = sd["Notificationcount"].toString();
 
       // Vrutta summary
@@ -421,12 +352,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // ── Target dashboard data ──────────────────────────────────────────────────
-  Future<void> _fetchTargetDashboardData(
-      dynamic tgGeoUnitID, int levelID) async {
+  Future<void> _fetchTargetDashboardData(dynamic tgGeoUnitID, int levelID) async {
     _tgLevelID = levelID;
     setState(() => _isTgSearching = true);
-    final data = await Statics.getDashboardDataByGeoUnit(
-        Statics.userDetails["userID"], tgGeoUnitID);
+    final data = await Statics.getDashboardDataByGeoUnit(Statics.userDetails["userID"], tgGeoUnitID);
     if (data['Status'] != "Success") {
       _clearTargetData();
       return;
@@ -439,18 +368,15 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     if (sd["AreaOfExpertise"] != null) {
       _expertieslist.clear();
-      sd["AreaOfExpertise"]
-          .forEach((v) => _expertieslist.add(GetCount.fromJson(v)));
+      sd["AreaOfExpertise"].forEach((v) => _expertieslist.add(GetCount.fromJson(v)));
     }
     if (sd["AreaOfInterest"] != null) {
       _interestlist.clear();
-      sd["AreaOfInterest"]
-          .forEach((v) => _interestlist.add(GetCount.fromJson(v)));
+      sd["AreaOfInterest"].forEach((v) => _interestlist.add(GetCount.fromJson(v)));
     }
     if (sd["MotherTongue"] != null) {
       _mothertonguelist.clear();
-      sd["MotherTongue"]
-          .forEach((v) => _mothertonguelist.add(GetCount.fromJson(v)));
+      sd["MotherTongue"].forEach((v) => _mothertonguelist.add(GetCount.fromJson(v)));
     }
     if (sd["sangaayu"] != null) {
       _sangayulist.clear();
@@ -459,6 +385,12 @@ class _HomeScreenState extends State<HomeScreen> {
     if (sd["goshwad"] != null) {
       _ghoshwadlist.clear();
       sd["goshwad"].forEach((v) => _ghoshwadlist.add(GetCount.fromJson(v)));
+    }
+    if (sd["GanaveshData"] != null) {
+      _ganveshData = GanveshData.fromJson(sd["GanaveshData"]);
+    }
+    if (sd['VehicleData'] != null) {
+      _vehicle = Vehicle.fromJson(sd['VehicleData']);
     }
     setState(() {
       tgTotalKaaryakartaaCount = sd["TotalKaaryakartaaCount"].toString();
@@ -473,19 +405,13 @@ class _HomeScreenState extends State<HomeScreen> {
       tgUnknownAgeCount = sd["UnknownAgeCount"].toString();
       tgPraarambhikShikshitCount = sd["PraarambhikShikshitCount"].toString();
       tgPraathamikShikshitCount = sd["PraathamikShikshitCount"].toString();
-      tgPrathamVarshaShikshitCount =
-          sd["PrathamVarshaShikshitCount"].toString();
-      tgDwitiyaVarshaShikshitCount =
-          sd["DwitiyaVarshaShikshitCount"].toString();
-      tgTrutiyaVarshaShikshitCount =
-          sd["TrutiyaVarshaShikshitCount"].toString();
+      tgPrathamVarshaShikshitCount = sd["PrathamVarshaShikshitCount"].toString();
+      tgDwitiyaVarshaShikshitCount = sd["DwitiyaVarshaShikshitCount"].toString();
+      tgTrutiyaVarshaShikshitCount = sd["TrutiyaVarshaShikshitCount"].toString();
       tgNoShikshanCount = sd["NoShikshanCount"].toString();
-      tgDailyShaakhaaKaaryakartaaCount =
-          sd["DailyShaakhaaKaaryakartaaCount"].toString();
-      tgSaaptaahikMilanKaaryakartaaCount =
-          sd["SaaptaahikMilanKaaryakartaaCount"].toString();
-      tgMaasikMilanKaaryakartaaCount =
-          sd["MaasikMilanKaaryakartaaCount"].toString();
+      tgDailyShaakhaaKaaryakartaaCount = sd["DailyShaakhaaKaaryakartaaCount"].toString();
+      tgSaaptaahikMilanKaaryakartaaCount = sd["SaaptaahikMilanKaaryakartaaCount"].toString();
+      tgMaasikMilanKaaryakartaaCount = sd["MaasikMilanKaaryakartaaCount"].toString();
       tgVastiKaaryakartaaCount = sd["VastiKaaryakartaaCount"].toString();
       tgGraamKaaryakartaaCount = sd["GraamKaaryakartaaCount"].toString();
       tgMandalKaaryakartaaCount = sd["MandalKaaryakartaaCount"].toString();
@@ -493,21 +419,15 @@ class _HomeScreenState extends State<HomeScreen> {
       tgShaharKaaryakartaaCount = sd["ShaharKaaryakartaaCount"].toString();
       tgBhaagKaaryakartaaCount = sd["BhaagKaaryakartaaCount"].toString();
       tgVibhaagKaaryakartaaCount = sd["VibhaagKaaryakartaaCount"].toString();
-      tgMahaanagarKaaryakartaaCount =
-          sd["MahaanagarKaaryakartaaCount"].toString();
+      tgMahaanagarKaaryakartaaCount = sd["MahaanagarKaaryakartaaCount"].toString();
       tgPraantKaaryakartaaCount = sd["PraantKaaryakartaaCount"].toString();
       tgKshetraKaaryakartaaCount = sd["KshetraKaaryakartaaCount"].toString();
-      tgAkhilBhaaratiyaKaaryakartaaCount =
-          sd["AkhilBhaaratiyaKaaryakartaaCount"].toString();
-      tgPravaaseeKaaryakartaaCount =
-          sd["PravaaseeKaaryakartaaCount"].toString();
-      tgGatividhiKaaryakartaaCount =
-          sd["GatividhiKaaryakartaaCount"].toString();
+      tgAkhilBhaaratiyaKaaryakartaaCount = sd["AkhilBhaaratiyaKaaryakartaaCount"].toString();
+      tgPravaaseeKaaryakartaaCount = sd["PravaaseeKaaryakartaaCount"].toString();
+      tgGatividhiKaaryakartaaCount = sd["GatividhiKaaryakartaaCount"].toString();
       tgAayaamKaaryakartaaCount = sd["AayaamKaaryakartaaCount"].toString();
-      tgSanghaPreritSansthaaKaaryakartaaCount =
-          sd["SanghaPreritSansthaaKaaryakartaaCount"].toString();
-      tgSocialOrganizationKaaryakartaaCount =
-          sd["SocialOrganizationKaaryakartaaCount"].toString();
+      tgSanghaPreritSansthaaKaaryakartaaCount = sd["SanghaPreritSansthaaKaaryakartaaCount"].toString();
+      tgSocialOrganizationKaaryakartaaCount = sd["SocialOrganizationKaaryakartaaCount"].toString();
       notificationCount = sd["Notificationcount"].toString();
 
       // Vrutta summary
@@ -526,30 +446,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _clearTargetData() {
     setState(() {
-      tgTotalKaaryakartaaCount =
-          tgPratidnyitCount = tgShaakhaaKaaryakartaaCount = '';
+      tgTotalKaaryakartaaCount = tgPratidnyitCount = tgShaakhaaKaaryakartaaCount = '';
       tgShishuCount = tgBaalCount = tgTarunVidyaarthiCount = '';
-      tgTarunVyavasaayeeCount =
-          tgProudhaVyavasaayeeCount = tgUnknownAgeCount = '';
+      tgTarunVyavasaayeeCount = tgProudhaVyavasaayeeCount = tgUnknownAgeCount = '';
       tgPraarambhikShikshitCount = tgPraathamikShikshitCount = '';
-      tgPrathamVarshaShikshitCount =
-          tgDwitiyaVarshaShikshitCount = tgTrutiyaVarshaShikshitCount = '';
+      tgPrathamVarshaShikshitCount = tgDwitiyaVarshaShikshitCount = tgTrutiyaVarshaShikshitCount = '';
       tgNoShikshanCount = tgDailyShaakhaaKaaryakartaaCount = '';
       tgSaaptaahikMilanKaaryakartaaCount = tgMaasikMilanKaaryakartaaCount = '';
-      tgVastiKaaryakartaaCount =
-          tgGraamKaaryakartaaCount = tgMandalKaaryakartaaCount = '';
-      tgNagarKaaryakartaaCount =
-          tgShaharKaaryakartaaCount = tgBhaagKaaryakartaaCount = '';
-      tgVibhaagKaaryakartaaCount =
-          tgMahaanagarKaaryakartaaCount = tgPraantKaaryakartaaCount = '';
-      tgKshetraKaaryakartaaCount = tgAkhilBhaaratiyaKaaryakartaaCount =
-          tgPravaaseeKaaryakartaaCount = '';
+      tgVastiKaaryakartaaCount = tgGraamKaaryakartaaCount = tgMandalKaaryakartaaCount = '';
+      tgNagarKaaryakartaaCount = tgShaharKaaryakartaaCount = tgBhaagKaaryakartaaCount = '';
+      tgVibhaagKaaryakartaaCount = tgMahaanagarKaaryakartaaCount = tgPraantKaaryakartaaCount = '';
+      tgKshetraKaaryakartaaCount = tgAkhilBhaaratiyaKaaryakartaaCount = tgPravaaseeKaaryakartaaCount = '';
       tgGatividhiKaaryakartaaCount = tgAayaamKaaryakartaaCount = '';
-      tgSanghaPreritSansthaaKaaryakartaaCount =
-          tgSocialOrganizationKaaryakartaaCount = '';
+      tgSanghaPreritSansthaaKaaryakartaaCount = tgSocialOrganizationKaaryakartaaCount = '';
       tgTotalSwayamsevakCount = tgMasikMilanCount = tgSanghaMandaliCount = '';
-      tgMaasikEQ0 = tgMaasikEQ1 =
-          tgSaaptaahikEQ0 = tgSaaptaahik1To3 = tgSaaptaahikGTE4 = '';
+      tgMaasikEQ0 = tgMaasikEQ1 = tgSaaptaahikEQ0 = tgSaaptaahik1To3 = tgSaaptaahikGTE4 = '';
       tgShaakhaaEQ0 = tgShaakhaa1To24 = tgShaakhaaGTE25 = tgShaakhaaEQ30 = '';
       _isTgSearching = false;
     });
@@ -570,75 +481,62 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _populateMahaanagar1() async {
-    final data = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['MahaanagarLevelID'].toString(), "", "", "");
+    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MahaanagarLevelID'].toString(), "", "", "");
     setState(() => _linkedMahaanagar = data);
   }
 
   void _populateVibhaag1() async {
-    final data = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['VibhaagLevelID'].toString(), "", "", "");
+    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), "", "", "");
     setState(() => _linkedVibhaag = data);
   }
 
   void _populateMahaanagar2() async {
-    final data = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['MahaanagarLevelID'].toString(), "", "", "");
+    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MahaanagarLevelID'].toString(), "", "", "");
     setState(() => _linkedMahaanagar2 = data);
   }
 
   void _populateVibhaag2() async {
-    final data = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['VibhaagLevelID'].toString(), "", "", "");
+    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), "", "", "");
     setState(() => _linkedVibhaag2 = data);
   }
 
   void _populateBhaag(String vibhaagID) async {
-    _linkedshaharValue = _linkednagarValue =
-        _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-    final data = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['BhaagLevelID'].toString(), vibhaagID, "Vibhaag", "");
+    _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagID, "Vibhaag", "");
     setState(() => _linkedbhaag = data);
   }
 
   void _populateShahar(String bhaagID) async {
-    _linkedshaharValue =
-        _linkedvastiValue = _linkedshahar = _linkedvasti = null;
-    final data = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['ShaharLevelID'].toString(), bhaagID, 'Bhaag', '');
+    _linkedshaharValue = _linkedvastiValue = _linkedshahar = _linkedvasti = null;
+    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaharLevelID'].toString(), bhaagID, 'Bhaag', '');
     setState(() => _linkedshahar = data.isNotEmpty ? data : null);
   }
 
   void _populateNagar({String? bhaagID, String? shaharID}) async {
-    _linkednagarValue =
-        _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
     final parentID = shaharID ?? bhaagID!;
     final parentType = shaharID != null ? 'Shahar' : 'Bhaag';
-    final data = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['NagarLevelID'].toString(), parentID, parentType, '');
+    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), parentID, parentType, '');
     setState(() => _linkednagar = data.isNotEmpty ? data : null);
   }
 
   void _populateMandal(String nagarID) async {
     _linkedmandalValue = _linkedgraamValue = null;
     _linkedmandal = _linkedgraam = null;
-    final data = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['MandalLevelID'].toString(), nagarID, 'Nagar', '');
+    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarID, 'Nagar', '');
     setState(() => _linkedmandal = data.isNotEmpty ? data : null);
   }
 
   void _populateGraam(String mandalID) async {
     _linkedgraamValue = null;
-    final data = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['GraamLevelID'].toString(), mandalID, 'Mandal', '');
+    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['GraamLevelID'].toString(), mandalID, 'Mandal', '');
     setState(() => _linkedgraam = data.isNotEmpty ? data : null);
   }
 
   void _populateVasti(String nagarID) async {
     _linkedvastiValue = null;
-    final data = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['VastiLevelID'].toString(), nagarID, 'Nagar', '');
+    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarID, 'Nagar', '');
     setState(() => _linkedvasti = data.isNotEmpty ? data : null);
   }
 
@@ -646,11 +544,9 @@ class _HomeScreenState extends State<HomeScreen> {
   // ACCESS CONTROL HELPERS
   // ═══════════════════════════════════════════════════════════════════════════
 
-  bool _shouldShowForLevel(String levelName) =>
-      !_deniedLevels.contains(levelName);
+  bool _shouldShowForLevel(String levelName) => !_deniedLevels.contains(levelName);
 
-  bool _shouldShowGeoUnitChange(String levelName, String daayitvaName) =>
-      _allowedLevelsForGeoUnitChange.contains(levelName);
+  bool _shouldShowGeoUnitChange(String levelName, String daayitvaName) => _allowedLevelsForGeoUnitChange.contains(levelName);
 
   // ═══════════════════════════════════════════════════════════════════════════
   // MENU
@@ -659,14 +555,10 @@ class _HomeScreenState extends State<HomeScreen> {
   void _populateChoices() {
     setState(() {
       choices = [
-        MenuChoices("ResfreshDashboard", Icons.refresh,
-            Statics.getLabel('DashboardData')),
-        MenuChoices("ChangeLanguage", Icons.settings,
-            Statics.getLabel('ChangeLanguage')),
-        MenuChoices("ChangePassword", Icons.track_changes,
-            Statics.getLabel('ChangePassword')),
-        MenuChoices("ContactUs", Icons.support_agent_rounded,
-            Statics.getLabel('contactUs')),
+        MenuChoices("ResfreshDashboard", Icons.refresh, Statics.getLabel('DashboardData')),
+        MenuChoices("ChangeLanguage", Icons.settings, Statics.getLabel('ChangeLanguage')),
+        MenuChoices("ChangePassword", Icons.track_changes, Statics.getLabel('ChangePassword')),
+        MenuChoices("ContactUs", Icons.support_agent_rounded, Statics.getLabel('contactUs')),
         MenuChoices("LogOut", Icons.logout, Statics.getLabel('logOutLabel')),
       ];
     });
@@ -686,19 +578,16 @@ class _HomeScreenState extends State<HomeScreen> {
       case "LogOut":
         final connected = await Statics.isInternetConnected();
         if (!connected) {
-          Statics.showMessageDialog(
-              context, Statics.getLabel('internetNotConnected'));
+          Statics.showMessageDialog(context, Statics.getLabel('internetNotConnected'));
         } else {
           await LogIn().logOut();
-          BackgroundFetch.stop()
-              .then((s) => print('[BackgroundFetch] stop: $s'));
+          BackgroundFetch.stop().then((s) => print('[BackgroundFetch] stop: $s'));
           Navigator.of(context).pushNamedAndRemoveUntil("/", (r) => false);
         }
         break;
       case "ResfreshDashboard":
         setState(() => _isSearching = true);
-        final data = await Statics.refreshDashboardData(
-            Statics.userDetails["userID"], geoUnitID);
+        final data = await Statics.refreshDashboardData(Statics.userDetails["userID"], geoUnitID);
         if (data == "Successfull") {
           await Statics.getNotificationDataList(Statics.userDetails["userID"]);
           Statics.populateDashboardDetailsMap();
@@ -712,8 +601,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void _getGeoUnitID() {
     setState(() {
       geoUnitID = Statics.userDetails["DaayitvaGeoUnitID"];
-      geoUnitName =
-          '${Statics.userDetails["DaayitvaGeoUnitName"]}-${Statics.userDetails["LevelName"]}';
+      geoUnitName = '${Statics.userDetails["DaayitvaGeoUnitName"]}-${Statics.userDetails["LevelName"]}';
     });
   }
 
@@ -762,27 +650,20 @@ class _HomeScreenState extends State<HomeScreen> {
             surfaceTintColor: Colors.transparent,
             backgroundColor: Colors.white,
             clipBehavior: Clip.antiAlias,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            insetPadding:
-                const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            insetPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
                   width: double.infinity,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
                   decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                        colors: [Colors.purple, Colors.purpleAccent]),
+                    gradient: LinearGradient(colors: [Colors.purple, Colors.purpleAccent]),
                   ),
                   child: Text(
                     "Release Notes - ${Statics.packageInfo['versionNumber']}",
-                    style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                   ),
                 ),
                 Flexible(
@@ -795,34 +676,17 @@ class _HomeScreenState extends State<HomeScreen> {
                           .entries
                           .map((e) => Container(
                                 margin: const EdgeInsets.symmetric(vertical: 6),
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 12),
+                                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(12),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.black.withOpacity(0.05),
-                                        blurRadius: 5,
-                                        offset: const Offset(0, 2))
-                                  ],
+                                  boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 5, offset: const Offset(0, 2))],
                                 ),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Expanded(
-                                        flex: 1,
-                                        child: Text("${e.key + 1}. ",
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.w800,
-                                                fontSize: 14))),
-                                    Expanded(
-                                        flex: 7,
-                                        child: Text(e.value,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 14,
-                                                color: Colors.grey.shade700))),
+                                    Expanded(flex: 1, child: Text("${e.key + 1}. ", style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14))),
+                                    Expanded(flex: 7, child: Text(e.value, style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14, color: Colors.grey.shade700))),
                                   ],
                                 ),
                               ))
@@ -836,19 +700,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.purpleAccent,
                       minimumSize: const Size.fromHeight(45),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
                     onPressed: () async {
                       await pref.setBool("isRead", true);
-                      await pref.setString(
-                          "appVer", Statics.packageInfo['versionNumber']);
+                      await pref.setString("appVer", Statics.packageInfo['versionNumber']);
                       Navigator.pop(context);
                     },
                     icon: const Icon(Icons.check_circle, color: Colors.white),
-                    label: Text(Statics.getLabel('bandKara'),
-                        style:
-                            const TextStyle(fontSize: 16, color: Colors.white)),
+                    label: Text(Statics.getLabel('bandKara'), style: const TextStyle(fontSize: 16, color: Colors.white)),
                   ),
                 ),
               ],
@@ -868,13 +728,11 @@ class _HomeScreenState extends State<HomeScreen> {
   /// Standard "no data" placeholder.
   Widget _buildNoData() => Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Text(Statics.getLabel('NoDataFound'),
-            style: const TextStyle(fontWeight: FontWeight.normal)),
+        child: Text(Statics.getLabel('NoDataFound'), style: const TextStyle(fontWeight: FontWeight.normal)),
       );
 
   /// Background colour for a total/summary row.
-  MaterialStateProperty<Color?> _totalRowColor() => MaterialStatePropertyAll(
-      Theme.of(context).colorScheme.secondary.withOpacity(0.2));
+  MaterialStateProperty<Color?> _totalRowColor() => MaterialStatePropertyAll(Theme.of(context).colorScheme.secondary.withOpacity(0.2));
 
   /// Shorthand for a plain text DataCell.
   // DataCell _cell(String text) => DataCell(Center(child: Text(text, textAlign: TextAlign.center, softWrap: true)));
@@ -915,20 +773,16 @@ class _HomeScreenState extends State<HomeScreen> {
           cells: [
             customDataRowCell('${item.shaakhaaCount}'),
             customDataRowCell('${item.sankalpitShaakhaaCount}'),
-            customDataRowCell(
-                '${(item.shaakhaaCount ?? 0) + (item.sankalpitShaakhaaCount ?? 0)}'),
+            customDataRowCell('${(item.shaakhaaCount ?? 0) + (item.sankalpitShaakhaaCount ?? 0)}'),
             customDataRowCell('${item.saaptaahikCount}'),
             customDataRowCell('${item.sankalpitSaaptaahikCount}'),
-            customDataRowCell(
-                '${(item.saaptaahikCount ?? 0) + (item.sankalpitSaaptaahikCount ?? 0)}'),
+            customDataRowCell('${(item.saaptaahikCount ?? 0) + (item.sankalpitSaaptaahikCount ?? 0)}'),
             customDataRowCell('${item.maasikMilanCount}'),
             customDataRowCell('${item.sankalpitMaasikMilanCount}'),
-            customDataRowCell(
-                '${(item.maasikMilanCount ?? 0) + (item.sankalpitMaasikMilanCount ?? 0)}'),
+            customDataRowCell('${(item.maasikMilanCount ?? 0) + (item.sankalpitMaasikMilanCount ?? 0)}'),
             customDataRowCell('${item.sanghaMandaliCount}'),
             customDataRowCell('${item.sankalpitSanghaMandaliCount}'),
-            customDataRowCell(
-                '${(item.sanghaMandaliCount ?? 0) + (item.sankalpitSanghaMandaliCount ?? 0)}'),
+            customDataRowCell('${(item.sanghaMandaliCount ?? 0) + (item.sankalpitSanghaMandaliCount ?? 0)}'),
           ],
         );
       }).toList(),
@@ -945,9 +799,7 @@ class _HomeScreenState extends State<HomeScreen> {
       leftFixedRows: data.asMap().entries.map((e) {
         final item = e.value;
         final isTotal = e.key == data.length - 1;
-        final aadhaarLabel = item.sankalpAadhaar == ''
-            ? ''
-            : Statics.getLabel(item.sankalpAadhaar);
+        final aadhaarLabel = item.sankalpAadhaar == '' ? '' : Statics.getLabel(item.sankalpAadhaar);
         return DataRow(
           color: isTotal ? _totalRowColor() : null,
           cells: [
@@ -965,9 +817,7 @@ class _HomeScreenState extends State<HomeScreen> {
       rows: data.asMap().entries.map((e) {
         final item = e.value;
         final isTotal = e.key == data.length - 1;
-        final aadhaarLabel = item.sankalpAadhaar == ''
-            ? ''
-            : Statics.getLabel(item.sankalpAadhaar);
+        final aadhaarLabel = item.sankalpAadhaar == '' ? '' : Statics.getLabel(item.sankalpAadhaar);
         return DataRow(
           color: isTotal ? _totalRowColor() : null,
           cells: [
@@ -1034,10 +884,7 @@ class _HomeScreenState extends State<HomeScreen> {
         final isTotal = e.key == data.length - 1;
         return DataRow(
           color: isTotal ? _totalRowColor() : null,
-          cells: [
-            customDataRowCell(nameOf(e.value)),
-            customDataRowCell(countOf(e.value))
-          ],
+          cells: [customDataRowCell(nameOf(e.value)), customDataRowCell(countOf(e.value))],
         );
       }).toList(),
     );
@@ -1172,18 +1019,15 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(Statics.getLabel('AskConfirmation')),
-        content:
-            Text("${Statics.getLabel("selectedLevel")} -> ${data.goUnitName}"),
+        content: Text("${Statics.getLabel("selectedLevel")} -> ${data.goUnitName}"),
         actions: [
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.purple),
-            child: Text(Statics.getLabel("downloadBtn"),
-                style: const TextStyle(color: Colors.white)),
+            child: Text(Statics.getLabel("downloadBtn"), style: const TextStyle(color: Colors.white)),
             onPressed: () async {
               Navigator.of(ctx).pop();
               setState(() => bhougolikReportForExcel = null);
-              bhougolikReportForExcel =
-                  await Statics.upkhandUpnagarReportForExcelData(
+              bhougolikReportForExcel = await Statics.upkhandUpnagarReportForExcelData(
                 userID: Statics.userDetails["userID"],
                 targetGeoUnitID: data.geoUnitId,
                 context: context,
@@ -1191,13 +1035,9 @@ class _HomeScreenState extends State<HomeScreen> {
               setState(() {});
               final list = bhougolikReportForExcel?.datanameList;
               if (list != null && list.isNotEmpty) {
-                await buildExcelFromData3(
-                    geoHierarchyData:
-                        bhougolikReportForExcel!.toJson()["GeoHierarchyData"]);
+                await buildExcelFromData3(geoHierarchyData: bhougolikReportForExcel!.toJson()["GeoHierarchyData"]);
               } else {
-                Fluttertoast.showToast(
-                    msg: Statics.getLabel("errorOccurred"),
-                    gravity: ToastGravity.BOTTOM);
+                Fluttertoast.showToast(msg: Statics.getLabel("errorOccurred"), gravity: ToastGravity.BOTTOM);
               }
             },
           ),
@@ -1210,8 +1050,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future<void> buildExcelFromData3(
-      {required List<Map<String, dynamic>> geoHierarchyData}) async {
+  Future<void> buildExcelFromData3({required List<Map<String, dynamic>> geoHierarchyData}) async {
     if (geoHierarchyData.isEmpty) {
       throw ArgumentError('No data rows provided.');
     }
@@ -1262,8 +1101,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     /// Header row
     _sheet.getRangeByIndex(1, _colForSheet).setText('Sr No');
-    _sheet.getRangeByIndex(1, _colForSheet, 2, _colForSheet).cellStyle =
-        headerStyle;
+    _sheet.getRangeByIndex(1, _colForSheet, 2, _colForSheet).cellStyle = headerStyle;
     _colForSheet++;
 
     for (final header in headers) {
@@ -1290,10 +1128,8 @@ class _HomeScreenState extends State<HomeScreen> {
       Set<String> uniqueUpnagars = {};
       int countMappedVastis = 0;
 
-      bool hasUpkhands =
-          data['Upkhands'] is List && (data['Upkhands'] as List).isNotEmpty;
-      bool hasUpnagars =
-          data['Upnagars'] is List && (data['Upnagars'] as List).isNotEmpty;
+      bool hasUpkhands = data['Upkhands'] is List && (data['Upkhands'] as List).isNotEmpty;
+      bool hasUpnagars = data['Upnagars'] is List && (data['Upnagars'] as List).isNotEmpty;
 
       // Edge case: Nagar with no sub-data
       if (!hasUpkhands && !hasUpnagars) {
@@ -1312,14 +1148,12 @@ class _HomeScreenState extends State<HomeScreen> {
         final List<dynamic> upkhandsList = data['Upkhands'];
 
         for (dynamic u in upkhandsList) {
-          String upkhandName =
-              u is Map ? (u['UpkhandName']?.toString() ?? '--') : u.toString();
+          String upkhandName = u is Map ? (u['UpkhandName']?.toString() ?? '--') : u.toString();
           if (upkhandName != '--' && upkhandName.isNotEmpty) {
             uniqueUpkhands.add(upkhandName);
           }
 
-          final List<dynamic> mandals =
-              (u['MappedMandals'] as List?)?.cast<dynamic>() ?? [];
+          final List<dynamic> mandals = (u['MappedMandals'] as List?)?.cast<dynamic>() ?? [];
 
           if (mandals.isEmpty) {
             nagarRows.add({
@@ -1332,15 +1166,12 @@ class _HomeScreenState extends State<HomeScreen> {
             });
           } else {
             for (dynamic m in mandals) {
-              String mandalName = m is Map
-                  ? (m['MandalName']?.toString() ?? '--')
-                  : m.toString();
+              String mandalName = m is Map ? (m['MandalName']?.toString() ?? '--') : m.toString();
               if (mandalName != '--' && mandalName.isNotEmpty) {
                 uniqueMandals.add(mandalName);
               }
 
-              List<dynamic> grams =
-                  (m is Map && m['GraamNames'] is List) ? m['GraamNames'] : [];
+              List<dynamic> grams = (m is Map && m['GraamNames'] is List) ? m['GraamNames'] : [];
 
               if (grams.isEmpty) {
                 nagarRows.add({
@@ -1360,9 +1191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     'MappedVastis': '--',
                     'UpkhandName': upkhandName,
                     'MandalName': mandalName,
-                    'GraamNames': g != null && g.toString().trim().isNotEmpty
-                        ? g.toString()
-                        : "--",
+                    'GraamNames': g != null && g.toString().trim().isNotEmpty ? g.toString() : "--",
                   });
                 }
               }
@@ -1376,14 +1205,12 @@ class _HomeScreenState extends State<HomeScreen> {
         final List<dynamic> upnagarsList = data['Upnagars'];
 
         for (dynamic u in upnagarsList) {
-          String upnagarName =
-              u is Map ? (u['UpnagarName']?.toString() ?? '--') : u.toString();
+          String upnagarName = u is Map ? (u['UpnagarName']?.toString() ?? '--') : u.toString();
           if (upnagarName != '--' && upnagarName.isNotEmpty) {
             uniqueUpnagars.add(upnagarName);
           }
 
-          List<dynamic> vastis =
-              (u is Map && u['MappedVastis'] is List) ? u['MappedVastis'] : [];
+          List<dynamic> vastis = (u is Map && u['MappedVastis'] is List) ? u['MappedVastis'] : [];
 
           if (vastis.isEmpty) {
             nagarRows.add({
@@ -1397,15 +1224,11 @@ class _HomeScreenState extends State<HomeScreen> {
           } else {
             countMappedVastis += vastis.length;
             for (dynamic v in vastis) {
-              String vastiName = v is Map
-                  ? (v['VastiName']?.toString() ?? '--')
-                  : v.toString();
+              String vastiName = v is Map ? (v['VastiName']?.toString() ?? '--') : v.toString();
               nagarRows.add({
                 'NagarName': nagarName,
                 'UpnagarName': upnagarName,
-                'MappedVastis': vastiName != null && vastiName.trim().isNotEmpty
-                    ? vastiName
-                    : "--",
+                'MappedVastis': vastiName != null && vastiName.trim().isNotEmpty ? vastiName : "--",
                 'UpkhandName': '--',
                 'MandalName': '--',
                 'GraamNames': '--',
@@ -1421,16 +1244,12 @@ class _HomeScreenState extends State<HomeScreen> {
       for (int i = 0; i < nagarRows.length; i++) {
         int writeCol = 1;
         // Only print Sr No on the first row of this block
-        _sheet
-            .getRangeByIndex(rowIndex, writeCol)
-            .setText(i == 0 ? srNo.toString() : '');
+        _sheet.getRangeByIndex(rowIndex, writeCol).setText(i == 0 ? srNo.toString() : '');
         _sheet.getRangeByIndex(rowIndex, writeCol).cellStyle = _cellStyle;
         writeCol++;
 
         for (final key in headers) {
-          _sheet
-              .getRangeByIndex(rowIndex, writeCol)
-              .setText(nagarRows[i][key] ?? '--');
+          _sheet.getRangeByIndex(rowIndex, writeCol).setText(nagarRows[i][key] ?? '--');
           _sheet.getRangeByIndex(rowIndex, writeCol).cellStyle = _cellStyle;
           writeCol++;
         }
@@ -1444,9 +1263,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _sheet.getRangeByIndex(startRow, 1, endRow, 1).merge(); // Sr No
 
         final int nagarCol = headers.indexOf('NagarName') + 2;
-        _sheet
-            .getRangeByIndex(startRow, nagarCol, endRow, nagarCol)
-            .merge(); // NagarName
+        _sheet.getRangeByIndex(startRow, nagarCol, endRow, nagarCol).merge(); // NagarName
 
         // Helper function to merge contiguous identical values vertically
         void tryMergeSubGroups(String keyName) {
@@ -1462,9 +1279,7 @@ class _HomeScreenState extends State<HomeScreen> {
             if (text != currentVal) {
               // Only merge if there's more than 1 row with the same value
               if (r - 1 > currentStart - startRow) {
-                _sheet
-                    .getRangeByIndex(currentStart, col, startRow + r - 1, col)
-                    .merge();
+                _sheet.getRangeByIndex(currentStart, col, startRow + r - 1, col).merge();
               }
               currentStart = startRow + r;
               currentVal = text;
@@ -1503,12 +1318,9 @@ class _HomeScreenState extends State<HomeScreen> {
         'GraamNames': countGrams,
       };
 
-      _sheet
-          .getRangeByIndex(rowIndex, 1, rowIndex, 2)
-          .merge(); // Sr No & NagarName combined
+      _sheet.getRangeByIndex(rowIndex, 1, rowIndex, 2).merge(); // Sr No & NagarName combined
       _sheet.getRangeByIndex(rowIndex, 1).setText('Total');
-      _sheet.getRangeByIndex(rowIndex, 1, rowIndex, 2).cellStyle = boldCellStyle
-        ..backColor = '#D6E3BC';
+      _sheet.getRangeByIndex(rowIndex, 1, rowIndex, 2).cellStyle = boldCellStyle..backColor = '#D6E3BC';
 
       for (int i = 0; i < headers.length; i++) {
         final key = headers[i];
@@ -1516,9 +1328,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
         if (finalCounts.containsKey(key)) {
           // Output counts. Treat 0 as '--' or keep it as 0 based on preference (Setting to Number handles Excel formatting)
-          _sheet
-              .getRangeByIndex(rowIndex, col)
-              .setNumber(finalCounts[key]!.toDouble());
+          _sheet.getRangeByIndex(rowIndex, col).setNumber(finalCounts[key]!.toDouble());
         } else {
           _sheet.getRangeByIndex(rowIndex, col).setText('');
         }
@@ -1536,8 +1346,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     /// Save + open
     try {
-      final _path =
-          await _getDirectoryPathFun(); // Function assumed available in scope
+      final _path = await _getDirectoryPathFun(); // Function assumed available in scope
       final file = File(_path);
 
       final bytes = wb.saveAsStream();
@@ -1594,10 +1403,8 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       dir = await getApplicationDocumentsDirectory();
     }
-    final ts =
-        DateTime.now().toIso8601String().replaceAll(':', '-').split(".").first;
-    final path =
-        '${dir!.path}/${_selctedLevelName ?? "prant"}_${Statics.getLabel("bhougolikExcelReport")}_$ts.xlsx';
+    final ts = DateTime.now().toIso8601String().replaceAll(':', '-').split(".").first;
+    final path = '${dir!.path}/${_selctedLevelName ?? "prant"}_${Statics.getLabel("bhougolikExcelReport")}_$ts.xlsx';
     log(path);
     return path;
   }
@@ -1608,19 +1415,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-        const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(Statics.getLabel('homeScreenTitle'),
-              style: const TextStyle(fontSize: 20)),
+          title: Text(Statics.getLabel('homeScreenTitle'), style: const TextStyle(fontSize: 20)),
           bottom: TabBar(
-            unselectedLabelStyle:
-                const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w500),
-            labelStyle:
-                const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700),
+            unselectedLabelStyle: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w500),
+            labelStyle: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700),
             onTap: (value) {
               if (value == 1) {
                 _initScreen();
@@ -1641,32 +1444,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => NotificationListPage(
-                            userId: Statics.userDetails['userID']),
+                        builder: (_) => NotificationListPage(userId: Statics.userDetails['userID']),
                       ),
                     ).then((_) => _fetchNotificationData());
                     setState(() {});
                   },
                 ),
-                if (notificationListdata?.notificationcount != "null" &&
-                    notificationListdata?.notificationcount != '0' &&
-                    notificationListdata?.notificationcount != '')
+                if (notificationListdata?.notificationcount != "null" && notificationListdata?.notificationcount != '0' && notificationListdata?.notificationcount != '')
                   Positioned(
                     right: 4,
                     top: 4,
                     child: Container(
                       padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(8)),
-                      constraints:
-                          const BoxConstraints(minWidth: 16, minHeight: 16),
-                      child: Text('${notificationListdata?.notificationcount}',
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center),
+                      decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(8)),
+                      constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+                      child: Text('${notificationListdata?.notificationcount}', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
                     ),
                   ),
               ],
@@ -1674,12 +1466,7 @@ class _HomeScreenState extends State<HomeScreen> {
             PopupMenuButton<MenuChoices>(
               onSelected: _onMenuSelected,
               icon: const Icon(Icons.settings),
-              itemBuilder: (ctx) => choices
-                  .map((c) => PopupMenuItem(
-                      value: c,
-                      child: ListTile(
-                          leading: Icon(c.icon), title: Text(c.menuText!))))
-                  .toList(),
+              itemBuilder: (ctx) => choices.map((c) => PopupMenuItem(value: c, child: ListTile(leading: Icon(c.icon), title: Text(c.menuText!)))).toList(),
             ),
           ],
         ),
@@ -1742,9 +1529,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               // ── Yesterday Praant ───────────────────────────────────────────
               Legend(legendString: "YesterdayPraantData", fontsize: 18),
-              _isMySearching
-                  ? const CircularProgressIndicator()
-                  : _buildYesterdayPraantTable(Statics.lstYesterdayPraantData),
+              _isMySearching ? const CircularProgressIndicator() : _buildYesterdayPraantTable(Statics.lstYesterdayPraantData),
               const SizedBox(height: 15),
 
               // ── Bhaugolik rachana (expansion) ─────────────────────────────
@@ -1781,12 +1566,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ]),
         Wrap(spacing: 5, children: [
-          Text(Statics.userDetails['DaayitvaGeoUnitName'],
-              style: const TextStyle(fontSize: 12)),
-          Text(Statics.userDetails['LevelName'],
-              style: const TextStyle(fontSize: 12)),
-          Text('$userDaayitvaNameforshow',
-              style: const TextStyle(fontSize: 12)),
+          Text(Statics.userDetails['DaayitvaGeoUnitName'], style: const TextStyle(fontSize: 12)),
+          Text(Statics.userDetails['LevelName'], style: const TextStyle(fontSize: 12)),
+          Text('$userDaayitvaNameforshow', style: const TextStyle(fontSize: 12)),
         ]),
       ],
     );
@@ -1798,13 +1580,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _bhaugolikRachanaPanel() {
     return ExpansionPanelList(
-      expansionCallback: (_, isExpanded) =>
-          setState(() => _isNagarTableExpanded = isExpanded),
+      expansionCallback: (_, isExpanded) => setState(() => _isNagarTableExpanded = isExpanded),
       children: [
         ExpansionPanel(
           isExpanded: _isNagarTableExpanded,
-          headerBuilder: (_, __) => ListTile(
-              title: Text(Statics.getLabel('prantachiBhaugolikRachanaa'))),
+          headerBuilder: (_, __) => ListTile(title: Text(Statics.getLabel('prantachiBhaugolikRachanaa'))),
           body: Container(
             margin: const EdgeInsets.all(20),
             child: Column(children: [
@@ -1824,9 +1604,7 @@ class _HomeScreenState extends State<HomeScreen> {
               if (_linkedMahaanagar2 != null)
                 _dropdown(
                   label: Statics.getLabel('Mahaanagar'),
-                  value: _linkedMahaanagarValue2 == ""
-                      ? null
-                      : _linkedMahaanagarValue2,
+                  value: _linkedMahaanagarValue2 == "" ? null : _linkedMahaanagarValue2,
                   items: _linkedMahaanagar2!,
                   onChanged: (v) {
                     setState(() {
@@ -1840,8 +1618,7 @@ class _HomeScreenState extends State<HomeScreen> {
               if (_linkedVibhaag2 != null)
                 _dropdown(
                   label: Statics.getLabel('Vibhaag'),
-                  value:
-                      _linkedVibhaagValue2 == "" ? null : _linkedVibhaagValue2,
+                  value: _linkedVibhaagValue2 == "" ? null : _linkedVibhaagValue2,
                   items: _linkedVibhaag2!,
                   onChanged: (v) {
                     setState(() {
@@ -1852,9 +1629,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               const SizedBox(height: 18),
-              _isLoading
-                  ? const CircularProgressIndicator()
-                  : _buildUpnagarCountDataTable(upkhandaDataList),
+              _isLoading ? const CircularProgressIndicator() : _buildUpnagarCountDataTable(upkhandaDataList),
             ]),
           ),
         ),
@@ -1864,18 +1639,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _myGeoUnitPanel() {
     return ExpansionPanelList(
-      expansionCallback: (_, isExpanded) =>
-          setState(() => _isSwExpanded = isExpanded),
+      expansionCallback: (_, isExpanded) => setState(() => _isSwExpanded = isExpanded),
       children: [
         ExpansionPanel(
           isExpanded: _isSwExpanded,
-          headerBuilder: (_, __) =>
-              ListTile(title: Text(Statics.getLabel('MyGeoUnitDetails'))),
+          headerBuilder: (_, __) => ListTile(title: Text(Statics.getLabel('MyGeoUnitDetails'))),
           body: Container(
             margin: const EdgeInsets.all(20),
-            child: _isMySearching
-                ? const Center(child: CircularProgressIndicator())
-                : _buildMyGeoUnitContent(),
+            child: _isMySearching ? const Center(child: CircularProgressIndicator()) : _buildMyGeoUnitContent(),
           ),
         ),
       ],
@@ -1886,10 +1657,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final isHighLevel = int.parse(Statics.userDetails['LevelID']) > 6;
     return Column(children: [
       Legend(legendString: "yesterdayNews", fontsize: 18),
-      if (isHighLevel)
-        _buildYesterdaySummaryTable(Statics.lstYesterdayVruttaSummary)
-      else
-        _buildYesterdayDetailTable(Statics.lstYesterdayVruttaDetail),
+      if (isHighLevel) _buildYesterdaySummaryTable(Statics.lstYesterdayVruttaSummary) else _buildYesterdayDetailTable(Statics.lstYesterdayVruttaDetail),
       const SizedBox(height: 15),
       _vruttaSummarySection(
         shaakhaaEQ0: myShaakhaaEQ0,
@@ -1913,14 +1681,8 @@ class _HomeScreenState extends State<HomeScreen> {
       _buildBhaugolikTable(Statics.lstBhaugolikVistaar),
       const SizedBox(height: 15),
       Legend(legendString: "SwayamsevakCount", fontsize: 18),
-      SingleColumnRow(
-          txtString: Statics.getLabel('TotalKaaryakartaaCount'),
-          value: myTotalSwayamsevakCount,
-          fontsize: 15),
-      SingleColumnRow(
-          txtString: Statics.getLabel('PratidnyitCount'),
-          value: myPratidnyitCount,
-          fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('TotalKaaryakartaaCount'), value: myTotalSwayamsevakCount, fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('PratidnyitCount'), value: myPratidnyitCount, fontsize: 15),
       const SizedBox(height: 15),
       _swayamsevakCountByAge(
         shishu: myShishuCount,
@@ -1931,18 +1693,21 @@ class _HomeScreenState extends State<HomeScreen> {
         unknown: myUnknownAgeCount,
       ),
       const SizedBox(height: 15),
-      _SwayamsewakByBloodGroup(bloodgroup: _bloodgroup),
+      _swayamsewakByBloodGroup(bloodgroup: _bloodgroup),
       const SizedBox(height: 15),
-      _SwayamsewakInfoWidget(infolist: _expertieslist, heading: 'Experties'),
+      _swayamsewakExperties(expertieslist: _expertieslist),
       const SizedBox(height: 15),
-      _SwayamsewakInfoWidget(
-          infolist: _mothertonguelist, heading: 'Mother Tongue'),
+      _swayamsewakInfoWidget(infolist: _mothertonguelist, heading: 'Mother Tongue'),
       const SizedBox(height: 15),
-      _SwayamsewakInfoWidget(infolist: _interestlist, heading: 'Interests'),
+      _swayamsewakInterests(interestlist: _interestlist),
       const SizedBox(height: 15),
-      _SwayamsewakInfoWidget(infolist: _ghoshwadlist, heading: 'Ghoshwad'),
+      _swayamsewakInfoWidget(infolist: _ghoshwadlist, heading: 'Ghoshwad'),
       const SizedBox(height: 15),
-      _SwayamsewakInfoWidget(infolist: _sangayulist, heading: 'Sangayu'),
+      _swayamsewakInfoWidget(infolist: _sangayulist, heading: 'Sangayu'),
+      const SizedBox(height: 15),
+      _ganveshData == null ? SizedBox() : _swayamsewakUniform(ganvesh: _ganveshData!),
+      const SizedBox(height: 15),
+      _vehicle == null ? SizedBox() : _swayamsewakVehicle(vehicle: _vehicle!),
       const SizedBox(height: 15),
       _shikshanSection(
         prarambhik: myPraarambhikShikshitCount,
@@ -1970,25 +1735,11 @@ class _HomeScreenState extends State<HomeScreen> {
         pravaasee: myPravaaseeKaaryakartaaCount,
         total: myTotalKaaryakartaaCount,
       ),
-      Legend(
-          legendString: "GatividhiAayaamSansthaaKaaryakartaaCount",
-          fontsize: 18),
-      SingleColumnRow(
-          txtString: Statics.getLabel('GatividhiKaaryakartaaCount'),
-          value: myGatividhiKaaryakartaaCount,
-          fontsize: 15),
-      SingleColumnRow(
-          txtString: Statics.getLabel('AayaamKaaryakartaaCount'),
-          value: myAayaamKaaryakartaaCount,
-          fontsize: 15),
-      SingleColumnRow(
-          txtString: Statics.getLabel('SanghaPreritSansthaaKaaryakartaaCount'),
-          value: mySanghaPreritSansthaaKaaryakartaaCount,
-          fontsize: 15),
-      SingleColumnRow(
-          txtString: Statics.getLabel('SocialOrganizationKaaryakartaaCount'),
-          value: mySocialOrganizationKaaryakartaaCount,
-          fontsize: 15),
+      Legend(legendString: "GatividhiAayaamSansthaaKaaryakartaaCount", fontsize: 18),
+      SingleColumnRow(txtString: Statics.getLabel('GatividhiKaaryakartaaCount'), value: myGatividhiKaaryakartaaCount, fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('AayaamKaaryakartaaCount'), value: myAayaamKaaryakartaaCount, fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('SanghaPreritSansthaaKaaryakartaaCount'), value: mySanghaPreritSansthaaKaaryakartaaCount, fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('SocialOrganizationKaaryakartaaCount'), value: mySocialOrganizationKaaryakartaaCount, fontsize: 15),
       const SizedBox(height: 15),
       Legend(legendString: "Gatividhi", fontsize: 18),
       _buildNameCountTable(
@@ -2043,13 +1794,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _targetGeoUnitPanel() {
     return ExpansionPanelList(
-      expansionCallback: (_, isExpanded) =>
-          setState(() => _isGeounitExpanded = isExpanded),
+      expansionCallback: (_, isExpanded) => setState(() => _isGeounitExpanded = isExpanded),
       children: [
         ExpansionPanel(
           isExpanded: _isGeounitExpanded,
-          headerBuilder: (_, __) =>
-              ListTile(title: Text(Statics.getLabel('TargetGeoUnitDetails'))),
+          headerBuilder: (_, __) => ListTile(title: Text(Statics.getLabel('TargetGeoUnitDetails'))),
           body: Container(
             margin: const EdgeInsets.all(20),
             child: Column(children: [
@@ -2057,14 +1806,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 alignment: Alignment.centerRight,
                 child: _clearButton(() {
                   setState(() {
-                    _linkedMahaanagarValue =
-                        _linkedVibhaagValue = _linkedbhaagValue = null;
-                    _linkedshaharValue = _linkednagarValue =
-                        _linkedmandalValue =
-                            _linkedgraamValue = _linkedvastiValue = null;
+                    _linkedMahaanagarValue = _linkedVibhaagValue = _linkedbhaagValue = null;
+                    _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
                     _linkedMahaanagar = _linkedVibhaag = _linkedbhaag = null;
-                    _linkedshahar = _linkednagar =
-                        _linkedmandal = _linkedgraam = _linkedvasti = null;
+                    _linkedshahar = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
                   });
                   _clearTargetData();
                   _populateDropdownSet1();
@@ -2075,9 +1820,7 @@ class _HomeScreenState extends State<HomeScreen> {
               if (_linkedMahaanagar != null)
                 _dropdown(
                     label: Statics.getLabel('Mahaanagar'),
-                    value: _linkedMahaanagarValue == ""
-                        ? null
-                        : _linkedMahaanagarValue,
+                    value: _linkedMahaanagarValue == "" ? null : _linkedMahaanagarValue,
                     items: _linkedMahaanagar!,
                     onChanged: (v) {
                       setState(() {
@@ -2090,8 +1833,7 @@ class _HomeScreenState extends State<HomeScreen> {
               if (_linkedVibhaag != null)
                 _dropdown(
                     label: Statics.getLabel('Vibhaag'),
-                    value:
-                        _linkedVibhaagValue == "" ? null : _linkedVibhaagValue,
+                    value: _linkedVibhaagValue == "" ? null : _linkedVibhaagValue,
                     items: _linkedVibhaag!,
                     onChanged: (v) {
                       setState(() {
@@ -2180,10 +1922,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     }),
 
               const SizedBox(height: 40),
-              if (_isTgSearching)
-                const CircularProgressIndicator()
-              else
-                _buildTargetGeoUnitContent(),
+              if (_isTgSearching) const CircularProgressIndicator() else _buildTargetGeoUnitContent(),
             ]),
           ),
         ),
@@ -2195,8 +1934,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(children: [
       Legend(legendString: "yesterdayNews", fontsize: 18),
       _buildYesterdaySummaryTable(Statics.tgLstYesterdayVruttaSummary),
-      if (_tgLevelID <= 6)
-        _buildYesterdayDetailTable(Statics.tgLstYesterdayVruttaDetail),
+      if (_tgLevelID <= 6) _buildYesterdayDetailTable(Statics.tgLstYesterdayVruttaDetail),
       const SizedBox(height: 15),
       _vruttaSummarySection(
         shaakhaaEQ0: _nullToZero(tgShaakhaaEQ0),
@@ -2220,14 +1958,8 @@ class _HomeScreenState extends State<HomeScreen> {
       _buildBhaugolikTable(Statics.tgLstBhaugolikVistaar),
       const SizedBox(height: 15),
       Legend(legendString: "SwayamsevakCount", fontsize: 18),
-      SingleColumnRow(
-          txtString: Statics.getLabel('TotalKaaryakartaaCount'),
-          value: tgTotalSwayamsevakCount,
-          fontsize: 15),
-      SingleColumnRow(
-          txtString: Statics.getLabel('PratidnyitCount'),
-          value: tgPratidnyitCount,
-          fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('TotalKaaryakartaaCount'), value: tgTotalSwayamsevakCount, fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('PratidnyitCount'), value: tgPratidnyitCount, fontsize: 15),
       const SizedBox(height: 15),
       _swayamsevakCountByAge(
         shishu: tgShishuCount,
@@ -2238,18 +1970,21 @@ class _HomeScreenState extends State<HomeScreen> {
         unknown: tgUnknownAgeCount,
       ),
       const SizedBox(height: 15),
-      _SwayamsewakByBloodGroup(bloodgroup: _bloodgroup),
+      _swayamsewakByBloodGroup(bloodgroup: _bloodgroup),
       const SizedBox(height: 15),
-      _SwayamsewakInfoWidget(infolist: _expertieslist, heading: 'Experties'),
+      _swayamsewakExperties(expertieslist: _expertieslist),
       const SizedBox(height: 15),
-      _SwayamsewakInfoWidget(infolist: _interestlist, heading: 'Interests'),
+      _swayamsewakInterests(interestlist: _interestlist),
       const SizedBox(height: 15),
-      _SwayamsewakInfoWidget(
-          infolist: _mothertonguelist, heading: 'Mother Tongue'),
+      _swayamsewakInfoWidget(infolist: _mothertonguelist, heading: 'Mother Tongue'),
       const SizedBox(height: 15),
-      _SwayamsewakInfoWidget(infolist: _sangayulist, heading: 'Sangayu'),
+      _swayamsewakInfoWidget(infolist: _sangayulist, heading: 'Sangayu'),
       const SizedBox(height: 15),
-      _SwayamsewakInfoWidget(infolist: _ghoshwadlist, heading: 'Ghoshwad'),
+      _swayamsewakInfoWidget(infolist: _ghoshwadlist, heading: 'Ghoshwad'),
+      const SizedBox(height: 15),
+      _ganveshData == null ? SizedBox() : _swayamsewakUniform(ganvesh: _ganveshData!),
+      const SizedBox(height: 15),
+      _vehicle == null ? SizedBox() : _swayamsewakVehicle(vehicle: _vehicle!),
       const SizedBox(height: 15),
       _shikshanSection(
         prarambhik: _nullToZero(tgPraarambhikShikshitCount),
@@ -2277,25 +2012,11 @@ class _HomeScreenState extends State<HomeScreen> {
         pravaasee: tgPravaaseeKaaryakartaaCount,
         total: tgTotalKaaryakartaaCount,
       ),
-      Legend(
-          legendString: "GatividhiAayaamSansthaaKaaryakartaaCount",
-          fontsize: 18),
-      SingleColumnRow(
-          txtString: Statics.getLabel('GatividhiKaaryakartaaCount'),
-          value: tgGatividhiKaaryakartaaCount,
-          fontsize: 15),
-      SingleColumnRow(
-          txtString: Statics.getLabel('AayaamKaaryakartaaCount'),
-          value: tgAayaamKaaryakartaaCount,
-          fontsize: 15),
-      SingleColumnRow(
-          txtString: Statics.getLabel('SanghaPreritSansthaaKaaryakartaaCount'),
-          value: tgSanghaPreritSansthaaKaaryakartaaCount,
-          fontsize: 15),
-      SingleColumnRow(
-          txtString: Statics.getLabel('SocialOrganizationKaaryakartaaCount'),
-          value: tgSocialOrganizationKaaryakartaaCount,
-          fontsize: 15),
+      Legend(legendString: "GatividhiAayaamSansthaaKaaryakartaaCount", fontsize: 18),
+      SingleColumnRow(txtString: Statics.getLabel('GatividhiKaaryakartaaCount'), value: tgGatividhiKaaryakartaaCount, fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('AayaamKaaryakartaaCount'), value: tgAayaamKaaryakartaaCount, fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('SanghaPreritSansthaaKaaryakartaaCount'), value: tgSanghaPreritSansthaaKaaryakartaaCount, fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('SocialOrganizationKaaryakartaaCount'), value: tgSocialOrganizationKaaryakartaaCount, fontsize: 15),
       const SizedBox(height: 15),
       Legend(legendString: "Gatividhi", fontsize: 18),
       _buildNameCountTable(
@@ -2366,98 +2087,196 @@ class _HomeScreenState extends State<HomeScreen> {
   }) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Legend(legendString: "ShaakhaaVruttaSummaryLabel", fontsize: 18),
-      SingleColumnRow(
-          txtString: '${Statics.getLabel('Shaakhaa')}:-',
-          value: '',
-          fontsize: 18),
-      SingleColumnRow(
-          txtString: Statics.getLabel('ShaakhaaEQ0'),
-          value: shaakhaaEQ0,
-          fontsize: 15),
-      SingleColumnRow(
-          txtString: Statics.getLabel('Shaakhaa1To24'),
-          value: shaakhaa1To24,
-          fontsize: 15),
-      SingleColumnRow(
-          txtString: Statics.getLabel('ShaakhaaGTE25'),
-          value: shaakhaaGTE25,
-          fontsize: 15),
-      SingleColumnRow(
-          txtString: Statics.getLabel('ShaakhaaEQ30'),
-          value: shaakhaaEQ30,
-          fontsize: 15),
-      SingleColumnRow(
-          txtString: '${Statics.getLabel('SaaptaahikMilan')}:-',
-          value: '',
-          fontsize: 18),
-      SingleColumnRow(
-          txtString: Statics.getLabel('SaaptaahikEQ0'),
-          value: saaptaahikEQ0,
-          fontsize: 15),
-      SingleColumnRow(
-          txtString: Statics.getLabel('Saaptaahik1To3'),
-          value: saaptaahik1To3,
-          fontsize: 15),
-      SingleColumnRow(
-          txtString: Statics.getLabel('SaaptaahikGTE4'),
-          value: saaptaahikGTE4,
-          fontsize: 15),
-      SingleColumnRow(
-          txtString:
-              '${Statics.getLabel('MaasikMilan')}/${Statics.getLabel('SanghaMandali')}:-',
-          value: '',
-          fontsize: 18),
-      SingleColumnRow(
-          txtString: Statics.getLabel('MaasikEQ0'),
-          value: maasikEQ0,
-          fontsize: 15),
-      SingleColumnRow(
-          txtString: Statics.getLabel('MaasikEQ1'),
-          value: maasikEQ1,
-          fontsize: 15),
+      SingleColumnRow(txtString: '${Statics.getLabel('Shaakhaa')}:-', value: '', fontsize: 18),
+      SingleColumnRow(txtString: Statics.getLabel('ShaakhaaEQ0'), value: shaakhaaEQ0, fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('Shaakhaa1To24'), value: shaakhaa1To24, fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('ShaakhaaGTE25'), value: shaakhaaGTE25, fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('ShaakhaaEQ30'), value: shaakhaaEQ30, fontsize: 15),
+      SingleColumnRow(txtString: '${Statics.getLabel('SaaptaahikMilan')}:-', value: '', fontsize: 18),
+      SingleColumnRow(txtString: Statics.getLabel('SaaptaahikEQ0'), value: saaptaahikEQ0, fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('Saaptaahik1To3'), value: saaptaahik1To3, fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('SaaptaahikGTE4'), value: saaptaahikGTE4, fontsize: 15),
+      SingleColumnRow(txtString: '${Statics.getLabel('MaasikMilan')}/${Statics.getLabel('SanghaMandali')}:-', value: '', fontsize: 18),
+      SingleColumnRow(txtString: Statics.getLabel('MaasikEQ0'), value: maasikEQ0, fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('MaasikEQ1'), value: maasikEQ1, fontsize: 15),
     ]);
   }
 
-  Widget _SwayamsewakInfoWidget(
-      {required List<GetCount> infolist, required String heading}) {
+  Widget _swayamsewakInfoWidget({
+    required List<GetCount> infolist,
+    required String heading,
+  }) {
+    double normalwidth = MediaQuery.sizeOf(context).width * 0.75;
+    double maxwidth = MediaQuery.sizeOf(context).width * 0.35;
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Legend(legendString: heading, fontsize: 18),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: infolist.length,
-          itemBuilder: (context, index) {
-            var experties = infolist[index];
-            return Single1ColumnRow(
-                txtString: experties.codeForDisplay,
-                value: experties.cnt.toString(),
-                fontsize: 15);
-          },
+        Wrap(
+            spacing: 15,
+            children: infolist.asMap().entries.map((entry) {
+              int index = entry.key;
+              GetCount e = entry.value;
+              bool islast = index == infolist.length - 1;
+              return Container(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: islast ? normalwidth : maxwidth),
+                  child: Single1ColumnRow(
+                    txtString: e.codeForDisplay,
+                    value: e.cnt.toString(),
+                    valFlex: 3,
+                  ),
+                ),
+              );
+            }).toList()),
+      ],
+    );
+  }
+
+  Widget _swayamsewakVehicle({required Vehicle vehicle}) {
+    return Column(
+      children: [
+        Legend(legendString: "VehicleInformation", fontsize: 18),
+        Single1ColumnRow(
+          txtString: Statics.getLabel('VehicleType2W'),
+          value: vehicle.Has2wehicle.toString(),
+          fontsize: 15,
+        ),
+        Single1ColumnRow(
+          txtString: Statics.getLabel('VehicleType3W'),
+          value: vehicle.Has3wvehicle.toString(),
+          fontsize: 15,
+        ),
+        Single1ColumnRow(
+          txtString: Statics.getLabel('VehicleType4W'),
+          value: vehicle.Has4wvehicle.toString(),
+          fontsize: 15,
+        ),
+        Single1ColumnRow(
+          txtString: Statics.getLabel('HasVehicleDriver'),
+          value: vehicle.Hasdriver.toString(),
+          fontsize: 15,
         ),
       ],
     );
   }
 
-  Widget _SwayamsewakByBloodGroup({required List<GetCount> bloodgroup}) {
+  Widget _swayamsewakExperties({required List<GetCount> expertieslist}) {
+    return Column(
+      children: [
+        Legend(legendString: "Experties", fontsize: 18),
+        ListView.builder(
+          padding: EdgeInsets.zero,
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: expertieslist.length,
+          itemBuilder: (context, index) {
+            var experties = expertieslist[index];
+            return Single1ColumnRow(
+              txtString: experties.codeForDisplay,
+              value: experties.cnt.toString(),
+              fontsize: 15,
+            );
+          },
+        )
+      ],
+    );
+  }
+
+  Widget _swayamsewakInterests({required List<GetCount> interestlist}) {
+    return Column(
+      children: [
+        Legend(legendString: "Interests", fontsize: 18),
+        ListView.builder(
+          padding: EdgeInsets.zero,
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: interestlist.length,
+          itemBuilder: (context, index) {
+            var interest = interestlist[index];
+            return Single1ColumnRow(
+              txtString: interest.codeForDisplay,
+              value: interest.cnt.toString(),
+              fontsize: 15,
+            );
+          },
+        )
+      ],
+    );
+  }
+
+  Widget _swayamsewakUniform({required GanveshData ganvesh}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        //Text("${bloodgroup.length}")
-        Legend(legendString: "SwayamsevakCountByBloodGroup", fontsize: 18),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: bloodgroup.length,
-          itemBuilder: (context, index) {
-            var bd = bloodgroup[index];
-            return Single1ColumnRow(
-                txtString: bd.codeForDisplay,
-                value: bd.cnt.toString(),
-                fontsize: 15);
-          },
+        Legend(legendString: "GanveshDetails", fontsize: 18),
+        Single1ColumnRow(
+          txtString: Statics.getLabel('HasBelt'),
+          value: ganvesh.Hasbelt.toString(),
+          fontsize: 15,
         ),
+        Single1ColumnRow(
+          txtString: Statics.getLabel('HasCap'),
+          value: ganvesh.Hascap.toString(),
+          fontsize: 15,
+        ),
+        Single1ColumnRow(
+          txtString: Statics.getLabel('HasDanda'),
+          value: ganvesh.Hasdanda.toString(),
+          fontsize: 15,
+        ),
+        Single1ColumnRow(
+          txtString: Statics.getLabel('HasPant'),
+          value: ganvesh.Haspant.toString(),
+          fontsize: 15,
+        ),
+        Single1ColumnRow(
+          txtString: Statics.getLabel('HasShirt'),
+          value: ganvesh.Hasshirt.toString(),
+          fontsize: 15,
+        ),
+        Single1ColumnRow(
+          txtString: Statics.getLabel('HasShoes'),
+          value: ganvesh.Hasshoes.toString(),
+          fontsize: 15,
+        ),
+        Single1ColumnRow(
+          txtString: Statics.getLabel('HasSocks'),
+          value: ganvesh.Hassock.toString(),
+          fontsize: 15,
+        ),
+        Single1ColumnRow(
+          txtString: Statics.getLabel('IsGanaveshComplete'),
+          value: ganvesh.isganveshcomplted.toString(),
+          fontsize: 15,
+        ),
+      ],
+    );
+  }
+
+  Widget _swayamsewakByBloodGroup({required List<GetCount> bloodgroup}) {
+    double normalwidth = MediaQuery.sizeOf(context).width * 0.75;
+    double maxwidth = MediaQuery.sizeOf(context).width * 0.35;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Legend(legendString: "SwayamsevakCountByBloodGroup", fontsize: 18),
+        Wrap(
+            spacing: 15,
+            children: bloodgroup.asMap().entries.map((entry) {
+              int index = entry.key;
+              GetCount e = entry.value;
+              bool islast = index == bloodgroup.length - 1;
+              return Container(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: islast ? normalwidth : maxwidth),
+                  child: Single1ColumnRow(
+                    txtString: e.codeForDisplay,
+                    value: e.cnt.toString(),
+                    valFlex: 3,
+                  ),
+                ),
+              );
+            }).toList())
       ],
     );
   }
@@ -2472,26 +2291,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Legend(legendString: "SwayamsevakCountByAge", fontsize: 18),
-      SingleColumnRow(
-          txtString: Statics.getLabel('Shishu'), value: shishu, fontsize: 15),
-      SingleColumnRow(
-          txtString: Statics.getLabel('Baal'), value: baal, fontsize: 15),
-      SingleColumnRow(
-          txtString: Statics.getLabel('TarunVidyaarthi'),
-          value: tarunV,
-          fontsize: 15),
-      SingleColumnRow(
-          txtString: Statics.getLabel('TarunVyavasaayee'),
-          value: tarunVy,
-          fontsize: 15),
-      SingleColumnRow(
-          txtString: Statics.getLabel('ProudhVyavasaayee'),
-          value: proudha,
-          fontsize: 15),
-      SingleColumnRow(
-          txtString: Statics.getLabel('UnkownAge'),
-          value: unknown,
-          fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('Shishu'), value: shishu, fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('Baal'), value: baal, fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('TarunVidyaarthi'), value: tarunV, fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('TarunVyavasaayee'), value: tarunVy, fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('ProudhVyavasaayee'), value: proudha, fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('UnkownAge'), value: unknown, fontsize: 15),
       const SizedBox(height: 15),
     ]);
   }
@@ -2506,30 +2311,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Legend(legendString: "ShikshitSwayamsevakCount", fontsize: 18),
-      SingleColumnRow(
-          txtString: Statics.getLabel('PrarambhikShikshit'),
-          value: prarambhik,
-          fontsize: 15),
-      SingleColumnRow(
-          txtString: Statics.getLabel('PraathamikShikshit'),
-          value: praathamik,
-          fontsize: 15),
-      SingleColumnRow(
-          txtString: Statics.getLabel('PrathamVarshShikshit'),
-          value: prathamVarsha,
-          fontsize: 15),
-      SingleColumnRow(
-          txtString: Statics.getLabel('DwitiyaVarshShikshit'),
-          value: dwitiya,
-          fontsize: 15),
-      SingleColumnRow(
-          txtString: Statics.getLabel('TrutiyaVarshShikshit'),
-          value: trutiya,
-          fontsize: 15),
-      SingleColumnRow(
-          txtString: Statics.getLabel('NoShikshan'),
-          value: noShikshan,
-          fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('PrarambhikShikshit'), value: prarambhik, fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('PraathamikShikshit'), value: praathamik, fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('PrathamVarshShikshit'), value: prathamVarsha, fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('DwitiyaVarshShikshit'), value: dwitiya, fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('TrutiyaVarshShikshit'), value: trutiya, fontsize: 15),
+      SingleColumnRow(txtString: Statics.getLabel('NoShikshan'), value: noShikshan, fontsize: 15),
       const SizedBox(height: 15),
     ]);
   }
@@ -2554,54 +2341,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Legend(legendString: "KaaryakartaaCountByLevel", fontsize: 18),
-      TwoColumnRow(
-          txtString: Statics.getLabel('Shaakhaa'),
-          value: shaakhaa,
-          txtString2: Statics.getLabel('SaaptaahikLabelShort'),
-          value2: saptahik,
-          fontsize: 15),
-      TwoColumnRow(
-          txtString: Statics.getLabel('MilanMandali'),
-          value: milan,
-          txtString2: Statics.getLabel('VastiKaaryakartaaCount'),
-          value2: vasti,
-          fontsize: 15),
-      TwoColumnRow(
-          txtString: Statics.getLabel('GraamKaaryakartaaCount'),
-          value: graam,
-          txtString2: Statics.getLabel('MandalKaaryakartaaCount'),
-          value2: mandal,
-          fontsize: 15),
-      TwoColumnRow(
-          txtString: Statics.getLabel('NagarKaaryakartaaCount'),
-          value: nagar,
-          txtString2: Statics.getLabel('ShaharKaaryakartaaCount'),
-          value2: shahar,
-          fontsize: 15),
-      TwoColumnRow(
-          txtString: Statics.getLabel('BhaagKaaryakartaaCount'),
-          value: bhaag,
-          txtString2: Statics.getLabel('VibhaagKaaryakartaaCount'),
-          value2: vibhaag,
-          fontsize: 15),
-      TwoColumnRow(
-          txtString: Statics.getLabel('MahaanagarKaaryakartaaCount'),
-          value: mahaanagar,
-          txtString2: Statics.getLabel('PraantKaaryakartaaCount'),
-          value2: praant,
-          fontsize: 15),
-      TwoColumnRow(
-          txtString: Statics.getLabel('KshetraKaaryakartaaCount'),
-          value: kshetra,
-          txtString2: Statics.getLabel('AkhilBhaaratiyaKaaryakartaaCount'),
-          value2: akhilBhaarat,
-          fontsize: 15),
-      TwoColumnRow(
-          txtString: Statics.getLabel('PravaaseeKaaryakartaaCount'),
-          value: pravaasee,
-          txtString2: Statics.getLabel('TotalKaaryakartaaCount'),
-          value2: total,
-          fontsize: 15),
+      TwoColumnRow(txtString: Statics.getLabel('Shaakhaa'), value: shaakhaa, txtString2: Statics.getLabel('SaaptaahikLabelShort'), value2: saptahik, fontsize: 15),
+      TwoColumnRow(txtString: Statics.getLabel('MilanMandali'), value: milan, txtString2: Statics.getLabel('VastiKaaryakartaaCount'), value2: vasti, fontsize: 15),
+      TwoColumnRow(txtString: Statics.getLabel('GraamKaaryakartaaCount'), value: graam, txtString2: Statics.getLabel('MandalKaaryakartaaCount'), value2: mandal, fontsize: 15),
+      TwoColumnRow(txtString: Statics.getLabel('NagarKaaryakartaaCount'), value: nagar, txtString2: Statics.getLabel('ShaharKaaryakartaaCount'), value2: shahar, fontsize: 15),
+      TwoColumnRow(txtString: Statics.getLabel('BhaagKaaryakartaaCount'), value: bhaag, txtString2: Statics.getLabel('VibhaagKaaryakartaaCount'), value2: vibhaag, fontsize: 15),
+      TwoColumnRow(txtString: Statics.getLabel('MahaanagarKaaryakartaaCount'), value: mahaanagar, txtString2: Statics.getLabel('PraantKaaryakartaaCount'), value2: praant, fontsize: 15),
+      TwoColumnRow(txtString: Statics.getLabel('KshetraKaaryakartaaCount'), value: kshetra, txtString2: Statics.getLabel('AkhilBhaaratiyaKaaryakartaaCount'), value2: akhilBhaarat, fontsize: 15),
+      TwoColumnRow(txtString: Statics.getLabel('PravaaseeKaaryakartaaCount'), value: pravaasee, txtString2: Statics.getLabel('TotalKaaryakartaaCount'), value2: total, fontsize: 15),
       const SizedBox(height: 15),
     ]);
   }
@@ -2620,8 +2367,7 @@ class _HomeScreenState extends State<HomeScreen> {
         color: Theme.of(context).primaryColor,
         textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
         onPressed: onPressed,
-        child: Text(Statics.getLabel("clear"),
-            style: const TextStyle(fontSize: 12)),
+        child: Text(Statics.getLabel("clear"), style: const TextStyle(fontSize: 12)),
       ),
     );
   }
@@ -2637,10 +2383,7 @@ class _HomeScreenState extends State<HomeScreen> {
       decoration: InputDecoration(labelText: label),
       isExpanded: true,
       value: value,
-      items: items
-          .map((g) => DropdownMenuItem(
-              value: g.geoUnitID.toString(), child: Text(g.name!)))
-          .toList(),
+      items: items.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
       onChanged: onChanged,
     );
   }
@@ -2668,9 +2411,7 @@ class _HomeScreenState extends State<HomeScreen> {
       return SizedBox(
         width: MediaQuery.sizeOf(context).width,
         height: 150,
-        child: Center(
-            child: Text(Statics.getLabel('NoDataFound'),
-                style: const TextStyle(fontWeight: FontWeight.normal))),
+        child: Center(child: Text(Statics.getLabel('NoDataFound'), style: const TextStyle(fontWeight: FontWeight.normal))),
       );
     }
 
@@ -2679,8 +2420,7 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         // Frozen first column
         DataTable(
-          headingRowColor:
-              MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
+          headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
           columnSpacing: 0,
           horizontalMargin: 16,
           border: TableBorder.all(color: Colors.black26),
@@ -2688,24 +2428,13 @@ class _HomeScreenState extends State<HomeScreen> {
             DataColumn(
               label: SizedBox(
                 width: 50,
-                child: Text(Statics.getLabel("hoomeScreenUpnagarTable0"),
-                    softWrap: true,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                child: Text(Statics.getLabel("hoomeScreenUpnagarTable0"), softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.bold)),
               ),
             ),
           ],
           rows: [
-            ...data.map((l) => DataRow(
-                color: const MaterialStatePropertyAll(Colors.white),
-                cells: [DataCell(Text(l.goUnitName.toString()))])),
-            DataRow(
-                color: MaterialStatePropertyAll(Colors.yellow.shade100),
-                cells: [
-                  DataCell(Text(Statics.getLabel("Total"),
-                      style: const TextStyle(fontWeight: FontWeight.w700)))
-                ]),
+            ...data.map((l) => DataRow(color: const MaterialStatePropertyAll(Colors.white), cells: [DataCell(Text(l.goUnitName.toString()))])),
+            DataRow(color: MaterialStatePropertyAll(Colors.yellow.shade100), cells: [DataCell(Text(Statics.getLabel("Total"), style: const TextStyle(fontWeight: FontWeight.w700)))]),
           ],
         ),
         // Scrollable remaining columns
@@ -2722,22 +2451,13 @@ class _HomeScreenState extends State<HomeScreen> {
               child: DataTable(
                 columnSpacing: 14,
                 horizontalMargin: 12,
-                headingRowColor: MaterialStateColor.resolveWith(
-                    (_) => Colors.purple.shade100),
-                border: TableBorder(
-                    verticalInside:
-                        BorderSide(width: 0.7, color: Colors.grey.shade200)),
+                headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
+                border: TableBorder(verticalInside: BorderSide(width: 0.7, color: Colors.grey.shade200)),
                 columns: headers
                     .map((h) => DataColumn(
                           label: Container(
-                            constraints: const BoxConstraints(
-                                minWidth: 40, maxWidth: 100),
-                            child: Text(h,
-                                softWrap: true,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold)),
+                            constraints: const BoxConstraints(minWidth: 40, maxWidth: 100),
+                            child: Text(h, softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.bold)),
                           ),
                         ))
                     .toList(),
@@ -2745,80 +2465,26 @@ class _HomeScreenState extends State<HomeScreen> {
                   ...data.map((l) => DataRow(
                         color: const MaterialStatePropertyAll(Colors.white),
                         cells: [
-                          DataCell(
-                              Center(child: Text(l.nagarCount.toString()))),
-                          DataCell(
-                              Center(child: Text(l.vastiCount.toString()))),
+                          DataCell(Center(child: Text(l.nagarCount.toString()))),
+                          DataCell(Center(child: Text(l.vastiCount.toString()))),
                           DataCell(Center(child: Text(l.gramCount.toString()))),
-                          DataCell(
-                              Center(child: Text(l.upNagarCount.toString()))),
-                          DataCell(Center(
-                              child: Text(l.mapUpNagarCount.toString()))),
-                          DataCell(
-                              Center(child: Text(l.upKhandCount.toString()))),
-                          DataCell(Center(
-                              child: Text(l.mapUpKhandCount.toString()))),
-                          DataCell(
-                              Center(
-                                  child: Icon(Icons.download,
-                                      color: Colors.purple, size: 16)),
-                              onTap: () => _showExcelDownloadDialog(l)),
+                          DataCell(Center(child: Text(l.upNagarCount.toString()))),
+                          DataCell(Center(child: Text(l.mapUpNagarCount.toString()))),
+                          DataCell(Center(child: Text(l.upKhandCount.toString()))),
+                          DataCell(Center(child: Text(l.mapUpKhandCount.toString()))),
+                          DataCell(Center(child: Icon(Icons.download, color: Colors.purple, size: 16)), onTap: () => _showExcelDownloadDialog(l)),
                         ],
                       )),
                   DataRow(
                     color: MaterialStatePropertyAll(Colors.yellow.shade100),
                     cells: [
-                      DataCell(Center(
-                          child: Text(
-                              data
-                                  .fold(0, (s, i) => s + (i.nagarCount ?? 0))
-                                  .toString(),
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w700)))),
-                      DataCell(Center(
-                          child: Text(
-                              data
-                                  .fold(0, (s, i) => s + (i.vastiCount ?? 0))
-                                  .toString(),
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w700)))),
-                      DataCell(Center(
-                          child: Text(
-                              data
-                                  .fold(0, (s, i) => s + (i.gramCount ?? 0))
-                                  .toString(),
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w700)))),
-                      DataCell(Center(
-                          child: Text(
-                              data
-                                  .fold(0, (s, i) => s + (i.upNagarCount ?? 0))
-                                  .toString(),
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w700)))),
-                      DataCell(Center(
-                          child: Text(
-                              data
-                                  .fold(
-                                      0, (s, i) => s + (i.mapUpNagarCount ?? 0))
-                                  .toString(),
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w700)))),
-                      DataCell(Center(
-                          child: Text(
-                              data
-                                  .fold(0, (s, i) => s + (i.upKhandCount ?? 0))
-                                  .toString(),
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w700)))),
-                      DataCell(Center(
-                          child: Text(
-                              data
-                                  .fold(
-                                      0, (s, i) => s + (i.mapUpKhandCount ?? 0))
-                                  .toString(),
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w700)))),
+                      DataCell(Center(child: Text(data.fold(0, (s, i) => s + (i.nagarCount ?? 0)).toString(), style: const TextStyle(fontWeight: FontWeight.w700)))),
+                      DataCell(Center(child: Text(data.fold(0, (s, i) => s + (i.vastiCount ?? 0)).toString(), style: const TextStyle(fontWeight: FontWeight.w700)))),
+                      DataCell(Center(child: Text(data.fold(0, (s, i) => s + (i.gramCount ?? 0)).toString(), style: const TextStyle(fontWeight: FontWeight.w700)))),
+                      DataCell(Center(child: Text(data.fold(0, (s, i) => s + (i.upNagarCount ?? 0)).toString(), style: const TextStyle(fontWeight: FontWeight.w700)))),
+                      DataCell(Center(child: Text(data.fold(0, (s, i) => s + (i.mapUpNagarCount ?? 0)).toString(), style: const TextStyle(fontWeight: FontWeight.w700)))),
+                      DataCell(Center(child: Text(data.fold(0, (s, i) => s + (i.upKhandCount ?? 0)).toString(), style: const TextStyle(fontWeight: FontWeight.w700)))),
+                      DataCell(Center(child: Text(data.fold(0, (s, i) => s + (i.mapUpKhandCount ?? 0)).toString(), style: const TextStyle(fontWeight: FontWeight.w700)))),
                       const DataCell(SizedBox()),
                     ],
                   ),
@@ -2840,50 +2506,21 @@ class _HomeScreenState extends State<HomeScreen> {
       title: Statics.getLabel("shatabdiVarshaVruttaTitle"),
       children: [
         _cardRow([
-          _cardTile(
-              Statics.getLabel('vijayaDashamiUtsav') +
-                  '\n' +
-                  Statics.getLabel('Vrutta'),
-              () => Navigator.of(context)
-                  .pushNamed(VijayadashamiFormView.routeName)),
-          _cardTile(
-              Statics.getLabel('vijayaDashamiUtsav') +
-                  ' ' +
-                  Statics.getLabel('Reportonly'),
-              () => Navigator.of(context)
-                  .pushNamed(VijayadashamiFormReport.routeName)),
+          _cardTile(Statics.getLabel('vijayaDashamiUtsav') + '\n' + Statics.getLabel('Vrutta'), () => Navigator.of(context).pushNamed(VijayadashamiFormView.routeName)),
+          _cardTile(Statics.getLabel('vijayaDashamiUtsav') + ' ' + Statics.getLabel('Reportonly'), () => Navigator.of(context).pushNamed(VijayadashamiFormReport.routeName)),
         ]),
         _cardRow([
-          _cardTile(
-              Statics.getLabel("gruhSamparkAbhiyan"),
-              () => Navigator.of(context)
-                  .pushNamed(GruhAbhiyaanMainTabScreen.routeName)),
-          _cardTile(
-              Statics.getLabel("hinduSammelan"),
-              () => Navigator.of(context)
-                  .pushNamed(HinduSanmelanMainTab.routeName)),
+          _cardTile(Statics.getLabel("gruhSamparkAbhiyan"), () => Navigator.of(context).pushNamed(GruhAbhiyaanMainTabScreen.routeName)),
+          _cardTile(Statics.getLabel("hinduSammelan"), () => Navigator.of(context).pushNamed(HinduSanmelanMainTab.routeName)),
         ]),
         _cardRow([
-          _cardTile(
-              Statics.getLabel("sadbhavBaithak"),
-              () => Navigator.of(context)
-                  .pushNamed(SadbhavBaithakMainTab.routeName)),
-          _cardTile(
-              Statics.getLabel("pramukhJansanvaad"),
-              () => Navigator.of(context)
-                  .pushNamed(PramukhJansanvadMainTab.routeName)),
+          _cardTile(Statics.getLabel("sadbhavBaithak"), () => Navigator.of(context).pushNamed(SadbhavBaithakMainTab.routeName)),
+          _cardTile(Statics.getLabel("pramukhJansanvaad"), () => Navigator.of(context).pushNamed(PramukhJansanvadMainTab.routeName)),
         ]),
         _cardRow([
-          _cardTile(
-              Statics.getLabel("yuvaSangam"),
-              () =>
-                  Navigator.of(context).pushNamed(YuvaSangamMainTab.routeName)),
+          _cardTile(Statics.getLabel("yuvaSangam"), () => Navigator.of(context).pushNamed(YuvaSangamMainTab.routeName)),
           // _cardTile(Statics.getLabel("yuvaSangam"), () => Fluttertoast.showToast(msg: Statics.getLabel("workInProgress"), gravity: ToastGravity.BOTTOM)),
-          _cardTile(
-              Statics.getLabel("shakhaVistaar"),
-              () => Fluttertoast.showToast(
-                  msg: Statics.getLabel("workInProgress"),
-                  gravity: ToastGravity.BOTTOM)),
+          _cardTile(Statics.getLabel("shakhaVistaar"), () => Fluttertoast.showToast(msg: Statics.getLabel("workInProgress"), gravity: ToastGravity.BOTTOM)),
         ]),
       ],
     );
@@ -2894,24 +2531,12 @@ class _HomeScreenState extends State<HomeScreen> {
       title: Statics.getLabel("Survey"),
       children: [
         _cardRow([
-          _cardTile(
-              Statics.getLabel('vastiSurvey'),
-              () => Navigator.of(context)
-                  .pushNamed(VastiSurveyFormScreen.routeName)),
-          _cardTile(
-              Statics.getLabel('mandalSurvey'),
-              () => Navigator.of(context)
-                  .pushNamed(MandalSurveyFormScreen.routeName)),
+          _cardTile(Statics.getLabel('vastiSurvey'), () => Navigator.of(context).pushNamed(VastiSurveyFormScreen.routeName)),
+          _cardTile(Statics.getLabel('mandalSurvey'), () => Navigator.of(context).pushNamed(MandalSurveyFormScreen.routeName)),
         ]),
         _cardRow([
-          _cardTile(
-              Statics.getLabel('vastiSurveyReport'),
-              () => Navigator.of(context)
-                  .pushNamed(VastiSurveyReportScreen.routeName)),
-          _cardTile(
-              Statics.getLabel('mandalSurveyReport'),
-              () => Navigator.of(context)
-                  .pushNamed(MandalSurveyReportScreen.routeName)),
+          _cardTile(Statics.getLabel('vastiSurveyReport'), () => Navigator.of(context).pushNamed(VastiSurveyReportScreen.routeName)),
+          _cardTile(Statics.getLabel('mandalSurveyReport'), () => Navigator.of(context).pushNamed(MandalSurveyReportScreen.routeName)),
         ]),
       ],
     );
@@ -2924,34 +2549,19 @@ class _HomeScreenState extends State<HomeScreen> {
       title: Statics.getLabel("mainScreenOther"),
       children: [
         _cardRow([
-          if (_shouldShowForLevel(level))
-            _cardTile(Statics.getLabel('searchJoinRSSScreenLabel'),
-                () => Navigator.of(context).pushNamed(SearchJoinRss.routeName)),
-          _cardTile(
-              Statics.getLabel('searchSwayamsevakScreenBanner'),
-              () =>
-                  Navigator.of(context).pushNamed(SwayamSevakSearch.routeName)),
+          if (_shouldShowForLevel(level)) _cardTile(Statics.getLabel('searchJoinRSSScreenLabel'), () => Navigator.of(context).pushNamed(SearchJoinRss.routeName)),
+          _cardTile(Statics.getLabel('searchSwayamsevakScreenBanner'), () => Navigator.of(context).pushNamed(SwayamSevakSearch.routeName)),
         ]),
         _cardRow([
-          _cardTile(Statics.getLabel('Abhiyaan'),
-              () => Navigator.of(context).pushNamed(AbhiyanScreen.routeName)),
-          _cardTile(
-              Statics.getLabel('searchSoochiScreenLabel'),
-              () => Navigator.of(context)
-                  .pushNamed(SearchSoochiScreen.routeName)),
+          _cardTile(Statics.getLabel('Abhiyaan'), () => Navigator.of(context).pushNamed(AbhiyanScreen.routeName)),
+          _cardTile(Statics.getLabel('searchSoochiScreenLabel'), () => Navigator.of(context).pushNamed(SearchSoochiScreen.routeName)),
         ]),
         _cardRow([
-          if (_shouldShowGeoUnitChange(level, daayitva))
-            _cardTile(Statics.getLabel('masterdataupdate2'),
-                () => Navigator.of(context).pushNamed(TabScreen.routeName)),
-          _cardTile(Statics.getLabel('searchEventsScreenLabel'),
-              () => Navigator.of(context).pushNamed(SearchEvent.routeName)),
+          if (_shouldShowGeoUnitChange(level, daayitva)) _cardTile(Statics.getLabel('masterdataupdate2'), () => Navigator.of(context).pushNamed(TabScreen.routeName)),
+          _cardTile(Statics.getLabel('searchEventsScreenLabel'), () => Navigator.of(context).pushNamed(SearchEvent.routeName)),
         ]),
         if (_showRjbNidhiTile(level, daayitva))
-          _cardTile(
-              Statics.getLabel('searchRamJanmabhoomiNidhiSankalanVrutta'),
-              () => Navigator.of(context)
-                  .pushNamed(SearchRamJanmaBhoomiNidhiSankalan.routeName)),
+          _cardTile(Statics.getLabel('searchRamJanmabhoomiNidhiSankalanVrutta'), () => Navigator.of(context).pushNamed(SearchRamJanmaBhoomiNidhiSankalan.routeName)),
       ],
     );
   }
@@ -2967,9 +2577,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              decoration: BoxDecoration(
-                  color: Colors.purple.shade50,
-                  borderRadius: BorderRadius.circular(12)),
+              decoration: BoxDecoration(color: Colors.purple.shade50, borderRadius: BorderRadius.circular(12)),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [const SizedBox(height: 19), ...children],
@@ -2981,16 +2589,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 clipBehavior: Clip.antiAlias,
                 clipper: LabelClipper(),
                 child: Container(
-                  padding: const EdgeInsets.only(
-                      right: 24, top: 3, bottom: 2, left: 8),
-                  decoration: BoxDecoration(
-                      color: Colors.purple.shade300,
-                      borderRadius: BorderRadius.circular(12)),
-                  child: Text(title,
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600)),
+                  padding: const EdgeInsets.only(right: 24, top: 3, bottom: 2, left: 8),
+                  decoration: BoxDecoration(color: Colors.purple.shade300, borderRadius: BorderRadius.circular(12)),
+                  child: Text(title, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
                 ),
               ),
             ),
@@ -3004,15 +2605,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _cardRow(List<Widget> tiles) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-          children: tiles
-              .map((t) => Expanded(child: t))
-              .toList()
-              .fold<List<Widget>>(
-                  [],
-                  (list, w) => list.isEmpty
-                      ? [w]
-                      : [...list, const SizedBox(width: 8), w])),
+      child: Row(children: tiles.map((t) => Expanded(child: t)).toList().fold<List<Widget>>([], (list, w) => list.isEmpty ? [w] : [...list, const SizedBox(width: 8), w])),
     );
   }
 
@@ -3022,13 +2615,9 @@ class _HomeScreenState extends State<HomeScreen> {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(12)),
+        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
         child: Row(children: [
-          Expanded(
-              child: Text(label,
-                  style: const TextStyle(
-                      fontSize: 14, fontWeight: FontWeight.w500))),
+          Expanded(child: Text(label, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500))),
           const Icon(Icons.arrow_forward_ios_rounded, size: 16),
         ]),
       ),
@@ -3113,6 +2702,53 @@ class GetCount {
     return GetCount(
       codeForDisplay: json['CodeForDisplay'],
       cnt: json['cnt'],
+      //cnt: int.tryParse(json['cnt'].toString()) ?? 0,
+    );
+  }
+}
+
+class GanveshData {
+  int? Hasbelt;
+  int? Hascap;
+  int? Hasdanda;
+  int? Haspant;
+  int? Hasshirt;
+  int? Hasshoes;
+  int? Hassock;
+  int? isganveshcomplted;
+
+  GanveshData({this.Hasbelt, this.Hascap, this.Hasdanda, this.Haspant, this.Hasshirt, this.Hasshoes, this.Hassock, this.isganveshcomplted});
+
+  factory GanveshData.fromJson(Map<String, dynamic> json) {
+    return GanveshData(
+      Hasbelt: json['HasBelt'],
+      Hascap: json['HasCap'],
+      Hasdanda: json['HasDanda'],
+      Haspant: json['HasPant'],
+      Hasshirt: json['HasShirt'],
+      Hasshoes: json['HasShoes'],
+      Hassock: json['HasSocks'],
+      isganveshcomplted: json['IsGanaveshComplete'],
+      //cnt: int.tryParse(json['cnt'].toString()) ?? 0,
+    );
+  }
+}
+
+class Vehicle {
+  int? Has2wehicle;
+  int? Has3wvehicle;
+  int? Has4wvehicle;
+  int? Hasdriver;
+
+  Vehicle({this.Has2wehicle, this.Has3wvehicle, this.Has4wvehicle, this.Hasdriver});
+
+  factory Vehicle.fromJson(Map<String, dynamic> json) {
+    return Vehicle(
+      Has2wehicle: json['Has2WVehicle'],
+      Has3wvehicle: json['Has3WVehicle'],
+      Has4wvehicle: json['Has4WVehicle'],
+      Hasdriver: json['HasVehicleDriver'],
+
       //cnt: int.tryParse(json['cnt'].toString()) ?? 0,
     );
   }

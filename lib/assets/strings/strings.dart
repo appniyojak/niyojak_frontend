@@ -28,8 +28,7 @@ Map<String, String> resEnglish = {
   'FieldsRemaining': ' fields remaining',
   'AddButton': 'Add',
   'upgradeVersionAlert': 'New Version',
-  'upgradeVersion':
-      'Your Current Version is Obsolete, Please Upgrade To Latest Version from Play Store.',
+  'upgradeVersion': 'Your Current Version is Obsolete, Please Upgrade To Latest Version from Play Store.',
   'versionLabel': 'Version',
   'upgradeButton': 'Upgrade',
   'Commerce': 'Commerce',
@@ -97,8 +96,7 @@ Map<String, String> resEnglish = {
   'KshetraKaaryakartaaCount': 'Kshetra',
   'AkhilBhaaratiyaKaaryakartaaCount': 'Akhil Bhaaratiya',
   'PravaaseeKaaryakartaaCount': 'Pravaasi',
-  'GatividhiAayaamSansthaaKaaryakartaaCount':
-      'Gatividhi/Aayaam/Sangh-Prerit/Social Org Sansthaa Kaaryakartaa',
+  'GatividhiAayaamSansthaaKaaryakartaaCount': 'Gatividhi/Aayaam/Sangh-Prerit/Social Org Sansthaa Kaaryakartaa',
   'GatividhiKaaryakartaaCount': 'Gatividhi',
   'lessThan8000': 'Less Than 8000',
   '8000to12000': '8000 to 12000',
@@ -128,10 +126,8 @@ Map<String, String> resEnglish = {
   'samajScreenLabel': 'Samaj',
   'searchSwayamsevakScreenBanner': 'Search Swayamsevak',
   'searchSwayamsevakScreenTip': '(Can search by selecting many filters)',
-  'searchShaakhaaScreenLabel':
-      'Shaakhaa/Saaptaahik Milan/Maasik Milan/Sangha Mandali',
-  'searchShaakhaaScreenBanner':
-      'Search Shaakhaa/Saaptaahik Milan/Maasik Milan/Sangha Mandali',
+  'searchShaakhaaScreenLabel': 'Shaakhaa/Saaptaahik Milan/Maasik Milan/Sangha Mandali',
+  'searchShaakhaaScreenBanner': 'Search Shaakhaa/Saaptaahik Milan/Maasik Milan/Sangha Mandali',
   'EditMenu': 'Edit',
   'ViewMenu': 'View',
   'DeleteMenu': 'Delete',
@@ -144,19 +140,14 @@ Map<String, String> resEnglish = {
   'completeDate': 'Complete Date',
   'searchSwayamsevakTransferBanner': 'Swayamsevak Transfers',
   'searchSwayamsevakTransferLabel': 'Search Swayamsevak Transfers',
-  'SwayamsevakTransferDeletedSuccessfully':
-      'Swayamsevak Transfer Deleted Successfully',
+  'SwayamsevakTransferDeletedSuccessfully': 'Swayamsevak Transfer Deleted Successfully',
   'VisheshVyaktiDeletedSuccessfully': 'Vishesh Vyakti Deleted Successfully',
-  'SahbhagiKaryakartaDeletedSuccessfully':
-      'Sahbhagi Karyakarta Deleted Successfully',
+  'SahbhagiKaryakartaDeletedSuccessfully': 'Sahbhagi Karyakarta Deleted Successfully',
   'CouldnotDeleteSwayamsevakTransfer': 'Could not Delete Swayamsevak Transfer',
   'CouldnotDeleteSahbhagiKaryakarta': 'Could not Delete SahbhagiKaryakarta',
-  'AreyouSureYouWantToDeleteSwayamsevakTransfer':
-      'Are you Sure You Want To Delete Swayamsevak Transfer',
-  'AreyouSureYouWantToDeleteVisheshvyakti':
-      'Are you Sure You Want To Delete Visheshvyakti',
-  'AreyouSureYouWantToDeleteSahbhagiKaryakarta':
-      'Are you Sure You Want To Delete Sahabhagi Karyakarta',
+  'AreyouSureYouWantToDeleteSwayamsevakTransfer': 'Are you Sure You Want To Delete Swayamsevak Transfer',
+  'AreyouSureYouWantToDeleteVisheshvyakti': 'Are you Sure You Want To Delete Visheshvyakti',
+  'AreyouSureYouWantToDeleteSahbhagiKaryakarta': 'Are you Sure You Want To Delete Sahabhagi Karyakarta',
   'EditSwayamsevakTransferLabel': 'Edit Swayamsevak Transfer',
   'CardMenuSwayamsevakTransfer': 'Transfer',
   'searchEventScreenLabel': 'Events',
@@ -188,14 +179,12 @@ Map<String, String> resEnglish = {
   'ShaakhaaDetailVruttaNotFound': 'Shaakhaa Vrutta Not Available',
   'canNotMakeChanges': 'Cannot Make Any Changes!',
   'saveBasicInfo': 'Please Save Basic Info First!',
-  'pleaseWait':
-      'The app will be launched soon \nPlease do not press the back button',
+  'pleaseWait': 'The app will be launched soon \nPlease do not press the back button',
   'clear': 'Clear!',
   'completeVrutta': 'Complted Vrutta',
   'incompleteVrutta': 'Incomplte Vrutta',
   'notStartVrutta': 'Vrutta Fill Not Start',
-  'autheticationFailed':
-      'Could not authenticate you. Please check Mobile Number and Password.',
+  'autheticationFailed': 'Could not authenticate you. Please check Mobile Number and Password.',
   'dataSavedSuccessfully': 'Data Saved Successfully!',
   'unableToSaveData': 'Unable to save data',
   'internetNotConnected': 'Please Connect to Internet!',
@@ -204,8 +193,7 @@ Map<String, String> resEnglish = {
   'dataRefreshedSuccessfully': 'Data refreshed sucessfully!',
   'dataAlreadyExists': 'Data already exists for selected criteria',
   'newRecord': 'Data does not exist; Please update new data',
-  'uniqueMobileNumberViolation':
-      'Mobile Number is linked to Another Swayamsevak',
+  'uniqueMobileNumberViolation': 'Mobile Number is linked to Another Swayamsevak',
   'selectAtLeastOneFilter': 'Please select some filter',
   'abhiyaanSummaryLabel': 'Abhiyaan Consolidated Vrutta',
   'abhiyaanEditLabel': 'Abhiyaan Vrutta Edit',
@@ -252,6 +240,7 @@ Map<String, String> resEnglish = {
   'Has3Wheeler': 'Has 3-Wheeler?',
   'Has4Wheeler': 'Has 4-Wheeler?',
   'HasVehicleDriver': 'Has Vehicle Driver?',
+  'VehicleInformation': 'Vehicles Information',
   'VehicleType2W': '2-Wheeler',
   'VehicleType3W': '3-Wheeler',
   'VehicleType4W': '4-Wheeler',
@@ -275,19 +264,14 @@ Map<String, String> resEnglish = {
   'YearsAsTrutiyaShikshak': 'Years As Trutiya Shikshak',
   'PrarambhikVargaYearValidationMessage': 'Please Enter Prarambhik Varga Year',
   'PraathamikVargaYearValidationMessage': 'Please Enter Praathamik Varga Year',
-  'ValidPrarambhikVargaYearValidationMessage':
-      'Please Enter Valid Prarambhik Varga Year',
-  'ValidPraathamikVargaYearValidationMessage':
-      'Please Enter Valid Praathamik Varga Year',
+  'ValidPrarambhikVargaYearValidationMessage': 'Please Enter Valid Prarambhik Varga Year',
+  'ValidPraathamikVargaYearValidationMessage': 'Please Enter Valid Praathamik Varga Year',
   'PrathamVarshaYearValidationMessage': 'Please Enter Pratham Varsha Year',
-  'ValidPrathamVarshaYearValidationMessage':
-      'Please Enter Valid Pratham Varsha Year',
+  'ValidPrathamVarshaYearValidationMessage': 'Please Enter Valid Pratham Varsha Year',
   'DwitiyaVarshaYearValidationMessage': 'Please Enter Dwitiya Varsha Year',
-  'ValidDwitiyaVarshaYearValidationMessage':
-      'Please Enter Valid Dwitiya Varsha Year',
+  'ValidDwitiyaVarshaYearValidationMessage': 'Please Enter Valid Dwitiya Varsha Year',
   'TrutiyaVarshaYearValidationMessage': 'Please Enter Trutiya Varsha Year',
-  'ValidTrutiyaVarshaYearValidationMessage':
-      'Please Enter Valid Trutiya Varsha Year',
+  'ValidTrutiyaVarshaYearValidationMessage': 'Please Enter Valid Trutiya Varsha Year',
   'TrainedIn': 'Trained In',
   'GhoshVishay': 'Ghosh Vishay',
   'ShaaririkVishay': 'Shaaririk Vishay',
@@ -353,8 +337,7 @@ Map<String, String> resEnglish = {
   'SchoolNameValidationMessage': 'Please Enter School Name',
   'StandardValidationMessage': 'Please Enter Standard',
   'ProgramValidationMessage': 'Please Enter Program',
-  'ExpectedCompletionYearValidationMessage':
-      'Please Enter Expected Completion Year',
+  'ExpectedCompletionYearValidationMessage': 'Please Enter Expected Completion Year',
   'GovernmentDepartmentValidationMessage': 'Please Enter Government Department',
   'OrganizationNameValidationMessage': 'Please Enter Organization Name',
   'IndustryVerticalValidationMessage': 'Please Enter Industry Vertical',
@@ -363,12 +346,9 @@ Map<String, String> resEnglish = {
   'WeeklyOffDayValidationMessage': 'Please Select Weekly Off Day',
   'DutyHoursToValidationMessage': 'Please Enter Duty Hours To',
   'DutyHoursFromValidationMessage': 'Please Enter Duty Hours From',
-  'OrganizationAtRetirementValidationMessage':
-      'Please Enter Organization At Retirement',
-  'DesignationAtRetirementValidationMessage':
-      'Please Enter Designation At Retirement',
-  'GovernmentDepartmentRetirementValidationMessage':
-      'Please Enter Department At Retirement',
+  'OrganizationAtRetirementValidationMessage': 'Please Enter Organization At Retirement',
+  'DesignationAtRetirementValidationMessage': 'Please Enter Designation At Retirement',
+  'GovernmentDepartmentRetirementValidationMessage': 'Please Enter Department At Retirement',
   'SelectVasti': 'Vasti',
   'VastiInfo': 'Vasti Info',
   'MandalInfo': 'Mandal Info',
@@ -489,8 +469,7 @@ Map<String, String> resEnglish = {
   'VruttaToday': 'Last 24 Hours',
   'VruttaDateValidationMessage': 'Please Enter Vrutta Date',
   'KaaryakartaaCountValidationMessage': 'Please Enter Kaaryakartaa Sankhyaa',
-  'SamparkitHomesCountValidationMessage':
-      'Please Enter Samparkit Homes Sankhyaa',
+  'SamparkitHomesCountValidationMessage': 'Please Enter Samparkit Homes Sankhyaa',
   'ChequecountValidationMessage': 'Please Enter Cheque Sankhyaa',
   'ChequeAmountValidationMessage': 'Please Enter Cheque Amount',
   'ChangePassword': 'Change Password',
@@ -506,8 +485,7 @@ Map<String, String> resEnglish = {
   'NewPasswordValidationMessage': 'Please Enter New Password',
   'ConfirmPasswordValidationMessage': 'Please Confirm New Password',
   'PasswordValidationMessage': 'Password Confirmation Failed',
-  'oldPasswordMatchValidationMessage':
-      'Old Password must not be same as New Password',
+  'oldPasswordMatchValidationMessage': 'Old Password must not be same as New Password',
   'EditVisheshVyakti': 'Edit Vishesh Vyakti',
   'searchVisheshVyaktiScreenLabel': 'Vishesh Vyakti',
   'searchVisheshVyaktiScreenBanner': 'Search Vishesh Vyakti',
@@ -605,6 +583,8 @@ Map<String, String> resEnglish = {
   'HasBelt': 'Has Belt',
   'HasShoes': 'Has Shoes',
   'HasSocks': 'Has Socks',
+  'UniformInformation': 'Uniform Information',
+  'IsGanaveshComplete': 'Is Ganavesh Complete',
   'HasDanda': 'Has Danda',
   'IsDaayitvaPresent': 'Is Daayitva Present?',
   'CurrentAddress': 'Current Address',
@@ -809,8 +789,7 @@ Map<String, String> resEnglish = {
   'ViewLocation': 'View Location',
   'RecordLocation': 'Record Location',
   'SameSoochiValidationMessage': 'Cannot Add Same Soochi',
-  'LocationAlreadyExists':
-      'Location Already Exists.\nAre you sure you want to continue?',
+  'LocationAlreadyExists': 'Location Already Exists.\nAre you sure you want to continue?',
   'CannotUpdateLocation': 'Cannot Update Location',
   'LocationNotAvailableForSearch': 'sa',
   'MaxDaayitva': 'Max Past Daayitva',
@@ -841,8 +820,7 @@ Map<String, String> resEnglish = {
   'HasShaakhaaSanchaalanExperience': 'Has Shaakhaa Sanchaalan Experience',
   'ShaakhaExp': 'Shaakhaa Experience',
   'HasShaakhaaOpeningExperience': 'Has New Shaakhaa Starting Experience',
-  'PleaseSelectatleastoneMukhyaVishay':
-      'Please Select atleast one Mukhya Vishay',
+  'PleaseSelectatleastoneMukhyaVishay': 'Please Select atleast one Mukhya Vishay',
   'WeeklyOffCycle': 'Weekly Off Cycle',
   'IsShiftDuty': 'Is Shift Duty',
   'WeeklyOffCycleValidationMessage': 'Please Select Weekly Off Cycle',
@@ -853,19 +831,15 @@ Map<String, String> resEnglish = {
   'AreyouSureYouWantToAddSoochi': 'Are you Sure You Want To Add Soochi',
   'ShaakhaaDeletedSuccessfully': 'Shk/SM/MM/SMd Deleted Successfully',
   'CouldnotDeleteShaakhaa': 'Could not Delete Shk/SM/MM/SMd',
-  'AreyouSureYouWantToDeleteShaakhaa':
-      'Are you Sure You Want To Delete Shk/SM/MM/SMd',
+  'AreyouSureYouWantToDeleteShaakhaa': 'Are you Sure You Want To Delete Shk/SM/MM/SMd',
   'SewaVasti': 'Sewa Vasti',
-  'ConductedAnivaaryaShaaririkKaaryakram':
-      'Conducted Anivaarya Shaaririk Kaaryakram',
-  'ConductedAnivaaryaBouddhikKaaryakram':
-      'Conducted Anivaarya Bouddhik Kaaryakram',
+  'ConductedAnivaaryaShaaririkKaaryakram': 'Conducted Anivaarya Shaaririk Kaaryakram',
+  'ConductedAnivaaryaBouddhikKaaryakram': 'Conducted Anivaarya Bouddhik Kaaryakram',
   'ConductedOptionalShaaririkVishay': 'Conducted Optional Shaaririk Vishay',
   'ConductedOtherOptionalKaaryakram': 'Conducted Other Optional Kaaryakram',
   'PleaseEnterAtleastOneOfThree': 'Please Enter at least One of the three',
   'PleaseEnterPrachaarakYearCount': 'Please Enter Prachaarak Year Sankhyaa',
-  'PleaseEnterMaxDaayitvaWhenPracharak':
-      'Please Enter Max Daayitva When Pracharak',
+  'PleaseEnterMaxDaayitvaWhenPracharak': 'Please Enter Max Daayitva When Pracharak',
   'IAgreeToBefore': 'I Accept the ',
   'TermsofUse': 'Terms of Use',
   'PrivacyPolicy': 'Privacy Policy',
@@ -908,28 +882,24 @@ Map<String, String> resEnglish = {
   'AreaOfExpertiseShort': 'Areas Of Expertise',
   'DaayitvaDeletedSuccessfully': 'Daayitva Deleted Successfully',
   'CouldnotDeleteDaayitva': 'Could not Delete Daayitva',
-  'AreyouSureYouWantToDeleteDaayitva':
-      'Are you Sure You Want To Delete Daayitva',
+  'AreyouSureYouWantToDeleteDaayitva': 'Are you Sure You Want To Delete Daayitva',
   'AreyouSureYouWantToDeleteJoinRSS': 'Are you Sure You Want To Delete Record',
   'AreaOfOperations': 'Areas Of Operations',
-  'HasbeenShikshakinSanghaShikshaVarga':
-      'Has been Shikshak in Sangha Shiksha Varga',
+  'HasbeenShikshakinSanghaShikshaVarga': 'Has been Shikshak in Sangha Shiksha Varga',
   'NoDaayitva': 'No Daayitva',
   'Pravaasi': 'Pravaasi',
   'IsSankalpit': 'Is Sankalpit',
   'SankalpAadhaar': 'Sankalp Aadhaar',
   'SankalpAadhaarShakhaa': 'Shakhaa Sankalp Aadhaar',
   'SankalpAadhaarSaptahikMilan': 'Saptahik Milan Sankalp Aadhaar',
-  'SankalpAadhaarMasikMilanSanghaMandali':
-      'Maa. Mi./Sangh Mandali Sankalp Aadhaar',
+  'SankalpAadhaarMasikMilanSanghaMandali': 'Maa. Mi./Sangh Mandali Sankalp Aadhaar',
   'SankalpAadhaarShaakhaa': 'Shaakhaa/Sa.Mi.',
   'SankalpAadhaarKaaryakartaa': 'Kaaryakartaa',
   'SankalpTimeLine': 'Sankalp Completion',
   'SankalpCompletionMonth': 'Month',
   'SankalpCompletionYear': 'Year',
   'SankalpAadhaarKaaryakartaaValidationMessage': 'Please select Kaaryakartaa',
-  'SankalpAadhaarShaakhaaValidationMessage':
-      'Please select Shaakhaa/Saaptaahik',
+  'SankalpAadhaarShaakhaaValidationMessage': 'Please select Shaakhaa/Saaptaahik',
   'HasToli': 'Has Toli',
   'HasPaalak': 'Has Paalak',
   'ToliBaithakMeet': 'Toli Baithak Count',
@@ -953,23 +923,19 @@ Map<String, String> resEnglish = {
   'PopulationValidationMessage': 'Please enter Population',
   'SewaVastiDeletedSuccessfully': 'Sewa Vasti Deleted Successfully',
   'CouldnotDeleteSewaVasti': 'Could not Delete Sewa Vasti',
-  'AreyouSureYouWantToDeleteSewaVasti':
-      'Are you Sure You Want To Delete Sewa Vasti',
+  'AreyouSureYouWantToDeleteSewaVasti': 'Are you Sure You Want To Delete Sewa Vasti',
   'Information': 'Information',
   'month': 'Month',
   'SwayamsevakDeletedSuccessfully': 'Swayamsevak Deleted Successfully',
   'CouldnotDeleteSwayamsevak': 'Could not Delete Swayamsevak',
-  'AreyouSureYouWantToDeleteSwayamsevak':
-      'Are you Sure You Want To Delete Swayamsevak',
+  'AreyouSureYouWantToDeleteSwayamsevak': 'Are you Sure You Want To Delete Swayamsevak',
   'CopyFromEmail': 'Copy From Email',
   'EmailBody': 'Email Body',
   'PopulateFields': 'Populate Fields',
   'EmailBodyValidationMessage': 'Please enter Email Body',
   'ValidEmailBodyValidationMessage': 'Please enter Valid Email Body',
-  'searchRamJanmabhoomiNidhiSankalanVrutta':
-      'Search Ram Janmabhoomi Nidhi Sankalan Vrutta',
-  'searchRamJanmabhoomiNidhiSankalanVruttaScreenBanner':
-      'Ram Janmabhoomi Nidhi Sankalan Vrutta',
+  'searchRamJanmabhoomiNidhiSankalanVrutta': 'Search Ram Janmabhoomi Nidhi Sankalan Vrutta',
+  'searchRamJanmabhoomiNidhiSankalanVruttaScreenBanner': 'Ram Janmabhoomi Nidhi Sankalan Vrutta',
   'SahabhaagiKaaryakartaa': 'Sahabhaagi Kaaryakartaa',
   'VisheshVyakti': 'Vishesh Vyakti',
   'searchRJBSVNameMobileLabel': 'Name / Mobile No',
@@ -1034,8 +1000,7 @@ Map<String, String> resEnglish = {
   'selectcomparativevruttapoint': ' Data points for Comparitive Report',
   'selectedBhougolikkaryastithi': 'Choose Level',
   'comparativevruttapoint': 'Select  Data points for Comparitive Report',
-  'tulnatmakBaithakEkatritVruttaBanner':
-      'SelectTulnatmak Sankalit Baithak Vrutta',
+  'tulnatmakBaithakEkatritVruttaBanner': 'SelectTulnatmak Sankalit Baithak Vrutta',
   'baithakType': 'Baithak Type',
   'selectbaithakType': 'Select Baithak Type',
   'selectbaithakTypeLabel': 'Select Baithak',
@@ -1050,8 +1015,7 @@ Map<String, String> resEnglish = {
   'tarunVyavasaayeeAverage': 'Tarun Vyavasaayee Avg',
   'proudhAverage': 'Proudh Avg',
   'annualBaithakShaakhaaVruttaTitle': 'Annual Baithak Shaakhaa Vrutta',
-  'annualBaithakShaakhaaViheenVruttaTitle':
-      'Annual Baithak Kaarya-Viheen Vasti/Graam Vrutta',
+  'annualBaithakShaakhaaViheenVruttaTitle': 'Annual Baithak Kaarya-Viheen Vasti/Graam Vrutta',
   'annualBaithakMukhyaMaargVruttaTitle': 'Annual Baithak Mukhya Maarg Vrutta',
   'annualBaithakGraamVikasVruttaTitle': 'Annual Baithak Graam Vikas Vrutta',
   'annualBaithakNagarVruttaTitle': 'Annual Baithak Nagar Vrutta',
@@ -1099,13 +1063,11 @@ Map<String, String> resEnglish = {
   'trutiyaGeneralShikshaarthiSakriya': 'Trutiya Samanya Shikshaarthi/Sakriya',
   'trutiyaSpecialShikshaarthiSakriya': 'Trutiya Vishesh Shikshaarthi/Sakriya',
   'sanghaDaayitvawaanSwCount': 'Swayamsevak Count with Sangha Daayitva',
-  'preritSansthaaSangathanDaayitvawaanSwCount':
-      'Swayamsevak Count with Sangha-Prerit Sansthaa/Sangathan Daayitva',
+  'preritSansthaaSangathanDaayitvawaanSwCount': 'Swayamsevak Count with Sangha-Prerit Sansthaa/Sangathan Daayitva',
   'gatividhiDaayitvawaanSwCount': 'Swayamsevak Count with Gatividhi Daayitva',
   'aayaamDaayitvawaanSwCount': 'Swayamsevak Count with Aayaam Daayitva',
   'sociallyActiveSwCount': 'Swayamsevak Count with Social Activity Daayitva',
-  'shaakhaaToliBaithakCount':
-      'Shaakhaa/Saaptaa.Mi. Toli Baithak Count(last 30 days)',
+  'shaakhaaToliBaithakCount': 'Shaakhaa/Saaptaa.Mi. Toli Baithak Count(last 30 days)',
   'isVaarshikNiyojanDone': 'Vaarshik Niyojan Done?',
   'isSankalpaPoorna': 'Sankalpa Done?',
   'vastiGraamName': 'Vasti/Graam',
@@ -1259,8 +1221,7 @@ Map<String, String> resEnglish = {
   'attachMobile': 'Please Write your Mobile here',
   'attachDaayitva': 'Please Write your Daayitva here',
   'attachment': 'Attachment',
-  'EmailSentSuccessfully':
-      'Thank you for contacting us, we will reach to you shortly',
+  'EmailSentSuccessfully': 'Thank you for contacting us, we will reach to you shortly',
   'PleaseEnterYourMessage': 'Please enter your message',
   'yesterdayNews': 'Yesterday Vrutta',
   'tolatHomeContact': 'Tolat home contact',
@@ -1322,8 +1283,7 @@ Map<String, String> resEnglish = {
   'onlyBhasha': 'Language',
   'samparkSthiti': 'Sampark Status',
   'completeAll': 'Grand Total',
-  'daayitvaTip':
-      '(Sangh, Gatividhi, Aayaam and Sangh-Prerit Social Org / Sansthaa)',
+  'daayitvaTip': '(Sangh, Gatividhi, Aayaam and Sangh-Prerit Social Org / Sansthaa)',
   'vastitiHonareSanUtsav': 'Major Festivals / Programs in Vasti',
   'vastitiHonareSamajikKaryaKram': 'Major Social Programs in Vasti',
   'kendrsSankhya': 'Total Units',
@@ -1389,8 +1349,7 @@ Map<String, String> resEnglish = {
   'gaavPramukh': 'Gram Head',
   'pramukhaacheNaav': 'Name of Head',
   'SarpanchacheNaav': 'Name of Sarpanch',
-  'gavSadyasyaSamitiCount':
-      'How many members are  there in Village Committee ?',
+  'gavSadyasyaSamitiCount': 'How many members are  there in Village Committee ?',
   'gaavachiLoksankhya': 'Village Population',
   'suchana': 'Notice',
   'GaavSelectionImportant': 'Please select Gram before ',
@@ -1442,10 +1401,8 @@ Map<String, String> resEnglish = {
   'otherFestivals': 'Other Festival',
   'samajikKaryakram': 'Social Programs',
   'sarpanchNavValidation': 'Please fill out Sarapanch Name',
-  'purviShakhaValidation':
-      'Please select <Yes/No> if RSS Shakha existed before ',
-  'anyaVividhValidation':
-      'Please select <Yes/No> if work in other Social Field existed before ',
+  'purviShakhaValidation': 'Please select <Yes/No> if RSS Shakha existed before ',
+  'anyaVividhValidation': 'Please select <Yes/No> if work in other Social Field existed before ',
   'mumbaikarValidation': 'Please select <Yes/No> for Mumbaikar Group in Gram',
   'gaavSamitiValidation': 'Gram Committee Required',
   'prathamikSubmit': 'Primary Information Submit',
@@ -1493,8 +1450,7 @@ Map<String, String> resEnglish = {
   'vividhBhashaBolnare': 'Diverse Lingustic Groups',
   'kontyaPrantache': 'State Group',
   'anyaPraant': 'Other States',
-  'vastiSamitiAndLoksankhyaValidation':
-      'Vasti Committee and Population info must',
+  'vastiSamitiAndLoksankhyaValidation': 'Vasti Committee and Population info must',
   'prathamikMahitiSangrah': 'Preliminary information Submit',
   'jagranShreniTapshil': 'Jagaran Shreni Details',
   'selectVaramvarita': 'Select Frequency',
@@ -1635,8 +1591,7 @@ Map<String, String> resEnglish = {
   "MandalName": "Mandal",
   "GraamNames": "Graam",
   "VastiGraamValidation": "Vasti/Graam is required",
-  "swayamsevakDaayitvaValidation":
-      "If there is no existing Daayitva, then the 'End Year' must be filled in.",
+  "swayamsevakDaayitvaValidation": "If there is no existing Daayitva, then the 'End Year' must be filled in.",
   'upasthitAnya': "Others Present  ",
   'sanchalan': "Sanchalan",
   'gruhSamparkAbhiyan': 'Gruh Sampark Abhiyaan',
@@ -1649,8 +1604,7 @@ Map<String, String> resEnglish = {
   'mainScreenTab2': 'Vrutta and Other Reports',
   'selectMukhyaAtithi': 'Select Chief Guest ',
   'anyaPrabhaviLok': 'Other Influencer',
-  'vijaaydashamiStarQuestion':
-      ' At what level the Vijadashami Utsav was organised ?',
+  'vijaaydashamiStarQuestion': ' At what level the Vijadashami Utsav was organised ?',
   'PramukhJan': 'Pramukh Jan',
   'sadhbhavKarya': 'Sadhbhav Karya',
   'vijayadashmiReportTable0': "Utsav\nLevel",
@@ -1659,14 +1613,12 @@ Map<String, String> resEnglish = {
   'vijayadashmiReportTable3': "How many Utsavs\nstarted on time?",
   'vijayadashmiReportTable4': "How many Utsavs had\nindividual Geet by heart ?",
   'vijayadashmiReportTable5': "How many Sanchalan\nhad Ghosh vadan ?",
-  'vijayadashmiReportTable6':
-      "How many Utsavs accounts were\ncompleted in 24 hours?",
+  'vijayadashmiReportTable6': "How many Utsavs accounts were\ncompleted in 24 hours?",
   'vijayadashmiReportTable7': "How many Sanchalan\nwas with Dand ?",
   'utsavLable': "Utsav",
   'ProgramNirdharitTime': "Did the Utsav start on time ?",
   'vaiyaktikGitKantashtha': "Was the Geet by hearted ?",
-  'programHishobh24Hour':
-      "Was the accounting of the program completed in 24 hrs ?",
+  'programHishobh24Hour': "Was the accounting of the program completed in 24 hrs ?",
   'swayamsewakUpastithi': 'Swaymsevak Present',
   'Vayogat': 'Vayogat',
   'patSankhyaa': 'Total Pat Sankhyaa',
@@ -1758,8 +1710,7 @@ Map<String, String> resEnglish = {
   "MapUpNagarNames": "UpNagar Vasti Names",
   "UpKhandNames": "Upkhand Names",
   "MapUpKhandNames": "Upkhanda Mandal Names",
-  "noExcelAppFoundError":
-      "Please download the appropriate app (such as Microsoft Excel or WPS Office) to open the Excel file.",
+  "noExcelAppFoundError": "Please download the appropriate app (such as Microsoft Excel or WPS Office) to open the Excel file.",
   "unableToOpenFile": "Unable to open the file",
   "noPermissionGiven": "Storage permission is required",
   "vijayadashmiExcelReport": "Vijayadashmi Utsav Vrutta",
@@ -1804,8 +1755,7 @@ Map<String, String> resEnglish = {
   'selectAtLeastOneSwayamsevak': 'At least one Swayamsevak should be added.',
   'fillGruhVruttaFirst': 'Fill the Vrutta first',
   'dateWiseDataNotAvailable': 'Datewise data is not available',
-  'specialContactDataNotAvailable':
-      'Special Person Contact data is not available',
+  'specialContactDataNotAvailable': 'Special Person Contact data is not available',
   'gruhKaaryakartaaTotalCount': 'Total Kaaryakarte',
   'gruhSahabhaagiKaaryakartaaTotalCount': 'Total Abhiyaan Kaaryakarte',
   'gruhSahabhaagiKaaryakartaaMaleCount': 'Abhiyaan Kaaryakarte (M)',
@@ -1840,8 +1790,7 @@ Map<String, String> resEnglish = {
   'AddSanmelanFilesDesc': 'Add Description for Sanmelan Images',
   'AddSanmelanFilesSubtitle': 'Add maximum 3',
   'AddAdvSanmelanFiles': 'Add photos of Sanmelan-related news',
-  'AddAdvSanmelanFilesDesc':
-      'Add the name, date, and frequency of the Sanmelan-related news *',
+  'AddAdvSanmelanFilesDesc': 'Add the name, date, and frequency of the Sanmelan-related news *',
   'AddAdvSanmelanFilesSubtitle': 'Add maximum 10',
   'sanmelanReportTable0': "Sanmelan Level",
   'sanmelanReportTable1': "Sanmelan Count",
@@ -1851,8 +1800,7 @@ Map<String, String> resEnglish = {
   'sanmelanReportTable5': "Female Count",
   'sanmelanReportTable6': "Total Count \n(Guest + Male + Female)",
   'sanmelanQuestion1': "Did the sammelan start on time ?",
-  'sanmelanQuestion2':
-      "Was the accounting of the sammelan completed in 24 hrs ?",
+  'sanmelanQuestion2': "Was the accounting of the sammelan completed in 24 hrs ?",
   'sanmelanVakta': 'Speaker of Sanmelan',
   'addVakta': 'Add Vakta',
   'sanmelanVaktaName': 'Name of Speaker of Sanmelan',
@@ -1929,7 +1877,12 @@ Map<String, String> resEnglish = {
   'vruttaEditTitle': "Edit Vrutta",
   'baithakStatus': "Baithak Status",
   'kendraData': "Kendra Data",
-  'SwayamsevakCountByBloodGroup': 'रक्तगट संख्या',
+  'SwayamsevakCountByBloodGroup': 'Blood Group Sankhya',
+  'Experties': "Experties",
+  'Mother Tongue': "Mother Tongue",
+  'Interests': 'Interests Of Swayamsewak',
+  'Ghoshwad': 'Ghoshwad',
+  'Sangayu': 'Sanghayu',
   'allBaithakData': "All Baithak Data",
   'baithakData': "Baithak Data",
   'sadbhavCentre': "Sadbhav Kendra",
@@ -1954,12 +1907,9 @@ Map<String, String> resEnglish = {
   'sadbhavReportTable6': "Present Female",
   'sadbhavReportTable7': "Total Expected",
   'sadbhavReportTable8': "Total Present",
-  'AreyouSureYouWantToDeleteSanmelan':
-      'Are you Sure You Want To Delete this Sanmelan?',
-  'AreyouSureYouWantToDeleteKendra':
-      'Are you Sure You Want To Delete this Kendra?',
-  'AreyouSureYouWantToDeleteBaithak':
-      'Are you Sure You Want To Delete this Baithak?',
+  'AreyouSureYouWantToDeleteSanmelan': 'Are you Sure You Want To Delete this Sanmelan?',
+  'AreyouSureYouWantToDeleteKendra': 'Are you Sure You Want To Delete this Kendra?',
+  'AreyouSureYouWantToDeleteBaithak': 'Are you Sure You Want To Delete this Baithak?',
   'KendraDeletedSuccessfully': 'Kendra Deleted Successfully',
   'BaithakDeletedSuccessfully': 'Baithak Deleted Successfully',
   'presentMahanubhav': 'Present Mahanubhaav',
@@ -1972,8 +1922,7 @@ Map<String, String> resEnglish = {
   'enableVruttaValidationMessage': 'Vrutta will open from {date}',
   'sadbhavTip': 'Touch sadbhav kendra to select details of sadbhav baithak',
   'baithakDataTitle': ' Complete Program Details',
-  'jnyatiValidationMessage':
-      'The Jnyati representation count should not be less than the number present',
+  'jnyatiValidationMessage': 'The Jnyati representation count should not be less than the number present',
   'baithakDateValidation': 'Baithak already present on this date',
   'addNewSajjAnyaBtn': 'Add Sajjan Shakti / Other Influencers',
   ////////////////////////////////////// Pramukh Jansanvaad Block //////////////////////////////////////
@@ -2074,8 +2023,7 @@ Map<String, String> resMarathi = {
   'FieldsRemaining': ' माहिती उर्वरित आहे',
   'AddButton': 'नवीन',
   'upgradeVersionAlert': 'नवीन आवृत्ती',
-  'upgradeVersion':
-      'नियोजक अ‍ॅपची नवीन आवृत्ती आता उपलब्ध आहे. कृपया प्ले स्टोर वरून डाउनलोड करा.',
+  'upgradeVersion': 'नियोजक अ‍ॅपची नवीन आवृत्ती आता उपलब्ध आहे. कृपया प्ले स्टोर वरून डाउनलोड करा.',
   'versionLabel': 'संस्करण',
   'upgradeButton': 'नवीन संस्करण घ्या',
   'Commerce': 'वाणिज्य',
@@ -2121,6 +2069,11 @@ Map<String, String> resMarathi = {
   'UnkownAge': 'जन्मदिनांक उपलब्ध नाही',
   'ShikshitSwayamsevakCount': 'शिक्षित स्वयंसेवक संख्या',
   'SwayamsevakCountByBloodGroup': "रक्तगट संख्या",
+  'Experties': "प्रावीण्य संख्या",
+  'Mother Tongue': "स्वयंसेवक मातृभाषा संख्या",
+  'Interests': 'स्वयंसेवकांच्या आवडी',
+  'Ghoshwad': 'घोषवाद',
+  'Sangayu': 'संघआयु',
   'PraathamikShikshit': 'प्राथमिक',
   'PrarambhikShikshit': 'प्रारंभिक',
   'PrathamVarshShikshit': 'प्रथम वर्ष / संघ शिक्षा वर्ग',
@@ -2144,8 +2097,7 @@ Map<String, String> resMarathi = {
   'KshetraKaaryakartaaCount': 'क्षेत्र',
   'AkhilBhaaratiyaKaaryakartaaCount': 'अखिल भारतीय',
   'PravaaseeKaaryakartaaCount': 'प्रवासी',
-  'GatividhiAayaamSansthaaKaaryakartaaCount':
-      'गतिविधी/आयाम/संघप्रेरित संघटना-संस्था/अन्य सामाजिक संस्था कार्यकर्ता संख्या',
+  'GatividhiAayaamSansthaaKaaryakartaaCount': 'गतिविधी/आयाम/संघप्रेरित संघटना-संस्था/अन्य सामाजिक संस्था कार्यकर्ता संख्या',
   'GatividhiKaaryakartaaCount': 'गतिविधी',
   'lessThan8000': '८ooo पेक्षा कमी',
   '8000to12000': '८ooo ते १२०००',
@@ -2194,12 +2146,9 @@ Map<String, String> resMarathi = {
   'SahbhagiKaryakartaDeletedSuccessfully': 'सहभागी कार्यकर्ता रद्द केले',
   'CouldnotDeleteSwayamsevakTransfer': 'स्वयंसेवक स्थलांतर रद्द करू शकलो नाही',
   'CouldnotDeleteSahbhagiKaryakarta': 'सहभागी कार्यकर्ता रद्द करू शकलो नाही',
-  'AreyouSureYouWantToDeleteSwayamsevakTransfer':
-      'आपण स्वयंसेवक स्थलांतर रद्द करू इच्छिता',
-  'AreyouSureYouWantToDeleteVisheshvyakti':
-      'आपण विशेष व्यक्ती रद्द करू इच्छिता',
-  'AreyouSureYouWantToDeleteSahbhagiKaryakarta':
-      'आपण सहभागी कार्यकर्ता रद्द करू इच्छिता',
+  'AreyouSureYouWantToDeleteSwayamsevakTransfer': 'आपण स्वयंसेवक स्थलांतर रद्द करू इच्छिता',
+  'AreyouSureYouWantToDeleteVisheshvyakti': 'आपण विशेष व्यक्ती रद्द करू इच्छिता',
+  'AreyouSureYouWantToDeleteSahbhagiKaryakarta': 'आपण सहभागी कार्यकर्ता रद्द करू इच्छिता',
   'EditSwayamsevakTransferLabel': 'स्वयंसेवक स्थलांतर सुधारणा',
   'CardMenuSwayamsevakTransfer': 'स्थलांतर',
   'searchEventScreenLabel': 'कार्यक्रम',
@@ -2236,8 +2185,7 @@ Map<String, String> resMarathi = {
   'completeVrutta': 'वृत्त पूर्ण आहे',
   'incompleteVrutta': 'वृत्त अपूर्ण आहे',
   'notStartVrutta': ' वृत्त भरणे सुरु नाही केले',
-  'autheticationFailed':
-      'मोबाईल क्रमांक किंवा पासवर्ड चुकीचा आहे. प्रवेश देऊ शकत नाही!',
+  'autheticationFailed': 'मोबाईल क्रमांक किंवा पासवर्ड चुकीचा आहे. प्रवेश देऊ शकत नाही!',
   'dataSavedSuccessfully': 'माहिती संग्रहित झाली!',
   'unableToSaveData': 'माहिती संग्रहित होऊ शकली नाही!',
   'internetNotConnected': 'इंटरनेट उपलब्ध नाही!',
@@ -2293,6 +2241,7 @@ Map<String, String> resMarathi = {
   'Has3Wheeler': 'तीन-चाकी वाहन?',
   'Has4Wheeler': 'चार-चाकी वाहन आहे?',
   'HasVehicleDriver': 'वाहनचालक आहे?',
+  'VehicleInformation': 'गाड्यांची संख्या',
   'VehicleType2W': 'दुचाकी',
   'VehicleType3W': 'तीन-चाकी',
   'VehicleType4W': 'चार-चाकी',
@@ -2307,35 +2256,23 @@ Map<String, String> resMarathi = {
   'PrarambhikVargaYear': 'प्रारंभिक शिक्षण वर्ग कोणत्या वर्षी केला?',
   'PraathamikVargaYear': 'प्राथमिक शिक्षण वर्ग कोणत्या वर्षी केला?',
   'PrathamVarshaYear': 'प्रथम वर्ष / संघ शिक्षा वर्ग कोणत्या वर्षी केला',
-  'DwitiyaVarshaYear':
-      'द्वितीय वर्ष / कार्यकर्ता विकास वर्ग प्रथम कोणत्या वर्षी केला',
-  'TrutiyaVarshaYear':
-      'तृतीय वर्ष / कार्यकर्ता विकास वर्ग द्वितीय कोणत्या वर्षी केला',
+  'DwitiyaVarshaYear': 'द्वितीय वर्ष / कार्यकर्ता विकास वर्ग प्रथम कोणत्या वर्षी केला',
+  'TrutiyaVarshaYear': 'तृतीय वर्ष / कार्यकर्ता विकास वर्ग द्वितीय कोणत्या वर्षी केला',
   'YearsAsPrarambhikShikshak': 'प्रारंभिक शिक्षण वर्गासाठी किती वर्षे शिक्षक?',
   'YearsAsPraathamikShikshak': 'प्राथमिक शिक्षण वर्गासाठी किती वर्षे शिक्षक?',
-  'YearsAsPrathamShikshak':
-      'प्रथम वर्ष / संघ शिक्षा  वर्गासाठी किती वर्षे शिक्षक?',
-  'YearsAsDwitiyaShikshak':
-      'द्वितीय वर्ष / कार्यकर्ता विकास वर्ग प्रथम वर्गासाठी किती वर्षे शिक्षक?',
-  'YearsAsTrutiyaShikshak':
-      'तृतीय वर्ष / कार्यकर्ता विकास वर्ग द्वितीय वर्गासाठी किती वर्षे शिक्षक?',
+  'YearsAsPrathamShikshak': 'प्रथम वर्ष / संघ शिक्षा  वर्गासाठी किती वर्षे शिक्षक?',
+  'YearsAsDwitiyaShikshak': 'द्वितीय वर्ष / कार्यकर्ता विकास वर्ग प्रथम वर्गासाठी किती वर्षे शिक्षक?',
+  'YearsAsTrutiyaShikshak': 'तृतीय वर्ष / कार्यकर्ता विकास वर्ग द्वितीय वर्गासाठी किती वर्षे शिक्षक?',
   'PrarambhikVargaYearValidationMessage': 'प्रारंभिक शिक्षण वर्ग वर्ष आवश्यक',
   'PraathamikVargaYearValidationMessage': 'प्रथमिक शिक्षण वर्ग वर्ष आवश्यक',
-  'ValidPrarambhikVargaYearValidationMessage':
-      'योग्य प्रारंभिक वर्ग वर्ष लिहावे',
+  'ValidPrarambhikVargaYearValidationMessage': 'योग्य प्रारंभिक वर्ग वर्ष लिहावे',
   'ValidPraathamikVargaYearValidationMessage': 'योग्य प्रथमिक वर्ग वर्ष लिहावे',
-  'PrathamVarshaYearValidationMessage':
-      'पप्रथम वर्ष / संघ शिक्षा वर्ग वर्ष आवश्यक',
-  'ValidPrathamVarshaYearValidationMessage':
-      'योग्य पप्रथम वर्ष / संघ शिक्षा वर्ग वर्ष लिहावे',
-  'DwitiyaVarshaYearValidationMessage':
-      'दद्वितीय वर्ष / कार्यकर्ता विकास वर्ग प्रथम वर्ष आवश्यक',
-  'ValidDwitiyaVarshaYearValidationMessage':
-      'योग्य द्वितीय वर्ष / कार्यकर्ता विकास वर्ग प्रथम वर्ष लिहावे',
-  'TrutiyaVarshaYearValidationMessage':
-      'तृतीय वर्ष / कार्यकर्ता विकास वर्ग द्वितीय वर्ष आवश्यक',
-  'ValidTrutiyaVarshaYearValidationMessage':
-      'योग्य तृतीय वर्ष / कार्यकर्ता विकास वर्ग द्वितीय वर्ष लिहावे',
+  'PrathamVarshaYearValidationMessage': 'पप्रथम वर्ष / संघ शिक्षा वर्ग वर्ष आवश्यक',
+  'ValidPrathamVarshaYearValidationMessage': 'योग्य पप्रथम वर्ष / संघ शिक्षा वर्ग वर्ष लिहावे',
+  'DwitiyaVarshaYearValidationMessage': 'दद्वितीय वर्ष / कार्यकर्ता विकास वर्ग प्रथम वर्ष आवश्यक',
+  'ValidDwitiyaVarshaYearValidationMessage': 'योग्य द्वितीय वर्ष / कार्यकर्ता विकास वर्ग प्रथम वर्ष लिहावे',
+  'TrutiyaVarshaYearValidationMessage': 'तृतीय वर्ष / कार्यकर्ता विकास वर्ग द्वितीय वर्ष आवश्यक',
+  'ValidTrutiyaVarshaYearValidationMessage': 'योग्य तृतीय वर्ष / कार्यकर्ता विकास वर्ग द्वितीय वर्ष लिहावे',
   'TrainedIn': 'प्रशिक्षण',
   'GhoshVishay': 'घोष विषय',
   'ShaaririkVishay': 'शारीरिक विषय',
@@ -2401,8 +2338,7 @@ Map<String, String> resMarathi = {
   'SchoolNameValidationMessage': 'शाळेचे नाव आवश्यक',
   'StandardValidationMessage': 'इयत्ता आवश्यक',
   'ProgramValidationMessage': 'ज्ञान-शाखा आवश्यक',
-  'ExpectedCompletionYearValidationMessage':
-      'शिक्षण पूर्ण होण्याचे अपेक्षित वर्ष आवश्यक',
+  'ExpectedCompletionYearValidationMessage': 'शिक्षण पूर्ण होण्याचे अपेक्षित वर्ष आवश्यक',
   'GovernmentDepartmentValidationMessage': 'शासकीय विभाग आवश्यक',
   'OrganizationNameValidationMessage': 'संस्थेचे नाव आवश्यक',
   'IndustryVerticalValidationMessage': 'उद्योग क्षेत्र आवश्यक',
@@ -2411,12 +2347,9 @@ Map<String, String> resMarathi = {
   'WeeklyOffDayValidationMessage': 'साप्ताहिक सुट्टीचा/चे दिवस आवश्यक',
   'DutyHoursToValidationMessage': 'कामाची वेळ केव्हापर्यंत आवश्यक',
   'DutyHoursFromValidationMessage': 'कामाची वेळ केव्हापासून आवश्यक',
-  'OrganizationAtRetirementValidationMessage':
-      'सेवानिवृत्तीच्या वेळी संस्था आवश्यक',
-  'DesignationAtRetirementValidationMessage':
-      'सेवानिवृत्तीच्या वेळी पदनाम आवश्यक',
-  'GovernmentDepartmentRetirementValidationMessage':
-      'सेवानिवृत्तीच्या वेळी विभाग आवश्यक',
+  'OrganizationAtRetirementValidationMessage': 'सेवानिवृत्तीच्या वेळी संस्था आवश्यक',
+  'DesignationAtRetirementValidationMessage': 'सेवानिवृत्तीच्या वेळी पदनाम आवश्यक',
+  'GovernmentDepartmentRetirementValidationMessage': 'सेवानिवृत्तीच्या वेळी विभाग आवश्यक',
   'SelectVasti': 'वस्ती',
   'VastiInfo': 'वस्ती माहिती',
   'MandalInfo': 'मंडल माहिती',
@@ -2621,8 +2554,7 @@ Map<String, String> resMarathi = {
   'Detailed(HouseCount/Sankalan)': 'विस्तृत (घरे/संकलन)',
   'Cancel': 'रद्द करा',
   'ResetPassword': 'पासवर्ड रीसेट',
-  'ConfirmResetpassword':
-      'आपल्याला खात्री आहे की आपण पासवर्ड रीसेट करू इच्छिता?',
+  'ConfirmResetpassword': 'आपल्याला खात्री आहे की आपण पासवर्ड रीसेट करू इच्छिता?',
   'PasswordResetSuccessfully': 'यशस्वीरित्या पासवर्ड रीसेट',
   'CouldNotResetPassword': 'पासवर्ड रीसेट करणे शक्य झाले नाही',
   'SanghaShikshaVarsha': 'वर्ग निवडा',
@@ -2654,6 +2586,8 @@ Map<String, String> resMarathi = {
   'HasBelt': 'पट्टा आहे',
   'HasShoes': 'पदवेष आहे',
   'HasSocks': 'मोजे आहेत',
+  'IsGanaveshComplete': 'गणवेश पूर्ण आहे',
+  'UniformInformation': 'गणवेशाची माहिती',
   'HasDanda': 'दंड आहे',
   'IsDaayitvaPresent': 'दायित्व आहे?',
   'CurrentAddress': 'सध्याचा पत्ता',
@@ -2727,8 +2661,7 @@ Map<String, String> resMarathi = {
   'UnderstandLipi': 'लिपी कळते?',
   'RachanaaName': 'रचनाचे नाव',
   'RachanaaCount': 'किती रचना येतात?',
-  'LinkedShaakhaa':
-      'कोणत्या शाखा/साप्ताहिक मिलन/मासिक मिलन/संघ मंडळी चा स्वयंसेवक',
+  'LinkedShaakhaa': 'कोणत्या शाखा/साप्ताहिक मिलन/मासिक मिलन/संघ मंडळी चा स्वयंसेवक',
   'DaayitvaFor': 'दायित्व प्रकार',
   'Level': 'स्तर',
   'Notifications': 'सूचना',
@@ -2791,8 +2724,7 @@ Map<String, String> resMarathi = {
   'ViewMembers': 'सदस्य पहा',
   'ViewSharing': 'उपयोगकर्ता पहा',
   'AreyouSureYouWantToDeleteSharing': 'आपण उपयोगकर्ता काढून टाकू इच्छिता',
-  'SoochiSharingDeletedSuccessfully':
-      'सूची उपयोगकर्ता यशस्वीरित्या काढून टाकला',
+  'SoochiSharingDeletedSuccessfully': 'सूची उपयोगकर्ता यशस्वीरित्या काढून टाकला',
   'CouldnotDeleteSoochiSharing': 'सूची उपयोगकर्ता काढून टाकू शकलो नाही',
   'SharingExits': 'सूची या स्वयंसेवकाबरोबर आधीच सामायिक झाली आहे',
   'CanEdit': 'संपादित करू शकतो?',
@@ -2900,13 +2832,10 @@ Map<String, String> resMarathi = {
   'SoochiDeletedSuccessfully': 'सूची यशस्वीरित्या काढून टाकली',
   'CouldnotDeleteSoochi': 'सूची काढून टाकू शकलो नाही',
   'AreyouSureYouWantToDeleteSoochi': 'आपण सूची काढून टाकू इच्छिता',
-  'AreyouSureYouWantToAddSoochi':
-      'तुमची खात्री आहे की तुम्हाला सूचीला जोडायचे आहे',
-  'ShaakhaaDeletedSuccessfully':
-      'शाखा/साप्ताहिक/मासिक/मंडळी यशस्वीरित्या काढून टाकली',
+  'AreyouSureYouWantToAddSoochi': 'तुमची खात्री आहे की तुम्हाला सूचीला जोडायचे आहे',
+  'ShaakhaaDeletedSuccessfully': 'शाखा/साप्ताहिक/मासिक/मंडळी यशस्वीरित्या काढून टाकली',
   'CouldnotDeleteShaakhaa': 'शाखा/साप्ताहिक/मासिक/मंडळी काढून टाकू शकलो नाही',
-  'AreyouSureYouWantToDeleteShaakhaa':
-      'आपण शाखा/साप्ताहिक/मासिक/मंडळी काढून टाकू इच्छिता',
+  'AreyouSureYouWantToDeleteShaakhaa': 'आपण शाखा/साप्ताहिक/मासिक/मंडळी काढून टाकू इच्छिता',
   'SewaVasti': 'सेवा-वस्ती',
   'ConductedAnivaaryaShaaririkKaaryakram': 'अनिवार्य शारीरिक कार्यक्रम झाले',
   'ConductedAnivaaryaBouddhikKaaryakram': 'अनिवार्य बौद्धिक कार्यक्रम झाले',
@@ -3010,8 +2939,7 @@ Map<String, String> resMarathi = {
   'EmailBodyValidationMessage': 'ईमेलचा मुख्य भाग आवश्यक',
   'ValidEmailBodyValidationMessage': 'कृपया वैध ईमेल मुख्य भाग प्रविष्ट करा',
   'searchRamJanmabhoomiNidhiSankalanVrutta': 'रामजन्मभूमी निधी संकलन वृत्त शोध',
-  'searchRamJanmabhoomiNidhiSankalanVruttaScreenBanner':
-      'रामजन्मभूमी निधी संकलन वृत्त',
+  'searchRamJanmabhoomiNidhiSankalanVruttaScreenBanner': 'रामजन्मभूमी निधी संकलन वृत्त',
   'SahabhaagiKaaryakartaa': 'सहभागी कार्यकर्ता',
   'VisheshVyakti': 'विशेष व्यक्ती',
   'searchRJBSVNameMobileLabel': 'नाव / मोबाईल क्र',
@@ -3076,8 +3004,7 @@ Map<String, String> resMarathi = {
   'selectcomparativevruttapoint': 'तुलनात्मक वृत्त बिंदु निवडा',
   'selectedBhougolikkaryastithi': 'स्तर निवडा',
   'comparativevruttapoint': 'तुलनात्मक वृत्त बिंदु',
-  'tulnatmakBaithakEkatritVruttaBanner':
-      'तुलनात्मक संकलित वृत्तासाठी बैठक प्रकार निवडा',
+  'tulnatmakBaithakEkatritVruttaBanner': 'तुलनात्मक संकलित वृत्तासाठी बैठक प्रकार निवडा',
   'baithakType': 'बैठक प्रकार',
   'selectbaithakType': 'बैठक प्रकार निवडा',
   'selectbaithakTypeLabel': 'बैठक निवडा',
@@ -3092,8 +3019,7 @@ Map<String, String> resMarathi = {
   'tarunVyavasaayeeAverage': 'तरुण व्यव. सरासरी',
   'proudhAverage': 'प्रौढ सरासरी',
   'annualBaithakShaakhaaVruttaTitle': ' बैठक शाखा वृत्त',
-  'annualBaithakShaakhaaViheenVruttaTitle':
-      'वार्षिक बैठक कार्यविहीन वस्ती/ग्राम वृत्त',
+  'annualBaithakShaakhaaViheenVruttaTitle': 'वार्षिक बैठक कार्यविहीन वस्ती/ग्राम वृत्त',
   'annualBaithakMukhyaMaargVruttaTitle': 'वार्षिक बैठक मुख्य मार्ग वृत्त',
   'annualBaithakGraamVikasVruttaTitle': 'वार्षिक बैठक ग्राम विकास वृत्त',
   'annualBaithakNagarVruttaTitle': 'वार्षिक बैठक नगर वृत्त',
@@ -3107,10 +3033,8 @@ Map<String, String> resMarathi = {
   'vaarshikotsavMonthFebMar': 'वार्षिकोत्सव कधी झाला? (गेल्या ३० दिवसात)',
   'vaarshikotsavMonthMarJun': 'वार्षिकोत्सव कधी झाला? (गेल्या ३० दिवसात)',
   'isSewaVastiDefined': 'सेवा वस्ती निश्चित आहे?',
-  'sewaVastiSamparkCount':
-      'सेवा वस्तीत किती वेळा संपर्क झाला (गेल्या ३० दिवसात)',
-  'sewaVastiSamparkCountFebMar':
-      'सेवा वस्तीत किती वेळा संपर्क झाला (गेल्या ३० दिवसात)',
+  'sewaVastiSamparkCount': 'सेवा वस्तीत किती वेळा संपर्क झाला (गेल्या ३० दिवसात)',
+  'sewaVastiSamparkCountFebMar': 'सेवा वस्तीत किती वेळा संपर्क झाला (गेल्या ३० दिवसात)',
   'isSewaKaaryakartaaDefined': 'सेवा कार्यकर्ता निश्चित आहे?',
   'sewaUpakramCount': 'सेवा उपक्रम संख्या (गेल्या ३० दिवसात )',
   'sewaUpakramCountJunOct': 'सेवा उपक्रम संख्या (गेल्या ३० दिवसात)',
@@ -3142,22 +3066,16 @@ Map<String, String> resMarathi = {
   'dwitiyaSpecialShikshaarthiSakriya': 'द्वितीय विशेष शिक्षार्थी/सक्रीय',
   'trutiyaGeneralShikshaarthiSakriya': 'तृतीय सामान्य शिक्षार्थी/सक्रीय',
   'trutiyaSpecialShikshaarthiSakriya': 'तृतीय विशेष शिक्षार्थी/सक्रीय',
-  'sanghaDaayitvawaanSwCount':
-      'संघाचे कोणत्याही स्तराचे दायित्व असलेले स्वयंसेवक संख्या',
-  'preritSansthaaSangathanDaayitvawaanSwCount':
-      'कोणत्याही संघ-प्रेरीत संस्था/संघटनेचे कोणत्याही स्तराचे दायित्व असलेले स्वयंसेवक संख्या',
-  'gatividhiDaayitvawaanSwCount':
-      'कोणत्याही गतिविधीचे कोणत्याही स्तराचे दायित्व असलेले स्वयंसेवक संख्या',
-  'aayaamDaayitvawaanSwCount':
-      'कोणत्याही आयामाचे कोणत्याही स्तराचे दायित्व असलेले स्वयंसेवक संख्या',
+  'sanghaDaayitvawaanSwCount': 'संघाचे कोणत्याही स्तराचे दायित्व असलेले स्वयंसेवक संख्या',
+  'preritSansthaaSangathanDaayitvawaanSwCount': 'कोणत्याही संघ-प्रेरीत संस्था/संघटनेचे कोणत्याही स्तराचे दायित्व असलेले स्वयंसेवक संख्या',
+  'gatividhiDaayitvawaanSwCount': 'कोणत्याही गतिविधीचे कोणत्याही स्तराचे दायित्व असलेले स्वयंसेवक संख्या',
+  'aayaamDaayitvawaanSwCount': 'कोणत्याही आयामाचे कोणत्याही स्तराचे दायित्व असलेले स्वयंसेवक संख्या',
   'sociallyActiveSwCount': 'सामाजिक कामांचे दायित्व असलेले स्वयंसेवक संख्या',
-  'shaakhaaToliBaithakCount':
-      'शाखा/साप्ता.मि. टोळीची बैठक किती वेळा झाली(गेल्या ३० दिवसात)',
+  'shaakhaaToliBaithakCount': 'शाखा/साप्ता.मि. टोळीची बैठक किती वेळा झाली(गेल्या ३० दिवसात)',
   'isVaarshikNiyojanDone': 'वार्षिक नियोजन पूर्ण झाले?',
   'isSankalpaPoorna': 'संकल्प ठरला?',
   'vastiGraamName': 'वस्ती/ग्राम',
-  'isShaakhaaInPast':
-      'गेल्या १० वर्षांत कधीही शाखा/साप्ताहिक/मासिक लागले होते का?',
+  'isShaakhaaInPast': 'गेल्या १० वर्षांत कधीही शाखा/साप्ताहिक/मासिक लागले होते का?',
   'mukhyaMaargName': 'मुख्य मार्ग',
   'shaakhaaCount': 'शाखा संख्या',
   'saaptaahikCount': 'साप्ताहिक संख्या',
@@ -3256,20 +3174,16 @@ Map<String, String> resMarathi = {
   'graaminSaaptaahikSthan': 'ग्रामीण साप्ताहिक मिलन स्थान',
   'graaminSaaptaahikMilanYuktyaSthan': 'ग्रामीण साप्ताहिक मिलनयुक्त स्थान',
   'graaminSaaptaahik': 'ग्रामीण साप्ताहिक मिलन',
-  'averageUpasthitiNagareeySaaptaahik':
-      'नगरीय साप्ताहिक मिलन - सरासरी उपस्थिती',
-  'averageUpasthitiGraaminSaaptaahik':
-      'ग्रामीण साप्ताहिक मिलन - सरासरी उपस्थिती',
+  'averageUpasthitiNagareeySaaptaahik': 'नगरीय साप्ताहिक मिलन - सरासरी उपस्थिती',
+  'averageUpasthitiGraaminSaaptaahik': 'ग्रामीण साप्ताहिक मिलन - सरासरी उपस्थिती',
   'milanMandali': 'मासिक मिलन / संघ मंडळी',
   'masikMilan': 'मासिक मिलन',
   'vidyaarthi': 'विद्यार्थी',
   'vyavasaayee': 'व्यवसायी',
   'paalakYuktaShaakhaa': 'पालकयुक्त शाखा',
   'vaarshikotsav': 'वार्षिकोत्सव',
-  'sewaVastiIdentifiedShaakhaaCount':
-      'सेवावस्ती निश्चित केलेल्या शाखांची संख्या',
-  'sevaPramukhIdentifiedShaakhaaCount':
-      'सेवाप्रमुख निश्चित केलेल्या शाखांची संख्या',
+  'sewaVastiIdentifiedShaakhaaCount': 'सेवावस्ती निश्चित केलेल्या शाखांची संख्या',
+  'sevaPramukhIdentifiedShaakhaaCount': 'सेवाप्रमुख निश्चित केलेल्या शाखांची संख्या',
   'sewaVastiSamparkShaakhaaCount': 'सेवा वस्तीत संपर्क करणाऱ्या शाखा',
   'fourTimes': '४ वेळा',
   'thrice': '३ वेळा',
@@ -3280,11 +3194,9 @@ Map<String, String> resMarathi = {
   'prabhaatGraamCount': 'प्रभात ग्राम संख्या',
   'kaaryaViheenVrutta': 'कार्यविहीन वस्ती/ग्राम',
   'vastiCountWithPastShaakhaa': 'गेल्या १० वर्षांत शाखा लागलेल्या वस्त्या',
-  'vastiCountWithPastSaaptaahik':
-      'गेल्या १० वर्षांत साप्ताहिक मिलन लागलेल्या वस्त्या',
+  'vastiCountWithPastSaaptaahik': 'गेल्या १० वर्षांत साप्ताहिक मिलन लागलेल्या वस्त्या',
   'graamCountWithPastShaakhaa': 'गेल्या १० वर्षांत शाखा लागलेली गावे',
-  'graamCountWithPastSaaptaahik':
-      'गेल्या १० वर्षांत साप्ताहिक मिलन लागलेली गावे',
+  'graamCountWithPastSaaptaahik': 'गेल्या १० वर्षांत साप्ताहिक मिलन लागलेली गावे',
   'saanskrutikVaartaapatraVrutta': 'सांस्कृतिक वार्तापत्र वृत्त',
   'vaartaapatraVastiCount': 'वस्ती संख्या',
   'vaartaapatraGraamCount': 'ग्राम संख्या',
@@ -3313,8 +3225,7 @@ Map<String, String> resMarathi = {
   'attachMobile': 'कृपया तुमचे मोबाईल क्रमांक येथे लिहा',
   'attachDaayitva': 'कृपया तुमचे दायित्व येथे लिहा',
   'attachment': 'दस्तावेज',
-  'EmailSentSuccessfully':
-      'आमच्याशी संपर्क साधल्याबद्दल धन्यवाद, आम्ही लवकरच तुमच्यापर्यंत पोहोचू.',
+  'EmailSentSuccessfully': 'आमच्याशी संपर्क साधल्याबद्दल धन्यवाद, आम्ही लवकरच तुमच्यापर्यंत पोहोचू.',
   'PleaseEnterYourMessage': 'कृपया तुमचा संदेश प्रविष्ट करा',
   'yesterdayNews': 'कालचे वृत्त',
   'tolatHomeContact': 'एकूण घर संपर्क',
@@ -3378,8 +3289,7 @@ Map<String, String> resMarathi = {
   'completeAll': '(संपूर्ण एकूण)',
   'daayitvaTip': '(संघ, गतिविधी, आयाम आणि संघ प्रेरित संघटन/संस्थेत)',
   'vastitiHonareSanUtsav': 'वस्तीत साजर होणारे महत्वाचे\nसण/ उत्सव',
-  'vastitiHonareSamajikKaryaKram':
-      'वस्तीत साजर होणारे महत्वाचे \nसामाजिक कार्यक्रम',
+  'vastitiHonareSamajikKaryaKram': 'वस्तीत साजर होणारे महत्वाचे \nसामाजिक कार्यक्रम',
   'kendrsSankhya': 'केंद्र संख्या',
   'hospitalCount': 'रुग्णालय संख्या',
   'school1': 'शाळा',
@@ -3454,8 +3364,7 @@ Map<String, String> resMarathi = {
   'gaavNivada': 'गाव निवडा',
   'Note': 'टीप',
   'rowSelectionImportant': 'वापरण्या करिता  पंक्ती (Row) निवडणे आवश्यक आहे.',
-  'wholeNoValidation':
-      'आकडे हे पूर्णांक (Whole Numbers) मध्ये भरणे अनिवार्य आहे. उ.दा... (0123)',
+  'wholeNoValidation': 'आकडे हे पूर्णांक (Whole Numbers) मध्ये भरणे अनिवार्य आहे. उ.दा... (0123)',
   'vadipadyacheNaav': 'वाडी/पाड्याचे नाव',
   'andaajeGhar': 'अंदाजे घर',
   'andajeLoksankhya': 'अंदाजे लोकसंख्या',
@@ -3466,8 +3375,7 @@ Map<String, String> resMarathi = {
   'prushaanchiSankhya': 'पुरुषांची संख्या',
   'mahilanchiSankhya': 'महिलांची संख्या',
   'ekunLoksankhya': 'एकूण लोकसंख्या',
-  'purvuKadhitarishakha':
-      'पूर्वी कधीतरी संघाची शाखा/साप्ताहिक मिलन चालत होते पण आज बंद आहे का ?',
+  'purvuKadhitarishakha': 'पूर्वी कधीतरी संघाची शाखा/साप्ताहिक मिलन चालत होते पण आज बंद आहे का ?',
   'tapshilInfo': 'तपशील माहिती',
   'shaakhaPrakar': 'शाखा प्रकार',
   'chalavnariSanghatana': 'चालवणारी संस्था/संघटन',
@@ -3497,12 +3405,9 @@ Map<String, String> resMarathi = {
   'otherFestivals': 'अन्य सण',
   'samajikKaryakram': 'सामाजिक कार्यक्रम',
   'sarpanchNavValidation': 'कृपया सरपंचाचे नाव भरा.',
-  'purviShakhaValidation':
-      'कृपया \'पूर्वी कधीतरी संघाची शाखा/साप्ताहिक चालत होती\' साठी \'होय\' किंवा \'नाही\' निवडा.',
-  'anyaVividhValidation':
-      'कृपया \'अन्य विविध क्षेत्राचे काम चालतात\' साठी \'होय\' किंवा \'नाही\' निवडा.',
-  'mumbaikarValidation':
-      'कृपया \'गावातील मुंबईकर मंडल आहे\' साठी \'होय\' किंवा \'नाही\' निवडा.',
+  'purviShakhaValidation': 'कृपया \'पूर्वी कधीतरी संघाची शाखा/साप्ताहिक चालत होती\' साठी \'होय\' किंवा \'नाही\' निवडा.',
+  'anyaVividhValidation': 'कृपया \'अन्य विविध क्षेत्राचे काम चालतात\' साठी \'होय\' किंवा \'नाही\' निवडा.',
+  'mumbaikarValidation': 'कृपया \'गावातील मुंबईकर मंडल आहे\' साठी \'होय\' किंवा \'नाही\' निवडा.',
   'gaavSamitiValidation': 'गाव समिती आवश्यक.',
   'prathamikSubmit': 'प्रार्थमिक माहिती संग्रह',
   'selectUpshreni': 'उपश्रेणी निवडा',
@@ -3534,8 +3439,7 @@ Map<String, String> resMarathi = {
   'otherEnter': 'अन्य',
   'visrutMahitiSubmit': 'विस्तृत माहिती संग्रह',
   'surveyCompleted': 'सर्वेक्षण झाले.',
-  'vastiSelectMandetoryValidation':
-      'माहिती भरण्यापूर्वी वस्ती निवडणे अनिवार्य आहे.',
+  'vastiSelectMandetoryValidation': 'माहिती भरण्यापूर्वी वस्ती निवडणे अनिवार्य आहे.',
   'selectFile': 'फाइल निवडा',
   'submittedFile': 'सादर केलेली फाइल',
   'replacedFile': 'बदली केलेली फाइल',
@@ -3693,8 +3597,7 @@ Map<String, String> resMarathi = {
   "MandalName": "मंडल",
   "GraamNames": "ग्राम",
   "VastiGraamValidation": "वस्ती/ग्राम निवडणे अनिवार्य आहे",
-  "swayamsevakDaayitvaValidation":
-      "विद्यमान दायित्व नसल्यास 'केव्हा पर्यंत' चे वर्ष भरणे आवश्यक आहे",
+  "swayamsevakDaayitvaValidation": "विद्यमान दायित्व नसल्यास 'केव्हा पर्यंत' चे वर्ष भरणे आवश्यक आहे",
   'gruhSamparkAbhiyan': 'गृह संपर्क अभियान',
   'hinduSammelan': 'हिंदु संमेलन',
   'sadbhavBaithak': 'सद्भाव बैठक',
@@ -3751,8 +3654,7 @@ Map<String, String> resMarathi = {
   'url': 'बातमीचा दुवा (लिंक)',
   'urlDesc': 'बातमीच्या दुवाचे वर्णन',
   'AreyouSureYouWantToDeleteImage': 'आपण फाइल काढून टाकू इच्छिता ?',
-  'AreyouSureYouWantToDeleteUrl':
-      'आपण बातमीचा दुवा (लिंक) काढून टाकू इच्छिता ?',
+  'AreyouSureYouWantToDeleteUrl': 'आपण बातमीचा दुवा (लिंक) काढून टाकू इच्छिता ?',
   'AddUtsavFilesSubtitle': 'जास्तीत जास्त ३ जोडा',
   'AddAdvUtsavFilesSubtitle': 'जास्तीत जास्त १० जोडा',
   'loadingDialog': 'कृपया वाट पहा...',
@@ -3809,8 +3711,7 @@ Map<String, String> resMarathi = {
   "MapUpNagarNames": "उपनगर वस्ती नाव",
   "UpKhandNames": "उपखंड नाव",
   "MapUpKhandNames": "उपखंड मंडल नाव",
-  "noExcelAppFoundError":
-      "कृपया Excel फाईल उघडण्यासाठी योग्य ॲप (जसे की Microsoft Excel किंवा WPS Office) डाउनलोड करा.",
+  "noExcelAppFoundError": "कृपया Excel फाईल उघडण्यासाठी योग्य ॲप (जसे की Microsoft Excel किंवा WPS Office) डाउनलोड करा.",
   "unableToOpenFile": "फाइल उघडता येत नाही.",
   "noPermissionGiven": "ॲपला फाईल उघडण्याची परवानगी नाही.",
   "vijayadashmiExcelReport": "विजयादशमी उत्सव वृत्त",
@@ -3822,8 +3723,7 @@ Map<String, String> resMarathi = {
   "abhiyaanKaryakartaFormTitle": "अभियान कार्यकर्ता",
   "abhiyaanPramukhKey": "अभियान प्रमुख",
   "karyakartaAlreadyExists": "अभियान कार्यकर्ता म्हणून आधीच नोंदणी आहे.",
-  "cannotDeleteTheData":
-      "हि माहिती आधीच वापरात असल्याने तुम्ही  ती  काढू शकत नाही!",
+  "cannotDeleteTheData": "हि माहिती आधीच वापरात असल्याने तुम्ही  ती  काढू शकत नाही!",
   'specialPerson': "विशेष व्यक्ती",
   'addSpecialPerson': "विशेष व्यक्ती जोडा",
   'selectSpecialPerson': "विशेष व्यक्ती निवडा",
@@ -3880,8 +3780,7 @@ Map<String, String> resMarathi = {
   'addAbhiyaanKaryakartaValidation5': "संस्थेमध्ये पद प्रविष्ट करा",
   'visheshVyaktiAlreadyExists': "या विशेष व्यक्तींचे आधीच नोंदणी आहे.",
   // 'cannotDeleteValidation1': "Cannot Select! ",
-  'cannotDeleteValidation':
-      " यांनी वृत्त आधीच भरलेले आहे, त्यामुळे निवड करता येत नाही.",
+  'cannotDeleteValidation': " यांनी वृत्त आधीच भरलेले आहे, त्यामुळे निवड करता येत नाही.",
   'gruhTip': 'संपर्क करणारे  कार्यकर्ते',
   ////////////////////////////////////// Hindu Sanmelan Block //////////////////////////////////////
   'selectVastiMandal': "वस्ती/मंडल निवडा",
@@ -3891,8 +3790,7 @@ Map<String, String> resMarathi = {
   'AddSanmelanFiles': 'संमेलना संबंधित छायाचित्र जोडा',
   'AddSanmelanFilesDesc': 'संमेलना संबंधित छायाचित्रांचे वर्णन जोडा',
   'AddAdvSanmelanFiles': 'संमेलना संबंधित बातम्यांचे छायाचित्र जोडा',
-  'AddAdvSanmelanFilesDesc':
-      'संमेलना संबंधित वर्तमान पत्राचे नाव, दिनांक आणि आवृत्ति जोडा *',
+  'AddAdvSanmelanFilesDesc': 'संमेलना संबंधित वर्तमान पत्राचे नाव, दिनांक आणि आवृत्ति जोडा *',
   'AddSanmelanFilesSubtitle': 'जास्तीत जास्त ३ जोडा',
   'AddAdvSanmelanFilesSubtitle': 'जास्तीत जास्त १० जोडा',
   'sanmelanReportTable0': "संमेलन स्तर",
@@ -4019,8 +3917,7 @@ Map<String, String> resMarathi = {
   'enableVruttaValidationMessage': '{date} तारखेपासून वृत्त उघडेल',
   'sadbhavTip': 'तपशील बघण्यासाठी सद्भाव केंद्राला स्पर्श करून निवडा',
   'baithakDataTitle': ' संपूर्ण कार्यक्रम माहिती',
-  'jnyatiValidationMessage':
-      'ज्ञाति प्रतिनिधित्व संख्या उपस्थित संख्येपेक्षा कमी नसावी',
+  'jnyatiValidationMessage': 'ज्ञाति प्रतिनिधित्व संख्या उपस्थित संख्येपेक्षा कमी नसावी',
   'baithakDateValidation': 'या तारखेला एक बैठक आधीच अस्तित्वात आहे.',
   'addNewSajjAnyaBtn': 'नवीन सज्जनशक्ती / अन्य प्रभावी व्यक्ती जोडा',
   ////////////////////////////////////// Pramukh Jansanvaad Block //////////////////////////////////////
@@ -4131,13 +4028,18 @@ Map<String, String> resHindi = {
   'FieldsRemaining': ' जानकारी अपूर्ण है।',
   'AddButton': 'जोड़ें',
   'upgradeVersionAlert': 'नया संस्करण',
-  'upgradeVersion':
-      'नियोजक ऐप का एक नया संस्करण अब उपलब्ध है। कृपया प्ले स्टोर से डाउनलोड करें',
+  'upgradeVersion': 'नियोजक ऐप का एक नया संस्करण अब उपलब्ध है। कृपया प्ले स्टोर से डाउनलोड करें',
   'versionLabel': 'संस्करण',
   'upgradeButton': 'नया संस्करण लें',
   'Commerce': 'वाणिज्य',
   'Science': 'विज्ञान',
   'Arts': 'कला',
+  'SwayamsevakCountByBloodGroup': "रक्तगट संख्या",
+  'Experties': "प्रावीण्य संख्या",
+  'Mother Tongue': "स्वयंसेवक मातृभाषा संख्या",
+  'Interests': 'स्वयंसेवकों की रुचियाँ',
+  'Ghoshwad': 'घोषवाद',
+  'Sangayu': 'संघआयु',
   'InvalidNumber': 'अवैध फोन नंबर',
   'EntervalidNumber': 'मान्य नंबर दर्ज करें',
   'mandatoryInformation': 'जानकारी देना अनिवार्य है',
@@ -4200,8 +4102,7 @@ Map<String, String> resHindi = {
   'KshetraKaaryakartaaCount': 'क्षेत्र',
   'AkhilBhaaratiyaKaaryakartaaCount': 'अखिल भारतीय',
   'PravaaseeKaaryakartaaCount': 'प्रवासी',
-  'GatividhiAayaamSansthaaKaaryakartaaCount':
-      'गतिविधि/आयाम/संघप्रेरित संगठन-संस्था/अन्य सामाजिक संस्था कार्यकर्ता संख्या',
+  'GatividhiAayaamSansthaaKaaryakartaaCount': 'गतिविधि/आयाम/संघप्रेरित संगठन-संस्था/अन्य सामाजिक संस्था कार्यकर्ता संख्या',
   'GatividhiKaaryakartaaCount': 'गतिविधी',
   'lessThan8000': '८ooo पेक्षा कमी',
   '8000to12000': '८ooo ते १२०००',
@@ -4232,8 +4133,7 @@ Map<String, String> resHindi = {
   'searchSwayamsevakScreenBanner': 'स्वयंसेवक ढूँढें',
   'searchSwayamsevakScreenTip': '(अनेक विकल्पों का चयन कर शोध कर सकते हैं)',
   'searchShaakhaaScreenLabel': 'शाखा/साप्ताहिक मिलन/मासिक मिलन/संघ मंडली',
-  'searchShaakhaaScreenBanner':
-      'शाखा/साप्ताहिक मिलन/मासिक मिलन/संघ मंडली ढूँढें',
+  'searchShaakhaaScreenBanner': 'शाखा/साप्ताहिक मिलन/मासिक मिलन/संघ मंडली ढूँढें',
   'EditMenu': 'जानकारी बदलिए',
   'ViewMenu': 'जानकारी देखिये',
   'DeleteMenu': 'हटाएं',
@@ -4248,16 +4148,12 @@ Map<String, String> resHindi = {
   'searchSwayamsevakTransferLabel': 'स्वयंसेवक स्थलांतर',
   'SwayamsevakTransferDeletedSuccessfully': 'स्वयंसेवक स्थलांतर निरस्त किया',
   'VisheshVyaktiDeletedSuccessfully': 'विशेष व्यक्ती निरस्त किया',
-  'SahbhagiKaryakartaDeletedSuccessfully':
-      'सहभागी कार्यकर्ता निरस्त नहीं कर सके',
+  'SahbhagiKaryakartaDeletedSuccessfully': 'सहभागी कार्यकर्ता निरस्त नहीं कर सके',
   'CouldnotDeleteSwayamsevakTransfer': 'स्वयंसेवक स्थलांतर निरस्त नहीं कर सके',
   'CouldnotDeleteSahbhagiKaryakarta': 'सहभागी कार्यकर्ता निरस्त नहीं कर सके',
-  'AreyouSureYouWantToDeleteSwayamsevakTransfer':
-      'क्या आप स्वयंसेवक स्थलांतर निरस्त कराना चाहते है',
-  'AreyouSureYouWantToDeleteVisheshvyakti':
-      'क्या आप  विशेष व्यक्ती  निरस्त कराना चाहते है',
-  'AreyouSureYouWantToDeleteSahbhagiKaryakarta':
-      'क्या आप सहभागी कार्यकर्ता निरस्त कराना चाहते है',
+  'AreyouSureYouWantToDeleteSwayamsevakTransfer': 'क्या आप स्वयंसेवक स्थलांतर निरस्त कराना चाहते है',
+  'AreyouSureYouWantToDeleteVisheshvyakti': 'क्या आप  विशेष व्यक्ती  निरस्त कराना चाहते है',
+  'AreyouSureYouWantToDeleteSahbhagiKaryakarta': 'क्या आप सहभागी कार्यकर्ता निरस्त कराना चाहते है',
   'EditSwayamsevakTransferLabel': 'स्वयंसेवक स्थलांतर बदल',
   'CardMenuSwayamsevakTransfer': 'स्थलांतर',
   'searchEventScreenLabel': 'कार्यक्रम',
@@ -4285,8 +4181,7 @@ Map<String, String> resHindi = {
   'alert': 'सूचना!',
   'okay': 'ठीक है',
   'NoDataFound': 'जानकारी उपलब्ध नहीं',
-  'noDataFoundTryAnotherSearch':
-      'जानकारी उपलब्ध नहीं है, अन्य आधार का उपयोग कीजिये!',
+  'noDataFoundTryAnotherSearch': 'जानकारी उपलब्ध नहीं है, अन्य आधार का उपयोग कीजिये!',
   'ShaakhaaDetailVruttaNotFound': 'शाखा वृत्त उपलब्ध नहीं',
   'canNotMakeChanges': 'बदल संभव नही है!',
   'saveBasicInfo': 'पहले प्राथमिक जानकारी संग्रहित करें!',
@@ -4295,8 +4190,7 @@ Map<String, String> resHindi = {
   'completeVrutta': ' वृत्त पूरा है',
   'incompleteVrutta': ' वृत्त अधूरा है',
   'notStartVrutta': 'वृत्त भरना शुरू नहीं हुआ है',
-  'autheticationFailed':
-      'मोबाईल क्रमांक अथवा पासवर्ड गलत है, प्रवेश नही कर सकते!',
+  'autheticationFailed': 'मोबाईल क्रमांक अथवा पासवर्ड गलत है, प्रवेश नही कर सकते!',
   'dataSavedSuccessfully': 'जानकारी अद्यतन हो गयी!',
   'unableToSaveData': 'जानकारी अद्यतन नही हुवी!',
   'internetNotConnected': 'इंटरनेट उपलब्ध नही है!',
@@ -4352,6 +4246,7 @@ Map<String, String> resHindi = {
   'Has3Wheeler': 'तिपहिया वाहन है?',
   'Has4Wheeler': 'कार है?',
   'HasVehicleDriver': 'वाहन चालक है?',
+  'VehicleInformation': 'गाड़ियों की संख्या',
   'VehicleType2W': 'दुपहिया',
   'VehicleType3W': 'तिपहिया',
   'VehicleType4W': 'कार',
@@ -4366,37 +4261,23 @@ Map<String, String> resHindi = {
   'PrarambhikVargaYear': 'प्रारंभिक शिक्षा वर्ग कौन से वर्ष हुआ?',
   'PraathamikVargaYear': 'प्राथमिक शिक्षा वर्ग कौन से वर्ष हुआ?',
   'PrathamVarshaYear': 'प्रथम वर्ष / संघ शिक्षा वर्ग कौन से वर्ष हुआ?',
-  'DwitiyaVarshaYear':
-      'दद्वितीय वर्ष / कार्यकर्ता विकास वर्ग प्रथम कौन से वर्ष हुआ?',
-  'TrutiyaVarshaYear':
-      'तृतीय वर्ष / कार्यकर्ता विकास वर्ग द्वितीय कौन से वर्ष हुआ?',
-  'YearsAsPrarambhikShikshak':
-      'प्रारंभिक शिक्षा वर्ग के लिए कितने वर्ष शिक्षक?',
+  'DwitiyaVarshaYear': 'दद्वितीय वर्ष / कार्यकर्ता विकास वर्ग प्रथम कौन से वर्ष हुआ?',
+  'TrutiyaVarshaYear': 'तृतीय वर्ष / कार्यकर्ता विकास वर्ग द्वितीय कौन से वर्ष हुआ?',
+  'YearsAsPrarambhikShikshak': 'प्रारंभिक शिक्षा वर्ग के लिए कितने वर्ष शिक्षक?',
   'YearsAsPraathamikShikshak': 'प्राथमिक शिक्षा वर्ग के लिए कितने वर्ष शिक्षक?',
-  'YearsAsPrathamShikshak':
-      'पप्रथम वर्ष / संघ शिक्षा वर्ग के लिए कितने वर्ष शिक्षक?',
-  'YearsAsDwitiyaShikshak':
-      'दद्वितीय वर्ष / कार्यकर्ता विकास वर्ग प्रथम के लिए कितने वर्ष शिक्षक?',
-  'YearsAsTrutiyaShikshak':
-      'तृतीय वर्ष / कार्यकर्ता विकास वर्ग द्वितीय के लिए कितने वर्ष शिक्षक?',
+  'YearsAsPrathamShikshak': 'पप्रथम वर्ष / संघ शिक्षा वर्ग के लिए कितने वर्ष शिक्षक?',
+  'YearsAsDwitiyaShikshak': 'दद्वितीय वर्ष / कार्यकर्ता विकास वर्ग प्रथम के लिए कितने वर्ष शिक्षक?',
+  'YearsAsTrutiyaShikshak': 'तृतीय वर्ष / कार्यकर्ता विकास वर्ग द्वितीय के लिए कितने वर्ष शिक्षक?',
   'PrarambhikVargaYearValidationMessage': 'प्रारंभिक शिक्षा वर्ग वर्ष आवश्यक',
   'PraathamikVargaYearValidationMessage': 'प्राथमिक शिक्षा वर्ग वर्ष आवश्यक',
-  'ValidPrarambhikVargaYearValidationMessage':
-      'योग्य प्रारंभिक शिक्षा वर्ग वर्ष आवश्यक',
-  'ValidPraathamikVargaYearValidationMessage':
-      'योग्य प्राथमिक शिक्षा वर्ग वर्ष आवश्यक',
-  'PrathamVarshaYearValidationMessage':
-      'प्रथम वर्ष / संघ शिक्षा वर्ग वर्ष आवश्यक',
-  'ValidPrathamVarshaYearValidationMessage':
-      'योग्य पप्रथम वर्ष / संघ शिक्षा वर्ग वर्ष आवश्यक',
-  'DwitiyaVarshaYearValidationMessage':
-      'द्वितीय वर्ष / कार्यकर्ता विकास वर्ग प्रथम वर्ष आवश्यक',
-  'ValidDwitiyaVarshaYearValidationMessage':
-      'योग्य द्वितीय वर्ष / कार्यकर्ता विकास वर्ग प्रथम वर्ष आवश्यक',
-  'TrutiyaVarshaYearValidationMessage':
-      'तृतीय वर्ष / कार्यकर्ता विकास वर्ग द्वितीय वर्ष आवश्यक',
-  'ValidTrutiyaVarshaYearValidationMessage':
-      'योग्य तृतीय वर्ष / कार्यकर्ता विकास वर्ग द्वितीय वर्ष आवश्यक',
+  'ValidPrarambhikVargaYearValidationMessage': 'योग्य प्रारंभिक शिक्षा वर्ग वर्ष आवश्यक',
+  'ValidPraathamikVargaYearValidationMessage': 'योग्य प्राथमिक शिक्षा वर्ग वर्ष आवश्यक',
+  'PrathamVarshaYearValidationMessage': 'प्रथम वर्ष / संघ शिक्षा वर्ग वर्ष आवश्यक',
+  'ValidPrathamVarshaYearValidationMessage': 'योग्य पप्रथम वर्ष / संघ शिक्षा वर्ग वर्ष आवश्यक',
+  'DwitiyaVarshaYearValidationMessage': 'द्वितीय वर्ष / कार्यकर्ता विकास वर्ग प्रथम वर्ष आवश्यक',
+  'ValidDwitiyaVarshaYearValidationMessage': 'योग्य द्वितीय वर्ष / कार्यकर्ता विकास वर्ग प्रथम वर्ष आवश्यक',
+  'TrutiyaVarshaYearValidationMessage': 'तृतीय वर्ष / कार्यकर्ता विकास वर्ग द्वितीय वर्ष आवश्यक',
+  'ValidTrutiyaVarshaYearValidationMessage': 'योग्य तृतीय वर्ष / कार्यकर्ता विकास वर्ग द्वितीय वर्ष आवश्यक',
   'TrainedIn': 'प्रशिक्षण',
   'GhoshVishay': 'घोष विषय',
   'ShaaririkVishay': 'शारीरिक विषय',
@@ -4462,8 +4343,7 @@ Map<String, String> resHindi = {
   'SchoolNameValidationMessage': 'पाठशाला का नाम आवश्यक',
   'StandardValidationMessage': 'कक्षा आवश्यक',
   'ProgramValidationMessage': 'ज्ञान-शाखा आवश्यक',
-  'ExpectedCompletionYearValidationMessage':
-      'शिक्षा पूर्ण होने का अपेक्षित वर्ष आवश्यक',
+  'ExpectedCompletionYearValidationMessage': 'शिक्षा पूर्ण होने का अपेक्षित वर्ष आवश्यक',
   'GovernmentDepartmentValidationMessage': 'शासकीय विभाग आवश्यक',
   'OrganizationNameValidationMessage': 'संस्थान का नाम आवश्यक',
   'IndustryVerticalValidationMessage': 'उद्योग क्षेत्र आवश्यक',
@@ -4472,12 +4352,9 @@ Map<String, String> resHindi = {
   'WeeklyOffDayValidationMessage': 'साप्ताहिक अवकाश आवश्यक',
   'DutyHoursToValidationMessage': 'कार्यालय का समय कब तक आवश्यक',
   'DutyHoursFromValidationMessage': 'कार्यालय का समय कब से आवश्यक',
-  'OrganizationAtRetirementValidationMessage':
-      'सेवानिवृत्ति के समय संस्था आवश्यक',
-  'DesignationAtRetirementValidationMessage':
-      'सेवानिवृत्ति के समय पदनाम आवश्यक',
-  'GovernmentDepartmentRetirementValidationMessage':
-      'सेवानिवृत्ति के समय विभाग नाम',
+  'OrganizationAtRetirementValidationMessage': 'सेवानिवृत्ति के समय संस्था आवश्यक',
+  'DesignationAtRetirementValidationMessage': 'सेवानिवृत्ति के समय पदनाम आवश्यक',
+  'GovernmentDepartmentRetirementValidationMessage': 'सेवानिवृत्ति के समय विभाग नाम',
   'SelectVasti': 'बस्ती',
   'VastiInfo': 'वस्ती माहिती',
   'MandalInfo': 'मंडल माहिती',
@@ -4614,8 +4491,7 @@ Map<String, String> resHindi = {
   'NewPasswordValidationMessage': 'नया पासवर्ड आवश्यक',
   'ConfirmPasswordValidationMessage': 'फिर से वही नया पासवर्ड आवश्यक',
   'PasswordValidationMessage': 'दोनों जगह एक ही नया पासवर्ड आवश्यक',
-  'oldPasswordMatchValidationMessage':
-      'नया और पुराना पासवर्ड अलग-अलग होने चाहिए',
+  'oldPasswordMatchValidationMessage': 'नया और पुराना पासवर्ड अलग-अलग होने चाहिए',
   'EditVisheshVyakti': 'विशेष व्यक्ती जानकारी',
   'searchVisheshVyaktiScreenLabel': 'विशेष व्यक्ति',
   'searchVisheshVyaktiScreenBanner': 'विशेष व्यक्ति ढूँढें',
@@ -4714,6 +4590,8 @@ Map<String, String> resHindi = {
   'HasShoes': 'जूते है',
   'HasSocks': 'मोजे है',
   'HasDanda': 'दंड है',
+  'IsGanaveshComplete': 'वर्दी पूरी है',
+  'UniformInformation': 'गणवेशाची माहिती',
   'IsDaayitvaPresent': 'दायित्व है?',
   'CurrentAddress': 'वर्त्तमान पता',
   'PermanentAddress': 'स्थाई पता',
@@ -4786,8 +4664,7 @@ Map<String, String> resHindi = {
   'UnderstandLipi': 'लिपि समझते हैं?',
   'RachanaaName': 'रचाना का नाम',
   'RachanaaCount': 'कितनी रचना आती है?',
-  'LinkedShaakhaa':
-      'कौन सी शाखा/साप्ताहिक मिलन/मासिक मिलन/संघ मंडली का स्वयंसेवक',
+  'LinkedShaakhaa': 'कौन सी शाखा/साप्ताहिक मिलन/मासिक मिलन/संघ मंडली का स्वयंसेवक',
   'DaayitvaFor': 'दायित्व प्रकार',
   'Level': 'स्तर',
   'Notifications': 'सूचनाएं',
@@ -4950,8 +4827,7 @@ Map<String, String> resHindi = {
   'HasShaakhaaSanchaalanExperience': 'शाखा संचालन अनुभव है?',
   'ShaakhaExp': 'शाखा अनुभव',
   'HasShaakhaaOpeningExperience': 'नयी शाखा आरंभ करने का अनुभव है?',
-  'PleaseSelectatleastoneMukhyaVishay':
-      'कृपया कम से कम एक मुख्य विषय का चयन करें',
+  'PleaseSelectatleastoneMukhyaVishay': 'कृपया कम से कम एक मुख्य विषय का चयन करें',
   'WeeklyOffCycle': 'साप्ताहिक छुट्टी का चक्र',
   'IsShiftDuty': 'पारी में काम',
   'WeeklyOffCycleValidationMessage': 'कृपया साप्ताहिक छुट्टी-चक्र का चयन करें',
@@ -4962,8 +4838,7 @@ Map<String, String> resHindi = {
   'AreyouSureYouWantToAddSoochi': 'क्या आप वाकई सूची को जोड़ना चाहते हैं',
   'ShaakhaaDeletedSuccessfully': 'शाखा/साप्ताहिक/मासिक/मंडली हटा दिया गया',
   'CouldnotDeleteShaakhaa': 'शाखा/साप्ताहिक/मासिक/मंडली नहीं हटा सके',
-  'AreyouSureYouWantToDeleteShaakhaa':
-      'क्या आप शाखा/साप्ताहिक/मासिक/मंडली हटाना चाहते है',
+  'AreyouSureYouWantToDeleteShaakhaa': 'क्या आप शाखा/साप्ताहिक/मासिक/मंडली हटाना चाहते है',
   'SewaVasti': 'सेवा-बस्ती',
   'ConductedAnivaaryaShaaririkKaaryakram': 'अनिवार्य शारीरिक कार्यक्रम हुवे',
   'ConductedAnivaaryaBouddhikKaaryakram': 'अनिवार्य बौद्धिक कार्यक्रम हुवे',
@@ -5066,10 +4941,8 @@ Map<String, String> resHindi = {
   'PopulateFields': 'जानकारी भरें',
   'EmailBodyValidationMessage': 'ईमेल का मुख्य भाग आवश्यक',
   'ValidEmailBodyValidationMessage': 'कृपया मान्य ईमेल बॉडी दर्ज करें',
-  'searchRamJanmabhoomiNidhiSankalanVrutta':
-      'रामजन्मभूमी निधी संकलन वृत्त ढूँढें',
-  'searchRamJanmabhoomiNidhiSankalanVruttaScreenBanner':
-      'रामजन्मभूमी निधी संकलन वृत्त',
+  'searchRamJanmabhoomiNidhiSankalanVrutta': 'रामजन्मभूमी निधी संकलन वृत्त ढूँढें',
+  'searchRamJanmabhoomiNidhiSankalanVruttaScreenBanner': 'रामजन्मभूमी निधी संकलन वृत्त',
   'SahabhaagiKaaryakartaa': 'सहभागी कार्यकर्ता',
   'VisheshVyakti': 'विशेष व्यक्ती',
   'searchRJBSVNameMobileLabel': 'नाम / मोबाइल नंबर',
@@ -5136,8 +5009,7 @@ Map<String, String> resHindi = {
   'selectcomparativevruttapoint': 'तुलनात्मक वृत्त बिंदु निवडा',
   'selectedBhougolikkaryastithi': 'स्तर निवडा',
   'comparativevruttapoint': 'तुलनात्मक वृत्त बिंदु',
-  'tulnatmakBaithakEkatritVruttaBanner':
-      'तुलनात्मक संकलित वृत्त के लिये बैठक प्रकार चुनें',
+  'tulnatmakBaithakEkatritVruttaBanner': 'तुलनात्मक संकलित वृत्त के लिये बैठक प्रकार चुनें',
   'baithakType': 'बैठक प्रकार',
   'selectbaithakType': 'बैठक प्रकार चुनें',
   'selectbaithakTypeLabel': 'बैठक चुनें',
@@ -5152,8 +5024,7 @@ Map<String, String> resHindi = {
   'tarunVyavasaayeeAverage': 'तरुण व्यव. सरासरी',
   'proudhAverage': 'प्रौढ़ सरासरी',
   'annualBaithakShaakhaaVruttaTitle': ' बैठक शाखा वृत्त',
-  'annualBaithakShaakhaaViheenVruttaTitle':
-      'वार्षिक बैठक कार्यविहीन बस्ती/ग्राम वृत्त',
+  'annualBaithakShaakhaaViheenVruttaTitle': 'वार्षिक बैठक कार्यविहीन बस्ती/ग्राम वृत्त',
   'annualBaithakMukhyaMaargVruttaTitle': 'वार्षिक बैठक मुख्य मार्ग वृत्त',
   'annualBaithakGraamVikasVruttaTitle': 'वार्षिक बैठक ग्राम विकास वृत्त',
   'annualBaithakNagarVruttaTitle': 'वार्षिक बैठक नगर वृत्त',
@@ -5167,10 +5038,8 @@ Map<String, String> resHindi = {
   'vaarshikotsavMonthFebMar': 'वार्षिकोत्सव कब हुआ? (गत 30 दिनों में)',
   'vaarshikotsavMonthMarJun': 'वार्षिकोत्सव कब हुआ? (गत 30 दिनों में)',
   'isSewaVastiDefined': 'सेवा बस्ती निश्चित है?',
-  'sewaVastiSamparkCount':
-      'सेवा बस्तीमें कितनी बार संपर्क हुआ (गत 30 दिनों में)',
-  'sewaVastiSamparkCountFebMar':
-      'सेवा बस्तीमें कितनी बार संपर्क हुआ (गत 30 दिनों में)',
+  'sewaVastiSamparkCount': 'सेवा बस्तीमें कितनी बार संपर्क हुआ (गत 30 दिनों में)',
+  'sewaVastiSamparkCountFebMar': 'सेवा बस्तीमें कितनी बार संपर्क हुआ (गत 30 दिनों में)',
   'isSewaKaaryakartaaDefined': 'सेवा कार्यकर्ता निश्चित है?',
   'sewaUpakramCount': 'सेवा उपक्रम संख्या (गत 30 दिनों में)',
   'sewaUpakramCountJunOct': 'सेवा उपक्रम संख्या (गत 30 दिनों में)',
@@ -5202,17 +5071,12 @@ Map<String, String> resHindi = {
   'dwitiyaSpecialShikshaarthiSakriya': 'द्वितीय विशेष शिक्षार्थी/सक्रिय',
   'trutiyaGeneralShikshaarthiSakriya': 'तृतीय सामान्य शिक्षार्थी/सक्रिय',
   'trutiyaSpecialShikshaarthiSakriya': 'तृतीय विशेष शिक्षार्थी/सक्रिय',
-  'sanghaDaayitvawaanSwCount':
-      'संघ में किसी भी स्तर पर दायित्ववान स्वयंसेवक संख्या',
-  'preritSansthaaSangathanDaayitvawaanSwCount':
-      'किसी भी संघ-प्रेरित संस्था / संगठन में किसी भी स्तर पर दायित्ववान स्वयंसेवक संख्या',
-  'gatividhiDaayitvawaanSwCount':
-      'किसी भी गतिविधि में किसी भी स्तर पर दायित्ववान स्वयंसेवक संख्या',
-  'aayaamDaayitvawaanSwCount':
-      'किसी भी आयाम में किसी भी स्तर पर दायित्ववान स्वयंसेवक संख्या',
+  'sanghaDaayitvawaanSwCount': 'संघ में किसी भी स्तर पर दायित्ववान स्वयंसेवक संख्या',
+  'preritSansthaaSangathanDaayitvawaanSwCount': 'किसी भी संघ-प्रेरित संस्था / संगठन में किसी भी स्तर पर दायित्ववान स्वयंसेवक संख्या',
+  'gatividhiDaayitvawaanSwCount': 'किसी भी गतिविधि में किसी भी स्तर पर दायित्ववान स्वयंसेवक संख्या',
+  'aayaamDaayitvawaanSwCount': 'किसी भी आयाम में किसी भी स्तर पर दायित्ववान स्वयंसेवक संख्या',
   'sociallyActiveSwCount': 'सामाजिक कामों में दायित्ववान स्वयंसेवक संख्या',
-  'shaakhaaToliBaithakCount':
-      'शाखा/साप्ता.मि. टोली बैठक कितनी बार हुई(गत 30 दिनों में)',
+  'shaakhaaToliBaithakCount': 'शाखा/साप्ता.मि. टोली बैठक कितनी बार हुई(गत 30 दिनों में)',
   'isVaarshikNiyojanDone': 'वार्षिक नियोजन पूर्ण हुआ?',
   'isSankalpaPoorna': 'संकल्प तय हुआ?',
   'vastiGraamName': 'बस्ती/ग्राम',
@@ -5315,20 +5179,16 @@ Map<String, String> resHindi = {
   'graaminSaaptaahikSthan': 'ग्रामीण साप्ताहिक मिलन स्थान',
   'graaminSaaptaahikMilanYuktyaSthan': 'ग्रामीण साप्ताहिक मिलनयुक्त स्थान',
   'graaminSaaptaahik': 'ग्रामीण साप्ताहिक मिलन',
-  'averageUpasthitiNagareeySaaptaahik':
-      'नगरीय साप्ताहिक मिलन - सरासरी उपस्थिती',
-  'averageUpasthitiGraaminSaaptaahik':
-      'ग्रामीण साप्ताहिक मिलन - सरासरी उपस्थिती',
+  'averageUpasthitiNagareeySaaptaahik': 'नगरीय साप्ताहिक मिलन - सरासरी उपस्थिती',
+  'averageUpasthitiGraaminSaaptaahik': 'ग्रामीण साप्ताहिक मिलन - सरासरी उपस्थिती',
   'milanMandali': 'मासिक मिलन / संघ मंडळी',
   'masikMilan': 'मासिक मिलन',
   'vidyaarthi': 'विद्यार्थी',
   'vyavasaayee': 'व्यवसायी',
   'paalakYuktaShaakhaa': 'पालकयुक्त शाखा',
   'vaarshikotsav': 'वार्षिकोत्सव',
-  'sewaVastiIdentifiedShaakhaaCount':
-      'सेवावस्ती निश्चित केलेल्या शाखांची संख्या',
-  'sevaPramukhIdentifiedShaakhaaCount':
-      'सेवाप्रमुख निश्चित केलेल्या शाखांची संख्या',
+  'sewaVastiIdentifiedShaakhaaCount': 'सेवावस्ती निश्चित केलेल्या शाखांची संख्या',
+  'sevaPramukhIdentifiedShaakhaaCount': 'सेवाप्रमुख निश्चित केलेल्या शाखांची संख्या',
   'sewaVastiSamparkShaakhaaCount': 'सेवा वस्तीत संपर्क करणाऱ्या शाखा',
   'fourTimes': '४ वेळा',
   'thrice': '३ वेळा',
@@ -5339,11 +5199,9 @@ Map<String, String> resHindi = {
   'prabhaatGraamCount': 'प्रभात ग्राम संख्या',
   'kaaryaViheenVrutta': 'कार्यविहीन वस्ती/ग्राम',
   'vastiCountWithPastShaakhaa': 'गेल्या १० वर्षांत शाखा लागलेल्या वस्त्या',
-  'vastiCountWithPastSaaptaahik':
-      'गेल्या १० वर्षांत साप्ताहिक मिलन लागलेल्या वस्त्या',
+  'vastiCountWithPastSaaptaahik': 'गेल्या १० वर्षांत साप्ताहिक मिलन लागलेल्या वस्त्या',
   'graamCountWithPastShaakhaa': 'गेल्या १० वर्षांत शाखा लागलेली गावे',
-  'graamCountWithPastSaaptaahik':
-      'गेल्या १० वर्षांत साप्ताहिक मिलन लागलेली गावे',
+  'graamCountWithPastSaaptaahik': 'गेल्या १० वर्षांत साप्ताहिक मिलन लागलेली गावे',
   'saanskrutikVaartaapatraVrutta': 'सांस्कृतिक वार्तापत्र वृत्त',
   'vaartaapatraVastiCount': 'वस्ती संख्या',
   'vaartaapatraGraamCount': 'ग्राम संख्या',
@@ -5372,8 +5230,7 @@ Map<String, String> resHindi = {
   'attachMobile': 'कृपया अपना मोबाईल यहां लिखेंं',
   'attachDaayitva': 'कृपया अपना दायित्व यहां लिखेंं',
   'attachment': 'दस्तावेज',
-  'EmailSentSuccessfully':
-      'हमसे संपर्क करने के लिए धन्यवाद, हम शीघ्र ही आप तक पहुंचेंगे.',
+  'EmailSentSuccessfully': 'हमसे संपर्क करने के लिए धन्यवाद, हम शीघ्र ही आप तक पहुंचेंगे.',
   'PleaseEnterYourMessage': 'कृपया अपना संदेश लिखें',
   'yesterdayNews': 'कलका वृत्त',
   'tolatHomeContact': 'कुल घरेलू संपर्क',
@@ -5437,8 +5294,7 @@ Map<String, String> resHindi = {
   'completeAll': '(संपूर्ण एकूण)',
   'daayitvaTip': '(संघ, गतिविधी, आयाम और संघ प्रेरित संघटन/संस्थेत)',
   'vastitiHonareSanUtsav': 'बस्तीमे मनाए जाने वाले \n त्योहार / उत्सव ',
-  'vastitiHonareSamajikKaryaKram':
-      'बस्तीमे मनाए जाने वाले \n सामाजिक कार्यक्रम',
+  'vastitiHonareSamajikKaryaKram': 'बस्तीमे मनाए जाने वाले \n सामाजिक कार्यक्रम',
   'kendrsSankhya': 'केंद्र संख्या',
   'hospitalCount': 'रुग्णालय संख्या',
   'school1': 'विद्यालय',
@@ -5505,8 +5361,7 @@ Map<String, String> resHindi = {
   'gavSadyasyaSamitiCount': 'गाव समिति मे कितने सदस्य है  ?',
   'gaavachiLoksankhya': 'गाव कि  जनसंख्या ',
   'suchana': 'सूचना ',
-  'GaavSelectionImportant':
-      'जानकारी भरने से पहले गांव का चयन करना अनिवार्य है।',
+  'GaavSelectionImportant': 'जानकारी भरने से पहले गांव का चयन करना अनिवार्य है।',
   'bharnyaPurvi': 'जानकारी भरने से पहले',
   'bharneImportant': 'जानकारी भरना अनिवार्य है।',
   'sangrahKelyaNantr': 'संग्रह करने के बाद ',
@@ -5514,8 +5369,7 @@ Map<String, String> resHindi = {
   'gaavNivada': 'गाव चुनिये ',
   'Note': 'सूचना ',
   'rowSelectionImportant': 'उपयोग करने के लिए पंक्ति (row ) का चयन करना होगा.',
-  'wholeNoValidation':
-      'संख्याओं को पूर्ण संख्याओं में दर्ज करना अनिवार्य है। जैसे.... (0123)',
+  'wholeNoValidation': 'संख्याओं को पूर्ण संख्याओं में दर्ज करना अनिवार्य है। जैसे.... (0123)',
   'vadipadyacheNaav': 'गांव/गाँव का नाम',
   'andaajeGhar': 'अनुमानित घर',
   'andajeLoksankhya': 'अनुमानित जनसंख्या',
@@ -5526,8 +5380,7 @@ Map<String, String> resHindi = {
   'prushaanchiSankhya': 'पुरुषों की संख्या',
   'mahilanchiSankhya': 'महिलाओं की संख्या',
   'ekunLoksankhya': 'कुल जनसंख्या',
-  'purvuKadhitarishakha':
-      'क्या संघ की कोई शाखा/साप्ताहिक बैठक पहले चलती थी, लेकिन क्या आज बंद है?',
+  'purvuKadhitarishakha': 'क्या संघ की कोई शाखा/साप्ताहिक बैठक पहले चलती थी, लेकिन क्या आज बंद है?',
   'tapshilInfo': 'विवरण माहिती ',
   'shaakhaPrakar': 'शाखा का प्रकार',
   'chalavnariSanghatana': 'चल रहा संस्था /संगठन',
@@ -5557,12 +5410,9 @@ Map<String, String> resHindi = {
   'otherFestivals': 'अन्य त्यौहार',
   'samajikKaryakram': 'सामाजिक कार्यक्रम',
   'sarpanchNavValidation': 'कृपया सरपंच का नाम भरें।',
-  'purviShakhaValidation':
-      'पहले संघ की शाखा/साप्ताहिक चल रही थी\' के लिए कृपया \'हाँ\' या \'नहीं\' चुनें।',
-  'anyaVividhValidation':
-      'अन्य विभिन्न क्षेत्रीय कार्य किए जा रहे हैं\' के लिए कृपया \'हाँ\' या \'नहीं\' चुनें।',
-  'mumbaikarValidation':
-      'गाँव में मुंबईकर मंडल है\' के लिए कृपया \'हाँ\' या \'नहीं\' चुनें।',
+  'purviShakhaValidation': 'पहले संघ की शाखा/साप्ताहिक चल रही थी\' के लिए कृपया \'हाँ\' या \'नहीं\' चुनें।',
+  'anyaVividhValidation': 'अन्य विभिन्न क्षेत्रीय कार्य किए जा रहे हैं\' के लिए कृपया \'हाँ\' या \'नहीं\' चुनें।',
+  'mumbaikarValidation': 'गाँव में मुंबईकर मंडल है\' के लिए कृपया \'हाँ\' या \'नहीं\' चुनें।',
   'gaavSamitiValidation': 'ग्राम समिति आवश्यक है।',
   'prathamikSubmit': 'प्राथमिक सूचना संग्रह',
   'selectUpshreni': 'उपश्रेणी चुनें',
@@ -5594,8 +5444,7 @@ Map<String, String> resHindi = {
   'otherEnter': 'अन्य',
   'visrutMahitiSubmit': 'विस्तृत सूचना संग्रह',
   'surveyCompleted': 'सर्वेक्षण पूरा हुआ।',
-  'vastiSelectMandetoryValidation':
-      'जानकारी भरने से पहले बस्ती का चयन करना अनिवार्य है।',
+  'vastiSelectMandetoryValidation': 'जानकारी भरने से पहले बस्ती का चयन करना अनिवार्य है।',
   'selectFile': 'फ़ाइल चुनें',
   'submittedFile': 'प्रस्तुत फाइल',
   'replacedFile': 'बदली गयी फाइल',
@@ -5747,8 +5596,7 @@ Map<String, String> resHindi = {
   'vijayadashmiReportTable3': "कितने उत्सव निर्धारित\nसमय पर शुरू हुए ?",
   'vijayadashmiReportTable4': "कितने उत्सवो मे वैयक्तिक\nगीत कंठस्थ था ?",
   'vijayadashmiReportTable5': "कितने संचलन मे घोष\nवादन हुआ  ?",
-  'vijayadashmiReportTable6':
-      "कितने उत्सवों का हिसाब\n२४ घंटे के अंदर पूर्ण हुआ ?",
+  'vijayadashmiReportTable6': "कितने उत्सवों का हिसाब\n२४ घंटे के अंदर पूर्ण हुआ ?",
   'vijayadashmiReportTable7': "कितने संचलन\nसदण्ड हुए ?",
   'utsavLable': "उत्सव",
   'ProgramNirdharitTime': "क्या उत्सव निर्धारित समय पर शुरू हुआ ?",
@@ -5788,8 +5636,7 @@ Map<String, String> resHindi = {
   'url': ' समाचार के संकेत स्थल का दुवा',
   'urlDesc': 'संकेत स्थल के दुवा का वर्णन',
   'AreyouSureYouWantToDeleteImage': 'क्या आप फाइल को हटाना चाहते है ?',
-  'AreyouSureYouWantToDeleteUrl':
-      'क्या आप संकेत स्थल के दुवा को हटाना चाहते है ?',
+  'AreyouSureYouWantToDeleteUrl': 'क्या आप संकेत स्थल के दुवा को हटाना चाहते है ?',
   'AddUtsavFilesSubtitle': 'अधिकतम ३ संलग्न करें',
   'AddAdvUtsavFilesSubtitle': 'अधिकतम 10 संलग्न करें',
   'hoomeScreenUpnagarTable0': "स्तर नाव",
@@ -5807,8 +5654,7 @@ Map<String, String> resHindi = {
   "MandalName": "मंडल",
   "GraamNames": "ग्राम",
   "VastiGraamValidation": "वस्ती/ग्राम चुनना अनिवार्य है ।",
-  "swayamsevakDaayitvaValidation":
-      "यदि कोई मौजूदा दायित्व नहीं है, तो 'कब तक' का वर्ष भरना आवश्यक है।",
+  "swayamsevakDaayitvaValidation": "यदि कोई मौजूदा दायित्व नहीं है, तो 'कब तक' का वर्ष भरना आवश्यक है।",
   'gruhSamparkAbhiyan': 'गृह संपर्क अभियान',
   'hinduSammelan': 'हिंदु सम्मेलन',
   'sadbhavBaithak': 'सद्भाव बैठक',
@@ -5869,8 +5715,7 @@ Map<String, String> resHindi = {
   "MapUpNagarNames": "उपनगर वस्ती नाव",
   "UpKhandNames": "उपखंड नाव",
   "MapUpKhandNames": "उपखंड मंडल नाव",
-  "noExcelAppFoundError":
-      "कृपया Excel फ़ाइल खोलने के लिए उपयुक्त ऐप (जैसे Microsoft Excel या WPS Office) डाउनलोड करें।",
+  "noExcelAppFoundError": "कृपया Excel फ़ाइल खोलने के लिए उपयुक्त ऐप (जैसे Microsoft Excel या WPS Office) डाउनलोड करें।",
   "unableToOpenFile": "फ़ाइल खोलने में असमर्थ",
   "noPermissionGiven": "फ़ाइल खोलने की अनुमति नहीं है.",
   "vijayadashmiExcelReport": "विजयादशमी उत्सव वृत्त",
@@ -5882,8 +5727,7 @@ Map<String, String> resHindi = {
   "abhiyaanKaryakartaFormTitle": "अभियान कार्यकर्ता",
   "abhiyaanPramukhKey": "अभियान प्रमुख",
   "karyakartaAlreadyExists": "अभियान कार्यकर्ता का नाम पहले से जुडा है।",
-  "cannotDeleteTheData":
-      "आप इस जानकारी को हटा नहीं सकते क्योंकि यह पहले से ही उपयोग में है!",
+  "cannotDeleteTheData": "आप इस जानकारी को हटा नहीं सकते क्योंकि यह पहले से ही उपयोग में है!",
   'specialPerson': "विशेष व्यक्ति",
   'addSpecialPerson': "विशेष व्यक्ती जोड़े",
   'selectSpecialPerson': "विशेष व्यक्ती चुने ",
@@ -5916,8 +5760,7 @@ Map<String, String> resHindi = {
   'selectAtLeastOneSwayamsevak': 'कम से कम एक स्वयंसेवक का चयन करें।',
   'fillGruhVruttaFirst': 'पहले वृत्त जोड़िए',
   'dateWiseDataNotAvailable': 'तिथि के अनुसार माहिती उपलब्ध नहीं है।',
-  'specialContactDataNotAvailable':
-      'विशेष संपर्क के अनुसार माहिती उपलब्ध नहीं है।',
+  'specialContactDataNotAvailable': 'विशेष संपर्क के अनुसार माहिती उपलब्ध नहीं है।',
   'gruhKaaryakartaaTotalCount': 'कुल कार्यकर्ते',
   'gruhSahabhaagiKaaryakartaaTotalCount': 'कुल अभियान कार्यकर्ते',
   'gruhSahabhaagiKaaryakartaaMaleCount': 'सहभागी कार्यकर्ते (पु)',
@@ -5941,8 +5784,7 @@ Map<String, String> resHindi = {
   'addAbhiyaanKaryakartaValidation5': "संस्था मे अधिकृत दायित्व",
   'visheshVyaktiAlreadyExists': "इन विशेष व्यक्तीं का नाम पहले से जुडा है।",
   // 'cannotDeleteValidation1': "Cannot Select! ",
-  'cannotDeleteValidation':
-      " ने वृत्त पहले ही भर दिया है, इसलिए चयन नहीं किया जा सकता।",
+  'cannotDeleteValidation': " ने वृत्त पहले ही भर दिया है, इसलिए चयन नहीं किया जा सकता।",
   'gruhTip': 'संपर्क करनेवाले कार्यकर्ता',
   ////////////////////////////////////// Hindu Sanmelan Block //////////////////////////////////////
   'selectVastiMandal': "वस्ती/मंडल चुने",
@@ -5952,8 +5794,7 @@ Map<String, String> resHindi = {
   'AddSanmelanFiles': 'सम्मेलन से संबंधित छायाचित्र जोड़ें',
   'AddSanmelanFilesDesc': 'सम्मेलन से संबंधित छायाचित्र के वर्णन जोड़ें',
   'AddAdvSanmelanFiles': 'सम्मेलन से संबंधित समाचार के छायाचित्र जोड़ें  ',
-  'AddAdvSanmelanFilesDesc':
-      'सम्मेलन से संबंधित वर्तमान पत्र का नाम, तिथि और आवृत्ति जोड़ें। *',
+  'AddAdvSanmelanFilesDesc': 'सम्मेलन से संबंधित वर्तमान पत्र का नाम, तिथि और आवृत्ति जोड़ें। *',
   'AddSanmelanFilesSubtitle': 'अधिकतम ३ संलग्न करें',
   'AddAdvSanmelanFilesSubtitle': 'अधिकतम १० संलग्न करें',
   'sanmelanReportTable0': "सम्मेलन स्तर",
@@ -6080,8 +5921,7 @@ Map<String, String> resHindi = {
   'enableVruttaValidationMessage': '{date} तारीख से वृत्त खुलेगा',
   'sadbhavTip': 'बैठक जानकारी देखने के लिए सद्भाव केंद्र को स्पर्श कर के चुनें',
   'baithakDataTitle': ' संपूर्ण कार्यक्रम जानकारी',
-  'jnyatiValidationMessage':
-      'ज्ञाति प्रतिनिधित्व संख्या उपस्थित संख्या से कम नहीं होनी चाहिए।',
+  'jnyatiValidationMessage': 'ज्ञाति प्रतिनिधित्व संख्या उपस्थित संख्या से कम नहीं होनी चाहिए।',
   'baithakDateValidation': 'यह तारीख पर बैठक पहले से ही मौजूद है',
   'addNewSajjAnyaBtn': 'नए सज्जन शक्ति/अन्य प्रभावी व्यक्ति जोड़ें',
   ////////////////////////////////////// Pramukh Jansanvaad Block //////////////////////////////////////

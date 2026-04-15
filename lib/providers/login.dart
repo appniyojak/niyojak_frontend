@@ -243,6 +243,13 @@ class LogIn {
         // }
       }
 
+      dataList = body['LogInData']['ddldata'];
+      if (dataList != null) {
+        print("usrLogIn 16.5");
+
+        await dbh.DatabaseHelper.reCreate('DaayitwaLevelMaster', dataList);
+      }
+
       dataList = body['LogInData']['GatividhiMasterList'];
       if (dataList.length > 0) {
         print("usrLogIn 17");

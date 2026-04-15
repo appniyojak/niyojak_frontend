@@ -115,6 +115,9 @@ class DatabaseHelper {
           '   HasGraaminKshetra BOOL, ParentKshetraID INT, ParentPraantID INT, ParentMahaanagarID INT, ' +
           '   ParentVibhaagID INT, ParentBhaagID INT, ParentNagarID INT, ParentShaharID INT, ' +
           '   ParentMandalID INT, ParentVastiID INT, ParentGraamID INT, isAbhiyaan BOOL)');
+
+      db.execute('CREATE TABLE DaayitwaLevelMaster(LevelID INT,GeoUnitID INT,ParentMahaanagarID INT,ParentVibhaagID INT,ParentBhaagID INT,' +
+          'ParentNagarID INT,ParentUpaNagarID INT,ParentMandalID INT,ParentGraamID INT,ParentVastiID INT)');
     });
     return database;
   }
@@ -572,6 +575,40 @@ class DatabaseHelper {
             dataList['Notificationcount'].toString() +
             ')';
         //}
+      } else if (tableName == 'DaayitwaLevelMaster') {
+        // Record not found, then insert
+        try {
+          cnt = cnt + 1;
+          sqlStr = sqlStr +
+              (cnt == 1
+                  ? 'INSERT INTO DaayitwaLevelMaster( LevelID, GeoUnitID,	ParentMahaanagarID,	ParentVibhaagID,	' +
+                      '	ParentBhaagID,	 ParentNagarID,	ParentUpaNagarID,	ParentMandalID,	' +
+                      '	ParentGraamID,	ParentVastiID) VALUES  '
+                  : ',') +
+              '(' +
+              dataList['LevelID'].toString() +
+              ',' +
+              dataList['GeoUnitID'].toString() +
+              ',' +
+              dataList['ParentMahaanagarID'].toString() +
+              ',' +
+              dataList['ParentVibhaagID'].toString() +
+              ',' +
+              dataList['ParentBhaagID'].toString() +
+              ',' +
+              dataList['ParentNagarID'].toString() +
+              ',' +
+              dataList['ParentUpaNagarID'].toString() +
+              ',' +
+              dataList['ParentMandalID'].toString() +
+              ',' +
+              dataList['ParentGraamID'].toString() +
+              ',' +
+              dataList['ParentVastiID'].toString() +
+              ');';
+        } on Exception catch (e) {
+          print(" -- DB Exception --  $e");
+        }
       }
 
       if (cnt > 0) sqlStr = sqlStr + ';';
@@ -1099,6 +1136,35 @@ class DatabaseHelper {
           ',' +
           data['Notificationcount'].toString() +
           ');';
+    } else if (tableName == 'DaayitwaLevelMaster') {
+      // Record not found, then insert
+      try {
+        sqlStr = 'INSERT INTO DaayitwaLevelMaster( LevelID, GeoUnitID,	ParentMahaanagarID,	ParentVibhaagID,	' +
+            '	ParentBhaagID,	 ParentNagarID,	ParentUpaNagarID,	ParentMandalID,	' +
+            '	ParentGraamID,	ParentVastiID) VALUES (' +
+            data['LevelID'].toString() +
+            ',' +
+            data['GeoUnitID'].toString() +
+            ',' +
+            data['ParentMahaanagarID'].toString() +
+            ',' +
+            data['ParentVibhaagID'].toString() +
+            ',' +
+            data['ParentBhaagID'].toString() +
+            ',' +
+            data['ParentNagarID'].toString() +
+            ',' +
+            data['ParentUpaNagarID'].toString() +
+            ',' +
+            data['ParentMandalID'].toString() +
+            ',' +
+            data['ParentGraamID'].toString() +
+            ',' +
+            data['ParentVastiID'].toString() +
+            ');';
+      } on Exception catch (e) {
+        print("exception$e");
+      }
     }
 
     await db.execute(sqlStr);
