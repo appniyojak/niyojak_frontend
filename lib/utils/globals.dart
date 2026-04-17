@@ -8,6 +8,19 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../helpers/database_helper.dart';
 
+//----------------From db----------------//
+DropDownModel? ddm;
+int? userLevelId;
+int? userGeoUnitId;
+int? userparentMahanagar;
+int? userparentVibhag;
+int? userparentBhaag;
+int? userparentNagarid;
+int? userparentUpanagarid;
+int? userparentMandalid;
+int? userParentGramid;
+int? userParentVastiid;
+
 class MyAppGlobals {
   static String checkTextNullEmpty(String? txt) {
     if (txt == null || txt.isEmpty) return "N/A";
@@ -73,5 +86,17 @@ class MyAppGlobals {
     var ddmodel = DropDownModel.fromJson(result.first);
     //List<DropDownModel> dropdownlist = result.map((e) => DropDownModel.fromJson(e)).toList();
     return ddmodel;
+  }
+
+  static Map<String, int> levelOrder = {'Mahaanagar': 9, 'Vibhaag': 8, 'Bhaag': 7, 'Nagar': 6, 'upnagarUpkhanda': 5, 'Mandal': 4, 'Graam': 3, 'Vasti': 2};
+
+  static bool isDropdownDisabled(String levelName) {
+    int dropdownLevel = levelOrder[levelName] ?? 0;
+    if (levelName == 'upnagarUpkhanda') {
+      var usLevelid = 5;
+      return dropdownLevel >= usLevelid;
+    }
+
+    return dropdownLevel >= userLevelId!;
   }
 }

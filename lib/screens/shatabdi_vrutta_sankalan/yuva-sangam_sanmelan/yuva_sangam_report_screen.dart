@@ -24,18 +24,6 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
   bool _searched = false;
   bool _isExpanded = true;
 
-  //----------------From db----------------//
-  int? userLevelId;
-  int? userGeoUnitId;
-  int? userparentMahanagar;
-  int? userparentVibhag;
-  int? userparentBhaag;
-  int? userparentNagarid;
-  int? userparentUpanagarid;
-  int? userparentMandalid;
-  int? userParentGramid;
-  int? userParentVastiid;
-
   List<Nagardata> nagarList = [];
   List<GeoUnitMasterBAL>? _linkedMahaanagar;
   List<GeoUnitMasterBAL>? _linkedVibhaag;
@@ -77,7 +65,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
   List<Yuvrpt> report = [];
 
   final List<bool> _expanded = List.generate(3, (_) => true);
-  final Map<String, int> levelOrder = {'Mahaanagar': 9, 'Vibhaag': 8, 'Bhaag': 7, 'Nagar': 6, 'upnagarUpkhanda': 5, 'Mandal': 4, 'Graam': 3, 'Vasti': 2};
+
   @override
   void initState() {
     super.initState();
@@ -93,6 +81,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
     await populateDropdown(userLevelId!, dm);
     //await populateAllDropdowns(userLevelId!, dm);
   }
+
   // Future<void> _initData() async {
   //   await _fetchdataFromDaitwaMaster();
   //   await populateDropdown();
@@ -540,6 +529,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
     });
     return mnDD;
   }
+
   //////////////////////////////////////////////////////////////////////////////////////
 
   getReportDataFun() async {
@@ -1079,16 +1069,6 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
     );
   }
 
-  bool isDropdownDisabled(String levelName) {
-    int dropdownLevel = levelOrder[levelName] ?? 0;
-    if (levelName == 'upnagarUpkhanda') {
-      var usLevelid = 5;
-      return dropdownLevel >= usLevelid;
-    }
-
-    return dropdownLevel >= userLevelId!;
-  }
-
   Widget _buildExpansionPanel() {
     return Container(
       // width: MediaQuery.of(context).size.width * 0.9,
@@ -1132,7 +1112,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                                     child: Text(bg.name!),
                                   ))
                               .toList(),
-                      onChanged: isDropdownDisabled('Mahaanagar')
+                      onChanged: MyAppGlobals.isDropdownDisabled('Mahaanagar')
                           ? (value) {
                               if (value == null) return;
                             }
@@ -1151,7 +1131,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                               populatelinkedVibhaagDropdown(value!);
                               populatelinkedBhaagDropdown("");
                             },
-                      isDisabled: isDropdownDisabled('Mahaanagar'),
+                      isDisabled: MyAppGlobals.isDropdownDisabled('Mahaanagar'),
                     ),
                   if (_linkedVibhaag != null)
                     _buildDropdownField(
@@ -1165,7 +1145,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                                     child: Text(bg.name!),
                                   ))
                               .toList(),
-                      onChanged: isDropdownDisabled('Vibhaag')
+                      onChanged: MyAppGlobals.isDropdownDisabled('Vibhaag')
                           ? (value) {
                               if (value == null) return;
                             }
@@ -1182,7 +1162,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                               });
                               populatelinkedBhaagDropdown(value!);
                             },
-                      isDisabled: isDropdownDisabled('Vibhaag'),
+                      isDisabled: MyAppGlobals.isDropdownDisabled('Vibhaag'),
                     ),
                   //if (_linkedbhaag != null && _linkedbhaag!.isNotEmpty)
                   _buildDropdownField(
@@ -1196,7 +1176,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                                   child: Text(bg.name!),
                                 ))
                             .toList(),
-                    onChanged: isDropdownDisabled('Bhaag')
+                    onChanged: MyAppGlobals.isDropdownDisabled('Bhaag')
                         ? (value) {
                             if (value == null) return;
                           }
@@ -1213,7 +1193,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                               populatelinkedNagarDropdown(value, null);
                             });
                           },
-                    isDisabled: isDropdownDisabled('Bhaag'),
+                    isDisabled: MyAppGlobals.isDropdownDisabled('Bhaag'),
                   ),
 
                   // if (_linkednagar != null && _linkednagar!.isNotEmpty)
@@ -1228,7 +1208,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                                   child: Text(bg.name!),
                                 ))
                             .toList(),
-                    onChanged: isDropdownDisabled('Nagar')
+                    onChanged: MyAppGlobals.isDropdownDisabled('Nagar')
                         ? (value) {
                             if (value == null) return;
                           }
@@ -1246,9 +1226,9 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                               populatelinkedVastiDropdown(value);
                             });
                           },
-                    isDisabled: isDropdownDisabled('Nagar'),
+                    isDisabled: MyAppGlobals.isDropdownDisabled('Nagar'),
                   ),
-                  if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
+                  /*if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
                     _buildDropdownField(
                       label: Statics.getLabel('upnagarUpkhanda'),
                       value: _linkedupnagarValue,
@@ -1260,7 +1240,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                                     child: Text(bg.name!),
                                   ))
                               .toList(),
-                      onChanged: isDropdownDisabled('upnagarUpkhanda')
+                      onChanged: MyAppGlobals.isDropdownDisabled('upnagarUpkhanda')
                           ? (value) {
                               if (value == null) return;
                             }
@@ -1279,7 +1259,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                                 // populatelinkedNagarDropdown(null, value);
                               });
                             },
-                      isDisabled: isDropdownDisabled('upnagarUpkhanda'),
+                      isDisabled: MyAppGlobals.isDropdownDisabled('upnagarUpkhanda'),
                     ),
 
                   if (_linkedmandal != null && _linkedmandal!.isNotEmpty)
@@ -1294,7 +1274,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                                     child: Text(bg.name!),
                                   ))
                               .toList(),
-                      onChanged: isDropdownDisabled('Mandal')
+                      onChanged: MyAppGlobals.isDropdownDisabled('Mandal')
                           ? (value) {
                               if (value == null) return;
                             }
@@ -1309,7 +1289,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                                 populatelinkedGraamDropdown(value);
                               });
                             },
-                      isDisabled: isDropdownDisabled('Mandal'),
+                      isDisabled: MyAppGlobals.isDropdownDisabled('Mandal'),
                     ),
                   if (_linkedgraam != null && _linkedgraam!.isNotEmpty)
                     _buildDropdownField(
@@ -1323,7 +1303,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                                     child: Text(bg.name!),
                                   ))
                               .toList(),
-                      onChanged: isDropdownDisabled('Graam')
+                      onChanged: MyAppGlobals.isDropdownDisabled('Graam')
                           ? (value) {
                               if (value == null) return;
                             }
@@ -1337,7 +1317,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                                 _linkedgraamName = selectedItem.name ?? "";
                               });
                             },
-                      isDisabled: isDropdownDisabled('Graam'),
+                      isDisabled: MyAppGlobals.isDropdownDisabled('Graam'),
                     ),
                   if (_linkedvasti != null && _linkedvasti!.isNotEmpty)
                     _buildDropdownField(
@@ -1351,7 +1331,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                                     child: Text(bg.name!),
                                   ))
                               .toList(),
-                      onChanged: isDropdownDisabled('Vasti')
+                      onChanged: MyAppGlobals.isDropdownDisabled('Vasti')
                           ? (value) {
                               if (value == null) return;
                             }
@@ -1365,8 +1345,8 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                                 _linkedvastiName = selectedItem.name ?? "";
                               });
                             },
-                      isDisabled: isDropdownDisabled('Vasti'),
-                    ),
+                      isDisabled: MyAppGlobals.isDropdownDisabled('Vasti'),
+                    ),*/
                   SizedBox(height: 15),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -1452,26 +1432,4 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
       ),
     );
   }
-}
-
-class GeoSelection {
-  String? mahaanagar;
-  String? vibhaag;
-  String? bhaag;
-  String? nagar;
-  String? upnagar;
-  String? mandal;
-  String? graam;
-  String? vasti;
-
-  GeoSelection({
-    this.mahaanagar,
-    this.vibhaag,
-    this.bhaag,
-    this.nagar,
-    this.upnagar,
-    this.mandal,
-    this.graam,
-    this.vasti,
-  });
 }

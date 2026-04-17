@@ -50,3 +50,25 @@ class DropDownModel {
     return data;
   }
 }
+
+class GeoSelection {
+  String? mahaanagar;
+  String? vibhaag;
+  String? bhaag;
+  String? nagar;
+  String? upnagar;
+  String? mandal;
+  String? graam;
+  String? vasti;
+
+  GeoSelection({
+    this.mahaanagar,
+    this.vibhaag,
+    this.bhaag,
+    this.nagar,
+    this.upnagar,
+    this.mandal,
+    this.graam,
+    this.vasti,
+  });
+}

@@ -17,12 +17,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' as xls;
 
 import '../../helpers/static_data.dart' as Statics;
+import '../../models/response_model/dropdown_level_responsemodel.dart';
 import '../../models/response_model/notification_list_model.dart';
 import '../../models/response_model/upkhanda_upnagar_report_data_model.dart';
 import '../../providers/bals.dart';
 import '../../providers/login.dart';
 import '../../screens/change_password.dart';
 import '../../utils/cust_painters.dart';
+import '../../utils/globals.dart';
 import '../../widgets/app_drawer.dart';
 import '../../widgets/scrollable_data_table.dart';
 import '../../widgets/single_column_row.dart';
@@ -106,8 +108,10 @@ class _HomeScreenState extends State<HomeScreen> {
   String? myKshetraKaaryakartaaCount = '', myAkhilBhaaratiyaKaaryakartaaCount = '', myPravaaseeKaaryakartaaCount = '';
   String? myGatividhiKaaryakartaaCount = '', myAayaamKaaryakartaaCount = '';
   String? mySanghaPreritSansthaaKaaryakartaaCount = '', mySocialOrganizationKaaryakartaaCount = '';
+
 //------ Blood Group - count-------------------------------------------------//
   String? opos = '', oneg = '', apos = '', aneg = '', bpos = '', bneg = '', abpos = '', abneg = '', nivadlenahi = '';
+
   // ─── Tg – counts ───────────────────────────────────────────────────────────
   String? tgTotalKaaryakartaaCount = '', tgPratidnyitCount = '', tgTotalSwayamsevakCount = '';
   String? tgShaakhaaKaaryakartaaCount = '';
@@ -154,6 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late List<GetCount> _ghoshwadlist = [];
   GanveshData? _ganveshData;
   Vehicle? _vehicle;
+
   // ─── Access-control lists ─────────────────────────────────────────────────
   final List<String> _deniedLevels = ["Shakha", "Saptahik Milan", "शाखा", "साप्ताहिक मिलन"];
 
@@ -208,7 +213,18 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _initScreen();
+    WidgetsBinding.instance.addPostFrameCallback((_) => initData());
     WidgetsBinding.instance.addPostFrameCallback((_) => _getReleaseNotes());
+  }
+
+  Future<void> initData() async {
+    DropDownModel dm = await MyAppGlobals.getLevelLDB();
+
+    setState(() {
+      userLevelId = dm.levelID;
+      userGeoUnitId = dm.geoUnitID;
+    });
+    //await populateAllDropdowns(userLevelId!, dm);
   }
 
   void _initScreen() {

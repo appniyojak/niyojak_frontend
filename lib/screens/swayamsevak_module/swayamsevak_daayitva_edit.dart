@@ -1366,7 +1366,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
               isDisabled: false,
             ),
 
-          if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
+          if (_levelValue != null && (_linkedupnagar != null && _linkedupnagar!.isNotEmpty))
             _buildDropdownField(
               label: Statics.getLabel('upnagarUpkhanda'),
               value: _linkedupnagarValue,
@@ -1380,6 +1380,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
                 final selectedItem = _linkedupnagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                 setState(() {
                   _linkedupnagarValue = value;
+                  _selectedLevelId = 13;
                   _selectedGeoUnitId = value;
                   _selctedLevel = Statics.getLabel('upnagarUpkhanda');
                   _selctedLevelName = selectedItem.name ?? "";
