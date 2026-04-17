@@ -546,6 +546,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   bool _shouldShowForLevel(String levelName) => !_deniedLevels.contains(levelName);
 
+  bool get _joinRss => Statics.levelId >= 6 && Statics.levelId != 13;
+
   bool _shouldShowGeoUnitChange(String levelName, String daayitvaName) => _allowedLevelsForGeoUnitChange.contains(levelName);
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -2549,7 +2551,7 @@ class _HomeScreenState extends State<HomeScreen> {
       title: Statics.getLabel("mainScreenOther"),
       children: [
         _cardRow([
-          if (_shouldShowForLevel(level)) _cardTile(Statics.getLabel('searchJoinRSSScreenLabel'), () => Navigator.of(context).pushNamed(SearchJoinRss.routeName)),
+          if (_joinRss) _cardTile(Statics.getLabel('searchJoinRSSScreenLabel'), () => Navigator.of(context).pushNamed(SearchJoinRss.routeName)),
           _cardTile(Statics.getLabel('searchSwayamsevakScreenBanner'), () => Navigator.of(context).pushNamed(SwayamSevakSearch.routeName)),
         ]),
         _cardRow([

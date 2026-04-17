@@ -68,7 +68,7 @@ class MyAppGlobals {
     return match != null && match.group(1)!.isNotEmpty;
   }
 
-  Future<DropDownModel> getLevelLDB() async {
+  static Future<DropDownModel> getLevelLDB() async {
     var result = await DatabaseHelper.getData("Select * from DaayitwaLevelMaster;");
     var ddmodel = DropDownModel.fromJson(result.first);
     //List<DropDownModel> dropdownlist = result.map((e) => DropDownModel.fromJson(e)).toList();
