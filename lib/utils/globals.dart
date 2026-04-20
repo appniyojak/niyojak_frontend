@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:niyojak_prod/models/response_model/dropdown_level_responsemodel.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
@@ -99,4 +100,23 @@ class MyAppGlobals {
 
     return dropdownLevel >= userLevelId!;
   }
+}
+
+Widget buildDropdownField({
+  required String label,
+  required String? value,
+  required List<DropdownMenuItem<String>> items,
+  required ValueChanged<String?> onChanged,
+  required bool isDisabled,
+}) {
+  return IgnorePointer(
+    ignoring: isDisabled,
+    child: DropdownButtonFormField<String>(
+      decoration: InputDecoration(labelText: label),
+      isExpanded: true,
+      value: (value == null || value.isEmpty) ? null : value,
+      items: items,
+      onChanged: onChanged,
+    ),
+  );
 }

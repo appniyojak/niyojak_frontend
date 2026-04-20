@@ -1953,7 +1953,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
               child: Column(
                 children: [
                   if (_linkedMahaanagar != null)
-                    _buildDropdownField(
+                    buildDropdownField(
                       isDisabled: MyAppGlobals.isDropdownDisabled('Mahaanagar'),
                       label: Statics.getLabel('Mahaanagar'),
                       value: _linkedMahaanagarValue,
@@ -1972,7 +1972,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                       },
                     ),
                   if (_linkedVibhaag != null)
-                    _buildDropdownField(
+                    buildDropdownField(
                       isDisabled: MyAppGlobals.isDropdownDisabled('Vibhaag'),
                       label: Statics.getLabel('Vibhaag'),
                       value: _linkedVibhaagValue,
@@ -1989,7 +1989,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                       },
                     ),
                   if (_linkedbhaag != null && _linkedbhaag!.isNotEmpty)
-                    _buildDropdownField(
+                    buildDropdownField(
                       isDisabled: MyAppGlobals.isDropdownDisabled('Bhaag'),
                       label: Statics.getLabel('Bhaag'),
                       value: _linkedbhaagValue,
@@ -2008,7 +2008,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                       },
                     ),
                   if (_linkedshahar != null && _linkedshahar!.isNotEmpty)
-                    _buildDropdownField(
+                    buildDropdownField(
                       isDisabled: MyAppGlobals.isDropdownDisabled('Nagar'),
                       label: Statics.getLabel('Shahar'),
                       value: _linkedshaharValue,
@@ -2026,7 +2026,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                       },
                     ),
                   if (_linkednagar != null && _linkednagar!.isNotEmpty)
-                    _buildDropdownField(
+                    buildDropdownField(
                       isDisabled: MyAppGlobals.isDropdownDisabled('upnagarUpkhanda'),
                       label: Statics.getLabel('Nagar'),
                       value: _linkednagarValue,
@@ -2045,18 +2045,16 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                       },
                     ),
                   if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
-                    _buildDropdownField(
+                    buildDropdownField(
                       isDisabled: MyAppGlobals.isDropdownDisabled('Mandal'),
                       label: Statics.getLabel('upnagarUpkhanda'),
                       value: _linkedupnagarValue,
-                      items: _linkedupnagar == null
-                          ? []
-                          : _linkedupnagar!
-                              .map((bg) => DropdownMenuItem(
-                                    value: bg.geoUnitID.toString(),
-                                    child: Text(bg.name!),
-                                  ))
-                              .toList(),
+                      items: _linkedupnagar!
+                          .map((bg) => DropdownMenuItem(
+                                value: bg.geoUnitID.toString(),
+                                child: Text(bg.name!),
+                              ))
+                          .toList(),
                       onChanged: MyAppGlobals.isDropdownDisabled('upnagarUpkhanda')
                           ? (value) {
                               if (value == null) return;
@@ -2078,7 +2076,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                             },
                     ),
                   if (_linkedmandal != null && _linkedmandal!.isNotEmpty)
-                    _buildDropdownField(
+                    buildDropdownField(
                       isDisabled: MyAppGlobals.isDropdownDisabled('Graam'),
                       label: Statics.getLabel('Mandal'),
                       value: _linkedmandalValue,
@@ -2096,7 +2094,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                       },
                     ),
                   if (_linkedvasti != null && _linkedvasti!.isNotEmpty)
-                    _buildDropdownField(
+                    buildDropdownField(
                       isDisabled: MyAppGlobals.isDropdownDisabled('Vasti'),
                       label: Statics.getLabel('Vasti'),
                       value: _linkedvastiValue,
@@ -2166,25 +2164,6 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
             isExpanded: _isExpanded,
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildDropdownField({
-    required String label,
-    required String? value,
-    required List<DropdownMenuItem<String>> items,
-    required ValueChanged<String?> onChanged,
-    required bool isDisabled,
-  }) {
-    return IgnorePointer(
-      ignoring: isDisabled,
-      child: DropdownButtonFormField<String>(
-        decoration: InputDecoration(labelText: label),
-        isExpanded: true,
-        value: (value == null || value.isEmpty) ? null : value,
-        items: items,
-        onChanged: onChanged,
       ),
     );
   }
