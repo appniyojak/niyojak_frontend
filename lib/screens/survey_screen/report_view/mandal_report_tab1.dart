@@ -35,6 +35,7 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
     setState(() {
       userLevelId = dm.levelID;
       userGeoUnitId = dm.geoUnitID;
+      ddm = dm;
     });
     await populateAllDropdowns(userLevelId!, dm);
   }
@@ -127,7 +128,7 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
     // Step 6: Mandal
     await populatelinkedMandalDropdown(
       selection.upnagar != null,
-      selection.upnagar != null ? _linkedupnagarValue : _linkedNagarValue,
+      selection.upnagar != null ? _linkedNagarValue : _linkedupnagarValue,
     );
     _selectedGeoUnitId = _linkedmandalValue = (level == 4 ? (dm.geoUnitID ?? "").toString() : selection.mandal) ?? '';
 

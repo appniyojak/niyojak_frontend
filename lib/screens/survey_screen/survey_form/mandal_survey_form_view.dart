@@ -5438,9 +5438,10 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
 
                                   // Check if input is a valid number between 0 and 100
                                   if (!RegExp(r'^\d+$').hasMatch(andajeGharInput) || // only digits
-                                      int.tryParse(andajeGharInput) == null || // not a number
-                                      int.parse(andajeGharInput) < 0 ||
-                                      int.parse(andajeGharInput) > 100) {
+                                      int.tryParse(andajeGharInput) == null // not a number
+                                      ||  int.parse(andajeGharInput) < 0
+                                  // || int.parse(andajeGharInput) > 100
+                                  ) {
                                     Statics.showToast("${Statics.getLabel('persentValidation')}");
                                     return;
                                   }

@@ -149,6 +149,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
     setState(() {
       userLevelId = dm.levelID;
       userGeoUnitId = dm.geoUnitID;
+      ddm = dm;
     });
     await populateAllDropdowns(userLevelId!, dm);
   }
@@ -206,7 +207,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
     // Step 6: Mandal
     await populatelinkedMandalDropdown(
       selection.upnagar != null,
-      selection.upnagar != null ? _linkedupnagarValue : _linkednagarValue,
+      selection.upnagar != null ? _linkednagarValue : _linkedupnagarValue,
     );
     _selectedGeoUnitId = _linkedmandalValue = (level == 4 ? (dm.geoUnitID ?? "").toString() : selection.mandal) ?? '';
 

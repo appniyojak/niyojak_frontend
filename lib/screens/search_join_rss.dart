@@ -74,7 +74,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
   String? _nagarValue = "";
   String? _statusValue = "";
   String? fromAge;
-  String? geoUnitIDnew;
+  // String? geoUnitIDnew;
   String? toAge;
   int? isGender = 0;
 
@@ -99,7 +99,18 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
   @override
   void initState() {
     super.initState();
-    populateDropdown();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) =>  initData());
+  }
+
+  Future<void> initData() async {
+    DropDownModel dm = await MyAppGlobals.getLevelLDB();
+
+    setState(() {
+      userLevelId = dm.levelID;
+      userGeoUnitId = dm.geoUnitID;
+      ddm = dm;
+    });
+    await populateDropdown();
     _searchNew('');
   }
 
@@ -178,16 +189,18 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
     //   _linkedgraamValue = null;
     //   _linkedvastiValue = null;
     // });
-    await populatelinkedMahaanagarDropdown();
-    await populatelinkedVibhaagDropdown('');
     setState(() {
       _linkedMahaanagarValue = _linkedVibhaagValue = _linkedbhaagValue = _linkednagarValue = null;
       _linkedMahaanagar = _linkedVibhaag = _linkedbhaag = _linkednagar = null;
       _selctedLevelName = _selectedGeoUnitId = null;
       _selctedLevel = "praant";
     });
+    await populatelinkedMahaanagarDropdown();
+    await populatelinkedVibhaagDropdown('');
     if (fromClear || userLevelId == null || ddm == null) {
       print("object is null");
+      print("object is null ${userLevelId == null}");
+      print("object is null ${ddm == null}");
       return;
     }
     print("object is not null >>>>>>>>>>>>>>>>>>>>>>");
@@ -439,7 +452,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
     String strInput = json.encode({
       "AppUserID": Statics.userDetails['userID'],
       "SearchCriteria": _searchController.text,
-      "GeoUnitID": geoUnitIDnew,
+      "GeoUnitID": _selectedGeoUnitId,
       "StatusID": statusVal,
       "JoiningDateFrom": fromDate,
       "JoiningDateTo": toDate,
@@ -980,7 +993,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                                                   print(value);
                                                   setState(() {
                                                     _linkedMahaanagarValue = value;
-                                                    geoUnitIDnew = value;
+                                                    _selectedGeoUnitId = value;
                                                     _linkedVibhaagValue = null;
                                                     _linkedMahaanagarDisable = false;
                                                     _linkedVibhaagDisable = false;
@@ -1012,7 +1025,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                                                     _linkedVibhaagValue = value;
                                                     populatelinkedBhaagDropdown(value!);
                                                     type = "vibhag";
-                                                    geoUnitIDnew = value;
+                                                    _selectedGeoUnitId = value;
                                                   });
                                                 },
                                         ),
@@ -1036,7 +1049,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                                                     _linkedbhaagValue = value;
                                                     populatelinkedNagarDropdown(value, null);
                                                     type = "bhag";
-                                                    geoUnitIDnew = value;
+                                                    _selectedGeoUnitId = value;
                                                   });
                                                 },
                                         ),
@@ -1082,7 +1095,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                                                     _linkednagarValue = value;
 
                                                     type = "nagar";
-                                                    geoUnitIDnew = value;
+                                                    _selectedGeoUnitId = value;
                                                   });
                                                 },
                                         ),
@@ -1264,7 +1277,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                             ),
                             MaterialButton(
                                 onPressed: () {
-                                  geoUnitIDnew = null;
+                                  _selectedGeoUnitId = null;
                                   type = "prant";
                                   setState(() {
                                     _bhaagValue = _shaharValue = _nagarValue = null;

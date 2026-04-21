@@ -138,7 +138,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
       _selectedGeoUnitId = _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? "").toString() : selection.upnagar) ?? '';
     }
     if (selection.mandal != null && selection.mandal!.isNotEmpty) {
-      await populatelinkedMandalDropdown(selection.upnagar != null, selection.upnagar != null ? _linkedupnagarValue! : _linkedNagarValue!);
+      await populatelinkedMandalDropdown(selection.upnagar != null, selection.upnagar != null ? _linkedNagarValue! : _linkedupnagarValue!);
       _selectedGeoUnitId = _linkedMandalValue = (level == 4 ? (dm.geoUnitID ?? "").toString() : selection.mandal) ?? '';
     }
     // Step 7: Graam

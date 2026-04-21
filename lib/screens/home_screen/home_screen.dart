@@ -223,6 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       userLevelId = dm.levelID;
       userGeoUnitId = dm.geoUnitID;
+      ddm = dm;
     });
     //await populateAllDropdowns(userLevelId!, dm);
   }

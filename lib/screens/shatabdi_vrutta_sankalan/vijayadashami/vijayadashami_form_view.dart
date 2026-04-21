@@ -16,6 +16,7 @@ import 'package:niyojak_prod/widgets/single_column_row.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../helpers/static_data.dart' as Statics;
+import '../../../models/response_model/dropdown_level_responsemodel.dart';
 import '../../../models/response_model/get_vijaya_dashami_geounit_data.dart';
 import '../../../models/response_model/vasti_up_data_model.dart';
 import '../../../models/response_model/vijayaDashamiInitModel.dart';
@@ -88,7 +89,91 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     presentMatrushaktiController.addListener(_calculateTotal);
     presentMaleController.addListener(_calculateTotal);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) => _getInitialData());
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => initData());
   }
+
+  Future<void> initData() async {
+    DropDownModel dm = await MyAppGlobals.getLevelLDB();
+
+    setState(() {
+      userLevelId = dm.levelID;
+      userGeoUnitId = dm.geoUnitID;
+      ddm = dm;
+    });
+    // await populateAllDropdowns(userLevelId!, dm);
+  }
+  //
+  // // Future<void> _initData() async {
+  // //   await _fetchdataFromDaitwaMaster();
+  // //   await populateDropdown();
+  // // }
+  //
+  // GeoSelection prepareSelection(DropDownModel dm) {
+  //   return GeoSelection(
+  //     mahaanagar: dm.parentMahaanagarID?.toString() ?? '',
+  //     vibhaag: dm.parentVibhaagID?.toString() ?? '',
+  //     bhaag: dm.parentBhaagID?.toString() ?? '',
+  //     nagar: dm.parentNagarID?.toString() ?? '',
+  //     upnagar: dm.parentUpaNagarID?.toString() ?? '',
+  //     mandal: dm.parentMandalID?.toString() ?? '',
+  //     graam: dm.parentGraamID?.toString() ?? '',
+  //     vasti: dm.parentVastiID?.toString() ?? '',
+  //   );
+  // }
+  //
+  // Future<void> populateAllDropdowns(int level, DropDownModel dm) async {
+  //   setState(() {
+  //     _selectedGeoUnitId = _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+  //   });
+  //   final selection = prepareSelection(dm);
+  //
+  //   // Step 1: Mahaanagar
+  //   await populatelinkedMahaanagarDropdown();
+  //   _selectedGeoUnitId = _linkedMahaanagarValue = (level == 9 ? (dm.geoUnitID ?? "").toString() : selection.mahaanagar) ?? '';
+  //   _selctedLevel = 'Mahaanagar';
+  //
+  //   // Step 2: Vibhaag
+  //   await populatelinkedVibhaagDropdown(_linkedMahaanagarValue!);
+  //   _selectedGeoUnitId = _linkedVibhaagValue = (level == 8 ? (dm.geoUnitID ?? "").toString() : selection.vibhaag) ?? '';
+  //   _selctedLevel = 'Vibhaag';
+  //
+  //   // Step 3: Bhaag
+  //   await populatelinkedBhaagDropdown(_linkedVibhaagValue!);
+  //   _selectedGeoUnitId = _linkedbhaagValue = (level == 7 ? (dm.geoUnitID ?? "").toString() : selection.bhaag) ?? '';
+  //   _selctedLevel = 'Bhaag';
+  //
+  //   // Step 4: Nagar
+  //   await populatelinkedNagarDropdown(_linkedBhaagValue, null);
+  //   _selectedGeoUnitId = _linkedNagarValue = (level == 6 ? (dm.geoUnitID ?? "").toString() : selection.nagar) ?? '';
+  //   _selctedLevel = 'Nagar';
+  //
+  //   // Step 5: Upnagar (conditional)
+  //   if (selection.upnagar != null && selection.upnagar!.isNotEmpty) {
+  //     await populatelinkedUpnagarDropdown(_linkedNagarValue);
+  //     _selectedGeoUnitId = _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? "").toString() : selection.upnagar) ?? '';
+  //   }
+  //
+  //   // Step 6: Mandal
+  //   await populatelinkedMandalDropdown(
+  //     selection.upnagar != null,
+  //     selection.upnagar != null ? _linkedNagarValue : _linkedupnagarValue,
+  //   );
+  //   _selectedGeoUnitId = _linkedmandalValue = (level == 4 ? (dm.geoUnitID ?? "").toString() : selection.mandal) ?? '';
+  //
+  //   // Step 7: Graam
+  //   await populatelinkedGraamDropdown(_linkedmandalValue);
+  //   _selectedGeoUnitId = _linkedgraamValue = (level == 3 ? (dm.geoUnitID ?? "").toString() : selection.graam) ?? '';
+  //
+  //   // Step 8: Vasti
+  //   await populatelinkedVastiDropdown(_linkedNagarValue);
+  //   _selectedGeoUnitId = _linkedvastiValue = (level == 2 ? (dm.geoUnitID ?? "").toString() : selection.vasti) ?? '';
+  //
+  //   // if (_linkedVibhaag != null && _linkedVibhaag!.isNotEmpty) _linkedVibhaagName = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedbhaagValue).name;
+  //   // if (_linkedbhaag != null && _linkedbhaag!.isNotEmpty) _linkedbhaagName = _linkedbhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedbhaagValue).name;
+  //   // if (_linkednagar != null && _linkednagar!.isNotEmpty) _linkednagarName = _linkednagar!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedbhaagValue).name;
+  //
+  //   setState(() {});
+  // }
 
   _getInitialData() async {
     final args = ModalRoute.of(context)?.settings.arguments as String?;

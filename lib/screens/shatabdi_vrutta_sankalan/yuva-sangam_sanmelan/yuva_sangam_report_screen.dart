@@ -76,8 +76,11 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
   Future<void> initData() async {
     DropDownModel dm = await MyAppGlobals.getLevelLDB();
 
-    userLevelId = dm.levelID;
-    userGeoUnitId = dm.geoUnitID;
+    setState(() {
+      userLevelId = dm.levelID;
+      userGeoUnitId = dm.geoUnitID;
+      ddm = dm;
+    });
     await populateDropdown(userLevelId!, dm);
     //await populateAllDropdowns(userLevelId!, dm);
   }
@@ -131,7 +134,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
     // Step 6: Mandal
     await populatelinkedMandalDropdown(
       selection.upnagar != null,
-      selection.upnagar != null ? _linkedupnagarValue : _linkednagarValue,
+      selection.upnagar != null ? _linkednagarValue : _linkedupnagarValue,
     );
     _linkedmandalValue = (level == 4 ? dm.geoUnitID.toString() : selection.mandal) ?? '';
 

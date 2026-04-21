@@ -244,7 +244,7 @@ class _SearchSewaVastiState extends State<SearchSewaVasti> {
     }
     // Step 6: mandal (conditional)
     if (selection.mandal != null && selection.mandal!.isNotEmpty) {
-      await populatelinkedMandalDropdown(selection.upnagar != null, selection.upnagar != null ? _linkedupnagarValue! : _linkednagarValue!);
+      await populatelinkedMandalDropdown(selection.upnagar != null, selection.upnagar != null ? _linkednagarValue! : _linkedupnagarValue!);
       _selectedGeoUnitId = _linkedmandalValue = (level == 4 ? (dm.geoUnitID ?? "").toString() : selection.mandal) ?? '';
     }
     // Step 7: Graam

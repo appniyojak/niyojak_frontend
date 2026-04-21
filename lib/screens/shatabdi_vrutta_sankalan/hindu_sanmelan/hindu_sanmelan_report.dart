@@ -83,6 +83,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> with Automati
     setState(() {
       userLevelId = dm.levelID;
       userGeoUnitId = dm.geoUnitID;
+      ddm = dm;
     });
     await populateAllDropdowns(userLevelId!, dm);
   }
