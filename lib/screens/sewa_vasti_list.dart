@@ -654,7 +654,7 @@ class _SearchSewaVastiState extends State<SearchSewaVasti> {
                                     ),
                                   if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
                                     buildDropdownField(
-                                      isDisabled: MyAppGlobals.isDropdownDisabled('Mandal'),
+                                      isDisabled: false,
                                       label: Statics.getLabel('upnagarUpkhanda'),
                                       value: _linkedupnagarValue,
                                       items: _linkedupnagar!
@@ -688,7 +688,7 @@ class _SearchSewaVastiState extends State<SearchSewaVasti> {
                                       isExpanded: true,
                                       value: _linkedmandalValue == "" ? null : _linkedmandalValue,
                                       items: _linkedmandal!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                                      onChanged: MyAppGlobals.isDropdownDisabled('upnagarUpkhanda')
+                                      onChanged: MyAppGlobals.isDropdownDisabled('Mandal')
                                           ? null
                                           : (value) {
                                               setState(() {
@@ -708,7 +708,7 @@ class _SearchSewaVastiState extends State<SearchSewaVasti> {
                                       isExpanded: true,
                                       value: _linkedgraamValue == "" ? null : _linkedgraamValue,
                                       items: _linkedgraam!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                                      onChanged: MyAppGlobals.isDropdownDisabled('upnagarUpkhanda')
+                                      onChanged: MyAppGlobals.isDropdownDisabled('Graam')
                                           ? null
                                           : (value) {
                                               setState(() {

@@ -106,7 +106,7 @@ Widget buildDropdownField({
   required String label,
   required String? value,
   required List<DropdownMenuItem<String>> items,
-  required ValueChanged<String?> onChanged,
+  required ValueChanged<String?>? onChanged,
   required bool isDisabled,
 }) {
   return IgnorePointer(
