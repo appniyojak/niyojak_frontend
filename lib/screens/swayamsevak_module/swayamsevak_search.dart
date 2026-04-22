@@ -1455,6 +1455,13 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
   bool? _noSocks = false;
   bool? _noDanda = false;
 
+  bool? _shishu = false;
+  bool? _baal = false;
+  bool? _tarunVidyarthi = false;
+  bool? _taarunVyavsai = false;
+  bool? _prudhVyavsai = false;
+  bool? _isDobAvail = false;
+
   var _pratidnyaYearCtrl = TextEditingController();
 
   List<StaticMasterBAL>? _program;
@@ -2128,6 +2135,13 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
         //
         "AreaOfInterestIDs": areaOfInterestIDs.trim() == '' ? null : areaOfInterestIDs,
         "AreaOfExpertiseIDs": areaOfExpertiseIDs.trim() == '' ? null : areaOfExpertiseIDs,
+        //
+        "shishu": _shishu,
+        "baal": _baal,
+        "vidhyarthi": _tarunVidyarthi,
+        "vyavsai": _taarunVyavsai,
+        "proudhvyavsai": _prudhVyavsai,
+        "notavaiable": _isDobAvail,
       });
       if (strType == "Search")
         return SwayamsevakProvider().getSwayamsevaks(inputData);
@@ -2912,6 +2926,13 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                   _twtUsage = null;
                   _areaOfInterestForSearch.forEach((e) => e.isSelected = null);
                   _areaOfExpertiseForSearch.forEach((e) => e.isSelected = null);
+                  //
+                  _shishu = null;
+                  _baal = null;
+                  _tarunVidyarthi = null;
+                  _taarunVyavsai = null;
+                  _prudhVyavsai = null;
+                  _isDobAvail = null;
                   // _areaOfInterestForSearch = [];
                   // _areaOfExpertiseForSearch = [];
                 });
@@ -5496,8 +5517,109 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                             }).toList(),
                           ),
                         ),
-                        SizedBox(height: 10),
-                        SizedBox(height: 30),
+                        SizedBox(height: 18),
+                        Legend(legendString: "selectVayogat", fontsize: 18),
+                        SizedBox(height: 5),
+                        Wrap(
+                          direction: Axis.horizontal,
+                          spacing: 10,
+                          children: [
+                            SizedBox(
+                              width: Statics.getDeviceSize(context).width * 0.4,
+                              child: CheckboxListTile(
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                                  title: Text(Statics.getLabel('Shishu'), style: TextStyle(fontSize: 15)),
+                                  checkColor: Colors.white,
+                                  activeColor: Colors.purple,
+                                  value: _shishu == null ? false : _shishu,
+                                  controlAffinity: ListTileControlAffinity.leading,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _shishu = value;
+                                    });
+                                  }),
+                            ),
+                            SizedBox(
+                              width: Statics.getDeviceSize(context).width * 0.4,
+                              child: CheckboxListTile(
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                                  title: Text(Statics.getLabel('Baal'), style: TextStyle(fontSize: 15)),
+                                  checkColor: Colors.white,
+                                  activeColor: Colors.purple,
+                                  value: _baal == null ? false : _baal,
+                                  controlAffinity: ListTileControlAffinity.leading,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _baal = value;
+                                    });
+                                  }),
+                            ),
+                            SizedBox(
+                              width: Statics.getDeviceSize(context).width * 0.4,
+                              child: CheckboxListTile(
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                                  title: Text(Statics.getLabel('TarunVidyaarthi'), style: TextStyle(fontSize: 15)),
+                                  checkColor: Colors.white,
+                                  activeColor: Colors.purple,
+                                  value: _tarunVidyarthi == null ? false : _tarunVidyarthi,
+                                  controlAffinity: ListTileControlAffinity.leading,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _tarunVidyarthi = value;
+                                    });
+                                  }),
+                            ),
+                            SizedBox(
+                              width: Statics.getDeviceSize(context).width * 0.4,
+                              child: CheckboxListTile(
+                                contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                                title: Text(Statics.getLabel('TarunVyavasaayee'), style: TextStyle(fontSize: 15)),
+                                checkColor: Colors.white,
+                                activeColor: Colors.purple,
+                                value: _taarunVyavsai == null ? false : _taarunVyavsai,
+                                controlAffinity: ListTileControlAffinity.leading,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _taarunVyavsai = value;
+                                  });
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              width: Statics.getDeviceSize(context).width * 0.4,
+                              child: CheckboxListTile(
+                                contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                                title: Text(Statics.getLabel('ProudhaVyavasaayeeLabel'), style: TextStyle(fontSize: 15)),
+                                checkColor: Colors.white,
+                                activeColor: Colors.purple,
+                                value: _prudhVyavsai == null ? false : _prudhVyavsai,
+                                controlAffinity: ListTileControlAffinity.leading,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _prudhVyavsai = value;
+                                  });
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              width: Statics.getDeviceSize(context).width * 0.4,
+                              child: CheckboxListTile(
+                                contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                                title: Text(Statics.getLabel('UnkownAge'), style: TextStyle(fontSize: 15)),
+                                checkColor: Colors.white,
+                                activeColor: Colors.purple,
+                                value: _isDobAvail == null ? false : _isDobAvail,
+                                controlAffinity: ListTileControlAffinity.leading,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _isDobAvail = value;
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 100),
                       ],
                     ),
                   ),

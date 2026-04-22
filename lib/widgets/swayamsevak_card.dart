@@ -1632,7 +1632,7 @@ class _SwayamsevakCardState extends State<SwayamsevakCard> {
         children: [
           Icon(icon, size: 14, color: Colors.deepPurple),
           SizedBox(width: 4),
-          Text(text, style: TextStyle(fontSize: 11.5, color: Colors.deepPurple[700], fontWeight: FontWeight.w500)),
+          Flexible(child: Text(text, style: TextStyle(fontSize: 11.5, color: Colors.deepPurple[700], fontWeight: FontWeight.w500))),
         ],
       ),
     );
