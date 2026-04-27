@@ -156,9 +156,17 @@ class _HomeScreenState extends State<HomeScreen> {
   late List<GetCount> _interestlist = [];
   late List<GetCount> _sangayulist = [];
   late List<GetCount> _ghoshwadlist = [];
+
+  late List<GetCount> _tgbloodgroup = [];
+  late List<GetCount> _tgexpertieslist = [];
+  late List<GetCount> _tgmothertonguelist = [];
+  late List<GetCount> _tginterestlist = [];
+  late List<GetCount> _tgsangayulist = [];
+  late List<GetCount> _tgghoshwadlist = [];
   GanveshData? _ganveshData;
   Vehicle? _vehicle;
-
+  GanveshData? _tgganveshData;
+  Vehicle? _tgvehicle;
   // ─── Access-control lists ─────────────────────────────────────────────────
   final List<String> _deniedLevels = ["Shakha", "Saptahik Milan", "शाखा", "साप्ताहिक मिलन"];
 
@@ -380,34 +388,34 @@ class _HomeScreenState extends State<HomeScreen> {
     final sd = data["HomeScreenData"];
     final vd = sd["ShaakhaaVruttaSummaryData"];
     if (sd["BloodGroup"] != null) {
-      _bloodgroup.clear();
-      sd["BloodGroup"].forEach((v) => _bloodgroup.add(GetCount.fromJson(v)));
+      _tgbloodgroup.clear();
+      sd["BloodGroup"].forEach((v) => _tgbloodgroup.add(GetCount.fromJson(v)));
     }
     if (sd["AreaOfExpertise"] != null) {
-      _expertieslist.clear();
-      sd["AreaOfExpertise"].forEach((v) => _expertieslist.add(GetCount.fromJson(v)));
+      _tgexpertieslist.clear();
+      sd["AreaOfExpertise"].forEach((v) => _tgexpertieslist.add(GetCount.fromJson(v)));
     }
     if (sd["AreaOfInterest"] != null) {
-      _interestlist.clear();
-      sd["AreaOfInterest"].forEach((v) => _interestlist.add(GetCount.fromJson(v)));
+      _tginterestlist.clear();
+      sd["AreaOfInterest"].forEach((v) => _tginterestlist.add(GetCount.fromJson(v)));
     }
     if (sd["MotherTongue"] != null) {
-      _mothertonguelist.clear();
-      sd["MotherTongue"].forEach((v) => _mothertonguelist.add(GetCount.fromJson(v)));
+      _tgmothertonguelist.clear();
+      sd["MotherTongue"].forEach((v) => _tgmothertonguelist.add(GetCount.fromJson(v)));
     }
     if (sd["sangaayu"] != null) {
-      _sangayulist.clear();
-      sd["sangaayu"].forEach((v) => _sangayulist.add(GetCount.fromJson(v)));
+      _tgsangayulist.clear();
+      sd["sangaayu"].forEach((v) => _tgsangayulist.add(GetCount.fromJson(v)));
     }
     if (sd["goshwad"] != null) {
-      _ghoshwadlist.clear();
-      sd["goshwad"].forEach((v) => _ghoshwadlist.add(GetCount.fromJson(v)));
+      _tgghoshwadlist.clear();
+      sd["goshwad"].forEach((v) => _tgghoshwadlist.add(GetCount.fromJson(v)));
     }
     if (sd["GanaveshData"] != null) {
-      _ganveshData = GanveshData.fromJson(sd["GanaveshData"]);
+      _tgganveshData = GanveshData.fromJson(sd["GanaveshData"]);
     }
     if (sd['VehicleData'] != null) {
-      _vehicle = Vehicle.fromJson(sd['VehicleData']);
+      _tgvehicle = Vehicle.fromJson(sd['VehicleData']);
     }
     setState(() {
       tgTotalKaaryakartaaCount = sd["TotalKaaryakartaaCount"].toString();
@@ -479,6 +487,9 @@ class _HomeScreenState extends State<HomeScreen> {
       tgTotalSwayamsevakCount = tgMasikMilanCount = tgSanghaMandaliCount = '';
       tgMaasikEQ0 = tgMaasikEQ1 = tgSaaptaahikEQ0 = tgSaaptaahik1To3 = tgSaaptaahikGTE4 = '';
       tgShaakhaaEQ0 = tgShaakhaa1To24 = tgShaakhaaGTE25 = tgShaakhaaEQ30 = '';
+      _tgbloodgroup = _tgexpertieslist = _tginterestlist = _tgmothertonguelist = _tgsangayulist = _tgghoshwadlist = [];
+      _tgganveshData = null;
+      _tgvehicle = null;
       _isTgSearching = false;
     });
   }
@@ -1989,21 +2000,21 @@ class _HomeScreenState extends State<HomeScreen> {
         unknown: tgUnknownAgeCount,
       ),
       const SizedBox(height: 15),
-      _swayamsewakByBloodGroup(bloodgroup: _bloodgroup),
+      _swayamsewakByBloodGroup(bloodgroup: _tgbloodgroup),
       const SizedBox(height: 15),
-      _swayamsewakExperties(expertieslist: _expertieslist),
+      _swayamsewakExperties(expertieslist: _tgexpertieslist),
       const SizedBox(height: 15),
-      _swayamsewakInterests(interestlist: _interestlist),
+      _swayamsewakInterests(interestlist: _tginterestlist),
       const SizedBox(height: 15),
-      _swayamsewakInfoWidget(infolist: _mothertonguelist, heading: 'Mother Tongue'),
+      _swayamsewakInfoWidget(infolist: _tgmothertonguelist, heading: 'Mother Tongue'),
       const SizedBox(height: 15),
-      _swayamsewakInfoWidget(infolist: _sangayulist, heading: 'Sangayu'),
+      _swayamsewakInfoWidget(infolist: _tgsangayulist, heading: 'Sangayu'),
       const SizedBox(height: 15),
-      _swayamsewakInfoWidget(infolist: _ghoshwadlist, heading: 'Ghoshwad'),
+      _swayamsewakInfoWidget(infolist: _tgghoshwadlist, heading: 'Ghoshwad'),
       const SizedBox(height: 15),
-      _ganveshData == null ? SizedBox() : _swayamsewakUniform(ganvesh: _ganveshData!),
+      _tgganveshData == null ? SizedBox() : _swayamsewakUniform(ganvesh: _tgganveshData!),
       const SizedBox(height: 15),
-      _vehicle == null ? SizedBox() : _swayamsewakVehicle(vehicle: _vehicle!),
+      _tgvehicle == null ? SizedBox() : _swayamsewakVehicle(vehicle: _tgvehicle!),
       const SizedBox(height: 15),
       _shikshanSection(
         prarambhik: _nullToZero(tgPraarambhikShikshitCount),
@@ -2130,23 +2141,25 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       children: [
         Legend(legendString: heading, fontsize: 18),
-        Wrap(
-            spacing: 15,
-            children: infolist.asMap().entries.map((entry) {
-              int index = entry.key;
-              GetCount e = entry.value;
-              bool islast = index == infolist.length - 1;
-              return Container(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: islast ? normalwidth : maxwidth),
-                  child: Single1ColumnRow(
-                    txtString: e.codeForDisplay,
-                    value: e.cnt.toString(),
-                    valFlex: 3,
-                  ),
-                ),
-              );
-            }).toList()),
+        infolist.isEmpty
+            ? Center(child: Text(Statics.getLabel('NoDataFound')))
+            : Wrap(
+                spacing: 15,
+                children: infolist.asMap().entries.map((entry) {
+                  int index = entry.key;
+                  GetCount e = entry.value;
+                  bool islast = index == infolist.length - 1;
+                  return Container(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: islast ? normalwidth : maxwidth),
+                      child: Single1ColumnRow(
+                        txtString: e.codeForDisplay,
+                        value: e.cnt.toString(),
+                        valFlex: 3,
+                      ),
+                    ),
+                  );
+                }).toList()),
       ],
     );
   }
@@ -2183,20 +2196,22 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       children: [
         Legend(legendString: "Experties", fontsize: 18),
-        ListView.builder(
-          padding: EdgeInsets.zero,
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: expertieslist.length,
-          itemBuilder: (context, index) {
-            var experties = expertieslist[index];
-            return Single1ColumnRow(
-              txtString: experties.codeForDisplay,
-              value: experties.cnt.toString(),
-              fontsize: 15,
-            );
-          },
-        )
+        expertieslist.isEmpty
+            ? Center(child: Text(Statics.getLabel('NoDataFound')))
+            : ListView.builder(
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: expertieslist.length,
+                itemBuilder: (context, index) {
+                  var experties = expertieslist[index];
+                  return Single1ColumnRow(
+                    txtString: experties.codeForDisplay,
+                    value: experties.cnt.toString(),
+                    fontsize: 15,
+                  );
+                },
+              )
       ],
     );
   }
@@ -2205,20 +2220,22 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       children: [
         Legend(legendString: "Interests", fontsize: 18),
-        ListView.builder(
-          padding: EdgeInsets.zero,
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: interestlist.length,
-          itemBuilder: (context, index) {
-            var interest = interestlist[index];
-            return Single1ColumnRow(
-              txtString: interest.codeForDisplay,
-              value: interest.cnt.toString(),
-              fontsize: 15,
-            );
-          },
-        )
+        interestlist.isEmpty
+            ? Center(child: Text(Statics.getLabel('NoDataFound')))
+            : ListView.builder(
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: interestlist.length,
+                itemBuilder: (context, index) {
+                  var interest = interestlist[index];
+                  return Single1ColumnRow(
+                    txtString: interest.codeForDisplay,
+                    value: interest.cnt.toString(),
+                    fontsize: 15,
+                  );
+                },
+              )
       ],
     );
   }
@@ -2229,43 +2246,48 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         Legend(legendString: "GanveshDetails", fontsize: 18),
         Single1ColumnRow(
-          txtString: Statics.getLabel('HasBelt'),
+          txtString: Statics.getLabel('NoBelt'),
           value: ganvesh.Hasbelt.toString(),
           fontsize: 15,
         ),
         Single1ColumnRow(
-          txtString: Statics.getLabel('HasCap'),
+          txtString: Statics.getLabel('NoCap'),
           value: ganvesh.Hascap.toString(),
           fontsize: 15,
         ),
         Single1ColumnRow(
-          txtString: Statics.getLabel('HasDanda'),
+          txtString: Statics.getLabel('NoDanda'),
           value: ganvesh.Hasdanda.toString(),
           fontsize: 15,
         ),
         Single1ColumnRow(
-          txtString: Statics.getLabel('HasPant'),
+          txtString: Statics.getLabel('NoPant'),
           value: ganvesh.Haspant.toString(),
           fontsize: 15,
         ),
         Single1ColumnRow(
-          txtString: Statics.getLabel('HasShirt'),
+          txtString: Statics.getLabel('NoShirt'),
           value: ganvesh.Hasshirt.toString(),
           fontsize: 15,
         ),
         Single1ColumnRow(
-          txtString: Statics.getLabel('HasShoes'),
+          txtString: Statics.getLabel('NoShoes'),
           value: ganvesh.Hasshoes.toString(),
           fontsize: 15,
         ),
         Single1ColumnRow(
-          txtString: Statics.getLabel('HasSocks'),
+          txtString: Statics.getLabel('NoSocks'),
           value: ganvesh.Hassock.toString(),
           fontsize: 15,
         ),
         Single1ColumnRow(
           txtString: Statics.getLabel('IsGanaveshComplete'),
           value: ganvesh.isganveshcomplted.toString(),
+          fontsize: 15,
+        ),
+        Single1ColumnRow(
+          txtString: Statics.getLabel('SanghaPraveshYearNotFilled'),
+          value: ganvesh.isyearnotfilled.toString(),
           fontsize: 15,
         ),
       ],
@@ -2279,23 +2301,25 @@ class _HomeScreenState extends State<HomeScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Legend(legendString: "SwayamsevakCountByBloodGroup", fontsize: 18),
-        Wrap(
-            spacing: 15,
-            children: bloodgroup.asMap().entries.map((entry) {
-              int index = entry.key;
-              GetCount e = entry.value;
-              bool islast = index == bloodgroup.length - 1;
-              return Container(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: islast ? normalwidth : maxwidth),
-                  child: Single1ColumnRow(
-                    txtString: e.codeForDisplay,
-                    value: e.cnt.toString(),
-                    valFlex: 3,
-                  ),
-                ),
-              );
-            }).toList())
+        bloodgroup.isEmpty
+            ? Center(child: Text(Statics.getLabel('NoDataFound')))
+            : Wrap(
+                spacing: 15,
+                children: bloodgroup.asMap().entries.map((entry) {
+                  int index = entry.key;
+                  GetCount e = entry.value;
+                  bool islast = index == bloodgroup.length - 1;
+                  return Container(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: islast ? normalwidth : maxwidth),
+                      child: Single1ColumnRow(
+                        txtString: e.codeForDisplay,
+                        value: e.cnt.toString(),
+                        valFlex: 3,
+                      ),
+                    ),
+                  );
+                }).toList())
       ],
     );
   }
@@ -2735,21 +2759,23 @@ class GanveshData {
   int? Hasshoes;
   int? Hassock;
   int? isganveshcomplted;
+  int? isyearnotfilled;
 
-  GanveshData({this.Hasbelt, this.Hascap, this.Hasdanda, this.Haspant, this.Hasshirt, this.Hasshoes, this.Hassock, this.isganveshcomplted});
+  GanveshData({this.Hasbelt, this.Hascap, this.Hasdanda, this.Haspant, this.Hasshirt, this.Hasshoes, this.Hassock, this.isganveshcomplted, this.isyearnotfilled});
 
   factory GanveshData.fromJson(Map<String, dynamic> json) {
     return GanveshData(
-      Hasbelt: json['HasBelt'],
-      Hascap: json['HasCap'],
-      Hasdanda: json['HasDanda'],
-      Haspant: json['HasPant'],
-      Hasshirt: json['HasShirt'],
-      Hasshoes: json['HasShoes'],
-      Hassock: json['HasSocks'],
-      isganveshcomplted: json['IsGanaveshComplete'],
-      //cnt: int.tryParse(json['cnt'].toString()) ?? 0,
-    );
+        Hasbelt: json['HasBelt'],
+        Hascap: json['HasCap'],
+        Hasdanda: json['HasDanda'],
+        Haspant: json['HasPant'],
+        Hasshirt: json['HasShirt'],
+        Hasshoes: json['HasShoes'],
+        Hassock: json['HasSocks'],
+        isganveshcomplted: json['IsGanaveshComplete'],
+        isyearnotfilled: json['IsYearNotFilled']
+        //cnt: int.tryParse(json['cnt'].toString()) ?? 0,
+        );
   }
 }
 
