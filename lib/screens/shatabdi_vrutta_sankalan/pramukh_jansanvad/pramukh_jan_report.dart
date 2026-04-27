@@ -102,22 +102,22 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
 
     // Step 1: Mahaanagar
     await populatelinkedMahaanagarDropdown();
-    _selectedGeoUnitId = _linkedMahaanagarValue = (level == 9 ? (dm.geoUnitID ?? "").toString() : selection.mahaanagar) ?? '';
+    _selectedGeoUnitId = _linkedMahaanagarValue = (level == 9 ? (dm.geoUnitID ?? int.tryParse(_linkedVibhaagValue ?? "0") ?? 0).toString() : selection.mahaanagar) ?? '';
     _selctedLevel = 'Mahaanagar';
 
     // Step 2: Vibhaag
     await populatelinkedVibhaagDropdown(_linkedMahaanagarValue!);
-    _selectedGeoUnitId = _linkedVibhaagValue = (level == 8 ? (dm.geoUnitID ?? "").toString() : selection.vibhaag) ?? '';
+    _selectedGeoUnitId = _linkedVibhaagValue = (level == 8 ? (dm.geoUnitID ?? int.tryParse(_linkedVibhaagValue ?? "0") ?? 0).toString() : selection.vibhaag) ?? '';
     _selctedLevel = 'Vibhaag';
 
     // Step 3: Bhaag
     await populatelinkedBhaagDropdown(_linkedVibhaagValue!);
-    _selectedGeoUnitId = _linkedbhaagValue = (level == 7 ? (dm.geoUnitID ?? "").toString() : selection.bhaag) ?? '';
+    _selectedGeoUnitId = _linkedbhaagValue = (level == 7 ? (dm.geoUnitID ?? int.tryParse(_linkedVibhaagValue ?? "0") ?? 0).toString() : selection.bhaag) ?? '';
     _selctedLevel = 'Bhaag';
 
     // Step 4: Nagar
     await populatelinkedNagarDropdown(_linkedbhaagValue, null);
-    _selectedGeoUnitId = _linkednagarValue = (level == 6 ? (dm.geoUnitID ?? "").toString() : selection.nagar) ?? '';
+    _selectedGeoUnitId = _linkednagarValue = (level == 6 ? (dm.geoUnitID ?? int.tryParse(_linkedbhaagValue ?? "0") ?? 0).toString() : selection.nagar) ?? _linkedbhaagValue;
     _selctedLevel = 'Nagar';
 
     // if (_linkedVibhaag != null && _linkedVibhaag!.isNotEmpty) _linkedVibhaagName = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedBhaagValue).name;
@@ -410,15 +410,15 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
             ),
           ],
           rows: data.map((level) {
-                return DataRow(cells: [
-                  DataCell(Container(
-                      constraints: BoxConstraints(minWidth: 40, maxWidth: 115),
-                      child: Text(
-                        level.levelname == "रेल्वे स्थानक / शहर / अन्य" ? "अन्य" : level.levelname.toString(),
-                        style: TextStyle(fontWeight: FontWeight.w600),
-                      ))),
-                ]);
-              }).toList() +
+            return DataRow(cells: [
+              DataCell(Container(
+                  constraints: BoxConstraints(minWidth: 40, maxWidth: 115),
+                  child: Text(
+                    level.levelname == "रेल्वे स्थानक / शहर / अन्य" ? "अन्य" : level.levelname.toString(),
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ))),
+            ]);
+          }).toList() +
               [
                 DataRow(color: MaterialStatePropertyAll(Colors.yellow.shade100), cells: [
                   DataCell(Container(
@@ -448,18 +448,19 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
                 headingRowColor: MaterialStateColor.resolveWith((_) => Colors.purple.shade100),
                 border: TableBorder(verticalInside: BorderSide(width: 0.7, color: Colors.grey.shade200)),
                 columns: headers
-                    .map((header) => DataColumn(
-                          label: Container(
-                            constraints: BoxConstraints(minWidth: 40, maxWidth: 200),
-                            // constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.2),
-                            child: Text(header, softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold)),
-                          ),
-                        ))
+                    .map((header) =>
+                    DataColumn(
+                      label: Container(
+                        constraints: BoxConstraints(minWidth: 40, maxWidth: 200),
+                        // constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.2),
+                        child: Text(header, softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                    ))
                     .toList(),
                 rows: data.map((level) {
-                      return DataRow(cells: [
-                        DataCell(Center(
-                            child: Row(
+                  return DataRow(cells: [
+                    DataCell(Center(
+                        child: Row(
                           mainAxisAlignment: (level.baithakcount != 0 && level.baithaknames != null && level.baithaknames!.isNotEmpty) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
                           children: [
                             if (level.baithakcount != 0 && level.baithaknames != null && level.baithaknames!.isNotEmpty) SizedBox(width: 1),
@@ -476,52 +477,52 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
                               ),
                           ],
                         ))),
-                        // DataCell(Center(
-                        //     child: Row(
-                        //   mainAxisAlignment: (level.startedcnt != 0 && level.startedname != null && level.startedname!.isNotEmpty) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
-                        //   children: [
-                        //     if (level.startedcnt != 0 && level.startedname != null && level.startedname!.isNotEmpty) SizedBox(width: 1),
-                        //     Container(
-                        //         margin: EdgeInsets.only(right: (level.startedcnt != 0 && level.startedname != null && level.startedname!.isNotEmpty) ? 0 : 10),
-                        //         child: Text(level.startedcnt.toString())),
-                        //     if (level.startedcnt != 0 && level.startedname != null && level.startedname!.isNotEmpty)
-                        //       InkWell(
-                        //         borderRadius: BorderRadius.circular(50),
-                        //         onTap: () {
-                        //           showInfoDialogBox(names: level.startedname ?? "", title: Statics.getLabel("sadbhavReportTable15"));
-                        //         },
-                        //         child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
-                        //       ),
-                        //   ],
-                        // ))),
-                        // if (showRemaining)
-                        //   DataCell(Center(
-                        //       child: Row(
-                        //     mainAxisAlignment: (level.remainingcnt != 0 && level.remainingname != null && level.remainingname!.isNotEmpty) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
-                        //     children: [
-                        //       if (level.remainingcnt != 0 && level.remainingname != null && level.remainingname!.isNotEmpty) SizedBox(width: 1),
-                        //       Container(
-                        //           margin: EdgeInsets.only(right: (level.remainingcnt != 0 && level.remainingname != null && level.remainingname!.isNotEmpty) ? 0 : 10),
-                        //           child: Text(level.remainingcnt.toString())),
-                        //       if (level.remainingcnt != 0 && level.remainingname != null && level.remainingname!.isNotEmpty)
-                        //         InkWell(
-                        //           borderRadius: BorderRadius.circular(50),
-                        //           onTap: () {
-                        //             showInfoDialogBox(names: level.remainingname ?? "", title: Statics.getLabel("sadbhavReportTable155"));
-                        //           },
-                        //           child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
-                        //         ),
-                        //     ],
-                        //   ))),
-                        // DataCell(Center(child: Text(level.namecount.toString()))),
-                        DataCell(Center(child: Text(level.totalmalecount.toString()))),
-                        DataCell(Center(child: Text(level.presentmale.toString()))),
-                        DataCell(Center(child: Text(level.totalfemalecount.toString()))),
-                        DataCell(Center(child: Text(level.presentfemale.toString()))),
-                        DataCell(Center(child: Text(level.totalcount.toString()))),
-                        DataCell(Center(child: Text(level.totalpresentcount.toString()))),
-                      ]);
-                    }).toList() +
+                    // DataCell(Center(
+                    //     child: Row(
+                    //   mainAxisAlignment: (level.startedcnt != 0 && level.startedname != null && level.startedname!.isNotEmpty) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                    //   children: [
+                    //     if (level.startedcnt != 0 && level.startedname != null && level.startedname!.isNotEmpty) SizedBox(width: 1),
+                    //     Container(
+                    //         margin: EdgeInsets.only(right: (level.startedcnt != 0 && level.startedname != null && level.startedname!.isNotEmpty) ? 0 : 10),
+                    //         child: Text(level.startedcnt.toString())),
+                    //     if (level.startedcnt != 0 && level.startedname != null && level.startedname!.isNotEmpty)
+                    //       InkWell(
+                    //         borderRadius: BorderRadius.circular(50),
+                    //         onTap: () {
+                    //           showInfoDialogBox(names: level.startedname ?? "", title: Statics.getLabel("sadbhavReportTable15"));
+                    //         },
+                    //         child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
+                    //       ),
+                    //   ],
+                    // ))),
+                    // if (showRemaining)
+                    //   DataCell(Center(
+                    //       child: Row(
+                    //     mainAxisAlignment: (level.remainingcnt != 0 && level.remainingname != null && level.remainingname!.isNotEmpty) ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                    //     children: [
+                    //       if (level.remainingcnt != 0 && level.remainingname != null && level.remainingname!.isNotEmpty) SizedBox(width: 1),
+                    //       Container(
+                    //           margin: EdgeInsets.only(right: (level.remainingcnt != 0 && level.remainingname != null && level.remainingname!.isNotEmpty) ? 0 : 10),
+                    //           child: Text(level.remainingcnt.toString())),
+                    //       if (level.remainingcnt != 0 && level.remainingname != null && level.remainingname!.isNotEmpty)
+                    //         InkWell(
+                    //           borderRadius: BorderRadius.circular(50),
+                    //           onTap: () {
+                    //             showInfoDialogBox(names: level.remainingname ?? "", title: Statics.getLabel("sadbhavReportTable155"));
+                    //           },
+                    //           child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
+                    //         ),
+                    //     ],
+                    //   ))),
+                    // DataCell(Center(child: Text(level.namecount.toString()))),
+                    DataCell(Center(child: Text(level.totalmalecount.toString()))),
+                    DataCell(Center(child: Text(level.presentmale.toString()))),
+                    DataCell(Center(child: Text(level.totalfemalecount.toString()))),
+                    DataCell(Center(child: Text(level.presentfemale.toString()))),
+                    DataCell(Center(child: Text(level.totalcount.toString()))),
+                    DataCell(Center(child: Text(level.totalpresentcount.toString()))),
+                  ]);
+                }).toList() +
                     [
                       DataRow(color: MaterialStatePropertyAll(Colors.yellow.shade100), cells: [
                         // DataCell(Center(
@@ -542,39 +543,39 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
                         //   ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.namecount ?? 0)).toString(),
-                          style: TextStyle(fontWeight: FontWeight.w700),
-                        ))),
+                              data.fold(0, (sum, item) => sum + (item.namecount ?? 0)).toString(),
+                              style: TextStyle(fontWeight: FontWeight.w700),
+                            ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.totalmalecount ?? 0)).toString(),
-                          style: TextStyle(fontWeight: FontWeight.w700),
-                        ))),
+                              data.fold(0, (sum, item) => sum + (item.totalmalecount ?? 0)).toString(),
+                              style: TextStyle(fontWeight: FontWeight.w700),
+                            ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.presentmale ?? 0)).toString(),
-                          style: TextStyle(fontWeight: FontWeight.w700),
-                        ))),
+                              data.fold(0, (sum, item) => sum + (item.presentmale ?? 0)).toString(),
+                              style: TextStyle(fontWeight: FontWeight.w700),
+                            ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.totalfemalecount ?? 0)).toString(),
-                          style: TextStyle(fontWeight: FontWeight.w700),
-                        ))),
+                              data.fold(0, (sum, item) => sum + (item.totalfemalecount ?? 0)).toString(),
+                              style: TextStyle(fontWeight: FontWeight.w700),
+                            ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.presentfemale ?? 0)).toString(),
-                          style: TextStyle(fontWeight: FontWeight.w700),
-                        ))),
+                              data.fold(0, (sum, item) => sum + (item.presentfemale ?? 0)).toString(),
+                              style: TextStyle(fontWeight: FontWeight.w700),
+                            ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.totalcount ?? 0)).toString(),
-                          style: TextStyle(fontWeight: FontWeight.w700),
-                        ))),
+                              data.fold(0, (sum, item) => sum + (item.totalcount ?? 0)).toString(),
+                              style: TextStyle(fontWeight: FontWeight.w700),
+                            ))),
                         DataCell(Center(
                             child: Text(
-                          data.fold(0, (sum, item) => sum + (item.totalpresentcount ?? 0)).toString(),
-                          style: TextStyle(fontWeight: FontWeight.w700),
-                        ))),
+                              data.fold(0, (sum, item) => sum + (item.totalpresentcount ?? 0)).toString(),
+                              style: TextStyle(fontWeight: FontWeight.w700),
+                            ))),
                       ])
                     ],
               ),
@@ -600,7 +601,10 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
               title: Text(title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Colors.purple.shade400)),
               content: SingleChildScrollView(
                 child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
                   child: Scrollbar(
                     controller: _scrollController,
                     thumbVisibility: true,
@@ -620,18 +624,25 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
                         columns: [
                           DataColumn(
                               label: Container(
-                            constraints: BoxConstraints(maxWidth: 40),
-                            child: Text(" "),
-                          )),
+                                constraints: BoxConstraints(maxWidth: 40),
+                                child: Text(" "),
+                              )),
                           DataColumn(
                               label: Container(
-                            constraints: BoxConstraints(minWidth: MediaQuery.sizeOf(context).width * 0.5),
-                            child: Text(
-                              "${Statics.getLabel('Name')}",
-                            ),
-                          )),
+                                constraints: BoxConstraints(minWidth: MediaQuery
+                                    .sizeOf(context)
+                                    .width * 0.5),
+                                child: Text(
+                                  "${Statics.getLabel('Name')}",
+                                ),
+                              )),
                         ],
-                        rows: names.split(",").toList().asMap().entries.map((entry) {
+                        rows: names
+                            .split(",")
+                            .toList()
+                            .asMap()
+                            .entries
+                            .map((entry) {
                           int index = entry.key;
                           var data = entry.value;
                           return DataRow(cells: [
@@ -695,10 +706,11 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
                       label: Statics.getLabel('Mahaanagar'),
                       value: _linkedMahaanagarValue,
                       items: _linkedMahaanagar!
-                          .map((bg) => DropdownMenuItem(
-                                value: bg.geoUnitID.toString(),
-                                child: Text(bg.name!),
-                              ))
+                          .map((bg) =>
+                          DropdownMenuItem(
+                            value: bg.geoUnitID.toString(),
+                            child: Text(bg.name!),
+                          ))
                           .toList(),
                       onChanged: (value) async {
                         final selectedItem = _linkedMahaanagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
@@ -722,10 +734,11 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
                       label: Statics.getLabel('Vibhaag'),
                       value: _linkedVibhaagValue,
                       items: _linkedVibhaag!
-                          .map((bg) => DropdownMenuItem(
-                                value: bg.geoUnitID.toString(),
-                                child: Text(bg.name!),
-                              ))
+                          .map((bg) =>
+                          DropdownMenuItem(
+                            value: bg.geoUnitID.toString(),
+                            child: Text(bg.name!),
+                          ))
                           .toList(),
                       onChanged: (value) {
                         final selectedItem = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
@@ -746,10 +759,11 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
                       label: Statics.getLabel('Bhaag'),
                       value: _linkedbhaagValue,
                       items: _linkedbhaag!
-                          .map((bg) => DropdownMenuItem(
-                                value: bg.geoUnitID.toString(),
-                                child: Text(bg.name!),
-                              ))
+                          .map((bg) =>
+                          DropdownMenuItem(
+                            value: bg.geoUnitID.toString(),
+                            child: Text(bg.name!),
+                          ))
                           .toList(),
                       onChanged: (value) {
                         final selectedItem = _linkedbhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
@@ -794,10 +808,11 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
                       label: Statics.getLabel('Nagar'),
                       value: _linkednagarValue,
                       items: _linkednagar!
-                          .map((bg) => DropdownMenuItem(
-                                value: bg.geoUnitID.toString(),
-                                child: Text(bg.name!),
-                              ))
+                          .map((bg) =>
+                          DropdownMenuItem(
+                            value: bg.geoUnitID.toString(),
+                            child: Text(bg.name!),
+                          ))
                           .toList(),
                       onChanged: (value) {
                         final selectedItem = _linkednagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
@@ -892,8 +907,14 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
                           horizontal: 35,
                           vertical: 5,
                         ),
-                        color: Theme.of(context).primaryColor,
-                        textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                        color: Theme
+                            .of(context)
+                            .primaryColor,
+                        textColor: Theme
+                            .of(context)
+                            .primaryTextTheme
+                            .labelMedium
+                            ?.color,
                         onPressed: () async {
                           _selctedLevelNameList = [];
                           setState(() {});

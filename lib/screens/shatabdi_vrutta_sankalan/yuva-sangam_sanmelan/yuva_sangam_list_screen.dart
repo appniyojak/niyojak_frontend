@@ -103,6 +103,44 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
 
   // AbhiyanSwayamsevakdata? initialData;
 
+  List<Map<String, dynamic>> getFilteredKaryakramLevels(int levelId) {
+    Map<int, String> levelMap = {
+      1: "Bhaag",
+      4: "other",
+      5: "Nagar",
+      6: "upnagarUpkhanda",
+      7: "Mandal",
+    };
+
+    List<int> allowedIds;
+
+    switch (levelId) {
+      case 7:
+        allowedIds = [1, 4, 5, 6, 7];
+        break;
+
+      case 6:
+        allowedIds = [1, 5, 6, 7];
+        break;
+
+      case 13:
+        allowedIds = [1, 6, 7];
+        break;
+
+      case 4:
+        allowedIds = [7];
+        break;
+
+      default:
+        return karyakramLevelsList;
+    }
+
+    return allowedIds.map((id) {
+      final key = Statics.getLabel(levelMap[id]!);
+      return {key: id};
+    }).toList();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -118,7 +156,16 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
       userLevelId = dm.levelID;
       userGeoUnitId = dm.geoUnitID;
       ddm = dm;
-      _selectedKaryakramLevelId = dm.levelID==7 ? 1 : dm.levelID==6 ? 5 : dm.levelID==13 ? 6 : dm.levelID==4 ? 7 : null;
+      _selectedKaryakramLevelId = dm.levelID == 7
+          ? 1
+          : dm.levelID == 6
+              ? 5
+              : dm.levelID == 13
+                  ? 6
+                  : dm.levelID == 4
+                      ? 7
+                      : null;
+      karyakramLevelsList = getFilteredKaryakramLevels(dm.levelID ?? 0);
     });
     await populateDropdown();
     getKendraListData();
@@ -145,28 +192,28 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
 
     // Step 1: Mahaanagar
     await populatelinkedMahaanagarDropdown();
-    _selectedGeoUnitId = _linkedMahaanagarValue = (level == 9 ? (dm.geoUnitID ?? "").toString() : selection.mahaanagar) ?? '';
+    _selectedGeoUnitId = _linkedMahaanagarValue = (level == 9 ? (dm.geoUnitID ?? int.tryParse(_linkedVibhaagValue ?? "0") ?? 0).toString() : selection.mahaanagar) ?? '';
     _selctedLevel = 'Mahaanagar';
 
     // Step 2: Vibhaag
     await populatelinkedVibhaagDropdown(_linkedMahaanagarValue!);
-    _selectedGeoUnitId = _linkedVibhaagValue = (level == 8 ? (dm.geoUnitID ?? "").toString() : selection.vibhaag) ?? '';
+    _selectedGeoUnitId = _linkedVibhaagValue = (level == 8 ? (dm.geoUnitID ?? int.tryParse(_linkedVibhaagValue ?? "0") ?? 0).toString() : selection.vibhaag) ?? '';
     _selctedLevel = 'Vibhaag';
 
     // Step 3: Bhaag
     await populatelinkedBhaagDropdown(_linkedVibhaagValue!);
-    _selectedGeoUnitId = _linkedbhaagValue = (level == 7 ? (dm.geoUnitID ?? "").toString() : selection.bhaag) ?? '';
+    _selectedGeoUnitId = _linkedbhaagValue = (level == 7 ? (dm.geoUnitID ?? int.tryParse(_linkedVibhaagValue ?? "0") ?? 0).toString() : selection.bhaag) ?? '';
     _selctedLevel = 'Bhaag';
 
     // Step 4: Nagar
     await populatelinkedNagarDropdown(_linkedbhaagValue);
-    _selectedGeoUnitId = _linkednagarValue = (level == 6 ? (dm.geoUnitID ?? "").toString() : selection.nagar) ?? '';
+    _selectedGeoUnitId = _linkednagarValue = (level == 6 ? (dm.geoUnitID ?? int.tryParse(_linkedbhaagValue ?? "0") ?? 0).toString() : selection.nagar) ?? _linkedbhaagValue;
     _selctedLevel = 'Nagar';
 
     // Step 5: Upnagar (conditional)
     if (selection.upnagar != null && selection.upnagar!.isNotEmpty) {
       await populatelinkedUpnagarDropdown(_linkednagarValue);
-      _selectedGeoUnitId = _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? "").toString() : selection.upnagar) ?? '';
+      _selectedGeoUnitId = _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? int.tryParse(_linkedbhaagValue ?? "0") ?? 0).toString() : selection.upnagar) ?? '';
     }
 
     // Step 6: Mandal
@@ -174,7 +221,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
       selection.upnagar != null ? "Nagar" : "Upnagar",
       selection.upnagar != null ? _linkednagarValue : _linkedupnagarValue,
     );
-    _selectedGeoUnitId = _linkedmandalValue = (level == 4 ? (dm.geoUnitID ?? "").toString() : selection.mandal) ?? '';
+    _selectedGeoUnitId = _linkedmandalValue = (level == 4 ? (dm.geoUnitID ?? int.tryParse(_linkedbhaagValue ?? "0") ?? 0).toString() : selection.mandal) ?? '';
 
     // // Step 7: Graam
     // await populatelinkedGraamDropdown(_linkedmandalValue);
@@ -391,7 +438,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
     await populatelinkedMahaanagarDropdown();
     await populatelinkedVibhaagDropdown('');
 
-    if (fromClear || userLevelId == null || ddm == null){
+    if (fromClear || userLevelId == null || ddm == null) {
       print("object is null");
       print("object is null ${userLevelId == null}");
       print("object is null ${ddm == null}");

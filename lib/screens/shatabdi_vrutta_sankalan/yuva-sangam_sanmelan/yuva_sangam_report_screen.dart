@@ -105,46 +105,50 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
 
   Future<void> populateAllDropdowns(int level, DropDownModel dm) async {
     setState(() {
-      _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+      _selectedGeoUnitId = _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     });
     final selection = prepareSelection(dm);
 
     // Step 1: Mahaanagar
     await populatelinkedMahaanagarDropdown();
-    _linkedMahaanagarValue = (level == 9 ? dm.geoUnitID.toString() : selection.mahaanagar) ?? '';
+    _selectedGeoUnitId = _linkedMahaanagarValue = (level == 9 ? (dm.geoUnitID ?? int.tryParse(_linkedVibhaagValue ?? "0") ?? 0).toString() : selection.mahaanagar) ?? '';
+    _selctedLevel = 'Mahaanagar';
 
     // Step 2: Vibhaag
     await populatelinkedVibhaagDropdown(_linkedMahaanagarValue!);
-    _linkedVibhaagValue = (level == 8 ? dm.geoUnitID.toString() : selection.vibhaag) ?? '';
+    _selectedGeoUnitId = _linkedVibhaagValue = (level == 8 ? (dm.geoUnitID ?? int.tryParse(_linkedVibhaagValue ?? "0") ?? 0).toString() : selection.vibhaag) ?? '';
+    _selctedLevel = 'Vibhaag';
 
     // Step 3: Bhaag
     await populatelinkedBhaagDropdown(_linkedVibhaagValue!);
-    _linkedbhaagValue = (level == 7 ? dm.geoUnitID.toString() : selection.bhaag) ?? '';
+    _selectedGeoUnitId = _linkedbhaagValue = (level == 7 ? (dm.geoUnitID ?? int.tryParse(_linkedVibhaagValue ?? "0") ?? 0).toString() : selection.bhaag) ?? '';
+    _selctedLevel = 'Bhaag';
 
     // Step 4: Nagar
     await populatelinkedNagarDropdown(_linkedbhaagValue, null);
-    _linkednagarValue = (level == 6 ? dm.geoUnitID.toString() : selection.nagar) ?? '';
+    _selectedGeoUnitId = _linkednagarValue = (level == 6 ? (dm.geoUnitID ?? int.tryParse(_linkedbhaagValue ?? "0") ?? 0).toString() : selection.nagar) ?? _linkedbhaagValue;
+    _selctedLevel = 'Nagar';
 
-    // Step 5: Upnagar (conditional)
-    if (selection.upnagar != null && selection.upnagar!.isNotEmpty) {
-      await populatelinkedUpnagarDropdown(_linkednagarValue);
-      _linkedupnagarValue = (level == 13 ? dm.geoUnitID.toString() : selection.upnagar) ?? '';
-    }
-
-    // Step 6: Mandal
-    await populatelinkedMandalDropdown(
-      selection.upnagar != null,
-      selection.upnagar != null ? _linkednagarValue : _linkedupnagarValue,
-    );
-    _linkedmandalValue = (level == 4 ? dm.geoUnitID.toString() : selection.mandal) ?? '';
-
-    // Step 7: Graam
-    await populatelinkedGraamDropdown(_linkedmandalValue);
-    _linkedgraamValue = (level == 3 ? dm.geoUnitID.toString() : selection.graam) ?? '';
-
-    // Step 8: Vasti
-    await populatelinkedVastiDropdown(_linkednagarValue);
-    _linkedvastiValue = (level == 2 ? dm.geoUnitID.toString() : selection.vasti) ?? '';
+    // // Step 5: Upnagar (conditional)
+    // if (selection.upnagar != null && selection.upnagar!.isNotEmpty) {
+    //   await populatelinkedUpnagarDropdown(_linkednagarValue);
+    //  _selectedGeoUnitId =  _linkedupnagarValue = (level == 13 ? dm.geoUnitID.toString() : selection.upnagar) ?? '';
+    // }
+    //
+    // // Step 6: Mandal
+    // await populatelinkedMandalDropdown(
+    //   selection.upnagar != null,
+    //   selection.upnagar != null ? _linkedupnagarValue : _linkednagarValue,
+    // );
+    // _selectedGeoUnitId = _linkedmandalValue = (level == 4 ? dm.geoUnitID.toString() : selection.mandal) ?? '';
+    //
+    // // Step 7: Graam
+    // await populatelinkedGraamDropdown(_linkedmandalValue);
+    // _selectedGeoUnitId = _linkedgraamValue = (level == 3 ? dm.geoUnitID.toString() : selection.graam) ?? '';
+    //
+    // // Step 8: Vasti
+    // await populatelinkedVastiDropdown(_linkednagarValue);
+    // _selectedGeoUnitId = _linkedvastiValue = (level == 2 ? dm.geoUnitID.toString() : selection.vasti) ?? '';
 
     setState(() {});
   }
