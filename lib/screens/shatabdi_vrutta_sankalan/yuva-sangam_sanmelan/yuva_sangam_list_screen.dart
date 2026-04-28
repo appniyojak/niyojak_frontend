@@ -120,11 +120,11 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
         break;
 
       case 6:
-        allowedIds = [1, 5, 6, 7];
+        allowedIds = [5, 6, 7];
         break;
 
       case 13:
-        allowedIds = [1, 6, 7];
+        allowedIds = [6, 7];
         break;
 
       case 4:

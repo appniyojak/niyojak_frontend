@@ -167,6 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Vehicle? _vehicle;
   GanveshData? _tgganveshData;
   Vehicle? _tgvehicle;
+
   // ─── Access-control lists ─────────────────────────────────────────────────
   final List<String> _deniedLevels = ["Shakha", "Saptahik Milan", "शाखा", "साप्ताहिक मिलन"];
 
@@ -2593,7 +2594,7 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         _cardRow([
           if (_joinRss) _cardTile(Statics.getLabel('searchJoinRSSScreenLabel'), () => Navigator.of(context).pushNamed(SearchJoinRss.routeName)),
-          _cardTile(Statics.getLabel('searchSwayamsevakScreenBanner'), () => Navigator.of(context).pushNamed(SwayamSevakSearch.routeName)),
+          _cardTile(Statics.getLabel('searchSwayamsevakScreenBanner') + "$_joinRss ${Statics.levelId}", () => Navigator.of(context).pushNamed(SwayamSevakSearch.routeName)),
         ]),
         _cardRow([
           _cardTile(Statics.getLabel('Abhiyaan'), () => Navigator.of(context).pushNamed(AbhiyanScreen.routeName)),

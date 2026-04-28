@@ -654,6 +654,8 @@ Future<void> populateUserDetailsMap() async {
     userDetails['DaayitvaNameforshow'] = uData.daayitvaNameforshow.toString();
     userDetails['DaayitvaId'] = uData.daayitvaID.toString();
 
+    print(" Level Id >>>>>>>>>>>>>>>>>>>>>>>>>>> ${uData.levelID}");
+
     userDetails['LevelID'] = uData.levelID.toString();
     userDetails['LevelName'] = uData.levelName.toString();
     //userDetails['LevelNameForDisplay'] = uData.levelNameForDisplay.toString();

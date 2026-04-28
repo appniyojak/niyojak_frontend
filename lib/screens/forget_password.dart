@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:niyojak_prod/helpers/static_data.dart';
 import 'package:pin_input_text_field/pin_input_text_field.dart';
-import 'package:http/http.dart' as http;
+
 import '../helpers/static_data.dart' as Statics;
 import '../models/response_model/get_otp_model.dart';
 import 'login_screen.dart';
@@ -72,7 +74,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   ),
                   Flexible(
                     flex: deviceSize.width > 600 ? 2 : 1,
-                    child:  LogInOTPCard(),
+                    child: LogInOTPCard(),
                   ),
                   Text(
                     'Version - ${Statics.packageInfo['versionNumber']}${Statics.patchSuffix}',
@@ -128,13 +130,21 @@ class _LogInOTPCardState extends State<LogInOTPCard> {
       final response = await http.post(
         Uri.parse(getOtpForForgetPassWord),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'MobileNumber': _phoneNumberController.text.toString()}),
+        body: jsonEncode({'MobileNumber': _phoneNumberController.text.toString(), "fromforget": 1}),
       );
+
+      print(getOtpForForgetPassWord);
+      print(jsonEncode({'MobileNumber': _phoneNumberController.text.toString(), "fromforget": 1}));
 
       if (response.statusCode == 200) {
         var responseBody = json.decode(response.body);
         print("responseBody  $responseBody");
+        print(getOtpModel?.status);
         getOtpModel = GetOtpModel.fromJson(responseBody);
+        if (getOtpModel?.status != "1") {
+          showToast(getOtpModel?.message ?? "----------");
+          return;
+        }
         _otpController.text = getOtpModel!.otp!;
         setState(() {
           _showEnterOtp = true;
@@ -154,7 +164,6 @@ class _LogInOTPCardState extends State<LogInOTPCard> {
     }
   }
 
-
   Future<void> submitChangePassword() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() {
@@ -165,9 +174,9 @@ class _LogInOTPCardState extends State<LogInOTPCard> {
         Uri.parse(forgotPasswordApi),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-              'newpassword': _confirmPasswordController.text.toString(),
-              'SwayamsevakID': getOtpModel!.swayamsevakID,
-            }),
+          'newpassword': _confirmPasswordController.text.toString(),
+          'SwayamsevakID': getOtpModel!.swayamsevakID,
+        }),
       );
       if (response.statusCode == 200) {
         var responseBody = json.decode(response.body);
@@ -234,8 +243,6 @@ class _LogInOTPCardState extends State<LogInOTPCard> {
     }
   }
 
-
-
   void _showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message, style: TextStyle(color: Colors.red))),
@@ -247,6 +254,7 @@ class _LogInOTPCardState extends State<LogInOTPCard> {
       SnackBar(content: Text(message, style: TextStyle(color: Colors.green))),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -263,17 +271,19 @@ class _LogInOTPCardState extends State<LogInOTPCard> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (!_showEnterOtp && !showPasswordFields)
-                TextFormField(
-                  controller: _phoneNumberController,
-                  keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(labelText: Statics.getLabel('mobileNumberLabel'),),
-                  validator: (value) {
-                    if (value == null || value.length != 10) {
-                      return Statics.getLabel('mobileValidation');
-                    }
-                    return null;
-                  },
-                ),
+                  TextFormField(
+                    controller: _phoneNumberController,
+                    keyboardType: TextInputType.phone,
+                    decoration: InputDecoration(
+                      labelText: Statics.getLabel('mobileNumberLabel'),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.length != 10) {
+                        return Statics.getLabel('mobileValidation');
+                      }
+                      return null;
+                    },
+                  ),
                 SizedBox(height: 10),
                 if (_showEnterOtp && !showPasswordFields)
                   Column(
@@ -289,24 +299,20 @@ class _LogInOTPCardState extends State<LogInOTPCard> {
                     ],
                   ),
                 if (!showPasswordFields)
-                ElevatedButton(
-                  onPressed: _isSendingOtp
-                      ? null
-                      : _showEnterOtp && _secondsRemaining > 0
-                      ? null
-                      : _sendOtp,
-                  child: _isSendingOtp
-                      ? CircularProgressIndicator()
-                      : Text(_showEnterOtp && _secondsRemaining > 0
-                      ? '${Statics.getLabel('ReSendOtp')} $_secondsRemaining'
-                      : Statics.getLabel('SendOtp')),
-                ),
+                  ElevatedButton(
+                    onPressed: _isSendingOtp
+                        ? null
+                        : _showEnterOtp && _secondsRemaining > 0
+                            ? null
+                            : _sendOtp,
+                    child: _isSendingOtp
+                        ? CircularProgressIndicator()
+                        : Text(_showEnterOtp && _secondsRemaining > 0 ? '${Statics.getLabel('ReSendOtp')} $_secondsRemaining' : Statics.getLabel('SendOtp')),
+                  ),
                 if (!showPasswordFields && _showEnterOtp)
                   ElevatedButton(
                     onPressed: _isVerifyingOtp ? null : _verifyOtp,
-                    child: _isVerifyingOtp
-                        ? CircularProgressIndicator()
-                        : Text(Statics.getLabel('VerifyOTP')),
+                    child: _isVerifyingOtp ? CircularProgressIndicator() : Text(Statics.getLabel('VerifyOTP')),
                   ),
                 if (showPasswordFields)
                   Column(

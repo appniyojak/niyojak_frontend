@@ -180,9 +180,10 @@ class AuthService {
       Statics.showErrorDialog(context, Statics.getLabel('unableToCompleteProcess'));
       isLoadingNotifier.value = false;
       log("Eroorrrrrrrrrrr  $ex");
-    } catch (error) {
+    } catch (error, stack) {
       print("loginWithPassword 12");
       print(error);
+      print(stack);
       String errorMessage = Statics.getLabel('autheticationFailed');
       LoaderUtils.toggleLoader(context, false);
       Statics.showErrorDialog(context, errorMessage);
@@ -362,13 +363,21 @@ class _LogInOTPCardState extends State<LogInOTPCard> {
       final response = await http.post(
         Uri.parse(getOtpForForgetPassWord),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'MobileNumber': _phoneNumberController.text.toString()}),
+        body: jsonEncode({'MobileNumber': _phoneNumberController.text.toString(), "fromforget": 0}),
       );
+
+      print(getOtpForForgetPassWord);
+      print(jsonEncode({'MobileNumber': _phoneNumberController.text.toString(), "fromforget": 0}));
 
       if (response.statusCode == 200) {
         var responseBody = json.decode(response.body);
         print("responseBody  $responseBody");
         getOtpModel = GetOtpModel.fromJson(responseBody);
+        print(getOtpModel?.status);
+        if (getOtpModel?.status != "1") {
+          showToast(getOtpModel?.message ?? "----------");
+          return;
+        }
         _otpController.text = getOtpModel!.otp!;
         setState(() {
           _showEnterOtp = true;

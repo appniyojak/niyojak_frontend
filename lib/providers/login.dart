@@ -124,7 +124,7 @@ class LogIn {
     if (body != null) {
       // try {
       var abhiyaanDataList = body['LogInData']['AbhiyanSwayamsevakData'];
-      print(jsonEncode(abhiyaanDataList));
+      // print(jsonEncode(abhiyaanDataList));
       print(Statics.userDetails);
       print("usrLogIn 7");
 
@@ -372,6 +372,34 @@ class LogIn {
       if (appDir.existsSync()) {
         appDir.deleteSync(recursive: true);
       }
+      Statics.userDetails = {
+        'userID': '',
+        'MobileNumber': '',
+        'languagePreference': 'Marathi',
+        'isAuthorized': false,
+        'isFirstLogin': false,
+        'DaayitvaGeoUnitID': '',
+        'DaayitvaGeoUnitName': '',
+        'DaayitvaName': '',
+        'LevelID': '',
+        'LevelName': '',
+        //'LevelNameForDisplay': '',
+        'FullName': '',
+        'isUpdatedVersion': false,
+        'LinkedVastiID': '',
+        'LinkedVastiName': '',
+        'LinkedGraamID': '',
+        'LinkedGraamName': '',
+        'LinkedShaakhaaID': '',
+        'LinkedShaakhaaName': '',
+        'LinkedGeoUnitHierarchy': '',
+        'LastLoginTimeStamp': '',
+        'isLoggedIn': 'false',
+        'IsPravaasiKaaryakartaa': false,
+        'can_edit': '',
+        'DaayitvaNameforshow': '',
+        'DaayitvaId': '',
+      };
       await pref.setBool("isRead", isUpdate ? false : true);
       // await pref.setString("appVer", Statics.packageInfo['versionNumber']);
     } catch (e) {
