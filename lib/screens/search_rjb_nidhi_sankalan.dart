@@ -80,19 +80,6 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
     await populateDropdown();
   }
 
-  GeoSelection prepareSelection(DropDownModel dm) {
-    return GeoSelection(
-      mahaanagar: dm.parentMahaanagarID?.toString() ?? '',
-      vibhaag: dm.parentVibhaagID?.toString() ?? '',
-      bhaag: dm.parentBhaagID?.toString() ?? '',
-      nagar: dm.parentNagarID?.toString() ?? '',
-      upnagar: dm.parentUpaNagarID?.toString() ?? '',
-      mandal: dm.parentMandalID?.toString() ?? '',
-      graam: dm.parentGraamID?.toString() ?? '',
-      vasti: dm.parentVastiID?.toString() ?? '',
-    );
-  }
-
   Future<void> populateAllDropdowns(int level, DropDownModel dm) async {
     setState(() {
       _selectedGeoUnitId = _linkedVibhaagValue = _linkedbhaagValue = _linkednagarValue = _linkedvastiValue = _linkedupnagarValue = _linkedgraamValue = _linkedmandalValue = null;
@@ -101,24 +88,48 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
 
     // Step 2: Vibhaag
     await populatelinkedVibhaagDropdown('');
-    _selectedGeoUnitId = _linkedVibhaagValue = (level == 8 ? (dm.geoUnitID ?? "").toString() : selection.vibhaag) ?? '';
-    _selctedLevel = 'Vibhaag';
+    _linkedVibhaagValue = (level == 8 ? (dm.geoUnitID ?? 0).toString() : selection.vibhaag) ?? _linkedVibhaagValue;
+    if (level == 8) {
+      _selectedGeoUnitId = (dm.geoUnitID ?? selection.vibhaag).toString();
+      _selctedLevel = 'Vibhaag';
+    }
 
     // Step 3: Bhaag
     await populatelinkedBhaagDropdown(_linkedVibhaagValue!);
-    _selectedGeoUnitId = _linkedbhaagValue = (level == 7 ? (dm.geoUnitID ?? "").toString() : selection.bhaag) ?? '';
-    _selctedLevel = 'Bhaag';
+    _linkedbhaagValue = (level == 7 ? (dm.geoUnitID ?? 0).toString() : selection.bhaag) ?? _linkedbhaagValue;
+    if (level == 7) {
+      _selectedGeoUnitId = (dm.geoUnitID ?? selection.bhaag).toString();
+      _selctedLevel = 'Bhaag';
+    }
 
     // Step 4: Nagar
     await populatelinkedNagarDropdown(_linkedbhaagValue, null);
-    _selectedGeoUnitId = _linkednagarValue = (level == 6 ? (dm.geoUnitID ?? "").toString() : selection.nagar) ?? '';
-    _selctedLevel = 'Nagar';
+    _linkednagarValue = (level == 6 ? (dm.geoUnitID ?? 0).toString() : selection.nagar) ?? _linkednagarValue;
+    if (level == 6) {
+      _selectedGeoUnitId = (dm.geoUnitID ?? selection.nagar).toString();
+      _selctedLevel = 'Nagar';
+    }
 
     // Step 5: Upnagar (conditional)
     if (selection.upnagar != null && selection.upnagar!.isNotEmpty) {
       await populatelinkedUpnagarDropdown(_linkednagarValue);
-      _selectedGeoUnitId = _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? "").toString() : selection.upnagar) ?? '';
+      _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? 0).toString() : selection.upnagar) ?? _linkedupnagarValue;
+      if (level == 13) {
+        _selectedGeoUnitId = (dm.geoUnitID ?? selection.upnagar).toString();
+        _selctedLevel = 'Upnagar';
+      }
     }
+
+    // Step 6: Mandal
+    // await populatelinkedMandalDropdown(
+    //   selection.upnagar != null ? "Nagar" : "Upnagar",
+    //   selection.upnagar != null ? _linkednagarValue : _linkedupnagarValue,
+    // );
+    // _linkedmandalValue = (level == 4 ? (dm.geoUnitID ?? 0).toString() : selection.mandal) ?? _linkedmandalValue;
+    // if (level == 4) {
+    //   _selectedGeoUnitId = (dm.geoUnitID ?? selection.mandal).toString();
+    //   _selctedLevel = 'Mandal';
+    // }
     // Step 6: mandal (conditional)
     if (selection.mandal != null && selection.mandal!.isNotEmpty) {
       await populatelinkedMandalDropdown(selection.upnagar != null, selection.upnagar != null ? _linkednagarValue! : _linkedupnagarValue!);
@@ -233,6 +244,7 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
     });
     return data;
   }
+
   // void populatelinkedVibhaagDropdown() async {
   //   _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
   //   var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), "", "", "");

@@ -312,7 +312,7 @@ Map<String, String> vaarshikotsavMonths = {
   '12': 'Dec',
 };
 
-final levelId = int.tryParse(Statics.userDetails["LevelID"]?.toString() ?? "0") ?? 0;
+int levelId = int.tryParse(Statics.userDetails["LevelID"]?.toString() ?? "0") ?? 0;
 
 Map<String, dynamic> userDetails = {
   'userID': '',
@@ -673,6 +673,8 @@ Future<void> populateUserDetailsMap() async {
     userDetails['isLoggedIn'] = uData.isLoggedIn;
     userDetails['IsPravaasiKaaryakartaa'] = uData.isPravaasiKaaryakartaa;
   });
+
+  levelId = int.tryParse(Statics.userDetails["LevelID"]?.toString() ?? "0") ?? 0;
 
   var resultLevels = await DatabaseHelper.getData('Select * from LevelMaster;');
   resultLevels.forEach((element) {

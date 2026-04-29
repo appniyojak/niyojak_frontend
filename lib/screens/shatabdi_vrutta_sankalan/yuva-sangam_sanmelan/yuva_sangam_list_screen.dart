@@ -82,7 +82,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
   bool _isViewOnly = false;
   bool dateWise = false;
 
-  List<Map<String, dynamic>> karyakramLevelsList = [
+  List<Map<String, dynamic>> _karyakramLevelsListYuva = [
     {"${Statics.getLabel("Bhaag")}": 1},
     // {"${Statics.getLabel("railwayStation")}": 2},
     // {"${Statics.getLabel("Shahar")}": 3},
@@ -102,44 +102,6 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
   SadbhavKendraMasterdata? selectedKendra;
 
   // AbhiyanSwayamsevakdata? initialData;
-
-  List<Map<String, dynamic>> getFilteredKaryakramLevels(int levelId) {
-    Map<int, String> levelMap = {
-      1: "Bhaag",
-      4: "other",
-      5: "Nagar",
-      6: "upnagarUpkhanda",
-      7: "Mandal",
-    };
-
-    List<int> allowedIds;
-
-    switch (levelId) {
-      case 7:
-        allowedIds = [1, 4, 5, 6, 7];
-        break;
-
-      case 6:
-        allowedIds = [5, 6, 7];
-        break;
-
-      case 13:
-        allowedIds = [6, 7];
-        break;
-
-      case 4:
-        allowedIds = [7];
-        break;
-
-      default:
-        return karyakramLevelsList;
-    }
-
-    return allowedIds.map((id) {
-      final key = Statics.getLabel(levelMap[id]!);
-      return {key: id};
-    }).toList();
-  }
 
   @override
   void initState() {
@@ -165,23 +127,10 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
                   : dm.levelID == 4
                       ? 7
                       : null;
-      karyakramLevelsList = getFilteredKaryakramLevels(dm.levelID ?? 0);
+      _karyakramLevelsListYuva = getFilteredKaryakramLevels(dm.levelID ?? 0);
     });
     await populateDropdown();
     getKendraListData();
-  }
-
-  GeoSelection prepareSelection(DropDownModel dm) {
-    return GeoSelection(
-      mahaanagar: dm.parentMahaanagarID?.toString() ?? '',
-      vibhaag: dm.parentVibhaagID?.toString() ?? '',
-      bhaag: dm.parentBhaagID?.toString() ?? '',
-      nagar: dm.parentNagarID?.toString() ?? '',
-      upnagar: dm.parentUpaNagarID?.toString() ?? '',
-      mandal: dm.parentMandalID?.toString() ?? '',
-      graam: dm.parentGraamID?.toString() ?? '',
-      vasti: dm.parentVastiID?.toString() ?? '',
-    );
   }
 
   Future<void> populateAllDropdowns(int level, DropDownModel dm) async {
@@ -192,28 +141,44 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
 
     // Step 1: Mahaanagar
     await populatelinkedMahaanagarDropdown();
-    _selectedGeoUnitId = _linkedMahaanagarValue = (level == 9 ? (dm.geoUnitID ?? int.tryParse(_linkedVibhaagValue ?? "0") ?? 0).toString() : selection.mahaanagar) ?? '';
-    _selctedLevel = 'Mahaanagar';
+    _linkedMahaanagarValue = (level == 9 ? (dm.geoUnitID ?? 0).toString() : selection.mahaanagar) ?? _linkedMahaanagarValue;
+    if (level == 9) {
+      _selectedGeoUnitId = (dm.geoUnitID ?? selection.mahaanagar).toString();
+      _selctedLevel = 'Mahaanagar';
+    }
 
     // Step 2: Vibhaag
     await populatelinkedVibhaagDropdown(_linkedMahaanagarValue!);
-    _selectedGeoUnitId = _linkedVibhaagValue = (level == 8 ? (dm.geoUnitID ?? int.tryParse(_linkedVibhaagValue ?? "0") ?? 0).toString() : selection.vibhaag) ?? '';
-    _selctedLevel = 'Vibhaag';
+    _linkedVibhaagValue = (level == 8 ? (dm.geoUnitID ?? 0).toString() : selection.vibhaag) ?? _linkedVibhaagValue;
+    if (level == 8) {
+      _selectedGeoUnitId = (dm.geoUnitID ?? selection.vibhaag).toString();
+      _selctedLevel = 'Vibhaag';
+    }
 
     // Step 3: Bhaag
     await populatelinkedBhaagDropdown(_linkedVibhaagValue!);
-    _selectedGeoUnitId = _linkedbhaagValue = (level == 7 ? (dm.geoUnitID ?? int.tryParse(_linkedVibhaagValue ?? "0") ?? 0).toString() : selection.bhaag) ?? '';
-    _selctedLevel = 'Bhaag';
+    _linkedbhaagValue = (level == 7 ? (dm.geoUnitID ?? 0).toString() : selection.bhaag) ?? _linkedbhaagValue;
+    if (level == 7) {
+      _selectedGeoUnitId = (dm.geoUnitID ?? selection.bhaag).toString();
+      _selctedLevel = 'Bhaag';
+    }
 
     // Step 4: Nagar
     await populatelinkedNagarDropdown(_linkedbhaagValue);
-    _selectedGeoUnitId = _linkednagarValue = (level == 6 ? (dm.geoUnitID ?? int.tryParse(_linkedbhaagValue ?? "0") ?? 0).toString() : selection.nagar) ?? _linkedbhaagValue;
-    _selctedLevel = 'Nagar';
+    _linkednagarValue = (level == 6 ? (dm.geoUnitID ?? 0).toString() : selection.nagar) ?? _linkednagarValue;
+    if (level == 6) {
+      _selectedGeoUnitId = (dm.geoUnitID ?? selection.nagar).toString();
+      _selctedLevel = 'Nagar';
+    }
 
     // Step 5: Upnagar (conditional)
     if (selection.upnagar != null && selection.upnagar!.isNotEmpty) {
       await populatelinkedUpnagarDropdown(_linkednagarValue);
-      _selectedGeoUnitId = _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? int.tryParse(_linkedbhaagValue ?? "0") ?? 0).toString() : selection.upnagar) ?? '';
+      _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? 0).toString() : selection.upnagar) ?? _linkedupnagarValue;
+      if (level == 13) {
+        _selectedGeoUnitId = (dm.geoUnitID ?? selection.upnagar).toString();
+        _selctedLevel = 'Upnagar';
+      }
     }
 
     // Step 6: Mandal
@@ -221,8 +186,11 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
       selection.upnagar != null ? "Nagar" : "Upnagar",
       selection.upnagar != null ? _linkednagarValue : _linkedupnagarValue,
     );
-    _selectedGeoUnitId = _linkedmandalValue = (level == 4 ? (dm.geoUnitID ?? int.tryParse(_linkedbhaagValue ?? "0") ?? 0).toString() : selection.mandal) ?? '';
-
+    _linkedmandalValue = (level == 4 ? (dm.geoUnitID ?? 0).toString() : selection.mandal) ?? _linkedmandalValue;
+    if (level == 4) {
+      _selectedGeoUnitId = (dm.geoUnitID ?? selection.mandal).toString();
+      _selctedLevel = 'Mandal';
+    }
     // // Step 7: Graam
     // await populatelinkedGraamDropdown(_linkedmandalValue);
     // _selectedGeoUnitId = _linkedgraamValue = (level == 3 ? (dm.geoUnitID ?? "").toString() : selection.graam) ?? '';
@@ -773,7 +741,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
                                     Expanded(
                                       child: Wrap(
                                         children: [
-                                          _TagChip(label: karyakramLevelsList.firstWhere((e) => e.values.first == _item.shatapdistharlevelid).keys.first),
+                                          _TagChip(label: _karyakramLevelsListYuva.firstWhere((e) => e.values.first == _item.shatapdistharlevelid).keys.first),
                                           const SizedBox(width: 6),
 
                                           // // Taluka tag
@@ -840,7 +808,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
                                   child: GestureDetector(
                                     onTap: () => Navigator.of(context).pushNamed(YuvaSangamFormScreen.routeName, arguments: {
                                       "pkid": _item.pkid,
-                                      "type": karyakramLevelsList.firstWhere((e) => e.values.first == _item.shatapdistharlevelid).keys.first,
+                                      "type": _karyakramLevelsListYuva.firstWhere((e) => e.values.first == _item.shatapdistharlevelid).keys.first,
                                       "date": _item.yuvadate,
                                       "geo": _item.trailNames,
                                     }).then((value) => getKendraListData()),
@@ -963,7 +931,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
                     // ignoring: dateController.text.isEmpty || (baithakId != null && baithakId != 0),
                     label: Statics.getLabel('selectStar'),
                     value: _selectedKaryakramLevelId == null ? null : _selectedKaryakramLevelId.toString(),
-                    items: karyakramLevelsList
+                    items: _karyakramLevelsListYuva
                         .map((bg) => DropdownMenuItem(
                               value: bg.values.first.toString(),
                               child: Text(bg.keys.first),

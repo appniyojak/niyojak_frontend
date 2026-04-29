@@ -72,16 +72,6 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
   int? baithakId;
   bool _isViewOnly = false;
   bool _showSearch = true;
-
-  List<Map<String, dynamic>> karyakramLevelsList = [
-    {"${Statics.getLabel("Bhaag")}": 1},
-    {"${Statics.getLabel("railwayStation")}": 2},
-    {"${Statics.getLabel("Shahar")}": 3},
-    {"${Statics.getLabel("other")}": 4},
-    {"${Statics.getLabel("Nagar")}": 5},
-    {"${Statics.getLabel("upnagarUpkhanda")}": 6},
-    {"${Statics.getLabel("Mandal")}": 7},
-  ];
   int? _selectedKaryakramLevelId;
 
   List<Nagardata> nagarList = [];
@@ -101,23 +91,19 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
       userLevelId = dm.levelID;
       userGeoUnitId = dm.geoUnitID;
       ddm = dm;
-      _selectedKaryakramLevelId = dm.levelID==7 ? 1 : dm.levelID==6 ? 5 : dm.levelID==13 ? 6 : dm.levelID==4 ? 7 : null;
+      _selectedKaryakramLevelId = dm.levelID == 7
+          ? 1
+          : dm.levelID == 6
+              ? 5
+              : dm.levelID == 13
+                  ? 6
+                  : dm.levelID == 4
+                      ? 7
+                      : null;
+      karyakramLevelsListForSadbhav = getFilteredKaryakramLevels(dm.levelID ?? 0, isSadbhav: true);
     });
     await populateDropdown();
     getData();
-  }
-
-  GeoSelection prepareSelection(DropDownModel dm) {
-    return GeoSelection(
-      mahaanagar: dm.parentMahaanagarID?.toString() ?? '',
-      vibhaag: dm.parentVibhaagID?.toString() ?? '',
-      bhaag: dm.parentBhaagID?.toString() ?? '',
-      nagar: dm.parentNagarID?.toString() ?? '',
-      upnagar: dm.parentUpaNagarID?.toString() ?? '',
-      mandal: dm.parentMandalID?.toString() ?? '',
-      graam: dm.parentGraamID?.toString() ?? '',
-      vasti: dm.parentVastiID?.toString() ?? '',
-    );
   }
 
   Future<void> populateAllDropdowns(int level, DropDownModel dm) async {
@@ -128,28 +114,44 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
 
     // Step 1: Mahaanagar
     await populatelinkedMahaanagarDropdown();
-    _selectedGeoUnitIdForCreat = _linkedMahaanagarValue = (level == 9 ? (dm.geoUnitID ?? "").toString() : selection.mahaanagar) ?? '';
-    _selctedLevel = 'Mahaanagar';
+    _linkedMahaanagarValue = (level == 9 ? (dm.geoUnitID ?? 0).toString() : selection.mahaanagar) ?? _linkedMahaanagarValue;
+    if (level == 9) {
+      _selectedGeoUnitIdForCreat = (dm.geoUnitID ?? selection.mahaanagar).toString();
+      _selctedLevel = 'Mahaanagar';
+    }
 
     // Step 2: Vibhaag
     await populatelinkedVibhaagDropdown(_linkedMahaanagarValue!);
-    _selectedGeoUnitIdForCreat = _linkedVibhaagValue = (level == 8 ? (dm.geoUnitID ?? "").toString() : selection.vibhaag) ?? '';
-    _selctedLevel = 'Vibhaag';
+    _linkedVibhaagValue = (level == 8 ? (dm.geoUnitID ?? 0).toString() : selection.vibhaag) ?? _linkedVibhaagValue;
+    if (level == 8) {
+      _selectedGeoUnitIdForCreat = (dm.geoUnitID ?? selection.vibhaag).toString();
+      _selctedLevel = 'Vibhaag';
+    }
 
     // Step 3: Bhaag
     await populatelinkedBhaagDropdown(_linkedVibhaagValue!);
-    _selectedGeoUnitIdForCreat = _linkedbhaagValue = (level == 7 ? (dm.geoUnitID ?? "").toString() : selection.bhaag) ?? '';
-    _selctedLevel = 'Bhaag';
+    _linkedbhaagValue = (level == 7 ? (dm.geoUnitID ?? 0).toString() : selection.bhaag) ?? _linkedbhaagValue;
+    if (level == 7) {
+      _selectedGeoUnitIdForCreat = (dm.geoUnitID ?? selection.bhaag).toString();
+      _selctedLevel = 'Bhaag';
+    }
 
     // Step 4: Nagar
     await populatelinkedNagarDropdown(_linkedbhaagValue);
-    _selectedGeoUnitIdForCreat = _linkednagarValue = (level == 6 ? (dm.geoUnitID ?? "").toString() : selection.nagar) ?? '';
-    _selctedLevel = 'Nagar';
+    _linkednagarValue = (level == 6 ? (dm.geoUnitID ?? 0).toString() : selection.nagar) ?? _linkednagarValue;
+    if (level == 6) {
+      _selectedGeoUnitIdForCreat = (dm.geoUnitID ?? selection.nagar).toString();
+      _selctedLevel = 'Nagar';
+    }
 
     // Step 5: Upnagar (conditional)
     if (selection.upnagar != null && selection.upnagar!.isNotEmpty) {
       await populatelinkedUpnagarDropdown(_linkednagarValue);
-      _selectedGeoUnitIdForCreat = _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? "").toString() : selection.upnagar) ?? '';
+      _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? 0).toString() : selection.upnagar) ?? _linkedupnagarValue;
+      if (level == 13) {
+        _selectedGeoUnitIdForCreat = (dm.geoUnitID ?? selection.upnagar).toString();
+        _selctedLevel = 'Upnagar';
+      }
     }
 
     // Step 6: Mandal
@@ -157,8 +159,11 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
       selection.upnagar != null ? "Nagar" : "Upnagar",
       selection.upnagar != null ? _linkednagarValue : _linkedupnagarValue,
     );
-    _selectedGeoUnitIdForCreat = _linkedmandalValue = (level == 4 ? (dm.geoUnitID ?? "").toString() : selection.mandal) ?? '';
-
+    _linkedmandalValue = (level == 4 ? (dm.geoUnitID ?? 0).toString() : selection.mandal) ?? _linkedmandalValue;
+    if (level == 4) {
+      _selectedGeoUnitIdForCreat = (dm.geoUnitID ?? selection.mandal).toString();
+      _selctedLevel = 'Mandal';
+    }
     // // Step 7: Graam
     // await populatelinkedGraamDropdown(_linkedmandalValue);
     // _selectedGeoUnitId = _linkedgraamValue = (level == 3 ? (dm.geoUnitID ?? "").toString() : selection.graam) ?? '';
@@ -255,7 +260,7 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
     }
     FocusManager.instance.primaryFocus?.unfocus();
     if (!((([2, 3, 4].contains(_selectedKaryakramLevelId)) && _selctedLevel == Statics.getLabel('Bhaag')) ||
-        _selctedLevel == karyakramLevelsList.firstWhere((e) => e.values.first == _selectedKaryakramLevelId).keys.first)) {
+        _selctedLevel == karyakramLevelsListForSadbhav.firstWhere((e) => e.values.first == _selectedKaryakramLevelId).keys.first)) {
       Statics.showToast("Please select the required GeoUnit");
       return;
     }
@@ -307,7 +312,15 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
       _searched = false;
       _selectedGeoUnitIdForCreat = null;
       nagarList = [];
-      _selectedKaryakramLevelId = userLevelId==7 ? 1 : userLevelId==6 ? 5 : userLevelId==13 ? 6 : userLevelId==4 ? 7 : null;
+      _selectedKaryakramLevelId = userLevelId == 7
+          ? 1
+          : userLevelId == 6
+              ? 5
+              : userLevelId == 13
+                  ? 6
+                  : userLevelId == 4
+                      ? 7
+                      : null;
       txtGivenGroupNameController.clear();
       _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedvastiValue = _linkedgraamValue = null;
       _linkedVibhaagValue = _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
@@ -329,7 +342,7 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
     await populatelinkedMahaanagarDropdown();
     await populatelinkedVibhaagDropdown('');
 
-    if (fromClear || userLevelId == null || ddm == null){
+    if (fromClear || userLevelId == null || ddm == null) {
       print("object is null");
       print("object is null ${userLevelId == null}");
       print("object is null ${ddm == null}");
@@ -515,7 +528,7 @@ class _SadbhavCenterCreationScreenState extends State<SadbhavCenterCreationScree
                   // ignoring: dateController.text.isEmpty || (baithakId != null && baithakId != 0),
                   label: Statics.getLabel('selectStar'),
                   value: _selectedKaryakramLevelId == null ? null : _selectedKaryakramLevelId.toString(),
-                  items: karyakramLevelsList
+                  items: karyakramLevelsListForSadbhav
                       .map((bg) => DropdownMenuItem(
                             value: bg.values.first.toString(),
                             child: Text(bg.keys.first),

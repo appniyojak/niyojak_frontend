@@ -372,6 +372,7 @@ class LogIn {
       if (appDir.existsSync()) {
         appDir.deleteSync(recursive: true);
       }
+      Statics.levelId = 0;
       Statics.userDetails = {
         'userID': '',
         'MobileNumber': '',

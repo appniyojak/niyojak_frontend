@@ -92,6 +92,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
     });
     await populateDropdown();
   }
+
   // void populateDropdown() async {
   //   var data = await Statics.getStaticLDB('AnnualBaithakType');
   //   // populatelinkedBhaagDropdown();
@@ -103,19 +104,6 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
   //     _baithakTypes = data;
   //   });
   // }
-
-  GeoSelection prepareSelection(DropDownModel dm) {
-    return GeoSelection(
-      mahaanagar: dm.parentMahaanagarID?.toString() ?? '',
-      vibhaag: dm.parentVibhaagID?.toString() ?? '',
-      bhaag: dm.parentBhaagID?.toString() ?? '',
-      nagar: dm.parentNagarID?.toString() ?? '',
-      upnagar: dm.parentUpaNagarID?.toString() ?? '',
-      mandal: dm.parentMandalID?.toString() ?? '',
-      graam: dm.parentGraamID?.toString() ?? '',
-      vasti: dm.parentVastiID?.toString() ?? '',
-    );
-  }
 
   Future<void> populateAllDropdowns(int level, DropDownModel dm) async {
     setState(() {

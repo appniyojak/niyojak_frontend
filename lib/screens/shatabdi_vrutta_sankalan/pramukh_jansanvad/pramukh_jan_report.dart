@@ -81,18 +81,6 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
   }
 
   //////////////////////////////////////////////////////////////////////////////////////
-  GeoSelection prepareSelection(DropDownModel dm) {
-    return GeoSelection(
-      mahaanagar: dm.parentMahaanagarID?.toString() ?? '',
-      vibhaag: dm.parentVibhaagID?.toString() ?? '',
-      bhaag: dm.parentBhaagID?.toString() ?? '',
-      nagar: dm.parentNagarID?.toString() ?? '',
-      upnagar: dm.parentUpaNagarID?.toString() ?? '',
-      mandal: dm.parentMandalID?.toString() ?? '',
-      graam: dm.parentGraamID?.toString() ?? '',
-      vasti: dm.parentVastiID?.toString() ?? '',
-    );
-  }
 
   Future<void> populateAllDropdowns(int level, DropDownModel dm) async {
     setState(() {
@@ -102,23 +90,35 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
 
     // Step 1: Mahaanagar
     await populatelinkedMahaanagarDropdown();
-    _selectedGeoUnitId = _linkedMahaanagarValue = (level == 9 ? (dm.geoUnitID ?? int.tryParse(_linkedVibhaagValue ?? "0") ?? 0).toString() : selection.mahaanagar) ?? '';
-    _selctedLevel = 'Mahaanagar';
+    _linkedMahaanagarValue = (level == 9 ? (dm.geoUnitID ?? 0).toString() : selection.mahaanagar) ?? _linkedMahaanagarValue;
+    if (level == 9) {
+      _selectedGeoUnitId = (dm.geoUnitID ?? selection.mahaanagar).toString();
+      _selctedLevel = 'Mahaanagar';
+    }
 
     // Step 2: Vibhaag
     await populatelinkedVibhaagDropdown(_linkedMahaanagarValue!);
-    _selectedGeoUnitId = _linkedVibhaagValue = (level == 8 ? (dm.geoUnitID ?? int.tryParse(_linkedVibhaagValue ?? "0") ?? 0).toString() : selection.vibhaag) ?? '';
-    _selctedLevel = 'Vibhaag';
+    _linkedVibhaagValue = (level == 8 ? (dm.geoUnitID ?? 0).toString() : selection.vibhaag) ?? _linkedVibhaagValue;
+    if (level == 8) {
+      _selectedGeoUnitId = (dm.geoUnitID ?? selection.vibhaag).toString();
+      _selctedLevel = 'Vibhaag';
+    }
 
     // Step 3: Bhaag
     await populatelinkedBhaagDropdown(_linkedVibhaagValue!);
-    _selectedGeoUnitId = _linkedbhaagValue = (level == 7 ? (dm.geoUnitID ?? int.tryParse(_linkedVibhaagValue ?? "0") ?? 0).toString() : selection.bhaag) ?? '';
-    _selctedLevel = 'Bhaag';
+    _linkedbhaagValue = (level == 7 ? (dm.geoUnitID ?? 0).toString() : selection.bhaag) ?? _linkedbhaagValue;
+    if (level == 7) {
+      _selectedGeoUnitId = (dm.geoUnitID ?? selection.bhaag).toString();
+      _selctedLevel = 'Bhaag';
+    }
 
     // Step 4: Nagar
     await populatelinkedNagarDropdown(_linkedbhaagValue, null);
-    _selectedGeoUnitId = _linkednagarValue = (level == 6 ? (dm.geoUnitID ?? int.tryParse(_linkedbhaagValue ?? "0") ?? 0).toString() : selection.nagar) ?? _linkedbhaagValue;
-    _selctedLevel = 'Nagar';
+    _linkednagarValue = (level == 6 ? (dm.geoUnitID ?? 0).toString() : selection.nagar) ?? _linkednagarValue;
+    if (level == 6) {
+      _selectedGeoUnitId = (dm.geoUnitID ?? selection.nagar).toString();
+      _selctedLevel = 'Nagar';
+    }
 
     // if (_linkedVibhaag != null && _linkedVibhaag!.isNotEmpty) _linkedVibhaagName = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedBhaagValue).name;
     // if (_linkedBhaag != null && _linkedBhaag!.isNotEmpty) _linkedbhaagName = _linkedBhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedBhaagValue).name;
@@ -470,7 +470,7 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
                               InkWell(
                                 borderRadius: BorderRadius.circular(50),
                                 onTap: () {
-                                  showInfoDialogBox(names: level.baithaknames ?? "", title: Statics.getLabel("sadbhavReportTable1"));
+                                  showInfoDialogBox(names: level.baithaknames ?? "", title: Statics.getLabel("sanvaadReportTable1"));
                                 },
                                 child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
                               ),
@@ -488,7 +488,7 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
                         //       InkWell(
                         //         borderRadius: BorderRadius.circular(50),
                         //         onTap: () {
-                        //           showInfoDialogBox(names: level.startedname ?? "", title: Statics.getLabel("sadbhavReportTable15"));
+                        //           showInfoDialogBox(names: level.startedname ?? "", title: Statics.getLabel("sadbhavReportTable3"));
                         //         },
                         //         child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
                         //       ),
@@ -507,7 +507,7 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
                         //         InkWell(
                         //           borderRadius: BorderRadius.circular(50),
                         //           onTap: () {
-                        //             showInfoDialogBox(names: level.remainingname ?? "", title: Statics.getLabel("sadbhavReportTable155"));
+                        //             showInfoDialogBox(names: level.remainingname ?? "", title: Statics.getLabel("sadbhavReportTable4"));
                         //           },
                         //           child: Icon(Icons.info_rounded, color: CupertinoColors.activeBlue, size: 16),
                         //         ),

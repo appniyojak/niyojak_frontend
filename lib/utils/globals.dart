@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../helpers/database_helper.dart';
+import '../helpers/static_data.dart' as Statics;
 
 //----------------From db----------------//
 DropDownModel? ddm;
@@ -21,6 +22,80 @@ int? userparentUpanagarid;
 int? userparentMandalid;
 int? userParentGramid;
 int? userParentVastiid;
+
+GeoSelection prepareSelection(DropDownModel dm) {
+  return GeoSelection(
+    mahaanagar: (dm.parentMahaanagarID ?? '').toString(),
+    vibhaag: (dm.parentVibhaagID ?? '').toString(),
+    bhaag: (dm.parentBhaagID ?? '').toString(),
+    nagar: (dm.parentNagarID ?? '').toString(),
+    upnagar: (dm.parentUpaNagarID ?? '').toString(),
+    mandal: (dm.parentMandalID ?? '').toString(),
+    graam: (dm.parentGraamID ?? '').toString(),
+    vasti: (dm.parentVastiID ?? '').toString(),
+  );
+}
+
+List<Map<String, dynamic>> karyakramLevelsListForSadbhav = [
+  {"${Statics.getLabel("Bhaag")}": 1},
+  {"${Statics.getLabel("railwayStation")}": 2},
+  {"${Statics.getLabel("Shahar")}": 3},
+  {"${Statics.getLabel("other")}": 4},
+  {"${Statics.getLabel("Nagar")}": 5},
+  {"${Statics.getLabel("upnagarUpkhanda")}": 6},
+  {"${Statics.getLabel("Mandal")}": 7},
+];
+
+List<Map<String, dynamic>> karyakramLevelsList = [
+  {"${Statics.getLabel("Bhaag")}": 1},
+  // {"${Statics.getLabel("railwayStation")}": 2},
+  // {"${Statics.getLabel("Shahar")}": 3},
+  {"${Statics.getLabel("other")}": 4},
+  {"${Statics.getLabel("Nagar")}": 5},
+  {"${Statics.getLabel("upnagarUpkhanda")}": 6},
+  {"${Statics.getLabel("Mandal")}": 7},
+];
+
+List<Map<String, dynamic>> getFilteredKaryakramLevels(int levelId, {bool isSadbhav = false}) {
+  Map<int, String> levelMap = {
+    1: "Bhaag",
+    if (isSadbhav) 2: "railwayStation",
+    if (isSadbhav) 3: "Shahar",
+    4: "other",
+    5: "Nagar",
+    6: "upnagarUpkhanda",
+    7: "Mandal",
+  };
+
+  List<int> allowedIds;
+
+  switch (levelId) {
+    case 7:
+      allowedIds = [1, if (isSadbhav) 2, if (isSadbhav) 3, 4, 5, 6, 7];
+      break;
+
+    case 6:
+      allowedIds = [5, 6, 7];
+      break;
+
+    case 13:
+      allowedIds = [6, 7];
+      break;
+
+    case 4:
+      allowedIds = [7];
+      break;
+
+    default:
+      if (isSadbhav) karyakramLevelsListForSadbhav;
+      return karyakramLevelsList;
+  }
+
+  return allowedIds.map((id) {
+    final key = Statics.getLabel(levelMap[id]!);
+    return {key: id};
+  }).toList();
+}
 
 class MyAppGlobals {
   static String checkTextNullEmpty(String? txt) {
@@ -98,7 +173,7 @@ class MyAppGlobals {
       return dropdownLevel >= usLevelid;
     }
 
-    return dropdownLevel >= userLevelId!;
+    return dropdownLevel >= (Statics.levelId);
   }
 }
 
@@ -107,7 +182,7 @@ Widget buildDropdownField({
   required String? value,
   required List<DropdownMenuItem<String>> items,
   required ValueChanged<String?>? onChanged,
-  required bool isDisabled,
+  bool isDisabled = false,
 }) {
   return IgnorePointer(
     ignoring: isDisabled,
