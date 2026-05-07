@@ -82,7 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
   // ─── Target level ──────────────────────────────────────────────────────────
   int _tgLevelID = 13;
   String _selctedLevelName = "praant";
-  String _selctedGeoUnitId = "0";
+
+  //String _selctedGeoUnitId = "0";
 
   // ─── My – Shaakhaa Vrutta Summary ─────────────────────────────────────────
   String? myMaasikEQ0 = '', myMaasikEQ1 = '';
@@ -597,7 +598,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _fetchTargetDashboardData(int levelID) async {
     _tgLevelID = levelID;
     setState(() => _isTgSearching = true);
-    final data = await Statics.getDashboardDataByGeoUnit(Statics.userDetails["userID"], _selctedGeoUnitId);
+    final data = await Statics.getDashboardDataByGeoUnit(Statics.userDetails["userID"], _selectedGeoUnitId!);
     if (data['Status'] != "Success") {
       _clearTargetData();
       return;
@@ -2119,6 +2120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       _selectedGeoUnitId = value;
                       populatelinkedShaharDropdown(value!);
                       populatelinkedNagarDropdown(value, null);
+                      _fetchTargetDashboardData(7);
                     });
                   },
                 ),
