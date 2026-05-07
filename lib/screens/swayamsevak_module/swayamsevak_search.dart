@@ -3096,6 +3096,7 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                         });
                                       },
                                     ),
+                                    //------------------------changes---------------//
                                     // if(_linkedbhaag != null)
                                     // DropdownButtonFormField(
                                     //   decoration: InputDecoration(labelText: Statics.getLabel('Bhaag')),
@@ -3153,47 +3154,47 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                     //   SizedBox(
                                     //     height: 10,
                                     //   ),
-                                    if (_linkedmandal != null && _linkedmandal!.length > 0)
-                                      DropdownButtonFormField(
-                                        decoration: InputDecoration(labelText: Statics.getLabel('Mandal')),
-                                        isExpanded: true,
-                                        value: _linkedmandalValue == "" ? null : _linkedmandalValue,
-                                        items: _linkedmandal!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _linkedmandalValue = value;
-                                            populatelinkedGraamDropdown(value!);
-                                          });
-                                        },
-                                      ),
-                                    if (_linkedmandal != null && _linkedmandal!.length > 0)
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                    if (_linkedgraam != null && _linkedgraam!.length > 0)
-                                      DropdownButtonFormField(
-                                        decoration: InputDecoration(labelText: Statics.getLabel('Graam')),
-                                        isExpanded: true,
-                                        value: _linkedgraamValue == "" ? null : _linkedgraamValue,
-                                        items: _linkedgraam!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _linkedgraamValue = value;
-                                          });
-                                        },
-                                      ),
-                                    if (_linkedvasti != null && _linkedvasti!.length > 0)
-                                      DropdownButtonFormField(
-                                        decoration: InputDecoration(labelText: Statics.getLabel('Vasti')),
-                                        isExpanded: true,
-                                        value: _linkedvastiValue == "" ? null : _linkedvastiValue,
-                                        items: _linkedvasti!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _linkedvastiValue = value;
-                                          });
-                                        },
-                                      ),
+                                    // if (_linkedmandal != null && _linkedmandal!.length > 0)
+                                    //   DropdownButtonFormField(
+                                    //     decoration: InputDecoration(labelText: Statics.getLabel('Mandal')),
+                                    //     isExpanded: true,
+                                    //     value: _linkedmandalValue == "" ? null : _linkedmandalValue,
+                                    //     items: _linkedmandal!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                    //     onChanged: (value) {
+                                    //       setState(() {
+                                    //         _linkedmandalValue = value;
+                                    //         populatelinkedGraamDropdown(value!);
+                                    //       });
+                                    //     },
+                                    //   ),
+                                    // if (_linkedmandal != null && _linkedmandal!.length > 0)
+                                    //   SizedBox(
+                                    //     height: 10,
+                                    //   ),
+                                    // if (_linkedgraam != null && _linkedgraam!.length > 0)
+                                    //   DropdownButtonFormField(
+                                    //     decoration: InputDecoration(labelText: Statics.getLabel('Graam')),
+                                    //     isExpanded: true,
+                                    //     value: _linkedgraamValue == "" ? null : _linkedgraamValue,
+                                    //     items: _linkedgraam!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                    //     onChanged: (value) {
+                                    //       setState(() {
+                                    //         _linkedgraamValue = value;
+                                    //       });
+                                    //     },
+                                    //   ),
+                                    // if (_linkedvasti != null && _linkedvasti!.length > 0)
+                                    //   DropdownButtonFormField(
+                                    //     decoration: InputDecoration(labelText: Statics.getLabel('Vasti')),
+                                    //     isExpanded: true,
+                                    //     value: _linkedvastiValue == "" ? null : _linkedvastiValue,
+                                    //     items: _linkedvasti!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                                    //     onChanged: (value) {
+                                    //       setState(() {
+                                    //         _linkedvastiValue = value;
+                                    //       });
+                                    //     },
+                                    //   ),
                                   ],
                                 ),
                               ),

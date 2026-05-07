@@ -2122,28 +2122,28 @@ class _HomeScreenState extends State<HomeScreen> {
                     });
                   },
                 ),
-              if (_linkedshahar != null && _linkedshahar!.isNotEmpty)
-                buildDropdownField(
-                  isDisabled: MyAppGlobals.isDropdownDisabled('Nagar'),
-                  label: Statics.getLabel('Shahar'),
-                  value: _linkedshaharValue,
-                  items: _linkedshahar!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
-                  onChanged: (value) {
-                    final item = _linkedshahar!.firstWhere((g) => g.geoUnitID.toString() == value);
-                    setState(() {
-                      _linkedshaharValue = value;
-                      _selectedGeoUnitId = value;
-                      _selctedLevel = 'Shahar';
-                      _selctedLevelName = item.name ?? "";
-                      _linkedshaharName = item.name ?? "";
-                      populatelinkedNagarDropdown(null, value);
-                    });
-                    _fetchTargetDashboardData(7);
-                  },
-                ),
+              // if (_linkedshahar != null && _linkedshahar!.isNotEmpty)
+              //   buildDropdownField(
+              //     isDisabled: MyAppGlobals.isDropdownDisabled('Nagar'),
+              //     label: Statics.getLabel('Shahar'),
+              //     value: _linkedshaharValue,
+              //     items: _linkedshahar!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
+              //     onChanged: (value) {
+              //       final item = _linkedshahar!.firstWhere((g) => g.geoUnitID.toString() == value);
+              //       setState(() {
+              //         _linkedshaharValue = value;
+              //         _selectedGeoUnitId = value;
+              //         _selctedLevel = 'Shahar';
+              //         _selctedLevelName = item.name ?? "";
+              //         _linkedshaharName = item.name ?? "";
+              //         populatelinkedNagarDropdown(null, value);
+              //       });
+              //       _fetchTargetDashboardData(7);
+              //     },
+              //   ),
               if (_linkednagar != null && _linkednagar!.isNotEmpty)
                 buildDropdownField(
-                  isDisabled: MyAppGlobals.isDropdownDisabled('upnagarUpkhanda'),
+                  isDisabled: MyAppGlobals.isDropdownDisabled('Nagar'),
                   label: Statics.getLabel('Nagar'),
                   value: _linkednagarValue,
                   items: _linkednagar!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
@@ -2163,7 +2163,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
                 buildDropdownField(
-                  isDisabled: MyAppGlobals.isDropdownDisabled('Mandal'),
+                  isDisabled: MyAppGlobals.isDropdownDisabled('upnagarUpkhanda'),
                   label: Statics.getLabel('upnagarUpkhanda'),
                   value: _linkedupnagarValue,
                   items: _linkedupnagar!
@@ -2194,7 +2194,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               if (_linkedmandal != null && _linkedmandal!.isNotEmpty)
                 buildDropdownField(
-                  isDisabled: MyAppGlobals.isDropdownDisabled('Graam'),
+                  isDisabled: MyAppGlobals.isDropdownDisabled('Mandal'),
                   label: Statics.getLabel('Mandal'),
                   value: _linkedmandalValue,
                   items: _linkedmandal!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
@@ -2213,8 +2213,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               if (_linkedgraam != null && _linkedgraam!.isNotEmpty)
                 buildDropdownField(
-                  isDisabled: MyAppGlobals.isDropdownDisabled('Vasti'),
-                  label: Statics.getLabel('Vasti'),
+                  isDisabled: MyAppGlobals.isDropdownDisabled('Graam'),
+                  label: Statics.getLabel('Graam'),
                   value: _linkedgraamValue,
                   items: _linkedgraam!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
                   onChanged: (value) {
@@ -2582,11 +2582,11 @@ class _HomeScreenState extends State<HomeScreen> {
           value: ganvesh.isganveshcomplted.toString(),
           fontsize: 15,
         ),
-        Single1ColumnRow(
-          txtString: Statics.getLabel('SanghaPraveshYearNotFilled'),
-          value: ganvesh.isyearnotfilled.toString(),
-          fontsize: 15,
-        ),
+        // Single1ColumnRow(
+        //   txtString: Statics.getLabel('SanghaPraveshYearNotFilled'),
+        //   value: ganvesh.isyearnotfilled.toString(),
+        //   fontsize: 15,
+        // ),
       ],
     );
   }
@@ -2845,10 +2845,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return _card(
       title: Statics.getLabel("shatabdiVarshaVruttaTitle"),
       children: [
-        _cardRow([
-          _cardTile(Statics.getLabel('vijayaDashamiUtsav') + '\n' + Statics.getLabel('Vrutta'), () => Navigator.of(context).pushNamed(VijayadashamiFormView.routeName)),
-          _cardTile(Statics.getLabel('vijayaDashamiUtsav') + ' ' + Statics.getLabel('Reportonly'), () => Navigator.of(context).pushNamed(VijayadashamiFormReport.routeName)),
-        ]),
+        if (_fromAboveMandal)
+          _cardRow([
+            _cardTile(Statics.getLabel('vijayaDashamiUtsav') + '\n' + Statics.getLabel('Vrutta'), () => Navigator.of(context).pushNamed(VijayadashamiFormView.routeName)),
+            _cardTile(Statics.getLabel('vijayaDashamiUtsav') + ' ' + Statics.getLabel('Reportonly'), () => Navigator.of(context).pushNamed(VijayadashamiFormReport.routeName)),
+          ]),
         _cardRow([
           _cardTile(Statics.getLabel("gruhSamparkAbhiyan"), () => Navigator.of(context).pushNamed(GruhAbhiyaanMainTabScreen.routeName)),
           _cardTile(Statics.getLabel("hinduSammelan"), () => Navigator.of(context).pushNamed(HinduSanmelanMainTab.routeName)),
@@ -2875,10 +2876,11 @@ class _HomeScreenState extends State<HomeScreen> {
           _cardTile(Statics.getLabel('vastiSurvey'), () => Navigator.of(context).pushNamed(VastiSurveyFormScreen.routeName)),
           _cardTile(Statics.getLabel('mandalSurvey'), () => Navigator.of(context).pushNamed(MandalSurveyFormScreen.routeName)),
         ]),
-        _cardRow([
-          _cardTile(Statics.getLabel('vastiSurveyReport'), () => Navigator.of(context).pushNamed(VastiSurveyReportScreen.routeName)),
-          _cardTile(Statics.getLabel('mandalSurveyReport'), () => Navigator.of(context).pushNamed(MandalSurveyReportScreen.routeName)),
-        ]),
+        if (_fromAboveMandal)
+          _cardRow([
+            _cardTile(Statics.getLabel('vastiSurveyReport'), () => Navigator.of(context).pushNamed(VastiSurveyReportScreen.routeName)),
+            _cardTile(Statics.getLabel('mandalSurveyReport'), () => Navigator.of(context).pushNamed(MandalSurveyReportScreen.routeName)),
+          ]),
       ],
     );
   }
@@ -3057,23 +3059,21 @@ class GanveshData {
   int? Hasshoes;
   int? Hassock;
   int? isganveshcomplted;
-  int? isyearnotfilled;
 
-  GanveshData({this.Hasbelt, this.Hascap, this.Hasdanda, this.Haspant, this.Hasshirt, this.Hasshoes, this.Hassock, this.isganveshcomplted, this.isyearnotfilled});
+  GanveshData({this.Hasbelt, this.Hascap, this.Hasdanda, this.Haspant, this.Hasshirt, this.Hasshoes, this.Hassock, this.isganveshcomplted});
 
   factory GanveshData.fromJson(Map<String, dynamic> json) {
     return GanveshData(
-        Hasbelt: json['HasBelt'],
-        Hascap: json['HasCap'],
-        Hasdanda: json['HasDanda'],
-        Haspant: json['HasPant'],
-        Hasshirt: json['HasShirt'],
-        Hasshoes: json['HasShoes'],
-        Hassock: json['HasSocks'],
-        isganveshcomplted: json['IsGanaveshComplete'],
-        isyearnotfilled: json['IsYearNotFilled']
-        //cnt: int.tryParse(json['cnt'].toString()) ?? 0,
-        );
+      Hasbelt: json['HasBelt'],
+      Hascap: json['HasCap'],
+      Hasdanda: json['HasDanda'],
+      Haspant: json['HasPant'],
+      Hasshirt: json['HasShirt'],
+      Hasshoes: json['HasShoes'],
+      Hassock: json['HasSocks'],
+      isganveshcomplted: json['IsGanaveshComplete'],
+      //cnt: int.tryParse(json['cnt'].toString()) ?? 0,
+    );
   }
 }
 

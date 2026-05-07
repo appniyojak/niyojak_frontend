@@ -315,7 +315,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
       "GeoUnitName": englishNameController.text,
     });
     print("_submitForm" + inputData);
-    // Statics.savelevelUpdatedata(context, inputData);
+    Statics.savelevelUpdatedata(context, inputData);
   }
 
   @override
