@@ -15,20 +15,31 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8
     }
 
+    flavorDimensions += ["environment"]
+    productFlavors {
+        dev {
+            dimension "environment"
+            applicationId "com.softiq.niyojak_dev"
+            resValue "string", "app_name", "Niyojak Dev"
+        }
+        prod {
+            dimension "environment"
+            applicationId "com.softiq.niyojak_prod"
+            resValue "string", "app_name", "Niyojak"
+        }
+    }
+
     defaultConfig {
-        applicationId = "com.softiq.niyojak_prod"
         minSdk = 27
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         multiDexEnabled true
     }
-
     buildTypes {
         release {
             signingConfig = signingConfigs.debug
@@ -43,8 +54,5 @@ flutter {
 }
 
 dependencies {
-    // ... your other dependencies
-
-    // add core library desugaring implementation
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
 }

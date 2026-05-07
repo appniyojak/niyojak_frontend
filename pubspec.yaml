@@ -83,10 +83,15 @@ dependency_overrides:
 
 
 
-flutter_icons:
-  image_path: 'lib/assets/images/rss1.jpg'
+flutter_launcher_icons:
   android: true
   ios: true
+  remove_alpha_ios: true
+
+  image_path: "lib/assets/images/rss1.jpg"
+
+
+
 
 dev_dependencies:
   flutter_test:

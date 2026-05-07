@@ -2,9 +2,45 @@
   "project_info": {
     "project_number": "1086430340320",
     "project_id": "niyojak-cdd79",
-    "storage_bucket": "niyojak-cdd79.appspot.com"
+    "storage_bucket": "niyojak-cdd79.firebasestorage.app"
   },
   "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1086430340320:android:58eacd0a10cb54f0e51c85",
+        "android_client_info": {
+          "package_name": "com.softiq.niyojak_dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1086430340320-i29kv1g19sojtinrbe2sb5ng8em1i9im.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFVIJZsoZlGeWrYybnRrddfG-OyiMKMUg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1086430340320-i29kv1g19sojtinrbe2sb5ng8em1i9im.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1086430340320-6ct5o8geqaiuh5tn3ai5s9eq7v61kt9t.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.app.niyojakProd"
+              }
+            }
+          ]
+        }
+      }
+    },
     {
       "client_info": {
         "mobilesdk_app_id": "1:1086430340320:android:1695c34ef3e4ff72e51c85",
@@ -27,6 +63,14 @@
           "android_info": {
             "package_name": "com.softiq.niyojak_prod",
             "certificate_hash": "38216ea36bf139b52ef502126f22be4c5adc25b4"
+          }
+        },
+        {
+          "client_id": "1086430340320-ns1tro8dnis5qhorc77ocm90obo1bm70.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.softiq.niyojak_prod",
+            "certificate_hash": "d887e9bf5e42ebb76c7a734601590b95372ec5e0"
           }
         },
         {

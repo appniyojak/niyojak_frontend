@@ -4,6 +4,49 @@ A new Flutter project.
 
 ## Getting Started
 
+# Commands
+
+## Build AAB
+
+### Dev
+```bash
+flutter build appbundle --flavor dev
+```
+
+### Prod
+```bash
+flutter build appbundle --flavor prod
+```
+
+---
+
+## Run App
+
+### Dev
+```bash
+flutter run --flavor dev
+```
+
+### Prod
+```bash
+flutter run --flavor prod
+```
+
+---
+
+## Build APK
+
+### Dev
+```bash
+flutter build apk --flavor dev
+```
+
+### Prod
+```bash
+flutter build apk --flavor prod
+```
+---
+
 This project is a starting point for a Flutter application.
 
 A few resources to get you started if this is your first Flutter project:

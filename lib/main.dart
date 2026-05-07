@@ -262,7 +262,7 @@ class NiyojakAppState extends State<NiyojakApp> {
                   foregroundColor: Colors.white,
                 ),
                 scaffoldBackgroundColor: Colors.white,
-                tabBarTheme: TabBarTheme(
+                tabBarTheme: TabBarThemeData(
                   labelColor: Colors.white, // Color for selected tab text
                   unselectedLabelColor: Colors.white70, // Color for unselected tab text
                 ),
@@ -271,6 +271,15 @@ class NiyojakAppState extends State<NiyojakApp> {
                 primarySwatch: Colors.purple,
                 fontFamily: 'Lato',
                 visualDensity: VisualDensity.adaptivePlatformDensity,
+              ),
+              builder: (c,child)=> SafeArea(
+                top: false,
+                child: GestureDetector(
+                  onTap: (){
+                    FocusScope.of(context).unfocus();
+                  },
+                  child: child,
+                ),
               ),
               home: SplashScreenCheck(),
               routes: {
@@ -372,7 +381,7 @@ class NiyojakAppState extends State<NiyojakApp> {
                 child: Container(
                   decoration: BoxDecoration(borderRadius: const BorderRadius.horizontal(left: Radius.circular(5)), color: Colors.red.withValues(alpha: 0.7)),
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  child: Text("D ", style: const TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w600)),
+                  child: Text("Dev ", style: const TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w600)),
                 ),
               ),
           ],

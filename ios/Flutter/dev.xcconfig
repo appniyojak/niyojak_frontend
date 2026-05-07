@@ -1,0 +1,4 @@
+#include "Generated.xcconfig"
+FLUTTER_APP_FLAVOR=dev
+PRODUCT_BUNDLE_IDENTIFIER=com.app.niyojakDev
+PRODUCT_NAME=Niyojak Dev
