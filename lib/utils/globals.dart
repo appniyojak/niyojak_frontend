@@ -159,7 +159,12 @@ class MyAppGlobals {
 
   static Future<DropDownModel> getLevelLDB() async {
     var result = await DatabaseHelper.getData("Select * from DaayitwaLevelMaster;");
-    var ddmodel = DropDownModel.fromJson(result.first);
+    var ddmodel;
+    if (result.isNotEmpty) {
+      ddmodel = DropDownModel.fromJson(result.first);
+    } else {
+      print("result is empty");
+    }
     //List<DropDownModel> dropdownlist = result.map((e) => DropDownModel.fromJson(e)).toList();
     return ddmodel;
   }

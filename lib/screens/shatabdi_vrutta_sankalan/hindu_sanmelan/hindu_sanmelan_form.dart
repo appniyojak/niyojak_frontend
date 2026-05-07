@@ -152,6 +152,27 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
       ddm = dm;
     });
     await populateAllDropdowns(userLevelId!, dm);
+
+    if (userLevelId == 2 || userLevelId == 3) {
+      _selctedLevelNameList = [];
+      setState(() {});
+      _selctedLevelNameList.addAll([
+        _linkedbhaagName,
+        _linkedshaharName,
+        _linkednagarName,
+        _linkedupnagarValue,
+        _linkedmandalName,
+        _linkedgraamName,
+        _linkedvastiName,
+      ]);
+      await _getForm();
+      setState(() {
+        _selctedLevelNames = _selctedLevelNameList.where((e) => e != null && e.isNotEmpty).cast<String>().join(' -> ');
+        _searched = true;
+        _isExpanded = false;
+        isVastiSearch = true;
+      });
+    }
   }
 
   // Future<void> _initData() async {
@@ -217,13 +238,13 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.mandal).toString();
       _selctedLevel = 'Mandal';
     }
-    // // Step 7: Graam
-    // await populatelinkedGraamDropdown(_linkedmandalValue);
-    // _linkedgraamValue = (level == 3 ? (dm.geoUnitID ?? "").toString() : selection.graam) ?? '';
-    // if (level == 3) {
-    //   _selectedGeoUnitId = (dm.geoUnitID ?? selection.graam).toString();
-    //   _selctedLevel = 'Graam';
-    // }
+    // Step 7: Graam
+    await populatelinkedGraamDropdown(_linkedmandalValue);
+    _linkedgraamValue = (level == 3 ? (dm.geoUnitID ?? "").toString() : selection.graam) ?? '';
+    if (level == 3) {
+      _selectedGeoUnitId = (dm.geoUnitID ?? selection.graam).toString();
+      _selctedLevel = 'Graam';
+    }
     // Step 8: Vasti
     await populatelinkedVastiDropdown(_linkednagarValue);
     _linkedvastiValue = (level == 2 ? (dm.geoUnitID ?? "").toString() : selection.vasti) ?? '';
@@ -479,13 +500,13 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
     return data;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedShaharDropdown(String bhaagIDStr) async {
-    _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-    _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
-    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', '', isAbhiyaan: false);
-    setState(() => _linkedshahar = data.isNotEmpty ? data : null);
-    return data;
-  }
+  // Future<List<GeoUnitMasterBAL>> populatelinkedShaharDropdown(String bhaagIDStr) async {
+  //   _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+  //   _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
+  //   final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', '', isAbhiyaan: false);
+  //   setState(() => _linkedshahar = data.isNotEmpty ? data : null);
+  //   return data;
+  // }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
     _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
@@ -510,6 +531,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
       _linkedupnagar = (mnDD.length > 0 ? mnDD : null);
       //_linkedupnagarValue = (userparentUpanagarid ?? userGeoUnitId).toString();
     });
+
     return mnDD;
   }
 
@@ -519,13 +541,18 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
     _linkedmandal = _linkedgraam = null;
     var mnDD;
     if (haveParentUp) {
+      print("i am in parents upnagar");
       mnDD = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, "Upnagar", '');
+      print("${mnDD}");
     } else {
       mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, "Nagar", '');
     }
+
     setState(() {
       _linkedmandal = (mnDD.length > 0 ? mnDD : null);
     });
+    if (_linkedmandal != null) {}
+
     return mnDD;
   }
 
@@ -2015,32 +2042,32 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                           _selctedLevelName = item.name ?? "";
                           _linkedbhaagName = item.name ?? "";
                           _selectedGeoUnitId = value;
-                          populatelinkedShaharDropdown(value!);
+                          //populatelinkedShaharDropdown(value!);
                           populatelinkedNagarDropdown(value, null);
                         });
                       },
                     ),
-                  if (_linkedshahar != null && _linkedshahar!.isNotEmpty)
-                    buildDropdownField(
-                      isDisabled: MyAppGlobals.isDropdownDisabled('Nagar'),
-                      label: Statics.getLabel('Shahar'),
-                      value: _linkedshaharValue,
-                      items: _linkedshahar!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
-                      onChanged: (value) {
-                        final item = _linkedshahar!.firstWhere((g) => g.geoUnitID.toString() == value);
-                        setState(() {
-                          _linkedshaharValue = value;
-                          _selectedGeoUnitId = value;
-                          _selctedLevel = 'Shahar';
-                          _selctedLevelName = item.name ?? "";
-                          _linkedshaharName = item.name ?? "";
-                          populatelinkedNagarDropdown(null, value);
-                        });
-                      },
-                    ),
+                  // if (_linkedshahar != null && _linkedshahar!.isNotEmpty)
+                  //   buildDropdownField(
+                  //     isDisabled: MyAppGlobals.isDropdownDisabled('Nagar'),
+                  //     label: Statics.getLabel('Shahar'),
+                  //     value: _linkedshaharValue,
+                  //     items: _linkedshahar!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
+                  //     onChanged: (value) {
+                  //       final item = _linkedshahar!.firstWhere((g) => g.geoUnitID.toString() == value);
+                  //       setState(() {
+                  //         _linkedshaharValue = value;
+                  //         _selectedGeoUnitId = value;
+                  //         _selctedLevel = 'Shahar';
+                  //         _selctedLevelName = item.name ?? "";
+                  //         _linkedshaharName = item.name ?? "";
+                  //         populatelinkedNagarDropdown(null, value);
+                  //       });
+                  //     },
+                  //   ),
                   if (_linkednagar != null && _linkednagar!.isNotEmpty)
                     buildDropdownField(
-                      isDisabled: MyAppGlobals.isDropdownDisabled('upnagarUpkhanda'),
+                      isDisabled: MyAppGlobals.isDropdownDisabled('Nagar'),
                       label: Statics.getLabel('Nagar'),
                       value: _linkednagarValue,
                       items: _linkednagar!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
@@ -2052,6 +2079,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                           _selctedLevel = 'Nagar';
                           _selctedLevelName = item.name ?? "";
                           _linkednagarName = item.name ?? "";
+                          populatelinkedUpnagarDropdown(value);
                           populatelinkedMandalDropdown(false, value);
                           populatelinkedVastiDropdown(value);
                         });
@@ -2059,7 +2087,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                     ),
                   if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
                     buildDropdownField(
-                      isDisabled: MyAppGlobals.isDropdownDisabled('Mandal'),
+                      isDisabled: MyAppGlobals.isDropdownDisabled('upnagarUpkhanda'),
                       label: Statics.getLabel('upnagarUpkhanda'),
                       value: _linkedupnagarValue,
                       items: _linkedupnagar!
@@ -2068,29 +2096,25 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                                 child: Text(bg.name!),
                               ))
                           .toList(),
-                      onChanged: MyAppGlobals.isDropdownDisabled('upnagarUpkhanda')
-                          ? (value) {
-                              if (value == null) return;
-                            }
-                          : (value) {
-                              final selectedItem = _linkedupnagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
-                              setState(() {
-                                _searched = false;
-                                _linkedupnagarValue = value;
-                                _selectedGeoUnitId = value;
-                                _selctedLevel = 'upnagarUpkhanda';
-                                _selctedLevelName = selectedItem.name ?? "";
-                                _linkedshaharName = selectedItem.name ?? "";
-                                populatelinkedMandalDropdown(true, value);
-                                populatelinkedVastiDropdown(value);
+                      onChanged: (value) {
+                        final selectedItem = _linkedupnagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                        setState(() {
+                          _searched = false;
+                          _linkedupnagarValue = value;
+                          _selectedGeoUnitId = value;
+                          _selctedLevel = 'upnagarUpkhanda';
+                          _selctedLevelName = selectedItem.name ?? "";
+                          _linkedshaharName = selectedItem.name ?? "";
+                          populatelinkedMandalDropdown(true, value);
+                          populatelinkedVastiDropdown(value);
 
-                                // populatelinkedNagarDropdown(null, value);
-                              });
-                            },
+                          // populatelinkedNagarDropdown(null, value);
+                        });
+                      },
                     ),
                   if (_linkedmandal != null && _linkedmandal!.isNotEmpty)
                     buildDropdownField(
-                      isDisabled: MyAppGlobals.isDropdownDisabled('Graam'),
+                      isDisabled: MyAppGlobals.isDropdownDisabled('Mandal'),
                       label: Statics.getLabel('Mandal'),
                       value: _linkedmandalValue,
                       items: _linkedmandal!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
@@ -2112,7 +2136,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                       label: Statics.getLabel('Vasti'),
                       value: _linkedvastiValue,
                       items: _linkedvasti!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
-                      onChanged: (value) {
+                      onChanged: (value) async {
                         final item = _linkedvasti!.firstWhere((g) => g.geoUnitID.toString() == value);
                         setState(() {
                           _linkedvastiValue = value;
@@ -2121,13 +2145,69 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                           _selctedLevelName = item.name ?? "";
                           _linkedvastiName = item.name ?? "";
                         });
+                        // if (userLevelId == 2) {
+                        //   _selctedLevelNameList = [];
+                        //   setState(() {});
+                        //   _selctedLevelNameList.addAll([
+                        //     _linkedbhaagName,
+                        //     _linkedshaharName,
+                        //     _linkednagarName,
+                        //     _linkedmandalName,
+                        //     _linkedgraamName,
+                        //     _linkedvastiName,
+                        //   ]);
+                        //   await _getForm();
+                        //   setState(() {
+                        //     _selctedLevelNames = _selctedLevelNameList.where((e) => e != null && e.isNotEmpty).cast<String>().join(' -> ');
+                        //     _searched = true;
+                        //     _isExpanded = false;
+                        //     isVastiSearch = true;
+                        //   });
+                        // }
+                      },
+                    ),
+                  if (_linkedgraam != null && _linkedgraam!.isNotEmpty)
+                    buildDropdownField(
+                      isDisabled: MyAppGlobals.isDropdownDisabled('Graam'),
+                      label: Statics.getLabel('Graam'),
+                      value: _linkedgraamValue,
+                      items: _linkedgraam!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
+                      onChanged: (value) async {
+                        final item = _linkedgraam!.firstWhere((g) => g.geoUnitID.toString() == value);
+                        setState(() {
+                          _linkedvastiValue = value;
+                          _selectedGeoUnitId = value.toString();
+                          _selctedLevel = 'Graam';
+                          _selctedLevelName = item.name ?? "";
+                          _linkedvastiName = item.name ?? "";
+                        });
+
+                        // if (userLevelId == 3) {
+                        //   _selctedLevelNameList = [];
+                        //   setState(() {});
+                        //   _selctedLevelNameList.addAll([
+                        //     _linkedbhaagName,
+                        //     _linkedshaharName,
+                        //     _linkednagarName,
+                        //     _linkedmandalName,
+                        //     _linkedgraamName,
+                        //     _linkedvastiName,
+                        //   ]);
+                        //   await _getForm();
+                        //   setState(() {
+                        //     _selctedLevelNames = _selctedLevelNameList.where((e) => e != null && e.isNotEmpty).cast<String>().join(' -> ');
+                        //     _searched = true;
+                        //     _isExpanded = false;
+                        //     isVastiSearch = true;
+                        //   });
+                        // }
                       },
                     ),
                   const SizedBox(height: 15),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      if ((_linkedmandalValue != null && _linkedmandalValue!.isNotEmpty) || (_linkedvastiValue != null && _linkedvastiValue!.isNotEmpty))
+                      if ((userLevelId != 2 && userLevelId != 3) && (_linkedmandalValue != null && _linkedmandalValue!.isNotEmpty) || (_linkedvastiValue != null && _linkedvastiValue!.isNotEmpty))
                         MaterialButton(
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                           padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 5),

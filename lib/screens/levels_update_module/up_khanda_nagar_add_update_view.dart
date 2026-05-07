@@ -1843,7 +1843,7 @@ class _UpNagarkhandaAddUpdateViewState extends State<UpNagarkhandaAddUpdateView>
                 //   ),
                 if (_linkedNagar != null && _linkedNagar!.isNotEmpty)
                   buildDropdownField(
-                    isDisabled: MyAppGlobals.isDropdownDisabled('upnagarUpkhanda'),
+                    isDisabled: MyAppGlobals.isDropdownDisabled('Nagar'),
                     label: Statics.getLabel('Nagar'),
                     value: _linkedNagarValue,
                     items: _linkedNagar!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
