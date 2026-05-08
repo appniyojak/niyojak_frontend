@@ -25,6 +25,7 @@ class _NirikshanAnnualBaithakVruttaState extends State<NirikshanAnnualBaithakVru
   List<GeoUnitMasterBAL>? _linkedBhaag;
   List<GeoUnitMasterBAL>? _linkedShahar;
   List<GeoUnitMasterBAL>? _linkedNagar;
+  List<GeoUnitMasterBAL>? _linkedupnagar;
   List<StaticMasterBAL>? _baithakTypes;
 
   String? _linkedMahaanagarValue = '';
@@ -33,8 +34,8 @@ class _NirikshanAnnualBaithakVruttaState extends State<NirikshanAnnualBaithakVru
   String? _linkedShaharValue = '';
   String? _linkedNagarValue = '';
   String? _baithakTypeValue = '';
+  String? _linkedUpnagarValue = '';
 
-  String? _linkedupnagarValue = '';
   String? _selctedLevel = 'praant';
   String? _selctedLevelName = '';
   String _selctedLevelNames = '';
@@ -116,6 +117,15 @@ class _NirikshanAnnualBaithakVruttaState extends State<NirikshanAnnualBaithakVru
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.nagar).toString();
       _selctedLevel = 'Nagar';
     }
+    // Step 5: Upnagar (conditional)
+    if (selection.upnagar != null && selection.upnagar!.isNotEmpty) {
+      await populatelinkedUpnagarDropdown(_linkedNagarValue);
+      _linkedUpnagarValue = (level == 13 ? (dm.geoUnitID ?? 0).toString() : selection.upnagar) ?? _linkedUpnagarValue;
+      if (level == 13) {
+        _selectedGeoUnitId = (dm.geoUnitID ?? selection.upnagar).toString();
+        _selctedLevel = 'Upnagar';
+      }
+    }
 
     // if (_linkedVibhaag != null && _linkedVibhaag!.isNotEmpty) _linkedVibhaagName = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedBhaagValue).name;
     // if (_linkedBhaag != null && _linkedBhaag!.isNotEmpty) _linkedbhaagName = _linkedBhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedBhaagValue).name;
@@ -178,6 +188,15 @@ class _NirikshanAnnualBaithakVruttaState extends State<NirikshanAnnualBaithakVru
     final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), parentID, parentType, '', isAbhiyaan: false);
     setState(() => _linkedNagar = data.isNotEmpty ? data : null);
     return data;
+  }
+
+  Future<List<GeoUnitMasterBAL>> populatelinkedUpnagarDropdown(String? nagarIDStr) async {
+    var mnDD;
+    mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
+    setState(() {
+      _linkedupnagar = (mnDD.length > 0 ? mnDD : null);
+    });
+    return mnDD;
   }
 
   // void populatelinkedMahaanagarDropdown() async {
@@ -272,8 +291,9 @@ class _NirikshanAnnualBaithakVruttaState extends State<NirikshanAnnualBaithakVru
     int? bhaagVal = _linkedBhaagValue == null || _linkedBhaagValue == "" ? null : int.parse(_linkedBhaagValue!);
     int? shaharVal = _linkedShaharValue == null || _linkedShaharValue == "" ? null : int.parse(_linkedShaharValue!);
     int? nagarVal = _linkedNagarValue == null || _linkedNagarValue == "" ? null : int.parse(_linkedNagarValue!);
+    int? upnagarVal = _linkedUpnagarValue == null || _linkedUpnagarValue == "" ? null : int.parse(_linkedUpnagarValue!);
     _baithakType = _baithakTypeValue == null || _baithakTypeValue == "" ? null : int.parse(_baithakTypeValue!);
-    int? geoID = (nagarVal != null ? nagarVal : (bhaagVal != null ? bhaagVal : (vibhaagVal != null ? vibhaagVal : (mahaanagarVal != null ? mahaanagarVal : null))));
+    int? geoID = (upnagarVal != null ? upnagarVal : (nagarVal != null ? nagarVal : (bhaagVal != null ? bhaagVal : (vibhaagVal != null ? vibhaagVal : (mahaanagarVal != null ? mahaanagarVal : null)))));
     String type = "";
     if (_linkedMahaanagarValue != null && _linkedVibhaagValue == null && _linkedBhaagValue == null && _linkedNagarValue == null) {
       type = "Mahaanagar";
@@ -283,6 +303,8 @@ class _NirikshanAnnualBaithakVruttaState extends State<NirikshanAnnualBaithakVru
       type = "Bhaag";
     } else if (_linkedBhaagValue != null && _linkedNagarValue != null) {
       type = "Nagar";
+    } else if (_linkedUpnagarValue != null && _linkedUpnagarValue != null) {
+      type = "upnagarUpkhanda";
     }
     int locId = 0;
     if (_linkedMahaanagarValue != null && _linkedVibhaagValue == null && _linkedBhaagValue == null && _linkedNagarValue == null) {
@@ -448,6 +470,7 @@ class _NirikshanAnnualBaithakVruttaState extends State<NirikshanAnnualBaithakVru
                                 : (value) {
                                     setState(() {
                                       _linkedNagarValue = value;
+                                      populatelinkedUpnagarDropdown(value);
                                     });
                                   },
                           ),
@@ -455,6 +478,26 @@ class _NirikshanAnnualBaithakVruttaState extends State<NirikshanAnnualBaithakVru
                           SizedBox(
                             height: 10,
                           ),
+                        /**------------------------adding new dropdown------------------**/
+                        if (_linkedupnagar != null && _linkedupnagar!.length > 0)
+                          DropdownButtonFormField<String>(
+                            decoration: InputDecoration(labelText: Statics.getLabel('upnagarUpkhanda')),
+                            isExpanded: true,
+                            value: _linkedUpnagarValue == "" ? null : _linkedUpnagarValue,
+                            items: _linkedupnagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                            onChanged: MyAppGlobals.isDropdownDisabled('upnagarUpkhanda')
+                                ? null
+                                : (value) {
+                                    setState(() {
+                                      _linkedUpnagarValue = value;
+                                    });
+                                  },
+                          ),
+                        if (_linkedupnagar != null && _linkedupnagar!.length > 0)
+                          SizedBox(
+                            height: 10,
+                          ),
+
                         if (_baithakTypes != null)
                           DropdownSearch<String>(
                             popupProps: PopupProps.bottomSheet(

@@ -2157,6 +2157,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       _selctedLevel = 'Nagar';
                       _selctedLevelName = item.name ?? "";
                       _linkednagarName = item.name ?? "";
+                      populatelinkedUpnagarDropdown(value);
                       populatelinkedMandalDropdown(false, value);
                       populatelinkedVastiDropdown(value);
                     });

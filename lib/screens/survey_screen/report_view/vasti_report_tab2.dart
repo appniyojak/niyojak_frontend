@@ -2125,6 +2125,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                           _selctedLevel = 'Mahanagar';
                           _selctedLevelName = item.name ?? "";
                           _selectedGeoUnitId = value;
+                          selctedLevelId = value;
                         });
                         populatelinkedVibhaagDropdown(value!);
                         populatelinkedBhaagDropdown("");
@@ -2141,6 +2142,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                         setState(() {
                           _linkedVibhaagValue = value;
                           _selctedLevel = 'Vibhaag';
+                          selctedLevelId = value;
                           _selctedLevelName = item.name ?? "";
                           _selectedGeoUnitId = value;
                         });
@@ -2158,6 +2160,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                         setState(() {
                           _linkedBhaagValue = value;
                           _selctedLevel = 'Bhaag';
+                          selctedLevelId = value;
                           _selctedLevelName = item.name ?? "";
                           _linkedbhaagName = item.name ?? "";
                           _selectedGeoUnitId = value;
@@ -2185,7 +2188,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                   //   ),
                   if (_linkedNagar != null && _linkedNagar!.isNotEmpty)
                     buildDropdownField(
-                      isDisabled: MyAppGlobals.isDropdownDisabled('upnagarUpkhanda'),
+                      isDisabled: MyAppGlobals.isDropdownDisabled('Nagar'),
                       label: Statics.getLabel('Nagar'),
                       value: _linkedNagarValue,
                       items: _linkedNagar!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
@@ -2195,6 +2198,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                           _linkedNagarValue = value;
                           _selectedGeoUnitId = value;
                           _selctedLevel = 'Nagar';
+                          selctedLevelId = value;
                           _selctedLevelName = item.name ?? "";
                           _linkednagarName = item.name ?? "";
                           populatelinkedVastiDropdown(value!);
@@ -2203,7 +2207,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                     ),
                   if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
                     buildDropdownField(
-                      isDisabled: MyAppGlobals.isDropdownDisabled('Mandal'),
+                      isDisabled: MyAppGlobals.isDropdownDisabled('upnagarUpkhanda'),
                       label: Statics.getLabel('upnagarUpkhanda'),
                       value: _linkedupnagarValue,
                       items: _linkedupnagar!
@@ -2220,6 +2224,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                 _linkedupnagarValue = value;
                                 _selectedGeoUnitId = value;
                                 _selctedLevel = 'upnagarUpkhanda';
+                                selctedLevelId = value;
                                 _selctedLevelName = selectedItem.name ?? "";
                                 populatelinkedVastiDropdown(value!);
 
@@ -2239,6 +2244,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                           _linkedvastiValue = value;
                           _selectedGeoUnitId = value.toString();
                           _selctedLevel = 'Vasti';
+                          selctedLevelId = value;
                           _selctedLevelName = item.name ?? "";
                           _linkedvastiName = item.name ?? "";
                         });
@@ -2248,18 +2254,18 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                     SizedBox(
                       height: 10,
                     ),
-                  if (selctedLevel == "Vasti")
+                  if (_selctedLevel == "Vasti")
                     Align(
                       alignment: Alignment.center,
                       child: ElevatedButton(
                         style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.purpleAccent)),
                         onPressed: () {
-                          if (selctedLevel == "Vasti" || selctedLevel == "Graam") {
+                          if (_selctedLevel == "Vasti" || _selctedLevel == "Graam") {
                             setState(() {
                               isVastiSearch = true;
                               _isExpanded = false;
                             });
-                            print("selctedLevel $selctedLevel -- selctedLevelId $selctedLevelId -- selctedLevelName $selctedLevelName");
+                            print("selctedLevel $_selctedLevel -- selctedLevelId $selctedLevelId -- selctedLevelName $selctedLevelName");
                             getMyDetailsColumnsAndRows();
                           } else {
                             Statics.showToast(Statics.getLabel('vastiGramValidation'));

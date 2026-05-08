@@ -174,7 +174,7 @@ class MyAppGlobals {
   static bool isDropdownDisabled(String levelName) {
     int dropdownLevel = levelOrder[levelName] ?? 0;
     if (levelName == 'upnagarUpkhanda') {
-      var usLevelid = 5;
+      var usLevelid = Statics.levelId == 13 ? 5 : Statics.levelId;
       return dropdownLevel >= usLevelid;
     }
 

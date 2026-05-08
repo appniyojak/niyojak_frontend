@@ -87,7 +87,7 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
     final selection = prepareSelection(dm);
 
     // Step 1: Mahaanagar
-    await populatelinkedMahaanagarDropdown();
+    if (selection.mahaanagar!.isNotEmpty) await populatelinkedMahaanagarDropdown();
     _linkedMahaanagarValue = (level == 9 ? (dm.geoUnitID ?? 0).toString() : selection.mahaanagar) ?? _linkedMahaanagarValue;
     if (level == 9) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.mahaanagar).toString();
@@ -2396,6 +2396,7 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
                           _linkedMahaanagarValue = value;
                           _linkedVibhaagValue = null;
                           _selctedLevel = 'Mahanagar';
+                          selctedLevelId = value;
                           _selctedLevelName = item.name ?? "";
                           _selectedGeoUnitId = value;
                         });
@@ -2414,6 +2415,7 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
                         setState(() {
                           _linkedVibhaagValue = value;
                           _selctedLevel = 'Vibhaag';
+                          selctedLevelId = value;
                           _selctedLevelName = item.name ?? "";
                           _selectedGeoUnitId = value;
                         });
@@ -2431,6 +2433,7 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
                         setState(() {
                           _linkedBhaagValue = value;
                           _selctedLevel = 'Bhaag';
+                          selctedLevelId = value;
                           _selctedLevelName = item.name ?? "";
                           _linkedBhaagName = item.name ?? "";
                           _selectedGeoUnitId = value;
@@ -2458,7 +2461,7 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
                   //   ),
                   if (_linkedNagar != null && _linkedNagar!.isNotEmpty)
                     buildDropdownField(
-                      isDisabled: MyAppGlobals.isDropdownDisabled('upnagarUpkhanda'),
+                      isDisabled: MyAppGlobals.isDropdownDisabled('Nagar'),
                       label: Statics.getLabel('Nagar'),
                       value: _linkedNagarValue,
                       items: _linkedNagar!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
@@ -2468,6 +2471,7 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
                           _linkedNagarValue = value;
                           _selectedGeoUnitId = value;
                           _selctedLevel = 'Nagar';
+                          selctedLevelId = value;
                           _selctedLevelName = item.name ?? "";
                           _linkednagarName = item.name ?? "";
                           populatelinkedMandalDropdown(false, value);
@@ -2476,7 +2480,7 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
                     ),
                   if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
                     buildDropdownField(
-                      isDisabled: MyAppGlobals.isDropdownDisabled('Mandal'),
+                      isDisabled: MyAppGlobals.isDropdownDisabled('upnagarUpkhanda'),
                       label: Statics.getLabel('upnagarUpkhanda'),
                       value: _linkedupnagarValue,
                       items: _linkedupnagar!
@@ -2495,6 +2499,7 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
                                 _linkedupnagarValue = value;
                                 _selectedGeoUnitId = value;
                                 _selctedLevel = 'upnagarUpkhanda';
+                                selctedLevelId = value;
                                 _selctedLevelName = selectedItem.name ?? "";
                                 _linkedshaharName = selectedItem.name ?? "";
                                 populatelinkedMandalDropdown(true, value);
@@ -2505,7 +2510,7 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
                     ),
                   if (_linkedmandal != null && _linkedmandal!.isNotEmpty)
                     buildDropdownField(
-                      isDisabled: MyAppGlobals.isDropdownDisabled('Graam'),
+                      isDisabled: MyAppGlobals.isDropdownDisabled('Mandal'),
                       label: Statics.getLabel('Mandal'),
                       value: _linkedmandalValue,
                       items: _linkedmandal!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
@@ -2515,16 +2520,17 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
                           _linkedmandalValue = value;
                           _selectedGeoUnitId = value.toString();
                           _selctedLevel = 'Mandal';
+                          selctedLevelId = value;
                           _selctedLevelName = item.name ?? "";
                           _linkedmandalName = item.name ?? "";
                           // populatelinkedGraamDropdown(value);
                         });
                       },
                     ),
-                  if (_linkedmandal != null && _linkedmandal!.length > 0)
-                    SizedBox(
-                      height: 10,
-                    ),
+
+                  SizedBox(
+                    height: 10,
+                  ),
                   Align(
                     alignment: Alignment.center,
                     child: ElevatedButton(
