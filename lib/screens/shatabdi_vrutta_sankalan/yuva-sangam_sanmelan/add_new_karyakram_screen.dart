@@ -110,6 +110,7 @@ class _AddNewKaryakramScreenState extends State<AddNewKaryakramScreen> {
 
   Future<void> populateAllDropdowns(int level, DropDownModel dm) async {
     setState(() {
+      _selctedLevelList = [];
       _selectedGeoUnitIdForCreat = _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     });
     final selection = prepareSelection(dm);
@@ -117,17 +118,19 @@ class _AddNewKaryakramScreenState extends State<AddNewKaryakramScreen> {
     // Step 1: Mahaanagar
     await populatelinkedMahaanagarDropdown();
     _linkedMahaanagarValue = (level == 9 ? (dm.geoUnitID ?? 0).toString() : selection.mahaanagar) ?? _linkedMahaanagarValue;
+    _selctedLevelList.add(dm.parentMahaanagarID);
     if (level == 9) {
       _selectedGeoUnitIdForCreat = (dm.geoUnitID ?? selection.mahaanagar).toString();
-      _selctedLevel = 'Mahaanagar';
+      _selctedLevel = Statics.getLabel('Mahaanagar');
     }
 
     // Step 2: Vibhaag
     await populatelinkedVibhaagDropdown(_linkedMahaanagarValue!);
     _linkedVibhaagValue = (level == 8 ? (dm.geoUnitID ?? 0).toString() : selection.vibhaag) ?? _linkedVibhaagValue;
+    _selctedLevelList.add(dm.parentVibhaagID);
     if (level == 8) {
       _selectedGeoUnitIdForCreat = (dm.geoUnitID ?? selection.vibhaag).toString();
-      _selctedLevel = 'Vibhaag';
+      _selctedLevel = Statics.getLabel('Vibhaag');
     }
 
     // Step 3: Bhaag
@@ -135,7 +138,8 @@ class _AddNewKaryakramScreenState extends State<AddNewKaryakramScreen> {
     _linkedbhaagValue = (level == 7 ? (dm.geoUnitID ?? 0).toString() : selection.bhaag) ?? _linkedbhaagValue;
     if (level == 7) {
       _selectedGeoUnitIdForCreat = (dm.geoUnitID ?? selection.bhaag).toString();
-      _selctedLevel = 'Bhaag';
+      _selctedLevel = Statics.getLabel('Bhaag');
+      _selctedLevelList.add(dm.parentBhaagID ?? dm.geoUnitID);
     }
 
     // Step 4: Nagar
@@ -143,7 +147,8 @@ class _AddNewKaryakramScreenState extends State<AddNewKaryakramScreen> {
     _linkednagarValue = (level == 6 ? (dm.geoUnitID ?? 0).toString() : selection.nagar) ?? _linkednagarValue;
     if (level == 6) {
       _selectedGeoUnitIdForCreat = (dm.geoUnitID ?? selection.nagar).toString();
-      _selctedLevel = 'Nagar';
+      _selctedLevel = Statics.getLabel('Nagar');
+      _selctedLevelList.add(dm.parentNagarID ?? dm.geoUnitID);
     }
 
     // Step 5: Upnagar (conditional)
@@ -152,7 +157,8 @@ class _AddNewKaryakramScreenState extends State<AddNewKaryakramScreen> {
       _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? 0).toString() : selection.upnagar) ?? _linkedupnagarValue;
       if (level == 13) {
         _selectedGeoUnitIdForCreat = (dm.geoUnitID ?? selection.upnagar).toString();
-        _selctedLevel = 'Upnagar';
+        _selctedLevel = Statics.getLabel('upnagarUpkhanda');
+        _selctedLevelList.add(dm.parentUpaNagarID ?? dm.geoUnitID);
       }
     }
 
@@ -164,7 +170,8 @@ class _AddNewKaryakramScreenState extends State<AddNewKaryakramScreen> {
     _linkedmandalValue = (level == 4 ? (dm.geoUnitID ?? 0).toString() : selection.mandal) ?? _linkedmandalValue;
     if (level == 4) {
       _selectedGeoUnitIdForCreat = (dm.geoUnitID ?? selection.mandal).toString();
-      _selctedLevel = 'Mandal';
+      _selctedLevel = Statics.getLabel('Mandal');
+      _selctedLevelList.add(dm.parentMandalID ?? dm.geoUnitID);
     }
     // // Step 7: Graam
     // await populatelinkedGraamDropdown(_linkedmandalValue);

@@ -196,13 +196,18 @@ class _VastiSarvekshanScreenState extends State<VastiSarvekshanScreen> {
     return gmDD;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(String? nagarIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(bool haveParentUp, String? nagarIDStr) async {
     _linkedvastiValue = null;
     _linkedvastiName = null;
-    var vsDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, 'Nagar', '', isAbhiyaan: false);
-    setState(() {
-      _linkedvasti = (vsDD.length > 0 ? vsDD : null);
-    });
+    var vsDD;
+    if (haveParentUp) {
+      print("i am in parents upnagar");
+      vsDD = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, "Upnagar", '');
+      // print("${mnDD}");
+    } else {
+      vsDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, "Nagar", '');
+    }
+    setState(() => _linkedvasti = (vsDD.length > 0 ? vsDD : null));
     return vsDD;
   }
 
@@ -550,7 +555,7 @@ class _VastiSarvekshanScreenState extends State<VastiSarvekshanScreen> {
                           _selctedLevelName = selectedItem.name ?? "";
                           _linkednagarName = selectedItem.name ?? "";
                           populatelinkedMandalDropdown(value);
-                          populatelinkedVastiDropdown(value);
+                          populatelinkedVastiDropdown(false, value);
                         });
                       },
                       isDisabled: false,

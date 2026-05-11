@@ -182,7 +182,8 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
 
   Future<void> populateAllDropdowns(int level, DropDownModel dm) async {
     setState(() {
-      _selectedGeoUnitId = _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+      _selectedGeoUnitId =
+          _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedupnagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     });
     final selection = prepareSelection(dm);
 
@@ -230,8 +231,8 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
 
     // Step 6: Mandal
     await populatelinkedMandalDropdown(
-      selection.upnagar != null,
-      selection.upnagar != null ? _linkednagarValue : _linkedupnagarValue,
+      (selection.upnagar != null && selection.upnagar!.isNotEmpty),
+      (selection.upnagar != null && selection.upnagar!.isNotEmpty) ? (_linkedupnagarValue) : _linkednagarValue,
     );
     _linkedmandalValue = (level == 4 ? (dm.geoUnitID ?? "").toString() : selection.mandal) ?? '';
     if (level == 4) {
@@ -244,13 +245,22 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
     if (level == 3) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.graam).toString();
       _selctedLevel = 'Graam';
+      _getForm();
     }
     // Step 8: Vasti
-    await populatelinkedVastiDropdown(_linkednagarValue);
+    await populatelinkedVastiDropdown(
+      (selection.upnagar != null && selection.upnagar!.isNotEmpty),
+      (selection.upnagar != null && selection.upnagar!.isNotEmpty) ? (_linkedupnagarValue) : _linkednagarValue,
+    );
     _linkedvastiValue = (level == 2 ? (dm.geoUnitID ?? "").toString() : selection.vasti) ?? '';
     if (level == 2) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.vasti).toString();
       _selctedLevel = 'Vasti';
+      _getForm();
+    }
+    if (level == 1) {
+      _selectedGeoUnitId = (selection.vasti ?? selection.graam).toString();
+      _getForm();
     }
     // if (_linkedVibhaag != null && _linkedVibhaag!.isNotEmpty) _linkedVibhaagName = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedbhaagValue).name;
     // if (_linkedbhaag != null && _linkedbhaag!.isNotEmpty) _linkedbhaagName = _linkedbhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedbhaagValue).name;
@@ -326,7 +336,8 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
         }
         if (geo.parentNagarID != null && geo.parentNagarID != 0) {
           await populatelinkedMandalDropdown(false, geo.parentNagarID.toString());
-          await populatelinkedVastiDropdown(geo.parentNagarID.toString());
+          await populatelinkedVastiDropdown(
+              (geo.parentUpnagarID != null && geo.parentUpnagarID != 0), (geo.parentUpnagarID != null && geo.parentUpnagarID != 0) ? geo.parentUpnagarID.toString() : geo.parentNagarID.toString());
           _linkednagarValue = geo.parentNagarID.toString();
         }
         if (geo.levelID == 4)
@@ -564,10 +575,17 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
     return data;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(String? nagarIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(bool haveParentUp, String? nagarIDStr) async {
     _linkedvastiValue = null;
     _linkedvastiName = null;
-    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, 'Nagar', '', isAbhiyaan: false);
+    var data;
+    if (haveParentUp) {
+      print("i am in parents upnagar vasti");
+      data = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, "Upnagar", '');
+      // print("${mnDD}");
+    } else {
+      data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, "Nagar", '');
+    }
     setState(() => _linkedvasti = data.isNotEmpty ? data : null);
     return data;
   }
@@ -2081,7 +2099,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                           _linkednagarName = item.name ?? "";
                           populatelinkedUpnagarDropdown(value);
                           populatelinkedMandalDropdown(false, value);
-                          populatelinkedVastiDropdown(value);
+                          populatelinkedVastiDropdown(false, value);
                         });
                       },
                     ),
@@ -2106,7 +2124,7 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                           _selctedLevelName = selectedItem.name ?? "";
                           _linkedshaharName = selectedItem.name ?? "";
                           populatelinkedMandalDropdown(true, value);
-                          populatelinkedVastiDropdown(value);
+                          populatelinkedVastiDropdown(true, value);
 
                           // populatelinkedNagarDropdown(null, value);
                         });
@@ -2240,8 +2258,9 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
                             _searched = false;
                             isVastiSearch = false;
                             _selectedGeoUnitId = null;
-                            _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedvastiValue = _linkedgraamValue = null;
-                            _linkedVibhaagValue = _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
+                            _linkedMahaanagarValue =
+                                _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedupnagarValue = _linkedmandalValue = _linkedvastiValue = _linkedgraamValue = null;
+                            _linkedVibhaagValue = _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = _linkedupnagar = null;
                             _selctedLevel = "praant";
                           });
                           clearForm();

@@ -94,6 +94,8 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
     if (level == 9) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.mahaanagar).toString();
       _selctedLevel = 'Mahaanagar';
+      final selectedItem = _linkedMahaanagar!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
+      _selctedLevelName = selectedItem.name;
     }
 
     // Step 2: Vibhaag
@@ -102,6 +104,8 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
     if (level == 8) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.vibhaag).toString();
       _selctedLevel = 'Vibhaag';
+      final selectedItem = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
+      _selctedLevelName = selectedItem.name;
     }
 
     // Step 3: Bhaag
@@ -110,6 +114,8 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
     if (level == 7) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.bhaag).toString();
       _selctedLevel = 'Bhaag';
+      final selectedItem = _linkedbhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
+      _selctedLevelName = selectedItem.name;
     }
 
     // Step 4: Nagar
@@ -118,6 +124,8 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
     if (level == 6) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.nagar).toString();
       _selctedLevel = 'Nagar';
+      final selectedItem = _linkednagar!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
+      _selctedLevelName = selectedItem.name;
     }
 
     // if (_linkedVibhaag != null && _linkedVibhaag!.isNotEmpty) _linkedVibhaagName = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedBhaagValue).name;
@@ -293,7 +301,7 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
       // _isLoading = true;
     });
     Map<String, dynamic> formData = {
-      "geounitid": 0, //int.tryParse(_selectedGeoUnitId.toString()) ?? 0,
+      "geounitid": int.tryParse(_selectedGeoUnitId.toString()) ?? 0,
       "appuserid": int.tryParse(Statics.userDetails['userID']) ?? null,
     };
 

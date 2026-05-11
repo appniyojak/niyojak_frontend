@@ -140,16 +140,18 @@ class Geodata {
   int? levelID;
   int? parentBhaagID;
   int? parentMahaanagarID;
+  int? parentUpnagarID;
   int? parentNagarID;
   int? parentVibhaagID;
 
-  Geodata({this.geounitid, this.levelID, this.parentBhaagID, this.parentMahaanagarID, this.parentNagarID, this.parentVibhaagID});
+  Geodata({this.geounitid, this.levelID, this.parentBhaagID, this.parentMahaanagarID, this.parentUpnagarID, this.parentNagarID, this.parentVibhaagID});
 
   Geodata.fromJson(Map<String, dynamic> json) {
     geounitid = json['GeoUnitID'];
     levelID = json['LevelID'];
     parentBhaagID = json['ParentBhaagID'];
     parentMahaanagarID = json['ParentMahaanagarID'];
+    parentUpnagarID = json['ParentUpnagarID'];
     parentNagarID = json['ParentNagarID'];
     parentVibhaagID = json['ParentVibhaagID'];
   }
@@ -160,6 +162,7 @@ class Geodata {
     data['LevelID'] = this.levelID;
     data['ParentBhaagID'] = this.parentBhaagID;
     data['ParentMahaanagarID'] = this.parentMahaanagarID;
+    data['ParentUpnagarID'] = this.parentUpnagarID;
     data['ParentNagarID'] = this.parentNagarID;
     data['ParentVibhaagID'] = this.parentVibhaagID;
     return data;

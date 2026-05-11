@@ -214,7 +214,7 @@ class _AbhiyaanSwayamsevakState extends State<AbhiyaanSwayamsevak> {
           _linkednagarDisable = true;
           _linkednagarValue = initialData!.parentNagarID.toString();
           populatelinkedMandalDropdown(_linkednagarValue);
-          populatelinkedVastiDropdown(_linkednagarValue);
+          populatelinkedVastiDropdown(false, _linkednagarValue);
         }
         if (initialData!.parentMandalID != null) {
           _isExpanded = true;
@@ -240,7 +240,7 @@ class _AbhiyaanSwayamsevakState extends State<AbhiyaanSwayamsevak> {
           _linkednagarDisable = true;
           _linkednagarValue = initialData!.geoUnitID.toString();
           populatelinkedMandalDropdown(_linkednagarValue);
-          populatelinkedVastiDropdown(_linkednagarValue);
+          populatelinkedVastiDropdown(false, _linkednagarValue);
         } else if (initialData!.levelName == "Bhaag" && initialData!.geoUnitID != null) {
           _isExpanded = true;
           _linkedbhaagDisable = true;
@@ -337,12 +337,18 @@ class _AbhiyaanSwayamsevakState extends State<AbhiyaanSwayamsevak> {
     return gmDD;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(String? nagarIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(bool haveParentUp, String? nagarIDStr) async {
     _linkedvastiValue = null;
-    var vsDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, 'Nagar', '');
-    setState(() {
-      _linkedvasti = (vsDD.length > 0 ? vsDD : null);
-    });
+    // _linkedvastiName = null;
+    var vsDD;
+    if (haveParentUp) {
+      print("i am in parents upnagar");
+      vsDD = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, "Upnagar", '');
+      // print("${mnDD}");
+    } else {
+      vsDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, "Nagar", '');
+    }
+    setState(() => _linkedvasti = vsDD.length > 0 ? vsDD : null);
     return vsDD;
   }
 
@@ -519,7 +525,7 @@ class _AbhiyaanSwayamsevakState extends State<AbhiyaanSwayamsevak> {
         row.add("-");
       }
       // Vasti //16
-      List<GeoUnitMasterBAL> vastiList = await populatelinkedVastiDropdown(data.parentNagarID.toString()) ?? [];
+      List<GeoUnitMasterBAL> vastiList = await populatelinkedVastiDropdown(false, data.parentNagarID.toString()) ?? [];
       if (vastiList.where((element) => element.geoUnitID == data.parentVastiID).isNotEmpty) {
         row.add(vastiList.firstWhere((element) => element.geoUnitID == data.parentVastiID).name);
       } else {
@@ -768,7 +774,7 @@ class _AbhiyaanSwayamsevakState extends State<AbhiyaanSwayamsevak> {
                         setState(() {
                           _linkednagarValue = value;
                           populatelinkedMandalDropdown(value);
-                          populatelinkedVastiDropdown(value);
+                          populatelinkedVastiDropdown(false, value);
                         });
                       },
                       isDisabled: false,

@@ -264,7 +264,10 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     // _selectedGeoUnitId = _linkedgraamValue = (level == 3 ? (dm.geoUnitID ?? "").toString() : selection.graam) ?? '';
     //
     // // Step 8: Vasti
-    await populatelinkedVastiDropdown(_linkedNagarValue);
+    await populatelinkedVastiDropdown(
+      (selection.upnagar != null && selection.upnagar!.isNotEmpty),
+      (selection.upnagar != null && selection.upnagar!.isNotEmpty) ? _linkedupnagarValue : _linkedNagarValue,
+    );
     _linkedvastiValue = (level == 2 ? (dm.geoUnitID ?? 0).toString() : selection.vasti) ?? _linkedvastiValue;
     if (level == 2) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.vasti).toString();
@@ -489,10 +492,17 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     return data;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(String? nagarIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(bool haveParentUp, String? nagarIDStr) async {
     _linkedvastiValue = null;
     _linkedvastiName = null;
-    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, 'Nagar', '', isAbhiyaan: false);
+    var data;
+    if (haveParentUp) {
+      print("i am in parents upnagar");
+      data = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, "Upnagar", '');
+      // print("${mnDD}");
+    } else {
+      data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, "Nagar", '');
+    }
     setState(() => _linkedvasti = data.isNotEmpty ? data : null);
     return data;
   }
@@ -2434,6 +2444,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                           utsavKontyaStaravar = value;
                           _isExpanded = true;
                         });
+                        populateDropdown();
                       },
                     ),
                   ),
@@ -3628,12 +3639,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                   Statics.getLabel('selectStar'),
                   style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold),
                 ),
-                trailing: IconButton(
-                    onPressed: () {
-                      clearForm();
-                    },
-                    icon: Icon(Icons.refresh),
-                    color: Colors.purpleAccent),
+                trailing: IconButton(onPressed: clearForm, icon: Icon(Icons.refresh), color: Colors.purpleAccent),
                 iconColor: Colors.purpleAccent,
               );
             },
@@ -3792,7 +3798,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                                 _linkedNagarName = selectedItem.name ?? "";
                                 populatelinkedUpnagarDropdown(value);
                                 populatelinkedMandalDropdown(false, value);
-                                populatelinkedVastiDropdown(value);
+                                populatelinkedVastiDropdown(false, value);
                               });
                             },
                       // isDisabled: MyAppGlobals.isDropdownDisabled('Nagar'),
@@ -3876,7 +3882,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                           selctedLevelName = selectedItem.name ?? "";
                           _linkedshaharName = selectedItem.name ?? "";
                           populatelinkedMandalDropdown(true, value);
-                          populatelinkedVastiDropdown(value);
+                          populatelinkedVastiDropdown(true, value);
 
                           // populatelinkedNagarDropdown(null, value);
                         });
@@ -5942,7 +5948,10 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       }
       if (_geodata.parentNagarID != null && _geodata.parentNagarID != 0) {
         await populatelinkedMandalDropdown(false, _geodata.parentNagarID.toString());
-        await populatelinkedVastiDropdown(_geodata.parentNagarID.toString());
+        await populatelinkedVastiDropdown(
+          (_geodata.parentUpnagarID != null && _geodata.parentUpnagarID != 0),
+          (_geodata.parentUpnagarID != null && _geodata.parentUpnagarID != 0) ? _geodata.parentUpnagarID.toString() : _geodata.parentNagarID.toString(),
+        );
         _linkedNagarValue = _geodata.parentNagarID.toString();
       }
       if (_geodata.levelID == 6) {

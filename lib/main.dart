@@ -46,17 +46,10 @@ import './screens/edit_sewa_vasti.dart';
 import './screens/edit_shaakhaa.dart';
 import './screens/edit_shaakhaa_vrutta.dart';
 import './screens/edit_soochi.dart';
-import 'screens/swayamsevak_module/edit_module/edit_swayamsevak_basic_info.dart';
-import './screens/swayamsevak_module/edit_module/edit_swayamsevak_screen.dart';
-import './screens/swayamsevak_module/edit_module/edit_swayamsevak_transfer.dart';
-import './screens/swayamsevak_module/edit_module/edit_swayamsevak_daayitva.dart';
-import './screens/swayamsevak_module/edit_module/edit_swayamsevak_other_info.dart';
-import './screens/swayamsevak_module/edit_module/edit_swayamsevak_soochi.dart';
 import './screens/event_calender.dart';
 import './screens/event_members.dart';
 import './screens/event_vrutta.dart';
 import './screens/help_screen.dart';
-import 'screens/home_screen/home_screen.dart';
 import './screens/login_screen.dart';
 import './screens/maps_display.dart';
 import './screens/profile_settings.dart';
@@ -74,13 +67,18 @@ import './screens/shaakhaa_vrutta.dart';
 import './screens/soochi_members.dart';
 import './screens/soochi_sharing.dart';
 import './screens/splash_screen.dart';
-import 'screens/swayamsevak_module/swayamsevak_daayitva_edit.dart';
+import './screens/swayamsevak_module/edit_module/edit_swayamsevak_daayitva.dart';
+import './screens/swayamsevak_module/edit_module/edit_swayamsevak_other_info.dart';
+import './screens/swayamsevak_module/edit_module/edit_swayamsevak_screen.dart';
+import './screens/swayamsevak_module/edit_module/edit_swayamsevak_soochi.dart';
+import './screens/swayamsevak_module/edit_module/edit_swayamsevak_transfer.dart';
 import './screens/swayamsevak_module/swayamsevak_search.dart';
 import './widgets/shaakhaa_pat.dart';
 import 'firebase_options.dart';
 import 'helpers/static_data.dart' as Statics;
 import 'providers/sadbhav_provider.dart';
 import 'screens/forget_password.dart';
+import 'screens/home_screen/home_screen.dart';
 import 'screens/shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/add_abhiyaan_karyakarta_screen.dart';
 import 'screens/shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/add_abhiyaan_pramukh.dart';
 import 'screens/shatabdi_vrutta_sankalan/gruh_sampark_abhiyaan/gruh_abhiyaan_main_tab_screen.dart';
@@ -100,6 +98,8 @@ import 'screens/shatabdi_vrutta_sankalan/yuva-sangam_sanmelan/add_new_karyakram_
 import 'screens/shatabdi_vrutta_sankalan/yuva-sangam_sanmelan/yuva_sangam_form_screen.dart';
 import 'screens/shatabdi_vrutta_sankalan/yuva-sangam_sanmelan/yuva_sangam_main_tab.dart';
 import 'screens/survey_screen/vasti_sarvekshan_screen.dart';
+import 'screens/swayamsevak_module/edit_module/edit_swayamsevak_basic_info.dart';
+import 'screens/swayamsevak_module/swayamsevak_daayitva_edit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -272,10 +272,10 @@ class NiyojakAppState extends State<NiyojakApp> {
                 fontFamily: 'Lato',
                 visualDensity: VisualDensity.adaptivePlatformDensity,
               ),
-              builder: (c,child)=> SafeArea(
+              builder: (c, child) => SafeArea(
                 top: false,
                 child: GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     FocusScope.of(context).unfocus();
                   },
                   child: child,

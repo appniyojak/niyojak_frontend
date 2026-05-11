@@ -1333,7 +1333,9 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
     _linkedMahaanagarValue = (level == 9 ? (dm.geoUnitID ?? 0).toString() : selection.mahaanagar) ?? _linkedMahaanagarValue;
     if (level == 9) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.mahaanagar).toString();
-      // _selctedLevel = 'Mahaanagar';
+      selctedLevel = 'Mahaanagar';
+      final selectedItem = _linkedMahaanagar!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
+      selctedLevelName = selectedItem.name;
     }
 
     // Step 2: Vibhaag
@@ -1341,7 +1343,9 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
     _linkedVibhaagValue = (level == 8 ? (dm.geoUnitID ?? 0).toString() : selection.vibhaag) ?? _linkedVibhaagValue;
     if (level == 8) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.vibhaag).toString();
-      // _selctedLevel = 'Vibhaag';
+      selctedLevel = 'Vibhaag';
+      final selectedItem = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
+      selctedLevelName = selectedItem.name;
     }
 
     // Step 3: Bhaag
@@ -1349,7 +1353,9 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
     _linkedBhaagValue = (level == 7 ? (dm.geoUnitID ?? 0).toString() : selection.bhaag) ?? _linkedBhaagValue;
     if (level == 7) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.bhaag).toString();
-      // _selctedLevel = 'Bhaag';
+      selctedLevel = 'Bhaag';
+      final selectedItem = _linkedBhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
+      selctedLevelName = selectedItem.name;
     }
 
     // Step 4: Nagar
@@ -1357,7 +1363,9 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
     _linkedNagarValue = (level == 6 ? (dm.geoUnitID ?? 0).toString() : selection.nagar) ?? _linkedNagarValue;
     if (level == 6) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.nagar).toString();
-      // _selctedLevel = 'Nagar';
+      selctedLevel = 'Nagar';
+      final selectedItem = _linkedNagar!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
+      selctedLevelName = selectedItem.name;
     }
 
     // if (_linkedVibhaag != null && _linkedVibhaag!.isNotEmpty) _linkedVibhaagName = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedBhaagValue).name;
@@ -1430,7 +1438,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
       _isLoading = true;
     });
     Map<String, dynamic> formData = {
-      "GeoUnitID": int.tryParse(selctedLevelId.toString()) ?? null,
+      "GeoUnitID": int.tryParse(_selectedGeoUnitId.toString()) ?? null,
       "AppUserID": int.tryParse(Statics.userDetails['userID']) ?? null,
     };
 
@@ -1498,7 +1506,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                 // _isLoading = true;
               });
               Map<String, dynamic> formData = {
-                "GeoUnitID": int.tryParse(selctedLevelId ?? "0") ?? "0",
+                "GeoUnitID": int.tryParse(_selectedGeoUnitId ?? "0") ?? "0",
                 "AppUserID": int.tryParse(Statics.userDetails['userID']) ?? null,
               };
 
@@ -1647,7 +1655,8 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
 
   String? selctedLevel = 'praant';
   String? selctedLevelName = '';
-  String? selctedLevelId = '';
+
+  // String? selctedLevelId = '';
   String? selctedSanchalanLevelId = '';
   String? selctedSanchalanLevelName = '';
 
@@ -1708,7 +1717,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                                         mahanagarId = value;
                                         selctedLevelName = selectedItem.name ?? "";
                                         selctedLevel = 'Mahanagar';
-                                        selctedLevelId = value;
+                                        _selectedGeoUnitId = value;
                                       });
                                     },
                             ),
@@ -1732,7 +1741,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                                         _linkedBhaag = _linkedNagar = null;
                                         selctedLevelName = selectedItem.name ?? "";
                                         selctedLevel = 'Vibhaag';
-                                        selctedLevelId = value;
+                                        _selectedGeoUnitId = value;
                                       });
                                     },
                             ),
@@ -1753,7 +1762,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                                         populatelinkedNagarDropdown(value, null);
                                         selctedLevelName = selectedItem.name ?? "";
                                         selctedLevel = 'Bhaag';
-                                        selctedLevelId = value;
+                                        _selectedGeoUnitId = value;
                                       });
                                     },
                             ),
@@ -1770,7 +1779,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                                       setState(() {
                                         selctedLevelName = selectedItem.name ?? "";
                                         selctedLevel = 'Nagar';
-                                        selctedLevelId = value;
+                                        _selectedGeoUnitId = value;
 
                                         _linkedNagarValue = value;
                                       });
@@ -1793,7 +1802,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                                       setState(() {
                                         selctedLevelName = selectedItem.name ?? "";
                                         selctedLevel = 'Mandal';
-                                        selctedLevelId = value;
+                                        _selectedGeoUnitId = value;
 
                                         _linkedmandalValue = value;
                                       });
@@ -1825,7 +1834,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                               ),
                             ],
                           ),
-                          if (selctedLevelId != '' || vijayadashamiReport != null)
+                          if (_selectedGeoUnitId != '' || vijayadashamiReport != null)
                             Align(
                               alignment: Alignment.center,
                               child: TextButton(
@@ -1855,7 +1864,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                                     // Reset level tracking
                                     selctedLevel = '';
                                     selctedLevelName = '';
-                                    selctedLevelId = null;
+                                    _selectedGeoUnitId = null;
 
                                     vijayadashamiReport = null;
                                     populatelinkedVibhaagDropdown('');

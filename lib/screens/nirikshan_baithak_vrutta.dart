@@ -26,6 +26,10 @@ class _NirikshanAnnualBaithakVruttaState extends State<NirikshanAnnualBaithakVru
   List<GeoUnitMasterBAL>? _linkedShahar;
   List<GeoUnitMasterBAL>? _linkedNagar;
   List<GeoUnitMasterBAL>? _linkedupnagar;
+  List<GeoUnitMasterBAL>? _linkedmandal;
+
+  List<GeoUnitMasterBAL>? _linkedgraam;
+  List<GeoUnitMasterBAL>? _linkedvasti;
   List<StaticMasterBAL>? _baithakTypes;
 
   String? _linkedMahaanagarValue = '';
@@ -33,8 +37,15 @@ class _NirikshanAnnualBaithakVruttaState extends State<NirikshanAnnualBaithakVru
   String? _linkedBhaagValue = '';
   String? _linkedShaharValue = '';
   String? _linkedNagarValue = '';
+  String? _linkedmandalValue = '';
+  String? _linkedgraamValue = '';
   String? _baithakTypeValue = '';
   String? _linkedUpnagarValue = '';
+  String? _linkedvastiValue = '';
+
+  String? _linkedmandalName = '';
+  String? _linkedgraamName = '';
+  String? _linkedvastiName = '';
 
   String? _selctedLevel = 'praant';
   String? _selctedLevelName = '';
@@ -197,6 +208,45 @@ class _NirikshanAnnualBaithakVruttaState extends State<NirikshanAnnualBaithakVru
       _linkedupnagar = (mnDD.length > 0 ? mnDD : null);
     });
     return mnDD;
+  }
+
+  Future<List<GeoUnitMasterBAL>> populatelinkedMandalDropdown(bool haveParentUp, String? nagarIDStr) async {
+    _linkedmandalValue = _linkedgraamValue = null;
+    _linkedmandalName = _linkedgraamName = null;
+    _linkedmandal = _linkedgraam = null;
+    var mnDD;
+    if (haveParentUp) {
+      mnDD = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, "Upnagar", '');
+    } else {
+      mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr!, "Nagar", '');
+    }
+    setState(() {
+      _linkedmandal = (mnDD.length > 0 ? mnDD : null);
+    });
+    return mnDD;
+  }
+
+  Future<List<GeoUnitMasterBAL>> populatelinkedGraamDropdown(String? mandalIDStr) async {
+    _linkedgraamValue = null;
+    _linkedgraamName = null;
+    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['GraamLevelID'].toString(), mandalIDStr!, 'Mandal', '', isAbhiyaan: false);
+    setState(() => _linkedgraam = data.isNotEmpty ? data : null);
+    return data;
+  }
+
+  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(bool haveParentUp, String? nagarIDStr) async {
+    _linkedvastiValue = null;
+    _linkedvastiName = null;
+    var data;
+    if (haveParentUp) {
+      print("i am in parents upnagar");
+      data = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, "Upnagar", '');
+      // print("${mnDD}");
+    } else {
+      data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, "Nagar", '');
+    }
+    setState(() => _linkedvasti = data.isNotEmpty ? data : null);
+    return data;
   }
 
   // void populatelinkedMahaanagarDropdown() async {

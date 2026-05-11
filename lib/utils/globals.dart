@@ -97,6 +97,19 @@ List<Map<String, dynamic>> getFilteredKaryakramLevels(int levelId, {bool isSadbh
   }).toList();
 }
 
+Future<bool?> isInternetAvailable() async {
+  try {
+    // if (kIsWeb) {
+    //   var connectivityResult = await Connectivity().checkConnectivity();
+    //   return connectivityResult.first != ConnectivityResult.none;
+    // }
+    final result = await InternetAddress.lookup('google.com');
+    return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
+  } on SocketException {
+    return false;
+  }
+}
+
 class MyAppGlobals {
   static String checkTextNullEmpty(String? txt) {
     if (txt == null || txt.isEmpty) return "N/A";

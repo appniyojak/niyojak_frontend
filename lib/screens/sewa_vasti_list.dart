@@ -268,7 +268,7 @@ class _SearchSewaVastiState extends State<SearchSewaVasti> {
       _selectedGeoUnitId = _linkedgraamValue = (level == 3 ? (dm.geoUnitID ?? "").toString() : selection.graam) ?? '';
     }
     // Step 8: Vasti
-    await populatelinkedVastiDropdown(_linkednagarValue);
+    await populatelinkedVastiDropdown(selection.upnagar != null, selection.upnagar != null ? _linkedupnagarValue! : _linkednagarValue!);
     _selectedGeoUnitId = _linkedvastiValue = (level == 2 ? (dm.geoUnitID ?? "").toString() : selection.vasti) ?? '';
 
     // if (_linkedVibhaag != null && _linkedVibhaag!.isNotEmpty) _linkedVibhaagName = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedBhaagValue).name;
@@ -346,10 +346,17 @@ class _SearchSewaVastiState extends State<SearchSewaVasti> {
     return mnDD;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(String? nagarIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(bool haveParentUp, String? nagarIDStr) async {
     _linkedvastiValue = null;
     //_linkedvastiName = null;
-    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, 'Nagar', '', isAbhiyaan: false);
+    var data;
+    if (haveParentUp) {
+      print("i am in parents upnagar");
+      data = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, "Upnagar", '');
+      // print("${mnDD}");
+    } else {
+      data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, "Nagar", '');
+    }
     setState(() => _linkedvasti = data.isNotEmpty ? data : null);
     return data;
   }
@@ -659,7 +666,7 @@ class _SearchSewaVastiState extends State<SearchSewaVasti> {
                                                 _linkednagarValue = value.toString();
                                                 populatelinkedUpnagarDropdown(value.toString());
                                                 populatelinkedMandalDropdown(false, value.toString());
-                                                populatelinkedVastiDropdown(value.toString());
+                                                populatelinkedVastiDropdown(false, value.toString());
                                                 type = "nagar";
                                               });
                                             },
@@ -688,7 +695,7 @@ class _SearchSewaVastiState extends State<SearchSewaVasti> {
                                                 _selectedGeoUnitId = value;
                                                 _selctedLevel = 'upnagarUpkhanda';
                                                 _selctedLevelName = selectedItem.name ?? "";
-                                                populatelinkedVastiDropdown(value!);
+                                                populatelinkedVastiDropdown(true, value!);
                                                 populatelinkedMandalDropdown(true, value);
                                                 // populatelinkedNagarDropdown(null, value);
                                               });

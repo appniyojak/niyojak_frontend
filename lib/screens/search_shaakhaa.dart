@@ -191,7 +191,7 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
       _selectedGeoUnitId = _linkedgraamValue = (level == 3 ? (dm.geoUnitID ?? "").toString() : selection.graam) ?? '';
     }
     // Step 8: Vasti
-    await populatelinkedVastiDropdown(_linkednagarValue);
+    await populatelinkedVastiDropdown(selection.upnagar != null, selection.upnagar != null ? _linkedupnagarValue! : _linkednagarValue!);
     _selectedGeoUnitId = _linkedvastiValue = (level == 2 ? (dm.geoUnitID ?? "").toString() : selection.vasti) ?? '';
 
     // if (_linkedVibhaag != null && _linkedVibhaag!.isNotEmpty) _linkedVibhaagName = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedBhaagValue).name;
@@ -273,10 +273,17 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
     return mnDD;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(String? nagarIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(bool haveParentUp, String? nagarIDStr) async {
     _linkedvastiValue = null;
-    //_linkedvastiName = null;
-    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, 'Nagar', '', isAbhiyaan: false);
+    _linkedvastiName = null;
+    var data;
+    if (haveParentUp) {
+      print("i am in parents upnagar");
+      data = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, "Upnagar", '');
+      // print("${mnDD}");
+    } else {
+      data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, "Nagar", '');
+    }
     setState(() => _linkedvasti = data.isNotEmpty ? data : null);
     return data;
   }
@@ -537,7 +544,7 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
       List<GeoUnitMasterBAL> nagarList = await populatelinkedNagarDropdown(data["ParentBhaagID"].toString(), null);
       List<GeoUnitMasterBAL> mandalList = await populatelinkedMandalDropdown(false, data["ParentNagarID"].toString()) ?? [];
       List<GeoUnitMasterBAL> gramList = await populatelinkedGraamDropdown(data["ParentMandalID"].toString()) ?? [];
-      List<GeoUnitMasterBAL> vastiList = await populatelinkedVastiDropdown(data["ParentNagarID"].toString()) ?? [];
+      List<GeoUnitMasterBAL> vastiList = await populatelinkedVastiDropdown(false, data["ParentNagarID"].toString()) ?? [];
       // print("vibhagListvibhagList  ${jsonEncode(vibhagList)}");
 
       List<dynamic> row = [];
@@ -881,7 +888,7 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
                                         _selctedLevel = 'Nagar';
                                         _selctedLevelName = item.name ?? "";
                                         _linkednagarName = item.name ?? "";
-                                        populatelinkedVastiDropdown(value!);
+                                        populatelinkedVastiDropdown(false, value!);
                                         populatelinkedMandalDropdown(false, value);
                                         populatelinkedUpnagarDropdown(value);
                                       });
@@ -907,7 +914,7 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
                                               _selectedGeoUnitId = value;
                                               _selctedLevel = 'upnagarUpkhanda';
                                               _selctedLevelName = selectedItem.name ?? "";
-                                              populatelinkedVastiDropdown(value!);
+                                              populatelinkedVastiDropdown(true, value!);
                                               populatelinkedMandalDropdown(true, value);
                                               // populatelinkedNagarDropdown(null, value);
                                             });

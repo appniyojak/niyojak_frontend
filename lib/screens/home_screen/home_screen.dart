@@ -338,7 +338,10 @@ class _HomeScreenState extends State<HomeScreen> {
       _fetchTargetDashboardData(3);
     }
     // Step 8: Vasti
-    await populatelinkedVastiDropdown(_linkednagarValue);
+    await populatelinkedVastiDropdown(
+      selection.upnagar != null,
+      (selection.upnagar != null && selection.upnagar!.isNotEmpty) ? _linkedupnagarValue : _linkednagarValue,
+    );
     _linkedvastiValue = (level == 2 ? (dm.geoUnitID ?? "").toString() : selection.vasti) ?? '';
     if (level == 2) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.vasti).toString();
@@ -457,10 +460,17 @@ class _HomeScreenState extends State<HomeScreen> {
     return data;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(String? nagarIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(bool haveParentUp, String? nagarIDStr) async {
     _linkedvastiValue = null;
     _linkedvastiName = null;
-    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, 'Nagar', '', isAbhiyaan: false);
+    var data;
+    if (haveParentUp) {
+      print("i am in parents upnagar");
+      data = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, "Upnagar", '');
+      // print("${mnDD}");
+    } else {
+      data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, "Nagar", '');
+    }
     setState(() => _linkedvasti = data.isNotEmpty ? data : null);
     return data;
   }
@@ -2159,7 +2169,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       _linkednagarName = item.name ?? "";
                       populatelinkedUpnagarDropdown(value);
                       populatelinkedMandalDropdown(false, value);
-                      populatelinkedVastiDropdown(value);
+                      populatelinkedVastiDropdown(false, value);
                     });
                     _fetchTargetDashboardData(6);
                   },
@@ -2188,7 +2198,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             _selctedLevelName = selectedItem.name ?? "";
                             _linkedshaharName = selectedItem.name ?? "";
                             populatelinkedMandalDropdown(true, value);
-                            populatelinkedVastiDropdown(value);
+                            populatelinkedVastiDropdown(true, value);
 
                             // populatelinkedNagarDropdown(null, value);
                           });

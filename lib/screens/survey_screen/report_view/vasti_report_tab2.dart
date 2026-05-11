@@ -162,10 +162,17 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
     return mnDD;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(String? nagarIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(bool haveParentUp, String? nagarIDStr) async {
     _linkedvastiValue = null;
     _linkedvastiName = null;
-    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, 'Nagar', '', isAbhiyaan: false);
+    var data;
+    if (haveParentUp) {
+      print("i am in parents upnagar");
+      data = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, "Upnagar", '');
+      // print("${mnDD}");
+    } else {
+      data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, "Nagar", '');
+    }
     setState(() => _linkedvasti = data.isNotEmpty ? data : null);
     return data;
   }
@@ -2201,7 +2208,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                           selctedLevelId = value;
                           _selctedLevelName = item.name ?? "";
                           _linkednagarName = item.name ?? "";
-                          populatelinkedVastiDropdown(value!);
+                          populatelinkedVastiDropdown(false, value!);
                         });
                       },
                     ),
@@ -2226,7 +2233,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                                 _selctedLevel = 'upnagarUpkhanda';
                                 selctedLevelId = value;
                                 _selctedLevelName = selectedItem.name ?? "";
-                                populatelinkedVastiDropdown(value!);
+                                populatelinkedVastiDropdown(true, value!);
 
                                 // populatelinkedNagarDropdown(null, value);
                               });

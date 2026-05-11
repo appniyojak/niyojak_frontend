@@ -14,12 +14,10 @@ class MandalSurveyReportViewScreen2 extends StatefulWidget {
   const MandalSurveyReportViewScreen2({super.key});
 
   @override
-  State<MandalSurveyReportViewScreen2> createState() =>
-      _MandalSurveyReportViewScreen2State();
+  State<MandalSurveyReportViewScreen2> createState() => _MandalSurveyReportViewScreen2State();
 }
 
-class _MandalSurveyReportViewScreen2State
-    extends State<MandalSurveyReportViewScreen2> {
+class _MandalSurveyReportViewScreen2State extends State<MandalSurveyReportViewScreen2> {
   @override
   void initState() {
     // TODO: implement initState
@@ -63,61 +61,48 @@ class _MandalSurveyReportViewScreen2State
     populatelinkedVibhaagDropdown('');
     if (!mounted) return;
     _baithakTypes = data;
-    _baithakTypes = _baithakTypes!
-        .where((element) => element.showAnnualBaithakkey!.contains('1'))
-        .toList();
+    _baithakTypes = _baithakTypes!.where((element) => element.showAnnualBaithakkey!.contains('1')).toList();
     // print("_baithakTypes :-- $_baithakTypes");
     setState(() {});
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedMahaanagarDropdown() async {
-    var data = await Statics.getGeoUnitsByLevelAndParentForMandal(
-        Statics.levels['MahaanagarLevelID'].toString(), '', '', '');
+    var data = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['MahaanagarLevelID'].toString(), '', '', '');
     setState(() {
       _linkedMahaanagar = data;
     });
     return data;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(
-      String vibhaagIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(String vibhaagIDStr) async {
     _linkedNagarValue = null;
-    var data = await Statics.getGeoUnitsByLevelAndParentForMandal(
-        Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
+    var data = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
     setState(() {
       _linkedBhaag = data;
     });
     return data;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(
-      String mahaanagarIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
     _linkedBhaagValue = null;
-    var data = await Statics.getGeoUnitsByLevelAndParentForMandal(
-        Statics.levels['VibhaagLevelID'].toString(),
-        mahaanagarIDStr,
-        (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'),
-        '');
+    var data = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '');
     setState(() {
       _linkedVibhaag = data;
     });
     return data;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(
-      String? bhaagIDStr, String? shaharIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
     _linkedNagarValue = null;
     _linkedNagar = null;
     if (shaharIDStr != null) {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParentForMandal(
-          Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
+      var ngDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
       setState(() {
         _linkedNagar = (ngDD.length > 0 ? ngDD : null);
       });
       return ngDD;
     } else {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParentForMandal(
-          Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
+      var ngDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
       setState(() {
         _linkedNagar = (ngDD.length > 0 ? ngDD : null);
       });
@@ -125,24 +110,20 @@ class _MandalSurveyReportViewScreen2State
     }
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedMandalDropdown(
-      String nagarIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedMandalDropdown(String nagarIDStr) async {
     _linkedgraamValue = null;
     _linkedmandal = _linkedgraam = null;
-    var mnDD = await Statics.getGeoUnitsByLevelAndParentForMandal(
-        Statics.levels['MandalLevelID'].toString(), nagarIDStr, 'Nagar', '');
+    var mnDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['MandalLevelID'].toString(), nagarIDStr, 'Nagar', '');
     setState(() {
       _linkedmandal = (mnDD.length > 0 ? mnDD : null);
     });
     return mnDD;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedGraamDropdown(
-      String mandalIDStr) async {
+  Future<List<GeoUnitMasterBAL>> populatelinkedGraamDropdown(String mandalIDStr) async {
     _linkedgraamValue = null;
     print("mandalIDStr mandalIDStr ==> $mandalIDStr");
-    var gmDD = await Statics.getGeoUnitsByLevelAndParent(
-        Statics.levels['GraamLevelID'].toString(), mandalIDStr, 'Mandal', '');
+    var gmDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['GraamLevelID'].toString(), mandalIDStr, 'Mandal', '');
     setState(() {
       _linkedgraam = (gmDD.length > 0 ? gmDD : null);
     });
@@ -156,6 +137,7 @@ class _MandalSurveyReportViewScreen2State
       _linkedVibhaagValue = null;
       _linkedBhaagValue = null;
       _linkedNagarValue = null;
+      _linkedmandalValue = null;
       mahanagarId = '';
       selctedLevelName = "";
       selctedLevel = 'praant';
@@ -166,6 +148,7 @@ class _MandalSurveyReportViewScreen2State
       _linkedBhaag = null;
       _linkedNagar = null;
       _linkedvasti = null;
+      _linkedmandal = null;
       isVastiSearch = false;
       selctedLevelName = '';
       _isExpanded = false;
@@ -176,8 +159,7 @@ class _MandalSurveyReportViewScreen2State
   MandalVastisarvekshanReportModel? data;
 
   void getMyDetailsColumnsAndRows() async {
-    data = await Statics.vastisarvekshanOnlyMandalReportData(
-        context, Statics.userDetails["userID"], selctedLevelId, selctedLevel);
+    data = await Statics.vastisarvekshanOnlyMandalReportData(context, Statics.userDetails["userID"], selctedLevelId, selctedLevel);
     setState(() {});
   }
 
@@ -193,8 +175,7 @@ class _MandalSurveyReportViewScreen2State
       return;
     }
 
-    final List<String> namesList =
-        vastiStepStartedNames.split('::').map((e) => e.trim()).toList();
+    final List<String> namesList = vastiStepStartedNames.split('::').map((e) => e.trim()).toList();
 
     if (namesList.isEmpty || namesList.first.isEmpty) {
       Fluttertoast.showToast(
@@ -318,8 +299,7 @@ class _MandalSurveyReportViewScreen2State
     }
 
     // Get unique subvalue list
-    final subvalues =
-        data?.durjanshakti!.map((e) => e.subvalue).toSet().toList();
+    final subvalues = data?.durjanshakti!.map((e) => e.subvalue).toSet().toList();
 
     // Get unique value list
     final values = data?.durjanshakti!.map((e) => e.value).toSet().toList();
@@ -350,10 +330,7 @@ class _MandalSurveyReportViewScreen2State
                       backgroundColor: Colors.transparent,
                       headerBuilder: (BuildContext context, bool isExpanded) {
                         return ListTile(
-                          title: Text("${Statics.getLabel('selectStar')}",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold)),
+                          title: Text("${Statics.getLabel('selectStar')}", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
                           trailing: IconButton(
                               onPressed: () {
                                 resetData();
@@ -370,29 +347,18 @@ class _MandalSurveyReportViewScreen2State
                           children: [
                             if (_linkedVibhaag != null)
                               DropdownButtonFormField(
-                                decoration: InputDecoration(
-                                    labelText:
-                                        "${Statics.getLabel('Vibhaag')}"),
+                                decoration: InputDecoration(labelText: "${Statics.getLabel('Vibhaag')}"),
                                 isExpanded: true,
-                                value: _linkedVibhaagValue == ""
-                                    ? null
-                                    : _linkedVibhaagValue,
-                                items: _linkedVibhaag!
-                                    .map((bg) => DropdownMenuItem(
-                                        value: bg.geoUnitID.toString(),
-                                        child: Text(bg.name!)))
-                                    .toList(),
+                                value: _linkedVibhaagValue == "" ? null : _linkedVibhaagValue,
+                                items: _linkedVibhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                 onChanged: (value) {
-                                  final selectedItem = _linkedVibhaag!
-                                      .firstWhere((bg) =>
-                                          bg.geoUnitID.toString() == value);
+                                  final selectedItem = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                                   print(value);
                                   setState(() {
                                     _linkedVibhaagValue = value;
                                     populatelinkedBhaagDropdown(value!);
                                     vibhagId = value;
-                                    _linkedBhaagValue =
-                                        _linkedNagarValue = null;
+                                    _linkedBhaagValue = _linkedNagarValue = null;
                                     _linkedBhaag = _linkedNagar = null;
                                     selctedLevelId = value;
                                     selctedLevelName = selectedItem.name ?? "";
@@ -401,8 +367,7 @@ class _MandalSurveyReportViewScreen2State
                                     selctedVibhaagName = selectedItem.name;
                                   });
                                   print("Selected Id: $value");
-                                  print(
-                                      "Selected Level Name: ${selectedItem.name}");
+                                  print("Selected Level Name: ${selectedItem.name}");
                                 },
                               ),
                             SizedBox(
@@ -410,20 +375,12 @@ class _MandalSurveyReportViewScreen2State
                             ),
                             if (_linkedBhaag != null)
                               DropdownButtonFormField(
-                                decoration: InputDecoration(
-                                    labelText: "${Statics.getLabel('Bhaag')}"),
+                                decoration: InputDecoration(labelText: "${Statics.getLabel('Bhaag')}"),
                                 isExpanded: true,
-                                value: _linkedBhaagValue == ""
-                                    ? null
-                                    : _linkedBhaagValue,
-                                items: _linkedBhaag!
-                                    .map((bg) => DropdownMenuItem(
-                                        value: bg.geoUnitID.toString(),
-                                        child: Text(bg.name!)))
-                                    .toList(),
+                                value: _linkedBhaagValue == "" ? null : _linkedBhaagValue,
+                                items: _linkedBhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                 onChanged: (value) {
-                                  final selectedItem = _linkedBhaag!.firstWhere(
-                                      (bg) => bg.geoUnitID.toString() == value);
+                                  final selectedItem = _linkedBhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                                   setState(() {
                                     _linkedBhaagValue = value;
                                     populatelinkedNagarDropdown(value, null);
@@ -434,31 +391,20 @@ class _MandalSurveyReportViewScreen2State
                                     selctedBhaagName = selectedItem.name;
                                   });
                                   print("Selected Id: $value");
-                                  print(
-                                      "Selected Level Name: ${selectedItem.name}");
+                                  print("Selected Level Name: ${selectedItem.name}");
                                 },
                               ),
                             SizedBox(
                               height: 10,
                             ),
-                            if (_linkedNagar != null &&
-                                _linkedNagar!.length > 0)
+                            if (_linkedNagar != null && _linkedNagar!.length > 0)
                               DropdownButtonFormField(
-                                decoration: InputDecoration(
-                                    labelText:
-                                        "${Statics.getLabel('taalukaa')}"),
+                                decoration: InputDecoration(labelText: "${Statics.getLabel('taalukaa')}"),
                                 isExpanded: true,
-                                value: _linkedNagarValue == ""
-                                    ? null
-                                    : _linkedNagarValue,
-                                items: _linkedNagar!
-                                    .map((bg) => DropdownMenuItem(
-                                        value: bg.geoUnitID.toString(),
-                                        child: Text(bg.name!)))
-                                    .toList(),
+                                value: _linkedNagarValue == "" ? null : _linkedNagarValue,
+                                items: _linkedNagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                 onChanged: (value) {
-                                  final selectedItem = _linkedNagar!.firstWhere(
-                                      (bg) => bg.geoUnitID.toString() == value);
+                                  final selectedItem = _linkedNagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                                   setState(() {
                                     _linkedNagarValue = value;
                                     populatelinkedMandalDropdown(value!);
@@ -469,33 +415,21 @@ class _MandalSurveyReportViewScreen2State
                                     selctedTaalukaName = selectedItem.name;
                                   });
                                   print("Selected Id: $value");
-                                  print(
-                                      "Selected Level Name: ${selectedItem.name}");
+                                  print("Selected Level Name: ${selectedItem.name}");
                                 },
                               ),
-                            if (_linkedNagar != null &&
-                                _linkedNagar!.length > 0)
+                            if (_linkedNagar != null && _linkedNagar!.length > 0)
                               SizedBox(
                                 height: 10,
                               ),
-                            if (_linkedmandal != null &&
-                                _linkedmandal!.length > 0)
+                            if (_linkedmandal != null && _linkedmandal!.length > 0)
                               DropdownButtonFormField(
-                                decoration: InputDecoration(
-                                    labelText: "${Statics.getLabel('Mandal')}"),
+                                decoration: InputDecoration(labelText: "${Statics.getLabel('Mandal')}"),
                                 isExpanded: true,
-                                value: _linkedmandalValue == ""
-                                    ? null
-                                    : _linkedmandalValue,
-                                items: _linkedmandal!
-                                    .map((bg) => DropdownMenuItem(
-                                        value: bg.geoUnitID.toString(),
-                                        child: Text(bg.name!)))
-                                    .toList(),
+                                value: _linkedmandalValue == "" ? null : _linkedmandalValue,
+                                items: _linkedmandal!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                 onChanged: (value) {
-                                  final selectedItem = _linkedmandal!
-                                      .firstWhere((bg) =>
-                                          bg.geoUnitID.toString() == value);
+                                  final selectedItem = _linkedmandal!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                                   setState(() {
                                     _linkedmandalValue = value;
                                     selctedLevelId = value;
@@ -506,12 +440,10 @@ class _MandalSurveyReportViewScreen2State
                                     populatelinkedGraamDropdown(value!);
                                   });
                                   print("Selected Id: $value");
-                                  print(
-                                      "Selected Level Name: ${selectedItem.name}");
+                                  print("Selected Level Name: ${selectedItem.name}");
                                 },
                               ),
-                            if (_linkedmandal != null &&
-                                _linkedmandal!.length > 0)
+                            if (_linkedmandal != null && _linkedmandal!.length > 0)
                               SizedBox(
                                 height: 10,
                               ),
@@ -519,27 +451,20 @@ class _MandalSurveyReportViewScreen2State
                               Align(
                                 alignment: Alignment.center,
                                 child: ElevatedButton(
-                                  style: ButtonStyle(
-                                      backgroundColor: MaterialStatePropertyAll(
-                                          Colors.purpleAccent)),
+                                  style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.purpleAccent)),
                                   onPressed: () {
                                     if (selctedLevel == "Mandal") {
                                       setState(() {
                                         isVastiSearch = true;
                                         _isExpanded = false;
                                       });
-                                      print(
-                                          "selctedLevel $selctedLevel -- selctedLevelId $selctedLevelId -- selctedLevelName $selctedLevelName");
+                                      print("selctedLevel $selctedLevel -- selctedLevelId $selctedLevelId -- selctedLevelName $selctedLevelName");
                                       getMyDetailsColumnsAndRows();
                                     } else {
-                                      Statics.showToast(
-                                          Statics.getLabel('mandalValidation'));
+                                      Statics.showToast(Statics.getLabel('mandalValidation'));
                                     }
                                   },
-                                  child: Text("${Statics.getLabel('Filters')}",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold)),
+                                  child: Text("${Statics.getLabel('Filters')}", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                                 ),
                               )
                           ],
@@ -553,15 +478,11 @@ class _MandalSurveyReportViewScreen2State
               SizedBox(
                 height: 10,
               ),
-              if (selctedLevel == "Mandal" &&
-                  selctedLevelName != "" &&
-                  isVastiSearch == true)
+              if (selctedLevel == "Mandal" && selctedLevelName != "" && isVastiSearch == true)
                 SizedBox(
                   height: 20,
                 ),
-              if (selctedLevel == "Mandal" &&
-                  selctedLevelName != "" &&
-                  isVastiSearch == true)
+              if (selctedLevel == "Mandal" && selctedLevelName != "" && isVastiSearch == true)
                 Container(
                     height: 40,
                     width: double.infinity,
@@ -575,17 +496,11 @@ class _MandalSurveyReportViewScreen2State
                       children: [
                         Text(
                           "मंडल ->  ",
-                          style: TextStyle(
-                              color: Colors.purpleAccent,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16),
+                          style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                         Text(
                           " $selctedLevelName",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 17),
+                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17),
                         ),
                       ],
                     )),
@@ -604,8 +519,7 @@ class _MandalSurveyReportViewScreen2State
                   child: Center(
                     child: Text(
                       '${Statics.getLabel('sharaansh')} ($selctedDropDownLevelName)',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
@@ -767,105 +681,66 @@ class _MandalSurveyReportViewScreen2State
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: DataTable(
-                      headingRowColor:
-                          MaterialStateProperty.all(Colors.blueAccent),
+                      headingRowColor: MaterialStateProperty.all(Colors.blueAccent),
                       headingTextStyle: TextStyle(
                         fontSize: 15,
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                       columns: [
-                        DataColumn(
-                            label: Text(
-                                "${Statics.getLabel('sarvekshanSthiti')}")),
-                        DataColumn(
-                            label: Text("${Statics.getLabel('taalukaa')}")),
-                        DataColumn(
-                            label: Text("${Statics.getLabel('Mandal')}")),
+                        DataColumn(label: Text("${Statics.getLabel('sarvekshanSthiti')}")),
+                        DataColumn(label: Text("${Statics.getLabel('taalukaa')}")),
+                        DataColumn(label: Text("${Statics.getLabel('Mandal')}")),
                         DataColumn(label: Text("${Statics.getLabel('gaav')}")),
                         DataColumn(label: Text('')),
                       ],
                       rows: [
                         DataRow(
-                          color:
-                              MaterialStateProperty.all(Colors.orange.shade50),
+                          color: MaterialStateProperty.all(Colors.orange.shade50),
                           cells: [
-                            DataCell(
-                                Text("${Statics.getLabel('surveyStart')}")),
-                            DataCell(Text(
-                                "${data?.mandalVastisarvekshanReportwithname?.gramStepStartedCount ?? ""}")),
-                            DataCell(Text(
-                                "${data?.mandalVastisarvekshanReportwithname?.gramStepStartedCount ?? ""}")),
-                            DataCell(Text(
-                                "${data?.mandalVastisarvekshanReportwithname?.gramStepStartedCount ?? ""}")),
+                            DataCell(Text("${Statics.getLabel('surveyStart')}")),
+                            DataCell(Text("${data?.mandalVastisarvekshanReportwithname?.gramStepStartedCount ?? ""}")),
+                            DataCell(Text("${data?.mandalVastisarvekshanReportwithname?.gramStepStartedCount ?? ""}")),
+                            DataCell(Text("${data?.mandalVastisarvekshanReportwithname?.gramStepStartedCount ?? ""}")),
                             DataCell(IconButton(
-                              icon: Icon(Icons.remove_red_eye,
-                                  color: Colors.teal),
-                              onPressed: () => showPopupList(
-                                  context,
-                                  data!.mandalVastisarvekshanReportwithname!
-                                      .gramStepStartedNames!
-                                      .toString()),
+                              icon: Icon(Icons.remove_red_eye, color: Colors.teal),
+                              onPressed: () => showPopupList(context, data!.mandalVastisarvekshanReportwithname!.gramStepStartedNames!.toString()),
                             )),
                           ],
                         ),
                         DataRow(
-                          color:
-                              MaterialStateProperty.all(Colors.orange.shade50),
+                          color: MaterialStateProperty.all(Colors.orange.shade50),
                           cells: [
-                            DataCell(
-                                Text("${Statics.getLabel('surveyComplete')}")),
-                            DataCell(Text(
-                                "${data?.mandalVastisarvekshanReportwithname?.gramAllStepsCompleteCount ?? ""}")),
-                            DataCell(Text(
-                                "${data?.mandalVastisarvekshanReportwithname?.gramAllStepsCompleteCount ?? ""}")),
-                            DataCell(Text(
-                                "${data?.mandalVastisarvekshanReportwithname?.gramAllStepsCompleteCount ?? ""}")),
+                            DataCell(Text("${Statics.getLabel('surveyComplete')}")),
+                            DataCell(Text("${data?.mandalVastisarvekshanReportwithname?.gramAllStepsCompleteCount ?? ""}")),
+                            DataCell(Text("${data?.mandalVastisarvekshanReportwithname?.gramAllStepsCompleteCount ?? ""}")),
+                            DataCell(Text("${data?.mandalVastisarvekshanReportwithname?.gramAllStepsCompleteCount ?? ""}")),
                             DataCell(IconButton(
-                              icon: Icon(Icons.remove_red_eye,
-                                  color: Colors.teal),
-                              onPressed: () => showPopupList(
-                                  context,
-                                  data!.mandalVastisarvekshanReportwithname!
-                                      .gramAllStepsCompleteNames!
-                                      .toString()),
+                              icon: Icon(Icons.remove_red_eye, color: Colors.teal),
+                              onPressed: () => showPopupList(context, data!.mandalVastisarvekshanReportwithname!.gramAllStepsCompleteNames!.toString()),
                             )),
                           ],
                         ),
                         DataRow(
-                          color:
-                              MaterialStateProperty.all(Colors.orange.shade50),
+                          color: MaterialStateProperty.all(Colors.orange.shade50),
                           cells: [
-                            DataCell(Text(
-                                "${Statics.getLabel('surveyNotStarted')}")),
-                            DataCell(Text(
-                                "${data?.mandalVastisarvekshanReportwithname?.gramStepsNotstartedCount ?? ""}")),
-                            DataCell(Text(
-                                "${data?.mandalVastisarvekshanReportwithname?.gramStepsNotstartedCount ?? ""}")),
-                            DataCell(Text(
-                                "${data?.mandalVastisarvekshanReportwithname?.gramStepsNotstartedCount ?? ""}")),
+                            DataCell(Text("${Statics.getLabel('surveyNotStarted')}")),
+                            DataCell(Text("${data?.mandalVastisarvekshanReportwithname?.gramStepsNotstartedCount ?? ""}")),
+                            DataCell(Text("${data?.mandalVastisarvekshanReportwithname?.gramStepsNotstartedCount ?? ""}")),
+                            DataCell(Text("${data?.mandalVastisarvekshanReportwithname?.gramStepsNotstartedCount ?? ""}")),
                             DataCell(IconButton(
-                              icon: Icon(Icons.remove_red_eye,
-                                  color: Colors.teal),
-                              onPressed: () => showPopupList(
-                                  context,
-                                  data!.mandalVastisarvekshanReportwithname!
-                                      .gramStepsNotstartedNames!
-                                      .toString()),
+                              icon: Icon(Icons.remove_red_eye, color: Colors.teal),
+                              onPressed: () => showPopupList(context, data!.mandalVastisarvekshanReportwithname!.gramStepsNotstartedNames!.toString()),
                             )),
                           ],
                         ),
                         DataRow(
-                          color:
-                              MaterialStateProperty.all(Colors.grey.shade200),
+                          color: MaterialStateProperty.all(Colors.grey.shade200),
                           cells: [
                             DataCell(Text("${Statics.getLabel('Total')}")),
-                            DataCell(Text(
-                                "${data?.mandalVastisarvekshanReportwithname?.gramcount ?? ""}")),
-                            DataCell(Text(
-                                "${data?.mandalVastisarvekshanReportwithname?.gramcount ?? ""}")),
-                            DataCell(Text(
-                                "${data?.mandalVastisarvekshanReportwithname?.gramcount ?? ""}")),
+                            DataCell(Text("${data?.mandalVastisarvekshanReportwithname?.gramcount ?? ""}")),
+                            DataCell(Text("${data?.mandalVastisarvekshanReportwithname?.gramcount ?? ""}")),
+                            DataCell(Text("${data?.mandalVastisarvekshanReportwithname?.gramcount ?? ""}")),
                             DataCell(Text("-")),
                           ],
                         ),
@@ -880,104 +755,62 @@ class _MandalSurveyReportViewScreen2State
                           ],
                         ),
                         DataRow(
-                          color:
-                              MaterialStateProperty.all(Colors.teal.shade100),
+                          color: MaterialStateProperty.all(Colors.teal.shade100),
                           cells: [
                             DataCell(
                               Container(
                                 alignment: Alignment.center,
-                                width: double
-                                    .infinity, // makes it span available width
-                                child: Text(
-                                    "${Statics.getLabel('surveyStart')} ${Statics.getLabel('Status')}",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                        fontSize: 16)),
+                                width: double.infinity, // makes it span available width
+                                child: Text("${Statics.getLabel('surveyStart')} ${Statics.getLabel('Status')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)),
                               ),
                             ),
                             DataCell(
                               Container(
                                 alignment: Alignment.center,
-                                width: double
-                                    .infinity, // makes it span available width
-                                child: Text("${Statics.getLabel('taalukaa')}",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                        fontSize: 16)),
+                                width: double.infinity, // makes it span available width
+                                child: Text("${Statics.getLabel('taalukaa')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)),
                               ),
                             ),
                             DataCell(
                               Container(
                                 alignment: Alignment.center,
-                                width: double
-                                    .infinity, // makes it span available width
-                                child: Text("${Statics.getLabel('Mandal')}",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                        fontSize: 16)),
+                                width: double.infinity, // makes it span available width
+                                child: Text("${Statics.getLabel('Mandal')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)),
                               ),
                             ),
                             DataCell(
                               Container(
                                 alignment: Alignment.center,
-                                width: double
-                                    .infinity, // makes it span available width
-                                child: Text("${Statics.getLabel('gaav')}",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                        fontSize: 16)),
+                                width: double.infinity, // makes it span available width
+                                child: Text("${Statics.getLabel('gaav')}", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)),
                               ),
                             ),
                             DataCell.empty,
                           ],
                         ),
                         DataRow(
-                          color:
-                              MaterialStateProperty.all(Colors.green.shade50),
+                          color: MaterialStateProperty.all(Colors.green.shade50),
                           cells: [
-                            DataCell(Text(
-                                "${Statics.getLabel('prathamikSurveyComplete')}")),
-                            DataCell(Text(
-                                "${data?.mandalVastisarvekshanReportwithname?.gramStep1CompleteCount ?? ""}")),
-                            DataCell(Text(
-                                "${data?.mandalVastisarvekshanReportwithname?.gramStep1CompleteCount ?? ""}")),
-                            DataCell(Text(
-                                "${data?.mandalVastisarvekshanReportwithname?.gramStep1CompleteCount ?? ""}")),
+                            DataCell(Text("${Statics.getLabel('prathamikSurveyComplete')}")),
+                            DataCell(Text("${data?.mandalVastisarvekshanReportwithname?.gramStep1CompleteCount ?? ""}")),
+                            DataCell(Text("${data?.mandalVastisarvekshanReportwithname?.gramStep1CompleteCount ?? ""}")),
+                            DataCell(Text("${data?.mandalVastisarvekshanReportwithname?.gramStep1CompleteCount ?? ""}")),
                             DataCell(IconButton(
-                              icon: Icon(Icons.remove_red_eye,
-                                  color: Colors.teal),
-                              onPressed: () => showPopupList(
-                                  context,
-                                  data!.mandalVastisarvekshanReportwithname!
-                                      .gramStep1CompleteNames!
-                                      .toString()),
+                              icon: Icon(Icons.remove_red_eye, color: Colors.teal),
+                              onPressed: () => showPopupList(context, data!.mandalVastisarvekshanReportwithname!.gramStep1CompleteNames!.toString()),
                             )),
                           ],
                         ),
                         DataRow(
-                          color:
-                              MaterialStateProperty.all(Colors.green.shade50),
+                          color: MaterialStateProperty.all(Colors.green.shade50),
                           cells: [
-                            DataCell(Text(
-                                "${Statics.getLabel('vistrutSurveyComplete')}")),
-                            DataCell(Text(
-                                "${data?.mandalVastisarvekshanReportwithname?.gramStep3CompleteCount ?? ""}")),
-                            DataCell(Text(
-                                "${data?.mandalVastisarvekshanReportwithname?.gramStep3CompleteCount ?? ""}")),
-                            DataCell(Text(
-                                "${data?.mandalVastisarvekshanReportwithname?.gramStep3CompleteCount ?? ""}")),
+                            DataCell(Text("${Statics.getLabel('vistrutSurveyComplete')}")),
+                            DataCell(Text("${data?.mandalVastisarvekshanReportwithname?.gramStep3CompleteCount ?? ""}")),
+                            DataCell(Text("${data?.mandalVastisarvekshanReportwithname?.gramStep3CompleteCount ?? ""}")),
+                            DataCell(Text("${data?.mandalVastisarvekshanReportwithname?.gramStep3CompleteCount ?? ""}")),
                             DataCell(IconButton(
-                              icon: Icon(Icons.remove_red_eye,
-                                  color: Colors.teal),
-                              onPressed: () => showPopupList(
-                                  context,
-                                  data!.mandalVastisarvekshanReportwithname!
-                                      .gramStep3CompleteNames!
-                                      .toString()),
+                              icon: Icon(Icons.remove_red_eye, color: Colors.teal),
+                              onPressed: () => showPopupList(context, data!.mandalVastisarvekshanReportwithname!.gramStep3CompleteNames!.toString()),
                             )),
                           ],
                         ),
@@ -1164,41 +997,13 @@ class _MandalSurveyReportViewScreen2State
                           ),
                           child: Column(
                             children: [
-                              SingleColumnRow(
-                                  txtString:
-                                      "${Statics.getLabel("mandalName")}",
-                                  value: "${data?.mandaldata?.mandalname}",
-                                  fontsize: 15),
-                              SingleColumnRow(
-                                  txtString:
-                                      "${Statics.getLabel("talukaName")}",
-                                  value: "${data?.mandaldata?.nagarname}",
-                                  fontsize: 15),
-                              SingleColumnRow(
-                                  txtString: "${Statics.getLabel("zilhaName")}",
-                                  value: "${data?.mandaldata?.bhagname}",
-                                  fontsize: 15),
-                              SingleColumnRow(
-                                  txtString:
-                                      "${Statics.getLabel("vibhagName")}",
-                                  value: "${data?.mandaldata?.vibhagname}",
-                                  fontsize: 15),
-                              SingleColumnRow(
-                                  txtString:
-                                      "${Statics.getLabel("mandalPramukhacheNaav")}",
-                                  value:
-                                      "${data?.mandaldata?.mandalPramukhName}",
-                                  fontsize: 15),
-                              SingleColumnRow(
-                                  txtString:
-                                      "${Statics.getLabel("gavanchiSankhya")}",
-                                  value: "${data?.mandaldata?.gavachiSankhya}",
-                                  fontsize: 15),
-                              SingleColumnRow(
-                                  txtString:
-                                      "${Statics.getLabel("mumbaikarGaav")}",
-                                  value: "${data?.mandaldata?.mumbaikarCount}",
-                                  fontsize: 15),
+                              SingleColumnRow(txtString: "${Statics.getLabel("mandalName")}", value: "${data?.mandaldata?.mandalname}", fontsize: 15),
+                              SingleColumnRow(txtString: "${Statics.getLabel("talukaName")}", value: "${data?.mandaldata?.nagarname}", fontsize: 15),
+                              SingleColumnRow(txtString: "${Statics.getLabel("zilhaName")}", value: "${data?.mandaldata?.bhagname}", fontsize: 15),
+                              SingleColumnRow(txtString: "${Statics.getLabel("vibhagName")}", value: "${data?.mandaldata?.vibhagname}", fontsize: 15),
+                              SingleColumnRow(txtString: "${Statics.getLabel("mandalPramukhacheNaav")}", value: "${data?.mandaldata?.mandalPramukhName}", fontsize: 15),
+                              SingleColumnRow(txtString: "${Statics.getLabel("gavanchiSankhya")}", value: "${data?.mandaldata?.gavachiSankhya}", fontsize: 15),
+                              SingleColumnRow(txtString: "${Statics.getLabel("mumbaikarGaav")}", value: "${data?.mandaldata?.mumbaikarCount}", fontsize: 15),
                             ],
                           ),
                         ),
@@ -1208,8 +1013,7 @@ class _MandalSurveyReportViewScreen2State
                     commonExpansionTile(
                       title: 'sewaPrakalpa',
                       children: [
-                        if (data != null && data?.sewaPrakalpa != null)
-                          buildSewaPrakalpaDataTable(data!.sewaPrakalpa!),
+                        if (data != null && data?.sewaPrakalpa != null) buildSewaPrakalpaDataTable(data!.sewaPrakalpa!),
                       ],
                     ),
                   ],
@@ -1242,8 +1046,7 @@ class _MandalSurveyReportViewScreen2State
                                   child: Text(
                                     "${Statics.getLabel('karyaSankhya')}",
                                     textAlign: TextAlign.center,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                                    style: TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ),
@@ -1254,8 +1057,7 @@ class _MandalSurveyReportViewScreen2State
                                   child: Text(
                                     "${Statics.getLabel('kitiGaavat')}",
                                     textAlign: TextAlign.center,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                                    style: TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ),
@@ -1266,8 +1068,7 @@ class _MandalSurveyReportViewScreen2State
                                   child: Text(
                                     "${Statics.getLabel('chalavnareCount')}",
                                     textAlign: TextAlign.center,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                                    style: TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ),
@@ -1279,24 +1080,21 @@ class _MandalSurveyReportViewScreen2State
                                 DataCell(
                                   Center(
                                     child: Text(
-                                      data!.vividhKshetaCheKam![0].sankhya
-                                          .toString(),
+                                      data!.vividhKshetaCheKam![0].sankhya.toString(),
                                     ),
                                   ),
                                 ),
                                 DataCell(
                                   Center(
                                     child: Text(
-                                      data!.vividhKshetaCheKam![0].gramCount
-                                          .toString(),
+                                      data!.vividhKshetaCheKam![0].gramCount.toString(),
                                     ),
                                   ),
                                 ),
                                 DataCell(
                                   Center(
                                     child: Text(
-                                      data!.vividhKshetaCheKam![0].value
-                                          .toString(),
+                                      data!.vividhKshetaCheKam![0].value.toString(),
                                     ),
                                   ),
                                 ),
@@ -1321,19 +1119,16 @@ class _MandalSurveyReportViewScreen2State
                     child: SingleChildScrollView(
                         child: Column(
                       children: [
-                        if (data != null &&
-                            data?.vividhSampradhaySatsang != null)
+                        if (data != null && data?.vividhSampradhaySatsang != null)
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.shade300),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: DataTable(
-                                headingRowColor:
-                                    MaterialStateProperty.resolveWith(
+                                headingRowColor: MaterialStateProperty.resolveWith(
                                   (states) => Colors.purpleAccent[200],
                                 ),
                                 headingTextStyle: const TextStyle(
@@ -1347,8 +1142,7 @@ class _MandalSurveyReportViewScreen2State
                                         child: Text(
                                           "${Statics.getLabel('saampradaay')}",
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
@@ -1359,22 +1153,17 @@ class _MandalSurveyReportViewScreen2State
                                         child: Text(
                                           "${Statics.getLabel('TotalGraamCount')}",
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ],
-                                rows:
-                                    data!.vividhSampradhaySatsang!.map((item) {
+                                rows: data!.vividhSampradhaySatsang!.map((item) {
                                   return DataRow(
                                     cells: [
-                                      DataCell(Center(
-                                          child: Text(item.value ?? ''))),
-                                      DataCell(Center(
-                                          child:
-                                              Text(item.gramCount.toString()))),
+                                      DataCell(Center(child: Text(item.value ?? ''))),
+                                      DataCell(Center(child: Text(item.gramCount.toString()))),
                                     ],
                                   );
                                 }).toList(),
@@ -1390,87 +1179,30 @@ class _MandalSurveyReportViewScreen2State
               commonExpansionTile(
                 title: 'SwayamsevakCount',
                 children: [
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('TotalKaaryakartaaCount'),
-                      value: data?.loksankhyaformandal?.totalKaaryakartaaCount
-                          .toString(),
-                      fontsize: 15),
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('PratidnyitCount'),
-                      value:
-                          data?.loksankhyaformandal?.pratidnyitCount.toString(),
-                      fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('TotalKaaryakartaaCount'), value: data?.loksankhyaformandal?.totalKaaryakartaaCount.toString(), fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('PratidnyitCount'), value: data?.loksankhyaformandal?.pratidnyitCount.toString(), fontsize: 15),
                 ],
               ),
               commonExpansionTile(
                 title: 'SwayamsevakCountByAge',
                 children: [
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('Shishu'),
-                      value: data?.loksankhyaformandal?.shishuCount.toString(),
-                      fontsize: 15),
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('Baal'),
-                      value: data?.loksankhyaformandal?.baalCount.toString(),
-                      fontsize: 15),
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('TarunVidyaarthi'),
-                      value: data?.loksankhyaformandal?.tarunVidyaarthiCount
-                          .toString(),
-                      fontsize: 15),
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('TarunVyavasaayee'),
-                      value: data?.loksankhyaformandal?.tarunVyavasaayeeCount
-                          .toString(),
-                      fontsize: 15),
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('ProudhVyavasaayee'),
-                      value: data?.loksankhyaformandal?.proudhaVyavasaayeeCount
-                          .toString(),
-                      fontsize: 15),
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('UnkownAge'),
-                      value:
-                          data?.loksankhyaformandal?.unknownAgeCount.toString(),
-                      fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('Shishu'), value: data?.loksankhyaformandal?.shishuCount.toString(), fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('Baal'), value: data?.loksankhyaformandal?.baalCount.toString(), fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('TarunVidyaarthi'), value: data?.loksankhyaformandal?.tarunVidyaarthiCount.toString(), fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('TarunVyavasaayee'), value: data?.loksankhyaformandal?.tarunVyavasaayeeCount.toString(), fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('ProudhVyavasaayee'), value: data?.loksankhyaformandal?.proudhaVyavasaayeeCount.toString(), fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('UnkownAge'), value: data?.loksankhyaformandal?.unknownAgeCount.toString(), fontsize: 15),
                 ],
               ),
               commonExpansionTile(
                 title: 'ShikshitSwayamsevakCount',
                 children: [
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('PrarambhikShikshit'),
-                      value: data?.loksankhyaformandal?.prarambhikShikshitCount
-                          .toString(),
-                      fontsize: 15),
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('PraathamikShikshit'),
-                      value: data?.loksankhyaformandal?.praathamikShikshitCount
-                          .toString(),
-                      fontsize: 15),
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('PrathamVarshShikshit'),
-                      value: data
-                          ?.loksankhyaformandal?.prathamVarshaShikshitCount
-                          .toString(),
-                      fontsize: 15),
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('DwitiyaVarshShikshit'),
-                      value: data
-                          ?.loksankhyaformandal?.dwitiyaVarshaShikshitCount
-                          .toString(),
-                      fontsize: 15),
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('TrutiyaVarshShikshit'),
-                      value: data
-                          ?.loksankhyaformandal?.trutiyaVarshaShikshitCount
-                          .toString(),
-                      fontsize: 15),
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('NoShikshan'),
-                      value:
-                          data?.loksankhyaformandal?.noShikshanCount.toString(),
-                      fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('PrarambhikShikshit'), value: data?.loksankhyaformandal?.prarambhikShikshitCount.toString(), fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('PraathamikShikshit'), value: data?.loksankhyaformandal?.praathamikShikshitCount.toString(), fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('PrathamVarshShikshit'), value: data?.loksankhyaformandal?.prathamVarshaShikshitCount.toString(), fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('DwitiyaVarshShikshit'), value: data?.loksankhyaformandal?.dwitiyaVarshaShikshitCount.toString(), fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('TrutiyaVarshShikshit'), value: data?.loksankhyaformandal?.trutiyaVarshaShikshitCount.toString(), fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('NoShikshan'), value: data?.loksankhyaformandal?.noShikshanCount.toString(), fontsize: 15),
                 ],
               ),
               commonExpansionTile(
@@ -1478,80 +1210,58 @@ class _MandalSurveyReportViewScreen2State
                 children: [
                   TwoColumnRow(
                     txtString: Statics.getLabel('Shaakhaa'),
-                    value: data
-                        ?.loksankhyaformandal?.dailyShaakhaaKaaryakartaaCount
-                        .toString(),
+                    value: data?.loksankhyaformandal?.dailyShaakhaaKaaryakartaaCount.toString(),
                     txtString2: Statics.getLabel('SaaptaahikLabelShort'),
-                    value2: data
-                        ?.loksankhyaformandal?.saaptaahikMilanKaaryakartaaCount
-                        .toString(),
+                    value2: data?.loksankhyaformandal?.saaptaahikMilanKaaryakartaaCount.toString(),
                     fontsize: 15,
                   ),
                   TwoColumnRow(
                     txtString: Statics.getLabel('MilanMandali'),
-                    value: data
-                        ?.loksankhyaformandal?.maasikMilanKaaryakartaaCount
-                        .toString(),
+                    value: data?.loksankhyaformandal?.maasikMilanKaaryakartaaCount.toString(),
                     txtString2: Statics.getLabel('VastiKaaryakartaaCount'),
-                    value2: data?.loksankhyaformandal?.vastiKaaryakartaaCount
-                        .toString(),
+                    value2: data?.loksankhyaformandal?.vastiKaaryakartaaCount.toString(),
                     fontsize: 15,
                   ),
                   TwoColumnRow(
                     txtString: Statics.getLabel('GraamKaaryakartaaCount'),
-                    value: data?.loksankhyaformandal?.graamKaaryakartaaCount
-                        .toString(),
+                    value: data?.loksankhyaformandal?.graamKaaryakartaaCount.toString(),
                     txtString2: Statics.getLabel('MandalKaaryakartaaCount'),
-                    value2: data?.loksankhyaformandal?.mandalKaaryakartaaCount
-                        .toString(),
+                    value2: data?.loksankhyaformandal?.mandalKaaryakartaaCount.toString(),
                     fontsize: 15,
                   ),
                   TwoColumnRow(
                     txtString: Statics.getLabel('NagarKaaryakartaaCount'),
-                    value: data?.loksankhyaformandal?.nagarKaaryakartaaCount
-                        .toString(),
+                    value: data?.loksankhyaformandal?.nagarKaaryakartaaCount.toString(),
                     txtString2: Statics.getLabel('ShaharKaaryakartaaCount'),
-                    value2: data?.loksankhyaformandal?.shaharKaaryakartaaCount
-                        .toString(),
+                    value2: data?.loksankhyaformandal?.shaharKaaryakartaaCount.toString(),
                     fontsize: 15,
                   ),
                   TwoColumnRow(
                     txtString: Statics.getLabel('BhaagKaaryakartaaCount'),
-                    value: data?.loksankhyaformandal?.bhaagKaaryakartaaCount
-                        .toString(),
+                    value: data?.loksankhyaformandal?.bhaagKaaryakartaaCount.toString(),
                     txtString2: Statics.getLabel('VibhaagKaaryakartaaCount'),
-                    value2: data?.loksankhyaformandal?.vibhaagKaaryakartaaCount
-                        .toString(),
+                    value2: data?.loksankhyaformandal?.vibhaagKaaryakartaaCount.toString(),
                     fontsize: 15,
                   ),
                   TwoColumnRow(
                     txtString: Statics.getLabel('MahaanagarKaaryakartaaCount'),
-                    value: data
-                        ?.loksankhyaformandal?.mahaanagarKaaryakartaaCount
-                        .toString(),
+                    value: data?.loksankhyaformandal?.mahaanagarKaaryakartaaCount.toString(),
                     txtString2: Statics.getLabel('PraantKaaryakartaaCount'),
-                    value2: data?.loksankhyaformandal?.praantKaaryakartaaCount
-                        .toString(),
+                    value2: data?.loksankhyaformandal?.praantKaaryakartaaCount.toString(),
                     fontsize: 15,
                   ),
                   TwoColumnRow(
                     txtString: Statics.getLabel('KshetraKaaryakartaaCount'),
-                    value: data?.loksankhyaformandal?.kshetraKaaryakartaaCount
-                        .toString(),
-                    txtString2:
-                        Statics.getLabel('AkhilBhaaratiyaKaaryakartaaCount'),
-                    value2: data
-                        ?.loksankhyaformandal?.akhilBhaaratiyaKaaryakartaaCount
-                        .toString(),
+                    value: data?.loksankhyaformandal?.kshetraKaaryakartaaCount.toString(),
+                    txtString2: Statics.getLabel('AkhilBhaaratiyaKaaryakartaaCount'),
+                    value2: data?.loksankhyaformandal?.akhilBhaaratiyaKaaryakartaaCount.toString(),
                     fontsize: 15,
                   ),
                   TwoColumnRow(
                     txtString: Statics.getLabel('PravaaseeKaaryakartaaCount'),
-                    value: data?.loksankhyaformandal?.pravaaseeKaaryakartaaCount
-                        .toString(),
+                    value: data?.loksankhyaformandal?.pravaaseeKaaryakartaaCount.toString(),
                     txtString2: Statics.getLabel('TotalKaaryakartaaCount'),
-                    value2: data?.loksankhyaformandal?.totalKaaryakartaaCount
-                        .toString(),
+                    value2: data?.loksankhyaformandal?.totalKaaryakartaaCount.toString(),
                     fontsize: 15,
                   ),
                 ],
@@ -1559,31 +1269,11 @@ class _MandalSurveyReportViewScreen2State
               commonExpansionTile(
                 title: 'GatividhiAayaamSansthaaKaaryakartaaCount',
                 children: [
+                  SingleColumnRow(txtString: Statics.getLabel('GatividhiKaaryakartaaCount'), value: data?.loksankhyaformandal?.gatividhiKaaryakartaaCount.toString(), fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('AayaamKaaryakartaaCount'), value: data?.loksankhyaformandal?.aayaamKaaryakartaaCount.toString(), fontsize: 15),
                   SingleColumnRow(
-                      txtString: Statics.getLabel('GatividhiKaaryakartaaCount'),
-                      value: data
-                          ?.loksankhyaformandal?.gatividhiKaaryakartaaCount
-                          .toString(),
-                      fontsize: 15),
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('AayaamKaaryakartaaCount'),
-                      value: data?.loksankhyaformandal?.aayaamKaaryakartaaCount
-                          .toString(),
-                      fontsize: 15),
-                  SingleColumnRow(
-                      txtString: Statics.getLabel(
-                          'SanghaPreritSansthaaKaaryakartaaCount'),
-                      value: data?.loksankhyaformandal
-                          ?.sanghaPreritSansthaaKaaryakartaaCount
-                          .toString(),
-                      fontsize: 15),
-                  SingleColumnRow(
-                      txtString: Statics.getLabel(
-                          'SocialOrganizationKaaryakartaaCount'),
-                      value: data?.loksankhyaformandal
-                          ?.socialOrganizationKaaryakartaaCount
-                          .toString(),
-                      fontsize: 15),
+                      txtString: Statics.getLabel('SanghaPreritSansthaaKaaryakartaaCount'), value: data?.loksankhyaformandal?.sanghaPreritSansthaaKaaryakartaaCount.toString(), fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('SocialOrganizationKaaryakartaaCount'), value: data?.loksankhyaformandal?.socialOrganizationKaaryakartaaCount.toString(), fontsize: 15),
                 ],
               ),
               commonExpansionTile(
@@ -1598,19 +1288,16 @@ class _MandalSurveyReportViewScreen2State
                     child: SingleChildScrollView(
                         child: Column(
                       children: [
-                        if (data != null &&
-                            data?.kaaryakartaaCountByGatividhi != null)
+                        if (data != null && data?.kaaryakartaaCountByGatividhi != null)
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.shade300),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: DataTable(
-                                headingRowColor:
-                                    MaterialStateProperty.resolveWith(
+                                headingRowColor: MaterialStateProperty.resolveWith(
                                   (states) => Colors.purpleAccent[200],
                                 ),
                                 headingTextStyle: const TextStyle(
@@ -1624,8 +1311,7 @@ class _MandalSurveyReportViewScreen2State
                                         child: Text(
                                           'गतिविधी',
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
@@ -1636,23 +1322,17 @@ class _MandalSurveyReportViewScreen2State
                                         child: Text(
                                           "${Statics.getLabel('count')}",
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ],
-                                rows: data!.kaaryakartaaCountByGatividhi!
-                                    .map((item) {
+                                rows: data!.kaaryakartaaCountByGatividhi!.map((item) {
                                   return DataRow(
                                     cells: [
-                                      DataCell(Center(
-                                          child:
-                                              Text(item.gatividhiName ?? ''))),
-                                      DataCell(Center(
-                                          child: Text(item.kaaryakartaaCount
-                                              .toString()))),
+                                      DataCell(Center(child: Text(item.gatividhiName ?? ''))),
+                                      DataCell(Center(child: Text(item.kaaryakartaaCount.toString()))),
                                     ],
                                   );
                                 }).toList(),
@@ -1676,19 +1356,16 @@ class _MandalSurveyReportViewScreen2State
                     child: SingleChildScrollView(
                         child: Column(
                       children: [
-                        if (data != null &&
-                            data?.kaaryakartaaCountByAayaam != null)
+                        if (data != null && data?.kaaryakartaaCountByAayaam != null)
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.shade300),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: DataTable(
-                                headingRowColor:
-                                    MaterialStateProperty.resolveWith(
+                                headingRowColor: MaterialStateProperty.resolveWith(
                                   (states) => Colors.purpleAccent[200],
                                 ),
                                 headingTextStyle: const TextStyle(
@@ -1702,8 +1379,7 @@ class _MandalSurveyReportViewScreen2State
                                         child: Text(
                                           "${Statics.getLabel('Aayaam')}",
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
@@ -1714,22 +1390,17 @@ class _MandalSurveyReportViewScreen2State
                                         child: Text(
                                           "${Statics.getLabel('count')}",
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ],
-                                rows: data!.kaaryakartaaCountByAayaam!
-                                    .map((item) {
+                                rows: data!.kaaryakartaaCountByAayaam!.map((item) {
                                   return DataRow(
                                     cells: [
-                                      DataCell(Center(
-                                          child: Text(item.aayaamName ?? ''))),
-                                      DataCell(Center(
-                                          child: Text(item.kaaryakartaaCount
-                                              .toString()))),
+                                      DataCell(Center(child: Text(item.aayaamName ?? ''))),
+                                      DataCell(Center(child: Text(item.kaaryakartaaCount.toString()))),
                                     ],
                                   );
                                 }).toList(),
@@ -1753,20 +1424,16 @@ class _MandalSurveyReportViewScreen2State
                     child: SingleChildScrollView(
                         child: Column(
                       children: [
-                        if (data != null &&
-                            data?.sanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation !=
-                                null)
+                        if (data != null && data?.sanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation != null)
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.shade300),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: DataTable(
-                                headingRowColor:
-                                    MaterialStateProperty.resolveWith(
+                                headingRowColor: MaterialStateProperty.resolveWith(
                                   (states) => Colors.purpleAccent[200],
                                 ),
                                 headingTextStyle: const TextStyle(
@@ -1780,8 +1447,7 @@ class _MandalSurveyReportViewScreen2State
                                         child: Text(
                                           "${Statics.getLabel('sanghaPreritSanghatana')}",
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
@@ -1792,24 +1458,17 @@ class _MandalSurveyReportViewScreen2State
                                         child: Text(
                                           "${Statics.getLabel('count')}",
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ],
-                                rows: data!
-                                    .sanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation!
-                                    .map((item) {
+                                rows: data!.sanghaPreritSansthaaKaaryakartaaCountByAreaOfOperation!.map((item) {
                                   return DataRow(
                                     cells: [
-                                      DataCell(Center(
-                                          child: Text(
-                                              item.areaOfOperation ?? ''))),
-                                      DataCell(Center(
-                                          child: Text(item.kaaryakartaaCount
-                                              .toString()))),
+                                      DataCell(Center(child: Text(item.areaOfOperation ?? ''))),
+                                      DataCell(Center(child: Text(item.kaaryakartaaCount.toString()))),
                                     ],
                                   );
                                 }).toList(),
@@ -1833,20 +1492,16 @@ class _MandalSurveyReportViewScreen2State
                     child: SingleChildScrollView(
                         child: Column(
                       children: [
-                        if (data != null &&
-                            data?.socialOrganizationKaaryakartaaCountByAreaOfOperation !=
-                                null)
+                        if (data != null && data?.socialOrganizationKaaryakartaaCountByAreaOfOperation != null)
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.shade300),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: DataTable(
-                                headingRowColor:
-                                    MaterialStateProperty.resolveWith(
+                                headingRowColor: MaterialStateProperty.resolveWith(
                                   (states) => Colors.purpleAccent[200],
                                 ),
                                 headingTextStyle: const TextStyle(
@@ -1860,8 +1515,7 @@ class _MandalSurveyReportViewScreen2State
                                         child: Text(
                                           "${Statics.getLabel('OtherSocialOrganization')}",
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
@@ -1872,25 +1526,17 @@ class _MandalSurveyReportViewScreen2State
                                         child: Text(
                                           "${Statics.getLabel('count')}",
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ],
-                                rows: data!
-                                    .socialOrganizationKaaryakartaaCountByAreaOfOperation!
-                                    .map((item) {
+                                rows: data!.socialOrganizationKaaryakartaaCountByAreaOfOperation!.map((item) {
                                   return DataRow(
                                     cells: [
-                                      DataCell(Center(
-                                          child: Text(
-                                              item.studentCategoryName ?? ''))),
-                                      DataCell(Center(
-                                          child: Text(item
-                                              .countByStudentCategory
-                                              .toString()))),
+                                      DataCell(Center(child: Text(item.studentCategoryName ?? ''))),
+                                      DataCell(Center(child: Text(item.countByStudentCategory.toString()))),
                                     ],
                                   );
                                 }).toList(),
@@ -1914,19 +1560,16 @@ class _MandalSurveyReportViewScreen2State
                     child: SingleChildScrollView(
                         child: Column(
                       children: [
-                        if (data != null &&
-                            data?.swayamsevakCountByStudentCategory != null)
+                        if (data != null && data?.swayamsevakCountByStudentCategory != null)
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.shade300),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: DataTable(
-                                headingRowColor:
-                                    MaterialStateProperty.resolveWith(
+                                headingRowColor: MaterialStateProperty.resolveWith(
                                   (states) => Colors.purpleAccent[200],
                                 ),
                                 headingTextStyle: const TextStyle(
@@ -1940,8 +1583,7 @@ class _MandalSurveyReportViewScreen2State
                                         child: Text(
                                           "${Statics.getLabel('StudentCategory')}",
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
@@ -1952,24 +1594,17 @@ class _MandalSurveyReportViewScreen2State
                                         child: Text(
                                           "${Statics.getLabel('count')}",
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ],
-                                rows: data!.swayamsevakCountByStudentCategory!
-                                    .map((item) {
+                                rows: data!.swayamsevakCountByStudentCategory!.map((item) {
                                   return DataRow(
                                     cells: [
-                                      DataCell(Center(
-                                          child: Text(
-                                              item.studentCategoryName ?? ''))),
-                                      DataCell(Center(
-                                          child: Text(item
-                                              .countByStudentCategory
-                                              .toString()))),
+                                      DataCell(Center(child: Text(item.studentCategoryName ?? ''))),
+                                      DataCell(Center(child: Text(item.countByStudentCategory.toString()))),
                                     ],
                                   );
                                 }).toList(),
@@ -1993,20 +1628,16 @@ class _MandalSurveyReportViewScreen2State
                     child: SingleChildScrollView(
                         child: Column(
                       children: [
-                        if (data != null &&
-                            data?.listSwayamsevakCountByVyavasaayeeCategory !=
-                                null)
+                        if (data != null && data?.listSwayamsevakCountByVyavasaayeeCategory != null)
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.shade300),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: DataTable(
-                                headingRowColor:
-                                    MaterialStateProperty.resolveWith(
+                                headingRowColor: MaterialStateProperty.resolveWith(
                                   (states) => Colors.purpleAccent[200],
                                 ),
                                 headingTextStyle: const TextStyle(
@@ -2020,8 +1651,7 @@ class _MandalSurveyReportViewScreen2State
                                         child: Text(
                                           "${Statics.getLabel('VyavasaayeeCategory')}",
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
@@ -2032,26 +1662,17 @@ class _MandalSurveyReportViewScreen2State
                                         child: Text(
                                           "${Statics.getLabel('count')}",
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ],
-                                rows: data!
-                                    .listSwayamsevakCountByVyavasaayeeCategory!
-                                    .map((item) {
+                                rows: data!.listSwayamsevakCountByVyavasaayeeCategory!.map((item) {
                                   return DataRow(
                                     cells: [
-                                      DataCell(Center(
-                                          child: Text(
-                                              item.vyavasaayeeCategoryName ??
-                                                  ''))),
-                                      DataCell(Center(
-                                          child: Text(item
-                                              .countByVyavasaayeeCategory
-                                              .toString()))),
+                                      DataCell(Center(child: Text(item.vyavasaayeeCategoryName ?? ''))),
+                                      DataCell(Center(child: Text(item.countByVyavasaayeeCategory.toString()))),
                                     ],
                                   );
                                 }).toList(),
@@ -2067,80 +1688,24 @@ class _MandalSurveyReportViewScreen2State
               commonExpansionTile(
                 title: 'Population',
                 children: [
-                  Text(Statics.getLabel("gaavachiLoksankhya"),
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.purpleAccent,
-                          fontSize: 20)),
+                  Text(Statics.getLabel("gaavachiLoksankhya"), style: TextStyle(fontWeight: FontWeight.bold, color: Colors.purpleAccent, fontSize: 20)),
                   Divider(),
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('moreThan40000'),
-                      value: data?.mandaldata?.greaterthen4000.toString(),
-                      fontsize: 15),
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('20000to40000'),
-                      value: data?.mandaldata?.between2000And4000.toString(),
-                      fontsize: 15),
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('10000to20000'),
-                      value: data?.mandaldata?.between1000And2000.toString(),
-                      fontsize: 15),
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('5000to10000'),
-                      value: data?.mandaldata?.between5000And10000.toString(),
-                      fontsize: 15),
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('3000to5000'),
-                      value: data?.mandaldata?.between3000And5000.toString(),
-                      fontsize: 15),
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('1000to3000'),
-                      value: data?.mandaldata?.between1000And3000.toString(),
-                      fontsize: 15),
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('1000to3000'),
-                      value: data?.mandaldata?.lessThan1000.toString(),
-                      fontsize: 15),
-                  Text(Statics.getLabel("purushLoksankhya"),
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.purpleAccent,
-                          fontSize: 20)),
+                  SingleColumnRow(txtString: Statics.getLabel('moreThan40000'), value: data?.mandaldata?.greaterthen4000.toString(), fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('20000to40000'), value: data?.mandaldata?.between2000And4000.toString(), fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('10000to20000'), value: data?.mandaldata?.between1000And2000.toString(), fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('5000to10000'), value: data?.mandaldata?.between5000And10000.toString(), fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('3000to5000'), value: data?.mandaldata?.between3000And5000.toString(), fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('1000to3000'), value: data?.mandaldata?.between1000And3000.toString(), fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('1000to3000'), value: data?.mandaldata?.lessThan1000.toString(), fontsize: 15),
+                  Text(Statics.getLabel("purushLoksankhya"), style: TextStyle(fontWeight: FontWeight.bold, color: Colors.purpleAccent, fontSize: 20)),
                   Divider(),
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('moreThan40000'),
-                      value:
-                          data?.mandaldata?.maleCountgreaterthen4000.toString(),
-                      fontsize: 15),
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('20000to40000'),
-                      value: data?.mandaldata?.maleCountBetween2000And4000
-                          .toString(),
-                      fontsize: 15),
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('10000to20000'),
-                      value: data?.mandaldata?.maleCountBetween1000And2000
-                          .toString(),
-                      fontsize: 15),
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('5000to10000'),
-                      value: data?.mandaldata?.maleCountBetween5000And10000
-                          .toString(),
-                      fontsize: 15),
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('3000to5000'),
-                      value: data?.mandaldata?.maleCountBetween3000And5000
-                          .toString(),
-                      fontsize: 15),
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('1000to3000'),
-                      value: data?.mandaldata?.maleCountBetween1000And3000
-                          .toString(),
-                      fontsize: 15),
-                  SingleColumnRow(
-                      txtString: Statics.getLabel('1000to3000'),
-                      value: data?.mandaldata?.maleCountLessThan1000.toString(),
-                      fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('moreThan40000'), value: data?.mandaldata?.maleCountgreaterthen4000.toString(), fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('20000to40000'), value: data?.mandaldata?.maleCountBetween2000And4000.toString(), fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('10000to20000'), value: data?.mandaldata?.maleCountBetween1000And2000.toString(), fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('5000to10000'), value: data?.mandaldata?.maleCountBetween5000And10000.toString(), fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('3000to5000'), value: data?.mandaldata?.maleCountBetween3000And5000.toString(), fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('1000to3000'), value: data?.mandaldata?.maleCountBetween1000And3000.toString(), fontsize: 15),
+                  SingleColumnRow(txtString: Statics.getLabel('1000to3000'), value: data?.mandaldata?.maleCountLessThan1000.toString(), fontsize: 15),
                 ],
               ),
 //===================================================================================================================================================
@@ -2163,11 +1728,9 @@ class _MandalSurveyReportViewScreen2State
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: DataTable(
-                                headingRowColor:
-                                    MaterialStateProperty.resolveWith(
+                                headingRowColor: MaterialStateProperty.resolveWith(
                                   (states) => Colors.purpleAccent[200],
                                 ),
                                 headingTextStyle: const TextStyle(
@@ -2181,8 +1744,7 @@ class _MandalSurveyReportViewScreen2State
                                         child: Text(
                                           "${Statics.getLabel('religion')}",
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
@@ -2193,8 +1755,7 @@ class _MandalSurveyReportViewScreen2State
                                         child: Text(
                                           "${Statics.getLabel('GraamCount')}",
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
@@ -2203,11 +1764,8 @@ class _MandalSurveyReportViewScreen2State
                                 rows: data!.religion!.map((item) {
                                   return DataRow(
                                     cells: [
-                                      DataCell(Center(
-                                          child: Text(item.value ?? ''))),
-                                      DataCell(Center(
-                                          child:
-                                              Text(item.gramCount.toString()))),
+                                      DataCell(Center(child: Text(item.value ?? ''))),
+                                      DataCell(Center(child: Text(item.gramCount.toString()))),
                                     ],
                                   );
                                 }).toList(),
@@ -2236,12 +1794,8 @@ class _MandalSurveyReportViewScreen2State
                         final data = entry.value;
 
                         // Unique prabhavishetra & samparkashiti
-                        final prabhavishetraList = {
-                          ...data.map((e) => e.prabhavishetra).toSet()
-                        }.toList();
-                        final samparkList = {
-                          ...data.map((e) => e.samparkashiti).toSet()
-                        }.toList();
+                        final prabhavishetraList = {...data.map((e) => e.prabhavishetra).toSet()}.toList();
+                        final samparkList = {...data.map((e) => e.samparkashiti).toSet()}.toList();
 
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -2250,20 +1804,17 @@ class _MandalSurveyReportViewScreen2State
                             Center(
                               child: Text(
                                 "${Statics.getLabel('SajjanShakti')} (${sajjanType})",
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                               ),
                             ),
                             Table(
                               border: TableBorder.all(),
-                              defaultVerticalAlignment:
-                                  TableCellVerticalAlignment.middle,
+                              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                               children: [
                                 // Header Row
                                 TableRow(
                                   decoration: BoxDecoration(
-                                    color: Colors.purpleAccent
-                                        .shade200, // Header background
+                                    color: Colors.purpleAccent.shade200, // Header background
                                   ),
                                   children: [
                                     TableCell(
@@ -2275,15 +1826,13 @@ class _MandalSurveyReportViewScreen2State
                                         ),
                                       ),
                                     ),
-                                    ...prabhavishetraList
-                                        .map((header) => Padding(
-                                              padding: const EdgeInsets.all(8),
-                                              child: Text(
-                                                header!,
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                            )),
+                                    ...prabhavishetraList.map((header) => Padding(
+                                          padding: const EdgeInsets.all(8),
+                                          child: Text(
+                                            header!,
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                        )),
                                   ],
                                 ),
                                 // Data Rows
@@ -2299,15 +1848,12 @@ class _MandalSurveyReportViewScreen2State
                                       ),
                                       ...prabhavishetraList.map((prabhav) {
                                         final match = data.firstWhere(
-                                          (item) =>
-                                              item.samparkashiti == sampark &&
-                                              item.prabhavishetra == prabhav,
+                                          (item) => item.samparkashiti == sampark && item.prabhavishetra == prabhav,
                                           orElse: () => Sajjanshakkati(),
                                         );
                                         return Padding(
                                           padding: const EdgeInsets.all(8),
-                                          child:
-                                              Text('${match.vasticnt ?? ''}'),
+                                          child: Text('${match.vasticnt ?? ''}'),
                                         );
                                       }),
                                     ],
@@ -2315,32 +1861,23 @@ class _MandalSurveyReportViewScreen2State
                                 }).toList(),
                                 // Total Row
                                 TableRow(
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey.shade200),
+                                  decoration: BoxDecoration(color: Colors.grey.shade200),
                                   children: [
                                     Padding(
                                       padding: EdgeInsets.all(8),
                                       child: Text(
                                         "${Statics.getLabel('Total')}",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
+                                        style: TextStyle(fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                     ...prabhavishetraList.map((prabhav) {
-                                      final total = data
-                                          .where((item) =>
-                                              item.prabhavishetra == prabhav)
-                                          .fold<int>(
-                                              0,
-                                              (sum, item) =>
-                                                  sum + (item.vasticnt ?? 0));
+                                      final total = data.where((item) => item.prabhavishetra == prabhav).fold<int>(0, (sum, item) => sum + (item.vasticnt ?? 0));
 
                                       return Padding(
                                         padding: const EdgeInsets.all(8),
                                         child: Text(
                                           '$total',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: const TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       );
                                     }),
@@ -2371,12 +1908,8 @@ class _MandalSurveyReportViewScreen2State
                         final data = entry.value;
 
                         // Unique prabhavishetra & samparkashiti
-                        final prabhavishetraList = {
-                          ...data.map((e) => e.prabhavishetra).toSet()
-                        }.toList();
-                        final samparkList = {
-                          ...data.map((e) => e.samparkashiti).toSet()
-                        }.toList();
+                        final prabhavishetraList = {...data.map((e) => e.prabhavishetra).toSet()}.toList();
+                        final samparkList = {...data.map((e) => e.samparkashiti).toSet()}.toList();
 
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -2385,20 +1918,17 @@ class _MandalSurveyReportViewScreen2State
                             Center(
                               child: Text(
                                 "${Statics.getLabel('anyaPrabhaviLok')} (${sajjanType})",
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                               ),
                             ),
                             Table(
                               border: TableBorder.all(),
-                              defaultVerticalAlignment:
-                                  TableCellVerticalAlignment.middle,
+                              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                               children: [
                                 // Header Row
                                 TableRow(
                                   decoration: BoxDecoration(
-                                    color: Colors.purpleAccent
-                                        .shade200, // Header background
+                                    color: Colors.purpleAccent.shade200, // Header background
                                   ),
                                   children: [
                                     TableCell(
@@ -2410,15 +1940,13 @@ class _MandalSurveyReportViewScreen2State
                                         ),
                                       ),
                                     ),
-                                    ...prabhavishetraList
-                                        .map((header) => Padding(
-                                              padding: const EdgeInsets.all(8),
-                                              child: Text(
-                                                header!,
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                            )),
+                                    ...prabhavishetraList.map((header) => Padding(
+                                          padding: const EdgeInsets.all(8),
+                                          child: Text(
+                                            header!,
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                        )),
                                   ],
                                 ),
                                 // Data Rows
@@ -2434,15 +1962,12 @@ class _MandalSurveyReportViewScreen2State
                                       ),
                                       ...prabhavishetraList.map((prabhav) {
                                         final match = data.firstWhere(
-                                          (item) =>
-                                              item.samparkashiti == sampark &&
-                                              item.prabhavishetra == prabhav,
+                                          (item) => item.samparkashiti == sampark && item.prabhavishetra == prabhav,
                                           orElse: () => Anyaprabhavilok(),
                                         );
                                         return Padding(
                                           padding: const EdgeInsets.all(8),
-                                          child:
-                                              Text('${match.vasticnt ?? ''}'),
+                                          child: Text('${match.vasticnt ?? ''}'),
                                         );
                                       }),
                                     ],
@@ -2450,32 +1975,23 @@ class _MandalSurveyReportViewScreen2State
                                 }).toList(),
                                 // Total Row
                                 TableRow(
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey.shade200),
+                                  decoration: BoxDecoration(color: Colors.grey.shade200),
                                   children: [
                                     Padding(
                                       padding: EdgeInsets.all(8),
                                       child: Text(
                                         "${Statics.getLabel('Total')}",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
+                                        style: TextStyle(fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                     ...prabhavishetraList.map((prabhav) {
-                                      final total = data
-                                          .where((item) =>
-                                              item.prabhavishetra == prabhav)
-                                          .fold<int>(
-                                              0,
-                                              (sum, item) =>
-                                                  sum + (item.vasticnt ?? 0));
+                                      final total = data.where((item) => item.prabhavishetra == prabhav).fold<int>(0, (sum, item) => sum + (item.vasticnt ?? 0));
 
                                       return Padding(
                                         padding: const EdgeInsets.all(8),
                                         child: Text(
                                           '$total',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: const TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       );
                                     }),
@@ -2510,11 +2026,9 @@ class _MandalSurveyReportViewScreen2State
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: DataTable(
-                                headingRowColor:
-                                    MaterialStateProperty.resolveWith(
+                                headingRowColor: MaterialStateProperty.resolveWith(
                                   (states) => Colors.purpleAccent[200],
                                 ),
                                 headingTextStyle: const TextStyle(
@@ -2528,8 +2042,7 @@ class _MandalSurveyReportViewScreen2State
                                         child: Text(
                                           "${Statics.getLabel('UpsanaSthal')}",
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
@@ -2540,8 +2053,7 @@ class _MandalSurveyReportViewScreen2State
                                         child: Text(
                                           "${Statics.getLabel('count')}",
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
@@ -2552,8 +2064,7 @@ class _MandalSurveyReportViewScreen2State
                                         child: Text(
                                           "${Statics.getLabel('GraamCount')}",
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
@@ -2562,14 +2073,9 @@ class _MandalSurveyReportViewScreen2State
                                 rows: data!.upaasana!.map((item) {
                                   return DataRow(
                                     cells: [
-                                      DataCell(Center(
-                                          child: Text(item.value ?? ''))),
-                                      DataCell(Center(
-                                          child:
-                                              Text(item.sankhya.toString()))),
-                                      DataCell(Center(
-                                          child:
-                                              Text(item.gramCount.toString()))),
+                                      DataCell(Center(child: Text(item.value ?? ''))),
+                                      DataCell(Center(child: Text(item.sankhya.toString()))),
+                                      DataCell(Center(child: Text(item.gramCount.toString()))),
                                     ],
                                   );
                                 }).toList(),
@@ -2601,11 +2107,9 @@ class _MandalSurveyReportViewScreen2State
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: DataTable(
-                                headingRowColor:
-                                    MaterialStateProperty.resolveWith(
+                                headingRowColor: MaterialStateProperty.resolveWith(
                                   (states) => Colors.purpleAccent[200],
                                 ),
                                 headingTextStyle: const TextStyle(
@@ -2619,8 +2123,7 @@ class _MandalSurveyReportViewScreen2State
                                         child: Text(
                                           "${Statics.getLabel('SelectFrequency')}",
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
@@ -2631,8 +2134,7 @@ class _MandalSurveyReportViewScreen2State
                                         child: Text(
                                           "${Statics.getLabel('count')}",
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
@@ -2643,8 +2145,7 @@ class _MandalSurveyReportViewScreen2State
                                         child: Text(
                                           "${Statics.getLabel('GraamCount')}",
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
@@ -2653,14 +2154,9 @@ class _MandalSurveyReportViewScreen2State
                                 rows: data!.mahatvacesana!.map((item) {
                                   return DataRow(
                                     cells: [
-                                      DataCell(Center(
-                                          child: Text(item.value ?? ''))),
-                                      DataCell(Center(
-                                          child:
-                                              Text(item.sankhya.toString()))),
-                                      DataCell(Center(
-                                          child:
-                                              Text(item.gramCount.toString()))),
+                                      DataCell(Center(child: Text(item.value ?? ''))),
+                                      DataCell(Center(child: Text(item.sankhya.toString()))),
+                                      DataCell(Center(child: Text(item.gramCount.toString()))),
                                     ],
                                   );
                                 }).toList(),
@@ -2692,11 +2188,9 @@ class _MandalSurveyReportViewScreen2State
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              scrollDirection:
-                                  Axis.horizontal, // horizontal scroll
+                              scrollDirection: Axis.horizontal, // horizontal scroll
                               child: DataTable(
-                                headingRowColor:
-                                    MaterialStateProperty.resolveWith(
+                                headingRowColor: MaterialStateProperty.resolveWith(
                                   (states) => Colors.purpleAccent[200],
                                 ),
                                 headingTextStyle: const TextStyle(
@@ -2710,8 +2204,7 @@ class _MandalSurveyReportViewScreen2State
                                         child: Text(
                                           "${Statics.getLabel('SelectFrequency')}",
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
@@ -2722,8 +2215,7 @@ class _MandalSurveyReportViewScreen2State
                                         child: Text(
                                           "${Statics.getLabel('count')}",
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
@@ -2734,8 +2226,7 @@ class _MandalSurveyReportViewScreen2State
                                         child: Text(
                                           "${Statics.getLabel('GraamCount')}",
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
@@ -2744,14 +2235,9 @@ class _MandalSurveyReportViewScreen2State
                                 rows: data!.samajikkaryakram!.map((item) {
                                   return DataRow(
                                     cells: [
-                                      DataCell(Center(
-                                          child: Text(item.value ?? ''))),
-                                      DataCell(Center(
-                                          child:
-                                              Text(item.sankhya.toString()))),
-                                      DataCell(Center(
-                                          child:
-                                              Text(item.gramCount.toString()))),
+                                      DataCell(Center(child: Text(item.value ?? ''))),
+                                      DataCell(Center(child: Text(item.sankhya.toString()))),
+                                      DataCell(Center(child: Text(item.gramCount.toString()))),
                                     ],
                                   );
                                 }).toList(),
@@ -2771,13 +2257,10 @@ class _MandalSurveyReportViewScreen2State
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: DataTable(
-                        headingRowColor: MaterialStateProperty.all(
-                            Colors.purpleAccent.shade100),
+                        headingRowColor: MaterialStateProperty.all(Colors.purpleAccent.shade100),
                         columns: [
-                          DataColumn(
-                              label: Text(Statics.getLabel("DurjanShakti"))),
-                          ...subvalues!
-                              .map((sub) => DataColumn(label: Text(sub!))),
+                          DataColumn(label: Text(Statics.getLabel("DurjanShakti"))),
+                          ...subvalues!.map((sub) => DataColumn(label: Text(sub!))),
                         ],
                         rows: values!.map((val) {
                           return DataRow(cells: [
@@ -2787,8 +2270,7 @@ class _MandalSurveyReportViewScreen2State
                                 (e) => e.value == val && e.subvalue == sub,
                                 // orElse: () => {"gramCount": 0},
                               );
-                              return DataCell(
-                                  Text(match!.gramCount.toString()));
+                              return DataCell(Text(match!.gramCount.toString()));
                             })
                           ]);
                         }).toList(),
@@ -2810,11 +2292,9 @@ class _MandalSurveyReportViewScreen2State
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: SingleChildScrollView(
-                            scrollDirection:
-                                Axis.horizontal, // horizontal scroll
+                            scrollDirection: Axis.horizontal, // horizontal scroll
                             child: DataTable(
-                              headingRowColor:
-                                  MaterialStateProperty.resolveWith(
+                              headingRowColor: MaterialStateProperty.resolveWith(
                                 (states) => Colors.purpleAccent[200],
                               ),
                               headingTextStyle: TextStyle(
@@ -2828,8 +2308,7 @@ class _MandalSurveyReportViewScreen2State
                                       child: Text(
                                         "${Statics.getLabel('hinduVeerCount')}",
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
+                                        style: TextStyle(fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                   ),
@@ -2840,8 +2319,7 @@ class _MandalSurveyReportViewScreen2State
                                       child: Text(
                                         "${Statics.getLabel('GraamCount')}",
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
+                                        style: TextStyle(fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                   ),
@@ -2850,11 +2328,8 @@ class _MandalSurveyReportViewScreen2State
                               rows: data!.hinduvirayadi!.map((item) {
                                 return DataRow(
                                   cells: [
-                                    DataCell(Center(
-                                        child: Text(item.sankhya.toString()))),
-                                    DataCell(Center(
-                                        child:
-                                            Text(item.gramCount.toString()))),
+                                    DataCell(Center(child: Text(item.sankhya.toString()))),
+                                    DataCell(Center(child: Text(item.gramCount.toString()))),
                                   ],
                                 );
                               }).toList(),
@@ -2877,18 +2352,10 @@ class _MandalSurveyReportViewScreen2State
     dataList = data!.sewaPrakalpa ?? [];
 
     // 1. Unique subtypes for header columns
-    final List<String> uniqueSubtypes = dataList
-        .map((e) => e.subvalue ?? '')
-        .toSet()
-        .where((s) => s.isNotEmpty)
-        .toList();
+    final List<String> uniqueSubtypes = dataList.map((e) => e.subvalue ?? '').toSet().where((s) => s.isNotEmpty).toList();
 
     // 2. Unique maintypes for row headers
-    final List<String> uniqueMaintypes = dataList
-        .map((e) => e.value ?? '')
-        .toSet()
-        .where((m) => m.isNotEmpty)
-        .toList();
+    final List<String> uniqueMaintypes = dataList.map((e) => e.value ?? '').toSet().where((m) => m.isNotEmpty).toList();
 
     // 3. Construct DataTable rows
     List<DataRow> rows = uniqueMaintypes.map((maintype) {
@@ -2908,10 +2375,8 @@ class _MandalSurveyReportViewScreen2State
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: DataTable(
-        headingRowColor:
-            MaterialStateProperty.all(Colors.purpleAccent.shade200),
-        headingTextStyle:
-            const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        headingRowColor: MaterialStateProperty.all(Colors.purpleAccent.shade200),
+        headingTextStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         columns: [
           DataColumn(label: Text("${Statics.getLabel('mukhyaPrakar')}")),
           ...uniqueSubtypes.map((subtype) => DataColumn(label: Text(subtype))),
@@ -2951,8 +2416,7 @@ class _MandalSurveyReportViewScreen2State
           collapsedBackgroundColor: Colors.transparent,
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: children,
