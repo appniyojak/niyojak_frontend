@@ -1280,6 +1280,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
                                   _selectedGeoUnitId = null;
                                   type = "prant";
                                   setState(() {
+                                    _showList = false;
                                     _bhaagValue = _shaharValue = _nagarValue = null;
                                     _bhaag = _shahar = _statusValue = _nagar = _fromDate = _toDate = null;
                                     _searchController.text = _toDateCntrl.text = _fromDateCntrl.text = _fromAgeController.text = _toAgeController.text = "";

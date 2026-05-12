@@ -1367,6 +1367,12 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
       final selectedItem = _linkedNagar!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
       selctedLevelName = selectedItem.name;
     }
+    if (level == 13) {
+      _selectedGeoUnitId = selection.nagar.toString();
+      selctedLevel = 'Nagar';
+      final selectedItem = _linkedNagar!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
+      selctedLevelName = selectedItem.name;
+    }
 
     // if (_linkedVibhaag != null && _linkedVibhaag!.isNotEmpty) _linkedVibhaagName = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedBhaagValue).name;
     // if (_linkedBhaag != null && _linkedBhaag!.isNotEmpty) _linkedbhaagName = _linkedBhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedBhaagValue).name;
@@ -1384,18 +1390,18 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
     });
     await populatelinkedMahaanagarDropdown();
     await populatelinkedVibhaagDropdown('');
-    if (fromClear || userLevelId == null || ddm == null) {
-      print("object is null");
-      return;
-    }
-    print("object is not null >>>>>>>>>>>>>>>>>>>>>>");
-    await populateAllDropdowns(userLevelId!, ddm!);
     _scrollController = ScrollController();
     var data = await Statics.getStaticLDB('AnnualBaithakType');
     if (!mounted) return;
     _baithakTypes = data;
     _baithakTypes = _baithakTypes!.where((element) => element.showAnnualBaithakkey!.contains('1')).toList();
     print("_baithakTypes :-- $_baithakTypes");
+    if (fromClear || userLevelId == null || ddm == null) {
+      print("object is null");
+      return;
+    }
+    print("object is not null >>>>>>>>>>>>>>>>>>>>>>");
+    await populateAllDropdowns(userLevelId!, ddm!);
     setState(() {});
   }
 

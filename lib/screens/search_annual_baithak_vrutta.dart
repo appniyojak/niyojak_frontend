@@ -147,17 +147,18 @@ class _SearchAnnualBaithakVruttaState extends State<SearchAnnualBaithakVrutta> {
     });
     await populatelinkedMahaanagarDropdown();
     await populatelinkedVibhaagDropdown('');
+    var data = await Statics.getStaticLDB('AnnualBaithakType');
+    if (!mounted) return;
+    _baithakTypes = data;
+    _baithakTypes = _baithakTypes!.where((element) => element.showAnnualBaithakkey!.contains('1')).toList();
+    print("_baithakTypes :-- ${_baithakTypes}");
+    setState(() {});
     if (fromClear || userLevelId == null || ddm == null) {
       print("object is null");
       return;
     }
     print("object is not null >>>>>>>>>>>>>>>>>>>>>>");
     await populateAllDropdowns(userLevelId!, ddm!);
-    var data = await Statics.getStaticLDB('AnnualBaithakType');
-    if (!mounted) return;
-    _baithakTypes = data;
-    _baithakTypes = _baithakTypes!.where((element) => element.showAnnualBaithakkey!.contains('1')).toList();
-    print("_baithakTypes :-- ${_baithakTypes}");
     setState(() {});
   }
 
@@ -1155,13 +1156,12 @@ class _SearchAnnualBaithakVruttaState extends State<SearchAnnualBaithakVrutta> {
                               _linkedMahaanagarValue = _linkedVibhaagValue = _linkedBhaagValue = _linkedNagarValue = null;
                               _linkedMahaanagar = _linkedVibhaag = _linkedBhaag = _linkedNagar = null;
                               _baithakType = null;
-                              _baithakTypeValue = _selectedNagarAndBaithak = '';
+                              _baithakTypeYear = _baithakTypeValue = _selectedNagarAndBaithak = '';
                               _isSearching = false;
                               exportList.clear();
                               donloadexportList.clear();
                             });
-                            populatelinkedMahaanagarDropdown();
-                            populatelinkedVibhaagDropdown('');
+                            populateDropdown();
                           },
                           child: Text(Statics.getLabel('clear'))),
                     ],

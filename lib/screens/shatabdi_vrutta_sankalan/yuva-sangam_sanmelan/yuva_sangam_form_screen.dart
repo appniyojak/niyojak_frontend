@@ -1563,6 +1563,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
       keyboardType: TextInputType.number,
       readOnly: readOnly,
       inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
         LengthLimitingTextInputFormatter(10),
         if (expectedController != null)
           TextInputFormatter.withFunction((oldValue, newValue) {

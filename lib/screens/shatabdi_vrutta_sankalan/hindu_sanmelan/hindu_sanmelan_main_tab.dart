@@ -67,7 +67,7 @@ class _HinduSanmelanMainTabState extends State<HinduSanmelanMainTab> with Single
             "${Statics.getLabel('hinduSammelan')} ${Statics.getLabel('Vrutta')}",
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
           ),
-          bottom: (userLevelId ?? 0) < 4
+          bottom: (userLevelId ?? 0) < 6 || userLevelId == 13
               ? null
               : TabBar(
                   controller: _tabController,
@@ -111,7 +111,7 @@ class _HinduSanmelanMainTabState extends State<HinduSanmelanMainTab> with Single
         drawer: AppDrawer(),
         body: ModalProgressHUD(
           inAsyncCall: _isSearching,
-          child: (userLevelId ?? 0) < 4
+          child: (userLevelId ?? 0) < 6 || userLevelId == 13
               ? HinduSanmelanForm(id: selectedId)
               : TabBarView(
                   controller: _tabController,

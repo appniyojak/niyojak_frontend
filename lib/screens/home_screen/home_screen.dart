@@ -806,6 +806,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   bool get _fromAboveMandal => Statics.levelId >= 4;
 
+  bool get _fromAboveNagar => ((userLevelId ?? 0) >= 6 && (userLevelId ?? 0) < 13);
+
   bool _shouldShowGeoUnitChange(String levelName, String daayitvaName) => _allowedLevelsForGeoUnitChange.contains(levelName);
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -2860,8 +2862,8 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         if (_fromAboveMandal)
           _cardRow([
-            _cardTile(Statics.getLabel('vijayaDashamiUtsav') + '\n' + Statics.getLabel('Vrutta'), () => Navigator.of(context).pushNamed(VijayadashamiFormView.routeName)),
-            _cardTile(Statics.getLabel('vijayaDashamiUtsav') + ' ' + Statics.getLabel('Reportonly'), () => Navigator.of(context).pushNamed(VijayadashamiFormReport.routeName)),
+            _cardTile(Statics.getLabel('vijayaDashamiUtsav') + '  ' + Statics.getLabel('Vrutta'), () => Navigator.of(context).pushNamed(VijayadashamiFormView.routeName)),
+            if (_fromAboveNagar) _cardTile(Statics.getLabel('vijayaDashamiUtsav') + '  ' + Statics.getLabel('Reportonly'), () => Navigator.of(context).pushNamed(VijayadashamiFormReport.routeName)),
           ]),
         _cardRow([
           _cardTile(Statics.getLabel("gruhSamparkAbhiyan"), () => Navigator.of(context).pushNamed(GruhAbhiyaanMainTabScreen.routeName)),
@@ -2889,7 +2891,7 @@ class _HomeScreenState extends State<HomeScreen> {
           _cardTile(Statics.getLabel('vastiSurvey'), () => Navigator.of(context).pushNamed(VastiSurveyFormScreen.routeName)),
           _cardTile(Statics.getLabel('mandalSurvey'), () => Navigator.of(context).pushNamed(MandalSurveyFormScreen.routeName)),
         ]),
-        if (_fromAboveMandal)
+        if (_fromAboveNagar)
           _cardRow([
             _cardTile(Statics.getLabel('vastiSurveyReport'), () => Navigator.of(context).pushNamed(VastiSurveyReportScreen.routeName)),
             _cardTile(Statics.getLabel('mandalSurveyReport'), () => Navigator.of(context).pushNamed(MandalSurveyReportScreen.routeName)),

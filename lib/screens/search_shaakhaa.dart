@@ -51,7 +51,8 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
 
   String? _vayogatValue;
   String? _frequencyValue;
-  String? geoUnitIDnew;
+
+  // String? geoUnitIDnew;
   String? _selctedLevel = 'praant';
   String? _selctedLevelName = '';
   String _selctedLevelNames = '';
@@ -182,7 +183,8 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
     // }
     // Step 6: mandal (conditional)
     if (selection.mandal != null && selection.mandal!.isNotEmpty) {
-      await populatelinkedMandalDropdown(selection.upnagar != null, selection.upnagar != null ? _linkednagarValue! : _linkedupnagarValue!);
+      await populatelinkedMandalDropdown(
+          (selection.upnagar != null && selection.upnagar!.isNotEmpty), (selection.upnagar != null && selection.upnagar!.isNotEmpty) ? _linkedupnagarValue! : _linkednagarValue!);
       _selectedGeoUnitId = _linkedmandalValue = (level == 4 ? (dm.geoUnitID ?? "").toString() : selection.mandal) ?? '';
     }
     // Step 7: Graam
@@ -191,7 +193,8 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
       _selectedGeoUnitId = _linkedgraamValue = (level == 3 ? (dm.geoUnitID ?? "").toString() : selection.graam) ?? '';
     }
     // Step 8: Vasti
-    await populatelinkedVastiDropdown(selection.upnagar != null, selection.upnagar != null ? _linkedupnagarValue! : _linkednagarValue!);
+    await populatelinkedVastiDropdown(
+        (selection.upnagar != null && selection.upnagar!.isNotEmpty), (selection.upnagar != null && selection.upnagar!.isNotEmpty) ? _linkedupnagarValue! : _linkednagarValue!);
     _selectedGeoUnitId = _linkedvastiValue = (level == 2 ? (dm.geoUnitID ?? "").toString() : selection.vasti) ?? '';
 
     // if (_linkedVibhaag != null && _linkedVibhaag!.isNotEmpty) _linkedVibhaagName = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedBhaagValue).name;
@@ -462,7 +465,7 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
 
     if (strType == "Search") {
       if (mandalVal == null && graamVal == null && vastiVal == null) {
-        print("Search :-  ${geoUnitIDnew}");
+        print("Search :-  ${_selectedGeoUnitId}");
       } else {
         print("mandalVal :-  ${mandalVal}");
         print("graamVal :-  ${graamVal}");
@@ -471,8 +474,8 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
 
       setState(() {
         if (mandalVal == null && graamVal == null && vastiVal == null) {
-          print("Search :-  ${geoUnitIDnew}");
-          _shaakhaaList = _getshaakhaaList(int.parse(geoUnitIDnew!), _searchController.text, frequencyVal, vayogatVal);
+          print("Search :-  ${_selectedGeoUnitId}");
+          _shaakhaaList = _getshaakhaaList(int.parse(_selectedGeoUnitId ?? "0"), _searchController.text, frequencyVal, vayogatVal);
         } else {
           _shaakhaaList = _getshaakhaaList(geoUnitID, _searchController.text, frequencyVal, vayogatVal);
           print("mandalVal :-  ${mandalVal}");
@@ -1212,7 +1215,7 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
                                   _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedvastiValue = _linkedgraamValue = null;
                                   _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
                                   _searchController.text = "";
-                                  geoUnitIDnew = "";
+                                  _selectedGeoUnitId = "";
                                   _isSearching = false;
                                 });
                                 _frequencyValue = null;

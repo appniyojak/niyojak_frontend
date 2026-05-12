@@ -13,6 +13,8 @@ import '../../../../models/response_model/get_vasti_data_by_id_model.dart';
 import '../../../../models/response_model/vasti_sarvekshan_dropdown_model.dart';
 import '../../../../providers/bals.dart';
 import '../../../models/response_model/abhiyaan_karyakarta_model.dart';
+import '../../../models/response_model/dropdown_level_responsemodel.dart';
+import '../../../utils/globals.dart';
 
 class VastiSurveyFormScreen extends StatefulWidget {
   static const String routeName = '/vasti-survey';
@@ -179,7 +181,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
       selctedLevelName = "";
       selctedLevel = 'praant';
       _linkedvastiValue = '';
-      selctedLevelId = '';
+      _selectedGeoUnitId = '';
       selctedLevelName = "";
       _linkedBhaag = null;
       _linkedNagar = null;
@@ -283,12 +285,14 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
   List<GeoUnitMasterBAL>? _linkedVibhaag;
   List<GeoUnitMasterBAL>? _linkedBhaag;
   List<GeoUnitMasterBAL>? _linkedNagar;
+  List<GeoUnitMasterBAL>? _linkedupnagar;
   List<GeoUnitMasterBAL>? _linkedvasti;
   List<StaticMasterBAL>? _baithakTypes;
   String? _linkedMahaanagarValue = '';
   String? _linkedVibhaagValue = '';
   String? _linkedBhaagValue = '';
   String? _linkedNagarValue = '';
+  String? _linkedupnagarValue = '';
   String? _linkedgraamValue = '';
   String? _linkedMandalValue = '';
   String? _linkedvastiValue = '';
@@ -296,7 +300,9 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
   String? vibhagId = '';
   String? selctedLevel = 'praant';
   String? selctedLevelName = '';
-  String? selctedLevelId = '';
+
+  // String? selctedLevelId = '';
+  String? _selectedGeoUnitId = '';
   String? selctedLevelNameNew = '';
   String? selctedLevelIdNew = '';
   int? vastiSamitiYesNo = 2;
@@ -313,7 +319,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
   String? selectedValueFemale;
   String? ekunLoksankhya;
 
-  List<LevelMasterBAL>? _level;
+  // List<LevelMasterBAL>? _level;
 
   // String _selectedLevel = "";
 
@@ -327,7 +333,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
     '{Statics.getLabel(lessThan1000)}': '999',
   };
 
-  void populateDropdown() async {
+  Future<void> populateDropdown({bool fromClear = false}) async {
     var data = await Statics.getStaticLDB('AnnualBaithakType');
     populatelinkedMahaanagarDropdown();
     populatelinkedVibhaagDropdown('');
@@ -336,6 +342,13 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
     _baithakTypes = _baithakTypes!.where((element) => element.showAnnualBaithakkey!.contains('1')).toList();
     print("_baithakTypes :-- $_baithakTypes");
     setState(() {});
+    if (fromClear || userLevelId == null || ddm == null) {
+      return;
+    }
+    setState(() {
+      _linkedMahaanagarValue = _linkedBhaagValue = _linkedNagarValue = _linkedgraamValue = _linkedvastiValue = null;
+    });
+    await populateAllDropdowns(userLevelId!, ddm!);
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedMahaanagarDropdown() async {
@@ -382,12 +395,32 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
     }
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(String nagarIDStr) async {
-    _linkedvastiValue = null;
-    var vsDD = await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['VastiLevelID'].toString(), nagarIDStr, 'Nagar', '');
+  Future<List<GeoUnitMasterBAL>> populatelinkedUpnagarDropdown(String? nagarIDStr) async {
+    _linkedupnagarValue = _linkedvastiValue = null;
+    _linkedupnagar = _linkedvasti = null;
+    var mnDD;
+
+    mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
+
     setState(() {
-      _linkedvasti = (vsDD.length > 0 ? vsDD : null);
+      _linkedupnagar = (mnDD.length > 0 ? mnDD : null);
+      //_linkedupnagarValue = (userparentUpanagarid ?? userGeoUnitId).toString();
     });
+
+    return mnDD;
+  }
+
+  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(bool haveParentUp, String nagarIDStr) async {
+    _linkedvastiValue = null;
+    var vsDD;
+    if (haveParentUp) {
+      print("i am in parents upnagar vasti");
+      vsDD = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['VastiLevelID'].toString(), nagarIDStr, "Upnagar", '');
+      // print("${mnDD}");
+    } else {
+      vsDD = await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['VastiLevelID'].toString(), nagarIDStr, 'Nagar', '');
+    }
+    setState(() => _linkedvasti = vsDD.length > 0 ? vsDD : null);
     return vsDD;
   }
 
@@ -399,15 +432,16 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    populateDropdown();
+    // populateDropdown();
     fetchVastiSurveyDropdownData();
     _tabController.addListener(_handleTabSelection);
-    getLevelData();
+    // getLevelData();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => initData());
     if ((int.parse(Statics.userDetails['LevelID']) <= 2)) {
       setState(() {
         isVastiSearch = true;
         _isExpanded = false;
-        selctedLevelId = Statics.userDetails['LinkedVastiID'].toString();
+        _selectedGeoUnitId = Statics.userDetails['LinkedVastiID'].toString();
         selctedLevelName = Statics.userDetails['LinkedVastiName'].toString();
         selctedLevel = "Vasti";
       });
@@ -419,13 +453,113 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
     }
   }
 
-  getLevelData() async {
-    _level = await Statics.getLevelLDB();
+  Future<void> initData() async {
+    DropDownModel dm = await MyAppGlobals.getLevelLDB();
+
     setState(() {
-      _level = _level!.where((element) => element.levelName == "Vasti" || element.levelName == "Graam").toList();
-      // _search("Search");
+      userLevelId = dm.levelID;
+      userGeoUnitId = dm.geoUnitID;
+      ddm = dm;
     });
+    await populateDropdown();
   }
+
+  // Future<void> _initData() async {
+  //   await _fetchdataFromDaitwaMaster();
+  //   await populateDropdown();
+  // }
+
+  Future<void> populateAllDropdowns(int level, DropDownModel dm) async {
+    setState(() {
+      _selectedGeoUnitId = _linkedMahaanagarValue = _linkedBhaagValue = _linkedNagarValue = _linkedupnagarValue = _linkedvastiValue = null;
+    });
+    final selection = prepareSelection(dm);
+
+    // Step 1: Mahaanagar
+    await populatelinkedMahaanagarDropdown();
+    _linkedMahaanagarValue = (level == 9 ? (dm.geoUnitID ?? "").toString() : selection.mahaanagar) ?? '';
+    if (level == 9) {
+      _selectedGeoUnitId = (dm.geoUnitID ?? selection.mahaanagar).toString();
+      selctedLevel = 'Mahaanagar';
+    }
+
+    // Step 2: Vibhaag
+    await populatelinkedVibhaagDropdown(_linkedMahaanagarValue!);
+    _linkedVibhaagValue = (level == 8 ? (dm.geoUnitID ?? "").toString() : selection.vibhaag) ?? '';
+    if (level == 8) {
+      _selectedGeoUnitId = (dm.geoUnitID ?? selection.vibhaag).toString();
+      selctedLevel = 'Vibhaag';
+    }
+
+    // Step 3: Bhaag
+    await populatelinkedBhaagDropdown(_linkedVibhaagValue!);
+    _linkedBhaagValue = (level == 7 ? (dm.geoUnitID ?? "").toString() : selection.bhaag) ?? '';
+    if (level == 7) {
+      _selectedGeoUnitId = (dm.geoUnitID ?? selection.bhaag).toString();
+      selctedLevel = 'Bhaag';
+    }
+
+    // Step 4: Nagar
+    await populatelinkedNagarDropdown(_linkedBhaagValue, null);
+    _linkedNagarValue = (level == 6 ? (dm.geoUnitID ?? "").toString() : selection.nagar) ?? '';
+    if (level == 6) {
+      _selectedGeoUnitId = (dm.geoUnitID ?? selection.nagar).toString();
+      selctedLevel = 'Nagar';
+    }
+
+    // Step 5: Upnagar (conditional)
+    if (selection.upnagar != null && selection.upnagar!.isNotEmpty) {
+      await populatelinkedUpnagarDropdown(_linkedNagarValue);
+      _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? "").toString() : selection.upnagar) ?? '';
+      if (level == 13) {
+        _selectedGeoUnitId = (dm.geoUnitID ?? selection.upnagar).toString();
+        selctedLevel = 'Upnagar';
+      }
+    }
+
+    /*// Step 6: Mandal
+    await populatelinkedMandalDropdown(
+      (selection.upnagar != null && selection.upnagar!.isNotEmpty),
+      (selection.upnagar != null && selection.upnagar!.isNotEmpty) ? (_linkedupnagarValue) : _linkednagarValue,
+    );
+    _linkedmandalValue = (level == 4 ? (dm.geoUnitID ?? "").toString() : selection.mandal) ?? '';
+    if (level == 4) {
+      _selectedGeoUnitId = (dm.geoUnitID ?? selection.mandal).toString();
+      selctedLevel = 'Mandal';
+    }
+    // Step 7: Graam
+    await populatelinkedGraamDropdown(_linkedmandalValue);
+    _linkedgraamValue = (level == 3 ? (dm.geoUnitID ?? "").toString() : selection.graam) ?? '';
+    if (level == 3) {
+      _selectedGeoUnitId = (dm.geoUnitID ?? selection.graam).toString();
+      selctedLevel = 'Graam';
+      _getForm();
+    }*/
+    // Step 8: Vasti
+    await populatelinkedVastiDropdown(
+      (selection.upnagar != null && selection.upnagar!.isNotEmpty),
+      (selection.upnagar != null && selection.upnagar!.isNotEmpty) ? _linkedupnagarValue! : _linkedNagarValue!,
+    );
+    _linkedvastiValue = (level == 2 ? (dm.geoUnitID ?? "").toString() : selection.vasti) ?? '';
+    if (level == 2) {
+      _selectedGeoUnitId = (dm.geoUnitID ?? selection.vasti).toString();
+      selctedLevel = 'Vasti';
+      // _getForm();
+    }
+    // if (_linkedVibhaag != null && _linkedVibhaag!.isNotEmpty) _linkedVibhaagName = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedbhaagValue).name;
+    // if (_linkedbhaag != null && _linkedbhaag!.isNotEmpty) _linkedbhaagName = _linkedbhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedbhaagValue).name;
+    // if (_linkednagar != null && _linkednagar!.isNotEmpty) _linkednagarName = _linkednagar!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedbhaagValue).name;
+
+    setState(() {});
+  }
+
+  // getLevelData() async {
+  //   _level = await Statics.getLevelLDB();
+  //   setState(() {
+  //     _level = _level!.where((element) => element.levelName == "Vasti" || element.levelName == "Graam").toList();
+  //     // _search("Search");
+  //   });
+  // }
 
   void _handleTabSelection() {
     if (_tabController.index == 1 && !_isStep1Completed!) {
@@ -1257,7 +1391,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                   _linkedNagarValue = null;
                                   populatelinkedVibhaagDropdown(value!);
                                   mahanagarId = value;
-                                  selctedLevelId = value;
+                                  _selectedGeoUnitId = value;
                                   selctedLevelName = selectedItem.name ?? "";
                                   selctedLevel = 'Mahanagar';
                                 });
@@ -1283,7 +1417,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                   vibhagId = value;
                                   _linkedBhaagValue = _linkedNagarValue = null;
                                   _linkedBhaag = _linkedNagar = null;
-                                  selctedLevelId = value;
+                                  _selectedGeoUnitId = value;
                                   selctedLevelName = selectedItem.name ?? "";
                                   selctedLevel = 'Vibhaag';
                                 });
@@ -1305,7 +1439,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                 setState(() {
                                   _linkedBhaagValue = value;
                                   populatelinkedNagarDropdown(value, null);
-                                  selctedLevelId = value;
+                                  _selectedGeoUnitId = value;
                                   selctedLevelName = selectedItem.name ?? "";
                                   selctedLevel = 'Bhaag';
                                 });
@@ -1326,10 +1460,35 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                 final selectedItem = _linkedNagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                                 setState(() {
                                   _linkedNagarValue = value;
-                                  populatelinkedVastiDropdown(value!);
-                                  selctedLevelId = value;
+                                  populatelinkedVastiDropdown(false, value!);
+                                  _selectedGeoUnitId = value;
                                   selctedLevelName = selectedItem.name ?? "";
                                   selctedLevel = 'Nagar';
+                                });
+                                print("Selected Id: $value");
+                                print("Selected Level Name: ${selectedItem.name}");
+                              },
+                            ),
+                          if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
+                            buildDropdownField(
+                              // isDisabled: MyAppGlobals.isDropdownDisabled('upnagarUpkhanda'),
+                              label: Statics.getLabel('upnagarUpkhanda'),
+                              value: _linkedupnagarValue,
+                              items: _linkedupnagar!
+                                  .map((bg) => DropdownMenuItem(
+                                        value: bg.geoUnitID.toString(),
+                                        child: Text(bg.name!),
+                                      ))
+                                  .toList(),
+                              onChanged: (value) {
+                                final selectedItem = _linkedupnagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                                setState(() {
+                                  _linkedupnagarValue = value;
+                                  _selectedGeoUnitId = value;
+                                  selctedLevel = 'upnagarUpkhanda';
+                                  populatelinkedVastiDropdown(true, value!);
+
+                                  // populatelinkedNagarDropdown(null, value);
                                 });
                                 print("Selected Id: $value");
                                 print("Selected Level Name: ${selectedItem.name}");
@@ -1349,7 +1508,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                 final selectedItem = _linkedvasti!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                                 setState(() {
                                   _linkedvastiValue = value;
-                                  selctedLevelId = value;
+                                  _selectedGeoUnitId = value;
                                   selctedLevelName = selectedItem.name ?? "";
                                   selctedLevel = 'Vasti';
                                 });
@@ -1372,8 +1531,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                                       isVastiSearch = true;
                                       _isExpanded = false;
                                     });
-                                    print("selctedLevel $selctedLevel -- selctedLevelId $selctedLevelId -- selctedLevelName $selctedLevelName");
-                                    searchVastiData(selctedLevelId);
+                                    print("selctedLevel $selctedLevel -- _selectedGeoUnitId $_selectedGeoUnitId -- selctedLevelName $selctedLevelName");
+                                    searchVastiData(_selectedGeoUnitId);
                                   } else {
                                     Statics.showToast(Statics.getLabel('vastiGramValidation'));
                                   }
@@ -5409,7 +5568,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
     log("Selected File Name: $selectedFileName");
     Map<String, dynamic> formData = {
       "cuserid": int.parse(Statics.userDetails['userID']),
-      "vastiid": int.parse(selctedLevelId!),
+      "vastiid": int.parse(_selectedGeoUnitId!),
       "vastiShakhaPramukhName": sanghaKaryaVastiPramukhNameController.text,
       "vastiShakhaSamiti": vastiSamitiYesNo,
       "Lokasankhya": loksankhyaController.text,
@@ -5486,7 +5645,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
         hinduVeerYadiDataList = [];
       });
       await Future.delayed(Duration(seconds: 2));
-      searchVastiData(selctedLevelId);
+      searchVastiData(_selectedGeoUnitId);
       _scrollController.animateTo(
         0.0,
         duration: Duration(milliseconds: 500),
@@ -6002,7 +6161,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                               : "-",
                       isShaakhaa: currentType,
                       pkid: selectedPkId,
-                      vastiid: int.parse(selctedLevelId!),
+                      vastiid: int.parse(_selectedGeoUnitId ?? "0"),
                       shaakhaa: currentType == 1 ? kuthalaVarshiVayogatShaakhaYearController.text.trim() : "",
                       saptahik: currentType == 0 ? kuthalaVarshiVayogatSaptahikYearController.text.trim() : "",
                       isactive: selectedisActive,
@@ -6194,7 +6353,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             } else {
                               final data = VastisarJaagaranshreneesthiti(
                                 pkid: jagranShreniPkId,
-                                vastiid: int.parse(selctedLevelId!),
+                                vastiid: int.parse(_selectedGeoUnitId ?? "0"),
                                 shreneeid: selectedShreniID,
                                 niyamitacalanareupakrama: niyamitChalnareUpkramController.text.trim(),
                                 varanvaritaid: selectedVaramvaritaID,
@@ -6374,7 +6533,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                               }
                               var data = VastisarGatividhikaryasthiti(
                                 pkid: gatividhiPkId ?? 0,
-                                vastiid: int.parse(selctedLevelId!),
+                                vastiid: int.parse(_selectedGeoUnitId ?? "0"),
                                 gatividhiid: selectedShreniIDGatividhi!,
                                 selectedDropdownValueName: selectedShreniNameGatividhi,
                                 niyamitacalanareupakrama: niyamitChalnareUpkramGatividhiController.text.trim(),
@@ -6598,7 +6757,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             } else {
                               final data = VastisarVasahatprakara(
                                 pkid: pkIdVsahatPrakar,
-                                vastiid: int.parse(selctedLevelId!),
+                                vastiid: int.parse(_selectedGeoUnitId ?? "0"),
                                 prakarid: vsahatPrakarId ?? 0,
                                 selectedDropdownValueName: vsahatPrakarName ?? '',
                                 bhavanachenav: vsahatPrakarBhavnacheNavController.text.trim(),
@@ -6786,7 +6945,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
 
                             final newData = VastisarVividhaprakara(
                               pkid: pkIdVividhBhasha,
-                              vastiid: int.parse(selctedLevelId!),
+                              vastiid: int.parse(_selectedGeoUnitId ?? "0"),
                               bhaashaid: bhashaId,
                               selectedDropdownValueName: bhashaName,
                               andaje: bhashaPersentCount.text.trim(),
@@ -7313,7 +7472,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             } else {
                               final item = VastisarKonatyaprantache(
                                 pkid: pkIdKontyaPrantache ?? 0,
-                                vastiid: int.parse(selctedLevelId!),
+                                vastiid: int.parse(_selectedGeoUnitId ?? "0"),
                                 praantid: KontyaPraantacheId,
                                 andaje: input,
                                 anyaPraantName: anyaKontyaPrantacheNameController.text.trim(),
@@ -7455,7 +7614,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
 
                             VastisarReligion newReligion = VastisarReligion(
                               pkid: pkIdReligion ?? 0,
-                              vastiid: int.parse(selctedLevelId!),
+                              vastiid: int.parse(_selectedGeoUnitId ?? "0"),
                               konatyarilijanaceid: religionId,
                               selectedDropdownValueName: religionName,
                               andaje: religionAveragePersentCount.text.trim(),
@@ -7645,7 +7804,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                       sankhya: upasnaCount,
                       isactive: isActiveUpasanaSthal,
                       otherupaasanasthala: anyaName,
-                      vastiid: int.parse(selctedLevelId!),
+                      vastiid: int.parse(_selectedGeoUnitId ?? "0"),
                       pkid: upasnaSthalPkid,
                     );
 
@@ -8003,7 +8162,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                       samparkasutranava: sajjanShaktiContactPersonNameController.text.trim(),
                       samparkasutraMobileNumber: sajjanShaktiContactPersonDoorbhashController.text.trim(),
                       isactive: isActiveSajjanShakti,
-                      vastiid: int.parse(selctedLevelId!),
+                      vastiid: int.parse(_selectedGeoUnitId ?? "0"),
                       pkid: pkidSajjanShakti,
                       isfemale: isFemale,
                     );
@@ -8375,7 +8534,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                       otherupshrenee: anyaPrabhaviLokAnyaUppshreniController.text,
                       otherupshrenee2: anyaPrabhaviLokAnyaUppshreni1Controller.text,
                       isactive: isActiveAnyaPrabhavilok,
-                      vastiid: int.parse(selctedLevelId!),
+                      vastiid: int.parse(_selectedGeoUnitId ?? "0"),
                       isfemale: isFemale,
                     );
                     if (editIndex != null) {
@@ -8581,7 +8740,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                       otherSajareSan: vastitSajarHonareAnyaSanController.text,
                       isactive: isActiveSajareHonareSan,
                       pkid: pkidSajareHonareSan ?? 0,
-                      vastiid: int.parse(selctedLevelId!),
+                      vastiid: int.parse(_selectedGeoUnitId ?? "0"),
                     );
                     if (editIndex != null) {
                       vastitSajarHonareSanDataList[editIndex] = data;
@@ -8758,7 +8917,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                   } else {
                     VastisarVastitasajaraSamajikkaryakram data = VastisarVastitasajaraSamajikkaryakram(
                       id: selectedSamajikKaryakramId,
-                      vastiid: int.parse(selctedLevelId!),
+                      vastiid: int.parse(_selectedGeoUnitId ?? "0"),
                       pkid: pkidSamajikKaryakram,
                       isactive: isActiveSamajikKaryakram,
                       selectedDropdownValueName: selectedSamajikKaryakramName,
@@ -10775,7 +10934,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
       _isStep2Completed = true;
     });
     Map<String, dynamic> formData = {
-      "vastiid": int.parse(selctedLevelId!),
+      "vastiid": int.parse(_selectedGeoUnitId ?? "0"),
       "cuserid": int.parse(Statics.userDetails['userID']),
       "VastisarVastitilabalopasanakendra": vastitBalopasanaKendraDataList,
       "VastisarMothevyavasayikakendra": motheVyasayikKendraDataList,
@@ -10792,7 +10951,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
     log("Step 2 Form Data (JSON):\n$formattedJson");
     Statics.vastiSarvekshanStep2FormSubmit(context, jsonEncode(formData));
     await Future.delayed(Duration(seconds: 2));
-    searchVastiData(selctedLevelId);
+    searchVastiData(_selectedGeoUnitId);
     _scrollController.animateTo(
       0.0,
       duration: Duration(milliseconds: 500),
@@ -10941,7 +11100,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                         selectedDropdownValueName: selectedVastitBalopasanaKendraName,
                         isactive: isActiveBalopasanakendra,
                         pkid: pkidBalopasanakendra,
-                        vastiid: int.parse(selctedLevelId!),
+                        vastiid: int.parse(_selectedGeoUnitId ?? "0"),
                         name: vastitBalopasanaKendraNaavController.text,
                         konasathi: _selectedGender,
                         otherBalopasanaShreniName: vastitBalopasanaKendraAnyaNameController.text);
@@ -11069,7 +11228,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                 onPressed: () {
                   VastisarMothevyavasayikakendra data = VastisarMothevyavasayikakendra(
                     name: motheVyasayikKendraNaavController.text,
-                    vastiid: int.parse(selctedLevelId!),
+                    vastiid: int.parse(_selectedGeoUnitId ?? "0"),
                     pkid: pkidMotheVyasayikKendra,
                     isactive: isActiveMotheVyasayikKendra,
                     selectedDropdownValueName: selectedMotheVyasayikKendraName,
@@ -11199,7 +11358,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                     name: nirmandhinMothePrakalpaNaavController.text,
                     pkid: nirmandhinMothePrakalpaPkid,
                     isactive: nirmandhinMothePrakalpaIsActive,
-                    vastiid: int.parse(selctedLevelId!),
+                    vastiid: int.parse(_selectedGeoUnitId ?? "0"),
                   );
                   if (editIndex != null) {
                     nirmandhinMothePrakalpaDataList[editIndex] = data;
@@ -11325,7 +11484,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                 ),
                 onPressed: () {
                   VastisarMotherugnalaya data = VastisarMotherugnalaya(
-                    vastiid: int.parse(selctedLevelId!),
+                    vastiid: int.parse(_selectedGeoUnitId ?? "0"),
                     isactive: selectedmotheRugnalayIsActive,
                     pkid: selectedmotheRugnalayPkId,
                     selectedDropdownValueName: selectedmotheRugnalayName,
@@ -11702,7 +11861,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                     name: allShaikshanikPrakarNaavController.text,
                     pkid: pkidSchool,
                     isactive: isActiveSchool,
-                    vastiid: int.parse(selctedLevelId!),
+                    vastiid: int.parse(_selectedGeoUnitId ?? "0"),
                     selectedDropdownValueName: selectedShaikshanikSansthaName,
                     prakaarid: selectedShalaPrakarId ?? selectedMahavidyalayinPrakarId,
                     selectedDropdownValueName3: selectedShalaPrakarName ?? selectedMahavidyalayinPrakarName,
@@ -11841,7 +12000,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                     name: maidanUdyanNameControler.text.trim(),
                     pkid: pkidMaidanUdyan,
                     isactive: isActiveMaidanUdyan,
-                    vastiid: int.parse(selctedLevelId!),
+                    vastiid: int.parse(_selectedGeoUnitId ?? "0"),
                   );
                   if (editIndex != null) {
                     maidanUddyanDataList[editIndex] = data;
@@ -11977,7 +12136,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                 ),
                 onPressed: () {
                   VastisarJahirakaryakramasambandhi data = VastisarJahirakaryakramasambandhi(
-                    vastiid: int.parse(selctedLevelId!),
+                    vastiid: int.parse(_selectedGeoUnitId ?? "0"),
                     isactive: isActiveJahirKaryakram,
                     pkid: pkidJahirKaryakram,
                     name: jahirKaryakramNaavControler.text,
@@ -12113,7 +12272,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                     selectedDropdownValueName: selectedVastiPrashnaGarjaName,
                     pkid: pkidVastiPrashnaGarjaName,
                     isactive: isActiveVastiPrashnaGarjaName,
-                    vastiid: int.parse(selctedLevelId!),
+                    vastiid: int.parse(_selectedGeoUnitId ?? "0"),
                     id: selectedVastiPrashnaGarjaId,
                   );
                   if (editIndex != null) {
@@ -12240,7 +12399,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                   } else {
                     Vastisardhaarmiknetrtav data = Vastisardhaarmiknetrtav(
                       id: selectedDharmikNetrutvaId,
-                      vastiid: int.parse(selctedLevelId!),
+                      vastiid: int.parse(_selectedGeoUnitId ?? "0"),
                       isactive: isActiveDharmikNetrutva,
                       pkid: pkidDharmikNetrutva,
                       selectedDropdownValueName: selectedDharmikNetrutvaName,
@@ -12431,7 +12590,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                         name: durjanShaktiNaavController.text,
                         pkid: pkidDurjanShaktiGunha,
                         isactive: isActivedDurjanShaktiGunha,
-                        vastiid: int.parse(selctedLevelId!),
+                        vastiid: int.parse(_selectedGeoUnitId ?? "0"),
                         selectedDropdownValueName: selectedDurjanShaktiPrakarName,
                         selectedDropdownValueName1: selectedDurjanShaktiShikashaName,
                         selectedDropdownValueName2: selectedDurjanShaktiGunhaName,
@@ -12554,7 +12713,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                   //   'hinduVeerYadiName': hinduVeerYadiNameControler.text.trim(), // ✅ fixed this line
                   // };
                   VastisarHinduvirayadi data = VastisarHinduvirayadi(
-                    vastiid: int.parse(selctedLevelId!),
+                    vastiid: int.parse(_selectedGeoUnitId ?? '0'),
                     isactive: isActiveHinduVeerYadi,
                     pkid: pkidHinduVeerYadi,
                     name: hinduVeerYadiNameControler.text,
@@ -13019,7 +13178,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                     if (_result == 0) {
                       final newData = AbhiyaanKaryakartaModel(
                         pkid: editIndex == null ? 0 : abhiyaanKaryakartaList[editIndex].pkid,
-                        geounitid: int.parse(selctedLevelId!),
+                        geounitid: int.parse(_selectedGeoUnitId ?? "0"),
                         isvasti: 1,
                         name: _fullNameCntrl.text.trim(),
                         mobileno: _mobileCntrl.text.trim(),
@@ -14269,7 +14428,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
 
   Future<void> submitStep3Form() async {
     Map<String, dynamic> formData = {
-      "vastiid": int.parse(selctedLevelId!),
+      "vastiid": int.parse(_selectedGeoUnitId ?? "0"),
       "cuserid": int.parse(Statics.userDetails['userID']),
       "VastisarVastitilasamajika": vastiPrashnaGarjaDataList,
       "Vastisardhaarmiknetrtav": dharmikNetrutvaDataList,
@@ -14288,7 +14447,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
       duration: Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
-    searchVastiData(selctedLevelId);
+    searchVastiData(_selectedGeoUnitId);
   }
 
   // Widget dynamicProgressBar(double value) {

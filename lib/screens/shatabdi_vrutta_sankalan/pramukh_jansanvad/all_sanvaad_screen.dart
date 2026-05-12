@@ -141,8 +141,8 @@ class _AllSanvaadScreenState extends State<AllSanvaadScreen> {
 
     // Step 6: Mandal
     await populatelinkedMandalDropdown(
-      selection.upnagar != null ? "Nagar" : "Upnagar",
-      selection.upnagar != null ? _linkednagarValue : _linkedupnagarValue,
+      (selection.upnagar != null && selection.upnagar!.isNotEmpty) ? "Upnagar" : "Nagar",
+      (selection.upnagar != null && selection.upnagar!.isNotEmpty) ? _linkedupnagarValue : _linkednagarValue,
     );
     _linkedmandalValue = (level == 4 ? (dm.geoUnitID ?? 0).toString() : selection.mandal) ?? _linkedmandalValue;
     if (level == 4) {

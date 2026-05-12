@@ -389,7 +389,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
       _linkedVibhaagValue = _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
     });
     // clearForm();
-    await populateDropdown();
+    await initData();
     await getKendraListData();
   }
 

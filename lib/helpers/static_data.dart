@@ -977,7 +977,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForVasti(String levelI
           : "") +
       (pattern == "" ? "" : " AND GeoUnitMaster.GeoUnitName LIKE \'$pattern%\'") +
       " ORDER BY GeoUnitMaster.DisplaySequence;";
-  print("strSql ==> $strSql");
+  // print("strSql ==> $strSql");
   var result = await DatabaseHelper.getData(strSql);
 
   List<GeoUnitMasterBAL> _geounitList = <GeoUnitMasterBAL>[];
@@ -1126,6 +1126,8 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForUpnagar(String leve
   // print("strSql ==> $strSql");
   var result = await DatabaseHelper.getData(strSql);
 
+  print(strSql);
+
   List<GeoUnitMasterBAL> _geounitList = <GeoUnitMasterBAL>[];
   result.forEach((data) {
     var info = GeoUnitMasterBAL(
@@ -1150,6 +1152,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForUpnagar(String leve
       data['ParentGraamID'],
       data['ParentUpaNagarID'],
     );
+    log(jsonEncode(info.toJson()));
     _geounitList.add(info);
   });
   return _geounitList;
@@ -1158,7 +1161,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForUpnagar(String leve
 //===================================================================================================================================================================
 
 Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParent(String levelID, String parentID, String parentType, String pattern, {bool isAbhiyaan = false}) async {
-  print("isabhiyaan >>>>>>>>>>>>>>>>>>>>>> $isAbhiyaan");
+  // print("isabhiyaan >>>>>>>>>>>>>>>>>>>>>> $isAbhiyaan");
   if (parentID == '') parentID = '0';
   String strSql = "Select * from ${isAbhiyaan ? "AbhiyaanGeoUnitMaster" : "GeoUnitMaster"} WHERE LevelID=" +
       levelID +

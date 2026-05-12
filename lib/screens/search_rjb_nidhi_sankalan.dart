@@ -132,7 +132,8 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
     // }
     // Step 6: mandal (conditional)
     if (selection.mandal != null && selection.mandal!.isNotEmpty) {
-      await populatelinkedMandalDropdown(selection.upnagar != null, selection.upnagar != null ? _linkedupnagarValue! : _linkednagarValue!);
+      await populatelinkedMandalDropdown(
+          (selection.upnagar != null && selection.upnagar!.isNotEmpty), (selection.upnagar != null && selection.upnagar!.isNotEmpty) ? _linkedupnagarValue! : _linkednagarValue!);
       _selectedGeoUnitId = _linkedmandalValue = (level == 4 ? (dm.geoUnitID ?? "").toString() : selection.mandal) ?? '';
     }
     // Step 7: Graam
@@ -141,7 +142,8 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
       _selectedGeoUnitId = _linkedgraamValue = (level == 3 ? (dm.geoUnitID ?? "").toString() : selection.graam) ?? '';
     }
     // Step 8: Vasti
-    await populatelinkedVastiDropdown(selection.upnagar != null, selection.upnagar != null ? _linkedupnagarValue! : _linkednagarValue!);
+    await populatelinkedVastiDropdown(
+        (selection.upnagar != null && selection.upnagar!.isNotEmpty), (selection.upnagar != null && selection.upnagar!.isNotEmpty) ? _linkedupnagarValue! : _linkednagarValue!);
     _selectedGeoUnitId = _linkedvastiValue = (level == 2 ? (dm.geoUnitID ?? "").toString() : selection.vasti) ?? '';
 
     // if (_linkedVibhaag != null && _linkedVibhaag!.isNotEmpty) _linkedVibhaagName = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedBhaagValue).name;

@@ -70,7 +70,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
   void initState() {
     super.initState();
     _scrollController = ScrollController();
-    initData();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => initData());
   }
 
   Future<void> initData() async {
@@ -81,16 +81,10 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
       userGeoUnitId = dm.geoUnitID;
       ddm = dm;
     });
-    await populateDropdown(userLevelId!, dm);
-    //await populateAllDropdowns(userLevelId!, dm);
+    await populateDropdown();
   }
 
-  // Future<void> _initData() async {
-  //   await _fetchdataFromDaitwaMaster();
-  //   await populateDropdown();
-  // }
-
-  Future<void> populateAllDropdowns(int level, DropDownModel dm) async {
+  Future<void> populateAllGeoDropdowns(int level, DropDownModel dm) async {
     setState(() {
       _selectedGeoUnitId = _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     });
@@ -102,6 +96,8 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
     if (level == 9) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.mahaanagar).toString();
       _selctedLevel = 'Mahaanagar';
+      final selectedItem = _linkedMahaanagar!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
+      _selctedLevelName = selectedItem.name;
     }
 
     // Step 2: Vibhaag
@@ -110,6 +106,8 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
     if (level == 8) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.vibhaag).toString();
       _selctedLevel = 'Vibhaag';
+      final selectedItem = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
+      _selctedLevelName = selectedItem.name;
     }
 
     // Step 3: Bhaag
@@ -118,6 +116,8 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
     if (level == 7) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.bhaag).toString();
       _selctedLevel = 'Bhaag';
+      final selectedItem = _linkedbhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
+      _selctedLevelName = selectedItem.name;
     }
 
     // Step 4: Nagar
@@ -126,6 +126,9 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
     if (level == 6) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.nagar).toString();
       _selctedLevel = 'Nagar';
+      getReportDataFun();
+      final selectedItem = _linkednagar!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
+      _selctedLevelName = selectedItem.name;
     }
 
     // // Step 5: Upnagar (conditional)
@@ -135,12 +138,19 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
     //   if (level == 13) {
     //     _selectedGeoUnitId = (dm.geoUnitID ?? selection.upnagar).toString();
     //     _selctedLevel = 'Upnagar';
+    //     getReportDataFun();
     //   }
     // }
-    //
+    // if (level == 13) {
+    //   _selectedGeoUnitId = selection.nagar.toString();
+    //   _selctedLevel = 'Nagar';
+    //   final selectedItem = _linkednagar!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
+    //   _selctedLevelName = selectedItem.name;
+    // }
+    // //
     // // Step 6: Mandal
     // await populatelinkedMandalDropdown(
-    //   selection.upnagar != null ? "Nagar" : "Upnagar",
+    //   selection.upnagar != null,
     //   selection.upnagar != null ? _linkednagarValue : _linkedupnagarValue,
     // );
     // _linkedmandalValue = (level == 4 ? (dm.geoUnitID ?? 0).toString() : selection.mandal) ?? _linkedmandalValue;
@@ -150,11 +160,15 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
     // }
     // // Step 7: Graam
     // await populatelinkedGraamDropdown(_linkedmandalValue);
-    // _selectedGeoUnitId = _linkedgraamValue = (level == 3 ? dm.geoUnitID.toString() : selection.graam) ?? '';
+    // _selectedGeoUnitId = _linkedgraamValue = (level == 3 ? (dm.geoUnitID ?? "").toString() : selection.graam) ?? '';
     //
     // // Step 8: Vasti
     // await populatelinkedVastiDropdown(_linkednagarValue);
-    // _selectedGeoUnitId = _linkedvastiValue = (level == 2 ? dm.geoUnitID.toString() : selection.vasti) ?? '';
+    // _selectedGeoUnitId = _linkedvastiValue = (level == 2 ? (dm.geoUnitID ?? "").toString() : selection.vasti) ?? '';
+
+    // if (_linkedVibhaag != null && _linkedVibhaag!.isNotEmpty) _linkedVibhaagName = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedbhaagValue).name;
+    // if (_linkedbhaag != null && _linkedbhaag!.isNotEmpty) _linkedbhaagName = _linkedbhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedbhaagValue).name;
+    // if (_linkednagar != null && _linkednagar!.isNotEmpty) _linkednagarName = _linkednagar!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedbhaagValue).name;
 
     setState(() {});
   }
@@ -397,23 +411,22 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
   //   }
   // }
 
-  Future<void> populateDropdown(int level, DropDownModel? dm, {bool fromClear = false}) async {
-    if (fromClear) {
-      setState(() {
-        _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedupnagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-        _linkedMahaanagar = _linkedVibhaag = _linkedbhaag = _linkednagar = _linkedupnagar = _linkedmandal = null;
-        _selctedLevelName = _selectedGeoUnitId = null;
-        nagarList = [];
-        _selctedLevel = "praant";
-      });
-      await populatelinkedMahaanagarDropdown();
-      await populatelinkedVibhaagDropdown('');
+  Future<void> populateDropdown({bool fromClear = false}) async {
+    setState(() {
+      _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+      _linkedMahaanagar = _linkedVibhaag = _linkedbhaag = _linkednagar = _linkedmandal = null;
+      _selctedLevelName = _selectedGeoUnitId = null;
+      _selctedLevel = "praant";
+    });
+    await populatelinkedMahaanagarDropdown();
+    await populatelinkedVibhaagDropdown('');
+    if (fromClear || userLevelId == null || ddm == null) {
       return;
     }
     setState(() {
       _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     });
-    await populateAllDropdowns(level, dm!);
+    await populateAllGeoDropdowns(userLevelId!, ddm!);
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedMahaanagarDropdown() async {
@@ -549,10 +562,18 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
   //////////////////////////////////////////////////////////////////////////////////////
 
   getReportDataFun() async {
-    setState(() {
-      report = [];
-      // _isLoading = true;
-    });
+    report = [];
+    _selctedLevelNameList = [];
+    setState(() {});
+    // _selctedLevelNameList.add(_linkedMahaanagarName);
+    // _selctedLevelNameList.add(_linkedVibhaagName);
+    _selctedLevelNameList.add(_linkedbhaagName);
+    _selctedLevelNameList.add(_linkedshaharName);
+    _selctedLevelNameList.add(_linkednagarName);
+    _selctedLevelNameList.add(_linkedmandalName);
+    _selctedLevelNameList.add(_linkedgraamName);
+    _selctedLevelNameList.add(_linkedvastiName);
+    setState(() {});
     Map<String, dynamic> formData = {
       "geounitid": int.tryParse(_selectedGeoUnitId.toString()) ?? 0,
       "appuserid": int.tryParse(Statics.userDetails['userID']) ?? null,
@@ -564,6 +585,12 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
     // log("vijayadashamiReport >>>>>>>>>>>>>>>>> ${jsonDecode(jsonEncode(vijayadashamiReport))}");
     setState(() {
       report;
+      _selctedLevelNames = _selctedLevelNameList
+          .where((e) => e != null && e.isNotEmpty) // remove null or empty strings
+          .cast<String>() // convert from String? to String
+          .join(' -> ');
+      _searched = true;
+      _isExpanded = false;
     });
   }
 
@@ -1376,30 +1403,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                         ),
                         color: Theme.of(context).primaryColor,
                         textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                        onPressed: () async {
-                          _selctedLevelNameList = [];
-                          setState(() {});
-                          // _selctedLevelNameList.add(_linkedMahaanagarName);
-                          // _selctedLevelNameList.add(_linkedVibhaagName);
-                          _selctedLevelNameList.add(_linkedbhaagName);
-                          _selctedLevelNameList.add(_linkedshaharName);
-                          _selctedLevelNameList.add(_linkednagarName);
-                          _selctedLevelNameList.add(_linkedmandalName);
-                          _selctedLevelNameList.add(_linkedgraamName);
-                          _selctedLevelNameList.add(_linkedvastiName);
-                          setState(() {});
-
-                          await getReportDataFun();
-
-                          setState(() {
-                            _selctedLevelNames = _selctedLevelNameList
-                                .where((e) => e != null && e.isNotEmpty) // remove null or empty strings
-                                .cast<String>() // convert from String? to String
-                                .join(' -> ');
-                            _searched = true;
-                            _isExpanded = false;
-                          });
-                        },
+                        onPressed: getReportDataFun,
                         child: Text(
                           "${Statics.getLabel('search')}",
                           style: TextStyle(fontSize: 16),
@@ -1415,7 +1419,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                               _linkedVibhaagValue = _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
                               _selctedLevel = "praant";
                             });
-                            await populateDropdown(userLevelId!, null, fromClear: true);
+                            await populateDropdown();
                           },
                           child: Text(Statics.getLabel('clear'))),
                     ],

@@ -341,7 +341,7 @@ class _PramukhJansanvadFormTabState extends State<PramukhJansanvadFormTab> with 
       _linkedVibhaagValue = _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
     });
     // clearForm();
-    await populateDropdown();
+    await initData();
     await getKendraListData();
   }
 
