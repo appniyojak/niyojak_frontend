@@ -1126,7 +1126,7 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForUpnagar(String leve
   // print("strSql ==> $strSql");
   var result = await DatabaseHelper.getData(strSql);
 
-  print(strSql);
+  // print(strSql);
 
   List<GeoUnitMasterBAL> _geounitList = <GeoUnitMasterBAL>[];
   result.forEach((data) {

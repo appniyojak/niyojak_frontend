@@ -120,8 +120,8 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
     _selctedLevel = 'Nagar';
 
     // Step 5: Upnagar (conditional)
+    await populatelinkedUpnagarDropdown(_linkedNagarValue);
     if (selection.upnagar != null && selection.upnagar!.isNotEmpty) {
-      await populatelinkedUpnagarDropdown(_linkedNagarValue);
       _selectedGeoUnitId = _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? "").toString() : selection.upnagar) ?? '';
     }
     if (selection.mandal != null && selection.mandal!.isNotEmpty) {

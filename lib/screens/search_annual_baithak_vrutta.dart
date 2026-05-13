@@ -159,7 +159,9 @@ class _SearchAnnualBaithakVruttaState extends State<SearchAnnualBaithakVrutta> {
     }
     print("object is not null >>>>>>>>>>>>>>>>>>>>>>");
     await populateAllDropdowns(userLevelId!, ddm!);
-    setState(() {});
+    setState(() {
+      _isSearching = false;
+    });
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedMahaanagarDropdown() async {
@@ -1160,6 +1162,9 @@ class _SearchAnnualBaithakVruttaState extends State<SearchAnnualBaithakVrutta> {
                               _isSearching = false;
                               exportList.clear();
                               donloadexportList.clear();
+                              _lstShaakhaaVrutta = null;
+                              _lstMukhyaMaarg = null;
+                              _lstGraamVikas = null;
                             });
                             populateDropdown();
                           },

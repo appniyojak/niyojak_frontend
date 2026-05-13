@@ -1739,8 +1739,8 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
     }
 
     // Step 5: Upnagar (conditional)
+    await populatelinkedUpnagarDropdown(_linkednagarValue);
     if (selection.upnagar != null && selection.upnagar!.isNotEmpty) {
-      await populatelinkedUpnagarDropdown(_linkednagarValue);
       _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? "").toString() : selection.upnagar) ?? '';
       if (level == 13) {
         _selectedGeoUnitId = (dm.geoUnitID ?? selection.upnagar).toString();
@@ -4499,11 +4499,17 @@ class _SwayamSevakSearchState extends State<SwayamSevakSearch> with SingleTicker
                                         .map(
                                           (bg) => DropdownMenuItem(
                                             value: bg.levelID.toString(),
-                                            child: Text(bg.levelName == "Bhaag"
-                                                ? "Bhaag / Jilha"
-                                                : bg.levelName == "Nagar"
-                                                    ? "Nagar / Taluka"
-                                                    : bg.levelName!),
+                                            child: Text(
+                                              Statics.getLabel(
+                                                  bg.levelID == 13
+                                                      ? "upnagarUpkhanda"
+                                                      : bg.levelID == 6
+                                                          ? "Nagar/Taluka"
+                                                          : bg.levelName == "Akhil Bhaaratiya"
+                                                              ? "AkhilBhaaratiya"
+                                                              : bg.levelName!,
+                                                  returnKey: true),
+                                            ),
                                           ),
                                         )
                                         .toList(),

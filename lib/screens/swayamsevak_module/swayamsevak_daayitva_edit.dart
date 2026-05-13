@@ -9,6 +9,7 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import '../../helpers/static_data.dart' as Statics;
 import '../../providers/bals.dart';
 import '../../providers/swayamsevak_provider.dart';
+import '../../utils/globals.dart';
 import '../../widgets/legend.dart';
 
 class SwayamSevakDaayitvaEdit extends StatefulWidget {
@@ -1270,7 +1271,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
               },
             ),
           if (_levelValue != null && ((_levelValue ?? 0) < 9 || (_levelValue ?? 0) > 12) && _linkedVibhaag != null)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('Vibhaag'),
               value: _linkedVibhaagValue,
               items: _linkedVibhaag!
@@ -1295,7 +1296,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
               isDisabled: false,
             ),
           if (_levelValue != null && ((_levelValue ?? 0) < 8 || (_levelValue ?? 0) > 12) && _linkedVibhaagValue != null && _linkedbhaag != null && _linkedbhaag!.isNotEmpty)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('Bhaag'),
               value: _linkedbhaagValue,
               items: _linkedbhaag!
@@ -1344,7 +1345,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
           //     isDisabled: false,
           //   ),
           if (_levelValue != null && ((_levelValue ?? 0) < 7 || (_levelValue ?? 0) > 12) && _linkedbhaagValue != null && _linkednagar != null && _linkednagar!.isNotEmpty)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('Nagar'),
               value: _linkednagarValue,
               items: _linkednagar!
@@ -1372,7 +1373,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
             ),
 
           if (_levelValue != null && (_linkedupnagar != null && _linkedupnagar!.isNotEmpty))
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('upnagarUpkhanda'),
               value: _linkedupnagarValue,
               items: _linkedupnagar!
@@ -1397,7 +1398,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
               isDisabled: false,
             ),
           if (_levelValue != null && (_levelValue ?? 0) < 5 && _linkednagarValue != null && _linkedmandal != null && _linkedmandal!.isNotEmpty)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('Mandal'),
               value: _linkedmandalValue,
               items: _linkedmandal!
@@ -1422,7 +1423,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
               isDisabled: false,
             ),
           if (_levelValue != null && (_levelValue ?? 0) < 4 && _linkedmandalValue != null && _linkedgraam != null && _linkedgraam!.isNotEmpty)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('Graam'),
               value: _linkedgraamValue,
               items: _linkedgraam!
@@ -1447,7 +1448,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
               isDisabled: false,
             ),
           if (_levelValue != null && (_levelValue ?? 0) < 3 && _linkednagarValue != null && _linkedvasti != null && _linkedvasti!.isNotEmpty)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('Vasti'),
               value: _linkedvastiValue,
               items: _linkedvasti!
@@ -1472,7 +1473,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
               isDisabled: false,
             ),
           if (_levelValue != null && (_levelValue ?? 0) < 2 && _linkedshaakhaa != null && _linkedshaakhaa!.isNotEmpty)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('Shaakhaa'),
               value: _linkedshaakhaaValue,
               items: _linkedshaakhaa!
@@ -1496,25 +1497,6 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
               isDisabled: false,
             ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildDropdownField({
-    required String label,
-    required String? value,
-    required List<DropdownMenuItem<String>> items,
-    required ValueChanged<String?> onChanged,
-    required bool isDisabled,
-  }) {
-    return IgnorePointer(
-      ignoring: isDisabled,
-      child: DropdownButtonFormField(
-        decoration: InputDecoration(labelText: label),
-        isExpanded: true,
-        value: value == "" ? null : value,
-        items: items,
-        onChanged: onChanged,
       ),
     );
   }

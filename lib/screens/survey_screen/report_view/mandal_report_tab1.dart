@@ -119,8 +119,8 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
     }
 
     // Step 5: Upnagar (conditional)
+    await populatelinkedUpnagarDropdown(_linkedNagarValue);
     if (selection.upnagar != null && selection.upnagar!.isNotEmpty) {
-      await populatelinkedUpnagarDropdown(_linkedNagarValue);
       _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? 0).toString() : selection.upnagar) ?? _linkedupnagarValue;
       if (level == 13) {
         _selectedGeoUnitId = (dm.geoUnitID ?? selection.upnagar).toString();
@@ -2386,7 +2386,7 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
                 children: [
                   if (_linkedMahaanagar != null)
                     buildDropdownField(
-                      isDisabled: MyAppGlobals.isDropdownDisabled('Mahaanagar'),
+                      isDisabled: ((userLevelId ?? 0) < 9 || userLevelId == 13),
                       label: Statics.getLabel('Mahaanagar'),
                       value: _linkedMahaanagarValue,
                       items: _linkedMahaanagar!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
@@ -2406,7 +2406,7 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
                     ),
                   if (_linkedVibhaag != null)
                     buildDropdownField(
-                      isDisabled: MyAppGlobals.isDropdownDisabled('Vibhaag'),
+                      isDisabled: ((userLevelId ?? 0) < 8 || userLevelId == 13),
                       label: Statics.getLabel('Vibhaag'),
                       value: _linkedVibhaagValue,
                       items: _linkedVibhaag!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
@@ -2424,7 +2424,7 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
                     ),
                   if (_linkedBhaag != null && _linkedBhaag!.isNotEmpty)
                     buildDropdownField(
-                      isDisabled: MyAppGlobals.isDropdownDisabled('Bhaag'),
+                      isDisabled: ((userLevelId ?? 0) < 7 || userLevelId == 13),
                       label: Statics.getLabel('Bhaag'),
                       value: _linkedBhaagValue,
                       items: _linkedBhaag!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
@@ -2461,7 +2461,7 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
                   //   ),
                   if (_linkedNagar != null && _linkedNagar!.isNotEmpty)
                     buildDropdownField(
-                      isDisabled: MyAppGlobals.isDropdownDisabled('Nagar'),
+                      isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
                       label: Statics.getLabel('Nagar'),
                       value: _linkedNagarValue,
                       items: _linkedNagar!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
@@ -2480,7 +2480,7 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
                     ),
                   if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
                     buildDropdownField(
-                      isDisabled: MyAppGlobals.isDropdownDisabled('upnagarUpkhanda'),
+                      isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
                       label: Statics.getLabel('upnagarUpkhanda'),
                       value: _linkedupnagarValue,
                       items: _linkedupnagar!
@@ -2510,7 +2510,7 @@ class _MandalSurveyReportViewScreen1State extends State<MandalSurveyReportViewSc
                     ),
                   if (_linkedmandal != null && _linkedmandal!.isNotEmpty)
                     buildDropdownField(
-                      isDisabled: MyAppGlobals.isDropdownDisabled('Mandal'),
+                      isDisabled: ((userLevelId ?? 0) < 4),
                       label: Statics.getLabel('Mandal'),
                       value: _linkedmandalValue,
                       items: _linkedmandal!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),

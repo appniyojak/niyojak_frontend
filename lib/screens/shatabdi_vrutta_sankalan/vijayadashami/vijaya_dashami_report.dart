@@ -1845,7 +1845,7 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                               alignment: Alignment.center,
                               child: TextButton(
                                 child: Text(Statics.getLabel('clear')),
-                                onPressed: () {
+                                onPressed: () async {
                                   setState(() {
                                     // _isExpanded = false;
 
@@ -1873,8 +1873,9 @@ class _VijayadashamiFormReportState extends State<VijayadashamiFormReport> {
                                     _selectedGeoUnitId = null;
 
                                     vijayadashamiReport = null;
-                                    populatelinkedVibhaagDropdown('');
                                   });
+
+                                  await populateDropdown();
                                 },
                               ),
                             ),

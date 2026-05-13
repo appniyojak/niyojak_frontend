@@ -151,8 +151,8 @@ class _KaryakramCreationScreenState extends State<KaryakramCreationScreen> {
     }
 
     // Step 5: Upnagar (conditional)
+    await populatelinkedUpnagarDropdown(_linkednagarValue);
     if (selection.upnagar != null && selection.upnagar!.isNotEmpty) {
-      await populatelinkedUpnagarDropdown(_linkednagarValue);
       _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? 0).toString() : selection.upnagar) ?? _linkedupnagarValue;
       if (level == 13) {
         _selectedGeoUnitIdForCreat = (dm.geoUnitID ?? selection.upnagar).toString();
@@ -524,7 +524,7 @@ class _KaryakramCreationScreenState extends State<KaryakramCreationScreen> {
                 SizedBox(height: 12),
 
                 SizedBox(height: 12),
-                _buildDropdownField(
+                buildDropdownField(
                   // ignoring: dateController.text.isEmpty || (baithakId != null && baithakId != 0),
                   label: Statics.getLabel('selectStar'),
                   value: _selectedKaryakramLevelId == null ? null : _selectedKaryakramLevelId.toString(),
@@ -767,8 +767,12 @@ class _KaryakramCreationScreenState extends State<KaryakramCreationScreen> {
       child: Column(
         children: [
           if (![6, 7].contains(_selectedKaryakramLevelId) && _linkedMahaanagar != null)
-            _buildDropdownField(
-              ignoring: _isViewOnly ? _isViewOnly : (baithakId != null && baithakId != 0) && [2, 3, 4].contains(_selectedKaryakramLevelId),
+            buildDropdownField(
+              isDisabled: ((userLevelId ?? 0) < 9 || userLevelId == 13) == true
+                  ? true
+                  : _isViewOnly
+                      ? _isViewOnly
+                      : (baithakId != null && baithakId != 0) && [2, 3, 4].contains(_selectedKaryakramLevelId),
               label: Statics.getLabel('Mahaanagar'),
               value: _linkedMahaanagarValue,
               items: _linkedMahaanagar!
@@ -791,11 +795,14 @@ class _KaryakramCreationScreenState extends State<KaryakramCreationScreen> {
                 populatelinkedVibhaagDropdown(value!);
                 populatelinkedBhaagDropdown("");
               },
-              isDisabled: false,
             ),
           if (_linkedVibhaag != null)
-            _buildDropdownField(
-              ignoring: _isViewOnly ? _isViewOnly : (baithakId != null && baithakId != 0) && [2, 3, 4].contains(_selectedKaryakramLevelId),
+            buildDropdownField(
+              isDisabled: ((userLevelId ?? 0) < 8 || userLevelId == 13) == true
+                  ? true
+                  : _isViewOnly
+                      ? _isViewOnly
+                      : (baithakId != null && baithakId != 0) && [2, 3, 4].contains(_selectedKaryakramLevelId),
               label: Statics.getLabel('Vibhaag'),
               value: _linkedVibhaagValue,
               items: _linkedVibhaag!
@@ -815,11 +822,14 @@ class _KaryakramCreationScreenState extends State<KaryakramCreationScreen> {
                 });
                 populatelinkedBhaagDropdown(value!);
               },
-              isDisabled: false,
             ),
           if (_linkedbhaag != null && _linkedbhaag!.isNotEmpty)
-            _buildDropdownField(
-              ignoring: _isViewOnly ? _isViewOnly : (baithakId != null && baithakId != 0) && [2, 3, 4].contains(_selectedKaryakramLevelId),
+            buildDropdownField(
+              isDisabled: ((userLevelId ?? 0) < 7 || userLevelId == 13) == true
+                  ? true
+                  : _isViewOnly
+                      ? _isViewOnly
+                      : (baithakId != null && baithakId != 0) && [2, 3, 4].contains(_selectedKaryakramLevelId),
               label: Statics.getLabel('Bhaag'),
               value: _linkedbhaagValue,
               items: _linkedbhaag!
@@ -840,10 +850,9 @@ class _KaryakramCreationScreenState extends State<KaryakramCreationScreen> {
                   populatelinkedNagarDropdown(value);
                 });
               },
-              isDisabled: false,
             ),
           if ([5, 6, 7].contains(_selectedKaryakramLevelId) && _linkednagar != null && _linkednagar!.isNotEmpty)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('Nagar'),
               value: _linkednagarValue,
               items: _linkednagar!
@@ -865,10 +874,10 @@ class _KaryakramCreationScreenState extends State<KaryakramCreationScreen> {
                   // populatelinkedVastiDropdown('Nagar', value);
                 });
               },
-              isDisabled: false,
+              isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
             ),
           if ([6, 7].contains(_selectedKaryakramLevelId) && _linkedupnagar != null && _linkedupnagar!.isNotEmpty)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('upnagarUpkhanda'),
               value: _linkedupnagarValue,
               items: _linkedupnagar!
@@ -889,10 +898,10 @@ class _KaryakramCreationScreenState extends State<KaryakramCreationScreen> {
                   // populatelinkedVastiDropdown('Upnagar', value);
                 });
               },
-              isDisabled: false,
+              isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
             ),
           if ([7].contains(_selectedKaryakramLevelId) && _linkedmandal != null && _linkedmandal!.isNotEmpty)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('Mandal'),
               value: _linkedmandalValue,
               items: _linkedmandal!
@@ -912,7 +921,7 @@ class _KaryakramCreationScreenState extends State<KaryakramCreationScreen> {
                   // populatelinkedGraamDropdown(value);
                 });
               },
-              isDisabled: false,
+              isDisabled: ((userLevelId ?? 0) < 4),
             ),
           // if (_linkedgraam != null && _linkedgraam!.isNotEmpty)
           //   _buildDropdownField(
@@ -960,28 +969,6 @@ class _KaryakramCreationScreenState extends State<KaryakramCreationScreen> {
           //   ),
           SizedBox(height: 15),
         ],
-      ),
-    );
-  }
-
-  Widget _buildDropdownField({
-    bool? ignoring,
-    required String label,
-    required String? value,
-    required List<DropdownMenuItem<String>>? items,
-    required ValueChanged<String?>? onChanged,
-    required bool isDisabled,
-    void Function()? onTap,
-  }) {
-    return IgnorePointer(
-      ignoring: ignoring ?? _isViewOnly,
-      child: DropdownButtonFormField(
-        decoration: InputDecoration(labelText: label),
-        isExpanded: true,
-        value: value == "" ? null : value,
-        items: items,
-        onTap: onTap,
-        onChanged: onChanged,
       ),
     );
   }

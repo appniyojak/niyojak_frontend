@@ -418,6 +418,10 @@ class _LogInOTPCardState extends State<LogInOTPCard> {
       _showError(Statics.getLabel('digit4validation'));
       return;
     }
+    bool? connected = await isInternetConnected();
+    if (connected == false) {
+      return;
+    }
     setState(() {
       _isVerifyingOtp = true;
     });
@@ -834,6 +838,10 @@ class _LogInCardState extends State<LogInCard> {
   Future<void> _login(BuildContext context) async {
     if (!_formKey.currentState!.validate()) {
       // Invalid form
+      return;
+    }
+    bool? connected = await isInternetConnected();
+    if (connected == false) {
       return;
     }
     LoaderUtils.toggleLoader(context, true);

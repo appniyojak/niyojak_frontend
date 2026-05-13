@@ -1144,7 +1144,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
               child: Column(
                 children: [
                   if (_linkedMahaanagar != null && _linkedMahaanagar!.isNotEmpty)
-                    _buildDropdownField(
+                    buildDropdownField(
                       label: Statics.getLabel('Mahaanagar'),
                       value: _linkedMahaanagarValue,
                       items: _linkedMahaanagar == null
@@ -1174,10 +1174,10 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                               populatelinkedVibhaagDropdown(value!);
                               populatelinkedBhaagDropdown("");
                             },
-                      isDisabled: MyAppGlobals.isDropdownDisabled('Mahaanagar'),
+                      isDisabled: ((userLevelId ?? 0) < 9 || userLevelId == 13),
                     ),
                   if (_linkedVibhaag != null)
-                    _buildDropdownField(
+                    buildDropdownField(
                       label: Statics.getLabel('Vibhaag'),
                       value: _linkedVibhaagValue,
                       items: _linkedVibhaag == null
@@ -1205,10 +1205,10 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                               });
                               populatelinkedBhaagDropdown(value!);
                             },
-                      isDisabled: MyAppGlobals.isDropdownDisabled('Vibhaag'),
+                      isDisabled: ((userLevelId ?? 0) < 8 || userLevelId == 13),
                     ),
                   //if (_linkedbhaag != null && _linkedbhaag!.isNotEmpty)
-                  _buildDropdownField(
+                  buildDropdownField(
                     label: Statics.getLabel('Bhaag'),
                     value: _linkedbhaagValue,
                     items: _linkedbhaag == null
@@ -1236,11 +1236,11 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                               populatelinkedNagarDropdown(value, null);
                             });
                           },
-                    isDisabled: MyAppGlobals.isDropdownDisabled('Bhaag'),
+                    isDisabled: ((userLevelId ?? 0) < 7 || userLevelId == 13),
                   ),
 
                   // if (_linkednagar != null && _linkednagar!.isNotEmpty)
-                  _buildDropdownField(
+                  buildDropdownField(
                     label: Statics.getLabel('Nagar'),
                     value: _linkednagarValue,
                     items: _linkednagar == null
@@ -1269,7 +1269,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                               populatelinkedVastiDropdown(false, value);
                             });
                           },
-                    isDisabled: MyAppGlobals.isDropdownDisabled('Nagar'),
+                    isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
                   ),
                   /*if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
                     _buildDropdownField(
@@ -1430,25 +1430,6 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
             isExpanded: _isExpanded,
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildDropdownField({
-    required String label,
-    required String? value,
-    required List<DropdownMenuItem<String>> items,
-    required ValueChanged<String?> onChanged,
-    required bool isDisabled,
-  }) {
-    return IgnorePointer(
-      ignoring: isDisabled,
-      child: DropdownButtonFormField(
-        decoration: InputDecoration(labelText: label),
-        isExpanded: true,
-        value: (value == "" || value == "null") ? null : value,
-        items: items,
-        onChanged: onChanged,
       ),
     );
   }

@@ -172,8 +172,8 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
     }
 
     // Step 5: Upnagar (conditional)
+    await populatelinkedUpnagarDropdown(_linkednagarValue);
     if (selection.upnagar != null && selection.upnagar!.isNotEmpty) {
-      await populatelinkedUpnagarDropdown(_linkednagarValue);
       _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? 0).toString() : selection.upnagar) ?? _linkedupnagarValue;
       if (level == 13) {
         _selectedGeoUnitId = (dm.geoUnitID ?? selection.upnagar).toString();
@@ -385,8 +385,8 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
       _selectedKaryakramLevelId = null;
       dateController.clear();
       txtGivenGroupNameController.clear();
-      _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedvastiValue = _linkedgraamValue = null;
-      _linkedVibhaagValue = _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
+      _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedupnagarValue = _linkedmandalValue = _linkedvastiValue = _linkedgraamValue = null;
+      _linkedVibhaagValue = _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = _linkedupnagar = null;
     });
     // clearForm();
     await initData();
@@ -584,7 +584,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
     nagarList = [];
     var mnDD;
     if (_selectedKaryakramLevelId == 7) {
-      mnDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
+      mnDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Upnagar', '');
     } else if (_selectedKaryakramLevelId == 6) {
       mnDD = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
     } else {
@@ -927,7 +927,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
               margin: EdgeInsets.all(16),
               child: Column(
                 children: [
-                  _buildDropdownField(
+                  buildDropdownField(
                     // ignoring: dateController.text.isEmpty || (baithakId != null && baithakId != 0),
                     label: Statics.getLabel('selectStar'),
                     value: _selectedKaryakramLevelId == null ? null : _selectedKaryakramLevelId.toString(),
@@ -991,7 +991,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
       child: Column(
         children: [
           if (![6, 7].contains(_selectedKaryakramLevelId) && _linkedMahaanagar != null)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('Mahaanagar'),
               value: _linkedMahaanagarValue,
               items: _linkedMahaanagar!
@@ -1017,7 +1017,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
               isDisabled: false,
             ),
           if (_linkedVibhaag != null)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('Vibhaag'),
               value: _linkedVibhaagValue,
               items: _linkedVibhaag!
@@ -1040,7 +1040,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
               isDisabled: false,
             ),
           if (_linkedbhaag != null && _linkedbhaag!.isNotEmpty)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('Bhaag'),
               value: _linkedbhaagValue,
               items: _linkedbhaag!
@@ -1064,7 +1064,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
               isDisabled: false,
             ),
           if ([5, 6, 7].contains(_selectedKaryakramLevelId) && _linkednagar != null && _linkednagar!.isNotEmpty)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('Nagar'),
               value: _linkednagarValue,
               items: _linkednagar!
@@ -1089,7 +1089,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
               isDisabled: false,
             ),
           if ([6, 7].contains(_selectedKaryakramLevelId) && _linkedupnagar != null && _linkedupnagar!.isNotEmpty)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('upnagarUpkhanda'),
               value: _linkedupnagarValue,
               items: _linkedupnagar!
@@ -1113,7 +1113,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
               isDisabled: false,
             ),
           if ([7].contains(_selectedKaryakramLevelId) && _linkedmandal != null && _linkedmandal!.isNotEmpty)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('Mandal'),
               value: _linkedmandalValue,
               items: _linkedmandal!
@@ -1181,28 +1181,6 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
           //   ),
           SizedBox(height: 15),
         ],
-      ),
-    );
-  }
-
-  Widget _buildDropdownField({
-    bool? ignoring,
-    required String label,
-    required String? value,
-    required List<DropdownMenuItem<String>>? items,
-    required ValueChanged<String?>? onChanged,
-    required bool isDisabled,
-    void Function()? onTap,
-  }) {
-    return IgnorePointer(
-      ignoring: ignoring ?? _isViewOnly,
-      child: DropdownButtonFormField(
-        decoration: InputDecoration(labelText: label),
-        isExpanded: true,
-        value: value == "" ? null : value,
-        items: items,
-        onTap: onTap,
-        onChanged: onChanged,
       ),
     );
   }

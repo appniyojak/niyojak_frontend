@@ -152,7 +152,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     });
   }
 
-  Future<void> populateAllDropdowns(int level, DropDownModel dm) async {
+  Future<void> populateAllDropdowns(int level, DropDownModel dm, {bool fromManual = false}) async {
     setState(() {
       _selectedGeoUnitId = _linkedMahaanagarValue = _linkedBhaagValue = _linkedShaharValue = _linkedNagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     });
@@ -194,19 +194,23 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     if (level == 6) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.nagar).toString();
       selctedLevel = 'Nagar';
-      utsavKontyaStaravar = "6";
-      selctedLevelId = "6";
+      if (fromManual) {
+        utsavKontyaStaravar = "6";
+        selctedLevelId = "6";
+      }
       final selectedItem = _linkedNagar!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
       selctedLevelName = selectedItem.name;
     }
 
     // Step 5: Upnagar (conditional)
+    await populatelinkedUpnagarDropdown(_linkedNagarValue);
     if (selection.upnagar != null && selection.upnagar!.isNotEmpty) {
-      await populatelinkedUpnagarDropdown(_linkedNagarValue);
       _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? 0).toString() : selection.upnagar) ?? _linkedupnagarValue;
       if (level == 13) {
-        utsavKontyaStaravar = "13";
-        selctedLevelId = "13";
+        if (fromManual) {
+          utsavKontyaStaravar = "13";
+          selctedLevelId = "13";
+        }
         selectedUpnagarList = [];
         data = await Statics.getVijayadashamiInitData(context, Statics.userDetails["userID"], _selectedGeoUnitId, selctedLevel == 'Nagar' ? "6" : utsavKontyaStaravar);
         log("searchVijayaDashami data ${jsonDecode(jsonEncode(data))}");
@@ -254,8 +258,10 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     if (level == 4) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.mandal).toString();
       selctedLevel = 'Mandal';
-      utsavKontyaStaravar = "4";
-      selctedLevelId = "4";
+      if (fromManual) {
+        utsavKontyaStaravar = "4";
+        selctedLevelId = "4";
+      }
       final selectedItem = _linkedmandal!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
       selctedLevelName = selectedItem.name;
     }
@@ -272,8 +278,10 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     if (level == 2) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.vasti).toString();
       selctedLevel = 'Vasti';
-      utsavKontyaStaravar = "2";
-      selctedLevelId = "2";
+      if (fromManual) {
+        utsavKontyaStaravar = "2";
+        selctedLevelId = "2";
+      }
       final selectedItem = _linkedvasti!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
       selctedLevelName = selectedItem.name;
     }
@@ -387,9 +395,10 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
 
       selectedPrabhavi = null;
       selectedPerson = null;
+      isVastiSearch = false;
       // Re-populate base dropdowns
     });
-    populateDropdown(fromClear: true);
+    await populateAllDropdowns(userLevelId!, ddm!);
   }
 
   populateDropdown({bool fromClear = false}) async {
@@ -403,10 +412,11 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       _linkedMahaanagar = _linkedVibhaag = _linkedBhaag = _linkedNagar = _linkedmandal = null;
       selctedLevelName = _selectedGeoUnitId = null;
       selctedLevel = "praant";
+      isVastiSearch = false;
     });
+    populatelinkedMahaanagarDropdown();
+    populatelinkedVibhaagDropdown('');
     if (fromClear || userLevelId == null || ddm == null) {
-      populatelinkedMahaanagarDropdown();
-      populatelinkedVibhaagDropdown('');
       return;
     }
     await populateAllDropdowns(userLevelId!, ddm!);
@@ -2444,7 +2454,6 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                           utsavKontyaStaravar = value;
                           _isExpanded = true;
                         });
-                        populateDropdown();
                       },
                     ),
                   ),

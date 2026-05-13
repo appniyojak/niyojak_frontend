@@ -1976,6 +1976,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                             onChanged: (value) {
                               set(() {
                                 _aayaamValue = int.parse(value.toString());
+                                _gatividhiValue = _preritSansthaValue = null;
                               });
                             },
                             validator: (value) {
@@ -2005,6 +2006,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                             onChanged: (value) {
                               set(() {
                                 _gatividhiValue = int.parse(value.toString());
+                                _aayaamValue = _preritSansthaValue = null;
                               });
                             },
                             validator: (value) {
@@ -2038,6 +2040,7 @@ class _YuvaSangamFormScreenState extends State<YuvaSangamFormScreen> {
                             onChanged: (value) {
                               set(() {
                                 _preritSansthaValue = int.parse(value.toString());
+                                _gatividhiValue = _aayaamValue = null;
                               });
                             },
                             validator: (value) {

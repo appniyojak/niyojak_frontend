@@ -679,7 +679,7 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
               child: Column(
                 children: [
                   if (_linkedMahaanagar != null)
-                    _buildDropdownField(
+                    buildDropdownField(
                       label: Statics.getLabel('Mahaanagar'),
                       value: _linkedMahaanagarValue,
                       items: _linkedMahaanagar!
@@ -703,10 +703,10 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
                         populatelinkedVibhaagDropdown(value!);
                         populatelinkedBhaagDropdown("");
                       },
-                      isDisabled: MyAppGlobals.isDropdownDisabled('Mahaanagar'),
+                      isDisabled: ((userLevelId ?? 0) < 9 || userLevelId == 13),
                     ),
                   if (_linkedVibhaag != null)
-                    _buildDropdownField(
+                    buildDropdownField(
                       label: Statics.getLabel('Vibhaag'),
                       value: _linkedVibhaagValue,
                       items: _linkedVibhaag!
@@ -727,10 +727,10 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
                         });
                         populatelinkedBhaagDropdown(value!);
                       },
-                      isDisabled: MyAppGlobals.isDropdownDisabled('Vibhaag'),
+                      isDisabled: ((userLevelId ?? 0) < 8 || userLevelId == 13),
                     ),
                   if (_linkedbhaag != null && _linkedbhaag!.isNotEmpty)
-                    _buildDropdownField(
+                    buildDropdownField(
                       label: Statics.getLabel('Bhaag'),
                       value: _linkedbhaagValue,
                       items: _linkedbhaag!
@@ -751,7 +751,7 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
                           populatelinkedNagarDropdown(value, null);
                         });
                       },
-                      isDisabled: MyAppGlobals.isDropdownDisabled('Bhaag'),
+                      isDisabled: ((userLevelId ?? 0) < 7 || userLevelId == 13),
                     ),
                   // if (_linkedshahar != null && _linkedshahar!.isNotEmpty)
                   //   _buildDropdownField(
@@ -778,7 +778,7 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
                   //     isDisabled: false,
                   //   ),
                   if (_linkednagar != null && _linkednagar!.isNotEmpty)
-                    _buildDropdownField(
+                    buildDropdownField(
                       label: Statics.getLabel('Nagar'),
                       value: _linkednagarValue,
                       items: _linkednagar!
@@ -798,7 +798,7 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
                           _linkednagarName = selectedItem.name ?? "";
                         });
                       },
-                      isDisabled: MyAppGlobals.isDropdownDisabled('Nagar'),
+                      isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
                     ),
                   // if (_linkedmandal != null && _linkedmandal!.isNotEmpty)
                   //   _buildDropdownField(
@@ -919,7 +919,8 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
                               _linkedVibhaagValue = _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
                               _selctedLevel = "praant";
                             });
-                            await populateDropdown(fromClear: true);
+
+                            await populateDropdown();
                           },
                           child: Text(Statics.getLabel('clear'))),
                     ],
@@ -930,25 +931,6 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
             isExpanded: _isExpanded,
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildDropdownField({
-    required String label,
-    required String? value,
-    required List<DropdownMenuItem<String>> items,
-    required ValueChanged<String?> onChanged,
-    required bool isDisabled,
-  }) {
-    return IgnorePointer(
-      ignoring: isDisabled,
-      child: DropdownButtonFormField(
-        decoration: InputDecoration(labelText: label),
-        isExpanded: true,
-        value: value == "" ? null : value,
-        items: items,
-        onChanged: onChanged,
       ),
     );
   }

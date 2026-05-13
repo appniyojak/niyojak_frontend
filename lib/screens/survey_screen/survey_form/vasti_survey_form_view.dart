@@ -185,10 +185,12 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
       selctedLevelName = "";
       _linkedBhaag = null;
       _linkedNagar = null;
+      _linkedupnagar = null;
       _linkedvasti = null;
       isVastiSearch = false;
       selctedLevelName = '';
     });
+    populateDropdown();
   }
 
   void showPopupForVastiValidation(BuildContext context) {
@@ -346,7 +348,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
       return;
     }
     setState(() {
-      _linkedMahaanagarValue = _linkedBhaagValue = _linkedNagarValue = _linkedgraamValue = _linkedvastiValue = null;
+      _linkedMahaanagarValue = _linkedBhaagValue = _linkedNagarValue = _linkedupnagarValue = _linkedgraamValue = _linkedvastiValue = null;
     });
     await populateAllDropdowns(userLevelId!, ddm!);
   }
@@ -378,8 +380,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
-    _linkedNagarValue = null;
-    _linkedNagar = null;
+    _linkedNagarValue = _linkedupnagarValue = _linkedvastiValue = null;
+    _linkedNagar = _linkedupnagar = _linkedvasti = null;
     if (shaharIDStr != null) {
       var ngDD = await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
       setState(() {
@@ -508,8 +510,8 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
     }
 
     // Step 5: Upnagar (conditional)
+    await populatelinkedUpnagarDropdown(_linkedNagarValue);
     if (selection.upnagar != null && selection.upnagar!.isNotEmpty) {
-      await populatelinkedUpnagarDropdown(_linkedNagarValue);
       _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? "").toString() : selection.upnagar) ?? '';
       if (level == 13) {
         _selectedGeoUnitId = (dm.geoUnitID ?? selection.upnagar).toString();
@@ -1372,10 +1374,10 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                       child: Column(
                         children: [
                           if (_linkedMahaanagar != null)
-                            DropdownButtonFormField(
-                              decoration: InputDecoration(labelText: "${Statics.getLabel('MahaanagarKaaryakartaaCount')}"),
-                              isExpanded: true,
-                              value: _linkedMahaanagarValue == "" ? null : _linkedMahaanagarValue,
+                            buildDropdownField(
+                              isDisabled: ((userLevelId ?? 0) < 9 || (userLevelId ?? 0) == 13),
+                              label: Statics.getLabel('MahaanagarKaaryakartaaCount'),
+                              value: _linkedMahaanagarValue,
                               items: _linkedMahaanagar!
                                   .map((bg) => DropdownMenuItem(
                                         value: bg.geoUnitID.toString(),
@@ -1403,11 +1405,16 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             height: 10,
                           ),
                           if (_linkedVibhaag != null)
-                            DropdownButtonFormField(
-                              decoration: InputDecoration(labelText: "${Statics.getLabel('Vibhaag')}"),
-                              isExpanded: true,
-                              value: _linkedVibhaagValue == "" ? null : _linkedVibhaagValue,
-                              items: _linkedVibhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                            buildDropdownField(
+                              isDisabled: ((userLevelId ?? 0) < 8 || (userLevelId ?? 0) == 13),
+                              label: Statics.getLabel('Vibhaag'),
+                              value: _linkedVibhaagValue,
+                              items: _linkedVibhaag!
+                                  .map((bg) => DropdownMenuItem(
+                                        value: bg.geoUnitID.toString(),
+                                        child: Text(bg.name!),
+                                      ))
+                                  .toList(),
                               onChanged: (value) {
                                 final selectedItem = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                                 print(value);
@@ -1429,11 +1436,16 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             height: 10,
                           ),
                           if (_linkedBhaag != null)
-                            DropdownButtonFormField(
-                              decoration: InputDecoration(labelText: "${Statics.getLabel('Bhaag')}"),
-                              isExpanded: true,
-                              value: _linkedBhaagValue == "" ? null : _linkedBhaagValue,
-                              items: _linkedBhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                            buildDropdownField(
+                              isDisabled: ((userLevelId ?? 0) < 7 || (userLevelId ?? 0) == 13),
+                              label: Statics.getLabel('Bhaag'),
+                              value: _linkedBhaagValue,
+                              items: _linkedBhaag!
+                                  .map((bg) => DropdownMenuItem(
+                                        value: bg.geoUnitID.toString(),
+                                        child: Text(bg.name!),
+                                      ))
+                                  .toList(),
                               onChanged: (value) {
                                 final selectedItem = _linkedBhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                                 setState(() {
@@ -1451,16 +1463,22 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             height: 10,
                           ),
                           if (_linkedNagar != null && _linkedNagar!.length > 0)
-                            DropdownButtonFormField(
-                              decoration: InputDecoration(labelText: "${Statics.getLabel('Nagar')}"),
-                              isExpanded: true,
-                              value: _linkedNagarValue == "" ? null : _linkedNagarValue,
-                              items: _linkedNagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                            buildDropdownField(
+                              isDisabled: ((userLevelId ?? 0) < 6 || (userLevelId ?? 0) == 13),
+                              label: Statics.getLabel('Nagar'),
+                              value: _linkedNagarValue,
+                              items: _linkedNagar!
+                                  .map((bg) => DropdownMenuItem(
+                                        value: bg.geoUnitID.toString(),
+                                        child: Text(bg.name!),
+                                      ))
+                                  .toList(),
                               onChanged: (value) {
                                 final selectedItem = _linkedNagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                                 setState(() {
                                   _linkedNagarValue = value;
                                   populatelinkedVastiDropdown(false, value!);
+                                  populatelinkedUpnagarDropdown(value!);
                                   _selectedGeoUnitId = value;
                                   selctedLevelName = selectedItem.name ?? "";
                                   selctedLevel = 'Nagar';
@@ -1471,7 +1489,7 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                             ),
                           if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
                             buildDropdownField(
-                              // isDisabled: MyAppGlobals.isDropdownDisabled('upnagarUpkhanda'),
+                              isDisabled: ((userLevelId ?? 0) < 6 || (userLevelId ?? 0) == 13),
                               label: Statics.getLabel('upnagarUpkhanda'),
                               value: _linkedupnagarValue,
                               items: _linkedupnagar!
@@ -1499,11 +1517,16 @@ class _VastiSurveyFormScreenState extends State<VastiSurveyFormScreen> with Sing
                               height: 10,
                             ),
                           if (_linkedvasti != null && _linkedvasti!.length > 0)
-                            DropdownButtonFormField(
-                              decoration: InputDecoration(labelText: "${Statics.getLabel('Vasti')}"),
-                              isExpanded: true,
-                              value: _linkedvastiValue == "" ? null : _linkedvastiValue,
-                              items: _linkedvasti!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                            buildDropdownField(
+                              isDisabled: ((userLevelId ?? 0) < 2),
+                              label: Statics.getLabel('Vasti'),
+                              value: _linkedvastiValue,
+                              items: _linkedvasti!
+                                  .map((bg) => DropdownMenuItem(
+                                        value: bg.geoUnitID.toString(),
+                                        child: Text(bg.name!),
+                                      ))
+                                  .toList(),
                               onChanged: (value) {
                                 final selectedItem = _linkedvasti!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                                 setState(() {

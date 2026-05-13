@@ -215,8 +215,8 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
     }
 
     // Step 5: Upnagar (conditional)
+    await populatelinkedUpnagarDropdown(_linkednagarValue);
     if (selection.upnagar != null && selection.upnagar!.isNotEmpty) {
-      await populatelinkedUpnagarDropdown(_linkednagarValue);
       _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? "").toString() : selection.upnagar) ?? '';
       if (level == 13) {
         _selectedGeoUnitId = (dm.geoUnitID ?? selection.upnagar).toString();
@@ -605,6 +605,8 @@ class _HinduSanmelanFormState extends State<HinduSanmelanForm> with AutomaticKee
       _urlsList = [];
       vaktaList = [];
       selectedType = null;
+      _selectedFileNames1 = [];
+      _selectedFileNames2 = [];
       selectedSajjanshaktiItems = [];
       selectedAnyaprabhaviItems = [];
       selectedVastiCount = 0;

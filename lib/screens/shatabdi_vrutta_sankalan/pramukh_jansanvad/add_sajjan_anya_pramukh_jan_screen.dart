@@ -8,6 +8,7 @@ import '../../../models/response_model/get_vasti_data_by_id_model.dart';
 import '../../../models/response_model/vasti_sarvekshan_dropdown_model.dart';
 import '../../../models/response_model/vasti_up_data_model.dart';
 import '../../../providers/bals.dart';
+import '../../../utils/globals.dart';
 
 class AddSajjanAnyaPrakukhJanScreen extends StatefulWidget {
   static const String routeName = '/add-sajjan-anya_pramukh-jan';
@@ -1178,7 +1179,7 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
       child: Column(
         children: [
           if (_linkedMahaanagar != null)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('Mahaanagar'),
               value: _linkedMahaanagarValue,
               items: _linkedMahaanagar!
@@ -1201,10 +1202,10 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
                 populatelinkedVibhaagDropdown(value!);
                 populatelinkedBhaagDropdown("");
               },
-              isDisabled: false,
+              isDisabled: ((userLevelId ?? 0) < 9 || userLevelId == 13),
             ),
           if (_linkedVibhaag != null)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('Vibhaag'),
               value: _linkedVibhaagValue,
               items: _linkedVibhaag!
@@ -1224,10 +1225,10 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
                 });
                 populatelinkedBhaagDropdown(value!);
               },
-              isDisabled: false,
+              isDisabled: ((userLevelId ?? 0) < 8 || userLevelId == 13),
             ),
           if (_linkedbhaag != null && _linkedbhaag!.isNotEmpty)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('Bhaag'),
               value: _linkedbhaagValue,
               items: _linkedbhaag!
@@ -1248,10 +1249,10 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
                   populatelinkedNagarDropdown(value);
                 });
               },
-              isDisabled: false,
+              isDisabled: ((userLevelId ?? 0) < 7 || userLevelId == 13),
             ),
           if (_linkednagar != null && _linkednagar!.isNotEmpty)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('Nagar'),
               value: _linkednagarValue,
               items: _linkednagar!
@@ -1273,10 +1274,10 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
                   populatelinkedVastiDropdown('Nagar', value);
                 });
               },
-              isDisabled: false,
+              isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
             ),
           if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('upnagarUpkhanda'),
               value: _linkedupnagarValue,
               items: _linkedupnagar!
@@ -1297,10 +1298,10 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
                   // populatelinkedVastiDropdown('Upnagar', value);
                 });
               },
-              isDisabled: false,
+              isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
             ),
           if (_linkedmandal != null && _linkedmandal!.isNotEmpty)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('Mandal'),
               value: _linkedmandalValue,
               items: _linkedmandal!
@@ -1320,10 +1321,10 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
                   populatelinkedGraamDropdown(value);
                 });
               },
-              isDisabled: false,
+              isDisabled: ((userLevelId ?? 0) < 4),
             ),
           if (_linkedgraam != null && _linkedgraam!.isNotEmpty)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('Graam'),
               value: _linkedgraamValue,
               items: _linkedgraam!
@@ -1344,10 +1345,10 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
                   showTypeOfForm = true;
                 });
               },
-              isDisabled: false,
+              isDisabled: ((userLevelId ?? 0) < 3),
             ),
           if (_linkedvasti != null && _linkedvasti!.isNotEmpty)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('Vasti'),
               value: _linkedvastiValue,
               items: _linkedvasti!
@@ -1368,32 +1369,10 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
                   showTypeOfForm = true;
                 });
               },
-              isDisabled: false,
+              isDisabled: ((userLevelId ?? 0) < 2),
             ),
           SizedBox(height: 15),
         ],
-      ),
-    );
-  }
-
-  Widget _buildDropdownField({
-    bool? ignoring,
-    required String label,
-    required String? value,
-    required List<DropdownMenuItem<String>>? items,
-    required ValueChanged<String?>? onChanged,
-    required bool isDisabled,
-    void Function()? onTap,
-  }) {
-    return IgnorePointer(
-      ignoring: ignoring ?? false,
-      child: DropdownButtonFormField(
-        decoration: InputDecoration(labelText: label),
-        isExpanded: true,
-        value: value == "" ? null : value,
-        items: items,
-        onTap: onTap,
-        onChanged: onChanged,
       ),
     );
   }

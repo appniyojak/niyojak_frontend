@@ -528,26 +528,29 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                       child: Column(
                         children: [
                           if (_linkedMahaanagar != null)
-                            DropdownButtonFormField<String>(
-                              decoration: InputDecoration(labelText: Statics.getLabel('Mahaanagar')),
-                              isExpanded: true,
-                              value: _linkedMahaanagarValue == "" ? null : _linkedMahaanagarValue,
-                              items: _linkedMahaanagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                              onChanged: MyAppGlobals.isDropdownDisabled('Mahaanagar')
-                                  ? null
-                                  : (value) {
-                                      print("Mahaanagar---   $value");
-                                      setState(() {
-                                        _linkedMahaanagarValue = value;
-                                        _linkedVibhaagValue = null;
-                                        _linkedBhaagValue = null;
-                                        _linkedShaharValue = null;
-                                        _linkedNagarValue = null;
-                                        _linkedupnagarValue = null;
-                                        populatelinkedVibhaagDropdown(value!);
-                                        mahanagarId = value;
-                                      });
-                                    },
+                            buildDropdownField(
+                              label: Statics.getLabel('Mahaanagar'),
+                              value: _linkedMahaanagarValue,
+                              items: _linkedMahaanagar!
+                                  .map((bg) => DropdownMenuItem(
+                                        value: bg.geoUnitID.toString(),
+                                        child: Text(bg.name!),
+                                      ))
+                                  .toList(),
+                              onChanged: (value) {
+                                print("Mahaanagar---   $value");
+                                setState(() {
+                                  _linkedMahaanagarValue = value;
+                                  _linkedVibhaagValue = null;
+                                  _linkedBhaagValue = null;
+                                  _linkedShaharValue = null;
+                                  _linkedNagarValue = null;
+                                  _linkedupnagarValue = null;
+                                  mahanagarId = value;
+                                  _selectedGeoUnitId = value;
+                                });
+                                populatelinkedVibhaagDropdown(value!);
+                              },
                             ),
                           SizedBox(
                             height: 10,
@@ -558,19 +561,18 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                               isExpanded: true,
                               value: _linkedVibhaagValue == "" ? null : _linkedVibhaagValue,
                               items: _linkedVibhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                              onChanged: MyAppGlobals.isDropdownDisabled('Vibhaag')
-                                  ? null
-                                  : (value) {
-                                      print("Vibhaag---   $value");
-                                      setState(() {
-                                        _linkedVibhaagValue = value;
-                                        populatelinkedBhaagDropdown(value!);
-                                        _linkedBhaagValue = null;
-                                        _linkedShaharValue = null;
-                                        _linkedNagarValue = null;
-                                        vibhagId = value;
-                                      });
-                                    },
+                              onChanged: (value) {
+                                print("Vibhaag---   $value");
+                                setState(() {
+                                  _linkedVibhaagValue = value;
+                                  _linkedBhaagValue = null;
+                                  _linkedShaharValue = null;
+                                  _linkedNagarValue = null;
+                                  _selectedGeoUnitId = value;
+                                  vibhagId = value;
+                                });
+                                populatelinkedBhaagDropdown(value!);
+                              },
                             ),
                           SizedBox(
                             height: 10,
@@ -581,17 +583,16 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                               isExpanded: true,
                               value: _linkedBhaagValue == "" ? null : _linkedBhaagValue,
                               items: _linkedBhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                              onChanged: MyAppGlobals.isDropdownDisabled('Bhaag')
-                                  ? null
-                                  : (value) {
-                                      print("Bhaag---   $value");
-                                      setState(() {
-                                        _linkedBhaagValue = value;
-                                        populatelinkedNagarDropdown(value, null);
-                                        _linkedShaharValue = null;
-                                        _linkedNagarValue = null;
-                                      });
-                                    },
+                              onChanged: (value) {
+                                print("Bhaag---   $value");
+                                setState(() {
+                                  _linkedBhaagValue = value;
+                                  _linkedShaharValue = null;
+                                  _selectedGeoUnitId = value;
+                                  _linkedNagarValue = null;
+                                });
+                                populatelinkedNagarDropdown(value, null);
+                              },
                             ),
                           SizedBox(
                             height: 10,
@@ -623,22 +624,21 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                               isExpanded: true,
                               value: _linkedNagarValue == "" ? null : _linkedNagarValue,
                               items: _linkedNagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                              onChanged: MyAppGlobals.isDropdownDisabled('Nagar')
-                                  ? null
-                                  : (value) {
-                                      print("Nagar---   $value");
-                                      setState(() {
-                                        _linkedNagarValue = value;
-                                        populatelinkedUpnagarDropdown(value);
-                                      });
-                                    },
+                              onChanged: (value) {
+                                print("Nagar---   $value");
+                                setState(() {
+                                  _linkedNagarValue = value;
+                                  _selectedGeoUnitId = value;
+                                });
+                                // populatelinkedUpnagarDropdown(value);
+                              },
                             ),
                           if (_linkedNagar != null && _linkedNagar!.length > 0)
                             SizedBox(
                               height: 10,
                             ),
                           //--------------new dropdown added----------------------//
-                          if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
+                          /*if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
                             buildDropdownField(
                               isDisabled: false,
                               label: Statics.getLabel('upnagarUpkhanda'),
@@ -656,16 +656,16 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                   _selectedGeoUnitId = value;
                                   _selctedLevel = 'upnagarUpkhanda';
                                   _selctedLevelName = selectedItem.name ?? "";
-                                  // populatelinkedVastiDropdown(value!);
-                                  // populatelinkedMandalDropdown(true, value);
-                                  // populatelinkedNagarDropdown(null, value);
+                                  populatelinkedVastiDropdown(value!);
+                                  populatelinkedMandalDropdown(true, value);
+                                  populatelinkedNagarDropdown(null, value);
                                 });
                               },
                             ),
-                          if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
+                            if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
                             SizedBox(
                               height: 10,
-                            ),
+                            ),*/
                           DropdownButtonFormField(
                             decoration: InputDecoration(labelText: Statics.getLabel('SankalpCompletionYear')),
                             isExpanded: true,
@@ -890,7 +890,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                           width: 10,
                         ),
                         MaterialButton(
-                            onPressed: () {
+                            onPressed: () async {
                               setState(() {
                                 mahanagarId = _linkedMahaanagarValue = _linkedVibhaagValue = _linkedBhaagValue = _linkedShaharValue = _linkedNagarValue = _linkedupnagarValue = _baithakType = null;
                                 _linkedMahaanagar = _linkedVibhaag = _linkedBhaag = _linkedShahar = _linkedNagar = _linkedupnagar = null;
@@ -901,8 +901,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                 _selectedBaithak = '';
                               });
                               //populatelinkedBhaagDropdown();
-                              populatelinkedMahaanagarDropdown();
-                              populatelinkedVibhaagDropdown('');
+                              await populateDropdown();
                             },
                             child: Text(Statics.getLabel('clear'))),
                       ],

@@ -307,8 +307,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     // Step 5: Upnagar (conditional)
+    await populatelinkedUpnagarDropdown(_linkednagarValue);
     if (selection.upnagar != null && selection.upnagar!.isNotEmpty) {
-      await populatelinkedUpnagarDropdown(_linkednagarValue);
       _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? 0).toString() : selection.upnagar) ?? _linkedupnagarValue;
       if (level == 13) {
         _selectedGeoUnitId = (dm.geoUnitID ?? selection.upnagar).toString();
@@ -805,6 +805,10 @@ class _HomeScreenState extends State<HomeScreen> {
   bool get _joinRss => Statics.levelId >= 6 && Statics.levelId != 13;
 
   bool get _fromAboveMandal => Statics.levelId >= 4;
+
+  bool get _fromMandalGram => Statics.levelId != 2;
+
+  bool get _fromVasti => Statics.levelId != 3 || Statics.levelId != 4;
 
   bool get _fromAboveNagar => ((userLevelId ?? 0) >= 6 && (userLevelId ?? 0) < 13);
 
@@ -2080,7 +2084,7 @@ class _HomeScreenState extends State<HomeScreen> {
               // Mahaanagar
               if (_linkedMahaanagar != null)
                 buildDropdownField(
-                  isDisabled: MyAppGlobals.isDropdownDisabled('Mahaanagar'),
+                  isDisabled: ((userLevelId ?? 0) < 9 || userLevelId == 13),
                   label: Statics.getLabel('Mahaanagar'),
                   value: _linkedMahaanagarValue,
                   items: _linkedMahaanagar!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
@@ -2888,8 +2892,8 @@ class _HomeScreenState extends State<HomeScreen> {
       title: Statics.getLabel("Survey"),
       children: [
         _cardRow([
-          _cardTile(Statics.getLabel('vastiSurvey'), () => Navigator.of(context).pushNamed(VastiSurveyFormScreen.routeName)),
-          _cardTile(Statics.getLabel('mandalSurvey'), () => Navigator.of(context).pushNamed(MandalSurveyFormScreen.routeName)),
+          if (_fromVasti) _cardTile(Statics.getLabel('vastiSurvey'), () => Navigator.of(context).pushNamed(VastiSurveyFormScreen.routeName)),
+          if (_fromMandalGram) _cardTile(Statics.getLabel('mandalSurvey'), () => Navigator.of(context).pushNamed(MandalSurveyFormScreen.routeName)),
         ]),
         if (_fromAboveNagar)
           _cardRow([

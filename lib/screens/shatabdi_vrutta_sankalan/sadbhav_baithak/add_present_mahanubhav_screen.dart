@@ -119,8 +119,8 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
     }
 
     // Step 5: Upnagar (conditional)
+    await populatelinkedUpnagarDropdown(_linkednagarValue);
     if (selection.upnagar != null && selection.upnagar!.isNotEmpty) {
-      await populatelinkedUpnagarDropdown(_linkednagarValue);
       _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? "").toString() : selection.upnagar) ?? '';
       if (level == 13) {
         _selectedGeoUnitId = (dm.geoUnitID ?? selection.upnagar).toString();
@@ -1303,7 +1303,7 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
       child: Column(
         children: [
           if (_linkedMahaanagar != null)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('Mahaanagar'),
               value: _linkedMahaanagarValue,
               items: _linkedMahaanagar!
@@ -1326,10 +1326,10 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
                 populatelinkedVibhaagDropdown(value!);
                 populatelinkedBhaagDropdown("");
               },
-              isDisabled: false,
+              isDisabled: ((userLevelId ?? 0) < 9 || userLevelId == 13),
             ),
           if (_linkedVibhaag != null)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('Vibhaag'),
               value: _linkedVibhaagValue,
               items: _linkedVibhaag!
@@ -1349,10 +1349,10 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
                 });
                 populatelinkedBhaagDropdown(value!);
               },
-              isDisabled: false,
+              isDisabled: ((userLevelId ?? 0) < 8 || userLevelId == 13),
             ),
           if (_linkedbhaag != null && _linkedbhaag!.isNotEmpty)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('Bhaag'),
               value: _linkedbhaagValue,
               items: _linkedbhaag!
@@ -1373,10 +1373,10 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
                   populatelinkedNagarDropdown(value);
                 });
               },
-              isDisabled: false,
+              isDisabled: ((userLevelId ?? 0) < 7 || userLevelId == 13),
             ),
           if (_linkednagar != null && _linkednagar!.isNotEmpty)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('Nagar'),
               value: _linkednagarValue,
               items: _linkednagar!
@@ -1398,10 +1398,10 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
                   populatelinkedVastiDropdown(false, value);
                 });
               },
-              isDisabled: false,
+              isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
             ),
           if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('upnagarUpkhanda'),
               value: _linkedupnagarValue,
               items: _linkedupnagar!
@@ -1422,10 +1422,10 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
                   populatelinkedVastiDropdown(true, value);
                 });
               },
-              isDisabled: false,
+              isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
             ),
           if (_linkedmandal != null && _linkedmandal!.isNotEmpty)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('Mandal'),
               value: _linkedmandalValue,
               items: _linkedmandal!
@@ -1445,10 +1445,10 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
                   populatelinkedGraamDropdown(value);
                 });
               },
-              isDisabled: false,
+              isDisabled: ((userLevelId ?? 0) < 4),
             ),
           if (_linkedgraam != null && _linkedgraam!.isNotEmpty)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('Graam'),
               value: _linkedgraamValue,
               items: _linkedgraam!
@@ -1469,10 +1469,10 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
                   showTypeOfForm = true;
                 });
               },
-              isDisabled: false,
+              isDisabled: ((userLevelId ?? 0) < 3),
             ),
           if (_linkedvasti != null && _linkedvasti!.isNotEmpty)
-            _buildDropdownField(
+            buildDropdownField(
               label: Statics.getLabel('Vasti'),
               value: _linkedvastiValue,
               items: _linkedvasti!
@@ -1493,32 +1493,10 @@ class _AddPresentMahanubhavScreenState extends State<AddPresentMahanubhavScreen>
                   showTypeOfForm = true;
                 });
               },
-              isDisabled: false,
+              isDisabled: ((userLevelId ?? 0) < 2),
             ),
           SizedBox(height: 15),
         ],
-      ),
-    );
-  }
-
-  Widget _buildDropdownField({
-    bool? ignoring,
-    required String label,
-    required String? value,
-    required List<DropdownMenuItem<String>>? items,
-    required ValueChanged<String?>? onChanged,
-    required bool isDisabled,
-    void Function()? onTap,
-  }) {
-    return IgnorePointer(
-      ignoring: ignoring ?? false,
-      child: DropdownButtonFormField(
-        decoration: InputDecoration(labelText: label),
-        isExpanded: true,
-        value: value == "" ? null : value,
-        items: items,
-        onTap: onTap,
-        onChanged: onChanged,
       ),
     );
   }

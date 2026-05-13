@@ -100,7 +100,21 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
       if (!mounted) return;
       if (mounted)
         setState(() {
-          swDetails = new SwayamsevakBAL(swID, 1, "", "", "", "", null, "", null, "", null, "", false, false);
+          swDetails = new SwayamsevakBAL(
+              swID,
+              1,
+              "",
+              "",
+              "",
+              "",
+              null,
+              "",
+              null,
+              "",
+              null,
+              "",
+              false,
+              false);
         });
     }
     print("viewType ${widget.viewType} -- name ${widget.preFilledName} -- email ${widget.preFilledEmail} -- mobile ${widget.preFilledMobile}");
@@ -170,9 +184,9 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
     }
 
     // Step 5: Upnagar (conditional)
+    await populatelinkedUpnagarDropdown(_linkednagarValue);
+    await populateUpnagarDropdown(_linkednagarValue);
     if (selection.upnagar != null && selection.upnagar!.isNotEmpty) {
-      await populatelinkedUpnagarDropdown(_linkednagarValue);
-      await populateUpnagarDropdown(_linkednagarValue);
       _upnagarValue = _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? 0).toString() : selection.upnagar) ?? _linkedupnagarValue;
       if (level == 13) {
         swDetails?.linkedGeoUnitID = dm.geoUnitID ?? dm.parentUpaNagarID;
@@ -319,8 +333,12 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
     DateTime? date = await showDatePicker(
         context: context,
         initialDate: _birthDate == null ? DateTime.now() : _birthDate!,
-        firstDate: DateTime((_birthDate == null ? DateTime.now().year : _birthDate!.year) - 80),
-        lastDate: DateTime((_birthDate == null ? DateTime.now().year : _birthDate!.year) + 80));
+        firstDate: DateTime((_birthDate == null ? DateTime
+            .now()
+            .year : _birthDate!.year) - 80),
+        lastDate: DateTime((_birthDate == null ? DateTime
+            .now()
+            .year : _birthDate!.year) + 80));
 
     if (date != null) {
       if (mounted)
@@ -623,7 +641,9 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
         child: SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.all(20),
-            width: Statics.getDeviceSize(context).width,
+            width: Statics
+                .getDeviceSize(context)
+                .width,
             child: AbsorbPointer(
               absorbing: widget.viewType == "ViewMenu" ? true : false,
               child: Form(
@@ -654,7 +674,9 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
                       keyboardType: TextInputType.phone,
                       maxLength: 10,
                       validator: (value) {
-                        if (value!.isEmpty || value.trim().length < 10) return (Statics.getLabel('MobileValidationMessage'));
+                        if (value!.isEmpty || value
+                            .trim()
+                            .length < 10) return (Statics.getLabel('MobileValidationMessage'));
                         return null;
                       },
                       onSaved: (value) {
@@ -689,7 +711,9 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
                     Row(
                       children: [
                         SizedBox(
-                          width: Statics.getDeviceSize(context).width * 0.7,
+                          width: Statics
+                              .getDeviceSize(context)
+                              .width * 0.7,
                           child: TextFormField(
                             readOnly: true,
                             controller: _birthDateCntrl,
@@ -698,7 +722,10 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
                             // controller: widget.viewType == 'JoinRss' ? emailController : _emailCntrl,
                             // maxLength: 100,
                             validator: (value) {
-                              if (value == null || value.toString().trim().isEmpty || value.trim() == "") {
+                              if (value == null || value
+                                  .toString()
+                                  .trim()
+                                  .isEmpty || value.trim() == "") {
                                 return (Statics.getLabel('DobValidationMessage'));
                               }
                               return null;
@@ -734,8 +761,14 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
                                 width: 80,
                                 child: MaterialButton(
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                                    color: Theme.of(context).primaryColor,
-                                    textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                                    color: Theme
+                                        .of(context)
+                                        .primaryColor,
+                                    textColor: Theme
+                                        .of(context)
+                                        .primaryTextTheme
+                                        .labelMedium
+                                        ?.color,
                                     onPressed: () {
                                       setState(() {
                                         _bhaagValue = _shaharValue = _nagarValue = _mandalValue = _graamValue = _vastiValue = null;
@@ -905,10 +938,10 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
                         value: _vastiValue == ""
                             ? null
                             : _vasti != null
-                                ? _vasti!.indexWhere((p) => p.geoUnitID.toString() == _vastiValue) > -1
-                                    ? _vastiValue
-                                    : null
-                                : null,
+                            ? _vasti!.indexWhere((p) => p.geoUnitID.toString() == _vastiValue) > -1
+                            ? _vastiValue
+                            : null
+                            : null,
                         items: _vasti!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                         validator: (value) {
                           if ((value == null || value.isEmpty) && (_graamValue == null || _graamValue!.isEmpty)) {
@@ -979,8 +1012,14 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
                                 width: 80,
                                 child: MaterialButton(
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                                  color: Theme.of(context).primaryColor,
-                                  textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                                  color: Theme
+                                      .of(context)
+                                      .primaryColor,
+                                  textColor: Theme
+                                      .of(context)
+                                      .primaryTextTheme
+                                      .labelMedium
+                                      ?.color,
                                   onPressed: () {
                                     setState(() {
                                       _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = _linkedShaakhaaValue = null;
@@ -1233,23 +1272,30 @@ class SwayamsevakBasicInfoState extends State<SwayamsevakBasicInfo> {
                     ),
                     if (_isLoading)
                       CircularProgressIndicator()
-                    else if (widget.viewType == "ViewMenu")
-                      Text(Statics.getLabel('canNotMakeChanges'))
                     else
-                      MaterialButton(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: 8,
+                      if (widget.viewType == "ViewMenu")
+                        Text(Statics.getLabel('canNotMakeChanges'))
+                      else
+                        MaterialButton(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 15,
+                            vertical: 8,
+                          ),
+                          color: Theme
+                              .of(context)
+                              .primaryColor,
+                          textColor: Theme
+                              .of(context)
+                              .primaryTextTheme
+                              .labelMedium
+                              ?.color,
+                          onPressed: _submit,
+                          child: Text(
+                            Statics.getLabel('Submit'),
+                            style: TextStyle(fontSize: 25),
+                          ),
                         ),
-                        color: Theme.of(context).primaryColor,
-                        textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                        onPressed: _submit,
-                        child: Text(
-                          Statics.getLabel('Submit'),
-                          style: TextStyle(fontSize: 25),
-                        ),
-                      ),
                   ],
                 ),
               ),
