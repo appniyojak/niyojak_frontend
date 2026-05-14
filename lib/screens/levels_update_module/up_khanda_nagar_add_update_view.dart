@@ -64,7 +64,8 @@ class _UpNagarkhandaAddUpdateViewState extends State<UpNagarkhandaAddUpdateView>
   String? vibhagId = '';
   String? selctedLevel = 'praant';
   String? selctedLevelName = '';
-  String? selctedLevelId = '';
+
+  // String? selctedLevelId = '';
   String? selctedLevelNameNew = '';
   String? upnagarLinkedValue = '';
   String? _linkedbhaagName = '';
@@ -103,7 +104,7 @@ class _UpNagarkhandaAddUpdateViewState extends State<UpNagarkhandaAddUpdateView>
     _linkedMahaanagarValue = (level == 9 ? (dm.geoUnitID ?? 0).toString() : selection.mahaanagar) ?? _linkedMahaanagarValue;
     if (level == 9) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.mahaanagar).toString();
-      // _selctedLevel = 'Mahaanagar';
+      selctedLevel = 'Mahaanagar';
     }
 
     // Step 2: Vibhaag
@@ -111,7 +112,7 @@ class _UpNagarkhandaAddUpdateViewState extends State<UpNagarkhandaAddUpdateView>
     _linkedVibhaagValue = (level == 8 ? (dm.geoUnitID ?? 0).toString() : selection.vibhaag) ?? _linkedVibhaagValue;
     if (level == 8) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.vibhaag).toString();
-      // _selctedLevel = 'Vibhaag';
+      selctedLevel = 'Vibhaag';
     }
 
     // Step 3: Bhaag
@@ -119,7 +120,7 @@ class _UpNagarkhandaAddUpdateViewState extends State<UpNagarkhandaAddUpdateView>
     _linkedBhaagValue = (level == 7 ? (dm.geoUnitID ?? 0).toString() : selection.bhaag) ?? _linkedBhaagValue;
     if (level == 7) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.bhaag).toString();
-      // _selctedLevel = 'Bhaag';
+      selctedLevel = 'Bhaag';
     }
 
     // Step 4: Nagar
@@ -127,7 +128,7 @@ class _UpNagarkhandaAddUpdateViewState extends State<UpNagarkhandaAddUpdateView>
     _linkedNagarValue = (level == 6 ? (dm.geoUnitID ?? 0).toString() : selection.nagar) ?? _linkedNagarValue;
     if (level == 6) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.nagar).toString();
-      // _selctedLevel = 'Nagar';
+      selctedLevel = 'Nagar';
     }
 
     // // Step 5: Upnagar (conditional)
@@ -261,7 +262,7 @@ class _UpNagarkhandaAddUpdateViewState extends State<UpNagarkhandaAddUpdateView>
     });
     var inputData = json.encode({
       "AppUserID": Statics.userDetails['userID'],
-      "GeoUnitID": selctedLevelId,
+      "GeoUnitID": _selectedGeoUnitId,
       "isnagar": 6,
     });
 
@@ -300,7 +301,7 @@ class _UpNagarkhandaAddUpdateViewState extends State<UpNagarkhandaAddUpdateView>
   Future<void> submitUpkhandaForm() async {
     var inputData = json.encode({
       "AppUserID": Statics.userDetails['userID'],
-      "GeoUnitID": selctedLevelId,
+      "GeoUnitID": _selectedGeoUnitId,
       "Upnagarid": upnagarLinkedValue ?? 0,
       "vastiids": selectedIdString,
       "GeoUnitName": englishNameController.text,
@@ -1972,6 +1973,7 @@ class _UpNagarkhandaAddUpdateViewState extends State<UpNagarkhandaAddUpdateView>
                               showupnagarUpkhandaTable = false;
                               selctedLevel = "";
                             });
+                            populateDropdown();
                           },
                           child: Text(
                             Statics.getLabel('clear'),

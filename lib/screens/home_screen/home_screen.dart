@@ -551,57 +551,58 @@ class _HomeScreenState extends State<HomeScreen> {
     if (sd['VehicleData'] != null) {
       _vehicle = Vehicle.fromJson(sd['VehicleData']);
     }
-    setState(() {
-      myTotalKaaryakartaaCount = sd["TotalKaaryakartaaCount"].toString();
-      myTotalSwayamsevakCount = sd["TotalSwayamsevakCount"].toString();
+    if (mounted)
+      setState(() {
+        myTotalKaaryakartaaCount = sd["TotalKaaryakartaaCount"].toString();
+        myTotalSwayamsevakCount = sd["TotalSwayamsevakCount"].toString();
 
-      myPratidnyitCount = sd["PratidnyitCount"].toString();
-      myShishuCount = sd["ShishuCount"].toString();
-      myBaalCount = sd["BaalCount"].toString();
-      myTarunVidyaarthiCount = sd["TarunVidyaarthiCount"].toString();
-      myTarunVyavasaayeeCount = sd["TarunVyavasaayeeCount"].toString();
-      myProudhaVyavasaayeeCount = sd["ProudhaVyavasaayeeCount"].toString();
-      myUnknownAgeCount = sd["UnknownAgeCount"].toString();
-      myPraarambhikShikshitCount = sd["PrarambhikShikshitCount"].toString();
-      myPraathamikShikshitCount = sd["PraathamikShikshitCount"].toString();
-      myPrathamVarshaShikshitCount = sd["PrathamVarshaShikshitCount"].toString();
-      myDwitiyaVarshaShikshitCount = sd["DwitiyaVarshaShikshitCount"].toString();
-      myTrutiyaVarshaShikshitCount = sd["TrutiyaVarshaShikshitCount"].toString();
-      myNoShikshanCount = sd["NoShikshanCount"].toString();
-      myDailyShaakhaaKaaryakartaaCount = sd["DailyShaakhaaKaaryakartaaCount"].toString();
-      mySaaptaahikMilanKaaryakartaaCount = sd["SaaptaahikMilanKaaryakartaaCount"].toString();
-      myMaasikMilanKaaryakartaaCount = sd["MaasikMilanKaaryakartaaCount"].toString();
-      myVastiKaaryakartaaCount = sd["VastiKaaryakartaaCount"].toString();
-      myGraamKaaryakartaaCount = sd["GraamKaaryakartaaCount"].toString();
-      myMandalKaaryakartaaCount = sd["MandalKaaryakartaaCount"].toString();
-      myNagarKaaryakartaaCount = sd["NagarKaaryakartaaCount"].toString();
-      myShaharKaaryakartaaCount = sd["ShaharKaaryakartaaCount"].toString();
-      myBhaagKaaryakartaaCount = sd["BhaagKaaryakartaaCount"].toString();
-      myVibhaagKaaryakartaaCount = sd["VibhaagKaaryakartaaCount"].toString();
-      myMahaanagarKaaryakartaaCount = sd["MahaanagarKaaryakartaaCount"].toString();
-      myPraantKaaryakartaaCount = sd["PraantKaaryakartaaCount"].toString();
-      myKshetraKaaryakartaaCount = sd["KshetraKaaryakartaaCount"].toString();
-      myAkhilBhaaratiyaKaaryakartaaCount = sd["AkhilBhaaratiyaKaaryakartaaCount"].toString();
-      myPravaaseeKaaryakartaaCount = sd["PravaaseeKaaryakartaaCount"].toString();
-      myGatividhiKaaryakartaaCount = sd["GatividhiKaaryakartaaCount"].toString();
-      myAayaamKaaryakartaaCount = sd["AayaamKaaryakartaaCount"].toString();
-      mySanghaPreritSansthaaKaaryakartaaCount = sd["SanghaPreritSansthaaKaaryakartaaCount"].toString();
-      mySocialOrganizationKaaryakartaaCount = sd["SocialOrganizationKaaryakartaaCount"].toString();
-      notificationCount = sd["Notificationcount"].toString();
+        myPratidnyitCount = sd["PratidnyitCount"].toString();
+        myShishuCount = sd["ShishuCount"].toString();
+        myBaalCount = sd["BaalCount"].toString();
+        myTarunVidyaarthiCount = sd["TarunVidyaarthiCount"].toString();
+        myTarunVyavasaayeeCount = sd["TarunVyavasaayeeCount"].toString();
+        myProudhaVyavasaayeeCount = sd["ProudhaVyavasaayeeCount"].toString();
+        myUnknownAgeCount = sd["UnknownAgeCount"].toString();
+        myPraarambhikShikshitCount = sd["PrarambhikShikshitCount"].toString();
+        myPraathamikShikshitCount = sd["PraathamikShikshitCount"].toString();
+        myPrathamVarshaShikshitCount = sd["PrathamVarshaShikshitCount"].toString();
+        myDwitiyaVarshaShikshitCount = sd["DwitiyaVarshaShikshitCount"].toString();
+        myTrutiyaVarshaShikshitCount = sd["TrutiyaVarshaShikshitCount"].toString();
+        myNoShikshanCount = sd["NoShikshanCount"].toString();
+        myDailyShaakhaaKaaryakartaaCount = sd["DailyShaakhaaKaaryakartaaCount"].toString();
+        mySaaptaahikMilanKaaryakartaaCount = sd["SaaptaahikMilanKaaryakartaaCount"].toString();
+        myMaasikMilanKaaryakartaaCount = sd["MaasikMilanKaaryakartaaCount"].toString();
+        myVastiKaaryakartaaCount = sd["VastiKaaryakartaaCount"].toString();
+        myGraamKaaryakartaaCount = sd["GraamKaaryakartaaCount"].toString();
+        myMandalKaaryakartaaCount = sd["MandalKaaryakartaaCount"].toString();
+        myNagarKaaryakartaaCount = sd["NagarKaaryakartaaCount"].toString();
+        myShaharKaaryakartaaCount = sd["ShaharKaaryakartaaCount"].toString();
+        myBhaagKaaryakartaaCount = sd["BhaagKaaryakartaaCount"].toString();
+        myVibhaagKaaryakartaaCount = sd["VibhaagKaaryakartaaCount"].toString();
+        myMahaanagarKaaryakartaaCount = sd["MahaanagarKaaryakartaaCount"].toString();
+        myPraantKaaryakartaaCount = sd["PraantKaaryakartaaCount"].toString();
+        myKshetraKaaryakartaaCount = sd["KshetraKaaryakartaaCount"].toString();
+        myAkhilBhaaratiyaKaaryakartaaCount = sd["AkhilBhaaratiyaKaaryakartaaCount"].toString();
+        myPravaaseeKaaryakartaaCount = sd["PravaaseeKaaryakartaaCount"].toString();
+        myGatividhiKaaryakartaaCount = sd["GatividhiKaaryakartaaCount"].toString();
+        myAayaamKaaryakartaaCount = sd["AayaamKaaryakartaaCount"].toString();
+        mySanghaPreritSansthaaKaaryakartaaCount = sd["SanghaPreritSansthaaKaaryakartaaCount"].toString();
+        mySocialOrganizationKaaryakartaaCount = sd["SocialOrganizationKaaryakartaaCount"].toString();
+        notificationCount = sd["Notificationcount"].toString();
 
-      // Vrutta summary
-      myMaasikEQ0 = vd["MaasikEQ0"].toString();
-      myMaasikEQ1 = vd["MaasikEQ1"].toString();
-      mySaaptaahikEQ0 = vd["SaaptaahikEQ0"].toString();
-      mySaaptaahik1To3 = vd["Saaptaahik1To3"].toString();
-      mySaaptaahikGTE4 = vd["SaaptaahikGTE4"].toString();
-      myShaakhaaEQ0 = vd["ShaakhaaEQ0"].toString();
-      myShaakhaa1To24 = vd["Shaakhaa1To24"].toString();
-      myShaakhaaGTE25 = vd["ShaakhaaGTE25"].toString();
-      myShaakhaaEQ30 = vd["ShaakhaaEQ30"].toString();
+        // Vrutta summary
+        myMaasikEQ0 = vd["MaasikEQ0"].toString();
+        myMaasikEQ1 = vd["MaasikEQ1"].toString();
+        mySaaptaahikEQ0 = vd["SaaptaahikEQ0"].toString();
+        mySaaptaahik1To3 = vd["Saaptaahik1To3"].toString();
+        mySaaptaahikGTE4 = vd["SaaptaahikGTE4"].toString();
+        myShaakhaaEQ0 = vd["ShaakhaaEQ0"].toString();
+        myShaakhaa1To24 = vd["Shaakhaa1To24"].toString();
+        myShaakhaaGTE25 = vd["ShaakhaaGTE25"].toString();
+        myShaakhaaEQ30 = vd["ShaakhaaEQ30"].toString();
 
-      _isMySearching = false;
-    });
+        _isMySearching = false;
+      });
   }
 
   // ── Target dashboard data ──────────────────────────────────────────────────
@@ -808,7 +809,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   bool get _fromMandalGram => Statics.levelId != 2;
 
-  bool get _fromVasti => Statics.levelId != 3 || Statics.levelId != 4;
+  bool get _fromVasti => userLevelId != 3 && userLevelId != 4;
+
+  bool get _fromShaakha => userLevelId == 1;
 
   bool get _fromAboveNagar => ((userLevelId ?? 0) >= 6 && (userLevelId ?? 0) < 13);
 
@@ -1967,7 +1970,7 @@ class _HomeScreenState extends State<HomeScreen> {
       const SizedBox(height: 15),
       _swayamsewakInterests(interestlist: _interestlist),
       const SizedBox(height: 15),
-      _swayamsewakInfoWidget(infolist: _ghoshwadlist, heading: 'Ghoshwad'),
+      _swayamsewakInfoWidget(infolist: _ghoshwadlist, heading: 'Ghoshwadak'),
       const SizedBox(height: 15),
       _swayamsewakInfoWidget(infolist: _sangayulist, heading: 'Sangayu'),
       const SizedBox(height: 15),
@@ -2326,7 +2329,7 @@ class _HomeScreenState extends State<HomeScreen> {
       const SizedBox(height: 15),
       _swayamsewakInfoWidget(infolist: _tgsangayulist, heading: 'Sangayu'),
       const SizedBox(height: 15),
-      _swayamsewakInfoWidget(infolist: _tgghoshwadlist, heading: 'Ghoshwad'),
+      _swayamsewakInfoWidget(infolist: _tgghoshwadlist, heading: 'Ghoshwadak'),
       const SizedBox(height: 15),
       _tgganveshData == null ? SizedBox() : _swayamsewakUniform(ganvesh: _tgganveshData!),
       const SizedBox(height: 15),
@@ -2888,6 +2891,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget surveyCard() {
+    if (_fromShaakha) return SizedBox();
     return _card(
       title: Statics.getLabel("Survey"),
       children: [

@@ -200,6 +200,8 @@ Widget buildDropdownField({
   required String? value,
   required List<DropdownMenuItem<String>> items,
   required ValueChanged<String?>? onChanged,
+  String? Function(dynamic)? validator,
+  void Function(dynamic)? onSaved,
   bool isDisabled = false,
 }) {
   return IgnorePointer(
@@ -210,6 +212,8 @@ Widget buildDropdownField({
       value: (value == null || value.isEmpty) ? null : value,
       items: items,
       onChanged: onChanged,
+      validator: validator,
+      onSaved: onSaved,
     ),
   );
 }

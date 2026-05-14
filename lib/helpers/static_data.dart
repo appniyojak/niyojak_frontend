@@ -1019,6 +1019,8 @@ Future<List<GeoUnitMasterBAL>> getGeoUnitsByLevelAndParentForMandal(String level
     add = " AND GeoUnitID in  (select ParentBhaagID from GeoUnitMaster where LevelID=4)";
   } else if (levelID == "6") {
     add = " AND GeoUnitID in  (select ParentNagarID from GeoUnitMaster where LevelID=4)";
+    // } else if (levelID == "13") {
+    //   add = " AND GeoUnitID in  (select ParentUpaNagarID from GeoUnitMaster where LevelID=13)";
   }
 
   if (parentID == '') parentID = '0';

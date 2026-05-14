@@ -266,7 +266,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
       String strInput = json.encode({
         "AppUserID": Statics.userDetails['userID'],
         "AnnualBaithakTypeID": baithakTypeID,
-        "GeoUnitID": geoID,
+        "GeoUnitID": _selectedGeoUnitId,
       });
       dynamic retVal = await Statics.getAnnualBaithakEkatritVruttaForApp(strInput);
       return retVal;
@@ -443,7 +443,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
     bool isConnected = await Statics.isInternetConnected();
     if (isConnected) {
       try {
-        String strInput = json.encode({"AppUserID": Statics.userDetails['userID'], "AnnualBaithakTypeID": int.parse(annualBaithakTypeID!), "GeoUnitID": geoUnitID, "type": type});
+        String strInput = json.encode({"AppUserID": Statics.userDetails['userID'], "AnnualBaithakTypeID": int.parse(annualBaithakTypeID!), "GeoUnitID": _selectedGeoUnitId, "type": type});
 
         SankalitBaithakVruttaDataNamesModel? dataModel = await Statics.getSankalitBaithakVruttaDataNames(strInput);
 
@@ -529,6 +529,7 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                         children: [
                           if (_linkedMahaanagar != null)
                             buildDropdownField(
+                              isDisabled: ((userLevelId ?? 0) < 9 || userLevelId == 13),
                               label: Statics.getLabel('Mahaanagar'),
                               value: _linkedMahaanagarValue,
                               items: _linkedMahaanagar!
@@ -556,11 +557,16 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                             height: 10,
                           ),
                           if (_linkedVibhaag != null)
-                            DropdownButtonFormField<String>(
-                              decoration: InputDecoration(labelText: Statics.getLabel('Vibhaag')),
-                              isExpanded: true,
-                              value: _linkedVibhaagValue == "" ? null : _linkedVibhaagValue,
-                              items: _linkedVibhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                            buildDropdownField(
+                              isDisabled: ((userLevelId ?? 0) < 8 || userLevelId == 13),
+                              label: Statics.getLabel('Vibhaag'),
+                              value: _linkedVibhaagValue,
+                              items: _linkedVibhaag!
+                                  .map((bg) => DropdownMenuItem(
+                                        value: bg.geoUnitID.toString(),
+                                        child: Text(bg.name!),
+                                      ))
+                                  .toList(),
                               onChanged: (value) {
                                 print("Vibhaag---   $value");
                                 setState(() {
@@ -578,11 +584,16 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                             height: 10,
                           ),
                           if (_linkedBhaag != null)
-                            DropdownButtonFormField<String>(
-                              decoration: InputDecoration(labelText: Statics.getLabel('Bhaag')),
-                              isExpanded: true,
-                              value: _linkedBhaagValue == "" ? null : _linkedBhaagValue,
-                              items: _linkedBhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                            buildDropdownField(
+                              isDisabled: ((userLevelId ?? 0) < 7 || userLevelId == 13),
+                              label: Statics.getLabel('Bhaag'),
+                              value: _linkedBhaagValue,
+                              items: _linkedBhaag!
+                                  .map((bg) => DropdownMenuItem(
+                                        value: bg.geoUnitID.toString(),
+                                        child: Text(bg.name!),
+                                      ))
+                                  .toList(),
                               onChanged: (value) {
                                 print("Bhaag---   $value");
                                 setState(() {
@@ -619,18 +630,23 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                           //     height: 10,
                           //   ),
                           if (_linkedNagar != null && _linkedNagar!.length > 0)
-                            DropdownButtonFormField<String>(
-                              decoration: InputDecoration(labelText: Statics.getLabel('Nagar')),
-                              isExpanded: true,
-                              value: _linkedNagarValue == "" ? null : _linkedNagarValue,
-                              items: _linkedNagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                            buildDropdownField(
+                              isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
+                              label: Statics.getLabel('Nagar'),
+                              value: _linkedNagarValue,
+                              items: _linkedNagar!
+                                  .map((bg) => DropdownMenuItem(
+                                        value: bg.geoUnitID.toString(),
+                                        child: Text(bg.name!),
+                                      ))
+                                  .toList(),
                               onChanged: (value) {
                                 print("Nagar---   $value");
                                 setState(() {
                                   _linkedNagarValue = value;
                                   _selectedGeoUnitId = value;
                                 });
-                                // populatelinkedUpnagarDropdown(value);
+                                populatelinkedUpnagarDropdown(value);
                               },
                             ),
                           if (_linkedNagar != null && _linkedNagar!.length > 0)
@@ -638,9 +654,9 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                               height: 10,
                             ),
                           //--------------new dropdown added----------------------//
-                          /*if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
+                          if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
                             buildDropdownField(
-                              isDisabled: false,
+                              isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
                               label: Statics.getLabel('upnagarUpkhanda'),
                               value: _linkedupnagarValue,
                               items: _linkedupnagar!
@@ -656,16 +672,16 @@ class _AnnualBaithakEkatritVruttaState extends State<AnnualBaithakEkatritVrutta>
                                   _selectedGeoUnitId = value;
                                   _selctedLevel = 'upnagarUpkhanda';
                                   _selctedLevelName = selectedItem.name ?? "";
-                                  populatelinkedVastiDropdown(value!);
-                                  populatelinkedMandalDropdown(true, value);
-                                  populatelinkedNagarDropdown(null, value);
+                                  // populatelinkedVastiDropdown(value!);
+                                  // populatelinkedMandalDropdown(true, value);
+                                  // populatelinkedNagarDropdown(null, value);
                                 });
                               },
                             ),
-                            if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
+                          if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
                             SizedBox(
                               height: 10,
-                            ),*/
+                            ),
                           DropdownButtonFormField(
                             decoration: InputDecoration(labelText: Statics.getLabel('SankalpCompletionYear')),
                             isExpanded: true,

@@ -1670,7 +1670,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> with Automati
                     ),
                     */
                   SizedBox(height: 15),
-                  if (userLevelId != 6 && userLevelId != 13)
+                  if ((userLevelId ?? 0) > 6)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

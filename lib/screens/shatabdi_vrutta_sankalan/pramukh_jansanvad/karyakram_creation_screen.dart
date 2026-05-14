@@ -326,7 +326,7 @@ class _KaryakramCreationScreenState extends State<KaryakramCreationScreen> {
       _linkedVibhaagValue = _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
     });
     // clearForm();
-    await populateDropdown();
+    await initData();
   }
 
   //////////////////////////////////////////////////////////////////////////////////////
@@ -336,6 +336,7 @@ class _KaryakramCreationScreenState extends State<KaryakramCreationScreen> {
       _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedupnagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
       _linkedMahaanagar = _linkedVibhaag = _linkedbhaag = _linkednagar = _linkedupnagar = _linkedmandal = null;
       _selctedLevelName = _selectedGeoUnitIdForCreat = null;
+      nagarList = [];
       nagarList = [];
       _selctedLevel = "praant";
     });

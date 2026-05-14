@@ -2165,7 +2165,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                 children: [
                   if (_linkedMahaanagar != null)
                     buildDropdownField(
-                      isDisabled: (userLevelId == 2),
+                      isDisabled: ((userLevelId ?? 0) < 9 || userLevelId == 13),
                       label: Statics.getLabel('Mahaanagar'),
                       value: _linkedMahaanagarValue,
                       items: _linkedMahaanagar!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
@@ -2185,7 +2185,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                     ),
                   if (_linkedVibhaag != null)
                     buildDropdownField(
-                      isDisabled: (userLevelId == 2),
+                      isDisabled: ((userLevelId ?? 0) < 8 || userLevelId == 13),
                       label: Statics.getLabel('Vibhaag'),
                       value: _linkedVibhaagValue,
                       items: _linkedVibhaag!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
@@ -2203,7 +2203,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                     ),
                   if (_linkedBhaag != null && _linkedBhaag!.isNotEmpty)
                     buildDropdownField(
-                      isDisabled: (userLevelId == 2),
+                      isDisabled: ((userLevelId ?? 0) < 7 || userLevelId == 13),
                       label: Statics.getLabel('Bhaag'),
                       value: _linkedBhaagValue,
                       items: _linkedBhaag!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
@@ -2240,7 +2240,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                   //   ),
                   if (_linkedNagar != null && _linkedNagar!.isNotEmpty)
                     buildDropdownField(
-                      isDisabled: (userLevelId == 2),
+                      isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
                       label: Statics.getLabel('Nagar'),
                       value: _linkedNagarValue,
                       items: _linkedNagar!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),
@@ -2259,7 +2259,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                     ),
                   if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
                     buildDropdownField(
-                      isDisabled: (userLevelId == 2),
+                      isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
                       label: Statics.getLabel('upnagarUpkhanda'),
                       value: _linkedupnagarValue,
                       items: _linkedupnagar!
@@ -2284,7 +2284,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                     ),
                   if (_linkedvasti != null && _linkedvasti!.isNotEmpty)
                     buildDropdownField(
-                      isDisabled: (userLevelId == 2),
+                      isDisabled: ((userLevelId ?? 0) < 2),
                       label: Statics.getLabel('Vasti'),
                       value: _linkedvastiValue,
                       items: _linkedvasti!.map((g) => DropdownMenuItem(value: g.geoUnitID.toString(), child: Text(g.name!))).toList(),

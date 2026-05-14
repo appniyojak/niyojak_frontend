@@ -57,9 +57,11 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
   String? _linkedvastiValue = '';
   String? mahanagarId = '';
   String? vibhagId = '';
-  String? selctedLevel = 'praant';
+
+  // String? selctedLevel = 'praant';
   String? selctedLevelName = '';
-  String? selctedLevelId = '';
+
+  // String? selctedLevelId = '';
   String? selctedLevelNameNew = '';
   String? selctedLevelIdNew = '';
 
@@ -101,42 +103,74 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
 
     // Step 1: Mahaanagar
     await populatelinkedMahaanagarDropdown();
-    _selectedGeoUnitId = _linkedMahaanagarValue = (level == 9 ? (dm.geoUnitID ?? "").toString() : selection.mahaanagar) ?? '';
-    _selctedLevel = 'Mahaanagar';
+    _linkedMahaanagarValue = (level == 9 ? (dm.geoUnitID ?? 0).toString() : selection.mahaanagar) ?? _linkedMahaanagarValue;
+    if (level == 9) {
+      _selectedGeoUnitId = (dm.geoUnitID ?? selection.mahaanagar).toString();
+      _selctedLevel = 'Mahaanagar';
+    }
 
     // Step 2: Vibhaag
     await populatelinkedVibhaagDropdown(_linkedMahaanagarValue!);
-    _selectedGeoUnitId = _linkedVibhaagValue = (level == 8 ? (dm.geoUnitID ?? "").toString() : selection.vibhaag) ?? '';
-    _selctedLevel = 'Vibhaag';
+    _linkedVibhaagValue = (level == 8 ? (dm.geoUnitID ?? 0).toString() : selection.vibhaag) ?? _linkedVibhaagValue;
+    if (level == 8) {
+      _selectedGeoUnitId = (dm.geoUnitID ?? selection.vibhaag).toString();
+      _selctedLevel = 'Vibhaag';
+    }
 
     // Step 3: Bhaag
     await populatelinkedBhaagDropdown(_linkedVibhaagValue!);
-    _selectedGeoUnitId = _linkedBhaagValue = (level == 7 ? (dm.geoUnitID ?? "").toString() : selection.bhaag) ?? '';
-    _selctedLevel = 'Bhaag';
+    _linkedBhaagValue = (level == 7 ? (dm.geoUnitID ?? 0).toString() : selection.bhaag) ?? _linkedBhaagValue;
+    if (level == 7) {
+      _selectedGeoUnitId = (dm.geoUnitID ?? selection.bhaag).toString();
+      _selctedLevel = 'Bhaag';
+    }
 
     // Step 4: Nagar
     await populatelinkedNagarDropdown(_linkedBhaagValue, null);
-    _selectedGeoUnitId = _linkedNagarValue = (level == 6 ? (dm.geoUnitID ?? "").toString() : selection.nagar) ?? '';
-    _selctedLevel = 'Nagar';
+    _linkedNagarValue = (level == 6 ? (dm.geoUnitID ?? 0).toString() : selection.nagar) ?? _linkedNagarValue;
+    if (level == 6) {
+      _selectedGeoUnitId = (dm.geoUnitID ?? selection.nagar).toString();
+      _selctedLevel = 'Nagar';
+    }
 
     // Step 5: Upnagar (conditional)
     await populatelinkedUpnagarDropdown(_linkedNagarValue);
     if (selection.upnagar != null && selection.upnagar!.isNotEmpty) {
-      _selectedGeoUnitId = _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? "").toString() : selection.upnagar) ?? '';
+      _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? "").toString() : selection.upnagar) ?? '';
+      if (level == 13) {
+        _selectedGeoUnitId = (dm.geoUnitID ?? selection.upnagar).toString();
+        _selctedLevel = 'upnagarUpkhanda';
+      }
     }
-    if (selection.mandal != null && selection.mandal!.isNotEmpty) {
-      await populatelinkedMandalDropdown(
-          (selection.upnagar != null && selection.upnagar!.isNotEmpty), (selection.upnagar != null && selection.upnagar!.isNotEmpty) ? _linkedupnagarValue! : _linkedNagarValue!);
-      _selectedGeoUnitId = _linkedMandalValue = (level == 4 ? (dm.geoUnitID ?? "").toString() : selection.mandal) ?? '';
+
+    // Step 6: Mandal
+    await populatelinkedMandalDropdown(
+      (selection.upnagar != null && selection.upnagar!.isNotEmpty),
+      (selection.upnagar != null && selection.upnagar!.isNotEmpty) ? (_linkedupnagarValue!) : _linkedNagarValue!,
+    );
+    _linkedMandalValue = (level == 4 ? (dm.geoUnitID ?? "").toString() : selection.mandal) ?? '';
+    if (level == 4) {
+      _selectedGeoUnitId = (dm.geoUnitID ?? selection.mandal).toString();
+      _selctedLevel = 'Mandal';
     }
     // Step 7: Graam
     await populatelinkedGraamDropdown(_linkedMandalValue!);
-    _selectedGeoUnitId = _linkedgraamValue = (level == 3 ? (dm.geoUnitID ?? "").toString() : selection.graam) ?? '';
-
+    _linkedgraamValue = (level == 3 ? (dm.geoUnitID ?? "").toString() : selection.graam) ?? '';
+    if (level == 3) {
+      _selectedGeoUnitId = (dm.geoUnitID ?? selection.graam).toString();
+      _selctedLevel = 'Graam';
+    }
     // Step 8: Vasti
-    await populatelinkedVastiDropdown(_linkedNagarValue!);
-    _selectedGeoUnitId = _linkedvastiValue = (level == 2 ? (dm.geoUnitID ?? "").toString() : selection.vasti) ?? '';
-
+    await populatelinkedVastiDropdown(
+      (selection.upnagar != null && selection.upnagar!.isNotEmpty),
+      (selection.upnagar != null && selection.upnagar!.isNotEmpty) ? _linkedupnagarValue! : _linkedNagarValue!,
+    );
+    _linkedvastiValue = (level == 2 ? (dm.geoUnitID ?? "").toString() : selection.vasti) ?? '';
+    if (level == 2) {
+      _selectedGeoUnitId = (dm.geoUnitID ?? selection.vasti).toString();
+      _selctedLevel = 'Vasti';
+      // _getForm();
+    }
     // if (_linkedVibhaag != null && _linkedVibhaag!.isNotEmpty) _linkedVibhaagName = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedBhaagValue).name;
     // if (_linkedBhaag != null && _linkedBhaag!.isNotEmpty) _linkedbhaagName = _linkedBhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedBhaagValue).name;
     // if (_linkedNagar != null && _linkedNagar!.isNotEmpty) _linkednagarName = _linkedNagar!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedBhaagValue).name;
@@ -153,12 +187,6 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
     });
     await populatelinkedMahaanagarDropdown();
     await populatelinkedVibhaagDropdown('');
-    if (fromClear || userLevelId == null || ddm == null) {
-      print("object is null");
-      return;
-    }
-    print("object is not null >>>>>>>>>>>>>>>>>>>>>>");
-    await populateAllDropdowns(userLevelId!, ddm!);
     setState(() => viewcontainer = false);
     var data = await Statics.getStaticLDB('AnnualBaithakType');
     // populatelinkedMahaanagarDropdown();
@@ -168,6 +196,12 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
     _baithakTypes = _baithakTypes!.where((element) => element.showAnnualBaithakkey!.contains('1')).toList();
     print("_baithakTypes :-- $_baithakTypes");
     setState(() {});
+    if (fromClear || userLevelId == null || ddm == null) {
+      print("object is null");
+      return;
+    }
+    print("object is not null >>>>>>>>>>>>>>>>>>>>>>");
+    await populateAllDropdowns(userLevelId!, ddm!);
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedMahaanagarDropdown() async {
@@ -178,21 +212,6 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
         _linkedMahaanagar = data;
       });
     return data;
-  }
-
-  Future<List<GeoUnitMasterBAL>> populatelinkedUpnagarDropdown(String? nagarIDStr) async {
-    _linkedupnagarValue = _linkedvastiValue = null;
-    _linkedupnagarName = _linkedmandalName = _linkedgraamName = null;
-    _linkedupnagar = _linkedvasti = null;
-    var mnDD;
-
-    mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
-
-    setState(() {
-      _linkedupnagar = (mnDD.length > 0 ? mnDD : null);
-      //_linkedupnagarValue = (userparentUpanagarid ?? userGeoUnitId).toString();
-    });
-    return mnDD;
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(String vibhaagIDStr) async {
@@ -235,23 +254,6 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
     }
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedMandalDropdown(bool haveParentUp, String nagarIDStr) async {
-    setState(() => viewcontainer = false);
-    _linkedgraamValue = null;
-    _linkedmandal = _linkedgraam = null;
-    var mnDD;
-    if (haveParentUp) {
-      mnDD = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['MandalLevelID'].toString(), nagarIDStr, "Upnagar", '');
-    } else {
-      mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr, "Nagar", '');
-    }
-    //var mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr, 'Nagar', '');
-    setState(() {
-      _linkedmandal = (mnDD.length > 0 ? mnDD : null);
-    });
-    return mnDD;
-  }
-
   Future<List<GeoUnitMasterBAL>> populatelinkedGraamDropdown(String mandalIDStr) async {
     setState(() => viewcontainer = false);
     _linkedgraamValue = null;
@@ -263,22 +265,59 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
     return gmDD;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(String nagarIDStr) async {
-    setState(() => viewcontainer = false);
+  Future<List<GeoUnitMasterBAL>> populatelinkedUpnagarDropdown(String? nagarIDStr) async {
     _linkedvastiValue = null;
-    var vsDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr, 'Nagar', '');
+    //_linkedupnagarName = _linkedmandalName = _linkedgraamName = null;
+    _linkedvasti = null;
+    var mnDD;
+
+    mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
+
     setState(() {
-      _linkedvasti = (vsDD.length > 0 ? vsDD : null);
+      _linkedupnagar = (mnDD.length > 0 ? mnDD : null);
+      //_linkedupnagarValue = (userparentUpanagarid ?? userGeoUnitId).toString();
     });
-    return vsDD;
+    return mnDD;
+  }
+
+  Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(bool haveParentUp, String? nagarIDStr) async {
+    _linkedvastiValue = null;
+    //_linkedvastiName = null;
+    var data;
+    if (haveParentUp) {
+      print("i am in parents upnagar");
+      data = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, "Upnagar", '');
+      // print("${mnDD}");
+    } else {
+      data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, "Nagar", '');
+    }
+    setState(() => _linkedvasti = data.isNotEmpty ? data : null);
+    return data;
+  }
+
+  Future<List<GeoUnitMasterBAL>> populatelinkedMandalDropdown(bool haveParentUp, String nagarIDStr) async {
+    //setState(() => viewcontainer = false);
+    _linkedgraamValue = null;
+    _linkedgraam = null;
+    var data;
+    if (haveParentUp) {
+      data = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['MandalLevelID'].toString(), nagarIDStr, "Upnagar", '');
+    } else {
+      data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr, "Nagar", '');
+    }
+    //var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MandalLevelID'].toString(), nagarIDStr, 'Nagar', '');
+    setState(() {
+      _linkedmandal = data.isNotEmpty ? data : null;
+    });
+    return data;
   }
 
   Future<void> getData(context) async {
-    print("GeoUnitID  :- $selctedLevelId");
-    print("selctedLevel  :- $selctedLevel");
+    print("GeoUnitID  :- $_selectedGeoUnitId");
+    print("_selctedLevel  :- $_selctedLevel");
     print("selctedLevelName  :- $selctedLevelName");
     var inputData = json.encode({
-      "GeoUnitID": selctedLevelId,
+      "GeoUnitID": _selectedGeoUnitId,
     });
     print("getData" + inputData);
     getgeounitNameModel = await Statics.getlevelUpdatedata(inputData);
@@ -303,14 +342,14 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
     print("Form Submitted Successfully $_linkedvastiValue");
 
     var inputData = json.encode({
-      "GeoUnitID": selctedLevelId,
-      "ParentMahaanagarID": _linkedMahaanagarValue == "" || selctedLevelId == _linkedMahaanagarValue ? null : _linkedMahaanagarValue,
-      "ParentVibhaagID": _linkedVibhaagValue == "" || selctedLevelId == _linkedVibhaagValue ? null : _linkedVibhaagValue,
-      "ParentBhaagID": _linkedBhaagValue == "" || selctedLevelId == _linkedBhaagValue ? null : _linkedBhaagValue,
-      "ParentNagarID": _linkedNagarValue == "" || selctedLevelId == _linkedNagarValue ? null : _linkedNagarValue,
-      "ParentMandalID": _linkedMandalValue == "" || selctedLevelId == _linkedMandalValue ? null : _linkedMandalValue,
-      "ParentGraamID": _linkedgraamValue == "" || selctedLevelId == _linkedgraamValue ? null : _linkedgraamValue,
-      "ParentVastiID": _linkedvastiValue == "" || selctedLevelId == _linkedvastiValue ? null : _linkedvastiValue,
+      "GeoUnitID": _selectedGeoUnitId,
+      "ParentMahaanagarID": _linkedMahaanagarValue == "" || _selectedGeoUnitId == _linkedMahaanagarValue ? null : _linkedMahaanagarValue,
+      "ParentVibhaagID": _linkedVibhaagValue == "" || _selectedGeoUnitId == _linkedVibhaagValue ? null : _linkedVibhaagValue,
+      "ParentBhaagID": _linkedBhaagValue == "" || _selectedGeoUnitId == _linkedBhaagValue ? null : _linkedBhaagValue,
+      "ParentNagarID": _linkedNagarValue == "" || _selectedGeoUnitId == _linkedNagarValue ? null : _linkedNagarValue,
+      "ParentMandalID": _linkedMandalValue == "" || _selectedGeoUnitId == _linkedMandalValue ? null : _linkedMandalValue,
+      "ParentGraamID": _linkedgraamValue == "" || _selectedGeoUnitId == _linkedgraamValue ? null : _linkedgraamValue,
+      "ParentVastiID": _linkedvastiValue == "" || _selectedGeoUnitId == _linkedvastiValue ? null : _linkedvastiValue,
       "GeoUnitNameMarathi": marathiNameController.text,
       "GeoUnitNameHindi": hindiNameController.text,
       "GeoUnitName": englishNameController.text,
@@ -327,245 +366,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
         child: SingleChildScrollView(
             child: Column(
           children: [
-            ExpansionPanelList(
-              expansionCallback: (int index, bool isExpanded) {
-                setState(() {
-                  _isExpanded = isExpanded;
-                });
-              },
-              children: [
-                ExpansionPanel(
-                  headerBuilder: (BuildContext context, bool isExpanded) {
-                    return ListTile(
-                      title: Text(Statics.getLabel('Filters')),
-                    );
-                  },
-                  body: Container(
-                    margin: EdgeInsets.all(20),
-                    child: Column(
-                      children: [
-                        if (_linkedMahaanagar != null)
-                          DropdownButtonFormField(
-                            decoration: InputDecoration(labelText: Statics.getLabel('Mahaanagar')),
-                            isExpanded: true,
-                            value: _linkedMahaanagarValue == "" ? null : _linkedMahaanagarValue,
-                            items: _linkedMahaanagar!
-                                .map((bg) => DropdownMenuItem(
-                                      value: bg.geoUnitID.toString(),
-                                      child: Text(bg.name!),
-                                    ))
-                                .toList(),
-                            onChanged: MyAppGlobals.isDropdownDisabled('Mahaanagar')
-                                ? null
-                                : (value) {
-                                    final selectedItem = _linkedMahaanagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
-                                    setState(() {
-                                      _linkedMahaanagarValue = value.toString();
-                                      _linkedVibhaagValue = null;
-                                      _linkedBhaagValue = null;
-                                      _linkedNagarValue = null;
-                                      populatelinkedVibhaagDropdown(value!.toString());
-                                      mahanagarId = value.toString();
-                                      selctedLevelId = value.toString();
-                                      selctedLevelName = selectedItem.name ?? "";
-                                      selctedLevel = 'Mahanagar';
-                                    });
-                                    print("Selected Id: $value");
-                                    print("Selected Level Name: ${selectedItem.name}");
-                                  },
-                          ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        if (_linkedVibhaag != null)
-                          DropdownButtonFormField(
-                            decoration: InputDecoration(labelText: Statics.getLabel('Vibhaag')),
-                            isExpanded: true,
-                            value: _linkedVibhaagValue == "" ? null : _linkedVibhaagValue,
-                            items: _linkedVibhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                            onChanged: MyAppGlobals.isDropdownDisabled('Vibhaag')
-                                ? null
-                                : (value) {
-                                    final selectedItem = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
-                                    print(value);
-                                    setState(() {
-                                      _linkedVibhaagValue = value.toString();
-                                      populatelinkedBhaagDropdown(value.toString()!);
-                                      vibhagId = value.toString();
-                                      _linkedBhaagValue = _linkedNagarValue = null;
-                                      _linkedBhaag = _linkedNagar = null;
-                                      selctedLevelId = value.toString();
-                                      selctedLevelName = selectedItem.name ?? "";
-                                      selctedLevel = 'Vibhaag';
-                                    });
-                                    print("Selected Id: $value");
-                                    print("Selected Level Name: ${selectedItem.name}");
-                                  },
-                          ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        if (_linkedBhaag != null)
-                          DropdownButtonFormField(
-                            decoration: InputDecoration(labelText: Statics.getLabel('Bhaag')),
-                            isExpanded: true,
-                            value: _linkedBhaagValue == "" ? null : _linkedBhaagValue,
-                            items: _linkedBhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                            onChanged: MyAppGlobals.isDropdownDisabled('Bhaag')
-                                ? null
-                                : (value) {
-                                    final selectedItem = _linkedBhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
-                                    setState(() {
-                                      _linkedBhaagValue = value.toString();
-                                      populatelinkedNagarDropdown(value.toString(), null);
-                                      selctedLevelId = value.toString();
-                                      selctedLevelName = selectedItem.name ?? "";
-                                      selctedLevel = 'Bhaag';
-                                    });
-                                    print("Selected Id: $value");
-                                    print("Selected Level Name: ${selectedItem.name}");
-                                  },
-                          ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        if (_linkedNagar != null && _linkedNagar!.length > 0)
-                          DropdownButtonFormField(
-                            decoration: InputDecoration(labelText: Statics.getLabel('Nagar')),
-                            isExpanded: true,
-                            value: _linkedNagarValue == "" ? null : _linkedNagarValue,
-                            items: _linkedNagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                            onChanged: MyAppGlobals.isDropdownDisabled('Nagar')
-                                ? null
-                                : (value) {
-                                    final selectedItem = _linkedNagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
-                                    setState(() {
-                                      _linkedNagarValue = value.toString();
-                                      populatelinkedVastiDropdown(value!.toString());
-                                      populatelinkedMandalDropdown(false, value.toString());
-                                      selctedLevelId = value.toString();
-                                      selctedLevelName = selectedItem.name ?? "";
-                                      selctedLevel = 'Nagar';
-                                    });
-                                    print("Selected Id: $value");
-                                    print("Selected Level Name: ${selectedItem.name}");
-                                  },
-                          ),
-                        if (_linkedNagar != null && _linkedNagar!.length > 0)
-                          SizedBox(
-                            height: 10,
-                          ),
-                        if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
-                          buildDropdownField(
-                            isDisabled: MyAppGlobals.isDropdownDisabled('Mandal'),
-                            label: Statics.getLabel('upnagarUpkhanda'),
-                            value: _linkedupnagarValue,
-                            items: _linkedupnagar!
-                                .map((bg) => DropdownMenuItem(
-                                      value: bg.geoUnitID.toString(),
-                                      child: Text(bg.name!),
-                                    ))
-                                .toList(),
-                            onChanged: MyAppGlobals.isDropdownDisabled('upnagarUpkhanda')
-                                ? null
-                                : (value) {
-                                    final selectedItem = _linkedupnagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
-                                    setState(() {
-                                      _linkedupnagarValue = value;
-                                      _selectedGeoUnitId = value;
-                                      _selctedLevel = 'upnagarUpkhanda';
-                                      _selctedLevelName = selectedItem.name ?? "";
-                                      populatelinkedVastiDropdown(value!);
-                                      populatelinkedMandalDropdown(true, value);
-                                      // populatelinkedNagarDropdown(null, value);
-                                    });
-                                  },
-                          ),
-                        if (_linkedmandal != null && _linkedmandal!.length > 0)
-                          DropdownButtonFormField(
-                            decoration: InputDecoration(labelText: Statics.getLabel('Mandal')),
-                            isExpanded: true,
-                            value: _linkedMandalValue == "" ? null : _linkedMandalValue,
-                            items: _linkedmandal!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                            onChanged: MyAppGlobals.isDropdownDisabled('Mandal')
-                                ? null
-                                : (value) {
-                                    final selectedItem = _linkedmandal!.firstWhere((bg) => bg.geoUnitID.toString() == value);
-                                    setState(() {
-                                      _linkedMandalValue = value.toString();
-                                      populatelinkedGraamDropdown(value.toString());
-                                      selctedLevelId = value.toString();
-                                      selctedLevelName = selectedItem.name ?? "";
-                                      selctedLevel = 'Mandal';
-                                    });
-                                    print("Selected Id: $value");
-                                    print("Selected Level Name: ${selectedItem.name}");
-                                  },
-                          ),
-                        if (_linkedmandal != null && _linkedmandal!.length > 0)
-                          SizedBox(
-                            height: 10,
-                          ),
-                        if (_linkedgraam != null && _linkedgraam!.length > 0)
-                          DropdownButtonFormField(
-                            decoration: InputDecoration(labelText: Statics.getLabel('Graam')),
-                            isExpanded: true,
-                            value: _linkedgraamValue == "" ? null : _linkedgraamValue,
-                            items: _linkedgraam!
-                                .map((bg) => DropdownMenuItem(
-                                      value: bg.geoUnitID.toString(),
-                                      child: Text(bg.name!),
-                                    ))
-                                .toList(),
-                            onChanged: MyAppGlobals.isDropdownDisabled('Graam')
-                                ? null
-                                : (value) {
-                                    final selectedItem = _linkedgraam!.firstWhere((bg) => bg.geoUnitID.toString() == value);
-                                    setState(() {
-                                      _linkedgraamValue = value.toString(); // D2 me bhi same value aayegi
-                                      selctedLevelId = value.toString();
-                                      selctedLevelName = selectedItem.name ?? "";
-                                      selctedLevel = 'Graam';
-                                    });
-                                    print("D1 Selected Id: $value");
-                                    print("D1 Selected Level Name: ${selectedItem.name}");
-                                  },
-                          ),
-                        if (_linkedvasti != null && _linkedvasti!.length > 0)
-                          SizedBox(
-                            height: 10,
-                          ),
-                        if (_linkedvasti != null && _linkedvasti!.length > 0)
-                          DropdownButtonFormField(
-                            decoration: InputDecoration(labelText: Statics.getLabel('Vasti')),
-                            isExpanded: true,
-                            value: _linkedvastiValue == "" ? null : _linkedvastiValue,
-                            items: _linkedvasti!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                            onChanged: MyAppGlobals.isDropdownDisabled('Vasti')
-                                ? null
-                                : (value) {
-                                    final selectedItem = _linkedvasti!.firstWhere((bg) => bg.geoUnitID.toString() == value);
-                                    setState(() {
-                                      _linkedvastiValue = value.toString();
-                                      selctedLevelId = value.toString();
-                                      selctedLevelName = selectedItem.name ?? "";
-                                      selctedLevel = 'Vasti';
-                                    });
-                                    print("Selected Id: $value");
-                                    print("Selected Level Name: ${selectedItem.name}");
-                                  },
-                          ),
-                        if (_linkedgraam != null && _linkedgraam!.length > 0)
-                          SizedBox(
-                            height: 10,
-                          ),
-                      ],
-                    ),
-                  ),
-                  isExpanded: _isExpanded,
-                ),
-              ],
-            ),
+            vastiGraamDropdown(),
             Container(
               margin: EdgeInsets.all(20),
               child: Column(
@@ -602,8 +403,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
                               englishNameController.clear();
                               viewcontainer = false;
                             });
-                            populatelinkedMahaanagarDropdown();
-                            populatelinkedVibhaagDropdown('');
+                            populateDropdown();
                           },
                           child: Text(Statics.getLabel('clear'))),
                     ],
@@ -620,7 +420,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
                 child: Column(
                   children: [
                     if (_linkedMahaanagar != null)
-                      if (selctedLevel == 'Vibhaag' || selctedLevel == 'Bhaag')
+                      if (_selctedLevel == 'Vibhaag' || _selctedLevel == 'Bhaag')
                         DropdownButtonFormField(
                           decoration: InputDecoration(labelText: Statics.getLabel('Mahaanagar')),
                           isExpanded: true,
@@ -645,7 +445,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
                       height: 10,
                     ),
                     if (_linkedVibhaag != null)
-                      if (selctedLevel == 'Vibhaag' || selctedLevel == 'Mahanagar')
+                      if (_selctedLevel == 'Vibhaag' || _selctedLevel == 'Mahanagar')
                         DropdownButtonFormField(
                           decoration: InputDecoration(labelText: Statics.getLabel('Vibhaag')),
                           isExpanded: true,
@@ -667,7 +467,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
                       height: 10,
                     ),
                     if (_linkedBhaag != null)
-                      if (selctedLevel == 'Bhaag' || selctedLevel == 'Nagar')
+                      if (_selctedLevel == 'Bhaag' || _selctedLevel == 'Nagar')
                         DropdownButtonFormField(
                           decoration: InputDecoration(labelText: Statics.getLabel('Bhaag')),
                           isExpanded: true,
@@ -688,7 +488,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
                       height: 10,
                     ),
                     if (_linkedNagar != null && _linkedNagar!.length > 0)
-                      if (selctedLevel == 'Nagar' || selctedLevel == 'Vasti' || selctedLevel == 'Mandal')
+                      if (_selctedLevel == 'Nagar' || _selctedLevel == 'Vasti' || _selctedLevel == 'Mandal')
                         DropdownButtonFormField(
                           decoration: InputDecoration(labelText: Statics.getLabel('Nagar')),
                           isExpanded: true,
@@ -709,7 +509,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
                       height: 10,
                     ),
                     if (_linkedvasti != null && _linkedvasti!.length > 0)
-                      if (selctedLevel == 'Vasti')
+                      if (_selctedLevel == 'Vasti')
                         DropdownButtonFormField(
                           decoration: InputDecoration(labelText: Statics.getLabel('Vasti')),
                           isExpanded: true,
@@ -730,7 +530,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
                       height: 10,
                     ),
                     if (_linkedmandal != null && _linkedmandal!.length > 0)
-                      if (selctedLevel == 'Mandal' || selctedLevel == 'Graam')
+                      if (_selctedLevel == 'Mandal' || _selctedLevel == 'Graam')
                         DropdownButtonFormField(
                           decoration: InputDecoration(labelText: Statics.getLabel('Mandal')),
                           isExpanded: true,
@@ -751,7 +551,7 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
                       height: 10,
                     ),
                     if (_linkedgraam != null && _linkedgraam!.length > 0)
-                      if (selctedLevel == 'Graam')
+                      if (_selctedLevel == 'Graam')
                         DropdownButtonFormField(
                           decoration: InputDecoration(labelText: Statics.getLabel('Graam')),
                           isExpanded: true,
@@ -850,6 +650,238 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
           ],
         )),
       ),
+    );
+  }
+
+  Widget vastiGraamDropdown() {
+    return ExpansionPanelList(
+      expansionCallback: (int index, bool isExpanded) {
+        setState(() {
+          _isExpanded = isExpanded;
+        });
+      },
+      children: [
+        ExpansionPanel(
+          headerBuilder: (BuildContext context, bool isExpanded) {
+            return ListTile(
+              title: Text(Statics.getLabel('Filters')),
+            );
+          },
+          body: Container(
+            margin: EdgeInsets.all(20),
+            child: Column(
+              spacing: 10,
+              children: [
+                if (_linkedMahaanagar != null)
+                  buildDropdownField(
+                    isDisabled: ((userLevelId ?? 0) < 9 || userLevelId == 13),
+                    label: Statics.getLabel('Mahaanagar'),
+                    value: _linkedMahaanagarValue,
+                    items: _linkedMahaanagar!
+                        .map((bg) => DropdownMenuItem(
+                              value: bg.geoUnitID.toString(),
+                              child: Text(bg.name!),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      final selectedItem = _linkedMahaanagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                      setState(() {
+                        _linkedMahaanagarValue = value.toString();
+                        _linkedVibhaagValue = null;
+                        _linkedBhaagValue = null;
+                        _linkedNagarValue = null;
+                        populatelinkedVibhaagDropdown(value!.toString());
+                        mahanagarId = value.toString();
+                        _selectedGeoUnitId = value.toString();
+                        selctedLevelName = selectedItem.name ?? "";
+                        _selctedLevel = 'Mahanagar';
+                      });
+                      print("Selected Id: $value");
+                      print("Selected Level Name: ${selectedItem.name}");
+                    },
+                  ),
+                if (_linkedVibhaag != null)
+                  buildDropdownField(
+                    isDisabled: ((userLevelId ?? 0) < 8 || userLevelId == 13),
+                    label: Statics.getLabel('Vibhaag'),
+                    value: _linkedVibhaagValue,
+                    items: _linkedVibhaag!
+                        .map((bg) => DropdownMenuItem(
+                              value: bg.geoUnitID.toString(),
+                              child: Text(bg.name!),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      final selectedItem = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                      print(value);
+                      setState(() {
+                        _linkedVibhaagValue = value.toString();
+                        populatelinkedBhaagDropdown(value.toString()!);
+                        vibhagId = value.toString();
+                        _linkedBhaagValue = _linkedNagarValue = null;
+                        _linkedBhaag = _linkedNagar = null;
+                        _selectedGeoUnitId = value.toString();
+                        selctedLevelName = selectedItem.name ?? "";
+                        _selctedLevel = 'Vibhaag';
+                      });
+                      print("Selected Id: $value");
+                      print("Selected Level Name: ${selectedItem.name}");
+                    },
+                  ),
+                if (_linkedBhaag != null)
+                  buildDropdownField(
+                    isDisabled: ((userLevelId ?? 0) < 7 || userLevelId == 13),
+                    label: Statics.getLabel('Bhaag'),
+                    value: _linkedBhaagValue,
+                    items: _linkedBhaag!
+                        .map((bg) => DropdownMenuItem(
+                              value: bg.geoUnitID.toString(),
+                              child: Text(bg.name!),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      final selectedItem = _linkedBhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                      setState(() {
+                        _linkedBhaagValue = value.toString();
+                        populatelinkedNagarDropdown(value.toString(), null);
+                        _selectedGeoUnitId = value.toString();
+                        selctedLevelName = selectedItem.name ?? "";
+                        _selctedLevel = 'Bhaag';
+                      });
+                      print("Selected Id: $value");
+                      print("Selected Level Name: ${selectedItem.name}");
+                    },
+                  ),
+                if (_linkedNagar != null && _linkedNagar!.length > 0)
+                  buildDropdownField(
+                    isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
+                    label: Statics.getLabel('Nagar'),
+                    value: _linkedNagarValue,
+                    items: _linkedNagar!
+                        .map((bg) => DropdownMenuItem(
+                              value: bg.geoUnitID.toString(),
+                              child: Text(bg.name!),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      final selectedItem = _linkedNagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                      setState(() {
+                        _linkedNagarValue = value.toString();
+                        _selectedGeoUnitId = value.toString();
+                        selctedLevelName = selectedItem.name ?? "";
+                        _selctedLevel = 'Nagar';
+                      });
+                      populatelinkedUpnagarDropdown(value!.toString());
+                      populatelinkedVastiDropdown(false, value!.toString());
+                      populatelinkedMandalDropdown(false, value.toString());
+                      print("Selected Id: $value");
+                      print("Selected Level Name: ${selectedItem.name}");
+                    },
+                  ),
+                if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
+                  buildDropdownField(
+                    isDisabled: MyAppGlobals.isDropdownDisabled('Mandal'),
+                    label: Statics.getLabel('upnagarUpkhanda'),
+                    value: _linkedupnagarValue,
+                    items: _linkedupnagar!
+                        .map((bg) => DropdownMenuItem(
+                              value: bg.geoUnitID.toString(),
+                              child: Text(bg.name!),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      final selectedItem = _linkedupnagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                      setState(() {
+                        _linkedupnagarValue = value;
+                        _selectedGeoUnitId = value;
+                        _selctedLevel = 'upnagarUpkhanda';
+                        _selctedLevelName = selectedItem.name ?? "";
+                        // populatelinkedNagarDropdown(null, value);
+                      });
+                      populatelinkedVastiDropdown(true, value!);
+                      populatelinkedMandalDropdown(true, value);
+                    },
+                  ),
+                if (_linkedmandal != null && _linkedmandal!.length > 0)
+                  buildDropdownField(
+                    isDisabled: ((userLevelId ?? 0) < 4),
+                    label: Statics.getLabel('Mandal'),
+                    value: _linkedMandalValue,
+                    items: _linkedmandal!
+                        .map((bg) => DropdownMenuItem(
+                              value: bg.geoUnitID.toString(),
+                              child: Text(bg.name!),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      final selectedItem = _linkedmandal!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                      setState(() {
+                        _linkedMandalValue = value.toString();
+                        populatelinkedGraamDropdown(value.toString());
+                        _selectedGeoUnitId = value.toString();
+                        selctedLevelName = selectedItem.name ?? "";
+                        _selctedLevel = 'Mandal';
+                      });
+                      print("Selected Id: $value");
+                      print("Selected Level Name: ${selectedItem.name}");
+                    },
+                  ),
+                if (_linkedgraam != null && _linkedgraam!.length > 0)
+                  buildDropdownField(
+                    isDisabled: ((userLevelId ?? 0) < 3),
+                    label: Statics.getLabel('Graam'),
+                    value: _linkedgraamValue,
+                    items: _linkedgraam!
+                        .map((bg) => DropdownMenuItem(
+                              value: bg.geoUnitID.toString(),
+                              child: Text(bg.name!),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      final selectedItem = _linkedgraam!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                      setState(() {
+                        _linkedgraamValue = value.toString(); // D2 me bhi same value aayegi
+                        _selectedGeoUnitId = value.toString();
+                        selctedLevelName = selectedItem.name ?? "";
+                        _selctedLevel = 'Graam';
+                      });
+                      print("D1 Selected Id: $value");
+                      print("D1 Selected Level Name: ${selectedItem.name}");
+                    },
+                  ),
+                if (_linkedvasti != null && _linkedvasti!.length > 0)
+                  buildDropdownField(
+                    isDisabled: ((userLevelId ?? 0) < 2),
+                    label: Statics.getLabel('Vasti'),
+                    value: _linkedvastiValue,
+                    items: _linkedvasti!
+                        .map((bg) => DropdownMenuItem(
+                              value: bg.geoUnitID.toString(),
+                              child: Text(bg.name!),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      final selectedItem = _linkedvasti!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                      setState(() {
+                        _linkedvastiValue = value.toString();
+                        _selectedGeoUnitId = value.toString();
+                        selctedLevelName = selectedItem.name ?? "";
+                        _selctedLevel = 'Vasti';
+                      });
+                      print("Selected Id: $value");
+                      print("Selected Level Name: ${selectedItem.name}");
+                    },
+                  ),
+                if (_linkedgraam != null && _linkedgraam!.length > 0)
+                  SizedBox(
+                    height: 10,
+                  ),
+              ],
+            ),
+          ),
+          isExpanded: _isExpanded,
+        ),
+      ],
     );
   }
 }

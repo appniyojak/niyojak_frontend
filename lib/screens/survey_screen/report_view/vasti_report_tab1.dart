@@ -889,10 +889,10 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                         child: Column(
                           children: [
                             if (_linkedMahaanagar != null)
-                              DropdownButtonFormField(
-                                decoration: InputDecoration(labelText: "${Statics.getLabel('mahaanagar')}"),
-                                isExpanded: true,
-                                value: _linkedMahaanagarValue == "" ? null : _linkedMahaanagarValue,
+                              buildDropdownField(
+                                isDisabled: ((userLevelId ?? 0) < 9 || userLevelId == 13),
+                                label: Statics.getLabel('Mahaanagar'),
+                                value: _linkedMahaanagarValue,
                                 items: _linkedMahaanagar!
                                     .map((bg) => DropdownMenuItem(
                                           value: bg.geoUnitID.toString(),
@@ -910,7 +910,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                     mahanagarId = value;
                                     _selectedGeoUnitId = value;
                                     selctedLevelName = selectedItem.name ?? "";
-                                    selctedLevel = 'mahanagar';
+                                    selctedLevel = 'Mahaanagar';
                                   });
                                   print("Selected Id: $value");
                                   print("Selected Level Name: ${selectedItem.name}");
@@ -920,11 +920,16 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                               height: 10,
                             ),
                             if (_linkedVibhaag != null)
-                              DropdownButtonFormField(
-                                decoration: InputDecoration(labelText: "${Statics.getLabel('vibhaag')}"),
-                                isExpanded: true,
-                                value: _linkedVibhaagValue == "" ? null : _linkedVibhaagValue,
-                                items: _linkedVibhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                              buildDropdownField(
+                                isDisabled: ((userLevelId ?? 0) < 8 || userLevelId == 13),
+                                label: Statics.getLabel('Vibhaag'),
+                                value: _linkedVibhaagValue,
+                                items: _linkedVibhaag!
+                                    .map((bg) => DropdownMenuItem(
+                                          value: bg.geoUnitID.toString(),
+                                          child: Text(bg.name!),
+                                        ))
+                                    .toList(),
                                 onChanged: (value) {
                                   final selectedItem = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                                   print(value);
@@ -936,7 +941,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                     _linkedBhaag = _linkedNagar = null;
                                     _selectedGeoUnitId = value;
                                     selctedLevelName = selectedItem.name ?? "";
-                                    selctedLevel = 'vibhag';
+                                    selctedLevel = 'Vibhaag';
                                   });
                                   print("Selected Id: $value");
                                   print("Selected Level Name: ${selectedItem.name}");
@@ -946,11 +951,16 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                               height: 10,
                             ),
                             if (_linkedBhaag != null)
-                              DropdownButtonFormField(
-                                decoration: InputDecoration(labelText: "${Statics.getLabel('BhaagKaaryakartaaCount')}"),
-                                isExpanded: true,
-                                value: _linkedBhaagValue == "" ? null : _linkedBhaagValue,
-                                items: _linkedBhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                              buildDropdownField(
+                                isDisabled: ((userLevelId ?? 0) < 7 || userLevelId == 13),
+                                label: Statics.getLabel('Bhaag'),
+                                value: _linkedBhaagValue,
+                                items: _linkedBhaag!
+                                    .map((bg) => DropdownMenuItem(
+                                          value: bg.geoUnitID.toString(),
+                                          child: Text(bg.name!),
+                                        ))
+                                    .toList(),
                                 onChanged: (value) {
                                   final selectedItem = _linkedBhaag!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                                   setState(() {
@@ -958,7 +968,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                     populatelinkedNagarDropdown(value, null);
                                     _selectedGeoUnitId = value;
                                     selctedLevelName = selectedItem.name ?? "";
-                                    selctedLevel = 'bhag';
+                                    selctedLevel = 'Bhaag';
                                   });
                                   print("Selected Id: $value");
                                   print("Selected Level Name: ${selectedItem.name}");
@@ -968,11 +978,16 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                               height: 10,
                             ),
                             if (_linkedNagar != null && _linkedNagar!.length > 0)
-                              DropdownButtonFormField(
-                                decoration: InputDecoration(labelText: "${Statics.getLabel('Nagar')}"),
-                                isExpanded: true,
-                                value: _linkedNagarValue == "" ? null : _linkedNagarValue,
-                                items: _linkedNagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                              buildDropdownField(
+                                isDisabled: ((userLevelId ?? 0) < 7 || userLevelId == 13),
+                                label: Statics.getLabel('Nagar'),
+                                value: _linkedNagarValue,
+                                items: _linkedNagar!
+                                    .map((bg) => DropdownMenuItem(
+                                          value: bg.geoUnitID.toString(),
+                                          child: Text(bg.name!),
+                                        ))
+                                    .toList(),
                                 onChanged: (value) {
                                   final selectedItem = _linkedNagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                                   setState(() {
@@ -980,7 +995,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
                                     // populatelinkedVastiDropdown(value!);
                                     _selectedGeoUnitId = value;
                                     selctedLevelName = selectedItem.name ?? "";
-                                    selctedLevel = 'nagar';
+                                    selctedLevel = 'Nagar';
                                   });
                                   print("Selected Id: $value");
                                   print("Selected Level Name: ${selectedItem.name}");

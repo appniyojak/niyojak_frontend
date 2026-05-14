@@ -633,7 +633,6 @@ class _PramukhJansanvadFormTabState extends State<PramukhJansanvadFormTab> with 
               child: Column(
                 children: [
                   buildDropdownField(
-                    // ignoring: dateController.text.isEmpty || (baithakId != null && baithakId != 0),
                     label: Statics.getLabel('selectStar'),
                     value: _selectedKaryakramLevelId == null ? null : _selectedKaryakramLevelId.toString(),
                     items: karyakramLevelsList
@@ -653,7 +652,6 @@ class _PramukhJansanvadFormTabState extends State<PramukhJansanvadFormTab> with 
                       await getKendraListData();
                       await populateDropdown();
                     },
-                    isDisabled: false,
                   ),
                   SizedBox(height: 18),
                   nagarDropdown(),
@@ -1755,7 +1753,7 @@ class _PramukhJansanvadFormTabState extends State<PramukhJansanvadFormTab> with 
                 populatelinkedVibhaagDropdown(value!);
                 populatelinkedBhaagDropdown("");
               },
-              isDisabled: false,
+              isDisabled: ((userLevelId ?? 0) < 9 || userLevelId == 13),
             ),
           if (_linkedVibhaag != null)
             buildDropdownField(
@@ -1778,7 +1776,7 @@ class _PramukhJansanvadFormTabState extends State<PramukhJansanvadFormTab> with 
                 });
                 populatelinkedBhaagDropdown(value!);
               },
-              isDisabled: false,
+              isDisabled: ((userLevelId ?? 0) < 8 || userLevelId == 13),
             ),
           if (_linkedbhaag != null && _linkedbhaag!.isNotEmpty)
             buildDropdownField(
@@ -1802,7 +1800,7 @@ class _PramukhJansanvadFormTabState extends State<PramukhJansanvadFormTab> with 
                   populatelinkedNagarDropdown(value);
                 });
               },
-              isDisabled: false,
+              isDisabled: ((userLevelId ?? 0) < 7 || userLevelId == 13),
             ),
           if ([5, 6, 7].contains(_selectedKaryakramLevelId) && _linkednagar != null && _linkednagar!.isNotEmpty)
             buildDropdownField(
@@ -1827,7 +1825,7 @@ class _PramukhJansanvadFormTabState extends State<PramukhJansanvadFormTab> with 
                   // populatelinkedVastiDropdown('Nagar', value);
                 });
               },
-              isDisabled: false,
+              isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
             ),
           if ([6, 7].contains(_selectedKaryakramLevelId) && _linkedupnagar != null && _linkedupnagar!.isNotEmpty)
             buildDropdownField(
@@ -1851,7 +1849,7 @@ class _PramukhJansanvadFormTabState extends State<PramukhJansanvadFormTab> with 
                   // populatelinkedVastiDropdown('Upnagar', value);
                 });
               },
-              isDisabled: false,
+              isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
             ),
           if ([7].contains(_selectedKaryakramLevelId) && _linkedmandal != null && _linkedmandal!.isNotEmpty)
             buildDropdownField(
@@ -1874,7 +1872,7 @@ class _PramukhJansanvadFormTabState extends State<PramukhJansanvadFormTab> with 
                   // populatelinkedGraamDropdown(value);
                 });
               },
-              isDisabled: false,
+              isDisabled: ((userLevelId ?? 0) < 4),
             ),
           // if (_linkedgraam != null && _linkedgraam!.isNotEmpty)
           //   _buildDropdownField(
