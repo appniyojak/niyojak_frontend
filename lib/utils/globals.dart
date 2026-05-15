@@ -22,6 +22,8 @@ int? userparentUpanagarid;
 int? userparentMandalid;
 int? userParentGramid;
 int? userParentVastiid;
+int? isuservasti;
+int? isusermandal;
 
 GeoSelection prepareSelection(DropDownModel dm) {
   return GeoSelection(
@@ -72,14 +74,29 @@ List<Map<String, dynamic>> getFilteredKaryakramLevels(int levelId, {bool isSadbh
   switch (levelId) {
     case 7:
       allowedIds = [1, if (isSadbhav) 2, if (isSadbhav) 3, 4, 5, 6, 7];
+
+      // if only Vasti is enabled -> exclude 4
+      if (isusermandal == 0) {
+        allowedIds.remove(7);
+      }
       break;
 
     case 6:
       allowedIds = [5, 6, 7];
+
+      // if only Vasti is enabled -> exclude 4
+      if (isusermandal == 0) {
+        allowedIds.remove(7);
+      }
       break;
 
     case 13:
       allowedIds = [6, 7];
+
+      // if only Vasti is enabled -> exclude 4
+      if (isusermandal == 0) {
+        allowedIds.remove(7);
+      }
       break;
 
     case 4:
@@ -87,8 +104,17 @@ List<Map<String, dynamic>> getFilteredKaryakramLevels(int levelId, {bool isSadbh
       break;
 
     default:
-      if (isSadbhav) karyakramLevelsListForSadbhav;
-      return karyakramLevelsList;
+      // Default logic
+      allowedIds = [1, if (isSadbhav) 2, if (isSadbhav) 3, 4, 5, 6, 7];
+
+      // if only Vasti is enabled -> exclude 4
+      if (isusermandal == 0) {
+        allowedIds.remove(7);
+      }
+
+      // if both are 1 -> include both
+      // no changes needed
+      break;
   }
 
   return allowedIds.map((id) {
@@ -171,7 +197,7 @@ class MyAppGlobals {
   }
 
   static Future<DropDownModel> getLevelLDB() async {
-    var result = await DatabaseHelper.getData("Select * from DaayitwaLevelMaster;");
+    var result = await DatabaseHelper.getData("Select * from DropdownLevelMaster;");
     var ddmodel;
     if (result.isNotEmpty) {
       ddmodel = DropDownModel.fromJson(result.first);

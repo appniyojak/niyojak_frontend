@@ -1432,8 +1432,8 @@ class _AddSajjanAnyaPrakukhJanScreenState extends State<AddSajjanAnyaPrakukhJanS
                   _selctedLevel = Statics.getLabel('Mandal');
                   _selctedLevelName = selectedItem.name ?? "";
                   _linkedmandalName = selectedItem.name ?? "";
-                  populatelinkedGraamDropdown(value);
                 });
+                populatelinkedGraamDropdown(value);
               },
               isDisabled: ((userLevelId ?? 0) < 4),
             ),

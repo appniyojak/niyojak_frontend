@@ -125,10 +125,35 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
 
       case 13:
         allowedIds = [2, 4, 13];
+
+        // if only Vasti is enabled -> exclude 4
+        if (isuservasti == 1 && isusermandal != 1) {
+          allowedIds.remove(4);
+        }
+
+        // if only Mandal is enabled -> exclude 2
+        else if (isusermandal == 1 && isuservasti != 1) {
+          allowedIds.remove(2);
+        }
         break;
 
       default:
-        return utsavKontyaStaravarList;
+        // Default logic
+        allowedIds = [2, 4, 13, 6];
+
+        // if only Vasti is enabled -> exclude 4
+        if (isuservasti == 1 && isusermandal != 1) {
+          allowedIds.remove(4);
+        }
+
+        // if only Mandal is enabled -> exclude 2
+        else if (isusermandal == 1 && isuservasti != 1) {
+          allowedIds.remove(2);
+        }
+
+        // if both are 1 -> include both
+        // no changes needed
+        break;
     }
 
     return allowedIds.map((id) {
@@ -144,12 +169,14 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       userLevelId = dm.levelID;
       userGeoUnitId = dm.geoUnitID;
       ddm = dm;
+      isuservasti = dm.isvasti;
+      isusermandal = dm.ismandal;
     });
-    await populateDropdown();
     _getInitialData();
     setState(() {
       utsavKontyaStaravarList = getFilteredLevels(dm.levelID ?? 0);
     });
+    await populateDropdown();
   }
 
   Future<void> populateAllDropdowns(int level, DropDownModel dm, {bool fromManual = false}) async {
@@ -210,6 +237,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     if (selection.upnagar != null && selection.upnagar!.isNotEmpty) {
       _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? 0).toString() : selection.upnagar) ?? _linkedupnagarValue;
       if (level == 13) {
+        _selectedGeoUnitId = (dm.geoUnitID ?? selection.upnagar).toString();
         if (!fromManual) {
           utsavKontyaStaravar = "13";
           selctedLevelId = "13";
@@ -217,8 +245,6 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
         selectedUpnagarList = [];
         data = await Statics.getVijayadashamiInitData(context, Statics.userDetails["userID"], _selectedGeoUnitId, selctedLevel == 'Nagar' ? "6" : utsavKontyaStaravar);
         log("searchVijayaDashami data ${jsonDecode(jsonEncode(data))}");
-        selectedPrabhavi = null;
-        selectedPerson = null;
         setState(() {
           _linkedUpnagar = data?.upnagarmandallist ?? [];
         });
@@ -247,6 +273,8 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
             ),
           );
         }
+        selectedUpnagarList = [(dm.geoUnitID ?? dm.parentUpaNagarID)];
+        _linkedUpnagar?.removeWhere((e) => e.geoUnitID != (dm.geoUnitID ?? dm.parentUpaNagarID));
 
         return;
       }
@@ -2360,7 +2388,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     );
   }
 
-  String? utsavKontyaStaravar = "6";
+  String? utsavKontyaStaravar = "";
   List<Map<String, String>> utsavKontyaStaravarList = [
     {"2": "${Statics.getLabel('SelectVasti')}"},
     {"4": "${Statics.getLabel('Mandal')}"},
@@ -2417,11 +2445,12 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed(VijayadashamiFormReport.routeName);
-              },
-              icon: Icon(Icons.document_scanner_outlined))
+          if ((userLevelId ?? 0) >= 6 && (userLevelId ?? 0) < 13)
+            IconButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(VijayadashamiFormReport.routeName);
+                },
+                icon: Icon(Icons.document_scanner_outlined))
         ],
       ),
       drawer: AppDrawer(),
@@ -3767,6 +3796,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
 
                                 _linkedNagarValue = value;
                               });
+                              // await populatelinkedUpnagarDropdown(value);
                               data = await Statics.getVijayadashamiInitData(context, Statics.userDetails["userID"], _selectedGeoUnitId, selctedLevel == 'Nagar' ? "6" : utsavKontyaStaravar);
                               log("searchVijayaDashami data ${jsonDecode(jsonEncode(data))}");
                               selectedPrabhavi = null;
@@ -3863,6 +3893,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                         print("valueeeeeeeesssss >>>>>>>>>>>>>>> $values");
                         // if (selectedUpnagarList.contains(values)) {
                         selctedLevel = 'upnagarUpkhanda';
+                        if (selectedUpnagarList.isNotEmpty) selctedLevelId = "13";
                         selctedLevelName = _linkedUpnagar!.where((upnagar) => selectedUpnagarList.contains(upnagar.geoUnitID)).map((upnagar) => upnagar.preferedname).toList().join(",");
                         //   selectedUpnagarList.add(bg);
                         // } else {

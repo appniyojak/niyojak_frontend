@@ -1372,7 +1372,7 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
               isDisabled: false,
             ),
 
-          if (_levelValue != null && (_linkedupnagar != null && _linkedupnagar!.isNotEmpty))
+          if (_levelValue != null && (_levelValue == 13) && (_linkedupnagar != null && _linkedupnagar!.isNotEmpty))
             buildDropdownField(
               label: Statics.getLabel('upnagarUpkhanda'),
               value: _linkedupnagarValue,

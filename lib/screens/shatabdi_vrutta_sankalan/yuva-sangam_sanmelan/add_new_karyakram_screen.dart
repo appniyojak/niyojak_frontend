@@ -365,7 +365,7 @@ class _AddNewKaryakramScreenState extends State<AddNewKaryakramScreen> {
       _linkedVibhaagValue = _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
     });
     // clearForm();
-    await populateDropdown();
+    await initData();
   }
 
   //////////////////////////////////////////////////////////////////////////////////////
@@ -492,7 +492,7 @@ class _AddNewKaryakramScreenState extends State<AddNewKaryakramScreen> {
     nagarList = [];
     var mnDD;
     if (_selectedKaryakramLevelId == 7) {
-      mnDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Upnagar', '');
+      mnDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
     } else if (_selectedKaryakramLevelId == 6) {
       mnDD = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
     } else {

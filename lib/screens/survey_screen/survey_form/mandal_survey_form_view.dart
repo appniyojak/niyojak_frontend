@@ -484,7 +484,7 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
     // Step 5: Upnagar (conditional)
     await populatelinkedUpnagarDropdown(_linkedNagarValue);
     if (selection.upnagar != null && selection.upnagar!.isNotEmpty) {
-      _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? "").toString() : selection.upnagar) ?? '';
+      _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? dm.parentUpaNagarID).toString() : selection.upnagar) ?? '';
       if (level == 13) {
         _selectedGeoUnitId = (dm.geoUnitID ?? selection.upnagar).toString();
         selctedLevel = 'Upnagar';
@@ -5092,12 +5092,12 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                         final selectedItem = _linkedNagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
                         setState(() {
                           _linkedNagarValue = value;
-                          populatelinkedUpnagarDropdown(value);
-                          populatelinkedMandalDropdown(false, value);
                           _selectedGeoUnitId = value;
                           selctedLevelName = selectedItem.name ?? "";
                           selctedLevel = 'Nagar';
                         });
+                        populatelinkedUpnagarDropdown(value);
+                        populatelinkedMandalDropdown(false, value);
                         print("Selected Id: $value");
                         print("Selected Level Name: ${selectedItem.name}");
                       },
@@ -5121,7 +5121,6 @@ class _MandalSurveyFormScreenState extends State<MandalSurveyFormScreen> with Si
                           selctedLevelName = selectedItem.name ?? "";
                           selctedLevel = 'upnagarUpkhanda';
                         });
-                        populatelinkedUpnagarDropdown(value);
                         populatelinkedMandalDropdown(false, value);
                         print("Selected Id: $value");
                         print("Selected Level Name: ${selectedItem.name}");

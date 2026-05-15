@@ -9,6 +9,8 @@ class DropDownModel {
   int? parentMandalID;
   int? parentGraamID;
   int? parentVastiID;
+  int? isvasti;
+  int? ismandal;
 
   DropDownModel(
       {this.levelID,
@@ -20,7 +22,9 @@ class DropDownModel {
       this.parentUpaNagarID,
       this.parentMandalID,
       this.parentGraamID,
-      this.parentVastiID});
+      this.parentVastiID,
+      this.isvasti,
+      this.ismandal});
 
   DropDownModel.fromJson(Map<String, dynamic> json) {
     levelID = json['LevelID'];
@@ -33,6 +37,8 @@ class DropDownModel {
     parentMandalID = json['ParentMandalID'];
     parentGraamID = json['ParentGraamID'];
     parentVastiID = json['ParentVastiID'];
+    isvasti = json['isvasti'];
+    ismandal = json['ismandal'];
   }
 
   Map<String, dynamic> toJson() {
@@ -47,6 +53,8 @@ class DropDownModel {
     data['ParentMandalID'] = this.parentMandalID;
     data['ParentGraamID'] = this.parentGraamID;
     data['ParentVastiID'] = this.parentVastiID;
+    data['isvasti'] = this.isvasti;
+    data['ismandal'] = this.ismandal;
     return data;
   }
 }

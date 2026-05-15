@@ -116,8 +116,8 @@ class DatabaseHelper {
           '   ParentVibhaagID INT, ParentBhaagID INT, ParentNagarID INT, ParentShaharID INT, ' +
           '   ParentMandalID INT, ParentVastiID INT, ParentGraamID INT, isAbhiyaan BOOL)');
 
-      db.execute('CREATE TABLE DaayitwaLevelMaster(LevelID INT,GeoUnitID INT,ParentMahaanagarID INT,ParentVibhaagID INT,ParentBhaagID INT,' +
-          'ParentNagarID INT,ParentUpaNagarID INT,ParentMandalID INT,ParentGraamID INT,ParentVastiID INT)');
+      db.execute('CREATE TABLE DropdownLevelMaster(LevelID INT,GeoUnitID INT,ParentMahaanagarID INT,ParentVibhaagID INT,ParentBhaagID INT,' +
+          'ParentNagarID INT,ParentUpaNagarID INT,ParentMandalID INT,ParentGraamID INT,ParentVastiID INT,isvasti INT,ismandal INT)');
     });
     return database;
   }
@@ -575,15 +575,15 @@ class DatabaseHelper {
             dataList['Notificationcount'].toString() +
             ')';
         //}
-      } else if (tableName == 'DaayitwaLevelMaster') {
+      } else if (tableName == 'DropdownLevelMaster') {
         // Record not found, then insert
         try {
           cnt = cnt + 1;
           sqlStr = sqlStr +
               (cnt == 1
-                  ? 'INSERT INTO DaayitwaLevelMaster( LevelID, GeoUnitID,	ParentMahaanagarID,	ParentVibhaagID,	' +
+                  ? 'INSERT INTO DropdownLevelMaster( LevelID, GeoUnitID,	ParentMahaanagarID,	ParentVibhaagID,	' +
                       '	ParentBhaagID,	 ParentNagarID,	ParentUpaNagarID,	ParentMandalID,	' +
-                      '	ParentGraamID,	ParentVastiID) VALUES  '
+                      '	ParentGraamID,	ParentVastiID,	isvasti,	ismandal) VALUES  '
                   : ',') +
               '(' +
               dataList['LevelID'].toString() +
@@ -605,6 +605,10 @@ class DatabaseHelper {
               dataList['ParentGraamID'].toString() +
               ',' +
               dataList['ParentVastiID'].toString() +
+              ',' +
+              dataList['isvasti'].toString() +
+              ',' +
+              dataList['ismandal'].toString() +
               ');';
         } on Exception catch (e) {
           print(" -- DB Exception --  $e");
@@ -1136,12 +1140,12 @@ class DatabaseHelper {
           ',' +
           data['Notificationcount'].toString() +
           ');';
-    } else if (tableName == 'DaayitwaLevelMaster') {
+    } else if (tableName == 'DropdownLevelMaster') {
       // Record not found, then insert
       try {
-        sqlStr = 'INSERT INTO DaayitwaLevelMaster( LevelID, GeoUnitID,	ParentMahaanagarID,	ParentVibhaagID,	' +
+        sqlStr = 'INSERT INTO DropdownLevelMaster( LevelID, GeoUnitID,	ParentMahaanagarID,	ParentVibhaagID,	' +
             '	ParentBhaagID,	 ParentNagarID,	ParentUpaNagarID,	ParentMandalID,	' +
-            '	ParentGraamID,	ParentVastiID) VALUES (' +
+            '	ParentGraamID,	ParentVastiID,	isvasti,	ismandal) VALUES (' +
             data['LevelID'].toString() +
             ',' +
             data['GeoUnitID'].toString() +
@@ -1161,6 +1165,10 @@ class DatabaseHelper {
             data['ParentGraamID'].toString() +
             ',' +
             data['ParentVastiID'].toString() +
+            ',' +
+            data['isvasti'].toString() +
+            ',' +
+            data['ismandal'].toString() +
             ');';
       } on Exception catch (e) {
         print("exception$e");

@@ -247,7 +247,7 @@ class LogIn {
       if (dataList != null) {
         print("usrLogIn 16.5");
 
-        await dbh.DatabaseHelper.reCreate('DaayitwaLevelMaster', dataList);
+        await dbh.DatabaseHelper.reCreate('DropdownLevelMaster', dataList);
       }
 
       dataList = body['LogInData']['GatividhiMasterList'];

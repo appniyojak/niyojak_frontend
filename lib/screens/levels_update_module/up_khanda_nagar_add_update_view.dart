@@ -781,15 +781,9 @@ class _UpNagarkhandaAddUpdateViewState extends State<UpNagarkhandaAddUpdateView>
                                 //     Colors.purpleAccent.withOpacity(0.7),
                                 borderRadius: BorderRadius.circular(15)),
                             child: Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(width: 5),
-                                  Text(
-                                    "${Statics.getLabel('addVasti')}",
-                                    style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold),
-                                  ),
-                                ],
+                              child: Text(
+                                "${Statics.getLabel('addVasti')}",
+                                style: TextStyle(color: Colors.purpleAccent, fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),

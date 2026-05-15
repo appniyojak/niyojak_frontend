@@ -148,7 +148,7 @@ class NiyojakAppState extends State<NiyojakApp> {
         requiresDeviceIdle: false,
         requiredNetworkType: NetworkType.NONE,
       ),
-      (String taskId) async {
+          (String taskId) async {
         print("Background Event: $taskId at ${DateTime.now()}");
         BackgroundFetch.finish(taskId);
       },
@@ -232,7 +232,7 @@ class NiyojakAppState extends State<NiyojakApp> {
 
   Future<void> _showNotification(RemoteNotification notification) async {
     const AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails('channel_id', 'channel_name', channelDescription: 'channel_description', importance: Importance.high, priority: Priority.high, showWhen: false);
+    AndroidNotificationDetails('channel_id', 'channel_name', channelDescription: 'channel_description', importance: Importance.high, priority: Priority.high, showWhen: false);
     const NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
     await flutterLocalNotificationsPlugin.show(
       notification.hashCode,
@@ -272,15 +272,16 @@ class NiyojakAppState extends State<NiyojakApp> {
                 fontFamily: 'Lato',
                 visualDensity: VisualDensity.adaptivePlatformDensity,
               ),
-              builder: (c, child) => SafeArea(
-                top: false,
-                child: GestureDetector(
-                  onTap: () {
-                    FocusScope.of(context).unfocus();
-                  },
-                  child: child,
-                ),
-              ),
+              builder: (c, child) =>
+                  SafeArea(
+                    top: false,
+                    child: GestureDetector(
+                      onTap: () {
+                        FocusScope.of(context).unfocus();
+                      },
+                      child: child,
+                    ),
+                  ),
               home: SplashScreenCheck(),
               routes: {
                 LogInScreen.routeName: (ctx) => LogInScreen(),
@@ -376,12 +377,15 @@ class NiyojakAppState extends State<NiyojakApp> {
             ),
             if (Statics.isDevelopment)
               Positioned(
-                top: MediaQuery.of(context).size.height * 0.04,
+                top: MediaQuery
+                    .of(context)
+                    .size
+                    .height * 0.04,
                 right: 0,
                 child: Container(
                   decoration: BoxDecoration(borderRadius: const BorderRadius.horizontal(left: Radius.circular(5)), color: Colors.red.withValues(alpha: 0.7)),
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  child: Text("Dev - 1.0.4 ", style: const TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w600)),
+                  child: Text("Dev - 1.0.6 ", style: const TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w600)),
                 ),
               ),
           ],

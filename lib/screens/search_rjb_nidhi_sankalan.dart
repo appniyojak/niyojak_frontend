@@ -754,6 +754,8 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
                                   _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedvastiValue = _linkedgraamValue = null;
                                   _linkedbhaag = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
                                   _searchController.text = "";
+                                  _sankalanList = Future.value(<dynamic>[]);
+                                  _isSahabhaagiOrVishesh = false;
                                 });
                                 populateDropdown();
                               },

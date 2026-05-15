@@ -249,6 +249,8 @@ class _HomeScreenState extends State<HomeScreen> {
       userLevelId = dm.levelID;
       userGeoUnitId = dm.geoUnitID;
       ddm = dm;
+      isuservasti = dm.isvasti;
+      isusermandal = dm.ismandal;
     });
     await populateDropdown();
   }
@@ -1923,7 +1925,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildMyGeoUnitContent() {
-    final isHighLevel = int.parse(Statics.userDetails['LevelID']) > 6;
+    final isHighLevel = (int.tryParse(Statics.userDetails['LevelID'] ?? "0") ?? 0) > 6;
     return Column(children: [
       Legend(legendString: "yesterdayNews", fontsize: 18),
       if (isHighLevel) _buildYesterdaySummaryTable(Statics.lstYesterdayVruttaSummary) else _buildYesterdayDetailTable(Statics.lstYesterdayVruttaDetail),
@@ -2891,18 +2893,18 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget surveyCard() {
-    if (_fromShaakha) return SizedBox();
+    if ((isuservasti == 0 && isusermandal == 0) || _fromShaakha) return SizedBox();
     return _card(
-      title: Statics.getLabel("Survey"),
+      title: Statics.getLabel("Survey"), // + "$isuservasti ?????????? $isusermandal",
       children: [
         _cardRow([
-          if (_fromVasti) _cardTile(Statics.getLabel('vastiSurvey'), () => Navigator.of(context).pushNamed(VastiSurveyFormScreen.routeName)),
-          if (_fromMandalGram) _cardTile(Statics.getLabel('mandalSurvey'), () => Navigator.of(context).pushNamed(MandalSurveyFormScreen.routeName)),
+          if (_fromVasti && isuservasti == 1) _cardTile(Statics.getLabel('vastiSurvey'), () => Navigator.of(context).pushNamed(VastiSurveyFormScreen.routeName)),
+          if (_fromMandalGram && isusermandal == 1) _cardTile(Statics.getLabel('mandalSurvey'), () => Navigator.of(context).pushNamed(MandalSurveyFormScreen.routeName)),
         ]),
         if (_fromAboveNagar)
           _cardRow([
-            _cardTile(Statics.getLabel('vastiSurveyReport'), () => Navigator.of(context).pushNamed(VastiSurveyReportScreen.routeName)),
-            _cardTile(Statics.getLabel('mandalSurveyReport'), () => Navigator.of(context).pushNamed(MandalSurveyReportScreen.routeName)),
+            if (isuservasti == 1) _cardTile(Statics.getLabel('vastiSurveyReport'), () => Navigator.of(context).pushNamed(VastiSurveyReportScreen.routeName)),
+            if (isusermandal == 1) _cardTile(Statics.getLabel('mandalSurveyReport'), () => Navigator.of(context).pushNamed(MandalSurveyReportScreen.routeName)),
           ]),
       ],
     );

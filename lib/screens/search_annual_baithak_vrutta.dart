@@ -131,6 +131,17 @@ class _SearchAnnualBaithakVruttaState extends State<SearchAnnualBaithakVrutta> {
       _selctedLevel = 'Nagar';
     }
 
+    // Step 5: Upnagar (conditional)
+    await populatelinkedUpnagarDropdown(_linkedNagarValue);
+    if (selection.upnagar != null && selection.upnagar!.isNotEmpty) {
+      _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? 0).toString() : selection.upnagar) ?? _linkedupnagarValue;
+      if (level == 13) {
+        _selectedGeoUnitId = (dm.geoUnitID ?? selection.upnagar).toString();
+        _selctedLevel = 'upnagarUpkhanda';
+        // _selctedLevelList.add(dm.parentUpaNagarID ?? dm.geoUnitID);
+      }
+    }
+
     // if (_linkedVibhaag != null && _linkedVibhaag!.isNotEmpty) _linkedVibhaagName = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedBhaagValue).name;
     // if (_linkedBhaag != null && _linkedBhaag!.isNotEmpty) _linkedbhaagName = _linkedBhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedBhaagValue).name;
     // if (_linkedNagar != null && _linkedNagar!.isNotEmpty) _linkednagarName = _linkedNagar!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedBhaagValue).name;
@@ -195,6 +206,16 @@ class _SearchAnnualBaithakVruttaState extends State<SearchAnnualBaithakVrutta> {
     final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), parentID, parentType, '', isAbhiyaan: false);
     setState(() => _linkedNagar = data.isNotEmpty ? data : null);
     return data;
+  }
+
+  Future<List<GeoUnitMasterBAL>> populatelinkedUpnagarDropdown(String? nagarIDStr) async {
+    _linkedupnagarValue = null;
+    _linkedupnagar = _linkedmandal = _linkedgraam = null;
+    var mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
+    setState(() {
+      _linkedupnagar = (mnDD.length > 0 ? mnDD : null);
+    });
+    return mnDD;
   }
 
   // void populateDropdown() async {
@@ -289,7 +310,7 @@ class _SearchAnnualBaithakVruttaState extends State<SearchAnnualBaithakVrutta> {
   //   return vsDD;
   // }
 
-  Future<dynamic> _getShaakhaaVrutta(int? mahanagarId, int? vibhagId, int? bhagId, int? shaharID, int? nagarID, int? baithakTypeID, int? geoID) async {
+  Future<dynamic> _getShaakhaaVrutta(int? mahanagarId, int? vibhagId, int? bhagId, int? shaharID, int? nagarID, int? baithakTypeID) async {
     bool isConnected = await Statics.isInternetConnected();
     String type = "";
     String locId = "";
@@ -313,9 +334,9 @@ class _SearchAnnualBaithakVruttaState extends State<SearchAnnualBaithakVrutta> {
         "ShaharID": shaharID,
         "NagarID": nagarID,
         "AnnualBaithakTypeID": baithakTypeID,
-        "GeoUnitID": geoID,
-        "LocId": locId == '' ? null : locId,
-        "type": type,
+        "GeoUnitID": _selectedGeoUnitId,
+        "LocId": _selectedGeoUnitId,
+        "type": _selctedLevel,
       });
       dynamic retVal = await Statics.getAnnualBaithakShaakhaaVruttaForApp(strInput);
       return retVal;
@@ -707,7 +728,7 @@ class _SearchAnnualBaithakVruttaState extends State<SearchAnnualBaithakVrutta> {
         }
         nagarVrutta = await _getNagarVrutta(nagarVal, _baithakType!);
         if (geoID != null) {
-          _lstShaakhaaVrutta = await _getShaakhaaVrutta(mahaanagarVal, vibhaagVal, bhaagVal, shaharVal, nagarVal, _baithakType, geoID);
+          _lstShaakhaaVrutta = await _getShaakhaaVrutta(mahaanagarVal, vibhaagVal, bhaagVal, shaharVal, nagarVal, _baithakType);
         } else {
           Statics.showMessageDialog(context, Statics.getLabel('selectedBhougolikkaryastithi'));
         }
@@ -878,250 +899,7 @@ class _SearchAnnualBaithakVruttaState extends State<SearchAnnualBaithakVrutta> {
               style: TextStyle(fontSize: 20),
             ),
             SizedBox(height: 10),
-            ExpansionPanelList(
-              expansionCallback: (int index, bool isExpanded) {
-                setState(() {
-                  _isExpanded = isExpanded;
-                });
-              },
-              children: [
-                ExpansionPanel(
-                  headerBuilder: (BuildContext context, bool isExpanded) {
-                    return ListTile(
-                      title: Text(Statics.getLabel('Filters')),
-                    );
-                  },
-                  body: Container(
-                    margin: EdgeInsets.all(20),
-                    child: Column(
-                      children: [
-                        if (_linkedMahaanagar != null)
-                          DropdownButtonFormField<String>(
-                            decoration: InputDecoration(labelText: Statics.getLabel('Mahaanagar')),
-                            isExpanded: true,
-                            value: _linkedMahaanagarValue == "" ? null : _linkedMahaanagarValue,
-                            items: _linkedMahaanagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                            onChanged: MyAppGlobals.isDropdownDisabled('Mahaanagar')
-                                ? null
-                                : (value) {
-                                    print(value);
-                                    setState(() {
-                                      _linkedMahaanagarValue = value;
-                                      _linkedVibhaagValue = null;
-                                      _linkedBhaagValue = null;
-                                      _linkedShaharValue = null;
-                                      _linkedNagarValue = null;
-                                      populatelinkedVibhaagDropdown(value!);
-                                      mahanagarId = value;
-                                    });
-                                  },
-                          ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        if (_linkedVibhaag != null)
-                          DropdownButtonFormField<String>(
-                            decoration: InputDecoration(labelText: Statics.getLabel('Vibhaag')),
-                            isExpanded: true,
-                            value: _linkedVibhaagValue == "" ? null : _linkedVibhaagValue,
-                            items: _linkedVibhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                            onChanged: MyAppGlobals.isDropdownDisabled('Vibhaag')
-                                ? null
-                                : (value) {
-                                    print(value);
-                                    setState(() {
-                                      _linkedVibhaagValue = value;
-                                      populatelinkedBhaagDropdown(value!);
-                                      vibhagId = value;
-                                      _linkedBhaagValue = _linkedNagarValue = null;
-                                      _linkedBhaag = _linkedNagar = null;
-                                    });
-                                  },
-                          ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        if (_linkedBhaag != null)
-                          DropdownButtonFormField<String>(
-                            decoration: InputDecoration(labelText: Statics.getLabel('Bhaag')),
-                            isExpanded: true,
-                            value: _linkedBhaagValue == "" ? null : _linkedBhaagValue,
-                            items: _linkedBhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                            onChanged: MyAppGlobals.isDropdownDisabled('Bhaag')
-                                ? null
-                                : (value) {
-                                    setState(() {
-                                      _linkedBhaagValue = value;
-
-                                      populatelinkedNagarDropdown(value, null);
-                                    });
-                                  },
-                          ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        // if (_linkedShahar != null && _linkedShahar!.length > 0)
-                        //   DropdownButtonFormField<String>(
-                        //     decoration: InputDecoration(labelText: Statics.getLabel('Shahar')),
-                        //     isExpanded: true,
-                        //     value: _linkedShaharValue == "" ? null : _linkedShaharValue,
-                        //     items: _linkedShahar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                        //     onChanged:MyAppGlobals.isDropdownDisabled('Shahar')
-                        //         ? null
-                        //         :  (value) {
-                        //       setState(() {
-                        //         _linkedShaharValue = value;
-                        //         populatelinkedNagarDropdown(null, value);
-                        //       });
-                        //     },
-                        //   ),
-                        // if (_linkedShahar != null && _linkedShahar!.length > 0)
-                        //   SizedBox(
-                        //     height: 10,
-                        //   ),
-                        if (_linkedNagar != null && _linkedNagar!.length > 0)
-                          DropdownButtonFormField<String>(
-                            decoration: InputDecoration(labelText: Statics.getLabel('Nagar')),
-                            isExpanded: true,
-                            value: _linkedNagarValue == "" ? null : _linkedNagarValue,
-                            items: _linkedNagar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
-                            onChanged: MyAppGlobals.isDropdownDisabled('Nagar')
-                                ? null
-                                : (value) {
-                                    setState(() {
-                                      _linkedNagarValue = value;
-                                    });
-                                  },
-                          ),
-                        if (_linkedNagar != null && _linkedNagar!.length > 0)
-                          SizedBox(
-                            height: 10,
-                          ),
-                        if (_baithakTypes != null)
-                          // DropdownSearch<String>(
-                          //   popupProps: PopupProps.bottomSheet(
-                          //     showSearchBox: true,
-                          //     fit: FlexFit.tight,
-                          //     itemBuilder: (context, item, isSelected) {
-                          //       return Container(
-                          //         margin: EdgeInsets.symmetric(horizontal: 8),
-                          //         decoration: !isSelected
-                          //             ? null
-                          //             : BoxDecoration(
-                          //           border: Border.all(color: Theme.of(context).primaryColor),
-                          //           borderRadius: BorderRadius.circular(5),
-                          //           color: Colors.grey[300],
-                          //         ),
-                          //         child: ListTile(
-                          //           title: Text(
-                          //             item,
-                          //             style: TextStyle(fontSize: 14), ),
-                          //           contentPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 8), visualDensity: VisualDensity(vertical: -4),),
-                          //       );
-                          //     },
-                          //     searchFieldProps: TextFieldProps(
-                          //       decoration: InputDecoration(
-                          //         border: OutlineInputBorder(),
-                          //         contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                          //       ),
-                          //     ),
-                          //     constraints: BoxConstraints.tightFor(
-                          //       width: double.infinity,   ),
-                          //     containerBuilder: (context, popupWidget) {
-                          //       return Stack(
-                          //         children: [
-                          //           popupWidget,
-                          //           Positioned(
-                          //             right: 10,
-                          //             top: 10,
-                          //             child: IconButton(
-                          //               icon: Icon(Icons.close),
-                          //               onPressed: () {
-                          //                 Navigator.of(context).pop();
-                          //               },
-                          //             ),
-                          //           ),
-                          //         ],
-                          //       );
-                          //     },
-                          //   ),
-                          //   items: _baithakTypes!.map((bg) => bg.codeForDisplay!).toList(),
-                          //   dropdownDecoratorProps: DropDownDecoratorProps(
-                          //     dropdownSearchDecoration: InputDecoration(
-                          //       labelText: Statics.getLabel('selectbaithakTypeLabel'),
-                          //     ),
-                          //   ),
-                          //   selectedItem: _baithakTypeValue == "" ? null : _baithakTypes?.firstWhere((element) => element.staticID.toString() == _baithakTypeValue).codeForDisplay,
-                          //   onChanged: (value) {
-                          //     print(value);
-                          //     setState(() {
-                          //       selectedViewOnly = _baithakTypes?.firstWhere((element) => element.codeForDisplay == value).ViewOnly;
-                          //       _baithakTypeValue = _baithakTypes?.firstWhere((element) => element.codeForDisplay == value).staticID.toString();
-                          //     });
-                          //     print(selectedViewOnly);
-                          //   },
-                          // ),
-                          DropdownButtonFormField(
-                            decoration: InputDecoration(labelText: Statics.getLabel('SankalpCompletionYear')),
-                            isExpanded: true,
-                            value: _baithakTypeYear == "" ? null : _baithakTypeYear,
-                            items: _baithakTypes
-                                ?.map((bg) => bg.monthYear.toString().split(',').last)
-                                .toSet()
-                                .map((year) => DropdownMenuItem(
-                                      value: year,
-                                      child: Text(year),
-                                    ))
-                                .toList(),
-                            onChanged: (value) {
-                              print("Year ---==>  $value");
-                              setState(() {
-                                _baithakTypeYear = value;
-                                _baithakTypeValue = null;
-                              });
-                            },
-                          ),
-                        SizedBox(height: 10),
-                        if (_baithakTypes != null)
-                          DropdownButtonFormField(
-                            decoration: InputDecoration(labelText: Statics.getLabel('baithakType')),
-                            isExpanded: true,
-                            value: _baithakTypeValue == "" ? null : _baithakTypeValue,
-                            items: _baithakTypes!
-                                .where((bg) => bg.monthYear.toString().split(',').last == _baithakTypeYear)
-                                .map((bg) => DropdownMenuItem(
-                                      value: bg.staticID.toString(),
-                                      child: Text(bg.codeForDisplay!),
-                                    ))
-                                .toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                _baithakTypeValue = value;
-                                print("value --> $value");
-                                print("_baithakTypes -->  ${_baithakTypes!.map((e) => e.ViewOnly)}");
-                                try {
-                                  final matchedItem = _baithakTypes!.firstWhere(
-                                    (e) => e.staticID.toString() == value.toString(),
-                                  );
-                                  selectedViewOnly = matchedItem.ViewOnly;
-                                  print("selectedViewOnly --> $selectedViewOnly");
-                                } catch (e) {
-                                  print("No match found for staticID: $value");
-                                  selectedViewOnly = null;
-                                }
-                              });
-                            },
-                          ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    ),
-                  ),
-                  isExpanded: _isExpanded,
-                ),
-              ],
-            ),
+            nagarUpnagarDropdown(),
             Container(
               margin: EdgeInsets.all(20),
               child: Column(
@@ -1289,6 +1067,276 @@ class _SearchAnnualBaithakVruttaState extends State<SearchAnnualBaithakVrutta> {
           ],
         ),
       )),
+    );
+  }
+
+  Widget nagarUpnagarDropdown() {
+    return ExpansionPanelList(
+      expansionCallback: (int index, bool isExpanded) {
+        setState(() {
+          _isExpanded = isExpanded;
+        });
+      },
+      children: [
+        ExpansionPanel(
+          headerBuilder: (BuildContext context, bool isExpanded) {
+            return ListTile(
+              title: Text(Statics.getLabel('Filters')),
+            );
+          },
+          body: Container(
+            margin: EdgeInsets.all(20),
+            child: Column(
+              spacing: 10,
+              children: [
+                if (_linkedMahaanagar != null)
+                  buildDropdownField(
+                    isDisabled: ((userLevelId ?? 0) < 9 || userLevelId == 13),
+                    label: Statics.getLabel('Mahaanagar'),
+                    value: _linkedMahaanagarValue,
+                    items: _linkedMahaanagar!
+                        .map((bg) => DropdownMenuItem(
+                              value: bg.geoUnitID.toString(),
+                              child: Text(bg.name!),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      print(value);
+                      setState(() {
+                        _linkedMahaanagarValue = value;
+                        _linkedVibhaagValue = null;
+                        _linkedBhaagValue = null;
+                        _linkedShaharValue = null;
+                        _linkedNagarValue = null;
+                        populatelinkedVibhaagDropdown(value!);
+                        mahanagarId = value;
+                        _selctedLevel = 'Mahaanagar';
+                        _selectedGeoUnitId = value!;
+                      });
+                    },
+                  ),
+                if (_linkedVibhaag != null)
+                  buildDropdownField(
+                    isDisabled: ((userLevelId ?? 0) < 8 || userLevelId == 13),
+                    label: Statics.getLabel('Vibhaag'),
+                    value: _linkedVibhaagValue,
+                    items: _linkedVibhaag!
+                        .map((bg) => DropdownMenuItem(
+                              value: bg.geoUnitID.toString(),
+                              child: Text(bg.name!),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      print(value);
+                      setState(() {
+                        _linkedVibhaagValue = value;
+                        populatelinkedBhaagDropdown(value!);
+                        vibhagId = value;
+                        _linkedBhaagValue = _linkedNagarValue = null;
+                        _linkedBhaag = _linkedNagar = null;
+                        _selctedLevel = 'Vibhaag';
+                        _selectedGeoUnitId = value!;
+                      });
+                    },
+                  ),
+                if (_linkedBhaag != null)
+                  buildDropdownField(
+                    isDisabled: ((userLevelId ?? 0) < 7 || userLevelId == 13),
+                    label: Statics.getLabel('Bhaag'),
+                    value: _linkedBhaagValue,
+                    items: _linkedBhaag!
+                        .map((bg) => DropdownMenuItem(
+                              value: bg.geoUnitID.toString(),
+                              child: Text(bg.name!),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _linkedBhaagValue = value;
+                        _selctedLevel = 'Bhaag';
+                        _selectedGeoUnitId = value!;
+                      });
+                      populatelinkedNagarDropdown(value, null);
+                    },
+                  ),
+                // if (_linkedShahar != null && _linkedShahar!.length > 0)
+                //   DropdownButtonFormField<String>(
+                //     decoration: InputDecoration(labelText: Statics.getLabel('Shahar')),
+                //     isExpanded: true,
+                //     value: _linkedShaharValue == "" ? null : _linkedShaharValue,
+                //     items: _linkedShahar!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
+                //     onChanged:MyAppGlobals.isDropdownDisabled('Shahar')
+                //         ? null
+                //         :  (value) {
+                //       setState(() {
+                //         _linkedShaharValue = value;
+                //         populatelinkedNagarDropdown(null, value);
+                //       });
+                //     },
+                //   ),
+                // if (_linkedShahar != null && _linkedShahar!.length > 0)
+                //   SizedBox(
+                //     height: 10,
+                //   ),
+                if (_linkedNagar != null && _linkedNagar!.length > 0)
+                  buildDropdownField(
+                    isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
+                    label: Statics.getLabel('Nagar'),
+                    value: _linkedNagarValue,
+                    items: _linkedNagar!
+                        .map((bg) => DropdownMenuItem(
+                              value: bg.geoUnitID.toString(),
+                              child: Text(bg.name!),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _linkedNagarValue = value;
+                        _selctedLevel = 'Nagar';
+                        _selectedGeoUnitId = value!;
+                      });
+                      populatelinkedUpnagarDropdown(value);
+                    },
+                  ),
+                if (_linkedupnagar != null && _linkedupnagar!.length > 0)
+                  buildDropdownField(
+                    isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
+                    label: Statics.getLabel('upnagarUpkhanda'),
+                    value: _linkedupnagarValue,
+                    items: _linkedupnagar!
+                        .map((bg) => DropdownMenuItem(
+                              value: bg.geoUnitID.toString(),
+                              child: Text(bg.name!),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _linkedNagarValue = value;
+                        _selctedLevel = 'upnagarUpkhanda';
+                        _selectedGeoUnitId = value!;
+                      });
+                    },
+                  ),
+                if (_baithakTypes != null)
+                  // DropdownSearch<String>(
+                  //   popupProps: PopupProps.bottomSheet(
+                  //     showSearchBox: true,
+                  //     fit: FlexFit.tight,
+                  //     itemBuilder: (context, item, isSelected) {
+                  //       return Container(
+                  //         margin: EdgeInsets.symmetric(horizontal: 8),
+                  //         decoration: !isSelected
+                  //             ? null
+                  //             : BoxDecoration(
+                  //           border: Border.all(color: Theme.of(context).primaryColor),
+                  //           borderRadius: BorderRadius.circular(5),
+                  //           color: Colors.grey[300],
+                  //         ),
+                  //         child: ListTile(
+                  //           title: Text(
+                  //             item,
+                  //             style: TextStyle(fontSize: 14), ),
+                  //           contentPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 8), visualDensity: VisualDensity(vertical: -4),),
+                  //       );
+                  //     },
+                  //     searchFieldProps: TextFieldProps(
+                  //       decoration: InputDecoration(
+                  //         border: OutlineInputBorder(),
+                  //         contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                  //       ),
+                  //     ),
+                  //     constraints: BoxConstraints.tightFor(
+                  //       width: double.infinity,   ),
+                  //     containerBuilder: (context, popupWidget) {
+                  //       return Stack(
+                  //         children: [
+                  //           popupWidget,
+                  //           Positioned(
+                  //             right: 10,
+                  //             top: 10,
+                  //             child: IconButton(
+                  //               icon: Icon(Icons.close),
+                  //               onPressed: () {
+                  //                 Navigator.of(context).pop();
+                  //               },
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       );
+                  //     },
+                  //   ),
+                  //   items: _baithakTypes!.map((bg) => bg.codeForDisplay!).toList(),
+                  //   dropdownDecoratorProps: DropDownDecoratorProps(
+                  //     dropdownSearchDecoration: InputDecoration(
+                  //       labelText: Statics.getLabel('selectbaithakTypeLabel'),
+                  //     ),
+                  //   ),
+                  //   selectedItem: _baithakTypeValue == "" ? null : _baithakTypes?.firstWhere((element) => element.staticID.toString() == _baithakTypeValue).codeForDisplay,
+                  //   onChanged: (value) {
+                  //     print(value);
+                  //     setState(() {
+                  //       selectedViewOnly = _baithakTypes?.firstWhere((element) => element.codeForDisplay == value).ViewOnly;
+                  //       _baithakTypeValue = _baithakTypes?.firstWhere((element) => element.codeForDisplay == value).staticID.toString();
+                  //     });
+                  //     print(selectedViewOnly);
+                  //   },
+                  // ),
+                  DropdownButtonFormField(
+                    decoration: InputDecoration(labelText: Statics.getLabel('SankalpCompletionYear')),
+                    isExpanded: true,
+                    value: _baithakTypeYear == "" ? null : _baithakTypeYear,
+                    items: _baithakTypes
+                        ?.map((bg) => bg.monthYear.toString().split(',').last)
+                        .toSet()
+                        .map((year) => DropdownMenuItem(
+                              value: year,
+                              child: Text(year),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      print("Year ---==>  $value");
+                      setState(() {
+                        _baithakTypeYear = value;
+                        _baithakTypeValue = null;
+                      });
+                    },
+                  ),
+                if (_baithakTypes != null)
+                  DropdownButtonFormField(
+                    decoration: InputDecoration(labelText: Statics.getLabel('baithakType')),
+                    isExpanded: true,
+                    value: _baithakTypeValue == "" ? null : _baithakTypeValue,
+                    items: _baithakTypes!
+                        .where((bg) => bg.monthYear.toString().split(',').last == _baithakTypeYear)
+                        .map((bg) => DropdownMenuItem(
+                              value: bg.staticID.toString(),
+                              child: Text(bg.codeForDisplay!),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _baithakTypeValue = value;
+                        print("value --> $value");
+                        print("_baithakTypes -->  ${_baithakTypes!.map((e) => e.ViewOnly)}");
+                        try {
+                          final matchedItem = _baithakTypes!.firstWhere(
+                            (e) => e.staticID.toString() == value.toString(),
+                          );
+                          selectedViewOnly = matchedItem.ViewOnly;
+                          print("selectedViewOnly --> $selectedViewOnly");
+                        } catch (e) {
+                          print("No match found for staticID: $value");
+                          selectedViewOnly = null;
+                        }
+                      });
+                    },
+                  ),
+              ],
+            ),
+          ),
+          isExpanded: _isExpanded,
+        ),
+      ],
     );
   }
 }

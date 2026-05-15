@@ -180,8 +180,8 @@ class _UpdateMasterDataScreenState extends State<UpdateMasterDataScreen> {
 
   Future<void> populateDropdown({bool fromClear = false}) async {
     setState(() {
-      _linkedMahaanagarValue = _linkedBhaagValue = _linkedNagarValue = _linkedvastiValue = null;
-      _linkedMahaanagar = _linkedVibhaag = _linkedBhaag = _linkedNagar = _linkedupnagar = null;
+      _linkedMahaanagarValue = _linkedVibhaagValue = _linkedBhaagValue = _linkedNagarValue = _linkedupnagarValue = _linkedvastiValue = _linkedMandalValue = _linkedgraamValue = null;
+      _linkedMahaanagar = _linkedVibhaag = _linkedBhaag = _linkedNagar = _linkedupnagar = _linkedvasti = _linkedmandal = _linkedgraam = null;
       _selctedLevelName = _selectedGeoUnitId = null;
       _selctedLevel = "praant";
     });

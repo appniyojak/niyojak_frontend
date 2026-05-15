@@ -584,7 +584,7 @@ class _YuvaSangamListTabState extends State<YuvaSangamListTab> with AutomaticKee
     nagarList = [];
     var mnDD;
     if (_selectedKaryakramLevelId == 7) {
-      mnDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Upnagar', '');
+      mnDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
     } else if (_selectedKaryakramLevelId == 6) {
       mnDD = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
     } else {
