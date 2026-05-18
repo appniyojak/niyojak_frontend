@@ -795,6 +795,8 @@ class _AbhiyanScreenState extends State<AbhiyanScreen> with SingleTickerProvider
                                           setState(() {
                                             _linkedMahaanagarValue = value;
                                             _linkedVibhaagValue = null;
+                                            _linkedupnagarValue = null;
+                                            _linkednagarValue = null;
 
                                             _linkedMahaanagarDisable = false;
                                             _linkedVibhaagDisable = false;
@@ -805,7 +807,7 @@ class _AbhiyanScreenState extends State<AbhiyanScreen> with SingleTickerProvider
                                             _linkedgraamDisable = false;
                                             _linkedvastiDisable = false;
 
-                                            _linkedVibhaag = _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
+                                            _linkedVibhaag = _linkedbhaag = _linkednagar = _linkedupnagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
                                             type = "mahanagar";
                                           });
                                           populatelinkedVibhaagDropdown(value);
@@ -818,7 +820,7 @@ class _AbhiyanScreenState extends State<AbhiyanScreen> with SingleTickerProvider
                                       buildDropdownField(
                                         isDisabled: ((userLevelId ?? 0) < 8 || userLevelId == 13),
                                         label: Statics.getLabel('Vibhaag'),
-                                        value: _linkedVibhaagValue == "" ? null : _linkedVibhaagValue,
+                                        value: _linkedVibhaagValue,
                                         items: _linkedVibhaag!.map((bg) => DropdownMenuItem(value: bg.geoUnitID.toString(), child: Text(bg.name!))).toList(),
                                         onChanged: (value) {
                                           setState(() {
@@ -878,10 +880,11 @@ class _AbhiyanScreenState extends State<AbhiyanScreen> with SingleTickerProvider
                                         onChanged: (value) {
                                           setState(() {
                                             _linkednagarValue = value;
-                                            populatelinkedMandalDropdown(false, value!);
-                                            populatelinkedVastiDropdown(false, value);
                                             type = "nagar";
                                           });
+                                          populatelinkedUpnagarDropdown(value!);
+                                          populatelinkedMandalDropdown(false, value!);
+                                          populatelinkedVastiDropdown(false, value);
                                         },
                                       ),
                                     if (_linkednagar != null && _linkednagar!.length > 0)
@@ -897,7 +900,7 @@ class _AbhiyanScreenState extends State<AbhiyanScreen> with SingleTickerProvider
                                         onChanged: (value) {
                                           setState(() {
                                             _linkedupnagarValue = value;
-                                            type = "upnagar";
+                                            type = "upnagarUpkhanda";
                                           });
                                           populatelinkedMandalDropdown(true, value!);
                                           populatelinkedVastiDropdown(true, value);

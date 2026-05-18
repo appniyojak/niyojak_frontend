@@ -126,9 +126,19 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
     if (level == 6) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.nagar).toString();
       _selctedLevel = 'Nagar';
-      getReportDataFun();
       final selectedItem = _linkednagar!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
       _selctedLevelName = selectedItem.name;
+    }
+
+    // Step 5: Upnagar (conditional)
+    await populatelinkedUpnagarDropdown(_linkednagarValue);
+    if (selection.upnagar != null && selection.upnagar!.isNotEmpty) {
+      _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? 0).toString() : selection.upnagar) ?? _linkedupnagarValue;
+      if (level == 13) {
+        _selectedGeoUnitId = (dm.geoUnitID ?? selection.upnagar).toString();
+        _selctedLevel = 'Upnagar';
+        getReportDataFun();
+      }
     }
 
     // // Step 5: Upnagar (conditional)
@@ -1271,6 +1281,28 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                           },
                     isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
                   ),
+                  if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
+                    buildDropdownField(
+                      label: Statics.getLabel('upnagarUpkhanda'),
+                      value: _linkedupnagarValue,
+                      items: _linkedupnagar!
+                          .map((bg) => DropdownMenuItem(
+                                value: bg.geoUnitID.toString(),
+                                child: Text(bg.name!),
+                              ))
+                          .toList(),
+                      onChanged: (value) {
+                        final selectedItem = _linkedupnagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                        setState(() {
+                          _searched = false;
+                          _linkedupnagarValue = value;
+                          _selectedGeoUnitId = value;
+                          _selctedLevel = 'upnagarUpkhanda';
+                          _selctedLevelName = selectedItem.name ?? "";
+                        });
+                      },
+                      isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
+                    ),
                   /*if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
                     _buildDropdownField(
                       label: Statics.getLabel('upnagarUpkhanda'),
@@ -1418,6 +1450,7 @@ class _YuvaSangamReportTabState extends State<YuvaSangamReportTab> with Automati
                               _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedvastiValue = _linkedgraamValue = null;
                               _linkedVibhaagValue = _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
                               _selctedLevel = "praant";
+                              report = [];
                             });
                             await populateDropdown();
                           },

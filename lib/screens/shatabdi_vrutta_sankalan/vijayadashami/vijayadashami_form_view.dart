@@ -224,12 +224,44 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     if (level == 6) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.nagar).toString();
       selctedLevel = 'Nagar';
-      if (!fromManual) {
-        utsavKontyaStaravar = "6";
-        selctedLevelId = "6";
-      }
       final selectedItem = _linkedNagar!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
       selctedLevelName = selectedItem.name;
+      selctedLevelId = "6";
+      if (!fromManual) {
+        utsavKontyaStaravar = "6";
+
+        selectedUpnagarList = [];
+        data = await Statics.getVijayadashamiInitData(context, Statics.userDetails["userID"], _selectedGeoUnitId, selctedLevel == 'Nagar' ? "6" : utsavKontyaStaravar);
+        log("searchVijayaDashami data ${jsonDecode(jsonEncode(data))}");
+        setState(() {
+          _linkedUpnagar = data?.upnagarmandallist ?? [];
+        });
+        if (_linkedUpnagar == null || _linkedUpnagar?.length == 0) {
+          showDialog(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              title: Text(Statics.getLabel('AskConfirmation')),
+              content: Text(Statics.getLabel('addUpnagarDialogBox')),
+              actions: <Widget>[
+                TextButton(
+                  child: Text(Statics.getLabel('add')),
+                  onPressed: () async {
+                    Navigator.of(context).pushReplacementNamed(TabScreen.routeName).then((value) {
+                      if (mounted) clearForm();
+                    }); //.then((value) => searchVijayaDashami());
+                  },
+                ),
+                TextButton(
+                  child: Text(Statics.getLabel('clear')),
+                  onPressed: () {
+                    Navigator.of(ctx).pop();
+                  },
+                )
+              ],
+            ),
+          );
+        }
+      }
     }
 
     // Step 5: Upnagar (conditional)

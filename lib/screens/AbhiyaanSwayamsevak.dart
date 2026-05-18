@@ -891,7 +891,7 @@ class _AbhiyaanSwayamsevakState extends State<AbhiyaanSwayamsevak> {
                         setState(() {
                           _linkedbhaagValue = value;
                         });
-                        populatelinkedShaharDropdown(value!);
+                        // populatelinkedShaharDropdown(value!);
                         populatelinkedNagarDropdown(value, null);
                       },
                       isDisabled: ((userLevelId ?? 0) < 7 || userLevelId == 13),
@@ -928,6 +928,7 @@ class _AbhiyaanSwayamsevakState extends State<AbhiyaanSwayamsevak> {
                         setState(() {
                           _linkednagarValue = value;
                         });
+                        populatelinkedUpnagarDropdown(value!);
                         populatelinkedMandalDropdown(false, value!);
                         populatelinkedVastiDropdown(false, value);
                       },
@@ -935,7 +936,7 @@ class _AbhiyaanSwayamsevakState extends State<AbhiyaanSwayamsevak> {
                     ),
                   if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
                     buildDropdownField(
-                      label: Statics.getLabel('Nagar'),
+                      label: Statics.getLabel('upnagarUpkhanda'),
                       value: _linkedupnagarValue,
                       items: _linkedupnagar!
                           .map((bg) => DropdownMenuItem(
@@ -1115,9 +1116,9 @@ class _AbhiyaanSwayamsevakState extends State<AbhiyaanSwayamsevak> {
         MaterialButton(
           onPressed: () {
             setState(() {
-              _resetAllDropdowns();
-              _isExpanded = false;
+              _isExpanded = true;
             });
+            _resetAllDropdowns();
           },
           child: Text(Statics.getLabel('clear')),
         ),
@@ -1174,11 +1175,12 @@ class _AbhiyaanSwayamsevakState extends State<AbhiyaanSwayamsevak> {
   }
 
   Future<void> _resetAllDropdowns() async {
-    await populatelinkedVibhaagDropdown('');
     _linkedMahaanagarValue = _linkedVibhaagValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedvastiValue = _linkedgraamValue = null;
     _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
     mobileNoCOntroller.clear();
     selectedDayitvValue = "";
+    setState(() {});
+    await populateDropdown();
   }
 
   void _resetLinkedValues() {

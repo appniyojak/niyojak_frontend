@@ -153,12 +153,12 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> with Automati
         getReportDataFun();
       }
     }
-    if (level == 13) {
-      _selectedGeoUnitId = selection.nagar.toString();
-      _selctedLevel = 'Nagar';
-      final selectedItem = _linkednagar!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
-      _selctedLevelName = selectedItem.name;
-    }
+    // if (level == 13) {
+    //   _selectedGeoUnitId = selection.nagar.toString();
+    //   _selctedLevel = 'Nagar';
+    //   final selectedItem = _linkednagar!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
+    //   _selctedLevelName = selectedItem.name;
+    // }
     // //
     // // Step 6: Mandal
     // await populatelinkedMandalDropdown(
@@ -1566,6 +1566,29 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> with Automati
                         populatelinkedUpnagarDropdown(value);
                         populatelinkedMandalDropdown(false, value);
                         // populatelinkedVastiDropdown(value);
+                      },
+                      isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
+                    ),
+                  if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
+                    buildDropdownField(
+                      label: Statics.getLabel('upnagarUpkhanda'),
+                      value: _linkedupnagarValue,
+                      items: _linkedupnagar!
+                          .map((bg) => DropdownMenuItem(
+                                value: bg.geoUnitID.toString(),
+                                child: Text(bg.name!),
+                              ))
+                          .toList(),
+                      onChanged: (value) {
+                        final selectedItem = _linkedupnagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                        setState(() {
+                          _searched = false;
+                          _linkedupnagarValue = value;
+                          _selectedGeoUnitId = value;
+                          _selctedLevel = 'upnagarUpkhanda';
+                          _selctedLevelName = selectedItem.name ?? "";
+                          _linkedupnagarName = selectedItem.name ?? "";
+                        });
                       },
                       isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
                     ),

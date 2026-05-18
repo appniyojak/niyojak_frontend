@@ -28,6 +28,7 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
   List<GeoUnitMasterBAL>? _linkedbhaag;
   List<GeoUnitMasterBAL>? _linkedshahar;
   List<GeoUnitMasterBAL>? _linkednagar;
+  List<GeoUnitMasterBAL>? _linkedupnagar;
   List<GeoUnitMasterBAL>? _linkedmandal;
   List<GeoUnitMasterBAL>? _linkedgraam;
   List<GeoUnitMasterBAL>? _linkedvasti;
@@ -37,7 +38,9 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
   String? _linkedbhaagValue = "";
   String? _linkedshaharValue = "";
   String? _linkednagarValue = "";
-  String? _linkedNagarValuePopup = '';
+  String? _linkedupnagarValue = "";
+
+  // String? _linkedNagarValuePopup = '';
   String? _linkedmandalValue = "";
   String? _linkedgraamValue = "";
   String? _linkedvastiValue = "";
@@ -47,6 +50,7 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
   String? _linkedbhaagName = "";
   String? _linkedshaharName = "";
   String? _linkednagarName = "";
+  String? _linkedupnagarName = "";
   String? _linkedmandalName = "";
   String? _linkedgraamName = "";
   String? _linkedvastiName = "";
@@ -56,8 +60,6 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
   String _selctedLevelNames = '';
   List<String?> _selctedLevelNameList = [];
   String? _selectedGeoUnitId;
-
-  String? _linkedupnagarValue = '';
 
   List<ReportData> report = [];
 
@@ -81,7 +83,7 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
     await populateDropdown();
   }
 
-  ////////////////////////////////////////////////////////////////////////////////////// }
+  //////////////////////////////////////////////////////////////////////////////////////
 
   Future<void> populateAllDropdowns(int level, DropDownModel dm) async {
     setState(() {
@@ -95,6 +97,8 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
     if (level == 9) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.mahaanagar).toString();
       _selctedLevel = 'Mahaanagar';
+      final selectedItem = _linkedMahaanagar!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
+      _selctedLevelName = selectedItem.name;
     }
 
     // Step 2: Vibhaag
@@ -103,6 +107,8 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
     if (level == 8) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.vibhaag).toString();
       _selctedLevel = 'Vibhaag';
+      final selectedItem = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
+      _selctedLevelName = selectedItem.name;
     }
 
     // Step 3: Bhaag
@@ -111,6 +117,8 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
     if (level == 7) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.bhaag).toString();
       _selctedLevel = 'Bhaag';
+      final selectedItem = _linkedbhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
+      _selctedLevelName = selectedItem.name;
     }
 
     // Step 4: Nagar
@@ -119,6 +127,20 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
     if (level == 6) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.nagar).toString();
       _selctedLevel = 'Nagar';
+      final selectedItem = _linkednagar!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
+      _selctedLevelName = selectedItem.name;
+    }
+
+    // Step 5: Upnagar (conditional)
+    await populatelinkedUpnagarDropdown(_linkednagarValue);
+    if (selection.upnagar != null && selection.upnagar!.isNotEmpty) {
+      _linkedupnagarValue = (level == 13 ? (dm.geoUnitID ?? "").toString() : selection.upnagar) ?? '';
+      if (level == 13) {
+        _selectedGeoUnitId = (dm.geoUnitID ?? selection.upnagar).toString();
+        _selctedLevel = 'upnagarUpkhanda';
+        final selectedItem = _linkedupnagar!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
+        _selctedLevelName = selectedItem.name;
+      }
     }
 
     // if (_linkedVibhaag != null && _linkedVibhaag!.isNotEmpty) _linkedVibhaagName = _linkedVibhaag!.firstWhere((bg) => bg.geoUnitID.toString() == _linkedBhaagValue).name;
@@ -169,14 +191,29 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
-    _linkednagarValue = null;
+    _linkednagarValue = _linkedupnagarValue = null;
     //_linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
-    _linkednagar = _linkedvasti = null;
+    _linkednagar = _linkedupnagar = _linkedvasti = null;
     final parentID = shaharIDStr ?? bhaagIDStr!;
     final parentType = shaharIDStr != null ? 'Shahar' : 'Bhaag';
     final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), parentID, parentType, '', isAbhiyaan: false);
     setState(() => _linkednagar = data.isNotEmpty ? data : null);
     return data;
+  }
+
+  Future<List<GeoUnitMasterBAL>> populatelinkedUpnagarDropdown(String? nagarIDStr) async {
+    _linkedvastiValue = null;
+    //_linkedupnagarName = _linkedmandalName = _linkedgraamName = null;
+    _linkedvasti = null;
+    var mnDD;
+
+    mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
+
+    setState(() {
+      _linkedupnagar = (mnDD.length > 0 ? mnDD : null);
+      //_linkedupnagarValue = (userparentUpanagarid ?? userGeoUnitId).toString();
+    });
+    return mnDD;
   }
 
 //   Future<List<GeoUnitMasterBAL>> populatelinkedMahaanagarDropdown() async {
@@ -748,8 +785,8 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
                           _selctedLevelName = selectedItem.name ?? "";
                           _linkedbhaagName = selectedItem.name ?? "";
                           _selectedGeoUnitId = value;
-                          populatelinkedNagarDropdown(value, null);
                         });
+                        populatelinkedNagarDropdown(value, null);
                       },
                       isDisabled: ((userLevelId ?? 0) < 7 || userLevelId == 13),
                     ),
@@ -796,6 +833,30 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
                           _selctedLevel = 'Nagar';
                           _selctedLevelName = selectedItem.name ?? "";
                           _linkednagarName = selectedItem.name ?? "";
+                        });
+                        populatelinkedUpnagarDropdown(value);
+                      },
+                      isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
+                    ),
+                  if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
+                    buildDropdownField(
+                      label: Statics.getLabel('upnagarUpkhanda'),
+                      value: _linkedupnagarValue,
+                      items: _linkedupnagar!
+                          .map((bg) => DropdownMenuItem(
+                                value: bg.geoUnitID.toString(),
+                                child: Text(bg.name!),
+                              ))
+                          .toList(),
+                      onChanged: (value) {
+                        final selectedItem = _linkedupnagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
+                        setState(() {
+                          _searched = false;
+                          _linkedupnagarValue = value;
+                          _selectedGeoUnitId = value;
+                          _selctedLevel = 'upnagarUpkhanda';
+                          _selctedLevelName = selectedItem.name ?? "";
+                          _linkedupnagarName = selectedItem.name ?? "";
                         });
                       },
                       isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
@@ -918,6 +979,7 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
                               _linkedMahaanagarValue = _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedvastiValue = _linkedgraamValue = null;
                               _linkedVibhaagValue = _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = null;
                               _selctedLevel = "praant";
+                              report = [];
                             });
 
                             await populateDropdown();
