@@ -160,7 +160,8 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
   String? vibhagId = '';
   String? selctedLevel = 'praant';
   String? selctedLevelName = '';
-  String? selctedLevelId = '';
+
+  // String? selctedLevelId = '';
   String? selctedLevelNameNew = '';
   String? selctedLevelIdNew = '';
 
@@ -289,7 +290,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
       selctedLevelName = "";
       selctedLevel = 'praant';
       _linkedvastiValue = '';
-      selctedLevelId = '';
+      _selectedGeoUnitId = '';
       selctedLevelName = "";
       _linkedBhaag = null;
       _linkedNagar = null;
@@ -316,7 +317,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
       isVastiSearch = true;
       _isExpanded = false;
     });
-    vastiSurveyReportModel = await Statics.vastisarvekshanReportData(context, Statics.userDetails["userID"], selctedLevelId);
+    vastiSurveyReportModel = await Statics.vastisarvekshanReportData(context, Statics.userDetails["userID"], _selectedGeoUnitId);
     setState(() {
       data = vastiSurveyReportModel!.vastisarvekshan;
     });
@@ -2177,7 +2178,6 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                           _selctedLevel = 'Mahanagar';
                           _selctedLevelName = item.name ?? "";
                           _selectedGeoUnitId = value;
-                          selctedLevelId = value;
                         });
                         populatelinkedVibhaagDropdown(value!);
                         populatelinkedBhaagDropdown("");
@@ -2194,7 +2194,6 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                         setState(() {
                           _linkedVibhaagValue = value;
                           _selctedLevel = 'Vibhaag';
-                          selctedLevelId = value;
                           _selctedLevelName = item.name ?? "";
                           _selectedGeoUnitId = value;
                         });
@@ -2212,12 +2211,11 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                         setState(() {
                           _linkedBhaagValue = value;
                           _selctedLevel = 'Bhaag';
-                          selctedLevelId = value;
                           _selctedLevelName = item.name ?? "";
                           _linkedbhaagName = item.name ?? "";
                           _selectedGeoUnitId = value;
-                          populatelinkedNagarDropdown(value, null);
                         });
+                        populatelinkedNagarDropdown(value, null);
                       },
                     ),
                   // if (_linkedshahar != null && _linkedshahar!.isNotEmpty)
@@ -2250,11 +2248,11 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                           _linkedNagarValue = value;
                           _selectedGeoUnitId = value;
                           _selctedLevel = 'Nagar';
-                          selctedLevelId = value;
                           _selctedLevelName = item.name ?? "";
                           _linkednagarName = item.name ?? "";
-                          populatelinkedVastiDropdown(false, value!);
                         });
+                        populatelinkedUpnagarDropdown(value!);
+                        populatelinkedVastiDropdown(false, value!);
                       },
                     ),
                   if (_linkedupnagar != null && _linkedupnagar!.isNotEmpty)
@@ -2274,12 +2272,11 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                           _linkedupnagarValue = value;
                           _selectedGeoUnitId = value;
                           _selctedLevel = 'upnagarUpkhanda';
-                          selctedLevelId = value;
                           _selctedLevelName = selectedItem.name ?? "";
-                          populatelinkedVastiDropdown(true, value!);
 
                           // populatelinkedNagarDropdown(null, value);
                         });
+                        populatelinkedVastiDropdown(true, value!);
                       },
                     ),
                   if (_linkedvasti != null && _linkedvasti!.isNotEmpty)
@@ -2294,7 +2291,6 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                           _linkedvastiValue = value;
                           _selectedGeoUnitId = value.toString();
                           _selctedLevel = 'Vasti';
-                          selctedLevelId = value;
                           _selctedLevelName = item.name ?? "";
                           _linkedvastiName = item.name ?? "";
                         });
@@ -2312,7 +2308,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
                           style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.purpleAccent)),
                           onPressed: () {
                             if (_selctedLevel == "Vasti" || _selctedLevel == "Graam") {
-                              print("selctedLevel $_selctedLevel -- selctedLevelId $selctedLevelId -- selctedLevelName $selctedLevelName");
+                              print("selctedLevel $_selctedLevel -- selctedLevelId $_selectedGeoUnitId -- selctedLevelName $selctedLevelName");
                               getMyDetailsColumnsAndRows();
                             } else {
                               Statics.showToast(Statics.getLabel('vastiGramValidation'));

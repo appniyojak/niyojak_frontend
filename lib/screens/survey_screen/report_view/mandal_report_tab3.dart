@@ -1484,7 +1484,7 @@ class _MandalSurveyReportViewScreen3State extends State<MandalSurveyReportViewSc
                           selctedLevelName = selectedItem.name ?? "";
                           _selctedLevel = 'upnagarUpkhanda';
                         });
-                        populatelinkedMandalDropdown(false, value!);
+                        populatelinkedMandalDropdown(true, value!);
                         print("Selected Id: $value");
                         print("Selected Level Name: ${selectedItem.name}");
                       },
@@ -1502,8 +1502,8 @@ class _MandalSurveyReportViewScreen3State extends State<MandalSurveyReportViewSc
                           _selectedGeoUnitId = value;
                           selctedLevelName = selectedItem.name ?? "";
                           _selctedLevel = 'Mandal';
-                          populatelinkedGraamDropdown(value!);
                         });
+                        populatelinkedGraamDropdown(value!);
                         print("Selected Id: $value");
                         print("Selected Level Name: ${selectedItem.name}");
                       },

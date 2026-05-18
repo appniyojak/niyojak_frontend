@@ -176,31 +176,33 @@ class _SearchAnnualBaithakVruttaState extends State<SearchAnnualBaithakVrutta> {
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedMahaanagarDropdown() async {
+    _linkedVibhaagValue = _linkedBhaagValue = _linkedNagarValue = _linkedupnagarValue = null;
+    _linkedVibhaag = _linkedBhaag = _linkedNagar = _linkedvasti = _linkedupnagar = [];
     final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MahaanagarLevelID'].toString(), '', '', '', isAbhiyaan: false);
     setState(() => _linkedMahaanagar = data);
     return data;
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
-    _linkedBhaagValue = _linkedNagarValue = null;
+    _linkedBhaagValue = _linkedNagarValue = _linkedupnagarValue = null;
     final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar', '', isAbhiyaan: false);
     setState(() => _linkedVibhaag = data);
     return data;
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(String vibhaagIDStr) async {
-    _linkedNagarValue = null;
+    _linkedNagarValue = _linkedupnagarValue = null;
     //_linkedbhaagName = _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
-    _linkedBhaag = _linkedNagar = _linkedvasti = [];
+    _linkedBhaag = _linkedNagar = _linkedvasti = _linkedupnagar = [];
     final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '', isAbhiyaan: false);
     setState(() => _linkedBhaag = data);
     return data;
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
-    _linkedNagarValue = null;
+    _linkedNagarValue = _linkedupnagarValue = null;
     //_linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
-    _linkedNagar = _linkedvasti = null;
+    _linkedNagar = _linkedupnagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
     final parentID = shaharIDStr ?? bhaagIDStr!;
     final parentType = shaharIDStr != null ? 'Shahar' : 'Bhaag';
     final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), parentID, parentType, '', isAbhiyaan: false);
@@ -1211,7 +1213,7 @@ class _SearchAnnualBaithakVruttaState extends State<SearchAnnualBaithakVrutta> {
                         .toList(),
                     onChanged: (value) {
                       setState(() {
-                        _linkedNagarValue = value;
+                        _linkedupnagarValue = value;
                         _selctedLevel = 'upnagarUpkhanda';
                         _selectedGeoUnitId = value!;
                       });

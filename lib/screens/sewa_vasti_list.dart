@@ -885,6 +885,7 @@ class _SearchSewaVastiState extends State<SearchSewaVasti> {
                                     _linkedMahaanagarValue =
                                         _linkedVibhaagValue = _linkedbhaagValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = _bhaagValue = _shaharValue = _nagarValue = null;
                                     _linkedbhaag = _linkedmandal = _linkednagar = _linkedgraam = _linkedmandal = _linkedvasti = _bhaag = _shahar = _nagar = null;
+                                    _sewaVastiList = null;
                                   });
                                   populateDropdown();
                                 },
