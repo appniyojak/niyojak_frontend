@@ -140,6 +140,7 @@ class _SadbhavReportTabState extends State<SadbhavReportTab> with AutomaticKeepA
         _selctedLevel = 'upnagarUpkhanda';
         final selectedItem = _linkedupnagar!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
         _selctedLevelName = selectedItem.name;
+        getReportDataFun();
       }
     }
 

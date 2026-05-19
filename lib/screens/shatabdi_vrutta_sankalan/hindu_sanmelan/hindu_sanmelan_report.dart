@@ -138,7 +138,7 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> with Automati
     if (level == 6) {
       _selectedGeoUnitId = (dm.geoUnitID ?? selection.nagar).toString();
       _selctedLevel = 'Nagar';
-      getReportDataFun();
+      // getReportDataFun();
       final selectedItem = _linkednagar!.firstWhere((bg) => bg.geoUnitID.toString() == _selectedGeoUnitId);
       _selctedLevelName = selectedItem.name;
     }

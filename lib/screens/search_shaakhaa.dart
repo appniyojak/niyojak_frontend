@@ -248,25 +248,25 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
 
   Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
     _linkedupnagarValue =
-        _linkedupnagar = _linkedbhaagValue = _linkednagarValue = _linkedupnagarValue = _linkedvastiValue = null;
+        _linkedupnagar = _linkedbhaagValue = _linkednagarValue = _linkedupnagarValue = _linkedvastiValue = _linkedmandalValue = _linkedgraamValue = _linkedmandal = _linkedgraam = null;
     final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar', '', isAbhiyaan: false);
     setState(() => _linkedVibhaag = data);
     return data;
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(String vibhaagIDStr) async {
-    _linkedupnagarValue = _linkedbhaagValue = _linkednagarValue = _linkedupnagarValue = _linkedvastiValue = null;
+    _linkedupnagarValue = _linkedbhaagValue = _linkednagarValue = _linkedupnagarValue = _linkedvastiValue = _linkedmandalValue = _linkedgraamValue = null;
     //_linkedbhaagName = _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
-    _linkedupnagar = _linkedbhaag = _linkednagar = _linkedupnagar = _linkedvasti = [];
+    _linkedupnagar = _linkedbhaag = _linkednagar = _linkedupnagar = _linkedvasti = _linkedmandal = _linkedgraam = [];
     final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '', isAbhiyaan: false);
     setState(() => _linkedbhaag = data);
     return data;
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
-    _linkedupnagarValue = _linkednagarValue = _linkedvastiValue = _linkedupnagarValue = null;
+    _linkedupnagarValue = _linkednagarValue = _linkedvastiValue = _linkedupnagarValue = _linkedmandalValue = _linkedgraamValue = null;
     //_linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
-    _linkedupnagar = _linkednagar = _linkedvasti = _linkedupnagar = null;
+    _linkedupnagar = _linkednagar = _linkedvasti = _linkedupnagar = _linkedmandal = _linkedgraam = null;
     final parentID = shaharIDStr ?? bhaagIDStr!;
     final parentType = shaharIDStr != null ? 'Shahar' : 'Bhaag';
     final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), parentID, parentType, '', isAbhiyaan: false);
@@ -275,9 +275,9 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedUpnagarDropdown(String? nagarIDStr) async {
-    _linkedupnagarValue = _linkedvastiValue = null;
+    _linkedupnagarValue = _linkedvastiValue = _linkedmandalValue = _linkedgraamValue = null;
     //_linkedupnagarName = _linkedmandalName = _linkedgraamName = null;
-    _linkedupnagar = _linkedvasti = null;
+    _linkedupnagar = _linkedvasti = _linkedmandal = _linkedgraam = null;
     var mnDD;
 
     mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
@@ -290,8 +290,8 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedVastiDropdown(bool haveParentUp, String? nagarIDStr) async {
-    _linkedvastiValue = null;
-    _linkedvastiName = null;
+    _linkedvastiValue = _linkedmandalValue = _linkedgraamValue = null;
+    _linkedvastiName = _linkedvasti = _linkedmandal = _linkedgraam = null;
     var data;
     if (haveParentUp) {
       print("i am in parents upnagar");
@@ -465,16 +465,16 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
     geoUnitID = vastiVal != null
         ? vastiVal
         : graamVal != null
-        ? graamVal
-        : mandalVal != null
-        ? mandalVal
-        : nagarVal != null
-        ? nagarVal
-        : shaharVal != null
-        ? shaharVal
-        : bhaagVal != null
-        ? bhaagVal
-        : null;
+            ? graamVal
+            : mandalVal != null
+                ? mandalVal
+                : nagarVal != null
+                    ? nagarVal
+                    : shaharVal != null
+                        ? shaharVal
+                        : bhaagVal != null
+                            ? bhaagVal
+                            : null;
 
     if (strType == "Search") {
       if (mandalVal == null && graamVal == null && vastiVal == null) {
@@ -577,36 +577,12 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
       row.add(data["OtherOptionalVishay"].toString());
       // row.add(data["DaayitvaLevelName"].toString());
       // row.add(data["DaayitvaName"].toString());
-      row.add("${bhagList
-          .where((element) => element.geoUnitID == data["ParentBhaagID"])
-          .isNotEmpty ? bhagList
-          .firstWhere((element) => element.geoUnitID == data["ParentBhaagID"])
-          .name : "-"}");
-      row.add("${gramList
-          .where((element) => element.geoUnitID == data["ParentGraamID"])
-          .isNotEmpty ? gramList
-          .firstWhere((element) => element.geoUnitID == data["ParentGraamID"])
-          .name : "-"}");
-      row.add("${mandalList
-          .where((element) => element.geoUnitID == data["ParentMandalID"])
-          .isNotEmpty ? mandalList
-          .firstWhere((element) => element.geoUnitID == data["ParentMandalID"])
-          .name : "-"}");
-      row.add("${nagarList
-          .where((element) => element.geoUnitID == data["ParentNagarID"])
-          .isNotEmpty ? nagarList
-          .firstWhere((element) => element.geoUnitID == data["ParentNagarID"])
-          .name : "-"}");
-      row.add("${vastiList
-          .where((element) => element.geoUnitID == data["ParentShaharID"])
-          .isNotEmpty ? vastiList
-          .firstWhere((element) => element.geoUnitID == data["ParentShaharID"])
-          .name : "-"}");
-      row.add("${vastiList
-          .where((element) => element.geoUnitID == data["ParentVastiID"])
-          .isNotEmpty ? vastiList
-          .firstWhere((element) => element.geoUnitID == data["ParentVastiID"])
-          .name : "-"}");
+      row.add("${bhagList.where((element) => element.geoUnitID == data["ParentBhaagID"]).isNotEmpty ? bhagList.firstWhere((element) => element.geoUnitID == data["ParentBhaagID"]).name : "-"}");
+      row.add("${gramList.where((element) => element.geoUnitID == data["ParentGraamID"]).isNotEmpty ? gramList.firstWhere((element) => element.geoUnitID == data["ParentGraamID"]).name : "-"}");
+      row.add("${mandalList.where((element) => element.geoUnitID == data["ParentMandalID"]).isNotEmpty ? mandalList.firstWhere((element) => element.geoUnitID == data["ParentMandalID"]).name : "-"}");
+      row.add("${nagarList.where((element) => element.geoUnitID == data["ParentNagarID"]).isNotEmpty ? nagarList.firstWhere((element) => element.geoUnitID == data["ParentNagarID"]).name : "-"}");
+      row.add("${vastiList.where((element) => element.geoUnitID == data["ParentShaharID"]).isNotEmpty ? vastiList.firstWhere((element) => element.geoUnitID == data["ParentShaharID"]).name : "-"}");
+      row.add("${vastiList.where((element) => element.geoUnitID == data["ParentVastiID"]).isNotEmpty ? vastiList.firstWhere((element) => element.geoUnitID == data["ParentVastiID"]).name : "-"}");
 
       // Mahanagar //9
       //   "${mahanagarList.where((element) =>  element.geoUnitID == data.parentMahaanagarID).isNotEmpty ? mahanagarList.firstWhere((element) => element.geoUnitID == data.parentMahaanagarID).name  : "-" }",
@@ -844,11 +820,11 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
                     },
                     children: [
                       if ((int.parse(Statics.userDetails['LevelID']) > 1))
-                      // &&
-                      // !(Statics.userDetails['DaayitvaName'] == 'Mukhya Shikshak' ||
-                      //     Statics.userDetails['DaayitvaName'] == 'मुख्य शिक्षक' ||
-                      //     Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' ||
-                      //     Statics.userDetails['DaayitvaName'] == 'कार्यवाह'))
+                        // &&
+                        // !(Statics.userDetails['DaayitvaName'] == 'Mukhya Shikshak' ||
+                        //     Statics.userDetails['DaayitvaName'] == 'मुख्य शिक्षक' ||
+                        //     Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' ||
+                        //     Statics.userDetails['DaayitvaName'] == 'कार्यवाह'))
                         ExpansionPanel(
                           headerBuilder: (BuildContext context, bool isExpanded) {
                             return ListTile(
@@ -940,11 +916,10 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
                                     label: Statics.getLabel('upnagarUpkhanda'),
                                     value: _linkedupnagarValue,
                                     items: _linkedupnagar!
-                                        .map((bg) =>
-                                        DropdownMenuItem(
-                                          value: bg.geoUnitID.toString(),
-                                          child: Text(bg.name!),
-                                        ))
+                                        .map((bg) => DropdownMenuItem(
+                                              value: bg.geoUnitID.toString(),
+                                              child: Text(bg.name!),
+                                            ))
                                         .toList(),
                                     onChanged: (value) {
                                       final selectedItem = _linkedupnagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
@@ -965,11 +940,10 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
                                     label: Statics.getLabel('Mandal'),
                                     value: _linkedmandalValue,
                                     items: _linkedmandal!
-                                        .map((bg) =>
-                                        DropdownMenuItem(
-                                          value: bg.geoUnitID.toString(),
-                                          child: Text(bg.name!),
-                                        ))
+                                        .map((bg) => DropdownMenuItem(
+                                              value: bg.geoUnitID.toString(),
+                                              child: Text(bg.name!),
+                                            ))
                                         .toList(),
                                     onChanged: (value) {
                                       final item = _linkedmandal!.firstWhere((g) => g.geoUnitID.toString() == value);
@@ -993,11 +967,10 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
                                     label: Statics.getLabel('Graam'),
                                     value: _linkedgraamValue,
                                     items: _linkedgraam!
-                                        .map((bg) =>
-                                        DropdownMenuItem(
-                                          value: bg.geoUnitID.toString(),
-                                          child: Text(bg.name!),
-                                        ))
+                                        .map((bg) => DropdownMenuItem(
+                                              value: bg.geoUnitID.toString(),
+                                              child: Text(bg.name!),
+                                            ))
                                         .toList(),
                                     onChanged: (value) {
                                       final item = _linkedgraam!.firstWhere((g) => g.geoUnitID.toString() == value);
@@ -1015,11 +988,10 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
                                     label: Statics.getLabel('Vasti'),
                                     value: _linkedvastiValue,
                                     items: _linkedvasti!
-                                        .map((bg) =>
-                                        DropdownMenuItem(
-                                          value: bg.geoUnitID.toString(),
-                                          child: Text(bg.name!),
-                                        ))
+                                        .map((bg) => DropdownMenuItem(
+                                              value: bg.geoUnitID.toString(),
+                                              child: Text(bg.name!),
+                                            ))
                                         .toList(),
                                     onChanged: (value) {
                                       final item = _linkedvasti!.firstWhere((g) => g.geoUnitID.toString() == value);
@@ -1170,8 +1142,8 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
                                     value: _frequencyValue == null
                                         ? null
                                         : _frequency == null
-                                        ? null
-                                        : _frequency![_frequency!.indexWhere((p) => p.staticID.toString() == _frequencyValue.toString())],
+                                            ? null
+                                            : _frequency![_frequency!.indexWhere((p) => p.staticID.toString() == _frequencyValue.toString())],
                                     items: _frequency!.map((bg) => DropdownMenuItem(value: bg, child: Text(bg.codeForDisplay!))).toList(),
                                     onChanged: (value) {
                                       setState(() {
@@ -1205,11 +1177,11 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
                     ],
                   ),
                   if ((int.parse(Statics.userDetails['LevelID']) > 1))
-                  // &&
-                  //   !(Statics.userDetails['DaayitvaName'] == 'Mukhya Shikshak' ||
-                  //       Statics.userDetails['DaayitvaName'] == 'मुख्य शिक्षक' ||
-                  //       Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' ||
-                  //       Statics.userDetails['DaayitvaName'] == 'कार्यवाह'))
+                    // &&
+                    //   !(Statics.userDetails['DaayitvaName'] == 'Mukhya Shikshak' ||
+                    //       Statics.userDetails['DaayitvaName'] == 'मुख्य शिक्षक' ||
+                    //       Statics.userDetails['DaayitvaName'] == 'Kaaryavaah' ||
+                    //       Statics.userDetails['DaayitvaName'] == 'कार्यवाह'))
                     Container(
                       margin: EdgeInsets.all(20),
                       child: Column(
@@ -1225,14 +1197,8 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
                                     horizontal: 15,
                                     vertical: 8,
                                   ),
-                                  color: Theme
-                                      .of(context)
-                                      .primaryColor,
-                                  textColor: Theme
-                                      .of(context)
-                                      .primaryTextTheme
-                                      .labelMedium
-                                      ?.color,
+                                  color: Theme.of(context).primaryColor,
+                                  textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                                   onPressed: () {
                                     _search("Search", context);
                                   },
@@ -1252,14 +1218,8 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
                                     horizontal: 15,
                                     vertical: 8,
                                   ),
-                                  color: Theme
-                                      .of(context)
-                                      .primaryColor,
-                                  textColor: Theme
-                                      .of(context)
-                                      .primaryTextTheme
-                                      .labelMedium
-                                      ?.color,
+                                  color: Theme.of(context).primaryColor,
+                                  textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
                                   onPressed: () {
                                     _search("ViewLocation", context);
                                   },
@@ -1267,11 +1227,7 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
                                     children: [
                                       Icon(
                                         Icons.location_pin,
-                                        color: Theme
-                                            .of(context)
-                                            .primaryTextTheme
-                                            .labelMedium
-                                            ?.color,
+                                        color: Theme.of(context).primaryTextTheme.labelMedium?.color,
                                       ),
                                       Text(
                                         Statics.getLabel("MapView"),
@@ -1319,8 +1275,8 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
                       }
                       return dataSnapshot.hasData && dataSnapshot.data!.length > 0
                           ? Column(
-                        children: dataSnapshot.data!.map((shaakhaa) => ShaakhaaCard(shaakhaa, shaakhaa['IsSankalpit'], _search)).toList(),
-                      )
+                              children: dataSnapshot.data!.map((shaakhaa) => ShaakhaaCard(shaakhaa, shaakhaa['IsSankalpit'], _search)).toList(),
+                            )
                           : Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch')));
                     },
                   ),
@@ -1330,8 +1286,8 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
           ),
         ),
         floatingActionButton:
-        // tulnatmakBaithakResponse != null ?
-        FloatingActionButton(
+            // tulnatmakBaithakResponse != null ?
+            FloatingActionButton(
           mini: true,
           tooltip: Statics.getLabel("ExportToExcel"),
           onPressed: () async {
@@ -1341,7 +1297,7 @@ class _SearchSShaakhaaScreenState extends State<SearchShaakhaaScreen> {
           child: Icon(Icons.download_sharp),
           backgroundColor: Colors.green,
         )
-      // :Container(),
-    );
+        // :Container(),
+        );
   }
 }

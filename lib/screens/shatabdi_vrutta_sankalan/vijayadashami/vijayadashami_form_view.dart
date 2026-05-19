@@ -181,7 +181,9 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
 
   Future<void> populateAllDropdowns(int level, DropDownModel dm, {bool fromManual = false}) async {
     setState(() {
-      _selectedGeoUnitId = _linkedMahaanagarValue = _linkedBhaagValue = _linkedShaharValue = _linkedNagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+      selctedLevelId = '';
+      _selectedGeoUnitId = _linkedMahaanagarValue =
+          _linkedBhaagValue = _linkedShaharValue = _linkedUpnagar = _linkedupnagarValue = _linkedNagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     });
     final selection = prepareSelection(dm);
 
@@ -239,8 +241,8 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       if (level == 13) {
         _selectedGeoUnitId = (dm.geoUnitID ?? selection.upnagar).toString();
         selectedUpnagarList = [];
-        selctedLevelId = "13";
         if (!fromManual) {
+          selctedLevelId = "13";
           utsavKontyaStaravar = "13";
         }
       }
@@ -451,6 +453,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
       _linkedMahaanagarValue = _linkedBhaagValue = _linkedShaharValue = _linkedNagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
       _linkedMahaanagar = _linkedVibhaag = _linkedBhaag = _linkedNagar = _linkedmandal = null;
       selctedLevelName = _selectedGeoUnitId = null;
+      _linkedUpnagar = [];
       selctedLevel = "praant";
       isVastiSearch = false;
     });
@@ -463,13 +466,17 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedMahaanagarDropdown() async {
+    _linkedmandalValue = _linkedgraamValue = null;
+    _linkedmandal = _linkedgraam = [];
+    _linkedUpnagar = [];
     final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MahaanagarLevelID'].toString(), '', '', '');
     setState(() => _linkedMahaanagar = data);
     return data;
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
-    _linkedupnagarValue = _linkedupnagar = _linkedBhaagValue = _linkedNagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    _linkedupnagarValue = _linkedupnagar = _linkedUpnagar = _linkedBhaagValue = _linkedNagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    _linkedUpnagar = [];
     final data = utsavKontyaStaravar == "4"
         ? await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar', '')
         : utsavKontyaStaravar == "13"
@@ -483,6 +490,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     _linkedupnagarValue = _linkedBhaagValue = _linkedNagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedBhaagName = _linkedNagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
     _linkedupnagar = _linkedBhaag = _linkedNagar = _linkedmandal = _linkedgraam = _linkedvasti = [];
+    _linkedUpnagar = [];
     final data = utsavKontyaStaravar == "4"
         ? await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '')
         : utsavKontyaStaravar == "13"
@@ -504,6 +512,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     _linkedupnagarValue = _linkedNagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedNagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
     _linkedupnagar = _linkedNagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
+    _linkedUpnagar = [];
     final parentID = shaharIDStr ?? bhaagIDStr!;
     final parentType = shaharIDStr != null ? 'Shahar' : 'Bhaag';
     final data = utsavKontyaStaravar == "4"
@@ -519,6 +528,7 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
     _linkedupnagarValue = _linkedmandalValue = _linkedgraamValue = null;
     _linkedupnagarName = _linkedmandalName = _linkedgraamName = null;
     _linkedupnagar = _linkedmandal = _linkedgraam = null;
+    _linkedUpnagar = [];
     var mnDD;
 
     mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
@@ -2507,6 +2517,10 @@ class _VijayadashamiFormViewState extends State<VijayadashamiFormView> {
                           _isExpanded = true;
                         });
                         await clearForm(fromManual: true);
+                        setState(() {
+                          utsavKontyaStaravar = value;
+                          _isExpanded = true;
+                        });
                       },
                     ),
                   ),
