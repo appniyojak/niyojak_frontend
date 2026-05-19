@@ -61,6 +61,7 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
   List<GeoUnitMasterBAL>? _linkedbhaag;
   List<GeoUnitMasterBAL>? _linkedshahar;
   List<GeoUnitMasterBAL>? _linkednagar;
+  List<GeoUnitMasterBAL>? _linkedupnagar;
   List<GeoUnitMasterBAL>? _linkedmandal;
   List<GeoUnitMasterBAL>? _linkedgraam;
   List<GeoUnitMasterBAL>? _linkedvasti;
@@ -71,6 +72,7 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
   String? _linkedVibhaagValue = '';
   String? _linkedbhaagValue = "";
   String? _linkednagarValue = "";
+  String? _linkedupnagarValue = "";
   String? _linkedmandalValue = "";
   String? _linkedgraamValue = "";
   String? _linkedvastiValue = "";
@@ -128,7 +130,7 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
 
   Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(String vibhaagIDStr) async {
     setState(() {
-      _linkedbhaagValue = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
+      _linkedupnagarValue = _linkedupnagar = _linkedbhaagValue = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
     });
     var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
     setState(() {
@@ -139,7 +141,7 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
 
   Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
     setState(() {
-      _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
+      _linkedupnagarValue = _linkedupnagar = _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
     });
     var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '');
     setState(() {
@@ -159,8 +161,8 @@ class _AddAbhiyaanKaryakartaScreenState extends State<AddAbhiyaanKaryakartaScree
 
   Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
     setState(() {
-      _linkednagarValue = null;
-      _linkedvasti = _linkedgraam = _linkedmandal = _linkednagar = null;
+      _linkedupnagarValue = _linkednagarValue = null;
+      _linkedupnagar = _linkedvasti = _linkedgraam = _linkedmandal = _linkednagar = null;
     });
     if (shaharIDStr != null) {
       var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');

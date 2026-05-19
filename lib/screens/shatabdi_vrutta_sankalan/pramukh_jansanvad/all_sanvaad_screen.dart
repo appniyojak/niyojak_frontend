@@ -243,8 +243,9 @@ class _AllSanvaadScreenState extends State<AllSanvaadScreen> {
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
-    _linkedbhaagValue = _linkednagarValue = _linkedupnagarValue = _linkedupnagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    _linkedupnagarValue = _linkedbhaagValue = _linkednagarValue = _linkedupnagarValue = _linkedupnagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedbhaagName = _linkednagarName = _linkedupnagar = _linkedupnagar = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
+    _linkedupnagar = _linkedbhaag = _linkednagar = _linkedupnagar = _linkedupnagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
     print("populatelinkedVibhaagDropdown $mahaanagarIDStr");
     var data;
     if (_selectedKaryakramLevelId == 7) {
@@ -261,9 +262,9 @@ class _AllSanvaadScreenState extends State<AllSanvaadScreen> {
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(String vibhaagIDStr) async {
-    _linkedbhaagValue = _linkednagarValue = _linkedupnagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    _linkedupnagarValue = _linkedbhaagValue = _linkednagarValue = _linkedupnagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedbhaagName = _linkednagarName = _linkedupnagar = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
-    _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = [];
+    _linkedupnagar = _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = [];
     var data;
     if (_selectedKaryakramLevelId == 7) {
       data = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
@@ -298,9 +299,9 @@ class _AllSanvaadScreenState extends State<AllSanvaadScreen> {
   Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(String? bhaagIDStr) async {
     var ngDD;
 // print("populatelinkedNagarDropdown ${bhaagIDStr} == ${shaharIDStr}  ");
-    _linkednagarValue = _linkedupnagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    _linkedupnagarValue = _linkednagarValue = _linkedupnagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkednagarName = _linkedupnagar = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
-    _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
+    _linkedupnagar = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
     print("print LevelID > ${Statics.userDetails["LevelID"]}");
     if (_selectedKaryakramLevelId == 7) {
       ngDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');

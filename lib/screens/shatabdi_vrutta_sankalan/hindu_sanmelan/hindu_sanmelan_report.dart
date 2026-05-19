@@ -223,8 +223,9 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> with Automati
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
-    _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    _linkedupnagarValue = _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedbhaagName = _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
+    _linkedupnagar = _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
     print("populatelinkedVibhaagDropdown $mahaanagarIDStr");
     var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '', isAbhiyaan: false);
     setState(() {
@@ -234,9 +235,9 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> with Automati
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(String vibhaagIDStr) async {
-    _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    _linkedupnagarValue = _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedbhaagName = _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
-    _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = [];
+    _linkedupnagar = _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = [];
     var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '', isAbhiyaan: false);
     setState(() {
       _linkedbhaag = data;
@@ -256,9 +257,9 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> with Automati
 
   Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
 // print("populatelinkedNagarDropdown ${bhaagIDStr} == ${shaharIDStr}  ");
-    _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-    _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
-    _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
+    _linkedupnagarValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    _linkedupnagarName = _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
+    _linkedupnagar = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
     print("print LevelID > ${Statics.userDetails["LevelID"]}");
     print("shaharIDStr shaharIDStr $shaharIDStr");
     if (shaharIDStr != null) {
@@ -1693,41 +1694,40 @@ class _HinduSanmelanReportState extends State<HinduSanmelanReport> with Automati
                     ),
                     */
                   SizedBox(height: 15),
-                  if ((userLevelId ?? 0) > 6)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // if ((_linkedgraamValue != "" && _linkedgraamValue != null) || (_linkedvastiValue != "" && _linkedvastiValue != null))
-                        MaterialButton(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 35,
-                            vertical: 5,
-                          ),
-                          color: Theme.of(context).primaryColor,
-                          textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
-                          onPressed: getReportDataFun,
-                          child: Text(
-                            "${Statics.getLabel('search')}",
-                            style: TextStyle(fontSize: 16),
-                          ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // if ((_linkedgraamValue != "" && _linkedgraamValue != null) || (_linkedvastiValue != "" && _linkedvastiValue != null))
+                      MaterialButton(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 35,
+                          vertical: 5,
                         ),
-                        MaterialButton(
-                            onPressed: () async {
-                              setState(() {
-                                _searched = false;
-                                _selctedLevelName = "";
-                                _selectedGeoUnitId = null;
-                                _linkedMahaanagarValue =
-                                    _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedvastiValue = _linkedgraamValue = _linkedupnagarValue = null;
-                                _linkedVibhaagValue = _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = _linkedupnagar = null;
-                                _selctedLevel = "praant";
-                              });
-                              await populateDropdown();
-                            },
-                            child: Text(Statics.getLabel('clear'))),
-                      ],
-                    ),
+                        color: Theme.of(context).primaryColor,
+                        textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                        onPressed: getReportDataFun,
+                        child: Text(
+                          "${Statics.getLabel('search')}",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      MaterialButton(
+                          onPressed: () async {
+                            setState(() {
+                              _searched = false;
+                              _selctedLevelName = "";
+                              _selectedGeoUnitId = null;
+                              _linkedMahaanagarValue =
+                                  _linkedbhaagValue = _linkedshaharValue = _linkednagarValue = _linkedmandalValue = _linkedvastiValue = _linkedgraamValue = _linkedupnagarValue = null;
+                              _linkedVibhaagValue = _linkedbhaag = _linkedshahar = _linkedgraam = _linkedmandal = _linkedvasti = _linkednagar = _linkedupnagar = null;
+                              _selctedLevel = "praant";
+                            });
+                            await populateDropdown();
+                          },
+                          child: Text(Statics.getLabel('clear'))),
+                    ],
+                  ),
                 ],
               ),
             ),

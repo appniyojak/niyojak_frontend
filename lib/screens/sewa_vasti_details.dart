@@ -210,18 +210,18 @@ class _SewaVastiDetailsState extends State<SewaVastiDetails> {
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(String vibhaagIDStr) async {
-    _linkedbhaagValue = _linkednagarValue = _linkedvastiValue = null;
+    _linkedupnagarValue = _linkedbhaagValue = _linkednagarValue = _linkedvastiValue = null;
     //_linkedbhaagName = _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
-    _linkedbhaag = _linkednagar = _linkedvasti = [];
+    _linkedupnagar = _linkedbhaag = _linkednagar = _linkedvasti = [];
     final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '', isAbhiyaan: false);
     setState(() => _linkedbhaag = data);
     return data;
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
-    _linkednagarValue = _linkedvastiValue = null;
+    _linkedupnagarValue = _linkednagarValue = _linkedvastiValue = null;
     //_linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
-    _linkednagar = _linkedvasti = null;
+    _linkedupnagar = _linkednagar = _linkedvasti = null;
     final parentID = shaharIDStr ?? bhaagIDStr!;
     final parentType = shaharIDStr != null ? 'Shahar' : 'Bhaag';
     final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), parentID, parentType, '', isAbhiyaan: false);
@@ -230,9 +230,9 @@ class _SewaVastiDetailsState extends State<SewaVastiDetails> {
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedUpnagarDropdown(String? nagarIDStr) async {
-    _linkedvastiValue = null;
+    _linkedupnagarValue = _linkedvastiValue = null;
     //_linkedupnagarName = _linkedmandalName = _linkedgraamName = null;
-    _linkedvasti = null;
+    _linkedupnagar = _linkedvasti = null;
     var mnDD;
 
     mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
@@ -879,6 +879,7 @@ class _SewaVastiDetailsState extends State<SewaVastiDetails> {
                                   _selectedGeoUnitId = value;
                                   type = "nagar";
                                 });
+                                populatelinkedUpnagarDropdown(value!);
                                 populatelinkedMandalDropdown(false, value!);
                                 populatelinkedVastiDropdown(false, value);
                                 print("nagar: $value");

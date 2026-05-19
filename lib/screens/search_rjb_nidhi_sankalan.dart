@@ -172,25 +172,26 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
-    _linkedbhaagValue = _linkednagarValue = _linkedvastiValue = null;
+    _linkedupnagarValue =
+        _linkedupnagar = _linkedbhaagValue = _linkednagarValue = _linkedvastiValue = null;
     final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar', '', isAbhiyaan: false);
     setState(() => _linkedVibhaag = data);
     return data;
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(String vibhaagIDStr) async {
-    _linkedbhaagValue = _linkednagarValue = _linkedvastiValue = null;
+    _linkedupnagarValue = _linkedbhaagValue = _linkednagarValue = _linkedvastiValue = null;
     //_linkedbhaagName = _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
-    _linkedbhaag = _linkednagar = _linkedvasti = [];
+    _linkedupnagar = _linkedbhaag = _linkednagar = _linkedvasti = [];
     final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '', isAbhiyaan: false);
     setState(() => _linkedbhaag = data);
     return data;
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
-    _linkednagarValue = _linkedvastiValue = null;
+    _linkedupnagarValue = _linkednagarValue = _linkedvastiValue = null;
     //_linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
-    _linkednagar = _linkedvasti = null;
+    _linkedupnagar = _linkednagar = _linkedvasti = null;
     final parentID = shaharIDStr ?? bhaagIDStr!;
     final parentType = shaharIDStr != null ? 'Shahar' : 'Bhaag';
     final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), parentID, parentType, '', isAbhiyaan: false);
@@ -199,9 +200,9 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedUpnagarDropdown(String? nagarIDStr) async {
-    _linkedvastiValue = null;
+    _linkedupnagarValue = _linkedvastiValue = null;
     //_linkedupnagarName = _linkedmandalName = _linkedgraamName = null;
-    _linkedvasti = null;
+    _linkedupnagar = _linkedvasti = null;
     var mnDD;
 
     mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
@@ -337,18 +338,18 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
     geoUnitID = vibhaagVal != null
         ? vibhaagVal
         : vastiVal != null
-            ? vastiVal
-            : graamVal != null
-                ? graamVal
-                : mandalVal != null
-                    ? mandalVal
-                    : nagarVal != null
-                        ? nagarVal
-                        : shaharVal != null
-                            ? shaharVal
-                            : bhaagVal != null
-                                ? bhaagVal
-                                : null;
+        ? vastiVal
+        : graamVal != null
+        ? graamVal
+        : mandalVal != null
+        ? mandalVal
+        : nagarVal != null
+        ? nagarVal
+        : shaharVal != null
+        ? shaharVal
+        : bhaagVal != null
+        ? bhaagVal
+        : null;
 
     if (strType == 'Search') {
       setState(() {
@@ -473,10 +474,11 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
                               label: Statics.getLabel('Vibhaag'),
                               value: _linkedVibhaagValue,
                               items: _linkedVibhaag!
-                                  .map((bg) => DropdownMenuItem(
-                                        value: bg.geoUnitID.toString(),
-                                        child: Text(bg.name!),
-                                      ))
+                                  .map((bg) =>
+                                  DropdownMenuItem(
+                                    value: bg.geoUnitID.toString(),
+                                    child: Text(bg.name!),
+                                  ))
                                   .toList(),
                               onChanged: (value) {
                                 setState(() {
@@ -495,10 +497,11 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
                               label: Statics.getLabel('Bhaag'),
                               value: _linkedbhaagValue,
                               items: _linkedbhaag!
-                                  .map((bg) => DropdownMenuItem(
-                                        value: bg.geoUnitID.toString(),
-                                        child: Text(bg.name!),
-                                      ))
+                                  .map((bg) =>
+                                  DropdownMenuItem(
+                                    value: bg.geoUnitID.toString(),
+                                    child: Text(bg.name!),
+                                  ))
                                   .toList(),
                               onChanged: (value) {
                                 setState(() {
@@ -535,10 +538,11 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
                               label: Statics.getLabel('Nagar'),
                               value: _linkednagarValue,
                               items: _linkednagar!
-                                  .map((bg) => DropdownMenuItem(
-                                        value: bg.geoUnitID.toString(),
-                                        child: Text(bg.name!),
-                                      ))
+                                  .map((bg) =>
+                                  DropdownMenuItem(
+                                    value: bg.geoUnitID.toString(),
+                                    child: Text(bg.name!),
+                                  ))
                                   .toList(),
                               onChanged: (value) {
                                 setState(() {
@@ -560,10 +564,11 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
                               label: Statics.getLabel('upnagarUpkhanda'),
                               value: _linkedupnagarValue,
                               items: _linkedupnagar!
-                                  .map((bg) => DropdownMenuItem(
-                                        value: bg.geoUnitID.toString(),
-                                        child: Text(bg.name!),
-                                      ))
+                                  .map((bg) =>
+                                  DropdownMenuItem(
+                                    value: bg.geoUnitID.toString(),
+                                    child: Text(bg.name!),
+                                  ))
                                   .toList(),
                               onChanged: (value) {
                                 final selectedItem = _linkedupnagar!.firstWhere((bg) => bg.geoUnitID.toString() == value);
@@ -588,10 +593,11 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
                               label: Statics.getLabel('Mandal'),
                               value: _linkedmandalValue,
                               items: _linkedmandal!
-                                  .map((bg) => DropdownMenuItem(
-                                        value: bg.geoUnitID.toString(),
-                                        child: Text(bg.name!),
-                                      ))
+                                  .map((bg) =>
+                                  DropdownMenuItem(
+                                    value: bg.geoUnitID.toString(),
+                                    child: Text(bg.name!),
+                                  ))
                                   .toList(),
                               onChanged: (value) {
                                 setState(() {
@@ -611,10 +617,11 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
                               label: Statics.getLabel('Graam'),
                               value: _linkedgraamValue,
                               items: _linkedgraam!
-                                  .map((bg) => DropdownMenuItem(
-                                        value: bg.geoUnitID.toString(),
-                                        child: Text(bg.name!),
-                                      ))
+                                  .map((bg) =>
+                                  DropdownMenuItem(
+                                    value: bg.geoUnitID.toString(),
+                                    child: Text(bg.name!),
+                                  ))
                                   .toList(),
                               onChanged: (value) {
                                 setState(() {
@@ -629,10 +636,11 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
                               label: Statics.getLabel('Vasti'),
                               value: _linkedvastiValue,
                               items: _linkedvasti!
-                                  .map((bg) => DropdownMenuItem(
-                                        value: bg.geoUnitID.toString(),
-                                        child: Text(bg.name!),
-                                      ))
+                                  .map((bg) =>
+                                  DropdownMenuItem(
+                                    value: bg.geoUnitID.toString(),
+                                    child: Text(bg.name!),
+                                  ))
                                   .toList(),
                               onChanged: (value) {
                                 setState(() {
@@ -712,8 +720,14 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
                               horizontal: 15,
                               vertical: 8,
                             ),
-                            color: Theme.of(context).primaryColor,
-                            textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                            color: Theme
+                                .of(context)
+                                .primaryColor,
+                            textColor: Theme
+                                .of(context)
+                                .primaryTextTheme
+                                .labelMedium
+                                ?.color,
                             onPressed: () {
                               _search("Search", context);
                             },
@@ -731,8 +745,14 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
                               horizontal: 15,
                               vertical: 8,
                             ),
-                            color: Theme.of(context).primaryColor,
-                            textColor: Theme.of(context).primaryTextTheme.labelMedium?.color,
+                            color: Theme
+                                .of(context)
+                                .primaryColor,
+                            textColor: Theme
+                                .of(context)
+                                .primaryTextTheme
+                                .labelMedium
+                                ?.color,
                             onPressed: () {
                               _search("ExportToExcel", context);
                             },
@@ -778,14 +798,14 @@ class _SearchRamJanmaBhoomiNidhiSankalanState extends State<SearchRamJanmaBhoomi
                     print(dataSnapshot.error);
                     return Center(
                         child: Text(
-                      'Server Error, Please Try Again Later',
-                      style: TextStyle(color: Colors.red),
-                    ));
+                          'Server Error, Please Try Again Later',
+                          style: TextStyle(color: Colors.red),
+                        ));
                   }
                   return dataSnapshot.hasData && dataSnapshot.data!.length > 0
                       ? Column(
-                          children: dataSnapshot.data!.map((sankalan) => NidhiSankalanCard(sankalan, (_isSahabhaagiOrVishesh == false ? 'SahabhaagiKaaryakartaa' : 'VisheshVyakti'), _search)).toList(),
-                        )
+                    children: dataSnapshot.data!.map((sankalan) => NidhiSankalanCard(sankalan, (_isSahabhaagiOrVishesh == false ? 'SahabhaagiKaaryakartaa' : 'VisheshVyakti'), _search)).toList(),
+                  )
                       : Center(child: Text(Statics.getLabel('noDataFoundTryAnotherSearch')));
                 },
               ),

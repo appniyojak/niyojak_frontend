@@ -38,6 +38,7 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
   List<GeoUnitMasterBAL>? _linkedbhaag;
   List<GeoUnitMasterBAL>? _linkedshahar;
   List<GeoUnitMasterBAL>? _linkednagar;
+  List<GeoUnitMasterBAL>? _linkedupnagar;
   List<GeoUnitMasterBAL>? _linkedmandal;
   List<GeoUnitMasterBAL>? _linkedgraam;
   List<GeoUnitMasterBAL>? _linkedvasti;
@@ -56,11 +57,11 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
   String? _linkedbhaagValue = "";
   String? _linkedshaharValue = "";
   String? _linkednagarValue = "";
+  String? _linkedupnagarValue = "";
   String? _linkedmandalValue = "";
   String? _linkedgraamValue = "";
   String? _linkedvastiValue = "";
   String? type = "prant";
-  String? _linkedupnagarValue = '';
   String? _selctedLevel = 'praant';
   String? _selctedLevelName = '';
   String _selctedLevelNames = '';
@@ -214,25 +215,25 @@ class _SearchJoinRssState extends State<SearchJoinRss> {
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
-    _linkedbhaagValue = _linkednagarValue = null;
+    _linkedupnagarValue = _linkedupnagar = _linkedbhaagValue = _linkednagarValue = null;
     final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar', '', isAbhiyaan: false);
     setState(() => _linkedVibhaag = data);
     return data;
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(String vibhaagIDStr) async {
-    _linkednagarValue = null;
+    _linkedupnagarValue = _linkednagarValue = null;
     //_linkedbhaagName = _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
-    _linkedbhaag = _linkednagar = _linkedvasti = [];
+    _linkedupnagar = _linkedbhaag = _linkednagar = _linkedvasti = [];
     final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '', isAbhiyaan: false);
     setState(() => _linkedbhaag = data);
     return data;
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
-    _linkednagarValue = null;
+    _linkedupnagarValue = _linkednagarValue = null;
     //_linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
-    _linkednagar = _linkedvasti = null;
+    _linkedupnagar = _linkednagar = _linkedvasti = null;
     final parentID = shaharIDStr ?? bhaagIDStr!;
     final parentType = shaharIDStr != null ? 'Shahar' : 'Bhaag';
     final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), parentID, parentType, '', isAbhiyaan: false);

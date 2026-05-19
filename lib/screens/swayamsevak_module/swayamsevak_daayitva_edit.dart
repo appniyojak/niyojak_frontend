@@ -182,8 +182,9 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
-    _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    _linkedupnagarValue = _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedbhaagName = _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
+    _linkedupnagar = _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
     print("populatelinkedVibhaagDropdown $mahaanagarIDStr");
     var data;
     if (_levelValue == 4 || _levelValue == 3) {
@@ -200,9 +201,9 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(String vibhaagIDStr) async {
-    _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    _linkedupnagarValue = _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkedbhaagName = _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
-    _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = [];
+    _linkedupnagar = _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = [];
     var data;
     if (_levelValue == 4 || _levelValue == 3) {
       data = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
@@ -229,9 +230,9 @@ class _SwayamSevakDaayitvaEditState extends State<SwayamSevakDaayitvaEdit> {
 
   Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
 // print("populatelinkedNagarDropdown ${bhaagIDStr} == ${shaharIDStr}  ");
-    _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    _linkedupnagarValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
     _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
-    _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
+    _linkedupnagar = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
     print("print LevelID > ${Statics.userDetails["LevelID"]}");
     print("shaharIDStr shaharIDStr $shaharIDStr");
     if (shaharIDStr != null) {

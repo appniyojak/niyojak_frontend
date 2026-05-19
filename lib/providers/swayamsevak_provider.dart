@@ -360,6 +360,7 @@ class SwayamsevakProvider {
     Map<String, String> jHeaders = {'Content-Type': 'application/json', 'Accept': '*/*'};
     print(Uri.parse(Statics.urlGetSwayamsevaksForAppGrid));
     log(inputJson);
+    print(Statics.urlGetSwayamsevaksForAppGrid);
     var response = await http.post(Uri.parse(Statics.urlGetSwayamsevaksForAppGrid), headers: jHeaders, body: inputJson);
     var body = json.decode(response.body);
 

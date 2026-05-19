@@ -175,7 +175,7 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
-    _linkedbhaagValue = null;
+    _linkedupnagarValue = _linkedupnagar = _linkedbhaagValue = null;
     var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '');
     if (mounted)
       setState(() {
@@ -185,7 +185,7 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(String vibhaagIDStr) async {
-    _linkednagarValue = null;
+    _linkedupnagarValue = _linkedupnagar = _linkedbhaagValue = _linkedbhaag = _linkednagarValue = _linkednagar = null;
     var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
     setState(() {
       _linkedbhaag = data;
@@ -194,8 +194,8 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
-    _linkednagarValue = null;
-    _linkednagar = null;
+    _linkedupnagarValue = _linkednagarValue = null;
+    _linkedupnagar = _linkednagar = null;
     if (shaharIDStr != null) {
       var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
       setState(() {
@@ -845,6 +845,7 @@ class _PramukhJansanvadReportTabState extends State<PramukhJansanvadReportTab> w
                           // populatelinkedMandalDropdown(value);
                           // populatelinkedVastiDropdown(value);
                         });
+                        populatelinkedUpnagarDropdown(value);
                       },
                       isDisabled: ((userLevelId ?? 0) < 6 || userLevelId == 13),
                     ),

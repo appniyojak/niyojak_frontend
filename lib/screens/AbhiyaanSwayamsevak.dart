@@ -401,10 +401,9 @@ class _AbhiyaanSwayamsevakState extends State<AbhiyaanSwayamsevak> {
     return data;
   }
 
-  Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
+  populatelinkedVibhaagDropdown(String? mahaanagarIDStr) async {
     _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-    print("populatelinkedVibhaagDropdown $mahaanagarIDStr");
-    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '');
+    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr!, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '');
     setState(() {
       _linkedVibhaag = data;
     });
@@ -412,9 +411,9 @@ class _AbhiyaanSwayamsevakState extends State<AbhiyaanSwayamsevak> {
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(String vibhaagIDStr) async {
-    _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-    _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = [];
-    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
+    _linkedupnagarValue = _linkedbhaagValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    _linkedupnagar = _linkedbhaag = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = [];
+    var data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr!, 'Vibhaag', '');
     setState(() {
       _linkedbhaag = data;
     });
@@ -423,7 +422,7 @@ class _AbhiyaanSwayamsevakState extends State<AbhiyaanSwayamsevak> {
 
   Future<List<GeoUnitMasterBAL>> populatelinkedShaharDropdown(String bhaagIDStr) async {
     _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-    var shDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr, 'Bhaag', '');
+    var shDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['ShaharLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
     setState(() {
       _linkedshahar = (shDD.length > 0 ? shDD : null);
     });
@@ -431,23 +430,21 @@ class _AbhiyaanSwayamsevakState extends State<AbhiyaanSwayamsevak> {
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
-// print("populatelinkedNagarDropdown ${bhaagIDStr} == ${shaharIDStr}  ");
-    _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
-    _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
-    print("shaharIDStr shaharIDStr $shaharIDStr");
+    _linkedupnagarValue = _linkednagarValue = _linkedmandalValue = _linkedgraamValue = _linkedvastiValue = null;
+    _linkedupnagar = _linkednagar = _linkedmandal = _linkedgraam = _linkedvasti = null;
+    var ngDD;
     if (shaharIDStr != null) {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), shaharIDStr!, 'Shahar', '');
+      ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
       setState(() {
         _linkednagar = (ngDD.length > 0 ? ngDD : null);
       });
-      return ngDD;
     } else {
-      var ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
+      ngDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), bhaagIDStr!, 'Bhaag', '');
       setState(() {
         _linkednagar = (ngDD.length > 0 ? ngDD : null);
       });
-      return ngDD;
     }
+    return ngDD;
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedGraamDropdown(String? mandalIDStr) async {
@@ -460,9 +457,9 @@ class _AbhiyaanSwayamsevakState extends State<AbhiyaanSwayamsevak> {
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedUpnagarDropdown(String? nagarIDStr) async {
-    _linkedvastiValue = null;
+    _linkedupnagarValue = _linkedvastiValue = _linkedmandalValue = _linkedgraamValue = null;
     //_linkedupnagarName = _linkedmandalName = _linkedgraamName = null;
-    _linkedvasti = null;
+    _linkedupnagar = _linkedvasti = _linkedmandal = _linkedgraam = null;
     var mnDD;
 
     mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
@@ -491,8 +488,8 @@ class _AbhiyaanSwayamsevakState extends State<AbhiyaanSwayamsevak> {
 
   Future<List<GeoUnitMasterBAL>> populatelinkedMandalDropdown(bool haveParentUp, String nagarIDStr) async {
     //setState(() => viewcontainer = false);
-    _linkedgraamValue = null;
-    _linkedgraam = null;
+    _linkedmandalValue = _linkedgraamValue = null;
+    _linkedmandal = _linkedgraam = null;
     var data;
     if (haveParentUp) {
       data = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['MandalLevelID'].toString(), nagarIDStr, "Upnagar", '');
@@ -966,8 +963,8 @@ class _AbhiyaanSwayamsevakState extends State<AbhiyaanSwayamsevak> {
                       onChanged: (value) {
                         setState(() {
                           _linkedmandalValue = value;
-                          populatelinkedGraamDropdown(value);
                         });
+                        populatelinkedGraamDropdown(value);
                       },
                       isDisabled: ((userLevelId ?? 0) < 4),
                     ),

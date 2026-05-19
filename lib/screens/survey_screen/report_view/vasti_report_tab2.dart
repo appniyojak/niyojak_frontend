@@ -218,34 +218,34 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
   var geoUnitName;
 
   Future<List<GeoUnitMasterBAL>> populatelinkedMahaanagarDropdown() async {
-    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['MahaanagarLevelID'].toString(), '', '', '', isAbhiyaan: false);
+    final data = await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['MahaanagarLevelID'].toString(), '', '', '');
     setState(() => _linkedMahaanagar = data);
     return data;
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
-    _linkedBhaagValue = _linkedNagarValue = _linkedvastiValue = null;
-    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar', '', isAbhiyaan: false);
+    _linkedupnagarValue = _linkedupnagar = _linkedBhaagValue = _linkedNagarValue = _linkedvastiValue = null;
+    final data = await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar', '');
     setState(() => _linkedVibhaag = data);
     return data;
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(String vibhaagIDStr) async {
-    _linkedBhaagValue = _linkedNagarValue = _linkedvastiValue = null;
+    _linkedupnagarValue = _linkedBhaagValue = _linkedNagarValue = _linkedvastiValue = null;
     _linkedbhaagName = _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
-    _linkedBhaag = _linkedNagar = _linkedvasti = [];
-    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '', isAbhiyaan: false);
+    _linkedupnagar = _linkedBhaag = _linkedNagar = _linkedvasti = [];
+    final data = await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
     setState(() => _linkedBhaag = data);
     return data;
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
-    _linkedNagarValue = _linkedvastiValue = null;
+    _linkedupnagarValue = _linkedNagarValue = _linkedvastiValue = null;
     _linkednagarName = _linkedmandalName = _linkedgraamName = _linkedvastiName = null;
-    _linkedNagar = _linkedvasti = null;
+    _linkedupnagar = _linkedNagar = _linkedvasti = null;
     final parentID = shaharIDStr ?? bhaagIDStr!;
     final parentType = shaharIDStr != null ? 'Shahar' : 'Bhaag';
-    final data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['NagarLevelID'].toString(), parentID, parentType, '', isAbhiyaan: false);
+    final data = await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['NagarLevelID'].toString(), parentID, parentType, '');
     setState(() => _linkedNagar = data.isNotEmpty ? data : null);
     return data;
   }
@@ -256,7 +256,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
     _linkedupnagar = _linkedvasti = null;
     var mnDD;
 
-    mnDD = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
+    mnDD = await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['UpaNagarLevelID'].toString(), nagarIDStr!, 'Nagar', '');
 
     setState(() {
       _linkedupnagar = (mnDD.length > 0 ? mnDD : null);
@@ -274,7 +274,7 @@ class _VastiSurveyReportTab2State extends State<VastiSurveyReportTab2> {
       data = await Statics.getGeoUnitsByLevelAndParentForUpnagar(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, "Upnagar", '');
       // print("${mnDD}");
     } else {
-      data = await Statics.getGeoUnitsByLevelAndParent(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, "Nagar", '');
+      data = await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['VastiLevelID'].toString(), nagarIDStr!, "Nagar", '');
     }
     setState(() => _linkedvasti = data.isNotEmpty ? data : null);
     return data;

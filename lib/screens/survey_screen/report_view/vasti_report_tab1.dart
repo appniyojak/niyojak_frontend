@@ -192,7 +192,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(String vibhaagIDStr) async {
-    _linkedNagarValue = null;
+    _linkedupnagarValue = _linkedupnagar = _linkedNagarValue = null;
     var data = await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
     setState(() {
       _linkedBhaag = data;
@@ -201,7 +201,7 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
-    _linkedBhaagValue = null;
+    _linkedupnagarValue = _linkedupnagar = _linkedBhaagValue = null;
     var data = await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '');
     setState(() {
       _linkedVibhaag = data;
@@ -210,8 +210,8 @@ class _VastiSurveyReportTab1State extends State<VastiSurveyReportTab1> {
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
-    _linkedNagarValue = null;
-    _linkedNagar = null;
+    _linkedupnagarValue = _linkedNagarValue = null;
+    _linkedupnagar = _linkedNagar = null;
     if (shaharIDStr != null) {
       var ngDD = await Statics.getGeoUnitsByLevelAndParentForVasti(Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
       setState(() {

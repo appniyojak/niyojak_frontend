@@ -231,7 +231,7 @@ class _MandalSurveyReportViewScreen3State extends State<MandalSurveyReportViewSc
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedBhaagDropdown(String vibhaagIDStr) async {
-    _linkedNagarValue = null;
+    _linkedupnagarValue = _linkedupnagar = _linkedNagarValue = null;
     var data = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['BhaagLevelID'].toString(), vibhaagIDStr, 'Vibhaag', '');
     setState(() {
       _linkedBhaag = data;
@@ -240,7 +240,7 @@ class _MandalSurveyReportViewScreen3State extends State<MandalSurveyReportViewSc
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedVibhaagDropdown(String mahaanagarIDStr) async {
-    _linkedBhaagValue = null;
+    _linkedupnagarValue = _linkedupnagar = _linkedBhaagValue = null;
     var data = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['VibhaagLevelID'].toString(), mahaanagarIDStr, (mahaanagarIDStr.isEmpty ? '' : 'Mahaanagar'), '');
     setState(() {
       _linkedVibhaag = data;
@@ -249,8 +249,8 @@ class _MandalSurveyReportViewScreen3State extends State<MandalSurveyReportViewSc
   }
 
   Future<List<GeoUnitMasterBAL>> populatelinkedNagarDropdown(String? bhaagIDStr, String? shaharIDStr) async {
-    _linkedNagarValue = null;
-    _linkedNagar = null;
+    _linkedupnagarValue = _linkedNagarValue = null;
+    _linkedupnagar = _linkedNagar = null;
     if (shaharIDStr != null) {
       var ngDD = await Statics.getGeoUnitsByLevelAndParentForMandal(Statics.levels['NagarLevelID'].toString(), shaharIDStr, 'Shahar', '');
       setState(() {
